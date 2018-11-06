@@ -22,12 +22,10 @@
 'use strict';
 import { Platform } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
-import DeviceInfo from 'react-native-device-info';
 const forge = require('node-forge');
 
-const systemVersion = DeviceInfo.getSystemVersion();
-const supportRSA = Platform.OS === 'android' || (Platform.OS === 'ios' && parseFloat(systemVersion) >= 10);// iOS 10 and above is required to use react-native-rsa-native.
-const RSA = supportRSA ? require('react-native-rsa-native') : null;
+import { supportRSA } from './appUtils';
+const RSA = supportRSA() ? require('react-native-rsa-native') : null;// iOS 10 and above is required to use react-native-rsa-native.
 
 /**
  * Fetches RSA key if present in the local, if not and if @generate is not set to 'false' then generates one.
@@ -37,7 +35,7 @@ const RSA = supportRSA ? require('react-native-rsa-native') : null;
  * as an Object, in PEM format as first argument.
  */
 function getRSAKey(generate: boolean = true, onSuccess: (Object) => void): any {
-	if (supportRSA) {
+	if (supportRSA()) {
 		SInfo.getAllItems({
 			sharedPreferencesName: 'TelldusSharedPrefs',
 			keychainService: 'TelldusKeychain'}).then((values: any) => {
@@ -110,7 +108,7 @@ function generateAndStoreRSAKey(onSuccess: (Object) => void) {
 }
 
 function decryptLocalControlToken(encrypted: string, onSuccess: (string) => void) {
-	if (supportRSA) {
+	if (supportRSA()) {
 		getRSAKey(false, ({ pemPvt }: Object) => {
 			const privateKey = forge.pki.privateKeyFromPem(pemPvt);
 			const decoded64 = forge.util.decode64(encrypted);

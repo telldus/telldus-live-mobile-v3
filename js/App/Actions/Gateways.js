@@ -23,14 +23,11 @@
 'use strict';
 
 import { Platform, NetInfo } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
 
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
+import { supportRSA } from '../Lib/appUtils';
 import type { ThunkAction, Action } from './Types';
-
-const systemVersion = DeviceInfo.getSystemVersion();
-const supportRSA = Platform.OS === 'android' || (Platform.OS === 'ios' && parseFloat(systemVersion) >= 10);
 
 // Gateways actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -52,7 +49,7 @@ const STATE = {
 function autoDetectLocalTellStick(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		// No need to do local discovery if the platform is iOS 9 or less, as it does not support RSAAlgorithm
-		if (supportRSA) {
+		if (supportRSA()) {
 
 		// Establish new UDP socket only after closing the existing socket completely.
 			closeUDPSocket(() => {

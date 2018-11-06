@@ -46,6 +46,7 @@ import scheduleUtils from './scheduleUtils';
 import * as LocalApi from './LocalApi';
 import * as UserUtils from './UserUtils';
 import * as LocalControl from './LocalControl';
+import * as appUtils from './appUtils';
 
 
 module.exports = {
@@ -75,4 +76,5 @@ module.exports = {
 	...LocalApi,
 	...UserUtils,
 	...LocalControl,
+	...appUtils,
 };
