@@ -21,4 +21,10 @@ jest.mock('react-native-orientation-locker', () => {
 	};
 });
 
+jest.mock('react-native-device-info', () => {
+	return {
+		getSystemVersion: jest.fn(),
+	};
+});
+
 global.window.addEventListener = () => null;

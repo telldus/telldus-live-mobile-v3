@@ -21,9 +21,11 @@
 
 'use strict';
 import { Platform } from 'react-native';
-import { RSA } from 'react-native-rsa-native';
 import SInfo from 'react-native-sensitive-info';
 const forge = require('node-forge');
+
+import { supportRSA } from './appUtils';
+const RSA = supportRSA() ? require('react-native-rsa-native') : null;// iOS 10 and above is required to use react-native-rsa-native.
 
 /**
  * Fetches RSA key if present in the local, if not and if @generate is not set to 'false' then generates one.
@@ -33,83 +35,89 @@ const forge = require('node-forge');
  * as an Object, in PEM format as first argument.
  */
 function getRSAKey(generate: boolean = true, onSuccess: (Object) => void): any {
-	SInfo.getAllItems({
-		sharedPreferencesName: 'TelldusSharedPrefs',
-		keychainService: 'TelldusKeychain'}).then((values: any) => {
-		if (Platform.OS === 'android') {
-			let { pemPub: pemPubS, pemPvt: pemPvtS } = values;
-			if (pemPubS && pemPvtS) {
-				if (onSuccess) {
-					onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
-				}
-			} else if (generate) {
-				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
+	if (supportRSA()) {
+		SInfo.getAllItems({
+			sharedPreferencesName: 'TelldusSharedPrefs',
+			keychainService: 'TelldusKeychain'}).then((values: any) => {
+			if (Platform.OS === 'android') {
+				let { pemPub: pemPubS, pemPvt: pemPvtS } = values;
+				if (pemPubS && pemPvtS) {
 					if (onSuccess) {
-						onSuccess({pemPub, pemPvt});
+						onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
 					}
-				});
-			} else if (onSuccess) {
-				onSuccess({pemPub: null, pemPvt: null});
-			}
-		} else {
-			let keys = values[0];
-			if (keys && keys.length >= 2) {
-				if (onSuccess) {
-					let data = {};
-					keys.map((key: Object) => {
-						if (key.key === 'pemPub') {
-							data.pemPub = key.value;
-						}
-						if (key.key === 'pemPvt') {
-							data.pemPvt = key.value;
+				} else if (generate) {
+					generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
+						if (onSuccess) {
+							onSuccess({pemPub, pemPvt});
 						}
 					});
-					onSuccess(data);
+				} else if (onSuccess) {
+					onSuccess({pemPub: null, pemPvt: null});
 				}
-			} else if (generate) {
-				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
+			} else {
+				let keys = values[0];
+				if (keys && keys.length >= 2) {
 					if (onSuccess) {
-						onSuccess({pemPub, pemPvt});
+						let data = {};
+						keys.map((key: Object) => {
+							if (key.key === 'pemPub') {
+								data.pemPub = key.value;
+							}
+							if (key.key === 'pemPvt') {
+								data.pemPvt = key.value;
+							}
+						});
+						onSuccess(data);
 					}
-				});
-			} else if (onSuccess) {
-				onSuccess({pemPub: null, pemPvt: null});
+				} else if (generate) {
+					generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
+						if (onSuccess) {
+							onSuccess({pemPub, pemPvt});
+						}
+					});
+				} else if (onSuccess) {
+					onSuccess({pemPub: null, pemPvt: null});
+				}
 			}
-		}
-	});
+		});
+	}
 }
 
 function generateAndStoreRSAKey(onSuccess: (Object) => void) {
-	RSA.generateKeys(2048) // set key size
-		.then((keypair: Object) => {
-			const { public: pemPub, private: pemPvt } = keypair;
-			if (pemPub && pemPvt) {
-				SInfo.setItem('pemPub', pemPub, {
-					sharedPreferencesName: 'TelldusSharedPrefs',
-					keychainService: 'TelldusKeychain',
-				});
-				SInfo.setItem('pemPvt', pemPvt, {
-					sharedPreferencesName: 'TelldusSharedPrefs',
-					keychainService: 'TelldusKeychain',
-				});
-				if (onSuccess) {
-					onSuccess({pemPub, pemPvt});
+	if (RSA) {
+		RSA.generateKeys(2048) // set key size
+			.then((keypair: Object) => {
+				const { public: pemPub, private: pemPvt } = keypair;
+				if (pemPub && pemPvt) {
+					SInfo.setItem('pemPub', pemPub, {
+						sharedPreferencesName: 'TelldusSharedPrefs',
+						keychainService: 'TelldusKeychain',
+					});
+					SInfo.setItem('pemPvt', pemPvt, {
+						sharedPreferencesName: 'TelldusSharedPrefs',
+						keychainService: 'TelldusKeychain',
+					});
+					if (onSuccess) {
+						onSuccess({pemPub, pemPvt});
+					}
+				} else if (onSuccess) {
+					onSuccess({pemPub: null, pemPvt: null});
 				}
-			} else if (onSuccess) {
-				onSuccess({pemPub: null, pemPvt: null});
-			}
-		});
+			});
+	}
 }
 
 function decryptLocalControlToken(encrypted: string, onSuccess: (string) => void) {
-	getRSAKey(false, ({ pemPvt }: Object) => {
-		const privateKey = forge.pki.privateKeyFromPem(pemPvt);
-		const decoded64 = forge.util.decode64(encrypted);
-		const token = privateKey.decrypt(decoded64, 'RSA-OAEP', {
-			md: forge.md.sha256.create(),
+	if (supportRSA()) {
+		getRSAKey(false, ({ pemPvt }: Object) => {
+			const privateKey = forge.pki.privateKeyFromPem(pemPvt);
+			const decoded64 = forge.util.decode64(encrypted);
+			const token = privateKey.decrypt(decoded64, 'RSA-OAEP', {
+				md: forge.md.sha256.create(),
+			});
+			onSuccess(token);
 		});
-		onSuccess(token);
-	});
+	}
 }
 
 module.exports = {

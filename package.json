@@ -47,7 +47,6 @@
     "react-native-material-ripple": "^0.8.0",
     "react-native-modal": "^6.1.0",
     "react-native-orientation-locker": "^1.0.11",
-    "react-native-rsa-native": "^1.0.23",
     "react-native-scrollable-tab-view": "^0.8.0",
     "react-native-sensitive-info": "^5.1.0",
     "react-native-simple-toast": "0.0.8",
@@ -68,7 +67,8 @@
     "reselect": "^3.0.1",
     "url": "^0.11.0",
     "uuid": "^3.2.1",
-    "victory-native": "^0.18.2"
+    "victory-native": "^0.18.2",
+    "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
