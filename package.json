@@ -6,8 +6,8 @@
     "lint": "eslint js",
     "lint_autofix": "eslint js --fix",
     "flow": "node_modules/.bin/flow",
-    "release": "node js/Utils/release.js",
-    "sourcemap": "node js/Utils/sourcemap.js",
+    "release": "babel-node js/Utils/release.js",
+    "sourcemap": "babel-node js/Utils/sourcemap.js",
     "test": "jest"
   },
   "browser": {
