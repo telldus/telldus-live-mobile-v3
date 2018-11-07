@@ -25,6 +25,8 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
+import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
 
 import { View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -53,7 +55,7 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	state = {
-		dataSource: orderBy(this.props.devices.byId, [(device: Object): any => device.name.toLowerCase()], ['asc']),
+		dataSource: this.parseDataForList(this.props.devices.byId),
 		refreshing: false,
 	};
 
@@ -64,6 +66,11 @@ export default class Device extends View<void, Props, State> {
 
 		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
 		this.h2 = formatMessage(i18n.posterChooseDevice);
+	}
+
+	parseDataForList(devices: Object): Object {
+		devices = filter(devices, (device: Object): any => !isEmpty(device.supportedMethods));
+		return orderBy(devices, [(device: Object): any => device.name.toLowerCase()], ['asc']);
 	}
 
 	componentDidMount() {
