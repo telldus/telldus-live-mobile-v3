@@ -72,7 +72,7 @@ onDoneEdit: () => void;
 constructor(props: Props) {
 	super(props);
 
-	const { retries = 0, retryInterval = 0, reps = 0 } = this.props;
+	const { retries = 3, retryInterval = 5, reps = 1 } = this.props;
 
 	this.state = {
 		retries: parseInt(retries, 10),
