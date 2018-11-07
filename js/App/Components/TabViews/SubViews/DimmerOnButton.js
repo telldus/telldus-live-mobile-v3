@@ -25,6 +25,9 @@ import PropTypes from 'prop-types';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+const isEqual = require('react-fast-compare');
+
+import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -65,6 +68,21 @@ class DimmerOnButton extends View {
 		this.onPress = this.onPress.bind(this);
 
 		this.labelOnButton = `${props.intl.formatMessage(i18n.on)} ${props.intl.formatMessage(i18n.button)}`;
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const propsChange = shouldUpdate(this.props, nextProps, [
+			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local',
+		]);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onPress() {

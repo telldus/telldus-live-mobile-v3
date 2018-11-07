@@ -218,12 +218,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
 		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, ...othersN } = nextProps;
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+
+		const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
+		if (dimmerPropsChange) {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['dimmer']);
-		if (propsChange) {
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
 			return true;
 		}
 
@@ -411,7 +412,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onDrawerClose={this.onCloseDrawer}
 			>
 				{showHeader && (
-					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
+					<Header
+						style={styles.header}
+						logoStyle={styles.logoStyle}
+						leftButton={leftButton}
+						appLayout={appLayout}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>
 					<Navigator

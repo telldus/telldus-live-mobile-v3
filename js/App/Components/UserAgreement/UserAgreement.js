@@ -36,6 +36,7 @@ import {
 	getEULA,
 	acceptEULA,
 } from '../../Actions';
+import shouldUpdate from '../../Lib/shouldUpdate';
 
 const ViewX = isIphoneX() ? SafeAreaView : View;
 
@@ -85,6 +86,21 @@ class UserAgreement extends View<Props, State> {
 		if (showModal && !eulaContent) {
 			this.getEULA();
 		}
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { eulaVersion } = this.state;
+		const { eulaVersion: eulaVersionN } = nextState;
+		if (eulaVersion !== eulaVersionN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(this.props, nextProps, ['showModal', 'appLayout']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	getEULA() {

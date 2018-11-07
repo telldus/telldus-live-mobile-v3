@@ -117,12 +117,15 @@ class NavigationHeader extends PureComponent<Props, null> {
 		} : null;
 
 		return (
-			<Header leftButton={leftIcon} style={{
-				height: Platform.OS === 'android' ?
-					deviceHeight * 0.08
-					:
-					(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 ),
-			}}/>
+			<Header
+				leftButton={leftIcon}
+				appLayout={appLayout}
+				style={{
+					height: Platform.OS === 'android' ?
+						deviceHeight * 0.08
+						:
+						(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 ),
+				}}/>
 		);
 	}
 }

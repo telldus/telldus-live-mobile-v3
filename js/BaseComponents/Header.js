@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -49,7 +48,7 @@ type Props = {
 	appLayout: Object,
 };
 
-class HeaderComponent extends Base {
+export default class HeaderComponent extends Base {
 
 	deviceWidth: number;
 	paddingHorizontal: number;
@@ -393,10 +392,3 @@ HeaderComponent.propTypes = {
 	leftButton: PropTypes.object,
 };
 
-function mapStateToProps(store: Object): Object {
-	return {
-		appLayout: store.app.layout,
-	};
-}
-
-export default connect(mapStateToProps, null)(HeaderComponent);
