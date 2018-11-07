@@ -22,10 +22,11 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 
-import { List, ListDataSource, View } from '../../../BaseComponents';
+import { View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from './SubViews';
 import i18n from '../../Translations/common';
@@ -37,6 +38,7 @@ interface Props extends ScheduleProps {
 
 type State = {
 	dataSource: Object,
+	refreshing: boolean,
 };
 
 export default class Device extends View<void, Props, State> {
@@ -51,9 +53,8 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	state = {
-		dataSource: new ListDataSource({
-			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-		}).cloneWithRows(orderBy(this.props.devices.byId, [(device: Object): any => device.name.toLowerCase()], ['asc'])),
+		dataSource: orderBy(this.props.devices.byId, [(device: Object): any => device.name.toLowerCase()], ['asc']),
+		refreshing: false,
 	};
 
 	constructor(props: Props) {
@@ -80,7 +81,18 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	onRefresh = () => {
-		this.props.actions.getDevices();
+		this.setState({
+			refreshing: true,
+		});
+		this.props.actions.getDevices().then(() => {
+			this.setState({
+				refreshing: false,
+			});
+		}).catch(() => {
+			this.setState({
+				refreshing: false,
+			});
+		});
 	};
 
 	selectDevice = (row: Object) => {
@@ -92,35 +104,44 @@ export default class Device extends View<void, Props, State> {
 		actions.selectDevice(row.id);
 	};
 
-	render(): React$Element<List> {
+	render(): React$Element<FlatList> {
+		const { dataSource, refreshing } = this.state;
 		return (
-			<List
-				dataSource={this.state.dataSource}
-				renderRow={this._renderRow}
+			<FlatList
+				data={dataSource}
+				renderItem={this._renderRow}
 				onRefresh={this.onRefresh}
+				refreshing={refreshing}
 			/>
 		);
 	}
 
-	_renderRow = (row: Object, sId: string, rId: string): Object => {
+	_renderRow = (row: Object): Object => {
 		const { appLayout, intl } = this.props;
+		const { item } = row;
 		// TODO: use device description
-		const preparedRow = Object.assign({}, row, { description: '' });
+		const preparedRow = Object.assign({}, item, { description: '' });
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout}
-			intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
-			containerStyle = {{
-				flex: 1,
-				alignItems: 'stretch',
-				justifyContent: 'space-between',
-				marginVertical: undefined,
-				marginTop: parseInt(rId, 10) === 0 ? padding : 0,
-				marginBottom: padding / 2,
-			}}/>;
+		return (
+			<DeviceRow
+				row={preparedRow}
+				onPress={this.selectDevice}
+				appLayout={appLayout}
+				intl={intl}
+				labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
+				containerStyle = {{
+					flex: 1,
+					alignItems: 'stretch',
+					justifyContent: 'space-between',
+					marginVertical: undefined,
+					marginBottom: padding / 2,
+				}}
+			/>
+		);
 	};
 
 }
