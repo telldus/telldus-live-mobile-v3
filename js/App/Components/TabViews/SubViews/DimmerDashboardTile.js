@@ -54,6 +54,7 @@ type Props = {
 	showSlider?: boolean,
 	setScrollEnabled: boolean,
 	screenReaderEnabled: boolean,
+	sensitive: number,
 
 	style: Object,
 	intl: Object,
@@ -121,7 +122,7 @@ class DimmerDashboardTile extends View<Props, void> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled', 'sensitive']);
 		if (propsChange) {
 			return true;
 		}
@@ -169,7 +170,7 @@ class DimmerDashboardTile extends View<Props, void> {
 			item, tileWidth, intl, isGatewayActive,
 			screenReaderEnabled, showSlider, onButtonStyle,
 			offButtonStyle, sliderStyle, containerStyle,
-			setScrollEnabled,
+			setScrollEnabled, sensitive,
 		} = this.props;
 		const { name, isInState, supportedMethods, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -179,6 +180,7 @@ class DimmerDashboardTile extends View<Props, void> {
 		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
+			sensitive,
 			thumbWidth: 7,
 			thumbHeight: 7,
 			fontSize: 8,
@@ -317,8 +319,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
+	const { app = {} } = store;
+	const { screenReaderEnabled, dimmerSensitivity: sensitive = 5 } = app;
 	return {
-		screenReaderEnabled: store.app.screenReaderEnabled,
+		screenReaderEnabled,
+		sensitive,
 	};
 }
 

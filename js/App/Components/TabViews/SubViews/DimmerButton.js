@@ -53,6 +53,7 @@ type Props = {
 	isOpen: boolean,
 	screenReaderEnabled: boolean,
 	setScrollEnabled: boolean,
+	sensitive: number,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -121,7 +122,7 @@ class DimmerButton extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled']);
+		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled', 'sensitive']);
 		if (propsChange) {
 			return true;
 		}
@@ -193,6 +194,7 @@ class DimmerButton extends View<Props, null> {
 			setScrollEnabled,
 			isOpen,
 			closeSwipeRow,
+			sensitive,
 		} = this.props;
 		const { isInState, name, supportedMethods, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -202,6 +204,7 @@ class DimmerButton extends View<Props, null> {
 		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
+			sensitive,
 			thumbWidth: 10,
 			thumbHeight: 10,
 			fontSize: 9,
@@ -329,8 +332,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, dispatch: Function): Object {
+	const { app = {} } = store;
+	const { screenReaderEnabled, dimmerSensitivity: sensitive = 5 } = app;
 	return {
-		screenReaderEnabled: store.app.screenReaderEnabled,
+		screenReaderEnabled,
+		sensitive,
 	};
 }
 

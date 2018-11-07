@@ -79,6 +79,14 @@ class HVSliderContainer extends View {
 	layoutView: Object => void;
 	onPressDimmer: () => void;
 
+	static defaultProps: DefaultProps = {
+		thumbHeight: 12,
+		thumbWidth: 12,
+		fontSize: 10,
+		sensitive: 5,
+		value: 0,
+	};
+
 	constructor(props: Props) {
 		super(props);
 		this.parentScrollEnabled = true;
@@ -450,13 +458,5 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 });
-
-HVSliderContainer.defaultProps = {
-	thumbHeight: 12,
-	thumbWidth: 12,
-	fontSize: 10,
-	sensitive: 1,
-	value: 0,
-};
 
 module.exports = injectIntl(HVSliderContainer);
