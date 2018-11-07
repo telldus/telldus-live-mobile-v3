@@ -73,7 +73,11 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 
 		job.effectiveHour = tempDay.format('HH');
 		job.effectiveMinute = tempDay.format('mm');
-		job.deviceName = device.name;
+
+		const { name, deviceType, supportedMethods = {} } = device;
+		job.deviceName = name;
+		job.deviceType = deviceType;
+		job.deviceSupportedMethods = supportedMethods;
 
 		const now = moment().tz(timezone);
 		const { showInactive } = userOptions;
