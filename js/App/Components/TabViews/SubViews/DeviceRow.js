@@ -33,12 +33,17 @@ import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
-import { getLabelDevice, shouldUpdate } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
 
-import { getPowerConsumed, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
+import {
+	getLabelDevice,
+	shouldUpdate,
+	getPowerConsumed,
+	getDeviceIcons,
+	getDeviceActionIcon,
+} from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
