@@ -73,29 +73,44 @@ export default class DeviceRow extends View<null, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { borderRadiusRow } = Theme.Core;
+		const { borderRadiusRow, brandSecondary } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const iconSize = deviceWidth * 0.06;
+		const containerSize = deviceWidth * 0.1;
+		const borderRadius = deviceWidth * 0.05;
 
 		return {
 			row: {
 				flex: 1,
 				alignItems: 'stretch',
+				paddingVertical: Math.floor(iconSize * 0.5),
+				paddingHorizontal: Math.floor(iconSize * 0.8),
+				justifyContent: 'center',
 			},
 			icon: {
-				fontSize: deviceWidth * 0.149333333,
+				fontSize: iconSize,
+				textAlign: 'center',
+				alignSelf: 'center',
+				borderRadius: borderRadius,
 			},
 			iconContainer: {
-				width: deviceWidth * 0.226666667,
-				borderTopLeftRadius: borderRadiusRow,
-				borderBottomLeftRadius: borderRadiusRow,
+				width: containerSize,
+				height: containerSize,
+				borderRadius: borderRadius,
+				alignItems: 'center',
+				justifyContent: 'center',
+				backgroundColor: brandSecondary,
 			},
 			descriptionContainer: {
 				flex: 1,
 				paddingLeft: 10,
 				paddingRight: 10,
 			},
+			// borderTopLeftRadius: borderRadiusRow,
+			// 	borderBottomLeftRadius: borderRadiusRow,
 		};
 	};
 
