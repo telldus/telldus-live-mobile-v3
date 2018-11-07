@@ -22,9 +22,10 @@
 'use strict';
 
 import React from 'react';
+import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { List, ListDataSource, View } from '../../../BaseComponents';
+import { View } from '../../../BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
 import { ActionRow } from './SubViews';
 import getDeviceType from '../../Lib/getDeviceType';
@@ -71,9 +72,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		}
 
 		this.state = {
-			dataSource: new ListDataSource({
-				rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-			}).cloneWithRows(methods),
+			dataSource: methods,
 		};
 	}
 
@@ -131,31 +130,41 @@ export default class Action extends View<null, ScheduleProps, State> {
 		}
 	};
 
-	render(): React$Element<List> {
+	getPadding(): number {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		return deviceWidth * Theme.Core.paddingFactor;
+	}
+
+	render(): React$Element<FlatList> {
+		const padding = this.getPadding();
 		return (
-			<List
-				dataSource={this.state.dataSource}
-				renderRow={this._renderRow}
+			<FlatList
+				data={this.state.dataSource}
+				renderItem={this._renderRow}
+				contentContainerStyle={{
+					flexGrow: 1,
+					paddingTop: padding,
+				}}
 			/>
 		);
 	}
 
-	_renderRow = (method: number, sId: string, rId: string): Object => {
+	_renderRow = (row: Object): Object => {
 		const { appLayout, intl } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const { item } = row;
+		const padding = this.getPadding();
 
 		return <ActionRow
-			method={method}
+			method={item}
 			onPress={this._handlePress}
 			appLayout={appLayout}
 			intl={intl}
 			labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
 			containerStyle={{
 				marginVertical: undefined,
-				marginTop: parseInt(rId, 10) === 0 ? padding : 0,
 				marginBottom: padding / 2,
 			}}/>;
 	};

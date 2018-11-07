@@ -111,14 +111,27 @@ export default class Device extends View<void, Props, State> {
 		actions.selectDevice(row.id);
 	};
 
+	getPadding(): number {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		return deviceWidth * Theme.Core.paddingFactor;
+	}
+
 	render(): React$Element<FlatList> {
 		const { dataSource, refreshing } = this.state;
+		const padding = this.getPadding();
 		return (
 			<FlatList
 				data={dataSource}
 				renderItem={this._renderRow}
 				onRefresh={this.onRefresh}
 				refreshing={refreshing}
+				contentContainerStyle={{
+					flexGrow: 1,
+					paddingTop: padding,
+				}}
 			/>
 		);
 	}
@@ -128,10 +141,7 @@ export default class Device extends View<void, Props, State> {
 		const { item } = row;
 		// TODO: use device description
 		const preparedRow = Object.assign({}, item, { description: '' });
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = this.getPadding();
 
 		return (
 			<DeviceRow
