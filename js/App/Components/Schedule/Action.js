@@ -29,6 +29,7 @@ import { View } from '../../../BaseComponents';
 import type { ScheduleProps } from './ScheduleScreen';
 import { ActionRow } from './SubViews';
 import getDeviceType from '../../Lib/getDeviceType';
+import { getDeviceActionIcon } from '../../Lib/DeviceUtils';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
@@ -57,17 +58,18 @@ export default class Action extends View<null, ScheduleProps, State> {
 			tmp: true, // TODO: fill with real fields
 		};
 
-		let deviceType = this.getType(schedule.deviceId), methods = [];
-		if (deviceType === 'TOGGLE') {
+		let { type } = this.getDeviceInfo(schedule.deviceId), methods = [];
+
+		if (type === 'TOGGLE') {
 			methods = [1, 2];
 		}
-		if (deviceType === 'DIMMER') {
+		if (type === 'DIMMER') {
 			methods = [1, 2, 16];
 		}
-		if (deviceType === 'NAVIGATIONAL') {
+		if (type === 'NAVIGATIONAL') {
 			methods = [128, 256, 512];
 		}
-		if (deviceType === 'BELL') {
+		if (type === 'BELL') {
 			methods = [4];
 		}
 
@@ -76,14 +78,14 @@ export default class Action extends View<null, ScheduleProps, State> {
 		};
 	}
 
-	getType(deviceId: number): mixed {
+	getDeviceInfo(deviceId: number): Object {
 		const filteredItem = this.props.devices.byId[deviceId];
 		if (!filteredItem) {
-			return null;
+			return {};
 		}
 
-		const supportedMethods = filteredItem.supportedMethods;
-		return getDeviceType(supportedMethods);
+		const { supportedMethods, deviceType } = filteredItem;
+		return { type: getDeviceType(supportedMethods), deviceType, supportedMethods };
 	}
 
 	componentDidMount() {
@@ -153,12 +155,15 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	_renderRow = (row: Object): Object => {
-		const { appLayout, intl } = this.props;
+		const { appLayout, intl, schedule } = this.props;
 		const { item } = row;
 		const padding = this.getPadding();
+		const { deviceType, supportedMethods } = this.getDeviceInfo(schedule.deviceId);
+		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
 
 		return <ActionRow
 			method={item}
+			actionIcons={actionIcons}
 			onPress={this._handlePress}
 			appLayout={appLayout}
 			intl={intl}

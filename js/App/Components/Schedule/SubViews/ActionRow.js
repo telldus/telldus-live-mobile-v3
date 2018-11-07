@@ -28,6 +28,8 @@ import { BlockIcon, Row, Text, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
+import { methods } from '../../../../Constants';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -124,6 +126,7 @@ type DefaultProps = {
 
 type Props = {
 	method: number,
+	actionIcons: Object,
 	onPress?: Function,
 	containerStyle?: Object,
 	showValue?: boolean,
@@ -177,8 +180,8 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue, appLayout, iconContainerStyle } = this.props;
-		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle(appLayout);
+		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons } = this.props;
+		const { dimContainer, dimValue, icon: iconStyle, iconContainer } = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
 			const roundVal = Math.round(methodValue / 255 * 100);
@@ -196,11 +199,14 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			);
 		}
 
+		const methodString = methods[action.method];
+		let iconName = actionIcons[methodString];
+
 		return (
 			<BlockIcon
-				icon={action.icon}
+				icon={iconName ? iconName : action.icon}
 				bgColor={action.bgColor}
-				style={icon}
+				style={iconStyle}
 				containerStyle={[iconContainer, iconContainerStyle]}
 			/>
 		);

@@ -46,8 +46,10 @@ import {
 	getWeekdays,
 	getWeekends,
 	getTranslatableDays,
+	getDeviceActionIcon,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
+import { methods } from '../../../../Constants';
 
 import i18n from '../../../Translations/common';
 
@@ -65,6 +67,8 @@ type Props = {
 	appLayout: Object,
 	showNow: boolean,
 	expired: boolean,
+	deviceType: string,
+	deviceSupportedMethods: Object,
 
 	intl: intlShape,
 	editJob: (schedule: Schedule) => void,
@@ -272,10 +276,13 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue, expired } = this.props;
+		const { intl, method, appLayout, methodValue, expired, deviceSupportedMethods, deviceType } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
+		const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
+		const methodString = methods[action.method];
+		let iconName = actionIcons[methodString];
 
 		if (action) {
 			if (action.name === 'Dim') {
@@ -295,7 +302,7 @@ class JobRow extends View<null, Props, null> {
 			return (
 				{
 					actionIcon: <BlockIcon
-						icon={action.icon}
+						icon={iconName ? iconName : action.icon}
 						bgColor={expired ? '#999999' : action.bgColor}
 						containerStyle={methodIconContainer}
 						style={methodIcon}
