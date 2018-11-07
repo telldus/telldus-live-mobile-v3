@@ -25,7 +25,7 @@ import SInfo from 'react-native-sensitive-info';
 const forge = require('node-forge');
 
 import { supportRSA } from './appUtils';
-const RSA = supportRSA() ? require('react-native-rsa-native') : null;// iOS 10 and above is required to use react-native-rsa-native.
+const { RSA } = supportRSA() ? require('react-native-rsa-native') : {};// iOS 10 and above is required to use react-native-rsa-native.
 
 /**
  * Fetches RSA key if present in the local, if not and if @generate is not set to 'false' then generates one.
