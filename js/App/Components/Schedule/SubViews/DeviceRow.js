@@ -26,6 +26,9 @@ import PropTypes from 'prop-types';
 import { BlockIcon, Row, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
+
+import { getDeviceIcons } from '../../../Lib/DeviceUtils';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -47,15 +50,17 @@ export default class DeviceRow extends View<null, Props, null> {
 
 	render(): React$Element<any> {
 		const { row, onPress, appLayout, intl, labelPostScript = '', containerStyle } = this.props;
-		const { row: rowStyle, icon, iconContainer, descriptionContainer } = this._getStyle(appLayout);
-		const deviceName = row.name ? row.name : intl.formatMessage(i18n.noName);
+		const { row: rowStyle, icon: iconStyle, iconContainer, descriptionContainer } = this._getStyle(appLayout);
+		const { name, deviceType } = row;
+		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const accessibilityLabel = `${deviceName}, ${labelPostScript}`;
+		const icon = getDeviceIcons(deviceType);
 
 		return (
 			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle} accessible={true} accessibilityLabel={accessibilityLabel}>
 				<BlockIcon
-					icon="device-alt"
-					style={icon}
+					icon={icon}
+					style={iconStyle}
 					containerStyle={iconContainer}
 				/>
 				<TextRowWrapper appLayout={appLayout} style={descriptionContainer}>
