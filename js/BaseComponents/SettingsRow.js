@@ -200,9 +200,11 @@ class SettingsRow extends Component<Props, null> {
 							<Text style={textShowOnDash}>
 								{label}
 							</Text>
-							<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
-								<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
-							</TouchableOpacity>
+							{!!iconLabelRight && (
+								<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
+									<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+								</TouchableOpacity>
+							)}
 						</View>
 						<View style={valueCover}>
 							{inLineEditActive ?
