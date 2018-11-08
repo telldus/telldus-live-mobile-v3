@@ -297,11 +297,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	render(): Object {
 		const { currentScreen: CS } = this.state;
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const screenProps = {
-			currentScreen: CS,
-			intl,
-			appLayout,
-		};
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
@@ -314,14 +309,22 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
+		let screenProps = {
+			currentScreen: CS,
+			intl,
+			appLayout,
+		};
+		if (showHeader) {
+			screenProps = {
+				...screenProps,
+				leftButton,
+				hideHeader: false,
+				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )},
+			};
+		}
+
 		return (
 			<View style={{flex: 1}}>
-				{showHeader && (
-					<Header
-						leftButton={leftButton}
-						style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}
-						appLayout={appLayout}/>
-				)}
 				<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 					<Navigator
 						ref={this.setNavigatorRef}

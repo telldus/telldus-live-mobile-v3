@@ -384,12 +384,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	render(): Object {
 		const { currentScreen: CS, drawer } = this.state;
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const screenProps = {
-			currentScreen: CS,
-			intl,
-			drawer,
-			appLayout,
-		};
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
@@ -401,6 +395,22 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
+		let screenProps = {
+			currentScreen: CS,
+			intl,
+			drawer,
+			appLayout,
+		};
+		if (showHeader) {
+			screenProps = {
+				...screenProps,
+				leftButton,
+				hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
+				style: styles.header,
+				logoStyle: styles.logoStyle,
+			};
+		}
+
 		return (
 			<DrawerLayoutAndroid
 				ref="drawer"
@@ -411,7 +421,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onDrawerOpen={this.onOpenDrawer}
 				onDrawerClose={this.onCloseDrawer}
 			>
-				{showHeader && (
+				{showHeader && !styles.isPortrait && (
 					<Header
 						style={styles.header}
 						logoStyle={styles.logoStyle}
@@ -489,6 +499,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				left: deviceHeight * 0.6255,
 				top: deviceHeight * 0.0400,
 			},
+			isPortrait,
 		};
 	}
 }

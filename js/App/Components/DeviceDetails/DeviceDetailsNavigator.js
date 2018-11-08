@@ -25,9 +25,11 @@
 import React from 'react';
 import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
 
+import { View } from '../../../BaseComponents';
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
+import { DeviceDetailsHeaderPoster } from './SubViews';
 import Theme from '../../Theme';
 
 const DeviceDetailsNavigator = createMaterialTopTabNavigator(
@@ -61,17 +63,20 @@ const DeviceDetailsNavigator = createMaterialTopTabNavigator(
 				paddingVertical = 10 + (fontSize * 0.5);
 			}
 			return (
-				<MaterialTopTabBar {...rest}
-					tabStyle={{
-						...tabStyle,
-						width: tabWidth,
-						paddingVertical,
-					}}
-					labelStyle={{
-						...labelStyle,
-						fontSize,
-					}}
-				/>
+				<View style={{flex: 0}}>
+					<DeviceDetailsHeaderPoster {...rest}/>
+					<MaterialTopTabBar {...rest}
+						tabStyle={{
+							...tabStyle,
+							width: tabWidth,
+							paddingVertical,
+						}}
+						labelStyle={{
+							...labelStyle,
+							fontSize,
+						}}
+					/>
+				</View>
 			);
 		},
 		tabBarOptions: {
