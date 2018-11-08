@@ -50,7 +50,7 @@ export default class DeviceRow extends View<null, Props, null> {
 
 	render(): React$Element<any> {
 		const { row, onPress, appLayout, intl, labelPostScript = '', containerStyle } = this.props;
-		const { row: rowStyle, icon: iconStyle, iconContainer, descriptionContainer } = this._getStyle(appLayout);
+		const { row: rowStyle, icon: iconStyle, iconContainer, descriptionContainer, titleStyle } = this._getStyle(appLayout);
 		const { name, deviceType } = row;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const accessibilityLabel = `${deviceName}, ${labelPostScript}`;
@@ -64,7 +64,7 @@ export default class DeviceRow extends View<null, Props, null> {
 					containerStyle={iconContainer}
 				/>
 				<TextRowWrapper appLayout={appLayout} style={descriptionContainer}>
-					<Title numberOfLines={1} ellipsizeMode="tail" appLayout={appLayout}>
+					<Title numberOfLines={1} ellipsizeMode="tail" appLayout={appLayout} style={titleStyle}>
 						{deviceName}
 					</Title>
 				</TextRowWrapper>
@@ -73,21 +73,21 @@ export default class DeviceRow extends View<null, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { borderRadiusRow, brandSecondary } = Theme.Core;
+		const { brandSecondary, rowTextColor } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
 		const iconSize = deviceWidth * 0.06;
-		const containerSize = deviceWidth * 0.1;
-		const borderRadius = deviceWidth * 0.05;
+		const containerSize = deviceWidth * 0.09;
+		const borderRadius = deviceWidth * 0.045;
 
 		return {
 			row: {
 				flex: 1,
-				alignItems: 'stretch',
-				paddingVertical: Math.floor(iconSize * 0.5),
-				paddingHorizontal: Math.floor(iconSize * 0.8),
+				alignItems: 'center',
+				paddingVertical: 2 + Math.floor(iconSize * 0.3),
+				paddingHorizontal: 5 + Math.floor(iconSize * 0.55),
 				justifyContent: 'center',
 			},
 			icon: {
@@ -109,8 +109,9 @@ export default class DeviceRow extends View<null, Props, null> {
 				paddingLeft: 10,
 				paddingRight: 10,
 			},
-			// borderTopLeftRadius: borderRadiusRow,
-			// 	borderBottomLeftRadius: borderRadiusRow,
+			titleStyle: {
+				color: rowTextColor,
+			},
 		};
 	};
 

@@ -155,6 +155,7 @@ export default class Device extends View<void, Props, State> {
 					alignItems: 'stretch',
 					justifyContent: 'space-between',
 					marginVertical: undefined,
+					height: undefined,
 					marginBottom: padding / 2,
 				}}
 			/>

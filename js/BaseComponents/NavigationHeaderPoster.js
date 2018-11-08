@@ -264,7 +264,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const posterHeight = adjustItems ? deviceWidth * 0.155 : deviceWidth * 0.333;
+	const posterHeight = adjustItems ? deviceWidth * 0.155 : deviceWidth * 0.311;
 	const iconBackgroundSize = posterHeight * 0.6;
 	const fontSizeIcon = posterHeight * 0.4;
 
