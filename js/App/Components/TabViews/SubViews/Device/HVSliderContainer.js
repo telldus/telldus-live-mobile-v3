@@ -70,6 +70,14 @@ type State = {
 	DimmerStep: boolean,
 };
 
+type DefaultProps = {
+	thumbHeight: number,
+	thumbWidth: number,
+	sensitive: number,
+	value: number,
+	fontSize: number,
+};
+
 class HVSliderContainer extends View {
 	props: Props;
 	state: State;
