@@ -29,7 +29,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape, injectIntl } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, Header, IconTelldus } from '../../BaseComponents';
+import { View, IconTelldus } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
