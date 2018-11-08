@@ -102,7 +102,7 @@ class DimmerDashboardTile extends View<Props, void> {
 		const { item, onDimmerSlide } = this.props;
 		this.parentScrollEnabled = true;
 
-		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
+		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 100, {
 			trailing: true,
 		});
 

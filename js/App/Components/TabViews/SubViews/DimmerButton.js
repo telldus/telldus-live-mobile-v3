@@ -102,7 +102,7 @@ class DimmerButton extends View<Props, null> {
 
 		this.parentScrollEnabled = true;
 		const { device, onDimmerSlide } = this.props;
-		this.onValueChangeThrottled = throttle(onDimmerSlide(device.id), 200, {
+		this.onValueChangeThrottled = throttle(onDimmerSlide(device.id), 100, {
 			trailing: true,
 		});
 
