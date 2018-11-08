@@ -192,7 +192,9 @@ class GraphValuesDropDown extends View<Props, State> {
 			itemPadding,
 			itemCount,
 		} = this.getStyle(appLayout);
-		const dropDownPosition = list.length + 1;
+		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
+		const iCount = list.length < itemCount ? list.length : itemCount;
+		const dropdownTop = -(iCount * itemSize);
 
 		return (
 			<View style={dropDownContainerStyle}>
@@ -206,13 +208,17 @@ class GraphValuesDropDown extends View<Props, State> {
 						renderBase={this.renderBaseOne}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
-						itemCount={itemCount}
+						itemCount={iCount}
 						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandDanger}
-						dropdownPosition={dropDownPosition}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
 						propsExtractor={this.propsExtractorOne}
 					/>
 					<Dropdown
@@ -223,13 +229,17 @@ class GraphValuesDropDown extends View<Props, State> {
 						renderBase={this.renderBaseTwo}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
-						itemCount={itemCount}
+						itemCount={iCount}
 						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandInfo}
-						dropdownPosition={dropDownPosition}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
 						propsExtractor={this.propsExtractorTwo}
 					/>
 				</View>
