@@ -45,8 +45,8 @@ let infoRequestTimeout = {};
 function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
 		const { gateways, devices } = getState();
-		const { clientId, clientDeviceId } = devices.byId[deviceId];
-		const { localKey = {} } = gateways.byId[clientId];
+		const { clientId, clientDeviceId } = devices.byId[deviceId] ? devices.byId[deviceId] : {};
+		const { localKey = {} } = gateways.byId[clientId] ? gateways.byId[clientId] : {};
 		const { address, key: token, ttl, supportLocal } = localKey;
 		const tokenExpired = hasTokenExpired(ttl);
 
