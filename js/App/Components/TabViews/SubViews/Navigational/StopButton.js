@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from '../../../../../BaseComponents';
+import { IconTelldus, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
@@ -89,7 +89,7 @@ class StopButton extends View {
 				style={[stopButtonStyle, style]}
 				onPress={supportedMethod ? this.onStop : noop}
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
-				<Icon name="stop" size={iconSize}
+				<IconTelldus icon="stop" size={iconSize}
 					style={{
 						color: supportedMethod ? stopIconColor : '#eeeeee',
 					}}
