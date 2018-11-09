@@ -235,6 +235,7 @@ render(): Object {
 				h1={this.headerOne} h2={this.headerTwo}
 				navigation={navigation}
 				align={'right'}
+				leftIcon={'close'}
 				handleBackPress={this.handleBackPress}
 				{...screenProps}/>
 			<ScrollView style={styles.container} contentContainerStyle={{flexGrow: 1}}>

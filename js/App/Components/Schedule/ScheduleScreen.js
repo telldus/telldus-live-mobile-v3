@@ -203,7 +203,8 @@ class ScheduleScreen extends View<null, Props, State> {
 						infoButton={infoButton}
 						align={'right'}
 						navigation={navigation}
-						{...screenProps}/>
+						{...screenProps}
+						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}/>
 					<View style={style}>
 						{React.cloneElement(
 							children,

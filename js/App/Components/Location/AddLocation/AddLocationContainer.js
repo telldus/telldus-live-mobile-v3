@@ -223,7 +223,8 @@ class AddLocationContainer extends View<null, Props, State> {
 							showLeftIcon={currentScreen !== 'Success'}
 							align={'right'}
 							navigation={navigation}
-							{...screenProps}/>
+							{...screenProps}
+							leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(
 								children,

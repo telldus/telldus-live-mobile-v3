@@ -57,6 +57,7 @@ type Props = {
     align?: 'right' | 'center',
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
+	leftIcon: string,
 
 	navigation: Object,
     handleBackPress: () => boolean,
@@ -139,7 +140,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton']);
+	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon']);
 	if (propsChange) {
 		return true;
 	}
@@ -199,6 +200,7 @@ render(): Object {
 		posterCoverStyle,
 		infoButton,
 		showLeftIcon,
+		leftIcon,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -217,7 +219,7 @@ render(): Object {
 
 	return (
 		<View style={styles.container}>
-			<NavigationHeader navigation={navigation} showLeftIcon={showLeftIcon}/>
+			<NavigationHeader navigation={navigation} showLeftIcon={showLeftIcon} leftIcon={leftIcon}/>
 			<Poster posterHeight={posterHeight}>
 				<View style={[posterCover, posterCoverStyle]}>
 					<View style={posterItemsContainer}>
