@@ -31,7 +31,9 @@ platform :android do
   lane :alpha do
     supply(
       track: "alpha",
-      apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
+      apk: "android/app/build/outputs/apk/release/app-release.apk"
+      # Use this if the apk was build by fastlane
+      # apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
     )
     slack(
       message: "Successfully deployed new App Update.",
