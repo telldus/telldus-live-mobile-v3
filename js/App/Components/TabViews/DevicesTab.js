@@ -141,7 +141,8 @@ class DevicesTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
-		return currentScreen === 'Devices';
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Devices') || (currentScreen !== 'Devices' && prevScreen === 'Devices');
 	}
 
 	openDeviceDetail(device: Object) {

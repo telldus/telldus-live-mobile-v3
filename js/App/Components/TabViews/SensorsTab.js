@@ -118,7 +118,8 @@ class SensorsTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
-		return currentScreen === 'Sensors';
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Sensors') || (currentScreen !== 'Sensors' && prevScreen === 'Sensors');
 	}
 
 	onRefresh() {
