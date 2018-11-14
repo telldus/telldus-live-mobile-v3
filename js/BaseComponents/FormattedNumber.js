@@ -46,10 +46,10 @@ const FormattedNumberComponent = (props: Object): React$Element<any> => {
 		<Intl.FormattedNumber {...formatOptions}>
 			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{localized}
 				{!!suffix && (
-					[<Text style={styles.space}>
+					[<Text style={styles.space} key={'1'}>
 						!
 					</Text>,
-					<Text style={suffixStyle}>
+					<Text style={suffixStyle} key={'2'}>
 						{suffix}
 					</Text>]
 				)}
