@@ -93,10 +93,12 @@ export default class SensorBlock extends View<Props, null> {
 							{value}
 						</Text>
 						:
-						<Text style={valueStyle} numberOfLines={1}>
-							<FormattedNumber value={value} {...formatOptions}/>
-							{unit}
-						</Text>
+						<FormattedNumber
+							value={value}
+							{...formatOptions}
+							style={valueStyle}
+							suffix={unit}
+							suffixStyle={valueStyle}/>
 					}
 					<Text style={updatedInfoStyle}>
 						<FormattedDate value={lastUpdated} style={updatedInfoStyle}/>

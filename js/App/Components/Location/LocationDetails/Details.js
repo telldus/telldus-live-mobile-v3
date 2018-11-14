@@ -295,11 +295,11 @@ class Details extends View {
 					<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
 						<Text style={[styles.textValue, {fontSize}]}>
 							{`${this.labelLat}: `}
-							<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
+							<FormattedNumber value={latitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 						</Text>
 						<Text style={[styles.textValue, {fontSize}]}>
 							{` ${this.labelLong}: `}
-							<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
+							<FormattedNumber value={longitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 						</Text>
 					</View>
 					<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
