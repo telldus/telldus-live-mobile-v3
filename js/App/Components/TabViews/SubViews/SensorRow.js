@@ -105,7 +105,6 @@ class SensorRow extends View<Props, State> {
 	helpViewHiddenRow: string;
 	helpCloseHiddenRow: string;
 
-	onLayout: (Object) => void;
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
@@ -135,7 +134,7 @@ class SensorRow extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.width = 0;
+
 		const { formatMessage } = props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
@@ -150,7 +149,6 @@ class SensorRow extends View<Props, State> {
 		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
 		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
-		this.onLayout = this.onLayout.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
@@ -327,19 +325,22 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onLayoutDeviceName(ev: Object) {
-		if (!this.state.showFullName) {
-			let { x, width } = ev.nativeEvent.layout;
-			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
-			const maxRightPadd = 12;
+		const { x, width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
+		const maxRightPadd = 12;
+		const newOccWidth = width + x + maxRightPadd;
+		if (!this.state.showFullName && (newOccWidth !== coverMaxWidth)) {
 			this.setState({
-				coverOccupiedWidth: width + x + maxRightPadd,
+				coverOccupiedWidth: newOccWidth,
 			});
 		}
 	}
 
 	onLayoutCover(ev: Object) {
-		if (!this.state.showFullName) {
-			let { width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		const { width } = ev.nativeEvent.layout;
+		if (!this.state.showFullName && (coverMaxWidth !== width)) {
 			this.setState({
 				coverMaxWidth: width,
 			});
@@ -347,7 +348,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onLayoutButtons(ev: Object) {
-		let { buttonsWidth } = this.state;
+		const { buttonsWidth } = this.state;
 		if (!buttonsWidth) {
 			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
 			this.setState({
@@ -377,7 +378,7 @@ class SensorRow extends View<Props, State> {
 		return time;
 	}
 
-	getSensors(data: Object): Object {
+	getSensors(data: Object, styles: Object): Object {
 		let sensors = {}, sensorInfo = '';
 		const { formatMessage } = this.props.intl;
 		const {
@@ -386,7 +387,7 @@ class SensorRow extends View<Props, State> {
 			unitStyle,
 			labelStyle,
 			sensorValueCoverStyle,
-		} = this.getStyles();
+		} = styles;
 
 		for (let key in data) {
 			const values = data[key];
@@ -490,7 +491,7 @@ class SensorRow extends View<Props, State> {
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
-		let { sensors, sensorInfo } = this.getSensors(data);
+		let { sensors, sensorInfo } = this.getSensors(data, styles);
 
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
@@ -523,7 +524,6 @@ class SensorRow extends View<Props, State> {
 					onPressSettings={this.onSettingsSelected}/>
 				<ListItem
 					style={styles.row}
-					onLayout={this.onLayout}
 					accessible={accessible}
 					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 					accessibilityLabel={accessible ? accessibilityLabel : ''}
@@ -598,17 +598,13 @@ class SensorRow extends View<Props, State> {
 		);
 	}
 
-	onLayout(event: Object) {
-		this.width = event.nativeEvent.layout.width;
-	}
-
 	getStyles(): Object {
 		const { appLayout, isGatewayActive, sensor } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		let {
+		const {
 			rowHeight,
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
