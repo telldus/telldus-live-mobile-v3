@@ -207,7 +207,8 @@ export default class Time extends View<null, Props, State> {
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
 				<KeyboardAvoidingView
-					behavior="padding">
+					behavior="padding"
+					style={{flex: 1}}>
 					<View style={container}>
 						<View style={[type.container, { marginBottom }]}>
 							{this._renderTypes(TYPES)}
