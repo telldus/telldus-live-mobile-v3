@@ -66,9 +66,11 @@ const Push = {
 		const channel = new firebase.notifications.Android.Channel(
 			pushSenderId,
 			'Tellus Alert',
-			firebase.notifications.Android.Importance.Max,
-		  ).setDescription('Telldus Live alerts on user subscribed events');
-		  firebase.notifications().android.createChannel(channel);
+			firebase.notifications.Android.Importance.Max)
+			.setDescription('Telldus Live alerts on user subscribed events')
+			.enableVibration(true);
+
+		firebase.notifications().android.createChannel(channel);
 	},
 	getToken: ({ pushToken, pushTokenRegistered, deviceId }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
