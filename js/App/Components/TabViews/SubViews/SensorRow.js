@@ -78,26 +78,8 @@ class SensorRow extends View<Props, State> {
 	state: State;
 
 	labelSensor: string;
-	labelHumidity: string;
-	labelTemperature: string;
-	labelRainRate: string;
-	labelRainTotal: string;
-	labelWindGust: string;
-	labelWindAverage: string;
-	labelWindDirection: string;
-	labelUVIndex: string;
 	labelWatt: string;
-	labelCurrent: string;
-	labelEnergy: string;
-	labelAccumulated: string;
 	labelAcc: string;
-	labelVoltage: string;
-	labelPowerFactor: string;
-	labelPulse: string;
-	labelLuminance: string;
-	labelDewPoint: string;
-	labelBarometricPressure: string;
-	labelGenericMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
