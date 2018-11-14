@@ -150,28 +150,29 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const isStateEqual = isEqual(this.state, nextState);
-		if (!isStateEqual) {
-			return true;
+		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		if (currentScreenN === 'Devices') {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
+			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+			const { device } = otherProps;
+
+			if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
+			]);
+			if (propsChange) {
+				return true;
+			}
 		}
-
-		const { propsSwipeRow, tab, ...otherProps } = this.props;// eslint-disable-line
-		const { propsSwipeRow: nextPropsSwipeRow, tab: nextTab, ...nextOtherProps } = nextProps;
-		const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
-		const { device } = otherProps;
-
-		if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
-			return true;
-		}
-
-		if (nextTab !== 'Devices' && this.state.isOpen) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-			'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
-		]);
-		if (propsChange) {
+		if (currentScreenN !== 'Devices' && this.state.isOpen) {
 			return true;
 		}
 
@@ -179,10 +180,10 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { tab, propsSwipeRow, device } = this.props;
+		let { currentScreen, propsSwipeRow, device } = this.props;
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (tab !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
+		if (isOpen && (currentScreen !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
 	}
@@ -675,7 +676,6 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
 
 	return {
-		tab: store.navigation.tab,
 		powerConsumed,
 	};
 }
