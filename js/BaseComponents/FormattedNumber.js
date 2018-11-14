@@ -21,7 +21,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Text } from 'react-native';
+import Text from './Text';
 import * as Intl from 'react-intl';
 
 const FormattedNumberComponent = (props: Object): React$Element<any> => {
@@ -43,7 +43,7 @@ const FormattedNumberComponent = (props: Object): React$Element<any> => {
 
 	return (
 		<Intl.FormattedNumber {...formatOptions}>
-			{(localized: number): React$Element<any> => <Text style={style} allowFontScaling={false}>{props.prefix}{localized}{props.suffix}</Text>}
+			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{localized}<Text style={props.suffixStyle}>{` ${props.suffix}`}</Text></Text>}
 		</Intl.FormattedNumber>
 	);
 };
