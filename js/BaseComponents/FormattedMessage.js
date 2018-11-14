@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import Base from './Base';
 import Text from './Text';
 
@@ -44,4 +44,4 @@ class FormattedMessageComponent extends Base {
 		);
 	}
 }
-export default injectIntl(FormattedMessageComponent);
+export default FormattedMessageComponent;
