@@ -54,7 +54,7 @@
     "react-native-slider": "^0.11.0",
     "react-native-sqlite-storage": "^3.3.6",
     "react-native-svg": "6.1.4",
-    "react-native-swipe-list-view": "^1.3.0",
+    "react-native-swipe-list-view": "https://github.com/rimzici/react-native-swipe-list-view.git",
     "react-native-swiper": "^1.5.13",
     "react-native-udp": "^2.3.1",
     "react-native-uuid": "^1.4.9",
