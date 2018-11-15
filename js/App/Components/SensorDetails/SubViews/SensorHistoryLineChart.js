@@ -350,6 +350,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			);
 		}
 		return (<VictoryLine
+			interpolation={'natural'}
 			key={i}
 			data={d}
 			style={{ data: { stroke: colors[i] } }}
