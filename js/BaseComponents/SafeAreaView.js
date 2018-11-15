@@ -47,7 +47,7 @@ export default class SafeAreaViewComponent extends React.Component<Props, null> 
 					{
 						React.Children.map(children, (child: Object): Object | null => {
 							if (React.isValidElement(child)) {
-								return React.cloneElement(child, ...otherProperties);
+								return React.cloneElement(child, {...otherProperties});
 							}
 							return null;
 						})
