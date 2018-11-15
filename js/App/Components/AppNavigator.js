@@ -135,6 +135,7 @@ const StackNavigatorConfig = {
 		  duration: 600,
 		  easing: Easing.out(Easing.poly(4)),
 		  timing: Animated.timing,
+		  useNativeDriver: true,
 		},
 		screenInterpolator: (sceneProps: Object): Object => {
 			const { layout, position, scene } = sceneProps;
