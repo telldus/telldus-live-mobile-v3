@@ -55,6 +55,7 @@ export default {
 		return this.brandSecondary;
 	},
 
+	appBackground: '#eeeeee',
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
 	eulaContentColor: '#555555',

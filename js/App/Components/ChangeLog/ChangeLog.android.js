@@ -250,7 +250,7 @@ class ChangeLogNavigator extends View {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
 				supportedOrientations={['portrait', 'landscape']}>
-				<View style={{flex: 1, backgroundColor: '#EFEFF4'}} onLayout={onLayout}>
+				<View style={{flex: 1, backgroundColor: Theme.Core.appBackground}} onLayout={onLayout}>
 					<NavigationHeader showLeftIcon={false} topMargin={false}/>
 					<ChangeLogPoster h1={h1} h2={h2}/>
 					<ScrollView>
