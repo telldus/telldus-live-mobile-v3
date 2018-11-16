@@ -32,6 +32,7 @@ import DateBlock from './DateBlock';
 import CalendarModalComponent from './CalendarModalComponent';
 import HistoryNotStored from './HistoryNotStored';
 import NoHistory from './NoHistory';
+import SmoothingDropDown from './SmoothingDropDown';
 
 module.exports = {
 	BatteryInfo,
@@ -45,4 +46,5 @@ module.exports = {
 	CalendarModalComponent,
 	HistoryNotStored,
 	NoHistory,
+	SmoothingDropDown,
 };
