@@ -318,7 +318,7 @@ class HistoryTab extends View {
 				return true;
 			}
 
-			const stateChange = shouldUpdate(others, nextState, ['hasRefreshed', 'refreshing', 'hasLoaded', 'showCalendar', 'timestamp', 'propToUpdate']);
+			const stateChange = shouldUpdate(others, nextState, ['isChartLoading', 'hasRefreshed', 'refreshing', 'hasLoaded', 'showCalendar', 'timestamp', 'propToUpdate']);
 			if (stateChange) {
 				return stateChange;
 			}
@@ -521,7 +521,7 @@ class HistoryTab extends View {
 			sensorId,
 			isChartLoading,
 		};
-
+		console.log('TEST isChartLoading', isChartLoading);
 		return (
 			<ScrollView>
 				<View style={containerStyle}>
