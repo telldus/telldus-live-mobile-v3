@@ -187,7 +187,10 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
-		let { TURNON: icon } = getDeviceActionIcon(deviceType, deviceState, {});
+		let { TURNON: icon, TURNOFF: iconOff } = getDeviceActionIcon(deviceType, deviceState, {});
+		if (deviceState === 'TURNOFF') {
+			icon = iconOff;
+		}
 		if (!icon) {
 			icon = this.getIcon(deviceState);
 		}
@@ -217,7 +220,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
 
-		let triangleColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#1b365d' : '#F06F0C';
+		let bGColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#1b365d' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
 
 		return (
@@ -237,17 +240,17 @@ class HistoryRow extends React.PureComponent<Props, State> {
 					timeContainerStyle={timeContainerStyle}
 					containerStyle={containerStyle}
 					rowContainerStyle={rowContainerStyle}
-					triangleColor={triangleColor}
+					triangleColor={bGColor}
 					rowWithTriangleContainerStyle={rowWithTriangleContainer}
 					isFirst={this.props.isFirst}
 				>
 
-					{this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ?
+					{(deviceState === 'DIM' && this.props.item.stateValue === 0) ?
 						<View style={[statusView, { backgroundColor: '#1b365d' }]}>
-							<IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />
+							<IconTelldus icon={'off'} size={statusIconSize} color="#ffffff" />
 						</View>
 						:
-						<View style={[statusView, { backgroundColor: '#F06F0C' }]}>
+						<View style={[statusView, { backgroundColor: bGColor }]}>
 							{deviceState === 'DIM' ?
 								<Text style={statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
 								:
