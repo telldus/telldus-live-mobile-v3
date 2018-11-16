@@ -129,5 +129,5 @@ s3:
     - tags
   script:
     - echo "${S3CFG}" > ~/.s3cfg
-    - s3cmd put android/app/build/outputs/apk/release/app-release.apk s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_android_{$CI_COMMIT_TAG}.apk
-    - s3cmd put TelldusLiveApp.ipa s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_ios_{$CI_COMMIT_TAG}.ipa
+    - s3cmd put android/app/build/outputs/apk/release/app-release.apk s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_android_${CI_COMMIT_TAG}.apk
+    - s3cmd put TelldusLiveApp.ipa s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_ios_${CI_COMMIT_TAG}.ipa
