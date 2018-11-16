@@ -521,7 +521,7 @@ class HistoryTab extends View {
 			sensorId,
 			isChartLoading,
 		};
-		console.log('TEST isChartLoading', isChartLoading);
+
 		return (
 			<ScrollView>
 				<View style={containerStyle}>
