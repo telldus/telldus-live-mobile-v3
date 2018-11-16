@@ -38,6 +38,7 @@ import {
 	CalendarModalComponent,
 	HistoryNotStored,
 	NoHistory,
+	SmoothingDropDown,
 } from './SubViews';
 
 import {
@@ -66,6 +67,7 @@ type Props = {
 	showOne: boolean,
 	showTwo: boolean,
 	screenProps: Object,
+	smoothing: boolean,
 
 	sensorId: number,
 	dispatch: Function,
@@ -100,6 +102,7 @@ class HistoryTab extends View {
 	onToggleChartData: (Object) => void;
 
 	delayRefreshHistoryData: any;
+	onValueChangeSmoothing: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -153,6 +156,7 @@ class HistoryTab extends View {
 		this.onPressNegative = this.onPressNegative.bind(this);
 
 		this.onToggleChartData = this.onToggleChartData.bind(this);
+		this.onValueChangeSmoothing = this.onValueChangeSmoothing.bind(this);
 
 		this.delayRefreshHistoryData = null;
 	}
@@ -333,7 +337,7 @@ class HistoryTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo']);
+			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo', 'smoothing']);
 			if (propsChange) {
 				return propsChange;
 			}
@@ -449,6 +453,15 @@ class HistoryTab extends View {
 		});
 	}
 
+	onValueChangeSmoothing(itemValue: string, itemIndex: number, data: Array<Object>) {
+		const { sensorId, dispatch } = this.props;
+		const { key: smoothing } = data[itemIndex];
+		const setting = {
+			smoothing,
+		};
+		dispatch(changeDefaultHistorySettings(sensorId, setting));
+	}
+
 	getMaxDate(index: number, timestamp: Object): string {
 		const { toTimestamp } = timestamp;
 		if (index === 1) {
@@ -466,6 +479,7 @@ class HistoryTab extends View {
 			showOne,
 			sensorId,
 			keepHistory,
+			smoothing,
 		} = this.props;
 		const {
 			list,
@@ -520,6 +534,7 @@ class HistoryTab extends View {
 			showOne,
 			sensorId,
 			isChartLoading,
+			smoothing,
 		};
 
 		return (
@@ -556,6 +571,11 @@ class HistoryTab extends View {
 						onValueChangeOne={this.onValueChangeOne}
 						onValueChangeTwo={this.onValueChangeTwo}
 						appLayout={appLayout}/>
+					<SmoothingDropDown
+						smoothing={smoothing}
+						appLayout={appLayout}
+						intl={intl}
+						onValueChange={this.onValueChangeSmoothing}/>
 				</View>
 				<CalendarModalComponent
 					isVisible={showCalendar}
@@ -600,6 +620,7 @@ function prepareDefaultSettings(defaultSettings?: Object): Object {
 		selectedTwo: null,
 		showOne: true,
 		showTwo: true,
+		smoothing: false,
 	};
 	if (!defaultSettings) {
 		return settings;
@@ -623,6 +644,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		selectedTwo = null,
 		showOne = true,
 		showTwo = true,
+		smoothing = false,
 	} = prepareDefaultSettings(defaultSettings);
 
 	return {
@@ -632,6 +654,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		selectedTwo,
 		showOne,
 		showTwo,
+		smoothing,
 	};
 }
 

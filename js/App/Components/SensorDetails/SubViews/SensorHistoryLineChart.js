@@ -38,6 +38,7 @@ const isEqual = require('react-fast-compare');
 
 import { View, FullPageActivityIndicator } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
+import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -52,6 +53,7 @@ type Props = {
 	showTwo: boolean,
 	liveData: Object,
 	isChartLoading: boolean,
+	smoothing: boolean,
 
 	onToggleChartData: (Object) => void,
 };
@@ -59,6 +61,7 @@ type Props = {
 type DefaultProps = {
 	showOne: boolean,
 	showTwo: boolean,
+	smoothing: boolean,
 };
 
 type State = {
@@ -73,6 +76,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 	static defaultProps: DefaultProps = {
 		showOne: true,
 		showTwo: true,
+		smoothing: false,
 	};
 
 	toggleOne: () => void;
@@ -118,10 +122,12 @@ class SensorHistoryLineChart extends View<Props, State> {
 		if (!isStateEqual) {
 			return true;
 		}
-		const { showOne, showTwo, isChartLoading } = this.props;
-		if ((showOne !== nextProps.showOne) || (showTwo !== nextProps.showTwo) || (isChartLoading !== nextProps.isChartLoading)) {
-			return true;
+
+		const propsChange = shouldUpdate( this.props, nextProps, ['showOne', 'showTwo', 'isChartLoading', 'smoothing']);
+		if (propsChange) {
+			return propsChange;
 		}
+
 		const { selectedOne, selectedTwo } = this.props;
 		const isSelectedEqual = isEqual(selectedOne, nextProps.selectedOne) && isEqual(selectedTwo, nextProps.selectedTwo);
 		if (!isSelectedEqual) {
@@ -322,6 +328,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 		const {
 			showOne,
 			showTwo,
+			smoothing,
 		} = this.props;
 
 		if (!d) {
@@ -350,7 +357,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			);
 		}
 		return (<VictoryLine
-			interpolation={'natural'}
+			interpolation={smoothing ? 'monotoneX' : 'linear'}
 			key={i}
 			data={d}
 			style={{ data: { stroke: colors[i] } }}
