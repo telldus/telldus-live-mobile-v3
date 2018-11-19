@@ -40,6 +40,7 @@ type Props = {
 	showDialogue?: boolean,
 	appLayout: Object,
 
+	backdropOpacity?: number,
 	showIconOnHeader?: boolean,
 	imageHeader?: boolean,
 	text: string,
@@ -57,6 +58,7 @@ type Props = {
 	intl: intlShape.isRequired,
 	accessibilityLabel?: string,
 	style?: number | Object | Array<any>,
+	showHeader?: boolean,
 };
 
 type defaultProps = {
@@ -65,6 +67,8 @@ type defaultProps = {
 	exit: string,
 	entryDuration: number,
 	exitDuration: number,
+	backdropOpacity: number,
+	showHeader: boolean,
 };
 
 class DialogueBox extends Component<Props, null> {
@@ -77,6 +81,8 @@ class DialogueBox extends Component<Props, null> {
 		exit: 'ZoomOut',
 		entryDuration: 300,
 		exitDuration: 100,
+		backdropOpacity: 0.60,
+		showHeader: true,
 	}
 
 	renderHeader: (Object) => void;
@@ -278,13 +284,15 @@ class DialogueBox extends Component<Props, null> {
 			style,
 			entryDuration,
 			exitDuration,
+			backdropOpacity,
+			showHeader,
 		} = this.props;
 		const styles = this.getStyles();
 
 		return (
 			<Modal
 				style={styles.modal}
-				backdropOpacity={0.60}
+				backdropOpacity={backdropOpacity}
 				isVisible={showDialogue}
 				animationInTiming={entryDuration}
 				animationOutTiming={exitDuration}
@@ -292,7 +300,7 @@ class DialogueBox extends Component<Props, null> {
 				onModalShow={this.onModalOpened}
 				supportedOrientations={['portrait', 'landscape']}>
 				<View style={[styles.container, style]}>
-					{this.renderHeader(styles)}
+					{!!showHeader && this.renderHeader(styles)}
 					{this.renderBody(styles)}
 					{this.renderFooter(styles)}
 				</View>

@@ -38,7 +38,8 @@ type Props = {
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
-    iconColor?: string,
+	iconColor?: string,
+	shouldCapitalize?: boolean,
 };
 
 type defaultProps = {
@@ -46,7 +47,8 @@ type defaultProps = {
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
-    iconColor?: string,
+	iconColor?: string,
+	shouldCapitalize: boolean,
 };
 
 export default class DialogueHeader extends Component<Props, null> {
@@ -57,6 +59,7 @@ static defaultProps: defaultProps = {
 	iconName: 'times-circle',
 	iconSize: 12,
 	iconColor: '#fff',
+	shouldCapitalize: true,
 }
 
 onPressIcon: () => void;
@@ -84,12 +87,22 @@ onPressHeader() {
 }
 
 render(): Object {
-	let { headerText, headerStyle, textStyle, showIcon, iconName, iconSize, iconColor } = this.props;
-	headerText = typeof headerText === 'string' ? capitalize(headerText) : headerText;
+	let {
+		headerText,
+		headerStyle,
+		textStyle,
+		showIcon,
+		iconName,
+		iconSize,
+		iconColor,
+		shouldCapitalize,
+		onPressHeader,
+	} = this.props;
+	headerText = typeof headerText === 'string' && shouldCapitalize ? capitalize(headerText) : headerText;
 
 	return (
-		<TouchableOpacity onPress={this.onPressHeader}>
-			<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
+		<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
+			<TouchableOpacity onPress={this.onPressHeader} disabled={!onPressHeader} style={styles.touchable}>
 
 				<Text style={[styles.text, textStyle]}>
 					{headerText}
@@ -98,13 +111,18 @@ render(): Object {
 					<Icon name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
 				)}
 
-			</ImageBackground>
-		</TouchableOpacity>
+			</TouchableOpacity>
+		</ImageBackground>
 	);
 }
 }
 
 const styles = StyleSheet.create({
+	touchable: {
+		flex: 1,
+		justifyContent: 'space-between',
+		alignItems: 'stretch',
+	},
 	image: {
 		height: undefined,
 		width: undefined,
