@@ -305,7 +305,7 @@ class DevicesTab extends View {
 		return false;
 	}
 
-	getDialogueBoxData(style: Object, appLayout: Object): Object {
+	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
 		const { show, action, device } = this.state.dialogueBoxConf;
 		let data = {
 			showDialogue: show,
@@ -331,6 +331,7 @@ class DevicesTab extends View {
 					onPressButton={this.onDismissDialogueHide}
 					isOnline={isOnline}
 					appLayout={appLayout}
+					intl={intl}
 				/>,
 				dialogueBoxStyle: style.dialogueBoxStyle,
 				backdropOpacity: 0,
@@ -464,7 +465,7 @@ class DevicesTab extends View {
 			screenProps,
 			screenReaderEnabled,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const { appLayout, intl } = screenProps;
 		const {
 			showHiddenList,
 			isRefreshing,
@@ -506,7 +507,7 @@ class DevicesTab extends View {
 			dialogueBoxStyle,
 			backdropOpacity,
 			showHeader,
-		} = this.getDialogueBoxData(style, appLayout);
+		} = this.getDialogueBoxData(style, appLayout, intl);
 
 		return (
 			<ScrollView style={style.container}

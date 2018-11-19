@@ -34,6 +34,7 @@ import DimSlider from './DimSlider';
 import shouldUpdate from '../../../../Lib/shouldUpdate';
 
 import Theme from '../../../../Theme';
+import i18n from '../../../../Translations/common';
 
 type Props = {
     name: string,
@@ -42,6 +43,7 @@ type Props = {
 	onPressButton: Function,
 	isOnline: boolean,
 	appLayout: Object,
+	intl: Object,
 };
 
 class DimmerControlInfo extends View<Props, null> {
@@ -62,6 +64,7 @@ class DimmerControlInfo extends View<Props, null> {
 			onPressButton,
 			isOnline,
 			appLayout,
+			intl,
 		} = this.props;
 
 		const minimumTrackTintColor = isOnline ? Theme.Core.brandSecondary : '#cccccc';
@@ -80,15 +83,14 @@ class DimmerControlInfo extends View<Props, null> {
 		return (
 			<View style={dimInfoDialogueContainer}>
 				<DialogueHeader
-					headerText={`DIM [${name}]`}
+					headerText={`${intl.formatMessage(i18n.dim)} ${name}`}
 					shouldCapitalize={false}
 					showIcon={false}
 					headerStyle={style.dialogueHeaderStyle}
 					textStyle={style.dialogueHeaderTextStyle}/>
 				<View style={style.dialogueBodyStyle}>
 					<Text style={style.dialogueBodyTextStyle}>
-                Select dim value below. You can also click and drag the dim
-                 button in the list up/right or down/left to dim your device.
+						{intl.formatMessage(i18n.dimInstruction)}
 					</Text>
 					<View style={{
 						flexDirection: 'row',

@@ -281,7 +281,7 @@ class DashboardTab extends View {
 		});
 	}
 
-	getDialogueBoxData(style: Object, appLayout: Object): Object {
+	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
 		const { show, action, device } = this.state.dialogueBoxConf;
 		let data = {
 			showDialogue: show,
@@ -307,6 +307,7 @@ class DashboardTab extends View {
 					onPressButton={this.onDismissDialogueHide}
 					isOnline={isOnline}
 					appLayout={appLayout}
+					intl={intl}
 				/>,
 				dialogueBoxStyle: style.dialogueBoxStyle,
 				backdropOpacity: 0,
@@ -317,7 +318,7 @@ class DashboardTab extends View {
 
 	render(): Object {
 		const { screenProps, isDBEmpty, rows } = this.props;
-		const { appLayout } = screenProps;
+		const { appLayout, intl } = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles(appLayout);
@@ -343,7 +344,7 @@ class DashboardTab extends View {
 			dialogueBoxStyle,
 			backdropOpacity,
 			showHeader,
-		} = this.getDialogueBoxData(style, appLayout);
+		} = this.getDialogueBoxData(style, appLayout, intl);
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
