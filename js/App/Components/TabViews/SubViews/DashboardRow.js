@@ -44,7 +44,8 @@ type Props = {
     powerConsumed?: number,
 	appLayout: Object,
     style: Object,
-    setScrollEnabled: (boolean) => void,
+	setScrollEnabled: (boolean) => void,
+	onPressDimButton: (Object) => void,
 };
 
 type State = {
@@ -93,7 +94,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 getButtonsInfo(item: Object, styles: Object): Object {
 	let { supportedMethods, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
-	let { tileWidth, setScrollEnabled } = this.props;
+	let { tileWidth, setScrollEnabled, onPressDimButton } = this.props;
 	const {
 		TURNON,
 		TURNOFF,
@@ -141,7 +142,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<DimmerDashboardTile key={2} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
-			showSlider={showSlider} setScrollEnabled={setScrollEnabled}/>);
+			showSlider={showSlider} setScrollEnabled={setScrollEnabled} onPressDimButton={onPressDimButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,

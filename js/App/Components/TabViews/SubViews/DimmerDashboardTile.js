@@ -69,6 +69,7 @@ type Props = {
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
+	onPressDimButton: (Object) => void,
 };
 
 type DefaultProps = {
@@ -97,6 +98,8 @@ class DimmerDashboardTile extends View<Props, void> {
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
 
+	onPressDimButton: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
@@ -112,6 +115,8 @@ class DimmerDashboardTile extends View<Props, void> {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
+
+		this.onPressDimButton = this.onPressDimButton.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -163,6 +168,13 @@ class DimmerDashboardTile extends View<Props, void> {
 
 	showDimmerStep(id: number) {
 		this.props.showDimmerStep(id);
+	}
+
+	onPressDimButton() {
+		const { onPressDimButton, item } = this.props;
+		if (onPressDimButton && typeof onPressDimButton === 'function') {
+			onPressDimButton(item);
+		}
 	}
 
 	render(): Object {
@@ -221,7 +233,8 @@ class DimmerDashboardTile extends View<Props, void> {
 		const slider = DIM ?
 			<HVSliderContainer
 				{...sliderProps}
-				style={[styles.sliderContainer, sliderStyle]}>
+				style={[styles.sliderContainer, sliderStyle]}
+				onPress={this.onPressDimButton}>
 				<SliderScale
 					style={styles.slider}
 					thumbWidth={7}

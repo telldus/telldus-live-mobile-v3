@@ -29,7 +29,12 @@ import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, View } from '../../../BaseComponents';
+import {
+	Text,
+	View,
+	DialogueBox,
+} from '../../../BaseComponents';
+import { DimmerControlInfo } from './SubViews/Device';
 import { getDevices } from '../../Actions/Devices';
 import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
 
@@ -70,6 +75,7 @@ type State = {
 	isRefreshing: boolean,
 	scrollEnabled: boolean,
 	showRefresh: boolean,
+	dialogueBoxConf: Object,
 };
 
 class DashboardTab extends View {
@@ -87,6 +93,9 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 	_renderRow: (number) => Object;
+	onDismissDialogueHide: () => void;
+
+	showDimInfo: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.dashboard),
@@ -105,6 +114,11 @@ class DashboardTab extends View {
 			isRefreshing: false,
 			scrollEnabled: true,
 			showRefresh: true,
+			dialogueBoxConf: {
+				show: false,
+				action: '',
+				device: {},
+			},
 		};
 
 		this.timer = null;
@@ -119,6 +133,9 @@ class DashboardTab extends View {
 
 		this.noItemsTitle = props.screenProps.intl.formatMessage(i18n.messageNoItemsTitle);
 		this.noItemsContent = props.screenProps.intl.formatMessage(i18n.messageNoItemsContent);
+
+		this.showDimInfo = this.showDimInfo.bind(this);
+		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 	}
 
 	startSensorTimer() {
@@ -245,6 +262,59 @@ class DashboardTab extends View {
 		return false;
 	}
 
+	onDismissDialogueHide() {
+		this.setState({
+			dialogueBoxConf: {
+				show: false,
+				action: '',
+			},
+		});
+	}
+
+	showDimInfo(device: Object) {
+		this.setState({
+			dialogueBoxConf: {
+				show: true,
+				action: 'dim_info',
+				device,
+			},
+		});
+	}
+
+	getDialogueBoxData(style: Object, appLayout: Object): Object {
+		const { show, action, device } = this.state.dialogueBoxConf;
+		let data = {
+			showDialogue: show,
+			header: null,
+			text: '',
+		};
+		if (show && action === 'dim_info') {
+			const { isOnline, name, id } = device;
+			const styles = {
+				dialogueHeaderStyle: style.dialogueHeaderStyle,
+				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
+				dialogueBodyStyle: style.dialogueBodyStyle,
+				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
+			};
+
+			return {
+				...data,
+				showHeader: false,
+				text: <DimmerControlInfo
+					style={styles}
+					name={name}
+					id={id}
+					onPressButton={this.onDismissDialogueHide}
+					isOnline={isOnline}
+					appLayout={appLayout}
+				/>,
+				dialogueBoxStyle: style.dialogueBoxStyle,
+				backdropOpacity: 0,
+			};
+		}
+		return data;
+	}
+
 	render(): Object {
 		const { screenProps, isDBEmpty, rows } = this.props;
 		const { appLayout } = screenProps;
@@ -260,6 +330,20 @@ class DashboardTab extends View {
 			propOne: tileWidth,
 			propTwo: appLayout,
 		};
+
+		const {
+			showDialogue,
+			header,
+			text,
+			showNegative,
+			onPressNegative,
+			showPositive,
+			positiveText,
+			onPressPositive,
+			dialogueBoxStyle,
+			backdropOpacity,
+			showHeader,
+		} = this.getDialogueBoxData(style, appLayout);
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
@@ -284,6 +368,19 @@ class DashboardTab extends View {
 					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+				/>
+				<DialogueBox
+					showDialogue={showDialogue}
+					showHeader={showHeader}
+					header={header}
+					text={text}
+					style={dialogueBoxStyle}
+					showNegative={showNegative}
+					onPressNegative={onPressNegative}
+					showPositive={showPositive}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					backdropOpacity={backdropOpacity}
 				/>
 			</View>
 		);
@@ -355,6 +452,7 @@ class DashboardTab extends View {
 			tileWidth={tileWidth}
 			intl={screenProps.intl}
 			setScrollEnabled={this.setScrollEnabled}
+			onPressDimButton={this.showDimInfo}
 		/>;
 	}
 
@@ -370,6 +468,7 @@ class DashboardTab extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const { isDBEmpty } = this.props;
+		const deviceWidth = isPortrait ? width : height;
 
 		const padding = this.getPadding();
 
@@ -394,6 +493,35 @@ class DashboardTab extends View {
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
+			dialogueHeaderStyle: {
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+				width: deviceWidth * 0.75,
+			},
+			dialogueHeaderTextStyle: {
+				fontSize: 13,
+			},
+			dialogueBodyStyle: {
+				paddingHorizontal: 20,
+				paddingVertical: 10,
+				width: deviceWidth * 0.75,
+			},
+			dialogueBodyTextStyle: {
+				fontSize: 13,
+				color: '#6B6969',
+			},
+			dialogueBoxStyle: {
+				borderRadius: 8,
+				elevation: 2,
+				shadowColor: '#000',
+				shadowRadius: 8,
+				shadowOpacity: 0.23,
+				shadowOffset: {
+					width: 0,
+					height: 1,
+				},
+				backgroundColor: '#fff',
+			},
 		};
 	}
 }
