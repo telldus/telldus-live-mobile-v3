@@ -70,6 +70,7 @@ type Props = {
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
+	onPressDimButton: (device: Object) => void,
 };
 
 type DefaultProps = {
@@ -89,6 +90,8 @@ class DimmerButton extends View<Props, null> {
 	onSlidingComplete: number => void;
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
+
+	onPressDimButton: () => void;
 
 	static defaultProps: DefaultProps = {
 		showSlider: true,
@@ -112,6 +115,8 @@ class DimmerButton extends View<Props, null> {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
+
+		this.onPressDimButton = this.onPressDimButton.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -178,6 +183,13 @@ class DimmerButton extends View<Props, null> {
 
 	showDimmerStep(id: number) {
 		this.props.showDimmerStep(id);
+	}
+
+	onPressDimButton() {
+		const { onPressDimButton, device } = this.props;
+		if (onPressDimButton && typeof onPressDimButton === 'function') {
+			onPressDimButton(device);
+		}
 	}
 
 	render(): Object {
@@ -260,7 +272,7 @@ class DimmerButton extends View<Props, null> {
 			<HVSliderContainer
 				{...sliderProps}
 				style={sliderStyle}
-				onPress={isOpen ? closeSwipeRow : null}
+				onPress={isOpen ? closeSwipeRow : this.onPressDimButton}
 			>
 				<SliderScale
 					style={styles.slider}
