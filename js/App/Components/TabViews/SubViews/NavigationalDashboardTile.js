@@ -68,7 +68,7 @@ class NavigationalDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth']);
 		if (propsChange) {
 			return true;
 		}
