@@ -97,7 +97,7 @@ class DimmerControlInfo extends View<Props, null> {
 						marginTop: 8,
 					}}>
 						<DimSlider
-							prefix={'Dim value: '}
+							prefix={`${intl.formatMessage(i18n.dimmingLevel)}: `}
 							id={id}
 							sliderContainerStyle={sliderContainerStyle}
 							thumbStyle={thumbStyle}
