@@ -1,0 +1,237 @@
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @flow
+
+'use strict';
+
+import React, { Component } from 'react';
+import { Dropdown } from 'react-native-material-dropdown';
+import Ripple from 'react-native-material-ripple';
+
+import View from './View';
+import Text from './Text';
+import IconTelldus from './IconTelldus';
+
+import shouldUpdate from '../App/Lib/shouldUpdate';
+
+import Theme from '../App/Theme';
+
+type Props = {
+    appLayout: Object,
+    items: Array<Object>,
+    value: string,
+    label: string,
+
+    baseLeftIcon?: string,
+	onValueChange: (string, number, Array<any>) => void,
+    pickerContainerStyle: Array<any> | number | Object,
+    dropDownHeaderStyle: Array<any> | number | Object,
+    dropDownContainerStyle: Array<any> | number | Object,
+    dropDownListsContainerStyle: Array<any> | number | Object,
+};
+
+type DefaultProps = {
+    baseLeftIcon: string,
+};
+
+type State = {
+};
+
+export default class DropDown extends Component<Props, State> {
+props: Props;
+state: State = {
+};
+defaultProps: DefaultProps = {
+	baseLeftIcon: 'down',
+};
+	renderBase: () => Object;
+	onPressPicker: () => void;
+	constructor(props: Props) {
+		super(props);
+
+		this.renderBase = this.renderBase.bind(this);
+		this.onPressPicker = this.onPressPicker.bind(this);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const propsChange = shouldUpdate(this.props, nextProps, ['value', 'appLayout', 'label']);
+		if (propsChange) {
+			return true;
+		}
+		if (this.props.items.length !== nextProps.items.length) {
+			return true;
+		}
+		return false;
+	}
+
+	onPressPicker() {
+		this.refs.dropdown.focus();
+	}
+
+	renderBase(items: Object): Object {
+		const { title } = items;
+		const { appLayout, baseLeftIcon } = this.props;
+
+		const {
+			pickerBaseCoverStyle,
+			pickerBaseTextStyle,
+			rightIconStyle,
+		} = this.getStyle(appLayout);
+		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
+
+		return (
+			<Ripple
+				rippleColor={rippleColor}
+				rippleOpacity={rippleOpacity}
+				rippleDuration={rippleDuration}
+				style={pickerBaseCoverStyle}
+				onPress={this.onPressPicker}>
+				<Text style={pickerBaseTextStyle} numberOfLines={1}>
+					{title}
+				</Text>
+				<IconTelldus icon={baseLeftIcon} style={rightIconStyle}/>
+			</Ripple>
+		);
+	}
+
+	render(): Object {
+		const {
+			appLayout,
+			onValueChange,
+			items,
+			value,
+			label,
+			pickerContainerStyle,
+			dropDownHeaderStyle,
+			dropDownContainerStyle,
+			dropDownListsContainerStyle,
+		} = this.props;
+		const {
+			pickerContainerStyleDef,
+			fontSize,
+			rowTextColor,
+			itemPadding,
+			itemCount,
+			dropDownHeaderStyleDef,
+			dropDownContainerStyleDef,
+			dropDownListsContainerStyleDef,
+		} = this.getStyle(appLayout);
+		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
+		const iCount = items.length < itemCount ? items.length : itemCount;
+		const dropdownTop = -(iCount * itemSize);
+
+		return (
+			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>
+				{!!label && (
+					<Text style={[dropDownHeaderStyleDef, dropDownHeaderStyle]}>
+						{label}
+					</Text>
+				)}
+				<View style={[dropDownListsContainerStyleDef, dropDownListsContainerStyle]}>
+					<Dropdown
+						ref={'dropdown'}
+						data={items}
+						value={value}
+						onChangeText={onValueChange}
+						renderBase={this.renderBase}
+						containerStyle={[pickerContainerStyleDef, pickerContainerStyle]}
+						fontSize={fontSize}
+						itemCount={iCount}
+						itemPadding={itemPadding}
+						baseColor={'#000'}
+						itemColor={'#000'}
+						selectedItemColor={rowTextColor}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
+					/>
+				</View>
+			</View>
+		);
+	}
+	getStyle(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
+		const outerPadding = padding * 2;
+		const pickerItemsWidth = width - outerPadding;
+
+		const fontSizeText = deviceWidth * 0.04;
+		const fontSizeRightIcon = deviceWidth * 0.04;
+
+		const itemCount = 4;
+		const itemPadding = 8;
+
+		return {
+			dropDownContainerStyleDef: {
+				flex: 0,
+				alignItems: 'flex-start',
+			},
+			dropDownHeaderStyleDef: {
+				marginLeft: padding / 2,
+				color: inactiveTintColor,
+				fontSize: fontSizeText * 1.2,
+				marginBottom: (fontSizeText * 0.5),
+			},
+			dropDownListsContainerStyleDef: {
+				flex: 0,
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			pickerContainerStyleDef: {
+				width: pickerItemsWidth,
+				...shadow,
+				marginLeft: padding / 2,
+				marginBottom: padding / 2,
+				backgroundColor: '#fff',
+			},
+			pickerBaseCoverStyle: {
+				width: pickerItemsWidth,
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				alignItems: 'center',
+				padding: 5 + (fontSizeText * 0.4),
+			},
+			pickerBaseTextStyle: {
+				flex: 1,
+				fontSize: fontSizeText,
+				color: rowTextColor,
+				marginRight: (fontSizeText * 0.4),
+			},
+			rightIconStyle: {
+				fontSize: fontSizeRightIcon,
+				color: rowTextColor,
+			},
+			brandInfo,
+			rowTextColor,
+			brandDanger,
+			fontSize: fontSizeText,
+			itemCount,
+			itemPadding,
+		};
+	}
+}
