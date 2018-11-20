@@ -395,7 +395,14 @@ class HVSliderContainer extends View {
 		}
 
 		return (
-			<Parent style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]} onLayout={containerWidth ? undefined : this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
+			<Parent
+				style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]}
+				/** TODO: Remove once RN is upgraded, and after making sure onLayout getting called
+				* indefinitely issue is solved in iPhone 7 & 8 plus
+				*/
+				onLayout={(containerWidth && Platform.OS === 'ios') ? undefined : this.layoutView}
+				{...parentProps}
+				accessibilityLabel={accessibilityLabel}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
