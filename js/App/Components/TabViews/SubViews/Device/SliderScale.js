@@ -105,10 +105,13 @@ class SliderScale extends View {
 
 	layoutScale(event: Object) {
 		let { width, height } = event.nativeEvent.layout;
-		this.setState({
-			scaleWidth: width,
-			scaleHeight: height,
-		});
+		const { scaleWidth, scaleHeight } = this.state;
+		if (scaleWidth !== width || height !== scaleHeight) {
+			this.setState({
+				scaleWidth: width,
+				scaleHeight: height,
+			});
+		}
 	}
 
 	render(): Object {
@@ -142,7 +145,7 @@ class SliderScale extends View {
 					width: (containerWidth - (2 * thumbWidth)),
 					marginLeft: thumbWidth,
 					borderRadius: thumbHeight / 6,
-				}]} onLayout={this.layoutScale}/>
+				}]} onLayout={scaleWidth ? undefined : this.layoutScale}/>
 				<Animated.View style={[
 					styles.thumb, thumbStyle, {
 						width: thumbWidth,

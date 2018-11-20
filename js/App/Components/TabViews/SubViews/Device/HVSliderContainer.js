@@ -340,10 +340,13 @@ class HVSliderContainer extends View {
 
 	layoutView(x: Object) {
 		let { width, height } = x.nativeEvent.layout;
-		this.setState({
-			containerWidth: width,
-			containerHeight: height,
-		});
+		const { containerWidth, containerHeight } = this.state;
+		if (containerWidth !== width || containerHeight !== height) {
+			this.setState({
+				containerWidth: width,
+				containerHeight: height,
+			});
+		}
 	}
 
 	onValueChange(val: number) {
@@ -392,7 +395,7 @@ class HVSliderContainer extends View {
 		}
 
 		return (
-			<Parent style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
+			<Parent style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]} onLayout={containerWidth ? undefined : this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
