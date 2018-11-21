@@ -284,6 +284,7 @@ This app uses [Redux](http://redux.js.org/) to manage its state. Redux is opinio
 - `connect`: function that binds the Redux store to a React component passing two functions:
   - `mapStateToProps`: a function that uses Selectors to filter relevant props from the state
   - `mapDispatchToProps`: a function that exposes relevant Action creators in the props
+- `migrate`: Upon adding/removing a reducer or adding/removing any property of a reducer give a thought about app upgradation and compatibilty.(see `js/App/Store/migrations`)
 
 For more info, from the man himself @dan_ambramov: https://github.com/reactjs/react-redux/blob/master/docs/api.md
 
