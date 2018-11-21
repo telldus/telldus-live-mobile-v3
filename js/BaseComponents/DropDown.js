@@ -145,8 +145,8 @@ static defaultProps: DefaultProps = {
 			selectedItemColor,
 			itemColor,
 			baseColor,
-			itemPadding,
-			itemCount,
+			itemPadding = 8,
+			itemCount = 4,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
