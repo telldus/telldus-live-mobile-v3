@@ -345,7 +345,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 function mapStateToProps(store: Object, dispatch: Function): Object {
 	const { app = {} } = store;
-	const { screenReaderEnabled, dimmerSensitivity: sensitive = 5 } = app;
+	const { screenReaderEnabled, defaultSettings = {} } = app;
+	const { dimmerSensitivity: sensitive = 5 } = defaultSettings;
 	return {
 		screenReaderEnabled,
 		sensitive,
