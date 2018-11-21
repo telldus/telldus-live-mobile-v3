@@ -188,7 +188,6 @@ saveSortingDB(value: string, itemIndex: number, data: Array<any>) {
 	const { dispatch } = this.props;
 	const { key: sortingDB } = data[itemIndex];
 	const settings = { sortingDB };
-	console.log('TEST settings', settings);
 	dispatch(changeSortingDB(settings));
 }
 
@@ -250,7 +249,7 @@ render(): Object {
 
 	const buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
 	const importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
-	console.log('TEST this.props', this.props);
+
 	return (
 		<View style={styles.container}>
 			<NavigationHeaderPoster
