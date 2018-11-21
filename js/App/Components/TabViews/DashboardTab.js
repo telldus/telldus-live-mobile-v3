@@ -263,10 +263,11 @@ class DashboardTab extends View {
 	}
 
 	onDismissDialogueHide() {
+		const { dialogueBoxConf } = this.state;
 		this.setState({
 			dialogueBoxConf: {
+				...dialogueBoxConf,
 				show: false,
-				action: '',
 			},
 		});
 	}
@@ -285,10 +286,8 @@ class DashboardTab extends View {
 		const { show, action, device } = this.state.dialogueBoxConf;
 		let data = {
 			showDialogue: show,
-			header: null,
-			text: '',
 		};
-		if (show && action === 'dim_info') {
+		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
 			const styles = {
 				dialogueHeaderStyle: style.dialogueHeaderStyle,

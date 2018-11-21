@@ -204,19 +204,21 @@ class DevicesTab extends View {
 
 	onConfirmDialogueHide() {
 		this.setIgnoreDevice(this.state.dialogueBoxConf.device);
+		const { dialogueBoxConf } = this.state;
 		this.setState({
 			dialogueBoxConf: {
+				...dialogueBoxConf,
 				show: false,
-				action: '',
 			},
 		});
 	}
 
 	onDismissDialogueHide() {
+		const { dialogueBoxConf } = this.state;
 		this.setState({
 			dialogueBoxConf: {
+				...dialogueBoxConf,
 				show: false,
-				action: '',
 			},
 		});
 	}
@@ -309,10 +311,8 @@ class DevicesTab extends View {
 		const { show, action, device } = this.state.dialogueBoxConf;
 		let data = {
 			showDialogue: show,
-			header: null,
-			text: '',
 		};
-		if (show && action === 'dim_info') {
+		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
 			const styles = {
 				dialogueHeaderStyle: style.dialogueHeaderStyle,
@@ -324,6 +324,7 @@ class DevicesTab extends View {
 			return {
 				...data,
 				showHeader: false,
+				header: null,
 				text: <DimmerControlInfo
 					style={styles}
 					name={name}
@@ -337,7 +338,7 @@ class DevicesTab extends View {
 				backdropOpacity: 0,
 			};
 		}
-		if (show && action === 'set_ignore') {
+		if (action === 'set_ignore') {
 			return {
 				...data,
 				header: <DialogueHeader
