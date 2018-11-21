@@ -209,7 +209,6 @@ static defaultProps: DefaultProps = {
 				alignItems: 'flex-start',
 			},
 			dropDownHeaderStyleDef: {
-				marginLeft: padding / 2,
 				color: inactiveTintColor,
 				fontSize: fontSizeText * 1.2,
 				marginBottom: 5,
@@ -223,7 +222,6 @@ static defaultProps: DefaultProps = {
 			pickerContainerStyleDef: {
 				flex: 1,
 				...shadow,
-				marginLeft: padding / 2,
 				marginBottom: padding / 2,
 				backgroundColor: '#fff',
 			},

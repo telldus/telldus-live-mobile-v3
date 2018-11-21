@@ -32,6 +32,7 @@ import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
 
+import Theme from '../../../Theme';
 type Props = {
 	appLayout: Object,
 	smoothing: boolean,
@@ -58,6 +59,12 @@ export default class SmoothingDropDown extends View<Props, null> {
 
 	render(): Object {
 		const { appLayout, smoothing, onValueChange } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const { paddingFactor } = Theme.Core;
+		const padding = deviceWidth * paddingFactor;
 
 		return (
 			<DropDown
@@ -66,6 +73,9 @@ export default class SmoothingDropDown extends View<Props, null> {
 				label={this.DDLabel}
 				onValueChange={onValueChange}
 				appLayout={appLayout}
+				dropDownContainerStyle={{
+					paddingLeft: padding / 2,
+				}}
 			/>
 		);
 	}
