@@ -325,7 +325,7 @@ THERMOSTAT = 2048  #: Device flag for devices supporting thermostat methods.
 The following methods aren't in use in the moment: `TOGGLE`, `EXECUTE`, `RGBW`, `THERMOSTAT`
 
 You can add up these methods to a single digit that denotes a group of methods, e.g. `3 = 1 + 2 = TURNON, TURNOFF`.
-Currently, the app supports `1975 = 1 + 2 + 4 + 16 + 32 + 128 + 256 + 512 + 1024`.
+Currently, the app supports `951 = 1 + 2 + 4 + 16 + 32 + 128 + 256 + 512`.
 
 When for example, `devices/list` is called, we can provide `supportedMethods`. If this parameter is not set, in the response `methods` and `state` will always report `0` for each device.
 
