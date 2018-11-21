@@ -229,8 +229,9 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 ## Testing
 
 Before commiting code. Please make sure tests pass. Test the code:  
-`npm run lint`  
-`npm run flow`
+`yarn run lint`  
+`yarn run flow`
+`yarn run test`
 
 ## Naming convention branches, commits and pull requests
 
