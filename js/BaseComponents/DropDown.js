@@ -39,6 +39,13 @@ type Props = {
     value: string,
     label: string,
 
+	fontSize?: number,
+	baseColor?: string,
+	itemColor?: string,
+	selectedItemColor?: string,
+	dropdownPosition?: number,
+	itemCount?: number,
+	itemPadding?: number,
     baseLeftIcon?: string,
 	onValueChange: (string, number, Array<any>) => void,
     pickerContainerStyle: Array<any> | number | Object,
@@ -48,7 +55,13 @@ type Props = {
 };
 
 type DefaultProps = {
-    baseLeftIcon: string,
+	baseLeftIcon: string,
+	baseColor: string,
+	itemColor: string,
+	selectedItemColor: string,
+	dropdownPosition: number,
+	itemCount: number,
+	itemPadding: number,
 };
 
 type State = {
@@ -58,8 +71,14 @@ export default class DropDown extends Component<Props, State> {
 props: Props;
 state: State = {
 };
-defaultProps: DefaultProps = {
+static defaultProps: DefaultProps = {
 	baseLeftIcon: 'down',
+	baseColor: '#000',
+	itemColor: '#000',
+	selectedItemColor: Theme.Core.rowTextColor,
+	dropdownPosition: 0,
+	itemCount: 4,
+	itemPadding: 8,
 };
 	renderBase: () => Object;
 	onPressPicker: () => void;
@@ -87,7 +106,7 @@ defaultProps: DefaultProps = {
 
 	renderBase(items: Object): Object {
 		const { title } = items;
-		const { appLayout, baseLeftIcon } = this.props;
+		const { appLayout, baseLeftIcon, baseColor } = this.props;
 
 		const {
 			pickerBaseCoverStyle,
@@ -103,7 +122,7 @@ defaultProps: DefaultProps = {
 				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPicker}>
-				<Text style={pickerBaseTextStyle} numberOfLines={1}>
+				<Text style={[pickerBaseTextStyle, {color: baseColor}]} numberOfLines={1}>
 					{title}
 				</Text>
 				<IconTelldus icon={baseLeftIcon} style={rightIconStyle}/>
@@ -122,13 +141,16 @@ defaultProps: DefaultProps = {
 			dropDownHeaderStyle,
 			dropDownContainerStyle,
 			dropDownListsContainerStyle,
+			dropdownPosition,
+			selectedItemColor,
+			itemColor,
+			baseColor,
+			itemPadding,
+			itemCount,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
 			fontSize,
-			rowTextColor,
-			itemPadding,
-			itemCount,
 			dropDownHeaderStyleDef,
 			dropDownContainerStyleDef,
 			dropDownListsContainerStyleDef,
@@ -155,10 +177,10 @@ defaultProps: DefaultProps = {
 						fontSize={fontSize}
 						itemCount={iCount}
 						itemPadding={itemPadding}
-						baseColor={'#000'}
-						itemColor={'#000'}
-						selectedItemColor={rowTextColor}
-						dropdownPosition={0}
+						baseColor={baseColor}
+						itemColor={itemColor}
+						selectedItemColor={selectedItemColor}
+						dropdownPosition={dropdownPosition}
 						dropdownOffset={{
 							top: dropdownTop,
 							left: 0,
@@ -169,6 +191,7 @@ defaultProps: DefaultProps = {
 		);
 	}
 	getStyle(appLayout: Object): Object {
+		const { fontSize } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -176,14 +199,9 @@ defaultProps: DefaultProps = {
 		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
-		const outerPadding = padding * 2;
-		const pickerItemsWidth = width - outerPadding;
 
-		const fontSizeText = deviceWidth * 0.04;
+		const fontSizeText = fontSize ? fontSize : deviceWidth * 0.04;
 		const fontSizeRightIcon = deviceWidth * 0.04;
-
-		const itemCount = 4;
-		const itemPadding = 8;
 
 		return {
 			dropDownContainerStyleDef: {
@@ -194,7 +212,7 @@ defaultProps: DefaultProps = {
 				marginLeft: padding / 2,
 				color: inactiveTintColor,
 				fontSize: fontSizeText * 1.2,
-				marginBottom: (fontSizeText * 0.5),
+				marginBottom: 5,
 			},
 			dropDownListsContainerStyleDef: {
 				flex: 0,
@@ -203,24 +221,24 @@ defaultProps: DefaultProps = {
 				justifyContent: 'center',
 			},
 			pickerContainerStyleDef: {
-				width: pickerItemsWidth,
+				flex: 1,
 				...shadow,
 				marginLeft: padding / 2,
 				marginBottom: padding / 2,
 				backgroundColor: '#fff',
 			},
 			pickerBaseCoverStyle: {
-				width: pickerItemsWidth,
+				flex: 1,
 				flexDirection: 'row',
 				justifyContent: 'flex-start',
 				alignItems: 'center',
-				padding: 5 + (fontSizeText * 0.4),
+				padding: fontSizeText,
 			},
 			pickerBaseTextStyle: {
 				flex: 1,
 				fontSize: fontSizeText,
 				color: rowTextColor,
-				marginRight: (fontSizeText * 0.4),
+				marginRight: fontSizeText,
 			},
 			rightIconStyle: {
 				fontSize: fontSizeRightIcon,
@@ -230,8 +248,6 @@ defaultProps: DefaultProps = {
 			rowTextColor,
 			brandDanger,
 			fontSize: fontSizeText,
-			itemCount,
-			itemPadding,
 		};
 	}
 }
