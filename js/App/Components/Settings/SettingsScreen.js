@@ -407,6 +407,7 @@ getStyles(appLayout: Object): Object {
 		},
 		dropDownHeaderStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
+			color: '#b5b5b5',
 		},
 	};
 }
