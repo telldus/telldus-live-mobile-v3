@@ -22,7 +22,7 @@
 'use strict';
 import orderBy from 'lodash/orderBy';
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}): Array<Object> {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}): Array<Object> {
 	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
 		let device = devices.byId[deviceId];
 		let { clientId } = device;
@@ -48,9 +48,14 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			data,
 		};
 	});
-	const orderedList = orderBy([...deviceItems, ...sensorItems], [(item: Object): any => {
-		let { name } = item.data;
-		return name ? name.toLowerCase() : null;
-	}], ['asc']);
+	const { defaultSettings = {} } = app;
+	const { sortingDB } = defaultSettings;
+	let orderedList = [...deviceItems, ...sensorItems];
+	if (sortingDB === 'Alphabetical') {
+		orderedList = orderBy(orderedList, [(item: Object): any => {
+			let { name } = item.data;
+			return name ? name.toLowerCase() : null;
+		}], ['asc']);
+	}
 	return orderedList;
 }

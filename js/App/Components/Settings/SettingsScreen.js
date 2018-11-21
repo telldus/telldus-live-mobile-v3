@@ -34,8 +34,9 @@ import {
 	DialogueBox,
 	NavigationHeaderPoster,
 	TitledInfoBlock,
+	DropDown,
 } from '../../../BaseComponents';
-import { logoutFromTelldus, showToast } from '../../Actions';
+import { logoutFromTelldus, showToast, changeSortingDB } from '../../Actions';
 import { showModal as actionShowModal } from '../../Actions';
 
 import { pushServiceId } from '../../../Config';
@@ -54,6 +55,7 @@ type Props = {
 	pushToken: string,
 	email: string,
 	modalExtras: any,
+	sortingDB: string,
 
 	navigation: Object,
 	dispatch: Function,
@@ -79,6 +81,8 @@ closeModal: () => void;
 onPressWhatsNew: () => void;
 
 handleBackPress: () => boolean;
+
+saveSortingDB: (string, number, Array<any>) => void;
 
 constructor(props: Props) {
 	super(props);
@@ -114,6 +118,15 @@ constructor(props: Props) {
 	this.labelWhatsNew = formatMessage(i18n.labelWhatsNew);
 
 	this.handleBackPress = this.handleBackPress.bind(this);
+
+	this.saveSortingDB = this.saveSortingDB.bind(this);
+	this.labelSortingDB = formatMessage(i18n.labelSortingDb);
+	this.labelAlpha = formatMessage(i18n.labelAlphabetical);
+	this.labelChrono = formatMessage(i18n.labelChronological);
+	this.DDOptions = [
+		{key: 'Alphabetical', value: this.labelAlpha},
+		{key: 'Chronological', value: this.labelChrono},
+	];
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -130,7 +143,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['showModal', 'pushTokenRegistered', 'pushToken', 'email', 'modalExtras']);
+		const propsChange = shouldUpdate(others, othersN, ['showModal', 'sortingDB', 'pushTokenRegistered', 'pushToken', 'email', 'modalExtras']);
 		if (propsChange) {
 			return true;
 		}
@@ -169,6 +182,14 @@ onPressWhatsNew() {
 handleBackPress(): boolean {
 	this.props.navigation.goBack();
 	return true;
+}
+
+saveSortingDB(value: string, itemIndex: number, data: Array<any>) {
+	const { dispatch } = this.props;
+	const { key: sortingDB } = data[itemIndex];
+	const settings = { sortingDB };
+	console.log('TEST settings', settings);
+	dispatch(changeSortingDB(settings));
 }
 
 getRelativeData(): Object {
@@ -221,6 +242,7 @@ render(): Object {
 		navigation,
 		pushTokenRegistered,
 		email,
+		sortingDB = 'Chronological',
 	} = this.props;
 	const { appLayout } = screenProps;
 	const { isLogoutLoading, isPushSubmitLoading } = this.state;
@@ -228,7 +250,7 @@ render(): Object {
 
 	const buttonAccessible = !isLogoutLoading && !isPushSubmitLoading && !showModal;
 	const importantForAccessibility = showModal ? 'no-hide-descendants' : 'yes';
-
+	console.log('TEST this.props', this.props);
 	return (
 		<View style={styles.container}>
 			<NavigationHeaderPoster
@@ -258,6 +280,17 @@ render(): Object {
 					<Text onPress={this.submitPushToken} style={styles.buttonResubmit}>
 						{submitButText}
 					</Text>
+					<DropDown
+						items={this.DDOptions}
+						value={sortingDB === this.labelAlpha ? this.labelAlpha : this.labelChrono}
+						label={this.labelSortingDB}
+						onValueChange={this.saveSortingDB}
+						appLayout={appLayout}
+						dropDownContainerStyle={styles.dropDownContainerStyle}
+						dropDownHeaderStyle={styles.dropDownHeaderStyle}
+						baseColor={'#000'}
+						fontSize={styles.fontSize}
+					/>
 					<TitledInfoBlock
 						title={this.titleUserInfo}
 						label={this.labelLoggedUser}
@@ -332,6 +365,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
+	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	return {
 		fontSize,
@@ -367,7 +401,13 @@ getStyles(appLayout: Object): Object {
 			justifyContent: 'flex-start',
 			alignItems: 'stretch',
 			backgroundColor: 'transparent',
-			padding: 10,
+			padding: padding,
+		},
+		dropDownContainerStyle: {
+			marginBottom: fontSize / 2,
+		},
+		dropDownHeaderStyle: {
+			fontSize: Math.floor(deviceWidth * 0.045),
 		},
 	};
 }
@@ -375,7 +415,9 @@ getStyles(appLayout: Object): Object {
 
 function mapStateToProps(store: Object): Object {
 	const { pushTokenRegistered, userProfile, pushToken } = store.user;
-	const { data: validationMessage, openModal: showModal } = store.modal;
+	const { data: validationMessage, openModal: showModal, extras: modalExtras } = store.modal;
+	const { defaultSettings = {} } = store.app;
+	const { sortingDB } = defaultSettings;
 	const { email } = userProfile;
 
 	return {
@@ -384,7 +426,8 @@ function mapStateToProps(store: Object): Object {
 		pushTokenRegistered,
 		pushToken,
 		email,
-		modalExtras: store.modal.extras,
+		modalExtras,
+		sortingDB,
 	};
 }
 

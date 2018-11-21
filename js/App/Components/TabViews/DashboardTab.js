@@ -536,8 +536,9 @@ const getRows = createSelector(
 		({ devices }: Object): Object => devices,
 		({ sensors }: Object): Object => sensors,
 		({ gateways }: Object): Object => gateways,
+		({ app }: Object): Object => app,
 	],
-	(dashboard: Object, devices: Object, sensors: Object, gateways: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
