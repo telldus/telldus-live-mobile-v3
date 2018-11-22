@@ -152,13 +152,17 @@ class DeviceRow extends View<Props, State> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
 		if (currentScreenN === 'Devices') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Devices' && nextProps.screenReaderEnabled) {
+				return true;
+			}
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
 
-			const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
 			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
 			const { device } = otherProps;
 
@@ -174,6 +178,10 @@ class DeviceRow extends View<Props, State> {
 			}
 		}
 		if (currentScreenN !== 'Devices' && this.state.isOpen) {
+			return true;
+		}
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Devices' && currentScreen === 'Devices' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 
@@ -220,6 +228,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	onSettingsSelected() {
+		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.device);
 	}
 
@@ -454,7 +463,9 @@ class DeviceRow extends View<Props, State> {
 						// Fixes issue controlling device in IOS, in accessibility mode
 						// By passing onPress to visible content of 'SwipeRow', prevents it from
 						// being placed inside a touchable.
-						onPress={this.noOp}>
+						onPress={this.noOp}
+						accessible={false}
+						importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}>
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}

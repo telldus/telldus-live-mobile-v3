@@ -59,6 +59,8 @@ type Props = {
 	isGatewayActive: boolean,
 	propsSwipeRow: Object,
 	defaultType?: string,
+	screenReaderEnabled: boolean,
+
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
 	onSettingsSelected: Object => void,
@@ -155,13 +157,17 @@ class SensorRow extends View<Props, State> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
 		if (currentScreenN === 'Sensors') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Sensors' && nextProps.screenReaderEnabled) {
+				return true;
+			}
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
 
-			const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line		
 			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
 			const { sensor } = otherProps;
 
@@ -178,7 +184,8 @@ class SensorRow extends View<Props, State> {
 
 			return false;
 		}
-		if (currentScreenN !== 'Sensors' && this.state.isOpen) {
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Sensors' && currentScreen === 'Sensors' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 
@@ -245,6 +252,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onSettingsSelected() {
+		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.sensor);
 	}
 
@@ -505,15 +513,17 @@ class SensorRow extends View<Props, State> {
 					onPressSettings={this.onSettingsSelected}/>
 				<ListItem
 					style={styles.row}
-					accessible={accessible}
-					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-					accessibilityLabel={accessible ? accessibilityLabel : ''}
+					accessible={false}
+					importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}
 					// By passing onPress to visible content of 'SwipeRow', prevents it from
 					// being placed inside a touchable.
 					onPress={this.noOp}>
 					<View style={styles.cover}>
 						<TouchableOpacity onPress={this.onPressSensorName} disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
-							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+							style={styles.container}
+							accessible={accessible}
+							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+							accessibilityLabel={accessible ? accessibilityLabel : ''}>
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
 						</TouchableOpacity>

@@ -402,11 +402,17 @@ class DevicesTab extends View {
 	}
 
 	toggleHiddenListButton(style: Object): Object {
+		const { screenProps } = this.props;
+		const accessible = screenProps.currentScreen === 'Sensors';
 		return (
-			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
+			<TouchableOpacity
+				style={style.toggleHiddenListButton}
+				onPress={this.toggleHiddenList}
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
 					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={true}>
+				<Text style={style.toggleHiddenListText} accessible={accessible}>
 					{this.state.showHiddenList ?
 						this.hideHidden
 						:
@@ -435,7 +441,7 @@ class DevicesTab extends View {
 		const { screenProps } = this.props;
 		const { appLayout } = screenProps;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen } = screenProps;
+		const { intl, currentScreen, screenReaderEnabled } = screenProps;
 		const { item } = row;
 		const { isOnline, supportLocalControl } = item;
 
@@ -453,6 +459,7 @@ class DevicesTab extends View {
 				onHiddenRowOpen={this.closeVisibleRows}
 				onPressDimButton={this.showDimInfo}
 				propsSwipeRow={propsSwipeRow}
+				screenReaderEnabled={screenReaderEnabled}
 			/>
 		);
 	}
@@ -530,7 +537,7 @@ class DevicesTab extends View {
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 				/>
-				<View>
+				<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
 					{this.toggleHiddenListButton(style)}
 					{showHiddenList ?
 						<SectionList
