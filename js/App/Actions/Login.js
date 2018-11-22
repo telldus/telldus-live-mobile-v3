@@ -45,6 +45,7 @@ const loginToTelldus = (username: string, password: string): ThunkAction => (dis
 			'grant_type': 'password',
 			'username': username,
 			'password': password,
+			'scope': 'live-app',
 		},
 	  })
 		.then((response: Object): Object => {
