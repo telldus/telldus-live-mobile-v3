@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BackHandler } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -40,14 +39,16 @@ import { getJobs } from '../../Actions';
 import type { Schedule } from '../../Reducers/Schedule';
 
 type Props = {
-	navigation: Object,
-	children: Object,
+	gateways: Object,
+	appLayout: Object,
 	schedule?: Schedule,
 	actions?: Object,
 	devices?: Object,
 	screenProps: Object,
+
+	navigation: Object,
+	children: Object,
 	intl: intlShape.isRequired,
-	appLayout: Object,
 };
 
 type State = {
@@ -72,15 +73,6 @@ export interface ScheduleProps {
 class ScheduleScreen extends View<null, Props, State> {
 
 	handleBackPress: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		schedule: PropTypes.object,
-		actions: PropTypes.objectOf(PropTypes.func),
-		devices: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
 
 	state = {
 		h1: '',
@@ -172,7 +164,17 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { children, navigation, actions, devices, schedule, screenProps, intl, appLayout } = this.props;
+		const {
+			children,
+			navigation,
+			actions,
+			devices,
+			schedule,
+			screenProps,
+			intl,
+			appLayout,
+			gateways,
+		} = this.props;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle(appLayout);
 		const {
@@ -220,6 +222,7 @@ class ScheduleScreen extends View<null, Props, State> {
 								...screenProps,
 								appLayout,
 								intl,
+								gateways,
 							},
 						)}
 					</View>
@@ -280,12 +283,14 @@ type mapStateToPropsType = {
 	devices: Object,
 	modal: Object,
 	app: Object,
+	gateways: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, app }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
+		gateways,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,

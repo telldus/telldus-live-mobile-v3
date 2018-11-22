@@ -22,24 +22,27 @@
 'use strict';
 
 import React from 'react';
-import { FlatList } from 'react-native';
+import { SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
+import groupBy from 'lodash/groupBy';
+import reduce from 'lodash/reduce';
 
-import { View } from '../../../BaseComponents';
+import { View, Text } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from './SubViews';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 interface Props extends ScheduleProps {
 	devices: Object,
+	gateways: Object,
 	resetSchedule: () => void,
 }
 
 type State = {
-	dataSource: Object,
+	dataSource: Array<Object>,
 	refreshing: boolean,
 };
 
@@ -55,10 +58,11 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	state = {
-		dataSource: this.parseDataForList(this.props.devices.byId),
+		dataSource: this.parseDataForList(this.props.devices.byId, this.props.gateways.byId),
 		refreshing: false,
 	};
 
+	_renderSectionHeader: (Object) => Object;
 	constructor(props: Props) {
 		super(props);
 
@@ -66,11 +70,35 @@ export default class Device extends View<void, Props, State> {
 
 		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
 		this.h2 = formatMessage(i18n.posterChooseDevice);
+
+		this._renderSectionHeader = this._renderSectionHeader.bind(this);
 	}
 
-	parseDataForList(devices: Object): Object {
+	parseDataForList(devices: Object, gateways: Object): Array<Object> {
 		devices = filter(devices, (device: Object): any => !isEmpty(device.supportedMethods));
-		return orderBy(devices, [(device: Object): any => device.name.toLowerCase()], ['asc']);
+		devices = orderBy(devices, [(device: Object): any => device.name.toLowerCase()], ['asc']);
+		if (Object.keys(gateways).length > 1) {
+			devices = groupBy(devices, (items: Object): Array<any> => {
+				let gateway = gateways[items.clientId];
+				return gateway && gateway.name;
+			});
+			devices = reduce(devices, (acc: Array<any>, next: Object, index: number): Array<any> => {
+				acc.push({
+					key: index,
+					data: next,
+				});
+				return acc;
+			}, []);
+			return devices;
+		} else if (Object.keys(gateways).length === 1) {
+			devices = [{
+				key: '',
+				data: [...devices],
+
+			}];
+			return devices;
+		}
+		return [];
 	}
 
 	componentDidMount() {
@@ -111,21 +139,17 @@ export default class Device extends View<void, Props, State> {
 		actions.selectDevice(row.id);
 	};
 
-	getPadding(): number {
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		return deviceWidth * Theme.Core.paddingFactor;
-	}
-
-	render(): React$Element<FlatList> {
+	render(): React$Element<SectionList> {
 		const { dataSource, refreshing } = this.state;
-		const padding = this.getPadding();
+		if (!dataSource || dataSource.length <= 0) {
+			return null;
+		}
+		const {padding} = this.getStyles();
 		return (
-			<FlatList
-				data={dataSource}
+			<SectionList
+				sections={dataSource}
 				renderItem={this._renderRow}
+				renderSectionHeader={this._renderSectionHeader}
 				onRefresh={this.onRefresh}
 				refreshing={refreshing}
 				contentContainerStyle={{
@@ -141,7 +165,7 @@ export default class Device extends View<void, Props, State> {
 		const { item } = row;
 		// TODO: use device description
 		const preparedRow = Object.assign({}, item, { description: '' });
-		const padding = this.getPadding();
+		const {padding} = this.getStyles();
 
 		return (
 			<DeviceRow
@@ -161,5 +185,41 @@ export default class Device extends View<void, Props, State> {
 			/>
 		);
 	};
+
+	_renderSectionHeader(sectionData: Object): Object {
+		const { key } = sectionData.section;
+		const { dataSource } = this.state;
+		if (dataSource.length === 1) {
+			return null;
+		}
+		const {nameFontSize} = this.getStyles();
+		return (
+			<View style={[Theme.Styles.sectionHeader, {marginLeft: 0}]}>
+				<Text style={[Theme.Styles.sectionHeaderText, {fontSize: nameFontSize}]}>
+					{key}
+				</Text>
+			</View>
+		);
+	}
+
+	getStyles(): Object {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
+		const {
+			maxSizeRowTextOne,
+		} = Theme.Core;
+
+		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+
+		return {
+			nameFontSize,
+			padding,
+		};
+	}
 
 }
