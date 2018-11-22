@@ -43,7 +43,7 @@ type Props = {
 	gateways: Object,
 	schedule?: Schedule,
 	actions?: Object,
-	devices?: Object,
+	devices: Object,
 	screenProps: Object,
 
 	navigation: Object,

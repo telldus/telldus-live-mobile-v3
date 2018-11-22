@@ -91,12 +91,11 @@ export default class Device extends View<void, Props, State> {
 			}, []);
 			return devices;
 		} else if (Object.keys(gateways).length === 1) {
-			devices = [{
+			return [{
 				key: '',
 				data: [...devices],
 
 			}];
-			return devices;
 		}
 		return [];
 	}
@@ -139,7 +138,7 @@ export default class Device extends View<void, Props, State> {
 		actions.selectDevice(row.id);
 	};
 
-	render(): React$Element<SectionList> {
+	render(): React$Element<SectionList> | null {
 		const { dataSource, refreshing } = this.state;
 		if (!dataSource || dataSource.length <= 0) {
 			return null;
@@ -186,7 +185,7 @@ export default class Device extends View<void, Props, State> {
 		);
 	};
 
-	_renderSectionHeader(sectionData: Object): Object {
+	_renderSectionHeader(sectionData: Object): Object | null {
 		const { key } = sectionData.section;
 		const { dataSource } = this.state;
 		if (dataSource.length === 1) {
