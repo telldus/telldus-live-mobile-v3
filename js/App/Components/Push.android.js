@@ -109,6 +109,7 @@ const Push = {
 			  .android.setChannelId(pushSenderId)
 			  .android.setSmallIcon('icon_notif')
 			  .android.setColor('#e26901')
+			  .android.setDefaults(firebase.notifications.Android.Defaults.All)
 			  .android.setPriority(firebase.notifications.Android.Priority.High);
 		firebase.notifications().displayNotification(localNotification)
 			.catch((err: any) => {
