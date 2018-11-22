@@ -313,6 +313,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			currentScreen: CS,
 			intl,
 			appLayout,
+			screenReaderEnabled,
 		};
 		if (showHeader) {
 			screenProps = {

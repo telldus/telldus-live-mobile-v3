@@ -400,6 +400,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			intl,
 			drawer,
 			appLayout,
+			screenReaderEnabled,
 		};
 		if (showHeader) {
 			screenProps = {
