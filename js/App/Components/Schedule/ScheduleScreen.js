@@ -25,8 +25,7 @@ import React from 'react';
 import { BackHandler } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
-import { intlShape, injectIntl } from 'react-intl';
+const isEqual = require('react-fast-compare');
 
 import { FullPageActivityIndicator, View, DialogueBox, NavigationHeaderPoster } from '../../../BaseComponents';
 import Theme from '../../Theme';
@@ -38,9 +37,10 @@ import { showToast } from '../../Actions/App';
 import { getJobs } from '../../Actions';
 import type { Schedule } from '../../Reducers/Schedule';
 
+import shouldUpdate from '../../Lib/shouldUpdate';
+
 type Props = {
 	gateways: Object,
-	appLayout: Object,
 	schedule?: Schedule,
 	actions?: Object,
 	devices?: Object,
@@ -48,7 +48,6 @@ type Props = {
 
 	navigation: Object,
 	children: Object,
-	intl: intlShape.isRequired,
 };
 
 type State = {
@@ -66,8 +65,6 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
-	intl: Object,
-	appLayout: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -109,9 +106,23 @@ class ScheduleScreen extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const isStateEqual = _.isEqual(this.state, nextState);
-		const isPropsEqual = _.isEqual(this.props, nextProps);
-		return !(isStateEqual && isPropsEqual);
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const { gateways, devices, screenProps, ...otherProps } = this.props;
+		const { gateways: gatewaysN, devices: devicesN, screenProps: screenPropsN, ...otherPropsN } = nextProps;
+		if ((Object.keys(gateways.byId).length !== Object.keys(gatewaysN.byId).length) || (Object.keys(devices.byId).length !== Object.keys(devicesN.byId).length)) {
+			return true;
+		}
+		if (screenProps.currentScreen !== screenPropsN.currentScreen) {
+			return true;
+		}
+		const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
 	}
 
 	goBack = () => {
@@ -171,10 +182,11 @@ class ScheduleScreen extends View<null, Props, State> {
 			devices,
 			schedule,
 			screenProps,
-			intl,
-			appLayout,
 			gateways,
 		} = this.props;
+		const {
+			appLayout,
+		} = screenProps;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle(appLayout);
 		const {
@@ -220,8 +232,6 @@ class ScheduleScreen extends View<null, Props, State> {
 								loading: this.loading,
 								isEditMode: this._isEditMode,
 								...screenProps,
-								appLayout,
-								intl,
 								gateways,
 							},
 						)}
@@ -294,7 +304,6 @@ const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateTo
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: app.layout,
 	}
 );
 
@@ -307,4 +316,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ScheduleScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);
