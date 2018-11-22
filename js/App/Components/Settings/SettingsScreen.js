@@ -289,6 +289,7 @@ render(): Object {
 						dropDownHeaderStyle={styles.dropDownHeaderStyle}
 						baseColor={'#000'}
 						fontSize={styles.fontSize}
+						accessibilityLabelPrefix={this.labelSortingDB}
 					/>
 					<TitledInfoBlock
 						title={this.titleUserInfo}

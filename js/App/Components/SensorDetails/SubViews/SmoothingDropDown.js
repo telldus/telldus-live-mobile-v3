@@ -76,6 +76,7 @@ export default class SmoothingDropDown extends View<Props, null> {
 				dropDownContainerStyle={{
 					paddingLeft: padding / 2,
 				}}
+				accessibilityLabelPrefix={this.DDLabel}
 			/>
 		);
 	}

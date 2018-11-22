@@ -24,6 +24,7 @@
 import React, { Component } from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
 import Ripple from 'react-native-material-ripple';
+import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import Text from './Text';
@@ -32,6 +33,8 @@ import IconTelldus from './IconTelldus';
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
 import Theme from '../App/Theme';
+
+import i18n from '../App/Translations/common';
 
 type Props = {
     appLayout: Object,
@@ -51,7 +54,9 @@ type Props = {
     pickerContainerStyle: Array<any> | number | Object,
     dropDownHeaderStyle: Array<any> | number | Object,
     dropDownContainerStyle: Array<any> | number | Object,
-    dropDownListsContainerStyle: Array<any> | number | Object,
+	dropDownListsContainerStyle: Array<any> | number | Object,
+	accessibilityLabelPrefix?: string,
+	intl: intlShape.isRequired,
 };
 
 type DefaultProps = {
@@ -67,7 +72,7 @@ type DefaultProps = {
 type State = {
 };
 
-export default class DropDown extends Component<Props, State> {
+class DropDown extends Component<Props, State> {
 props: Props;
 state: State = {
 };
@@ -82,11 +87,19 @@ static defaultProps: DefaultProps = {
 };
 	renderBase: () => Object;
 	onPressPicker: () => void;
+	phraseOne: string;
+	phraseTwo: string;
+	phraseThree: string;
 	constructor(props: Props) {
 		super(props);
 
 		this.renderBase = this.renderBase.bind(this);
 		this.onPressPicker = this.onPressPicker.bind(this);
+
+		const { accessibilityLabelPrefix = '', intl } = this.props;
+		this.phraseOne = `${accessibilityLabelPrefix} ${intl.formatMessage(i18n.labelDropdown)}`;
+		this.phraseTwo = intl.formatMessage(i18n.labelSelected);
+		this.phraseThree = intl.formatMessage(i18n.defaultDescriptionButton);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -114,6 +127,7 @@ static defaultProps: DefaultProps = {
 			rightIconStyle,
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
 			<Ripple
@@ -121,11 +135,13 @@ static defaultProps: DefaultProps = {
 				rippleOpacity={rippleOpacity}
 				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPicker}>
+				onPress={this.onPressPicker}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
 				<Text style={[pickerBaseTextStyle, {color: baseColor}]} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={baseLeftIcon} style={rightIconStyle}/>
+				<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
 			</Ripple>
 		);
 	}
@@ -249,3 +265,5 @@ static defaultProps: DefaultProps = {
 		};
 	}
 }
+
+export default injectIntl(DropDown);
