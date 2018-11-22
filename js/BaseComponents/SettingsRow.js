@@ -179,7 +179,7 @@ class SettingsRow extends Component<Props, null> {
 		}
 
 		return (
-			<View style={ShowOnDashCover}>
+			<View style={ShowOnDashCover} accessible={true} importantForAccessibility={'yes'}>
 				{type === 'switch' ?
 					<View
 						style={touchableStyle}>

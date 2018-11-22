@@ -100,7 +100,8 @@ render(): Object {
 			<TouchableButton
 				text={i18n.labelStoreHistory}
 				onPress={this.setKeepHistory}
-				style={buttonStyle}/>
+				style={buttonStyle}
+				accessible={true}/>
 		</View>
 	);
 }

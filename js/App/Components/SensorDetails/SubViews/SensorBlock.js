@@ -82,7 +82,7 @@ export default class SensorBlock extends View<Props, null> {
 		const { brandSecondary } = Theme.Core;
 
 		return (
-			<View style={containerStyle}>
+			<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
 				<IconTelldus icon={icon} style={iconStyle}/>
 				<View style={textContainer}>
 					<Text style={labelStyle}>
