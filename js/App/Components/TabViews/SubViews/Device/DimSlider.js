@@ -136,6 +136,10 @@ static defaultProps: DefaultProps = {
 					minimumValue={0}
 					maximumValue={100}
 					step={1}
+					thumbTouchSize={{
+						width: 18,
+						height: 18,
+					}}
 					value={sliderValue}
 					style={sliderStyle}
 					thumbStyle={[thumbStyleDef, thumbStyle]}
