@@ -38,6 +38,7 @@ type Props = {
     onValueChangeOne: (string, number) => void,
 	onValueChangeTwo: (string, number) => void,
 	appLayout: Object,
+	intl: Object,
 };
 
 type State = {
@@ -66,6 +67,11 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.onPressPickerTwo = this.onPressPickerTwo.bind(this);
 		this.propsExtractorTwo = this.propsExtractorTwo.bind(this);
 		this.propsExtractorOne = this.propsExtractorOne.bind(this);
+
+		const { intl } = this.props;
+		this.phraseOne = `${intl.formatMessage(i18n.labelGraphValues)} ${intl.formatMessage(i18n.labelDropdown)}`;
+		this.phraseTwo = props.intl.formatMessage(i18n.labelSelected);
+		this.phraseThree = props.intl.formatMessage(i18n.defaultDescriptionButton);
 	}
 
 	renderBaseOne(items: Object): Object {
@@ -83,18 +89,22 @@ class GraphValuesDropDown extends View<Props, State> {
 			return item.value === title;
 		});
 
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
+
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
 				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPickerOne}>
-				<IconTelldus icon={icon} style={leftIconStyle}/>
+				onPress={this.onPressPickerOne}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon={icon} style={leftIconStyle} accessible={false}/>
 				<Text style={pickerBaseTextStyle} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={'down'} style={rightIconStyle}/>
+				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
 			</Ripple>
 		);
 	}
@@ -150,18 +160,22 @@ class GraphValuesDropDown extends View<Props, State> {
 			return item.value === title;
 		});
 
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
+
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
 				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPickerTwo}>
-				<IconTelldus icon={icon} style={leftIconStyle}/>
+				onPress={this.onPressPickerTwo}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon={icon} style={leftIconStyle} accessible={false}/>
 				<Text style={pickerBaseTextStyle} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={'down'} style={rightIconStyle}/>
+				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
 			</Ripple>
 		);
 	}

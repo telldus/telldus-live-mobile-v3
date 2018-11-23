@@ -570,7 +570,8 @@ class HistoryTab extends View {
 						list={list}
 						onValueChangeOne={this.onValueChangeOne}
 						onValueChangeTwo={this.onValueChangeTwo}
-						appLayout={appLayout}/>
+						appLayout={appLayout}
+						intl={intl}/>
 					<SmoothingDropDown
 						smoothing={smoothing}
 						appLayout={appLayout}
