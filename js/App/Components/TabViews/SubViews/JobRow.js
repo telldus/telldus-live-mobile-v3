@@ -95,19 +95,29 @@ class JobRow extends View<null, Props, null> {
 	};
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { appLayout, intl, editJob, weekdays, ...others } = this.props;// eslint-disable-line
-		const newLayout = nextProps.appLayout.width !== appLayout.width;
-		if (newLayout) {
-			return true;
-		}
-		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, ...othersN } = nextProps;// eslint-disable-line
+		const { appLayout, intl, editJob, weekdays, currentScreen, ...others } = this.props;// eslint-disable-line
+		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, currentScreen: currentScreenN, ...othersN } = nextProps;// eslint-disable-line
+		if (currentScreenN === 'Scheduler') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Scheduler' && nextProps.screenReaderEnabled) {
+				return true;
+			}
+			const newLayout = nextProps.appLayout.width !== appLayout.width;
+			if (newLayout) {
+				return true;
+			}
 
-		if (weekdays.length !== weekdaysN.length) {
-			return true;
-		}
+			if (weekdays.length !== weekdaysN.length) {
+				return true;
+			}
 
-		const propsEqual = isEqual(others, othersN);
-		if (!propsEqual) {
+			const propsEqual = isEqual(others, othersN);
+			if (!propsEqual) {
+				return true;
+			}
+		}
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Scheduler' && currentScreen === 'Scheduler' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 		return false;
@@ -168,6 +178,7 @@ class JobRow extends View<null, Props, null> {
 			intl,
 			showNow,
 			expired,
+			currentScreen,
 		} = this.props;
 
 		const {
@@ -199,15 +210,19 @@ class JobRow extends View<null, Props, null> {
 		const deviceName = dName ? dName : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
+
+		const accessible = currentScreen === 'Scheduler';
 		const accessibilityLabel = `${formatMessage(i18n.phraseOneSheduler)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
-			<View>
+			<View importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}>
 				<TouchableOpacity
 					style={container}
 					onPress={this.editJob}
 					disabled={!editJob}
-					accessibilityLabel={accessibilityLabel}
+					accessible={accessible}
+					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+					accessibilityLabel={accessible ? accessibilityLabel : ''}
 				>
 					<ListRow
 						roundIcon={type}

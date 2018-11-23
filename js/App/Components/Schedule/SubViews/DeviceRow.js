@@ -57,7 +57,8 @@ export default class DeviceRow extends View<null, Props, null> {
 		const icon = getDeviceIcons(deviceType);
 
 		return (
-			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle} accessible={true} accessibilityLabel={accessibilityLabel}>
+			<Row layout="row" row={row} onPress={onPress} style={rowStyle} containerStyle={containerStyle}
+				accessible={true} accessibilityLabel={accessibilityLabel} importantForAccessibility={'yes'}>
 				<BlockIcon
 					icon={icon}
 					style={iconStyle}
