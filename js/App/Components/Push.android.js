@@ -68,7 +68,8 @@ const Push = {
 			'Tellus Alert',
 			firebase.notifications.Android.Importance.Max)
 			.setDescription('Telldus Live alerts on user subscribed events')
-			.enableVibration(true);
+			.enableVibration(true)
+			.setVibrationPattern([0.0, 1000.0, 500.0]);
 
 		firebase.notifications().android.createChannel(channel);
 	},
@@ -110,6 +111,7 @@ const Push = {
 			  .android.setSmallIcon('icon_notif')
 			  .android.setColor('#e26901')
 			  .android.setDefaults(firebase.notifications.Android.Defaults.All)
+			  .android.setVibrate([0.0, 1000.0, 500.0])
 			  .android.setPriority(firebase.notifications.Android.Priority.High);
 		firebase.notifications().displayNotification(localNotification)
 			.catch((err: any) => {
