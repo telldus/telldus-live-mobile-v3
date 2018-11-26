@@ -55,13 +55,12 @@
         See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
           android:name="com.google.firebase.messaging.default_notification_icon"
-          android:resource="@mipmap/icon_notif" />
+          android:resource="@drawable/icon_notif" />
         <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
             notification message. See README(https://goo.gl/6BKBk7) for more. -->
         <meta-data
           android:name="com.google.firebase.messaging.default_notification_color"
-          android:value="#1b365d" />
-
+          android:resource="@color/brandSecondary" />
         <meta-data
           android:name="io.fabric.ApiKey"
           android:value="6ddcb9201beba571821a466b7b634103262d6903"
