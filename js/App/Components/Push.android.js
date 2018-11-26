@@ -29,6 +29,7 @@ const DeviceInfo = require('react-native-device-info');
 import type { ThunkAction } from '../Actions/Types';
 import { pushSenderId, pushServiceId } from '../../Config';
 import { registerPushToken } from '../Actions/User';
+import { reportException } from '../Lib/Analytics';
 
 const Push = {
 	configure: (params: Object): ThunkAction => {
@@ -65,16 +66,20 @@ const Push = {
 		const channel = new firebase.notifications.Android.Channel(
 			pushSenderId,
 			'Tellus Alert',
-			firebase.notifications.Android.Importance.Max,
-		  ).setDescription('Telldus Live alerts on user subscribed events');
-		  firebase.notifications().android.createChannel(channel);
+			firebase.notifications.Android.Importance.Max)
+			.setDescription('Telldus Live alerts on user subscribed events')
+			.enableVibration(true)
+			.setVibrationPattern([0.0, 1000.0, 500.0]);
+
+		firebase.notifications().android.createChannel(channel);
 	},
-	getToken: ({ pushToken }: Object): ThunkAction => {
+	getToken: ({ pushToken, pushTokenRegistered, deviceId }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
 					if (pushToken !== token) {
-						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 					}
 					return token;
@@ -105,10 +110,12 @@ const Push = {
 			  .android.setChannelId(pushSenderId)
 			  .android.setSmallIcon('icon_notif')
 			  .android.setColor('#e26901')
+			  .android.setDefaults(firebase.notifications.Android.Defaults.All)
+			  .android.setVibrate([0.0, 1000.0, 500.0])
 			  .android.setPriority(firebase.notifications.Android.Priority.High);
 		firebase.notifications().displayNotification(localNotification)
 			.catch((err: any) => {
-				console.error('Error Showing Notification - Android', err);
+				reportException(err);
 			});
 	},
 };

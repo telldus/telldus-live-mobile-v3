@@ -40,6 +40,20 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
+	const { app } = newState;
+	if (app && !app.defaultSettings) {
+		newState = {
+			...newState,
+			app: {
+				...app,
+				defaultSettings: {
+					dimmerSensitivity: 5,
+					sortingDB: 'Chronological',
+				},
+			},
+		};
+	}
+
 	const { gateways, sensorsList } = newState;
 	if (gateways) {
 		// Insert the attribute/property 'localKey' to each gateways object if not already present.

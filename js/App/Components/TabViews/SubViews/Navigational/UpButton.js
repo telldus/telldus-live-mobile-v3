@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from '../../../../../BaseComponents';
+import { IconTelldus, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
@@ -89,7 +89,7 @@ class UpButton extends View {
 				style={[upButtonStyle, style]}
 				onPress={supportedMethod ? this.onUp : noop}
 				accessibilityLabel={`${this.labelUpButton}, ${name}`}>
-				<Icon name="caret-up" size={iconSize}
+				<IconTelldus icon="up" size={iconSize}
 		      style={{
 			      color: supportedMethod ? upIconColor : '#eeeeee',
 		      }}

@@ -83,6 +83,7 @@ import LocationDetails from './LocationDetails';
 import EditBox from './EditBox';
 import FormattedRelative from './FormattedRelative';
 import ProgressBarLinear from './ProgressBarLinear';
+import DropDown from './DropDown';
 
 import {
 	AppState,
@@ -157,6 +158,7 @@ module.exports = {
 	EditBox,
 	FormattedRelative,
 	ProgressBarLinear,
+	DropDown,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

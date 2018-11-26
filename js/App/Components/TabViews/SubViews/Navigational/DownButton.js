@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from '../../../../../BaseComponents';
+import { IconTelldus, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
@@ -90,7 +90,7 @@ class DownButton extends View {
 				style={[downButtonStyle, style]}
 				onPress={supportedMethod ? this.onDown : noop}
 				accessibilityLabel={`${this.labelDownButton}, ${name}`}>
-				<Icon name="caret-down" size={iconSize}
+				<IconTelldus icon="down" size={iconSize}
 					style={{
 						color: supportedMethod ? downIconColor : '#eeeeee',
 					}}

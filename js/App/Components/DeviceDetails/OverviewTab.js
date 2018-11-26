@@ -111,35 +111,23 @@ class OverviewTab extends View<Props, null> {
 			H1: gatewayName,
 			H2: gatewayType,
 		};
-		const {
-			TURNON,
-			TURNOFF,
-			BELL,
-			DIM,
-			UP,
-			DOWN,
-			STOP,
-		} = device.supportedMethods;
-		const hasActions = TURNON || TURNOFF || BELL || DIM || UP || DOWN || STOP;
 
-		const styles = this.getStyles(appLayout, hasActions);
+		const styles = this.getStyles(appLayout);
 
 		return (
 			<ScrollView style={{flex: 1}} contentContainerStyle={styles.itemsContainer}>
-				{hasActions && (
-					<DeviceActionDetails
-						device={device}
-						intl={intl}
-						appLayout={appLayout}
-						isGatewayActive={isGatewayActive}
-						containerStyle={styles.actionDetails}/>
-				)}
+				<DeviceActionDetails
+					device={device}
+					intl={intl}
+					appLayout={appLayout}
+					isGatewayActive={isGatewayActive}
+					containerStyle={styles.actionDetails}/>
 				<LocationDetails {...locationData} style={styles.LocationDetail}/>
 			</ScrollView>
 		);
 	}
 
-	getStyles(appLayout: Object, hasActions: boolean): Object {
+	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -153,7 +141,7 @@ class OverviewTab extends View<Props, null> {
 			},
 			LocationDetail: {
 				flex: 0,
-				marginTop: hasActions ? (padding / 2) : 0,
+				marginTop: (padding / 2),
 				marginBottom: padding,
 				marginHorizontal: padding,
 			},

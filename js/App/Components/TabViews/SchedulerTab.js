@@ -95,8 +95,9 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
-		return currentScreen === 'Scheduler';
+		const { currentScreen, screenReaderEnabled } = nextProps.screenProps;
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Scheduler') || (currentScreen !== 'Scheduler' && prevScreen === 'Scheduler' && screenReaderEnabled);
 	}
 
 	componentDidMount() {
@@ -171,7 +172,9 @@ class SchedulerTab extends View<null, Props, State> {
 		const { swiperContainer } = this.getStyles(appLayout);
 
 		return (
-			<View style={swiperContainer}>
+			<View style={swiperContainer}
+				accessible={false}
+				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
 					days={days}
 					todayIndex={todayIndex}
@@ -307,7 +310,6 @@ class SchedulerTab extends View<null, Props, State> {
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
 		const { rowsAndSections, screenProps } = this.props;
-		const { appLayout, intl } = screenProps;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -316,12 +318,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
 
 		return (
-			<JobRow {...item}
+			<JobRow
+				{...item}
 				showNow={showNow}
 				editJob={this.editJob}
 				isFirst={props.index === 0}
-				intl={intl}
-				appLayout={appLayout}/>
+				{...screenProps}/>
 		);
 	};
 }

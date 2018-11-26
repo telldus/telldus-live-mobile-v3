@@ -50,7 +50,7 @@
 		6849A4E963DC4D8985BFE7C3 /* libRNSensitiveInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E8B17FC3BC433DA0620A43 /* libRNSensitiveInfo.a */; };
 		68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */ = {isa = PBXBuildFile; fileRef = DB8C12D469844F34ABBA0A64 /* telldusicons.svg */; };
 		695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 882834547CB84ED98886796F /* Roboto-Medium.ttf */; };
-		7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C59689631C948E3A30CAA55 /* libRNRSA.a */; };
+		7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C59689631C948E3A30CAA55 /* libRNRSA.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 		77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */; };
 		794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -1711,7 +1711,7 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1763,7 +1763,7 @@
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

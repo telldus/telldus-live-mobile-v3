@@ -76,7 +76,7 @@ ios:
     - cd ios
     - ./buildGitlabRunner.sh
 
-google_play:  &google_play
+google_play:
   image: ruby:2
   stage: release
   tags:
@@ -86,16 +86,8 @@ google_play:  &google_play
   environment:
     name: google_play
     url: https://play.google.com/store/apps/details?id=com.telldus.live.mobile.test
-  when: manual
   only:
     - tags
-  script:
-    - echo ${GOOGLE_KEY} > play_key.json
-    - bundle install
-    - fastlane supply --apk android/app/build/outputs/apk/release/app-release.apk --track alpha
-
-google_play_fastlane:
-  <<: *google_play
   script:
     - echo ${GOOGLE_KEY} > play_key.json
     - bundle install
@@ -110,8 +102,23 @@ testflight:
   environment:
     name: appstore
     url: https://itunes.apple.com/us/app/telldus-live-mobile-beta/id1014419677
-  when: manual
   only:
     - tags
   script:
     - fastlane ios beta
+
+s3:
+  image: cgswong/aws:latest
+  stage: release
+  dependencies:
+    - ios
+    - android
+  environment:
+    name: s3
+    url: https://download.telldus.com/app
+  only:
+    - tags
+  script:
+    - echo "${S3CFG}" > ~/.s3cfg
+    - s3cmd put android/app/build/outputs/apk/release/app-release.apk s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_android_${CI_COMMIT_TAG}.apk
+    - s3cmd put TelldusLiveApp.ipa s3://download.telldus.com/app/${CI_COMMIT_TAG}/telldus-app-v3_ios_${CI_COMMIT_TAG}.ipa

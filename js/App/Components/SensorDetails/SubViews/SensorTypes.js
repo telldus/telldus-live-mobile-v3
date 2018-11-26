@@ -72,8 +72,8 @@ export default class SensorTypes extends View<Props, State> {
 				label,
 				max,
 				min,
-				maxTime,
-				minTime,
+				maxTime: moment.unix(maxTime),
+				minTime: moment.unix(minTime),
 				appLayout,
 				lastUpdated: moment.unix(lastUpdated),
 			};

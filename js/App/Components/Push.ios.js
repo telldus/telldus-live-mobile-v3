@@ -38,10 +38,11 @@ const Push = {
 	},
 	onRegister: (token: string, params: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): any => {
-			const { pushToken, pushTokenRegistered } = params;
+			const { pushToken, pushTokenRegistered, deviceId } = params;
 			if ((!pushToken) || (pushToken !== token) || (!pushTokenRegistered)) {
-			// stores fcm token in the server
-				dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+				const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+				// stores fcm token in the server
+				dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 				dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 			}
 		};

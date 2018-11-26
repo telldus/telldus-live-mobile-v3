@@ -28,7 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import {View, TouchableButton, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays } from '../../Lib';
+import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
 import { ActionRow, DaysRow, ScheduleSwitch, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -229,6 +229,8 @@ class Edit extends View<null, Props, State> {
 		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
 		const labelPostScript = formatMessage(i18n.activateEdit);
+		const { deviceType, supportedMethods = {} } = this.device;
+		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
 
 		return (
 			<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
@@ -236,6 +238,7 @@ class Edit extends View<null, Props, State> {
 					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 					<ActionRow
 						method={method}
+						actionIcons={actionIcons}
 						showValue={true}
 						methodValue={methodValue}
 						onPress={this.editAction}

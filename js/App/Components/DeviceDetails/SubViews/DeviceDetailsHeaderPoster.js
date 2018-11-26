@@ -29,6 +29,7 @@ import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
 import { closeDatabase } from '../../../Actions/LocalStorage';
 import i18n from '../../../Translations/common';
 import { hideModal } from '../../../Actions';
+import { getDeviceIcons } from '../../../Lib';
 
 type Props = {
 	hideModal: () => Function,
@@ -79,17 +80,20 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 	render(): Object {
 		const { navigation, device, screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
+		const { name, deviceType } = device;
 
-		const deviceName = device.name ? device.name : this.noName;
+		const deviceName = name ? name : this.noName;
+		const icon = getDeviceIcons(deviceType);
 
 		return (
 			<NavigationHeaderPoster
-				icon={'device-alt'}
+				icon={icon}
 				h2={deviceName}
 				appLayout={appLayout}
 				intl={intl}
 				navigation={navigation}
 				handleBackPress={this.handleBackPress}
+				leftIcon={'close'}
 			/>
 		);
 	}

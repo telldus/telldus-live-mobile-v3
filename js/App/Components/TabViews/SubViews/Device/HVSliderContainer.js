@@ -70,6 +70,14 @@ type State = {
 	DimmerStep: boolean,
 };
 
+type DefaultProps = {
+	thumbHeight: number,
+	thumbWidth: number,
+	sensitive: number,
+	value: number,
+	fontSize: number,
+};
+
 class HVSliderContainer extends View {
 	props: Props;
 	state: State;
@@ -78,6 +86,14 @@ class HVSliderContainer extends View {
 	hasMoved: boolean;
 	layoutView: Object => void;
 	onPressDimmer: () => void;
+
+	static defaultProps: DefaultProps = {
+		thumbHeight: 12,
+		thumbWidth: 12,
+		fontSize: 10,
+		sensitive: 5,
+		value: 0,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -324,10 +340,13 @@ class HVSliderContainer extends View {
 
 	layoutView(x: Object) {
 		let { width, height } = x.nativeEvent.layout;
-		this.setState({
-			containerWidth: width,
-			containerHeight: height,
-		});
+		const { containerWidth, containerHeight } = this.state;
+		if (containerWidth !== width || containerHeight !== height) {
+			this.setState({
+				containerWidth: width,
+				containerHeight: height,
+			});
+		}
 	}
 
 	onValueChange(val: number) {
@@ -376,7 +395,14 @@ class HVSliderContainer extends View {
 		}
 
 		return (
-			<Parent style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]} onLayout={this.layoutView} {...parentProps} accessibilityLabel={accessibilityLabel}>
+			<Parent
+				style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]}
+				/** TODO: Remove once RN is upgraded, and after making sure onLayout getting called
+				* indefinitely issue is solved in iPhone 7 & 8 plus
+				*/
+				onLayout={(containerWidth && Platform.OS === 'ios') ? undefined : this.layoutView}
+				{...parentProps}
+				accessibilityLabel={accessibilityLabel}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
@@ -450,13 +476,5 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 	},
 });
-
-HVSliderContainer.defaultProps = {
-	thumbHeight: 12,
-	thumbWidth: 12,
-	fontSize: 10,
-	sensitive: 1,
-	value: 0,
-};
 
 module.exports = injectIntl(HVSliderContainer);

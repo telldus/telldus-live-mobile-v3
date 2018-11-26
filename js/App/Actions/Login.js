@@ -52,6 +52,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 			'client_id': publicKey,
 			'client_secret': privateKey,
 			'grant_type': grantType,
+			'scope': 'live-app',
 			...credential,
 		},
 	  })

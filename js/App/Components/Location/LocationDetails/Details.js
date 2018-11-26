@@ -25,6 +25,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, Alert, NetInfo } from 'react-native';
 import { connect } from 'react-redux';
+const DeviceInfo = require('react-native-device-info');
 
 import {
 	View, Text, TouchableButton, StyleSheet,
@@ -171,6 +172,7 @@ class Details extends View {
 				const { type, effectiveType } = connectionInfo;
 				const { ttl = null } = localKey;
 				const tokenExpired = hasTokenExpired(ttl);
+				const deviceName = DeviceInfo.getDeviceName();
 				const debugData = {
 					online,
 					websocketOnline,
@@ -178,6 +180,7 @@ class Details extends View {
 					tokenExpired,
 					connectionType: type,
 					connectionEffectiveType: effectiveType,
+					deviceName,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
@@ -295,11 +298,11 @@ class Details extends View {
 					<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
 						<Text style={[styles.textValue, {fontSize}]}>
 							{`${this.labelLat}: `}
-							<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
+							<FormattedNumber value={latitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 						</Text>
 						<Text style={[styles.textValue, {fontSize}]}>
 							{` ${this.labelLong}: `}
-							<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
+							<FormattedNumber value={longitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 						</Text>
 					</View>
 					<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>

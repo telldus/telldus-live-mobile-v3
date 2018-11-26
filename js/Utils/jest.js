@@ -31,4 +31,10 @@ jest.mock('react-native-google-signin', () => {
 	};
 });
 
+jest.mock('react-native-device-info', () => {
+	return {
+		getSystemVersion: jest.fn(),
+	};
+});
+
 global.window.addEventListener = () => null;

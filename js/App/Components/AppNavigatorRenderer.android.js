@@ -218,12 +218,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
 		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, ...othersN } = nextProps;
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+
+		const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
+		if (dimmerPropsChange) {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['dimmer']);
-		if (propsChange) {
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
 			return true;
 		}
 
@@ -383,12 +384,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	render(): Object {
 		const { currentScreen: CS, drawer } = this.state;
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const screenProps = {
-			currentScreen: CS,
-			intl,
-			drawer,
-			appLayout,
-		};
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
@@ -400,6 +395,23 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
+		let screenProps = {
+			currentScreen: CS,
+			intl,
+			drawer,
+			appLayout,
+			screenReaderEnabled,
+		};
+		if (showHeader) {
+			screenProps = {
+				...screenProps,
+				leftButton,
+				hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
+				style: styles.header,
+				logoStyle: styles.logoStyle,
+			};
+		}
+
 		return (
 			<DrawerLayoutAndroid
 				ref="drawer"
@@ -410,8 +422,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onDrawerOpen={this.onOpenDrawer}
 				onDrawerClose={this.onCloseDrawer}
 			>
-				{showHeader && (
-					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
+				{showHeader && !styles.isPortrait && (
+					<Header
+						style={styles.header}
+						logoStyle={styles.logoStyle}
+						leftButton={leftButton}
+						appLayout={appLayout}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>
 					<Navigator
@@ -484,6 +500,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				left: deviceHeight * 0.6255,
 				top: deviceHeight * 0.0400,
 			},
+			isPortrait,
 		};
 	}
 }

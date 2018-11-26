@@ -1,0 +1,4 @@
+- Turn off interpolation as default
+- Possibility to turn on interpolation
+- Dim instructions when tapping dim button
+

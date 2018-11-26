@@ -29,6 +29,8 @@ import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import Theme from '../../Theme';
+import { View } from '../../../BaseComponents';
+import { SensorDetailsHeaderPoster } from './SubViews';
 
 const SensorDetailsNavigator = createMaterialTopTabNavigator(
 	{
@@ -61,17 +63,20 @@ const SensorDetailsNavigator = createMaterialTopTabNavigator(
 				paddingVertical = 10 + (fontSize * 0.5);
 			}
 			return (
-				<MaterialTopTabBar {...rest}
-					tabStyle={{
-						...tabStyle,
-						width: tabWidth,
-						paddingVertical,
-					}}
-					labelStyle={{
-						...labelStyle,
-						fontSize,
-					}}
-				/>
+				<View style={{flex: 0}}>
+					<SensorDetailsHeaderPoster {...rest}/>
+					<MaterialTopTabBar {...rest}
+						tabStyle={{
+							...tabStyle,
+							width: tabWidth,
+							paddingVertical,
+						}}
+						labelStyle={{
+							...labelStyle,
+							fontSize,
+						}}
+					/>
+				</View>
 			);
 		},
 		tabBarOptions: {

@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { Text, View } from '../../../../../BaseComponents';
@@ -105,10 +105,13 @@ class SliderScale extends View {
 
 	layoutScale(event: Object) {
 		let { width, height } = event.nativeEvent.layout;
-		this.setState({
-			scaleWidth: width,
-			scaleHeight: height,
-		});
+		const { scaleWidth, scaleHeight } = this.state;
+		if (scaleWidth !== width || height !== scaleHeight) {
+			this.setState({
+				scaleWidth: width,
+				scaleHeight: height,
+			});
+		}
 	}
 
 	render(): Object {
@@ -137,12 +140,16 @@ class SliderScale extends View {
 			<View style={[{flex: 1, justifyContent: 'center'}, backgroundStyle, style]}
 				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={importantForAccessibility}>
-				<View style={[styles.sliderScale, scaleStyle, {
-					height: thumbHeight / 3,
-					width: (containerWidth - (2 * thumbWidth)),
-					marginLeft: thumbWidth,
-					borderRadius: thumbHeight / 6,
-				}]} onLayout={this.layoutScale}/>
+				<View
+					style={[styles.sliderScale, scaleStyle, {
+						height: thumbHeight / 3,
+						width: (containerWidth - (2 * thumbWidth)),
+						marginLeft: thumbWidth,
+						borderRadius: thumbHeight / 6,
+					}]}
+					// TODO: Remove once RN is upgraded, and after making sure onLayout getting called
+					// indefinitely issue is solved in iPhone 7 & 8 plus
+					onLayout={(scaleWidth && Platform.OS === 'ios') ? undefined : this.layoutScale}/>
 				<Animated.View style={[
 					styles.thumb, thumbStyle, {
 						width: thumbWidth,

@@ -22,12 +22,10 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BackHandler } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
-import { intlShape, injectIntl } from 'react-intl';
+const isEqual = require('react-fast-compare');
 
 import { FullPageActivityIndicator, View, DialogueBox, NavigationHeaderPoster } from '../../../BaseComponents';
 import Theme from '../../Theme';
@@ -39,15 +37,17 @@ import { showToast } from '../../Actions/App';
 import { getJobs } from '../../Actions';
 import type { Schedule } from '../../Reducers/Schedule';
 
+import shouldUpdate from '../../Lib/shouldUpdate';
+
 type Props = {
-	navigation: Object,
-	children: Object,
+	gateways: Object,
 	schedule?: Schedule,
 	actions?: Object,
-	devices?: Object,
+	devices: Object,
 	screenProps: Object,
-	intl: intlShape.isRequired,
-	appLayout: Object,
+
+	navigation: Object,
+	children: Object,
 };
 
 type State = {
@@ -65,22 +65,11 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
-	intl: Object,
-	appLayout: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
 
 	handleBackPress: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		schedule: PropTypes.object,
-		actions: PropTypes.objectOf(PropTypes.func),
-		devices: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
 
 	state = {
 		h1: '',
@@ -117,9 +106,23 @@ class ScheduleScreen extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const isStateEqual = _.isEqual(this.state, nextState);
-		const isPropsEqual = _.isEqual(this.props, nextProps);
-		return !(isStateEqual && isPropsEqual);
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const { gateways, devices, screenProps, ...otherProps } = this.props;
+		const { gateways: gatewaysN, devices: devicesN, screenProps: screenPropsN, ...otherPropsN } = nextProps;
+		if ((Object.keys(gateways.byId).length !== Object.keys(gatewaysN.byId).length) || (Object.keys(devices.byId).length !== Object.keys(devicesN.byId).length)) {
+			return true;
+		}
+		if (screenProps.currentScreen !== screenPropsN.currentScreen) {
+			return true;
+		}
+		const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
 	}
 
 	goBack = () => {
@@ -172,7 +175,18 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { children, navigation, actions, devices, schedule, screenProps, intl, appLayout } = this.props;
+		const {
+			children,
+			navigation,
+			actions,
+			devices,
+			schedule,
+			screenProps,
+			gateways,
+		} = this.props;
+		const {
+			appLayout,
+		} = screenProps;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style, modal } = this._getStyle(appLayout);
 		const {
@@ -203,7 +217,8 @@ class ScheduleScreen extends View<null, Props, State> {
 						infoButton={infoButton}
 						align={'right'}
 						navigation={navigation}
-						{...screenProps}/>
+						{...screenProps}
+						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}/>
 					<View style={style}>
 						{React.cloneElement(
 							children,
@@ -217,8 +232,7 @@ class ScheduleScreen extends View<null, Props, State> {
 								loading: this.loading,
 								isEditMode: this._isEditMode,
 								...screenProps,
-								appLayout,
-								intl,
+								gateways,
 							},
 						)}
 					</View>
@@ -279,16 +293,17 @@ type mapStateToPropsType = {
 	devices: Object,
 	modal: Object,
 	app: Object,
+	gateways: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, app }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
+		gateways,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: app.layout,
 	}
 );
 
@@ -301,4 +316,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ScheduleScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);

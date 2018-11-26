@@ -29,7 +29,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape, injectIntl } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, Header, IconTelldus } from '../../BaseComponents';
+import { View, IconTelldus } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
@@ -183,12 +183,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
 		const { appLayout: appLayoutN, showEULA: showEULAN, showToast: showToastN, ...othersN } = nextProps;
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+
+		const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
+		if (dimmerPropsChange) {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['dimmer']);
-		if (propsChange) {
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
 			return true;
 		}
 
@@ -296,11 +297,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	render(): Object {
 		const { currentScreen: CS } = this.state;
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const screenProps = {
-			currentScreen: CS,
-			intl,
-			appLayout,
-		};
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
@@ -313,11 +309,23 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
+		let screenProps = {
+			currentScreen: CS,
+			intl,
+			appLayout,
+			screenReaderEnabled,
+		};
+		if (showHeader) {
+			screenProps = {
+				...screenProps,
+				leftButton,
+				hideHeader: false,
+				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )},
+			};
+		}
+
 		return (
 			<View style={{flex: 1}}>
-				{showHeader && (
-					<Header leftButton={leftButton} style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}/>
-				)}
 				<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 					<Navigator
 						ref={this.setNavigatorRef}

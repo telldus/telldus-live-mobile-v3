@@ -83,6 +83,7 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 				intl={intl}
 				navigation={navigation}
 				handleBackPress={this.handleBackPress}
+				leftIcon={'close'}
 			/>
 		);
 	}

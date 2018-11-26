@@ -33,12 +33,17 @@ import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
-import { getLabelDevice, shouldUpdate } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
 
-import { getPowerConsumed, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
+import {
+	getLabelDevice,
+	shouldUpdate,
+	getPowerConsumed,
+	getDeviceIcons,
+	getDeviceActionIcon,
+} from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
@@ -65,6 +70,7 @@ type Props = {
 	setIgnoreDevice: (Object) => void,
 	onPressMore: (Array<Object>) => void,
 	onHiddenRowOpen: (string) => void,
+	onPressDimButton: (device: Object) => void,
 };
 
 type State = {
@@ -145,28 +151,37 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const isStateEqual = isEqual(this.state, nextState);
-		if (!isStateEqual) {
+		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
+		if (currentScreenN === 'Devices') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Devices' && nextProps.screenReaderEnabled) {
+				return true;
+			}
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+			const { device } = otherProps;
+
+			if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
+			]);
+			if (propsChange) {
+				return true;
+			}
+		}
+		if (currentScreenN !== 'Devices' && this.state.isOpen) {
 			return true;
 		}
-
-		const { propsSwipeRow, tab, ...otherProps } = this.props;// eslint-disable-line
-		const { propsSwipeRow: nextPropsSwipeRow, tab: nextTab, ...nextOtherProps } = nextProps;
-		const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
-		const { device } = otherProps;
-
-		if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
-			return true;
-		}
-
-		if (nextTab !== 'Devices' && this.state.isOpen) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-			'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
-		]);
-		if (propsChange) {
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Devices' && currentScreen === 'Devices' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 
@@ -174,10 +189,10 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { tab, propsSwipeRow, device } = this.props;
+		let { currentScreen, propsSwipeRow, device } = this.props;
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (tab !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
+		if (isOpen && (currentScreen !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
 	}
@@ -213,6 +228,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	onSettingsSelected() {
+		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.device);
 	}
 
@@ -338,7 +354,7 @@ class DeviceRow extends View<Props, State> {
 	render(): Object {
 		let button = [];
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
-		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
+		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed, onPressDimButton } = this.props;
 		const { isInState, name, deviceType, supportedMethods = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -354,14 +370,14 @@ class DeviceRow extends View<Props, State> {
 			STOP,
 		} = supportedMethods;
 
-		const actionIcon = getDeviceActionIcon(deviceType, isInState);
+		const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 		const sharedProps = {
 			device,
 			isOpen,
 			intl,
 			isGatewayActive,
 			appLayout,
-			actionIcon,
+			actionIcons,
 			closeSwipeRow: this.closeSwipeRow,
 		};
 		const icon = getDeviceIcons(deviceType);
@@ -393,6 +409,7 @@ class DeviceRow extends View<Props, State> {
 					showSlider={!BELL && !UP && !DOWN && !STOP}
 					onSlideActive={this.onSlideActive}
 					onSlideComplete={this.onSlideComplete}
+					onPressDimButton={onPressDimButton}
 					key={2}
 				/>
 			);
@@ -436,7 +453,6 @@ class DeviceRow extends View<Props, State> {
 					disableRightSwipe={true}
 					onRowOpen={this.onRowOpen}
 					onRowClose={this.onRowClose}
-					recalculateHiddenLayout={true}
 					swipeToOpenPercent={20}
 					directionalDistanceChangeThreshold={2}>
 					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
@@ -447,7 +463,9 @@ class DeviceRow extends View<Props, State> {
 						// Fixes issue controlling device in IOS, in accessibility mode
 						// By passing onPress to visible content of 'SwipeRow', prevents it from
 						// being placed inside a touchable.
-						onPress={this.noOp}>
+						onPress={this.noOp}
+						accessible={false}
+						importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}>
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
@@ -670,7 +688,6 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
 
 	return {
-		tab: store.navigation.tab,
 		powerConsumed,
 	};
 }

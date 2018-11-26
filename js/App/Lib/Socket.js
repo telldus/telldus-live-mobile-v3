@@ -71,7 +71,10 @@ export default class TelldusWebsocket {
 			return console.log('socket already opening');
 		}
 
-		this.websocket = new ReconnectingWebSocket(this.websocketUrl);
+		const options = {
+			minReconnectionDelay: 10,
+		};
+		this.websocket = new ReconnectingWebSocket(this.websocketUrl, [], options);
 
 		// bind any listeners on TelldusWebsocket to this.socket
 		this._addListeners();

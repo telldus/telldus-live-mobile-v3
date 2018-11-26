@@ -31,7 +31,7 @@ import {
 	View,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays } from '../../Lib';
+import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
@@ -145,6 +145,8 @@ class Summary extends View<null, Props, State> {
 			iconContainerStyle,
 		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
+		const { deviceType, supportedMethods = {} } = this.device;
+		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
 
 		const { retries = 0, retryInterval = 0, reps = 0 } = schedule;
 
@@ -155,6 +157,7 @@ class Summary extends View<null, Props, State> {
 						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
 						<ActionRow
 							method={method}
+							actionIcons={actionIcons}
 							showValue={true}
 							methodValue={methodValue}
 							containerStyle={row}

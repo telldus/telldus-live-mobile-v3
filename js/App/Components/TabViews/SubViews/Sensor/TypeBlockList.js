@@ -89,7 +89,7 @@ getDefaultType(sensors: Object): string {
 }
 
 render(): Object {
-	const { style, sensors, valueCoverStyle, dotCoverStyle, dotStyle } = this.props;
+	const { sensors, ...others } = this.props;
 	let defaultType = null, defaultSensor = null, totalTypes = this.getSupportedDisplayTypes(sensors);
 	if (totalTypes.length > 0) {
 		defaultType = this.getDefaultType(sensors);
@@ -97,11 +97,7 @@ render(): Object {
 	}
 
 	const props = {
-		...this.props,
-		valueCoverStyle,
-		style,
-		dotCoverStyle,
-		dotStyle,
+		...others,
 		defaultSensor,
 		defaultType,
 		totalTypes,

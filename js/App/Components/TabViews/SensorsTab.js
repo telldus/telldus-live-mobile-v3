@@ -118,7 +118,8 @@ class SensorsTab extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
-		return currentScreen === 'Sensors';
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Sensors') || (currentScreen !== 'Sensors' && prevScreen === 'Sensors');
 	}
 
 	onRefresh() {
@@ -189,10 +190,17 @@ class SensorsTab extends View {
 	}
 
 	toggleHiddenListButton(style: Object): Object {
+		const { screenProps } = this.props;
+		const accessible = screenProps.currentScreen === 'Sensors';
 		return (
-			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
-				<Text style={style.toggleHiddenListText}>
+			<TouchableOpacity
+				style={style.toggleHiddenListButton}
+				nPress={this.toggleHiddenList}
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
+					importantForAccessibility="no" accessible={false}/>
+				<Text style={style.toggleHiddenListText} accessible={accessible}>
 					{this.state.showHiddenList ?
 						this.hideHidden
 						:
@@ -242,7 +250,7 @@ class SensorsTab extends View {
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
 				/>
-				<View>
+				<View importantForAccessibility={screenProps.currentScreen === 'Sensors' ? 'no' : 'no-hide-descendants'}>
 					{this.toggleHiddenListButton(style)}
 					{showHiddenList ?
 						<SectionList
@@ -299,7 +307,7 @@ class SensorsTab extends View {
 	renderRow(row: Object): Object {
 		const { screenProps } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen, appLayout } = screenProps;
+		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
 		const { item } = row;
 		const { isOnline } = item;
 
@@ -313,7 +321,8 @@ class SensorsTab extends View {
 				setIgnoreSensor={this.setIgnoreSensor}
 				onHiddenRowOpen={this.closeVisibleRows}
 				propsSwipeRow={propsSwipeRow}
-				onSettingsSelected={this.openSensorDetail}/>
+				onSettingsSelected={this.openSensorDetail}
+				screenReaderEnabled={screenReaderEnabled}/>
 		);
 	}
 

@@ -38,6 +38,7 @@ type Props = {
     onValueChangeOne: (string, number) => void,
 	onValueChangeTwo: (string, number) => void,
 	appLayout: Object,
+	intl: Object,
 };
 
 type State = {
@@ -66,6 +67,11 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.onPressPickerTwo = this.onPressPickerTwo.bind(this);
 		this.propsExtractorTwo = this.propsExtractorTwo.bind(this);
 		this.propsExtractorOne = this.propsExtractorOne.bind(this);
+
+		const { intl } = this.props;
+		this.phraseOne = `${intl.formatMessage(i18n.labelGraphValues)} ${intl.formatMessage(i18n.labelDropdown)}`;
+		this.phraseTwo = props.intl.formatMessage(i18n.labelSelected);
+		this.phraseThree = props.intl.formatMessage(i18n.defaultDescriptionButton);
 	}
 
 	renderBaseOne(items: Object): Object {
@@ -83,18 +89,22 @@ class GraphValuesDropDown extends View<Props, State> {
 			return item.value === title;
 		});
 
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
+
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
 				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPickerOne}>
-				<IconTelldus icon={icon} style={leftIconStyle}/>
+				onPress={this.onPressPickerOne}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon={icon} style={leftIconStyle} accessible={false}/>
 				<Text style={pickerBaseTextStyle} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={'down'} style={rightIconStyle}/>
+				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
 			</Ripple>
 		);
 	}
@@ -150,18 +160,22 @@ class GraphValuesDropDown extends View<Props, State> {
 			return item.value === title;
 		});
 
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
+
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
 				rippleDuration={rippleDuration}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPickerTwo}>
-				<IconTelldus icon={icon} style={leftIconStyle}/>
+				onPress={this.onPressPickerTwo}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon={icon} style={leftIconStyle} accessible={false}/>
 				<Text style={pickerBaseTextStyle} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={'down'} style={rightIconStyle}/>
+				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
 			</Ripple>
 		);
 	}
@@ -192,7 +206,9 @@ class GraphValuesDropDown extends View<Props, State> {
 			itemPadding,
 			itemCount,
 		} = this.getStyle(appLayout);
-		const dropDownPosition = list.length + 1;
+		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
+		const iCount = list.length < itemCount ? list.length : itemCount;
+		const dropdownTop = -(iCount * itemSize);
 
 		return (
 			<View style={dropDownContainerStyle}>
@@ -206,13 +222,17 @@ class GraphValuesDropDown extends View<Props, State> {
 						renderBase={this.renderBaseOne}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
-						itemCount={itemCount}
+						itemCount={iCount}
 						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandDanger}
-						dropdownPosition={dropDownPosition}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
 						propsExtractor={this.propsExtractorOne}
 					/>
 					<Dropdown
@@ -223,13 +243,17 @@ class GraphValuesDropDown extends View<Props, State> {
 						renderBase={this.renderBaseTwo}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
-						itemCount={itemCount}
+						itemCount={iCount}
 						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandInfo}
-						dropdownPosition={dropDownPosition}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
 						propsExtractor={this.propsExtractorTwo}
 					/>
 				</View>

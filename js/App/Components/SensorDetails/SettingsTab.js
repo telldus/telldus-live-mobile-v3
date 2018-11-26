@@ -533,15 +533,18 @@ class SettingsTab extends View {
 					<TouchableButton
 						text={formatMessage(i18n.clearHistory).toUpperCase()}
 						onPress={this.clearHistory}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						accessible={true}/>
 					<TouchableButton
 						text={formatMessage(i18n.resetMaxMin).toUpperCase()}
 						onPress={this.resetMaxMin}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						accessible={true}/>
 					<TouchableButton
 						text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
 						onPress={this.clearHistoryCache}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						accessible={true}/>
 					<Text style={clearCacheHintStyle}>
 						{formatMessage(i18n.hintHistoryCache)}.
 					</Text>

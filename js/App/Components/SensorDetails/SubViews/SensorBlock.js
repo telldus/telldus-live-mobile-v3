@@ -82,7 +82,7 @@ export default class SensorBlock extends View<Props, null> {
 		const { brandSecondary } = Theme.Core;
 
 		return (
-			<View style={containerStyle}>
+			<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
 				<IconTelldus icon={icon} style={iconStyle}/>
 				<View style={textContainer}>
 					<Text style={labelStyle}>
@@ -93,10 +93,12 @@ export default class SensorBlock extends View<Props, null> {
 							{value}
 						</Text>
 						:
-						<Text style={valueStyle} numberOfLines={1}>
-							<FormattedNumber value={value} {...formatOptions}/>
-							{unit}
-						</Text>
+						<FormattedNumber
+							value={value}
+							{...formatOptions}
+							style={valueStyle}
+							suffix={unit}
+							suffixStyle={valueStyle}/>
 					}
 					<Text style={updatedInfoStyle}>
 						<FormattedDate value={lastUpdated} style={updatedInfoStyle}/>

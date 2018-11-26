@@ -44,7 +44,8 @@ type Props = {
     powerConsumed?: number,
 	appLayout: Object,
     style: Object,
-    setScrollEnabled: (boolean) => void,
+	setScrollEnabled: (boolean) => void,
+	onPressDimButton: (Object) => void,
 };
 
 type State = {
@@ -93,7 +94,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 getButtonsInfo(item: Object, styles: Object): Object {
 	let { supportedMethods, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
-	let { tileWidth, setScrollEnabled } = this.props;
+	let { tileWidth, setScrollEnabled, onPressDimButton } = this.props;
 	const {
 		TURNON,
 		TURNOFF,
@@ -108,7 +109,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	// Some device type, mostly with single button, the action(mostly inactive) icon will change wrt. it's state
 	// For now this value is passed(and logic handled) only to 'ToggleDashboardTile'(as those device's state seem to be 'TURNON || TURNOFF')
 	// if these type of devices has any chance of having state other than 'TURNON || TURNOFF', pass it to required button component.(also handle the logic)
-	const actionIcon = getDeviceActionIcon(deviceType, isInState);
+	const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 
 	if (BELL) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
@@ -141,7 +142,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<DimmerDashboardTile key={2} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
-			showSlider={showSlider} setScrollEnabled={setScrollEnabled}/>);
+			showSlider={showSlider} setScrollEnabled={setScrollEnabled} onPressDimButton={onPressDimButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -154,7 +155,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} actionIcon={actionIcon} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
+		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -165,7 +166,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} actionIcon={actionIcon} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
+		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -195,12 +196,15 @@ render(): Object {
 			icon={iconsName}
 			iconStyle={{
 				color: '#fff',
-				fontSize: tileWidth / 5.2,
+				fontSize: Math.floor(tileWidth / 5.7),
+				borderRadius: Math.floor(tileWidth / 8),
+				textAlign: 'center',
+				alignSelf: 'center',
 			}}
 			iconContainerStyle={[iconContainerStyle, {
-				width: tileWidth / 4.8,
-				height: tileWidth / 4.8,
-				borderRadius: tileWidth / 9.6,
+				width: Math.floor(tileWidth / 4),
+				height: Math.floor(tileWidth / 4),
+				borderRadius: Math.floor(tileWidth / 8),
 				alignItems: 'center',
 				justifyContent: 'center',
 			}]}

@@ -46,7 +46,7 @@ import {
 } from './App/Lib';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.7';
+const changeLogVersion = '3.8';
 
 type Props = {
 	dispatch: Function,
@@ -57,6 +57,7 @@ type Props = {
 	forceShowChangeLog: boolean,
 	intl: Object,
 	locale: string,
+	deviceId?: string,
 };
 
 class App extends React.Component<Props, null> {
@@ -171,6 +172,7 @@ function mapStateToProps(store: Object): Object {
 		isTokenValid,
 		pushTokenRegistered,
 		showChangeLog: forceShowChangeLog,
+		deviceId = null,
 	} = store.user;
 	let {
 		changeLogVersion: prevChangeLogVersion,
@@ -183,6 +185,7 @@ function mapStateToProps(store: Object): Object {
 		pushTokenRegistered,
 		prevChangeLogVersion,
 		forceShowChangeLog,
+		deviceId,
 	};
 }
 

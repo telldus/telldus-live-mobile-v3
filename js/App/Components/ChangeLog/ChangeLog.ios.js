@@ -224,7 +224,7 @@ class ChangeLogNavigator extends View {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<SafeAreaView onLayout={onLayout}>
+				<SafeAreaView onLayout={onLayout} backgroundColor={Theme.Core.appBackground}>
 					<NavigationHeader showLeftIcon={false}/>
 					<ChangeLogPoster h1={h1} h2={h2}/>
 					<ScrollView>

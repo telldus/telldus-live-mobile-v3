@@ -54,6 +54,7 @@ type Props = {
 	showSlider?: boolean,
 	setScrollEnabled: boolean,
 	screenReaderEnabled: boolean,
+	sensitive: number,
 
 	style: Object,
 	intl: Object,
@@ -68,6 +69,7 @@ type Props = {
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
+	onPressDimButton: (Object) => void,
 };
 
 type DefaultProps = {
@@ -96,12 +98,14 @@ class DimmerDashboardTile extends View<Props, void> {
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
 
+	onPressDimButton: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		const { item, onDimmerSlide } = this.props;
 		this.parentScrollEnabled = true;
 
-		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 200, {
+		this.onValueChangeThrottled = throttle(onDimmerSlide(item.id), 100, {
 			trailing: true,
 		});
 
@@ -111,6 +115,8 @@ class DimmerDashboardTile extends View<Props, void> {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
+
+		this.onPressDimButton = this.onPressDimButton.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -121,7 +127,7 @@ class DimmerDashboardTile extends View<Props, void> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'showSlider', 'screenReaderEnabled', 'sensitive']);
 		if (propsChange) {
 			return true;
 		}
@@ -164,12 +170,19 @@ class DimmerDashboardTile extends View<Props, void> {
 		this.props.showDimmerStep(id);
 	}
 
+	onPressDimButton() {
+		const { onPressDimButton, item } = this.props;
+		if (onPressDimButton && typeof onPressDimButton === 'function') {
+			onPressDimButton(item);
+		}
+	}
+
 	render(): Object {
 		const {
 			item, tileWidth, intl, isGatewayActive,
 			screenReaderEnabled, showSlider, onButtonStyle,
 			offButtonStyle, sliderStyle, containerStyle,
-			setScrollEnabled,
+			setScrollEnabled, sensitive,
 		} = this.props;
 		const { name, isInState, supportedMethods, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -179,6 +192,7 @@ class DimmerDashboardTile extends View<Props, void> {
 		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
+			sensitive,
 			thumbWidth: 7,
 			thumbHeight: 7,
 			fontSize: 8,
@@ -219,7 +233,8 @@ class DimmerDashboardTile extends View<Props, void> {
 		const slider = DIM ?
 			<HVSliderContainer
 				{...sliderProps}
-				style={[styles.sliderContainer, sliderStyle]}>
+				style={[styles.sliderContainer, sliderStyle]}
+				onPress={this.onPressDimButton}>
 				<SliderScale
 					style={styles.slider}
 					thumbWidth={7}
@@ -317,8 +332,12 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
+	const { app = {} } = store;
+	const { screenReaderEnabled, defaultSettings = {} } = app;
+	const { dimmerSensitivity: sensitive = 5 } = defaultSettings;
 	return {
-		screenReaderEnabled: store.app.screenReaderEnabled,
+		screenReaderEnabled,
+		sensitive,
 	};
 }
 

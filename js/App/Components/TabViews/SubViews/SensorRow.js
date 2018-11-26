@@ -59,6 +59,8 @@ type Props = {
 	isGatewayActive: boolean,
 	propsSwipeRow: Object,
 	defaultType?: string,
+	screenReaderEnabled: boolean,
+
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
 	onSettingsSelected: Object => void,
@@ -78,26 +80,8 @@ class SensorRow extends View<Props, State> {
 	state: State;
 
 	labelSensor: string;
-	labelHumidity: string;
-	labelTemperature: string;
-	labelRainRate: string;
-	labelRainTotal: string;
-	labelWindGust: string;
-	labelWindAverage: string;
-	labelWindDirection: string;
-	labelUVIndex: string;
 	labelWatt: string;
-	labelCurrent: string;
-	labelEnergy: string;
-	labelAccumulated: string;
 	labelAcc: string;
-	labelVoltage: string;
-	labelPowerFactor: string;
-	labelPulse: string;
-	labelLuminance: string;
-	labelDewPoint: string;
-	labelBarometricPressure: string;
-	labelGenericMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
@@ -105,7 +89,6 @@ class SensorRow extends View<Props, State> {
 	helpViewHiddenRow: string;
 	helpCloseHiddenRow: string;
 
-	onLayout: (Object) => void;
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
@@ -135,7 +118,7 @@ class SensorRow extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.width = 0;
+
 		const { formatMessage } = props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
@@ -150,7 +133,6 @@ class SensorRow extends View<Props, State> {
 		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
 		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
-		this.onLayout = this.onLayout.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
@@ -175,13 +157,17 @@ class SensorRow extends View<Props, State> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
 		if (currentScreenN === 'Sensors') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Sensors' && nextProps.screenReaderEnabled) {
+				return true;
+			}
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
 
-			const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line		
 			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
 			const { sensor } = otherProps;
 
@@ -198,7 +184,8 @@ class SensorRow extends View<Props, State> {
 
 			return false;
 		}
-		if (currentScreenN !== 'Sensors' && this.state.isOpen) {
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Sensors' && currentScreen === 'Sensors' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 
@@ -265,6 +252,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onSettingsSelected() {
+		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.sensor);
 	}
 
@@ -327,19 +315,22 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onLayoutDeviceName(ev: Object) {
-		if (!this.state.showFullName) {
-			let { x, width } = ev.nativeEvent.layout;
-			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
-			const maxRightPadd = 12;
+		const { x, width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
+		const maxRightPadd = 12;
+		const newOccWidth = width + x + maxRightPadd;
+		if (!this.state.showFullName && (newOccWidth !== coverMaxWidth)) {
 			this.setState({
-				coverOccupiedWidth: width + x + maxRightPadd,
+				coverOccupiedWidth: newOccWidth,
 			});
 		}
 	}
 
 	onLayoutCover(ev: Object) {
-		if (!this.state.showFullName) {
-			let { width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		const { width } = ev.nativeEvent.layout;
+		if (!this.state.showFullName && (coverMaxWidth !== width)) {
 			this.setState({
 				coverMaxWidth: width,
 			});
@@ -347,7 +338,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onLayoutButtons(ev: Object) {
-		let { buttonsWidth } = this.state;
+		const { buttonsWidth } = this.state;
 		if (!buttonsWidth) {
 			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
 			this.setState({
@@ -377,7 +368,7 @@ class SensorRow extends View<Props, State> {
 		return time;
 	}
 
-	getSensors(data: Object): Object {
+	getSensors(data: Object, styles: Object): Object {
 		let sensors = {}, sensorInfo = '';
 		const { formatMessage } = this.props.intl;
 		const {
@@ -386,7 +377,7 @@ class SensorRow extends View<Props, State> {
 			unitStyle,
 			labelStyle,
 			sensorValueCoverStyle,
-		} = this.getStyles();
+		} = styles;
 
 		for (let key in data) {
 			const values = data[key];
@@ -490,7 +481,7 @@ class SensorRow extends View<Props, State> {
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
-		let { sensors, sensorInfo } = this.getSensors(data);
+		let { sensors, sensorInfo } = this.getSensors(data, styles);
 
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
@@ -515,7 +506,6 @@ class SensorRow extends View<Props, State> {
 				disableRightSwipe={true}
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
-				recalculateHiddenLayout={true}
 				swipeToOpenPercent={20}
 				directionalDistanceChangeThreshold={2}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
@@ -523,16 +513,17 @@ class SensorRow extends View<Props, State> {
 					onPressSettings={this.onSettingsSelected}/>
 				<ListItem
 					style={styles.row}
-					onLayout={this.onLayout}
-					accessible={accessible}
-					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-					accessibilityLabel={accessible ? accessibilityLabel : ''}
+					accessible={false}
+					importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}
 					// By passing onPress to visible content of 'SwipeRow', prevents it from
 					// being placed inside a touchable.
 					onPress={this.noOp}>
 					<View style={styles.cover}>
 						<TouchableOpacity onPress={this.onPressSensorName} disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
-							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+							style={styles.container}
+							accessible={accessible}
+							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+							accessibilityLabel={accessible ? accessibilityLabel : ''}>
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
 						</TouchableOpacity>
@@ -598,17 +589,13 @@ class SensorRow extends View<Props, State> {
 		);
 	}
 
-	onLayout(event: Object) {
-		this.width = event.nativeEvent.layout.width;
-	}
-
 	getStyles(): Object {
 		const { appLayout, isGatewayActive, sensor } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		let {
+		const {
 			rowHeight,
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,

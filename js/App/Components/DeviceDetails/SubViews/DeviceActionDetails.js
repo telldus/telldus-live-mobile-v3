@@ -35,6 +35,8 @@ import UpButton from '../../TabViews/SubViews/Navigational/UpButton';
 import DownButton from '../../TabViews/SubViews/Navigational/DownButton';
 import StopButton from '../../TabViews/SubViews/Navigational/StopButton';
 
+import { getDeviceActionIcon } from '../../../Lib/DeviceUtils';
+
 import Theme from '../../../Theme';
 
 
@@ -55,6 +57,7 @@ class DeviceActionDetails extends View {
 
 	render(): Object {
 		const { device, intl, isGatewayActive, appLayout, containerStyle } = this.props;
+		const { supportedMethods = {}, deviceType, isInState } = device;
 		const {
 			TURNON,
 			TURNOFF,
@@ -63,46 +66,72 @@ class DeviceActionDetails extends View {
 			UP,
 			DOWN,
 			STOP,
-		} = device.supportedMethods;
+		} = supportedMethods;
 		const buttons = [];
 		const { container, shadow, buttonStyle, buttonsContainer } = this.getStyles(appLayout);
+		const sharedProps = {
+			...device,
+			isGatewayActive,
+			intl,
+		};
 
 		if (UP) {
 			buttons.push(
-				<UpButton {...device} intl={intl} isGatewayActive={isGatewayActive}
+				<UpButton {...sharedProps}
 					iconSize={45} supportedMethod={UP}/>
 			);
 		}
 
 		if (DOWN) {
 			buttons.push(
-				<DownButton {...device} intl={intl} isGatewayActive={isGatewayActive}
+				<DownButton {...sharedProps}
 					iconSize={45} supportedMethod={DOWN}/>
 			);
 		}
 
 		if (STOP) {
 			buttons.push(
-				<StopButton {...device} intl={intl} isGatewayActive={isGatewayActive}
+				<StopButton {...sharedProps}
 					iconSize={20} supportedMethod={STOP}/>
 			);
 		}
 
 		if (TURNOFF) {
+			const { TURNOFF: actionIcon } = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 			buttons.push(
-				<OffButton {...device} intl={intl} isGatewayActive={isGatewayActive}/>
+				<OffButton
+					{...sharedProps}
+					actionIcon={actionIcon}/>
 			);
 		}
 
 		if (TURNON) {
+			const { TURNON: actionIcon } = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 			buttons.push(
-				<OnButton {...device} intl={intl} isGatewayActive={isGatewayActive}/>
+				<OnButton
+					{...sharedProps}
+					actionIcon={actionIcon}
+				/>
 			);
 		}
 
 		if (BELL) {
 			buttons.push(
-				<BellButton device={device} intl={intl} isGatewayActive={isGatewayActive}/>
+				<BellButton device={device} {...sharedProps}/>
+			);
+		}
+
+		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
+			const { TURNOFF: actionIcon } = getDeviceActionIcon(deviceType, isInState, supportedMethods);
+			buttons.push(
+				isInState === 'TURNOFF' ?
+					<OffButton
+						{...sharedProps}
+						actionIcon={actionIcon}/>
+					:
+					<OnButton
+						{...sharedProps}
+						actionIcon={actionIcon}/>
 			);
 		}
 

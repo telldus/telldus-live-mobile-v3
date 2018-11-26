@@ -192,6 +192,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				icon: 'location',
 				h2: location.name,
 				align: 'center',
+				leftIcon: 'close',
 			} :
 			{
 				...sharedProps,
