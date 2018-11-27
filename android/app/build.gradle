@@ -211,24 +211,24 @@ dependencies {
     {
         force = true
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
       transitive = true;
     }
     implementation project(':react-native-sqlite-storage')
     implementation 'com.android.support:multidex:1.0.2'
-    implementation ("com.google.android.gms:play-services-base:15.0.0") {
+    implementation ("com.google.android.gms:play-services-base:16.0.1") {
         force = true;
     }
-    implementation ("com.google.android.gms:play-services-maps:15.0.0") {
+    implementation ("com.google.android.gms:play-services-maps:16.0.0") {
         force = true;
     }
-    implementation ("com.google.android.gms:play-services-gcm:15.0.0") {
+    implementation ("com.google.android.gms:play-services-gcm:16.0.0") {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-core:15.0.2') {
+    implementation ('com.google.firebase:firebase-core:16.0.4') {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-messaging:15.0.2') {
+    implementation ('com.google.firebase:firebase-messaging:17.3.4') {
         force = true;
     }
 }
