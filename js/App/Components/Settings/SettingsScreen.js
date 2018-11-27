@@ -24,7 +24,7 @@
 import React from 'react';
 import { ScrollView, PushNotificationIOS, Platform } from 'react-native';
 import { connect } from 'react-redux';
-const DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
 
 import {

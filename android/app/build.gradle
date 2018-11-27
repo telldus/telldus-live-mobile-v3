@@ -182,6 +182,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-gesture-handler')
     implementation project(':react-native-orientation-locker')
     implementation project(':react-native-svg')
     implementation(project(':react-native-firebase')) {
@@ -192,7 +193,7 @@ dependencies {
         exclude group: 'com.google.android.gms'
     }
     implementation (project(':react-native-device-info')){
-        exclude group: "com.google.android.gms" 
+        exclude group: "com.google.android.gms"
     }
     implementation project(':react-native-rsa-native')
     implementation project(':react-native-udp')
@@ -207,11 +208,11 @@ dependencies {
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
-    implementation ("com.facebook.react:react-native:0.56.0")
+    implementation ("com.facebook.react:react-native:0.57.0")
     {
         force = true
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
       transitive = true;
     }
     implementation project(':react-native-sqlite-storage')

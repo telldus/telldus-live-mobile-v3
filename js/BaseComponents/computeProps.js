@@ -21,8 +21,12 @@
 
 
 import _ from 'lodash';
-import ReactNativePropRegistry from 'react-native/Libraries/Renderer/shims/ReactNativePropRegistry';
+// TODO: Disabling as of now to get the App running
+// import ReactNativePropRegistry from 'react-native/Libraries/Renderer/shims/ReactNativePropRegistry';
 
+const ReactNativePropRegistry = (i: number): Object => {
+	return {};
+};
 module.exports = function (incomingProps: Object, defaultProps: Object): Object {
 	// External props has a higher precedence
 	let computedProps = {};

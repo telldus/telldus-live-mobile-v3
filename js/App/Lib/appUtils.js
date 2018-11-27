@@ -21,7 +21,7 @@
 
 'use strict';
 import { Platform } from 'react-native';
-let DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 
 function supportRSA(): boolean {
 	const systemVersion = DeviceInfo.getSystemVersion();

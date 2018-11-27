@@ -20,7 +20,7 @@
 // @flow
 'use strict';
 
-const DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 import { Alert, PushNotificationIOS } from 'react-native';
 
 import type { ThunkAction } from '../Actions/Types';

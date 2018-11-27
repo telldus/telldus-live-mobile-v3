@@ -22,7 +22,7 @@
 'use strict';
 import React from 'react';
 import { Easing, Animated } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { Header } from '../../BaseComponents';
@@ -172,4 +172,4 @@ const StackNavigatorConfig = {
 
 const Navigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
 
-export default Navigator;
+export default createAppContainer(Navigator);

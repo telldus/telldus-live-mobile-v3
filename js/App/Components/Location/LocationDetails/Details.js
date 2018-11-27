@@ -25,7 +25,7 @@
 import React from 'react';
 import { Image, TouchableOpacity, TouchableWithoutFeedback, Alert, NetInfo } from 'react-native';
 import { connect } from 'react-redux';
-const DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 
 import {
 	View, Text, TouchableButton, StyleSheet,

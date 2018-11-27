@@ -24,7 +24,7 @@
 
 import firebase from 'react-native-firebase';
 import type { Notification } from 'react-native-firebase';
-const DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 
 import type { ThunkAction } from '../Actions/Types';
 import { pushSenderId, pushServiceId } from '../../Config';
