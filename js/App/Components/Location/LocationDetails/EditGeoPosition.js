@@ -50,6 +50,7 @@ type State = {
 	longitude: number,
 	latitudeDelta: number,
 	longitudeDelta: number,
+	isKeyboardShown: boolean,
 };
 
 class EditGeoPosition extends View {
@@ -70,6 +71,7 @@ class EditGeoPosition extends View {
 			longitude,
 			latitudeDelta: 0.74442,
 			longitudeDelta: 0.74442,
+			isKeyboardShown: false,
 		};
 
 		let { formatMessage } = props.intl;

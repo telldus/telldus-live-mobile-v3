@@ -115,6 +115,7 @@ export type Action =
 	| { type: 'VALIDATE_LOCAL_CONTROL_SUPPORT', payload: Object }
 	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string, payload: Object }
 	| { type: typeof REHYDRATE }
+	| { type: 'persist/REHYDRATE', payload: Object }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }

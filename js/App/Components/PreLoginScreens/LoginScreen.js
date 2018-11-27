@@ -33,20 +33,22 @@ import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 
 type Props = {
-		dispatch: Function,
-		screenProps: Object,
-		navigation: Object,
-		loginToTelldus: Function,
-		validationMessage: string,
-		showModal: boolean,
-		intl: intlShape.isRequired,
-		appLayout: Object,
-		styles: Object,
+	dispatch: Function,
+	screenProps: Object,
+	navigation: Object,
+	loginToTelldus: Function,
+	validationMessage: string,
+	showModal: boolean,
+	intl: intlShape.isRequired,
+	appLayout: Object,
+	styles: Object,
+	accessToken: Object,
+	isTokenValid: boolean,
 };
 
 type State = {
-		notificationText?: string,
-		onPressLogout: boolean,
+	notificationText?: string,
+	onPressLogout: boolean,
 };
 
 class LoginScreen extends View {
