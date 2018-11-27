@@ -471,10 +471,10 @@ class SensorRow extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { sensor, currentScreen, isGatewayActive, intl } = this.props;
+		const { sensor = {}, currentScreen, isGatewayActive, intl } = this.props;
 		const styles = this.getStyles();
 		const {
-			data,
+			data = {},
 			name,
 			lastUpdated,
 			id,
@@ -590,7 +590,8 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor } = this.props;
+		const { appLayout, isGatewayActive, sensor = {} } = this.props;
+		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -695,7 +696,7 @@ class SensorRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			sensorValueCoverStyle: {
-				marginBottom: Object.keys(sensor.data).length <= 1 ? 0 : rowHeight * 0.16,
+				marginBottom: Object.keys(data).length <= 1 ? 0 : rowHeight * 0.16,
 			},
 			sensorValueCover: {
 				width: widthValueBlock,

@@ -34,6 +34,7 @@
 .*/node_modules/react-navigation/.*
 .*/node_modules/react-native-udp/.*
 .*/node_modules/react-native-firebase/.*
+.*/node_modules/react-native-swiper/.*
 .*/node_modules/react-native/Libraries/StyleSheet/StyleSheetValidation.js
 .*/node_modules/react-native/Libraries/Lists/ListView/ListView.js
 .*/node_modules/react-native/Libraries/Components/Slider/Slider.js

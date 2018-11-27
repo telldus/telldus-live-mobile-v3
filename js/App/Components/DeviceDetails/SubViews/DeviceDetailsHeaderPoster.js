@@ -33,7 +33,8 @@ import { getDeviceIcons } from '../../../Lib';
 
 type Props = {
 	hideModal: () => Function,
-	device: Object,
+	deviceName: string,
+	deviceType: string,
 	screenProps: Object,
 	isModalOpen: boolean,
 	navigation: Object,
@@ -78,11 +79,11 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { navigation, device, screenProps } = this.props;
+		const { navigation, deviceType, screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
-		const { name, deviceType } = device;
 
-		const deviceName = name ? name : this.noName;
+		let { deviceName } = this.props;
+		deviceName = deviceName ? deviceName : this.noName;
 		const icon = getDeviceIcons(deviceType);
 
 		return (
@@ -101,9 +102,11 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
-	const device = store.devices.byId[id];
+	const device = store.devices.byId[id] ? store.devices.byId[id] : {};
+	const { name: deviceName, deviceType } = device;
 	return {
-		device,
+		deviceName,
+		deviceType,
 		isModalOpen: store.modal.openModal,
 	};
 }
