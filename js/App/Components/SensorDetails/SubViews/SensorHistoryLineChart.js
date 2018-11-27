@@ -376,7 +376,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	renderChart(): Object | null {
-		const { fullscreen } = this.state;
+		const { fullscreen, isLoading } = this.state;
 		const { show } = fullscreen;
 		const {
 			selectedOne,
@@ -385,6 +385,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			showOne,
 			showTwo,
 			liveData,
+			isChartLoading,
 		} = this.props;
 
 		let {
@@ -441,53 +442,46 @@ class SensorHistoryLineChart extends View<Props, State> {
 					appLayout={appLayout}
 					fullscreen={show}
 					onPressToggleView={this.onPressToggleView}/>
-				<View style={{flex: 0}}>
-					<VictoryChart
-						theme={VictoryTheme.material}
-						width={chartWidth} height={chartHeight}
-						padding={chartPadding}
-						domainPadding={{ y: domainPadding, x: 20 }}
-						containerComponent={
-							<VictoryZoomContainer/>
-						}
-					>
-						<VictoryAxis
-							orientation={'bottom'}
-							style={{
-								parent: {
-									border: '0px',
-								},
-								axis: chartLineStyle,
-								tickLabels: { fill: Theme.Core.inactiveTintColor },
-								grid: chartLineStyle,
-							}}
-							tickValues={ticks}
-							tickFormat={this.formatXTick}
-						/>
-						{chartData.map(this.renderAxis)}
-						{chartData.map(this.renderLine)}
-					</VictoryChart>
-				</View>
+				{isLoading || isChartLoading ?
+					<View style={{width: chartWidth, height: chartHeight}}>
+						<FullPageActivityIndicator size={'small'}/>
+					</View>
+					:
+					<View style={{flex: 0}}>
+						<VictoryChart
+							theme={VictoryTheme.material}
+							width={chartWidth} height={chartHeight}
+							padding={chartPadding}
+							domainPadding={{ y: domainPadding, x: 20 }}
+							containerComponent={
+								<VictoryZoomContainer/>
+							}
+						>
+							<VictoryAxis
+								orientation={'bottom'}
+								style={{
+									parent: {
+										border: '0px',
+									},
+									axis: chartLineStyle,
+									tickLabels: { fill: Theme.Core.inactiveTintColor },
+									grid: chartLineStyle,
+								}}
+								tickValues={ticks}
+								tickFormat={this.formatXTick}
+							/>
+							{chartData.map(this.renderAxis)}
+							{chartData.map(this.renderLine)}
+						</VictoryChart>
+					</View>
+				}
 			</View>
 		);
 	}
 
 	render(): any {
-		const { fullscreen, orientation, isLoading } = this.state;
+		const { fullscreen, orientation } = this.state;
 		const { show } = fullscreen;
-		const { isChartLoading } = this.props;
-
-		const {
-			containerStyle,
-			containerWhenLoading,
-		} = this.getStyle();
-		if (isChartLoading) {
-			return (
-				<View style={containerWhenLoading}>
-					<FullPageActivityIndicator size={'small'}/>
-				</View>
-			);
-		}
 
 		const chart = this.renderChart();
 		if (!show) {
@@ -513,13 +507,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 					alignItems: 'center',
 					justifyContent: 'center',
 				}}>
-					{isLoading ?
-						<View style={containerStyle}>
-							<FullPageActivityIndicator size={'small'}/>
-						</View>
-						:
-						chart
-					}
+					{chart}
 				</View>
 			</Modal>
 		);
