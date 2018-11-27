@@ -112,7 +112,7 @@
     "testEnvironment": "node",
     "transform": {
       "^.+\\.jsx$": "babel-jest",
-      "^.+\\.js$": "babel-jest"
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "globals": {
       "window": {
