@@ -392,6 +392,9 @@ class HistoryTab extends View {
 			const settings = {
 				selectedOne,
 			};
+			this.setState({
+				isChartLoading: true,
+			});
 			dispatch(changeDefaultHistorySettings(sensorId, settings));
 
 			// $FlowFixMe
@@ -413,6 +416,9 @@ class HistoryTab extends View {
 			const settings = {
 				selectedTwo,
 			};
+			this.setState({
+				isChartLoading: true,
+			});
 			dispatch(changeDefaultHistorySettings(sensorId, settings));
 
 			// $FlowFixMe
