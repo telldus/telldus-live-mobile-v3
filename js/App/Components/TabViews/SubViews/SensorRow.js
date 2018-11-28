@@ -107,6 +107,8 @@ class SensorRow extends View<Props, State> {
 
 	formatSensorLastUpdate: (string) => string;
 
+	shouldUpdateSwipeRow: (Object) => boolean;
+
 	state = {
 		isOpen: false,
 		forceClose: false,
@@ -153,6 +155,7 @@ class SensorRow extends View<Props, State> {
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
 
 		this.formatSensorLastUpdate = this.formatSensorLastUpdate.bind(this);
+		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -199,6 +202,10 @@ class SensorRow extends View<Props, State> {
 		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
+	}
+
+	shouldUpdateSwipeRow(items: Object): boolean {
+		return true;
 	}
 
 	onRowOpen() {
@@ -507,7 +514,8 @@ class SensorRow extends View<Props, State> {
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
 				swipeToOpenPercent={20}
-				directionalDistanceChangeThreshold={2}>
+				directionalDistanceChangeThreshold={2}
+				shouldItemUpdate={this.shouldUpdateSwipeRow}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
 					onPressSettings={this.onSettingsSelected}/>

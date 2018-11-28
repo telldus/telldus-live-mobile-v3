@@ -109,6 +109,8 @@ class DeviceRow extends View<Props, State> {
 	isTablet: boolean;
 	closeSwipeRow: () => void;
 
+	shouldUpdateSwipeRow: (Object) => boolean;
+
 	state = {
 		disableSwipe: false,
 		isOpen: false,
@@ -148,6 +150,7 @@ class DeviceRow extends View<Props, State> {
 
 		this.isTablet = DeviceInfo.isTablet();
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
+		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -195,6 +198,10 @@ class DeviceRow extends View<Props, State> {
 		if (isOpen && (currentScreen !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
+	}
+
+	shouldUpdateSwipeRow(items: Object): boolean {
+		return true;
 	}
 
 	onSlideActive() {
@@ -454,7 +461,8 @@ class DeviceRow extends View<Props, State> {
 					onRowOpen={this.onRowOpen}
 					onRowClose={this.onRowClose}
 					swipeToOpenPercent={20}
-					directionalDistanceChangeThreshold={2}>
+					directionalDistanceChangeThreshold={2}
+					shouldItemUpdate={this.shouldUpdateSwipeRow}>
 					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
 						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
 						isOpen={isOpen}/>
