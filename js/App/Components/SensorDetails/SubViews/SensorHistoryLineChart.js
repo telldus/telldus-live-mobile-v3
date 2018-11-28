@@ -199,7 +199,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 
 		let ticks = [], day = from;
 		ticks.push(fromTimestamp);
-		for (let i = 1; i < domainX; i++) {
+		for (let i = 1; i <= domainX; i++) {
 			let d = day.add(1, 'd');
 			ticks.push(d.unix());
 		}
