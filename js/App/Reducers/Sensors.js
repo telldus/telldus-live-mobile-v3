@@ -56,7 +56,10 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 		});
 		return acc;
 	}, []);
-	return result;
+	return orderBy(result, [(item: Object): any => {
+		let { key } = item;
+		return key ? key.toLowerCase() : null;
+	}], ['asc']);
 }
 
 export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}): Object {
