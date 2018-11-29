@@ -1,21 +1,7 @@
 apply plugin: "com.android.application"
+apply plugin: "io.fabric"
 
 import com.android.build.OutputFile
-
-buildscript {
-  repositories {
-    maven { url 'https://maven.fabric.io/public' }
-  }
-  dependencies {
-    // The Fabric Gradle plugin uses an open ended version to react
-    // quickly to Android tooling updates
-    classpath 'io.fabric.tools:gradle:1.+'
-  }
-}
-apply plugin: 'io.fabric'
-repositories {
-  maven { url 'https://maven.fabric.io/public' }
-}
 
 def readVersion() {
     def parsedJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
@@ -199,7 +185,6 @@ dependencies {
     implementation project(':react-native-udp')
     implementation project(':react-native-sensitive-info')
     implementation project(':react-native-accessibility')
-    implementation project(':react-native-fabric')
     implementation project(':react-native-i18n')
     implementation project(':react-native-extra-dimensions-android')
     implementation project(':react-native-vector-icons')
@@ -208,7 +193,7 @@ dependencies {
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
-    implementation ("com.facebook.react:react-native:0.57.0")
+    implementation ("com.facebook.react:react-native:0.57.7")
     {
         force = true
     }

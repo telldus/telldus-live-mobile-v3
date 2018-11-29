@@ -25,7 +25,7 @@
 import axios from 'axios';
 import type { Action, ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
-import { Answers } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
@@ -58,7 +58,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 	  })
 		.then((response: Object): Object => {
 			if (response.status === 200) {
-				Answers.logLogin('Password', true);
+				firebase.crashlytics().setBoolValue('Password', true);
 				dispatch({
 					type: 'RECEIVED_ACCESS_TOKEN',
 					accessToken: response.data,
@@ -68,7 +68,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 			throw response;
 		})
 		.catch((error: Object): Object => {
-			Answers.logLogin('Password', false);
+			firebase.crashlytics().setBoolValue('Password', true);
 			throw error;
 		});
 };

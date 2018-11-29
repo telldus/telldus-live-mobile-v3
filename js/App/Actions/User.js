@@ -21,7 +21,7 @@
 // @flow
 
 'use strict';
-import { Answers } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 import { format } from 'url';
 
 // User actions that are shared by both Web and Mobile.
@@ -148,14 +148,14 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			if (responseData.error) {
 				throw responseData;
 			}
-			Answers.logSignUp('Email', true);
+			firebase.crashlytics().setBoolValue('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
 			return responseData;
 		}).catch((e: Object): any => {
-			Answers.logSignUp('Email', false);
+			firebase.crashlytics().setBoolValue('Email', false);
 			throw e;
 		});
 };

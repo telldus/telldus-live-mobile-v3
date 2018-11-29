@@ -22,7 +22,7 @@
 'use strict';
 
 import type { Action } from '../Actions/Types';
-import { Crashlytics } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 
 import { createSelector } from 'reselect';
 
@@ -105,8 +105,9 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
-		Crashlytics.setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
-		Crashlytics.setUserEmail(action.payload.email);
+		firebase.crashlytics().setUserIdentifier(action.payload.email);
+		// TODO: Enable once the method is supported.
+		// firebase.crashlytics().setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
 		return {
 			...state,
 			userProfile: action.payload,
