@@ -26,4 +26,11 @@ jest.mock('react-native-device-info', () => {
 	};
 });
 
+jest.mock('react-native-firebase', () => {
+	return {
+		crashlytics: jest.fn(),
+		notifications: jest.fn(),
+	};
+});
+
 global.window.addEventListener = () => null;
