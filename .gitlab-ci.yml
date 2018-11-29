@@ -9,8 +9,8 @@ eslint:
   tags:
     - docker
   script:
-    - npm install --quiet
-    - npm run lint
+    - yarn install --quiet
+    - yarn run lint
 
 flow:
   image: danrspencer/node-flow:8.1.2
@@ -18,8 +18,8 @@ flow:
   tags:
     - docker
   script:
-    - npm install --quiet
-    - npm run flow
+    - yarn install --quiet
+    - yarn run flow
 
 jest:
   image: node:8.1.2
@@ -28,8 +28,8 @@ jest:
     - docker
   script:
     - echo "module.exports = {localStorageKey:'tellduslive'}" > config.local.js
-    - npm install --quiet
-    - npm test
+    - yarn install --quiet
+    - yarn test
 
 android: &android-ubuntu
   image: telldus/react-native-android:27-alpine
