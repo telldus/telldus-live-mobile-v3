@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -780,7 +781,6 @@
 				598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */,
 				DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */,
 				23630B716BB84A33B8A4D6BD /* libRNI18n.a */,
-				A59E17B346064409AF705800 /* libSMXCrashlytics.a */,
 				67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */,
 				34DA95593A1544E09D95F18F /* libRNReactNativeAccessibility.a */,
 				B5E8B17FC3BC433DA0620A43 /* libRNSensitiveInfo.a */,
@@ -973,8 +973,8 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				408824E71F1010CF007B3FF4 /* Fabric */,
 				B99843B15E0A99117432243F /* [CP] Copy Pods Resources */,
+				26F10BF821B03D0200E01139 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1573,19 +1573,18 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		408824E71F1010CF007B3FF4 /* Fabric */ = {
+		26F10BF821B03D0200E01139 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = Fabric;
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 6ddcb9201beba571821a466b7b634103262d6903 1e0f4b2f91bd434ab1b65e09615545c3454314c8373315d27d42185004889b1d";
+			shellScript = "\"${PODS_ROOT}/Fabric/run\"";
 		};
 		811565FD9DF7088506EC7B92 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1676,9 +1675,7 @@
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1726,9 +1723,7 @@
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
