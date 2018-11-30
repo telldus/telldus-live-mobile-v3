@@ -4,7 +4,7 @@ stages:
   - release
 
 eslint:
-  image: node:8.1.2
+  image: node:9.10.0
   stage: test
   tags:
     - docker
@@ -13,7 +13,7 @@ eslint:
     - yarn run lint
 
 flow:
-  image: danrspencer/node-flow:8.1.2
+  image: node:9.10.0
   stage: test
   tags:
     - docker
@@ -22,7 +22,7 @@ flow:
     - yarn run flow
 
 jest:
-  image: node:8.1.2
+  image: node:9.10.0
   stage: test
   tags:
     - docker
