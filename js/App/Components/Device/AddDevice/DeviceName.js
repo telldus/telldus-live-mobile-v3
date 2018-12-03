@@ -96,6 +96,7 @@ submitName() {
 			});
 			navigation.navigate('Devices');
 		}).catch(() => {
+			actions.getDevices();
 			this.setState({
 				isLoading: false,
 			});
