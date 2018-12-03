@@ -62,6 +62,7 @@ zwaveId: ?number;
 deviceId: ?number;
 clientDeviceId: ?number;
 onLayout: (Object) => void;
+deviceManufactInfo: Object;
 constructor(props: Props) {
 	super(props);
 
@@ -84,6 +85,7 @@ constructor(props: Props) {
 	this.deviceId = null;
 	this.commandClasses = null;
 	this.clientDeviceId = null;
+	this.deviceManufactInfo = {};
 
 	this.onLayout = this.onLayout.bind(this);
 }
@@ -179,6 +181,9 @@ setSocketListeners() {
 						break;
 					}
 				}
+				if (data.cmdClass === 114) {
+					this.deviceManufactInfo = data.data;
+				}
 				this.checkInclusionComplete();
 			} else if (module === 'device' && action === 'added' && !this.deviceId) {
 				const { clientDeviceId, id } = data;
@@ -240,6 +245,7 @@ onInclusionComplete() {
 	navigation.navigate('DeviceName', {
 		gateway,
 		deviceId: this.deviceId,
+		info: this.deviceManufactInfo,
 	});
 	this.deviceId = null;
 }

@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { Image } from 'react-native';
 
 import {
 	View,
@@ -46,6 +47,7 @@ type Props = {
 type State = {
 	deviceName: string,
 	isLoading: boolean,
+	deviceImage: string | null,
 };
 
 class DeviceName extends View<Props, State> {
@@ -60,15 +62,28 @@ constructor(props: Props) {
 	this.state = {
 		deviceName: '',
 		isLoading: false,
+		deviceImage: null,
 	};
 	this.onChangeName = this.onChangeName.bind(this);
 	this.submitName = this.submitName.bind(this);
 }
 
 componentDidMount() {
-	const { onDidMount, intl } = this.props;
+	const { onDidMount, intl, navigation, actions } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(i18n.AddZDNameHeaderTwo));
+
+	const info = navigation.getParam('info', {});
+	const { manufacturerId, productTypeId, productId } = info;
+	if (manufacturerId) {
+		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
+			.then((res: Object) => {
+				const { Image: deviceImage = null } = res;
+				this.setState({
+					deviceImage,
+				});
+			});
+	}
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -106,7 +121,7 @@ submitName() {
 }
 
 render(): Object {
-	const { deviceName, isLoading } = this.state;
+	const { deviceName, isLoading, deviceImage } = this.state;
 	const { appLayout, intl } = this.props;
 	const {
 		container,
@@ -123,6 +138,15 @@ render(): Object {
 				onChangeText={this.onChangeName}
 				onSubmitEditing={this.submitName}
 				appLayout={appLayout}/>
+			{!!deviceImage && (
+				<Image
+					source={{uri: deviceImage}}
+					style={{
+						height: '100%',
+						width: '100%',
+						marginTop: 10,
+					}}/>
+			)}
 			<FloatingButton
 				onPress={this.submitName}
 				iconName={this.state.isLoading ? false : 'checkmark'}
