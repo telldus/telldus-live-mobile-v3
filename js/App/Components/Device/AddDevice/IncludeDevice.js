@@ -124,9 +124,7 @@ setSocketListeners() {
 				that.inclusionTimer = setInterval(() => {
 					that.runInclusionTimer(data);
 				}, 1000);
-			}
-
-			if (module === 'zwave' && action === 'addNodeToNetwork') {
+			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
 				let status = data[0];
 				if (status === 1) {
 					this.setState({
@@ -174,9 +172,7 @@ setSocketListeners() {
 						status: 'Error : could not enter learn mode',
 					});
 				}
-			}
-
-			if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
+			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
 				for (let i in this.commandClasses) {
 					if (i === data.cmdClass.toString()) {
 						this.commandClasses[i] = data.data;
@@ -184,9 +180,7 @@ setSocketListeners() {
 					}
 				}
 				this.checkInclusionComplete();
-			}
-
-			if (module === 'device' && action === 'added' && !this.deviceId) {
+			} else if (module === 'device' && action === 'added' && !this.deviceId) {
 				const { clientDeviceId, id } = data;
 				this.deviceId = id;
 				this.clientDeviceId = clientDeviceId;
