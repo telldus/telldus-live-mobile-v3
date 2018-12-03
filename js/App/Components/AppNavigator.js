@@ -136,6 +136,7 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
+	initialRouteKey: 'Tabs',
 	cardStyle: {
 		shadowColor: 'transparent',
 		shadowOpacity: 0,

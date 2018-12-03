@@ -46,6 +46,7 @@ const SensorDetailsNavigator = createMaterialTopTabNavigator(
 	},
 	{
 		initialRouteName: 'Overview',
+		initialRouteKey: 'Overview',
 		tabBarPosition: 'top',
 		swipeEnabled: false,
 		lazy: true,

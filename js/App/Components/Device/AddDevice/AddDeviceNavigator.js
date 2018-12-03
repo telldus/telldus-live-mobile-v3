@@ -65,6 +65,7 @@ const RouteConfigs = {
 
 const StackNavigatorConfig = {
 	initialRouteName,
+	initialRouteKey: initialRouteName,
 	headerMode: 'none',
 	cardStyle: {
 		shadowColor: 'transparent',
