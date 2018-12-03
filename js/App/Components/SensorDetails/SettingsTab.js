@@ -116,8 +116,8 @@ class SettingsTab extends View {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			navigation.navigate({
-				routeName: 'Settings',
-				key: 'Settings',
+				routeName: 'SSettings',
+				key: 'SSettings',
 			});
 		},
 	});
@@ -129,7 +129,7 @@ class SettingsTab extends View {
 
 		// This is required to make the 'keepHistory' prop update when changed from history tab
 		// also while toggling switch prevent update in between API response.
-		if (screenProps.currentScreen === 'Settings' &&
+		if (screenProps.currentScreen === 'SSettings' &&
 			state.keepHistory !== sensor.keepHistory &&
 			source !== 'keepHistory' && !transition
 		) {
@@ -194,8 +194,8 @@ class SettingsTab extends View {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
-		if (currentScreen === 'Settings') {
-			if (this.props.screenProps.currentScreen !== 'Settings') {
+		if (currentScreen === 'SSettings') {
+			if (this.props.screenProps.currentScreen !== 'SSettings') {
 				return true;
 			}
 

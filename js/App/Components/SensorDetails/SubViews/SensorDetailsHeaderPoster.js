@@ -58,7 +58,7 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 	handleBackPress(): boolean {
 		let { screenProps } = this.props;
 		let { currentScreen } = screenProps;
-		if (currentScreen === 'Overview') {
+		if (currentScreen === 'SOverview') {
 			this.goBack();
 			return true;
 		}

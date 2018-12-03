@@ -114,15 +114,15 @@ class HistoryTab extends View {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			navigation.navigate({
-				routeName: 'History',
-				key: 'History',
+				routeName: 'SHistory',
+				key: 'SHistory',
 			});
 		},
 	});
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { screenProps } = props;
-		if (screenProps.currentScreen !== 'History') {
+		if (screenProps.currentScreen !== 'SHistory') {
 			return {
 				hasRefreshed: false,
 			};
@@ -166,7 +166,7 @@ class HistoryTab extends View {
 		// the conditional check here is to prevent the history related query from happening when being in
 		// overview tab, which can result in delay to open history tab if the query is running in the background.
 		// Data fetch/query is handled at 'didUpdate' method.
-		if (this.props.screenProps.currentScreen === 'History') {
+		if (this.props.screenProps.currentScreen === 'SHistory') {
 			this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
 		}
 	}
@@ -312,9 +312,9 @@ class HistoryTab extends View {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps, keepHistory } = nextProps;
 		const { appLayout, currentScreen } = screenProps;
-		if (currentScreen === 'History') {
+		if (currentScreen === 'SHistory') {
 			const { chartDataOne, chartDataTwo, list, ...others } = this.state;
-			if (this.props.screenProps.currentScreen !== 'History') {
+			if (this.props.screenProps.currentScreen !== 'SHistory') {
 				return true;
 			}
 
@@ -350,7 +350,7 @@ class HistoryTab extends View {
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { screenProps } = this.props;
 		const { hasRefreshed, hasLoaded } = this.state;
-		if (screenProps.currentScreen === 'History' && !hasRefreshed) {
+		if (screenProps.currentScreen === 'SHistory' && !hasRefreshed) {
 			// If data fetch did not happen inside 'didMount' do it here
 			if (!hasLoaded) {
 				this.getHistoryDataWithLatestTimestamp();
