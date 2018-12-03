@@ -237,14 +237,11 @@ runInclusionTimer(data?: number = 60) {
 onInclusionComplete() {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
-	let deviceId = null;
-	if (this.clientDeviceId === this.zwaveId) {
-		deviceId = this.deviceId;
-	}
 	navigation.navigate('DeviceName', {
 		gateway,
-		deviceId,
+		deviceId: this.deviceId,
 	});
+	this.deviceId = null;
 }
 
 componentWillUnmount() {
