@@ -41,6 +41,7 @@ import {
 	getSocketObject,
 	setDeviceName,
 	getDevices,
+	getDeviceManufacturerInfo,
 } from '../../../Actions';
 
 type Props = {
@@ -211,6 +212,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getSocketObject,
 				setDeviceName,
 				getDevices,
+				getDeviceManufacturerInfo,
 			}, dispatch),
 		},
 	}
