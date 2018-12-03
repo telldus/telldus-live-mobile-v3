@@ -25,9 +25,9 @@
 
 import React from 'react';
 import { Linking, ScrollView } from 'react-native';
-import { connect } from 'react-redux';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { NavigationActions } from 'react-navigation';
 
 import Theme from '../../../Theme';
 import {
@@ -99,10 +99,15 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.navigation.navigate({
+		const navigateAction = NavigationActions.navigate({
 			routeName: 'Tabs',
 			key: 'Tabs',
-		});
+			action: NavigationActions.navigate({
+				routeName: 'Gateways',
+				key: 'Gateways',
+			}),
+		  });
+		this.props.navigation.dispatch(navigateAction);
 	}
 
 	onPressHelp() {
@@ -240,4 +245,4 @@ class Success extends View<void, Props, State> {
 	}
 }
 
-export default connect()(Success);
+export default Success;

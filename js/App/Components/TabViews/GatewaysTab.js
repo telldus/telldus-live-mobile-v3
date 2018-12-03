@@ -25,6 +25,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import { NavigationActions } from 'react-navigation';
 
 import { View, FloatingButton } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
@@ -116,11 +117,17 @@ class GatewaysTab extends View {
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
-				this.props.navigation.navigate({
+				const navigateAction = NavigationActions.navigate({
 					routeName: 'AddLocation',
 					key: 'AddLocation',
-					params: { clients: response.client },
-				});
+					params: {clients: response.client},
+					action: NavigationActions.navigate({
+						routeName: 'LocationDetected',
+						key: 'LocationDetected',
+						params: {clients: response.client},
+					}),
+				  });
+				this.props.navigation.dispatch(navigateAction);
 				this.setState({
 					isLoading: false,
 				});
