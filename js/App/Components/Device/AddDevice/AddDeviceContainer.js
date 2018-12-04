@@ -42,6 +42,7 @@ import {
 	setDeviceName,
 	getDevices,
 	getDeviceManufacturerInfo,
+	showToast,
 } from '../../../Actions';
 
 type Props = {
@@ -213,6 +214,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				setDeviceName,
 				getDevices,
 				getDeviceManufacturerInfo,
+				showToast,
 			}, dispatch),
 		},
 	}

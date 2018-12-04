@@ -48,8 +48,6 @@ type Props = {
 type State = {
 	deviceName: string,
 	isLoading: boolean,
-	deviceImage: string | null,
-	deviceType: string,
 };
 
 class DeviceName extends View<Props, State> {
@@ -64,34 +62,37 @@ constructor(props: Props) {
 	this.state = {
 		deviceName: '',
 		isLoading: false,
-		deviceImage: null,
-		deviceType: '',
 	};
 	this.onChangeName = this.onChangeName.bind(this);
 	this.submitName = this.submitName.bind(this);
 }
 
 componentDidMount() {
-	const { onDidMount, intl, navigation, actions } = this.props;
+	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(i18n.AddZDNameHeaderTwo));
-
-	const info = navigation.getParam('info', {});
-	const { manufacturerId, productTypeId, productId } = info;
-	if (manufacturerId) {
-		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
-			.then((res: Object) => {
-				const { Image: deviceImage = null, DeviceType: deviceType } = res;
-				this.setState({
-					deviceImage,
-					deviceType,
-				});
-			});
-	}
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'DeviceName';
+}
+
+getImageDimensions(appLayout: Object): Object {
+	const {
+		imageW,
+		imageH,
+	} = this.props.navigation.getParam('info', {});
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const imageHeight = deviceWidth * 0.25;
+	const imageWidth = deviceWidth * 0.29;
+	if (!imageW || !imageH) {
+		return { imgWidth: imageWidth, imgHeight: imageHeight };
+	}
+
+	let ratioHW = imageH / imageW;
+	return { imgWidth: imageHeight / ratioHW, imgHeight: imageHeight };
 }
 
 onChangeName(deviceName: string) {
@@ -101,13 +102,13 @@ onChangeName(deviceName: string) {
 }
 
 submitName() {
-	this.setState({
-		isLoading: true,
-	});
 	const { actions, navigation } = this.props;
 	const { deviceName } = this.state;
 	const deviceId = navigation.getParam('deviceId', null);
 	if (deviceName !== '') {
+		this.setState({
+			isLoading: true,
+		});
 		actions.setDeviceName(deviceId, deviceName).then(() => {
 			actions.getDevices();
 			this.setState({
@@ -125,16 +126,16 @@ submitName() {
 }
 
 getDeviceInfo(styles: Object): Object {
-	const { deviceImage, deviceType } = this.state;
-	const gateway = this.props.navigation.getParam('gateway', {});
+	const { navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	const { deviceImage, deviceType } = navigation.getParam('info', {});
+
 	return (
 		<View style={styles.deviceInfoCoverStyle}>
-			{!!deviceImage && (
-				<Image
-					source={{uri: deviceImage}}
-					resizeMode={'contain'}
-					style={styles.deviceImageStyle}/>
-			)}
+			<Image
+				source={{uri: deviceImage}}
+				resizeMode={'contain'}
+				style={styles.deviceImageStyle}/>
 			<View>
 				{!!deviceType && (<Text style={styles.deviceTypeStyle}>
 					{deviceType}
@@ -190,7 +191,8 @@ getStyles(): Object {
 	const { paddingFactor, eulaContentColor, brandSecondary } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const imageSize = deviceWidth * 0.25;
+	const { imgWidth, imgHeight } = this.getImageDimensions(appLayout);
+
 	return {
 		container: {
 			flex: 1,
@@ -203,13 +205,13 @@ getStyles(): Object {
 		},
 		deviceInfoCoverStyle: {
 			flexDirection: 'row',
-			marginBottom: 2,
+			marginBottom: 4,
 			alignItems: 'center',
 		},
 		deviceImageStyle: {
-			height: imageSize,
-			width: imageSize,
-			marginRight: 2,
+			width: imgWidth,
+			height: imgHeight,
+			marginRight: padding,
 		},
 		deviceTypeStyle: {
 			fontSize: deviceWidth * 0.05,

@@ -65,6 +65,9 @@ deviceId: ?number;
 clientDeviceId: ?number;
 onLayout: (Object) => void;
 deviceManufactInfo: Object;
+deviceProdInfo: Object;
+isDeviceAwake: boolean;
+isDeviceBatteried: boolean;
 constructor(props: Props) {
 	super(props);
 
@@ -83,11 +86,17 @@ constructor(props: Props) {
 	this.setSocketListeners();
 
 	this.inclusionTimer = null;
+	this.sleepCheckTimeInterval = null;
+	this.sleepCheckTimeout = null;
 	this.zwaveId = null;
 	this.deviceId = null;
 	this.commandClasses = null;
 	this.clientDeviceId = null;
 	this.deviceManufactInfo = {};
+	this.deviceProdInfo = {};
+	this.isDeviceAwake = true;
+	this.isDeviceBatteried = false;
+	this.showToast = true;
 
 	this.onLayout = this.onLayout.bind(this);
 }
@@ -134,6 +143,7 @@ setSocketListeners() {
 		const { module, action, data } = message;
 		if (module && action) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
+				this.showToast = true;
 				that.inclusionTimer = setInterval(() => {
 					that.runInclusionTimer(data);
 				}, 1000);
@@ -144,10 +154,14 @@ setSocketListeners() {
 						status: `${formatMessage(i18n.addNodeToNetworkOne)}...`,
 					});
 				} else if (status === 2) {
+					this.isDeviceAwake = true;
+					this.startSleepCheckTimer();
 					this.setState({
 						status: formatMessage(i18n.addNodeToNetworkTwo),
 					});
 				} else if (status === 3 || status === 4) {
+					this.isDeviceAwake = true;
+					this.startSleepCheckTimer();
 
 					this.zwaveId = data[1];
 					let commandClasses = data.slice(6);
@@ -169,13 +183,15 @@ setSocketListeners() {
 						});
 					}
 				} else if (status === 5) {
+					this.isDeviceAwake = true;
 					// Add node protocol done
 					if (!this.zwaveId) {
 						this.zwaveId = data[1];
 					}
 				} else if (status === 6) {
+					this.isDeviceAwake = true;
 					// Add node done
-					this.clearTimer();
+					// this.clearTimer();
 				} else if (status === 7) {
 					this.setState({
 						status: 'Error : could not enter learn mode',
@@ -186,6 +202,7 @@ setSocketListeners() {
 					});
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
+				this.isDeviceAwake = true;
 				for (let i in this.commandClasses) {
 					if (i === data.cmdClass.toString()) {
 						this.commandClasses[i] = data.data;
@@ -193,10 +210,12 @@ setSocketListeners() {
 					}
 				}
 				if (data.cmdClass === 114) {
-					this.deviceManufactInfo = data.data;
+					this.deviceProdInfo = data.data;
 				}
 				this.checkInclusionComplete();
 			} else if (module === 'device' && action === 'added' && !this.deviceId) {
+				this.isDeviceAwake = true;
+				this.startSleepCheckTimer();
 				const { clientDeviceId, id } = data;
 				this.deviceId = id;
 				this.clientDeviceId = clientDeviceId;
@@ -251,19 +270,89 @@ runInclusionTimer(data?: number = 60) {
 }
 
 onInclusionComplete() {
+	this.getDeviceManufactInfo();
+
+	this.deviceId = null;
+	clearTimeout(this.sleepCheckTimeout);
+}
+
+getDeviceManufactInfo() {
+	const { actions } = this.props;
+	const { manufacturerId, productTypeId, productId } = this.deviceProdInfo;
+
+	let deviceManufactInfo = {};
+	if (manufacturerId) {
+		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
+			.then((res: Object) => {
+				const { Image: deviceImage = null, DeviceType: deviceType = null } = res;
+				Image.getSize(deviceImage, (width: number, height: number) => {
+					if (width && height) {
+						deviceManufactInfo = {
+							deviceImage,
+							deviceType,
+							imageW: width,
+							imageH: height,
+						};
+						this.navigateToNext(deviceManufactInfo);
+					}
+				}, (failure: any) => {
+					deviceManufactInfo = {
+						deviceImage,
+						deviceType,
+					};
+					this.navigateToNext(deviceManufactInfo);
+				});
+			}).catch(() => {
+				deviceManufactInfo = {
+					deviceImage: null,
+					deviceType: null,
+				};
+				this.navigateToNext(deviceManufactInfo);
+			});
+	} else {
+		this.navigateToNext(deviceManufactInfo);
+	}
+}
+
+navigateToNext(deviceManufactInfo: Object) {
+
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
-	navigation.navigate('DeviceName', {
-		gateway,
-		deviceId: this.deviceId,
-		info: this.deviceManufactInfo,
+	navigation.navigate({
+		routeName: 'DeviceName',
+		key: 'DeviceName',
+		params: {
+			gateway,
+			deviceId: this.deviceId,
+			info: {...deviceManufactInfo},
+		},
 	});
-	this.deviceId = null;
 }
 
 componentWillUnmount() {
 	this.clearSocketListeners();
 	this.clearTimer();
+	clearTimeout(this.sleepCheckTimeout);
+}
+
+startSleepCheckTimer(timeout: number = 60000) {
+	if (!this.sleepCheckTimeout) {
+		this.sleepCheckTimeout = setTimeout(() => {
+			// Every 10secs check if device is awake.
+			this.sleepCheckTimeInterval = setInterval(() => {
+				// Change awake state and wait till the next cycle.
+				if (this.isDeviceAwake) {
+					this.isDeviceAwake = false;
+				}
+				// Device has gone to sleep, wake him up!
+				if (!this.isDeviceAwake && this.showToast) {
+					const { actions } = this.props;
+					actions.showToast('Please try to wake the device manually');
+					this.showToast = false;
+				}
+			}, 10000);
+		}, timeout);
+	}
 }
 
 clearSocketListeners() {
