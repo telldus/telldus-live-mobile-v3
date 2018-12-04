@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -33,6 +34,7 @@ import {
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
 
@@ -105,7 +107,16 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'IncludeDevice';
+	if (nextProps.currentScreen === 'IncludeDevice') {
+		if (shouldUpdate(nextProps, this.props, ['appLayout'])) {
+			return true;
+		}
+		if (!isEqual(this.state, nextState)) {
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 setSocketListeners() {
