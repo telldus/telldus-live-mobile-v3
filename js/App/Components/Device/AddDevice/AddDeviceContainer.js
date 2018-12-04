@@ -43,9 +43,11 @@ import {
 	getDevices,
 	getDeviceManufacturerInfo,
 	showToast,
+	processWebsocketMessageForDevice,
 } from '../../../Actions';
 
 type Props = {
+	devices: Object,
 	navigation: Object,
 	children: Object,
 	actions?: Object,
@@ -135,6 +137,7 @@ class AddDeviceContainer extends View<Props, State> {
 			screenProps,
 			showModal,
 			navigation,
+			devices,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const { h1, h2, infoButton } = this.state;
@@ -169,6 +172,7 @@ class AddDeviceContainer extends View<Props, State> {
 								navigation,
 								dialogueOpen: showModal,
 								paddingHorizontal: padding,
+								devices,
 							},
 						)}
 					</View>
@@ -200,6 +204,7 @@ const mapStateToProps = (store: Object): Object => {
 		showModal: openModal,
 		validationMessage: data,
 		modalExtras: extras,
+		devices: store.devices.byId,
 	};
 };
 
@@ -215,6 +220,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getDevices,
 				getDeviceManufacturerInfo,
 				showToast,
+				processWebsocketMessageForDevice,
 			}, dispatch),
 		},
 	}

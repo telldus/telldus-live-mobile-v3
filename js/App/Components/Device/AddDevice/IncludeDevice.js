@@ -123,6 +123,9 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (!isEqual(this.state, nextState)) {
 			return true;
 		}
+		if (Object.keys(this.props.devices).length !== Object.keys(nextProps.devices).length) {
+			return true;
+		}
 		return false;
 	}
 	return false;
@@ -213,15 +216,36 @@ setSocketListeners() {
 					this.deviceProdInfo = data.data;
 				}
 				this.checkInclusionComplete();
-			} else if (module === 'device' && action === 'added' && !this.deviceId) {
-				this.isDeviceAwake = true;
-				this.startSleepCheckTimer();
-				const { clientDeviceId, id } = data;
-				this.deviceId = id;
-				this.clientDeviceId = clientDeviceId;
+			} else if (module === 'device' && action === 'added') {
+				if (!this.deviceId) {
+					this.isDeviceAwake = true;
+					this.startSleepCheckTimer();
+					const { clientDeviceId, id } = data;
+					this.deviceId = id;
+					this.clientDeviceId = clientDeviceId;
+					// TODO: Check if required else remove.
+					setTimeout(() => {
+						this.getNodeInfo();
+					}, 1000);
+				}
+				this.props.actions.processWebsocketMessageForDevice(action, data);
+			} else if (module === 'device' && action === 'removed') {
+				this.props.actions.processWebsocketMessageForDevice(action, data);
 			}
 		}
 	};
+}
+
+getNodeInfo() {
+	const { devices = {}, actions } = this.props;
+	for (let key in devices) {
+		const { clientId, clientDeviceId } = devices[key];
+		actions.sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'nodeInfo',
+			'device': clientDeviceId,
+		});
+	}
 }
 
 checkInclusionComplete() {
@@ -271,8 +295,6 @@ runInclusionTimer(data?: number = 60) {
 
 onInclusionComplete() {
 	this.getDeviceManufactInfo();
-
-	this.deviceId = null;
 	clearTimeout(this.sleepCheckTimeout);
 }
 
@@ -315,7 +337,6 @@ getDeviceManufactInfo() {
 }
 
 navigateToNext(deviceManufactInfo: Object) {
-
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 	navigation.navigate({
@@ -327,6 +348,7 @@ navigateToNext(deviceManufactInfo: Object) {
 			info: {...deviceManufactInfo},
 		},
 	});
+	this.deviceId = null;
 }
 
 componentWillUnmount() {
@@ -346,6 +368,7 @@ startSleepCheckTimer(timeout: number = 60000) {
 				}
 				// Device has gone to sleep, wake him up!
 				if (!this.isDeviceAwake && this.showToast) {
+					// TODO: Need to handle devices with and without battery separate, also translate
 					const { actions } = this.props;
 					actions.showToast('Please try to wake the device manually');
 					this.showToast = false;
