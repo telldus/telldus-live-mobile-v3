@@ -29,6 +29,7 @@ import {
 	View,
 	EditBox,
 	FloatingButton,
+	Text,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -48,6 +49,7 @@ type State = {
 	deviceName: string,
 	isLoading: boolean,
 	deviceImage: string | null,
+	deviceType: string,
 };
 
 class DeviceName extends View<Props, State> {
@@ -63,6 +65,7 @@ constructor(props: Props) {
 		deviceName: '',
 		isLoading: false,
 		deviceImage: null,
+		deviceType: '',
 	};
 	this.onChangeName = this.onChangeName.bind(this);
 	this.submitName = this.submitName.bind(this);
@@ -78,9 +81,10 @@ componentDidMount() {
 	if (manufacturerId) {
 		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
 			.then((res: Object) => {
-				const { Image: deviceImage = null } = res;
+				const { Image: deviceImage = null, DeviceType: deviceType } = res;
 				this.setState({
 					deviceImage,
+					deviceType,
 				});
 			});
 	}
@@ -120,6 +124,31 @@ submitName() {
 	}
 }
 
+getDeviceInfo(styles: Object): Object {
+	const { deviceImage, deviceType } = this.state;
+	const gateway = this.props.navigation.getParam('gateway', {});
+	return (
+		<View style={styles.deviceInfoCoverStyle}>
+			{!!deviceImage && (
+				<Image
+					source={{uri: deviceImage}}
+					resizeMode={'contain'}
+					style={styles.deviceImageStyle}/>
+			)}
+			<View>
+				{!!deviceType && (<Text style={styles.deviceTypeStyle}>
+					{deviceType}
+				</Text>
+				)}
+				{!!gateway.name && (<Text style={styles.deviceGatewayStyle}>
+					{gateway.name}
+				</Text>
+				)}
+			</View>
+		</View>
+	);
+}
+
 render(): Object {
 	const { deviceName, isLoading, deviceImage } = this.state;
 	const { appLayout, intl } = this.props;
@@ -127,7 +156,9 @@ render(): Object {
 		container,
 		iconSize,
 		iconStyle,
+		...otherStyles
 	} = this.getStyles();
+	const header = this.getDeviceInfo(otherStyles);
 
 	return (
 		<View style={container}>
@@ -135,18 +166,11 @@ render(): Object {
 				value={deviceName}
 				icon={'device-alt'}
 				label={intl.formatMessage(i18n.name)}
+				header={header}
+				extraData={deviceImage}
 				onChangeText={this.onChangeName}
 				onSubmitEditing={this.submitName}
 				appLayout={appLayout}/>
-			{!!deviceImage && (
-				<Image
-					source={{uri: deviceImage}}
-					style={{
-						height: '100%',
-						width: '100%',
-						marginTop: 10,
-					}}/>
-			)}
 			<FloatingButton
 				onPress={this.submitName}
 				iconName={this.state.isLoading ? false : 'checkmark'}
@@ -163,9 +187,10 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor } = Theme.Core;
+	const { paddingFactor, eulaContentColor, brandSecondary } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+	const imageSize = deviceWidth * 0.25;
 	return {
 		container: {
 			flex: 1,
@@ -175,6 +200,24 @@ getStyles(): Object {
 		iconStyle: {
 			fontSize: deviceWidth * 0.050666667,
 			color: '#fff',
+		},
+		deviceInfoCoverStyle: {
+			flexDirection: 'row',
+			marginBottom: 2,
+			alignItems: 'center',
+		},
+		deviceImageStyle: {
+			height: imageSize,
+			width: imageSize,
+			marginRight: 2,
+		},
+		deviceTypeStyle: {
+			fontSize: deviceWidth * 0.05,
+			color: brandSecondary,
+		},
+		deviceGatewayStyle: {
+			fontSize: deviceWidth * 0.04,
+			color: eulaContentColor,
 		},
 	};
 }
