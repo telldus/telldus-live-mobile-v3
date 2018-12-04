@@ -40,6 +40,7 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	appLayout: Object,
+	devices: Object,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -135,7 +136,7 @@ setSocketListeners() {
 	const that = this;
 	const { intl } = this.props;
 	const { formatMessage } = intl;
-	that.websocket.onmessage = (msg: Object) => {
+	this.websocket.onmessage = (msg: Object) => {
 		let message = {};
 		try {
 			message = JSON.parse(msg.data);
@@ -379,7 +380,7 @@ startSleepCheckTimer(timeout: number = 60000) {
 }
 
 clearSocketListeners() {
-	delete this.websocket;
+	this.websocket = null;
 }
 
 clearTimer() {
