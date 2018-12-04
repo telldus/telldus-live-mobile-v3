@@ -151,7 +151,7 @@ getDeviceInfo(styles: Object): Object {
 }
 
 render(): Object {
-	const { deviceName, isLoading, deviceImage } = this.state;
+	const { deviceName, isLoading } = this.state;
 	const { appLayout, intl } = this.props;
 	const {
 		container,
@@ -168,7 +168,6 @@ render(): Object {
 				icon={'device-alt'}
 				label={intl.formatMessage(i18n.name)}
 				header={header}
-				extraData={deviceImage}
 				onChangeText={this.onChangeName}
 				onSubmitEditing={this.submitName}
 				appLayout={appLayout}/>
