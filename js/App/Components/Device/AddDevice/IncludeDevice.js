@@ -40,7 +40,8 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	appLayout: Object,
-	devices: Object,
+	gateways: Array<string>,
+	addDevice: Object,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -69,6 +70,7 @@ deviceManufactInfo: Object;
 deviceProdInfo: Object;
 isDeviceAwake: boolean;
 isDeviceBatteried: boolean;
+gatewayId: number;
 constructor(props: Props) {
 	super(props);
 
@@ -84,7 +86,10 @@ constructor(props: Props) {
 	const { actions, navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 	this.websocket = actions.getSocketObject(gateway.id);
-	this.setSocketListeners();
+	this.gatewayId = gateway.id;
+	if (this.websocket) {
+		this.setSocketListeners();
+	}
 
 	this.inclusionTimer = null;
 	this.sleepCheckTimeInterval = null;
@@ -118,13 +123,10 @@ componentDidMount() {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	if (nextProps.currentScreen === 'IncludeDevice') {
-		if (shouldUpdate(nextProps, this.props, ['appLayout'])) {
+		if (shouldUpdate(nextProps, this.props, ['addDevice', 'appLayout', 'gateways'])) {
 			return true;
 		}
 		if (!isEqual(this.state, nextState)) {
-			return true;
-		}
-		if (Object.keys(this.props.devices).length !== Object.keys(nextProps.devices).length) {
 			return true;
 		}
 		return false;
@@ -167,6 +169,8 @@ setSocketListeners() {
 					this.isDeviceAwake = true;
 					this.startSleepCheckTimer();
 
+					this.checkDeviceAlreadyIncluded(data[1]);
+
 					this.zwaveId = data[1];
 					let commandClasses = data.slice(6);
 					if (commandClasses.indexOf(0xEF) >= 0) {
@@ -187,8 +191,11 @@ setSocketListeners() {
 						});
 					}
 				} else if (status === 5) {
-					this.isDeviceAwake = true;
 					// Add node protocol done
+					this.isDeviceAwake = true;
+
+					this.checkDeviceAlreadyIncluded(data[1]);
+
 					if (!this.zwaveId) {
 						this.zwaveId = data[1];
 					}
@@ -217,35 +224,27 @@ setSocketListeners() {
 					this.deviceProdInfo = data.data;
 				}
 				this.checkInclusionComplete();
-			} else if (module === 'device' && action === 'added') {
-				if (!this.deviceId) {
-					this.isDeviceAwake = true;
-					this.startSleepCheckTimer();
-					const { clientDeviceId, id } = data;
-					this.deviceId = id;
-					this.clientDeviceId = clientDeviceId;
-					// TODO: Check if required else remove.
-					setTimeout(() => {
-						this.getNodeInfo();
-					}, 1000);
-				}
-				this.props.actions.processWebsocketMessageForDevice(action, data);
-			} else if (module === 'device' && action === 'removed') {
+			} else if (module === 'zwave' && action === 'nodeList') {
+				this.props.actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
+			} else if (module === 'device' && action === 'added' && !this.deviceId) {
+				this.isDeviceAwake = true;
+				this.startSleepCheckTimer();
+				const { clientDeviceId, id } = data;
+				this.deviceId = id;
+				this.clientDeviceId = clientDeviceId;
+			} else if (module === 'device') {
 				this.props.actions.processWebsocketMessageForDevice(action, data);
 			}
 		}
 	};
 }
 
-getNodeInfo() {
-	const { devices = {}, actions } = this.props;
-	for (let key in devices) {
-		const { clientId, clientDeviceId } = devices[key];
-		actions.sendSocketMessage(clientId, 'client', 'forward', {
-			'module': 'zwave',
-			'action': 'nodeInfo',
-			'device': clientDeviceId,
-		});
+checkDeviceAlreadyIncluded(nodeId: number) {
+	const { addDevice, actions } = this.props;
+	const alreadyIncluded = addDevice.nodeList[nodeId];
+	if (alreadyIncluded) {
+		const { name } = alreadyIncluded;
+		actions.showToast(`Device seem to have already included by the name "${name}". Please exclude and try again.`);
 	}
 }
 
@@ -290,6 +289,7 @@ runInclusionTimer(data?: number = 60) {
 		this.setState({
 			timer: null,
 		});
+		this.props.actions.showToast('Inclusion timed out!');
 		this.clearTimer();
 	}
 }
@@ -368,7 +368,7 @@ startSleepCheckTimer(timeout: number = 60000) {
 					this.isDeviceAwake = false;
 				}
 				// Device has gone to sleep, wake him up!
-				if (!this.isDeviceAwake && this.showToast) {
+				if (!this.isDeviceAwake && this.showToast && this.state.timer) {
 					// TODO: Need to handle devices with and without battery separate, also translate
 					const { actions } = this.props;
 					actions.showToast('Please try to wake the device manually');

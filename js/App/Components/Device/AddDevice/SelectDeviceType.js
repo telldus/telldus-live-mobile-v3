@@ -81,11 +81,26 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 onChooseType({module, action}: Object) {
 	const { navigation } = this.props;
+
+	// get all nodes list, to check if device already included
+	this.getNodesList();
+
 	const gateway = navigation.getParam('gateway', {});
 	navigation.navigate('IncludeDevice', {
 		gateway,
 		module,
 		action,
+	});
+}
+
+getNodesList() {
+	const { gateways = [], actions } = this.props;
+	gateways.map((gateway: string) => {
+		const id = parseInt(gateway, 10);
+		actions.sendSocketMessage(id, 'client', 'forward', {
+			'module': 'zwave',
+			'action': 'nodeList',
+		});
 	});
 }
 
