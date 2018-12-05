@@ -294,12 +294,13 @@ class JobRow extends View<null, Props, null> {
 		const { intl, method, appLayout, methodValue, expired, deviceSupportedMethods, deviceType } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
-		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
-		const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
-		const methodString = methods[action.method];
-		let iconName = actionIcons[methodString];
 
 		if (action) {
+			const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
+			const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
+			const methodString = methods[action.method];
+			let iconName = actionIcons[methodString];
+
 			if (action.name === 'Dim') {
 				const roundVal = Math.round(methodValue / 255 * 100);
 				const value = `${roundVal}%`;

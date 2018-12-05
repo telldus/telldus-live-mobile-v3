@@ -24,6 +24,7 @@
 import React from 'react';
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
+import { getControlIconColor } from '../../../Lib/gatewayUtils';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -60,13 +61,11 @@ export default class DeviceHeader extends View<Props, null> {
 			statusInfo,
 			nameFontSize,
 		} = this.getStyles(appLayout, supportLocalControl);
-		const { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
-		const iconColor = !isOnline ? locationOffline :
-			!websocketOnline ? locationNoLiveUpdates : locationOnline;
+		const controlIconColor = getControlIconColor(isOnline, websocketOnline, supportLocalControl);
 
 		return (
 			<View style={Theme.Styles.sectionHeader}>
-				<IconTelldus icon={icon} style={{...statusInfo, color: iconColor}}/>
+				<IconTelldus icon={icon} style={{...statusInfo, color: controlIconColor}}/>
 				<Text style={[Theme.Styles.sectionHeaderText, { fontSize: nameFontSize }]}>
 					{gateway}
 				</Text>
