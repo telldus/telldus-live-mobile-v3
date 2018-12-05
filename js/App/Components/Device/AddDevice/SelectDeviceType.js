@@ -39,6 +39,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	currentScreen: string,
+	gateways: Array<string>,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
