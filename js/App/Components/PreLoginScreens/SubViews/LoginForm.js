@@ -100,8 +100,6 @@ class LoginForm extends View {
 	}
 
 	configureGoogleSignIn() {
-		// TODO: AUTOMATE values of secret key's webClientId, iosClientId and iosReversedClientId for release builds.
-		// iosReversedClientId : used as URL Scheme in info.plist file
 		GoogleSignin.configure({
 			webClientId: webClientId,
 			offlineAccess: true,

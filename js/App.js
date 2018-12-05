@@ -64,7 +64,7 @@ class App extends React.Component<Props, null> {
 	props: Props;
 
 	onLayout: (Object) => void;
-	onNotification: any;
+	onNotification: Function | null;
 	setCalendarLocale: () => void;
 
 	constructor(props: Props) {
@@ -76,6 +76,7 @@ class App extends React.Component<Props, null> {
 		if (Platform.OS === 'android') {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		}
+		this.onNotification = null;
 	}
 
 	componentDidMount() {
@@ -93,9 +94,8 @@ class App extends React.Component<Props, null> {
 			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
 
-		// Push notification listener.
-		// TODO : Remove conditional check once push in IOS is enabled and same method is present.
-		this.onNotification = Push.onNotification ? Push.onNotification() : null;
+		// sets push notification listeners and returns a method that clears all listeners.
+		this.onNotification = Push.onNotification();
 	}
 
 	setCalendarLocale() {
@@ -119,8 +119,8 @@ class App extends React.Component<Props, null> {
 		  'change',
 		  setAccessibilityInfo
 		);
-		// TODO : Remove conditional check once push in IOS is enabled and same method is present.
-		if (this.onNotification) {
+
+		if (this.onNotification && typeof this.onNotification === 'function') {
 			// Remove Push notification listener.
 			this.onNotification();
 		}
