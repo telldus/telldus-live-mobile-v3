@@ -120,6 +120,7 @@ componentDidMount() {
 	const gateway = navigation.getParam('gateway', {});
 	const module = navigation.getParam('module', '');
 	const action = navigation.getParam('action', '');
+	this.deviceId = null;
 	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
 		module,
 		action,
@@ -338,13 +339,13 @@ navigateToNext(deviceManufactInfo: Object) {
 			info: {...deviceManufactInfo},
 		},
 	});
-	this.deviceId = null;
 }
 
 componentWillUnmount() {
 	this.clearSocketListeners();
 	this.clearTimer();
 	clearTimeout(this.sleepCheckTimeout);
+	this.deviceId = null;
 }
 
 startSleepCheckTimer(timeout: number = 60000) {
