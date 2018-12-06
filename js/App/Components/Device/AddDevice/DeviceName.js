@@ -166,23 +166,21 @@ render(): Object {
 
 	return (
 		<View style={container}>
-			<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center'}}>
-				<EditBox
-					value={deviceName}
-					icon={'device-alt'}
-					label={intl.formatMessage(i18n.name)}
-					header={header}
-					onChangeText={this.onChangeName}
-					onSubmitEditing={this.submitName}
-					appLayout={appLayout}/>
-				<FloatingButton
-					onPress={this.submitName}
-					iconName={this.state.isLoading ? false : 'checkmark'}
-					showThrobber={isLoading}
-					iconSize={iconSize}
-					iconStyle={iconStyle}
-				/>
-			</KeyboardAvoidingView>
+			<EditBox
+				value={deviceName}
+				icon={'device-alt'}
+				label={intl.formatMessage(i18n.name)}
+				header={header}
+				onChangeText={this.onChangeName}
+				onSubmitEditing={this.submitName}
+				appLayout={appLayout}/>
+			<FloatingButton
+				onPress={this.submitName}
+				iconName={this.state.isLoading ? false : 'checkmark'}
+				showThrobber={isLoading}
+				iconSize={iconSize}
+				iconStyle={iconStyle}
+			/>
 		</View>
 	);
 }

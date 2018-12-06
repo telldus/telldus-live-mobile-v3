@@ -22,8 +22,7 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { BackHandler } from 'react-native';
+import { BackHandler, KeyboardAvoidingView, ScrollView, Keyboard } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -62,25 +61,18 @@ type State = {
 	h2: string,
 	infoButton: null | Object,
 	loading: boolean,
+	keyboardShown: boolean,
 };
 
 class AddDeviceContainer extends View<Props, State> {
 
 	handleBackPress: () => void;
 
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		actions: PropTypes.objectOf(PropTypes.func),
-		screenProps: PropTypes.object,
-		showModal: PropTypes.bool,
-		validationMessage: PropTypes.any,
-	};
-
 	state = {
 		h1: '',
 		h2: '',
 		infoButton: null,
+		keyboardShown: false,
 	};
 
 	constructor(props: Props) {
@@ -94,14 +86,32 @@ class AddDeviceContainer extends View<Props, State> {
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 		this.getRelativeData = this.getRelativeData.bind(this);
+		this._keyboardDidShow = this._keyboardDidShow.bind(this);
+		this._keyboardDidHide = this._keyboardDidHide.bind(this);
 	}
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+	}
+
+	_keyboardDidShow() {
+		this.setState({
+			keyboardShown: true,
+		});
+	}
+
+	_keyboardDidHide() {
+		this.setState({
+			keyboardShown: false,
+		});
 	}
 
 	componentWillUnmount() {
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
 	}
 
 	handleBackPress(): boolean {
@@ -141,7 +151,7 @@ class AddDeviceContainer extends View<Props, State> {
 			addDevice,
 		} = this.props;
 		const { appLayout } = screenProps;
-		const { h1, h2, infoButton } = this.state;
+		const { h1, h2, infoButton, keyboardShown } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
@@ -153,39 +163,46 @@ class AddDeviceContainer extends View<Props, State> {
 		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
 		return (
-			<View style={{
-				flex: 1,
-			}}>
-				<NavigationHeaderPoster
-					h1={h1} h2={h2}
-					infoButton={infoButton}
-					align={'right'}
-					navigation={navigation}
-					leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}
-					{...screenProps}/>
-				<View style={[styles.style, {paddingHorizontal: padding}]}>
-					{React.cloneElement(
-						children,
-						{
-							onDidMount: this.onChildDidMount,
-							actions,
-							...screenProps,
-							navigation,
-							dialogueOpen: showModal,
-							paddingHorizontal: padding,
-							addDevice,
-						},
-					)}
-				</View>
-				<DialogueBox
-					dialogueContainerStyle={{elevation: 0}}
-					header={dialogueHeader}
-					showDialogue={showModal}
-					text={validationMessage}
-					showPositive={true}
-					positiveText={positiveText}
-					onPressPositive={this.closeModal}/>
-			</View>
+			<ScrollView
+				keyboardShouldPersistTaps={'always'}
+				style={{ flex: 1 }}
+				contentContainerStyle={{flexGrow: 1}}
+				scrollEnabled={keyboardShown}>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{ flex: 1 }}
+					contentContainerStyle={{ justifyContent: 'center' }}>
+					<NavigationHeaderPoster
+						h1={h1} h2={h2}
+						infoButton={infoButton}
+						align={'right'}
+						navigation={navigation}
+						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}
+						{...screenProps}/>
+					<View style={[styles.style, {paddingHorizontal: padding}]}>
+						{React.cloneElement(
+							children,
+							{
+								onDidMount: this.onChildDidMount,
+								actions,
+								...screenProps,
+								navigation,
+								dialogueOpen: showModal,
+								paddingHorizontal: padding,
+								addDevice,
+							},
+						)}
+					</View>
+					<DialogueBox
+						dialogueContainerStyle={{elevation: 0}}
+						header={dialogueHeader}
+						showDialogue={showModal}
+						text={validationMessage}
+						showPositive={true}
+						positiveText={positiveText}
+						onPressPositive={this.closeModal}/>
+				</KeyboardAvoidingView>
+			</ScrollView>
 		);
 	}
 
