@@ -40,7 +40,6 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	currentScreen: string,
-	gateways: Array<string>,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
@@ -83,11 +82,11 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 onChooseType({module, action}: Object) {
 	const { navigation } = this.props;
-
-	// get all nodes list, to check if device already included
-	this.getNodesList();
-
 	const gateway = navigation.getParam('gateway', {});
+
+	// get all nodes list in the chosen gateway, to check if device already included
+	this.getNodesList(gateway.id);
+
 	navigation.navigate('IncludeDevice', {
 		gateway,
 		module,
@@ -95,14 +94,11 @@ onChooseType({module, action}: Object) {
 	});
 }
 
-getNodesList() {
-	const { gateways = [], actions } = this.props;
-	gateways.map((gateway: string) => {
-		const id = parseInt(gateway, 10);
-		actions.sendSocketMessage(id, 'client', 'forward', {
-			'module': 'zwave',
-			'action': 'nodeList',
-		});
+getNodesList(id: number) {
+	const { actions } = this.props;
+	actions.sendSocketMessage(id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'nodeList',
 	});
 }
 

@@ -40,7 +40,6 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	appLayout: Object,
-	gateways: Array<string>,
 	addDevice: Object,
 
 	onDidMount: (string, string, ?Object) => void,
@@ -125,7 +124,7 @@ componentDidMount() {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	if (nextProps.currentScreen === 'IncludeDevice') {
-		if (shouldUpdate(nextProps, this.props, ['addDevice', 'appLayout', 'gateways'])) {
+		if (shouldUpdate(nextProps, this.props, ['addDevice', 'appLayout'])) {
 			return true;
 		}
 		if (!isEqual(this.state, nextState)) {

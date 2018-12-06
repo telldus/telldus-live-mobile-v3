@@ -48,7 +48,6 @@ import {
 } from '../../../Actions';
 
 type Props = {
-	gateways: Array<string>,
 	addDevice: Object,
 	navigation: Object,
 	children: Object,
@@ -139,7 +138,6 @@ class AddDeviceContainer extends View<Props, State> {
 			screenProps,
 			showModal,
 			navigation,
-			gateways,
 			addDevice,
 		} = this.props;
 		const { appLayout } = screenProps;
@@ -175,7 +173,6 @@ class AddDeviceContainer extends View<Props, State> {
 							navigation,
 							dialogueOpen: showModal,
 							paddingHorizontal: padding,
-							gateways,
 							addDevice,
 						},
 					)}
@@ -207,7 +204,6 @@ const mapStateToProps = (store: Object): Object => {
 		showModal: openModal,
 		validationMessage: data,
 		modalExtras: extras,
-		gateways: store.gateways.allIds,
 		addDevice: store.addDevice,
 	};
 };
