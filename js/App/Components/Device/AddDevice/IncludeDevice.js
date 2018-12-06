@@ -50,6 +50,7 @@ type Props = {
 };
 
 type State = {
+	showTimer: boolean,
 	timer: number | null,
 	status: string | null,
 	percent: number,
@@ -75,6 +76,7 @@ constructor(props: Props) {
 	super(props);
 
 	this.state = {
+		showTimer: true,
 		timer: null,
 		status: null,
 		percent: 0,
@@ -164,6 +166,7 @@ setSocketListeners() {
 					this.startSleepCheckTimer();
 					this.setState({
 						status: formatMessage(i18n.addNodeToNetworkTwo),
+						showTimer: false,
 					});
 				} else if (status === 3 || status === 4) {
 					this.isDeviceAwake = true;
@@ -184,10 +187,12 @@ setSocketListeners() {
 					if (status === 3) {
 						this.setState({
 							status: formatMessage(i18n.addNodeToNetworkThree),
+							showTimer: false,
 						});
 					} else {
 						this.setState({
 							status: formatMessage(i18n.addNodeToNetworkFour),
+							showTimer: false,
 						});
 					}
 				} else if (status === 5) {
@@ -228,6 +233,9 @@ setSocketListeners() {
 				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
 				actions.showToast('Please try to wake the device manually');
+				this.setState({
+					showTimer: true,
+				});
 			} else if (module === 'device' && action === 'added' && !this.deviceId) {
 				this.isDeviceAwake = true;
 				this.startSleepCheckTimer();
@@ -401,7 +409,7 @@ onLayout(ev: Object) {
 
 render(): Object {
 	const { intl } = this.props;
-	const { timer, status, percent, width } = this.state;
+	const { timer, status, percent, width, showTimer } = this.state;
 	const {
 		container,
 		progressContainer,
@@ -447,7 +455,7 @@ render(): Object {
 					</Text>
 					<Text/>
 					<Text style={timerStyle}>
-						{timer !== null ? `${timer} Sec` : ' '}
+						{(timer !== null && showTimer) ? `${timer} Sec` : ' '}
 					</Text>
 					<Text style={statusStyle}>
 						{status !== null ? `${status} (${percent}% ${formatMessage(i18n.done).toLowerCase()})` : ' '}
