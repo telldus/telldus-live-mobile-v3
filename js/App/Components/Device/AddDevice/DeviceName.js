@@ -25,7 +25,6 @@
 import React from 'react';
 import {
 	Image,
-	KeyboardAvoidingView,
 } from 'react-native';
 
 import {
