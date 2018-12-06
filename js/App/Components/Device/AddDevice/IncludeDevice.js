@@ -37,6 +37,7 @@ import Theme from '../../../Theme';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import {
 	checkInclusionComplete,
+	handleCommandClasses,
 } from '../../../Lib/DeviceUtils';
 
 import i18n from '../../../Translations/common';
@@ -177,14 +178,8 @@ setSocketListeners() {
 					this.checkDeviceAlreadyIncluded(data[1]);
 
 					this.zwaveId = data[1];
-					let commandClasses = data.slice(6);
-					if (commandClasses.indexOf(0xEF) >= 0) {
-						commandClasses = commandClasses.slice(0, commandClasses.indexOf(0xEF));
-					}
 					this.commandClasses = {};
-					for (let i in commandClasses) {
-						this.commandClasses[commandClasses[i]] = null;
-					}
+					this.commandClasses = handleCommandClasses(action, this.commandClasses, data);
 
 					if (status === 3) {
 						this.setState({
@@ -221,12 +216,9 @@ setSocketListeners() {
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
 				this.isDeviceAwake = true;
-				for (let i in this.commandClasses) {
-					if (i === data.cmdClass.toString()) {
-						this.commandClasses[i] = data.data;
-						break;
-					}
-				}
+
+				this.commandClasses = handleCommandClasses(action, this.commandClasses, data);
+
 				if (data.cmdClass === 114) {
 					this.deviceProdInfo = data.data;
 				}
