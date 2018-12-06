@@ -23,8 +23,9 @@
 'use strict';
 
 import { utils } from 'live-shared-data';
-const { deviceUtils } = utils;
+const { deviceUtils, addDeviceUtils } = utils;
 
 module.exports = {
 	...deviceUtils,
+	...addDeviceUtils,
 };

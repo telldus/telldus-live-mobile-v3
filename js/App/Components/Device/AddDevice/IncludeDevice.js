@@ -35,6 +35,9 @@ import {
 
 import Theme from '../../../Theme';
 import shouldUpdate from '../../../Lib/shouldUpdate';
+import {
+	checkInclusionComplete,
+} from '../../../Lib/DeviceUtils';
 
 import i18n from '../../../Translations/common';
 
@@ -227,7 +230,22 @@ setSocketListeners() {
 				if (data.cmdClass === 114) {
 					this.deviceProdInfo = data.data;
 				}
-				this.checkInclusionComplete();
+				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
+				if (percent) {
+					this.setState({
+						status,
+						percent,
+					});
+					if (waiting === 0) {
+						this.setState({
+							timer: null,
+							status,
+						}, () => {
+							this.onInclusionComplete();
+						});
+						this.clearTimer();
+					}
+				}
 			} else if (module === 'zwave' && action === 'nodeList') {
 				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
@@ -254,37 +272,6 @@ checkDeviceAlreadyIncluded(nodeId: number) {
 	if (alreadyIncluded) {
 		const { name } = alreadyIncluded;
 		actions.showToast(`Device seem to have already included by the name "${name}". Please exclude and try again.`);
-	}
-}
-
-checkInclusionComplete() {
-	if (!this.commandClasses) {
-		return;
-	}
-
-	const { intl } = this.props;
-	const { formatMessage } = intl;
-	let waiting = 0, complete = 0;
-	for (let i in this.commandClasses) {
-		if (this.commandClasses[i] === null) {
-			++waiting;
-		} else {
-			++complete;
-		}
-	}
-	let percent = parseInt((complete + 1) / (waiting + complete + 1) * 100, 10);
-	this.setState({
-		status: `${formatMessage(i18n.labelIncludingDevice)}...`,
-		percent,
-	});
-	if (waiting === 0) {
-		this.setState({
-			timer: null,
-			status: `${formatMessage(i18n.labelDeviceIncluded)}!`,
-		}, () => {
-			this.onInclusionComplete();
-		});
-		this.clearTimer();
 	}
 }
 
