@@ -308,6 +308,7 @@ getDeviceManufactInfo() {
 		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
 			.then((res: Object) => {
 				const { Image: deviceImage = null, DeviceType: deviceType = null } = res;
+				Image.prefetch(deviceImage);
 				Image.getSize(deviceImage, (width: number, height: number) => {
 					if (width && height) {
 						deviceManufactInfo = {

@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler, KeyboardAvoidingView } from 'react-native';
+import { BackHandler } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -158,29 +158,27 @@ class AddDeviceContainer extends View<Props, State> {
 			<View style={{
 				flex: 1,
 			}}>
-				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-					<NavigationHeaderPoster
-						h1={h1} h2={h2}
-						infoButton={infoButton}
-						align={'right'}
-						navigation={navigation}
-						{...screenProps}/>
-					<View style={[styles.style, {paddingHorizontal: padding}]}>
-						{React.cloneElement(
-							children,
-							{
-								onDidMount: this.onChildDidMount,
-								actions,
-								...screenProps,
-								navigation,
-								dialogueOpen: showModal,
-								paddingHorizontal: padding,
-								gateways,
-								addDevice,
-							},
-						)}
-					</View>
-				</KeyboardAvoidingView>
+				<NavigationHeaderPoster
+					h1={h1} h2={h2}
+					infoButton={infoButton}
+					align={'right'}
+					navigation={navigation}
+					{...screenProps}/>
+				<View style={[styles.style, {paddingHorizontal: padding}]}>
+					{React.cloneElement(
+						children,
+						{
+							onDidMount: this.onChildDidMount,
+							actions,
+							...screenProps,
+							navigation,
+							dialogueOpen: showModal,
+							paddingHorizontal: padding,
+							gateways,
+							addDevice,
+						},
+					)}
+				</View>
 				<DialogueBox
 					dialogueContainerStyle={{elevation: 0}}
 					header={dialogueHeader}

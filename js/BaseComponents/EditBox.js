@@ -135,6 +135,7 @@ getStyle(appLayout: Object): Object {
 			width: '100%',
 			flexDirection: 'column',
 			alignItems: 'flex-start',
+			justifyContent: 'center',
 			backgroundColor: '#fff',
 			padding,
 			...shadow,
