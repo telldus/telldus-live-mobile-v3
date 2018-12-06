@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { ScrollView } from 'react-native';
 
 import {
 	View,
@@ -143,9 +144,9 @@ render(): Object {
 	} = this.getStyles();
 
 	return (
-		<View style={container}>
+		<ScrollView style={container}>
 			{typesToRender}
-		</View>
+		</ScrollView>
 	);
 }
 getStyles(): Object {
