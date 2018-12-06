@@ -25,28 +25,6 @@
 import { utils } from 'live-shared-data';
 const { deviceUtils } = utils;
 
-import i18n from '../Translations/common';
-
-const getAvailableDeviceTypesAndInfo = (formatMessage: (Object) => string): Object => {
-	return {
-		'zwave': [
-			{
-				h1: 'Z-Wave',
-				h2: formatMessage(i18n.infoZWave),
-				module: 'zwave',
-				action: 'addNodeToNetwork',
-			},
-			{
-				h1: 'Z-Wave Secure',
-				h2: formatMessage(i18n.infoZWaveSec),
-				module: 'zwave',
-				action: 'addSecureNodeToNetwork',
-			},
-		],
-	};
-};
-
 module.exports = {
 	...deviceUtils,
-	getAvailableDeviceTypesAndInfo,
 };
