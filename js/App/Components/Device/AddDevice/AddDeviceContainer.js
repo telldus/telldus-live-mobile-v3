@@ -163,6 +163,7 @@ class AddDeviceContainer extends View<Props, State> {
 					infoButton={infoButton}
 					align={'right'}
 					navigation={navigation}
+					leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}
 					{...screenProps}/>
 				<View style={[styles.style, {paddingHorizontal: padding}]}>
 					{React.cloneElement(

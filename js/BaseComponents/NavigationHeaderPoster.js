@@ -245,10 +245,10 @@ render(): Object {
 							style={styles.backButtonLand}
 							onPress={this.goBack}
 							accessibilityLabel={this.labelLeftIcon}>
-							{Platform.OS === 'ios' ?
-								<FontAwesome name="angle-left" size={width * 0.047} color="#fff"/>
+							{Platform.OS === 'ios' && leftIcon !== 'close' ?
+								<FontAwesome name={leftIcon ? leftIcon : 'angle-left'} size={width * 0.047} color="#fff"/>
 								:
-								<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
+								<Icon name={leftIcon ? leftIcon : 'arrow-back'} size={width * 0.047} color="#fff"/>
 							}
 						</TouchableOpacity>
 					)}
