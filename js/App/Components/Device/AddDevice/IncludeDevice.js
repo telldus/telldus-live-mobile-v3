@@ -455,7 +455,7 @@ render(): Object {
 					</Text>
 					<Text/>
 					<Text style={timerStyle}>
-						{(timer !== null && showTimer) ? `${timer} Sec` : ' '}
+						{(timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSec)}` : ' '}
 					</Text>
 					<Text style={statusStyle}>
 						{status !== null ? `${status} (${percent}% ${formatMessage(i18n.done).toLowerCase()})` : ' '}
