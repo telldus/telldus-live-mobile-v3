@@ -136,7 +136,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 setSocketListeners() {
 	const that = this;
-	const { intl } = this.props;
+	const { intl, actions } = this.props;
 	const { formatMessage } = intl;
 	this.websocket.onmessage = (msg: Object) => {
 		let message = {};
@@ -225,7 +225,9 @@ setSocketListeners() {
 				}
 				this.checkInclusionComplete();
 			} else if (module === 'zwave' && action === 'nodeList') {
-				this.props.actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
+				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
+			} else if (module === 'zwave' && action === 'sleeping') {
+				actions.showToast('Please try to wake the device manually');
 			} else if (module === 'device' && action === 'added' && !this.deviceId) {
 				this.isDeviceAwake = true;
 				this.startSleepCheckTimer();
@@ -233,7 +235,7 @@ setSocketListeners() {
 				this.deviceId = id;
 				this.clientDeviceId = clientDeviceId;
 			} else if (module === 'device') {
-				this.props.actions.processWebsocketMessageForDevice(action, data);
+				actions.processWebsocketMessageForDevice(action, data);
 			}
 		}
 	};
