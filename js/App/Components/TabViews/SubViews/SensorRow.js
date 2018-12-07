@@ -45,7 +45,7 @@ import {
 	formatLastUpdated,
 	checkIfLarge,
 	shouldUpdate,
-	getSensorIconLabelUnit,
+	getSensorInfo,
 	getWindDirection,
 } from '../../../Lib';
 
@@ -80,8 +80,6 @@ class SensorRow extends View<Props, State> {
 	state: State;
 
 	labelSensor: string;
-	labelWatt: string;
-	labelAcc: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
@@ -124,9 +122,6 @@ class SensorRow extends View<Props, State> {
 		const { formatMessage } = props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
-
-		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelAcc = formatMessage(i18n.acc);
 
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
@@ -376,7 +371,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getSensors(data: Object, styles: Object): Object {
-		let sensors = {}, sensorInfo = '';
+		let sensors = {}, sensorAccessibilityInfo = '';
 		const { formatMessage } = this.props.intl;
 		const {
 			valueUnitCoverStyle,
@@ -391,7 +386,7 @@ class SensorRow extends View<Props, State> {
 			const { value, scale, name } = values;
 			const isLarge = checkIfLarge(value.toString());
 
-			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
 
 			let sharedProps = {
 				key,
@@ -406,75 +401,16 @@ class SensorRow extends View<Props, State> {
 				unitStyle,
 				labelStyle,
 				sensorValueCoverStyle,
+				formatOptions,
 			};
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 
-			if (name === 'humidity') {
-				sensors[key] = <GenericSensor {...sharedProps}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
+			if (name === 'wdir') {
+				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 			}
-			if (name === 'temp') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'rrate' || name === 'rtot') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-
-				let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtot' ? `${label} ${value}${unit}` : '';
-				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
-			}
-			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let direction = '';
-				if (name === 'wdir') {
-					direction = [...getWindDirection(value, formatMessage)].toString();
-					sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
-				}
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-
-				let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${label} ${direction}` : '';
-				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
-			}
-			if (name === 'uv') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'watt') {
-				if (scale === '0') {
-					sharedProps = { ...sharedProps, label: isLarge ? label :
-						`${this.labelAcc} ${this.labelWatt}` };
-				}
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'lum') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'dewp') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'barpress') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'genmeter') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
+			sensors[key] = <GenericSensor {...sharedProps}/>;
 		}
-		return {sensors, sensorInfo};
+		return {sensors, sensorAccessibilityInfo};
 	}
 
 	render(): Object {
@@ -488,13 +424,13 @@ class SensorRow extends View<Props, State> {
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
-		let { sensors, sensorInfo } = this.getSensors(data, styles);
+		let { sensors, sensorAccessibilityInfo } = this.getSensors(data, styles);
 
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
-		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentScreen === 'Sensors';
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
