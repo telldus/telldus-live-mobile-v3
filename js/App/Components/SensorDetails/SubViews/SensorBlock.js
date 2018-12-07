@@ -103,8 +103,10 @@ export default class SensorBlock extends View<Props, null> {
 					<Text style={updatedInfoStyle}>
 						<FormattedDate value={lastUpdated} style={updatedInfoStyle}/>
 						<Text style={{
-							color: 'transparent',
+							color: 'white',
 							fontSize: 14,
+							textShadowColor: 'white',
+							backgroundColor: 'white',
 						}}>
 						!
 						</Text>
@@ -114,8 +116,10 @@ export default class SensorBlock extends View<Props, null> {
 						<Text style={updatedInfoStyle}>
 							<Icon name={'angle-up'} color={brandSecondary} size={iconSize}/>
 							<Text style={{
-								color: 'transparent',
+								color: 'white',
 								fontSize: 14,
+								textShadowColor: 'white',
+								backgroundColor: 'white',
 							}}>
 							!
 							</Text>
@@ -123,8 +127,10 @@ export default class SensorBlock extends View<Props, null> {
 							{`: ${max}${unit}, `}
 							<FormattedDate value={maxTime} style={updatedInfoStyle}/>
 							<Text style={{
-								color: 'transparent',
+								color: 'white',
 								fontSize: 14,
+								textShadowColor: 'white',
+								backgroundColor: 'white',
 							}}>
 							!
 							</Text>
@@ -135,8 +141,10 @@ export default class SensorBlock extends View<Props, null> {
 						<Text style={updatedInfoStyle}>
 							<Icon name={'angle-down'} color={brandSecondary} size={iconSize}/>
 							<Text style={{
-								color: 'transparent',
+								color: 'white',
 								fontSize: 14,
+								textShadowColor: 'white',
+								backgroundColor: 'white',
 							}}>
 							!
 							</Text>
@@ -144,8 +152,10 @@ export default class SensorBlock extends View<Props, null> {
 							{`: ${min}${unit}, `}
 							<FormattedDate value={minTime} style={updatedInfoStyle}/>
 							<Text style={{
-								color: 'transparent',
+								color: 'white',
 								fontSize: 14,
+								textShadowColor: 'white',
+								backgroundColor: 'white',
 							}}>
 							!
 							</Text>
@@ -205,6 +215,7 @@ export default class SensorBlock extends View<Props, null> {
 			updatedInfoStyle: {
 				fontSize: updateInfoFontSize,
 				color: '#000',
+				backgroundColor: '#fff',
 			},
 			iconSize: updateInfoFontSize * 1.5,
 		};
