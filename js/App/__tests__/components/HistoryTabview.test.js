@@ -4,8 +4,8 @@ import { IntlProvider } from 'react-intl';
 import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 const store = mockStore({});
 
-import HistoryTab from '../../Components/DeviceDetails/HistoryTab';
-import { DeviceHistoryDetails, HistoryRow } from '../../Components/DeviceDetails/SubViews';
+import HistoryTab from '../../Components/Device/DeviceDetails/HistoryTab';
+import { DeviceHistoryDetails, HistoryRow } from '../../Components/Device/DeviceDetails/SubViews';
 import { hideModal } from '../../Actions/Modal';
 
 

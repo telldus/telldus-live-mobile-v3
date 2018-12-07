@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 
-import OverviewTab from '../../Components/DeviceDetails/OverviewTab';
+import OverviewTab from '../../Components/Device/DeviceDetails/OverviewTab';
 
 describe('<OverviewTab />', () => {
 
