@@ -27,13 +27,13 @@ import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import reduce from 'lodash/reduce';
 import groupBy from 'lodash/groupBy';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
-import { getDeviceHistory } from '../../Actions/Devices';
-import { getHistory, storeHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
-import { hideModal } from '../../Actions/Modal';
-import i18n from '../../Translations/common';
-import Theme from '../../Theme';
+import { getDeviceHistory } from '../../../Actions/Devices';
+import { getHistory, storeHistory, getLatestTimestamp } from '../../../Actions/LocalStorage';
+import { hideModal } from '../../../Actions/Modal';
+import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = {
 	dispatch: Function,

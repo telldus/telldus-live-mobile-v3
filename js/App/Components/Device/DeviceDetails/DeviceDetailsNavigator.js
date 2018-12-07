@@ -25,12 +25,12 @@
 import React from 'react';
 import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
 
-import { View } from '../../../BaseComponents';
+import { View } from '../../../../BaseComponents';
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import { DeviceDetailsHeaderPoster } from './SubViews';
-import Theme from '../../Theme';
+import Theme from '../../../Theme';
 
 const DeviceDetailsNavigator = createMaterialTopTabNavigator(
 	{

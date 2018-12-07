@@ -31,17 +31,17 @@ import {
 	View,
 	TabBar,
 	SettingsRow,
-} from '../../../BaseComponents';
+} from '../../../../BaseComponents';
 
-import { LearnButton } from '../TabViews/SubViews';
+import { LearnButton } from '../../TabViews/SubViews';
 
-import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
-import { shouldUpdate } from '../../Lib';
+import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';
+import { addToDashboard, removeFromDashboard, showToast } from '../../../Actions';
+import { shouldUpdate } from '../../../Lib';
 
-import Theme from '../../Theme';
+import Theme from '../../../Theme';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	dispatch: Function,

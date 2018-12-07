@@ -29,7 +29,7 @@ import { Header } from '../../BaseComponents';
 import { SettingsScreen } from './Settings';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import SensorDetailsNavigator from './SensorDetails/SensorDetailsNavigator';
-import DeviceDetailsNavigator from './DeviceDetails/DeviceDetailsNavigator';
+import DeviceDetailsNavigator from './Device/DeviceDetails/DeviceDetailsNavigator';
 import AddLocationNavigator from './Location/AddLocation/AddLocationNavigator';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetailsNavigator';
 import TabsView from './TabViews/TabsView';

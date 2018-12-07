@@ -29,14 +29,14 @@ import Slider from 'react-native-slider';
 
 const deviceHeight = Dimensions.get('window').height;
 
-import { setDimmerValue, saveDimmerInitialState } from '../../../Actions/Dimmer';
-import { deviceSetState } from '../../../Actions/Devices';
-import { FormattedMessage, Text, View } from '../../../../BaseComponents';
-import i18n from '../../../Translations/common';
+import { setDimmerValue, saveDimmerInitialState } from '../../../../Actions/Dimmer';
+import { deviceSetState } from '../../../../Actions/Devices';
+import { FormattedMessage, Text, View } from '../../../../../BaseComponents';
+import i18n from '../../../../Translations/common';
 import {
 	toDimmerValue,
-} from '../../../Lib';
-import Theme from '../../../Theme';
+} from '../../../../Lib';
+import Theme from '../../../../Theme';
 
 type Props = {
 	commandON: number,
