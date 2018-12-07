@@ -240,7 +240,7 @@ render(): Object {
 							</Text>
 						)}
 					</View>
-					{adjustItems && showBackButton && (
+					{adjustItems && showBackButton && showLeftIcon && (
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}

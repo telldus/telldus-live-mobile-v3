@@ -117,7 +117,10 @@ class AddDeviceContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation} = this.props;
+		let {navigation, screenProps} = this.props;
+		if (screenProps.currentScreen === 'DeviceName') {
+			return true;
+		}
 		navigation.pop();
 		return true;
 	}
@@ -152,7 +155,7 @@ class AddDeviceContainer extends View<Props, State> {
 			navigation,
 			addDevice,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton, keyboardShown } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -179,7 +182,8 @@ class AddDeviceContainer extends View<Props, State> {
 						infoButton={infoButton}
 						align={'right'}
 						navigation={navigation}
-						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}
+						showLeftIcon={currentScreen !== 'DeviceName'}
+						leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
 						{...screenProps}/>
 					<View style={[styles.style, {paddingHorizontal: padding}]}>
 						{React.cloneElement(
