@@ -26,6 +26,7 @@ import React from 'react';
 import {
 	Image,
 } from 'react-native';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -76,7 +77,16 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'DeviceName';
+	if (nextProps.currentScreen === 'DeviceName') {
+		if (!isEqual(this.state, nextState)) {
+			return true;
+		}
+		if (nextProps.appLayout.width !== this.props.appLayout.width) {
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 getImageDimensions(appLayout: Object): Object {
@@ -129,8 +139,11 @@ submitName() {
 
 getDeviceInfo(styles: Object): Object {
 	const { navigation } = this.props;
-	const gateway = navigation.getParam('gateway', {});
-	const { deviceImage, deviceType } = navigation.getParam('info', {});
+	const {
+		deviceImage,
+		deviceName,
+		deviceBrand,
+	} = navigation.getParam('info', {});
 
 	return (
 		<View style={styles.deviceInfoCoverStyle}>
@@ -139,12 +152,12 @@ getDeviceInfo(styles: Object): Object {
 				resizeMode={'contain'}
 				style={styles.deviceImageStyle}/>
 			<View>
-				{!!deviceType && (<Text style={styles.deviceTypeStyle}>
-					{deviceType}
+				{!!deviceName && (<Text style={styles.deviceNameStyle}>
+					{deviceName}
 				</Text>
 				)}
-				{!!gateway.name && (<Text style={styles.deviceGatewayStyle}>
-					{gateway.name}
+				{!!deviceBrand && (<Text style={styles.deviceBrandStyle}>
+					{deviceBrand}
 				</Text>
 				)}
 			</View>
@@ -214,11 +227,11 @@ getStyles(): Object {
 			height: imgHeight,
 			marginRight: padding,
 		},
-		deviceTypeStyle: {
+		deviceNameStyle: {
 			fontSize: deviceWidth * 0.05,
 			color: brandSecondary,
 		},
-		deviceGatewayStyle: {
+		deviceBrandStyle: {
 			fontSize: deviceWidth * 0.04,
 			color: eulaContentColor,
 		},

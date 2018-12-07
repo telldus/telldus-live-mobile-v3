@@ -246,13 +246,15 @@ setSocketListeners() {
 				this.setState({
 					showTimer: true,
 				});
-			} else if (module === 'device' && action === 'added' && !this.deviceId) {
-				this.isDeviceAwake = true;
-				this.startSleepCheckTimer();
-				const { clientDeviceId, id } = data;
-				this.deviceId = id;
-				this.clientDeviceId = clientDeviceId;
 			} else if (module === 'device') {
+				if (action === 'added' && !this.deviceId) {
+					this.isDeviceAwake = true;
+					this.startSleepCheckTimer();
+					const { clientDeviceId, id } = data;
+					this.deviceId = id;
+					this.clientDeviceId = clientDeviceId;
+				}
+
 				actions.processWebsocketMessageForDevice(action, data);
 			}
 		}
@@ -296,13 +298,14 @@ getDeviceManufactInfo() {
 	if (manufacturerId) {
 		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
 			.then((res: Object) => {
-				const { Image: deviceImage = null, DeviceType: deviceType = null } = res;
+				const { Image: deviceImage = null, Name: deviceName = null, Brand: deviceBrand = null } = res;
 				Image.prefetch(deviceImage);
 				Image.getSize(deviceImage, (width: number, height: number) => {
 					if (width && height) {
 						deviceManufactInfo = {
 							deviceImage,
-							deviceType,
+							deviceName,
+							deviceBrand,
 							imageW: width,
 							imageH: height,
 						};
@@ -311,14 +314,16 @@ getDeviceManufactInfo() {
 				}, (failure: any) => {
 					deviceManufactInfo = {
 						deviceImage,
-						deviceType,
+						deviceName,
+						deviceBrand,
 					};
 					this.navigateToNext(deviceManufactInfo);
 				});
 			}).catch(() => {
 				deviceManufactInfo = {
 					deviceImage: null,
-					deviceType: null,
+					deviceName: null,
+					deviceBrand: null,
 				};
 				this.navigateToNext(deviceManufactInfo);
 			});
