@@ -149,7 +149,8 @@ class SliderDetails extends View {
 
 	render(): Object {
 		const { device, intl, isGatewayActive, style, appLayout } = this.props;
-		const { DIM } = device.supportedMethods;
+		const { supportedMethods = {} } = device;
+		const { DIM } = supportedMethods;
 		const minimumTrackTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';
 		const maximumTrackTintColor = isGatewayActive ? 'rgba(219, 219, 219, 255)' : '#e5e5e5';
 		const thumbTintColor = isGatewayActive ? Theme.Core.brandSecondary : '#cccccc';

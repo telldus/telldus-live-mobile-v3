@@ -83,8 +83,8 @@ class ToggleButton extends View {
 			closeSwipeRow,
 			actionIcons = {},
 		} = this.props;
-		const { TURNON, TURNOFF } = device.supportedMethods;
-		const { id, isInState, methodRequested, name, local } = device;
+		const { id, isInState, methodRequested, name, local, supportedMethods = {} } = device;
+		const { TURNON, TURNOFF } = supportedMethods;
 		const width = Theme.Core.buttonWidth;
 
 		const sharedProps = {

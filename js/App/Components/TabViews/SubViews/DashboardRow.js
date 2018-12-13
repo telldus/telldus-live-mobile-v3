@@ -93,7 +93,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 getButtonsInfo(item: Object, styles: Object): Object {
-	let { supportedMethods, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
+	let { supportedMethods = {}, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
 	let { tileWidth, setScrollEnabled, onPressDimButton } = this.props;
 	const {
 		TURNON,

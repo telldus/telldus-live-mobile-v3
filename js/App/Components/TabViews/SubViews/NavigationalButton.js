@@ -91,7 +91,7 @@ class NavigationalButton extends View {
 			isOpen,
 			closeSwipeRow,
 		} = this.props;
-		const { supportedMethods, methodRequested, isInState, id, name, local } = device;
+		const { supportedMethods = {}, methodRequested, isInState, id, name, local } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
 
 		const sharedProps = {

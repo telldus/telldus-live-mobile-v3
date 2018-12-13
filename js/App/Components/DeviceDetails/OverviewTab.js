@@ -97,7 +97,7 @@ class OverviewTab extends View<Props, null> {
 			return null;
 		}
 
-		const supportedMethods = device.supportedMethods;
+		const {supportedMethods = {}} = device;
 		return getDeviceType(supportedMethods);
 	}
 

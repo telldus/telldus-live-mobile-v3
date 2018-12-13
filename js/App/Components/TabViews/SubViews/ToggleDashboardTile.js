@@ -68,7 +68,7 @@ class ToggleDashboardTile extends View<Props, null> {
 
 	render(): Object {
 		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle, actionIcons = {} } = this.props;
-		const { id, name, isInState, supportedMethods, methodRequested, local } = item;
+		const { id, name, isInState, supportedMethods = {}, methodRequested, local } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
 		const sharedProps = {

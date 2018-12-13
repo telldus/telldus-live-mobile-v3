@@ -84,7 +84,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 			return {};
 		}
 
-		const { supportedMethods, deviceType } = filteredItem;
+		const { supportedMethods = {}, deviceType } = filteredItem;
 		return { type: getDeviceType(supportedMethods), deviceType, supportedMethods };
 	}
 
