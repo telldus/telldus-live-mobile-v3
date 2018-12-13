@@ -184,7 +184,7 @@ class DimmerDashboardTile extends View<Props, void> {
 			offButtonStyle, sliderStyle, containerStyle,
 			setScrollEnabled, sensitive,
 		} = this.props;
-		const { name, isInState, supportedMethods, methodRequested, local, stateValues, value: val } = item;
+		const { name, isInState, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 

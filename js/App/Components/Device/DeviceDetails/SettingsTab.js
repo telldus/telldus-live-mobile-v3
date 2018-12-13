@@ -153,18 +153,19 @@ class SettingsTab extends View {
 		const { device, screenProps, inDashboard } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
+		const { supportedMethods = {}, id } = device;
 
 		const {
 			container,
 			learn,
 		} = this.getStyle(appLayout);
 
-		const { LEARN } = device.supportedMethods;
+		const { LEARN } = supportedMethods;
 
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={device.id} style={learn} />;
+			learnButton = <LearnButton id={id} style={learn} />;
 		}
 		return (
 			<ScrollView>

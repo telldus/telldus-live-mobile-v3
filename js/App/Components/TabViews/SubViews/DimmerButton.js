@@ -208,7 +208,7 @@ class DimmerButton extends View<Props, null> {
 			closeSwipeRow,
 			sensitive,
 		} = this.props;
-		const { isInState, name, supportedMethods, methodRequested, local, stateValues, value: val } = item;
+		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
