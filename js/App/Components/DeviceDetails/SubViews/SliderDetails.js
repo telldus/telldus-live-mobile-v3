@@ -35,6 +35,8 @@ import { FormattedMessage, Text, View } from '../../../../BaseComponents';
 import i18n from '../../../Translations/common';
 import {
 	toDimmerValue,
+	getDimmerValue,
+	toSliderValue,
 } from '../../../Lib';
 import Theme from '../../../Theme';
 
@@ -59,17 +61,11 @@ type State = {
 	dimmerValue: number,
 };
 
-function getDimmerValue(device: Object): number {
+function prepareDimmerValue(device: Object): number {
 	if (device !== null) {
 		const { stateValues, isInState, value } = device;
 		const stateValue = stateValues ? stateValues.DIM : value;
-		if (isInState === 'TURNON') {
-			return 100;
-		} else if (isInState === 'TURNOFF') {
-			return 0;
-		} else if (isInState === 'DIM') {
-			return Math.round(stateValue * 100.0 / 255);
-		}
+		return toSliderValue(getDimmerValue(stateValue, isInState));
 	}
 	return 0;
 }
@@ -88,7 +84,7 @@ class SliderDetails extends View {
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { device } = props;
-		const dimmerValue = getDimmerValue(device);
+		const dimmerValue = prepareDimmerValue(device);
 
 		// '!state.isControlling' Will make sure while controlling it never renders with previous value.
 		// Other two checks will make sure re-render(value update) happens only when device set/reset happens and there is a
@@ -104,7 +100,7 @@ class SliderDetails extends View {
 	constructor(props: Props) {
 		super(props);
 
-		const dimmerValue: number = getDimmerValue(this.props.device);
+		const dimmerValue: number = prepareDimmerValue(this.props.device);
 
 		this.state = {
 			dimmerValue,
