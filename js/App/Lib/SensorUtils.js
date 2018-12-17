@@ -227,7 +227,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'co2') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelCO2);
 		return {
 			icon: 'sensor',
 			label,
@@ -237,7 +237,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'volume') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelVolume);
 		return {
 			icon: 'sensor',
 			label,
@@ -247,7 +247,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'loudness') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelLoudness);
 		return {
 			icon: 'sensor',
 			label,
@@ -257,7 +257,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'particulatematter2.5') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelPM25);
 		return {
 			icon: 'sensor',
 			label,
@@ -267,7 +267,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'co') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelCO);
 		return {
 			icon: 'sensor',
 			label,
@@ -277,7 +277,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'weight') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelWeight);
 		return {
 			icon: 'sensor',
 			label,
@@ -287,7 +287,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'moisture') {
-		let label = formatMessage(i18n.labelGenericMeter);
+		let label = formatMessage(i18n.labelMoisture);
 		return {
 			icon: 'sensor',
 			label,
@@ -297,10 +297,10 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	return {
-		icon: '',
-		label: '',
-		unit: '',
-		sensorInfo: '',
+		icon: 'sensor',
+		label: formatMessage(i18n.unknown),
+		unit,
+		sensorInfo: formatMessage(i18n.unknown),
 		formatOptions: undefined,
 	};
 }
