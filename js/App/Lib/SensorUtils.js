@@ -226,6 +226,76 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
+	if (name === 'co2') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'volume') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'loudness') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'particulatematter2.5') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'co') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'weight') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'moisture') {
+		let label = formatMessage(i18n.labelGenericMeter);
+		return {
+			icon: 'sensor',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
 	return {
 		icon: '',
 		label: '',
