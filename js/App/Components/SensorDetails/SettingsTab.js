@@ -256,7 +256,7 @@ class SettingsTab extends View {
 			});
 		}).catch((err: Object) => {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-			this.seState({
+			this.setState({
 				editName: false,
 				sensorName: sensor.name,
 			});
@@ -455,9 +455,14 @@ class SettingsTab extends View {
 		};
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { keepHistory, isHidden, editName, sensorName, dialogueConfig } = this.state;
 		const { inDashboard, sensor } = this.props;
+
+		if (!sensor.sensorId) {
+			return null;
+		}
+
 		const { model, protocol, sensorId, name } = sensor;
 		const { appLayout, intl } = this.props.screenProps;
 		const { formatMessage } = intl;
@@ -643,7 +648,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
 	return {
-		sensor,
+		sensor: sensor ? sensor : {},
 		inDashboard: !!state.dashboard.sensorsById[id],
 	};
 }

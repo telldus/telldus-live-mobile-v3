@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
@@ -148,12 +147,16 @@ class SettingsTab extends View {
 		});
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { isHidden } = this.state;
 		const { device, screenProps, inDashboard } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
 		const { supportedMethods = {}, id } = device;
+
+		if (!id) {
+			return null;
+		}
 
 		const {
 			container,
@@ -210,10 +213,6 @@ class SettingsTab extends View {
 	}
 }
 
-SettingsTab.propTypes = {
-	device: PropTypes.object.isRequired,
-};
-
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onAddToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
@@ -225,7 +224,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const device = state.devices.byId[id];
 	return {
-		device,
+		device: device ? device : {},
 		inDashboard: !!state.dashboard.devicesById[id],
 	};
 }

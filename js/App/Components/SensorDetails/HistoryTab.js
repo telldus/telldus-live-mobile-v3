@@ -182,30 +182,42 @@ class HistoryTab extends View {
 	getHistoryData(hasLoaded: boolean = false, refreshing: boolean = false, callBackWhenNoData: Function = () => {}) {
 		const { sensorId, screenProps, dispatch } = this.props;
 		const { formatMessage } = screenProps.intl;
-		getSensorTypes(sensorId, formatMessage).then((types: any) => {
-			if (types && types.length !== 0) {
-				const { selectedOne: selectedOnePrev, selectedTwo: selectedTwoPrev } = this.props;
-				const selectedOne = selectedOnePrev ? selectedOnePrev : types[0];
-				const selectedTwo = selectedTwoPrev ? selectedTwoPrev : (types[1] ? types[1] : null);
-				if (selectedOne) {
-					// $FlowFixMe
-					let queryParams = { ...selectedOne, id: sensorId };
-					this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 1);
+		if (sensorId) {
+			getSensorTypes(sensorId, formatMessage).then((types: any) => {
+				if (types && types.length !== 0) {
+					const { selectedOne: selectedOnePrev, selectedTwo: selectedTwoPrev } = this.props;
+					const selectedOne = selectedOnePrev ? selectedOnePrev : types[0];
+					const selectedTwo = selectedTwoPrev ? selectedTwoPrev : (types[1] ? types[1] : null);
+					if (selectedOne) {
+						// $FlowFixMe
+						let queryParams = { ...selectedOne, id: sensorId };
+						this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 1);
+					}
+					if (selectedTwo) {
+						// $FlowFixMe
+						let queryParams = { ...selectedTwo, id: sensorId };
+						this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 2);
+					}
+					const settings = {
+						selectedOne,
+						selectedTwo,
+					};
+					dispatch(changeDefaultHistorySettings(sensorId, settings));
+					this.setState({
+						list: types,
+					});
+				} else {
+					this.setState({
+						chartDataOne: [],
+						chartDataTwo: [],
+						list: [],
+						refreshing,
+						hasLoaded,
+						isChartLoading: false,
+					});
+					callBackWhenNoData();
 				}
-				if (selectedTwo) {
-					// $FlowFixMe
-					let queryParams = { ...selectedTwo, id: sensorId };
-					this.getSensorTypeHistory(hasLoaded, refreshing, queryParams, 2);
-				}
-				const settings = {
-					selectedOne,
-					selectedTwo,
-				};
-				dispatch(changeDefaultHistorySettings(sensorId, settings));
-				this.setState({
-					list: types,
-				});
-			} else {
+			}).catch(() => {
 				this.setState({
 					chartDataOne: [],
 					chartDataTwo: [],
@@ -215,18 +227,8 @@ class HistoryTab extends View {
 					isChartLoading: false,
 				});
 				callBackWhenNoData();
-			}
-		}).catch(() => {
-			this.setState({
-				chartDataOne: [],
-				chartDataTwo: [],
-				list: [],
-				refreshing,
-				hasLoaded,
-				isChartLoading: false,
 			});
-			callBackWhenNoData();
-		});
+		}
 	}
 
 	getSensorTypeHistory(hasLoaded: boolean, refreshing: boolean, queryParams: SensorHistoryQueryParams, list: 1 | 2) {
@@ -497,6 +499,10 @@ class HistoryTab extends View {
 			propToUpdate,
 			isChartLoading,
 		} = this.state;
+
+		if (!sensorId) {
+			return null;
+		}
 
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
