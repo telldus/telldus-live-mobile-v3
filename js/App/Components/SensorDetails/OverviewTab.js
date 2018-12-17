@@ -128,6 +128,11 @@ class OverviewTab extends View<Props, State> {
 	render(): Object {
 		const { isRefreshing } = this.state;
 		const { sensor, screenProps, gatewayName, gatewayType } = this.props;
+
+		if (!sensor) {
+			return null;
+		}
+
 		const { battery } = sensor;
 		const { intl, appLayout } = screenProps;
 		const locationImageUrl = getLocationImageUrl(gatewayType);
@@ -209,8 +214,10 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
-	const { clientId } = sensor;
-	const { name: gatewayName, type: gatewayType } = state.gateways.byId[clientId];
+	const { clientId } = sensor ? sensor : {};
+
+	const gateway = state.gateways.byId[clientId];
+	const { name: gatewayName, type: gatewayType } = gateway ? gateway : {};
 
 	return {
 		sensor,

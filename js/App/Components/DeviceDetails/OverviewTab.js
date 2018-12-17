@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
@@ -104,6 +103,11 @@ class OverviewTab extends View<Props, null> {
 	render(): Object {
 		const { device, screenProps, gatewayName, gatewayType, isGatewayActive } = this.props;
 		const { appLayout, intl } = screenProps;
+
+		if (!device) {
+			return null;
+		}
+
 		const locationImageUrl = getLocationImageUrl(gatewayType);
 		const locationData = {
 			title: this.boxTitle,
@@ -154,10 +158,6 @@ class OverviewTab extends View<Props, null> {
 	}
 }
 
-OverviewTab.propTypes = {
-	device: PropTypes.object.isRequired,
-};
-
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
@@ -167,11 +167,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const device = state.devices.byId[id];
-	const { clientId } = device;
-	const { name: gatewayName, type: gatewayType, online: isGatewayActive } = state.gateways.byId[clientId];
+	const { clientId } = device ? device : {};
+
+	const gateway = state.gateways.byId[clientId];
+	const { name: gatewayName, type: gatewayType, online: isGatewayActive } = gateway ? gateway : {};
 
 	return {
-		device: state.devices.byId[id],
+		device,
 		gatewayType,
 		gatewayName,
 		isGatewayActive,

@@ -133,30 +133,32 @@ class HistoryTab extends View {
 	 * from the API)
 	 */
 	getHistoryData(hasLoaded: boolean = false, refreshing: boolean = false, callBackWhenNoData: Function = () => {}) {
-		getHistory('device', this.props.device.id).then((data: Object) => {
-			if (data && data.length !== 0) {
-				let rowsAndSections = parseHistoryForSectionList(data);
-				this.setState({
-					rowsAndSections,
-					hasLoaded: true,
-					refreshing: false,
-				});
-			} else {
+		if (this.props.device.id) {
+			getHistory('device', this.props.device.id).then((data: Object) => {
+				if (data && data.length !== 0) {
+					let rowsAndSections = parseHistoryForSectionList(data);
+					this.setState({
+						rowsAndSections,
+						hasLoaded: true,
+						refreshing: false,
+					});
+				} else {
+					this.setState({
+						rowsAndSections: [],
+						hasLoaded,
+						refreshing,
+					});
+					callBackWhenNoData();
+				}
+			}).catch(() => {
 				this.setState({
 					rowsAndSections: [],
 					hasLoaded,
 					refreshing,
 				});
 				callBackWhenNoData();
-			}
-		}).catch(() => {
-			this.setState({
-				rowsAndSections: [],
-				hasLoaded,
-				refreshing,
 			});
-			callBackWhenNoData();
-		});
+		}
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -273,10 +275,14 @@ class HistoryTab extends View {
 	}
 
 	render(): Object {
-		let { screenProps } = this.props;
+		let { screenProps, device } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections } = this.state;
 		let { intl, currentScreen, appLayout } = screenProps;
 		let { brandPrimary } = Theme.Core;
+
+		if (!device.id) {
+			return null;
+		}
 
 		let {
 			line,
@@ -405,7 +411,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const device = state.devices.byId[id];
 
 	return {
-		device,
+		device: device ? device : {},
 		showModal: state.modal.openModal,
 	};
 }
