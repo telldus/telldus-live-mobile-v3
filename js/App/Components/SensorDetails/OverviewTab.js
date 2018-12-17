@@ -125,7 +125,7 @@ class OverviewTab extends View<Props, State> {
 		return false;
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { isRefreshing } = this.state;
 		const { sensor, screenProps, gatewayName, gatewayType } = this.props;
 

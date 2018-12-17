@@ -100,7 +100,7 @@ class OverviewTab extends View<Props, null> {
 		return getDeviceType(supportedMethods);
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { device, screenProps, gatewayName, gatewayType, isGatewayActive } = this.props;
 		const { appLayout, intl } = screenProps;
 

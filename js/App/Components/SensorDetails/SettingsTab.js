@@ -455,7 +455,7 @@ class SettingsTab extends View {
 		};
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { keepHistory, isHidden, editName, sensorName, dialogueConfig } = this.state;
 		const { inDashboard, sensor } = this.props;
 

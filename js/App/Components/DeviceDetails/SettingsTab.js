@@ -147,7 +147,7 @@ class SettingsTab extends View {
 		});
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { isHidden } = this.state;
 		const { device, screenProps, inDashboard } = this.props;
 		const { appLayout, intl } = screenProps;

@@ -274,7 +274,7 @@ class HistoryTab extends View {
 		this.getHistoryDataWithLatestTimestamp();
 	}
 
-	render(): Object {
+	render(): Object | null {
 		let { screenProps, device } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections } = this.state;
 		let { intl, currentScreen, appLayout } = screenProps;
