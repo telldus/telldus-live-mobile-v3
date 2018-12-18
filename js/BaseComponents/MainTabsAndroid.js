@@ -32,11 +32,11 @@ import View from './View';
 import Text from './Text';
 
 type Props = {
-	screenProps: Object,
 	tab: Object,
 	navigation: Object,
 	adjustScroll: Function,
 	appLayout: Object,
+	currentScreen: string,
 };
 
 type State = {
@@ -66,7 +66,7 @@ export default class MainTabsAndroid extends Component<Props, State> {
 			heightLand: undefined,
 		};
 
-		let { intl } = this.props.screenProps;
+		const { intl } = this.props;
 
 		this.dashboard = {
 			label: intl.formatMessage(i18n.dashboard).toUpperCase(),
@@ -105,8 +105,8 @@ export default class MainTabsAndroid extends Component<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { adjustScroll, screenProps, tab } = prevProps;
-		if (screenProps.currentScreen === tab.routeName) {
+		let { adjustScroll, currentScreen, tab } = prevProps;
+		if (currentScreen === tab.routeName) {
 			adjustScroll(this.state.layout);
 		}
 	}
@@ -140,10 +140,10 @@ export default class MainTabsAndroid extends Component<Props, State> {
 	}
 
 	render(): Object {
-		let { tab, screenProps, appLayout } = this.props;
-		let {label, accessibilityLabel} = this.getLabel(tab.routeName);
+		const { tab, currentScreen, appLayout } = this.props;
+		const {label, accessibilityLabel} = this.getLabel(tab.routeName);
 
-		let {
+		const {
 			tabBarStyle,
 			labelStyle,
 			indicatorActiveStyle,
@@ -159,7 +159,7 @@ export default class MainTabsAndroid extends Component<Props, State> {
 					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
-					{(screenProps.currentScreen === tab.routeName) ?
+					{(currentScreen === tab.routeName) ?
 						<View style={indicatorActiveStyle}/>
 						:
 						<View style={indicatorPassiveStyle}/>
@@ -173,9 +173,8 @@ export default class MainTabsAndroid extends Component<Props, State> {
 
 		let { heightLand, layout } = this.state;
 
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		return {
 			tabBarStyle: isPortrait ?

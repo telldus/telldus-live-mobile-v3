@@ -24,7 +24,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import Theme from '../App/Theme';
 
@@ -35,7 +34,6 @@ type Props = {
 	navigationState: Object,
 	navigation: Object,
 	screenProps: Object,
-	appLayout: Object,
 };
 
 class MainTabBarAndroid extends Component<Props, null> {
@@ -52,9 +50,10 @@ class MainTabBarAndroid extends Component<Props, null> {
 	}
 
 	scrollToTab(layout: Object) {
-		let {x, y, width, height} = layout;
-		let { appLayout } = this.props;
-		let isPortrait = appLayout.height > appLayout.width;
+		const {x, y, width, height} = layout;
+		const { screenProps } = this.props;
+		const { height: heightL, width: widthL } = screenProps.appLayout;
+		const isPortrait = heightL > widthL;
 
 		if (isPortrait) {
 			let position = (x + width) / 3;
@@ -68,24 +67,24 @@ class MainTabBarAndroid extends Component<Props, null> {
 	}
 
 	renderTabs(tab: Object, index: number): Object {
-		let { screenProps, navigation, appLayout } = this.props;
+		const { screenProps, navigation } = this.props;
 		return (
 			<MainTabsAndroid
 				key={index}
 				adjustScroll={this.scrollToTab}
-				screenProps={screenProps}
+				{...screenProps}
 				tab={tab}
-				navigation={navigation}
-				appLayout={appLayout}/>
+				navigation={navigation}/>
 		);
 	}
 
 	render(): Object {
-		let { navigationState, appLayout } = this.props;
-		let tabs = navigationState.routes.map((tab: Object, index: number): Object => {
+		const { navigationState, screenProps } = this.props;
+		const tabs = navigationState.routes.map((tab: Object, index: number): Object => {
 			return this.renderTabs(tab, index);
 		});
-		let {
+		const { appLayout } = screenProps;
+		const {
 			container,
 			contentContainer,
 		} = this.getStyles(appLayout);
@@ -107,9 +106,8 @@ class MainTabBarAndroid extends Component<Props, null> {
 	}
 
 	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
-		let isPortrait = height > width;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
 
 		return {
 			container: {
@@ -133,10 +131,4 @@ class MainTabBarAndroid extends Component<Props, null> {
 	}
 }
 
-function mapStateToProps(store: Object): Object {
-	return {
-		appLayout: store.app.layout,
-	};
-}
-
-export default connect(mapStateToProps, null)(MainTabBarAndroid);
+export default MainTabBarAndroid;
