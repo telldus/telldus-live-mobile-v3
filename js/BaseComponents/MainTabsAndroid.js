@@ -37,6 +37,7 @@ type Props = {
 	adjustScroll: Function,
 	appLayout: Object,
 	currentScreen: string,
+	intl: Object,
 };
 
 type State = {
