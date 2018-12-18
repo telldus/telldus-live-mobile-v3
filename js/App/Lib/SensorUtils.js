@@ -229,7 +229,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'co2') {
 		let label = formatMessage(i18n.labelCO2);
 		return {
-			icon: 'sensor',
+			icon: 'co2',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
@@ -238,8 +238,9 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	}
 	if (name === 'volume') {
 		let label = formatMessage(i18n.labelVolume);
+		let icon = scale === '0' ? 'volumeliquid' : 'volume3d';
 		return {
-			icon: 'sensor',
+			icon,
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
@@ -249,7 +250,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'loudness') {
 		let label = formatMessage(i18n.labelLoudness);
 		return {
-			icon: 'sensor',
+			icon: 'speaker',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
@@ -259,7 +260,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'particulatematter2.5') {
 		let label = formatMessage(i18n.labelPM25);
 		return {
-			icon: 'sensor',
+			icon: 'pm25',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
@@ -269,7 +270,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'co') {
 		let label = formatMessage(i18n.labelCO);
 		return {
-			icon: 'sensor',
+			icon: 'co',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
@@ -279,7 +280,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'weight') {
 		let label = formatMessage(i18n.labelWeight);
 		return {
-			icon: 'sensor',
+			icon: 'weight',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
@@ -289,7 +290,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'moisture') {
 		let label = formatMessage(i18n.labelMoisture);
 		return {
-			icon: 'sensor',
+			icon: 'humidity',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
