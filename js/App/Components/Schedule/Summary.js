@@ -151,51 +151,52 @@ class Summary extends View<null, Props, State> {
 		const { retries = 0, retryInterval = 0, reps = 0 } = schedule;
 
 		return (
-			<View style={{flex: 1}}>
-				<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
-					<View style={container}>
-						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
-						<ActionRow
-							method={method}
-							actionIcons={actionIcons}
-							showValue={true}
-							methodValue={methodValue}
-							containerStyle={row}
-							iconContainerStyle={iconContainerStyle}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<TimeRow
-							schedule={schedule}
-							device={this.device}
-							containerStyle={row}
-							appLayout={appLayout}
-							intl={intl}
-							getSuntime={actions.getSuntime}
-						/>
-						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
-						<AdvancedSettingsBlock
-							appLayout={appLayout}
-							intl={intl}
-							onPressInfo={actions.showModal}
-							onDoneEditAdvanced={actions.setAdvancedSettings}
-							retries={retries}
-							retryInterval={retryInterval}
-							reps={reps}
-							onToggleAdvanced={this.onToggleAdvanced}/>
-					</View>
-					<FloatingButton
-						buttonStyle={buttonStyle}
-						iconStyle={iconStyle}
-						onPress={this.saveSchedule}
-						iconName={this.state.isLoading ? false : 'checkmark'}
-						iconSize={iconSize}
-						paddingRight={paddingRight - 2}
-						showThrobber={this.state.isLoading}
-						accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
+			<ScrollView
+				ref={this.setRefScroll}
+				keyboardShouldPersistTaps={'always'}
+				style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+				<View style={container}>
+					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
+					<ActionRow
+						method={method}
+						actionIcons={actionIcons}
+						showValue={true}
+						methodValue={methodValue}
+						containerStyle={row}
+						iconContainerStyle={iconContainerStyle}
+						appLayout={appLayout}
+						intl={intl}
 					/>
-				</ScrollView>
-			</View>
+					<TimeRow
+						schedule={schedule}
+						device={this.device}
+						containerStyle={row}
+						appLayout={appLayout}
+						intl={intl}
+						getSuntime={actions.getSuntime}
+					/>
+					<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
+					<AdvancedSettingsBlock
+						appLayout={appLayout}
+						intl={intl}
+						onPressInfo={actions.showModal}
+						onDoneEditAdvanced={actions.setAdvancedSettings}
+						retries={retries}
+						retryInterval={retryInterval}
+						reps={reps}
+						onToggleAdvanced={this.onToggleAdvanced}/>
+				</View>
+				<FloatingButton
+					buttonStyle={buttonStyle}
+					iconStyle={iconStyle}
+					onPress={this.saveSchedule}
+					iconName={this.state.isLoading ? false : 'checkmark'}
+					iconSize={iconSize}
+					paddingRight={paddingRight - 2}
+					showThrobber={this.state.isLoading}
+					accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
+				/>
+			</ScrollView>
 		);
 	}
 
