@@ -23,7 +23,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
@@ -35,7 +35,6 @@ type Props = {
 	screenProps: Object,
 	tab: Object,
 	navigation: Object,
-	onLayout: Object,
 	adjustScroll: Function,
 	appLayout: Object,
 };
@@ -46,7 +45,7 @@ type State = {
 	heightLand: any,
 };
 
-export default class MainTabsAndroid extends View {
+export default class MainTabsAndroid extends Component<Props, State> {
 	props: Props;
 	state: State;
 
@@ -54,6 +53,10 @@ export default class MainTabsAndroid extends View {
 	onLayout: (Object) => void;
 	onLabelLayout: (Object) => void;
 
+	dashboard: Object;
+	devices: Object;
+	sensors: Object;
+	scheduler: Object;
 	constructor(props: Props) {
 		super(props);
 

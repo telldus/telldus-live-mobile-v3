@@ -23,7 +23,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import Theme from '../App/Theme';
@@ -38,21 +38,14 @@ type Props = {
 	appLayout: Object,
 };
 
-type State = {
-};
-
-class MainTabBarAndroid extends View {
+class MainTabBarAndroid extends Component<Props, null> {
 	props: Props;
-	state: State;
 
 	renderTabs: (Object, number) => Object;
 	scrollToTab: (Object) => void;
 
 	constructor(props: Props) {
 		super(props);
-
-		this.state = {
-		};
 
 		this.renderTabs = this.renderTabs.bind(this);
 		this.scrollToTab = this.scrollToTab.bind(this);
