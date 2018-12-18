@@ -239,7 +239,8 @@ render(): React$Element<any> {
 				onPressIconLabelRight={this.onPressRepeatsInfo}
 				onPressIconValueRight={inLineEditActive === 3 ? this.onDoneEdit : this.onPressRepeatsEdit}
 				onChangeText={this.onChangeRepeat}
-				onSubmitEditing={this.onDoneEdit}/>
+				onSubmitEditing={this.onDoneEdit}
+				style={{marginBottom: 5}}/>
 		</View>
 	);
 }
