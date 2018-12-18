@@ -26,10 +26,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import Theme from '../../Theme';
+import Theme from '../App/Theme';
 
-import { View } from '../../../BaseComponents';
-import Tabs from './Tabs';
+import View from './View';
+import MainTabsAndroid from './MainTabsAndroid';
 
 type Props = {
 	navigationState: Object,
@@ -41,7 +41,7 @@ type Props = {
 type State = {
 };
 
-class TabBar extends View {
+class MainTabBarAndroid extends View {
 	props: Props;
 	state: State;
 
@@ -77,7 +77,7 @@ class TabBar extends View {
 	renderTabs(tab: Object, index: number): Object {
 		let { screenProps, navigation, appLayout } = this.props;
 		return (
-			<Tabs
+			<MainTabsAndroid
 				key={index}
 				adjustScroll={this.scrollToTab}
 				screenProps={screenProps}
@@ -146,4 +146,4 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(TabBar);
+export default connect(mapStateToProps, null)(MainTabBarAndroid);

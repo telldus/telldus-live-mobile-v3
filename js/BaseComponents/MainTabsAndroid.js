@@ -25,10 +25,11 @@
 
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import Theme from '../../Theme';
-import i18n from '../../Translations/common';
+import Theme from '../App/Theme';
+import i18n from '../App/Translations/common';
 
-import { View, Text } from '../../../BaseComponents';
+import View from './View';
+import Text from './Text';
 
 type Props = {
 	screenProps: Object,
@@ -45,7 +46,7 @@ type State = {
 	heightLand: any,
 };
 
-export default class Tabs extends View {
+export default class MainTabsAndroid extends View {
 	props: Props;
 	state: State;
 

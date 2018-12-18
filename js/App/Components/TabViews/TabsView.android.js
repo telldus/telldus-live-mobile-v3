@@ -24,7 +24,7 @@
 
 
 
-import TabBar from './TabBar';
+import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
@@ -49,7 +49,7 @@ const TabNavigatorConfig = {
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
-	tabBarComponent: TabBar,
+	tabBarComponent: MainTabBarAndroid,
 	tabBarPosition: 'top',
 	tabBarOptions: {
 		activeTintColor: '#fff',
