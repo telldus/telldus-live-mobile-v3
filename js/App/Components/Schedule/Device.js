@@ -76,7 +76,11 @@ export default class Device extends View<void, Props, State> {
 
 	parseDataForList(devices: Object, gateways: Object): Array<Object> {
 		devices = filter(devices, (device: Object): any => !isEmpty(device.supportedMethods));
-		devices = orderBy(devices, [(device: Object): any => device.name.toLowerCase()], ['asc']);
+		devices = orderBy(devices, [(device: Object): any => {
+			let { name } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
 		if (Object.keys(gateways).length > 1) {
 			devices = groupBy(devices, (items: Object): Array<any> => {
 				let gateway = gateways[items.clientId];
