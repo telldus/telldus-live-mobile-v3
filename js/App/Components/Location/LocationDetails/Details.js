@@ -103,13 +103,15 @@ class Details extends View {
 
 	componentDidMount() {
 		const { actions, location, navigation } = this.props;
-		let { id } = location, extras = 'timezoneAutodetect';
-		actions.getGatewayInfo({id}, extras).then((response: Object) => {
-			let { autodetectedTimezone } = response;
-			let { params } = navigation.state;
-			let newParams = { ...params, autodetectedTimezone };
-			navigation.setParams(newParams);
-		});
+		if (location && location.id) {
+			let { id } = location, extras = 'timezoneAutodetect';
+			actions.getGatewayInfo({id}, extras).then((response: Object) => {
+				let { autodetectedTimezone } = response;
+				let { params } = navigation.state;
+				let newParams = { ...params, autodetectedTimezone };
+				navigation.setParams(newParams);
+			});
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -135,7 +137,7 @@ class Details extends View {
 	}
 
 	onEditTimeZone() {
-		let { navigation, location } = this.props;
+		let { navigation, location = {} } = this.props;
 		let { params } = navigation.state;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
 		navigation.navigate('EditTimeZoneContinent', newParams);
@@ -143,7 +145,7 @@ class Details extends View {
 	}
 
 	onEditGeoPosition() {
-		let { navigation, location } = this.props;
+		let { navigation, location = {} } = this.props;
 		let { latitude, longitude, id } = location;
 		navigation.navigate({
 			routeName: 'EditGeoPosition',
@@ -165,7 +167,7 @@ class Details extends View {
 		clearTimeout(this.timeoutInfoPress);
 		this.infoPressCount++;
 		if (this.infoPressCount >= 5) {
-			const { location } = this.props;
+			const { location = {} } = this.props;
 			const { online, websocketOnline, localKey = {} } = location;
 			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
 				this.infoPressCount = 0;
