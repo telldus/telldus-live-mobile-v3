@@ -31,7 +31,7 @@ import i18n from '../../../Translations/common';
 const Title = ({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, formatMessage }: Object): Object => (
 	<View style={[styles.title, {
 		width: tileWidth,
-		height: tileWidth * 0.6,
+		height: Math.ceil(tileWidth * 0.6),
 		paddingHorizontal: tileWidth * 0.06,
 		paddingVertical: tileWidth * 0.06,
 	}]}>
