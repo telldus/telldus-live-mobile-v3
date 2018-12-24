@@ -651,7 +651,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const { defaultSensorSettings } = state.sensorsList;
 	const defaultSettings = defaultSensorSettings[id];
-	const { keepHistory } = state.sensors.byId[id];
+	const { keepHistory } = state.sensors.byId[id] ? state.sensors.byId[id] : {};
 	const {
 		selectedOne = null,
 		selectedTwo = null,
