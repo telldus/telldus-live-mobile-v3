@@ -55,7 +55,7 @@ export default class SensorTypes extends View<Props, State> {
 
 	getSensors(): Array<Object> {
 		const { appLayout, sensor, intl } = this.props;
-		const { data } = sensor;
+		const { data = {} } = sensor;
 		const { formatMessage } = intl;
 
 		let sensors = [], sensorInfo = '';
