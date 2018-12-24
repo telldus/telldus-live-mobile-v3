@@ -350,21 +350,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(store: Object): Object {
 	return {
 		appLayout: store.app.layout,
-		isModalOpen: store.modal.openModal,
 	};
 }
 
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		onOriginPress: (data: Object) => {
-			dispatch({
-				type: 'REQUEST_MODAL_OPEN',
-				payload: {
-					data,
-				},
-			});
-		},
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(HistoryRow);
+module.exports = connect(mapStateToProps, null)(HistoryRow);

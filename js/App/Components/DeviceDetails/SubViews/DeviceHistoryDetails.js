@@ -346,8 +346,6 @@ class DeviceHistoryDetails extends View {
 
 function mapStateToProps(state: Object): Object {
 	return {
-		showDetails: state.modal.openModal,
-		detailsData: state.modal.data,
 		appLayout: state.app.layout,
 	};
 }

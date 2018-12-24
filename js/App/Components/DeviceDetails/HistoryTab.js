@@ -31,7 +31,6 @@ import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../..
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../Actions/Devices';
 import { getHistory, storeHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
-import { hideModal } from '../../Actions/Modal';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
@@ -41,7 +40,6 @@ type Props = {
 	rowsAndSections: Array<any> | boolean,
 	screenProps: Object,
 	currentScreen: string,
-	showModal: boolean,
 	navigation: Object,
 };
 
@@ -50,6 +48,7 @@ type State = {
 	rowsAndSections: Array<any>,
 	refreshing: boolean,
 	hasLoaded: boolean,
+	historyDetails: Object,
 };
 
 class HistoryTab extends View {
@@ -63,6 +62,7 @@ class HistoryTab extends View {
 	_onRefresh: () => void;
 	getHistoryDataFromAPI: (Object, number | null) => void;
 	getHistoryDataWithLatestTimestamp: () => void;
+	onOriginPress: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -100,6 +100,10 @@ class HistoryTab extends View {
 			hasRefreshed: false,
 			refreshing: true,
 			hasLoaded: false,
+			historyDetails: {
+				show: false,
+				data: {},
+			},
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
@@ -108,6 +112,7 @@ class HistoryTab extends View {
 		this._onRefresh = this._onRefresh.bind(this);
 		this.getHistoryDataFromAPI = this.getHistoryDataFromAPI.bind(this);
 		this.getHistoryDataWithLatestTimestamp = this.getHistoryDataWithLatestTimestamp.bind(this);
+		this.onOriginPress = this.onOriginPress.bind(this);
 	}
 
 	componentDidMount() {
@@ -119,9 +124,24 @@ class HistoryTab extends View {
 	}
 
 	closeHistoryDetailsModal() {
-		if (this.props.showModal) {
-			this.props.dispatch(hideModal());
+		const { show, data } = this.state.historyDetails;
+		if (show) {
+			this.setState({
+				historyDetails: {
+					show: false,
+					data,
+				},
+			});
 		}
+	}
+
+	onOriginPress(data: Object) {
+		this.setState({
+			historyDetails: {
+				show: true,
+				data,
+			},
+		});
 	}
 
 	/**
@@ -223,6 +243,7 @@ class HistoryTab extends View {
 		const { screenProps, device } = this.props;
 		const { intl, currentScreen } = screenProps;
 		const { deviceType } = device;
+		const { historyDetails } = this.state;
 
 		return (
 			<HistoryRow
@@ -233,6 +254,8 @@ class HistoryTab extends View {
 				isFirst={+item.index === 0}
 				currentScreen={currentScreen}
 				deviceType={deviceType}
+				onOriginPress={this.onOriginPress}
+				isModalOpen={historyDetails.show}
 			/>
 		);
 	}
@@ -276,7 +299,7 @@ class HistoryTab extends View {
 
 	render(): Object | null {
 		let { screenProps, device } = this.props;
-		let { hasLoaded, refreshing, rowsAndSections } = this.state;
+		let { hasLoaded, refreshing, rowsAndSections, historyDetails } = this.state;
 		let { intl, currentScreen, appLayout } = screenProps;
 		let { brandPrimary } = Theme.Core;
 
@@ -322,7 +345,11 @@ class HistoryTab extends View {
 				{this.state.rowsAndSections.length !== 0 && (
 					<View style={line}/>
 				)}
-				<DeviceHistoryDetails intl={intl} currentScreen={currentScreen}/>
+				<DeviceHistoryDetails
+					intl={intl}
+					currentScreen={currentScreen}
+					showDetails={historyDetails.show}
+					detailsData={historyDetails.data}/>
 			</View>
 		);
 	}
@@ -412,7 +439,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	return {
 		device: device ? device : {},
-		showModal: state.modal.openModal,
 	};
 }
 
