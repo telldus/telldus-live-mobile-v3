@@ -38,7 +38,7 @@ import Position from './Position';
 
 const initialRouteName = 'LocationDetected';
 
-type renderContainer = (Object) => Object;
+type renderContainer = (Object, string) => Object;
 
 const renderAddLocationContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
 	<AddLocationContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
