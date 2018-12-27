@@ -40,8 +40,8 @@ const initialRouteName = 'LocationDetected';
 
 type renderContainer = (Object) => Object;
 
-const renderAddLocationContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
-	<AddLocationContainer navigation={navigation} screenProps={screenProps}>
+const renderAddLocationContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
+	<AddLocationContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</AddLocationContainer>
 );
@@ -49,28 +49,28 @@ const renderAddLocationContainer = (navigation: Object, screenProps: Object): re
 
 const RouteConfigs = {
 	LocationDetected: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationDetected),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationDetected, 'LocationDetected'),
 	},
 	LocationActivationManual: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationActivationManual),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationActivationManual, 'LocationActivationManual'),
 	},
 	LocationName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationName),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationName, 'LocationName'),
 	},
 	TimeZoneContinent: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneContinent),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneContinent, 'TimeZoneContinent'),
 	},
 	TimeZoneCity: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneCity),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneCity, 'TimeZoneCity'),
 	},
 	TimeZone: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZone),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZone, 'TimeZone'),
 	},
 	Position: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Position),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Position, 'Position'),
 	},
 	Success: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Success),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Success, 'Success'),
 	},
 };
 
