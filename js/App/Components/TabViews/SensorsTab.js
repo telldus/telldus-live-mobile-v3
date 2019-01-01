@@ -195,7 +195,7 @@ class SensorsTab extends View {
 		return (
 			<TouchableOpacity
 				style={style.toggleHiddenListButton}
-				nPress={this.toggleHiddenList}
+				onPress={this.toggleHiddenList}
 				accessible={accessible}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
