@@ -185,7 +185,7 @@ class AddDeviceContainer extends View<Props, State> {
 						showLeftIcon={currentScreen !== 'DeviceName'}
 						leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
 						{...screenProps}/>
-					<View style={[styles.style, {paddingHorizontal: padding}]}>
+					<View style={styles.style}>
 						{React.cloneElement(
 							children,
 							{

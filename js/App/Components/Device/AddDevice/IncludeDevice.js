@@ -31,6 +31,7 @@ import {
 	Image,
 	BlockIcon,
 	ProgressBarLinear,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -389,7 +390,7 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	const { intl } = this.props;
+	const { intl, navigation } = this.props;
 	const { timer, status, percent, width, showTimer } = this.state;
 	const {
 		container,
@@ -408,6 +409,8 @@ render(): Object {
 	const progress = Math.max(percent / 100, 0);
 	const { formatMessage } = intl;
 
+	const icon = navigation.getParam('icon', '');
+
 	return (
 		<View style={container}>
 			<View style={progressContainer}>
@@ -420,7 +423,7 @@ render(): Object {
                             1.
 						</Text>
 					</View>
-					<Image source={{uri: 'icon_location_otio_box'}} resizeMode={'cover'} style={imageType}/>
+					<IconTelldus icon={icon} resizeMode={'cover'} style={imageType}/>
 				</View>
 				<View style={{
 					flex: 1,
@@ -486,6 +489,7 @@ getStyles(): Object {
 			flex: 1,
 			paddingTop: padding,
 			paddingBottom: padding / 2,
+			marginHorizontal: padding,
 		},
 		progressContainer: {
 			flexDirection: 'row',
@@ -519,8 +523,9 @@ getStyles(): Object {
 			color: '#fff',
 		},
 		imageType: {
-			height: deviceWidth * 0.18,
-			width: deviceWidth * 0.26,
+			fontSize: deviceWidth * 0.18,
+			color: '#1b365d',
+			marginRight: 4,
 		},
 		textStyle: {
 			fontSize: fontSizeText,

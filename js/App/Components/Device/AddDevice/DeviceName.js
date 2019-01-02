@@ -211,6 +211,7 @@ getStyles(): Object {
 		container: {
 			flex: 1,
 			paddingVertical: padding,
+			marginHorizontal: padding,
 		},
 		iconSize: deviceWidth * 0.050666667,
 		iconStyle: {
