@@ -233,7 +233,11 @@ class Edit extends View<null, Props, State> {
 		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
 
 		return (
-			<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+			<ScrollView
+				ref={this.setRefScroll}
+				style={{flex: 1}}
+				contentContainerStyle={{flexGrow: 1}}
+				keyboardShouldPersistTaps={'always'}>
 				<View style={container}>
 					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 					<ActionRow

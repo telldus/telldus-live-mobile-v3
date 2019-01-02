@@ -59,6 +59,7 @@ type Props = {
 	accessibilityLabel?: string,
 	style?: number | Object | Array<any>,
 	showHeader?: boolean,
+	backdropColor?: string,
 };
 
 type defaultProps = {
@@ -81,6 +82,7 @@ class DialogueBox extends Component<Props, null> {
 		exit: 'ZoomOut',
 		entryDuration: 300,
 		exitDuration: 100,
+		backdropColor: '#000',
 		backdropOpacity: 0.60,
 		showHeader: true,
 	}
@@ -286,12 +288,14 @@ class DialogueBox extends Component<Props, null> {
 			exitDuration,
 			backdropOpacity,
 			showHeader,
+			backdropColor,
 		} = this.props;
 		const styles = this.getStyles();
 
 		return (
 			<Modal
 				style={styles.modal}
+				backdropColor={backdropColor}
 				backdropOpacity={backdropOpacity}
 				isVisible={showDialogue}
 				animationInTiming={entryDuration}

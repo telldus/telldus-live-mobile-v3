@@ -59,8 +59,9 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 		return acc;
 	}, []);
 	return orderBy(result, [(item: Object): any => {
-		let { key } = item;
-		return key ? key.toLowerCase() : null;
+		let { key = '' } = item;
+		key = typeof key !== 'string' ? '' : key;
+		return key.toLowerCase();
 	}], ['asc']);
 }
 
@@ -70,14 +71,19 @@ export function parseDevicesForListView(devices: Object = {}, gateways: Object =
 	let isDevicesEmpty = isEmpty(devices);
 	if (!isGatwaysEmpty && !isDevicesEmpty) {
 		let orderedList = orderBy(devices, [(device: Object): any => {
-			let { name } = device;
-			return name ? name.toLowerCase() : null;
+			let { name = '' } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
 		}], ['asc']);
 		let [hidden, visible] = partition(orderedList, (device: Object): Object => {
 			return device.ignored;
 		});
-		visibleList = prepareSectionRow(visible, gateways);
-		hiddenList = prepareSectionRow(hidden, gateways);
+		if (visible && visible.length > 0) {
+			visibleList = prepareSectionRow(visible, gateways);
+		}
+		if (hidden && hidden.length > 0) {
+			hiddenList = prepareSectionRow(hidden, gateways);
+		}
 	}
 	return { visibleList, hiddenList };
 }

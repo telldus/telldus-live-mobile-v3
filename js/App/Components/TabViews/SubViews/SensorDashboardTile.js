@@ -220,6 +220,7 @@ class SensorDashboardTile extends View<Props, null> {
 
 	getStyles(): Object {
 		const { tileWidth, isGatewayActive, item } = this.props;
+		const { data = {}} = item;
 
 		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
@@ -244,7 +245,7 @@ class SensorDashboardTile extends View<Props, null> {
 				height: tileWidth * 0.12,
 			},
 			sensorValueCoverStyle: {
-				marginBottom: Object.keys(item.data).length <= 1 ? 0 : tileWidth * 0.1,
+				marginBottom: Object.keys(data).length <= 1 ? 0 : tileWidth * 0.1,
 			},
 			sensorValueCover: {
 				height: '100%',

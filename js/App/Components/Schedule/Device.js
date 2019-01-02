@@ -76,7 +76,11 @@ export default class Device extends View<void, Props, State> {
 
 	parseDataForList(devices: Object, gateways: Object): Array<Object> {
 		devices = filter(devices, (device: Object): any => !isEmpty(device.supportedMethods));
-		devices = orderBy(devices, [(device: Object): any => device.name.toLowerCase()], ['asc']);
+		devices = orderBy(devices, [(device: Object): any => {
+			let { name } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
 		if (Object.keys(gateways).length > 1) {
 			devices = groupBy(devices, (items: Object): Array<any> => {
 				let gateway = gateways[items.clientId];
@@ -84,7 +88,7 @@ export default class Device extends View<void, Props, State> {
 			});
 			devices = reduce(devices, (acc: Array<any>, next: Object, index: number): Array<any> => {
 				acc.push({
-					key: index,
+					key: `${index}`,
 					data: next,
 				});
 				return acc;
@@ -92,7 +96,7 @@ export default class Device extends View<void, Props, State> {
 			return devices;
 		} else if (Object.keys(gateways).length === 1) {
 			return [{
-				key: '',
+				key: '1',
 				data: [...devices],
 
 			}];
@@ -138,6 +142,10 @@ export default class Device extends View<void, Props, State> {
 		actions.selectDevice(row.id);
 	};
 
+	_keyExtractor(item: Object, index: number): string {
+		return index.toString();
+	}
+
 	render(): React$Element<SectionList> | null {
 		const { dataSource, refreshing } = this.state;
 		if (!dataSource || dataSource.length <= 0) {
@@ -149,6 +157,7 @@ export default class Device extends View<void, Props, State> {
 				sections={dataSource}
 				renderItem={this._renderRow}
 				renderSectionHeader={this._renderSectionHeader}
+				keyExtractor={this._keyExtractor}
 				onRefresh={this.onRefresh}
 				refreshing={refreshing}
 				contentContainerStyle={{

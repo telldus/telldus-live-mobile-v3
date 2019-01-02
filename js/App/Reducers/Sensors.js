@@ -57,8 +57,9 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 		return acc;
 	}, []);
 	return orderBy(result, [(item: Object): any => {
-		let { key } = item;
-		return key ? key.toLowerCase() : null;
+		let { key = '' } = item;
+		key = typeof key !== 'string' ? '' : key;
+		return key.toLowerCase();
 	}], ['asc']);
 }
 
@@ -68,14 +69,19 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 	let isSensorsEmpty = isEmpty(sensors);
 	if (!isGatwaysEmpty && !isSensorsEmpty) {
 		let orderedList = orderBy(sensors, [(sensor: Object): any => {
-			let { name } = sensor;
-			return name ? name.toLowerCase() : null;
+			let { name = '' } = sensor;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
 		}], ['asc']);
 		let [hidden, visible] = partition(orderedList, (sensor: Object): Object => {
 			return sensor.ignored;
 		});
-		visibleList = prepareSectionRow(visible, gateways);
-		hiddenList = prepareSectionRow(hidden, gateways);
+		if (visible && visible.length > 0) {
+			visibleList = prepareSectionRow(visible, gateways);
+		}
+		if (hidden && hidden.length > 0) {
+			hiddenList = prepareSectionRow(hidden, gateways);
+		}
 	}
 	return { visibleList, hiddenList };
 }

@@ -69,6 +69,7 @@ type DefaultProps = {
     showBackButton: boolean,
 	align: 'right' | 'center',
 	showLeftIcon: boolean,
+	leftIcon: string,
 };
 
 type State = {
@@ -84,6 +85,7 @@ static defaultProps: DefaultProps = {
 	showBackButton: true,
 	align: 'center',
 	showLeftIcon: true,
+	leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
 };
 
 goBack: () => void;
@@ -246,9 +248,9 @@ render(): Object {
 							onPress={this.goBack}
 							accessibilityLabel={this.labelLeftIcon}>
 							{Platform.OS === 'ios' && leftIcon !== 'close' ?
-								<FontAwesome name={leftIcon ? leftIcon : 'angle-left'} size={width * 0.047} color="#fff"/>
+								<FontAwesome name={leftIcon} size={width * 0.047} color="#fff"/>
 								:
-								<Icon name={leftIcon ? leftIcon : 'arrow-back'} size={width * 0.047} color="#fff"/>
+								<Icon name={leftIcon} size={width * 0.047} color="#fff"/>
 							}
 						</TouchableOpacity>
 					)}

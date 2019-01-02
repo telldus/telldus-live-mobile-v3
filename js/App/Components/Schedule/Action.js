@@ -140,12 +140,17 @@ export default class Action extends View<null, ScheduleProps, State> {
 		return deviceWidth * Theme.Core.paddingFactor;
 	}
 
+	_keyExtractor(item: Object, index: number): string {
+		return index.toString();
+	}
+
 	render(): React$Element<FlatList> {
 		const padding = this.getPadding();
 		return (
 			<FlatList
 				data={this.state.dataSource}
 				renderItem={this._renderRow}
+				keyExtractor={this._keyExtractor}
 				contentContainerStyle={{
 					flexGrow: 1,
 					paddingTop: padding,

@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { intlShape } from 'react-intl';
 
 import {
@@ -90,7 +90,10 @@ render(): Object {
 	} = this.getStyles();
 
 	return (
-		<View style={{flex: 1}}>
+		<KeyboardAvoidingView
+			behavior="padding"
+			style={{flex: 1}}
+			contentContainerStyle={{flexGrow: 1}}>
 			<TouchableOpacity
 				onPress={this.toggleAdvanced}
 				style={toggleAdvancedCover}>
@@ -107,7 +110,7 @@ render(): Object {
 				<AdvancedSettings
 					{...this.props}/>
 			)}
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

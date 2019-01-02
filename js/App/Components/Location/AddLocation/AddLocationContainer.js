@@ -50,6 +50,7 @@ type Props = {
 	showModal: boolean,
 	validationMessage: any,
 	source: Object | number,
+	ScreenName: string,
 };
 
 type State = {
@@ -126,9 +127,18 @@ class AddLocationContainer extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const isStateEqual = _.isEqual(this.state, nextState);
-		const isPropsEqual = _.isEqual(this.props, nextProps);
-		return !(isStateEqual && isPropsEqual);
+		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+			const isStateEqual = _.isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			const isPropsEqual = _.isEqual(this.props, nextProps);
+			if (!isPropsEqual) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
