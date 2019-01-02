@@ -243,9 +243,6 @@ setSocketListeners() {
 				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
 				actions.showToast('Please try to wake the device manually');
-				this.setState({
-					showTimer: true,
-				});
 			} else if (module === 'device') {
 				if (action === 'added' && !this.deviceId) {
 					this.isDeviceAwake = true;
@@ -439,7 +436,7 @@ render(): Object {
 					</Text>
 					<Text/>
 					<Text style={timerStyle}>
-						{(timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSec)}` : ' '}
+						{(timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' '}
 					</Text>
 					<Text style={statusStyle}>
 						{status !== null ? `${status} (${percent}% ${formatMessage(i18n.done).toLowerCase()})` : ' '}
