@@ -162,12 +162,14 @@ class LoginForm extends View {
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
 				/>
+				<View style={{ height: 10 }}/>
 				<GoogleSigninButton
-					style={{ width: 200, height: 48, alignSelf: 'center' }}
+					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}
 					color={GoogleSigninButton.Color.Dark}
 					onPress={this.signIn}
 					disabled={this.state.isSigninInProgress} />
+				<View style={{ height: 10 }}/>
 			</View>
 		);
 	}

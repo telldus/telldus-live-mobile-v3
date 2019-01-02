@@ -203,7 +203,6 @@ class LoginScreen extends View {
 			otherLinks: {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
-				marginTop: 15,
 				justifyContent: 'center',
 				marginHorizontal: 10,
 			},
@@ -211,7 +210,7 @@ class LoginScreen extends View {
 				color: '#bbb',
 				fontSize: infoFontSize,
 				marginHorizontal: infoFontSize * 0.2,
-				marginVertical: infoFontSize * 0.8,
+				marginBottom: 10,
 			},
 		};
 	}

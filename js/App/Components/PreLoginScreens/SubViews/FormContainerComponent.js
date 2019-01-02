@@ -183,6 +183,13 @@ class FormContainerComponent extends View<Props, null> {
 				left: Platform.OS === 'android' ? 3 : 0,
 			},
 			iconSize: textFieldFontSize,
+			loginButtonStyleG: {
+				minWidth: 200,
+				maxWidth: 300,
+				minHeight: 50,
+				maxHeight: 80,
+				alignSelf: 'center',
+			},
 		};
 	}
 }
