@@ -25,11 +25,10 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { NavigationActions } from 'react-navigation';
 
-import { View, FloatingButton } from '../../../BaseComponents';
+import { View } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
-import { getGateways, addNewGateway, showToast } from '../../Actions';
+import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
@@ -47,7 +46,6 @@ type Props = {
 };
 
 type State = {
-	isLoading: boolean,
 	isRefreshing: boolean,
 };
 
@@ -65,7 +63,6 @@ class GatewaysTab extends View {
 
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
-	addLocation: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.gateways),
@@ -78,7 +75,6 @@ class GatewaysTab extends View {
 		let { formatMessage } = props.screenProps.intl;
 
 		this.state = {
-			isLoading: false,
 			isRefreshing: false,
 		};
 
@@ -87,7 +83,6 @@ class GatewaysTab extends View {
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.addLocation = this.addLocation.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -109,35 +104,6 @@ class GatewaysTab extends View {
 
 	keyExtractor(item: Object): string {
 		return item.id.toString();
-	}
-
-	addLocation() {
-		this.setState({
-			isLoading: true,
-		});
-		this.props.addNewLocation()
-			.then((response: Object) => {
-				const navigateAction = NavigationActions.navigate({
-					routeName: 'AddLocation',
-					key: 'AddLocation',
-					params: {clients: response.client},
-					action: NavigationActions.navigate({
-						routeName: 'LocationDetected',
-						key: 'LocationDetected',
-						params: {clients: response.client},
-					}),
-				  });
-				this.props.navigation.dispatch(navigateAction);
-				this.setState({
-					isLoading: false,
-				});
-			}).catch((error: Object) => {
-				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
-				this.setState({
-					isLoading: false,
-				});
-				this.props.dispatch(showToast(message));
-			});
 	}
 
 	getPadding(): number {
@@ -164,10 +130,6 @@ class GatewaysTab extends View {
 						marginVertical: padding - (padding / 4),
 					}}
 				/>
-				<FloatingButton
-					onPress={this.addLocation}
-					imageSource={this.state.isLoading ? false : {uri: 'icon_plus'}}
-					showThrobber={this.state.isLoading}/>
 			</View>
 		);
 	}

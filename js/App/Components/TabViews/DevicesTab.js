@@ -34,7 +34,6 @@ import {
 	IconTelldus,
 	DialogueBox,
 	DialogueHeader,
-	FloatingButton,
 } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 import { DimmerControlInfo } from './SubViews/Device';
@@ -585,10 +584,6 @@ class DevicesTab extends View {
 						backdropOpacity={backdropOpacity}
 					/>
 				</ScrollView>
-				<FloatingButton
-					onPress={this.addNewDevice}
-					imageSource={{uri: 'icon_plus'}}
-				/>
 			</View>
 		);
 	}

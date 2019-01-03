@@ -30,7 +30,7 @@ import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape, injectIntl } from 'react-intl';
 
-import { View, Header, IconTelldus } from '../../BaseComponents';
+import { View, Header, Image } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
@@ -79,6 +79,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	addNewGatewayBool: boolean,
 	intl: intlShape.isRequired,
+	gateways: Array<any>,
 
 	dispatch: Function,
 	syncGateways: () => void,
@@ -110,6 +111,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 	openDrawer: () => void;
 	addNewLocation: () => void;
 	onPressGateway: (Object) => void;
+	addNewDevice: () => void;
+	newSchedule: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -156,21 +159,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		getRSAKey(true);
 
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-		const size = Math.floor(deviceHeight * 0.03);
-
-		let fontSize = size < 20 ? 20 : size;
-		this.settingsButton = {
-			component: <IconTelldus icon={'settings'} style={{
-				fontSize,
-				color: '#fff',
-			}}/>,
-			onPress: this.onOpenSetting,
-		};
-
 		this.menuButton = {
 			icon: {
 				name: 'bars',
@@ -182,6 +170,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 			onPress: this.openDrawer,
 			accessibilityLabel: '',
 		};
+
+		this.addNewDevice = this.addNewDevice.bind(this);
+		this.newSchedule = this.newSchedule.bind(this);
 	}
 
 	componentDidMount() {
@@ -216,15 +207,15 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
-		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, ...othersN } = nextProps;
+		const { appLayout, showEULA, showToast: showToastBool, gateways, ...others } = this.props;
+		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, gateways: gatewaysN, ...othersN } = nextProps;
 
 		const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
 		if (dimmerPropsChange) {
 			return true;
 		}
 
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN) || (gateways.length !== gatewaysN.length)) {
 			return true;
 		}
 
@@ -270,6 +261,25 @@ class AppNavigatorRenderer extends View<Props, State> {
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 				this.props.dispatch(showToast(message));
 			});
+	}
+
+	newSchedule() {
+		navigate('Schedule', {
+			key: 'Schedule',
+			params: { editMode: false },
+		}, 'Schedule');
+	}
+
+	addNewDevice() {
+		const { gateways } = this.props;
+		const gatewaysLen = gateways.length;
+		if (gatewaysLen > 0) {
+			const singleGateway = gatewaysLen === 1;
+			navigate('AddDevice', {
+				selectLocation: !singleGateway,
+				gateway: singleGateway ? gateways[0] : null,
+			}, 'AddDevice');
+		}
 	}
 
 	onOpenDrawer() {
@@ -345,6 +355,33 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.dispatch(hideDimmerStep());
 	}
 
+	makeRightButton(CS: string, styles: Object): Object | null {
+		this.AddButton = {
+			component: <Image source={{uri: 'icon_plus'}} style={styles.addIconStyle}/>,
+			style: styles.rightButtonStyle,
+			onPress: () => {},
+		};
+		switch (CS) {
+			case 'Devices':
+				return {
+					...this.AddButton,
+					onPress: this.addNewDevice,
+				};
+			case 'Gateways':
+				return {
+					...this.AddButton,
+					onPress: this.addNewLocation,
+				};
+			case 'Scheduler':
+				return {
+					...this.AddButton,
+					onPress: this.newSchedule,
+				};
+			default:
+				return null;
+		}
+	}
+
 	onLayout(ev: Object) {
 		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
@@ -390,6 +427,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const styles = this.getStyles(appLayout);
 
 		const leftButton = this.makeLeftButton(styles);
+		const rightButton = this.makeRightButton(CS, styles);
 		const drawerWidth = getDrawerWidth(styles.deviceWidth);
 
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
@@ -406,6 +444,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenProps = {
 				...screenProps,
 				leftButton,
+				rightButton,
 				hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
 				style: styles.header,
 				logoStyle: styles.logoStyle,
@@ -427,6 +466,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 						style={styles.header}
 						logoStyle={styles.logoStyle}
 						leftButton={leftButton}
+						rightButton={rightButton}
 						appLayout={appLayout}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>
@@ -458,6 +498,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const size = Math.floor(deviceHeight * 0.025);
+		const fontSizeIcon = size < 20 ? 20 : size;
 
 		return {
 			deviceWidth,
@@ -495,6 +538,16 @@ class AppNavigatorRenderer extends View<Props, State> {
 			menuIconStyle: isPortrait ? null : {
 				transform: [{rotateZ: '90deg'}],
 			},
+			rightButtonStyle: isPortrait ? null : {
+				top: deviceHeight * 0.03666,
+				right: height - 50,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+			addIconStyle: {
+				height: fontSizeIcon,
+				width: fontSizeIcon,
+			},
 			logoStyle: isPortrait ? null : {
 				position: 'absolute',
 				left: deviceHeight * 0.6255,
@@ -528,6 +581,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showEULA: !getUserProfileSelector(state).eula,
 		dimmer: state.dimmer,
 		appLayout: layout,
+		gateways: allIds,
 	};
 }
 

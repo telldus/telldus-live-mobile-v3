@@ -29,7 +29,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape, injectIntl } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, IconTelldus } from '../../BaseComponents';
+import { View, IconTelldus, Throbber } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
@@ -65,6 +65,7 @@ import {
 } from '../Lib';
 
 import i18n from '../Translations/common';
+import { Image } from 'react-native-animatable';
 
 type Props = {
 	dimmer: Object,
@@ -76,6 +77,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	addNewGatewayBool: boolean,
+	gateways: Array<any>,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -86,6 +88,7 @@ type Props = {
 type State = {
 	currentScreen: string,
 	addingNewLocation: boolean,
+	hasTriedAddLocation: boolean,
 };
 
 class AppNavigatorRenderer extends View<Props, State> {
@@ -103,6 +106,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	addNewLocation: () => void;
+	addNewDevice: () => void;
+	newSchedule: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -110,6 +115,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.state = {
 			currentScreen: 'Dashboard',
 			addingNewLocation: false,
+			hasTriedAddLocation: false,
 		};
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
@@ -141,12 +147,34 @@ class AppNavigatorRenderer extends View<Props, State> {
 			onPress: this.onOpenSetting,
 		};
 
+		this.AddButton = {
+			component: <Image source={{uri: 'icon_plus'}} style={{
+				height: fontSize * 0.85,
+				width: fontSize * 0.85,
+			}}/>,
+			onPress: () => {},
+		};
+
+		this.throbber = {
+			component: <Throbber
+				throbberStyle={{
+					fontSize,
+					color: '#fff',
+				}}
+				throbberContainerStyle={{
+					position: 'relative',
+				}}/>,
+			onPress: () => {},
+		};
+
 		const { formatMessage } = props.intl;
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.addNewLocation = this.addNewLocation.bind(this);
+		this.addNewDevice = this.addNewDevice.bind(this);
+		this.newSchedule = this.newSchedule.bind(this);
 	}
 
 	componentDidMount() {
@@ -181,15 +209,15 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
-		const { appLayout: appLayoutN, showEULA: showEULAN, showToast: showToastN, ...othersN } = nextProps;
+		const { appLayout, showEULA, showToast: showToastBool, gateways, ...others } = this.props;
+		const { appLayout: appLayoutN, showEULA: showEULAN, showToast: showToastN, gateways: gatewaysN, ...othersN } = nextProps;
 
 		const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
 		if (dimmerPropsChange) {
 			return true;
 		}
 
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN) || (gateways.length !== gatewaysN.length)) {
 			return true;
 		}
 
@@ -211,7 +239,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			this._showToast(message, durationToast, positionToast);
 		}
 
-		if (addNewGatewayBool && !this.state.addingNewLocation) {
+		const { hasTriedAddLocation } = this.state;
+		if (addNewGatewayBool && !hasTriedAddLocation) {
 			this.addNewLocation();
 		}
 	}
@@ -223,11 +252,15 @@ class AppNavigatorRenderer extends View<Props, State> {
 	addNewLocation() {
 		this.setState({
 			addingNewLocation: true,
+			hasTriedAddLocation: true,
 		});
 		this.props.addNewLocation()
 			.then((response: Object) => {
+				this.setState({
+					addingNewLocation: false,
+				});
 				if (response.client) {
-					navigate('AddLocation', {clients: response.client});
+					navigate('AddLocation', {clients: response.client}, 'AddLocation');
 				}
 			}).catch((error: Object) => {
 				this.setState({
@@ -236,6 +269,25 @@ class AppNavigatorRenderer extends View<Props, State> {
 				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 				this.props.dispatch(showToast(message));
 			});
+	}
+
+	newSchedule() {
+		navigate('Schedule', {
+			key: 'Schedule',
+			params: { editMode: false },
+		}, 'Schedule');
+	}
+
+	addNewDevice() {
+		const { gateways } = this.props;
+		const gatewaysLen = gateways.length;
+		if (gatewaysLen > 0) {
+			const singleGateway = gatewaysLen === 1;
+			navigate('AddDevice', {
+				selectLocation: !singleGateway,
+				gateway: singleGateway ? gateways[0] : null,
+			}, 'AddDevice');
+		}
 	}
 
 	handleConnectivityChange(connectionInfo: Object) {
@@ -286,6 +338,33 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.dispatch(hideDimmerStep());
 	}
 
+	makeRightButton(CS: string): Object | null {
+		switch (CS) {
+			case 'Devices':
+				return {
+					...this.AddButton,
+					onPress: this.addNewDevice,
+				};
+			case 'Gateways':
+				if (this.state.addingNewLocation) {
+					return {
+						...this.throbber,
+					};
+				}
+				return {
+					...this.AddButton,
+					onPress: this.addNewLocation,
+				};
+			case 'Scheduler':
+				return {
+					...this.AddButton,
+					onPress: this.newSchedule,
+				};
+			default:
+				return null;
+		}
+	}
+
 	onLayout(ev: Object) {
 		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
@@ -299,8 +378,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
-
-		const leftButton = this.settingsButton;
 
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -318,7 +395,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 		if (showHeader) {
 			screenProps = {
 				...screenProps,
-				leftButton,
+				leftButton: this.settingsButton,
+				rightButton: this.makeRightButton(CS),
 				hideHeader: false,
 				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )},
 			};
@@ -360,7 +438,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		layout,
 		screenReaderEnabled,
 	} = state.app;
-	const { allIds, toActivate } = state.gateways;
+	const { allIds = [], toActivate } = state.gateways;
 
 	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
 
@@ -374,6 +452,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showEULA: !getUserProfileSelector(state).eula,
 		dimmer: state.dimmer,
 		appLayout: layout,
+		gateways: allIds,
 	};
 }
 

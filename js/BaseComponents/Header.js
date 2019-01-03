@@ -321,8 +321,8 @@ export default class HeaderComponent extends Base {
 	};
 
 	renderRightButton = (rightButton: Object): Object => {
-		let { accessibilityLabel, icon } = rightButton;
-		let style = icon ? icon.style : null;
+		let { accessibilityLabel, icon, style } = rightButton;
+		style = icon ? icon.style : style;
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
