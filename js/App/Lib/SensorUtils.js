@@ -132,7 +132,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 
 		let direction = '';
 		if (name === 'wdir') {
-			direction = [...getWindDirection(value, formatMessage)].toString();
+			direction = Array.from(getWindDirection(value, formatMessage)).toString();
 		}
 		let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
 		let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
