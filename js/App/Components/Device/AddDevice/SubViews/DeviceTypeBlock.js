@@ -72,7 +72,7 @@ onPress() {
 }
 
 render(): Object {
-	const { h1, h2, icon } = this.props;
+	const { h1, h2, icon, id } = this.props;
 	const {
 		arrowCover,
 		arrow,
@@ -81,6 +81,7 @@ render(): Object {
 		itemsCover,
 		h1Style,
 		h2Style,
+		iconSecurity,
 	} = this.getStyles();
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 	return (
@@ -93,11 +94,23 @@ render(): Object {
 				<View style={itemsCover}>
 					<IconTelldus icon={icon} style={imageType}/>
 					<View style={{
+						flex: 1,
 						flexDirection: 'column',
+						flexWrap: 'wrap',
 					}}>
 
-						<Text style={h1Style}>
-							{h1}
+						<Text>
+							{(id === 2) && (
+								<Text>
+									<IconTelldus icon={'security'} style={iconSecurity}/>
+									<Text style={Theme.Styles.hiddenText}>
+							!
+									</Text>
+								</Text>
+							)}
+							<Text style={h1Style}>
+								{h1}
+							</Text>
 						</Text>
 						<Text style={h2Style}>
 							{h2}
@@ -148,7 +161,7 @@ getStyles(): Object {
 		},
 		itemsCover: {
 			flexDirection: 'row',
-			paddingVertical: 5 + h1FontSize,
+			paddingVertical: h1FontSize,
 			alignItems: 'center',
 			paddingRight: padding * 4,
 		},
@@ -163,7 +176,11 @@ getStyles(): Object {
 		imageType: {
 			fontSize: deviceWidth * 0.18,
 			color: '#1b365d',
-			marginRight: 8,
+			marginHorizontal: padding * 2,
+		},
+		iconSecurity: {
+			fontSize: h1FontSize,
+			color: brandSecondary,
 		},
 	};
 }

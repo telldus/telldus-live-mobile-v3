@@ -404,6 +404,7 @@ render(): Object {
 		markerText,
 		timerStyle,
 		statusStyle,
+		blockLeft,
 	} = this.getStyles();
 
 	const progress = Math.max(percent / 100, 0);
@@ -414,10 +415,9 @@ render(): Object {
 	return (
 		<View style={container}>
 			<View style={progressContainer}>
-				<View style={{
+				<View style={[blockLeft, {
 					flexDirection: 'column',
-					justifyContent: 'center',
-				}}>
+				}]}>
 					<View style={markerTextCover}>
 						<Text style={markerText}>
                             1.
@@ -454,7 +454,9 @@ render(): Object {
 				</View>
 			</View>
 			<View style={infoContainer}>
-				<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
+				<View style={blockLeft}>
+					<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
+				</View>
 				<View style={{
 					flex: 1,
 					flexDirection: 'column',
@@ -525,7 +527,6 @@ getStyles(): Object {
 		imageType: {
 			fontSize: deviceWidth * 0.18,
 			color: '#1b365d',
-			marginRight: 4,
 		},
 		textStyle: {
 			fontSize: fontSizeText,
@@ -550,6 +551,11 @@ getStyles(): Object {
 			fontSize: fontSizeStatus,
 			color: rowTextColor,
 			marginBottom: 4,
+		},
+		blockLeft: {
+			width: deviceWidth * 0.21,
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 	};
 }
