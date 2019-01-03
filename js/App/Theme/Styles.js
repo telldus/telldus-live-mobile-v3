@@ -153,4 +153,10 @@ export default StyleSheet.create({
 		shadowColor: '#000',
 		shadowOpacity: 0.23,
 	},
+	hiddenText: {
+		color: 'white',
+		fontSize: 14,
+		textShadowColor: 'white',
+		backgroundColor: 'white',
+	},
 });
