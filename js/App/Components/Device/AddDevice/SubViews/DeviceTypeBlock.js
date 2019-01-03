@@ -44,6 +44,7 @@ type Props = {
 	icon: string,
 	appLayout: Object,
 	onPress: (Object) => void,
+	id: number,
 };
 
 type State = {
