@@ -34,7 +34,7 @@ import {
 	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
-import { SafeAreaView } from './BaseComponents';
+import { SafeAreaView, DialogueBox } from './BaseComponents';
 import {
 	setAppLayout,
 	setAccessibilityListener,
@@ -60,23 +60,40 @@ type Props = {
 	deviceId?: string,
 };
 
-class App extends React.Component<Props, null> {
+type State = {
+	dialogueData: Object,
+};
+
+class App extends React.Component<Props, State> {
 	props: Props;
+	state: State;
 
 	onLayout: (Object) => void;
 	onNotification: Function | null;
 	setCalendarLocale: () => void;
+
+	toggleDialogueBox: (Object) => null;
+	closeDialogue: () => void;
 
 	constructor(props: Props) {
 		super(props);
 		this.onLayout = this.onLayout.bind(this);
 		this.setCalendarLocale = this.setCalendarLocale.bind(this);
 
+		this.state = {
+			dialogueData: {
+				show: false,
+			},
+		};
+
 		this.setCalendarLocale();
 		if (Platform.OS === 'android') {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		}
 		this.onNotification = null;
+
+		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
+		this.closeDialogue = this.closeDialogue.bind(this);
 	}
 
 	componentDidMount() {
@@ -141,6 +158,22 @@ class App extends React.Component<Props, null> {
 		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
 
+	toggleDialogueBox(dialogueData: Object) {
+		this.setState({
+			dialogueData,
+		});
+	}
+
+	closeDialogue() {
+		const { dialogueData } = this.state;
+		this.setState({
+			dialogueData: {
+				...dialogueData,
+				show: false,
+			},
+		});
+	}
+
 	render(): Object {
 		let { prevChangeLogVersion, accessToken, isTokenValid, forceShowChangeLog } = this.props;
 
@@ -148,18 +181,35 @@ class App extends React.Component<Props, null> {
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
+		const {
+			show = false,
+			showHeader = false,
+			imageHeader = false,
+			onPressNegative = this.closeDialogue,
+			onPressPositive = this.closeDialogue,
+			...others
+		} = this.state.dialogueData;
+
 		return (
 			<SafeAreaView onLayout={this.onLayout}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
-					<AppNavigatorRenderer {...this.props}/>
+					<AppNavigatorRenderer {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}
 					showChangeLog={showChangeLog}
 					forceShowChangeLog={forceShowChangeLog}
 					onLayout={this.onLayout}/>
+				<DialogueBox
+					showDialogue={show}
+					showHeader={showHeader}
+					imageHeader={imageHeader}
+					onPressNegative={onPressNegative}
+					onPressPositive={onPressPositive}
+					{...others}
+				/>
 			</SafeAreaView>
 		);
 	}
