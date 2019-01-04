@@ -464,7 +464,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;// Android tab bar height in landscape.
+
+		const { land } = Theme.Core.headerHeightFactor;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;// Android tab bar height in landscape.
 
 		const dayWidth = this._getDayWidth(weekday);
 		const dayHeight = deviceWidth * 0.1;
@@ -623,7 +625,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+
+		const { land } = Theme.Core.headerHeightFactor;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
 		const prevDay = days[todayIndex - 1];
 		const nextDay = days[todayIndex + 1];
 		const prevDayWidth = prevDay ? this._getDayWidth(prevDay.day) + (width * 0.0555) : undefined;
