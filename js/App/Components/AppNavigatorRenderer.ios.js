@@ -62,6 +62,8 @@ import {
 	navigate,
 	getRouteName,
 	shouldUpdate,
+	prepareNoZWaveSupportDialogueData,
+	checkForZWaveSupport,
 } from '../Lib';
 
 import Theme from '../Theme';
@@ -84,6 +86,8 @@ type Props = {
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
 	onNavigationStateChange: (string) => void,
+	toggleDialogueBox: (Object) => void,
+	locale: string,
 };
 
 type State = {
@@ -284,15 +288,21 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	addNewDevice() {
-		const { gateways } = this.props;
-		const { allIds, byId } = gateways;
-		const gatewaysLen = allIds.length;
-		if (gatewaysLen > 0) {
-			const singleGateway = gatewaysLen === 1;
-			navigate('AddDevice', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? byId[allIds[0]] : null,
-			}, 'AddDevice');
+		const { gateways, toggleDialogueBox, intl, locale } = this.props;
+		const zwavesupport = checkForZWaveSupport(gateways.byId);
+		if (!zwavesupport) {
+			const dialogueData = prepareNoZWaveSupportDialogueData(intl.formatMessage, locale);
+			toggleDialogueBox(dialogueData);
+		} else {
+			const { allIds, byId } = gateways;
+			const gatewaysLen = allIds.length;
+			if (gatewaysLen > 0) {
+				const singleGateway = gatewaysLen === 1;
+				navigate('AddDevice', {
+					selectLocation: !singleGateway,
+					gateway: singleGateway ? byId[allIds[0]] : null,
+				}, 'AddDevice');
+			}
 		}
 	}
 
@@ -406,11 +416,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		};
 		if (showHeader) {
 			const { land } = Theme.Core.headerHeightFactor;
-			const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
+			const rightButton = this.makeRightButton(CS);
+			const showAttentionCapture = CS === 'Devices' && rightButton && showAttentionCaptureAddDevice;
 			screenProps = {
 				...screenProps,
 				leftButton: this.settingsButton,
-				rightButton: this.makeRightButton(CS),
+				rightButton,
 				hideHeader: false,
 				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
 				toggleAttentionCapture: this.toggleAttentionCapture,

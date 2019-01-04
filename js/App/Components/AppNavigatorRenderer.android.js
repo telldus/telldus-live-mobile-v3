@@ -65,6 +65,8 @@ import {
 	getDrawerWidth,
 	getRouteName,
 	shouldUpdate,
+	prepareNoZWaveSupportDialogueData,
+	checkForZWaveSupport,
 } from '../Lib';
 import Theme from '../Theme';
 import i18n from '../Translations/common';
@@ -86,12 +88,16 @@ type Props = {
 	onTabSelect: (string) => void,
 	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
+	toggleDialogueBox: (Object) => void,
+	locale: string,
 };
 
 type State = {
 	currentScreen: string,
 	drawer: boolean,
 	addingNewLocation: boolean,
+	hasTriedAddLocation: boolean,
+	showAttentionCaptureAddDevice: boolean,
 };
 
 class AppNavigatorRenderer extends View<Props, State> {
@@ -122,6 +128,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			currentScreen: 'Dashboard',
 			drawer: false,
 			addingNewLocation: false,
+			hasTriedAddLocation: false,
 			showAttentionCaptureAddDevice: false,
 		};
 
@@ -239,7 +246,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 			const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
 			this._showToast(message, durationToast, positionToast);
 		}
-		if (addNewGatewayBool && !this.state.addingNewLocation) {
+
+		const { hasTriedAddLocation } = this.state;
+		if (addNewGatewayBool && !hasTriedAddLocation) {
 			this.addNewLocation();
 		}
 	}
@@ -247,13 +256,16 @@ class AppNavigatorRenderer extends View<Props, State> {
 	addNewLocation() {
 		this.setState({
 			addingNewLocation: true,
-			addNewGateway: false,
+			hasTriedAddLocation: true,
 		});
 		if (this.state.drawer) {
 			this.closeDrawer();
 		}
 		this.props.addNewLocation()
 			.then((response: Object) => {
+				this.setState({
+					addingNewLocation: false,
+				});
 				if (response.client) {
 					navigate('AddLocation', {clients: response.client}, 'AddLocation');
 				}
@@ -274,15 +286,21 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	addNewDevice() {
-		const { gateways } = this.props;
-		const { allIds, byId } = gateways;
-		const gatewaysLen = allIds.length;
-		if (gatewaysLen > 0) {
-			const singleGateway = gatewaysLen === 1;
-			navigate('AddDevice', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? byId[allIds[0]] : null,
-			}, 'AddDevice');
+		const { gateways, toggleDialogueBox, intl, locale } = this.props;
+		const zwavesupport = checkForZWaveSupport(gateways.byId);
+		if (!zwavesupport) {
+			const dialogueData = prepareNoZWaveSupportDialogueData(intl.formatMessage, locale);
+			toggleDialogueBox(dialogueData);
+		} else {
+			const { allIds, byId } = gateways;
+			const gatewaysLen = allIds.length;
+			if (gatewaysLen > 0) {
+				const singleGateway = gatewaysLen === 1;
+				navigate('AddDevice', {
+					selectLocation: !singleGateway,
+					gateway: singleGateway ? byId[allIds[0]] : null,
+				}, 'AddDevice');
+			}
 		}
 	}
 
