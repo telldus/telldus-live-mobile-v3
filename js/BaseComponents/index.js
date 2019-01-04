@@ -85,6 +85,7 @@ import ProgressBarLinear from './ProgressBarLinear';
 import DropDown from './DropDown';
 import MainTabBarAndroid from './MainTabBarAndroid';
 import MainTabsAndroid from './MainTabsAndroid';
+import AttentionCatcher from './AttentionCatcher';
 
 import {
 	AppState,
@@ -161,6 +162,7 @@ module.exports = {
 	DropDown,
 	MainTabBarAndroid,
 	MainTabsAndroid,
+	AttentionCatcher,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
