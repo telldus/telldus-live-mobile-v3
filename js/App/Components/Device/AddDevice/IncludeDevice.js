@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -417,11 +418,10 @@ render(): Object {
 					flexDirection: 'column',
 					alignItems: 'flex-start',
 				}]}>
-					<View style={markerTextCover}>
-						<Text style={markerText}>
+					<View style={markerTextCover}/>
+					<Text style={markerText}>
                             1.
-						</Text>
-					</View>
+					</Text>
 					<Image source={{uri: 'img_zwave_include'}} resizeMode={'cover'} style={imageType}/>
 				</View>
 				<View style={infoOneContainer} onLayout={this.onLayout}>
@@ -513,16 +513,22 @@ getStyles(): Object {
 			position: 'absolute',
 			left: -(contPadding),
 			top: -(contPadding),
-			alignItems: 'center',
-			justifyContent: 'center',
-			backgroundColor: brandPrimary,
-			borderBottomRightRadius: markerHeight + 20,
-			height: markerHeight,
-			width: deviceWidth * 0.19,
+			width: deviceWidth * 0.2,
+			height: Platform.OS === 'ios' ? deviceWidth * 0.05 : 0,
+			backgroundColor: 'transparent',
+			borderStyle: 'solid',
+			borderRightWidth: deviceWidth * 0.05,
+			borderTopWidth: Platform.OS === 'ios' ? deviceWidth * 0.17 : deviceWidth * 0.1,
+			borderRightColor: 'transparent',
+			borderTopColor: brandPrimary,
+			borderTopLeftRadius: 2,
 		},
 		markerText: {
-			fontSize: deviceWidth * 0.045,
+			position: 'absolute',
+			fontSize: deviceWidth * 0.05,
 			color: '#fff',
+			top: -(contPadding) + (deviceWidth * 0.025),
+			left: deviceWidth * 0.025,
 		},
 		infoOneContainer: {
 			flex: 1,
