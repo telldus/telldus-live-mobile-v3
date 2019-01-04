@@ -462,6 +462,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				toggleAttentionCapture: this.toggleAttentionCapture,
 				showAttentionCapture,
 				showAttentionCaptureAddDevice,
+				attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
 			};
 		}
 

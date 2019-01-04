@@ -34,7 +34,8 @@ type Props = {
     right: number,
     left: number,
     distance: number,
-    arrowPos: 'left' | 'right',
+	arrowPos: 'left' | 'right',
+	text: string,
 };
 
 type DefaultProps = {
@@ -104,7 +105,7 @@ bounceFromDest() {
 }
 
 render(): Object {
-	const { top, right, left, distance, arrowPos } = this.props;
+	const { top, right, left, distance, arrowPos, text } = this.props;
 	let animatedRight, animatedLeft;
 
 	if (arrowPos === 'right') {
@@ -152,7 +153,7 @@ render(): Object {
 					color: '#fff',
 					fontSize: 16,
 				}}>
-ADD Z-WAVE DEVICE
+					{text}
 				</Text>
 			</View>
 			{arrowPos === 'right' && (

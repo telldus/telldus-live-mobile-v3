@@ -48,6 +48,7 @@ type Props = {
 	leftButton: Object,
 	appLayout: Object,
 	showAttentionCapture: boolean,
+	attentionCaptureText: string,
 };
 
 type DefaultProps = {
@@ -331,7 +332,7 @@ export default class HeaderComponent extends Base {
 	};
 
 	getPropsAttentionCatcher(): Object {
-		const { appLayout } = this.props;
+		const { appLayout, attentionCaptureText } = this.props;
 		let top = this.paddingTop, pos = 'right', right = 35, left;
 
 		if (Platform.OS === 'ios') {
@@ -349,17 +350,18 @@ export default class HeaderComponent extends Base {
 				left = height - 35;
 			}
 		}
-		return {top, right, left, pos};
+		return {top, right, left, pos, text: attentionCaptureText};
 	}
 
 	renderRightButtonAttentionCapture = (): Object => {
-		const { top, right, left, pos } = this.getPropsAttentionCatcher();
+		const { top, right, left, pos, text } = this.getPropsAttentionCatcher();
 		return (
 			<AttentionCatcher
 				top={top}
 				right={right}
 				arrowPos={pos}
-				left={left}/>
+				left={left}
+				text={text}/>
 		);
 	}
 
