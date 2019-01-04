@@ -107,7 +107,7 @@ getDeviceTypes(): Array<any> {
 	const { navigation, intl } = this.props, types = [];
 	const { formatMessage } = intl;
 	const gateway = navigation.getParam('gateway', {});
-	const { transports } = gateway;
+	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 
 	transportsAsArray.map((ts: string) => {
