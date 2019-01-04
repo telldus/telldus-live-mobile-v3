@@ -31,7 +31,6 @@ import {
 	Image,
 	BlockIcon,
 	ProgressBarLinear,
-	IconTelldus,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -390,7 +389,7 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	const { intl, navigation } = this.props;
+	const { intl } = this.props;
 	const { timer, status, percent, width, showTimer } = this.state;
 	const {
 		container,
@@ -405,31 +404,27 @@ render(): Object {
 		timerStyle,
 		statusStyle,
 		blockLeft,
+		infoOneContainer,
 	} = this.getStyles();
 
 	const progress = Math.max(percent / 100, 0);
 	const { formatMessage } = intl;
-
-	const icon = navigation.getParam('icon', '');
 
 	return (
 		<View style={container}>
 			<View style={progressContainer}>
 				<View style={[blockLeft, {
 					flexDirection: 'column',
+					alignItems: 'flex-start',
 				}]}>
 					<View style={markerTextCover}>
 						<Text style={markerText}>
                             1.
 						</Text>
 					</View>
-					<IconTelldus icon={icon} resizeMode={'cover'} style={imageType}/>
+					<Image source={{uri: 'img_zwave_include'}} resizeMode={'cover'} style={imageType}/>
 				</View>
-				<View style={{
-					flex: 1,
-					flexDirection: 'column',
-					flexWrap: 'wrap',
-				}} onLayout={this.onLayout}>
+				<View style={infoOneContainer} onLayout={this.onLayout}>
 					<Text style={textStyle}>
 						{formatMessage(i18n.messageOne)}
 					</Text>
@@ -485,8 +480,13 @@ getStyles(): Object {
 	const fontSizeStatus = deviceWidth * 0.03;
 	const blockIconContainerSize = deviceWidth * 0.26;
 
+	const contPadding = 5 + (fontSizeText * 0.5);
+	const markerHeight = deviceWidth * 0.075;
+
+	const contOneTop = markerHeight - contPadding;
+
 	return {
-		innerPadding: 5 + (fontSizeText * 0.5),
+		innerPadding: contPadding,
 		container: {
 			flex: 1,
 			paddingTop: padding,
@@ -498,7 +498,7 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 			backgroundColor: '#fff',
 			borderRadius: 2,
-			padding: 5 + (fontSizeText * 0.5),
+			padding: contPadding,
 			...shadow,
 		},
 		infoContainer: {
@@ -506,27 +506,34 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 			backgroundColor: '#fff',
 			borderRadius: 2,
-			padding: 5 + (fontSizeText * 0.5),
+			padding: contPadding,
 			...shadow,
 		},
 		markerTextCover: {
 			position: 'absolute',
-			left: -(5 + (fontSizeText * 0.5)),
-			top: -(5 + (fontSizeText * 0.5)),
+			left: -(contPadding),
+			top: -(contPadding),
 			alignItems: 'center',
 			justifyContent: 'center',
 			backgroundColor: brandPrimary,
-			borderBottomRightRadius: deviceWidth * 0.075,
-			height: deviceWidth * 0.075,
-			width: deviceWidth * 0.17,
+			borderBottomRightRadius: markerHeight + 20,
+			height: markerHeight,
+			width: deviceWidth * 0.19,
 		},
 		markerText: {
 			fontSize: deviceWidth * 0.045,
 			color: '#fff',
 		},
+		infoOneContainer: {
+			flex: 1,
+			flexDirection: 'column',
+			flexWrap: 'wrap',
+			paddingTop: contOneTop,
+		},
 		imageType: {
-			fontSize: deviceWidth * 0.18,
-			color: '#1b365d',
+			marginTop: markerHeight,
+			height: deviceWidth * 0.20,
+			width: deviceWidth * 0.17,
 		},
 		textStyle: {
 			fontSize: fontSizeText,

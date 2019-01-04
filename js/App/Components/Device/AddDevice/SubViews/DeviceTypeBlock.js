@@ -62,12 +62,11 @@ constructor(props: Props) {
 }
 
 onPress() {
-	const { onPress, module, action, icon } = this.props;
+	const { onPress, module, action } = this.props;
 	if (onPress) {
 		onPress({
 			module,
 			action,
-			icon,
 		});
 	}
 }

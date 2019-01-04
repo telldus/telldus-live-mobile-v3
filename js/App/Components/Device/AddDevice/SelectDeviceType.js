@@ -80,7 +80,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-onChooseType({module, action, icon}: Object) {
+onChooseType({module, action}: Object) {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 
@@ -91,7 +91,6 @@ onChooseType({module, action, icon}: Object) {
 		gateway,
 		module,
 		action,
-		icon,
 	});
 }
 
