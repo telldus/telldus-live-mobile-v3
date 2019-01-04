@@ -145,7 +145,7 @@ class DevicesTab extends View {
 		this.url = 'http://live.telldus.com/';
 		this.noDeviceTitle = formatMessage(i18n.messageNoDeviceTitle);
 		this.noGatewayTitle = formatMessage(i18n.messageNoGatewayTitle);
-		this.noDeviceContent = formatMessage(i18n.messageNoDeviceContent);
+		this.noDeviceContent = formatMessage(i18n.messageNoDeviceContentAddZ);
 		this.noGatewayContent = formatMessage(i18n.messageNoGatewayContent);
 
 		const labelDevice = formatMessage(i18n.labelDevice).toLowerCase();
