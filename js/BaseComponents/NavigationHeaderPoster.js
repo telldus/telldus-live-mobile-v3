@@ -269,7 +269,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 	const deviceWidth = isPortrait ? width : height;
 
 	const posterHeight = adjustItems ? deviceWidth * 0.155 : deviceWidth * 0.311;
-	const iconBackgroundSize = posterHeight * 0.6;
+	const iconBackgroundSize = posterHeight * 0.55;
 	const fontSizeIcon = posterHeight * 0.4;
 
 	const fontSizeH1 = adjustItems ? posterHeight * 0.42
@@ -324,6 +324,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			height: iconBackgroundSize,
 			borderRadius: iconBackgroundSize / 2,
 			marginRight: isPortrait ? 0 : 10,
+			marginBottom: 3,
 		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
