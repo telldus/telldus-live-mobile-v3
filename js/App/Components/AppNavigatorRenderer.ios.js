@@ -77,7 +77,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	addNewGatewayBool: boolean,
-	gateways: Array<any>,
+	gateways: Object,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -217,7 +217,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN) || (gateways.length !== gatewaysN.length)) {
+		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN) || (gateways.allIds.length !== gatewaysN.allIds.length)) {
 			return true;
 		}
 
@@ -280,12 +280,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	addNewDevice() {
 		const { gateways } = this.props;
-		const gatewaysLen = gateways.length;
+		const { allIds, byId } = gateways;
+		const gatewaysLen = allIds.length;
 		if (gatewaysLen > 0) {
 			const singleGateway = gatewaysLen === 1;
 			navigate('AddDevice', {
 				selectLocation: !singleGateway,
-				gateway: singleGateway ? gateways[0] : null,
+				gateway: singleGateway ? byId[allIds[0]] : null,
 			}, 'AddDevice');
 		}
 	}
@@ -452,7 +453,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showEULA: !getUserProfileSelector(state).eula,
 		dimmer: state.dimmer,
 		appLayout: layout,
-		gateways: allIds,
+		gateways: state.gateways,
 	};
 }
 
