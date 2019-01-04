@@ -66,7 +66,7 @@ import {
 	getRouteName,
 	shouldUpdate,
 } from '../Lib';
-
+import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 type Props = {
@@ -113,6 +113,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	onPressGateway: (Object) => void;
 	addNewDevice: () => void;
 	newSchedule: () => void;
+	toggleAttentionCapture: (boolean) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -121,6 +122,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			currentScreen: 'Dashboard',
 			drawer: false,
 			addingNewLocation: false,
+			showAttentionCaptureAddDevice: false,
 		};
 
 		const { formatMessage } = props.intl;
@@ -173,6 +175,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.addNewDevice = this.addNewDevice.bind(this);
 		this.newSchedule = this.newSchedule.bind(this);
+		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 	}
 
 	componentDidMount() {
@@ -408,6 +411,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		/>;
 	}
 
+	toggleAttentionCapture(value: boolean) {
+		this.setState({
+			showAttentionCaptureAddDevice: value,
+		});
+	}
+
 	makeLeftButton(styles: Object): any {
 		const { drawer } = this.state;
 		const { screenReaderEnabled } = this.props;
@@ -420,7 +429,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { currentScreen: CS, drawer } = this.state;
+		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
@@ -442,6 +451,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 		};
 		if (showHeader) {
+			const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
 			screenProps = {
 				...screenProps,
 				leftButton,
@@ -449,6 +459,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 				hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
 				style: styles.header,
 				logoStyle: styles.logoStyle,
+				toggleAttentionCapture: this.toggleAttentionCapture,
+				showAttentionCapture,
+				showAttentionCaptureAddDevice,
 			};
 		}
 
@@ -503,10 +516,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const size = Math.floor(deviceHeight * 0.025);
 		const fontSizeIcon = size < 20 ? 20 : size;
 
+		const { port, land } = Theme.Core.headerHeightFactor;
+
 		return {
 			deviceWidth,
 			header: isPortrait ? {
-				height: deviceHeight * 0.05,
+				height: deviceHeight * port,
 				alignItems: 'flex-end',
 			} : {
 				transform: [{rotateZ: '-90deg'}],
@@ -514,7 +529,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				left: -deviceHeight * 0.4444,
 				top: deviceHeight * 0.4444,
 				width: deviceHeight,
-				height: deviceHeight * 0.1111,
+				height: deviceHeight * land,
 			},
 			container: {
 				flex: 1,

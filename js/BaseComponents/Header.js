@@ -22,12 +22,12 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { hasStatusBar } from '../App/Lib';
+import Theme from '../App/Theme';
 
 import Base from './Base';
 import computeProps from './computeProps';
@@ -36,6 +36,7 @@ import View from './View';
 import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
+import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
 
 type Props = {
@@ -46,6 +47,11 @@ type Props = {
 	rightButton: Object,
 	leftButton: Object,
 	appLayout: Object,
+	showAttentionCapture: boolean,
+};
+
+type DefaultProps = {
+	showAttentionCapture: boolean,
 };
 
 export default class HeaderComponent extends Base {
@@ -54,6 +60,10 @@ export default class HeaderComponent extends Base {
 	paddingHorizontal: number;
 	paddingTop: number;
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		showAttentionCapture: false,
+	};
 
 	getInitialStyle: () => Object;
 	prepareRootProps: () => Object;
@@ -320,6 +330,39 @@ export default class HeaderComponent extends Base {
 		}
 	};
 
+	getPropsAttentionCatcher(): Object {
+		const { appLayout } = this.props;
+		let top = this.paddingTop, pos = 'right', right = 35, left;
+
+		if (Platform.OS === 'ios') {
+			top += (Theme.Core.toolbarHeight * 0.12);
+		} else {
+			const { height, width } = appLayout;
+			const isPortrait = height > width;
+			const deviceHeight = isPortrait ? height : width;
+
+			const { land } = Theme.Core.headerHeightFactor;
+			top += isPortrait ? ((deviceHeight * 0.05) * 0.12) : ((deviceHeight * land) * 0.22);
+			if (!isPortrait) {
+				pos = 'left';
+				right = undefined;
+				left = height - 35;
+			}
+		}
+		return {top, right, left, pos};
+	}
+
+	renderRightButtonAttentionCapture = (): Object => {
+		const { top, right, left, pos } = this.getPropsAttentionCatcher();
+		return (
+			<AttentionCatcher
+				top={top}
+				right={right}
+				arrowPos={pos}
+				left={left}/>
+		);
+	}
+
 	renderRightButton = (rightButton: Object): Object => {
 		let { accessibilityLabel, icon, style } = rightButton;
 		style = icon ? icon.style : style;
@@ -365,7 +408,7 @@ export default class HeaderComponent extends Base {
 	};
 
 	render(): Object {
-		const { leftButton, rightButton } = this.props;
+		const { leftButton, rightButton, showAttentionCapture } = this.props;
 
 		return (
 			<View style={{ flex: 0 }}>
@@ -377,18 +420,11 @@ export default class HeaderComponent extends Base {
 				<View {...this.prepareRootProps()}>
 					{!!leftButton && this.renderLeftButton(leftButton)}
 					{this.renderChildren()}
+					{showAttentionCapture && this.renderRightButtonAttentionCapture()}
 					{!!rightButton && this.renderRightButton(rightButton)}
 				</View>
 			</View>
 		);
 	}
 }
-
-HeaderComponent.propTypes = {
-	children: PropTypes.object,
-	rounded: PropTypes.number,
-	searchBar: PropTypes.object,
-	rightButton: PropTypes.object,
-	leftButton: PropTypes.object,
-};
 

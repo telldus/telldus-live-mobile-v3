@@ -90,6 +90,7 @@ class DevicesTab extends View {
 
 	addNewDevice: () => void;
 	showDimInfo: (Object) => void;
+	handleAddDeviceAttentionCapture: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -153,12 +154,34 @@ class DevicesTab extends View {
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
 
 		this.showDimInfo = this.showDimInfo.bind(this);
+		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);
+	}
+
+	componentDidMount() {
+		this.handleAddDeviceAttentionCapture();
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
 		const { currentScreen: prevScreen } = this.props.screenProps;
 		return (currentScreen === 'Devices') || (currentScreen !== 'Devices' && prevScreen === 'Devices');
+	}
+
+	componentDidUpdate() {
+		this.handleAddDeviceAttentionCapture();
+	}
+
+	handleAddDeviceAttentionCapture() {
+		const { devicesDidFetch, devices, screenProps } = this.props;
+		const { toggleAttentionCapture, showAttentionCaptureAddDevice } = screenProps;
+
+		if (devices.length === 0 && devicesDidFetch && toggleAttentionCapture && !showAttentionCaptureAddDevice) {
+			toggleAttentionCapture(true);
+		}
+
+		if (devices.length > 0 && devicesDidFetch && showAttentionCaptureAddDevice && toggleAttentionCapture) {
+			toggleAttentionCapture(false);
+		}
 	}
 
 	openDeviceDetail(device: Object) {

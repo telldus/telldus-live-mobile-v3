@@ -64,6 +64,7 @@ import {
 	shouldUpdate,
 } from '../Lib';
 
+import Theme from '../Theme';
 import i18n from '../Translations/common';
 import { Image } from 'react-native-animatable';
 
@@ -89,6 +90,7 @@ type State = {
 	currentScreen: string,
 	addingNewLocation: boolean,
 	hasTriedAddLocation: boolean,
+	showAttentionCaptureAddDevice: boolean,
 };
 
 class AppNavigatorRenderer extends View<Props, State> {
@@ -108,6 +110,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	addNewLocation: () => void;
 	addNewDevice: () => void;
 	newSchedule: () => void;
+	toggleAttentionCapture: (boolean) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -116,6 +119,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			currentScreen: 'Dashboard',
 			addingNewLocation: false,
 			hasTriedAddLocation: false,
+			showAttentionCaptureAddDevice: false,
 		};
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
@@ -175,6 +179,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.addNewDevice = this.addNewDevice.bind(this);
 		this.newSchedule = this.newSchedule.bind(this);
+		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 	}
 
 	componentDidMount() {
@@ -366,6 +371,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 	}
 
+	toggleAttentionCapture(value: boolean) {
+		this.setState({
+			showAttentionCaptureAddDevice: value,
+		});
+	}
+
 	onLayout(ev: Object) {
 		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
@@ -375,7 +386,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { currentScreen: CS } = this.state;
+		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
 		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
 		const { show, name, value, showStep, deviceStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
@@ -394,12 +405,17 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 		};
 		if (showHeader) {
+			const { land } = Theme.Core.headerHeightFactor;
+			const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
 			screenProps = {
 				...screenProps,
 				leftButton: this.settingsButton,
 				rightButton: this.makeRightButton(CS),
 				hideHeader: false,
-				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )},
+				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
+				toggleAttentionCapture: this.toggleAttentionCapture,
+				showAttentionCapture,
+				showAttentionCaptureAddDevice,
 			};
 		}
 
