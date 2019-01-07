@@ -27,7 +27,7 @@ export function parseGatewaysForListView(gateways: Object = {}, filterZWave?: bo
 	if (filterZWave) {
 		gatewaysById = filterGatewaysWithZWaveSupport(gateways.byId);
 	}
-	const list = map(gatewaysById, (gatewayId: number): Array<Object> => gatewaysById[gatewayId.id]);
+	const list = map(gatewaysById, (item: Object): Array<Object> => gatewaysById[item.id]);
 	const orderedList = orderBy(list, [(gateway: Object): any => {
 		let { name } = gateway;
 		return name ? name.toLowerCase() : null;
