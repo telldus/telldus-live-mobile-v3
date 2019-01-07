@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { isIphoneX } from 'react-native-iphone-x-helper';
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
 import { View, IconTelldus, Throbber } from '../../BaseComponents';
@@ -262,4 +262,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigatorRenderer));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AppNavigatorRenderer);

@@ -26,7 +26,7 @@ import { connect } from 'react-redux';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape } from 'react-intl';
 
 import { View, Header, Image } from '../../BaseComponents';
 import Navigator from './AppNavigator';
@@ -417,4 +417,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigatorRenderer));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AppNavigatorRenderer);
