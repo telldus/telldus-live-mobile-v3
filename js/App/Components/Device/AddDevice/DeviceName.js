@@ -147,10 +147,11 @@ getDeviceInfo(styles: Object): Object {
 
 	return (
 		<View style={styles.deviceInfoCoverStyle}>
-			<Image
+			{deviceImage && (<Image
 				source={{uri: deviceImage}}
 				resizeMode={'contain'}
 				style={styles.deviceImageStyle}/>
+			)}
 			<View>
 				{!!deviceName && (<Text style={styles.deviceNameStyle}>
 					{deviceName}
