@@ -40,13 +40,11 @@ import {
 	syncWithServer,
 	switchTab,
 } from '../Actions';
-import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
 	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
 	getRouteName,
-	shouldUpdate,
 	prepareNoZWaveSupportDialogueData,
 	checkForZWaveSupport,
 	filterGatewaysWithZWaveSupport,
@@ -55,8 +53,6 @@ import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 type Props = {
-	dimmer: Object,
-	showEULA: boolean,
 	showToast: boolean,
 	messageToast: string,
 	durationToast: string,
@@ -162,15 +158,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, showEULA, showToast: showToastBool, gateways, ...others } = this.props;
-		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, gateways: gatewaysN, ...othersN } = nextProps;
+		const { appLayout, showToast: showToastBool, gateways } = this.props;
+		const { appLayout: appLayoutN, showToast: showToastN, gateways: gatewaysN } = nextProps;
 
-		const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
-		if (dimmerPropsChange) {
-			return true;
-		}
 
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN) || (gateways.allIds.length !== gatewaysN.allIds.length)) {
+		if ((appLayout.width !== appLayoutN.width) || (showToastBool !== showToastN) || (gateways.allIds.length !== gatewaysN.allIds.length)) {
 			return true;
 		}
 
@@ -356,9 +348,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	render(): Object {
 		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
-		const { intl, dimmer, appLayout, screenReaderEnabled } = this.props;
-		const { showStep } = dimmer;
-		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+		const { intl, appLayout, screenReaderEnabled } = this.props;
 
 		const styles = this.getStyles(appLayout);
 
@@ -410,7 +400,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 						rightButton={rightButton}
 						appLayout={appLayout}/>
 				)}
-				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>
+				<View style={showHeader ? styles.container : {flex: 1}}>
 					<Navigator
 						ref={this.setNavigatorRef}
 						onNavigationStateChange={this.onNavigationStateChange}
@@ -507,8 +497,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		durationToast,
 		positionToast,
 		showToast: showToastBool,
-		showEULA: !getUserProfileSelector(state).eula,
-		dimmer: state.dimmer,
 		appLayout: layout,
 		gateways: state.gateways,
 	};

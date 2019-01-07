@@ -51,6 +51,7 @@ import { hideDimmerStep } from '../Actions/Dimmer';
 
 import {
 	getRSAKey,
+	shouldUpdate,
 } from '../Lib';
 
 type Props = {
@@ -114,6 +115,23 @@ componentDidMount() {
 	);
 }
 
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+	const { showEULA, ...others } = this.props;
+	const { showEULA: showEULAN, ...othersN } = nextProps;
+
+	const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
+	if (dimmerPropsChange) {
+		return true;
+	}
+
+	if (showEULA !== showEULAN) {
+		return true;
+	}
+
+	return false;
+}
+
 componentWillUnmount() {
 	clearTimeout(this.timeOutConfigureLocalControl);
 	NetInfo.removeEventListener(
@@ -162,9 +180,15 @@ render(): Object {
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
+	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+
 	return (
 		<View style={{flex: 1}}>
-			<AppNavigatorRenderer {...this.props}/>
+			<View style={{flex: 1}}importantForAccessibility={importantForAccessibility}>
+				<AppNavigatorRenderer
+					{...this.props}/>
+			</View>
+
 			<DimmerPopup
 				isVisible={show}
 				name={name}
