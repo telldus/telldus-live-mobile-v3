@@ -22,8 +22,9 @@
 'use strict';
 
 import React from 'react';
+import { NetInfo } from 'react-native';
 import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
+import { injectIntl, intlShape } from 'react-intl';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
@@ -32,14 +33,31 @@ import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 
 import {
 	setAppLayout,
+	resetSchedule,
+	getUserProfile,
+	appStart,
+	appState,
+	syncLiveApiOnForeground,
+	getAppData,
+	getGateways,
+	initiateGatewayLocalTest,
+	closeUDPSocket,
+	autoDetectLocalTellStick,
+	resetLocalControlSupport,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
 
+import {
+	getRSAKey,
+} from '../Lib';
+
 type Props = {
     showEULA: boolean,
     dimmer: Object,
+	screenReaderEnabled: boolean,
 
+    intl: intlShape.isRequired,
     dispatch: Function,
 };
 
@@ -53,11 +71,77 @@ state: State;
 
 onLayout: (Object) => void;
 onDoneDimming: (Object) => void;
+autoDetectLocalTellStick: () => void;
+handleConnectivityChange: () => void;
 constructor(props: Props) {
 	super(props);
 
+	this.timeOutConfigureLocalControl = null;
+
 	this.onLayout = this.onLayout.bind(this);
 	this.onDoneDimming = this.onDoneDimming.bind(this);
+	this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
+
+	this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
+
+	getRSAKey(true);
+}
+
+componentDidMount() {
+	this.props.dispatch(appStart());
+	this.props.dispatch(appState());
+	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
+	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
+	// and results in generating multiple tokens.
+	const { dispatch } = this.props;
+	dispatch(getUserProfile()).then(() => {
+		dispatch(syncLiveApiOnForeground());
+		dispatch(getGateways());
+		dispatch(getAppData());
+		dispatch(resetSchedule());
+
+		// test gateway local control end-point on app restart.
+		dispatch(initiateGatewayLocalTest());
+
+		// Auto discover TellStick's that support local control.
+		this.autoDetectLocalTellStick();
+	});
+
+	NetInfo.addEventListener(
+		'connectionChange',
+		this.handleConnectivityChange,
+	);
+}
+
+componentWillUnmount() {
+	clearTimeout(this.timeOutConfigureLocalControl);
+	NetInfo.removeEventListener(
+		'connectionChange',
+		this.handleConnectivityChange,
+	);
+	closeUDPSocket();
+}
+
+handleConnectivityChange(connectionInfo: Object) {
+	const { dispatch } = this.props;
+	const { type } = connectionInfo;
+
+	// When ever user's connection change reset the previously auto-discovered ip address, before it is auto-discovered and updated again.
+	dispatch(resetLocalControlSupport());
+
+	// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
+	if (type && type !== 'none') {
+		dispatch(initiateGatewayLocalTest());
+		dispatch(autoDetectLocalTellStick());
+	}
+}
+
+// Sends UDP package to the broadcast IP to detect gateways connected in the same LAN.
+autoDetectLocalTellStick() {
+	const { dispatch } = this.props;
+	this.timeOutConfigureLocalControl = setTimeout(() => {
+		dispatch(autoDetectLocalTellStick());
+	}, 15000);
 }
 
 onLayout(ev: Object) {

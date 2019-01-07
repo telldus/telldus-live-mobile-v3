@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { NetInfo } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape, injectIntl } from 'react-intl';
@@ -34,26 +33,14 @@ import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
 
 import {
-	getUserProfile,
-	appStart,
-	appState,
-	syncLiveApiOnForeground,
-	getAppData,
-	getGateways,
 	hideToast,
-	resetSchedule,
-	autoDetectLocalTellStick,
-	resetLocalControlSupport,
 	syncWithServer,
 	addNewGateway,
 	showToast,
 	switchTab,
-	closeUDPSocket,
-	initiateGatewayLocalTest,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
-	getRSAKey,
 	setTopLevelNavigator,
 	navigate,
 	getRouteName,
@@ -99,8 +86,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	autoDetectLocalTellStick: () => void;
-	handleConnectivityChange: () => void;
 	setNavigatorRef: (any) => void;
 
 	onNavigationStateChange: (Object, Object) => void;
@@ -123,15 +108,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 
-		this.timeOutConfigureLocalControl = null;
-		this.timeOutGetLocalControlToken = null;
-		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
-		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
-
 		this.setNavigatorRef = this.setNavigatorRef.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
-
-		getRSAKey(true);
 
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
@@ -177,32 +155,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewDevice = this.addNewDevice.bind(this);
 		this.newSchedule = this.newSchedule.bind(this);
 		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
-	}
-
-	componentDidMount() {
-		this.props.dispatch(appStart());
-		this.props.dispatch(appState());
-		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
-		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
-		// and results in generating multiple tokens.
-		const { dispatch } = this.props;
-		dispatch(getUserProfile()).then(() => {
-			dispatch(syncLiveApiOnForeground());
-			dispatch(getGateways());
-			dispatch(getAppData());
-			dispatch(resetSchedule());
-
-			// test gateway local control end-point on app restart.
-			dispatch(initiateGatewayLocalTest());
-
-			// Auto discover TellStick's that support local control.
-			this.autoDetectLocalTellStick();
-		});
-
-		NetInfo.addEventListener(
-			'connectionChange',
-			this.handleConnectivityChange,
-		);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -300,38 +252,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 				}, 'AddDevice');
 			}
 		}
-	}
-
-	handleConnectivityChange(connectionInfo: Object) {
-		const { dispatch } = this.props;
-		const { type } = connectionInfo;
-
-		// When ever user's connection change reset the previously auto-discovered ip address, before it is auto-discovered and updated again.
-		dispatch(resetLocalControlSupport());
-
-		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
-		if (type && type !== 'none') {
-			dispatch(initiateGatewayLocalTest());
-			dispatch(autoDetectLocalTellStick());
-		}
-	}
-
-	// Sends UDP package to the broadcast IP to detect gateways connected in the same LAN.
-	autoDetectLocalTellStick() {
-		const { dispatch } = this.props;
-		this.timeOutConfigureLocalControl = setTimeout(() => {
-			dispatch(autoDetectLocalTellStick());
-		}, 15000);
-	}
-
-	componentWillUnmount() {
-		clearTimeout(this.timeOutConfigureLocalControl);
-		clearTimeout(this.timeOutGetLocalControlToken);
-		NetInfo.removeEventListener(
-			'connectionChange',
-			this.handleConnectivityChange,
-		);
-		closeUDPSocket();
 	}
 
 	_showToast(message: string, durationToast: any, positionToast: any) {
