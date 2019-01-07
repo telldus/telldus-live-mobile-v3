@@ -32,8 +32,6 @@ const isEqual = require('react-fast-compare');
 import { View, IconTelldus, Throbber } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
-import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
-import UserAgreement from './UserAgreement/UserAgreement';
 
 import {
 	getUserProfile,
@@ -45,7 +43,6 @@ import {
 	hideToast,
 	resetSchedule,
 	autoDetectLocalTellStick,
-	setAppLayout,
 	resetLocalControlSupport,
 	syncWithServer,
 	addNewGateway,
@@ -54,7 +51,6 @@ import {
 	closeUDPSocket,
 	initiateGatewayLocalTest,
 } from '../Actions';
-import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
 	getRSAKey,
@@ -103,10 +99,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	onDoneDimming: (Object) => void;
 	autoDetectLocalTellStick: () => void;
 	handleConnectivityChange: () => void;
-	onLayout: (Object) => void;
 	setNavigatorRef: (any) => void;
 
 	onNavigationStateChange: (Object, Object) => void;
@@ -128,12 +122,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 		};
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-		this.onDoneDimming = this.onDoneDimming.bind(this);
 
 		this.timeOutConfigureLocalControl = null;
 		this.timeOutGetLocalControlToken = null;
 		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
-		this.onLayout = this.onLayout.bind(this);
 		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
 		this.setNavigatorRef = this.setNavigatorRef.bind(this);
@@ -354,10 +346,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.onNavigationStateChange(currentScreen);
 	}
 
-	onDoneDimming() {
-		this.props.dispatch(hideDimmerStep());
-	}
-
 	makeRightButton(CS: string): Object | null {
 		switch (CS) {
 			case 'Devices':
@@ -391,18 +379,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	onLayout(ev: Object) {
-		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
-	}
-
 	setNavigatorRef(navigatorRef: any) {
 		setTopLevelNavigator(navigatorRef);
 	}
 
 	render(): Object {
 		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
-		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const { show, name, value, showStep, deviceStep } = dimmer;
+		const { intl, dimmer, appLayout, screenReaderEnabled } = this.props;
+		const { show, name, value, showStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 		const { height, width } = appLayout;
@@ -448,15 +432,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 						value={value / 255}
 					/>
 				</View>
-				{screenReaderEnabled && (
-					<DimmerStep
-						showModal={showStep}
-						deviceId={deviceStep}
-						onDoneDimming={this.onDoneDimming}
-						intl={intl}
-					/>
-				)}
-				<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
 			</View>
 		);
 	}

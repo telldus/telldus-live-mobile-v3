@@ -30,7 +30,7 @@ import { injectIntl } from 'react-intl';
 
 import {
 	PreLoginNavigator,
-	AppNavigatorRenderer,
+	PostLoginNavigatorCommon,
 	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
@@ -195,7 +195,7 @@ class App extends React.Component<Props, State> {
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
-					<AppNavigatorRenderer {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
+					<PostLoginNavigatorCommon {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}

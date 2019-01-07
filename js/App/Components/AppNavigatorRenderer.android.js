@@ -33,8 +33,6 @@ import { intlShape, injectIntl } from 'react-intl';
 import { View, Header, Image } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import { DimmerPopup } from './TabViews/SubViews';
-import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
-import UserAgreement from './UserAgreement/UserAgreement';
 import Drawer from './Drawer/Drawer';
 
 import {
@@ -47,7 +45,6 @@ import {
 	hideToast,
 	resetSchedule,
 	autoDetectLocalTellStick,
-	setAppLayout,
 	resetLocalControlSupport,
 	showToast,
 	addNewGateway,
@@ -56,7 +53,6 @@ import {
 	closeUDPSocket,
 	initiateGatewayLocalTest,
 } from '../Actions';
-import { hideDimmerStep } from '../Actions/Dimmer';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
 	getRSAKey,
@@ -107,10 +103,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 	state: State;
 
 	onNavigationStateChange: (Object, Object) => void;
-	onDoneDimming: (Object) => void;
 	autoDetectLocalTellStick: () => void;
 	handleConnectivityChange: () => void;
-	onLayout: (Object) => void;
 	setNavigatorRef: (any) => void;
 
 	renderNavigationView: () => Object;
@@ -149,12 +143,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-		this.onDoneDimming = this.onDoneDimming.bind(this);
 
 		this.timeOutConfigureLocalControl = null;
 		this.timeOutGetLocalControlToken = null;
 		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
-		this.onLayout = this.onLayout.bind(this);
 		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
 		this.setNavigatorRef = this.setNavigatorRef.bind(this);
@@ -377,10 +369,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.onNavigationStateChange(currentScreen);
 	}
 
-	onDoneDimming() {
-		this.props.dispatch(hideDimmerStep());
-	}
-
 	makeRightButton(CS: string, styles: Object): Object | null {
 		this.AddButton = {
 			component: <Image source={{uri: 'icon_plus'}} style={styles.addIconStyle}/>,
@@ -406,10 +394,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			default:
 				return null;
 		}
-	}
-
-	onLayout(ev: Object) {
-		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 	}
 
 	setNavigatorRef(navigatorRef: any) {
@@ -452,8 +436,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	render(): Object {
 		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
-		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const { show, name, value, showStep, deviceStep } = dimmer;
+		const { intl, dimmer, appLayout, screenReaderEnabled } = this.props;
+		const { show, name, value, showStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 		const styles = this.getStyles(appLayout);
@@ -517,15 +501,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 						value={value / 255}
 					/>
 				</View>
-				{screenReaderEnabled && (
-					<DimmerStep
-						showModal={showStep}
-						deviceId={deviceStep}
-						onDoneDimming={this.onDoneDimming}
-						intl={intl}
-					/>
-				)}
-				<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
 			</DrawerLayoutAndroid>
 		);
 	}
