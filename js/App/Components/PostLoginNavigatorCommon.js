@@ -58,6 +58,9 @@ import {
 	getRSAKey,
 	shouldUpdate,
 	navigate,
+	prepareNoZWaveSupportDialogueData,
+	checkForZWaveSupport,
+	filterGatewaysWithZWaveSupport,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -77,7 +80,9 @@ type Props = {
 
     intl: intlShape.isRequired,
     dispatch: Function,
-    addNewLocation: () => any,
+	addNewLocation: () => any,
+	locale: string,
+	toggleDialogueBox: (boolean) => null,
 };
 
 type State = {
@@ -95,6 +100,7 @@ onDoneDimming: (Object) => void;
 autoDetectLocalTellStick: () => void;
 handleConnectivityChange: () => void;
 addNewLocation: () => void;
+addNewDevice: () => void;
 constructor(props: Props) {
 	super(props);
 
@@ -112,6 +118,7 @@ constructor(props: Props) {
 	this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
 	this.addNewLocation = this.addNewLocation.bind(this);
+	this.addNewDevice = this.addNewDevice.bind(this);
 
 	getRSAKey(true);
 
@@ -226,6 +233,28 @@ addNewLocation() {
 		});
 }
 
+addNewDevice() {
+	const { gateways, toggleDialogueBox, intl, locale } = this.props;
+	const zwavesupport = checkForZWaveSupport(gateways.byId);
+	if (!zwavesupport) {
+		const dialogueData = prepareNoZWaveSupportDialogueData(intl.formatMessage, locale);
+		toggleDialogueBox(dialogueData);
+	} else {
+		const { byId } = gateways;
+		const filteredGateways = filterGatewaysWithZWaveSupport(byId);
+		const filteredAllIds = Object.keys(filteredGateways);
+		const gatewaysLen = filteredAllIds.length;
+
+		if (gatewaysLen > 0) {
+			const singleGateway = gatewaysLen === 1;
+			navigate('AddDevice', {
+				selectLocation: !singleGateway,
+				gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
+			}, 'AddDevice');
+		}
+	}
+}
+
 _showToast(message: string, durationToast: any, positionToast: any) {
 	Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
 	this.props.dispatch(hideToast());
@@ -274,11 +303,12 @@ render(): Object {
 
 	return (
 		<View style={{flex: 1}}>
-			<View style={{flex: 1}}importantForAccessibility={importantForAccessibility}>
+			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 				<AppNavigatorRenderer
 					{...this.props}
 					addNewLocation={this.addNewLocation}
-					addingNewLocation={this.state.addingNewLocation}/>
+					addingNewLocation={this.state.addingNewLocation}
+					addNewDevice={this.addNewDevice}/>
 			</View>
 
 			<DimmerPopup

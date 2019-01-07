@@ -38,9 +38,6 @@ import {
 	setTopLevelNavigator,
 	navigate,
 	getRouteName,
-	prepareNoZWaveSupportDialogueData,
-	checkForZWaveSupport,
-	filterGatewaysWithZWaveSupport,
 } from '../Lib';
 
 import Theme from '../Theme';
@@ -50,15 +47,13 @@ import { Image } from 'react-native-animatable';
 type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
-	gateways: Object,
 	addingNewLocation: boolean,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
 	onNavigationStateChange: (string) => void,
-	toggleDialogueBox: (Object) => void,
-	locale: string,
+	addNewDevice: () => void,
 };
 
 type State = {
@@ -76,7 +71,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	onNavigationStateChange: (Object, Object) => void;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
-	addNewDevice: () => void;
 	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
@@ -128,7 +122,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			onPress: () => {},
 		};
 
-		this.addNewDevice = this.addNewDevice.bind(this);
 		this.newSchedule = this.newSchedule.bind(this);
 		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 	}
@@ -139,11 +132,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, gateways, addingNewLocation } = this.props;
-		const { appLayout: appLayoutN, gateways: gatewaysN, addingNewLocation: addingNewLocationN } = nextProps;
+		const { appLayout, addingNewLocation } = this.props;
+		const { appLayout: appLayoutN, addingNewLocation: addingNewLocationN } = nextProps;
 
-		if ((appLayout.width !== appLayoutN.width) || (gateways.allIds.length !== gatewaysN.allIds.length)
-		|| (addingNewLocation !== addingNewLocationN)) {
+		if ((appLayout.width !== appLayoutN.width) || (addingNewLocation !== addingNewLocationN)) {
 			return true;
 		}
 
@@ -161,28 +153,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}, 'Schedule');
 	}
 
-	addNewDevice() {
-		const { gateways, toggleDialogueBox, intl, locale } = this.props;
-		const zwavesupport = checkForZWaveSupport(gateways.byId);
-		if (!zwavesupport) {
-			const dialogueData = prepareNoZWaveSupportDialogueData(intl.formatMessage, locale);
-			toggleDialogueBox(dialogueData);
-		} else {
-			const { byId } = gateways;
-			const filteredGateways = filterGatewaysWithZWaveSupport(byId);
-			const filteredAllIds = Object.keys(filteredGateways);
-			const gatewaysLen = filteredAllIds.length;
-
-			if (gatewaysLen > 0) {
-				const singleGateway = gatewaysLen === 1;
-				navigate('AddDevice', {
-					selectLocation: !singleGateway,
-					gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
-				}, 'AddDevice');
-			}
-		}
-	}
-
 	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const currentScreen = getRouteName(currentState);
 		this.setState({ currentScreen });
@@ -195,7 +165,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			case 'Devices':
 				return {
 					...this.AddButton,
-					onPress: this.addNewDevice,
+					onPress: this.props.addNewDevice,
 				};
 			case 'Gateways':
 				if (this.props.addingNewLocation) {
@@ -279,7 +249,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
-		gateways: state.gateways,
 	};
 }
 
