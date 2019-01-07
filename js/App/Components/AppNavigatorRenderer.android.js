@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Toast from 'react-native-simple-toast';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
@@ -34,9 +33,6 @@ import Navigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
 import {
-	hideToast,
-	showToast,
-	addNewGateway,
 	syncWithServer,
 	switchTab,
 } from '../Actions';
@@ -53,12 +49,7 @@ import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 type Props = {
-	showToast: boolean,
-	messageToast: string,
-	durationToast: string,
-	positionToast: string,
 	screenReaderEnabled: boolean,
-	addNewGatewayBool: boolean,
 	intl: intlShape.isRequired,
 	gateways: Object,
 
@@ -158,61 +149,22 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, showToast: showToastBool, gateways } = this.props;
-		const { appLayout: appLayoutN, showToast: showToastN, gateways: gatewaysN } = nextProps;
+		const { appLayout, gateways } = this.props;
+		const { appLayout: appLayoutN, gateways: gatewaysN } = nextProps;
 
 
-		if ((appLayout.width !== appLayoutN.width) || (showToastBool !== showToastN) || (gateways.allIds.length !== gatewaysN.allIds.length)) {
+		if ((appLayout.width !== appLayoutN.width) || (gateways.allIds.length !== gatewaysN.allIds.length)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const {
-			showToast: showToastBool,
-			messageToast,
-			durationToast,
-			positionToast,
-			intl,
-			addNewGatewayBool,
-		} = this.props;
-		if (showToastBool && !prevProps.showToast) {
-			const { formatMessage } = intl;
-			const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
-			this._showToast(message, durationToast, positionToast);
-		}
-
-		const { hasTriedAddLocation } = this.state;
-		if (addNewGatewayBool && !hasTriedAddLocation) {
-			this.addNewLocation();
-		}
-	}
-
 	addNewLocation() {
-		this.setState({
-			addingNewLocation: true,
-			hasTriedAddLocation: true,
-		});
 		if (this.state.drawer) {
 			this.closeDrawer();
 		}
-		this.props.addNewLocation()
-			.then((response: Object) => {
-				this.setState({
-					addingNewLocation: false,
-				});
-				if (response.client) {
-					navigate('AddLocation', {clients: response.client}, 'AddLocation');
-				}
-			}).catch((error: Object) => {
-				this.setState({
-					addingNewLocation: false,
-				});
-				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
-				this.props.dispatch(showToast(message));
-			});
+		this.props.addNewLocation();
 	}
 
 	newSchedule() {
@@ -267,11 +219,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	onOpenSetting() {
 		this.closeDrawer();
 		navigate('Settings', {}, 'Settings');
-	}
-
-	_showToast(message: string, durationToast: any, positionToast: any) {
-		Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
-		this.props.dispatch(hideToast());
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -479,24 +426,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const {
-		showToast: showToastBool,
-		messageToast,
-		durationToast,
-		positionToast,
 		layout,
 		screenReaderEnabled,
 	} = state.app;
-	const { allIds, toActivate } = state.gateways;
-
-	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
 
 	return {
-		addNewGatewayBool,
 		screenReaderEnabled,
-		messageToast,
-		durationToast,
-		positionToast,
-		showToast: showToastBool,
 		appLayout: layout,
 		gateways: state.gateways,
 	};
@@ -511,9 +446,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		onNavigationStateChange: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
-		},
-		addNewLocation: (): Function => {
-			return dispatch(addNewGateway());
 		},
 	};
 }

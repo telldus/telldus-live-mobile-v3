@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import Toast from 'react-native-simple-toast';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape, injectIntl } from 'react-intl';
 const isEqual = require('react-fast-compare');
@@ -32,10 +31,7 @@ import { View, IconTelldus, Throbber } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 
 import {
-	hideToast,
 	syncWithServer,
-	addNewGateway,
-	showToast,
 	switchTab,
 } from '../Actions';
 import {
@@ -52,14 +48,10 @@ import i18n from '../Translations/common';
 import { Image } from 'react-native-animatable';
 
 type Props = {
-	showToast: boolean,
-	messageToast: string,
-	durationToast: string,
-	positionToast: string,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
-	addNewGatewayBool: boolean,
 	gateways: Object,
+	addingNewLocation: boolean,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -71,8 +63,6 @@ type Props = {
 
 type State = {
 	currentScreen: string,
-	addingNewLocation: boolean,
-	hasTriedAddLocation: boolean,
 	showAttentionCaptureAddDevice: boolean,
 };
 
@@ -86,7 +76,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	onNavigationStateChange: (Object, Object) => void;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
-	addNewLocation: () => void;
 	addNewDevice: () => void;
 	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
@@ -96,8 +85,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.state = {
 			currentScreen: 'Dashboard',
-			addingNewLocation: false,
-			hasTriedAddLocation: false,
 			showAttentionCaptureAddDevice: false,
 		};
 
@@ -141,12 +128,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			onPress: () => {},
 		};
 
-		const { formatMessage } = props.intl;
-
-		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
-		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
-
-		this.addNewLocation = this.addNewLocation.bind(this);
 		this.addNewDevice = this.addNewDevice.bind(this);
 		this.newSchedule = this.newSchedule.bind(this);
 		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
@@ -158,61 +139,19 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, showToast: showToastBool, gateways } = this.props;
-		const { appLayout: appLayoutN, showToast: showToastN, gateways: gatewaysN } = nextProps;
+		const { appLayout, gateways, addingNewLocation } = this.props;
+		const { appLayout: appLayoutN, gateways: gatewaysN, addingNewLocation: addingNewLocationN } = nextProps;
 
-		if ((appLayout.width !== appLayoutN.width) || (showToastBool !== showToastN) || (gateways.allIds.length !== gatewaysN.allIds.length)) {
+		if ((appLayout.width !== appLayoutN.width) || (gateways.allIds.length !== gatewaysN.allIds.length)
+		|| (addingNewLocation !== addingNewLocationN)) {
 			return true;
 		}
 
 		return false;
 	}
 
-	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const {
-			showToast: showToastBool,
-			messageToast,
-			durationToast,
-			positionToast,
-			intl,
-			addNewGatewayBool,
-		} = this.props;
-		if (showToastBool && !prevProps.showToast) {
-			const { formatMessage } = intl;
-			const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
-			this._showToast(message, durationToast, positionToast);
-		}
-
-		const { hasTriedAddLocation } = this.state;
-		if (addNewGatewayBool && !hasTriedAddLocation) {
-			this.addNewLocation();
-		}
-	}
-
 	onOpenSetting() {
 		navigate('Settings');
-	}
-
-	addNewLocation() {
-		this.setState({
-			addingNewLocation: true,
-			hasTriedAddLocation: true,
-		});
-		this.props.addNewLocation()
-			.then((response: Object) => {
-				this.setState({
-					addingNewLocation: false,
-				});
-				if (response.client) {
-					navigate('AddLocation', {clients: response.client}, 'AddLocation');
-				}
-			}).catch((error: Object) => {
-				this.setState({
-					addingNewLocation: false,
-				});
-				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
-				this.props.dispatch(showToast(message));
-			});
 	}
 
 	newSchedule() {
@@ -244,11 +183,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 	}
 
-	_showToast(message: string, durationToast: any, positionToast: any) {
-		Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
-		this.props.dispatch(hideToast());
-	}
-
 	onNavigationStateChange(prevState: Object, currentState: Object) {
 		const currentScreen = getRouteName(currentState);
 		this.setState({ currentScreen });
@@ -264,14 +198,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 					onPress: this.addNewDevice,
 				};
 			case 'Gateways':
-				if (this.state.addingNewLocation) {
+				if (this.props.addingNewLocation) {
 					return {
 						...this.throbber,
 					};
 				}
 				return {
 					...this.AddButton,
-					onPress: this.addNewLocation,
+					onPress: this.props.addNewLocation,
 				};
 			case 'Scheduler':
 				return {
@@ -338,24 +272,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const {
-		showToast: showToastBool,
-		messageToast,
-		durationToast,
-		positionToast,
 		layout,
 		screenReaderEnabled,
 	} = state.app;
-	const { allIds = [], toActivate } = state.gateways;
-
-	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
 
 	return {
-		addNewGatewayBool,
 		screenReaderEnabled,
-		messageToast,
-		durationToast,
-		positionToast,
-		showToast: showToastBool,
 		appLayout: layout,
 		gateways: state.gateways,
 	};
@@ -366,9 +288,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		onNavigationStateChange: (tab: string) => {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
-		},
-		addNewLocation: (): Function => {
-			return dispatch(addNewGateway());
 		},
 		dispatch,
 	};

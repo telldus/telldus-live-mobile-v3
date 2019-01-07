@@ -25,6 +25,8 @@ import React from 'react';
 import { NetInfo } from 'react-native';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
+const isEqual = require('react-fast-compare');
+import Toast from 'react-native-simple-toast';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
@@ -45,6 +47,9 @@ import {
 	closeUDPSocket,
 	autoDetectLocalTellStick,
 	resetLocalControlSupport,
+	addNewGateway,
+	showToast,
+	hideToast,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -52,18 +57,32 @@ import { hideDimmerStep } from '../Actions/Dimmer';
 import {
 	getRSAKey,
 	shouldUpdate,
+	navigate,
 } from '../Lib';
+
+import i18n from '../Translations/common';
 
 type Props = {
     showEULA: boolean,
     dimmer: Object,
-	screenReaderEnabled: boolean,
+    screenReaderEnabled: boolean,
+    gateways: Object,
+
+    showToast: boolean,
+	messageToast: string,
+	durationToast: string,
+    positionToast: string,
+
+    addNewGatewayBool: boolean,
 
     intl: intlShape.isRequired,
     dispatch: Function,
+    addNewLocation: () => any,
 };
 
 type State = {
+    addingNewLocation: boolean,
+	hasTriedAddLocation: boolean,
 };
 
 class PostLoginNavigatorCommon extends View<Props, State> {
@@ -75,8 +94,14 @@ onLayout: (Object) => void;
 onDoneDimming: (Object) => void;
 autoDetectLocalTellStick: () => void;
 handleConnectivityChange: () => void;
+addNewLocation: () => void;
 constructor(props: Props) {
 	super(props);
+
+	this.state = {
+		addingNewLocation: false,
+		hasTriedAddLocation: false,
+	};
 
 	this.timeOutConfigureLocalControl = null;
 
@@ -86,7 +111,14 @@ constructor(props: Props) {
 
 	this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
+	this.addNewLocation = this.addNewLocation.bind(this);
+
 	getRSAKey(true);
+
+	const { formatMessage } = props.intl;
+
+	this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
+	this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 }
 
 componentDidMount() {
@@ -95,7 +127,7 @@ componentDidMount() {
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 	// and results in generating multiple tokens.
-	const { dispatch } = this.props;
+	const { dispatch, addNewGatewayBool } = this.props;
 	dispatch(getUserProfile()).then(() => {
 		dispatch(syncLiveApiOnForeground());
 		dispatch(getGateways());
@@ -113,23 +145,54 @@ componentDidMount() {
 		'connectionChange',
 		this.handleConnectivityChange,
 	);
+
+	const { hasTriedAddLocation } = this.state;
+	if (addNewGatewayBool && !hasTriedAddLocation) {
+		this.addNewLocation();
+	}
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const isStateEqual = isEqual(this.state, nextState);
+	if (!isStateEqual) {
+		return true;
+	}
 
-	const { showEULA, ...others } = this.props;
-	const { showEULA: showEULAN, ...othersN } = nextProps;
+	const { showEULA, showToast: showToastBool, gateways, addNewGatewayBool, ...others } = this.props;
+	const { showEULA: showEULAN, showToast: showToastN, gateways: gatewaysN, addNewGatewayBool: addNewGatewayBoolN, ...othersN } = nextProps;
 
 	const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
 	if (dimmerPropsChange) {
 		return true;
 	}
 
-	if (showEULA !== showEULAN) {
+	if ((showEULA !== showEULAN) || (showToastBool !== showToastN) ||
+    (gateways.allIds.length !== gatewaysN.allIds.length) || (addNewGatewayBool !== addNewGatewayBoolN)) {
 		return true;
 	}
 
 	return false;
+}
+
+componentDidUpdate(prevProps: Object, prevState: Object) {
+	const {
+		showToast: showToastBool,
+		messageToast,
+		durationToast,
+		positionToast,
+		intl,
+		addNewGatewayBool,
+	} = this.props;
+	if (showToastBool && !prevProps.showToast) {
+		const { formatMessage } = intl;
+		const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
+		this._showToast(message, durationToast, positionToast);
+	}
+
+	const { hasTriedAddLocation } = this.state;
+	if (addNewGatewayBool && !hasTriedAddLocation) {
+		this.addNewLocation();
+	}
 }
 
 componentWillUnmount() {
@@ -139,6 +202,33 @@ componentWillUnmount() {
 		this.handleConnectivityChange,
 	);
 	closeUDPSocket();
+}
+
+addNewLocation() {
+	this.setState({
+		addingNewLocation: true,
+		hasTriedAddLocation: true,
+	});
+	this.props.addNewLocation()
+		.then((response: Object) => {
+			this.setState({
+				addingNewLocation: false,
+			});
+			if (response.client) {
+				navigate('AddLocation', {clients: response.client}, 'AddLocation');
+			}
+		}).catch((error: Object) => {
+			this.setState({
+				addingNewLocation: false,
+			});
+			let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
+			this.props.dispatch(showToast(message));
+		});
+}
+
+_showToast(message: string, durationToast: any, positionToast: any) {
+	Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
+	this.props.dispatch(hideToast());
 }
 
 handleConnectivityChange(connectionInfo: Object) {
@@ -186,7 +276,9 @@ render(): Object {
 		<View style={{flex: 1}}>
 			<View style={{flex: 1}}importantForAccessibility={importantForAccessibility}>
 				<AppNavigatorRenderer
-					{...this.props}/>
+					{...this.props}
+					addNewLocation={this.addNewLocation}
+					addingNewLocation={this.state.addingNewLocation}/>
 			</View>
 
 			<DimmerPopup
@@ -211,9 +303,24 @@ render(): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const {
 		screenReaderEnabled,
+		showToast: showToastBool,
+		messageToast,
+		durationToast,
+		positionToast,
 	} = state.app;
 
+	const { allIds = [], toActivate } = state.gateways;
+	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
+
 	return {
+		messageToast,
+		durationToast,
+		positionToast,
+		showToast: showToastBool,
+
+		addNewGatewayBool,
+		gateways: state.gateways,
+
 		showEULA: !getUserProfileSelector(state).eula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
@@ -223,6 +330,9 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
+		addNewLocation: (): Function => {
+			return dispatch(addNewGateway());
+		},
 	};
 }
 
