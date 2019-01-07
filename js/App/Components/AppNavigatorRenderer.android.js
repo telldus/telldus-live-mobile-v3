@@ -31,7 +31,6 @@ import { intlShape, injectIntl } from 'react-intl';
 
 import { View, Header, Image } from '../../BaseComponents';
 import Navigator from './AppNavigator';
-import { DimmerPopup } from './TabViews/SubViews';
 import Drawer from './Drawer/Drawer';
 
 import {
@@ -358,7 +357,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	render(): Object {
 		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
 		const { intl, dimmer, appLayout, screenReaderEnabled } = this.props;
-		const { show, name, value, showStep } = dimmer;
+		const { showStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 		const styles = this.getStyles(appLayout);
@@ -416,11 +415,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 						ref={this.setNavigatorRef}
 						onNavigationStateChange={this.onNavigationStateChange}
 						screenProps={screenProps} />
-					<DimmerPopup
-						isVisible={show}
-						name={name}
-						value={value / 255}
-					/>
 				</View>
 			</DrawerLayoutAndroid>
 		);

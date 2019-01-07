@@ -30,7 +30,6 @@ const isEqual = require('react-fast-compare');
 
 import { View, IconTelldus, Throbber } from '../../BaseComponents';
 import Navigator from './AppNavigator';
-import { DimmerPopup } from './TabViews/SubViews';
 
 import {
 	hideToast,
@@ -306,7 +305,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	render(): Object {
 		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
 		const { intl, dimmer, appLayout, screenReaderEnabled } = this.props;
-		const { show, name, value, showStep } = dimmer;
+		const { showStep } = dimmer;
 		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 		const { height, width } = appLayout;
@@ -340,18 +339,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 
 		return (
-			<View style={{flex: 1}}>
-				<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
-					<Navigator
-						ref={this.setNavigatorRef}
-						onNavigationStateChange={this.onNavigationStateChange}
-						screenProps={screenProps} />
-					<DimmerPopup
-						isVisible={show}
-						name={name}
-						value={value / 255}
-					/>
-				</View>
+			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
+				<Navigator
+					ref={this.setNavigatorRef}
+					onNavigationStateChange={this.onNavigationStateChange}
+					screenProps={screenProps} />
 			</View>
 		);
 	}

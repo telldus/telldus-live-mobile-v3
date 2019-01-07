@@ -30,6 +30,7 @@ import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
+import { DimmerPopup } from './TabViews/SubViews';
 
 import {
 	setAppLayout,
@@ -159,11 +160,16 @@ render(): Object {
 		intl,
 		screenReaderEnabled,
 	} = this.props;
-	const { showStep, deviceStep } = dimmer;
+	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	return (
 		<View style={{flex: 1}}>
 			<AppNavigatorRenderer {...this.props}/>
+			<DimmerPopup
+				isVisible={show}
+				name={name}
+				value={value / 255}
+			/>
 			{screenReaderEnabled && (
 				<DimmerStep
 					showModal={showStep}
