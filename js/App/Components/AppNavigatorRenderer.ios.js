@@ -64,6 +64,7 @@ import {
 	shouldUpdate,
 	prepareNoZWaveSupportDialogueData,
 	checkForZWaveSupport,
+	filterGatewaysWithZWaveSupport,
 } from '../Lib';
 
 import Theme from '../Theme';
@@ -294,13 +295,16 @@ class AppNavigatorRenderer extends View<Props, State> {
 			const dialogueData = prepareNoZWaveSupportDialogueData(intl.formatMessage, locale);
 			toggleDialogueBox(dialogueData);
 		} else {
-			const { allIds, byId } = gateways;
-			const gatewaysLen = allIds.length;
+			const { byId } = gateways;
+			const filteredGateways = filterGatewaysWithZWaveSupport(byId);
+			const filteredAllIds = Object.keys(filteredGateways);
+			const gatewaysLen = filteredAllIds.length;
+
 			if (gatewaysLen > 0) {
 				const singleGateway = gatewaysLen === 1;
 				navigate('AddDevice', {
 					selectLocation: !singleGateway,
-					gateway: singleGateway ? byId[allIds[0]] : null,
+					gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
 				}, 'AddDevice');
 			}
 		}
