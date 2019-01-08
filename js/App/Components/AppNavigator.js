@@ -26,7 +26,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { Header } from '../../BaseComponents';
-import { SettingsScreen } from './Settings';
+import SettingsNavigator from './Settings/SettingsNavigator';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import SensorDetailsNavigator from './SensorDetails/SensorDetailsNavigator';
 import DeviceDetailsNavigator from './Device/DeviceDetails/DeviceDetailsNavigator';
@@ -56,7 +56,7 @@ const RouteConfigs = {
 	},
 	Settings: {
 		// In addition to 'header: null' If header style is not manually set so, it cause some empty space to show in iPhoneX
-		screen: SettingsScreen,
+		screen: SettingsNavigator,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,

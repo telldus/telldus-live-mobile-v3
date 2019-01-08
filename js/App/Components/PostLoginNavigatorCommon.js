@@ -50,6 +50,7 @@ import {
 	addNewGateway,
 	showToast,
 	hideToast,
+	getPhonesList,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -140,6 +141,7 @@ componentDidMount() {
 		dispatch(getGateways());
 		dispatch(getAppData());
 		dispatch(resetSchedule());
+		dispatch(getPhonesList());
 
 		// test gateway local control end-point on app restart.
 		dispatch(initiateGatewayLocalTest());
