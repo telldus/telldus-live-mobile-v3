@@ -42,7 +42,7 @@ export default class SafeAreaViewComponent extends React.Component<Props, null> 
 		let { children, onLayout, backgroundColor, ...otherProperties } = this.props;
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor }) }}>
 				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor }) }} onLayout={onLayout}>
 					{
 						React.Children.map(children, (child: Object): Object | null => {

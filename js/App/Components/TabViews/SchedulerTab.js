@@ -42,6 +42,8 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
+import Theme from '../../Theme';
+
 import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
@@ -329,7 +331,7 @@ const getRowsAndSections = createSelector(
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#eeeeef',
+		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
 		flexDirection: 'row',

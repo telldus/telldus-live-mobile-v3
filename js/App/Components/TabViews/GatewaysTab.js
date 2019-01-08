@@ -119,7 +119,10 @@ class GatewaysTab extends View {
 		const { rows } = this.props;
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{
+				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				<FlatList
 					data={rows}
 					renderItem={this.renderRow}
