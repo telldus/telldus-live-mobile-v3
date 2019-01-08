@@ -195,6 +195,60 @@ const hideChangeLog = (): Action => {
 	};
 };
 
+function deletePushToken(token: string): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const url = format({
+			pathname: '/user/deletePushToken',
+			query: {
+				token,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return dispatch(LiveApi(payload)).then((response: Object): Object => {
+			const { status } = response;
+			if (status && status === 'success') {
+				return response;
+			}
+			throw response;
+		}).catch((err: any) => {
+			throw err;
+		});
+	};
+}
+
+function getPhonesList(): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const payload = {
+			url: '/user/listPhones',
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return dispatch(LiveApi(payload)).then((response: Object): Object => {
+			const { phone } = response;
+			if (phone) {
+				dispatch(receivedPhonesList(phone));
+				return response;
+			}
+			throw response;
+		}).catch((err: any) => {
+			throw err;
+		});
+	};
+}
+
+const receivedPhonesList = (payload: Array<Object> = []): Action => {
+	return {
+		type: 'RECEIVED_PHONES_LIST',
+		payload,
+	};
+};
+
 
 module.exports = {
 	...User,
@@ -204,4 +258,6 @@ module.exports = {
 	showChangeLog,
 	hideChangeLog,
 	forgotPassword,
+	getPhonesList,
+	deletePushToken,
 };

@@ -39,6 +39,7 @@ export type State = {
 	osVersion: string,
 	deviceName: string,
 	deviceModel: string,
+	phonesList: Object,
 };
 
 export const initialState = {
@@ -54,6 +55,7 @@ export const initialState = {
 	osVersion: '',
 	deviceName: '',
 	deviceModel: '',
+	phonesList: {}, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -147,6 +149,28 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			showChangeLog: false,
+		};
+	}
+	if (action.type === 'RECEIVED_PHONES_LIST') {
+		// Store only those required attributes!
+		const phonesList = action.payload.reduce((acc: Object, phone: Object): Object => {
+			const {
+				id,
+				token,
+				name,
+				model,
+			} = phone;
+			acc[id] = {
+				token,
+				name,
+				model,
+			};
+			return acc;
+		}, {});
+
+		return {
+			...state,
+			phonesList,
 		};
 	}
 	return state;

@@ -124,6 +124,8 @@ export type Action =
 	| { type: 'HIDE_CHANGE_LOG' }
 
 	| { type: 'TOGGLE_INACTIVE_VISIBILITY', payload: Object }
+
+	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
