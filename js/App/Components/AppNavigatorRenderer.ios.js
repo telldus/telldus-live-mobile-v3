@@ -54,6 +54,7 @@ type Props = {
 	addNewLocation: () => Promise<any>,
 	onNavigationStateChange: (string) => void,
 	addNewDevice: () => void,
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
@@ -199,7 +200,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	render(): Object {
 		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled } = this.props;
+		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -213,6 +214,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			intl,
 			appLayout,
 			screenReaderEnabled,
+			toggleDialogueBox,
 		};
 		if (showHeader) {
 			const { land } = Theme.Core.headerHeightFactor;

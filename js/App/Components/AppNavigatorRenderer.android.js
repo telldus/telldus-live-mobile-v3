@@ -56,6 +56,7 @@ type Props = {
 	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
 	addNewDevice: () => void,
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
@@ -263,7 +264,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	render(): Object {
 		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled } = this.props;
+		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const styles = this.getStyles(appLayout);
 
@@ -280,6 +281,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			drawer,
 			appLayout,
 			screenReaderEnabled,
+			toggleDialogueBox,
 		};
 		if (showHeader) {
 			const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
