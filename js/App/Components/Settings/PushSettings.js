@@ -38,9 +38,14 @@ type Props = {
 	appLayout: Object,
 	phonesList: Object,
 	isPushSubmitLoading: boolean,
+	pushToken: string,
 
 	onDidMount: (string, string, ?string) => void,
 	onSubmitDeviceName: (string, string) => Promise<any>,
+	intl: Object,
+	actions: Object,
+	toggleDialogueBox: (Object) => void,
+	submitPushToken: (string) => void,
 };
 
 class PushSettings extends View<Props, null> {

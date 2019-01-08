@@ -65,6 +65,7 @@ type State = {
 	h2: string,
 	infoButton: null | Object,
 	isPushSubmitLoading: boolean,
+	isDialogueOpen: boolean,
 };
 
 class SettingsContainer extends View<Props, State> {
@@ -74,10 +75,12 @@ state: State = {
 	h2: '',
 	infoButton: null,
 	isPushSubmitLoading: false,
+	isDialogueOpen: false,
 };
 
 handleBackPress: () => void;
 onChildDidMount: (string, string, ?string) => void;
+submitPushToken: (string) => void;
 constructor(props: Props) {
 	super(props);
 
@@ -207,7 +210,7 @@ render(): Object {
 		body,
 	} = this.getStyles(appLayout);
 
-	const importantForAccessibility = this.state.showModal ? 'no-hide-descendants' : 'yes';
+	const importantForAccessibility = this.state.isDialogueOpen ? 'no-hide-descendants' : 'yes';// TODO: isDialogueOpen is not handled yet
 
 	return (
 

@@ -54,10 +54,11 @@ type Props = {
 
 	navigation: Object,
 	dispatch: Function,
-	onLogout: (string) => void,
+	onLogout: (string) => Promise<any>,
 	intl: Object,
 	onDidMount: (string, string, ?string) => void,
 	submitPushToken: () => void,
+	toggleDialogueBox: (Object) => void,
 };
 
 
