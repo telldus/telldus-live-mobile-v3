@@ -74,6 +74,7 @@ class App extends React.Component<Props, State> {
 
 	toggleDialogueBox: (Object) => null;
 	closeDialogue: () => void;
+	onPressDialoguePositive: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -94,6 +95,7 @@ class App extends React.Component<Props, State> {
 
 		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
+		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
 	}
 
 	componentDidMount() {
@@ -174,6 +176,14 @@ class App extends React.Component<Props, State> {
 		});
 	}
 
+	onPressDialoguePositive() {
+		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false } = this.state.dialogueData;
+		if (closeOnPressPositive) {
+			this.closeDialogue();
+		}
+		onPressPositive();
+	}
+
 	render(): Object {
 		let { prevChangeLogVersion, accessToken, isTokenValid, forceShowChangeLog } = this.props;
 
@@ -181,17 +191,16 @@ class App extends React.Component<Props, State> {
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
-		const {
+		let {
 			show = false,
 			showHeader = false,
 			imageHeader = false,
 			onPressNegative = this.closeDialogue,
-			onPressPositive = this.closeDialogue,
 			...others
 		} = this.state.dialogueData;
 
 		return (
-			<SafeAreaView onLayout={this.onLayout}>
+			<SafeAreaView onLayout={this.onLayout} backgroundColor={Theme.Core.appBackground}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
@@ -203,12 +212,12 @@ class App extends React.Component<Props, State> {
 					forceShowChangeLog={forceShowChangeLog}
 					onLayout={this.onLayout}/>
 				<DialogueBox
+					{...others}
 					showDialogue={show}
 					showHeader={showHeader}
 					imageHeader={imageHeader}
 					onPressNegative={onPressNegative}
-					onPressPositive={onPressPositive}
-					{...others}
+					onPressPositive={this.onPressDialoguePositive}
 				/>
 			</SafeAreaView>
 		);
