@@ -109,13 +109,16 @@ class TouchableButton extends Component<Props, void> {
 		let fontSize = deviceWidth * 0.04;
 		fontSize = fontSize > maxFontSize ? maxFontSize : fontSize;
 
+		const borderRadius = 18 + fontSize;
+
 		return {
 			buttonContainer: {
 				backgroundColor: btnPrimaryBg,
-				paddingVertical: 18,
+				paddingVertical: borderRadius / 2,
+				paddingHorizontal: borderRadius / 2,
 				maxWidth: width * 0.9,
 				minWidth: width * 0.5,
-				borderRadius: 18 + fontSize,
+				borderRadius,
 				alignSelf: 'center',
 				alignItems: 'center',
 				justifyContent: 'center',
