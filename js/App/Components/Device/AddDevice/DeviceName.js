@@ -126,13 +126,19 @@ submitName() {
 			this.setState({
 				isLoading: false,
 			});
-			navigation.navigate('Devices');
+			navigation.navigate({
+				routeName: 'Devices',
+				key: 'Devices',
+			});
 		}).catch(() => {
 			actions.getDevices();
 			this.setState({
 				isLoading: false,
 			});
-			navigation.navigate('Devices');
+			navigation.navigate({
+				routeName: 'Devices',
+				key: 'Devices',
+			});
 		});
 	}
 }
