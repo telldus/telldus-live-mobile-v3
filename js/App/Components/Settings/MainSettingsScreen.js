@@ -58,6 +58,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 	submitPushToken: () => void,
 	toggleDialogueBox: (Object) => void,
+	actions: Object,
 };
 
 
