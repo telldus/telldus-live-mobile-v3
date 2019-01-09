@@ -23,18 +23,14 @@
 'use strict';
 
 import React from 'react';
-import { Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	Text,
 	Image,
-	BlockIcon,
-	ProgressBarLinear,
 } from '../../../../BaseComponents';
+import { ZWaveIncludeExcludeUI } from '../Common';
 
-import Theme from '../../../Theme';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import {
 	checkInclusionComplete,
@@ -58,7 +54,6 @@ type State = {
 	timer: number | null,
 	status: string | null,
 	percent: number,
-	width: number,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -70,7 +65,6 @@ setSocketListeners: () => void;
 zwaveId: ?number;
 deviceId: ?number;
 clientDeviceId: ?number;
-onLayout: (Object) => void;
 deviceManufactInfo: Object;
 deviceProdInfo: Object;
 isDeviceAwake: boolean;
@@ -84,7 +78,6 @@ constructor(props: Props) {
 		timer: null,
 		status: null,
 		percent: 0,
-		width: 0,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -109,8 +102,6 @@ constructor(props: Props) {
 	this.isDeviceAwake = true;
 	this.isDeviceBatteried = false;
 	this.showToast = true;
-
-	this.onLayout = this.onLayout.bind(this);
 }
 
 componentDidMount() {
@@ -380,197 +371,24 @@ clearTimer() {
 	clearInterval(this.inclusionTimer);
 }
 
-onLayout(ev: Object) {
-	let { width } = ev.nativeEvent.layout;
-	if (this.state.width !== width) {
-		this.setState({
-			width,
-		});
-	}
-}
-
 render(): Object {
-	const { intl } = this.props;
-	const { timer, status, percent, width, showTimer } = this.state;
-	const {
-		container,
-		progressContainer,
-		infoContainer,
-		imageType,
-		textStyle,
-		infoIconStyle,
-		blockIcontainerStyle,
-		markerTextCover,
-		markerText,
-		timerStyle,
-		statusStyle,
-		blockLeft,
-		infoOneContainer,
-	} = this.getStyles();
-
-	const progress = Math.max(percent / 100, 0);
+	const { intl, appLayout } = this.props;
+	const { timer, status, percent, showTimer } = this.state;
 	const { formatMessage } = intl;
 
+	const progress = Math.max(percent / 100, 0);
+	const statusText = (status !== null) ? `${status} (${percent}% ${intl.formatMessage(i18n.done).toLowerCase()})` : ' ';
+	const timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
+
 	return (
-		<View style={container}>
-			<View style={progressContainer}>
-				<View style={[blockLeft, {
-					flexDirection: 'column',
-					alignItems: 'flex-start',
-				}]}>
-					<View style={markerTextCover}/>
-					<Text style={markerText}>
-                            1.
-					</Text>
-					<Image source={{uri: 'img_zwave_include'}} resizeMode={'cover'} style={imageType}/>
-				</View>
-				<View style={infoOneContainer} onLayout={this.onLayout}>
-					<Text style={textStyle}>
-						{formatMessage(i18n.messageOne)}
-					</Text>
-					<Text/>
-					<Text style={textStyle}>
-						{formatMessage(i18n.messageTwo)}
-					</Text>
-					<Text/>
-					<Text style={timerStyle}>
-						{(timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' '}
-					</Text>
-					<Text style={statusStyle}>
-						{status !== null ? `${status} (${percent}% ${formatMessage(i18n.done).toLowerCase()})` : ' '}
-					</Text>
-					<ProgressBarLinear
-						progress={progress}
-						height={4}
-						width={width}
-						borderWidth={0}
-						borderColor="transparent"
-						unfilledColor={Theme.Core.inactiveSwitchBackground} />
-				</View>
-			</View>
-			<View style={infoContainer}>
-				<View style={blockLeft}>
-					<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
-				</View>
-				<View style={{
-					flex: 1,
-					flexDirection: 'column',
-					flexWrap: 'wrap',
-				}}>
-					<Text style={textStyle}>
-						{formatMessage(i18n.messageHint)}
-					</Text>
-				</View>
-			</View>
-		</View>
+		<ZWaveIncludeExcludeUI
+			progress={progress}
+			percent={percent}
+			status={statusText}
+			timer={timerText}
+			intl={intl}
+			appLayout={appLayout}/>
 	);
-}
-
-getStyles(): Object {
-	const { appLayout } = this.props;
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-
-	const { paddingFactor, shadow, rowTextColor, brandSecondary, brandPrimary } = Theme.Core;
-
-	const padding = deviceWidth * paddingFactor;
-
-	const fontSizeText = deviceWidth * 0.035;
-	const fontSizeStatus = deviceWidth * 0.03;
-	const blockIconContainerSize = deviceWidth * 0.26;
-
-	const contPadding = 5 + (fontSizeText * 0.5);
-	const markerHeight = deviceWidth * 0.075;
-
-	const contOneTop = markerHeight - contPadding;
-
-	return {
-		innerPadding: contPadding,
-		container: {
-			flex: 1,
-			paddingTop: padding,
-			paddingBottom: padding / 2,
-			marginHorizontal: padding,
-		},
-		progressContainer: {
-			flexDirection: 'row',
-			marginBottom: padding / 2,
-			backgroundColor: '#fff',
-			borderRadius: 2,
-			padding: contPadding,
-			...shadow,
-		},
-		infoContainer: {
-			flexDirection: 'row',
-			marginBottom: padding / 2,
-			backgroundColor: '#fff',
-			borderRadius: 2,
-			padding: contPadding,
-			...shadow,
-		},
-		markerTextCover: {
-			position: 'absolute',
-			left: -(contPadding),
-			top: -(contPadding),
-			width: deviceWidth * 0.2,
-			height: Platform.OS === 'ios' ? deviceWidth * 0.05 : 0,
-			backgroundColor: 'transparent',
-			borderStyle: 'solid',
-			borderRightWidth: deviceWidth * 0.05,
-			borderTopWidth: Platform.OS === 'ios' ? deviceWidth * 0.17 : deviceWidth * 0.1,
-			borderRightColor: 'transparent',
-			borderTopColor: brandPrimary,
-			borderTopLeftRadius: 2,
-		},
-		markerText: {
-			position: 'absolute',
-			fontSize: deviceWidth * 0.05,
-			color: '#fff',
-			top: -(contPadding) + (deviceWidth * 0.025),
-			left: deviceWidth * 0.025,
-		},
-		infoOneContainer: {
-			flex: 1,
-			flexDirection: 'column',
-			flexWrap: 'wrap',
-			paddingTop: contOneTop,
-		},
-		imageType: {
-			marginTop: markerHeight,
-			height: deviceWidth * 0.20,
-			width: deviceWidth * 0.17,
-		},
-		textStyle: {
-			fontSize: fontSizeText,
-			color: rowTextColor,
-		},
-		infoIconStyle: {
-			fontSize: blockIconContainerSize / 2,
-			color: brandSecondary,
-		},
-		blockIcontainerStyle: {
-			width: blockIconContainerSize,
-			height: undefined,
-			borderRadius: 0,
-			backgroundColor: '#fff',
-		},
-		timerStyle: {
-			fontSize: deviceWidth * 0.045,
-			color: brandSecondary,
-			marginTop: 4,
-		},
-		statusStyle: {
-			fontSize: fontSizeStatus,
-			color: rowTextColor,
-			marginBottom: 4,
-		},
-		blockLeft: {
-			width: deviceWidth * 0.21,
-			justifyContent: 'center',
-			alignItems: 'center',
-		},
-	};
 }
 }
 
