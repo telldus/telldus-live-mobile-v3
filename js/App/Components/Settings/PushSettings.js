@@ -30,6 +30,8 @@ import {
 } from '../../../BaseComponents';
 import { PushSettingsRow } from './SubViews';
 
+import { shouldUpdate } from '../../Lib';
+
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -60,6 +62,24 @@ constructor(props: Props) {
 
 componentDidMount() {
 	this.props.onDidMount(this.h1, this.h2);
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { appLayout: appLayoutN, currentScreen, ...othersN } = nextProps;
+	if (currentScreen === 'PushSettings') {
+
+		const { appLayout, ...others } = this.props;
+		if (appLayout.width !== appLayoutN.width) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['isPushSubmitLoading', 'pushToken', 'phonesList']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 prepareList(): Object {
