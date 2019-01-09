@@ -24,6 +24,7 @@
 import React from 'react';
 import { TextInput, LayoutAnimation } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+const isEqual = require('react-fast-compare');
 
 import {
 	Text,
@@ -32,7 +33,7 @@ import {
 	IconTelldus,
 	Throbber,
 } from '../../../../BaseComponents';
-import { LayoutAnimations } from '../../../Lib';
+import { LayoutAnimations, shouldUpdate } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -97,6 +98,25 @@ constructor(props: Props) {
 	this.onPressDeleteToken = this.onPressDeleteToken.bind(this);
 	this.onSubmitDeviceName = this.onSubmitDeviceName.bind(this);
 	this.onConfirmDeleteToken = this.onConfirmDeleteToken.bind(this);
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { appLayout: appLayoutN, ...othersN } = nextProps;
+	const isStateEqual = isEqual(this.state, nextState);
+	if (!isStateEqual) {
+		return true;
+	}
+
+	const { appLayout, ...others } = this.props;
+	if (appLayout.width !== appLayoutN.width) {
+		return true;
+	}
+
+	const propsChange = shouldUpdate(others, othersN, ['name', 'model', 'editName', 'token']);
+	if (propsChange) {
+		return true;
+	}
+	return false;
 }
 
 onPressEditName() {
@@ -173,6 +193,7 @@ onSubmitDeviceName(name: string) {
 			this.setState({
 				isPushSubmitLoading: false,
 			});
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		}).catch(() => {
 			this.setState({
 				isPushSubmitLoading: false,
