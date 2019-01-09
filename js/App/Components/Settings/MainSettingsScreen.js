@@ -43,7 +43,6 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
-	pushTokenRegistered: boolean,
 	pushToken: string,
 	email: string,
 	sortingDB: string,
@@ -125,7 +124,9 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	this.props.onDidMount(this.headerOne, this.headerTwo);
+	const { onDidMount, actions } = this.props;
+	onDidMount(this.headerOne, this.headerTwo);
+	actions.getPhonesList();
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -141,7 +142,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['isPushSubmitLoading', 'sortingDB', 'pushTokenRegistered', 'pushToken', 'email', 'phonesList']);
+		const propsChange = shouldUpdate(others, othersN, ['isPushSubmitLoading', 'sortingDB', 'pushToken', 'email', 'phonesList']);
 		if (propsChange) {
 			return true;
 		}
@@ -347,13 +348,12 @@ getStyles(appLayout: Object): Object {
 }
 
 function mapStateToProps(store: Object): Object {
-	const { pushTokenRegistered, userProfile } = store.user;
+	const { userProfile } = store.user;
 	const { defaultSettings = {} } = store.app;
 	const { sortingDB } = defaultSettings;
 	const { email } = userProfile;
 
 	return {
-		pushTokenRegistered,
 		email,
 		sortingDB,
 	};
