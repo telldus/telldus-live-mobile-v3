@@ -171,7 +171,9 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={id} style={learn} />;
 		}
 		return (
-			<ScrollView>
+			<ScrollView style={{
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				<View style={container}>
 					<SettingsRow
 						label={formatMessage(i18n.showOnDashborad)}
@@ -204,6 +206,7 @@ class SettingsTab extends View {
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
+				backgroundColor: Theme.Core.appBackground,
 			},
 			learn: {
 				marginHorizontal: width * 0.25,

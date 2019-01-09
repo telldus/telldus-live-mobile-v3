@@ -519,7 +519,9 @@ class HistoryTab extends View {
 
 		if (!keepHistory) {
 			return (
-				<ScrollView>
+				<ScrollView style={{
+					backgroundColor: Theme.Core.appBackground,
+				}}>
 					<View style={containerStyle}>
 						<HistoryNotStored
 							sensorId={sensorId}
@@ -550,7 +552,9 @@ class HistoryTab extends View {
 		};
 
 		return (
-			<ScrollView>
+			<ScrollView style={{
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				<View style={containerStyle}>
 					<View style={{
 						flexDirection: 'row',

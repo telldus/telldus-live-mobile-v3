@@ -204,6 +204,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		return (
 			<View style={{
 				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
 			}}>
 				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>

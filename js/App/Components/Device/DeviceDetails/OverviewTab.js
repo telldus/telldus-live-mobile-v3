@@ -119,7 +119,12 @@ class OverviewTab extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={styles.itemsContainer}>
+			<ScrollView
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
+				contentContainerStyle={styles.itemsContainer}>
 				<DeviceActionDetails
 					device={device}
 					intl={intl}

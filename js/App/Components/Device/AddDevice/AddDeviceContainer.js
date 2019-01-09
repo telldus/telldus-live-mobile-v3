@@ -170,7 +170,10 @@ class AddDeviceContainer extends View<Props, State> {
 		return (
 			<ScrollView
 				keyboardShouldPersistTaps={'always'}
-				style={{ flex: 1 }}
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
 				contentContainerStyle={{flexGrow: 1}}
 				scrollEnabled={keyboardShown}>
 				<KeyboardAvoidingView

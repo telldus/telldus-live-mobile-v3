@@ -507,7 +507,12 @@ class SettingsTab extends View {
 		};
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+			<ScrollView
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
+				contentContainerStyle={{flexGrow: 1}}>
 				<View style={container}>
 					<SettingsRow
 						type={'text'}

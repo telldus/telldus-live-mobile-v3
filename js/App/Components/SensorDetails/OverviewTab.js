@@ -152,7 +152,10 @@ class OverviewTab extends View<Props, State> {
 
 		return (
 			<ScrollView
-				style={{flex: 1}}
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
 				contentContainerStyle={contentContainerStyle}
 				refreshControl={
 					<RefreshControl

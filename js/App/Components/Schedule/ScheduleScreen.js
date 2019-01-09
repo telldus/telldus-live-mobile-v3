@@ -206,7 +206,10 @@ class ScheduleScreen extends View<null, Props, State> {
 		} = this.getRelativeData();
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{
+				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				{loading && (
 					<FullPageActivityIndicator/>
 				)}

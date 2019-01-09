@@ -317,10 +317,16 @@ class HistoryTab extends View {
 		if (!refreshing && hasLoaded && rowsAndSections.length === 0) {
 			return (
 				<View style={styles.containerWhenNoData}>
-					<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
-					<Text style={textWhenNoData}>
-						<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
-					</Text>
+					<View style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+						<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+						<Text style={textWhenNoData}>
+							<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
+						</Text>
+					</View>
 				</View>
 			);
 		}
@@ -402,12 +408,15 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
+		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
+		flex: 1,
 		paddingTop: 20,
 		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: Theme.Core.appBackground,
 	},
 });
 
