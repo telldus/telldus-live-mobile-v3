@@ -106,6 +106,22 @@ export default function reduceUser(state: State = initialState, action: Action):
 			deviceModel,
 		};
 	}
+	if (action.type === 'PUSH_TOKEN_UNREGISTERED') {
+		return {
+			...state,
+			pushTokenRegistered: false,
+		};
+	}
+	if (action.type === 'PUSH_TOKEN_DELETED') {
+		return {
+			...state,
+			pushTokenRegistered: false,
+			deviceId: '',
+			osVersion: '',
+			deviceName: '',
+			deviceModel: '',
+		};
+	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
 		firebase.crashlytics().setUserIdentifier(action.payload.email);
 		// TODO: Enable once the method is supported.

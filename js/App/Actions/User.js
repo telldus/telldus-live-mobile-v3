@@ -212,6 +212,13 @@ function deletePushToken(token: string): ThunkAction {
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
 			const { status } = response;
 			if (status && status === 'success') {
+				dispatch({
+					type: 'PUSH_TOKEN_DELETED',
+					token: token,
+					payload: {
+						...response,
+					},
+				});
 				return response;
 			}
 			throw response;

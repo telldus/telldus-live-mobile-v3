@@ -32,6 +32,7 @@ export type Action =
 	| { type: 'RECEIVED_JOBS', payload: Object }
 	| { type: 'PUSH_TOKEN_REGISTERED', token: string, payload: Object }
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
+	| { type: 'PUSH_TOKEN_DELETED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
 
