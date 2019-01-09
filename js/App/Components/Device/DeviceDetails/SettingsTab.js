@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
@@ -45,7 +45,7 @@ import {
 	sendSocketMessage,
 	processWebsocketMessageForDevice,
 } from '../../../Actions';
-import { shouldUpdate } from '../../../Lib';
+import { shouldUpdate, LayoutAnimations } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -142,12 +142,14 @@ class SettingsTab extends View {
 	}
 
 	onPressExcludeDevice() {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			excludeActive: true,
 		});
 	}
 
 	onPressCancelExclude() {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			excludeActive: false,
 		});
@@ -245,7 +247,7 @@ class SettingsTab extends View {
 						/>
 						{learnButton}
 						<TouchableButton
-							text={'Exclude Device'}
+							text={formatMessage(i18n.headerExclude).toUpperCase()}
 							onPress={this.onPressExcludeDevice}
 							style={excludeButtonStyle}/>
 					</View>
