@@ -24,10 +24,12 @@ import DeviceHistoryDetails from './DeviceHistoryDetails';
 import HistoryRow from './HistoryRow';
 import DeviceActionDetails from './DeviceActionDetails';
 import DeviceDetailsHeaderPoster from './DeviceDetailsHeaderPoster';
+import ExcludeDevice from './ExcludeDevice';
 
 module.exports = {
 	DeviceHistoryDetails,
 	HistoryRow,
 	DeviceActionDetails,
 	DeviceDetailsHeaderPoster,
+	ExcludeDevice,
 };
