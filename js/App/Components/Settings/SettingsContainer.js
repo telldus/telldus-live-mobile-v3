@@ -39,7 +39,7 @@ import {
 	getPhonesList,
 } from '../../Actions/User';
 import { showToast } from '../../Actions';
-import { LayoutAnimations } from '../../Lib';
+import { LayoutAnimations, shouldUpdate } from '../../Lib';
 
 import { pushServiceId } from '../../../Config';
 
@@ -48,15 +48,16 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
-	actions?: Object,
 	screenProps: Object,
 	ScreenName: string,
 	phonesList: Object,
 	pushToken: string,
+	deviceName: string,
 
+	actions?: Object,
 	navigation: Object,
 	children: Object,
-	onSubmitPushToken: (string) => Promise<any>,
+	onSubmitPushToken: (string, ?string) => Promise<any>,
 	onSubmitDeviceName: (string, string) => Promise<any>,
 };
 
@@ -110,14 +111,16 @@ shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 			return true;
 		}
 
-		const { screenProps, phonesList, pushToken } = this.props;
-		const { screenProps: screenPropsN, phonesList: phonesListN, pushToken: pushTokenN } = nextProps;
-		if ((screenProps.currentScreen !== screenPropsN.currentScreen) || (pushTokenN !== pushToken)) {
+		const { screenProps, ...others } = this.props;
+		const { screenProps: screenPropsN, ...otherN } = nextProps;
+		const { currentScreen, appLayout } = screenProps;
+		const { currentScreen: currentScreenN, appLayout: appLayoutN } = screenPropsN;
+		if ((currentScreen !== currentScreenN) || (appLayout.width !== appLayoutN.width)) {
 			return true;
 		}
 
-		const isphonesListEqual = isEqual(phonesList, phonesListN);
-		if (!isphonesListEqual) {
+		const propsChange = shouldUpdate(others, otherN, ['pushToken', 'phonesList', 'deviceName']);
+		if (propsChange) {
 			return true;
 		}
 		return false;
@@ -164,10 +167,10 @@ confirmTokenSubmit() {
 	this.setState({
 		isPushSubmitLoading: true,
 	});
-	const { screenProps, actions, pushToken, onSubmitPushToken } = this.props;
+	const { screenProps, actions, pushToken, onSubmitPushToken, deviceName } = this.props;
 	const { formatMessage } = screenProps.intl;
 	if (pushToken) {
-		onSubmitPushToken(pushToken).then((response: Object) => {
+		onSubmitPushToken(pushToken, deviceName).then((response: Object) => {
 			let message = formatMessage(i18n.pushRegisterSuccess);
 			actions.showToast(message);
 			actions.getPhonesList().then(() => {
@@ -277,10 +280,11 @@ getStyles(appLayout: Object): Object {
 }
 
 const mapStateToProps = ({user}: Object): Object => {
-	const { phonesList = {}, pushToken } = user;
+	const { phonesList = {}, pushToken, deviceName } = user;
 	return {
 		phonesList,
 		pushToken,
+		deviceName,
 	};
 };
 
@@ -293,8 +297,9 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getPhonesList,
 			}, dispatch),
 		},
-		onSubmitPushToken: (token: string): Promise<any> => {
-			return dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+		onSubmitPushToken: (token: string, deviceName: string): Promise<any> => {
+			let dName = deviceName ? deviceName : DeviceInfo.getDeviceName();
+			return dispatch(registerPushToken(token, dName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
 		},
 		onSubmitDeviceName: (token: string, deviceName: string): Promise<any> => {
 			return dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
