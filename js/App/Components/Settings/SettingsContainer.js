@@ -166,27 +166,35 @@ confirmTokenSubmit() {
 	});
 	const { screenProps, actions, pushToken, onSubmitPushToken } = this.props;
 	const { formatMessage } = screenProps.intl;
-	onSubmitPushToken(pushToken).then((response: Object) => {
-		let message = formatMessage(i18n.pushRegisterSuccess);
-		actions.showToast(message);
-		actions.getPhonesList().then(() => {
-			this.setState({
-				isPushSubmitLoading: false,
+	if (pushToken) {
+		onSubmitPushToken(pushToken).then((response: Object) => {
+			let message = formatMessage(i18n.pushRegisterSuccess);
+			actions.showToast(message);
+			actions.getPhonesList().then(() => {
+				this.setState({
+					isPushSubmitLoading: false,
+				});
+				LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			}).catch(() => {
+				this.setState({
+					isPushSubmitLoading: false,
+				});
+				LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			});
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		}).catch(() => {
+			let message = formatMessage(i18n.pushRegisterFailed);
+			actions.showToast(message);
 			this.setState({
 				isPushSubmitLoading: false,
 			});
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		});
-	}).catch(() => {
+	} else {
 		let message = formatMessage(i18n.pushRegisterFailed);
 		actions.showToast(message);
 		this.setState({
 			isPushSubmitLoading: false,
 		});
-	});
+	}
 }
 
 render(): Object {
