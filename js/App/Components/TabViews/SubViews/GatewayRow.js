@@ -23,6 +23,7 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import { View, Image, LocationDetails } from '../../../../BaseComponents';
 
@@ -59,11 +60,17 @@ class GatewayRow extends PureComponent<Props, State> {
 		if (onPress) {
 			onPress(location);
 		} else {
-			this.props.navigation.navigate({
+			const navigateAction = NavigationActions.navigate({
 				routeName: 'LocationDetails',
 				key: 'LocationDetails',
 				params: { location },
-			});
+				action: NavigationActions.navigate({
+					routeName: 'Details',
+					key: 'Details',
+					params: { location },
+				}),
+			  });
+			this.props.navigation.dispatch(navigateAction);
 		}
 	}
 
