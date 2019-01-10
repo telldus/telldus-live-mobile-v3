@@ -37,7 +37,7 @@ import DeviceInfo from 'react-native-device-info';
 import {
 	View, Text, TouchableButton, StyleSheet,
 	FormattedNumber, Icon, TitledInfoBlock,
-	TabBar,
+	TabBar, Throbber,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
@@ -58,8 +58,13 @@ type Props = {
 	screenProps: Object,
 };
 
-class Details extends View {
+type State = {
+	isLoading: bolean,
+};
+
+class Details extends View<Props, State> {
 	props: Props;
+	state: State;
 
 	onEditName: () => void;
 	onEditTimeZone: () => void;
@@ -102,6 +107,10 @@ class Details extends View {
 
 	constructor(props: Props) {
 		super(props);
+
+		this.state = {
+			isLoading: false,
+		};
 
 		let { formatMessage } = props.screenProps.intl;
 		this.labelName = formatMessage(i18n.name);
@@ -210,12 +219,22 @@ class Details extends View {
 	onConfirmRemoveLocation() {
 		const { dispatch, navigation, screenProps } = this.props;
 		const location = navigation.getParam('location', {id: null});
+		this.setState({
+			isLoading: true,
+		});
 		dispatch(removeGateway(location.id)).then((res: Object) => {
 			dispatch(getGateways()).then(() => {
 				dispatch(getAppData());
 			});
-			navigation.pop();
+			this.setState({
+				isLoading: false,
+			}, () => {
+				navigation.pop();
+			});
 		}).catch(() => {
+			this.setState({
+				isLoading: false,
+			});
 			const dialogueData = {
 				show: true,
 				showPositive: true,
@@ -263,6 +282,7 @@ class Details extends View {
 	}
 
 	render(): Object | null {
+		const { isLoading } = this.state;
 		const { location, screenProps } = this.props;
 		const { appLayout } = screenProps;
 		const { height, width } = appLayout;
@@ -298,6 +318,7 @@ class Details extends View {
 			boxItemsCover,
 			padding,
 			container,
+			throbberContainer,
 		} = this.getStyles(appLayout);
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
@@ -346,7 +367,7 @@ class Details extends View {
 						valueTextStyle={{
 							marginRight: 20,
 						}}
-						onPress={this.onEditName}
+						onPress={isLoading ? null : this.onEditName}
 					/>
 					<TitledInfoBlock
 						label={timezoneLabel}
@@ -359,12 +380,12 @@ class Details extends View {
 						valueTextStyle={{
 							marginRight: 20,
 						}}
-						onPress={this.onEditTimeZone}
+						onPress={isLoading ? null : this.onEditTimeZone}
 					/>
 					<TouchableOpacity style={[styles.infoTwoContainerStyle, {
 						padding: fontSize,
 						marginBottom: padding / 2,
-					}]} onPress={this.onEditGeoPosition}>
+					}]} onPress={isLoading ? null : this.onEditGeoPosition}>
 						<Text style={[styles.textLabel, {fontSize}]}>
 							{this.labelGeoPosition}
 						</Text>
@@ -380,7 +401,15 @@ class Details extends View {
 						</View>
 						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 					</TouchableOpacity>
-					<TouchableButton text={this.labelDelete} style={styles.button} onPress={this.onPressRemoveLocation}/>
+					<View style={styles.buttonCover}>
+						<TouchableButton text={this.labelDelete} style={styles.button} onPress={isLoading ? null : this.onPressRemoveLocation}/>
+						{isLoading &&
+					(
+						<Throbber
+							throbberContainerStyle={throbberContainer}
+						/>
+					)}
+					</View>
 				</View>
 			</ScrollView>
 		);
@@ -430,6 +459,9 @@ class Details extends View {
 				fontSize: Math.floor(deviceWidth * 0.045),
 				color: Theme.Core.rowTextColor,
 			},
+			throbberContainer: {
+				right: (deviceWidth * 0.12),
+			},
 			padding,
 		};
 	}
@@ -438,6 +470,12 @@ class Details extends View {
 const styles = StyleSheet.create({
 	button: {
 		backgroundColor: Theme.Core.brandDanger,
+	},
+	buttonCover: {
+		flexDirection: 'row',
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
 		marginTop: 10,
 	},
 	infoTwoContainerStyle: {
