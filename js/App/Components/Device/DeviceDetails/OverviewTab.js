@@ -85,6 +85,10 @@ class OverviewTab extends View<Props, null> {
 				return true;
 			}
 
+			if (currentScreen !== screenProps.currentScreen) {
+				return true;
+			}
+
 			return false;
 		}
 
@@ -104,7 +108,7 @@ class OverviewTab extends View<Props, null> {
 		const { device, screenProps, gatewayName, gatewayType, isGatewayActive } = this.props;
 		const { appLayout, intl } = screenProps;
 
-		if (!device) {
+		if (!device || !device.id) {
 			return null;
 		}
 
