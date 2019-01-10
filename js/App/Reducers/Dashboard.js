@@ -24,7 +24,7 @@ import orderBy from 'lodash/orderBy';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}): Array<Object> {
 	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
-		let device = devices.byId[deviceId];
+		let device = devices.byId[deviceId] || {};
 		let { clientId } = device;
 		let gateway = gateways.byId[clientId];
 		let data = gateway ? { ...device, isOnline: gateway.online } : { ...device, isOnline: false };
@@ -37,7 +37,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	});
 
 	const sensorItems = dashboard.sensorIds.map((sensorId: number): Object => {
-		let sensor = sensors.byId[sensorId];
+		let sensor = sensors.byId[sensorId] || {};
 		let { clientId } = sensor;
 		let gateway = gateways.byId[clientId];
 		let data = gateway ? { ...sensor, isOnline: gateway.online } : { ...sensor, isOnline: false };
