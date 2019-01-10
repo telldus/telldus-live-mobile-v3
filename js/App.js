@@ -73,7 +73,7 @@ class App extends React.Component<Props, State> {
 	setCalendarLocale: () => void;
 
 	toggleDialogueBox: (Object) => null;
-	closeDialogue: () => void;
+	closeDialogue: (?() => void) => void;
 	onPressDialoguePositive: () => void;
 
 	constructor(props: Props) {
@@ -166,22 +166,25 @@ class App extends React.Component<Props, State> {
 		});
 	}
 
-	closeDialogue() {
+	closeDialogue(postClose?: () => void = (): void => undefined) {
 		const { dialogueData } = this.state;
 		this.setState({
 			dialogueData: {
 				...dialogueData,
 				show: false,
 			},
+		}, () => {
+			postClose();
 		});
 	}
 
 	onPressDialoguePositive() {
 		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false } = this.state.dialogueData;
 		if (closeOnPressPositive) {
-			this.closeDialogue();
+			this.closeDialogue(onPressPositive);
+		} else if (onPressPositive) {
+			onPressPositive();
 		}
-		onPressPositive();
 	}
 
 	render(): Object {
