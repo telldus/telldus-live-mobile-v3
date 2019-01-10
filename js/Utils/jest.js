@@ -1,14 +1,3 @@
-jest.mock('react-native-fabric', () => {
-	return {
-		Crashlytics: {
-			crash: () => {},
-		},
-		Answers: {
-			logCustom: () => {},
-			logContentView: () => {},
-		},
-	};
-});
 
 jest.mock('react-native-orientation-locker', () => {
 	return {
@@ -21,9 +10,26 @@ jest.mock('react-native-orientation-locker', () => {
 	};
 });
 
+jest.mock('react-native-google-signin', () => {
+	return {
+		statusCodes: {
+			SIGN_IN_CANCELLED: '',
+			IN_PROGRESS: '',
+			PLAY_SERVICES_NOT_AVAILABLE: '',
+		},
+	};
+});
+
 jest.mock('react-native-device-info', () => {
 	return {
 		getSystemVersion: jest.fn(),
+	};
+});
+
+jest.mock('react-native-firebase', () => {
+	return {
+		crashlytics: jest.fn(),
+		notifications: jest.fn(),
 	};
 });
 

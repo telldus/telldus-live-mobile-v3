@@ -27,7 +27,7 @@ import moment from 'moment';
 import { View } from '../../../../BaseComponents';
 import SensorBlock from './SensorBlock';
 
-import { getSensorIconLabelUnit, getWindDirection } from '../../../Lib';
+import { getSensorInfo, getWindDirection } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 
@@ -58,10 +58,10 @@ export default class SensorTypes extends View<Props, State> {
 		const { data = {} } = sensor;
 		const { formatMessage } = intl;
 
-		let sensors = [], sensorInfo = '';
+		let sensors = [], sensorAccessibilityInfo = '';
 		Object.values(data).forEach((values: any, index: number) => {
 			const { value, scale, name, lastUpdated, max, min, maxTime, minTime } = values;
-			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, false, formatMessage);
 
 			let props = {
 				key: index,
@@ -76,78 +76,16 @@ export default class SensorTypes extends View<Props, State> {
 				minTime: moment.unix(minTime),
 				appLayout,
 				lastUpdated: moment.unix(lastUpdated),
+				formatOptions,
 			};
-			if (name === 'humidity') {
-				sensors.push(
-					<SensorBlock {...props}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'temp') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 1, minimumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'rrate' || name === 'rtot') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 0}}/>);
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 
-				let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtot' ? `${label} ${value}${unit}` : '';
-				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
+			if (name === 'wdir') {
+				props = { ...props, value: getWindDirection(value, formatMessage) };
 			}
-			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let direction = '';
-				if (name === 'wdir') {
-					direction = [...getWindDirection(value, formatMessage)].toString();
-					props = { ...props, value: getWindDirection(value, formatMessage) };
-				}
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 1}}/>);
+			sensors.push(
+				<SensorBlock {...props}/>);
 
-				let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${label} ${direction}` : '';
-				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
-			}
-			if (name === 'uv') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 0}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'watt') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'lum') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 0}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'dewp') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'barpress') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'genmeter') {
-				sensors.push(
-					<SensorBlock {...props}
-						formatOptions={{maximumFractionDigits: 1}}/>);
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
 		});
 		return sensors;
 	}

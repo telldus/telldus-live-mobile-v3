@@ -26,16 +26,16 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
-import { View, TabBar, LocationDetails } from '../../../BaseComponents';
+import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
 
-import getDeviceType from '../../Lib/getDeviceType';
-import getLocationImageUrl from '../../Lib/getLocationImageUrl';
+import getDeviceType from '../../../Lib/getDeviceType';
+import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import {
 	DeviceActionDetails,
 } from './SubViews';
-import Theme from '../../Theme';
+import Theme from '../../../Theme';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	device: Object,
@@ -85,6 +85,10 @@ class OverviewTab extends View<Props, null> {
 				return true;
 			}
 
+			if (currentScreen !== screenProps.currentScreen) {
+				return true;
+			}
+
 			return false;
 		}
 
@@ -104,7 +108,7 @@ class OverviewTab extends View<Props, null> {
 		const { device, screenProps, gatewayName, gatewayType, isGatewayActive } = this.props;
 		const { appLayout, intl } = screenProps;
 
-		if (!device) {
+		if (!device || !device.id) {
 			return null;
 		}
 
@@ -119,7 +123,12 @@ class OverviewTab extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={styles.itemsContainer}>
+			<ScrollView
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
+				contentContainerStyle={styles.itemsContainer}>
 				<DeviceActionDetails
 					device={device}
 					intl={intl}

@@ -20,6 +20,7 @@ module.exports = {
     pushSenderId: '${PUSH_SENDER_ID}',
     pushServiceId: ${PUSH_SERVICE_ID_ANDROID},
     googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}'
+    webClientId: '${GOOGLE_WEB_CLIENT_ID}',
 };
 EOF
 

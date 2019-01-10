@@ -34,16 +34,17 @@ import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 import * as appDataActions from '../../../Actions/AppData';
 
-import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
-	navigation: Object,
-	children: Object,
-	actions?: Object,
+	ScreenName: string,
 	screenProps: Object,
 	showModal: boolean,
 	validationMessage: any,
+
+	navigation: Object,
+	children: Object,
+	actions?: Object,
 };
 
 type State = {
@@ -56,7 +57,6 @@ type State = {
 class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress: () => void;
-	onConfirmRemoveLocation: () => void;
 	closeModal: () => void;
 
 	static propTypes = {
@@ -82,14 +82,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			onPress: this.goBack,
 		};
 
-		let { formatMessage } = props.screenProps.intl;
-		this.labelDelete = formatMessage(i18n.delete).toUpperCase();
-		this.labelModalheaderOnDel = `${formatMessage(i18n.delete)} ${formatMessage(i18n.location)}?`;
-		this.onRemoveLocationError = `${formatMessage(i18n.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
-
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
-		this.onConfirmRemoveLocation = this.onConfirmRemoveLocation.bind(this);
 	}
 
 	componentDidMount() {
@@ -106,11 +100,16 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		return true;
 	}
 
-
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const isStateEqual = _.isEqual(this.state, nextState);
-		const isPropsEqual = _.isEqual(this.props, nextProps);
-		return !(isStateEqual && isPropsEqual);
+		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+			const isStateEqual = _.isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			const isPropsEqual = _.isEqual(this.props, nextProps);
+			return isPropsEqual;
+		}
+		return false;
 	}
 
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
@@ -125,30 +124,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		this.props.actions.hideModal();
 	};
 
-	onConfirmRemoveLocation() {
-		const { actions, navigation } = this.props;
-		const location = navigation.getParam('location', {id: null});
-		this.closeModal();
-		actions.removeGateway(location.id).then((res: Object) => {
-			actions.getGateways().then(() => {
-				actions.getAppData();
-			});
-			navigation.pop();
-		}).catch(() => {
-			actions.showModal(this.onRemoveLocationError);
-		});
-	}
-
 	getModalData(extras: any): Object {
-		if (extras === 'DELETE_LOCATION') {
-			return {
-				modalHeader: this.labelModalheaderOnDel,
-				positiveText: this.labelDelete,
-				showNegative: true,
-				onPressPositive: this.onConfirmRemoveLocation,
-				onPressNegative: this.closeModal,
-			};
-		}
 		return {
 			modalHeader: null,
 			positiveText: null,
@@ -204,6 +180,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		return (
 			<View style={{
 				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
 			}}>
 				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>

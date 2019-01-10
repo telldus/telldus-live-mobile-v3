@@ -26,12 +26,12 @@ import { connect } from 'react-redux';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 
-import { FormattedMessage, Text, View, ListRow, IconTelldus } from '../../../../BaseComponents';
-import { getDeviceStateMethod, getDeviceActionIcon } from '../../../Lib';
-import i18n from '../../../Translations/common';
+import { FormattedMessage, Text, View, ListRow, IconTelldus } from '../../../../../BaseComponents';
+import { getDeviceStateMethod, getDeviceActionIcon } from '../../../../Lib';
+import i18n from '../../../../Translations/common';
 import {
 	toSliderValue,
-} from '../../../Lib';
+} from '../../../../Lib';
 
 type Props = {
 	item: Object,

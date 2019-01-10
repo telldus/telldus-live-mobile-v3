@@ -30,7 +30,6 @@ import Swiper from 'react-native-swiper';
 import Platform from 'Platform';
 
 import {
-	FloatingButton,
 	FullPageActivityIndicator,
 	View,
 	StyleSheet,
@@ -42,6 +41,8 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
+
+import Theme from '../../Theme';
 
 import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
@@ -88,7 +89,6 @@ class SchedulerTab extends View<null, Props, State> {
 			isRefreshing: false,
 			isLoading: !Object.keys(props.rowsAndSections).length,
 		};
-		this.newSchedule = this.newSchedule.bind(this);
 		this.onIndexChanged = this.onIndexChanged.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
 		this.onToggleVisibility = this.onToggleVisibility.bind(this);
@@ -128,14 +128,6 @@ class SchedulerTab extends View<null, Props, State> {
 		});
 	}
 
-	newSchedule = () => {
-		this.props.navigation.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
-			params: { editMode: false },
-		});
-	};
-
 	editJob = (schedule: Schedule) => {
 		const { dispatch, navigation } = this.props;
 
@@ -160,8 +152,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { rowsAndSections, screenProps, showInactive } = this.props;
-		const { appLayout, intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
+		const { appLayout, currentScreen } = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -195,11 +186,6 @@ class SchedulerTab extends View<null, Props, State> {
 					onIndexChanged={this.onIndexChanged}>
 					{daysToRender}
 				</Swiper>
-				<FloatingButton
-					onPress={this.newSchedule}
-					imageSource={{uri: 'icon_plus'}}
-					accessibilityLabel={`${formatMessage(i18n.addSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`}
-				/>
 			</View>
 		);
 	}
@@ -345,7 +331,7 @@ const getRowsAndSections = createSelector(
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#eeeeef',
+		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
 		flexDirection: 'row',

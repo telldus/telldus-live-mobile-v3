@@ -27,12 +27,12 @@ import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import reduce from 'lodash/reduce';
 import groupBy from 'lodash/groupBy';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
-import { getDeviceHistory } from '../../Actions/Devices';
-import { getHistory, storeHistory, getLatestTimestamp } from '../../Actions/LocalStorage';
-import i18n from '../../Translations/common';
-import Theme from '../../Theme';
+import { getDeviceHistory } from '../../../Actions/Devices';
+import { getHistory, storeHistory, getLatestTimestamp } from '../../../Actions/LocalStorage';
+import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = {
 	dispatch: Function,
@@ -317,10 +317,16 @@ class HistoryTab extends View {
 		if (!refreshing && hasLoaded && rowsAndSections.length === 0) {
 			return (
 				<View style={styles.containerWhenNoData}>
-					<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
-					<Text style={textWhenNoData}>
-						<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
-					</Text>
+					<View style={{
+						flexDirection: 'row',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+						<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
+						<Text style={textWhenNoData}>
+							<FormattedMessage {...i18n.noRecentActivity} style={textWhenNoData}/>...
+						</Text>
+					</View>
 				</View>
 			);
 		}
@@ -402,12 +408,15 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
+		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
+		flex: 1,
 		paddingTop: 20,
 		flexDirection: 'row',
 		justifyContent: 'center',
-		alignItems: 'center',
+		alignItems: 'flex-start',
+		backgroundColor: Theme.Core.appBackground,
 	},
 });
 

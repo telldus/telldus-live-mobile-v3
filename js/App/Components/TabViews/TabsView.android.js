@@ -24,7 +24,7 @@
 
 
 
-import TabBar from './TabBar';
+import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 
@@ -45,10 +45,11 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
+	initialRouteKey: 'Dashboard',
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
-	tabBarComponent: TabBar,
+	tabBarComponent: MainTabBarAndroid,
 	tabBarPosition: 'top',
 	tabBarOptions: {
 		activeTintColor: '#fff',

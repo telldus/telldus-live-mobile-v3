@@ -34,18 +34,19 @@ import { SensorDetailsHeaderPoster } from './SubViews';
 
 const SensorDetailsNavigator = createMaterialTopTabNavigator(
 	{
-		Overview: {
+		SOverview: {
 			screen: Overview,
 		},
-		History: {
+		SHistory: {
 			screen: History,
 		},
-		Settings: {
+		SSettings: {
 			screen: Settings,
 		},
 	},
 	{
-		initialRouteName: 'Overview',
+		initialRouteName: 'SOverview',
+		initialRouteKey: 'SOverview',
 		tabBarPosition: 'top',
 		swipeEnabled: false,
 		lazy: true,

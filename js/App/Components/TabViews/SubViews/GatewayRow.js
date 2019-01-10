@@ -23,6 +23,7 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import { View, Image, LocationDetails } from '../../../../BaseComponents';
 
@@ -36,6 +37,7 @@ type Props = {
 	appLayout: Object,
 	intl: Object,
 	navigation: Object,
+	onPress: (Object) => void,
 };
 
 type State = {
@@ -54,12 +56,22 @@ class GatewayRow extends PureComponent<Props, State> {
 	}
 
 	onPressGateway() {
-		let { location } = this.props;
-		this.props.navigation.navigate({
-			routeName: 'LocationDetails',
-			key: 'LocationDetails',
-			params: { location },
-		});
+		let { location, onPress } = this.props;
+		if (onPress) {
+			onPress(location);
+		} else {
+			const navigateAction = NavigationActions.navigate({
+				routeName: 'LocationDetails',
+				key: 'LocationDetails',
+				params: { location },
+				action: NavigationActions.navigate({
+					routeName: 'Details',
+					key: 'Details',
+					params: { location },
+				}),
+			  });
+			this.props.navigation.dispatch(navigateAction);
+		}
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {

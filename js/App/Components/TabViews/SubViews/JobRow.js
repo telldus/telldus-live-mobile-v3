@@ -371,7 +371,9 @@ class JobRow extends View<null, Props, null> {
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
-		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+
+		const { land } = Theme.Core.headerHeightFactor;
+		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
 		width = width - headerHeight;
 
 		const timeWidth = width * 0.26;

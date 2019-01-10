@@ -19,9 +19,15 @@
 
 // @flow
 import orderBy from 'lodash/orderBy';
+import map from 'lodash/map';
+import { filterGatewaysWithZWaveSupport } from '../Lib/DeviceUtils';
 
-export function parseGatewaysForListView(gateways: Object = {}): Array<any> {
-	const list = gateways.allIds.map((gatewayId: number): Array<any> => gateways.byId[gatewayId]);
+export function parseGatewaysForListView(gateways: Object = {}, filterZWave?: boolean = false): Array<any> {
+	let gatewaysById = gateways.byId;
+	if (filterZWave) {
+		gatewaysById = filterGatewaysWithZWaveSupport(gateways.byId);
+	}
+	const list = map(gatewaysById, (item: Object): Array<Object> => gatewaysById[item.id]);
 	const orderedList = orderBy(list, [(gateway: Object): any => {
 		let { name } = gateway;
 		return name ? name.toLowerCase() : null;

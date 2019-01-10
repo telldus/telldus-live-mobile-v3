@@ -125,6 +125,13 @@ export default {
 		return 0.027777;
 	},
 
+	get headerHeightFactor() {
+		return {
+			port: 0.05,
+			land: 0.1111,
+		};
+	},
+
 	buttonPadding: 6,
 
 	borderRadiusBase: 2,

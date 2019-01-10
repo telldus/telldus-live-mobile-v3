@@ -24,7 +24,7 @@
 
 import firebase from 'react-native-firebase';
 import type { Notification } from 'react-native-firebase';
-const DeviceInfo = require('react-native-device-info');
+import DeviceInfo from 'react-native-device-info';
 
 import type { ThunkAction } from '../Actions/Types';
 import { pushSenderId, pushServiceId } from '../../Config';
@@ -77,7 +77,7 @@ const Push = {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
-					if (pushToken !== token) {
+					if (token && pushToken !== token) {
 						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
 						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });

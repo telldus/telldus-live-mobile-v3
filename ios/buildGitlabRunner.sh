@@ -13,9 +13,20 @@ module.exports = {
     forceLocale: '',
     pushSenderId: '',
     pushServiceId: '${PUSH_SERVICE_ID_IOS}',
+    webClientId: '${GOOGLE_WEB_CLIENT_ID}',
+	iosClientId: '${GOOGLE_IOS_CLIENT_ID}',
+	iosReversedClientId: '${GOOGLE_IOS_REVERSED_CLIENT_ID}',
     googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}'
 };
 EOF
+
+cat > Release.xcconfig <<EOF
+#include "./Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"
+
+GOOGLE_IOS_REVERSED_CLIENT_ID = ${GOOGLE_IOS_REVERSED_CLIENT_ID}
+EOF
+
+echo "${GOOGLE_SERVICES_PLIST}" > TelldusLiveApp/GoogleService-Info.plist
 
 cd ..
 react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --sourcemap-output ios/main.jsbundle.map

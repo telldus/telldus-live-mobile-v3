@@ -24,21 +24,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View } from '../../../../BaseComponents';
+import { View } from '../../../../../BaseComponents';
 import {
 	BellButton,
 	OnButton,
 	OffButton,
-} from '../../TabViews/SubViews';
+} from '../../../TabViews/SubViews';
 import SliderDetails from './SliderDetails';
-import UpButton from '../../TabViews/SubViews/Navigational/UpButton';
-import DownButton from '../../TabViews/SubViews/Navigational/DownButton';
-import StopButton from '../../TabViews/SubViews/Navigational/StopButton';
+import UpButton from '../../../TabViews/SubViews/Navigational/UpButton';
+import DownButton from '../../../TabViews/SubViews/Navigational/DownButton';
+import StopButton from '../../../TabViews/SubViews/Navigational/StopButton';
 
-import { getDeviceActionIcon } from '../../../Lib/DeviceUtils';
+import { getDeviceActionIcon } from '../../../../Lib/DeviceUtils';
 
-import Theme from '../../../Theme';
-
+import Theme from '../../../../Theme';
 
 type Props = {
 	device: Object,

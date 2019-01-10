@@ -29,14 +29,14 @@ import { announceForAccessibility } from 'react-native-accessibility';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
-import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../BaseComponents';
-import { states, statusMessage } from '../../../../Config';
+import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../../BaseComponents';
+import { states, statusMessage } from '../../../../../Config';
 
-import { getOriginString } from '../../../Lib';
+import { getOriginString } from '../../../../Lib';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
-import i18n from '../../../Translations/common';
+import i18n from '../../../../Translations/common';
 
 type Props = {
 	detailsData: Object,

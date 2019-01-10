@@ -88,7 +88,9 @@ class DevicesTab extends View {
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: () => void;
 
+	addNewDevice: () => void;
 	showDimInfo: (Object) => void;
+	handleAddDeviceAttentionCapture: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -129,6 +131,7 @@ class DevicesTab extends View {
 		this.closeVisibleRows = this.closeVisibleRows.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
+		this.addNewDevice = this.addNewDevice.bind(this);
 
 		let { formatMessage } = props.screenProps.intl;
 
@@ -142,7 +145,7 @@ class DevicesTab extends View {
 		this.url = 'http://live.telldus.com/';
 		this.noDeviceTitle = formatMessage(i18n.messageNoDeviceTitle);
 		this.noGatewayTitle = formatMessage(i18n.messageNoGatewayTitle);
-		this.noDeviceContent = formatMessage(i18n.messageNoDeviceContent);
+		this.noDeviceContent = formatMessage(i18n.messageNoDeviceContentAddZ);
 		this.noGatewayContent = formatMessage(i18n.messageNoGatewayContent);
 
 		const labelDevice = formatMessage(i18n.labelDevice).toLowerCase();
@@ -151,12 +154,34 @@ class DevicesTab extends View {
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
 
 		this.showDimInfo = this.showDimInfo.bind(this);
+		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);
+	}
+
+	componentDidMount() {
+		this.handleAddDeviceAttentionCapture();
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
 		const { currentScreen: prevScreen } = this.props.screenProps;
 		return (currentScreen === 'Devices') || (currentScreen !== 'Devices' && prevScreen === 'Devices');
+	}
+
+	componentDidUpdate() {
+		this.handleAddDeviceAttentionCapture();
+	}
+
+	handleAddDeviceAttentionCapture() {
+		const { devicesDidFetch, devices, screenProps } = this.props;
+		const { toggleAttentionCapture, showAttentionCaptureAddDevice } = screenProps;
+
+		if (devices.length === 0 && devicesDidFetch && toggleAttentionCapture && !showAttentionCaptureAddDevice) {
+			toggleAttentionCapture(true);
+		}
+
+		if (devices.length > 0 && devicesDidFetch && showAttentionCaptureAddDevice && toggleAttentionCapture) {
+			toggleAttentionCapture(false);
+		}
 	}
 
 	openDeviceDetail(device: Object) {
@@ -464,6 +489,18 @@ class DevicesTab extends View {
 		);
 	}
 
+	addNewDevice() {
+		const { navigation, gateways } = this.props;
+		const gatewaysLen = gateways.length;
+		if (gatewaysLen > 0) {
+			const singleGateway = gatewaysLen === 1;
+			navigation.navigate('AddDevice', {
+				selectLocation: !singleGateway,
+				gateway: singleGateway ? gateways[0] : null,
+			});
+		}
+	}
+
 	render(): Object {
 
 		const {
@@ -518,55 +555,59 @@ class DevicesTab extends View {
 		} = this.getDialogueBoxData(style, appLayout, intl);
 
 		return (
-			<ScrollView style={style.container}
-				scrollEnabled={scrollEnabled}
-				refreshControl={
-					<RefreshControl
-						enabled={showRefresh}
-						refreshing={isRefreshing}
-						onRefresh={this.onRefresh}
-					/>}
-				onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-			>
-				<SectionList
-					sections={visibleList}
-					renderItem={this.renderRow}
-					renderSectionHeader={this.renderSectionHeader}
-					keyExtractor={this.keyExtractor}
-					extraData={extraData}
+			<View style={{
+				flex: 1,
+			}}>
+				<ScrollView style={style.container}
 					scrollEnabled={scrollEnabled}
+					refreshControl={
+						<RefreshControl
+							enabled={showRefresh}
+							refreshing={isRefreshing}
+							onRefresh={this.onRefresh}
+						/>}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-				/>
-				<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
-					{this.toggleHiddenListButton(style)}
-					{showHiddenList ?
-						<SectionList
-							sections={hiddenList}
-							renderItem={this.renderRow}
-							renderSectionHeader={this.renderSectionHeader}
-							keyExtractor={this.keyExtractor}
-							extraData={extraData}
-							scrollEnabled={scrollEnabled}
-							onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-						/>
-						:
-						<View style={{height: 80}}/>
-					}
-				</View>
-				<DialogueBox
-					showDialogue={showDialogue}
-					showHeader={showHeader}
-					header={header}
-					text={text}
-					style={dialogueBoxStyle}
-					showNegative={showNegative}
-					onPressNegative={onPressNegative}
-					showPositive={showPositive}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					backdropOpacity={backdropOpacity}
-				/>
-			</ScrollView>
+				>
+					<SectionList
+						sections={visibleList}
+						renderItem={this.renderRow}
+						renderSectionHeader={this.renderSectionHeader}
+						keyExtractor={this.keyExtractor}
+						extraData={extraData}
+						scrollEnabled={scrollEnabled}
+						onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+					/>
+					<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
+						{this.toggleHiddenListButton(style)}
+						{showHiddenList ?
+							<SectionList
+								sections={hiddenList}
+								renderItem={this.renderRow}
+								renderSectionHeader={this.renderSectionHeader}
+								keyExtractor={this.keyExtractor}
+								extraData={extraData}
+								scrollEnabled={scrollEnabled}
+								onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+							/>
+							:
+							<View style={{height: 80}}/>
+						}
+					</View>
+					<DialogueBox
+						showDialogue={showDialogue}
+						showHeader={showHeader}
+						header={header}
+						text={text}
+						style={dialogueBoxStyle}
+						showNegative={showNegative}
+						onPressNegative={onPressNegative}
+						showPositive={showPositive}
+						positiveText={positiveText}
+						onPressPositive={onPressPositive}
+						backdropOpacity={backdropOpacity}
+					/>
+				</ScrollView>
+			</View>
 		);
 	}
 
@@ -589,11 +630,13 @@ class DevicesTab extends View {
 				paddingHorizontal: 30,
 				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				backgroundColor: Theme.Core.appBackground,
 			},
 			container: {
 				flex: 1,
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				backgroundColor: Theme.Core.appBackground,
 			},
 			noItemsTitle: {
 				textAlign: 'center',

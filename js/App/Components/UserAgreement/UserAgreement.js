@@ -147,7 +147,7 @@ class UserAgreement extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
 						<NavigationHeader showLeftIcon={false} topMargin={false}/>
 						<ScrollView

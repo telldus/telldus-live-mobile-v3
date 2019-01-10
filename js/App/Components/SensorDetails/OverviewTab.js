@@ -64,8 +64,8 @@ class OverviewTab extends View<Props, State> {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			navigation.navigate({
-				routeName: 'Overview',
-				key: 'Overview',
+				routeName: 'SOverview',
+				key: 'SOverview',
 			});
 		},
 	});
@@ -100,8 +100,8 @@ class OverviewTab extends View<Props, State> {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
-		if (currentScreen === 'Overview') {
-			if (this.props.screenProps.currentScreen !== 'Overview') {
+		if (currentScreen === 'SOverview') {
+			if (this.props.screenProps.currentScreen !== 'SOverview') {
 				return true;
 			}
 
@@ -152,7 +152,10 @@ class OverviewTab extends View<Props, State> {
 
 		return (
 			<ScrollView
-				style={{flex: 1}}
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
 				contentContainerStyle={contentContainerStyle}
 				refreshControl={
 					<RefreshControl

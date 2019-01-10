@@ -34,12 +34,14 @@ import Theme from '../App/Theme';
 
 type Props = {
     value: string,
-    appLayout: Object,
+	appLayout: Object,
+	extraData?: string | number,
 
     onChangeText: (string) => void,
     containerStyle: number | Object | Array<any>,
     label?: string,
-    icon?: string,
+	icon?: string,
+	header?: Object,
     onSubmitEditing: () => void,
     onChangeText: (string) => void,
 };
@@ -66,8 +68,8 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object): boolean {
-	const { appLayout, value } = this.props;
-	return (nextProps.value !== value) || (nextProps.appLayout.width !== appLayout.width);
+	const { appLayout, value, extraData } = this.props;
+	return (nextProps.value !== value) || (nextProps.appLayout.width !== appLayout.width) || extraData !== nextProps.extraData;
 }
 
 onSubmitEditing() {
@@ -85,11 +87,12 @@ onChangeText(value: string) {
 }
 
 render(): Object {
-	const { value, containerStyle, label, icon, appLayout } = this.props;
+	const { value, containerStyle, label, icon, appLayout, header } = this.props;
 	const styles = this.getStyle(appLayout);
 
 	return (
 		<View style={[styles.container, containerStyle]}>
+			{!!header && header}
 			{!!label && (
 				<Text style={styles.label}>
 					{label}
@@ -107,7 +110,7 @@ render(): Object {
 					autoCapitalize="sentences"
 					autoCorrect={false}
 					autoFocus={true}
-					underlineColorAndroid="#e26901"
+					underlineColorAndroid={Theme.Core.brandSecondary}
 					returnKeyType={'done'}
 				/>
 			</View>
@@ -119,6 +122,7 @@ getStyle(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const { shadow, brandSecondary } = Theme.Core;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 	const iconSize = Math.floor(deviceWidth * 0.09);
@@ -131,9 +135,10 @@ getStyle(appLayout: Object): Object {
 			width: '100%',
 			flexDirection: 'column',
 			alignItems: 'flex-start',
+			justifyContent: 'center',
 			backgroundColor: '#fff',
 			padding,
-			...Theme.Core.shadow,
+			...shadow,
 			borderRadius: 2,
 		},
 		inputCover: {
@@ -143,7 +148,7 @@ getStyle(appLayout: Object): Object {
 			marginTop: Platform.OS === 'ios' ? 10 : 0,
 		},
 		label: {
-			color: '#e26901',
+			color: brandSecondary,
 			fontSize,
 		},
 		iconSize,

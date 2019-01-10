@@ -19,15 +19,8 @@
  */
 
 'use strict';
-
-import DeviceHistoryDetails from './DeviceHistoryDetails';
-import HistoryRow from './HistoryRow';
-import DeviceActionDetails from './DeviceActionDetails';
-import DeviceDetailsHeaderPoster from './DeviceDetailsHeaderPoster';
+import PushSettingsRow from './PushSettingsRow';
 
 module.exports = {
-	DeviceHistoryDetails,
-	HistoryRow,
-	DeviceActionDetails,
-	DeviceDetailsHeaderPoster,
+	PushSettingsRow,
 };

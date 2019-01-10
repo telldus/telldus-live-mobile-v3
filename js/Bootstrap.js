@@ -29,7 +29,7 @@ import 'intl/locale-data/jsonp/sv';
 import React from 'react';
 import { Text } from './BaseComponents';
 import { Provider } from 'react-redux';
-import { Crashlytics } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
 
 import App from './App';
@@ -71,8 +71,9 @@ function Bootstrap(): Object {
 			this.setState({ isLoading: false });
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
-				Crashlytics.setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
-				Crashlytics.setUserEmail(state.user.userProfile.email);
+				firebase.crashlytics().setUserIdentifier(state.user.userProfile.email);
+				// TODO: Enable once the method is supported.
+				// firebase.crashlytics().setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
 			}
 		}
 

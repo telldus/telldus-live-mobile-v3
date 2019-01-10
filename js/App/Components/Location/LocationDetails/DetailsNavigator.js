@@ -25,27 +25,24 @@
 import React from 'react';
 import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
 
-import { View } from '../../../BaseComponents';
-import History from './HistoryTab';
-import Overview from './OverviewTab';
-import Settings from './SettingsTab';
-import { DeviceDetailsHeaderPoster } from './SubViews';
-import Theme from '../../Theme';
+import ZWaveSettings from './ZWaveSettings';
+import Details from './Details';
+import Theme from '../../../Theme';
+import { View } from '../../../../BaseComponents';
+import LocationDetailsHeaderPoster from './LocationDetailsHeaderPoster';
 
-const DeviceDetailsNavigator = createMaterialTopTabNavigator(
+const DetailsNavigator = createMaterialTopTabNavigator(
 	{
-		Overview: {
-			screen: Overview,
+		LOverview: {
+			screen: Details,
 		},
-		History: {
-			screen: History,
-		},
-		Settings: {
-			screen: Settings,
+		ZWaveSettings: {
+			screen: ZWaveSettings,
 		},
 	},
 	{
-		initialRouteName: 'Overview',
+		initialRouteName: 'LOverview',
+		initialRouteKey: 'LOverview',
 		tabBarPosition: 'top',
 		swipeEnabled: false,
 		lazy: true,
@@ -58,13 +55,13 @@ const DeviceDetailsNavigator = createMaterialTopTabNavigator(
 				const isPortrait = height > width;
 				const deviceWidth = isPortrait ? width : height;
 
-				tabWidth = width / 3;
+				tabWidth = width / 2;
 				fontSize = deviceWidth * 0.03;
 				paddingVertical = 10 + (fontSize * 0.5);
 			}
 			return (
 				<View style={{flex: 0}}>
-					<DeviceDetailsHeaderPoster {...rest}/>
+					<LocationDetailsHeaderPoster {...rest}/>
 					<MaterialTopTabBar {...rest}
 						tabStyle={{
 							...tabStyle,
@@ -102,4 +99,4 @@ const DeviceDetailsNavigator = createMaterialTopTabNavigator(
 	}
 );
 
-export default DeviceDetailsNavigator;
+export default DetailsNavigator;

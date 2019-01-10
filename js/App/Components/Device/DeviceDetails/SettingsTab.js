@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
@@ -30,17 +30,26 @@ import {
 	View,
 	TabBar,
 	SettingsRow,
-} from '../../../BaseComponents';
+	TouchableButton,
+} from '../../../../BaseComponents';
 
-import { LearnButton } from '../TabViews/SubViews';
+import { LearnButton } from '../../TabViews/SubViews';
+import { ExcludeDevice } from './SubViews';
 
-import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-import { addToDashboard, removeFromDashboard, showToast } from '../../Actions';
-import { shouldUpdate } from '../../Lib';
+import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';
+import {
+	addToDashboard,
+	removeFromDashboard,
+	showToast,
+	getSocketObject,
+	sendSocketMessage,
+	processWebsocketMessageForDevice,
+} from '../../../Actions';
+import { shouldUpdate, LayoutAnimations } from '../../../Lib';
 
-import Theme from '../../Theme';
+import Theme from '../../../Theme';
 
-import i18n from '../../Translations/common';
+import i18n from '../../../Translations/common';
 
 type Props = {
 	dispatch: Function,
@@ -49,10 +58,16 @@ type Props = {
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
 	screenProps: Object,
+	navigation: Object,
+	showToast: (?string) => void,
+	getSocketObject: (number) => any,
+	sendSocketMessage: (number, string, string, Object) => any,
+	processWebsocketMessageForDevice: (string, Object) => null,
 };
 
 type State = {
 	isHidden: boolean,
+	excludeActive: boolean,
 };
 
 
@@ -62,6 +77,9 @@ class SettingsTab extends View {
 
 	onValueChange: number => void;
 	setIgnoreDevice: (boolean) => void;
+	onPressExcludeDevice: () => void;
+	goBack: () => void;
+	onPressCancelExclude: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -86,12 +104,17 @@ class SettingsTab extends View {
 
 		this.state = {
 			isHidden: props.device.ignored,
+			excludeActive: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
 
 		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
+
+		this.onPressExcludeDevice = this.onPressExcludeDevice.bind(this);
+		this.goBack = this.goBack.bind(this);
+		this.onPressCancelExclude = this.onPressCancelExclude.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -118,6 +141,26 @@ class SettingsTab extends View {
 		return false;
 	}
 
+	onPressExcludeDevice() {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		this.setState({
+			excludeActive: true,
+		});
+	}
+
+	onPressCancelExclude() {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		this.setState({
+			excludeActive: false,
+		});
+	}
+
+	goBack() {
+		this.props.navigation.navigate({
+			routeName: 'Devices',
+			key: 'Devices',
+		});
+	}
 
 	onValueChange(value: boolean) {
 		if (!value) {
@@ -137,30 +180,31 @@ class SettingsTab extends View {
 			const message = !value ?
 				this.removedFromHiddenList : this.addedToHiddenList;
 			this.props.dispatch(getDevices());
-			this.props.dispatch(showToast(message));
+			this.props.showToast(message);
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			this.setState({
 				isHidden: device.ignored,
 			});
-			this.props.dispatch(showToast(message));
+			this.props.showToast(message);
 		});
 	}
 
 	render(): Object | null {
-		const { isHidden } = this.state;
+		const { isHidden, excludeActive } = this.state;
 		const { device, screenProps, inDashboard } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
-		const { supportedMethods = {}, id } = device;
+		const { supportedMethods = {}, id, clientId } = device;
 
-		if (!id) {
+		if (!id && !excludeActive) {
 			return null;
 		}
 
 		const {
 			container,
 			learn,
+			excludeButtonStyle,
 		} = this.getStyle(appLayout);
 
 		const { LEARN } = supportedMethods;
@@ -170,23 +214,43 @@ class SettingsTab extends View {
 		if (LEARN) {
 			learnButton = <LearnButton id={id} style={learn} />;
 		}
+
 		return (
-			<ScrollView>
-				<View style={container}>
-					<SettingsRow
-						label={formatMessage(i18n.showOnDashborad)}
-						onValueChange={this.onValueChange}
-						value={inDashboard}
+			<ScrollView style={{
+				backgroundColor: Theme.Core.appBackground,
+			}}>{excludeActive ?
+
+					<ExcludeDevice
+						clientId={clientId}
 						appLayout={appLayout}
-					/>
-					<SettingsRow
-						label={formatMessage(i18n.hideFromListD)}
-						onValueChange={this.setIgnoreDevice}
-						value={isHidden}
-						appLayout={appLayout}
-					/>
-					{learnButton}
-				</View>
+						intl={intl}
+						sendSocketMessage={this.props.sendSocketMessage}
+						getSocketObject={this.props.getSocketObject}
+						showToast={this.props.showToast}
+						processWebsocketMessageForDevice={this.props.processWebsocketMessageForDevice}
+						onExcludeSuccess={this.goBack}
+						onPressCancelExclude={this.onPressCancelExclude}/>
+					:
+					<View style={container}>
+						<SettingsRow
+							label={formatMessage(i18n.showOnDashborad)}
+							onValueChange={this.onValueChange}
+							value={inDashboard}
+							appLayout={appLayout}
+						/>
+						<SettingsRow
+							label={formatMessage(i18n.hideFromListD)}
+							onValueChange={this.setIgnoreDevice}
+							value={isHidden}
+							appLayout={appLayout}
+						/>
+						{learnButton}
+						<TouchableButton
+							text={formatMessage(i18n.headerExclude).toUpperCase()}
+							onPress={this.onPressExcludeDevice}
+							style={excludeButtonStyle}/>
+					</View>
+				}
 			</ScrollView>
 		);
 	}
@@ -204,10 +268,14 @@ class SettingsTab extends View {
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
+				backgroundColor: Theme.Core.appBackground,
 			},
 			learn: {
 				marginHorizontal: width * 0.25,
 				marginVertical: padding / 2,
+			},
+			excludeButtonStyle: {
+				marginTop: padding * 2,
 			},
 		};
 	}
@@ -217,6 +285,10 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onAddToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
 		onRemoveFromDashboard: (id: number): any => dispatch(removeFromDashboard('device', id)),
+		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
+		getSocketObject: (id: number): any => dispatch(getSocketObject(id)),
+		showToast: (message: string): any => dispatch(showToast(message)),
+		processWebsocketMessageForDevice: (action: string, data: Object): any => dispatch(processWebsocketMessageForDevice(action, data)),
 		dispatch,
 	};
 }

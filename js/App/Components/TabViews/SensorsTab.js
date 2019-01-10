@@ -350,6 +350,7 @@ class SensorsTab extends View {
 			container: {
 				flex: 1,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				backgroundColor: Theme.Core.appBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',

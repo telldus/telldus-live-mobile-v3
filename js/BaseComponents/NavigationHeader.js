@@ -35,6 +35,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import View from './View';
 import Header from './Header';
 import { hasStatusBar } from '../App/Lib';
+import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 type Props = {
@@ -119,6 +120,7 @@ class NavigationHeader extends PureComponent<Props, null> {
 			accessibilityLabel: this.labelLeftIcon,
 		} : null;
 
+		const { land } = Theme.Core.headerHeightFactor;
 		return (
 			<Header
 				leftButton={leftIcon}
@@ -127,7 +129,7 @@ class NavigationHeader extends PureComponent<Props, null> {
 					height: Platform.OS === 'android' ?
 						deviceHeight * 0.08
 						:
-						(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 ),
+						(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land ),
 				}}/>
 		);
 	}

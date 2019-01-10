@@ -137,7 +137,7 @@ getStyles(appLayout: Object): Object {
 		},
 		nextIcon: {
 			position: 'absolute',
-			right: 10,
+			right: fontSize,
 		},
 	};
 }

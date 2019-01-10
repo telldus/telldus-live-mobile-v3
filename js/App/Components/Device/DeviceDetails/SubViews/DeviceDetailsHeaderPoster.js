@@ -25,11 +25,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
-import { closeDatabase } from '../../../Actions/LocalStorage';
-import i18n from '../../../Translations/common';
-import { hideModal } from '../../../Actions';
-import { getDeviceIcons } from '../../../Lib';
+import { View, NavigationHeaderPoster } from '../../../../../BaseComponents';
+import { closeDatabase } from '../../../../Actions/LocalStorage';
+import i18n from '../../../../Translations/common';
+import { hideModal } from '../../../../Actions';
+import { getDeviceIcons } from '../../../../Lib';
 
 type Props = {
 	hideModal: () => Function,

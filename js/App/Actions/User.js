@@ -21,7 +21,7 @@
 // @flow
 
 'use strict';
-import { Answers } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 import { format } from 'url';
 
 // User actions that are shared by both Web and Mobile.
@@ -148,14 +148,14 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			if (responseData.error) {
 				throw responseData;
 			}
-			Answers.logSignUp('Email', true);
+			firebase.crashlytics().setBoolValue('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
 			return responseData;
 		}).catch((e: Object): any => {
-			Answers.logSignUp('Email', false);
+			firebase.crashlytics().setBoolValue('Email', false);
 			throw e;
 		});
 };
@@ -195,6 +195,67 @@ const hideChangeLog = (): Action => {
 	};
 };
 
+function deletePushToken(token: string): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const url = format({
+			pathname: '/user/deletePushToken',
+			query: {
+				token,
+			},
+		});
+		const payload = {
+			url,
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return dispatch(LiveApi(payload)).then((response: Object): Object => {
+			const { status } = response;
+			if (status && status === 'success') {
+				dispatch({
+					type: 'PUSH_TOKEN_DELETED',
+					token: token,
+					payload: {
+						...response,
+					},
+				});
+				return response;
+			}
+			throw response;
+		}).catch((err: any) => {
+			throw err;
+		});
+	};
+}
+
+function getPhonesList(): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const payload = {
+			url: '/user/listPhones',
+			requestParams: {
+				method: 'GET',
+			},
+		};
+		return dispatch(LiveApi(payload)).then((response: Object): Object => {
+			const { phone } = response;
+			if (phone) {
+				dispatch(receivedPhonesList(phone));
+				return response;
+			}
+			throw response;
+		}).catch((err: any) => {
+			throw err;
+		});
+	};
+}
+
+const receivedPhonesList = (payload: Array<Object> = []): Action => {
+	return {
+		type: 'RECEIVED_PHONES_LIST',
+		payload,
+	};
+};
+
 
 module.exports = {
 	...User,
@@ -204,4 +265,6 @@ module.exports = {
 	showChangeLog,
 	hideChangeLog,
 	forgotPassword,
+	getPhonesList,
+	deletePushToken,
 };

@@ -50,6 +50,7 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
+	initialRouteKey: 'Dashboard',
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: false,

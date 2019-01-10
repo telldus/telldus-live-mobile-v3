@@ -35,7 +35,7 @@ import {
 	formatLastUpdated,
 	checkIfLarge,
 	shouldUpdate,
-	getSensorIconLabelUnit,
+	getSensorInfo,
 	getWindDirection,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
@@ -106,7 +106,7 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getSlideList(item: Object): Object {
-		let slideList = {}, sensorInfo = '';
+		let slideList = {}, sensorAccessibilityInfo = '';
 		const { intl } = this.props;
 		const { formatMessage } = intl;
 
@@ -123,7 +123,7 @@ class SensorDashboardTile extends View<Props, null> {
 			const { value, scale, name } = item.data[key];
 			const isLarge = checkIfLarge(value.toString());
 
-			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
 
 			let sharedProps = {
 				key,
@@ -139,85 +139,28 @@ class SensorDashboardTile extends View<Props, null> {
 				unitStyle,
 				labelStyle,
 				sensorValueCoverStyle,
+				formatOptions,
 			};
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 
-			if (name === 'humidity') {
-				slideList[key] = <GenericSensor {...sharedProps} />;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
+			if (name === 'wdir') {
+				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 			}
-			if (name === 'temp') {
-				slideList[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'rrate' || name === 'rtotal') {
-				slideList[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-				let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtotal' ? `${label} ${value}${unit}` : '';
-				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
-			}
-			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let directions = '';
-				if (name === 'wdir') {
-					directions = [...getWindDirection(value, formatMessage)].toString();
-					sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
-				}
-				slideList[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${label} ${directions}` : '';
-				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
-			}
-			if (name === 'uv') {
-				slideList[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}} />;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'watt') {
-				if (scale === '0') {
-					sharedProps = { ...sharedProps, label: isLarge ? label :
-						`${this.labelAcc} ${this.labelWatt}` };
-				}
-				slideList[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}} />;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'lum') {
-				slideList[key] = <GenericSensor	{...sharedProps}
-					formatOptions={{maximumFractionDigits: 0, useGrouping: false}} />;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'dewp') {
-				slideList[key] = <GenericSensor	{...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'barpress') {
-				slideList[key] = <GenericSensor	{...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}} />;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'genmeter') {
-				slideList[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
+			slideList[key] = <GenericSensor {...sharedProps}/>;
 		}
 
-		return {slideList, sensorInfo};
+		return {slideList, sensorAccessibilityInfo};
 	}
 
 	render(): Object {
 		const { item, tileWidth, isGatewayActive, intl, onPress } = this.props;
-		const { slideList, sensorInfo } = this.getSlideList(item);
+		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
 		const { lastUpdated } = item;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
-		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
 		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';

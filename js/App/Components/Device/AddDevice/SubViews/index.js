@@ -15,48 +15,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 // @flow
 
 'use strict';
 
-import React from 'react';
-import Base from './Base';
-import computeProps from './computeProps';
-import ScrollableTabView from 'react-native-scrollable-tab-view';
+import DeviceTypeBlock from './DeviceTypeBlock';
 
-type Props = {
-	children: Object,
+module.exports = {
+	DeviceTypeBlock,
 };
-
-export default class TabComponent extends Base {
-	props: Props;
-
-	getInitialStyle(): Object {
-		return {
-			tab: {
-				flex: 1,
-			},
-		};
-	}
-
-	prepareRootProps(): Object {
-
-		let defaultProps = {
-			style: this.getInitialStyle().tab,
-		};
-
-		return computeProps(this.props, defaultProps);
-
-	}
-
-	render(): React$Element<any> {
-		return (
-			<ScrollableTabView {...this.prepareRootProps()} >
-				{this.props.children}
-			</ScrollableTabView>
-		);
-	}
-
-}

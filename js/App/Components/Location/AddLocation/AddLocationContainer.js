@@ -225,7 +225,10 @@ class AddLocationContainer extends View<null, Props, State> {
 			<View style={{
 				flex: 1,
 			}}>
-				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
+				<ScrollView style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
 						<NavigationHeaderPoster
 							h1={h1} h2={h2}

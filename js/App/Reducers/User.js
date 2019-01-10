@@ -22,7 +22,7 @@
 'use strict';
 
 import type { Action } from '../Actions/Types';
-import { Crashlytics } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 
 import { createSelector } from 'reselect';
 
@@ -39,6 +39,7 @@ export type State = {
 	osVersion: string,
 	deviceName: string,
 	deviceModel: string,
+	phonesList: Object,
 };
 
 export const initialState = {
@@ -54,6 +55,7 @@ export const initialState = {
 	osVersion: '',
 	deviceName: '',
 	deviceModel: '',
+	phonesList: {}, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -104,9 +106,26 @@ export default function reduceUser(state: State = initialState, action: Action):
 			deviceModel,
 		};
 	}
+	if (action.type === 'PUSH_TOKEN_UNREGISTERED') {
+		return {
+			...state,
+			pushTokenRegistered: false,
+		};
+	}
+	if (action.type === 'PUSH_TOKEN_DELETED') {
+		return {
+			...state,
+			pushTokenRegistered: false,
+			deviceId: '',
+			osVersion: '',
+			deviceName: '',
+			deviceModel: '',
+		};
+	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
-		Crashlytics.setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
-		Crashlytics.setUserEmail(action.payload.email);
+		firebase.crashlytics().setUserIdentifier(action.payload.email);
+		// TODO: Enable once the method is supported.
+		// firebase.crashlytics().setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
 		return {
 			...state,
 			userProfile: action.payload,
@@ -146,6 +165,28 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			showChangeLog: false,
+		};
+	}
+	if (action.type === 'RECEIVED_PHONES_LIST') {
+		// Store only those required attributes!
+		const phonesList = action.payload.reduce((acc: Object, phone: Object): Object => {
+			const {
+				id,
+				token,
+				name,
+				model,
+			} = phone;
+			acc[id] = {
+				token,
+				name,
+				model,
+			};
+			return acc;
+		}, {});
+
+		return {
+			...state,
+			phonesList,
 		};
 	}
 	return state;

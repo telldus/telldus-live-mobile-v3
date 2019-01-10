@@ -1,21 +1,7 @@
 apply plugin: "com.android.application"
+apply plugin: "io.fabric"
 
 import com.android.build.OutputFile
-
-buildscript {
-  repositories {
-    maven { url 'https://maven.fabric.io/public' }
-  }
-  dependencies {
-    // The Fabric Gradle plugin uses an open ended version to react
-    // quickly to Android tooling updates
-    classpath 'io.fabric.tools:gradle:1.+'
-  }
-}
-apply plugin: 'io.fabric'
-repositories {
-  maven { url 'https://maven.fabric.io/public' }
-}
 
 def readVersion() {
     def parsedJson = new groovy.json.JsonSlurper().parseText(file('../../package.json').text)
@@ -182,6 +168,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-gesture-handler')
     implementation project(':react-native-orientation-locker')
     implementation project(':react-native-svg')
     implementation(project(':react-native-firebase')) {
@@ -192,13 +179,12 @@ dependencies {
         exclude group: 'com.google.android.gms'
     }
     implementation (project(':react-native-device-info')){
-        exclude group: "com.google.android.gms" 
+        exclude group: "com.google.android.gms"
     }
     implementation project(':react-native-rsa-native')
     implementation project(':react-native-udp')
     implementation project(':react-native-sensitive-info')
     implementation project(':react-native-accessibility')
-    implementation project(':react-native-fabric')
     implementation project(':react-native-i18n')
     implementation project(':react-native-extra-dimensions-android')
     implementation project(':react-native-vector-icons')
@@ -207,11 +193,11 @@ dependencies {
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
-    implementation ("com.facebook.react:react-native:0.55.4")
+    implementation ("com.facebook.react:react-native:0.57.7")
     {
         force = true
     }
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.6') {
       transitive = true;
     }
     implementation project(':react-native-sqlite-storage')
@@ -229,6 +215,12 @@ dependencies {
         force = true;
     }
     implementation ('com.google.firebase:firebase-messaging:17.3.4') {
+        force = true;
+    }
+    implementation(project(":react-native-google-signin")){
+        exclude group: "com.google.android.gms"
+    }
+    implementation ('com.google.android.gms:play-services-auth:16.0.0') {
         force = true;
     }
 }

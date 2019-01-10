@@ -27,7 +27,7 @@ let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 SQLite.DEBUG(isDebuggingInChrome);
 SQLite.enablePromise(true);
 
-import { getSensorIconLabelUnit } from './SensorUtils';
+import { getSensorInfo } from './SensorUtils';
 
 
 const databaseName = 'tellduslocalstorage.db';
@@ -271,7 +271,7 @@ export default class TelldusLocalStorage {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				const { type, scale } = results.rows.item(i);
-				const { label, unit, icon } = getSensorIconLabelUnit(type, scale, formatMessage);
+				const { label, unit, icon } = getSensorInfo(type, scale, 0, false, formatMessage);
 				const postFix = unit ? ` (${unit})` : '';
 				let row = { type, scale, value: `${label}${postFix}`, icon};
 				data.push(row);

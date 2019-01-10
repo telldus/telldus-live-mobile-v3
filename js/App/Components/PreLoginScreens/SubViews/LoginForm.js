@@ -22,14 +22,20 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 
 import { TouchableButton, View, H1 } from '../../../../BaseComponents';
 import { loginToTelldus, showModal } from '../../../Actions';
-import { testUsername, testPassword } from '../../../../Config';
+import {
+	testUsername,
+	testPassword,
+	webClientId,
+	iosClientId,
+} from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 
@@ -48,6 +54,7 @@ type State = {
 		isLoading: boolean,
 		username: string,
 		password: string,
+		isSigninInProgress: boolean,
 };
 
 class LoginForm extends View {
@@ -58,6 +65,8 @@ class LoginForm extends View {
 	onChangePassword: (password: string) => void;
 	onFormSubmit: (username: string, password: string) => void;
 	postSubmit: () => void;
+	signIn: () => any;
+	signOutGoogle: () => any;
 
 	invalidGrant: string;
 
@@ -68,12 +77,15 @@ class LoginForm extends View {
 			username: testUsername,
 			password: testPassword,
 			isLoading: false,
+			isSigninInProgress: false,
 		};
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
 		this.onChangePassword = this.onChangePassword.bind(this);
 		this.onFormSubmit = this.onFormSubmit.bind(this);
 		this.postSubmit = this.postSubmit.bind(this);
+		this.signIn = this.signIn.bind(this);
+		this.signOutGoogle = this.signOutGoogle.bind(this);
 
 		let { formatMessage } = props.intl;
 
@@ -82,6 +94,18 @@ class LoginForm extends View {
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.invalidGrant = `${formatMessage(i18n.errorInvalidGrant)}.`;
 	}
+
+	componentDidMount() {
+		this.configureGoogleSignIn();
+	}
+
+	configureGoogleSignIn() {
+		GoogleSignin.configure({
+			webClientId: webClientId,
+			offlineAccess: true,
+			iosClientId: Platform.OS === 'ios' ? iosClientId : null,
+		});
+	  }
 
 	render(): Object {
 		let { dialogueOpen, styles, headerText } = this.props;
@@ -138,8 +162,66 @@ class LoginForm extends View {
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
 				/>
+				<View style={{ height: 10 }}/>
+				<GoogleSigninButton
+					style={styles.loginButtonStyleG}
+					size={GoogleSigninButton.Size.Wide}
+					color={GoogleSigninButton.Color.Dark}
+					onPress={this.signIn}
+					disabled={this.state.isSigninInProgress} />
+				<View style={{ height: 10 }}/>
 			</View>
 		);
+	}
+
+	async signOutGoogle(): any {
+		try {
+			await GoogleSignin.revokeAccess();
+			await GoogleSignin.signOut();
+
+			this.setState({ userInfo: null, error: null });
+		  } catch (error) {
+			this.setState({
+			  error,
+			});
+		  }
+	}
+
+	async signIn(): any {
+		const { dispatch } = this.props;
+		this.setState({ isSigninInProgress: true });
+		try {
+			await GoogleSignin.hasPlayServices();
+			const data = await GoogleSignin.signIn();
+			const { idToken } = data;
+			if (idToken) {
+				const credential = {
+					idToken,
+				};
+				this.props.loginToTelldus(credential, 'google')
+					.catch((err: Object) => {
+						this.setState({
+							isSigninInProgress: false,
+						});
+						this.handleLoginError(err);
+					});
+			} else {
+				dispatch(showModal(this.unknownError));
+			}
+		  } catch (error) {
+			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+			  // user cancelled the login flow
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+			  // operation (f.e. sign in) is in progress already
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+			  // play services not available or outdated
+			  dispatch(showModal('Please make sure you have the latest version of google play services installed.'));// TODO : Confirm and translate the message string
+			} else {
+			  // some other error happened
+			  dispatch(showModal(this.unknownError));
+			}
+			this.setState({ isSigninInProgress: false });
+		  }
 	}
 
 	onChangeUsername(username: string) {
@@ -157,10 +239,15 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
-		let { intl, dispatch } = this.props;
+		const { intl, dispatch } = this.props;
+		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
-			this.props.loginToTelldus(this.state.username, this.state.password)
+			const credential = {
+				username,
+				password,
+			};
+			this.props.loginToTelldus(credential)
 				.catch((err: Object) => {
 					this.postSubmit();
 					this.handleLoginError(err);
