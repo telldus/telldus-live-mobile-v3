@@ -59,7 +59,7 @@ type Props = {
 };
 
 type State = {
-	isLoading: bolean,
+	isLoading: boolean,
 };
 
 class Details extends View<Props, State> {
