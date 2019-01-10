@@ -27,7 +27,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import LocationDetailsContainer from './LocationDetailsContainer';
 
-import Details from './Details';
+import DetailsNavigator from './DetailsNavigator';
 import EditName from './EditName';
 import EditTimeZoneContinent from './EditTimeZoneContinent';
 import EditTimeZoneCity from './EditTimeZoneCity';
@@ -35,29 +35,29 @@ import EditGeoPosition from './EditGeoPosition';
 
 const initialRouteName = 'Details';
 
-type renderContainer = (Object) => Object;
+type renderContainer = (Object, string) => Object;
 
-const renderLocationDetailsContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
-	<LocationDetailsContainer navigation={navigation} screenProps={screenProps}>
+const renderLocationDetailsContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
+	<LocationDetailsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</LocationDetailsContainer>
 );
 
 const RouteConfigs = {
 	Details: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(Details),
+		screen: DetailsNavigator,
 	},
 	EditName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditName),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditName, 'EditName'),
 	},
 	EditTimeZoneContinent: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneContinent),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneContinent, 'EditTimeZoneContinent'),
 	},
 	EditTimeZoneCity: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneCity),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneCity, 'EditTimeZoneCity'),
 	},
 	EditGeoPosition: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition),
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition, 'EditGeoPosition'),
 	},
 };
 
