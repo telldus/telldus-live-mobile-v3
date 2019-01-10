@@ -159,4 +159,8 @@ export default StyleSheet.create({
 		textShadowColor: 'white',
 		backgroundColor: 'white',
 	},
+	emptyBackgroundFill: {
+		flex: 1,
+		backgroundColor: Core.appBackground,
+	},
 });
