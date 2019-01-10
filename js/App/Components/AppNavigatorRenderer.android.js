@@ -27,6 +27,7 @@ import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
+import { NavigationActions } from 'react-navigation';
 
 import { View, Header, Image } from '../../BaseComponents';
 import Navigator from './AppNavigator';
@@ -182,7 +183,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	onPressGateway(location: Object) {
 		this.closeDrawer();
-		navigate('LocationDetails', {location}, 'LocationDetails');
+		const navigateAction = NavigationActions.navigate({
+			routeName: 'Details',
+			key: 'Details',
+			params: { location },
+		});
+		navigate('LocationDetails', location, 'LocationDetails', navigateAction);
 	}
 
 	onOpenSetting() {
