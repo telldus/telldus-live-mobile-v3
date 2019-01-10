@@ -248,7 +248,7 @@ class JobRow extends View<null, Props, null> {
 								{deviceName}
 							</Title>
 							<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
-								{repeat}
+								{repeat}{' '}
 								{type === 'time' && (
 									<FormattedTime
 										value={timestamp}
