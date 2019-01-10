@@ -25,6 +25,7 @@
 import React from 'react';
 import {
 	Image,
+	Keyboard,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
 
@@ -121,6 +122,7 @@ submitName() {
 		this.setState({
 			isLoading: true,
 		});
+		Keyboard.dismiss();
 		actions.setDeviceName(deviceId, deviceName).then(() => {
 			actions.getDevices();
 			this.setState({

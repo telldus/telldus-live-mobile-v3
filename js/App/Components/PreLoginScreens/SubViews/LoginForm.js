@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Platform } from 'react-native';
+import { TextInput, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -195,6 +195,7 @@ class LoginForm extends View {
 			const data = await GoogleSignin.signIn();
 			const { idToken } = data;
 			if (idToken) {
+				Keyboard.dismiss();
 				const credential = {
 					idToken,
 				};
@@ -243,6 +244,7 @@ class LoginForm extends View {
 		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
+			Keyboard.dismiss();
 			const credential = {
 				username,
 				password,
