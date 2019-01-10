@@ -222,7 +222,6 @@ class SettingsTab extends View {
 
 					<ExcludeDevice
 						clientId={clientId}
-						id={id}
 						appLayout={appLayout}
 						intl={intl}
 						sendSocketMessage={this.props.sendSocketMessage}
