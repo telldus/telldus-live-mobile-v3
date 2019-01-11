@@ -30,7 +30,7 @@ import { closeDatabase } from '../../../Actions/LocalStorage';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	sensorName: string,
+	gatewayName: string,
 	screenProps: Object,
 	navigation: Object,
 };
@@ -73,13 +73,13 @@ class LocationDetailsHeaderPoster extends View<Props, null> {
 		const { navigation, screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
 
-		let { sensorName } = this.props;
-		sensorName = sensorName ? sensorName : this.noName;
+		let { gatewayName } = this.props;
+		gatewayName = gatewayName ? gatewayName : this.noName;
 
 		return (
 			<NavigationHeaderPoster
 				icon={'location'}
-				h2={sensorName}
+				h2={gatewayName}
 				appLayout={appLayout}
 				intl={intl}
 				navigation={navigation}
@@ -91,10 +91,10 @@ class LocationDetailsHeaderPoster extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
-	const { name: sensorName } = store.sensors.byId[id] ? store.sensors.byId[id] : {};
+	const { id } = ownProps.navigation.getParam('location', {});
+	const { name: gatewayName } = store.gateways.byId[id] ? store.gateways.byId[id] : {};
 	return {
-		sensorName,
+		gatewayName,
 	};
 }
 
