@@ -119,6 +119,11 @@ goBack() {
 	this.props.navigation.goBack();
 }
 
+supportZWave(transports: string = ''): boolean {
+	const items = transports.split(',');
+	return items.indexOf('zwave') !== -1;
+}
+
 render(): Object {
 	const { excludeActive } = this.state;
 	const { screenProps, location } = this.props;
@@ -128,10 +133,13 @@ render(): Object {
 		return <View style={Theme.Styles.emptyBackgroundFill}/>;
 	}
 
-	let { id } = location;
+	const { id, online = false, websocketOnline = false, transports = '' } = location;
+	const canExclude = online && websocketOnline && this.supportZWave(transports);
 
 	const {
 		container,
+		brandSecondary,
+		btnDisabledBg,
 	} = this.getStyles(appLayout);
 
 	return (
@@ -150,7 +158,10 @@ render(): Object {
 				:
 				<TouchableButton
 					text={intl.formatMessage(i18n.headerExclude).toUpperCase()}
-					onPress={this.onPressExcludeDevice}/>
+					onPress={this.onPressExcludeDevice}
+					style={{
+						backgroundColor: canExclude ? brandSecondary : btnDisabledBg,
+					}}/>
 			}
 		</ScrollView>
 	);
@@ -160,13 +171,16 @@ getStyles(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+	const { paddingFactor, appBackground, brandSecondary, btnDisabledBg } = Theme.Core;
 
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const padding = deviceWidth * paddingFactor;
 
 	return {
+		brandSecondary,
+		btnDisabledBg,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
+			backgroundColor: appBackground,
 			padding,
 		},
 	};

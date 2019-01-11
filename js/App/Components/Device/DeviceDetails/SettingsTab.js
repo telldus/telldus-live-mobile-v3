@@ -52,9 +52,11 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	dispatch: Function,
+	isGatewayReachable: boolean,
 	device: Object,
 	inDashboard: boolean,
+
+	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
 	screenProps: Object,
@@ -131,7 +133,7 @@ class SettingsTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['device']);
+			const propsChange = shouldUpdate(others, othersN, ['device', 'isGatewayReachable']);
 			if (propsChange) {
 				return true;
 			}
@@ -192,10 +194,10 @@ class SettingsTab extends View {
 
 	render(): Object | null {
 		const { isHidden, excludeActive } = this.state;
-		const { device, screenProps, inDashboard } = this.props;
+		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
-		const { supportedMethods = {}, id, clientId } = device;
+		const { supportedMethods = {}, id, clientId, transport } = device;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -205,6 +207,8 @@ class SettingsTab extends View {
 			container,
 			learn,
 			excludeButtonStyle,
+			brandSecondary,
+			btnDisabledBg,
 		} = this.getStyle(appLayout);
 
 		const { LEARN } = supportedMethods;
@@ -214,6 +218,8 @@ class SettingsTab extends View {
 		if (LEARN) {
 			learnButton = <LearnButton id={id} style={learn} />;
 		}
+
+		const canExclude = (transport === 'zwave') && isGatewayReachable;
 
 		return (
 			<ScrollView style={{
@@ -248,7 +254,9 @@ class SettingsTab extends View {
 						<TouchableButton
 							text={formatMessage(i18n.headerExclude).toUpperCase()}
 							onPress={this.onPressExcludeDevice}
-							style={excludeButtonStyle}/>
+							style={[excludeButtonStyle, {
+								backgroundColor: canExclude ? brandSecondary : btnDisabledBg,
+							}]}/>
 					</View>
 				}
 			</ScrollView>
@@ -259,16 +267,19 @@ class SettingsTab extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+		const { paddingFactor, appBackground, brandSecondary, btnDisabledBg } = Theme.Core;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = deviceWidth * paddingFactor;
 
 		return {
+			brandSecondary,
+			btnDisabledBg,
 			container: {
 				flex: 0,
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: appBackground,
 			},
 			learn: {
 				marginHorizontal: width * 0.25,
@@ -294,10 +305,16 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
-	const device = state.devices.byId[id];
+	let device = state.devices.byId[id];
+	device = device ? device : {};
+
+	const { clientId } = device;
+	const { online = false, websocketOnline = false } = state.gateways.byId[clientId] || {};
+
 	return {
 		device: device ? device : {},
 		inDashboard: !!state.dashboard.devicesById[id],
+		isGatewayReachable: online && websocketOnline,
 	};
 }
 
