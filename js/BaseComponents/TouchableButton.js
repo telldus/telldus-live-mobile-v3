@@ -40,6 +40,11 @@ type Props = {
 	appLayout: Object,
 	accessible: boolean,
 	accessibilityLabel?: string,
+	disabled?: boolean,
+};
+
+type DefaultProps = {
+	disabled: boolean,
 };
 
 class TouchableButton extends Component<Props, void> {
@@ -48,6 +53,10 @@ class TouchableButton extends Component<Props, void> {
 	labelButton: string;
 
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		disabled: false,
+	}
 
 	constructor(props: Props) {
 		super(props);
@@ -70,7 +79,7 @@ class TouchableButton extends Component<Props, void> {
 
 
 	render(): Object {
-		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel, accessible } = this.props;
+		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel, accessible, disabled } = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		let shadow = Theme.Core.shadow;
 		accessibilityLabel = !accessible ? '' :
@@ -88,6 +97,7 @@ class TouchableButton extends Component<Props, void> {
 				importantForAccessibility={importantForAccessibility}
 				accessibilityLabel={accessibilityLabel}
 				style={[shadow, buttonContainer, style]}
+				disabled={disabled}
 				onPress={this.onPress}>
 				<Text style={[buttonLabel, labelStyle]}
 					accessible={accessible}
