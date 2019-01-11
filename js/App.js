@@ -21,7 +21,7 @@
 'use strict';
 
 import React from 'react';
-import { AccessibilityInfo, UIManager } from 'react-native';
+import { AccessibilityInfo, UIManager, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
@@ -62,6 +62,7 @@ type Props = {
 
 type State = {
 	dialogueData: Object,
+	keyboard: boolean,
 };
 
 class App extends React.Component<Props, State> {
@@ -76,6 +77,11 @@ class App extends React.Component<Props, State> {
 	closeDialogue: (?() => void) => void;
 	onPressDialoguePositive: () => void;
 
+	_keyboardDidShow: () => void;
+	_keyboardDidHide: () => void;
+	keyboardDidShowListener: Object;
+	keyboardDidHideListener: Object;
+
 	constructor(props: Props) {
 		super(props);
 		this.onLayout = this.onLayout.bind(this);
@@ -85,6 +91,7 @@ class App extends React.Component<Props, State> {
 			dialogueData: {
 				show: false,
 			},
+			keyboard: false,
 		};
 
 		this.setCalendarLocale();
@@ -96,6 +103,12 @@ class App extends React.Component<Props, State> {
 		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
 		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
+
+		this._keyboardDidShow = this._keyboardDidShow.bind(this);
+		this._keyboardDidHide = this._keyboardDidHide.bind(this);
+
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 	}
 
 	componentDidMount() {
@@ -143,7 +156,21 @@ class App extends React.Component<Props, State> {
 			// Remove Push notification listener.
 			this.onNotification();
 		}
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
 	}
+
+	_keyboardDidShow() {
+		this.setState({
+			keyboard: true,
+		});
+	  }
+
+	  _keyboardDidHide() {
+		this.setState({
+			keyboard: false,
+		});
+	  }
 
 	/*
 	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
@@ -157,7 +184,9 @@ class App extends React.Component<Props, State> {
 	}
 
 	onLayout(ev: Object) {
-		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+		if (!this.state.keyboard) {
+			this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+		}
 	}
 
 	toggleDialogueBox(dialogueData: Object) {
