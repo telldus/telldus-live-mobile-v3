@@ -48,6 +48,7 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	screenProps: Object,
+	location: Object,
 
 	navigation: Object,
 	showToast: (?string) => void,
@@ -120,12 +121,14 @@ goBack() {
 
 render(): Object {
 	const { excludeActive } = this.state;
-	const { navigation, screenProps } = this.props;
+	const { screenProps, location } = this.props;
 	const { intl, appLayout } = screenProps;
-	let { id } = navigation.getParam('location', {id: null});
-	if (!id) {
+
+	if (!location || !location.id) {
 		return <View style={Theme.Styles.emptyBackgroundFill}/>;
 	}
+
+	let { id } = location;
 
 	const {
 		container,
@@ -180,4 +183,11 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(ZWaveSettings);
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	let { id } = ownProps.navigation.getParam('location', {id: null});
+	return {
+		location: store.gateways.byId[id],
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ZWaveSettings);
