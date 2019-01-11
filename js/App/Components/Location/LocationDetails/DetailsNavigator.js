@@ -47,30 +47,46 @@ const DetailsNavigator = createMaterialTopTabNavigator(
 		swipeEnabled: false,
 		lazy: true,
 		animationEnabled: true,
-		tabBarComponent: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
-			let { screenProps } = rest,
+		tabBarComponent: ({ style, tabStyle, labelStyle, indicatorStyle, ...rest }: Object): Object => {
+			let { screenProps, navigation } = rest, tabHeight,
 				tabWidth = 0, fontSize = 0, paddingVertical = 0;
+
+			const { transports = '' } = navigation.getParam('location', {});
+			const items = transports.split(',');
+			const supportZWave = items.indexOf('zwave') !== -1;
+
 			if (screenProps && screenProps.appLayout) {
 				const { width, height } = screenProps.appLayout;
 				const isPortrait = height > width;
 				const deviceWidth = isPortrait ? width : height;
 
-				tabWidth = width / 2;
+				tabWidth = supportZWave ? width / 2 : width;
 				fontSize = deviceWidth * 0.03;
 				paddingVertical = 10 + (fontSize * 0.5);
 			}
+			tabHeight = supportZWave ? undefined : 0;
 			return (
 				<View style={{flex: 0}}>
 					<LocationDetailsHeaderPoster {...rest}/>
 					<MaterialTopTabBar {...rest}
+						style={{
+							...style,
+							height: tabHeight,
+						}}
 						tabStyle={{
 							...tabStyle,
 							width: tabWidth,
+							height: tabHeight,
 							paddingVertical,
 						}}
 						labelStyle={{
 							...labelStyle,
 							fontSize,
+							height: tabHeight,
+						}}
+						indicatorStyle={{
+							...indicatorStyle,
+							height: tabHeight,
 						}}
 					/>
 				</View>
@@ -90,7 +106,7 @@ const DetailsNavigator = createMaterialTopTabNavigator(
 				justifyContent: 'center',
 			},
 			upperCaseLabel: false,
-			scrollEnabled: true,
+			scrollEnabled: false,
 			activeTintColor: Theme.Core.brandSecondary,
 			inactiveTintColor: Theme.Core.inactiveTintColor,
 			showIcon: false,
