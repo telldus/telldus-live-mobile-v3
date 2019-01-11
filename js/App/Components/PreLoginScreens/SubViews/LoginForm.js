@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Platform, Keyboard } from 'react-native';
+import { TextInput, Platform, Keyboard, InteractionManager } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -196,16 +196,18 @@ class LoginForm extends View {
 			const { idToken } = data;
 			if (idToken) {
 				Keyboard.dismiss();
-				const credential = {
-					idToken,
-				};
-				this.props.loginToTelldus(credential, 'google')
-					.catch((err: Object) => {
-						this.setState({
-							isSigninInProgress: false,
+				InteractionManager.runAfterInteractions(() => {
+					const credential = {
+						idToken,
+					};
+					this.props.loginToTelldus(credential, 'google')
+						.catch((err: Object) => {
+							this.setState({
+								isSigninInProgress: false,
+							});
+							this.handleLoginError(err);
 						});
-						this.handleLoginError(err);
-					});
+				});
 			} else {
 				dispatch(showModal(this.unknownError));
 			}
@@ -245,15 +247,17 @@ class LoginForm extends View {
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
 			Keyboard.dismiss();
-			const credential = {
-				username,
-				password,
-			};
-			this.props.loginToTelldus(credential)
-				.catch((err: Object) => {
-					this.postSubmit();
-					this.handleLoginError(err);
-				});
+			InteractionManager.runAfterInteractions(() => {
+				const credential = {
+					username,
+					password,
+				};
+				this.props.loginToTelldus(credential)
+					.catch((err: Object) => {
+						this.postSubmit();
+						this.handleLoginError(err);
+					});
+			});
 		} else {
 			let message = intl.formatMessage(i18n.fieldEmpty);
 			dispatch(showModal(message));

@@ -26,6 +26,7 @@ import React from 'react';
 import {
 	Image,
 	Keyboard,
+	InteractionManager,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
 
@@ -124,16 +125,28 @@ submitName() {
 		});
 		Keyboard.dismiss();
 		actions.setDeviceName(deviceId, deviceName).then(() => {
-			actions.getDevices();
-			this.setState({
-				isLoading: false,
-			});
+			this.postSubmitName();
+		}).catch(() => {
+			this.postSubmitName();
+		});
+	}
+}
+
+postSubmitName() {
+	const { actions, navigation } = this.props;
+
+	actions.getDevices().then(() => {
+		this.setState({
+			isLoading: false,
+		});
+		InteractionManager.runAfterInteractions(() => {
 			navigation.navigate({
 				routeName: 'Devices',
 				key: 'Devices',
 			});
-		}).catch(() => {
-			actions.getDevices();
+		});
+	}).catch(() => {
+		InteractionManager.runAfterInteractions(() => {
 			this.setState({
 				isLoading: false,
 			});
@@ -142,7 +155,7 @@ submitName() {
 				key: 'Devices',
 			});
 		});
-	}
+	});
 }
 
 getDeviceInfo(styles: Object): Object {
