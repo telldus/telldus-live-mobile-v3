@@ -23,12 +23,12 @@
 		144028A21EE6907D000945A3 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1440287A1EE69001000945A3 /* libRCTAnimation.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
+		26591AF421E899F300B1AF0F /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */; };
 		267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 267ABE5920F78730006CD1B5 /* libRNSVG.a */; };
 		26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */; };
 		26BB28B2216230CA0027C32A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28B1216230CA0027C32A /* Release.xcconfig */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
-		26D4DC5921424D9B0060DC8E /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DBFB21424C620060DC8E /* libRNGoogleSignin.a */; };
 		26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5A21424DAC0060DC8E /* SafariServices.framework */; };
 		26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */; };
 		26D4DC5F21424DCC0060DC8E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5E21424DCB0060DC8E /* libz.tbd */; };
@@ -483,6 +483,7 @@
 		23582646277C436FB236C344 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		23630B716BB84A33B8A4D6BD /* libRNI18n.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNI18n.a; sourceTree = "<group>"; };
 		261FCCC3217F5EB5006F74C1 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
+		26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		267ABE2520F78730006CD1B5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		26A439EF2100AB5500022896 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation-locker/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
 		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
@@ -544,10 +545,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26591AF421E899F300B1AF0F /* libRNGoogleSignin.a in Frameworks */,
 				26D4DC5F21424DCC0060DC8E /* libz.tbd in Frameworks */,
 				26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */,
 				26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */,
-				26D4DC5921424D9B0060DC8E /* libRNGoogleSignin.a in Frameworks */,
 				26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */,
 				267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */,
 				26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */,
@@ -838,6 +839,7 @@
 		781835ED9F715997196DD9BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */,
 				26D4DC5E21424DCB0060DC8E /* libz.tbd */,
 				26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */,
 				26D4DC5A21424DAC0060DC8E /* SafariServices.framework */,
