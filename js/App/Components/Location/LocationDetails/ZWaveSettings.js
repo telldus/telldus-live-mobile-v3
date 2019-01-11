@@ -134,7 +134,7 @@ render(): Object {
 	}
 
 	const { id, online = false, websocketOnline = false, transports = '' } = location;
-	const canExclude = online && websocketOnline && this.supportZWave(transports);
+	const canExclude = this.supportZWave(transports);
 
 	const {
 		container,
@@ -144,7 +144,7 @@ render(): Object {
 
 	return (
 		<ScrollView style={container}>
-			{excludeActive ?
+			{excludeActive && (
 				<ExcludeDevice
 					clientId={id}
 					appLayout={appLayout}
@@ -155,14 +155,15 @@ render(): Object {
 					processWebsocketMessageForDevice={this.props.processWebsocketMessageForDevice}
 					onExcludeSuccess={this.goBack}
 					onPressCancelExclude={this.onPressCancelExclude}/>
-				:
-				<TouchableButton
-					text={intl.formatMessage(i18n.headerExclude).toUpperCase()}
-					onPress={this.onPressExcludeDevice}
-					style={{
-						backgroundColor: canExclude ? brandSecondary : btnDisabledBg,
-					}}/>
-			}
+			)}
+			{(!excludeActive && canExclude) && (<TouchableButton
+				text={intl.formatMessage(i18n.headerExclude).toUpperCase()}
+				onPress={this.onPressExcludeDevice}
+				disabled={!(online && websocketOnline)}
+				style={{
+					backgroundColor: (online && websocketOnline) ? brandSecondary : btnDisabledBg,
+				}}/>
+			)}
 		</ScrollView>
 	);
 }

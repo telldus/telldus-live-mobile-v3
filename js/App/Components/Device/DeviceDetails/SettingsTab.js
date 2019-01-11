@@ -219,7 +219,7 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={id} style={learn} />;
 		}
 
-		const canExclude = (transport === 'zwave') && isGatewayReachable;
+		const canExclude = transport === 'zwave';
 
 		return (
 			<ScrollView style={{
@@ -251,12 +251,15 @@ class SettingsTab extends View {
 							appLayout={appLayout}
 						/>
 						{learnButton}
-						<TouchableButton
-							text={formatMessage(i18n.headerExclude).toUpperCase()}
-							onPress={this.onPressExcludeDevice}
-							style={[excludeButtonStyle, {
-								backgroundColor: canExclude ? brandSecondary : btnDisabledBg,
-							}]}/>
+						{canExclude && (
+							<TouchableButton
+								text={formatMessage(i18n.headerExclude).toUpperCase()}
+								onPress={this.onPressExcludeDevice}
+								disabled={!isGatewayReachable}
+								style={[excludeButtonStyle, {
+									backgroundColor: isGatewayReachable ? brandSecondary : btnDisabledBg,
+								}]}/>
+						)}
 					</View>
 				}
 			</ScrollView>
