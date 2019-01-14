@@ -234,6 +234,7 @@ render(): Object {
 				<View style={{
 					flexDirection: 'row',
 					alignItems: 'center',
+					justifyContent: 'flex-start',
 					flex: 1,
 				}}>
 					{editNameAcive ?
@@ -258,11 +259,13 @@ render(): Object {
 						throbberContainerStyle={{
 							position: 'relative',
 						}}/>}
-					{(!isPushSubmitLoading && editName) && <Icon
-						name={editNameAcive ? 'done' : 'edit'}
-						size={editIconSize}
-						color={editIconColor}
-						onPress={editNameAcive ? this.onSubmitEditing : this.onPressEditName}/>}
+					{(!isPushSubmitLoading && editName) &&
+							<Icon
+								name={editNameAcive ? 'done' : 'edit'}
+								size={editIconSize}
+								color={editIconColor}
+								onPress={editNameAcive ? this.onSubmitEditing : this.onPressEditName}/>
+					}
 				</View>
 				<Text style={h2Style}>
 					{model}
@@ -320,12 +323,13 @@ getStyles(appLayout: Object): Object {
 		infoContainerStyle: {
 			flexDirection: 'column',
 			justifyContent: 'center',
-			marginLeft: innerPadding,
+			marginHorizontal: innerPadding,
 			flex: 1,
 		},
 		h1Style: {
 			fontSize: fontSizeH1,
 			color: brandSecondary,
+			maxWidth: '90%',
 			marginRight: 5,
 		},
 		h2Style: {
