@@ -23,10 +23,12 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { Platform, Animated } from 'react-native';
+import { Animated } from 'react-native';
 import { intlShape } from 'react-intl';
 
-import { View, Text, IconTelldus, StyleSheet } from '../../../../BaseComponents';
+import { Text, Image } from '../../../../BaseComponents';
+import WizardIcon from './WizardIcon';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -60,73 +62,78 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.labelSensorHistory);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription38);
+		this.titleWOne = formatMessage(i18n.labelAddZWaveDevices);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription39);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoTitle38);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription38);
+		this.titleWTwo = formatMessage(i18n.wizardTwoTitle39);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription39);
 
-		this.titleWThree = formatMessage(i18n.labelDeviceTypes);
-		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription38);
+		this.titleWThree = formatMessage(i18n.wizardThreeTitle39);
+		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription39);
 	}
 
-	getScreenData(currentScreen: number, deviceWidth: number): Object {
-		let icon = null, iconTwo = null, iconThree = null, iconSize = Math.floor(deviceWidth * 0.315),
-			iconTwoSize = Math.floor(deviceWidth * 0.315), iconThreeSize = Math.floor(deviceWidth * 0.315), title = '', description = '';
+	getScreenData(currentScreen: number, styles: Object): Object {
+		const { brandSecondary, brandPrimary } = Theme.Core;
+		const {
+			iconStyle,
+			iconTwoStyle,
+			iconThreeStyle,
+			iconSize,
+		} = styles;
+
+		let screenData = {
+			icon: null,
+			iconSize,
+			iconColor: brandSecondary,
+			iconStyle,
+			title: '',
+			description: '',
+		};
+
 		switch (currentScreen) {
 			case 1:
-				icon = 'sensorhistory';
-				title = this.titleWOne;
-				description = this.descriptionWOne;
-				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
+				return {
+					...screenData,
+					icon: 'zwave',
+					iconSize: iconSize * 1.2,
+					iconColor: brandPrimary,
+					title: this.titleWOne,
+					description: this.descriptionWOne,
+				};
+
 			case 2:
-				icon = 'settings';
-				title = this.titleWTwo;
-				description = this.descriptionWTwo;
-				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
+				return {
+					...screenData,
+					icon: <Image source={{uri: 'icon_plus'}} style={iconTwoStyle} resizeMode={'cover'}/>,
+					title: this.titleWTwo,
+					description: this.descriptionWTwo,
+				};
+
 			case 3:
-				icon = 'door-open';
-				iconSize = Math.floor(deviceWidth * 0.345);
-				title = this.titleWThree;
-				description = this.descriptionWThree;
-				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
-			case 4:
-				icon = 'hidden';
-				iconTwo = 'favorite-outline';
-				iconTwoSize = Math.floor(deviceWidth * 0.22);
-				iconThree = 'settings';
-				iconThreeSize = Math.floor(deviceWidth * 0.22);
-				title = this.titleWFour;
-				description = this.descriptionWFour;
-				return { icon, iconTwo, iconSize, iconTwoSize, iconThreeSize, iconThree, title, description };
+				return {
+					...screenData,
+					icon: 'push',
+					iconStyle: iconThreeStyle,
+					title: this.titleWThree,
+					description: this.descriptionWThree,
+				};
+
 			default:
-				icon = 'time';
-				title = this.titleWOne;
-				description = this.descriptionWOne;
-				return { icon, iconSize, iconTwoSize, iconThreeSize, title, description };
+				return screenData;
 		}
 	}
 
 	render(): Object {
 		const { currentScreen, animatedX, animatedOpacity, appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
-		const { icon, iconTwo, iconThree, iconSize, iconTwoSize, iconThreeSize,
-			title, description } = this.getScreenData(currentScreen, deviceWidth);
 
-		const { container, titleStyle, descriptionStyle, iconTwoStyle, iconThreeStyle } = this.getStyles(appLayout);
+		const { container, titleStyle, descriptionStyle, ...otherStyles } = this.getStyles(appLayout);
+		const { title, description, ...iconProps } = this.getScreenData(currentScreen, otherStyles);
 
-		// IconTelldus, on setting different font sizes causing alignment issue. So, handling with negative margin.
 		return (
 			<Animated.View style={[container, {opacity: animatedOpacity, transform: [{
 				translateX: animatedX,
 			}]}]}>
-				<View style={{flexDirection: 'row', justifyContent: 'center', marginLeft: iconTwo ? -16 : 0}}>
-					{!!icon && <IconTelldus icon={icon} style={styles.icon} size={iconSize}/>}
-					{!!iconTwo && <IconTelldus icon={iconTwo} style={iconTwoStyle} size={iconTwoSize}/>}
-					{!!iconThree && <IconTelldus icon={iconThree} style={iconThreeStyle} size={iconThreeSize}/>}
-				</View>
+				<WizardIcon {...iconProps}/>
 				<Text style={titleStyle}>
 					{title}
 				</Text>
@@ -141,13 +148,15 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const titleFontSize = Math.floor(deviceWidth * 0.052);
 
-		const iconFontSize = Math.floor(deviceWidth * 0.22);
+		const { brandSecondary, shadow, brandPrimary } = Theme.Core;
+		const titleFontSize = Math.floor(deviceWidth * 0.052);
+		const iconSize = Math.floor(deviceWidth * 0.315);
 
 		return {
+			iconSize,
 			container: {
-				...Theme.Core.shadow,
+				...shadow,
 				backgroundColor: '#fff',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -156,19 +165,19 @@ export default class WizardOne extends PureComponent<Props, null> {
 				marginHorizontal: 10,
 				marginVertical: 10,
 			},
-			// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
-			iconTwoStyle: {
-				color: Theme.Core.brandSecondary,
-				textAlignVertical: 'center',
-				marginTop: Platform.OS === 'ios' ? iconFontSize * 0.18 : 0,
+			iconStyle: {
+				color: brandPrimary,
 				textAlign: 'center',
 			},
-			// IconTelldus, on setting different font sizes causing alignment issue. So, handling with margin.
+			iconTwoStyle: {
+				height: iconSize * 0.9,
+				width: iconSize * 0.9,
+				tintColor: brandSecondary,
+				marginVertical: 5 + (iconSize * 0.14),
+			},
 			iconThreeStyle: {
-				color: Theme.Core.brandSecondary,
+				color: brandSecondary,
 				textAlignVertical: 'center',
-				marginTop: Platform.OS === 'ios' ? iconFontSize * 0.18 : 0,
-				marginLeft: iconFontSize * 0.18,
 				textAlign: 'center',
 			},
 			titleStyle: {
@@ -185,10 +194,4 @@ export default class WizardOne extends PureComponent<Props, null> {
 		};
 	}
 }
-const styles = StyleSheet.create({
-	icon: {
-		color: Theme.Core.brandSecondary,
-		textAlign: 'center',
-	},
-});
 
