@@ -193,7 +193,7 @@ dependencies {
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
-    implementation ("com.facebook.react:react-native:0.57.7")
+    implementation ("com.facebook.react:react-native:0.57.8")
     {
         force = true
     }
