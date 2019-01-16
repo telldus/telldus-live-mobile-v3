@@ -23,7 +23,9 @@
 'use strict';
 
 import DeviceTypeBlock from './DeviceTypeBlock';
+import NameRow from './NameRow';
 
 module.exports = {
 	DeviceTypeBlock,
+	NameRow,
 };
