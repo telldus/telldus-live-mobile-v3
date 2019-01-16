@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import Ripple from 'react-native-material-ripple';
 const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
 
@@ -34,6 +35,7 @@ import Theme from '../../../Theme';
 type Props = {
     date: Object,
     state: string,
+    onDayPress: (Object) => void,
     marking: Object,
     appLayout: Object,
 };
@@ -41,19 +43,30 @@ type Props = {
 export default class CalendarDay extends View<Props, null> {
 props: Props;
 
+onDayPress: () => void;
 isTablet: boolean;
 
 constructor(props: Props) {
 	super(props);
 
 	this.isTablet = DeviceInfo.isTablet();
+
+	this.onDayPress = this.onDayPress.bind(this);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return !isEqual(this.props, nextProps);
 }
 
+onDayPress() {
+	const { date, state, onDayPress } = this.props;
+	if (state !== 'disabled' && onDayPress) {
+		onDayPress(date);
+	}
+}
+
 render(): Object {
+	const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 	const { date, appLayout } = this.props;
 	const { day } = date;
 
@@ -64,8 +77,12 @@ render(): Object {
 		dayText,
 	} = this.getStyle(appLayout);
 	return (
-		<View
-			style={container}>
+		<Ripple
+			rippleColor={rippleColor}
+			rippleOpacity={rippleOpacity}
+			rippleDuration={rippleDuration}
+			style={container}
+			onPress={this.onDayPress}>
 			<View style={periodCover}>
 				<View style={circularContainer}>
 					<Text style={dayText}>
@@ -73,7 +90,7 @@ render(): Object {
 					</Text>
 				</View>
 			</View>
-		</View>
+		</Ripple>
 	);
 }
 

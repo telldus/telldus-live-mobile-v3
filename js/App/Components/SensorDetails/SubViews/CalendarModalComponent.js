@@ -162,6 +162,7 @@ renderDay({date, state, marking}: Object): Object {
 		date,
 		state,
 		marking,
+		onDayPress: this.onDayPress,
 		appLayout: this.props.appLayout,
 	};
 	return (
@@ -248,7 +249,6 @@ render(): Object {
 					}}
 					maxDate={maxDate}
 					dayComponent={this.renderDay}
-					onDayPress={this.onDayPress}
 					theme={calendarTheme}
 					firstDay={1}/>
 				<View style={footerStyle}>
