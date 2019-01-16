@@ -37,17 +37,23 @@ type Props = {
 	appLayout: Object,
 	extraData?: string | number,
 
+	placeholder?: string,
+	placeholderTextColor?: string,
     onChangeText: (string) => void,
     containerStyle: number | Object | Array<any>,
     label?: string,
 	icon?: string,
 	header?: Object,
     onSubmitEditing: () => void,
-    onChangeText: (string) => void,
+	onChangeText: (string) => void,
+	autoFocus?: boolean,
+	setRef: (any) => void,
 };
 
 type DefaultProps = {
-    value: string,
+	value: string,
+	placeholderTextColor: string,
+	autoFocus: boolean,
 };
 
 class EditBox extends Component<Props, null> {
@@ -55,9 +61,13 @@ props: Props;
 
 onChangeText: (string) => void;
 onSubmitEditing: () => void;
+setRef: (any) => void;
 
 static defaultProps: DefaultProps = {
 	value: '',
+	placeholder: '',
+	placeholderTextColor: Theme.Core.offlineColor,
+	autoFocus: true,
 };
 
 constructor(props: Props) {
@@ -65,6 +75,7 @@ constructor(props: Props) {
 
 	this.onChangeText = this.onChangeText.bind(this);
 	this.onSubmitEditing = this.onSubmitEditing.bind(this);
+	this.setRef = this.setRef.bind(this);
 }
 
 shouldComponentUpdate(nextProps: Object): boolean {
@@ -86,8 +97,15 @@ onChangeText(value: string) {
 	}
 }
 
+setRef(ref: any) {
+	const { setRef } = this.props;
+	if (setRef && typeof setRef === 'function') {
+		setRef(ref);
+	}
+}
+
 render(): Object {
-	const { value, containerStyle, label, icon, appLayout, header } = this.props;
+	const { value, containerStyle, label, icon, appLayout, header, placeholder, placeholderTextColor, autoFocus } = this.props;
 	const styles = this.getStyle(appLayout);
 
 	return (
@@ -109,9 +127,12 @@ render(): Object {
 					onSubmitEditing={this.onSubmitEditing}
 					autoCapitalize="sentences"
 					autoCorrect={false}
-					autoFocus={true}
+					autoFocus={autoFocus}
 					underlineColorAndroid={Theme.Core.brandSecondary}
 					returnKeyType={'done'}
+					placeholder={placeholder}
+					placeholderTextColor={placeholderTextColor}
+					ref={this.setRef}
 				/>
 			</View>
 		</View>
@@ -122,13 +143,13 @@ getStyle(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { shadow, brandSecondary } = Theme.Core;
+	const { shadow, brandSecondary, editBoxPaddingFactor } = Theme.Core;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 	const iconSize = Math.floor(deviceWidth * 0.09);
 
 	const fontSizeText = deviceWidth * 0.06;
-	const padding = deviceWidth * 0.05;
+	const padding = deviceWidth * editBoxPaddingFactor;
 
 	return {
 		container: {
