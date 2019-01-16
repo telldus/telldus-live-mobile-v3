@@ -84,6 +84,8 @@ onChooseType({module, action}: Object) {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 
+	this.stopAddRemoveDevice(gateway.id);
+
 	// get all nodes list in the chosen gateway, to check if device already included
 	this.getNodesList(gateway.id);
 
@@ -91,6 +93,18 @@ onChooseType({module, action}: Object) {
 		gateway,
 		module,
 		action,
+	});
+}
+
+stopAddRemoveDevice(id: number) {
+	const { actions } = this.props;
+	actions.sendSocketMessage(id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'removeNodeFromNetworkStop',
+	});
+	actions.sendSocketMessage(id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'addNodeToNetworkStop',
 	});
 }
 

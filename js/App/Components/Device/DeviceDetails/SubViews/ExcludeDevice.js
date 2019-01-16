@@ -75,6 +75,9 @@ constructor(props: Props) {
 	this.setSocketListeners = this.setSocketListeners.bind(this);
 
 	const { clientId, getSocketObject } = this.props;
+
+	this.stopAddRemoveDevice(clientId);
+
 	this.websocket = getSocketObject(clientId);
 	if (this.websocket) {
 		this.setSocketListeners();
@@ -89,6 +92,19 @@ componentDidMount() {
 	sendSocketMessage(clientId, 'client', 'forward', {
 		module: 'zwave',
 		action: 'removeNodeFromNetwork',
+	});
+}
+
+
+stopAddRemoveDevice(id: number) {
+	const { sendSocketMessage } = this.props;
+	sendSocketMessage(id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'removeNodeFromNetworkStop',
+	});
+	sendSocketMessage(id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'addNodeToNetworkStop',
 	});
 }
 
@@ -145,6 +161,7 @@ runExclusionTimer(data?: number = 60) {
 			timer: timer ? timer - 1 : data,
 			progress,
 			status: '',
+			excludeSucces: false,
 		});
 	} else {
 		this.setState({
@@ -164,9 +181,13 @@ clearSocketListeners() {
 }
 
 onPressCancelExclude() {
-	const { onPressCancelExclude } = this.props;
+	const { onPressCancelExclude, sendSocketMessage, clientId } = this.props;
 	this.clearTimer();
 	this.clearSocketListeners();
+	sendSocketMessage(clientId, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'removeNodeFromNetworkStop',
+	});
 	if (onPressCancelExclude) {
 		onPressCancelExclude();
 	}

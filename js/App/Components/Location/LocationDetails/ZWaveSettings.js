@@ -117,6 +117,9 @@ onPressCancelExclude() {
 
 goBack() {
 	this.props.navigation.goBack();
+	this.setState({
+		excludeActive: false,
+	});
 }
 
 supportZWave(transports: string = ''): boolean {

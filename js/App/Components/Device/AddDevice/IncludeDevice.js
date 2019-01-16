@@ -102,6 +102,7 @@ constructor(props: Props) {
 	this.isDeviceAwake = true;
 	this.isDeviceBatteried = false;
 	this.showToast = true;
+	this.hasUnmount = false;
 }
 
 componentDidMount() {
@@ -145,7 +146,7 @@ setSocketListeners() {
 		}
 
 		const { module, action, data } = message;
-		if (module && action) {
+		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				this.showToast = true;
 				that.inclusionTimer = setInterval(() => {
@@ -340,6 +341,7 @@ componentWillUnmount() {
 	this.clearTimer();
 	clearTimeout(this.sleepCheckTimeout);
 	this.deviceIds = [];
+	this.hasUnmount = true;
 }
 
 startSleepCheckTimer(timeout: number = 60000) {
