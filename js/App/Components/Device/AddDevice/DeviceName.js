@@ -32,10 +32,11 @@ const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	EditBox,
 	FloatingButton,
 	Text,
+	IconTelldus,
 } from '../../../../BaseComponents';
+import { NameRow } from './SubViews';
 
 import Theme from '../../../Theme';
 
@@ -51,7 +52,7 @@ type Props = {
 };
 
 type State = {
-	deviceName: string,
+	rowData: Object,
 	isLoading: boolean,
 };
 
@@ -59,17 +60,34 @@ class DeviceName extends View<Props, State> {
 props: Props;
 state: State;
 
-onChangeName: (string) => void;
-submitName: () => void;
+submitName: (number) => void;
+onChangeName: (string, number) => void;
+setRef: (ref: any, id: number) => void;
+
+inputRefs: Object;
+
 constructor(props: Props) {
 	super(props);
 
+	const deviceIds = props.navigation.getParam('deviceIds', []);
+	let rowData = {};
+	deviceIds.map((id: number, index: number) => {
+		rowData[id] = {
+			id,
+			name: '',
+			index,
+		};
+	});
+
 	this.state = {
-		deviceName: '',
+		rowData,
 		isLoading: false,
 	};
-	this.onChangeName = this.onChangeName.bind(this);
 	this.submitName = this.submitName.bind(this);
+	this.onChangeName = this.onChangeName.bind(this);
+	this.setRef = this.setRef.bind(this);
+
+	this.inputRefs = {};
 }
 
 componentDidMount() {
@@ -109,26 +127,36 @@ getImageDimensions(appLayout: Object): Object {
 	return { imgWidth: imageHeight / ratioHW, imgHeight: imageHeight };
 }
 
-onChangeName(deviceName: string) {
-	this.setState({
-		deviceName,
-	});
+setRef(ref: any, id: number) {
+	this.inputRefs[id] = ref;
 }
 
 submitName() {
-	const { actions, navigation } = this.props;
-	const { deviceName } = this.state;
-	const deviceId = navigation.getParam('deviceId', null);
-	if (deviceName !== '') {
+	const { actions } = this.props;
+	const { rowData } = this.state;
+	let emptyField = false, promises = [];
+	for (let key in rowData) {
+		let { name = '', id } = rowData[key];
+		if (name === '') {
+			emptyField = id;
+			break;
+		} else {
+			promises.push(actions.setDeviceName(id, name));
+		}
+	}
+
+	if (!emptyField) {
 		this.setState({
 			isLoading: true,
 		});
 		Keyboard.dismiss();
-		actions.setDeviceName(deviceId, deviceName).then(() => {
+		Promise.all(promises).then(() => {
 			this.postSubmitName();
 		}).catch(() => {
 			this.postSubmitName();
 		});
+	} else if (this.inputRefs[emptyField]) {
+		this.inputRefs[emptyField].focus();
 	}
 }
 
@@ -155,6 +183,21 @@ postSubmitName() {
 				key: 'Devices',
 			});
 		});
+	});
+}
+
+onChangeName(name: string, id: number) {
+	const { rowData } = this.state;
+	const newItem = {
+		...rowData[id],
+		name,
+	};
+	const newRowData = {
+		...rowData,
+		[id]: newItem,
+	};
+	this.setState({
+		rowData: newRowData,
 	});
 }
 
@@ -187,27 +230,85 @@ getDeviceInfo(styles: Object): Object {
 	);
 }
 
+getNameRow({key, deviceName, id, label, header, placeholder, containerStyle, autoFocus}: Object): Object {
+	const { appLayout } = this.props;
+
+	return (
+		<NameRow
+			key={key}
+			id={id}
+			value={deviceName}
+			icon={'device-alt'}
+			label={label}
+			header={header}
+			appLayout={appLayout}
+			placeholder={placeholder}
+			containerStyle={containerStyle}
+			autoFocus={autoFocus}
+			onChangeName={this.onChangeName}
+			submitName={this.submitName}
+			setRef={this.setRef}/>
+	);
+}
+
 render(): Object {
-	const { deviceName, isLoading } = this.state;
-	const { appLayout, intl } = this.props;
+	const { rowData, isLoading } = this.state;
+	const { intl } = this.props;
+
 	const {
 		container,
 		iconSize,
 		iconStyle,
+		infoIconStyle,
+		rowsContainer,
+		boxContainerStyle,
+		infoTextStyle,
+		infoContainer,
 		...otherStyles
 	} = this.getStyles();
 	const header = this.getDeviceInfo(otherStyles);
 
+	let rows = [], firstRow;
+	for (let key in rowData) {
+		const { name: deviceName = '', index, id } = rowData[key] || {};
+		if (index === 0) {
+			firstRow = this.getNameRow({
+				key,
+				deviceName,
+				id,
+				header,
+				label: intl.formatMessage(i18n.name),
+				placeholder: '',
+				autoFocus: true,
+			});
+		} else {
+			rows.push(this.getNameRow({
+				key,
+				deviceName,
+				id,
+				header: null,
+				label: intl.formatMessage(i18n.setNameMultichannelEditLabel, {value: index}),
+				placeholder: intl.formatMessage(i18n.setNameMultichannelEditLabel, {value: index}),
+				containerStyle: boxContainerStyle,
+				autoFocus: false,
+			}));
+		}
+	}
+
 	return (
 		<View style={container}>
-			<EditBox
-				value={deviceName}
-				icon={'device-alt'}
-				label={intl.formatMessage(i18n.name)}
-				header={header}
-				onChangeText={this.onChangeName}
-				onSubmitEditing={this.submitName}
-				appLayout={appLayout}/>
+			{firstRow}
+			{rows.length !== 0 && (
+				<View style={rowsContainer}>
+					<View style={infoContainer}>
+						<IconTelldus icon={'info'} style={infoIconStyle}/>
+						<Text style={infoTextStyle}>
+							{intl.formatMessage(i18n.setNameMultichannelInfo)}
+						</Text>
+					</View>
+					{rows}
+				</View>
+			)}
 			<FloatingButton
 				onPress={this.submitName}
 				iconName={this.state.isLoading ? false : 'checkmark'}
@@ -224,16 +325,50 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary } = Theme.Core;
+	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const { imgWidth, imgHeight } = this.getImageDimensions(appLayout);
+
+	const editBoxPadding = deviceWidth * editBoxPaddingFactor;
+
+	const infoTextFontSize = deviceWidth * 0.04;
 
 	return {
 		container: {
 			flex: 1,
 			paddingVertical: padding,
 			marginHorizontal: padding,
+		},
+		rowsContainer: {
+			alignItems: 'stretch',
+			justifyContent: 'center',
+			width: '100%',
+		},
+		infoContainer: {
+			flex: 1,
+			flexDirection: 'row',
+			marginTop: padding / 2,
+			paddingVertical: 3 + (infoTextFontSize * 0.3),
+			paddingRight: editBoxPadding,
+			backgroundColor: '#fff',
+			...shadow,
+			alignItems: 'center',
+			justifyContent: 'space-between',
+		},
+		boxContainerStyle: {
+			marginTop: padding / 2,
+		},
+		infoIconStyle: {
+			fontSize: deviceWidth * 0.08,
+			color: brandSecondary,
+			marginHorizontal: editBoxPadding,
+		},
+		infoTextStyle: {
+			flex: 1,
+			fontSize: infoTextFontSize,
+			color: eulaContentColor,
+			flexWrap: 'wrap',
 		},
 		iconSize: deviceWidth * 0.050666667,
 		iconStyle: {

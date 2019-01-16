@@ -94,7 +94,7 @@ constructor(props: Props) {
 	this.sleepCheckTimeInterval = null;
 	this.sleepCheckTimeout = null;
 	this.zwaveId = null;
-	this.deviceId = null;
+	this.deviceIds = [];
 	this.commandClasses = null;
 	this.clientDeviceId = null;
 	this.deviceManufactInfo = {};
@@ -112,7 +112,7 @@ componentDidMount() {
 	const gateway = navigation.getParam('gateway', {});
 	const module = navigation.getParam('module', '');
 	const action = navigation.getParam('action', '');
-	this.deviceId = null;
+	this.deviceIds = [];
 	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
 		module,
 		action,
@@ -236,11 +236,11 @@ setSocketListeners() {
 			} else if (module === 'zwave' && action === 'sleeping') {
 				actions.showToast('Please try to wake the device manually');
 			} else if (module === 'device') {
-				if (action === 'added' && !this.deviceId) {
+				if (action === 'added') {
 					this.isDeviceAwake = true;
 					this.startSleepCheckTimer();
 					const { clientDeviceId, id } = data;
-					this.deviceId = id;
+					this.deviceIds.push(id);
 					this.clientDeviceId = clientDeviceId;
 				}
 
@@ -329,7 +329,7 @@ navigateToNext(deviceManufactInfo: Object) {
 		key: 'DeviceName',
 		params: {
 			gateway,
-			deviceId: this.deviceId,
+			deviceIds: this.deviceIds,
 			info: {...deviceManufactInfo},
 		},
 	});
@@ -339,7 +339,7 @@ componentWillUnmount() {
 	this.clearSocketListeners();
 	this.clearTimer();
 	clearTimeout(this.sleepCheckTimeout);
-	this.deviceId = null;
+	this.deviceIds = [];
 }
 
 startSleepCheckTimer(timeout: number = 60000) {
