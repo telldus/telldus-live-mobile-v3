@@ -132,6 +132,10 @@ export default {
 		};
 	},
 
+	get editBoxPaddingFactor() {
+		return 0.05;
+	},
+
 	buttonPadding: 6,
 
 	borderRadiusBase: 2,
