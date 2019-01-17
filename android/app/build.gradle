@@ -211,7 +211,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-gcm:16.0.0") {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-core:16.0.6') {
+    implementation ('com.google.firebase:firebase-core:16.0.4') {
         force = true;
     }
     implementation ('com.google.firebase:firebase-messaging:17.3.4') {
