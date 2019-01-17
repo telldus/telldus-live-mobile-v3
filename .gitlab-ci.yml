@@ -44,6 +44,7 @@ android: &android-ubuntu
       - android/sourcemap.js
     expire_in: '1 mos'
   script:
+    - $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*
     - yarn install --quiet
     - cd android
     - ./buildGitlabRunner.sh
@@ -72,6 +73,7 @@ ios:
     - master
     - /^v\d+\.\d+.*$/ # Version branches
   script:
+    - $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*
     - yarn install --quiet
     - cd ios
     - ./buildGitlabRunner.sh
