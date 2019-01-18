@@ -30,7 +30,7 @@ import Platform from 'Platform';
 import { View, IconTelldus, DialogueBox, DialogueHeader, Text } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
 
-import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
+import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
@@ -126,16 +126,19 @@ class SensorsTab extends View {
 		this.setState({
 			isRefreshing: true,
 		});
-		this.props.dispatch(getSensors())
-			.then(() => {
-				this.setState({
-					isRefreshing: false,
-				});
-			}).catch(() => {
-				this.setState({
-					isRefreshing: false,
-				});
+		let promises = [
+			this.props.dispatch(getGateways()),
+			this.props.dispatch(getSensors()),
+		];
+		Promise.all(promises).then(() => {
+			this.setState({
+				isRefreshing: false,
 			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		});
 	}
 
 	keyExtractor(item: Object): string {

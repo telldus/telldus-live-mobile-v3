@@ -43,7 +43,7 @@ import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 import { getTabBarIcon } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
-import { addNewGateway, showToast } from '../../Actions';
+import { addNewGateway, showToast, getGateways } from '../../Actions';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
@@ -261,16 +261,19 @@ class DevicesTab extends View {
 		this.setState({
 			isRefreshing: true,
 		});
-		this.props.dispatch(getDevices())
-			.then(() => {
-				this.setState({
-					isRefreshing: false,
-				});
-			}).catch(() => {
-				this.setState({
-					isRefreshing: false,
-				});
+		let promises = [
+			this.props.dispatch(getGateways()),
+			this.props.dispatch(getDevices()),
+		];
+		Promise.all(promises).then(() => {
+			this.setState({
+				isRefreshing: false,
 			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		});
 	}
 
 	keyExtractor(item: Object): number {
