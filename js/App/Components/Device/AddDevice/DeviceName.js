@@ -27,6 +27,8 @@ import {
 	Image,
 	Keyboard,
 	InteractionManager,
+	ScrollView,
+	KeyboardAvoidingView,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
 
@@ -296,19 +298,29 @@ render(): Object {
 	}
 
 	return (
-		<View style={container}>
-			{firstRow}
-			{rows.length !== 0 && (
-				<View style={rowsContainer}>
-					<View style={infoContainer}>
-						<IconTelldus icon={'info'} style={infoIconStyle}/>
-						<Text style={infoTextStyle}>
-							{intl.formatMessage(i18n.setNameMultichannelInfo)}
-						</Text>
+		<View style={{ flex: 1 }}>
+			<ScrollView
+				keyboardShouldPersistTaps={'always'}>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{ flex: 1 }}
+					contentContainerStyle={{ justifyContent: 'center' }}>
+					<View style={container}>
+						{firstRow}
+						{rows.length !== 0 && (
+							<View style={rowsContainer}>
+								<View style={infoContainer}>
+									<IconTelldus icon={'info'} style={infoIconStyle}/>
+									<Text style={infoTextStyle}>
+										{intl.formatMessage(i18n.setNameMultichannelInfo)}
+									</Text>
+								</View>
+								{rows}
+							</View>
+						)}
 					</View>
-					{rows}
-				</View>
-			)}
+				</KeyboardAvoidingView>
+			</ScrollView>
 			<FloatingButton
 				onPress={this.submitName}
 				iconName={this.state.isLoading ? false : 'checkmark'}

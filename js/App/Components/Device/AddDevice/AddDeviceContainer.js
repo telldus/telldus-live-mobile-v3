@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { BackHandler, KeyboardAvoidingView, ScrollView, Keyboard } from 'react-native';
+import { BackHandler, Keyboard } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -156,7 +156,7 @@ class AddDeviceContainer extends View<Props, State> {
 			addDevice,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
-		const { h1, h2, infoButton, keyboardShown } = this.state;
+		const { h1, h2, infoButton } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
@@ -168,50 +168,42 @@ class AddDeviceContainer extends View<Props, State> {
 		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
 		return (
-			<ScrollView
-				keyboardShouldPersistTaps={'always'}
+			<View
 				style={{
 					flex: 1,
 					backgroundColor: Theme.Core.appBackground,
-				}}
-				contentContainerStyle={{flexGrow: 1}}
-				scrollEnabled={keyboardShown}>
-				<KeyboardAvoidingView
-					behavior="padding"
-					style={{ flex: 1 }}
-					contentContainerStyle={{ justifyContent: 'center' }}>
-					<NavigationHeaderPoster
-						h1={h1} h2={h2}
-						infoButton={infoButton}
-						align={'right'}
-						navigation={navigation}
-						showLeftIcon={currentScreen !== 'DeviceName'}
-						leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
-						{...screenProps}/>
-					<View style={styles.style}>
-						{React.cloneElement(
-							children,
-							{
-								onDidMount: this.onChildDidMount,
-								actions,
-								...screenProps,
-								navigation,
-								dialogueOpen: showModal,
-								paddingHorizontal: padding,
-								addDevice,
-							},
-						)}
-					</View>
-					<DialogueBox
-						dialogueContainerStyle={{elevation: 0}}
-						header={dialogueHeader}
-						showDialogue={showModal}
-						text={validationMessage}
-						showPositive={true}
-						positiveText={positiveText}
-						onPressPositive={this.closeModal}/>
-				</KeyboardAvoidingView>
-			</ScrollView>
+				}}>
+				<NavigationHeaderPoster
+					h1={h1} h2={h2}
+					infoButton={infoButton}
+					align={'right'}
+					navigation={navigation}
+					showLeftIcon={currentScreen !== 'DeviceName'}
+					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
+					{...screenProps}/>
+				<View style={styles.style}>
+					{React.cloneElement(
+						children,
+						{
+							onDidMount: this.onChildDidMount,
+							actions,
+							...screenProps,
+							navigation,
+							dialogueOpen: showModal,
+							paddingHorizontal: padding,
+							addDevice,
+						},
+					)}
+				</View>
+				<DialogueBox
+					dialogueContainerStyle={{elevation: 0}}
+					header={dialogueHeader}
+					showDialogue={showModal}
+					text={validationMessage}
+					showPositive={true}
+					positiveText={positiveText}
+					onPressPositive={this.closeModal}/>
+			</View>
 		);
 	}
 
