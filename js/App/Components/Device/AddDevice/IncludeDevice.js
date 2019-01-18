@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { ScrollView } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -106,18 +107,12 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	const { onDidMount, actions, navigation, intl } = this.props;
+	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(i18n.AddZDIncludeHeaderTwo));
 
-	const gateway = navigation.getParam('gateway', {});
-	const module = navigation.getParam('module', '');
-	const action = navigation.getParam('action', '');
+	this.startAddDevice();
 	this.deviceIds = [];
-	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
-		module,
-		action,
-	});
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -136,6 +131,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 setSocketListeners() {
 	const that = this;
 	const { intl, actions } = this.props;
+
 	const { formatMessage } = intl;
 	this.websocket.onmessage = (msg: Object) => {
 		let message = {};
@@ -203,10 +199,14 @@ setSocketListeners() {
 					this.setState({
 						status: 'Error : could not enter learn mode',
 					});
+					this.stopAddRemoveDevice();
+					this.startAddDevice();
 				} else if (status === 0x23) {
 					this.setState({
 						status: 'Error : could not enter learn mode',
 					});
+					this.stopAddRemoveDevice();
+					this.startAddDevice();
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
 				this.isDeviceAwake = true;
@@ -365,6 +365,31 @@ startSleepCheckTimer(timeout: number = 60000) {
 	}
 }
 
+stopAddRemoveDevice() {
+	const { actions, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+
+	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'removeNodeFromNetworkStop',
+	});
+	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'addNodeToNetworkStop',
+	});
+}
+
+startAddDevice() {
+	const { actions, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	const module = navigation.getParam('module', '');
+	const action = navigation.getParam('action', '');
+	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
+		module,
+		action,
+	});
+}
+
 clearSocketListeners() {
 	this.websocket = null;
 }
@@ -383,13 +408,15 @@ render(): Object {
 	const timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
 
 	return (
-		<ZWaveIncludeExcludeUI
-			progress={progress}
-			percent={percent}
-			status={statusText}
-			timer={timerText}
-			intl={intl}
-			appLayout={appLayout}/>
+		<ScrollView>
+			<ZWaveIncludeExcludeUI
+				progress={progress}
+				percent={percent}
+				status={statusText}
+				timer={timerText}
+				intl={intl}
+				appLayout={appLayout}/>
+		</ScrollView>
 	);
 }
 }

@@ -76,8 +76,6 @@ constructor(props: Props) {
 
 	const { clientId, getSocketObject } = this.props;
 
-	this.stopAddRemoveDevice(clientId);
-
 	this.websocket = getSocketObject(clientId);
 	if (this.websocket) {
 		this.setSocketListeners();
@@ -88,23 +86,26 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
+	this.startRemoveDevice();
+}
+
+stopAddRemoveDevice() {
+	const { sendSocketMessage, clientId } = this.props;
+	sendSocketMessage(clientId, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'removeNodeFromNetworkStop',
+	});
+	sendSocketMessage(clientId, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'addNodeToNetworkStop',
+	});
+}
+
+startRemoveDevice() {
 	const { clientId, sendSocketMessage } = this.props;
 	sendSocketMessage(clientId, 'client', 'forward', {
 		module: 'zwave',
 		action: 'removeNodeFromNetwork',
-	});
-}
-
-
-stopAddRemoveDevice(id: number) {
-	const { sendSocketMessage } = this.props;
-	sendSocketMessage(id, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'removeNodeFromNetworkStop',
-	});
-	sendSocketMessage(id, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'addNodeToNetworkStop',
 	});
 }
 
@@ -136,6 +137,15 @@ setSocketListeners() {
 				that.exclusionTimer = setInterval(() => {
 					that.runExclusionTimer(data);
 				}, 1000);
+			} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
+				let status = data[0];
+				if (status === 7) {
+					this.setState({
+						status: 'Error : could not enter learn mode',
+					});
+					this.stopAddRemoveDevice();
+					this.startRemoveDevice();
+				}
 			}
 			if (module === 'device' && action === 'removed') {
 				this.setState({
@@ -184,10 +194,10 @@ onPressCancelExclude() {
 	const { onPressCancelExclude, sendSocketMessage, clientId } = this.props;
 	this.clearTimer();
 	this.clearSocketListeners();
-	sendSocketMessage(clientId, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'removeNodeFromNetworkStop',
-	});
+	// sendSocketMessage(clientId, 'client', 'forward', {
+	// 	'module': 'zwave',
+	// 	'action': 'removeNodeFromNetworkStop',
+	// });
 	if (onPressCancelExclude) {
 		onPressCancelExclude();
 	}
