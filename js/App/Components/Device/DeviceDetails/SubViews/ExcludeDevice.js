@@ -135,6 +135,7 @@ setSocketListeners() {
 		} catch (e) {
 			message = msg.data;
 		}
+
 		const { module, action, data } = message;
 		if (module && action) {
 			if (module === 'zwave' && action === 'removeNodeFromNetworkStartTimeout') {
@@ -143,6 +144,18 @@ setSocketListeners() {
 				}, 1000);
 			} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
 				let status = data[0];
+				if (status === 6) {
+					if (data[2] > 0) {
+						this.setState({
+							excludeSucces: true,
+							timer: `${intl.formatMessage(i18n.done)}!`,
+							status: intl.formatMessage(i18n.messageDeviceExcluded),
+							progress: 100,
+							showThrobber: false,
+						});
+						this.clearTimer();
+					}
+				}
 				if (status === 7) {
 					that.handleErrorEnterLearnMode();
 				}
