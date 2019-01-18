@@ -51,6 +51,7 @@ type State = {
 	status?: string | null,
 	progress: number,
 	excludeSucces: boolean,
+	showThrobber: boolean,
 };
 
 class ExcludeDevice extends View<Props, State> {
@@ -61,6 +62,7 @@ state: State;
 setSocketListeners: () => void;
 onPressCancelExclude: () => void;
 onPressOkay: () => void;
+handleErrorEnterLearnMode: () => void;
 constructor(props: Props) {
 	super(props);
 
@@ -70,6 +72,7 @@ constructor(props: Props) {
 		status: undefined,
 		progress: 0,
 		excludeSucces: false,
+		showThrobber: false,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -82,6 +85,7 @@ constructor(props: Props) {
 	}
 
 	this.onPressCancelExclude = this.onPressCancelExclude.bind(this);
+	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
 	this.onPressOkay = this.onPressOkay.bind(this);
 }
 
@@ -140,11 +144,7 @@ setSocketListeners() {
 			} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
 				let status = data[0];
 				if (status === 7) {
-					this.setState({
-						status: 'Error : could not enter learn mode',
-					});
-					this.stopAddRemoveDevice();
-					this.startRemoveDevice();
+					that.handleErrorEnterLearnMode();
 				}
 			}
 			if (module === 'device' && action === 'removed') {
@@ -153,6 +153,7 @@ setSocketListeners() {
 					timer: `${intl.formatMessage(i18n.done)}!`,
 					status: intl.formatMessage(i18n.messageDeviceExcluded),
 					progress: 100,
+					showThrobber: false,
 				});
 				this.clearTimer();
 			}
@@ -161,6 +162,23 @@ setSocketListeners() {
 			}
 		}
 	};
+}
+
+handleErrorEnterLearnMode() {
+	const { showThrobber } = this.state;
+	if (showThrobber) {
+		this.setState({
+			status: 'Error : could not enter learn mode',
+			showThrobber: false,
+		});
+	} else {
+		this.setState({
+			showThrobber: true,
+			status: '',
+		});
+		this.stopAddRemoveDevice();
+		this.startRemoveDevice();
+	}
 }
 
 runExclusionTimer(data?: number = 60) {
@@ -172,11 +190,13 @@ runExclusionTimer(data?: number = 60) {
 			progress,
 			status: '',
 			excludeSucces: false,
+			showThrobber: false,
 		});
 	} else {
 		this.setState({
 			timer: null,
 			status: 'Exclusion timed out!',
+			showThrobber: false,
 		});
 		this.clearTimer();
 	}
@@ -194,10 +214,10 @@ onPressCancelExclude() {
 	const { onPressCancelExclude, sendSocketMessage, clientId } = this.props;
 	this.clearTimer();
 	this.clearSocketListeners();
-	// sendSocketMessage(clientId, 'client', 'forward', {
-	// 	'module': 'zwave',
-	// 	'action': 'removeNodeFromNetworkStop',
-	// });
+	sendSocketMessage(clientId, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'removeNodeFromNetworkStop',
+	});
 	if (onPressCancelExclude) {
 		onPressCancelExclude();
 	}
@@ -212,7 +232,7 @@ onPressOkay() {
 
 render(): Object {
 	const { intl, appLayout } = this.props;
-	const { timer, status, progress, excludeSucces, showTimer } = this.state;
+	const { timer, status, progress, excludeSucces, showTimer, showThrobber } = this.state;
 	const { formatMessage } = intl;
 
 	let timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
@@ -228,7 +248,8 @@ render(): Object {
 				timer={timerText}
 				intl={intl}
 				appLayout={appLayout}
-				action={'exclude'}/>
+				action={'exclude'}
+				showThrobber={showThrobber}/>
 			<TouchableButton
 				text={excludeSucces ? formatMessage(i18n.defaultPositiveText) : formatMessage(i18n.defaultNegativeText)}
 				onPress={excludeSucces ? this.onPressOkay : this.onPressCancelExclude}

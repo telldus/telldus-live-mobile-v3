@@ -32,6 +32,7 @@ import {
 	Image,
 	BlockIcon,
 	ProgressBarLinear,
+	Throbber,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -45,6 +46,7 @@ type Props = {
 	status: string | null,
 	percent: number,
 	progress: number,
+	showThrobber?: boolean,
 
     action: 'include' | 'exclude',
 	intl: Object,
@@ -55,7 +57,8 @@ type State = {
 };
 
 type DefaultProps = {
-    action: 'include' | 'exclude',
+	action: 'include' | 'exclude',
+	showThrobber: boolean,
 };
 
 class ZWaveIncludeExcludeUI extends View<Props, State> {
@@ -66,6 +69,7 @@ onLayout: (Object) => void;
 
 static defaultProps: DefaultProps = {
 	action: 'include',
+	showThrobber: false,
 };
 
 constructor(props: Props) {
@@ -107,7 +111,7 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	const { intl, timer, status, progress } = this.props;
+	const { intl, timer, status, progress, showThrobber } = this.props;
 	const { width } = this.state;
 	const {
 		container,
@@ -124,6 +128,7 @@ render(): Object {
 		blockLeft,
 		infoOneContainer,
 		headerTextStyle,
+		throbberContainerStyle,
 	} = this.getStyles();
 
 	const { formatMessage } = intl;
@@ -160,12 +165,18 @@ render(): Object {
 						{this.messageTwo}
 					</Text>
 					<Text/>
-					<Text style={timerStyle}>
-						{timer}
-					</Text>
-					<Text style={statusStyle}>
-						{status}
-					</Text>
+					{showThrobber ?
+						<Throbber throbberContainerStyle={throbberContainerStyle} thorbberStyle={timerStyle}/>
+						:
+						[
+							<Text style={timerStyle} key={'0'}>
+								{timer}
+							</Text>,
+							<Text style={statusStyle} key={'1'}>
+								{status}
+							</Text>,
+						]
+					}
 					<ProgressBarLinear
 						progress={progress}
 						height={4}
@@ -290,6 +301,11 @@ getStyles(): Object {
 		timerStyle: {
 			fontSize: deviceWidth * 0.045,
 			color: brandSecondary,
+		},
+		throbberContainerStyle: {
+			position: 'relative',
+			alignSelf: 'flex-start',
+			marginBottom: 4,
 		},
 		statusStyle: {
 			fontSize: fontSizeStatus,

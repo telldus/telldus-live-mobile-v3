@@ -55,6 +55,7 @@ type State = {
 	timer: number | null,
 	status: string | null,
 	percent: number,
+	showThrobber: boolean,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -71,6 +72,8 @@ deviceProdInfo: Object;
 isDeviceAwake: boolean;
 isDeviceBatteried: boolean;
 gatewayId: number;
+
+handleErrorEnterLearnMode: () => void;
 constructor(props: Props) {
 	super(props);
 
@@ -79,9 +82,11 @@ constructor(props: Props) {
 		timer: null,
 		status: null,
 		percent: 0,
+		showThrobber: false,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
+	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
 
 	const { actions, navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
@@ -153,6 +158,7 @@ setSocketListeners() {
 				if (status === 1) {
 					this.setState({
 						status: `${formatMessage(i18n.addNodeToNetworkOne)}...`,
+						showThrobber: false,
 					});
 				} else if (status === 2) {
 					this.isDeviceAwake = true;
@@ -160,6 +166,7 @@ setSocketListeners() {
 					this.setState({
 						status: formatMessage(i18n.addNodeToNetworkTwo),
 						showTimer: false,
+						showThrobber: false,
 					});
 				} else if (status === 3 || status === 4) {
 					this.isDeviceAwake = true;
@@ -196,17 +203,9 @@ setSocketListeners() {
 					// Add node done
 					// this.clearTimer();
 				} else if (status === 7) {
-					this.setState({
-						status: 'Error : could not enter learn mode',
-					});
-					this.stopAddRemoveDevice();
-					this.startAddDevice();
+					that.handleErrorEnterLearnMode();
 				} else if (status === 0x23) {
-					this.setState({
-						status: 'Error : could not enter learn mode',
-					});
-					this.stopAddRemoveDevice();
-					this.startAddDevice();
+					that.handleErrorEnterLearnMode();
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
 				this.isDeviceAwake = true;
@@ -251,6 +250,23 @@ setSocketListeners() {
 	};
 }
 
+handleErrorEnterLearnMode() {
+	const { showThrobber } = this.state;
+	if (showThrobber) {
+		this.setState({
+			status: 'Error : could not enter learn mode',
+			showThrobber: false,
+		});
+	} else {
+		this.setState({
+			showThrobber: true,
+			status: '',
+		});
+		this.stopAddRemoveDevice();
+		this.startAddDevice();
+	}
+}
+
 checkDeviceAlreadyIncluded(nodeId: number) {
 	const { addDevice, actions } = this.props;
 	const alreadyIncluded = addDevice.nodeList[nodeId];
@@ -265,10 +281,12 @@ runInclusionTimer(data?: number = 60) {
 	if (timer === null || timer > 0) {
 		this.setState({
 			timer: timer ? timer - 1 : data,
+			showThrobber: false,
 		});
 	} else {
 		this.setState({
 			timer: null,
+			showThrobber: false,
 		});
 		this.props.actions.showToast('Inclusion timed out!');
 		this.clearTimer();
@@ -400,7 +418,7 @@ clearTimer() {
 
 render(): Object {
 	const { intl, appLayout } = this.props;
-	const { timer, status, percent, showTimer } = this.state;
+	const { timer, status, percent, showTimer, showThrobber } = this.state;
 	const { formatMessage } = intl;
 
 	const progress = Math.max(percent / 100, 0);
@@ -412,6 +430,7 @@ render(): Object {
 			<ZWaveIncludeExcludeUI
 				progress={progress}
 				percent={percent}
+				showThrobber={showThrobber}
 				status={statusText}
 				timer={timerText}
 				intl={intl}
