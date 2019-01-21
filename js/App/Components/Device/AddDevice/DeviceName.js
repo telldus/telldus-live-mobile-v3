@@ -71,9 +71,9 @@ inputRefs: Object;
 constructor(props: Props) {
 	super(props);
 
-	const deviceIds = props.navigation.getParam('deviceIds', []);
+	const devices = props.navigation.getParam('devices', []);
 	let rowData = {};
-	deviceIds.map((id: number, index: number) => {
+	devices.map(({id}: Object, index: number) => {
 		rowData[id] = {
 			id,
 			name: '',

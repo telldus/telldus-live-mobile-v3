@@ -66,7 +66,6 @@ setSocketListeners: () => void;
 
 zwaveId: ?number;
 deviceId: ?number;
-clientDeviceId: ?number;
 deviceManufactInfo: Object;
 deviceProdInfo: Object;
 isDeviceAwake: boolean;
@@ -97,12 +96,12 @@ constructor(props: Props) {
 	}
 
 	this.inclusionTimer = null;
+	this.interviewTimer = null;
 	this.sleepCheckTimeInterval = null;
 	this.sleepCheckTimeout = null;
 	this.zwaveId = null;
-	this.deviceIds = [];
+	this.devices = [];
 	this.commandClasses = null;
-	this.clientDeviceId = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
 	this.isDeviceAwake = true;
@@ -117,7 +116,7 @@ componentDidMount() {
 	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(i18n.AddZDIncludeHeaderTwo));
 
 	this.startAddDevice();
-	this.deviceIds = [];
+	this.devices = [];
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -163,6 +162,9 @@ setSocketListeners() {
 				} else if (status === 2) {
 					this.isDeviceAwake = true;
 					this.startSleepCheckTimer();
+
+					this.startInterviewPoll();
+
 					this.setState({
 						status: formatMessage(i18n.addNodeToNetworkTwo),
 						showTimer: false,
@@ -171,6 +173,8 @@ setSocketListeners() {
 				} else if (status === 3 || status === 4) {
 					this.isDeviceAwake = true;
 					this.startSleepCheckTimer();
+
+					this.startInterviewPoll();
 
 					this.checkDeviceAlreadyIncluded(data[1]);
 
@@ -216,7 +220,8 @@ setSocketListeners() {
 					this.deviceProdInfo = data.data;
 				}
 				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
-				if (percent) {
+
+				if (percent && (percent !== this.state.percent)) {
 					this.setState({
 						status,
 						percent,
@@ -235,13 +240,52 @@ setSocketListeners() {
 				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
 				actions.showToast('Please try to wake the device manually');
+			} else if (module === 'zwave' && action === 'nodeInfo') {
+				if ((`${this.zwaveId}`) !== data.nodeId) {
+					return;
+				}
+				if (!data.cmdClasses) {
+					return;
+				}
+				for (let i in this.commandClasses) {
+					if (this.commandClasses[i] !== null) {
+						continue;
+					}
+					if (!data.cmdClasses[i]) {
+						delete this.commandClasses[i];
+						continue;
+					}
+					if (data.cmdClasses[i].interviewed === 1) {
+						this.commandClasses[i] = data.cmdClasses[i];
+					}
+				}
+				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
+
+				if (percent && (percent !== this.state.percent)) {
+					this.setState({
+						status,
+						percent,
+					});
+					if (waiting === 0) {
+						this.setState({
+							timer: null,
+							status,
+						}, () => {
+							this.onInclusionComplete();
+						});
+						this.clearTimer();
+					}
+				}
+
 			} else if (module === 'device') {
 				if (action === 'added') {
 					this.isDeviceAwake = true;
 					this.startSleepCheckTimer();
 					const { clientDeviceId, id } = data;
-					this.deviceIds.push(id);
-					this.clientDeviceId = clientDeviceId;
+					this.devices.push({
+						id,
+						clientDeviceId,
+					});
 				}
 
 				actions.processWebsocketMessageForDevice(action, data);
@@ -348,7 +392,7 @@ navigateToNext(deviceManufactInfo: Object) {
 		key: 'DeviceName',
 		params: {
 			gateway,
-			deviceIds: this.deviceIds,
+			devices: this.devices,
 			info: {...deviceManufactInfo},
 		},
 	});
@@ -358,7 +402,7 @@ componentWillUnmount() {
 	this.clearSocketListeners();
 	this.clearTimer();
 	clearTimeout(this.sleepCheckTimeout);
-	this.deviceIds = [];
+	this.devices = [];
 	this.hasUnmount = true;
 }
 
@@ -382,6 +426,25 @@ startSleepCheckTimer(timeout: number = 60000) {
 		}, timeout);
 	}
 }
+
+startInterviewPoll() {
+	if (this.interviewTimer) {
+		return;
+	}
+	let that = this;
+	const { actions, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	this.interviewTimer = setInterval(() => {
+		for (let i = 0; i < that.devices.length; ++i) {
+			actions.sendSocketMessage(gateway.id, 'client', 'forward', {
+				'module': 'zwave',
+				'action': 'nodeInfo',
+				'device': that.devices[i].clientDeviceId,
+			});
+		}
+	}, 5000);
+}
+
 
 stopAddRemoveDevice() {
 	const { actions, navigation } = this.props;
@@ -414,6 +477,7 @@ clearSocketListeners() {
 
 clearTimer() {
 	clearInterval(this.inclusionTimer);
+	clearInterval(this.interviewTimer);
 }
 
 render(): Object {
