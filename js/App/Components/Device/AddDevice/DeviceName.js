@@ -255,7 +255,7 @@ getNameRow({key, deviceName, id, label, header, placeholder, containerStyle, aut
 
 render(): Object {
 	const { rowData, isLoading } = this.state;
-	const { intl } = this.props;
+	const { intl, navigation } = this.props;
 
 	const {
 		container,
@@ -266,6 +266,7 @@ render(): Object {
 		boxContainerStyle,
 		infoTextStyle,
 		infoContainer,
+		statusIconStyle,
 		...otherStyles
 	} = this.getStyles();
 	const header = this.getDeviceInfo(otherStyles);
@@ -297,6 +298,9 @@ render(): Object {
 		}
 	}
 
+	const statusMessage = navigation.getParam('statusMessage', null);
+	const statusIcon = navigation.getParam('statusIcon', null);
+
 	return (
 		<View style={{ flex: 1 }}>
 			<ScrollView
@@ -316,6 +320,16 @@ render(): Object {
 									</Text>
 								</View>
 								{rows}
+							</View>
+						)}
+						{!!statusMessage && (
+							<View style={infoContainer}>
+								<IconTelldus icon={statusIcon} style={[statusIconStyle, {
+									color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
+								}]}/>
+								<Text style={infoTextStyle}>
+									{statusMessage}
+								</Text>
 							</View>
 						)}
 					</View>
@@ -367,6 +381,11 @@ getStyles(): Object {
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
+			borderRadius: 2,
+		},
+		statusIconStyle: {
+			fontSize: deviceWidth * 0.12,
+			marginHorizontal: editBoxPadding,
 		},
 		boxContainerStyle: {
 			marginTop: padding / 2,

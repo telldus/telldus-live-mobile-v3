@@ -241,7 +241,7 @@ setSocketListeners() {
 			} else if (module === 'zwave' && action === 'sleeping') {
 				actions.showToast('Please try to wake the device manually');
 			} else if (module === 'zwave' && action === 'nodeInfo') {
-				if ((`${this.zwaveId}`) !== data.nodeId) {
+				if (this.zwaveId !== parseInt(data.nodeId, 10)) {
 					return;
 				}
 				if (!data.cmdClasses) {
@@ -266,7 +266,7 @@ setSocketListeners() {
 						status,
 						percent,
 					});
-					if (waiting === 0) {
+					if (waiting === 0 && this.state.percent !== 100) {
 						this.setState({
 							timer: null,
 							status,
@@ -384,9 +384,37 @@ getDeviceManufactInfo() {
 	}
 }
 
+prepareStatusMessage(): Object {
+	const { navigation, intl } = this.props;
+	const { formatMessage } = intl;
+	const secure = navigation.getParam('secure', false);
+	if (!secure) {
+		return {};
+	}
+	if (this.commandClasses && this.commandClasses[152]) {
+		if (this.commandClasses[152].includedSecure) {
+			return {
+				statusMessage: `${formatMessage(i18n.inclusionStatusSecureSuccess)}.`,
+				statusIcon: 'security',
+			};
+		}
+		return {
+			statusMessage: `${formatMessage(i18n.inclusionStatusSecureFailUnknown)}. ${formatMessage(i18n.inclusionStatusSecureFailPostScript)}.`,
+			statusIcon: 'info',
+		};
+
+	}
+	return {
+		statusMessage: `${formatMessage(i18n.inclusionStatusSecureFail)}. ${formatMessage(i18n.inclusionStatusSecureFailPostScript)}.`,
+		statusIcon: 'info',
+	};
+}
+
 navigateToNext(deviceManufactInfo: Object) {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
+	const { statusMessage = null, statusIcon = null } = this.prepareStatusMessage();
+
 	navigation.navigate({
 		routeName: 'DeviceName',
 		key: 'DeviceName',
@@ -394,6 +422,8 @@ navigateToNext(deviceManufactInfo: Object) {
 			gateway,
 			devices: this.devices,
 			info: {...deviceManufactInfo},
+			statusMessage,
+			statusIcon,
 		},
 	});
 }

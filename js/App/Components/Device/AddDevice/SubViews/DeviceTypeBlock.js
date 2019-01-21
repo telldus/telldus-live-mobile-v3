@@ -62,11 +62,12 @@ constructor(props: Props) {
 }
 
 onPress() {
-	const { onPress, module, action } = this.props;
+	const { onPress, module, action, id } = this.props;
 	if (onPress) {
 		onPress({
 			module,
 			action,
+			secure: id === 2,
 		});
 	}
 }
