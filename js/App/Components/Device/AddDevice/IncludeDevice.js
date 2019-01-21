@@ -219,6 +219,12 @@ setSocketListeners() {
 				if (data.cmdClass === 114) {
 					this.deviceProdInfo = data.data;
 				}
+				if (data.cmdClass === 152) {
+					const cmdData = data.data;
+					if (cmdData.cmdClasses && cmdData.cmdClasses[114]) {
+						this.deviceProdInfo = cmdData.cmdClasses[114];
+					}
+				}
 				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
 
 				if (percent && (percent !== this.state.percent)) {
@@ -246,6 +252,10 @@ setSocketListeners() {
 				}
 				if (!data.cmdClasses) {
 					return;
+				}
+				const manufactInfoCmd = data.cmdClasses[152];
+				if (manufactInfoCmd && manufactInfoCmd.interviewed && manufactInfoCmd.cmdClasses[114]) {
+					this.deviceProdInfo = manufactInfoCmd.cmdClasses[114];
 				}
 				for (let i in this.commandClasses) {
 					if (this.commandClasses[i] !== null) {
