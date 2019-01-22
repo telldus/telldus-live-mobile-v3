@@ -157,6 +157,8 @@ module.exports = {
  - `pushSenderId`: string - Used to identify the remote notification sender
  - `pushServiceId`: integer - Used to Identify the Push Service (GCM or APNS)
  - `googleMapsAPIKey`: string - Used to access Google Maps and Maps Geocode APIs
+ - `webClientId`: string - Used for google authentication
+ - `iosClientId`: string - Used for google authentication(only iOS)
 
 ### Docker
 
