@@ -257,18 +257,8 @@ setSocketListeners() {
 				if (manufactInfoCmd && manufactInfoCmd.interviewed && manufactInfoCmd.cmdClasses[114]) {
 					this.deviceProdInfo = manufactInfoCmd.cmdClasses[114];
 				}
-				for (let i in this.commandClasses) {
-					if (this.commandClasses[i] !== null) {
-						continue;
-					}
-					if (!data.cmdClasses[i]) {
-						delete this.commandClasses[i];
-						continue;
-					}
-					if (data.cmdClasses[i].interviewed === 1) {
-						this.commandClasses[i] = data.cmdClasses[i];
-					}
-				}
+
+				this.commandClasses = handleCommandClasses(action, this.commandClasses, data);
 				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
 
 				if (percent && (percent !== this.state.percent)) {
