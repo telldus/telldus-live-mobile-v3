@@ -66,7 +66,7 @@ class MainTabBarAndroid extends Component<Props, null> {
 		}
 	}
 
-	renderTabs(tab: Object, index: number): Object {
+	renderTabs(tab: Object = {}, index: number): Object {
 		const { screenProps, navigation } = this.props;
 		return (
 			<MainTabsAndroid
