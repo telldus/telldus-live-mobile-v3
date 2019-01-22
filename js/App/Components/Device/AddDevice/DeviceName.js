@@ -168,21 +168,23 @@ postSubmitName() {
 	actions.getDevices().then(() => {
 		this.setState({
 			isLoading: false,
-		});
-		InteractionManager.runAfterInteractions(() => {
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
+		}, () => {
+			InteractionManager.runAfterInteractions(() => {
+				navigation.navigate({
+					routeName: 'Devices',
+					key: 'Devices',
+				});
 			});
 		});
 	}).catch(() => {
-		InteractionManager.runAfterInteractions(() => {
-			this.setState({
-				isLoading: false,
-			});
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
+		this.setState({
+			isLoading: false,
+		}, () => {
+			InteractionManager.runAfterInteractions(() => {
+				navigation.navigate({
+					routeName: 'Devices',
+					key: 'Devices',
+				});
 			});
 		});
 	});
