@@ -24,7 +24,6 @@
 
 import React from 'react';
 import {
-	Image,
 	Keyboard,
 	InteractionManager,
 	ScrollView,
@@ -38,7 +37,7 @@ import {
 	Text,
 	IconTelldus,
 } from '../../../../BaseComponents';
-import { NameRow } from './SubViews';
+import { NameRow, DeviceInfoBlock } from './SubViews';
 
 import Theme from '../../../Theme';
 
@@ -109,24 +108,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return false;
 	}
 	return false;
-}
-
-getImageDimensions(appLayout: Object): Object {
-	const {
-		imageW,
-		imageH,
-	} = this.props.navigation.getParam('info', {});
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-	const imageHeight = deviceWidth * 0.25;
-	const imageWidth = deviceWidth * 0.29;
-	if (!imageW || !imageH) {
-		return { imgWidth: imageWidth, imgHeight: imageHeight };
-	}
-
-	let ratioHW = imageH / imageW;
-	return { imgWidth: imageHeight / ratioHW, imgHeight: imageHeight };
 }
 
 setRef(ref: any, id: number) {
@@ -206,34 +187,25 @@ onChangeName(name: string, id: number) {
 }
 
 getDeviceInfo(styles: Object): Object {
-	const { navigation, intl } = this.props;
+	const { navigation, intl, appLayout } = this.props;
 	const { formatMessage } = intl;
 	const {
 		deviceImage,
 		deviceModel,
 		deviceBrand,
+		imageW,
+		imageH,
 	} = navigation.getParam('info', {});
 
 	return (
-		<View style={styles.deviceInfoCoverStyle}>
-			{deviceImage ? <Image
-				source={{uri: deviceImage}}
-				resizeMode={'contain'}
-				style={styles.deviceImageStyle}/>
-				:
-				<IconTelldus
-					icon={'device-alt'}
-					style={styles.deviceIconStyle}/>
-			}
-			<View>
-				<Text style={styles.deviceModelStyle}>
-					{deviceModel ? deviceModel : formatMessage(i18n.addDeviceDefaultModel)}
-				</Text>
-				<Text style={styles.deviceBrandStyle}>
-					{deviceBrand ? deviceBrand : formatMessage(i18n.addDeviceDefaultBrand)}
-				</Text>
-			</View>
-		</View>
+		<DeviceInfoBlock
+			image={deviceImage}
+			h1={deviceModel ? deviceModel : formatMessage(i18n.addDeviceDefaultModel)}
+			h2={deviceBrand ? deviceBrand : formatMessage(i18n.addDeviceDefaultBrand)}
+			imageW={imageW}
+			imageH={imageH}
+			appLayout={appLayout}
+		/>
 	);
 }
 
@@ -356,10 +328,9 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow, rowTextColor } = Theme.Core;
+	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const { imgWidth, imgHeight } = this.getImageDimensions(appLayout);
 
 	const editBoxPadding = deviceWidth * editBoxPaddingFactor;
 
@@ -410,29 +381,6 @@ getStyles(): Object {
 		iconStyle: {
 			fontSize: deviceWidth * 0.050666667,
 			color: '#fff',
-		},
-		deviceInfoCoverStyle: {
-			flexDirection: 'row',
-			marginBottom: 4,
-			alignItems: 'center',
-		},
-		deviceImageStyle: {
-			width: imgWidth,
-			height: imgHeight,
-			marginRight: padding,
-		},
-		deviceIconStyle: {
-			fontSize: imgWidth,
-			marginRight: padding,
-			color: rowTextColor,
-		},
-		deviceModelStyle: {
-			fontSize: deviceWidth * 0.05,
-			color: brandSecondary,
-		},
-		deviceBrandStyle: {
-			fontSize: deviceWidth * 0.04,
-			color: eulaContentColor,
 		},
 	};
 }
