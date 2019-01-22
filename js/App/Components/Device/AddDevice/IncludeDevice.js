@@ -56,6 +56,7 @@ type State = {
 	status: string | null,
 	percent: number,
 	showThrobber: boolean,
+	deviceAlreadyIncluded: boolean,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -82,6 +83,7 @@ constructor(props: Props) {
 		status: null,
 		percent: 0,
 		showThrobber: false,
+		deviceAlreadyIncluded: false,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -176,7 +178,7 @@ setSocketListeners() {
 
 					this.startInterviewPoll();
 
-					this.checkDeviceAlreadyIncluded(data[1]);
+					this.checkDeviceAlreadyIncluded(data[1], false);
 
 					this.zwaveId = data[1];
 					this.commandClasses = {};
@@ -197,7 +199,7 @@ setSocketListeners() {
 					// Add node protocol done
 					this.isDeviceAwake = true;
 
-					this.checkDeviceAlreadyIncluded(data[1]);
+					this.checkDeviceAlreadyIncluded(data[1], false);
 
 					if (!this.zwaveId) {
 						this.zwaveId = data[1];
@@ -225,6 +227,9 @@ setSocketListeners() {
 						this.deviceProdInfo = cmdData.cmdClasses[114];
 					}
 				}
+
+				this.checkDeviceAlreadyIncluded(parseInt(data.node, 10), false);
+
 				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
 
 				if (percent && (percent !== this.state.percent)) {
@@ -250,6 +255,7 @@ setSocketListeners() {
 				if (this.zwaveId !== parseInt(data.nodeId, 10)) {
 					return;
 				}
+
 				if (!data.cmdClasses) {
 					return;
 				}
@@ -257,6 +263,8 @@ setSocketListeners() {
 				if (manufactInfoCmd && manufactInfoCmd.interviewed && manufactInfoCmd.cmdClasses[114]) {
 					this.deviceProdInfo = manufactInfoCmd.cmdClasses[114];
 				}
+
+				this.checkDeviceAlreadyIncluded(parseInt(data.nodeId, 10), false);
 
 				this.commandClasses = handleCommandClasses(action, this.commandClasses, data);
 				const { percent, waiting, status } = checkInclusionComplete(this.commandClasses, formatMessage);
@@ -311,12 +319,24 @@ handleErrorEnterLearnMode() {
 	}
 }
 
-checkDeviceAlreadyIncluded(nodeId: number) {
-	const { addDevice, actions } = this.props;
+checkDeviceAlreadyIncluded(nodeId: number, forceNavigate: boolean = false) {
+	const { addDevice } = this.props;
 	const alreadyIncluded = addDevice.nodeList[nodeId];
-	if (alreadyIncluded) {
+	const { manufacturerId } = this.deviceProdInfo;
+
+	const letNavigate = ((manufacturerId || forceNavigate) && (!this.state.deviceAlreadyIncluded));
+
+	if (alreadyIncluded && letNavigate) {
 		const { name } = alreadyIncluded;
-		actions.showToast(`Device seem to have already included by the name "${name}". Please exclude and try again.`);
+		this.setState({
+			timer: null,
+			status: '',
+			deviceAlreadyIncluded: true,
+		}, () => {
+			this.clearTimer();
+
+			this.getDeviceManufactInfo('AlreadyIncluded', {name});
+		});
 	}
 }
 
@@ -333,20 +353,23 @@ runInclusionTimer(data?: number = 60) {
 			showThrobber: false,
 		});
 		this.props.actions.showToast('Inclusion timed out!');
+		this.checkDeviceAlreadyIncluded(parseInt(this.zwaveId, 10), true);
 		this.clearTimer();
 	}
 }
 
 onInclusionComplete() {
-	this.getDeviceManufactInfo();
+	this.getDeviceManufactInfo('DeviceName', {});
 	clearTimeout(this.sleepCheckTimeout);
 }
 
-getDeviceManufactInfo() {
+getDeviceManufactInfo(routeName: string, routeParams?: Object = {}) {
 	const { actions } = this.props;
 	const { manufacturerId, productTypeId, productId } = this.deviceProdInfo;
 
-	let deviceManufactInfo = {};
+	let deviceManufactInfo = {
+		...routeParams,
+	};
 	if (manufacturerId) {
 		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
 			.then((res: Object) => {
@@ -360,27 +383,30 @@ getDeviceManufactInfo() {
 							deviceBrand,
 							imageW: width,
 							imageH: height,
+							...routeParams,
 						};
-						this.navigateToNext(deviceManufactInfo);
+						this.navigateToNext(deviceManufactInfo, routeName);
 					}
 				}, (failure: any) => {
 					deviceManufactInfo = {
 						deviceImage,
 						deviceModel,
 						deviceBrand,
+						...routeParams,
 					};
-					this.navigateToNext(deviceManufactInfo);
+					this.navigateToNext(deviceManufactInfo, routeName);
 				});
 			}).catch(() => {
 				deviceManufactInfo = {
 					deviceImage: null,
 					deviceModel: null,
 					deviceBrand: null,
+					...routeParams,
 				};
-				this.navigateToNext(deviceManufactInfo);
+				this.navigateToNext(deviceManufactInfo, routeName);
 			});
 	} else {
-		this.navigateToNext(deviceManufactInfo);
+		this.navigateToNext(deviceManufactInfo, routeName);
 	}
 }
 
@@ -410,14 +436,14 @@ prepareStatusMessage(): Object {
 	};
 }
 
-navigateToNext(deviceManufactInfo: Object) {
+navigateToNext(deviceManufactInfo: Object, routeName: string) {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 	const { statusMessage = null, statusIcon = null } = this.prepareStatusMessage();
 
 	navigation.navigate({
-		routeName: 'DeviceName',
-		key: 'DeviceName',
+		routeName,
+		key: routeName,
 		params: {
 			gateway,
 			devices: this.devices,
