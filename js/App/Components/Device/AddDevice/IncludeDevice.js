@@ -276,7 +276,7 @@ setSocketListeners() {
 						status,
 						percent,
 					});
-					if (waiting === 0 && this.state.percent !== 100) {
+					if (waiting === 0 && this.state.timer !== null) {
 						this.setState({
 							timer: null,
 							status,
@@ -360,13 +360,13 @@ getDeviceManufactInfo() {
 	if (manufacturerId) {
 		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
 			.then((res: Object) => {
-				const { Image: deviceImage = null, Name: deviceName = null, Brand: deviceBrand = null } = res;
+				const { Image: deviceImage = null, Name: deviceModel = null, Brand: deviceBrand = null } = res;
 				Image.prefetch(deviceImage);
 				Image.getSize(deviceImage, (width: number, height: number) => {
 					if (width && height) {
 						deviceManufactInfo = {
 							deviceImage,
-							deviceName,
+							deviceModel,
 							deviceBrand,
 							imageW: width,
 							imageH: height,
@@ -376,7 +376,7 @@ getDeviceManufactInfo() {
 				}, (failure: any) => {
 					deviceManufactInfo = {
 						deviceImage,
-						deviceName,
+						deviceModel,
 						deviceBrand,
 					};
 					this.navigateToNext(deviceManufactInfo);
@@ -384,7 +384,7 @@ getDeviceManufactInfo() {
 			}).catch(() => {
 				deviceManufactInfo = {
 					deviceImage: null,
-					deviceName: null,
+					deviceModel: null,
 					deviceBrand: null,
 				};
 				this.navigateToNext(deviceManufactInfo);

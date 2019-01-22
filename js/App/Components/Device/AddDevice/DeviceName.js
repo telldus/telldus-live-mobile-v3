@@ -204,29 +204,32 @@ onChangeName(name: string, id: number) {
 }
 
 getDeviceInfo(styles: Object): Object {
-	const { navigation } = this.props;
+	const { navigation, intl } = this.props;
+	const { formatMessage } = intl;
 	const {
 		deviceImage,
-		deviceName,
+		deviceModel,
 		deviceBrand,
 	} = navigation.getParam('info', {});
 
 	return (
 		<View style={styles.deviceInfoCoverStyle}>
-			{deviceImage && (<Image
+			{deviceImage ? <Image
 				source={{uri: deviceImage}}
 				resizeMode={'contain'}
 				style={styles.deviceImageStyle}/>
-			)}
+				:
+				<IconTelldus
+					icon={'device-alt'}
+					style={styles.deviceIconStyle}/>
+			}
 			<View>
-				{!!deviceName && (<Text style={styles.deviceNameStyle}>
-					{deviceName}
+				<Text style={styles.deviceModelStyle}>
+					{deviceModel ? deviceModel : formatMessage(i18n.addDeviceDefaultModel)}
 				</Text>
-				)}
-				{!!deviceBrand && (<Text style={styles.deviceBrandStyle}>
-					{deviceBrand}
+				<Text style={styles.deviceBrandStyle}>
+					{deviceBrand ? deviceBrand : formatMessage(i18n.addDeviceDefaultBrand)}
 				</Text>
-				)}
 			</View>
 		</View>
 	);
@@ -351,7 +354,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
+	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow, rowTextColor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const { imgWidth, imgHeight } = this.getImageDimensions(appLayout);
@@ -416,7 +419,12 @@ getStyles(): Object {
 			height: imgHeight,
 			marginRight: padding,
 		},
-		deviceNameStyle: {
+		deviceIconStyle: {
+			fontSize: imgWidth,
+			marginRight: padding,
+			color: rowTextColor,
+		},
+		deviceModelStyle: {
 			fontSize: deviceWidth * 0.05,
 			color: brandSecondary,
 		},
