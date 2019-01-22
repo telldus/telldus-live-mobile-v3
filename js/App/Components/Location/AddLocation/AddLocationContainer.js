@@ -26,7 +26,7 @@ import PropTypes from 'prop-types';
 import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -128,11 +128,11 @@ class AddLocationContainer extends View<null, Props, State> {
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
-			const isStateEqual = _.isEqual(this.state, nextState);
+			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
-			const isPropsEqual = _.isEqual(this.props, nextProps);
+			const isPropsEqual = isEqual(this.props, nextProps);
 			if (!isPropsEqual) {
 				return true;
 			}
