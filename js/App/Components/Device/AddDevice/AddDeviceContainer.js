@@ -25,6 +25,7 @@ import React from 'react';
 import { BackHandler, Keyboard } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -54,6 +55,7 @@ type Props = {
 	screenProps: Object,
 	showModal: boolean,
 	validationMessage: any,
+	ScreenName: string,
 };
 
 type State = {
@@ -98,6 +100,21 @@ class AddDeviceContainer extends View<Props, State> {
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 	}
 
+	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			const isPropsEqual = isEqual(this.props, nextProps);
+			if (!isPropsEqual) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
 	_keyboardDidShow() {
 		this.setState({
 			keyboardShown: true,
@@ -118,7 +135,7 @@ class AddDeviceContainer extends View<Props, State> {
 
 	handleBackPress(): boolean {
 		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'DeviceName') {
+		if (screenProps.currentScreen === 'DeviceName' || screenProps.currentScreen === 'AlreadyIncluded') {
 			return true;
 		}
 		navigation.pop();
@@ -167,6 +184,8 @@ class AddDeviceContainer extends View<Props, State> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
+		const showLeftIcon = currentScreen !== 'DeviceName' && currentScreen !== 'AlreadyIncluded';
+
 		return (
 			<View
 				style={{
@@ -178,7 +197,7 @@ class AddDeviceContainer extends View<Props, State> {
 					infoButton={infoButton}
 					align={'right'}
 					navigation={navigation}
-					showLeftIcon={currentScreen !== 'DeviceName'}
+					showLeftIcon={showLeftIcon}
 					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
 					{...screenProps}/>
 				<View style={styles.style}>
