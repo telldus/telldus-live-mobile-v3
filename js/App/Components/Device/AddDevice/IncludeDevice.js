@@ -74,6 +74,7 @@ deviceProdInfo: Object;
 gatewayId: number;
 
 handleErrorEnterLearnMode: () => void;
+runInclusionTimer: (number) => void;
 constructor(props: Props) {
 	super(props);
 
@@ -90,6 +91,7 @@ constructor(props: Props) {
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
 	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
+	this.runInclusionTimer = this.runInclusionTimer.bind(this);
 
 	const { actions, navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
@@ -115,7 +117,6 @@ componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(i18n.AddZDIncludeHeaderTwo));
-
 	this.startAddDevice();
 	this.devices = [];
 }
@@ -150,13 +151,11 @@ setSocketListeners() {
 		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				that.inclusionTimer = setInterval(() => {
-					that.runInclusionTimer(data);
+					that.runInclusionTimer(5);
 				}, 1000);
-
-				this.startSleepCheckTimer();
 			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
 				clearTimeout(this.partialInclusionCheckTimeout);
-				this.startSleepCheckTimer();
+
 				let status = data[0];
 				if (status === 1) {
 					this.setState({
@@ -167,12 +166,19 @@ setSocketListeners() {
 
 					this.startInterviewPoll();
 
+					this.startSleepCheckTimer();
+					this.startPartialInclusionCheckTimer();
+
 					this.setState({
 						status: formatMessage(i18n.addNodeToNetworkTwo),
 						showTimer: false,
 						showThrobber: false,
 					});
 				} else if (status === 3 || status === 4) {
+					clearInterval(this.inclusionTimer);
+
+					this.startSleepCheckTimer();
+					this.startPartialInclusionCheckTimer();
 
 					this.startInterviewPoll();
 
@@ -195,6 +201,9 @@ setSocketListeners() {
 					}
 				} else if (status === 5) {
 					// Add node protocol done
+					clearInterval(this.inclusionTimer);
+
+					this.startSleepCheckTimer();
 
 					this.checkDeviceAlreadyIncluded(data[1], false);
 
@@ -210,6 +219,7 @@ setSocketListeners() {
 					that.handleErrorEnterLearnMode();
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
+				clearInterval(this.inclusionTimer);
 				this.startPartialInclusionCheckTimer();
 				this.startSleepCheckTimer();
 
@@ -295,6 +305,7 @@ setSocketListeners() {
 				if (action === 'added') {
 					this.startSleepCheckTimer();
 					this.startPartialInclusionCheckTimer();
+					clearInterval(this.inclusionTimer);
 					const { clientDeviceId, id } = data;
 					this.devices.push({
 						id,
@@ -357,10 +368,18 @@ runInclusionTimer(data?: number = 60) {
 		this.setState({
 			timer: null,
 			showThrobber: false,
+		}, () => {
+			const { navigation } = this.props;
+			const { params = {}} = navigation.state;
+			navigation.navigate({
+				routeName: 'NoDeviceFound',
+				key: 'NoDeviceFound',
+				params,
+			});
+			clearTimeout(this.sleepCheckTimeout);
+			clearTimeout(this.partialInclusionCheckTimeout);
+			this.clearTimer();
 		});
-		this.props.actions.showToast('Inclusion timed out!');
-		this.checkDeviceAlreadyIncluded(parseInt(this.zwaveId, 10), true);
-		this.clearTimer();
 	}
 }
 
