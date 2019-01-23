@@ -32,6 +32,8 @@ import SelectDeviceType from './SelectDeviceType';
 import IncludeDevice from './IncludeDevice';
 import DeviceName from './DeviceName';
 import AlreadyIncluded from './AlreadyIncluded';
+import NoDeviceFound from './NoDeviceFound';
+import ExcludeScreen from './ExcludeScreen';
 
 const initialRouteName = 'InitialScreen';
 
@@ -64,6 +66,12 @@ const RouteConfigs = {
 	},
 	AlreadyIncluded: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(AlreadyIncluded, 'AlreadyIncluded'),
+	},
+	NoDeviceFound: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(NoDeviceFound, 'NoDeviceFound'),
+	},
+	ExcludeScreen: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(ExcludeScreen, 'ExcludeScreen'),
 	},
 };
 

@@ -134,12 +134,18 @@ class AddDeviceContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'DeviceName' || screenProps.currentScreen === 'AlreadyIncluded') {
+		let { navigation } = this.props;
+		if (this.dissAllowBackNavigation()) {
 			return true;
 		}
 		navigation.pop();
 		return true;
+	}
+
+	dissAllowBackNavigation(): boolean {
+		const {screenProps} = this.props;
+		const { currentScreen: CS } = screenProps;
+		return CS === 'DeviceName' || CS === 'AlreadyIncluded' || CS === 'NoDeviceFound' || CS === 'ExcludeScreen';
 	}
 
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
@@ -184,7 +190,7 @@ class AddDeviceContainer extends View<Props, State> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
-		const showLeftIcon = currentScreen !== 'DeviceName' && currentScreen !== 'AlreadyIncluded';
+		const showLeftIcon = !this.dissAllowBackNavigation();
 
 		return (
 			<View
