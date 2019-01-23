@@ -26,19 +26,15 @@ import React from 'react';
 import {
 	ScrollView,
 } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
 
 import {
 	View,
 	TouchableButton,
-	Row,
 	Text,
 	IconTelldus,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
-
-import { capitalize } from '../../../Lib';
 
 import i18n from '../../../Translations/common';
 
