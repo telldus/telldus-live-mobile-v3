@@ -47,6 +47,7 @@ type Props = {
 	percent: number,
 	progress: number,
 	showThrobber?: boolean,
+	infoText?: string,
 
     action: 'include' | 'exclude',
 	intl: Object,
@@ -92,7 +93,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	if (shouldUpdate(nextProps, this.props, ['progress', 'percent', 'status', 'timer', 'appLayout'])) {
+	if (shouldUpdate(nextProps, this.props, ['progress', 'percent', 'status', 'timer', 'appLayout', 'infoText'])) {
 		return true;
 	}
 	if (!isEqual(this.state, nextState)) {
@@ -111,7 +112,7 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	const { intl, timer, status, progress, showThrobber } = this.props;
+	const { intl, timer, status, progress, showThrobber, infoText } = this.props;
 	const { width } = this.state;
 	const {
 		container,
@@ -186,7 +187,7 @@ render(): Object {
 						unfilledColor={Theme.Core.inactiveSwitchBackground} />
 				</View>
 			</View>
-			{this.isInclude && (<View style={infoContainer}>
+			{this.isInclude && !!infoText && (<View style={infoContainer}>
 				<View style={blockLeft}>
 					<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
 				</View>
@@ -196,7 +197,7 @@ render(): Object {
 					flexWrap: 'wrap',
 				}}>
 					<Text style={textStyle}>
-						{formatMessage(i18n.messageHint)}
+						{infoText}
 					</Text>
 				</View>
 			</View>

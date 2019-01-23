@@ -57,6 +57,8 @@ type State = {
 	percent: number,
 	showThrobber: boolean,
 	deviceAlreadyIncluded: boolean,
+	hintMessage: string,
+	interviewPartialStatusMessage: string | null,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -69,8 +71,6 @@ zwaveId: ?number;
 deviceId: ?number;
 deviceManufactInfo: Object;
 deviceProdInfo: Object;
-isDeviceAwake: boolean;
-isDeviceBatteried: boolean;
 gatewayId: number;
 
 handleErrorEnterLearnMode: () => void;
@@ -84,6 +84,8 @@ constructor(props: Props) {
 		percent: 0,
 		showThrobber: false,
 		deviceAlreadyIncluded: false,
+		hintMessage: props.intl.formatMessage(i18n.messageHint),
+		interviewPartialStatusMessage: null,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -99,16 +101,13 @@ constructor(props: Props) {
 
 	this.inclusionTimer = null;
 	this.interviewTimer = null;
-	this.sleepCheckTimeInterval = null;
 	this.sleepCheckTimeout = null;
+	this.partialInclusionCheckTimeout = null;
 	this.zwaveId = null;
 	this.devices = [];
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
-	this.isDeviceAwake = true;
-	this.isDeviceBatteried = false;
-	this.showToast = true;
 	this.hasUnmount = false;
 }
 
@@ -150,11 +149,14 @@ setSocketListeners() {
 		const { module, action, data } = message;
 		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
-				this.showToast = true;
 				that.inclusionTimer = setInterval(() => {
 					that.runInclusionTimer(data);
 				}, 1000);
+
+				this.startSleepCheckTimer();
 			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
+				clearTimeout(this.partialInclusionCheckTimeout);
+				this.startSleepCheckTimer();
 				let status = data[0];
 				if (status === 1) {
 					this.setState({
@@ -162,8 +164,6 @@ setSocketListeners() {
 						showThrobber: false,
 					});
 				} else if (status === 2) {
-					this.isDeviceAwake = true;
-					this.startSleepCheckTimer();
 
 					this.startInterviewPoll();
 
@@ -173,8 +173,6 @@ setSocketListeners() {
 						showThrobber: false,
 					});
 				} else if (status === 3 || status === 4) {
-					this.isDeviceAwake = true;
-					this.startSleepCheckTimer();
 
 					this.startInterviewPoll();
 
@@ -197,7 +195,6 @@ setSocketListeners() {
 					}
 				} else if (status === 5) {
 					// Add node protocol done
-					this.isDeviceAwake = true;
 
 					this.checkDeviceAlreadyIncluded(data[1], false);
 
@@ -205,7 +202,6 @@ setSocketListeners() {
 						this.zwaveId = data[1];
 					}
 				} else if (status === 6) {
-					this.isDeviceAwake = true;
 					// Add node done
 					// this.clearTimer();
 				} else if (status === 7) {
@@ -214,7 +210,8 @@ setSocketListeners() {
 					that.handleErrorEnterLearnMode();
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (this.zwaveId === parseInt(data.node, 10))) {
-				this.isDeviceAwake = true;
+				this.startPartialInclusionCheckTimer();
+				this.startSleepCheckTimer();
 
 				this.commandClasses = handleCommandClasses(action, this.commandClasses, data);
 
@@ -236,11 +233,13 @@ setSocketListeners() {
 					this.setState({
 						status,
 						percent,
+						hintMessage: formatMessage(i18n.messageHint),
 					});
 					if (waiting === 0) {
 						this.setState({
 							timer: null,
 							status,
+							interviewPartialStatusMessage: null,
 						}, () => {
 							this.onInclusionComplete();
 						});
@@ -250,7 +249,12 @@ setSocketListeners() {
 			} else if (module === 'zwave' && action === 'nodeList') {
 				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
-				actions.showToast('Please try to wake the device manually');
+				this.startPartialInclusionCheckTimer();
+				// Battery connected devices.
+				this.setState({
+					hintMessage: formatMessage(i18n.deviceSleptBattery),
+					interviewPartialStatusMessage: `${formatMessage(i18n.interviewNotComplete)}. ${formatMessage(i18n.interviewNotCompleteBattery)}.`,
+				});
 			} else if (module === 'zwave' && action === 'nodeInfo') {
 				if (this.zwaveId !== parseInt(data.nodeId, 10)) {
 					return;
@@ -273,11 +277,13 @@ setSocketListeners() {
 					this.setState({
 						status,
 						percent,
+						hintMessage: formatMessage(i18n.messageHint),
 					});
 					if (waiting === 0 && this.state.timer !== null) {
 						this.setState({
 							timer: null,
 							status,
+							interviewPartialStatusMessage: null,
 						}, () => {
 							this.onInclusionComplete();
 						});
@@ -287,8 +293,8 @@ setSocketListeners() {
 
 			} else if (module === 'device') {
 				if (action === 'added') {
-					this.isDeviceAwake = true;
 					this.startSleepCheckTimer();
+					this.startPartialInclusionCheckTimer();
 					const { clientDeviceId, id } = data;
 					this.devices.push({
 						id,
@@ -361,6 +367,7 @@ runInclusionTimer(data?: number = 60) {
 onInclusionComplete() {
 	this.getDeviceManufactInfo('DeviceName', {});
 	clearTimeout(this.sleepCheckTimeout);
+	clearTimeout(this.partialInclusionCheckTimeout);
 }
 
 getDeviceManufactInfo(routeName: string, routeParams?: Object = {}) {
@@ -414,6 +421,7 @@ prepareStatusMessage(): Object {
 	const { navigation, intl } = this.props;
 	const { formatMessage } = intl;
 	const secure = navigation.getParam('secure', false);
+
 	if (!secure) {
 		return {};
 	}
@@ -438,6 +446,7 @@ prepareStatusMessage(): Object {
 
 navigateToNext(deviceManufactInfo: Object, routeName: string) {
 	const { navigation } = this.props;
+	const { interviewPartialStatusMessage } = this.state;
 	const gateway = navigation.getParam('gateway', {});
 	const { statusMessage = null, statusIcon = null } = this.prepareStatusMessage();
 
@@ -450,6 +459,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string) {
 			info: {...deviceManufactInfo},
 			statusMessage,
 			statusIcon,
+			interviewPartialStatusMessage,
 		},
 	});
 }
@@ -458,29 +468,37 @@ componentWillUnmount() {
 	this.clearSocketListeners();
 	this.clearTimer();
 	clearTimeout(this.sleepCheckTimeout);
+	clearTimeout(this.partialInclusionCheckTimeout);
 	this.devices = [];
 	this.hasUnmount = true;
 }
 
-startSleepCheckTimer(timeout: number = 60000) {
-	if (!this.sleepCheckTimeout) {
-		this.sleepCheckTimeout = setTimeout(() => {
-			// Every 10secs check if device is awake.
-			this.sleepCheckTimeInterval = setInterval(() => {
-				// Change awake state and wait till the next cycle.
-				if (this.isDeviceAwake) {
-					this.isDeviceAwake = false;
-				}
-				// Device has gone to sleep, wake him up!
-				if (!this.isDeviceAwake && this.showToast && this.state.timer) {
-					// TODO: Need to handle devices with and without battery separate, also translate
-					const { actions } = this.props;
-					actions.showToast('Please try to wake the device manually');
-					this.showToast = false;
-				}
-			}, 10000);
-		}, timeout);
-	}
+// sleep check for power connected devices.
+startSleepCheckTimer() {
+	clearTimeout(this.sleepCheckTimeout);
+	const that = this;
+	this.sleepCheckTimeout = setTimeout(() => {
+		// Device has gone to sleep, wake him up!
+
+		const { intl } = that.props;
+		that.setState({
+			hintMessage: intl.formatMessage(i18n.deviceSleptPower),
+			interviewPartialStatusMessage: `${intl.formatMessage(i18n.interviewNotComplete)}. ${intl.formatMessage(i18n.interviewNotCompletePower)}.`,
+		});
+	}, 10000);
+}
+
+startPartialInclusionCheckTimer() {
+	clearTimeout(this.partialInclusionCheckTimeout);
+	const that = this;
+	this.partialInclusionCheckTimeout = setTimeout(() => {
+		that.setState({
+			timer: null,
+		}, () => {
+			that.onInclusionComplete();
+			that.clearTimer();
+		});
+	}, 25000);
 }
 
 startInterviewPoll() {
@@ -538,7 +556,7 @@ clearTimer() {
 
 render(): Object {
 	const { intl, appLayout } = this.props;
-	const { timer, status, percent, showTimer, showThrobber } = this.state;
+	const { timer, status, percent, showTimer, showThrobber, hintMessage } = this.state;
 	const { formatMessage } = intl;
 
 	const progress = Math.max(percent / 100, 0);
@@ -554,7 +572,8 @@ render(): Object {
 				status={statusText}
 				timer={timerText}
 				intl={intl}
-				appLayout={appLayout}/>
+				appLayout={appLayout}
+				infoText={hintMessage}/>
 		</ScrollView>
 	);
 }

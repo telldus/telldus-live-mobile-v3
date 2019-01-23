@@ -135,8 +135,6 @@ submitName() {
 		Keyboard.dismiss();
 		Promise.all(promises).then(() => {
 			this.postSubmitName();
-		}).catch(() => {
-			this.postSubmitName();
 		});
 	} else if (this.inputRefs[emptyField]) {
 		this.inputRefs[emptyField].focus();
@@ -277,6 +275,7 @@ render(): Object {
 
 	const statusMessage = navigation.getParam('statusMessage', null);
 	const statusIcon = navigation.getParam('statusIcon', null);
+	const hintMessage = navigation.getParam('interviewPartialStatusMessage', null);
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -306,6 +305,14 @@ render(): Object {
 								}]}/>
 								<Text style={infoTextStyle}>
 									{statusMessage}
+								</Text>
+							</View>
+						)}
+						{!!hintMessage && (
+							<View style={infoContainer}>
+								<IconTelldus icon={'info'} style={statusIconStyle}/>
+								<Text style={infoTextStyle}>
+									{hintMessage}
 								</Text>
 							</View>
 						)}
@@ -362,6 +369,7 @@ getStyles(): Object {
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.12,
 			marginHorizontal: editBoxPadding,
+			color: brandSecondary,
 		},
 		boxContainerStyle: {
 			marginTop: padding / 2,
