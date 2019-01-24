@@ -71,12 +71,15 @@ constructor(props: Props) {
 	super(props);
 
 	const devices = props.navigation.getParam('devices', []);
+	const mainNodeDeviceId = props.navigation.getParam('mainNodeDeviceId', null);
 	let rowData = {};
-	devices.map(({id}: Object, index: number) => {
+	devices.map(({id, clientDeviceId}: Object, index: number) => {
 		rowData[id] = {
 			id,
 			name: '',
 			index,
+			mainNode: mainNodeDeviceId === clientDeviceId,
+			clientDeviceId,
 		};
 	});
 
@@ -143,6 +146,7 @@ submitName() {
 
 postSubmitName() {
 	const { actions, navigation } = this.props;
+	const { rowData } = this.state;
 
 	actions.getDevices().then(() => {
 		this.setState({
@@ -152,6 +156,9 @@ postSubmitName() {
 				navigation.navigate({
 					routeName: 'Devices',
 					key: 'Devices',
+					params: {
+						newDevices: rowData,
+					},
 				});
 			});
 		});
@@ -163,6 +170,9 @@ postSubmitName() {
 				navigation.navigate({
 					routeName: 'Devices',
 					key: 'Devices',
+					params: {
+						newDevices: rowData,
+					},
 				});
 			});
 		});
@@ -248,8 +258,8 @@ render(): Object {
 
 	let rows = [], firstRow;
 	for (let key in rowData) {
-		const { name: deviceName = '', index, id } = rowData[key] || {};
-		if (index === 0) {
+		const { name: deviceName = '', index, id, mainNode } = rowData[key] || {};
+		if (mainNode) {
 			firstRow = this.getNameRow({
 				key,
 				deviceName,
