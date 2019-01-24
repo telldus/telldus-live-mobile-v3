@@ -71,6 +71,8 @@ export default {
 
 	rowHeight: 60,
 
+	buttonRowKey: '  **buttonRow**  ',
+
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,
 

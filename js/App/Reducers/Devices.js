@@ -29,6 +29,7 @@ import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
 
 import { hasTokenExpired } from '../Lib/LocalControl';
+import Theme from '../Theme';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
@@ -85,5 +86,12 @@ export function parseDevicesForListView(devices: Object = {}, gateways: Object =
 			hiddenList = prepareSectionRow(hidden, gateways);
 		}
 	}
+	const toggleHiddenButtonRow = {
+		key: Theme.Core.buttonRowKey,
+		data: [{
+			buttonRow: true,
+		}],
+	};
+	visibleList.push(toggleHiddenButtonRow);
 	return { visibleList, hiddenList };
 }

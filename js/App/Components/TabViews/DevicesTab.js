@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { Image, TouchableOpacity, Linking, SectionList, ScrollView, RefreshControl } from 'react-native';
+import { Image, TouchableOpacity, Linking, SectionList, RefreshControl, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
@@ -40,7 +40,7 @@ import { DimmerControlInfo } from './SubViews/Device';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, LayoutAnimations } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast, getGateways } from '../../Actions';
@@ -91,6 +91,9 @@ class DevicesTab extends View {
 	addNewDevice: () => void;
 	showDimInfo: (Object) => void;
 	handleAddDeviceAttentionCapture: () => void;
+
+	setRef: (any) => void;
+	listView: any;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
@@ -155,6 +158,8 @@ class DevicesTab extends View {
 
 		this.showDimInfo = this.showDimInfo.bind(this);
 		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);
+		this.setRef = this.setRef.bind(this);
+		this.listView = null;
 	}
 
 	componentDidMount() {
@@ -169,6 +174,10 @@ class DevicesTab extends View {
 
 	componentDidUpdate() {
 		this.handleAddDeviceAttentionCapture();
+	}
+
+	setRef(ref: any) {
+		this.listView = ref;
 	}
 
 	handleAddDeviceAttentionCapture() {
@@ -316,8 +325,22 @@ class DevicesTab extends View {
 	}
 
 	toggleHiddenList() {
+		const { rowsAndSections } = this.props;
+		const { hiddenList, visibleList } = rowsAndSections;
+
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
+		}, () => {
+			const { showHiddenList } = this.state;
+			if (showHiddenList && hiddenList.length > 0 && visibleList.length > 0) {
+				this.listView.scrollToLocation({
+					animated: true,
+					sectionIndex: visibleList.length - 1,
+					itemIndex: 0,
+					viewPosition: 0.7,
+				});
+			}
 		});
 	}
 
@@ -429,9 +452,11 @@ class DevicesTab extends View {
 		);
 	}
 
-	toggleHiddenListButton(style: Object): Object {
+	toggleHiddenListButton(): Object {
 		const { screenProps } = this.props;
 		const accessible = screenProps.currentScreen === 'Sensors';
+		const style = this.getStyles(screenProps.appLayout);
+
 		return (
 			<TouchableOpacity
 				style={style.toggleHiddenListButton}
@@ -451,8 +476,11 @@ class DevicesTab extends View {
 		);
 	}
 
-	renderSectionHeader(sectionData: Object): Object {
+	renderSectionHeader(sectionData: Object): Object | null {
 		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
+		if (sectionData.section.key === Theme.Core.buttonRowKey) {
+			return null;
+		}
 
 		return (
 			<DeviceHeader
@@ -471,7 +499,15 @@ class DevicesTab extends View {
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, screenReaderEnabled } = screenProps;
 		const { item } = row;
-		const { isOnline, supportLocalControl } = item;
+		const { isOnline, supportLocalControl, buttonRow } = item;
+
+		if (buttonRow) {
+			return (
+				<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
+					{this.toggleHiddenListButton()}
+				</View>
+			);
+		}
 
 		return (
 			<DeviceRow
@@ -504,6 +540,15 @@ class DevicesTab extends View {
 		}
 	}
 
+	prepareFinalListData(rowsAndSections: Object): Array<Object> {
+		const { showHiddenList } = this.state;
+		const { visibleList, hiddenList } = rowsAndSections;
+		if (!showHiddenList) {
+			return visibleList;
+		}
+		return visibleList.concat(hiddenList);
+	}
+
 	render(): Object {
 
 		const {
@@ -515,14 +560,12 @@ class DevicesTab extends View {
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 		const {
-			showHiddenList,
 			isRefreshing,
 			addGateway,
 			propsSwipeRow,
 			scrollEnabled,
 			showRefresh,
 		} = this.state;
-		const { visibleList, hiddenList } = rowsAndSections;
 
 		const style = this.getStyles(appLayout);
 
@@ -556,60 +599,43 @@ class DevicesTab extends View {
 			backdropOpacity,
 			showHeader,
 		} = this.getDialogueBoxData(style, appLayout, intl);
+		const listData = this.prepareFinalListData(rowsAndSections);
 
 		return (
 			<View style={{
 				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
 			}}>
-				<ScrollView style={style.container}
-					scrollEnabled={scrollEnabled}
+				<SectionList
+					sections={listData}
+					renderItem={this.renderRow}
+					renderSectionHeader={this.renderSectionHeader}
 					refreshControl={
 						<RefreshControl
 							enabled={showRefresh}
 							refreshing={isRefreshing}
 							onRefresh={this.onRefresh}
-						/>}
+						/>
+					}
+					keyExtractor={this.keyExtractor}
+					extraData={extraData}
+					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-				>
-					<SectionList
-						sections={visibleList}
-						renderItem={this.renderRow}
-						renderSectionHeader={this.renderSectionHeader}
-						keyExtractor={this.keyExtractor}
-						extraData={extraData}
-						scrollEnabled={scrollEnabled}
-						onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-					/>
-					<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
-						{this.toggleHiddenListButton(style)}
-						{showHiddenList ?
-							<SectionList
-								sections={hiddenList}
-								renderItem={this.renderRow}
-								renderSectionHeader={this.renderSectionHeader}
-								keyExtractor={this.keyExtractor}
-								extraData={extraData}
-								scrollEnabled={scrollEnabled}
-								onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-							/>
-							:
-							<View style={{height: 80}}/>
-						}
-					</View>
-					<DialogueBox
-						showDialogue={showDialogue}
-						showHeader={showHeader}
-						header={header}
-						text={text}
-						style={dialogueBoxStyle}
-						showNegative={showNegative}
-						onPressNegative={onPressNegative}
-						showPositive={showPositive}
-						positiveText={positiveText}
-						onPressPositive={onPressPositive}
-						backdropOpacity={backdropOpacity}
-					/>
-				</ScrollView>
+					ref={this.setRef}
+				/>
+				<DialogueBox
+					showDialogue={showDialogue}
+					showHeader={showHeader}
+					header={header}
+					text={text}
+					style={dialogueBoxStyle}
+					showNegative={showNegative}
+					onPressNegative={onPressNegative}
+					showPositive={showPositive}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					backdropOpacity={backdropOpacity}
+				/>
 			</View>
 		);
 	}
