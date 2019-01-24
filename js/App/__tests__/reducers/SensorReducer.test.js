@@ -1,7 +1,15 @@
 import {parseSensorsForListView} from '../../Reducers/Sensors.js';
 jest.useFakeTimers();
 
-const initialState = {hiddenList: [], visibleList: []};
+import Theme from '../../Theme';
+
+const toggleHiddenButtonRow = {
+	key: Theme.Core.buttonRowKey,
+	data: [{
+		buttonRow: true,
+	}],
+};
+const initialState = {hiddenList: [], visibleList: [toggleHiddenButtonRow]};
 
 describe('Test Sensor reducers', ()=>{
 
