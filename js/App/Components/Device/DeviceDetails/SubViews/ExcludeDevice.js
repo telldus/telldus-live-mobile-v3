@@ -330,7 +330,7 @@ render(): Object {
 						text={excludeSucces ? formatMessage(i18n.defaultPositiveText) : formatMessage(i18n.defaultNegativeText)}
 						onPress={excludeSucces ? this.onPressOkay : this.onPressCancelExclude}
 						style={{
-							marginTop: 10,
+							marginTop: padding / 2,
 						}}/>
 				</View>
 			}
@@ -343,12 +343,13 @@ render(): Object {
 						onPress={this.onPressTryAgain}
 						style={{
 							backgroundColor: brandDanger,
+							marginTop: padding / 2,
 						}}/>
 					<TouchableButton
 						text={formatMessage(i18n.exit)}
 						onPress={this.onPressCancelExclude}
 						style={{
-							marginTop: padding / 2,
+							marginTop: padding,
 						}}/>
 				</View>
 			)}

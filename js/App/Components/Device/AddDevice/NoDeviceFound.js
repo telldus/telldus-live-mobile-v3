@@ -112,8 +112,8 @@ render(): Object {
 
 
 	return (
-		<View style={container}>
-			<ScrollView>
+		<ScrollView>
+			<View style={container}>
 				<View style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
@@ -134,8 +134,8 @@ render(): Object {
 					text={i18n.exit}
 					onPress={this.onPressExit}
 					style={buttonStyle}/>
-			</ScrollView>
-		</View>
+			</View>
+		</ScrollView>
 	);
 }
 
@@ -152,22 +152,22 @@ getStyles(): Object {
 	const infoTextFontSize = deviceWidth * 0.04;
 
 	return {
+		padding,
 		brandDanger,
 		container: {
 			flex: 1,
-			paddingVertical: padding,
-			marginHorizontal: padding,
+			margin: padding,
 		},
 		infoContainer: {
 			flex: 1,
 			flexDirection: 'row',
-			marginTop: padding / 2,
 			padding: innerPadding,
 			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
 			borderRadius: 2,
+			marginBottom: padding / 2,
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
@@ -181,7 +181,7 @@ getStyles(): Object {
 			marginLeft: innerPadding,
 		},
 		buttonStyle: {
-			marginTop: padding / 2,
+			marginTop: padding,
 		},
 	};
 }

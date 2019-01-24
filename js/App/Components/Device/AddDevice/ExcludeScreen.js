@@ -213,16 +213,14 @@ getStyles(): Object {
 	return {
 		container: {
 			flex: 1,
-			paddingVertical: padding,
-			marginHorizontal: padding,
 		},
 		buttonStyle: {
-			marginTop: padding / 2,
+			marginTop: padding,
 		},
 		infoContainer: {
 			flex: 1,
 			flexDirection: 'row',
-			marginTop: padding / 2,
+			marginVertical: padding / 2,
 			padding: innerPadding,
 			backgroundColor: '#fff',
 			...shadow,
