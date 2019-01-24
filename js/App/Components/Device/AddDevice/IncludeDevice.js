@@ -259,6 +259,7 @@ setSocketListeners() {
 			} else if (module === 'zwave' && action === 'nodeList') {
 				actions.processWebsocketMessageForZWave(action, data, this.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
+				clearTimeout(this.sleepCheckTimeout);
 				this.startPartialInclusionCheckTimer();
 				// Battery connected devices.
 				this.setState({
