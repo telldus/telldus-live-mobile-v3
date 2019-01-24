@@ -69,6 +69,7 @@ setSocketListeners: () => void;
 
 zwaveId: ?number;
 deviceId: ?number;
+mainNodeDeviceId: ?number;
 deviceManufactInfo: Object;
 deviceProdInfo: Object;
 gatewayId: number;
@@ -106,6 +107,7 @@ constructor(props: Props) {
 	this.sleepCheckTimeout = null;
 	this.partialInclusionCheckTimeout = null;
 	this.zwaveId = null;
+	this.mainNodeDeviceId = null;
 	this.devices = [];
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
@@ -268,8 +270,16 @@ setSocketListeners() {
 					interviewPartialStatusMessage: `${formatMessage(i18n.interviewNotComplete)}. ${formatMessage(i18n.interviewNotCompleteBattery)}.`,
 				});
 			} else if (module === 'zwave' && action === 'nodeInfo') {
+
 				if (that.zwaveId !== parseInt(data.nodeId, 10)) {
 					return;
+				}
+
+				if (data.parentDeviceId) {
+					that.mainNodeDeviceId = data.parentDeviceId;
+				}
+				if (!data.parentDeviceId && data.deviceId) {
+					that.mainNodeDeviceId = data.deviceId;
 				}
 
 				if (!data.cmdClasses) {
@@ -309,6 +319,7 @@ setSocketListeners() {
 					that.startPartialInclusionCheckTimer();
 					clearInterval(that.inclusionTimer);
 					const { clientDeviceId, id } = data;
+
 					that.devices.push({
 						id,
 						clientDeviceId,
@@ -477,6 +488,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string) {
 		params: {
 			gateway,
 			devices: this.devices,
+			mainNodeDeviceId: this.mainNodeDeviceId,
 			info: {...deviceManufactInfo},
 			statusMessage,
 			statusIcon,
