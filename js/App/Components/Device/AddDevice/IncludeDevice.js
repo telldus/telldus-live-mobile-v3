@@ -57,7 +57,7 @@ type State = {
 	percent: number,
 	showThrobber: boolean,
 	deviceAlreadyIncluded: boolean,
-	hintMessage: string,
+	hintMessage: string | null,
 	interviewPartialStatusMessage: string | null,
 };
 
@@ -173,6 +173,7 @@ setSocketListeners() {
 						status: formatMessage(i18n.addNodeToNetworkTwo),
 						showTimer: false,
 						showThrobber: false,
+						hintMessage: null,
 					});
 				} else if (status === 3 || status === 4) {
 					clearInterval(this.inclusionTimer);
@@ -243,7 +244,7 @@ setSocketListeners() {
 					that.setState({
 						status,
 						percent,
-						hintMessage: formatMessage(i18n.messageHint),
+						hintMessage: null,
 					});
 					if (waiting === 0) {
 						that.setState({
@@ -288,7 +289,7 @@ setSocketListeners() {
 					that.setState({
 						status,
 						percent,
-						hintMessage: formatMessage(i18n.messageHint),
+						hintMessage: null,
 					});
 					if (waiting === 0 && that.state.timer !== null) {
 						that.setState({
