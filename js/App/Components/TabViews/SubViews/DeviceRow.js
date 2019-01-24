@@ -56,6 +56,8 @@ type Props = {
 	appLayout: Object,
 	isGatewayActive: boolean,
 	tab: string,
+	isNew: boolean,
+	gatewayName: string,
 	powerConsumed: string | null,
 	propsSwipeRow: Object,
 	onBell: (number) => void,
@@ -71,6 +73,7 @@ type Props = {
 	onPressMore: (Array<Object>) => void,
 	onHiddenRowOpen: (string) => void,
 	onPressDimButton: (device: Object) => void,
+	onNewlyAddedDidMount: (number, string) => void,
 };
 
 type State = {
@@ -174,7 +177,7 @@ class DeviceRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
+				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed', 'isNew', 'gatewayName',
 			]);
 			if (propsChange) {
 				return true;
@@ -191,8 +194,19 @@ class DeviceRow extends View<Props, State> {
 		return false;
 	}
 
+	componentDidMount() {
+		const { onNewlyAddedDidMount, device, isNew, gatewayName } = this.props;
+		if (onNewlyAddedDidMount && isNew) {
+			onNewlyAddedDidMount(device.id, gatewayName);
+		}
+	}
+
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { currentScreen, propsSwipeRow, device } = this.props;
+		let {
+			currentScreen,
+			propsSwipeRow,
+			device,
+		} = this.props;
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
 		if (isOpen && (currentScreen !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
@@ -560,6 +574,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
+		const { isNew } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
@@ -569,6 +584,12 @@ class DeviceRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
+			brandPrimary,
+			brandSecondary,
+			shadow,
+			paddingFactor,
+			offlineColor,
+			rowTextColor,
 		} = Theme.Core;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -577,10 +598,10 @@ class DeviceRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
-		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? brandPrimary : brandSecondary;
+		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = deviceWidth * paddingFactor;
 
 		return {
 			touchableContainer: {
@@ -595,12 +616,14 @@ class DeviceRow extends View<Props, State> {
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
-				...Theme.Core.shadow,
+				...shadow,
+				borderWidth: isNew ? 2 : 0,
+				borderColor: isNew ? brandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',
-				height: Theme.Core.rowHeight,
-				width: Theme.Core.buttonWidth * 2,
+				height: rowHeight,
+				width: buttonWidth * 2,
 				alignSelf: 'flex-end',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -632,7 +655,7 @@ class DeviceRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			text: {
-				color: Theme.Core.rowTextColor,
+				color: rowTextColor,
 				fontSize: nameFontSize,
 				textAlignVertical: 'center',
 				textAlign: 'left',
@@ -673,14 +696,14 @@ class DeviceRow extends View<Props, State> {
 			},
 			textPowerConsumed: {
 				marginLeft: 6,
-				color: Theme.Core.rowTextColor,
+				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},
 			textPowerConsumedTablet: {
 				marginRight: 6,
 				marginTop: infoFontSize * 0.411,
-				color: Theme.Core.rowTextColor,
+				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},

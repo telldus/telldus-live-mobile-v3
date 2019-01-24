@@ -92,6 +92,8 @@ class DevicesTab extends View {
 	showDimInfo: (Object) => void;
 	handleAddDeviceAttentionCapture: () => void;
 
+	onNewlyAddedDidMount: (id: number, clientId: string) => void;
+
 	setRef: (any) => void;
 	listView: any;
 
@@ -160,10 +162,14 @@ class DevicesTab extends View {
 		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);
 		this.setRef = this.setRef.bind(this);
 		this.listView = null;
+
+		this.onNewlyAddedDidMount = this.onNewlyAddedDidMount.bind(this);
+		this.timeoutNormalizeNewlyAdded = null;
 	}
 
 	componentDidMount() {
 		this.handleAddDeviceAttentionCapture();
+		this.normalizeNewlyAddedUI();
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -174,6 +180,11 @@ class DevicesTab extends View {
 
 	componentDidUpdate() {
 		this.handleAddDeviceAttentionCapture();
+		this.normalizeNewlyAddedUI();
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.timeoutNormalizeNewlyAdded);
 	}
 
 	setRef(ref: any) {
@@ -494,12 +505,12 @@ class DevicesTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps } = this.props;
+		const { screenProps, navigation } = this.props;
 		const { appLayout } = screenProps;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, screenReaderEnabled } = screenProps;
-		const { item } = row;
-		const { isOnline, supportLocalControl, buttonRow } = item;
+		const { item, section } = row;
+		const { isOnline, supportLocalControl, buttonRow, id } = item;
 
 		if (buttonRow) {
 			return (
@@ -508,6 +519,8 @@ class DevicesTab extends View {
 				</View>
 			);
 		}
+
+		const newDevices = navigation.getParam('newDevices', {}) || {};
 
 		return (
 			<DeviceRow
@@ -524,8 +537,51 @@ class DevicesTab extends View {
 				onPressDimButton={this.showDimInfo}
 				propsSwipeRow={propsSwipeRow}
 				screenReaderEnabled={screenReaderEnabled}
+				isNew={!!newDevices[id]}
+				gatewayName={section.key}
+				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 			/>
 		);
+	}
+
+	normalizeNewlyAddedUI() {
+		const { navigation } = this.props;
+		const newDevices = navigation.getParam('newDevices', null);
+		if (newDevices && !this.timeoutNormalizeNewlyAdded ) {
+			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
+				navigation.setParams({
+					newDevices: undefined,
+				});
+				clearTimeout(this.timeoutNormalizeNewlyAdded);
+				this.timeoutNormalizeNewlyAdded = null;
+			}, 3000);
+		}
+	}
+
+	onNewlyAddedDidMount(id: number, clientName: string) {
+		const { rowsAndSections, navigation } = this.props;
+		const { visibleList } = rowsAndSections;
+		const newDevices = navigation.getParam('newDevices', {});
+		let section, row;
+		let item = newDevices[id];
+		if (item && item.mainNode) {
+			visibleList.map((list: Object, index: number) => {
+				if (list.key === clientName) {
+					section = index;
+					list.data.map((l: Object, i: number) => {
+						if (l.id === id) {
+							row = i;
+						}
+					});
+				}
+			});
+			this.listView.scrollToLocation({
+				animated: true,
+				sectionIndex: section,
+				itemIndex: row,
+				viewPosition: 0.4,
+			});
+		}
 	}
 
 	addNewDevice() {
