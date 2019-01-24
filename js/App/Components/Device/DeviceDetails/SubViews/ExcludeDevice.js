@@ -173,7 +173,7 @@ setSocketListeners() {
 		if (module && action) {
 			if (module === 'zwave' && action === 'removeNodeFromNetworkStartTimeout') {
 				that.exclusionTimer = setInterval(() => {
-					that.runExclusionTimer(5);
+					that.runExclusionTimer(data);
 				}, 1000);
 			} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
 				let status = data[0];

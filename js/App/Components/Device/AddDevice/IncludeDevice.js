@@ -151,7 +151,7 @@ setSocketListeners() {
 		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				that.inclusionTimer = setInterval(() => {
-					that.runInclusionTimer(5);
+					that.runInclusionTimer(data);
 				}, 1000);
 			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
 				clearTimeout(this.partialInclusionCheckTimeout);
