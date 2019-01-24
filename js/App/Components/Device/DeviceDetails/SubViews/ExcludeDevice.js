@@ -182,14 +182,14 @@ setSocketListeners() {
 						if (onExcludeSuccessImmediate) {
 							onExcludeSuccessImmediate();
 						}
-						this.setState({
+						that.setState({
 							excludeSucces: true,
 							timer: `${intl.formatMessage(i18n.done)}!`,
 							status: intl.formatMessage(i18n.messageDeviceExcluded),
 							progress: 100,
 							showThrobber: false,
 						});
-						this.clearTimer();
+						that.clearTimer();
 					}
 				}
 				if (status === 7) {
@@ -200,14 +200,14 @@ setSocketListeners() {
 				if (onExcludeSuccessImmediate) {
 					onExcludeSuccessImmediate();
 				}
-				this.setState({
+				that.setState({
 					excludeSucces: true,
 					timer: `${intl.formatMessage(i18n.done)}!`,
 					status: intl.formatMessage(i18n.messageDeviceExcluded),
 					progress: 100,
 					showThrobber: false,
 				});
-				this.clearTimer();
+				that.clearTimer();
 			}
 			if (module === 'device') {
 				processWebsocketMessageForDevice(action, data);
