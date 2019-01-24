@@ -97,6 +97,8 @@ class DevicesTab extends View {
 	setRef: (any) => void;
 	listView: any;
 
+	onPressDeviceAction: () => void;
+
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.devices),
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
@@ -165,11 +167,13 @@ class DevicesTab extends View {
 
 		this.onNewlyAddedDidMount = this.onNewlyAddedDidMount.bind(this);
 		this.timeoutNormalizeNewlyAdded = null;
+
+		this.onPressDeviceAction = this.onPressDeviceAction.bind(this);
 	}
 
 	componentDidMount() {
 		this.handleAddDeviceAttentionCapture();
-		this.normalizeNewlyAddedUI();
+		this.normalizeNewlyAddedUITimeout();
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -180,7 +184,7 @@ class DevicesTab extends View {
 
 	componentDidUpdate() {
 		this.handleAddDeviceAttentionCapture();
-		this.normalizeNewlyAddedUI();
+		this.normalizeNewlyAddedUITimeout();
 	}
 
 	componentWillUnmount() {
@@ -540,21 +544,34 @@ class DevicesTab extends View {
 				isNew={!!newDevices[id]}
 				gatewayName={section.key}
 				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
+				onPressDeviceAction={this.onPressDeviceAction}
 			/>
 		);
+	}
+
+	onPressDeviceAction() {
+		this.normalizeNewlyAddedUI();
+	}
+
+	normalizeNewlyAddedUITimeout() {
+		const { navigation } = this.props;
+		const newDevices = navigation.getParam('newDevices', null);
+		if (newDevices && !this.timeoutNormalizeNewlyAdded ) {
+			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
+				this.normalizeNewlyAddedUI();
+				clearTimeout(this.timeoutNormalizeNewlyAdded);
+				this.timeoutNormalizeNewlyAdded = null;
+			}, 3000);
+		}
 	}
 
 	normalizeNewlyAddedUI() {
 		const { navigation } = this.props;
 		const newDevices = navigation.getParam('newDevices', null);
-		if (newDevices && !this.timeoutNormalizeNewlyAdded ) {
-			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
-				navigation.setParams({
-					newDevices: undefined,
-				});
-				clearTimeout(this.timeoutNormalizeNewlyAdded);
-				this.timeoutNormalizeNewlyAdded = null;
-			}, 3000);
+		if (newDevices) {
+			navigation.setParams({
+				newDevices: undefined,
+			});
 		}
 	}
 

@@ -47,6 +47,7 @@ type Props = {
 	local: boolean,
 	isOpen: boolean,
 	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 class UpButton extends View {
@@ -63,10 +64,13 @@ class UpButton extends View {
 	}
 
 	onUp() {
-		const { commandUp, id, isOpen, closeSwipeRow } = this.props;
+		const { commandUp, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(id, commandUp);
 	}

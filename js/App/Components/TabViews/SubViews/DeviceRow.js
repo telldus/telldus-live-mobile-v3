@@ -74,6 +74,7 @@ type Props = {
 	onHiddenRowOpen: (string) => void,
 	onPressDimButton: (device: Object) => void,
 	onNewlyAddedDidMount: (number, string) => void,
+	onPressDeviceAction: () => void,
 };
 
 type State = {
@@ -375,7 +376,16 @@ class DeviceRow extends View<Props, State> {
 	render(): Object {
 		let button = [];
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
-		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed, onPressDimButton } = this.props;
+		const {
+			device,
+			intl,
+			currentScreen,
+			appLayout,
+			isGatewayActive,
+			powerConsumed,
+			onPressDimButton,
+			onPressDeviceAction,
+		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -400,6 +410,7 @@ class DeviceRow extends View<Props, State> {
 			appLayout,
 			actionIcons,
 			closeSwipeRow: this.closeSwipeRow,
+			onPressDeviceAction: onPressDeviceAction,
 		};
 		const icon = getDeviceIcons(deviceType);
 

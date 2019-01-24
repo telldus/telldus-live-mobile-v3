@@ -44,6 +44,7 @@ type Props = {
 	style: Object,
 	intl: Object,
 	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 type DefaultProps = {
@@ -90,6 +91,7 @@ class NavigationalButton extends View {
 			showStopButton,
 			isOpen,
 			closeSwipeRow,
+			onPressDeviceAction,
 		} = this.props;
 		const { supportedMethods = {}, methodRequested, isInState, id, name, local } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
@@ -104,6 +106,7 @@ class NavigationalButton extends View {
 			isOpen,
 			closeSwipeRow,
 			intl,
+			onPressDeviceAction,
 		};
 
 		return (

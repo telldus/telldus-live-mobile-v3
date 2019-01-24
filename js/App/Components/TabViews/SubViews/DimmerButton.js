@@ -71,6 +71,7 @@ type Props = {
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDimButton: (device: Object) => void,
+	onPressDeviceAction?: () => void,
 };
 
 type DefaultProps = {
@@ -164,19 +165,25 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onTurnOn() {
-		const { isOpen, closeSwipeRow } = this.props;
+		const { isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandON);
 	}
 
 	onTurnOff() {
-		const { isOpen, closeSwipeRow } = this.props;
+		const { isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
 	}
@@ -186,7 +193,10 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onPressDimButton() {
-		const { onPressDimButton, device } = this.props;
+		const { onPressDimButton, device, onPressDeviceAction } = this.props;
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
+		}
 		if (onPressDimButton && typeof onPressDimButton === 'function') {
 			onPressDimButton(device);
 		}
