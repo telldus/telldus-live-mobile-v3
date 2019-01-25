@@ -215,7 +215,7 @@ getStyles(): Object {
 		infoContainer: {
 			flex: 1,
 			flexDirection: 'row',
-			marginVertical: padding / 2,
+			margin: padding,
 			padding: innerPadding,
 			backgroundColor: '#fff',
 			...shadow,
