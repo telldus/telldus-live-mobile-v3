@@ -39,7 +39,7 @@ import { refreshAccessToken } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
-	refreshAccessToken: () => Promise<any>,
+	refreshAccessToken: (Object) => Promise<any>,
 	logoutFromTelldus: () => Promise<any>,
 	intl: intlShape.isRequired,
 	dispatch: Function,
