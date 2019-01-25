@@ -226,6 +226,16 @@ setSocketListeners() {
 
 				that.commandClasses = handleCommandClasses(action, that.commandClasses, data);
 
+				if (that.zwaveId && that.devices.length === 0 && !that.commandClasses) {
+					// nodeId(that.zwaveId) is present but newly added list is empty and not present in already added list.
+					// Must be dead node remain.
+					const { addDevice } = that.props;
+					const alreadyIncluded = addDevice.nodeList[that.zwaveId];
+					if (!alreadyIncluded) {
+						that.navigateToNext({}, 'IncludeFailed');
+					}
+				}
+
 				if (data.cmdClass === 114) {
 					that.deviceProdInfo = data.data;
 				}
@@ -478,14 +488,14 @@ prepareStatusMessage(): Object {
 navigateToNext(deviceManufactInfo: Object, routeName: string) {
 	const { navigation } = this.props;
 	const { interviewPartialStatusMessage } = this.state;
-	const gateway = navigation.getParam('gateway', {});
+	const { params = {}} = navigation.state;
 	const { statusMessage = null, statusIcon = null } = this.prepareStatusMessage();
 
 	navigation.navigate({
 		routeName,
 		key: routeName,
 		params: {
-			gateway,
+			...params,
 			devices: this.devices,
 			mainNodeDeviceId: this.mainNodeDeviceId,
 			info: {...deviceManufactInfo},
@@ -494,6 +504,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string) {
 			interviewPartialStatusMessage,
 		},
 	});
+	this.clearSocketListeners();
 }
 
 componentWillUnmount() {
@@ -534,6 +545,7 @@ startPartialInclusionCheckTimer() {
 				const alreadyIncluded = addDevice.nodeList[that.zwaveId];
 				if (!alreadyIncluded) {
 					this.navigateToNext({}, 'IncludeFailed');
+					this.stopAddRemoveDevice();
 				}
 
 			} else {
@@ -542,10 +554,6 @@ startPartialInclusionCheckTimer() {
 			that.clearTimer();
 		});
 	}, 25000);
-}
-
-handleDeadRemains() {
-
 }
 
 startInterviewPoll() {
