@@ -39,9 +39,6 @@ import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
-import io.fabric.sdk.android.Fabric;
 import org.pgsqlite.SQLitePluginPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -104,12 +101,7 @@ public class MainApplication extends Application implements ReactApplication {
         super.onCreate();
 		// saving current locale of the user inorder to reload the app(inside MainActivity) on locale change.
 		MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
-        // Set up Crashlytics, disabled for debug builds
-		// Required! Even though as this is done, RNFirebase, Crashlytics Docs did not metion this step.
-        Crashlytics crashlyticsKit = new Crashlytics.Builder()
-          .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-          .build();
-        Fabric.with(this, crashlyticsKit);
+
         SoLoader.init(this, /* native exopackage */ false);
     }
 }
