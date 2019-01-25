@@ -156,7 +156,6 @@ setSocketListeners() {
 					that.runInclusionTimer(data);
 				}, 1000);
 			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
-				clearTimeout(that.partialInclusionCheckTimeout);
 
 				let status = data[0];
 				if (status === 1) {
@@ -223,7 +222,6 @@ setSocketListeners() {
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (that.zwaveId === parseInt(data.node, 10))) {
 				clearInterval(that.inclusionTimer);
-				that.startPartialInclusionCheckTimer();
 				that.startSleepCheckTimer();
 
 				that.commandClasses = handleCommandClasses(action, that.commandClasses, data);
@@ -243,6 +241,7 @@ setSocketListeners() {
 				const { percent, waiting, status } = checkInclusionComplete(that.commandClasses, formatMessage);
 
 				if (percent && (percent !== that.state.percent)) {
+					that.startPartialInclusionCheckTimer();
 					that.setState({
 						status,
 						percent,
@@ -528,10 +527,25 @@ startPartialInclusionCheckTimer() {
 		that.setState({
 			timer: null,
 		}, () => {
-			that.onInclusionComplete();
+			if (that.zwaveId && that.devices.length === 0) {
+				// nodeId(that.zwaveId) is present but newly added list is empty and not present in already added list.
+				// Must be dead node remain.
+				const { addDevice } = that.props;
+				const alreadyIncluded = addDevice.nodeList[that.zwaveId];
+				if (!alreadyIncluded) {
+					this.navigateToNext({}, 'IncludeFailed');
+				}
+
+			} else {
+				that.onInclusionComplete();
+			}
 			that.clearTimer();
 		});
 	}, 25000);
+}
+
+handleDeadRemains() {
+
 }
 
 startInterviewPoll() {

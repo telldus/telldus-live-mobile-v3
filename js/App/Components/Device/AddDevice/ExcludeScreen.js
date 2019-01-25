@@ -115,12 +115,7 @@ onExcludeSuccessImmediate() {
 
 onPressCancelExclude() {
 	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'NoDeviceFound',
-		key: 'NoDeviceFound',
-		params,
-	});
+	navigation.goBack();
 }
 
 onPressInclude() {
