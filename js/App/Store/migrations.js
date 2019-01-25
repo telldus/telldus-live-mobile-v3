@@ -74,33 +74,6 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
-	if (sensorsList && sensorsList.defaultSensorSettings) {
-		let newDefaultSensorSettings = {}, { defaultSensorSettings } = sensorsList;
-		for (let key in defaultSensorSettings) {
-			const { historySettings = {}, ...others } = defaultSensorSettings[key];
-			const { selectedTwo, selectedOne, ...othersH } = historySettings;
-			if ((selectedTwo && selectedTwo.type === 'wdir') || (selectedOne && selectedOne.type === 'wdir')) {
-				newDefaultSensorSettings[key] = {
-					historySettings: {
-						selectedTwo: undefined,
-						selectedOne: undefined,
-						...othersH,
-					},
-					...others,
-				};
-			} else {
-				newDefaultSensorSettings[key] = defaultSensorSettings[key];
-			}
-		}
-
-		newState = {
-			...newState,
-			sensorsList: {
-				defaultSensorSettings: newDefaultSensorSettings,
-			},
-		};
-	}
-
 	return Promise.resolve(newState);
 }
 

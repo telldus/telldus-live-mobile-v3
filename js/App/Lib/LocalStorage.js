@@ -271,12 +271,10 @@ export default class TelldusLocalStorage {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				const { type, scale } = results.rows.item(i);
-				if (type !== 'wdir') {// excluding wind direction sensor
-					const { label, unit, icon } = getSensorInfo(type, scale, 0, false, formatMessage);
-					const postFix = unit ? ` (${unit})` : '';
-					let row = { type, scale, value: `${label}${postFix}`, icon};
-					data.push(row);
-				}
+				const { label, unit, icon } = getSensorInfo(type, scale, 0, false, formatMessage);
+				const postFix = unit ? ` (${unit})` : '';
+				let row = { type, scale, value: `${label}${postFix}`, icon};
+				data.push(row);
 			}
 			return data;
 		}).catch((error: Object) => {
