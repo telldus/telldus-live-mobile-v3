@@ -41,7 +41,6 @@ import {
 	showToast,
 	getSocketObject,
 	sendSocketMessage,
-	processWebsocketMessageForDevice,
 } from '../../../Actions';
 
 import { LayoutAnimations } from '../../../Lib';
@@ -59,7 +58,7 @@ type Props = {
 	showToast: (?string) => void,
 	getSocketObject: (number) => any,
 	sendSocketMessage: (number, string, string, Object) => any,
-	processWebsocketMessageForDevice: (string, Object) => null,
+	processWebsocketMessage: (number, string, Object) => any,
 };
 
 type State = {
@@ -183,7 +182,7 @@ render(): Object {
 						sendSocketMessage={this.props.sendSocketMessage}
 						getSocketObject={this.props.getSocketObject}
 						showToast={this.props.showToast}
-						processWebsocketMessageForDevice={this.props.processWebsocketMessageForDevice}
+						processWebsocketMessage={this.props.processWebsocketMessage}
 						onExcludeSuccessImmediate={this.onExcludeSuccessImmediate}
 						onExcludeTimedoutImmediate={this.onExcludeTimedoutImmediate}
 						onPressCancelExclude={this.onPressCancelExclude}/>
@@ -243,7 +242,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
 		getSocketObject: (id: number): any => dispatch(getSocketObject(id)),
 		showToast: (message: string): any => dispatch(showToast(message)),
-		processWebsocketMessageForDevice: (action: string, data: Object): any => dispatch(processWebsocketMessageForDevice(action, data)),
 	};
 }
 
