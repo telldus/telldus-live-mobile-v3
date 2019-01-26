@@ -48,6 +48,7 @@ type Props = {
 	navigation: Object,
 	actions: Object,
 	intl: Object,
+	processWebsocketMessage: (number, string, string, Object) => any,
 };
 
 type State = {
@@ -90,17 +91,18 @@ constructor(props: Props) {
 		interviewPartialStatusMessage: null,
 	};
 
-	this.setSocketListeners = this.setSocketListeners.bind(this);
-	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
-	this.runInclusionTimer = this.runInclusionTimer.bind(this);
-
 	const { actions, navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 	this.websocket = actions.getSocketObject(gateway.id);
 	this.gatewayId = gateway.id;
+
 	if (this.websocket) {
 		this.setSocketListeners();
 	}
+
+	this.setSocketListeners = this.setSocketListeners.bind(this);
+	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
+	this.runInclusionTimer = this.runInclusionTimer.bind(this);
 
 	this.inclusionTimer = null;
 	this.interviewTimer = null;
@@ -112,7 +114,6 @@ constructor(props: Props) {
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
-	this.hasUnmount = false;
 }
 
 componentDidMount() {
@@ -138,19 +139,22 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 setSocketListeners() {
 	const that = this;
-	const { intl, actions } = this.props;
-
+	const { intl, processWebsocketMessage, navigation } = this.props;
 	const { formatMessage } = intl;
+	const gateway = navigation.getParam('gateway', {});
+
 	this.websocket.onmessage = (msg: Object) => {
+		let title = '';
 		let message = {};
 		try {
 			message = JSON.parse(msg.data);
 		} catch (e) {
 			message = msg.data;
+			title = ` ${msg.data}`;
 		}
 
 		const { module, action, data } = message;
-		if (module && action && !that.hasUnmount) {
+		if (module && action) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				that.inclusionTimer = setInterval(() => {
 					that.runInclusionTimer(data);
@@ -268,8 +272,6 @@ setSocketListeners() {
 						that.clearTimer();
 					}
 				}
-			} else if (module === 'zwave' && action === 'nodeList') {
-				actions.processWebsocketMessageForZWave(action, data, that.gatewayId.toString());
 			} else if (module === 'zwave' && action === 'sleeping') {
 				clearTimeout(that.sleepCheckTimeout);
 				that.startPartialInclusionCheckTimer();
@@ -334,10 +336,9 @@ setSocketListeners() {
 						clientDeviceId,
 					});
 				}
-
-				actions.processWebsocketMessageForDevice(action, data);
 			}
 		}
+		processWebsocketMessage(gateway.id.toString(), message, title, this.websocket);
 	};
 }
 
@@ -345,7 +346,7 @@ handleErrorEnterLearnMode() {
 	const { showThrobber } = this.state;
 	if (showThrobber) {
 		this.setState({
-			status: 'Error : could not enter learn mode',
+			status: 'Error : could not enter learn mode', // TODO : translate
 			showThrobber: false,
 		});
 	} else {
@@ -353,6 +354,8 @@ handleErrorEnterLearnMode() {
 			showThrobber: true,
 			status: '',
 		});
+		// On error restart the whole process
+		this.cleanAllClassVariables();
 		this.stopAddRemoveDevice();
 		this.startAddDevice();
 	}
@@ -372,7 +375,12 @@ checkDeviceAlreadyIncluded(nodeId: number, forceNavigate: boolean = false) {
 			status: '',
 			deviceAlreadyIncluded: true,
 		}, () => {
+
+			// Clear all timers and socket listener - we do not need any memory leak.
+			// Do not clear other class variables, as some are required post-getDeviceManufactInfo!!
 			this.clearTimer();
+			clearTimeout(this.sleepCheckTimeout);
+			clearTimeout(this.partialInclusionCheckTimeout);
 
 			this.getDeviceManufactInfo('AlreadyIncluded', {name});
 		});
@@ -391,6 +399,10 @@ runInclusionTimer(data?: number = 60) {
 			timer: null,
 			showThrobber: false,
 		}, () => {
+			clearTimeout(this.sleepCheckTimeout);
+			clearTimeout(this.partialInclusionCheckTimeout);
+			this.clearTimer();
+
 			const { navigation } = this.props;
 			const { params = {}} = navigation.state;
 			navigation.navigate({
@@ -398,17 +410,14 @@ runInclusionTimer(data?: number = 60) {
 				key: 'NoDeviceFound',
 				params,
 			});
-			clearTimeout(this.sleepCheckTimeout);
-			clearTimeout(this.partialInclusionCheckTimeout);
-			this.clearTimer();
 		});
 	}
 }
 
 onInclusionComplete() {
-	this.getDeviceManufactInfo('DeviceName', {});
 	clearTimeout(this.sleepCheckTimeout);
 	clearTimeout(this.partialInclusionCheckTimeout);
+	this.getDeviceManufactInfo('DeviceName', {});
 }
 
 getDeviceManufactInfo(routeName: string, routeParams?: Object = {}) {
@@ -491,6 +500,11 @@ navigateToNext(deviceManufactInfo: Object, routeName: string) {
 	const { params = {}} = navigation.state;
 	const { statusMessage = null, statusIcon = null } = this.prepareStatusMessage();
 
+	clearTimeout(this.sleepCheckTimeout);
+	clearTimeout(this.partialInclusionCheckTimeout);
+	this.clearTimer();
+	this.stopAddDevice();
+
 	navigation.navigate({
 		routeName,
 		key: routeName,
@@ -504,16 +518,10 @@ navigateToNext(deviceManufactInfo: Object, routeName: string) {
 			interviewPartialStatusMessage,
 		},
 	});
-	this.clearSocketListeners();
 }
 
 componentWillUnmount() {
-	this.clearSocketListeners();
-	this.clearTimer();
-	clearTimeout(this.sleepCheckTimeout);
-	clearTimeout(this.partialInclusionCheckTimeout);
-	this.devices = [];
-	this.hasUnmount = true;
+	this.cleanAllClassVariables();
 }
 
 // sleep check for power connected devices.
@@ -531,6 +539,18 @@ startSleepCheckTimer() {
 	}, 10000);
 }
 
+cleanAllClassVariables() {
+	this.clearTimer();
+	clearTimeout(this.sleepCheckTimeout);
+	clearTimeout(this.partialInclusionCheckTimeout);
+	this.devices = [];
+	this.zwaveId = null;
+	this.mainNodeDeviceId = null;
+	this.commandClasses = null;
+	this.deviceManufactInfo = {};
+	this.deviceProdInfo = {};
+}
+
 startPartialInclusionCheckTimer() {
 	clearTimeout(this.partialInclusionCheckTimeout);
 	const that = this;
@@ -544,8 +564,8 @@ startPartialInclusionCheckTimer() {
 				const { addDevice } = that.props;
 				const alreadyIncluded = addDevice.nodeList[that.zwaveId];
 				if (!alreadyIncluded) {
-					this.navigateToNext({}, 'IncludeFailed');
-					this.stopAddRemoveDevice();
+					that.navigateToNext({}, 'IncludeFailed');
+					that.stopAddRemoveDevice();
 				}
 
 			} else {
@@ -574,7 +594,6 @@ startInterviewPoll() {
 	}, 5000);
 }
 
-
 stopAddRemoveDevice() {
 	const { actions, navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
@@ -583,6 +602,16 @@ stopAddRemoveDevice() {
 		'module': 'zwave',
 		'action': 'removeNodeFromNetworkStop',
 	});
+	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'addNodeToNetworkStop',
+	});
+}
+
+stopAddDevice() {
+	const { actions, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+
 	actions.sendSocketMessage(gateway.id, 'client', 'forward', {
 		'module': 'zwave',
 		'action': 'addNodeToNetworkStop',
@@ -598,10 +627,6 @@ startAddDevice() {
 		module,
 		action,
 	});
-}
-
-clearSocketListeners() {
-	this.websocket = null;
 }
 
 clearTimer() {

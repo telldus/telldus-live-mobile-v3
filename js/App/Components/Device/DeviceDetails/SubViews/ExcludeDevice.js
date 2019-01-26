@@ -51,7 +51,7 @@ type Props = {
 	onExcludeSuccessImmediate: () => void,
 	onExcludeTimedoutImmediate: () => void,
 	onPressCancelExclude: () => void,
-	processWebsocketMessageForDevice: (string, Object) => null,
+	processWebsocketMessage: (number, string, string, Object) => any,
 };
 
 type State = {
@@ -150,23 +150,25 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 componentWillUnmount() {
-	this.clearSocketListeners();
 	this.clearTimer();
 }
 
 setSocketListeners() {
 	const that = this;
 	const {
-		processWebsocketMessageForDevice,
+		processWebsocketMessage,
 		intl,
 		onExcludeSuccessImmediate,
+		clientId,
 	} = this.props;
 	this.websocket.onmessage = (msg: Object) => {
+		let title = '';
 		let message = {};
 		try {
 			message = JSON.parse(msg.data);
 		} catch (e) {
 			message = msg.data;
+			title = ` ${msg.data}`;
 		}
 
 		const { module, action, data } = message;
@@ -179,17 +181,19 @@ setSocketListeners() {
 				let status = data[0];
 				if (status === 6) {
 					if (data[2] > 0) {
+						that.clearTimer();
+						that.stopRemoveDevice();
 						if (onExcludeSuccessImmediate) {
 							onExcludeSuccessImmediate();
+						} else {
+							that.setState({
+								excludeSucces: true,
+								timer: `${intl.formatMessage(i18n.done)}!`,
+								status: intl.formatMessage(i18n.messageDeviceExcluded),
+								progress: 100,
+								showThrobber: false,
+							});
 						}
-						that.setState({
-							excludeSucces: true,
-							timer: `${intl.formatMessage(i18n.done)}!`,
-							status: intl.formatMessage(i18n.messageDeviceExcluded),
-							progress: 100,
-							showThrobber: false,
-						});
-						that.clearTimer();
 					}
 				}
 				if (status === 7) {
@@ -197,22 +201,22 @@ setSocketListeners() {
 				}
 			}
 			if (module === 'device' && action === 'removed') {
+				that.clearTimer();
+				that.stopRemoveDevice();
 				if (onExcludeSuccessImmediate) {
 					onExcludeSuccessImmediate();
+				} else {
+					that.setState({
+						excludeSucces: true,
+						timer: `${intl.formatMessage(i18n.done)}!`,
+						status: intl.formatMessage(i18n.messageDeviceExcluded),
+						progress: 100,
+						showThrobber: false,
+					});
 				}
-				that.setState({
-					excludeSucces: true,
-					timer: `${intl.formatMessage(i18n.done)}!`,
-					status: intl.formatMessage(i18n.messageDeviceExcluded),
-					progress: 100,
-					showThrobber: false,
-				});
-				that.clearTimer();
-			}
-			if (module === 'device') {
-				processWebsocketMessageForDevice(action, data);
 			}
 		}
+		processWebsocketMessage(clientId.toString(), message, title, this.websocket);
 	};
 }
 
@@ -246,16 +250,16 @@ runExclusionTimer(data?: number = 60) {
 		});
 	} else {
 		const { onExcludeTimedoutImmediate } = this.props;
+		this.clearTimer();
 		if (onExcludeTimedoutImmediate) {
 			onExcludeTimedoutImmediate();
+		} else {
+			this.setState({
+				timer: null,
+				status: 'timed out',
+				showThrobber: false,
+			});
 		}
-		this.setState({
-			timer: null,
-			status: 'timed out',
-			showThrobber: false,
-		});
-		this.stopRemoveDevice();
-		this.clearTimer();
 	}
 }
 
@@ -263,18 +267,10 @@ clearTimer() {
 	clearInterval(this.exclusionTimer);
 }
 
-clearSocketListeners() {
-	this.websocket = null;
-}
-
 onPressCancelExclude() {
-	const { onPressCancelExclude, sendSocketMessage, clientId } = this.props;
+	const { onPressCancelExclude } = this.props;
 	this.clearTimer();
-	this.clearSocketListeners();
-	sendSocketMessage(clientId, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'removeNodeFromNetworkStop',
-	});
+	this.stopRemoveDevice();
 	if (onPressCancelExclude) {
 		onPressCancelExclude();
 	}

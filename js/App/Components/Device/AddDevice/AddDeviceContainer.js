@@ -43,8 +43,7 @@ import {
 	getDevices,
 	getDeviceManufacturerInfo,
 	showToast,
-	processWebsocketMessageForDevice,
-	processWebsocketMessageForZWave,
+	processWebsocketMessage,
 } from '../../../Actions';
 
 type Props = {
@@ -56,6 +55,7 @@ type Props = {
 	showModal: boolean,
 	validationMessage: any,
 	ScreenName: string,
+	processWebsocketMessage: (number, string, string, Object) => any,
 };
 
 type State = {
@@ -218,6 +218,7 @@ class AddDeviceContainer extends View<Props, State> {
 							dialogueOpen: showModal,
 							paddingHorizontal: padding,
 							addDevice,
+							processWebsocketMessage: this.props.processWebsocketMessage,
 						},
 					)}
 				</View>
@@ -264,10 +265,9 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getDevices,
 				getDeviceManufacturerInfo,
 				showToast,
-				processWebsocketMessageForDevice,
-				processWebsocketMessageForZWave,
 			}, dispatch),
 		},
+		processWebsocketMessage: (gatewayId: number, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
 	}
 );
 
