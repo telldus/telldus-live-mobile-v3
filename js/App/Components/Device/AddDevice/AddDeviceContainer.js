@@ -55,7 +55,7 @@ type Props = {
 	showModal: boolean,
 	validationMessage: any,
 	ScreenName: string,
-	processWebsocketMessage: (number, string, string, Object) => any,
+	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
 type State = {
@@ -267,7 +267,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				showToast,
 			}, dispatch),
 		},
-		processWebsocketMessage: (gatewayId: number, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
+		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
 	}
 );
 

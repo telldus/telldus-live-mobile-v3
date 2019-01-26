@@ -64,7 +64,7 @@ type Props = {
 	showToast: (?string) => void,
 	getSocketObject: (number) => any,
 	sendSocketMessage: (number, string, string, Object) => any,
-	processWebsocketMessage: (number, string, string, Object) => any,
+	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
 type State = {
@@ -302,7 +302,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
 		getSocketObject: (id: number): any => dispatch(getSocketObject(id)),
 		showToast: (message: string): any => dispatch(showToast(message)),
-		processWebsocketMessage: (gatewayId: number, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
+		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
 		dispatch,
 	};
 }

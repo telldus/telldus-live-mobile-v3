@@ -51,7 +51,7 @@ type Props = {
 	onExcludeSuccessImmediate: () => void,
 	onExcludeTimedoutImmediate: () => void,
 	onPressCancelExclude: () => void,
-	processWebsocketMessage: (number, string, string, Object) => any,
+	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
 type State = {

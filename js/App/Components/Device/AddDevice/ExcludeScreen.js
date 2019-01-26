@@ -58,7 +58,7 @@ type Props = {
 	showToast: (?string) => void,
 	getSocketObject: (number) => any,
 	sendSocketMessage: (number, string, string, Object) => any,
-	processWebsocketMessage: (number, string, Object) => any,
+	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
 type State = {
