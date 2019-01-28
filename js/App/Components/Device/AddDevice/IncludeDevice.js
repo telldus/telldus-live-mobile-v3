@@ -60,6 +60,7 @@ type State = {
 	deviceAlreadyIncluded: boolean,
 	hintMessage: string | null,
 	interviewPartialStatusMessage: string | null,
+	deviceImage: string,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -89,6 +90,7 @@ constructor(props: Props) {
 		deviceAlreadyIncluded: false,
 		hintMessage: props.intl.formatMessage(i18n.messageHint),
 		interviewPartialStatusMessage: null,
+		deviceImage: 'img_zwave_include',
 	};
 
 	const { actions, navigation } = this.props;
@@ -242,11 +244,13 @@ setSocketListeners() {
 
 				if (data.cmdClass === 114) {
 					that.deviceProdInfo = data.data;
+					that.getDeviceManufactInfo(undefined, {});
 				}
 				if (data.cmdClass === 152) {
 					const cmdData = data.data;
 					if (cmdData.cmdClasses && cmdData.cmdClasses[114]) {
 						that.deviceProdInfo = cmdData.cmdClasses[114];
+						that.getDeviceManufactInfo(undefined, {});
 					}
 				}
 
@@ -299,6 +303,7 @@ setSocketListeners() {
 				const manufactInfoCmd = data.cmdClasses[152];
 				if (manufactInfoCmd && manufactInfoCmd.interviewed && manufactInfoCmd.cmdClasses[114]) {
 					that.deviceProdInfo = manufactInfoCmd.cmdClasses[114];
+					that.getDeviceManufactInfo(undefined, {});
 				}
 
 				that.checkDeviceAlreadyIncluded(parseInt(data.nodeId, 10), false);
@@ -432,38 +437,46 @@ getDeviceManufactInfo(routeName: string, routeParams?: Object = {}) {
 		actions.getDeviceManufacturerInfo(manufacturerId, productTypeId, productId)
 			.then((res: Object) => {
 				const { Image: deviceImage = null, Name: deviceModel = null, Brand: deviceBrand = null } = res;
-				Image.prefetch(deviceImage);
-				Image.getSize(deviceImage, (width: number, height: number) => {
-					if (width && height) {
+				if (routeName) {
+					Image.prefetch(deviceImage);
+					Image.getSize(deviceImage, (width: number, height: number) => {
+						if (width && height) {
+							deviceManufactInfo = {
+								deviceImage,
+								deviceModel,
+								deviceBrand,
+								imageW: width,
+								imageH: height,
+								...routeParams,
+							};
+							this.navigateToNext(deviceManufactInfo, routeName);
+						}
+					}, (failure: any) => {
 						deviceManufactInfo = {
 							deviceImage,
 							deviceModel,
 							deviceBrand,
-							imageW: width,
-							imageH: height,
 							...routeParams,
 						};
 						this.navigateToNext(deviceManufactInfo, routeName);
-					}
-				}, (failure: any) => {
-					deviceManufactInfo = {
+					});
+				} else {
+					this.setState({
 						deviceImage,
-						deviceModel,
-						deviceBrand,
+					});
+				}
+			}).catch(() => {
+				if (routeName) {
+					deviceManufactInfo = {
+						deviceImage: null,
+						deviceModel: null,
+						deviceBrand: null,
 						...routeParams,
 					};
 					this.navigateToNext(deviceManufactInfo, routeName);
-				});
-			}).catch(() => {
-				deviceManufactInfo = {
-					deviceImage: null,
-					deviceModel: null,
-					deviceBrand: null,
-					...routeParams,
-				};
-				this.navigateToNext(deviceManufactInfo, routeName);
+				}
 			});
-	} else {
+	} else if (routeName) {
 		this.navigateToNext(deviceManufactInfo, routeName);
 	}
 }
@@ -637,7 +650,7 @@ clearTimer() {
 
 render(): Object {
 	const { intl, appLayout } = this.props;
-	const { timer, status, percent, showTimer, showThrobber, hintMessage } = this.state;
+	const { timer, status, percent, showTimer, showThrobber, hintMessage, deviceImage } = this.state;
 	const { formatMessage } = intl;
 
 	const progress = Math.max(percent / 100, 0);
@@ -654,7 +667,8 @@ render(): Object {
 				timer={timerText}
 				intl={intl}
 				appLayout={appLayout}
-				infoText={hintMessage}/>
+				infoText={hintMessage}
+				deviceImage={deviceImage}/>
 		</ScrollView>
 	);
 }

@@ -48,6 +48,7 @@ type Props = {
 	progress: number,
 	showThrobber?: boolean,
 	infoText?: string,
+	deviceImage: string,
 
     action: 'include' | 'exclude',
 	intl: Object,
@@ -60,6 +61,7 @@ type State = {
 type DefaultProps = {
 	action: 'include' | 'exclude',
 	showThrobber: boolean,
+	deviceImage: string,
 };
 
 class ZWaveIncludeExcludeUI extends View<Props, State> {
@@ -71,6 +73,7 @@ onLayout: (Object) => void;
 static defaultProps: DefaultProps = {
 	action: 'include',
 	showThrobber: false,
+	deviceImage: 'img_zwave_include',
 };
 
 constructor(props: Props) {
@@ -93,7 +96,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	if (shouldUpdate(nextProps, this.props, ['progress', 'percent', 'status', 'timer', 'appLayout', 'infoText'])) {
+	if (shouldUpdate(nextProps, this.props, ['progress', 'percent', 'status', 'timer', 'appLayout', 'deviceImage', 'infoText'])) {
 		return true;
 	}
 	if (!isEqual(this.state, nextState)) {
@@ -112,7 +115,7 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	const { intl, timer, status, progress, showThrobber, infoText } = this.props;
+	const { intl, timer, status, progress, showThrobber, infoText, deviceImage } = this.props;
 	const { width } = this.state;
 	const {
 		container,
@@ -149,7 +152,7 @@ render(): Object {
 							</Text>,
 						]
 					)}
-					<Image source={{uri: 'img_zwave_include'}} resizeMode={'cover'} style={imageType}/>
+					<Image source={{uri: deviceImage}} resizeMode={'cover'} style={imageType}/>
 				</View>
 				<View style={infoOneContainer} onLayout={this.onLayout}>
 					{this.isExclude && (
