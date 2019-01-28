@@ -143,6 +143,7 @@ render(): Object {
 		container,
 		brandSecondary,
 		btnDisabledBg,
+		padding,
 	} = this.getStyles(appLayout);
 
 	return (
@@ -165,6 +166,7 @@ render(): Object {
 				disabled={!(online && websocketOnline)}
 				style={{
 					backgroundColor: (online && websocketOnline) ? brandSecondary : btnDisabledBg,
+					marginTop: padding * 1.5,
 				}}/>
 			)}
 		</ScrollView>
@@ -180,12 +182,12 @@ getStyles(appLayout: Object): Object {
 	const padding = deviceWidth * paddingFactor;
 
 	return {
+		padding,
 		brandSecondary,
 		btnDisabledBg,
 		container: {
 			flex: 1,
 			backgroundColor: appBackground,
-			padding,
 		},
 	};
 }
