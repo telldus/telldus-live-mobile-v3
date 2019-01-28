@@ -307,6 +307,7 @@ setSocketListeners() {
 				const { percent, waiting, status } = checkInclusionComplete(that.commandClasses, formatMessage);
 
 				if (percent && (percent !== that.state.percent)) {
+					that.startPartialInclusionCheckTimer();
 					that.setState({
 						status,
 						percent,
