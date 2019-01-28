@@ -119,12 +119,18 @@ class SensorsTab extends View {
 		this.openSensorDetail = this.openSensorDetail.bind(this);
 		this.setRef = this.setRef.bind(this);
 		this.listView = null;
+
+		this.timeoutScrollToHidden = null;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
 		const { currentScreen: prevScreen } = this.props.screenProps;
 		return (currentScreen === 'Sensors') || (currentScreen !== 'Sensors' && prevScreen === 'Sensors');
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.timeoutScrollToHidden);
 	}
 
 	setRef(ref: any) {
@@ -164,12 +170,14 @@ class SensorsTab extends View {
 		}, () => {
 			const { showHiddenList } = this.state;
 			if (showHiddenList && hiddenList.length > 0 && visibleList.length > 0) {
-				this.listView.scrollToLocation({
-					animated: true,
-					sectionIndex: visibleList.length - 1,
-					itemIndex: 0,
-					viewPosition: 0.7,
-				});
+				this.timeoutScrollToHidden = setTimeout(() => {
+					this.listView.scrollToLocation({
+						animated: true,
+						sectionIndex: visibleList.length - 1,
+						itemIndex: 0,
+						viewPosition: 0.7,
+					});
+				}, 500);
 			}
 		});
 	}

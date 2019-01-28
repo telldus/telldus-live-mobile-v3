@@ -167,6 +167,7 @@ class DevicesTab extends View {
 
 		this.onNewlyAddedDidMount = this.onNewlyAddedDidMount.bind(this);
 		this.timeoutNormalizeNewlyAdded = null;
+		this.timeoutScrollToHidden = null;
 
 		this.onPressDeviceAction = this.onPressDeviceAction.bind(this);
 	}
@@ -189,6 +190,7 @@ class DevicesTab extends View {
 
 	componentWillUnmount() {
 		clearTimeout(this.timeoutNormalizeNewlyAdded);
+		clearTimeout(this.timeoutScrollToHidden);
 	}
 
 	setRef(ref: any) {
@@ -349,12 +351,14 @@ class DevicesTab extends View {
 		}, () => {
 			const { showHiddenList } = this.state;
 			if (showHiddenList && hiddenList.length > 0 && visibleList.length > 0) {
-				this.listView.scrollToLocation({
-					animated: true,
-					sectionIndex: visibleList.length - 1,
-					itemIndex: 0,
-					viewPosition: 0.7,
-				});
+				this.timeoutScrollToHidden = setTimeout(() => {
+					this.listView.scrollToLocation({
+						animated: true,
+						sectionIndex: visibleList.length - 1,
+						itemIndex: 0,
+						viewPosition: 0.7,
+					});
+				}, 500);
 			}
 		});
 	}
