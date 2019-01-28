@@ -149,11 +149,11 @@ getStyles(): Object {
 		container: {
 			flex: 1,
 			paddingVertical: padding,
-			marginHorizontal: padding,
 		},
 		containerStyle: {
 			height: undefined,
 			padding: innerPadding,
+			marginHorizontal: padding,
 		},
 		iconSize: deviceWidth * 0.050666667,
 		iconStyle: {
@@ -164,6 +164,8 @@ getStyles(): Object {
 			flex: 1,
 			flexDirection: 'row',
 			marginTop: padding / 2,
+			marginBottom: padding,
+			marginHorizontal: padding,
 			padding: innerPadding,
 			backgroundColor: '#fff',
 			...shadow,
