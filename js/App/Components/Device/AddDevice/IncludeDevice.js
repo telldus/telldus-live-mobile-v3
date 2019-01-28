@@ -244,13 +244,13 @@ setSocketListeners() {
 
 				if (data.cmdClass === 114) {
 					that.deviceProdInfo = data.data;
-					that.getDeviceManufactInfo(undefined, {});
+					that.getDeviceManufactInfo(null, {});
 				}
 				if (data.cmdClass === 152) {
 					const cmdData = data.data;
 					if (cmdData.cmdClasses && cmdData.cmdClasses[114]) {
 						that.deviceProdInfo = cmdData.cmdClasses[114];
-						that.getDeviceManufactInfo(undefined, {});
+						that.getDeviceManufactInfo(null, {});
 					}
 				}
 
@@ -303,7 +303,7 @@ setSocketListeners() {
 				const manufactInfoCmd = data.cmdClasses[152];
 				if (manufactInfoCmd && manufactInfoCmd.interviewed && manufactInfoCmd.cmdClasses[114]) {
 					that.deviceProdInfo = manufactInfoCmd.cmdClasses[114];
-					that.getDeviceManufactInfo(undefined, {});
+					that.getDeviceManufactInfo(null, {});
 				}
 
 				that.checkDeviceAlreadyIncluded(parseInt(data.nodeId, 10), false);
@@ -426,7 +426,7 @@ onInclusionComplete() {
 	this.getDeviceManufactInfo('DeviceName', {});
 }
 
-getDeviceManufactInfo(routeName: string, routeParams?: Object = {}) {
+getDeviceManufactInfo(routeName: string | null, routeParams?: Object = {}) {
 	const { actions } = this.props;
 	const { manufacturerId, productTypeId, productId } = this.deviceProdInfo;
 
@@ -508,7 +508,7 @@ prepareStatusMessage(): Object {
 	};
 }
 
-navigateToNext(deviceManufactInfo: Object, routeName: string) {
+navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
 	const { navigation } = this.props;
 	const { interviewPartialStatusMessage } = this.state;
 	const { params = {}} = navigation.state;
