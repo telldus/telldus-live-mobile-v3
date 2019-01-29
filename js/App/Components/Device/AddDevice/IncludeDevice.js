@@ -158,6 +158,9 @@ setSocketListeners() {
 		const { module, action, data } = message;
 		if (module && action) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
+				if (that.inclusionTimer) {
+					clearInterval(that.inclusionTimer);
+				}
 				that.inclusionTimer = setInterval(() => {
 					that.runInclusionTimer(data);
 				}, 1000);
@@ -258,7 +261,7 @@ setSocketListeners() {
 
 				const { percent, waiting, status } = checkInclusionComplete(that.commandClasses, formatMessage);
 
-				if (percent && (percent !== that.state.percent)) {
+				if (percent) {
 					that.startPartialInclusionCheckTimer();
 					that.setState({
 						status,
@@ -400,7 +403,7 @@ runInclusionTimer(data?: number = 60) {
 			timer: timer ? timer - 1 : data,
 			showThrobber: false,
 		});
-	} else {
+	} else if (timer === 0) {
 		this.setState({
 			timer: null,
 			showThrobber: false,
