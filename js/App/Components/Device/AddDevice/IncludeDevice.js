@@ -236,14 +236,14 @@ setSocketListeners() {
 
 				// If 'hintMessage' is present(most likely device asleep) then,
 				// hide the 'hintMessage' only if 'interviewDone' is received twice within 5secs.
-				let hintMessage = this.state.hintMessage;
-				if (this.latestInterviewTime && hintMessage) {
-					let interval = Date.now() - this.latestInterviewTime;
+				let hintMessage = that.state.hintMessage;
+				if (that.latestInterviewTime && hintMessage) {
+					let interval = Date.now() - that.latestInterviewTime;
 					if (interval < 5000) {
 						hintMessage = null;
 					}
 				}
-				this.latestInterviewTime = Date.now();
+				that.latestInterviewTime = Date.now();
 
 				that.commandClasses = handleCommandClasses(action, that.commandClasses, data);
 
@@ -284,7 +284,7 @@ setSocketListeners() {
 						that.setState({
 							timer: null,
 							status,
-							interviewPartialStatusMessage: null,
+							interviewPartialStatusMessage: !hintMessage ? null : that.state.interviewPartialStatusMessage,
 						}, () => {
 							that.onInclusionComplete();
 						});
@@ -331,13 +331,11 @@ setSocketListeners() {
 					that.setState({
 						status,
 						percent,
-						hintMessage: null,
 					});
 					if (waiting === 0 && that.state.timer !== null) {
 						that.setState({
 							timer: null,
 							status,
-							interviewPartialStatusMessage: null,
 						}, () => {
 							that.onInclusionComplete();
 						});
