@@ -144,6 +144,7 @@ setSocketListeners() {
 	const { intl, processWebsocketMessage, navigation } = this.props;
 	const { formatMessage } = intl;
 	const gateway = navigation.getParam('gateway', {});
+	this.latestInterviewTime = null;
 
 	this.websocket.onmessage = (msg: Object) => {
 		let title = '';
@@ -233,6 +234,17 @@ setSocketListeners() {
 				clearInterval(that.inclusionTimer);
 				that.startSleepCheckTimer();
 
+				// If 'hintMessage' is present(most likely device asleep) then,
+				// hide the 'hintMessage' only if 'interviewDone' is received twice within 5secs.
+				let hintMessage = this.state.hintMessage;
+				if (this.latestInterviewTime && hintMessage) {
+					let interval = Date.now() - this.latestInterviewTime;
+					if (interval < 5000) {
+						hintMessage = null;
+					}
+				}
+				this.latestInterviewTime = Date.now();
+
 				that.commandClasses = handleCommandClasses(action, that.commandClasses, data);
 
 				if (that.zwaveId && that.devices.length === 0 && !that.commandClasses) {
@@ -266,7 +278,7 @@ setSocketListeners() {
 					that.setState({
 						status,
 						percent,
-						hintMessage: null,
+						hintMessage,
 					});
 					if (waiting === 0) {
 						that.setState({
@@ -566,6 +578,7 @@ cleanAllClassVariables() {
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
+	this.latestInterviewTime = null;
 }
 
 startPartialInclusionCheckTimer() {
