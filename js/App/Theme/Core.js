@@ -20,6 +20,7 @@
 import Color from 'color';
 
 import { Platform } from 'react-native';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 export default {
 	brandPrimary: '#1b365d',
@@ -53,6 +54,10 @@ export default {
 	sunsetColor: '#ef5350',
 	get timeColor() {
 		return this.brandSecondary;
+	},
+
+	get navBarTopPadding() {
+		return (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 10;
 	},
 
 	appBackground: '#eeeeee',

@@ -30,7 +30,7 @@ import Text from './Text';
 import Theme from '../App/Theme';
 
 type Props = {
-    top: number,
+    containerTop?: number,
     right: number,
     left: number,
     distance: number,
@@ -39,7 +39,6 @@ type Props = {
 };
 
 type DefaultProps = {
-    top: number,
     right: number,
     left: number,
     distance: number,
@@ -50,7 +49,6 @@ export default class AttentionCatcher extends Component<Props, null> {
 props: Props;
 
 static defaultProps: DefaultProps = {
-	top: 0,
 	right: 0,
 	left: 0,
 	distance: 10,
@@ -105,7 +103,7 @@ bounceFromDest() {
 }
 
 render(): Object {
-	const { top, right, left, distance, arrowPos, text } = this.props;
+	const { containerTop, right, left, distance, arrowPos, text } = this.props;
 	let animatedRight, animatedLeft;
 
 	if (arrowPos === 'right') {
@@ -123,57 +121,69 @@ render(): Object {
 
 	const {
 		triangleCommon,
+		containerStyle,
 	} = this.getStyles();
 
 	return (
-		<Animated.View style={{
-			position: 'absolute',
-			top,
-			right: animatedRight,
-			left: animatedLeft,
-			flexDirection: 'row',
-			justifyContent: 'center',
-			alignItems: 'center',
-		}}>
-			{arrowPos === 'left' && (
-				<Image
-					source={{uri: 'triangle'}}
-					style={[triangleCommon]}
-					tintColor={Theme.Core.brandSecondary}
-					resizeMode={'stretch'}
-				/>
-			)}
-			<View style={{
-				backgroundColor: Theme.Core.brandSecondary,
+		<View style={[containerStyle, {marginTop: containerTop}]}>
+			<Animated.View style={{
+				position: 'absolute',
+				right: animatedRight,
+				left: animatedLeft,
+				flexDirection: 'row',
 				justifyContent: 'center',
-				padding: 7,
-				borderRadius: 4,
+				alignItems: 'center',
 			}}>
-				<Text style={{
-					color: '#fff',
-					fontSize: 16,
+				{arrowPos === 'left' && (
+					<Image
+						source={{uri: 'triangle'}}
+						style={[triangleCommon]}
+						tintColor={Theme.Core.brandSecondary}
+						resizeMode={'stretch'}
+					/>
+				)}
+				<View style={{
+					backgroundColor: Theme.Core.brandSecondary,
+					justifyContent: 'center',
+					padding: 7,
+					borderRadius: 4,
 				}}>
-					{text}
-				</Text>
-			</View>
-			{arrowPos === 'right' && (
-				<Image
-					source={{uri: 'triangle'}}
-					style={[triangleCommon, {
-						transform: [
-							{rotate: '180deg'},
-						],
-					}]}
-					tintColor={Theme.Core.brandSecondary}
-					resizeMode={'stretch'}
-				/>
-			)}
-		</Animated.View>
+					<Text style={{
+						color: '#fff',
+						fontSize: 16,
+					}}>
+						{text}
+					</Text>
+				</View>
+				{arrowPos === 'right' && (
+					<Image
+						source={{uri: 'triangle'}}
+						style={[triangleCommon, {
+							transform: [
+								{rotate: '180deg'},
+							],
+						}]}
+						tintColor={Theme.Core.brandSecondary}
+						resizeMode={'stretch'}
+					/>
+				)}
+			</Animated.View>
+		</View>
 	);
 }
 
 getStyles(): Object {
 	return {
+		containerStyle: {
+			flex: 1,
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			bottom: 0,
+			right: 0,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 		triangleCommon: {
 			height: 15,
 			width: 10,

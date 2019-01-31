@@ -25,7 +25,6 @@ import React from 'react';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { hasStatusBar } from '../App/Lib';
 import Theme from '../App/Theme';
 
@@ -79,7 +78,7 @@ export default class HeaderComponent extends Base {
 		this.deviceWidth = height > width ? width : height;
 
 		this.paddingHorizontal = 15;
-		this.paddingTop = (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 0;
+		this.paddingTop = Theme.Core.navBarTopPadding;
 
 		return {
 			navbar: {
@@ -333,17 +332,13 @@ export default class HeaderComponent extends Base {
 
 	getPropsAttentionCatcher(): Object {
 		const { appLayout, attentionCaptureText } = this.props;
-		let top = this.paddingTop, pos = 'right', right = 35, left;
+		let top = Theme.Core.navBarTopPadding, pos = 'right', right = 35, left;
 
-		if (Platform.OS === 'ios') {
-			top += (Theme.Core.toolbarHeight * 0.12);
-		} else {
+		if (Platform.OS === 'android') {
 			const { height, width } = appLayout;
 			const isPortrait = height > width;
-			const deviceHeight = isPortrait ? height : width;
 
-			const { land } = Theme.Core.headerHeightFactor;
-			top += isPortrait ? ((deviceHeight * 0.05) * 0.12) : ((deviceHeight * land) * 0.22);
+			top = isPortrait ? Theme.Core.navBarTopPadding : 0;
 			if (!isPortrait) {
 				pos = 'left';
 				right = undefined;
@@ -357,7 +352,7 @@ export default class HeaderComponent extends Base {
 		const { top, right, left, pos, text } = this.getPropsAttentionCatcher();
 		return (
 			<AttentionCatcher
-				top={top}
+				containerTop={top}
 				right={right}
 				arrowPos={pos}
 				left={left}

@@ -289,8 +289,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 			toggleDialogueBox,
 		};
+		const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
 		if (showHeader) {
-			const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
 			screenProps = {
 				...screenProps,
 				leftButton,
@@ -321,7 +321,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 						logoStyle={styles.logoStyle}
 						leftButton={leftButton}
 						rightButton={rightButton}
-						appLayout={appLayout}/>
+						appLayout={appLayout}
+						showAttentionCapture={showAttentionCapture}
+						attentionCaptureText={intl.formatMessage(i18n.labelAddZWaveD).toUpperCase()}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
 					<Navigator
@@ -348,7 +350,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			deviceWidth,
 			header: isPortrait ? {
 				height: deviceHeight * port,
-				alignItems: 'flex-end',
+				alignItems: 'center',
 			} : {
 				transform: [{rotateZ: '-90deg'}],
 				position: 'absolute',
