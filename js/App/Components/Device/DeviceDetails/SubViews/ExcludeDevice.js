@@ -185,7 +185,6 @@ setSocketListeners() {
 				if (status === 6) {
 					if (data[2] > 0) {
 						that.clearTimer();
-						that.stopRemoveDevice();
 						if (onExcludeSuccessImmediate) {
 							onExcludeSuccessImmediate();
 						} else {
@@ -205,7 +204,6 @@ setSocketListeners() {
 			}
 			if (module === 'device' && action === 'removed') {
 				that.clearTimer();
-				that.stopRemoveDevice();
 				if (onExcludeSuccessImmediate) {
 					onExcludeSuccessImmediate();
 				} else {

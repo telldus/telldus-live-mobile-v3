@@ -545,7 +545,6 @@ navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
 	clearTimeout(this.sleepCheckTimeout);
 	clearTimeout(this.partialInclusionCheckTimeout);
 	this.clearTimer();
-	this.stopAddDevice();
 
 	navigation.navigate({
 		routeName,
