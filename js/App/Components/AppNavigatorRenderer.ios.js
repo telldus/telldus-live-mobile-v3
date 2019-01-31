@@ -60,6 +60,7 @@ type Props = {
 type State = {
 	currentScreen: string,
 	showAttentionCaptureAddDevice: boolean,
+	addNewDevicePressed: boolean,
 };
 
 class AppNavigatorRenderer extends View<Props, State> {
@@ -75,18 +76,23 @@ class AppNavigatorRenderer extends View<Props, State> {
 	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
+	addNewDevice: () => void;
+
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			currentScreen: 'Dashboard',
 			showAttentionCaptureAddDevice: false,
+			addNewDevicePressed: false,
 		};
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 
 		this.setNavigatorRef = this.setNavigatorRef.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
+
+		this.addNewDevice = this.addNewDevice.bind(this);
 
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
@@ -161,12 +167,19 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.onNavigationStateChange(currentScreen);
 	}
 
+	addNewDevice() {
+		this.setState({
+			addNewDevicePressed: true,
+		});
+		this.props.addNewDevice();
+	}
+
 	makeRightButton(CS: string): Object | null {
 		switch (CS) {
 			case 'Devices':
 				return {
 					...this.AddButton,
-					onPress: this.props.addNewDevice,
+					onPress: this.addNewDevice,
 				};
 			case 'Gateways':
 				if (this.props.addingNewLocation) {
@@ -199,7 +212,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
+		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
 		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const { height, width } = appLayout;
@@ -219,7 +232,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		if (showHeader) {
 			const { land } = Theme.Core.headerHeightFactor;
 			const rightButton = this.makeRightButton(CS);
-			const showAttentionCapture = CS === 'Devices' && rightButton && showAttentionCaptureAddDevice;
+			const showAttentionCapture = (CS === 'Devices') && rightButton && showAttentionCaptureAddDevice && !addNewDevicePressed;
 			screenProps = {
 				...screenProps,
 				leftButton: this.settingsButton,

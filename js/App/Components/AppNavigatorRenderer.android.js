@@ -64,6 +64,7 @@ type State = {
 	currentScreen: string,
 	drawer: boolean,
 	showAttentionCaptureAddDevice: boolean,
+	addNewDevicePressed: boolean,
 };
 
 class AppNavigatorRenderer extends View<Props, State> {
@@ -83,6 +84,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
+	addNewDevice: () => void;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -90,6 +93,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			currentScreen: 'Dashboard',
 			drawer: false,
 			showAttentionCaptureAddDevice: false,
+			addNewDevicePressed: false,
 		};
 
 		const { formatMessage } = props.intl;
@@ -118,6 +122,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.openDrawer = this.openDrawer.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.onPressGateway = this.onPressGateway.bind(this);
+
+		this.addNewDevice = this.addNewDevice.bind(this);
 
 		this.menuButton = {
 			icon: {
@@ -203,6 +209,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.onNavigationStateChange(currentScreen);
 	}
 
+	addNewDevice() {
+		this.setState({
+			addNewDevicePressed: true,
+		});
+		this.props.addNewDevice();
+	}
+
 	makeRightButton(CS: string, styles: Object): Object | null {
 		this.AddButton = {
 			component: <Image source={{uri: 'icon_plus'}} style={styles.addIconStyle}/>,
@@ -213,7 +226,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			case 'Devices':
 				return {
 					...this.AddButton,
-					onPress: this.props.addNewDevice,
+					onPress: this.addNewDevice,
 				};
 			case 'Gateways':
 				return {
@@ -269,7 +282,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
+		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
 		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -289,7 +302,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 			toggleDialogueBox,
 		};
-		const showAttentionCapture = CS === 'Devices' && showAttentionCaptureAddDevice;
+		const showAttentionCapture = (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 		if (showHeader) {
 			screenProps = {
 				...screenProps,
