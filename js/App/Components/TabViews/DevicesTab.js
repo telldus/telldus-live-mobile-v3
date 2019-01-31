@@ -170,6 +170,9 @@ class DevicesTab extends View {
 		this.timeoutScrollToHidden = null;
 
 		this.onPressDeviceAction = this.onPressDeviceAction.bind(this);
+
+		this.hideAttentionCaptureTimeout = null;
+		this.attentionCapture = false;
 	}
 
 	componentDidMount() {
@@ -191,6 +194,7 @@ class DevicesTab extends View {
 	componentWillUnmount() {
 		clearTimeout(this.timeoutNormalizeNewlyAdded);
 		clearTimeout(this.timeoutScrollToHidden);
+		clearTimeout(this.hideAttentionCaptureTimeout);
 	}
 
 	setRef(ref: any) {
@@ -201,12 +205,27 @@ class DevicesTab extends View {
 		const { devicesDidFetch, devices, screenProps } = this.props;
 		const { toggleAttentionCapture, showAttentionCaptureAddDevice } = screenProps;
 
-		if (devices.length === 0 && devicesDidFetch && toggleAttentionCapture && !showAttentionCaptureAddDevice) {
+		const allowToggleLocal = !this.attentionCapture;
+		if (devices.length === 0 && devicesDidFetch && toggleAttentionCapture && !showAttentionCaptureAddDevice && allowToggleLocal) {
+			this.attentionCapture = true;
 			toggleAttentionCapture(true);
+			this.startHideAttentionCaptureTimeout();
 		}
 
 		if (devices.length > 0 && devicesDidFetch && showAttentionCaptureAddDevice && toggleAttentionCapture) {
 			toggleAttentionCapture(false);
+		}
+	}
+
+	startHideAttentionCaptureTimeout() {
+		if (!this.hideAttentionCaptureTimeout) {
+			this.hideAttentionCaptureTimeout = setTimeout(() => {
+				const { screenProps } = this.props;
+				const { showAttentionCaptureAddDevice, toggleAttentionCapture } = screenProps;
+				if (toggleAttentionCapture && showAttentionCaptureAddDevice) {
+					toggleAttentionCapture(false);
+				}
+			}, 10000);
 		}
 	}
 
