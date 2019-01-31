@@ -171,12 +171,14 @@ class SensorsTab extends View {
 			const { showHiddenList } = this.state;
 			if (showHiddenList && hiddenList.length > 0 && visibleList.length > 0) {
 				this.timeoutScrollToHidden = setTimeout(() => {
-					this.listView.scrollToLocation({
-						animated: true,
-						sectionIndex: visibleList.length - 1,
-						itemIndex: 0,
-						viewPosition: 0.7,
-					});
+					if (this.listView) {
+						this.listView.scrollToLocation({
+							animated: true,
+							sectionIndex: visibleList.length - 1,
+							itemIndex: 0,
+							viewPosition: 0.7,
+						});
+					}
 				}, 500);
 			}
 		});
