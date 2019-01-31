@@ -132,12 +132,14 @@ submitName() {
 	}
 
 	if (!emptyField) {
+		Keyboard.dismiss();
 		this.setState({
 			isLoading: true,
-		});
-		Keyboard.dismiss();
-		Promise.all(promises).then(() => {
-			this.postSubmitName();
+		}, () => {
+			promises.push(actions.getDevices());
+			Promise.all(promises).then(() => {
+				this.postSubmitName();
+			});
 		});
 	} else if (this.inputRefs[emptyField]) {
 		this.inputRefs[emptyField].focus();
