@@ -308,11 +308,20 @@ setSocketListeners() {
 					return;
 				}
 
-				if (data.parentDeviceId) {
-					that.mainNodeDeviceId = data.parentDeviceId;
+				const { parentDeviceId, listening, deviceId } = data;
+
+				let isBatteried = Boolean(!listening);
+				if (isBatteried !== that.state.isBatteried) {
+					this.setState({
+						isBatteried,
+					});
 				}
-				if (!data.parentDeviceId && data.deviceId) {
-					that.mainNodeDeviceId = data.deviceId;
+
+				if (parentDeviceId) {
+					that.mainNodeDeviceId = parentDeviceId;
+				}
+				if (!parentDeviceId && deviceId) {
+					that.mainNodeDeviceId = deviceId;
 				}
 
 				if (!data.cmdClasses) {
@@ -555,18 +564,23 @@ componentWillUnmount() {
 	this.cleanAllClassVariables();
 }
 
-// sleep check for power connected devices.
 startSleepCheckTimer() {
 	clearTimeout(this.sleepCheckTimeout);
 	const that = this;
 	this.sleepCheckTimeout = setTimeout(() => {
-		// Only if power connected
-		if (!that.state.isBatteried) {
-			// Device has gone to sleep, wake him up!
-			const { intl } = that.props;
+		const { intl } = that.props;
+		const { formatMessage } = intl;
+
+		// Device has gone to sleep, wake him up!
+		if (that.state.isBatteried) {
 			that.setState({
-				hintMessage: intl.formatMessage(i18n.deviceSleptPower),
-				interviewPartialStatusMessage: `${intl.formatMessage(i18n.interviewNotComplete)}. ${intl.formatMessage(i18n.interviewNotCompletePower)}.`,
+				hintMessage: formatMessage(i18n.deviceSleptBattery),
+				interviewPartialStatusMessage: `${formatMessage(i18n.interviewNotComplete)}. ${formatMessage(i18n.interviewNotCompleteBattery)}.`,
+			});
+		} else {
+			that.setState({
+				hintMessage: formatMessage(i18n.deviceSleptPower),
+				interviewPartialStatusMessage: `${formatMessage(i18n.interviewNotComplete)}. ${formatMessage(i18n.interviewNotCompletePower)}.`,
 			});
 		}
 	}, 10000);
