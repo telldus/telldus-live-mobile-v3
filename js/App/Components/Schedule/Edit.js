@@ -128,8 +128,6 @@ class Edit extends View<null, Props, State> {
 	};
 
 	onSaveSchedule = () => {
-		// $FlowFixMe
-		v = 10;// eslint-disable-line
 		if (!this.state.isDeleting && !this.state.choseDelete) {
 			this.setState({
 				isSaving: true,
