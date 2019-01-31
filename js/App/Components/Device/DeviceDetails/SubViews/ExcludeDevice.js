@@ -102,6 +102,8 @@ constructor(props: Props) {
 	this.startRemoveDevice = this.startRemoveDevice.bind(this);
 	this.onPressTryAgain = this.onPressTryAgain.bind(this);
 	this.runExclusionTimer = this.runExclusionTimer.bind(this);
+
+	this.hasUnmount = false;
 }
 
 componentDidMount() {
@@ -151,6 +153,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 componentWillUnmount() {
 	this.clearTimer();
+	this.hasUnmount = true;
 }
 
 setSocketListeners() {
@@ -172,7 +175,7 @@ setSocketListeners() {
 		}
 
 		const { module, action, data } = message;
-		if (module && action) {
+		if (module && action && !this.hasUnmount) {
 			if (module === 'zwave' && action === 'removeNodeFromNetworkStartTimeout') {
 				that.exclusionTimer = setInterval(() => {
 					that.runExclusionTimer(data);

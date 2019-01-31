@@ -118,6 +118,8 @@ constructor(props: Props) {
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
+
+	this.hasUnmount = false;
 }
 
 componentDidMount() {
@@ -159,7 +161,7 @@ setSocketListeners() {
 		}
 
 		const { module, action, data } = message;
-		if (module && action) {
+		if (module && action && !this.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				if (that.inclusionTimer) {
 					clearInterval(that.inclusionTimer);
@@ -562,6 +564,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
 
 componentWillUnmount() {
 	this.cleanAllClassVariables();
+	this.hasUnmount = true;
 }
 
 startSleepCheckTimer() {
