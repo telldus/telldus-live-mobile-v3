@@ -61,6 +61,7 @@ type State = {
 	hintMessage: string | null,
 	interviewPartialStatusMessage: string | null,
 	deviceImage: string,
+	isBatteried: boolean,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -91,6 +92,7 @@ constructor(props: Props) {
 		hintMessage: props.intl.formatMessage(i18n.messageHint),
 		interviewPartialStatusMessage: null,
 		deviceImage: 'img_zwave_include',
+		isBatteried: false,
 	};
 
 	const { actions, navigation } = this.props;
@@ -296,6 +298,7 @@ setSocketListeners() {
 				that.startPartialInclusionCheckTimer();
 				// Battery connected devices.
 				that.setState({
+					isBatteried: true,
 					hintMessage: formatMessage(i18n.deviceSleptBattery),
 					interviewPartialStatusMessage: `${formatMessage(i18n.interviewNotComplete)}. ${formatMessage(i18n.interviewNotCompleteBattery)}.`,
 				});
@@ -372,6 +375,7 @@ handleErrorEnterLearnMode() {
 		this.setState({
 			showThrobber: true,
 			status: '',
+			isBatteried: false,
 		});
 		// On error restart the whole process
 		this.cleanAllClassVariables();
@@ -556,13 +560,15 @@ startSleepCheckTimer() {
 	clearTimeout(this.sleepCheckTimeout);
 	const that = this;
 	this.sleepCheckTimeout = setTimeout(() => {
-		// Device has gone to sleep, wake him up!
-
-		const { intl } = that.props;
-		that.setState({
-			hintMessage: intl.formatMessage(i18n.deviceSleptPower),
-			interviewPartialStatusMessage: `${intl.formatMessage(i18n.interviewNotComplete)}. ${intl.formatMessage(i18n.interviewNotCompletePower)}.`,
-		});
+		// Only if power connected
+		if (!that.state.isBatteried) {
+			// Device has gone to sleep, wake him up!
+			const { intl } = that.props;
+			that.setState({
+				hintMessage: intl.formatMessage(i18n.deviceSleptPower),
+				interviewPartialStatusMessage: `${intl.formatMessage(i18n.interviewNotComplete)}. ${intl.formatMessage(i18n.interviewNotCompletePower)}.`,
+			});
+		}
 	}, 10000);
 }
 
