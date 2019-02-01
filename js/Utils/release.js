@@ -18,7 +18,8 @@
  *
  */
 
-import { edit } from 'external-editor';
+let externalEditor = require('external-editor');
+let edit = externalEditor.edit;
 
 let exec = require('child-process-promise').exec;
 let fs = require('fs');
