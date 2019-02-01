@@ -68,7 +68,7 @@ static navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="settings"
 			tintColor={tintColor}
-			label={i18n.labelZWave}
+			label={'Z-Wave'}
 			accessibilityLabel={i18n.zWaveSettingsTab}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
