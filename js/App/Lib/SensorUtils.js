@@ -227,7 +227,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'co2') {
-		let label = formatMessage(i18n.labelCO2);
+		let label = 'CO2';
 		return {
 			icon: 'co2',
 			label,
@@ -258,7 +258,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'particulatematter2.5') {
-		let label = formatMessage(i18n.labelPM25);
+		let label = 'PM2.5';
 		return {
 			icon: 'pm25',
 			label,
@@ -268,7 +268,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 		};
 	}
 	if (name === 'co') {
-		let label = formatMessage(i18n.labelCO);
+		let label = 'CO';
 		return {
 			icon: 'co',
 			label,
