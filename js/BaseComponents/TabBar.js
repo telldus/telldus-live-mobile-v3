@@ -26,8 +26,8 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
+import Text from './Text';
 import IconTelldus from './IconTelldus';
-import FormattedMessage from './FormattedMessage';
 
 type Props = {
 	icon: string,
@@ -46,7 +46,7 @@ class TabBar extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { icon, tintColor, label, intl, accessibilityLabel, appLayout } = this.props;
+		let { icon, tintColor, label = '', intl, accessibilityLabel, appLayout } = this.props;
 		accessibilityLabel = intl.formatMessage(accessibilityLabel);
 
 		const {
@@ -55,10 +55,14 @@ class TabBar extends Component<Props, null> {
 			labelStyle,
 		} = this.getStyles(appLayout);
 
+		label = typeof label === 'string' ? label : intl.formatMessage(label);
+
 		return (
 			<View style={container} accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
-				<FormattedMessage {...label} style={[labelStyle, {color: tintColor}]}/>
+				<Text style={[labelStyle, {color: tintColor}]}>
+					{label}
+				</Text>
 			</View>
 		);
 	}
