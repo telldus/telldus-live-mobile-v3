@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
@@ -38,6 +39,7 @@ import {
 	setTopLevelNavigator,
 	navigate,
 	getRouteName,
+	LayoutAnimations,
 } from '../Lib';
 
 import Theme from '../Theme';
@@ -170,8 +172,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 	addNewDevice() {
 		this.setState({
 			addNewDevicePressed: true,
+		}, () => {
+			this.props.addNewDevice();
 		});
-		this.props.addNewDevice();
 	}
 
 	makeRightButton(CS: string): Object | null {
@@ -202,6 +205,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	toggleAttentionCapture(value: boolean) {
+		if (!this.state.addNewDevicePressed) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500), () => {
+				// This is to prevent same layout animation occuring on navigation(next layout)
+				// Callback only available in iOS
+				LayoutAnimation.configureNext(null);
+			});
+		}
 		this.setState({
 			showAttentionCaptureAddDevice: value,
 		});
@@ -211,8 +221,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 		setTopLevelNavigator(navigatorRef);
 	}
 
-	render(): Object {
+	showAttentionCapture(): boolean {
 		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+	}
+
+	render(): Object {
+		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
 		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const { height, width } = appLayout;
@@ -232,7 +247,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		if (showHeader) {
 			const { land } = Theme.Core.headerHeightFactor;
 			const rightButton = this.makeRightButton(CS);
-			const showAttentionCapture = (CS === 'Devices') && rightButton && showAttentionCaptureAddDevice && !addNewDevicePressed;
+			const showAttentionCapture = this.showAttentionCapture() && rightButton;
 			screenProps = {
 				...screenProps,
 				leftButton: this.settingsButton,

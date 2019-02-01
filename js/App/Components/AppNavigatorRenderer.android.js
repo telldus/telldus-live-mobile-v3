@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
@@ -42,6 +43,7 @@ import {
 	navigate,
 	getDrawerWidth,
 	getRouteName,
+	LayoutAnimations,
 } from '../Lib';
 import Theme from '../Theme';
 import i18n from '../Translations/common';
@@ -212,8 +214,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 	addNewDevice() {
 		this.setState({
 			addNewDevicePressed: true,
+		}, () => {
+			this.props.addNewDevice();
 		});
-		this.props.addNewDevice();
 	}
 
 	makeRightButton(CS: string, styles: Object): Object | null {
@@ -265,8 +268,15 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	toggleAttentionCapture(value: boolean) {
+		if (!this.state.addNewDevicePressed) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500));
+		}
 		this.setState({
 			showAttentionCaptureAddDevice: value,
+		}, () => {
+			// This is to prevent same layout animation occuring on navigation(next layout)
+			// Since LayoutAnimationEnd Callback only available in iOS
+			LayoutAnimation.configureNext(null);
 		});
 	}
 
@@ -281,8 +291,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 		return (drawer && screenReaderEnabled) ? null : this.menuButton;
 	}
 
+	showAttentionCapture(): boolean {
+		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+	}
+
 	render(): Object {
-		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
 		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -302,7 +317,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 			toggleDialogueBox,
 		};
-		const showAttentionCapture = (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		const showAttentionCapture = this.showAttentionCapture();
 		if (showHeader) {
 			screenProps = {
 				...screenProps,
