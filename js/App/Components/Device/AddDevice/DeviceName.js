@@ -136,7 +136,6 @@ submitName() {
 		this.setState({
 			isLoading: true,
 		}, () => {
-			promises.push(actions.getDevices());
 			Promise.all(promises).then(() => {
 				this.postSubmitName();
 			});
@@ -147,35 +146,19 @@ submitName() {
 }
 
 postSubmitName() {
-	const { actions, navigation } = this.props;
+	const { navigation } = this.props;
 	const { rowData } = this.state;
 
-	actions.getDevices().then(() => {
-		this.setState({
-			isLoading: false,
-		}, () => {
-			InteractionManager.runAfterInteractions(() => {
-				navigation.navigate({
-					routeName: 'Devices',
-					key: 'Devices',
-					params: {
-						newDevices: rowData,
-					},
-				});
-			});
-		});
-	}).catch(() => {
-		this.setState({
-			isLoading: false,
-		}, () => {
-			InteractionManager.runAfterInteractions(() => {
-				navigation.navigate({
-					routeName: 'Devices',
-					key: 'Devices',
-					params: {
-						newDevices: rowData,
-					},
-				});
+	this.setState({
+		isLoading: false,
+	}, () => {
+		InteractionManager.runAfterInteractions(() => {
+			navigation.navigate({
+				routeName: 'Devices',
+				key: 'Devices',
+				params: {
+					newDevices: rowData,
+				},
 			});
 		});
 	});
