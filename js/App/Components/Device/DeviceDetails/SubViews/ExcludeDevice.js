@@ -249,7 +249,7 @@ runExclusionTimer(data?: number = 60) {
 			excludeSucces: false,
 			showThrobber: false,
 		});
-	} else {
+	} else if (timer === 0) {
 		const { onExcludeTimedoutImmediate } = this.props;
 		this.clearTimer();
 		if (onExcludeTimedoutImmediate) {
