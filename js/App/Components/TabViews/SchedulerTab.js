@@ -140,9 +140,13 @@ class SchedulerTab extends View<null, Props, State> {
 	};
 
 	onIndexChanged = (index: number) => {
-		this.setState({
-			todayIndex: index,
-		});
+		if (index < 0 || index > 7) {
+			this._scroll(0);
+		} else {
+			this.setState({
+				todayIndex: index,
+			});
+		}
 	}
 
 	onToggleVisibility(show: boolean) {
