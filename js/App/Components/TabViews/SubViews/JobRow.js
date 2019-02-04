@@ -235,7 +235,6 @@ class JobRow extends View<null, Props, null> {
 						}}
 						timeStyle={time}
 						timeContainerStyle={{ opacity }}
-						rowStyle={{ opacity }}
 						rowContainerStyle={rowContainer}
 						rowWithTriangleContainerStyle={rowWithTriangleContainer}
 						triangleColor={methodIconContainer.backgroundColor}
@@ -243,34 +242,36 @@ class JobRow extends View<null, Props, null> {
 						isFirst={isFirst}
 					>
 						{actionIcon}
-						<TextRowWrapper style={textWrapper} appLayout={appLayout}>
-							<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
-								{deviceName}
-							</Title>
-							<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
-								{repeat}{' '}
-								{type === 'time' && (
-									<FormattedTime
-										value={timestamp}
-										hour="numeric"
-										minute="numeric"
-										style={description}
-									/>)
-								}
-							</Description>
-						</TextRowWrapper>
-						{!!offset && (
-							<IconTelldus
-								icon="offset"
-								style={iconOffset}
-							/>
-						)}
-						{!!randomInterval && (
-							<IconTelldus
-								icon="random"
-								style={iconRandom}
-							/>
-						)}
+						<View style={{ flex: 1, opacity }}>
+							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
+								<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
+									{deviceName}
+								</Title>
+								<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
+									{repeat}{' '}
+									{type === 'time' && (
+										<FormattedTime
+											value={timestamp}
+											hour="numeric"
+											minute="numeric"
+											style={description}
+										/>)
+									}
+								</Description>
+							</TextRowWrapper>
+							{!!offset && (
+								<IconTelldus
+									icon="offset"
+									style={iconOffset}
+								/>
+							)}
+							{!!randomInterval && (
+								<IconTelldus
+									icon="random"
+									style={iconRandom}
+								/>
+							)}
+						</View>
 					</ListRow>
 				</TouchableOpacity>
 				{!!showNow && (
