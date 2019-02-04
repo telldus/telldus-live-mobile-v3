@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { BackHandler, Keyboard } from 'react-native';
+import { BackHandler, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
@@ -161,7 +161,7 @@ class AddDeviceContainer extends View<Props, State> {
 		this.props.actions.hideModal();
 	};
 
-	getRelativeData = (styles: Object): Object => {
+	getRelativeData = (): Object => {
 		let {validationMessage} = this.props;
 		return {
 			dialogueHeader: false,
@@ -186,10 +186,8 @@ class AddDeviceContainer extends View<Props, State> {
 
 		const deviceWidth = isPortrait ? width : height;
 
-		const styles = this.getStyle(appLayout);
-
 		const padding = deviceWidth * Theme.Core.paddingFactor;
-		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
+		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData();
 
 		const showLeftIcon = !this.dissAllowBackNavigation();
 
@@ -207,7 +205,11 @@ class AddDeviceContainer extends View<Props, State> {
 					showLeftIcon={showLeftIcon}
 					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
 					{...screenProps}/>
-				<View style={styles.style}>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{flex: 1}}
+					contentContainerStyle={{ flexGrow: 1 }}
+					keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
 					{React.cloneElement(
 						children,
 						{
@@ -221,7 +223,7 @@ class AddDeviceContainer extends View<Props, State> {
 							processWebsocketMessage: this.props.processWebsocketMessage,
 						},
 					)}
-				</View>
+				</KeyboardAvoidingView>
 				<DialogueBox
 					dialogueContainerStyle={{elevation: 0}}
 					header={dialogueHeader}
@@ -232,14 +234,6 @@ class AddDeviceContainer extends View<Props, State> {
 					onPressPositive={this.closeModal}/>
 			</View>
 		);
-	}
-
-	getStyle(appLayout: Object): Object {
-		return {
-			style: {
-				flex: 1,
-			},
-		};
 	}
 }
 

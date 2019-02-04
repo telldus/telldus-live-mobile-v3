@@ -30,7 +30,6 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	LayoutAnimation,
-	KeyboardAvoidingView,
 } from 'react-native';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
@@ -205,10 +204,8 @@ export default class Time extends View<null, Props, State> {
 		const shouldRender = !!selectedType;
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
-				<KeyboardAvoidingView
-					behavior="padding"
-					style={{flex: 1}}>
+			<View style={{flex: 1}}>
+				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
 					<View style={container}>
 						<View style={[type.container, { marginBottom }]}>
 							{this._renderTypes(TYPES)}
@@ -231,15 +228,15 @@ export default class Time extends View<null, Props, State> {
 							</Row>
 						)}
 					</View>
-					{shouldRender && (
-						<FloatingButton
-							onPress={this.selectTime}
-							imageSource={{uri: 'right_arrow_key'}}
-							paddingRight={this.props.paddingRight - 2}
-						/>
-					)}
-				</KeyboardAvoidingView>
-			</ScrollView>
+				</ScrollView>
+				{shouldRender && (
+					<FloatingButton
+						onPress={this.selectTime}
+						imageSource={{uri: 'right_arrow_key'}}
+						paddingRight={this.props.paddingRight - 2}
+					/>
+				)}
+			</View>
 		);
 	}
 

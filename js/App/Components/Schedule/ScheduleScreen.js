@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
@@ -224,23 +224,29 @@ class ScheduleScreen extends View<null, Props, State> {
 						navigation={navigation}
 						{...screenProps}
 						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}/>
-					<View style={style}>
-						{React.cloneElement(
-							children,
-							{
-								onDidMount: this.onChildDidMount,
-								navigation,
-								actions,
-								paddingRight: style.paddingHorizontal,
-								devices,
-								schedule,
-								loading: this.loading,
-								isEditMode: this._isEditMode,
-								...screenProps,
-								gateways,
-							},
-						)}
-					</View>
+					<KeyboardAvoidingView
+						behavior="padding"
+						style={{flex: 1}}
+						contentContainerStyle={{flexGrow: 1}}
+						keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+						<View style={style}>
+							{React.cloneElement(
+								children,
+								{
+									onDidMount: this.onChildDidMount,
+									navigation,
+									actions,
+									paddingRight: style.paddingHorizontal,
+									devices,
+									schedule,
+									loading: this.loading,
+									isEditMode: this._isEditMode,
+									...screenProps,
+									gateways,
+								},
+							)}
+						</View>
+					</KeyboardAvoidingView>
 					<DialogueBox
 						showDialogue={this.props.showModal}
 						header={dialogueHeader}

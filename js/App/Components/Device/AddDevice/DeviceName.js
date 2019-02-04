@@ -27,7 +27,6 @@ import {
 	Keyboard,
 	InteractionManager,
 	ScrollView,
-	KeyboardAvoidingView,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
 
@@ -276,43 +275,38 @@ render(): Object {
 		<View style={{ flex: 1 }}>
 			<ScrollView
 				keyboardShouldPersistTaps={'always'}>
-				<KeyboardAvoidingView
-					behavior="padding"
-					style={{ flex: 1 }}
-					contentContainerStyle={{ justifyContent: 'center' }}>
-					<View style={container}>
-						{firstRow}
-						{rows.length !== 0 && (
-							<View style={rowsContainer}>
-								<View style={infoContainer}>
-									<IconTelldus icon={'info'} style={infoIconStyle}/>
-									<Text style={infoTextStyle}>
-										{intl.formatMessage(i18n.setNameMultichannelInfo)}
-									</Text>
-								</View>
-								{rows}
-							</View>
-						)}
-						{!!statusMessage && (
+				<View style={container}>
+					{firstRow}
+					{rows.length !== 0 && (
+						<View style={rowsContainer}>
 							<View style={infoContainer}>
-								<IconTelldus icon={statusIcon} style={[statusIconStyle, {
-									color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
-								}]}/>
+								<IconTelldus icon={'info'} style={infoIconStyle}/>
 								<Text style={infoTextStyle}>
-									{statusMessage}
+									{intl.formatMessage(i18n.setNameMultichannelInfo)}
 								</Text>
 							</View>
-						)}
-						{!!hintMessage && (
-							<View style={infoContainer}>
-								<IconTelldus icon={'info'} style={statusIconStyle}/>
-								<Text style={infoTextStyle}>
-									{hintMessage}
-								</Text>
-							</View>
-						)}
-					</View>
-				</KeyboardAvoidingView>
+							{rows}
+						</View>
+					)}
+					{!!statusMessage && (
+						<View style={infoContainer}>
+							<IconTelldus icon={statusIcon} style={[statusIconStyle, {
+								color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
+							}]}/>
+							<Text style={infoTextStyle}>
+								{statusMessage}
+							</Text>
+						</View>
+					)}
+					{!!hintMessage && (
+						<View style={infoContainer}>
+							<IconTelldus icon={'info'} style={statusIconStyle}/>
+							<Text style={infoTextStyle}>
+								{hintMessage}
+							</Text>
+						</View>
+					)}
+				</View>
 			</ScrollView>
 			<FloatingButton
 				onPress={this.submitName}
