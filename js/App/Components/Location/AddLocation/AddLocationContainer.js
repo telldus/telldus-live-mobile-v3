@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
@@ -225,19 +225,23 @@ class AddLocationContainer extends View<null, Props, State> {
 			<View style={{
 				flex: 1,
 			}}>
-				<ScrollView style={{
-					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
-				}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
-					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<NavigationHeaderPoster
-							h1={h1} h2={h2}
-							infoButton={infoButton}
-							showLeftIcon={currentScreen !== 'Success'}
-							align={'right'}
-							navigation={navigation}
-							{...screenProps}
-							leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{flex: 1}}
+					contentContainerStyle={{ justifyContent: 'center'}}
+					keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+					<NavigationHeaderPoster
+						h1={h1} h2={h2}
+						infoButton={infoButton}
+						showLeftIcon={currentScreen !== 'Success'}
+						align={'right'}
+						navigation={navigation}
+						{...screenProps}
+						leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>
+					<ScrollView style={{
+						flex: 1,
+						backgroundColor: Theme.Core.appBackground,
+					}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(
 								children,
@@ -251,8 +255,8 @@ class AddLocationContainer extends View<null, Props, State> {
 								},
 							)}
 						</View>
-					</KeyboardAvoidingView>
-				</ScrollView>
+					</ScrollView>
+				</KeyboardAvoidingView>
 				<DialogueBox
 					dialogueContainerStyle={{elevation: 0}}
 					header={dialogueHeader}

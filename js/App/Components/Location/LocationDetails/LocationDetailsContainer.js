@@ -23,7 +23,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { BackHandler, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -182,9 +182,13 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				flex: 1,
 				backgroundColor: Theme.Core.appBackground,
 			}}>
-				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
-					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<NavigationHeaderPoster {...posterData}/>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{flex: 1}}
+					contentContainerStyle={{ justifyContent: 'center'}}
+					keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+					<NavigationHeaderPoster {...posterData}/>
+					<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<View style={[styles.style, {paddingHorizontal}]}>
 							{React.cloneElement(
 								children,
@@ -198,8 +202,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 								},
 							)}
 						</View>
-					</KeyboardAvoidingView>
-				</ScrollView>
+					</ScrollView>
+				</KeyboardAvoidingView>
 				<DialogueBox
 					dialogueContainerStyle={{elevation: 0}}
 					header={modalHeader}
