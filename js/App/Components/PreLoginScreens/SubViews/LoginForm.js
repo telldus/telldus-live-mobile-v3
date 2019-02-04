@@ -252,7 +252,7 @@ class LoginForm extends View {
 					username,
 					password,
 				};
-				this.props.loginToTelldus(credential)
+				this.props.loginToTelldus(credential, 'password')
 					.catch((err: Object) => {
 						this.postSubmit();
 						this.handleLoginError(err);
@@ -299,8 +299,8 @@ function mapStateToProps(store: Object): Object {
 
 function dispatchToProps(dispatch: Function): Object {
 	return {
-		loginToTelldus: (userName: string, password: string): Promise<any> => {
-			return dispatch(loginToTelldus(userName, password));
+		loginToTelldus: (credential: Object, grantType: string): Promise<any> => {
+			return dispatch(loginToTelldus(credential, grantType));
 		},
 		dispatch,
 	};
