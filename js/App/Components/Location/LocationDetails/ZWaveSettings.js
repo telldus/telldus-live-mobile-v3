@@ -141,7 +141,7 @@ render(): Object {
 
 	const {
 		container,
-		brandSecondary,
+		brandDanger,
 		btnDisabledBg,
 		padding,
 	} = this.getStyles(appLayout);
@@ -165,7 +165,7 @@ render(): Object {
 				onPress={this.onPressExcludeDevice}
 				disabled={!(online && websocketOnline)}
 				style={{
-					backgroundColor: (online && websocketOnline) ? brandSecondary : btnDisabledBg,
+					backgroundColor: (online && websocketOnline) ? brandDanger : btnDisabledBg,
 					marginTop: padding * 1.5,
 				}}/>
 			)}
@@ -177,13 +177,13 @@ getStyles(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, appBackground, brandSecondary, btnDisabledBg } = Theme.Core;
+	const { paddingFactor, appBackground, brandDanger, btnDisabledBg } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	return {
 		padding,
-		brandSecondary,
+		brandDanger,
 		btnDisabledBg,
 		container: {
 			flex: 1,

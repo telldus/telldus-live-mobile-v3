@@ -207,7 +207,7 @@ class SettingsTab extends View {
 			container,
 			learn,
 			excludeButtonStyle,
-			brandSecondary,
+			brandDanger,
 			btnDisabledBg,
 		} = this.getStyle(appLayout);
 
@@ -257,7 +257,7 @@ class SettingsTab extends View {
 								onPress={this.onPressExcludeDevice}
 								disabled={!isGatewayReachable}
 								style={[excludeButtonStyle, {
-									backgroundColor: isGatewayReachable ? brandSecondary : btnDisabledBg,
+									backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 								}]}/>
 						)}
 					</View>
@@ -270,12 +270,12 @@ class SettingsTab extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const { paddingFactor, appBackground, brandSecondary, btnDisabledBg } = Theme.Core;
+		const { paddingFactor, appBackground, brandDanger, btnDisabledBg } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
 		return {
-			brandSecondary,
+			brandDanger,
 			btnDisabledBg,
 			container: {
 				flex: 0,
