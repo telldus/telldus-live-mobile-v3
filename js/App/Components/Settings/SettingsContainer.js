@@ -145,8 +145,9 @@ submitPushToken() {
 			if (alert || badge || sound) {
 				this.confirmTokenSubmit();
 			} else {
-				const { toggleDialogueBox, screenProps } = this.props;
-				const { formatMessage } = screenProps.intl;
+				const { screenProps } = this.props;
+				const { toggleDialogueBox, intl } = screenProps;
+				const { formatMessage } = intl;
 				const message = formatMessage(i18n.pushPermissionContent);
 
 				toggleDialogueBox({
