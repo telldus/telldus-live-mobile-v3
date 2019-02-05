@@ -118,6 +118,7 @@ constructor(props: Props) {
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
+	this.enterInclusionModeTimeout = null;
 
 	this.hasUnmount = false;
 }
@@ -128,6 +129,8 @@ componentDidMount() {
 	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(i18n.AddZDIncludeHeaderTwo));
 	this.startAddDevice();
 	this.devices = [];
+
+	this.startEnterInclusionModeTimeout();
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -141,6 +144,25 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return false;
 	}
 	return false;
+}
+
+startEnterInclusionModeTimeout() {
+	this.enterInclusionModeTimeout = setTimeout(() => {
+		const { timer, percent } = this.state;
+		if (timer === null && percent === 0) {
+			const { navigation } = this.props;
+			const { params = {}} = navigation.state;
+			navigation.navigate({
+				routeName: 'CantEnterInclusion',
+				key: 'CantEnterInclusion',
+				params,
+			});
+
+			clearTimeout(this.sleepCheckTimeout);
+			clearTimeout(this.partialInclusionCheckTimeout);
+			this.clearTimer();
+		}
+	}, 10000);
 }
 
 setSocketListeners() {
@@ -161,8 +183,9 @@ setSocketListeners() {
 		}
 
 		const { module, action, data } = message;
-		if (module && action && !this.hasUnmount) {
+		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
+				clearTimeout(that.enterInclusionModeTimeout);
 				if (that.inclusionTimer) {
 					clearInterval(that.inclusionTimer);
 				}
@@ -170,6 +193,7 @@ setSocketListeners() {
 					that.runInclusionTimer(data);
 				}, 1000);
 			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
+				clearTimeout(that.enterInclusionModeTimeout);
 
 				let status = data[0];
 				if (status === 1) {
@@ -191,7 +215,7 @@ setSocketListeners() {
 						hintMessage: null,
 					});
 				} else if (status === 3 || status === 4) {
-					clearInterval(this.inclusionTimer);
+					clearInterval(that.inclusionTimer);
 
 					that.startSleepCheckTimer();
 					that.startPartialInclusionCheckTimer();
@@ -236,6 +260,7 @@ setSocketListeners() {
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (that.zwaveId === parseInt(data.node, 10))) {
 				clearInterval(that.inclusionTimer);
+				clearTimeout(that.enterInclusionModeTimeout);
 				that.startSleepCheckTimer();
 
 				// If 'hintMessage' is present(most likely device asleep) then,
@@ -314,7 +339,7 @@ setSocketListeners() {
 
 				let isBatteried = Boolean(!listening);
 				if (isBatteried !== that.state.isBatteried) {
-					this.setState({
+					that.setState({
 						isBatteried,
 					});
 				}
@@ -359,6 +384,7 @@ setSocketListeners() {
 
 			} else if (module === 'device') {
 				if (action === 'added') {
+					clearTimeout(that.enterInclusionModeTimeout);
 					that.startSleepCheckTimer();
 					that.startPartialInclusionCheckTimer();
 					clearInterval(that.inclusionTimer);
@@ -371,7 +397,7 @@ setSocketListeners() {
 				}
 			}
 		}
-		processWebsocketMessage(gateway.id.toString(), message, title, this.websocket);
+		processWebsocketMessage(gateway.id.toString(), message, title, that.websocket);
 	};
 }
 
@@ -564,6 +590,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
 componentWillUnmount() {
 	this.cleanAllClassVariables();
 	this.hasUnmount = true;
+	clearTimeout(this.enterInclusionModeTimeout);
 }
 
 startSleepCheckTimer() {

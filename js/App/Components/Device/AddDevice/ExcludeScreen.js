@@ -35,7 +35,7 @@ import {
 	IconTelldus,
 	Text,
 } from '../../../../BaseComponents';
-import { ExcludeDevice } from '../DeviceDetails/SubViews';
+import { ExcludeDevice } from '../Common';
 
 import {
 	showToast,
@@ -74,6 +74,7 @@ onExcludeSuccessImmediate: () => void;
 onPressExit: () => void;
 onPressInclude: () => void;
 onExcludeTimedoutImmediate: () => void;
+onCantEnterExclusionTimeout: () => void;
 constructor(props: Props) {
 	super(props);
 
@@ -86,6 +87,7 @@ constructor(props: Props) {
 	this.onPressExit = this.onPressExit.bind(this);
 	this.onPressInclude = this.onPressInclude.bind(this);
 	this.onExcludeTimedoutImmediate = this.onExcludeTimedoutImmediate.bind(this);
+	this.onCantEnterExclusionTimeout = this.onCantEnterExclusionTimeout.bind(this);
 }
 
 componentDidMount() {
@@ -131,6 +133,12 @@ onExcludeTimedoutImmediate() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.noDeviceFound), formatMessage(i18n.couldNotExclude));
+}
+
+onCantEnterExclusionTimeout() {
+	const { onDidMount, intl } = this.props;
+	const { formatMessage } = intl;
+	onDidMount(formatMessage(i18n.couldNotExclude), formatMessage(i18n.cantEnterExclusionTwo));
 }
 
 render(): Object {
@@ -185,7 +193,8 @@ render(): Object {
 						processWebsocketMessage={this.props.processWebsocketMessage}
 						onExcludeSuccessImmediate={this.onExcludeSuccessImmediate}
 						onExcludeTimedoutImmediate={this.onExcludeTimedoutImmediate}
-						onPressCancelExclude={this.onPressCancelExclude}/>
+						onPressCancelExclude={this.onPressCancelExclude}
+						onCantEnterExclusionTimeout={this.onCantEnterExclusionTimeout}/>
 				}
 			</ScrollView>
 		</View>
