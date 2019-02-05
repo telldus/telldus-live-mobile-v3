@@ -35,7 +35,6 @@ export default StyleSheet.create({
 		color: Core.sectionTextColor,
 		fontSize: 14,
 		fontWeight: '500',
-		marginVertical: 10,
 	},
 	rowFront: {
 		backgroundColor: '#FFFFFF',

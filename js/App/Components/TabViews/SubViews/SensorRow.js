@@ -60,6 +60,7 @@ type Props = {
 	propsSwipeRow: Object,
 	defaultType?: string,
 	screenReaderEnabled: boolean,
+	isLast: boolean,
 
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
@@ -174,7 +175,7 @@ class SensorRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'sensor', 'isGatewayActive', 'defaultType',
+				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
 			]);
 			if (propsChange) {
 				return true;
@@ -540,7 +541,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor = {} } = this.props;
+		const { appLayout, isGatewayActive, sensor = {}, isLast } = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -592,7 +593,8 @@ class SensorRow extends View<Props, State> {
 			},
 			row: {
 				marginHorizontal: padding,
-				marginBottom: padding / 2,
+				marginTop: padding / 2,
+				marginBottom: isLast ? padding : 0,
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,

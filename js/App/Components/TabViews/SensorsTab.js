@@ -291,6 +291,7 @@ class SensorsTab extends View {
 					initialNumToRender={15}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
+					stickySectionHeadersEnabled={true}
 					refreshControl={
 						<RefreshControl
 							refreshing={isRefreshing}
@@ -346,7 +347,7 @@ class SensorsTab extends View {
 		const { screenProps } = this.props;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
-		const { item } = row;
+		const { item, section, index } = row;
 		const { isOnline, buttonRow } = item;
 
 		if (buttonRow) {
@@ -356,6 +357,9 @@ class SensorsTab extends View {
 				</View>
 			);
 		}
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<SensorRow
@@ -368,7 +372,8 @@ class SensorsTab extends View {
 				onHiddenRowOpen={this.closeVisibleRows}
 				propsSwipeRow={propsSwipeRow}
 				onSettingsSelected={this.openSensorDetail}
-				screenReaderEnabled={screenReaderEnabled}/>
+				screenReaderEnabled={screenReaderEnabled}
+				isLast={isLast}/>
 		);
 	}
 

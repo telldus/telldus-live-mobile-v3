@@ -545,7 +545,7 @@ class DevicesTab extends View {
 		const { appLayout } = screenProps;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, screenReaderEnabled } = screenProps;
-		const { item, section } = row;
+		const { item, section, index } = row;
 		const { isOnline, supportLocalControl, buttonRow, id } = item;
 
 		if (buttonRow) {
@@ -557,6 +557,9 @@ class DevicesTab extends View {
 		}
 
 		const newDevices = navigation.getParam('newDevices', {}) || {};
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<DeviceRow
@@ -577,6 +580,7 @@ class DevicesTab extends View {
 				gatewayName={section.header}
 				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 				onPressDeviceAction={this.onPressDeviceAction}
+				isLast={isLast}
 			/>
 		);
 	}
@@ -721,6 +725,7 @@ class DevicesTab extends View {
 					sections={listData}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
+					stickySectionHeadersEnabled={true}
 					refreshControl={
 						<RefreshControl
 							enabled={showRefresh}

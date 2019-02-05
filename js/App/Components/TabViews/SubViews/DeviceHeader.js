@@ -60,11 +60,12 @@ export default class DeviceHeader extends View<Props, null> {
 		const {
 			statusInfo,
 			nameFontSize,
+			sectionHeader,
 		} = this.getStyles(appLayout, supportLocalControl);
 		const controlIconColor = getControlIconColor(isOnline, websocketOnline, supportLocalControl);
 
 		return (
-			<View style={Theme.Styles.sectionHeader}>
+			<View style={sectionHeader}>
 				<IconTelldus icon={icon} style={{...statusInfo, color: controlIconColor}}/>
 				<Text style={[Theme.Styles.sectionHeaderText, { fontSize: nameFontSize }]}>
 					{gateway}
@@ -80,6 +81,8 @@ export default class DeviceHeader extends View<Props, null> {
 
 		const {
 			maxSizeRowTextOne,
+			shadow,
+			paddingFactor,
 		} = Theme.Core;
 
 		let statusInfoSize = Math.floor(deviceWidth * 0.055);
@@ -88,12 +91,24 @@ export default class DeviceHeader extends View<Props, null> {
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
+		const padding = deviceWidth * paddingFactor;
+
 		return {
 			statusInfo: {
 				fontSize: statusInfoSize,
 				marginRight: 5,
 			},
 			nameFontSize,
+			sectionHeader: {
+				flexDirection: 'row',
+				paddingVertical: 2 + (nameFontSize * 0.2),
+				backgroundColor: '#ffffff',
+				alignItems: 'center',
+				paddingLeft: 5 + (nameFontSize * 0.2),
+				justifyContent: 'flex-start',
+				marginBottom: padding / 2,
+				...shadow,
+			},
 		};
 	}
 }
