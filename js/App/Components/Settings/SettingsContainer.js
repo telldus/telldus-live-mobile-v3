@@ -185,20 +185,28 @@ confirmTokenSubmit() {
 				});
 				LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			});
-		}).catch(() => {
-			let message = formatMessage(i18n.pushRegisterFailed);
-			actions.showToast(message);
-			this.setState({
-				isPushSubmitLoading: false,
-			});
+		}).catch((error: Object) => {
+			let errorCode = !error.error_description && error.message === 'Network request failed' ?
+				`${formatMessage(i18n.networkFailed)}.` : error.message ?
+					error.message : error.error_description ?
+						error.error_description : error.error ?
+							error.error : `${formatMessage(i18n.unknownError)}.`;
+			this.showPushRegFailedToast(errorCode);
 		});
 	} else {
-		let message = formatMessage(i18n.pushRegisterFailed);
-		actions.showToast(message);
-		this.setState({
-			isPushSubmitLoading: false,
-		});
+		this.showPushRegFailedToast('Push token missing, please try restarting the app.');
 	}
+}
+
+showPushRegFailedToast(errorCode: string) {
+	const { screenProps, actions } = this.props;
+	const { formatMessage } = screenProps.intl;
+	let message = formatMessage(i18n.pushRegisterFailed);
+	message = `${message}.\nError code: ${errorCode}`;
+	actions.showToast(message);
+	this.setState({
+		isPushSubmitLoading: false,
+	});
 }
 
 render(): Object {
