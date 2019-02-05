@@ -64,6 +64,7 @@ type State = {
 	excludeSucces: boolean,
 	showThrobber: boolean,
 	cantEnterExclusion: boolean,
+	cantEnterLearnMode: boolean,
 };
 
 class ExcludeDevice extends View<Props, State> {
@@ -89,6 +90,7 @@ constructor(props: Props) {
 		excludeSucces: false,
 		showThrobber: false,
 		cantEnterExclusion: false,
+		cantEnterLearnMode: false,
 	};
 
 	this.setSocketListeners = this.setSocketListeners.bind(this);
@@ -108,6 +110,7 @@ constructor(props: Props) {
 	this.runExclusionTimer = this.runExclusionTimer.bind(this);
 
 	this.enterExclusionModeTimeout = null;
+	this.showThrobberTimeout = null;
 
 	this.hasUnmount = false;
 }
@@ -116,6 +119,7 @@ componentDidMount() {
 	this.startRemoveDevice();
 
 	this.startEnterExclusionModeTimeout();
+	this.startShowThrobberTimeout();
 }
 
 onPressTryAgain() {
@@ -163,6 +167,7 @@ componentWillUnmount() {
 	this.clearTimer();
 	this.hasUnmount = true;
 	clearTimeout(this.enterExclusionModeTimeout);
+	clearTimeout(this.showThrobberTimeout);
 }
 
 startEnterExclusionModeTimeout() {
@@ -175,6 +180,8 @@ startEnterExclusionModeTimeout() {
 }
 
 cantEnterExclusionMode() {
+	this.clearTimer();
+	clearTimeout(this.showThrobberTimeout);
 	this.setState({
 		cantEnterExclusion: true,
 	}, () => {
@@ -183,6 +190,17 @@ cantEnterExclusionMode() {
 			onCantEnterExclusionTimeout();
 		}
 	});
+}
+
+startShowThrobberTimeout() {
+	this.showThrobberTimeout = setTimeout(() => {
+		const { timer, progress, showThrobber } = this.state;
+		if (timer === null && progress === 0 && !showThrobber) {
+			this.setState({
+				showThrobber: true,
+			});
+		}
+	}, 1000);
 }
 
 setSocketListeners() {
@@ -207,6 +225,7 @@ setSocketListeners() {
 		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'removeNodeFromNetworkStartTimeout') {
 				clearTimeout(that.enterExclusionModeTimeout);
+				clearTimeout(that.showThrobberTimeout);
 				if (that.exclusionTimer) {
 					clearInterval(that.exclusionTimer);
 				}
@@ -215,6 +234,7 @@ setSocketListeners() {
 				}, 1000);
 			} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
 				clearTimeout(that.enterExclusionModeTimeout);
+				clearTimeout(that.showThrobberTimeout);
 				let status = data[0];
 				if (status === 6) {
 					if (data[2] > 0) {
@@ -228,6 +248,7 @@ setSocketListeners() {
 								status: intl.formatMessage(i18n.messageDeviceExcluded),
 								progress: 100,
 								showThrobber: false,
+								cantEnterLearnMode: false,
 							});
 						}
 					}
@@ -238,6 +259,7 @@ setSocketListeners() {
 			}
 			if (module === 'device' && action === 'removed') {
 				clearTimeout(that.enterExclusionModeTimeout);
+				clearTimeout(that.showThrobberTimeout);
 				that.clearTimer();
 				if (onExcludeSuccessImmediate) {
 					onExcludeSuccessImmediate();
@@ -248,6 +270,7 @@ setSocketListeners() {
 						status: intl.formatMessage(i18n.messageDeviceExcluded),
 						progress: 100,
 						showThrobber: false,
+						cantEnterLearnMode: false,
 					});
 				}
 			}
@@ -257,13 +280,14 @@ setSocketListeners() {
 }
 
 handleErrorEnterLearnMode() {
-	const { showThrobber } = this.state;
-	if (showThrobber) {
+	const { showThrobber, cantEnterLearnMode } = this.state;
+	if (showThrobber && cantEnterLearnMode) {
 		this.cantEnterExclusionMode();
 	} else {
 		this.setState({
 			showThrobber: true,
 			status: '',
+			cantEnterLearnMode: true,
 		});
 		this.stopAddRemoveDevice();
 		this.startRemoveDevice();
@@ -280,6 +304,7 @@ runExclusionTimer(data?: number = 60) {
 			status: '',
 			excludeSucces: false,
 			showThrobber: false,
+			cantEnterLearnMode: false,
 		});
 	} else if (timer === 0) {
 		const { onExcludeTimedoutImmediate } = this.props;
@@ -291,6 +316,7 @@ runExclusionTimer(data?: number = 60) {
 				timer: null,
 				status: 'timed out',
 				showThrobber: false,
+				cantEnterLearnMode: false,
 			});
 		}
 	}

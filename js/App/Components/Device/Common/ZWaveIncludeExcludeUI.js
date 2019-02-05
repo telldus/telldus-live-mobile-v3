@@ -96,7 +96,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	if (shouldUpdate(nextProps, this.props, ['progress', 'percent', 'status', 'timer', 'appLayout', 'deviceImage', 'infoText'])) {
+	if (shouldUpdate(nextProps, this.props, ['showThrobber', 'progress', 'percent', 'status', 'timer', 'appLayout', 'deviceImage', 'infoText'])) {
 		return true;
 	}
 	if (!isEqual(this.state, nextState)) {

@@ -62,6 +62,7 @@ type State = {
 	interviewPartialStatusMessage: string | null,
 	deviceImage: string,
 	isBatteried: boolean,
+	cantEnterLearnMode: boolean,
 };
 
 class IncludeDevice extends View<Props, State> {
@@ -93,6 +94,7 @@ constructor(props: Props) {
 		interviewPartialStatusMessage: null,
 		deviceImage: 'img_zwave_include',
 		isBatteried: false,
+		cantEnterLearnMode: false,
 	};
 
 	const { actions, navigation } = this.props;
@@ -119,6 +121,7 @@ constructor(props: Props) {
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
 	this.enterInclusionModeTimeout = null;
+	this.showThrobberTimeout = null;
 
 	this.hasUnmount = false;
 }
@@ -131,6 +134,7 @@ componentDidMount() {
 	this.devices = [];
 
 	this.startEnterInclusionModeTimeout();
+	this.startShowThrobberTimeout();
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -153,6 +157,17 @@ startEnterInclusionModeTimeout() {
 			this.navigateToCantEnter();
 		}
 	}, 10000);
+}
+
+startShowThrobberTimeout() {
+	this.showThrobberTimeout = setTimeout(() => {
+		const { timer, percent, showThrobber } = this.state;
+		if (timer === null && percent === 0 && !showThrobber) {
+			this.setState({
+				showThrobber: true,
+			});
+		}
+	}, 1000);
 }
 
 navigateToCantEnter() {
@@ -190,6 +205,7 @@ setSocketListeners() {
 		if (module && action && !that.hasUnmount) {
 			if (module === 'zwave' && action === 'addNodeToNetworkStartTimeout') {
 				clearTimeout(that.enterInclusionModeTimeout);
+				clearTimeout(that.showThrobberTimeout);
 				if (that.inclusionTimer) {
 					clearInterval(that.inclusionTimer);
 				}
@@ -198,12 +214,14 @@ setSocketListeners() {
 				}, 1000);
 			} else if (module === 'zwave' && action === 'addNodeToNetwork') {
 				clearTimeout(that.enterInclusionModeTimeout);
+				clearTimeout(that.showThrobberTimeout);
 
 				let status = data[0];
 				if (status === 1) {
 					that.setState({
 						status: `${formatMessage(i18n.addNodeToNetworkOne)}...`,
 						showThrobber: false,
+						cantEnterLearnMode: false,
 					});
 				} else if (status === 2) {
 
@@ -217,6 +235,7 @@ setSocketListeners() {
 						showTimer: false,
 						showThrobber: false,
 						hintMessage: null,
+						cantEnterLearnMode: false,
 					});
 				} else if (status === 3 || status === 4) {
 					clearInterval(that.inclusionTimer);
@@ -264,6 +283,7 @@ setSocketListeners() {
 				}
 			} else if (module === 'zwave' && action === 'interviewDone' && (that.zwaveId === parseInt(data.node, 10))) {
 				clearInterval(that.inclusionTimer);
+				clearTimeout(that.showThrobberTimeout);
 				clearTimeout(that.enterInclusionModeTimeout);
 				that.startSleepCheckTimer();
 
@@ -389,11 +409,14 @@ setSocketListeners() {
 			} else if (module === 'device') {
 				if (action === 'added') {
 					clearTimeout(that.enterInclusionModeTimeout);
+					clearTimeout(that.showThrobberTimeout);
+
 					that.startSleepCheckTimer();
 					that.startPartialInclusionCheckTimer();
-					clearInterval(that.inclusionTimer);
-					const { clientDeviceId, id } = data;
 
+					clearInterval(that.inclusionTimer);
+
+					const { clientDeviceId, id } = data;
 					that.devices.push({
 						id,
 						clientDeviceId,
@@ -406,14 +429,15 @@ setSocketListeners() {
 }
 
 handleErrorEnterLearnMode() {
-	const { showThrobber } = this.state;
-	if (showThrobber) {
+	const { showThrobber, cantEnterLearnMode } = this.state;
+	if (showThrobber && cantEnterLearnMode) {
 		this.navigateToCantEnter();
 	} else {
 		this.setState({
 			showThrobber: true,
 			status: '',
 			isBatteried: false,
+			cantEnterLearnMode: true,
 		});
 		// On error restart the whole process
 		this.cleanAllClassVariables();
@@ -454,11 +478,13 @@ runInclusionTimer(data?: number = 60) {
 		this.setState({
 			timer: timer ? timer - 1 : data,
 			showThrobber: false,
+			cantEnterLearnMode: false,
 		});
 	} else if (timer === 0) {
 		this.setState({
 			timer: null,
 			showThrobber: false,
+			cantEnterLearnMode: false,
 		}, () => {
 			clearTimeout(this.sleepCheckTimeout);
 			clearTimeout(this.partialInclusionCheckTimeout);
@@ -592,6 +618,7 @@ componentWillUnmount() {
 	this.cleanAllClassVariables();
 	this.hasUnmount = true;
 	clearTimeout(this.enterInclusionModeTimeout);
+	clearTimeout(this.showThrobberTimeout);
 }
 
 startSleepCheckTimer() {
