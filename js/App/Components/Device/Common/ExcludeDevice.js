@@ -169,15 +169,20 @@ startEnterExclusionModeTimeout() {
 	this.enterExclusionModeTimeout = setTimeout(() => {
 		const { timer, progress } = this.state;
 		if (timer === null && progress === 0) {
-			const { onCantEnterExclusionTimeout } = this.props;
-			if (onCantEnterExclusionTimeout) {
-				onCantEnterExclusionTimeout();
-			}
-			this.setState({
-				cantEnterExclusion: true,
-			});
+			this.cantEnterExclusionMode();
 		}
 	}, 10000);
+}
+
+cantEnterExclusionMode() {
+	this.setState({
+		cantEnterExclusion: true,
+	}, () => {
+		const { onCantEnterExclusionTimeout } = this.props;
+		if (onCantEnterExclusionTimeout) {
+			onCantEnterExclusionTimeout();
+		}
+	});
 }
 
 setSocketListeners() {
@@ -254,10 +259,7 @@ setSocketListeners() {
 handleErrorEnterLearnMode() {
 	const { showThrobber } = this.state;
 	if (showThrobber) {
-		this.setState({
-			status: 'Error : could not enter learn mode',
-			showThrobber: false,
-		});
+		this.cantEnterExclusionMode();
 	} else {
 		this.setState({
 			showThrobber: true,

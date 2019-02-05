@@ -150,19 +150,23 @@ startEnterInclusionModeTimeout() {
 	this.enterInclusionModeTimeout = setTimeout(() => {
 		const { timer, percent } = this.state;
 		if (timer === null && percent === 0) {
-			const { navigation } = this.props;
-			const { params = {}} = navigation.state;
-			navigation.navigate({
-				routeName: 'CantEnterInclusion',
-				key: 'CantEnterInclusion',
-				params,
-			});
-
-			clearTimeout(this.sleepCheckTimeout);
-			clearTimeout(this.partialInclusionCheckTimeout);
-			this.clearTimer();
+			this.navigateToCantEnter();
 		}
 	}, 10000);
+}
+
+navigateToCantEnter() {
+	const { navigation } = this.props;
+	const { params = {}} = navigation.state;
+	navigation.navigate({
+		routeName: 'CantEnterInclusion',
+		key: 'CantEnterInclusion',
+		params,
+	});
+
+	clearTimeout(this.sleepCheckTimeout);
+	clearTimeout(this.partialInclusionCheckTimeout);
+	this.clearTimer();
 }
 
 setSocketListeners() {
@@ -404,10 +408,7 @@ setSocketListeners() {
 handleErrorEnterLearnMode() {
 	const { showThrobber } = this.state;
 	if (showThrobber) {
-		this.setState({
-			status: 'Error : could not enter learn mode', // TODO : translate
-			showThrobber: false,
-		});
+		this.navigateToCantEnter();
 	} else {
 		this.setState({
 			showThrobber: true,
