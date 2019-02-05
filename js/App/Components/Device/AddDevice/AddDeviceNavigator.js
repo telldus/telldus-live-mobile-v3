@@ -35,6 +35,7 @@ import AlreadyIncluded from './AlreadyIncluded';
 import NoDeviceFound from './NoDeviceFound';
 import ExcludeScreen from './ExcludeScreen';
 import IncludeFailed from './IncludeFailed';
+import CantEnterInclusion from './CantEnterInclusion';
 
 const initialRouteName = 'InitialScreen';
 
@@ -76,6 +77,9 @@ const RouteConfigs = {
 	},
 	IncludeFailed: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeFailed, 'IncludeFailed'),
+	},
+	CantEnterInclusion: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(CantEnterInclusion, 'CantEnterInclusion'),
 	},
 };
 
