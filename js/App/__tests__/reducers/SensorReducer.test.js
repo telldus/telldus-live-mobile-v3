@@ -4,9 +4,10 @@ jest.useFakeTimers();
 import Theme from '../../Theme';
 
 const toggleHiddenButtonRow = {
-	key: Theme.Core.buttonRowKey,
+	header: Theme.Core.buttonRowKey,
 	data: [{
 		buttonRow: true,
+		id: Theme.Core.buttonRowKey,
 	}],
 };
 const initialState = {hiddenList: [], visibleList: [toggleHiddenButtonRow]};
