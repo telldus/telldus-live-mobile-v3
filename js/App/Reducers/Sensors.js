@@ -52,15 +52,15 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 	});
 	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
-			key: index,
+			header: index,
 			data: next,
 		});
 		return acc;
 	}, []);
 	return orderBy(result, [(item: Object): any => {
-		let { key = '' } = item;
-		key = typeof key !== 'string' ? '' : key;
-		return key.toLowerCase();
+		let { header = '' } = item;
+		header = typeof header !== 'string' ? '' : header;
+		return header.toLowerCase();
 	}], ['asc']);
 }
 
@@ -85,9 +85,10 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 		}
 	}
 	const toggleHiddenButtonRow = {
-		key: Theme.Core.buttonRowKey,
+		header: Theme.Core.buttonRowKey,
 		data: [{
 			buttonRow: true,
+			id: Theme.Core.buttonRowKey,
 		}],
 	};
 	visibleList.push(toggleHiddenButtonRow);

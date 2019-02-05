@@ -327,13 +327,13 @@ class SensorsTab extends View {
 	renderSectionHeader(sectionData: Object): Object | null {
 		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
 
-		if (sectionData.section.key === Theme.Core.buttonRowKey) {
+		if (sectionData.section.header === Theme.Core.buttonRowKey) {
 			return null;
 		}
 
 		return (
 			<DeviceHeader
-				gateway={sectionData.section.key}
+				gateway={sectionData.section.header}
 				appLayout={this.props.screenProps.appLayout}
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}

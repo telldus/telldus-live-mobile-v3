@@ -525,13 +525,13 @@ class DevicesTab extends View {
 
 	renderSectionHeader(sectionData: Object): Object | null {
 		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
-		if (sectionData.section.key === Theme.Core.buttonRowKey) {
+		if (sectionData.section.header === Theme.Core.buttonRowKey) {
 			return null;
 		}
 
 		return (
 			<DeviceHeader
-				gateway={sectionData.section.key}
+				gateway={sectionData.section.header}
 				appLayout={this.props.screenProps.appLayout}
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
@@ -574,7 +574,7 @@ class DevicesTab extends View {
 				propsSwipeRow={propsSwipeRow}
 				screenReaderEnabled={screenReaderEnabled}
 				isNew={!!newDevices[id]}
-				gatewayName={section.key}
+				gatewayName={section.header}
 				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 				onPressDeviceAction={this.onPressDeviceAction}
 			/>
@@ -619,7 +619,7 @@ class DevicesTab extends View {
 		let item = newDevices[id];
 		if (item && item.mainNode) {
 			visibleList.map((list: Object, index: number) => {
-				if (list.key === clientName) {
+				if (list.header === clientName) {
 					section = index;
 					list.data.map((l: Object, i: number) => {
 						if (l.id === id) {
