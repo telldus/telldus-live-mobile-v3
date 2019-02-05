@@ -239,23 +239,30 @@ class HistoryTab extends View {
 			});
 	}
 
-	renderRow(item: Object): Object {
+	renderRow(row: Object): Object {
 		const { screenProps, device } = this.props;
-		const { intl, currentScreen } = screenProps;
+		const { intl, currentScreen, appLayout } = screenProps;
 		const { deviceType } = device;
 		const { historyDetails } = this.state;
 
+		const { section, index, item } = row;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
+
 		return (
 			<HistoryRow
-				id={item.index}
-				item={item.item}
-				section={item.section.key}
+				id={index}
+				item={item}
+				section={section.key}
 				intl={intl}
-				isFirst={+item.index === 0}
+				isFirst={+index === 0}
 				currentScreen={currentScreen}
 				deviceType={deviceType}
 				onOriginPress={this.onOriginPress}
 				isModalOpen={historyDetails.show}
+				isLast={isLast}
+				appLayout={appLayout}
 			/>
 		);
 	}
@@ -340,6 +347,7 @@ class HistoryTab extends View {
 					renderSectionHeader={this.renderSectionHeader}
 					keyExtractor={this.keyExtractor}
 					initialNumToRender={10}
+					stickySectionHeadersEnabled={true}
 					refreshControl={
 						<RefreshControl
 						  refreshing={this.state.refreshing}

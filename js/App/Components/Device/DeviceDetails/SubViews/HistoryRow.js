@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 
@@ -33,6 +32,8 @@ import {
 	toSliderValue,
 } from '../../../../Lib';
 
+import Theme from '../../../../Theme';
+
 type Props = {
 	item: Object,
 	onOriginPress: Function,
@@ -40,17 +41,15 @@ type Props = {
 	appLayout: Object,
 	section: string,
 	intl: Object,
+	isLast: boolean,
 	isModalOpen: boolean,
 	currentScreen: string,
 	deviceType: string,
 };
 
-type State = {
-};
 
-class HistoryRow extends React.PureComponent<Props, State> {
+class HistoryRow extends React.PureComponent<Props, null> {
 	props: Props;
-	state: State;
 
 	labelAction: string;
 	labelStatus: string;
@@ -70,8 +69,6 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-		};
 		this.onOriginPress = this.onOriginPress.bind(this);
 
 		let { formatMessage } = props.intl;
@@ -167,7 +164,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 
 	render(): Object {
 
-		let { appLayout, intl, isModalOpen, currentScreen, deviceType } = this.props;
+		let { intl, isModalOpen, currentScreen, deviceType } = this.props;
 
 		let {
 			locationCover,
@@ -183,7 +180,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 			statusValueText,
 			iconBackgroundMaskStyle,
 			rowWithTriangleContainer,
-		} = this.getStyle(appLayout);
+		} = this.getStyle();
 
 		let time = new Date(this.props.item.ts * 1000);
 		let deviceState = getDeviceStateMethod(this.props.item.state);
@@ -266,10 +263,13 @@ class HistoryRow extends React.PureComponent<Props, State> {
 		);
 	}
 
-	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+	getStyle(): Object {
+		const { appLayout, isLast, isFirst } = this.props;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
 			locationCover: {
@@ -292,7 +292,7 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				borderBottomLeftRadius: 3,
 			},
 			roundIconStyle: {
-				fontSize: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
+				fontSize: deviceWidth * 0.0667777777,
 				color: '#d32f2f',
 			},
 			rowContainerStyle: {
@@ -303,10 +303,14 @@ class HistoryRow extends React.PureComponent<Props, State> {
 				justifyContent: 'center',
 			},
 			containerStyle: {
-				paddingHorizontal: isPortrait ? width * 0.04 : height * 0.04,
+				paddingHorizontal: deviceWidth * 0.04,
+				marginTop: isFirst ? padding : padding / 2,
+				marginBottom: isLast ? padding : 0,
+				paddingTop: 0,
+				paddingBottom: 0,
 			},
 			timeStyle: {
-				fontSize: isPortrait ? width * 0.047 : height * 0.047,
+				fontSize: deviceWidth * 0.047,
 			},
 			timeContainerStyle: {
 				width: isPortrait ? width * 0.30 : width * 0.20,
@@ -314,25 +318,25 @@ class HistoryRow extends React.PureComponent<Props, State> {
 			},
 			originTextStyle: {
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			roundIconContainerStyle: {
 				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
-				width: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
-				height: isPortrait ? width * 0.0667777777 : height * 0.0667777777,
-				borderRadius: isPortrait ? width * 0.03338888885 : height * 0.03338888885,
+				width: deviceWidth * 0.0667777777,
+				height: deviceWidth * 0.0667777777,
+				borderRadius: deviceWidth * 0.03338888885,
 			},
 			iconBackgroundMaskStyle: {
 				backgroundColor: this.props.item.successStatus !== 0 ? '#fff' : '#929292',
-				width: isPortrait ? width * 0.05 : height * 0.05,
-				height: isPortrait ? width * 0.05 : height * 0.05,
-				borderRadius: isPortrait ? width * 0.025 : height * 0.025,
+				width: deviceWidth * 0.05,
+				height: deviceWidth * 0.05,
+				borderRadius: deviceWidth * 0.025,
 				position: 'absolute',
 			},
-			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			statusIconSize: Math.floor(deviceWidth * 0.047),
 			statusValueText: {
 				color: '#ffffff',
-				fontSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+				fontSize: Math.floor(deviceWidth * 0.047),
 			},
 
 		};
@@ -347,10 +351,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(store: Object): Object {
-	return {
-		appLayout: store.app.layout,
-	};
-}
-
-module.exports = connect(mapStateToProps, null)(HistoryRow);
+module.exports = HistoryRow;
