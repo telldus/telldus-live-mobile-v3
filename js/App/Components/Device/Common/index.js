@@ -23,7 +23,11 @@
 'use strict';
 
 import ZWaveIncludeExcludeUI from './ZWaveIncludeExcludeUI';
+import CantEnterInclusionExclusionUI from './CantEnterInclusionExclusionUI';
+import ExcludeDevice from './ExcludeDevice';
 
 module.exports = {
 	ZWaveIncludeExcludeUI,
+	CantEnterInclusionExclusionUI,
+	ExcludeDevice,
 };
