@@ -31,7 +31,7 @@ import {
 	TabBar,
 	TouchableButton,
 } from '../../../../BaseComponents';
-import { ExcludeDevice } from '../../Device/DeviceDetails/SubViews';
+import { ExcludeDevice } from '../../Device/Common';
 
 import {
 	showToast,
