@@ -81,8 +81,6 @@ saveSortingDB: (string, number, Array<any>) => void;
 
 onPressPushSettings: () => void;
 
-forceCrash: () => void; // TODO: remove after verifying
-
 constructor(props: Props) {
 	super(props);
 	this.state = {
@@ -124,9 +122,6 @@ constructor(props: Props) {
 		{key: 'Alphabetical', value: this.labelAlpha},
 		{key: 'Chronological', value: this.labelChrono},
 	];
-
-	// TODO: remove after verifying
-	this.forceCrash = this.forceCrash.bind(this);
 }
 
 componentDidMount() {
@@ -155,12 +150,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return false;
 	}
 	return false;
-}
-
-// TODO: remove after verifying
-forceCrash() {
-	// $FlowFixMe
-	v = 10;// eslint-disable-line
 }
 
 logout() {
@@ -289,7 +278,6 @@ render(): Object {
 				label={this.labelLoggedUser}
 				value={email}
 				fontSize={styles.fontSize}
-				onPress={email === 'developer@telldus.com' ? this.forceCrash : undefined}// TODO: remove after verifying
 			/>
 			<TouchableButton
 				onPress={isLogoutLoading ? null : this.logout}
