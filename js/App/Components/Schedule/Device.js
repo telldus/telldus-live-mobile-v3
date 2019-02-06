@@ -68,7 +68,7 @@ export default class Device extends View<void, Props, State> {
 
 		let { formatMessage } = this.props.intl;
 
-		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
+		this.h1 = formatMessage(i18n.labelDevice);
 		this.h2 = formatMessage(i18n.posterChooseDevice);
 
 		this._renderSectionHeader = this._renderSectionHeader.bind(this);

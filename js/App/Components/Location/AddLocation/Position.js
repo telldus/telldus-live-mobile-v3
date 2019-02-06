@@ -62,7 +62,7 @@ class Position extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `4. ${formatMessage(i18n.headerOnePosition)}`;
+		this.h1 = formatMessage(i18n.headerOnePosition);
 		this.h2 = formatMessage(i18n.headerTwoPosition);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;

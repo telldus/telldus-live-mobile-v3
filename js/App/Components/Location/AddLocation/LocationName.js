@@ -56,7 +56,7 @@ class LocationName extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `2. ${formatMessage(i18n.name)}`;
+		this.h1 = formatMessage(i18n.name);
 		this.h2 = formatMessage(i18n.LNheaderTwo);
 
 		this.unknownError = `${formatMessage(i18n.unknownError)}.`;

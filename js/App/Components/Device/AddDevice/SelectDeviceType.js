@@ -64,7 +64,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`2. ${formatMessage(i18n.labelDeviceType)}`, formatMessage(i18n.AddZDTypeHeaderTwo));
+	onDidMount(formatMessage(i18n.labelDeviceType), formatMessage(i18n.AddZDTypeHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

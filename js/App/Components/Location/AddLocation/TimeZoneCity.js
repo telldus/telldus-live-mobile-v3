@@ -52,7 +52,7 @@ class TimeZoneCity extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(i18n.headerOneTimeZoneCity)}`;
+		this.h1 = formatMessage(i18n.headerOneTimeZoneCity);
 		this.h2 = formatMessage(i18n.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;

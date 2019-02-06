@@ -129,7 +129,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`3. ${formatMessage(i18n.labelInclude)}`, formatMessage(i18n.AddZDIncludeHeaderTwo));
+	onDidMount(formatMessage(i18n.labelInclude), formatMessage(i18n.AddZDIncludeHeaderTwo));
 	this.startAddDevice();
 	this.devices = [];
 

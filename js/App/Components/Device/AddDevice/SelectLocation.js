@@ -74,7 +74,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`1. ${formatMessage(i18n.labelSelectLocation)}`, formatMessage(i18n.AddZDSLHeaderTwo));
+	onDidMount(formatMessage(i18n.labelSelectLocation), formatMessage(i18n.AddZDSLHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

@@ -66,7 +66,7 @@ class Summary extends View<null, Props, State> {
 
 		let { formatMessage } = intl;
 
-		this.h1 = `5. ${formatMessage(i18n.summary)}`;
+		this.h1 = formatMessage(i18n.summary);
 		this.h2 = formatMessage(i18n.posterSummary);
 		this.messageOnAdd = formatMessage(i18n.addScheduleSuccess);
 		this.infoButton = {

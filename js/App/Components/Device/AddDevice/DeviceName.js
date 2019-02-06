@@ -96,7 +96,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`4. ${formatMessage(i18n.name)}`, formatMessage(i18n.AddZDNameHeaderTwo));
+	onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

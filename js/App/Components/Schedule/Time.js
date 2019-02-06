@@ -74,7 +74,7 @@ export default class Time extends View<null, Props, State> {
 		const { isEditMode, intl, schedule } = this.props;
 		const { formatMessage } = intl;
 
-		this.h1 = isEditMode() ? formatMessage(i18n.time) : `3. ${formatMessage(i18n.time)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.time) : formatMessage(i18n.time);
 		this.h2 = formatMessage(i18n.posterChooseTime);
 		this.labelSliderInterval = formatMessage(i18n.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
 		this.labelSliderOffset = formatMessage(i18n.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});

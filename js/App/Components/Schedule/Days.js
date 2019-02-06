@@ -64,7 +64,7 @@ export default class Days extends View<null, Props, State> {
 
 		this.days = getTranslatableDays(formatDate);
 
-		this.h1 = isEditMode() ? formatMessage(i18n.posterDays) : `4. ${formatMessage(i18n.posterDays)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.posterDays) : formatMessage(i18n.posterDays);
 		this.h2 = formatMessage(i18n.posterChooseDays);
 		this.labelCheckAll = formatMessage(i18n.checkAll);
 		this.labelUncheckAll = formatMessage(i18n.unCheckAll);
