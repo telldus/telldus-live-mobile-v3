@@ -277,11 +277,10 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const { navigation } = this.props;
-		const editMode = navigation.getParam('editMode', false);
+		const { screenProps } = this.props;
+		const { currentScreen } = screenProps;
 
-		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && (!editMode))
-			|| this.props.screenProps.currentScreen !== 'InitialScreen';
+		const notEdit = currentScreen !== 'InitialScreen';
 		return {
 			style: {
 				flex: 1,

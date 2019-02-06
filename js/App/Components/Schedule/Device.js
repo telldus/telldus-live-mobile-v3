@@ -164,16 +164,22 @@ export default class Device extends View<void, Props, State> {
 					flexGrow: 1,
 					paddingTop: padding,
 				}}
+				stickySectionHeadersEnabled={true}
 			/>
 		);
 	}
 
 	_renderRow = (row: Object): Object => {
 		const { appLayout, intl } = this.props;
-		const { item } = row;
+		const { item, section, index } = row;
 		// TODO: use device description
 		const preparedRow = Object.assign({}, item, { description: '' });
-		const {padding} = this.getStyles();
+		const {
+			padding,
+		} = this.getStyles();
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<DeviceRow
@@ -188,7 +194,9 @@ export default class Device extends View<void, Props, State> {
 					justifyContent: 'space-between',
 					marginVertical: undefined,
 					height: undefined,
-					marginBottom: padding / 2,
+					marginTop: padding / 2,
+					marginBottom: isLast ? padding : 0,
+					marginHorizontal: padding,
 				}}
 			/>
 		);
@@ -200,9 +208,12 @@ export default class Device extends View<void, Props, State> {
 		if (dataSource.length === 1) {
 			return null;
 		}
-		const {nameFontSize} = this.getStyles();
+		const {
+			nameFontSize,
+			sectionHeader,
+		} = this.getStyles();
 		return (
-			<View style={[Theme.Styles.sectionHeader, {marginLeft: 0}]}>
+			<View style={sectionHeader}>
 				<Text style={[Theme.Styles.sectionHeaderText, {fontSize: nameFontSize}]}>
 					{key}
 				</Text>
@@ -215,11 +226,14 @@ export default class Device extends View<void, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		const {
 			maxSizeRowTextOne,
+			paddingFactor,
+			shadow,
 		} = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
 		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
@@ -227,6 +241,16 @@ export default class Device extends View<void, Props, State> {
 		return {
 			nameFontSize,
 			padding,
+			sectionHeader: {
+				flexDirection: 'row',
+				paddingVertical: 2 + (nameFontSize * 0.2),
+				backgroundColor: '#ffffff',
+				alignItems: 'center',
+				paddingLeft: 5 + (nameFontSize * 0.2),
+				justifyContent: 'flex-start',
+				marginBottom: padding / 2,
+				...shadow,
+			},
 		};
 	}
 
