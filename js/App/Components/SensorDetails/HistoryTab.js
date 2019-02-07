@@ -104,6 +104,8 @@ class HistoryTab extends View {
 	delayRefreshHistoryData: any;
 	onValueChangeSmoothing: () => void;
 
+	refreshHistoryDataAfterLiveUpdate: () => void;
+
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
@@ -157,6 +159,7 @@ class HistoryTab extends View {
 
 		this.onToggleChartData = this.onToggleChartData.bind(this);
 		this.onValueChangeSmoothing = this.onValueChangeSmoothing.bind(this);
+		this.refreshHistoryDataAfterLiveUpdate = this.refreshHistoryDataAfterLiveUpdate.bind(this);
 
 		this.delayRefreshHistoryData = null;
 	}
@@ -309,6 +312,68 @@ class HistoryTab extends View {
 			}).catch(() => {
 				this.getHistoryData(true, false, noop);
 			});
+	}
+
+	refreshHistoryDataAfterLiveUpdate(): Promise<any> {
+		const { sensorId, selectedOne, selectedTwo } = this.props;
+		const { timestamp } = this.state;
+		const { toTimestamp: from, fromTimestamp } = timestamp;// get only those data from previous 'to' till new 'to'[Getting full data again is too slow]
+		const to = moment().unix();
+
+		let timestampNew = {
+			toTimestamp: to,
+			fromTimestamp,
+		};
+		const params = {
+			...selectedOne,
+			id: sensorId,
+			from,
+			to,
+		};
+		const paramsTwo = {
+			...selectedTwo,
+			id: sensorId,
+			from,
+			to,
+		};
+		return Promise.all([
+			this.refreshFromLocal(params, true, false, 1, timestampNew),
+			this.refreshFromLocal(paramsTwo, true, false, 2, timestampNew),
+		]);
+	}
+
+	refreshFromLocal(params: Object, hasLoaded: boolean, refreshing: boolean, list: 1 | 2, timestamp?: Object): Promise<any> {
+		return getHistory('sensor', params).then((data: Object) => {
+			const { chartDataOne, chartDataTwo } = this.state;
+			if (data && data.length !== 0) {
+				const newData = data.concat(list === 1 ? chartDataOne : chartDataTwo);
+				this.setState({
+					chartDataOne: list === 1 ? newData : chartDataOne,
+					chartDataTwo: list === 2 ? newData : chartDataTwo,
+					hasLoaded: true,
+					refreshing: false,
+					isChartLoading: false,
+					timestamp,
+				});
+			} else {
+				this.setState({
+					chartDataOne,
+					chartDataTwo,
+					hasLoaded,
+					refreshing,
+					isChartLoading: false,
+				});
+			}
+		}).catch(() => {
+			const { chartDataOne, chartDataTwo } = this.state;
+			this.setState({
+				chartDataOne,
+				chartDataTwo,
+				hasLoaded,
+				refreshing,
+				isChartLoading: false,
+			});
+		});
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -579,7 +644,8 @@ class HistoryTab extends View {
 						timestamp={timestamp}
 						appLayout={appLayout}
 						showCalendar={showCalendar}
-						onToggleChartData={this.onToggleChartData}/>
+						onToggleChartData={this.onToggleChartData}
+						refreshHistoryDataAfterLiveUpdate={this.refreshHistoryDataAfterLiveUpdate}/>
 					<GraphValuesDropDown
 						selectedOne={selectedOne}
 						selectedTwo={selectedTwo}
