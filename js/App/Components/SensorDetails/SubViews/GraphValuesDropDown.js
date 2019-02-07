@@ -205,6 +205,7 @@ class GraphValuesDropDown extends View<Props, State> {
 			brandInfo,
 			itemPadding,
 			itemCount,
+			padding,
 		} = this.getStyle(appLayout);
 		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = list.length < itemCount ? list.length : itemCount;
@@ -233,6 +234,10 @@ class GraphValuesDropDown extends View<Props, State> {
 							top: dropdownTop,
 							left: 0,
 						}}
+						dropdownMargins={{
+							min: padding,
+							max: padding,
+						}}
 						propsExtractor={this.propsExtractorOne}
 					/>
 					<Dropdown
@@ -253,6 +258,10 @@ class GraphValuesDropDown extends View<Props, State> {
 						dropdownOffset={{
 							top: dropdownTop,
 							left: 0,
+						}}
+						dropdownMargins={{
+							min: padding,
+							max: padding,
 						}}
 						propsExtractor={this.propsExtractorTwo}
 					/>
@@ -281,6 +290,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const itemPadding = 8;
 
 		return {
+			padding,
 			dropDownContainerStyle: {
 				flex: 0,
 				alignItems: 'flex-start',

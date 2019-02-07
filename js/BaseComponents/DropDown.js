@@ -36,6 +36,11 @@ import Theme from '../App/Theme';
 
 import i18n from '../App/Translations/common';
 
+type DDMargin = {
+	min: number,
+	max: number,
+};
+
 type Props = {
     appLayout: Object,
     items: Array<Object>,
@@ -57,6 +62,9 @@ type Props = {
 	dropDownListsContainerStyle: Array<any> | number | Object,
 	accessibilityLabelPrefix?: string,
 	intl: intlShape.isRequired,
+	pickerStyle?: Array<any> | number | Object,
+	overlayStyle?: Array<any> | number | Object,
+	dropdownMargins?: DDMargin,
 };
 
 type DefaultProps = {
@@ -163,6 +171,9 @@ static defaultProps: DefaultProps = {
 			baseColor,
 			itemPadding = 8,
 			itemCount = 4,
+			pickerStyle,
+			overlayStyle,
+			dropdownMargins,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -190,6 +201,8 @@ static defaultProps: DefaultProps = {
 						onChangeText={onValueChange}
 						renderBase={this.renderBase}
 						containerStyle={[pickerContainerStyleDef, pickerContainerStyle]}
+						pickerStyle={pickerStyle}
+						overlayStyle={overlayStyle}
 						fontSize={fontSize}
 						itemCount={iCount}
 						itemPadding={itemPadding}
@@ -201,6 +214,7 @@ static defaultProps: DefaultProps = {
 							top: dropdownTop,
 							left: 0,
 						}}
+						dropdownMargins={dropdownMargins}
 					/>
 				</View>
 			</View>

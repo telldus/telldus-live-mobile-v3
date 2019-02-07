@@ -74,7 +74,11 @@ export default class SmoothingDropDown extends View<Props, null> {
 				onValueChange={onValueChange}
 				appLayout={appLayout}
 				dropDownContainerStyle={{
-					paddingLeft: padding / 2,
+					marginLeft: padding / 2,
+				}}
+				dropdownMargins={{
+					min: padding,
+					max: padding,
 				}}
 				accessibilityLabelPrefix={this.DDLabel}
 			/>
