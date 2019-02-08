@@ -33,6 +33,7 @@ import CalendarModalComponent from './CalendarModalComponent';
 import HistoryNotStored from './HistoryNotStored';
 import NoHistory from './NoHistory';
 import SmoothingDropDown from './SmoothingDropDown';
+import GraphViewDropDown from './GraphViewDropDown';
 
 module.exports = {
 	BatteryInfo,
@@ -47,4 +48,5 @@ module.exports = {
 	HistoryNotStored,
 	NoHistory,
 	SmoothingDropDown,
+	GraphViewDropDown,
 };
