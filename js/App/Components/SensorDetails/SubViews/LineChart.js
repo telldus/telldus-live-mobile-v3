@@ -193,7 +193,7 @@ formatYTickTwo(tick: number): number {
 	return Math.ceil(tick * max.value);
 }
 
-getDomainY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): number {
+getDomainY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): Array<number> {
 	const min1 = minBy(chartDataOne, 'value');
 	const min2 = minBy(chartDataTwo, 'value');
 
@@ -203,7 +203,7 @@ getDomainY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): number {
 	return [0, 1];
 }
 
-getTicksY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): number {
+getTicksY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): Array<number> {
 	const min1 = minBy(chartDataOne, 'value');
 	const min2 = minBy(chartDataTwo, 'value');
 
