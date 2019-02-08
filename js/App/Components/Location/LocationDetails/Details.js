@@ -258,6 +258,7 @@ class Details extends View<Props, State> {
 				const { ttl = null } = localKey;
 				const tokenExpired = hasTokenExpired(ttl);
 				const deviceName = DeviceInfo.getDeviceName();
+				const deviceUniqueID = DeviceInfo.getUniqueID();
 				const debugData = {
 					online,
 					websocketOnline,
@@ -266,6 +267,7 @@ class Details extends View<Props, State> {
 					connectionType: type,
 					connectionEffectiveType: effectiveType,
 					deviceName,
+					deviceUniqueID,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
