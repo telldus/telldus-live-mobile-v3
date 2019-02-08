@@ -134,14 +134,14 @@ static defaultProps: DefaultProps = {
 			pickerBaseTextStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
+		const { rippleColor, rippleOpacity } = Theme.Core;
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
+				rippleDuration={250}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPicker}
 				accessible={true}

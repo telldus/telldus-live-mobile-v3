@@ -90,7 +90,7 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
+		const { rippleColor, rippleOpacity } = Theme.Core;
 		const {icon} = data.find((item: Object): boolean => {
 			return item.value === title;
 		});
@@ -101,7 +101,7 @@ class GraphValuesDropDown extends View<Props, State> {
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
+				rippleDuration={250}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPickerOne}
 				accessible={true}
@@ -177,7 +177,7 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
+		const { rippleColor, rippleOpacity } = Theme.Core;
 		const {icon} = data.find((item: Object): boolean => {
 			return item.value === title;
 		});
@@ -188,7 +188,7 @@ class GraphValuesDropDown extends View<Props, State> {
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
+				rippleDuration={250}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPickerTwo}
 				accessible={true}
