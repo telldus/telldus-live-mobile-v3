@@ -50,6 +50,7 @@ type Props = {
 	showTwo: boolean,
 	isChartLoading: boolean,
 	smoothing: boolean,
+	graphView: string,
 	liveData: Object,
 	sensorId: number,
 
@@ -61,6 +62,7 @@ type DefaultProps = {
 	showOne: boolean,
 	showTwo: boolean,
 	smoothing: boolean,
+	graphView: string,
 };
 
 type State = {
@@ -77,6 +79,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 		showOne: true,
 		showTwo: true,
 		smoothing: false,
+		graphView: 'overview',
 	};
 
 	toggleOne: () => void;
@@ -112,7 +115,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate( this.props, nextProps, ['showOne', 'showTwo', 'isChartLoading', 'smoothing', 'liveData']);
+		const propsChange = shouldUpdate( this.props, nextProps, ['showOne', 'showTwo', 'isChartLoading', 'smoothing', 'graphView', 'liveData']);
 		if (propsChange) {
 			return propsChange;
 		}
@@ -307,6 +310,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			showTwo,
 			isChartLoading,
 			smoothing,
+			graphView,
 		} = this.props;
 
 		if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
@@ -355,6 +359,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 							showTwo={showTwo}
 							fullscreen={fullscreen}
 							smoothing={smoothing}
+							graphView={graphView}
 						/>
 					</View>
 				}
@@ -459,18 +464,29 @@ function getNewData(data: Object, toTimestamp: number, selectedData: Object, tsO
 	}
 
 	const { scale1, type1, scale2, type2 } = selectedData;
+	let liveData = {};
 	for (let key in data) {
-		const { name, scale, lastUpdated } = data[key];
+		const { name, scale, lastUpdated, value } = data[key];
 		// Return live data only if any of the two chosen scale has new value.
 		if (name === type1 && scale === scale1 && lastUpdated > tsOne) {
-			return data;
+			liveData[key] = {
+				name,
+				scale,
+				lastUpdated,
+				value,
+			};
 		}
 		if (name === type2 && scale === scale2 && lastUpdated > tsTwo) {
-			return data;
+			liveData[key] = {
+				name,
+				scale,
+				lastUpdated,
+				value,
+			};
 		}
 	}
 
-	return {};
+	return liveData;
 }
 
 const checkForNewData = createSelector(
