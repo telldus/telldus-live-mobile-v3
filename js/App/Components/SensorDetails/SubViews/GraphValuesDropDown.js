@@ -35,8 +35,8 @@ type Props = {
     selectedOne: Object,
 	selectedTwo: Object,
 	list: Array<string>,
-    onValueChangeOne: (string, number) => void,
-	onValueChangeTwo: (string, number) => void,
+    onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void,
+	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void,
 	appLayout: Object,
 	intl: Object,
 };
@@ -56,6 +56,9 @@ class GraphValuesDropDown extends View<Props, State> {
 	propsExtractorOne: (Object, number) => Object;
 	propsExtractorTwo: (Object, number) => Object;
 
+	onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
+	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -67,6 +70,9 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.onPressPickerTwo = this.onPressPickerTwo.bind(this);
 		this.propsExtractorTwo = this.propsExtractorTwo.bind(this);
 		this.propsExtractorOne = this.propsExtractorOne.bind(this);
+
+		this.onValueChangeOne = this.onValueChangeOne.bind(this);
+		this.onValueChangeTwo = this.onValueChangeTwo.bind(this);
 
 		const { intl } = this.props;
 		this.phraseOne = `${intl.formatMessage(i18n.labelGraphValues)} ${intl.formatMessage(i18n.labelDropdown)}`;
@@ -115,6 +121,22 @@ class GraphValuesDropDown extends View<Props, State> {
 
 	onPressPickerTwo() {
 		this.refs.listTwo.focus();
+	}
+
+	onValueChangeOne(itemValue: string, itemIndex: number, data: Array<Object>) {
+		this.refs.listOne.blur();
+		const { onValueChangeOne } = this.props;
+		if (onValueChangeOne) {
+			onValueChangeOne(itemValue, itemIndex, data);
+		}
+	}
+
+	onValueChangeTwo(itemValue: string, itemIndex: number, data: Array<Object>) {
+		this.refs.listTwo.blur();
+		const { onValueChangeTwo } = this.props;
+		if (onValueChangeTwo) {
+			onValueChangeTwo(itemValue, itemIndex, data);
+		}
 	}
 
 	propsExtractorOne(item: Object, index: number): Object {
@@ -185,8 +207,6 @@ class GraphValuesDropDown extends View<Props, State> {
 			selectedOne,
 			selectedTwo,
 			list,
-			onValueChangeOne,
-			onValueChangeTwo,
 			appLayout,
 		} = this.props;
 
@@ -219,7 +239,7 @@ class GraphValuesDropDown extends View<Props, State> {
 						ref={'listOne'}
 						data={list}
 						value={selectedOne.value}
-						onChangeText={onValueChangeOne}
+						onChangeText={this.onValueChangeOne}
 						renderBase={this.renderBaseOne}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
@@ -244,7 +264,7 @@ class GraphValuesDropDown extends View<Props, State> {
 						ref={'listTwo'}
 						data={list}
 						value={selectedTwo.value}
-						onChangeText={onValueChangeTwo}
+						onChangeText={this.onValueChangeTwo}
 						renderBase={this.renderBaseTwo}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
