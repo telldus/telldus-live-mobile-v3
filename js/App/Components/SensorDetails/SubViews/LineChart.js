@@ -23,6 +23,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import maxBy from 'lodash/maxBy';
+import minBy from 'lodash/minBy';
 import {
 	VictoryChart,
 	VictoryAxis,
@@ -192,11 +193,33 @@ formatYTickTwo(tick: number): number {
 	return Math.ceil(tick * max.value);
 }
 
+getDomainY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): number {
+	const min1 = minBy(chartDataOne, 'value');
+	const min2 = minBy(chartDataTwo, 'value');
+
+	if ((min1 && min1.value < 0) || (min2 && min2.value < 0)) {
+		return [-1, 1];
+	}
+	return [0, 1];
+}
+
+getTicksY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): number {
+	const min1 = minBy(chartDataOne, 'value');
+	const min2 = minBy(chartDataTwo, 'value');
+
+	if ((min1 && min1.value < 0) || (min2 && min2.value < 0)) {
+		return [-1, -0.5, 0, 0.5, 1];
+	}
+	return [0, 0.5, 1];
+}
+
 renderAxis(d: Array<Object>, i: number): null | Object {
 	const {
 		showOne,
 		showTwo,
 		graphView,
+		chartDataOne,
+		chartDataTwo,
 	} = this.props;
 
 	if (!d || d.length === 0) {
@@ -223,7 +246,7 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 			formatYTick = this.formatYTickTwo;
 		}
 		dependentConfigs = {
-			tickValues: [0, 0.5, 1],
+			tickValues: this.getTicksY(chartDataOne, chartDataTwo),
 			tickFormat: formatYTick,
 		};
 	} else {
@@ -323,7 +346,7 @@ render(): Object | null {
 	let dependentConfigs = {};
 	if (graphView === 'detailed' && chartDataOne.length > 1 && chartDataTwo.length > 1) {
 		dependentConfigs = {
-			domain: { y: [0, 1] },
+			domain: { y: this.getDomainY(chartDataOne, chartDataTwo) },
 		};
 	}
 
