@@ -49,6 +49,7 @@ type Props = {
 	showOne: boolean,
 	showTwo: boolean,
 	smoothing: boolean,
+	graphView: string,
     fullscreen: Object,
 };
 
@@ -56,6 +57,7 @@ type DefaultProps = {
 	showOne: boolean,
 	showTwo: boolean,
 	smoothing: boolean,
+	graphView: string,
 };
 
 class LineChart extends View<Props, null> {
@@ -64,6 +66,7 @@ static defaultProps: DefaultProps = {
 	showOne: true,
 	showTwo: true,
 	smoothing: false,
+	graphView: 'overview',
 };
 
 getY: (Object) => number;
@@ -94,7 +97,7 @@ constructor(props: Props) {
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 	const propsChange = shouldUpdate( this.props, nextProps, [
-		'showOne', 'showTwo', 'smoothing', 'fullscreen',
+		'showOne', 'showTwo', 'smoothing', 'fullscreen', 'graphView',
 	]);
 	if (propsChange) {
 		return propsChange;
@@ -148,12 +151,18 @@ getY(data: Object): number {
 getYOne(data: Object): number {
 	const { chartDataOne } = this.props;
 	const max = maxBy(chartDataOne, 'value');
+	if (!data.value || !max) {
+		return data.value;
+	}
 	return data.value / max.value;
 }
 
 getYTwo(data: Object): number {
 	const { chartDataTwo } = this.props;
 	const max = maxBy(chartDataTwo, 'value');
+	if (!data.value || !max) {
+		return data.value;
+	}
 	return data.value / max.value;
 }
 
@@ -168,12 +177,18 @@ formatXTick(tick: number): string {
 formatYTickOne(tick: number): number {
 	const { chartDataOne } = this.props;
 	const max = maxBy(chartDataOne, 'value');
+	if (!max) {
+		return tick;
+	}
 	return Math.ceil(tick * max.value);
 }
 
 formatYTickTwo(tick: number): number {
 	const { chartDataTwo } = this.props;
 	const max = maxBy(chartDataTwo, 'value');
+	if (!max) {
+		return tick;
+	}
 	return Math.ceil(tick * max.value);
 }
 
@@ -181,6 +196,7 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 	const {
 		showOne,
 		showTwo,
+		graphView,
 	} = this.props;
 
 	if (!d || d.length === 0) {
@@ -200,10 +216,22 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 		chartLineStyle,
 	} = this.getStyle();
 
-	let formatYTick = this.formatYTickOne;
-	if (i === 1) {
-		formatYTick = this.formatYTickTwo;
+	let dependentConfigs = {};
+	if (graphView === 'detailed' && d.length > 1) {
+		let formatYTick = this.formatYTickOne;
+		if (i === 1) {
+			formatYTick = this.formatYTickTwo;
+		}
+		dependentConfigs = {
+			tickValues: [0, 0.5, 1],
+			tickFormat: formatYTick,
+		};
+	} else {
+		dependentConfigs = {
+			tickCount: 3,
+		};
 	}
+
 	return (
 		<VictoryAxis dependentAxis
 			key={i}
@@ -214,8 +242,7 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 				tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
 				grid: chartLineStyle,
 			}}
-			tickValues={[0, 0.5, 1]}
-			tickFormat={formatYTick}
+			{...dependentConfigs}
 		/>
 	);
 }
@@ -225,6 +252,7 @@ renderLine(d: Array<Object>, i: number): null | Object {
 		showOne,
 		showTwo,
 		smoothing,
+		graphView,
 	} = this.props;
 
 	if (!d || d.length === 0) {
@@ -253,10 +281,14 @@ renderLine(d: Array<Object>, i: number): null | Object {
 		);
 	}
 
-	let getY = this.getYOne;
-	if (i === 1) {
-		getY = this.getYTwo;
+	let getY = this.getY;
+	if (graphView === 'detailed') {
+		getY = this.getYOne;
+		if (i === 1) {
+			getY = this.getYTwo;
+		}
 	}
+
 	return (<VictoryLine
 		interpolation={smoothing ? 'monotoneX' : 'linear'}
 		key={i}
@@ -271,8 +303,10 @@ render(): Object | null {
 	const {
 		chartDataOne,
 		chartDataTwo,
+		graphView,
 	} = this.props;
-	if (chartDataOne.length === 0 && chartDataOne.length === 0) {
+
+	if (chartDataOne.length === 0 && chartDataTwo.length === 0) {
 		return null;
 	}
 
@@ -286,6 +320,13 @@ render(): Object | null {
 
 	const { ticks } = this.getTickConfigX();
 
+	let dependentConfigs = {};
+	if (graphView === 'detailed' && chartDataOne.length > 1 && chartDataTwo.length > 1) {
+		dependentConfigs = {
+			domain: { y: [0, 1] },
+		};
+	}
+
 	return (
 		<VictoryChart
 			theme={VictoryTheme.material}
@@ -295,7 +336,7 @@ render(): Object | null {
 			containerComponent={
 				<VictoryZoomContainer/>
 			}
-			domain={{ y: [0, 1] }}
+			{...dependentConfigs}
 		>
 			<VictoryAxis
 				orientation={'bottom'}

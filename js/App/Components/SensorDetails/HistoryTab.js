@@ -39,6 +39,7 @@ import {
 	HistoryNotStored,
 	NoHistory,
 	SmoothingDropDown,
+	GraphViewDropDown,
 } from './SubViews';
 
 import {
@@ -68,6 +69,7 @@ type Props = {
 	showTwo: boolean,
 	screenProps: Object,
 	smoothing: boolean,
+	graphView: string,
 
 	sensorId: number,
 	dispatch: Function,
@@ -102,7 +104,8 @@ class HistoryTab extends View {
 	onToggleChartData: (Object) => void;
 
 	delayRefreshHistoryData: any;
-	onValueChangeSmoothing: () => void;
+	onValueChangeSmoothing: (string, number, Array<Object>) => void;
+	onValueChangeGraphView: (string, number, Array<Object>) => void;
 
 	refreshHistoryDataAfterLiveUpdate: () => void;
 
@@ -159,6 +162,7 @@ class HistoryTab extends View {
 
 		this.onToggleChartData = this.onToggleChartData.bind(this);
 		this.onValueChangeSmoothing = this.onValueChangeSmoothing.bind(this);
+		this.onValueChangeGraphView = this.onValueChangeGraphView.bind(this);
 		this.refreshHistoryDataAfterLiveUpdate = this.refreshHistoryDataAfterLiveUpdate.bind(this);
 
 		this.delayRefreshHistoryData = null;
@@ -236,7 +240,8 @@ class HistoryTab extends View {
 
 	getSensorTypeHistory(hasLoaded: boolean, refreshing: boolean, queryParams: SensorHistoryQueryParams, list: 1 | 2) {
 		const { timestamp } = this.state;
-		const { fromTimestamp: from, toTimestamp: to } = timestamp;
+		const { fromTimestamp: from, toTimestamp, liveDataToTimestamp } = timestamp;
+		const to = liveDataToTimestamp ? liveDataToTimestamp : toTimestamp;
 		const params = { ...queryParams, from, to };
 		getHistory('sensor', params).then((data: Object) => {
 			const { chartDataOne, chartDataTwo } = this.state;
@@ -250,8 +255,8 @@ class HistoryTab extends View {
 				});
 			} else {
 				this.setState({
-					chartDataOne,
-					chartDataTwo,
+					chartDataOne: list === 1 ? [] : chartDataOne,
+					chartDataTwo: list === 2 ? [] : chartDataTwo,
 					hasLoaded,
 					refreshing,
 					isChartLoading: false,
@@ -260,8 +265,8 @@ class HistoryTab extends View {
 		}).catch(() => {
 			const { chartDataOne, chartDataTwo } = this.state;
 			this.setState({
-				chartDataOne,
-				chartDataTwo,
+				chartDataOne: list === 1 ? [] : chartDataOne,
+				chartDataTwo: list === 2 ? [] : chartDataTwo,
 				hasLoaded,
 				refreshing,
 				isChartLoading: false,
@@ -320,9 +325,11 @@ class HistoryTab extends View {
 		const { toTimestamp: from, fromTimestamp } = timestamp;// get only those data from previous 'to' till new 'to'[Getting full data again is too slow]
 		const to = moment().unix();
 
+		// Do not update 'toTimestamp' here, instead introduce new variable 'liveDataToTimestamp'
 		let timestampNew = {
-			toTimestamp: to,
+			toTimestamp: from,
 			fromTimestamp,
+			liveDataToTimestamp: to,
 		};
 		const params = {
 			...selectedOne,
@@ -356,19 +363,18 @@ class HistoryTab extends View {
 					timestamp,
 				});
 			} else {
+				// This method is only to append any new data if available with the previous data.
+				// If no new data, leave chart data intact.
 				this.setState({
-					chartDataOne,
-					chartDataTwo,
 					hasLoaded,
 					refreshing,
 					isChartLoading: false,
 				});
 			}
 		}).catch(() => {
-			const { chartDataOne, chartDataTwo } = this.state;
+			// This method is only to append any new data if available with the previous data.
+			// If no new data, leave chart data intact.
 			this.setState({
-				chartDataOne,
-				chartDataTwo,
 				hasLoaded,
 				refreshing,
 				isChartLoading: false,
@@ -404,7 +410,7 @@ class HistoryTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo', 'smoothing']);
+			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo', 'smoothing', 'graphView']);
 			if (propsChange) {
 				return propsChange;
 			}
@@ -535,6 +541,15 @@ class HistoryTab extends View {
 		dispatch(changeDefaultHistorySettings(sensorId, setting));
 	}
 
+	onValueChangeGraphView(itemValue: string, itemIndex: number, data: Array<Object>) {
+		const { sensorId, dispatch } = this.props;
+		const { key: graphView } = data[itemIndex];
+		const setting = {
+			graphView,
+		};
+		dispatch(changeDefaultHistorySettings(sensorId, setting));
+	}
+
 	getMaxDate(index: number, timestamp: Object): string {
 		const { toTimestamp } = timestamp;
 		if (index === 1) {
@@ -553,6 +568,7 @@ class HistoryTab extends View {
 			sensorId,
 			keepHistory,
 			smoothing,
+			graphView,
 		} = this.props;
 		const {
 			list,
@@ -614,6 +630,7 @@ class HistoryTab extends View {
 			sensorId,
 			isChartLoading,
 			smoothing,
+			graphView,
 		};
 
 		return (
@@ -654,6 +671,11 @@ class HistoryTab extends View {
 						onValueChangeTwo={this.onValueChangeTwo}
 						appLayout={appLayout}
 						intl={intl}/>
+					<GraphViewDropDown
+						graphView={graphView}
+						appLayout={appLayout}
+						intl={intl}
+						onValueChange={this.onValueChangeGraphView}/>
 					<SmoothingDropDown
 						smoothing={smoothing}
 						appLayout={appLayout}
@@ -704,6 +726,7 @@ function prepareDefaultSettings(defaultSettings?: Object): Object {
 		showOne: true,
 		showTwo: true,
 		smoothing: false,
+		graphView: 'overview',
 	};
 	if (!defaultSettings) {
 		return settings;
@@ -728,6 +751,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showOne = true,
 		showTwo = true,
 		smoothing = false,
+		graphView = 'overview',
 	} = prepareDefaultSettings(defaultSettings);
 
 	return {
@@ -738,6 +762,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showOne,
 		showTwo,
 		smoothing,
+		graphView,
 	};
 }
 
