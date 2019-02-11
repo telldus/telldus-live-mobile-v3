@@ -608,6 +608,7 @@ class SensorRow extends View<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'center',
 				marginRight: padding,
+				marginTop: padding / 2,
 			},
 			cover: {
 				flex: 1,
