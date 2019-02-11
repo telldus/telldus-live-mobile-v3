@@ -53,12 +53,13 @@ type Props = {
 	phonesList: Object,
 	pushToken: string,
 	deviceName: string,
+	deviceId: string,
 
 	actions?: Object,
 	navigation: Object,
 	children: Object,
-	onSubmitPushToken: (string, ?string) => Promise<any>,
-	onSubmitDeviceName: (string, string) => Promise<any>,
+	onSubmitPushToken: (string, ?string, string) => Promise<any>,
+	onSubmitDeviceName: (string, string, string) => Promise<any>,
 };
 
 type State = {
@@ -82,12 +83,14 @@ state: State = {
 handleBackPress: () => void;
 onChildDidMount: (string, string, ?string) => void;
 submitPushToken: (string) => void;
+onSubmitDeviceName: (string, string) => void;
 constructor(props: Props) {
 	super(props);
 
 	this.handleBackPress = this.handleBackPress.bind(this);
 	this.onChildDidMount = this.onChildDidMount.bind(this);
 	this.submitPushToken = this.submitPushToken.bind(this);
+	this.onSubmitDeviceName = this.onSubmitDeviceName.bind(this);
 }
 
 componentDidMount() {
@@ -119,7 +122,7 @@ shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, otherN, ['pushToken', 'phonesList', 'deviceName']);
+		const propsChange = shouldUpdate(others, otherN, ['pushToken', 'phonesList', 'deviceName', 'deviceId']);
 		if (propsChange) {
 			return true;
 		}
@@ -168,10 +171,24 @@ confirmTokenSubmit() {
 	this.setState({
 		isPushSubmitLoading: true,
 	});
-	const { screenProps, actions, pushToken, onSubmitPushToken, deviceName } = this.props;
+	const { screenProps, actions, pushToken, onSubmitPushToken, deviceName, deviceId, phonesList } = this.props;
 	const { formatMessage } = screenProps.intl;
+
+	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+	for (let key in phonesList) {
+		let { deviceId: idInList, token: tokenInList } = phonesList[key];
+		// UUID/deviceId already found among push registered devices list
+		// - If pushToken in the store matches with token in the list, it
+		// must be the same device that is already registered[NO WORRIES THERE]
+		// - But if tokens does not match then most probably, two different devices
+		// seem to give same UUID/DeviceInfo.getUniqueID().
+		// In that case modify deviceId before re-register.
+		if (idInList === uniqueId && tokenInList !== pushToken) {
+			uniqueId = `${uniqueId}-anomaly`;
+		}
+	}
 	if (pushToken) {
-		onSubmitPushToken(pushToken, deviceName).then((response: Object) => {
+		onSubmitPushToken(pushToken, deviceName, uniqueId).then((response: Object) => {
 			let message = formatMessage(i18n.pushRegisterSuccess);
 			actions.showToast(message);
 			actions.getPhonesList().then(() => {
@@ -207,6 +224,12 @@ showPushRegFailedToast(errorCode: string) {
 	this.setState({
 		isPushSubmitLoading: false,
 	});
+}
+
+onSubmitDeviceName(token: string, deviceName: string) {
+	const { onSubmitDeviceName, deviceId } = this.props;
+	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+	onSubmitDeviceName(token, deviceName, uniqueId);
 }
 
 render(): Object {
@@ -250,7 +273,7 @@ render(): Object {
 							{
 								onDidMount: this.onChildDidMount,
 								submitPushToken: this.submitPushToken,
-								onSubmitDeviceName: this.props.onSubmitDeviceName,
+								onSubmitDeviceName: this.onSubmitDeviceName,
 								navigation,
 								actions,
 								paddingHorizontal,
@@ -289,11 +312,12 @@ getStyles(appLayout: Object): Object {
 }
 
 const mapStateToProps = ({user}: Object): Object => {
-	const { phonesList = {}, pushToken, deviceName } = user;
+	const { phonesList = {}, pushToken, deviceName, deviceId } = user;
 	return {
 		phonesList,
 		pushToken,
 		deviceName,
+		deviceId,
 	};
 };
 
@@ -306,12 +330,12 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getPhonesList,
 			}, dispatch),
 		},
-		onSubmitPushToken: (token: string, deviceName: string): Promise<any> => {
+		onSubmitPushToken: (token: string, deviceName: string, deviceId: string): Promise<any> => {
 			let dName = deviceName ? deviceName : DeviceInfo.getDeviceName();
-			return dispatch(registerPushToken(token, dName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+			return dispatch(registerPushToken(token, dName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceId, pushServiceId));
 		},
-		onSubmitDeviceName: (token: string, deviceName: string): Promise<any> => {
-			return dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), DeviceInfo.getUniqueID(), pushServiceId));
+		onSubmitDeviceName: (token: string, deviceName: string, deviceId: string): Promise<any> => {
+			return dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceId, pushServiceId));
 		},
 	}
 );

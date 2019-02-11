@@ -175,11 +175,13 @@ export default function reduceUser(state: State = initialState, action: Action):
 				token,
 				name,
 				model,
+				deviceId,
 			} = phone;
 			acc[id] = {
 				token,
 				name,
 				model,
+				deviceId,
 			};
 			return acc;
 		}, {});
