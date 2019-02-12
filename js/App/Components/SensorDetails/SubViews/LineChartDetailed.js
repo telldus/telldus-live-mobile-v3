@@ -180,7 +180,7 @@ formatYTickOne(tick: number): number {
 	if (!max1) {
 		return tick;
 	}
-	return tick * max1.value;
+	return parseFloat(parseFloat(tick * max1.value).toFixed(1));
 }
 
 formatYTickTwo(tick: number): number {
@@ -188,7 +188,7 @@ formatYTickTwo(tick: number): number {
 	if (!max2) {
 		return tick;
 	}
-	return tick * max2.value;
+	return parseFloat(parseFloat(tick * max2.value).toFixed(1));
 }
 
 getDomainY(): Array<number> {
@@ -207,9 +207,8 @@ getTicksY(): Array<number> {
 	}
 
 	const { value: minVal } = min, { value: maxVal } = max;
-	const percent = minVal * (100 / maxVal);
-	const lowLimit = percent / 100;
-	const mid = lowLimit + ((1 - lowLimit) / 2);
+	const lowLimit = parseFloat(parseFloat(minVal / maxVal).toFixed(1));
+	const mid = parseFloat(parseFloat(lowLimit + ((1 - lowLimit) / 2)).toFixed(1));
 	return [lowLimit, mid, 1];
 }
 
