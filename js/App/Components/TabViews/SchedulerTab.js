@@ -186,6 +186,7 @@ class SchedulerTab extends View<null, Props, State> {
 					loadMinimal={true}
 					loadMinimalSize={0}
 					loop={false}
+					index={todayIndex}
 					showsPagination={false}
 					onIndexChanged={this.onIndexChanged}>
 					{daysToRender}
