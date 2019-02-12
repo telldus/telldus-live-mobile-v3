@@ -717,10 +717,7 @@ class DevicesTab extends View {
 		const listData = this.prepareFinalListData(rowsAndSections);
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View style={style.container}>
 				<SectionList
 					sections={listData}
 					renderItem={this.renderRow}
@@ -780,7 +777,7 @@ class DevicesTab extends View {
 			container: {
 				flex: 1,
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			noItemsTitle: {

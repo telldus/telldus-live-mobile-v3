@@ -482,7 +482,7 @@ class DashboardTab extends View {
 				alignItems: 'center',
 				justifyContent: 'center',
 				paddingHorizontal: isDBEmpty ? 30 : padding,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
