@@ -199,11 +199,14 @@ getDomainY(): Array<number> {
 getTicksY(): Array<number> {
 	const {min, max} = this.findLowestMinMax();
 
-	if (min.value === 0 || max.value === 0) {
+	if (min.value === 0) {
 		return [0, 0.5, 1];
 	}
 
-	const { value: minVal } = min, { value: maxVal } = max;
+	let { value: minVal } = min, { value: maxVal } = max;
+	if (maxVal === 0) {
+		maxVal = 0.01; // To prevent divide by zero error.
+	}
 	const lowLimit = minVal / maxVal;
 	const part = (1 - lowLimit) / 2;
 	const mid = lowLimit + part;
