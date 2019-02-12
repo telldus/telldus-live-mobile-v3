@@ -27,6 +27,8 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 import Orientation from 'react-native-orientation-locker';
 const isEqual = require('react-fast-compare');
+import maxBy from 'lodash/maxBy';
+import minBy from 'lodash/minBy';
 
 import { View, FullPageActivityIndicator } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
@@ -335,6 +337,11 @@ class SensorHistoryLineChart extends View<Props, State> {
 			color: showTwo ? colorsScatter[1] : Theme.Core.inactiveTintColor,
 		}];
 
+		const max1 = maxBy(chartDataOne, 'value');
+		const max2 = maxBy(chartDataTwo, 'value');
+		const min1 = minBy(chartDataOne, 'value');
+		const min2 = minBy(chartDataTwo, 'value');
+
 		return (
 			<View style={containerStyle}>
 				<ChartLegend
@@ -351,6 +358,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 						<LineChart
 							chartDataOne={chartDataOne}
 							chartDataTwo={chartDataTwo}
+							max1={max1}
+							max2={max2}
+							min1={min1}
+							min2={min2}
 							selectedOne={selectedOne}
 							selectedTwo={selectedTwo}
 							appLayout={appLayout}

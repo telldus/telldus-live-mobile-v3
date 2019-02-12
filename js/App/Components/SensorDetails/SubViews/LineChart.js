@@ -22,8 +22,6 @@
 'use strict';
 import React from 'react';
 import { Platform } from 'react-native';
-import maxBy from 'lodash/maxBy';
-import minBy from 'lodash/minBy';
 import {
 	VictoryChart,
 	VictoryAxis,
@@ -51,7 +49,12 @@ type Props = {
 	showTwo: boolean,
 	smoothing: boolean,
 	graphView: string,
-    fullscreen: Object,
+	fullscreen: Object,
+
+	max1: Object,
+	max2: Object,
+	min1: Object,
+	min2: Object,
 };
 
 type DefaultProps = {
@@ -150,21 +153,19 @@ getY(data: Object): number {
 }
 
 getYOne(data: Object): number {
-	const { chartDataOne } = this.props;
-	const max = maxBy(chartDataOne, 'value');
-	if (!data.value || !max) {
+	const { max1 } = this.props;
+	if (!data.value || !max1) {
 		return data.value;
 	}
-	return data.value / max.value;
+	return data.value / max1.value;
 }
 
 getYTwo(data: Object): number {
-	const { chartDataTwo } = this.props;
-	const max = maxBy(chartDataTwo, 'value');
-	if (!data.value || !max) {
+	const { max2 } = this.props;
+	if (!data.value || !max2) {
 		return data.value;
 	}
-	return data.value / max.value;
+	return data.value / max2.value;
 }
 
 getX(data: Object): number {
@@ -176,26 +177,23 @@ formatXTick(tick: number): string {
 }
 
 formatYTickOne(tick: number): number {
-	const { chartDataOne } = this.props;
-	const max = maxBy(chartDataOne, 'value');
-	if (!max) {
+	const { max1 } = this.props;
+	if (!max1) {
 		return tick;
 	}
-	return Math.ceil(tick * max.value);
+	return Math.ceil(tick * max1.value);
 }
 
 formatYTickTwo(tick: number): number {
-	const { chartDataTwo } = this.props;
-	const max = maxBy(chartDataTwo, 'value');
-	if (!max) {
+	const { max2 } = this.props;
+	if (!max2) {
 		return tick;
 	}
-	return Math.ceil(tick * max.value);
+	return Math.ceil(tick * max2.value);
 }
 
-getDomainY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): Array<number> {
-	const min1 = minBy(chartDataOne, 'value');
-	const min2 = minBy(chartDataTwo, 'value');
+getDomainY(): Array<number> {
+	const { min1, min2 } = this.props;
 
 	if ((min1 && min1.value < 0) || (min2 && min2.value < 0)) {
 		return [-1, 1];
@@ -203,9 +201,8 @@ getDomainY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): Array<numb
 	return [0, 1];
 }
 
-getTicksY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): Array<number> {
-	const min1 = minBy(chartDataOne, 'value');
-	const min2 = minBy(chartDataTwo, 'value');
+getTicksY(): Array<number> {
+	const { min1, min2 } = this.props;
 
 	if ((min1 && min1.value < 0) || (min2 && min2.value < 0)) {
 		return [-1, -0.5, 0, 0.5, 1];
@@ -213,13 +210,11 @@ getTicksY(chartDataOne: Array<Object>, chartDataTwo: Array<Object>): Array<numbe
 	return [0, 0.5, 1];
 }
 
-renderAxis(d: Array<Object>, i: number): null | Object {
+renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
 	const {
 		showOne,
 		showTwo,
 		graphView,
-		chartDataOne,
-		chartDataTwo,
 	} = this.props;
 
 	if (!d || d.length === 0) {
@@ -237,7 +232,7 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 		tickPadding,
 		anchors,
 		chartLineStyle,
-	} = this.getStyle();
+	} = styles;
 
 	let dependentConfigs = {};
 	if (graphView === 'detailed' && d.length > 1) {
@@ -245,8 +240,9 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 		if (i === 1) {
 			formatYTick = this.formatYTickTwo;
 		}
+		const tickValues = this.getTicksY();
 		dependentConfigs = {
-			tickValues: this.getTicksY(chartDataOne, chartDataTwo),
+			tickValues,
 			tickFormat: formatYTick,
 		};
 	} else {
@@ -270,7 +266,7 @@ renderAxis(d: Array<Object>, i: number): null | Object {
 	);
 }
 
-renderLine(d: Array<Object>, i: number): null | Object {
+renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 	const {
 		showOne,
 		showTwo,
@@ -290,7 +286,7 @@ renderLine(d: Array<Object>, i: number): null | Object {
 
 	const {
 		colors,
-	} = this.getStyle();
+	} = styles;
 
 	if (d.length === 1) {
 		return (
@@ -333,22 +329,31 @@ render(): Object | null {
 		return null;
 	}
 
+	const styles = this.getStyle();
 	const {
 		chartWidth,
 		chartHeight,
 		chartLineStyle,
 		domainPadding,
 		chartPadding,
-	} = this.getStyle();
+		...others
+	} = styles;
 
 	const { ticks } = this.getTickConfigX();
 
 	let dependentConfigs = {};
 	if (graphView === 'detailed' && chartDataOne.length > 1 && chartDataTwo.length > 1) {
+		const y = this.getDomainY();
 		dependentConfigs = {
-			domain: { y: this.getDomainY(chartDataOne, chartDataTwo) },
+			domain: { y },
 		};
 	}
+
+	const axisOne = this.renderAxis(chartDataOne, 0, styles);
+	const axisTwo = this.renderAxis(chartDataTwo, 1, styles);
+
+	const lineOne = this.renderLine(chartDataOne, 0, others);
+	const lineTwo = this.renderLine(chartDataTwo, 1, others);
 
 	return (
 		<VictoryChart
@@ -374,10 +379,10 @@ render(): Object | null {
 				tickValues={ticks}
 				tickFormat={this.formatXTick}
 			/>
-			{this.renderAxis(chartDataOne, 0)}
-			{this.renderAxis(chartDataTwo, 1)}
-			{this.renderLine(chartDataOne, 0)}
-			{this.renderLine(chartDataTwo, 1)}
+			{axisOne}
+			{axisTwo}
+			{lineOne}
+			{lineTwo}
 		</VictoryChart>
 	);
 }
