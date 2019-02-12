@@ -54,6 +54,8 @@ type Props = {
 	max2: Object,
 	min1: Object,
 	min2: Object,
+	min: Object,
+	max: Object,
 };
 
 type DefaultProps = {
@@ -62,7 +64,7 @@ type DefaultProps = {
 	smoothing: boolean,
 };
 
-class LineChart extends View<Props, null> {
+class LineChartDetailed extends View<Props, null> {
 props: Props;
 static defaultProps: DefaultProps = {
 	showOne: true,
@@ -75,6 +77,10 @@ getX: (Object) => number;
 formatXTick: (number) => string;
 renderAxis: (Array<Object>, number) => Object;
 renderLine: (Array<Object>, number) => Object;
+getYOne: (Object) => number;
+getYTwo: (Object) => number;
+formatYTickOne: (number) => number;
+formatYTickTwo: (number) => number;
 
 constructor(props: Props) {
 	super(props);
@@ -84,6 +90,11 @@ constructor(props: Props) {
 	this.formatXTick = this.formatXTick.bind(this);
 	this.renderAxis = this.renderAxis.bind(this);
 	this.renderLine = this.renderLine.bind(this);
+
+	this.getYOne = this.getYOne.bind(this);
+	this.getYTwo = this.getYTwo.bind(this);
+	this.formatYTickOne = this.formatYTickOne.bind(this);
+	this.formatYTickTwo = this.formatYTickTwo.bind(this);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -140,12 +151,66 @@ getY(data: Object): number {
 	return data.value;
 }
 
+getYOne(data: Object): number {
+	const { max1 } = this.props;
+	if (!data.value || !max1) {
+		return data.value;
+	}
+	return data.value / max1.value;
+}
+
+getYTwo(data: Object): number {
+	const { max2 } = this.props;
+	if (!data.value || !max2) {
+		return data.value;
+	}
+	return data.value / max2.value;
+}
+
 getX(data: Object): number {
 	return data.ts;
 }
 
 formatXTick(tick: number): string {
 	return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
+}
+
+formatYTickOne(tick: number): number {
+	const { max1 } = this.props;
+	if (!max1) {
+		return tick;
+	}
+	return tick * max1.value;
+}
+
+formatYTickTwo(tick: number): number {
+	const { max2 } = this.props;
+	if (!max2) {
+		return tick;
+	}
+	return tick * max2.value;
+}
+
+getDomainY(): Array<number> {
+	const ticks = this.getTicksY();
+	return [ticks[0], ticks[ticks.length - 1]];
+}
+
+getTicksY(): Array<number> {
+	const { min, max } = this.props;
+
+	if ((min && min.value < 0)) {
+		return [-1, -0.5, 0, 0.5, 1];
+	}
+	if (min.value === 0 || max.value === 0) {
+		return [0, 0.5, 1];
+	}
+
+	const { value: minVal } = min, { value: maxVal } = max;
+	const percent = minVal * (100 / maxVal);
+	const lowLimit = percent / 100;
+	const mid = lowLimit + ((1 - lowLimit) / 2);
+	return [lowLimit, mid, 1];
 }
 
 renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
@@ -171,6 +236,8 @@ renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
 		chartLineStyle,
 	} = styles;
 
+	const tickValues = this.getTicksY();
+
 	return (
 		<VictoryAxis dependentAxis
 			key={i}
@@ -181,7 +248,8 @@ renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
 				tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
 				grid: chartLineStyle,
 			}}
-			tickCount={3}
+			tickValues={tickValues}
+			tickFormat={i === 1 ? this.formatYTickTwo : this.formatYTickOne}
 		/>
 	);
 }
@@ -224,7 +292,7 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 		key={i}
 		data={d}
 		style={{ data: { stroke: colors[i] } }}
-		y={this.getY}
+		y={i === 1 ? this.getYTwo : this.getYOne}
 		x={this.getX}
 	/>);
 }
@@ -251,6 +319,14 @@ render(): Object | null {
 
 	const { ticks } = this.getTickConfigX();
 
+	let dependentConfigs = {};
+	if (chartDataOne.length > 1 && chartDataTwo.length > 1) {
+		const y = this.getDomainY();
+		dependentConfigs = {
+			domain: { y },
+		};
+	}
+
 	const axisOne = this.renderAxis(chartDataOne, 0, styles);
 	const axisTwo = this.renderAxis(chartDataTwo, 1, styles);
 
@@ -266,6 +342,7 @@ render(): Object | null {
 			containerComponent={
 				<VictoryZoomContainer/>
 			}
+			{...dependentConfigs}
 		>
 			<VictoryAxis
 				orientation={'bottom'}
@@ -336,4 +413,4 @@ getStyle(): Object {
 }
 }
 
-export default LineChart;
+export default LineChartDetailed;

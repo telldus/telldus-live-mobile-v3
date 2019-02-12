@@ -32,6 +32,7 @@ import minBy from 'lodash/minBy';
 
 import { View, FullPageActivityIndicator } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
+import LineChartDetailed from './LineChartDetailed';
 import LineChart from './LineChart';
 
 import {
@@ -337,10 +338,31 @@ class SensorHistoryLineChart extends View<Props, State> {
 			color: showTwo ? colorsScatter[1] : Theme.Core.inactiveTintColor,
 		}];
 
-		const max1 = maxBy(chartDataOne, 'value');
-		const max2 = maxBy(chartDataTwo, 'value');
-		const min1 = minBy(chartDataOne, 'value');
-		const min2 = minBy(chartDataTwo, 'value');
+		const max1 = maxBy(chartDataOne, 'value') || {value: 0};
+		const max2 = maxBy(chartDataTwo, 'value') || {value: 0};
+		const min1 = minBy(chartDataOne, 'value') || {value: 0};
+		const min2 = minBy(chartDataTwo, 'value') || {value: 0};
+
+		const max = maxBy([max1, max2], 'value');
+		const min = minBy([min1, min2], 'value');
+
+		const chartCommonProps = {
+			chartDataOne,
+			chartDataTwo,
+			max1,
+			max2,
+			min1,
+			min2,
+			selectedOne,
+			selectedTwo,
+			appLayout,
+			timestamp,
+			showOne,
+			showTwo,
+			fullscreen,
+			smoothing,
+			graphView,
+		};
 
 		return (
 			<View style={containerStyle}>
@@ -355,23 +377,15 @@ class SensorHistoryLineChart extends View<Props, State> {
 					</View>
 					:
 					<View style={{flex: 0}}>
-						<LineChart
-							chartDataOne={chartDataOne}
-							chartDataTwo={chartDataTwo}
-							max1={max1}
-							max2={max2}
-							min1={min1}
-							min2={min2}
-							selectedOne={selectedOne}
-							selectedTwo={selectedTwo}
-							appLayout={appLayout}
-							timestamp={timestamp}
-							showOne={showOne}
-							showTwo={showTwo}
-							fullscreen={fullscreen}
-							smoothing={smoothing}
-							graphView={graphView}
-						/>
+						{graphView === 'overview' ?
+							<LineChart
+								{...chartCommonProps}/>
+							:
+							<LineChartDetailed
+								{...chartCommonProps}
+								max={max}
+								min={min}/>
+						}
 					</View>
 				}
 			</View>
