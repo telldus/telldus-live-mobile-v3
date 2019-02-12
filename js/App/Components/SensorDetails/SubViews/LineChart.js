@@ -73,8 +73,8 @@ static defaultProps: DefaultProps = {
 getY: (Object) => number;
 getX: (Object) => number;
 formatXTick: (number) => string;
-renderAxis: (Array<Object>, number) => Object;
-renderLine: (Array<Object>, number) => Object;
+renderAxis: (Array<Object>, number, Object) => Object;
+renderLine: (Array<Object>, number, Object) => Object;
 
 constructor(props: Props) {
 	super(props);
