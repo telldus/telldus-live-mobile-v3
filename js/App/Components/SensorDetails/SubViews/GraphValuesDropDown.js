@@ -27,6 +27,8 @@ import Ripple from 'react-native-material-ripple';
 
 import { View, Text, IconTelldus, FormattedMessage } from '../../../../BaseComponents';
 
+import shouldUpdate from '../../../Lib/shouldUpdate';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -80,9 +82,18 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.phraseThree = props.intl.formatMessage(i18n.defaultDescriptionButton);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'appLayout', 'list']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
+	}
+
 	renderBaseOne(items: Object): Object {
 		const { data, title } = items;
-		const { appLayout } = this.props;
+		const { appLayout, selectedOne } = this.props;
+		const { type, scale } = selectedOne;
 
 		const {
 			pickerBaseCoverStyle,
@@ -92,7 +103,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleOpacity } = Theme.Core;
 		const result = data.find((item: Object): boolean => {
-			return item.value === title;
+			return item.scale === scale && item.type === type;
 		});
 		const {icon} = result ? result : {};
 
@@ -125,24 +136,25 @@ class GraphValuesDropDown extends View<Props, State> {
 	}
 
 	onValueChangeOne(itemValue: string, itemIndex: number, data: Array<Object>) {
-		this.refs.listOne.blur();
 		const { onValueChangeOne } = this.props;
 		if (onValueChangeOne) {
 			onValueChangeOne(itemValue, itemIndex, data);
+			this.refs.listOne.blur();
 		}
 	}
 
 	onValueChangeTwo(itemValue: string, itemIndex: number, data: Array<Object>) {
-		this.refs.listTwo.blur();
 		const { onValueChangeTwo } = this.props;
 		if (onValueChangeTwo) {
 			onValueChangeTwo(itemValue, itemIndex, data);
+			this.refs.listTwo.blur();
 		}
 	}
 
 	propsExtractorOne(item: Object, index: number): Object {
 		const { selectedTwo } = this.props;
-		if (selectedTwo.value === item.value) {
+		const { type, scale } = selectedTwo;
+		if (item.scale === scale && item.type === type) {
 			return {
 				...item,
 				disabled: true,
@@ -156,7 +168,8 @@ class GraphValuesDropDown extends View<Props, State> {
 
 	propsExtractorTwo(item: Object, index: number): Object {
 		const { selectedOne } = this.props;
-		if (selectedOne.value === item.value) {
+		const { type, scale } = selectedOne;
+		if (item.scale === scale && item.type === type) {
 			return {
 				...item,
 				disabled: true,
@@ -170,7 +183,8 @@ class GraphValuesDropDown extends View<Props, State> {
 
 	renderBaseTwo(items: Object): Object {
 		const { data, title } = items;
-		const { appLayout } = this.props;
+		const { appLayout, selectedTwo } = this.props;
+		const { type, scale } = selectedTwo;
 
 		const {
 			pickerBaseCoverStyle,
@@ -180,7 +194,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleOpacity } = Theme.Core;
 		const result = data.find((item: Object): boolean => {
-			return item.value === title;
+			return item.scale === scale && item.type === type;
 		});
 		const {icon} = result ? result : {};
 

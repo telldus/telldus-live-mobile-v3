@@ -459,9 +459,7 @@ class HistoryTab extends View {
 		const { selectedTwo } = this.props;
 		if (selectedTwo && selectedTwo.value !== itemValue) {
 			const { sensorId, dispatch } = this.props;
-			const selectedOne = data.find((item: Object): boolean => {
-				return item.value === itemValue;
-			});
+			const selectedOne = data[itemIndex];
 			const settings = {
 				selectedOne,
 			};
@@ -483,9 +481,7 @@ class HistoryTab extends View {
 		const { selectedOne } = this.props;
 		if (selectedOne && selectedOne.value !== itemValue) {
 			const { sensorId, dispatch } = this.props;
-			const selectedTwo = data.find((item: Object): boolean => {
-				return item.value === itemValue;
-			});
+			const selectedTwo = data[itemIndex];
 			const settings = {
 				selectedTwo,
 			};
