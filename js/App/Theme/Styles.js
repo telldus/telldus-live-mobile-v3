@@ -153,10 +153,10 @@ export default StyleSheet.create({
 		shadowOpacity: 0.23,
 	},
 	hiddenText: {
-		color: 'white',
+		color: 'rgba(0,0,0,0)',
 		fontSize: 14,
-		textShadowColor: 'white',
-		backgroundColor: 'white',
+		textShadowColor: 'rgba(0,0,0,0)',
+		backgroundColor: 'rgba(0,0,0,0)',
 	},
 	emptyBackgroundFill: {
 		flex: 1,

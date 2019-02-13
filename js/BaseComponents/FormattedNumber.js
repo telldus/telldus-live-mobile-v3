@@ -47,7 +47,7 @@ const FormattedNumberComponent = (props: Object): React$Element<any> => {
 			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{localized}
 				{!!suffix && (
 					[<Text style={styles.space} key={'1'}>
-						!
+						{' '}
 					</Text>,
 					<Text style={suffixStyle} key={'2'}>
 						{suffix}
@@ -77,7 +77,9 @@ FormattedNumberComponent.propTypes = {
 
 const styles = StyleSheet.create({
 	space: {
-		color: 'transparent',
+		color: 'rgba(0,0,0,0)',
+		textShadowColor: 'rgba(0,0,0,0)',
+		backgroundColor: 'rgba(0,0,0,0)',
 		fontSize: 6,
 	},
 });

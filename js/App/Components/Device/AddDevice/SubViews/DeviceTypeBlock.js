@@ -105,7 +105,7 @@ render(): Object {
 								<Text>
 									<IconTelldus icon={'security'} style={iconSecurity}/>
 									<Text style={Theme.Styles.hiddenText}>
-							!
+										{' '}
 									</Text>
 								</Text>
 							)}
