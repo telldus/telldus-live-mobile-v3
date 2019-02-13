@@ -203,17 +203,17 @@ getTicksY(): Array<number> {
 	return [lowLimit, mid, 1];
 }
 
-findLowerLimit(): Object {
+findLowerLimit(): number {
 	let { min, min1, min2, max1, max2 } = this.props;
 
 	if (min.value === 0) {
 		return 0;
 	}
 	if (max1.value === 0) {
-		max1 = 0.01; // To prevent divide by zero error.
+		max1 = {value: 0.01}; // To prevent divide by zero error.
 	}
 	if (max2.value === 0) {
-		max2 = 0.01; // To prevent divide by zero error.
+		max2 = {value: 0.01}; // To prevent divide by zero error.
 	}
 	const lowLimit1 = min1.value / max1.value;
 	const lowLimit2 = min2.value / max2.value;
