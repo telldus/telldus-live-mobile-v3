@@ -91,9 +91,10 @@ class GraphValuesDropDown extends View<Props, State> {
 			rightIconStyle,
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleOpacity } = Theme.Core;
-		const {icon} = data.find((item: Object): boolean => {
+		const result = data.find((item: Object): boolean => {
 			return item.value === title;
 		});
+		const {icon} = result ? result : {};
 
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
@@ -178,9 +179,10 @@ class GraphValuesDropDown extends View<Props, State> {
 			rightIconStyle,
 		} = this.getStyle(appLayout);
 		const { rippleColor, rippleOpacity } = Theme.Core;
-		const {icon} = data.find((item: Object): boolean => {
+		const result = data.find((item: Object): boolean => {
 			return item.value === title;
 		});
+		const {icon} = result ? result : {};
 
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
