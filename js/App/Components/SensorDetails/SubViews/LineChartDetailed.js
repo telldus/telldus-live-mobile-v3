@@ -197,30 +197,31 @@ getDomainY(): Array<number> {
 }
 
 getTicksY(): Array<number> {
-	const {min, max} = this.findLowestMinMax();
-
-	if (min.value === 0) {
-		return [0, 0.5, 1];
-	}
-
-	let { value: minVal } = min, { value: maxVal } = max;
-	if (maxVal === 0) {
-		maxVal = 0.01; // To prevent divide by zero error.
-	}
-	const lowLimit = minVal / maxVal;
+	const lowLimit = this.findLowerLimit();
 	const part = (1 - lowLimit) / 2;
 	const mid = lowLimit + part;
 	return [lowLimit, mid, 1];
 }
 
-findLowestMinMax(): Object {
-	const { min1, min2, max1, max2 } = this.props;
-	const d1 = max1.value - min1.value;
-	const d2 = max2.value - min2.value;
-	if (d1 >= d2) {
-		return {min: min1, max: max1};
+findLowerLimit(): Object {
+	let { min, min1, min2, max1, max2 } = this.props;
+
+	if (min.value === 0) {
+		return 0;
 	}
-	return {min: min2, max: max2};
+	if (max1.value === 0) {
+		max1 = 0.01; // To prevent divide by zero error.
+	}
+	if (max2.value === 0) {
+		max2 = 0.01; // To prevent divide by zero error.
+	}
+	const lowLimit1 = min1.value / max1.value;
+	const lowLimit2 = min2.value / max2.value;
+
+	if (lowLimit1 >= lowLimit2) {
+		return lowLimit2;
+	}
+	return lowLimit1;
 }
 
 renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
