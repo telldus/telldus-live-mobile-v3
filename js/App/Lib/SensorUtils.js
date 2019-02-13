@@ -209,7 +209,7 @@ function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: 
 	if (name === 'barpress') {
 		let label = formatMessage(i18n.labelBarometricPressure);
 		return {
-			icon: 'guage',
+			icon: 'gauge',
 			label,
 			unit,
 			sensorInfo: `${label} ${value}${unit}`,
