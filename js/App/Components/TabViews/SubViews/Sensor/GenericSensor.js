@@ -51,9 +51,11 @@ const GenericSensor = ({
 
 	const { sensorValue, sensorValueText, sensorValueLabelText } = Theme.Styles;
 
+	const labelLength = label.length;
+
 	return (
 		<View style={[sensorValue, coverStyle]}>
-			{!isLarge && (
+			{!isLarge && labelLength < 13 && (
 				<IconTelldus icon={icon} style={{
 					fontSize: 40,
 					color: '#fff',
