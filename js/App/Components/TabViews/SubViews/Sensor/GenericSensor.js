@@ -32,7 +32,7 @@ type sensorProps = {
 	value: string,
 	unit?: string,
 	icon: string,
-	label?: string,
+	label: string,
 	isLarge: boolean,
 	formatOptions?: Object,
 	coverStyle?: Object,
