@@ -83,7 +83,7 @@ state: State = {
 handleBackPress: () => void;
 onChildDidMount: (string, string, ?string) => void;
 submitPushToken: (string) => void;
-onSubmitDeviceName: (string, string) => void;
+onSubmitDeviceName: (string, string) => Promise<any>;
 constructor(props: Props) {
 	super(props);
 
@@ -226,10 +226,10 @@ showPushRegFailedToast(errorCode: string) {
 	});
 }
 
-onSubmitDeviceName(token: string, deviceName: string) {
+onSubmitDeviceName(token: string, deviceName: string): Promise<any> {
 	const { onSubmitDeviceName, deviceId } = this.props;
 	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-	onSubmitDeviceName(token, deviceName, uniqueId);
+	return onSubmitDeviceName(token, deviceName, uniqueId);
 }
 
 render(): Object {
