@@ -79,10 +79,11 @@ export default class TelldusWebsocket {
 		// bind any listeners on TelldusWebsocket to this.socket
 		this._addListeners();
 
-		// expose websocket.send as this.send
-		this.send = this.websocket.send;
-
 		this._onAppStateChange = this._onAppStateChange.bind(this);
+	}
+
+	send(message: string) {
+		this.websocket.send(message);
 	}
 
 	close(): any {

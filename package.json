@@ -60,7 +60,7 @@
     "react-native-vector-icons": "~6.1.0",
     "react-navigation": "^3.0.5",
     "react-redux": "~5.1.1",
-    "reconnecting-websocket": "3.2.2",
+    "reconnecting-websocket": "git+https://github.com/pladaria/reconnecting-websocket.git#c64d32fbeaf70199e7b82817476f4d9f3e35ef39",
     "redux": "~4.0.1",
     "redux-logger": "~3.0.6",
     "redux-persist": "~5.10.0",
