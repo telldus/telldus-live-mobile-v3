@@ -43,7 +43,7 @@
     "react-native-iphone-x-helper": "~1.2.0",
     "react-native-maps": "~0.22.1",
     "react-native-markdown-renderer": "~3.2.8",
-    "react-native-material-dropdown": "~0.11.1",
+    "react-native-material-dropdown": "https://github.com/rimzici/react-native-material-dropdown.git",
     "react-native-material-ripple": "~0.8.0",
     "react-native-modal": "~7.0.0",
     "react-native-orientation-locker": "~1.0.21",
