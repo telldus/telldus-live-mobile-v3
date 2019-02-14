@@ -48,6 +48,7 @@ type Props = {
 	isOpen: boolean,
 	closeSwipeRow: () => void,
 	actionIcon?: string,
+	onPressDeviceAction?: () => void,
 };
 
 class OnButton extends View {
@@ -63,10 +64,13 @@ class OnButton extends View {
 	}
 
 	onPress() {
-		const { command, id, isOpen, closeSwipeRow } = this.props;
+		const { command, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(id, command);
 	}

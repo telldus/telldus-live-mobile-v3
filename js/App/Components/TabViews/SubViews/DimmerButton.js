@@ -53,6 +53,7 @@ type Props = {
 	isOpen: boolean,
 	screenReaderEnabled: boolean,
 	setScrollEnabled: boolean,
+	sensitive: number,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -69,6 +70,8 @@ type Props = {
 	showDimmerPopup: (name: string, sliderValue: number) => void,
 	hideDimmerPopup: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
+	onPressDimButton: (device: Object) => void,
+	onPressDeviceAction?: () => void,
 };
 
 type DefaultProps = {
@@ -89,6 +92,8 @@ class DimmerButton extends View<Props, null> {
 	onValueChange: number => void;
 	showDimmerStep: (number) => void;
 
+	onPressDimButton: () => void;
+
 	static defaultProps: DefaultProps = {
 		showSlider: true,
 		commandON: 1,
@@ -101,7 +106,7 @@ class DimmerButton extends View<Props, null> {
 
 		this.parentScrollEnabled = true;
 		const { device, onDimmerSlide } = this.props;
-		this.onValueChangeThrottled = throttle(onDimmerSlide(device.id), 200, {
+		this.onValueChangeThrottled = throttle(onDimmerSlide(device.id), 100, {
 			trailing: true,
 		});
 
@@ -111,6 +116,8 @@ class DimmerButton extends View<Props, null> {
 		this.onSlidingComplete = this.onSlidingComplete.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
 		this.showDimmerStep = this.showDimmerStep.bind(this);
+
+		this.onPressDimButton = this.onPressDimButton.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -121,7 +128,7 @@ class DimmerButton extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled']);
+		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled', 'sensitive']);
 		if (propsChange) {
 			return true;
 		}
@@ -158,25 +165,41 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onTurnOn() {
-		const { isOpen, closeSwipeRow } = this.props;
+		const { isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandON);
 	}
 
 	onTurnOff() {
-		const { isOpen, closeSwipeRow } = this.props;
+		const { isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
 	}
 
 	showDimmerStep(id: number) {
 		this.props.showDimmerStep(id);
+	}
+
+	onPressDimButton() {
+		const { onPressDimButton, device, onPressDeviceAction } = this.props;
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
+		}
+		if (onPressDimButton && typeof onPressDimButton === 'function') {
+			onPressDimButton(device);
+		}
 	}
 
 	render(): Object {
@@ -193,8 +216,9 @@ class DimmerButton extends View<Props, null> {
 			setScrollEnabled,
 			isOpen,
 			closeSwipeRow,
+			sensitive,
 		} = this.props;
-		const { isInState, name, supportedMethods, methodRequested, local, stateValues, value: val } = item;
+		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
@@ -202,6 +226,7 @@ class DimmerButton extends View<Props, null> {
 		const value = getDimmerValue(stateValue, isInState);
 
 		const sliderProps = {
+			sensitive,
 			thumbWidth: 10,
 			thumbHeight: 10,
 			fontSize: 9,
@@ -257,7 +282,7 @@ class DimmerButton extends View<Props, null> {
 			<HVSliderContainer
 				{...sliderProps}
 				style={sliderStyle}
-				onPress={isOpen ? closeSwipeRow : null}
+				onPress={isOpen ? closeSwipeRow : this.onPressDimButton}
 			>
 				<SliderScale
 					style={styles.slider}
@@ -329,8 +354,12 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, dispatch: Function): Object {
+	const { app = {} } = store;
+	const { screenReaderEnabled, defaultSettings = {} } = app;
+	const { dimmerSensitivity: sensitive = 5 } = defaultSettings;
 	return {
-		screenReaderEnabled: store.app.screenReaderEnabled,
+		screenReaderEnabled,
+		sensitive,
 	};
 }
 

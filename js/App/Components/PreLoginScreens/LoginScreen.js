@@ -33,20 +33,22 @@ import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 
 type Props = {
-		dispatch: Function,
-		screenProps: Object,
-		navigation: Object,
-		loginToTelldus: Function,
-		validationMessage: string,
-		showModal: boolean,
-		intl: intlShape.isRequired,
-		appLayout: Object,
-		styles: Object,
+	dispatch: Function,
+	screenProps: Object,
+	navigation: Object,
+	loginToTelldus: Function,
+	validationMessage: string,
+	showModal: boolean,
+	intl: intlShape.isRequired,
+	appLayout: Object,
+	styles: Object,
+	accessToken: Object,
+	isTokenValid: boolean,
 };
 
 type State = {
-		notificationText?: string,
-		onPressLogout: boolean,
+	notificationText?: string,
+	onPressLogout: boolean,
 };
 
 class LoginScreen extends View {
@@ -201,7 +203,6 @@ class LoginScreen extends View {
 			otherLinks: {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
-				marginTop: 15,
 				justifyContent: 'center',
 				marginHorizontal: 10,
 			},
@@ -209,7 +210,7 @@ class LoginScreen extends View {
 				color: '#bbb',
 				fontSize: infoFontSize,
 				marginHorizontal: infoFontSize * 0.2,
-				marginVertical: infoFontSize * 0.8,
+				marginBottom: 10,
 			},
 		};
 	}

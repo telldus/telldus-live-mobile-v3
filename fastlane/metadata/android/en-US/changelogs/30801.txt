@@ -1,0 +1,4 @@
+- Sensor history
+- Sensor details
+- Device types
+

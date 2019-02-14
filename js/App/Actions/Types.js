@@ -32,6 +32,7 @@ export type Action =
 	| { type: 'RECEIVED_JOBS', payload: Object }
 	| { type: 'PUSH_TOKEN_REGISTERED', token: string, payload: Object }
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
+	| { type: 'PUSH_TOKEN_DELETED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
 
@@ -115,6 +116,7 @@ export type Action =
 	| { type: 'VALIDATE_LOCAL_CONTROL_SUPPORT', payload: Object }
 	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string, payload: Object }
 	| { type: typeof REHYDRATE }
+	| { type: 'persist/REHYDRATE', payload: Object }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }
@@ -123,6 +125,8 @@ export type Action =
 	| { type: 'HIDE_CHANGE_LOG' }
 
 	| { type: 'TOGGLE_INACTIVE_VISIBILITY', payload: Object }
+
+	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

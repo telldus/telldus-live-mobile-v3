@@ -35,7 +35,6 @@ export default StyleSheet.create({
 		color: Core.sectionTextColor,
 		fontSize: 14,
 		fontWeight: '500',
-		marginVertical: 10,
 	},
 	rowFront: {
 		backgroundColor: '#FFFFFF',
@@ -152,5 +151,15 @@ export default StyleSheet.create({
 		shadowRadius: 2,
 		shadowColor: '#000',
 		shadowOpacity: 0.23,
+	},
+	hiddenText: {
+		color: 'rgba(0,0,0,0)',
+		fontSize: 14,
+		textShadowColor: 'rgba(0,0,0,0)',
+		backgroundColor: 'rgba(0,0,0,0)',
+	},
+	emptyBackgroundFill: {
+		flex: 1,
+		backgroundColor: Core.appBackground,
 	},
 });

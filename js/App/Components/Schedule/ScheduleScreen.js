@@ -22,12 +22,10 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { BackHandler } from 'react-native';
+import { BackHandler, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
-import { intlShape, injectIntl } from 'react-intl';
+const isEqual = require('react-fast-compare');
 
 import { FullPageActivityIndicator, View, DialogueBox, NavigationHeaderPoster } from '../../../BaseComponents';
 import Theme from '../../Theme';
@@ -39,15 +37,18 @@ import { showToast } from '../../Actions/App';
 import { getJobs } from '../../Actions';
 import type { Schedule } from '../../Reducers/Schedule';
 
+import shouldUpdate from '../../Lib/shouldUpdate';
+
 type Props = {
-	navigation: Object,
-	children: Object,
+	gateways: Object,
 	schedule?: Schedule,
 	actions?: Object,
-	devices?: Object,
+	devices: Object,
 	screenProps: Object,
-	intl: intlShape.isRequired,
-	appLayout: Object,
+	ScreenName: string,
+
+	navigation: Object,
+	children: Object,
 };
 
 type State = {
@@ -65,22 +66,11 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
-	intl: Object,
-	appLayout: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
 
 	handleBackPress: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		schedule: PropTypes.object,
-		actions: PropTypes.objectOf(PropTypes.func),
-		devices: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
 
 	state = {
 		h1: '',
@@ -117,9 +107,26 @@ class ScheduleScreen extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const isStateEqual = _.isEqual(this.state, nextState);
-		const isPropsEqual = _.isEqual(this.props, nextProps);
-		return !(isStateEqual && isPropsEqual);
+		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			const { gateways, devices, screenProps, ...otherProps } = this.props;
+			const { gateways: gatewaysN, devices: devicesN, screenProps: screenPropsN, ...otherPropsN } = nextProps;
+			if ((Object.keys(gateways.byId).length !== Object.keys(gatewaysN.byId).length) || (Object.keys(devices.byId).length !== Object.keys(devicesN.byId).length)) {
+				return true;
+			}
+			if (screenProps.currentScreen !== screenPropsN.currentScreen) {
+				return true;
+			}
+			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule', 'showModal']);
+			if (propsChange) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	goBack = () => {
@@ -163,7 +170,6 @@ class ScheduleScreen extends View<null, Props, State> {
 			positiveText,
 			onPressPositive,
 			onPressNegative,
-			dialogueContainerStyle: {backgroundColor: '#00000099'},
 			imageHeader,
 			showIconOnHeader,
 			onPressHeader,
@@ -172,9 +178,20 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	render(): React$Element<any> {
-		const { children, navigation, actions, devices, schedule, screenProps, intl, appLayout } = this.props;
+		const {
+			children,
+			navigation,
+			actions,
+			devices,
+			schedule,
+			screenProps,
+			gateways,
+		} = this.props;
+		const {
+			appLayout,
+		} = screenProps;
 		const { h1, h2, infoButton, loading } = this.state;
-		const { style, modal } = this._getStyle(appLayout);
+		const { style } = this._getStyle(appLayout);
 		const {
 			dialogueHeader,
 			showPositive,
@@ -182,7 +199,6 @@ class ScheduleScreen extends View<null, Props, State> {
 			positiveText,
 			onPressPositive,
 			onPressNegative,
-			dialogueContainerStyle,
 			imageHeader,
 			showIconOnHeader,
 			onPressHeader,
@@ -190,7 +206,10 @@ class ScheduleScreen extends View<null, Props, State> {
 		} = this.getRelativeData();
 
 		return (
-			<View>
+			<View style={{
+				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				{loading && (
 					<FullPageActivityIndicator/>
 				)}
@@ -203,29 +222,33 @@ class ScheduleScreen extends View<null, Props, State> {
 						infoButton={infoButton}
 						align={'right'}
 						navigation={navigation}
-						{...screenProps}/>
-					<View style={style}>
-						{React.cloneElement(
-							children,
-							{
-								onDidMount: this.onChildDidMount,
-								navigation,
-								actions,
-								paddingRight: style.paddingHorizontal,
-								devices,
-								schedule,
-								loading: this.loading,
-								isEditMode: this._isEditMode,
-								...screenProps,
-								appLayout,
-								intl,
-							},
-						)}
-					</View>
+						{...screenProps}
+						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}/>
+					<KeyboardAvoidingView
+						behavior="padding"
+						style={{flex: 1}}
+						contentContainerStyle={{flexGrow: 1}}
+						keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+						<View style={style}>
+							{React.cloneElement(
+								children,
+								{
+									onDidMount: this.onChildDidMount,
+									navigation,
+									actions,
+									paddingRight: style.paddingHorizontal,
+									devices,
+									schedule,
+									loading: this.loading,
+									isEditMode: this._isEditMode,
+									...screenProps,
+									gateways,
+								},
+							)}
+						</View>
+					</KeyboardAvoidingView>
 					<DialogueBox
 						showDialogue={this.props.showModal}
-						modalStyle={modal}
-						dialogueContainerStyle={dialogueContainerStyle}
 						header={dialogueHeader}
 						text={this.props.validationMessage}
 						showPositive={showPositive}
@@ -252,22 +275,16 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const deviceHeight = isPortrait ? height : width;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const { navigation } = this.props;
-		const editMode = navigation.getParam('editMode', false);
+		const { screenProps } = this.props;
+		const { currentScreen } = screenProps;
 
-		const notEdit = (this.props.screenProps.currentScreen === 'InitialScreen' && (!editMode))
-			|| this.props.screenProps.currentScreen !== 'InitialScreen';
+		const notEdit = currentScreen !== 'InitialScreen';
 		return {
 			style: {
 				flex: 1,
 				paddingHorizontal: notEdit ? padding : 0,
-			},
-			modal: {
-				alignSelf: 'center',
-				top: deviceHeight * 0.3,
 			},
 		};
 	};
@@ -279,16 +296,17 @@ type mapStateToPropsType = {
 	devices: Object,
 	modal: Object,
 	app: Object,
+	gateways: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, app }: mapStateToPropsType): Object => (
+const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateToPropsType): Object => (
 	{
 		schedule,
 		devices,
+		gateways,
 		validationMessage: modal.data,
 		showModal: modal.openModal,
 		modalExtras: modal.extras,
-		appLayout: app.layout,
 	}
 );
 
@@ -301,4 +319,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ScheduleScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleScreen);

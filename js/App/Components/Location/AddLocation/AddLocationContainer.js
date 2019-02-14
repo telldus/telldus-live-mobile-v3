@@ -23,10 +23,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -50,6 +50,7 @@ type Props = {
 	showModal: boolean,
 	validationMessage: any,
 	source: Object | number,
+	ScreenName: string,
 };
 
 type State = {
@@ -126,9 +127,18 @@ class AddLocationContainer extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		const isStateEqual = _.isEqual(this.state, nextState);
-		const isPropsEqual = _.isEqual(this.props, nextProps);
-		return !(isStateEqual && isPropsEqual);
+		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			const isPropsEqual = isEqual(this.props, nextProps);
+			if (!isPropsEqual) {
+				return true;
+			}
+			return false;
+		}
+		return false;
 	}
 
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
@@ -215,15 +225,23 @@ class AddLocationContainer extends View<null, Props, State> {
 			<View style={{
 				flex: 1,
 			}}>
-				<ScrollView style={{flex: 1}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
-					<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-						<NavigationHeaderPoster
-							h1={h1} h2={h2}
-							infoButton={infoButton}
-							showLeftIcon={currentScreen !== 'Success'}
-							align={'right'}
-							navigation={navigation}
-							{...screenProps}/>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{flex: 1}}
+					contentContainerStyle={{ justifyContent: 'center'}}
+					keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+					<NavigationHeaderPoster
+						h1={h1} h2={h2}
+						infoButton={infoButton}
+						showLeftIcon={currentScreen !== 'Success'}
+						align={'right'}
+						navigation={navigation}
+						{...screenProps}
+						leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>
+					<ScrollView style={{
+						flex: 1,
+						backgroundColor: Theme.Core.appBackground,
+					}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(
 								children,
@@ -237,8 +255,8 @@ class AddLocationContainer extends View<null, Props, State> {
 								},
 							)}
 						</View>
-					</KeyboardAvoidingView>
-				</ScrollView>
+					</ScrollView>
+				</KeyboardAvoidingView>
 				<DialogueBox
 					dialogueContainerStyle={{elevation: 0}}
 					header={dialogueHeader}

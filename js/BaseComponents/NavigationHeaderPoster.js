@@ -57,6 +57,7 @@ type Props = {
     align?: 'right' | 'center',
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
+	leftIcon: string,
 
 	navigation: Object,
     handleBackPress: () => boolean,
@@ -68,6 +69,7 @@ type DefaultProps = {
     showBackButton: boolean,
 	align: 'right' | 'center',
 	showLeftIcon: boolean,
+	leftIcon: string,
 };
 
 type State = {
@@ -83,6 +85,7 @@ static defaultProps: DefaultProps = {
 	showBackButton: true,
 	align: 'center',
 	showLeftIcon: true,
+	leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
 };
 
 goBack: () => void;
@@ -139,7 +142,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton']);
+	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon']);
 	if (propsChange) {
 		return true;
 	}
@@ -199,6 +202,7 @@ render(): Object {
 		posterCoverStyle,
 		infoButton,
 		showLeftIcon,
+		leftIcon,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -217,7 +221,7 @@ render(): Object {
 
 	return (
 		<View style={styles.container}>
-			<NavigationHeader navigation={navigation} showLeftIcon={showLeftIcon}/>
+			<NavigationHeader navigation={navigation} showLeftIcon={showLeftIcon} leftIcon={leftIcon}/>
 			<Poster posterHeight={posterHeight}>
 				<View style={[posterCover, posterCoverStyle]}>
 					<View style={posterItemsContainer}>
@@ -238,15 +242,15 @@ render(): Object {
 							</Text>
 						)}
 					</View>
-					{adjustItems && showBackButton && (
+					{adjustItems && showBackButton && showLeftIcon && (
 						<TouchableOpacity
 							style={styles.backButtonLand}
 							onPress={this.goBack}
 							accessibilityLabel={this.labelLeftIcon}>
-							{Platform.OS === 'ios' ?
-								<FontAwesome name="angle-left" size={width * 0.047} color="#fff"/>
+							{Platform.OS === 'ios' && leftIcon !== 'close' ?
+								<FontAwesome name={leftIcon} size={width * 0.047} color="#fff"/>
 								:
-								<Icon name="arrow-back" size={width * 0.047} color="#fff"/>
+								<Icon name={leftIcon} size={width * 0.047} color="#fff"/>
 							}
 						</TouchableOpacity>
 					)}
@@ -264,8 +268,8 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const posterHeight = adjustItems ? deviceWidth * 0.155 : deviceWidth * 0.333;
-	const iconBackgroundSize = posterHeight * 0.6;
+	const posterHeight = adjustItems ? deviceWidth * 0.155 : deviceWidth * 0.311;
+	const iconBackgroundSize = posterHeight * 0.55;
 	const fontSizeIcon = posterHeight * 0.4;
 
 	const fontSizeH1 = adjustItems ? posterHeight * 0.42
@@ -320,6 +324,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			height: iconBackgroundSize,
 			borderRadius: iconBackgroundSize / 2,
 			marginRight: isPortrait ? 0 : 10,
+			marginBottom: 3,
 		},
 		iconStyle: {
 			fontSize: fontSizeIcon,

@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from '../../../../../BaseComponents';
+import { IconTelldus, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
@@ -48,6 +48,7 @@ type Props = {
 	local: boolean,
 	isOpen: boolean,
 	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 class StopButton extends View {
@@ -63,10 +64,13 @@ class StopButton extends View {
 		this.labelStopButton = `${props.intl.formatMessage(i18n.stop)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 	onStop() {
-		const { commandStop, id, isOpen, closeSwipeRow } = this.props;
+		const { commandStop, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(id, commandStop);
 	}
@@ -89,7 +93,7 @@ class StopButton extends View {
 				style={[stopButtonStyle, style]}
 				onPress={supportedMethod ? this.onStop : noop}
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
-				<Icon name="stop" size={iconSize}
+				<IconTelldus icon="stop" size={iconSize}
 					style={{
 						color: supportedMethod ? stopIconColor : '#eeeeee',
 					}}

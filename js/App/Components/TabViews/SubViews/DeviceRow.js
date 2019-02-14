@@ -33,12 +33,17 @@ import ToggleButton from './ToggleButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
-import { getLabelDevice, shouldUpdate } from '../../../Lib';
 import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
 
-import { getPowerConsumed, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
+import {
+	getLabelDevice,
+	shouldUpdate,
+	getPowerConsumed,
+	getDeviceIcons,
+	getDeviceActionIcon,
+} from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
@@ -50,7 +55,10 @@ type Props = {
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
+	isLast: boolean,
 	tab: string,
+	isNew: boolean,
+	gatewayName: string,
 	powerConsumed: string | null,
 	propsSwipeRow: Object,
 	onBell: (number) => void,
@@ -65,6 +73,9 @@ type Props = {
 	setIgnoreDevice: (Object) => void,
 	onPressMore: (Array<Object>) => void,
 	onHiddenRowOpen: (string) => void,
+	onPressDimButton: (device: Object) => void,
+	onNewlyAddedDidMount: (number, string) => void,
+	onPressDeviceAction: () => void,
 };
 
 type State = {
@@ -102,6 +113,8 @@ class DeviceRow extends View<Props, State> {
 	animatedScaleX: any;
 	isTablet: boolean;
 	closeSwipeRow: () => void;
+
+	shouldUpdateSwipeRow: (Object) => boolean;
 
 	state = {
 		disableSwipe: false,
@@ -142,44 +155,69 @@ class DeviceRow extends View<Props, State> {
 
 		this.isTablet = DeviceInfo.isTablet();
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
+		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const isStateEqual = isEqual(this.state, nextState);
-		if (!isStateEqual) {
+		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
+		if (currentScreenN === 'Devices') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Devices' && nextProps.screenReaderEnabled) {
+				return true;
+			}
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+			const { device } = otherProps;
+
+			if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed', 'isNew', 'gatewayName', 'isLast',
+			]);
+			if (propsChange) {
+				return true;
+			}
+		}
+		if (currentScreenN !== 'Devices' && this.state.isOpen) {
 			return true;
 		}
-
-		const { propsSwipeRow, tab, ...otherProps } = this.props;// eslint-disable-line
-		const { propsSwipeRow: nextPropsSwipeRow, tab: nextTab, ...nextOtherProps } = nextProps;
-		const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
-		const { device } = otherProps;
-
-		if (forceClose && this.state.isOpen && idToKeepOpen !== device.id) {
-			return true;
-		}
-
-		if (nextTab !== 'Devices' && this.state.isOpen) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-			'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
-		]);
-		if (propsChange) {
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Devices' && currentScreen === 'Devices' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 
 		return false;
 	}
 
+	componentDidMount() {
+		const { onNewlyAddedDidMount, device, isNew, gatewayName } = this.props;
+		if (onNewlyAddedDidMount && isNew) {
+			onNewlyAddedDidMount(device.id, gatewayName);
+		}
+	}
+
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		let { tab, propsSwipeRow, device } = this.props;
+		let {
+			currentScreen,
+			propsSwipeRow,
+			device,
+		} = this.props;
 		const { isOpen } = this.state;
 		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (tab !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
+		if (isOpen && (currentScreen !== 'Devices' || (forceClose && device.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
+	}
+
+	shouldUpdateSwipeRow(items: Object): boolean {
+		return true;
 	}
 
 	onSlideActive() {
@@ -213,6 +251,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	onSettingsSelected() {
+		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.device);
 	}
 
@@ -338,7 +377,16 @@ class DeviceRow extends View<Props, State> {
 	render(): Object {
 		let button = [];
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
-		const { device, intl, currentScreen, appLayout, isGatewayActive, powerConsumed } = this.props;
+		const {
+			device,
+			intl,
+			currentScreen,
+			appLayout,
+			isGatewayActive,
+			powerConsumed,
+			onPressDimButton,
+			onPressDeviceAction,
+		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
@@ -354,15 +402,16 @@ class DeviceRow extends View<Props, State> {
 			STOP,
 		} = supportedMethods;
 
-		const actionIcon = getDeviceActionIcon(deviceType, isInState);
+		const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 		const sharedProps = {
 			device,
 			isOpen,
 			intl,
 			isGatewayActive,
 			appLayout,
-			actionIcon,
+			actionIcons,
 			closeSwipeRow: this.closeSwipeRow,
+			onPressDeviceAction: onPressDeviceAction,
 		};
 		const icon = getDeviceIcons(deviceType);
 
@@ -393,6 +442,7 @@ class DeviceRow extends View<Props, State> {
 					showSlider={!BELL && !UP && !DOWN && !STOP}
 					onSlideActive={this.onSlideActive}
 					onSlideComplete={this.onSlideComplete}
+					onPressDimButton={onPressDimButton}
 					key={2}
 				/>
 			);
@@ -436,9 +486,9 @@ class DeviceRow extends View<Props, State> {
 					disableRightSwipe={true}
 					onRowOpen={this.onRowOpen}
 					onRowClose={this.onRowClose}
-					recalculateHiddenLayout={true}
 					swipeToOpenPercent={20}
-					directionalDistanceChangeThreshold={2}>
+					directionalDistanceChangeThreshold={2}
+					shouldItemUpdate={this.shouldUpdateSwipeRow}>
 					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
 						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
 						isOpen={isOpen}/>
@@ -447,7 +497,9 @@ class DeviceRow extends View<Props, State> {
 						// Fixes issue controlling device in IOS, in accessibility mode
 						// By passing onPress to visible content of 'SwipeRow', prevents it from
 						// being placed inside a touchable.
-						onPress={this.noOp}>
+						onPress={this.noOp}
+						accessible={false}
+						importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}>
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
@@ -534,6 +586,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getStyles(appLayout: Object, isGatewayActive: boolean, deviceState: string): Object {
+		const { isNew, isLast } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
@@ -543,6 +596,12 @@ class DeviceRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
+			brandPrimary,
+			brandSecondary,
+			shadow,
+			paddingFactor,
+			offlineColor,
+			rowTextColor,
 		} = Theme.Core;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -551,10 +610,10 @@ class DeviceRow extends View<Props, State> {
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
 		infoFontSize = infoFontSize > maxSizeRowTextTwo ? maxSizeRowTextTwo : infoFontSize;
 
-		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
-		let backgroundColor = !isGatewayActive ? Theme.Core.offlineColor : color;
+		let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? brandPrimary : brandSecondary;
+		let backgroundColor = !isGatewayActive ? offlineColor : color;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = deviceWidth * paddingFactor;
 
 		return {
 			touchableContainer: {
@@ -565,20 +624,24 @@ class DeviceRow extends View<Props, State> {
 			},
 			row: {
 				marginHorizontal: padding,
-				marginBottom: padding / 2,
+				marginTop: padding / 2,
+				marginBottom: isLast ? padding : 0,
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
-				...Theme.Core.shadow,
+				...shadow,
+				borderWidth: isNew ? 2 : 0,
+				borderColor: isNew ? brandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',
-				height: Theme.Core.rowHeight,
-				width: Theme.Core.buttonWidth * 2,
+				height: rowHeight,
+				width: buttonWidth * 2,
 				alignSelf: 'flex-end',
 				justifyContent: 'center',
 				alignItems: 'center',
 				marginRight: padding,
+				marginTop: padding / 2,
 			},
 			cover: {
 				flex: 1,
@@ -606,7 +669,7 @@ class DeviceRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			text: {
-				color: Theme.Core.rowTextColor,
+				color: rowTextColor,
 				fontSize: nameFontSize,
 				textAlignVertical: 'center',
 				textAlign: 'left',
@@ -647,14 +710,14 @@ class DeviceRow extends View<Props, State> {
 			},
 			textPowerConsumed: {
 				marginLeft: 6,
-				color: Theme.Core.rowTextColor,
+				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},
 			textPowerConsumedTablet: {
 				marginRight: 6,
 				marginTop: infoFontSize * 0.411,
-				color: Theme.Core.rowTextColor,
+				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},
@@ -670,7 +733,6 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
 
 	return {
-		tab: store.navigation.tab,
 		powerConsumed,
 	};
 }

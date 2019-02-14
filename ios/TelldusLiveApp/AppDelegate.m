@@ -23,8 +23,6 @@
 #import "React/RCTBundleURLProvider.h"
 #import "React/RCTRootView.h"
 #import "React/RCTPushNotificationManager.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
 #import "RNGoogleSignin.h"
 
 #import "Orientation.h"
@@ -34,8 +32,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSURL *jsCodeLocation;
-	[Fabric with:@[[Crashlytics class]]];
-  [FIRApp configure];
+	[FIRApp configure];
 
 	jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 

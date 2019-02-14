@@ -22,76 +22,51 @@
 'use strict';
 
 import React from 'react';
+import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
-import { NetInfo } from 'react-native';
-import Toast from 'react-native-simple-toast';
 import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape } from 'react-intl';
+import { NavigationActions } from 'react-navigation';
 
-import { View, Header, IconTelldus } from '../../BaseComponents';
+import { View, Header, Image } from '../../BaseComponents';
 import Navigator from './AppNavigator';
-import { DimmerPopup } from './TabViews/SubViews';
-import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
-import UserAgreement from './UserAgreement/UserAgreement';
 import Drawer from './Drawer/Drawer';
 
 import {
-	getUserProfile,
-	appStart,
-	appState,
-	syncLiveApiOnForeground,
-	getAppData,
-	getGateways,
-	hideToast,
-	resetSchedule,
-	autoDetectLocalTellStick,
-	setAppLayout,
-	resetLocalControlSupport,
-	showToast,
-	addNewGateway,
 	syncWithServer,
 	switchTab,
-	closeUDPSocket,
-	initiateGatewayLocalTest,
 } from '../Actions';
-import { hideDimmerStep } from '../Actions/Dimmer';
-import { configureAndroid } from '../Actions/Widget';
-import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import {
-	getRSAKey,
 	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
 	getRouteName,
-	shouldUpdate,
+	LayoutAnimations,
 } from '../Lib';
-
+import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 type Props = {
-	dimmer: Object,
-	showEULA: boolean,
-	showToast: boolean,
-	messageToast: string,
-	durationToast: string,
-	positionToast: string,
 	screenReaderEnabled: boolean,
-	addNewGatewayBool: boolean,
-	intl: intlShape.isRequired,
+	appLayout: Object,
 
+	intl: intlShape.isRequired,
 	dispatch: Function,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
 	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
+	addNewDevice: () => void,
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
 	currentScreen: string,
 	drawer: boolean,
-	addingNewLocation: boolean,
+	showAttentionCaptureAddDevice: boolean,
+	addNewDevicePressed: boolean,
 };
 
 class AppNavigatorRenderer extends View<Props, State> {
@@ -100,10 +75,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	state: State;
 
 	onNavigationStateChange: (Object, Object) => void;
-	onDoneDimming: (Object) => void;
 	autoDetectLocalTellStick: () => void;
-	handleConnectivityChange: () => void;
-	onLayout: (Object) => void;
 	setNavigatorRef: (any) => void;
 
 	renderNavigationView: () => Object;
@@ -111,6 +83,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 	openDrawer: () => void;
 	addNewLocation: () => void;
 	onPressGateway: (Object) => void;
+	newSchedule: () => void;
+	toggleAttentionCapture: (boolean) => void;
+
+	addNewDevice: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -118,7 +94,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.state = {
 			currentScreen: 'Dashboard',
 			drawer: false,
-			addingNewLocation: false,
+			showAttentionCaptureAddDevice: false,
+			addNewDevicePressed: false,
 		};
 
 		const { formatMessage } = props.intl;
@@ -137,13 +114,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
 		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-		this.onDoneDimming = this.onDoneDimming.bind(this);
-
-		this.timeOutConfigureLocalControl = null;
-		this.timeOutGetLocalControlToken = null;
-		this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
-		this.onLayout = this.onLayout.bind(this);
-		this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
 		this.setNavigatorRef = this.setNavigatorRef.bind(this);
 
@@ -155,22 +125,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.onPressGateway = this.onPressGateway.bind(this);
 
-		getRSAKey(true);
-
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-		const size = Math.floor(deviceHeight * 0.03);
-
-		let fontSize = size < 20 ? 20 : size;
-		this.settingsButton = {
-			component: <IconTelldus icon={'settings'} style={{
-				fontSize,
-				color: '#fff',
-			}}/>,
-			onPress: this.onOpenSetting,
-		};
+		this.addNewDevice = this.addNewDevice.bind(this);
 
 		this.menuButton = {
 			icon: {
@@ -183,33 +138,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 			onPress: this.openDrawer,
 			accessibilityLabel: '',
 		};
-	}
 
-	componentDidMount() {
-		this.props.dispatch(appStart());
-		this.props.dispatch(appState());
-		this.props.dispatch(configureAndroid());
-		// Calling other API requests after resolving the very first one, in order to avoid the situation, where
-		// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
-		// and results in generating multiple tokens.
-		const { dispatch } = this.props;
-		dispatch(getUserProfile()).then(() => {
-			dispatch(syncLiveApiOnForeground());
-			dispatch(getGateways());
-			dispatch(getAppData());
-			dispatch(resetSchedule());
-
-			// test gateway local control end-point on app restart.
-			dispatch(initiateGatewayLocalTest());
-
-			// Auto discover TellStick's that support local control.
-			this.autoDetectLocalTellStick();
-		});
-
-		NetInfo.addEventListener(
-			'connectionChange',
-			this.handleConnectivityChange,
-		);
+		this.newSchedule = this.newSchedule.bind(this);
+		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -218,59 +149,29 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, showEULA, showToast: showToastBool, ...others } = this.props;
-		const { appLayout: appLayoutN, showEULAN, showToast: showToastN, ...othersN } = nextProps;
-		if ((appLayout.width !== appLayoutN.width) || (showEULA !== showEULAN) || (showToastBool !== showToastN)) {
-			return true;
-		}
+		const { appLayout } = this.props;
+		const { appLayout: appLayoutN } = nextProps;
 
-		const propsChange = shouldUpdate(others, othersN, ['dimmer']);
-		if (propsChange) {
+
+		if (appLayout.width !== appLayoutN.width) {
 			return true;
 		}
 
 		return false;
 	}
 
-	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const {
-			showToast: showToastBool,
-			messageToast,
-			durationToast,
-			positionToast,
-			intl,
-			addNewGatewayBool,
-		} = this.props;
-		if (showToastBool && !prevProps.showToast) {
-			const { formatMessage } = intl;
-			const message = messageToast ? messageToast : formatMessage(i18n.errortoast);
-			this._showToast(message, durationToast, positionToast);
-		}
-		if (addNewGatewayBool && !this.state.addingNewLocation) {
-			this.addNewLocation();
-		}
-	}
-
 	addNewLocation() {
-		this.setState({
-			addingNewLocation: true,
-			addNewGateway: false,
-		});
 		if (this.state.drawer) {
 			this.closeDrawer();
 		}
-		this.props.addNewLocation()
-			.then((response: Object) => {
-				if (response.client) {
-					navigate('AddLocation', {clients: response.client}, 'AddLocation');
-				}
-			}).catch((error: Object) => {
-				this.setState({
-					addingNewLocation: false,
-				});
-				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
-				this.props.dispatch(showToast(message));
-			});
+		this.props.addNewLocation();
+	}
+
+	newSchedule() {
+		navigate('Schedule', {
+			key: 'Schedule',
+			params: { editMode: false },
+		}, 'Schedule');
 	}
 
 	onOpenDrawer() {
@@ -290,49 +191,17 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	onPressGateway(location: Object) {
 		this.closeDrawer();
-		navigate('LocationDetails', {location}, 'LocationDetails');
+		const navigateAction = NavigationActions.navigate({
+			routeName: 'Details',
+			key: 'Details',
+			params: { location },
+		});
+		navigate('LocationDetails', location, 'LocationDetails', navigateAction);
 	}
 
 	onOpenSetting() {
 		this.closeDrawer();
 		navigate('Settings', {}, 'Settings');
-	}
-
-	handleConnectivityChange(connectionInfo: Object) {
-		const { dispatch } = this.props;
-		const { type } = connectionInfo;
-
-		// When ever user's connection change reset the previously auto-discovered ip address, before it is auto-discovered and updated again.
-		dispatch(resetLocalControlSupport());
-
-		// When user's connection change and if it there is connection to internet, auto-discover TellStick and update it's ip address.
-		if (type && type !== 'none') {
-			dispatch(initiateGatewayLocalTest());
-			dispatch(autoDetectLocalTellStick());
-		}
-	}
-
-	// Sends UDP package to the broadcast IP to detect gateways connected in the same LAN.
-	autoDetectLocalTellStick() {
-		const { dispatch } = this.props;
-		this.timeOutConfigureLocalControl = setTimeout(() => {
-			dispatch(autoDetectLocalTellStick());
-		}, 15000);
-	}
-
-	componentWillUnmount() {
-		clearTimeout(this.timeOutConfigureLocalControl);
-		clearTimeout(this.timeOutGetLocalControlToken);
-		NetInfo.removeEventListener(
-			'connectionChange',
-			this.handleConnectivityChange,
-		);
-		closeUDPSocket();
-	}
-
-	_showToast(message: string, durationToast: any, positionToast: any) {
-		Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
-		this.props.dispatch(hideToast());
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -342,12 +211,39 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.props.onNavigationStateChange(currentScreen);
 	}
 
-	onDoneDimming() {
-		this.props.dispatch(hideDimmerStep());
+	addNewDevice() {
+		this.setState({
+			addNewDevicePressed: true,
+		}, () => {
+			this.props.addNewDevice();
+		});
 	}
 
-	onLayout(ev: Object) {
-		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+	makeRightButton(CS: string, styles: Object): Object | null {
+		this.AddButton = {
+			component: <Image source={{uri: 'icon_plus'}} style={styles.addIconStyle}/>,
+			style: styles.rightButtonStyle,
+			onPress: () => {},
+		};
+		switch (CS) {
+			case 'Devices':
+				return {
+					...this.AddButton,
+					onPress: this.addNewDevice,
+				};
+			case 'Gateways':
+				return {
+					...this.AddButton,
+					onPress: this.addNewLocation,
+				};
+			case 'Scheduler':
+				return {
+					...this.AddButton,
+					onPress: this.newSchedule,
+				};
+			default:
+				return null;
+		}
 	}
 
 	setNavigatorRef(navigatorRef: any) {
@@ -371,6 +267,19 @@ class AppNavigatorRenderer extends View<Props, State> {
 		/>;
 	}
 
+	toggleAttentionCapture(value: boolean) {
+		if (!this.state.addNewDevicePressed) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500));
+		}
+		this.setState({
+			showAttentionCaptureAddDevice: value,
+		}, () => {
+			// This is to prevent same layout animation occuring on navigation(next layout)
+			// Since LayoutAnimationEnd Callback only available in iOS
+			LayoutAnimation.configureNext(null);
+		});
+	}
+
 	makeLeftButton(styles: Object): any {
 		const { drawer } = this.state;
 		const { screenReaderEnabled } = this.props;
@@ -382,25 +291,47 @@ class AppNavigatorRenderer extends View<Props, State> {
 		return (drawer && screenReaderEnabled) ? null : this.menuButton;
 	}
 
+	showAttentionCapture(): boolean {
+		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+	}
+
 	render(): Object {
-		const { currentScreen: CS, drawer } = this.state;
-		const { intl, dimmer, showEULA, appLayout, screenReaderEnabled } = this.props;
-		const screenProps = {
-			currentScreen: CS,
-			intl,
-			drawer,
-			appLayout,
-		};
-		const { show, name, value, showStep, deviceStep } = dimmer;
-		const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
+		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
 
 		const styles = this.getStyles(appLayout);
 
 		const leftButton = this.makeLeftButton(styles);
+		const rightButton = this.makeRightButton(CS, styles);
 		const drawerWidth = getDrawerWidth(styles.deviceWidth);
 
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
+
+		let screenProps = {
+			currentScreen: CS,
+			intl,
+			drawer,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
+		};
+		const showAttentionCapture = this.showAttentionCapture();
+		if (showHeader) {
+			screenProps = {
+				...screenProps,
+				leftButton,
+				rightButton,
+				hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
+				style: styles.header,
+				logoStyle: styles.logoStyle,
+				toggleAttentionCapture: this.toggleAttentionCapture,
+				showAttentionCapture,
+				showAttentionCaptureAddDevice,
+				attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
+			};
+		}
 
 		return (
 			<DrawerLayoutAndroid
@@ -412,29 +343,22 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onDrawerOpen={this.onOpenDrawer}
 				onDrawerClose={this.onCloseDrawer}
 			>
-				{showHeader && (
-					<Header style={styles.header} logoStyle={styles.logoStyle} leftButton={leftButton}/>
+				{showHeader && !styles.isPortrait && (
+					<Header
+						style={styles.header}
+						logoStyle={styles.logoStyle}
+						leftButton={leftButton}
+						rightButton={rightButton}
+						appLayout={appLayout}
+						showAttentionCapture={showAttentionCapture}
+						attentionCaptureText={intl.formatMessage(i18n.labelAddZWaveD).toUpperCase()}/>
 				)}
-				<View style={showHeader ? styles.container : {flex: 1}} importantForAccessibility={importantForAccessibility}>
+				<View style={showHeader ? styles.container : {flex: 1}}>
 					<Navigator
 						ref={this.setNavigatorRef}
 						onNavigationStateChange={this.onNavigationStateChange}
 						screenProps={screenProps} />
-					<DimmerPopup
-						isVisible={show}
-						name={name}
-						value={value / 255}
-					/>
 				</View>
-				{screenReaderEnabled && (
-					<DimmerStep
-						showModal={showStep}
-						deviceId={deviceStep}
-						onDoneDimming={this.onDoneDimming}
-						intl={intl}
-					/>
-				)}
-				<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
 			</DrawerLayoutAndroid>
 		);
 	}
@@ -445,18 +369,23 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const size = Math.floor(deviceHeight * 0.025);
+		const fontSizeIcon = size < 20 ? 20 : size;
+
+		const { port, land } = Theme.Core.headerHeightFactor;
+
 		return {
 			deviceWidth,
 			header: isPortrait ? {
-				height: deviceHeight * 0.05,
-				alignItems: 'flex-end',
+				height: deviceHeight * port,
+				alignItems: 'center',
 			} : {
 				transform: [{rotateZ: '-90deg'}],
 				position: 'absolute',
 				left: -deviceHeight * 0.4444,
 				top: deviceHeight * 0.4444,
 				width: deviceHeight,
-				height: deviceHeight * 0.1111,
+				height: deviceHeight * land,
 			},
 			container: {
 				flex: 1,
@@ -481,37 +410,34 @@ class AppNavigatorRenderer extends View<Props, State> {
 			menuIconStyle: isPortrait ? null : {
 				transform: [{rotateZ: '90deg'}],
 			},
+			rightButtonStyle: isPortrait ? null : {
+				top: deviceHeight * 0.03666,
+				right: height - 50,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+			addIconStyle: {
+				height: fontSizeIcon,
+				width: fontSizeIcon,
+			},
 			logoStyle: isPortrait ? null : {
 				position: 'absolute',
 				left: deviceHeight * 0.6255,
 				top: deviceHeight * 0.0400,
 			},
+			isPortrait,
 		};
 	}
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const {
-		showToast: showToastBool,
-		messageToast,
-		durationToast,
-		positionToast,
 		layout,
 		screenReaderEnabled,
 	} = state.app;
-	const { allIds, toActivate } = state.gateways;
-
-	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
 
 	return {
-		addNewGatewayBool,
 		screenReaderEnabled,
-		messageToast,
-		durationToast,
-		positionToast,
-		showToast: showToastBool,
-		showEULA: !getUserProfileSelector(state).eula,
-		dimmer: state.dimmer,
 		appLayout: layout,
 	};
 }
@@ -526,10 +452,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 			dispatch(syncWithServer(tab));
 			dispatch(switchTab(tab));
 		},
-		addNewLocation: (): Function => {
-			return dispatch(addNewGateway());
-		},
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(AppNavigatorRenderer));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(AppNavigatorRenderer);

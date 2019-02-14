@@ -44,8 +44,8 @@ export default class Base extends Component<Object, void> {
 
 	getChildContext(): Object {
 		return {
-			theme: this.props.theme ? this.props.theme : this.getTheme(),
-			foregroundColor: this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor,
+			theme: this.props && this.props.theme ? this.props.theme : this.getTheme(),
+			foregroundColor: this.props && this.props.foregroundColor ? this.props.foregroundColor : this.getTheme().textColor,
 		};
 	}
 
@@ -54,7 +54,8 @@ export default class Base extends Component<Object, void> {
 	}
 
 	getTheme(): Object {
-		return this.props.theme ? this.props.theme : this.context.theme || Theme.Core;
+		return this.props && this.props.theme ? this.props.theme :
+			this.context && this.context.theme ? this.context.theme : Theme.Core;
 	}
 
 }

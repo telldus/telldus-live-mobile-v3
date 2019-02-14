@@ -37,6 +37,7 @@ type Props = {
 	children: Object,
 	note: string,
 	square: Object,
+	cardBody: any,
 };
 
 export default class CardItemComponent extends Base {

@@ -27,7 +27,7 @@ import { reportException } from './Analytics';
 
 import { utils } from 'live-shared-data';
 const { sensorUtils } = utils;
-const { getSensorTypes, getSensorUnits } = sensorUtils;
+const { getSensorTypes, getSensorUnits, getWindDirection } = sensorUtils;
 
 import i18n from '../Translations/common';
 
@@ -77,36 +77,51 @@ function checkIfLarge(value: string): boolean {
  *
  * @param {string} name : name/type of sensor received from API/socket(say, 'temp')
  * @param {number} scale : the integer value received from API/socket
+ * @param {number} value : the sensor value[Used only to prepare the 'sensorInfo'/accessibility label] pass value 0 if 'sensorInfo' is not required, but others
+ * @param {boolean} isLarge : if value is large in length or not, formatting option is based on this property.
  * @param {Function} formatMessage: method from 'intl'
  *
  * 'formatMessage' has a dummy method as default value, so it can be omitted if label is not required
  * and other properties can be accessed.
  */
-function getSensorIconLabelUnit(name: string, scale: number, formatMessage?: Function = (translatable: Object): null => null): Object {
+function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: boolean = false, formatMessage?: Function = (translatable: Object): null => null): Object {
 	let sensorTypes = getSensorTypes();
 	let sensorType = sensorTypes[name];
 	let sensorUnits = getSensorUnits(sensorType);
 	let unit = sensorUnits[scale];
 
 	if (name === 'humidity') {
+		let label = formatMessage(i18n.labelHumidity);
 		return {
 			icon: 'humidity',
-			label: formatMessage(i18n.labelHumidity),
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: undefined,
 		};
 	}
 	if (name === 'temp') {
+		let label = formatMessage(i18n.labelTemperature);
 		return {
 			icon: 'temperature',
-			label: formatMessage(i18n.labelTemperature),
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
 	if (name === 'rrate' || name === 'rtot') {
+		let label = name === 'rrate' ? formatMessage(i18n.labelRainRate) : formatMessage(i18n.labelRainTotal);
+
+		let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
+		let rtotalInfo = name === 'rtot' ? `${label} ${value}${unit}` : '';
+
 		return {
 			icon: 'rain',
-			label: name === 'rrate' ? formatMessage(i18n.labelRainRate) : formatMessage(i18n.labelRainTotal),
+			label,
 			unit,
+			sensorInfo: `${rrateInfo}, ${rtotalInfo}`,
+			formatOptions: {maximumFractionDigits: 0},
 		};
 	}
 	if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
@@ -114,23 +129,39 @@ function getSensorIconLabelUnit(name: string, scale: number, formatMessage?: Fun
 		if (name === 'wdir') {
 			label = formatMessage(i18n.labelWindDirection);
 		}
+
+		let direction = '';
+		if (name === 'wdir') {
+			direction = Array.from(getWindDirection(value, formatMessage)).toString();
+		}
+		let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
+		let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
+		let wdirInfo = name === 'wdir' ? `${label} ${direction}` : '';
+
 		return {
 			icon: 'wind',
 			label,
 			unit,
+			sensorInfo: `${wgustInfo}, ${wavgInfo}, ${wdirInfo}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
 	if (name === 'uv') {
+		let label = formatMessage(i18n.labelUVIndex);
 		return {
 			icon: 'uv',
-			label: formatMessage(i18n.labelUVIndex),
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: 0},
 		};
 	}
 	if (name === 'watt') {
 		let label = formatMessage(i18n.energy);
 		if (scale === '0') {
 			label = `${formatMessage(i18n.accumulated)} ${formatMessage(i18n.labelWatt)}`;
+			label = isLarge ? label :
+				`${formatMessage(i18n.acc)} ${formatMessage(i18n.labelWatt)}`;
 		}
 		if (scale === '2') {
 			label = formatMessage(i18n.labelWatt);
@@ -151,45 +182,132 @@ function getSensorIconLabelUnit(name: string, scale: number, formatMessage?: Fun
 			icon: 'watt',
 			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
 	if (name === 'lum') {
+		let label = formatMessage(i18n.labelLuminance);
 		return {
 			icon: 'luminance',
-			label: formatMessage(i18n.labelLuminance),
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: 0, useGrouping: false},
 		};
 	}
 	if (name === 'dewp') {
+		let label = formatMessage(i18n.labelDewPoint);
 		return {
 			icon: 'humidity',
-			label: formatMessage(i18n.labelDewPoint),
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
 	if (name === 'barpress') {
+		let label = formatMessage(i18n.labelBarometricPressure);
 		return {
-			icon: 'guage',
-			label: formatMessage(i18n.labelBarometricPressure),
+			icon: 'gauge',
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
 	if (name === 'genmeter') {
+		let label = formatMessage(i18n.labelGenericMeter);
 		return {
 			icon: 'sensor',
-			label: formatMessage(i18n.labelGenericMeter),
+			label,
 			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'co2') {
+		let label = 'CO2';
+		return {
+			icon: 'co2',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'volume') {
+		let label = formatMessage(i18n.labelVolume);
+		let icon = scale === '0' ? 'volumeliquid' : 'volume3d';
+		return {
+			icon,
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'loudness') {
+		let label = formatMessage(i18n.labelLoudness);
+		return {
+			icon: 'speaker',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'particulatematter2.5') {
+		let label = 'PM2.5';
+		return {
+			icon: 'pm25',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'co') {
+		let label = 'CO';
+		return {
+			icon: 'co',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'weight') {
+		let label = formatMessage(i18n.labelWeight);
+		return {
+			icon: 'weight',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
+		};
+	}
+	if (name === 'moisture') {
+		let label = formatMessage(i18n.labelMoisture);
+		return {
+			icon: 'humidity',
+			label,
+			unit,
+			sensorInfo: `${label} ${value}${unit}`,
+			formatOptions: {maximumFractionDigits: isLarge ? 0 : 1},
 		};
 	}
 	return {
-		icon: '',
-		label: '',
-		unit: '',
+		icon: 'sensor',
+		label: formatMessage(i18n.unknown),
+		unit,
+		sensorInfo: formatMessage(i18n.unknown),
+		formatOptions: undefined,
 	};
 }
 
 module.exports = {
-	getSensorIconLabelUnit,
+	getSensorInfo,
 	formatLastUpdated,
 	checkIfLarge,
 	...sensorUtils,

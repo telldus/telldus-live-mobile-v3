@@ -24,10 +24,10 @@
 'use strict';
 
 import React from 'react';
-import { Linking, ScrollView } from 'react-native';
-import { connect } from 'react-redux';
+import { Linking } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { NavigationActions } from 'react-navigation';
 
 import Theme from '../../../Theme';
 import {
@@ -99,10 +99,15 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.navigation.navigate({
+		const navigateAction = NavigationActions.navigate({
 			routeName: 'Tabs',
 			key: 'Tabs',
-		});
+			action: NavigationActions.navigate({
+				routeName: 'Gateways',
+				key: 'Gateways',
+			}),
+		  });
+		this.props.navigation.dispatch(navigateAction);
 	}
 
 	onPressHelp() {
@@ -126,71 +131,65 @@ class Success extends View<void, Props, State> {
 		const locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
-			<View style={{flex: 1}}>
-				<ScrollView>
-					<View style={[styles.itemsContainer, styles.shadow]}>
-						<View style={styles.imageTitleContainer}>
-							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
-							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
-							<View style={{flex: 1, flexWrap: 'wrap'}}>
-								<Text style={styles.messageTitle}>
-									{this.title}
-								</Text>
-							</View>
+			<View style={{
+				flex: 1,
+				alignItems: 'stretch',
+			}}>
+				<View style={styles.itemsContainer}>
+					<View style={styles.imageTitleContainer}>
+						<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
+						<View style={styles.iconBackMask}/>
+						<Icon name="check-circle" size={styles.iconCheckSize} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
+						<View style={{flex: 1, flexWrap: 'wrap'}}>
+							<Text style={styles.messageTitle}>
+								{this.title}
+							</Text>
 						</View>
-						<Text style={styles.messageBody}>
-							{this.body}
-							{/** {'\n\n'}
+					</View>
+					<Text style={styles.messageBody}>
+						{this.body}
+						{/** {'\n\n'}
 							TODO: Bring back this when guides are available in live-v3
 							<FormattedMessage {...i18n.messageBodyParaTwo} style={styles.messageBody}/>
 							*/}
-						</Text>
-						{/** <TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
+					</Text>
+					{/** <TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
 							<CustomIcon name="icon_guide" size={36} color={Theme.Core.brandSecondary} />
 							<FormattedMessage {...i18n.hyperLintText} style={styles.hyperLink}/>
 							<Icon name="angle-right" size={26} color={'#A59F9A'}/>
 						</TouchableOpacity> */}
-					</View>
-					<TouchableButton
-						text={this.props.intl.formatMessage(i18n.continue)}
-						onPress={this.onPressContinue}
-						style={styles.button}
-					/>
-				</ScrollView>
+				</View>
+				<TouchableButton
+					text={this.props.intl.formatMessage(i18n.continue)}
+					onPress={this.onPressContinue}
+					style={styles.button}
+				/>
 			</View>
 		);
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const iconCheckSize = deviceWidth * 0.13;
+		const iconContCheckSize = iconCheckSize * 0.96;
 
 		return {
+			iconCheckSize: iconCheckSize,
 			itemsContainer: {
-				flex: 1,
+				backgroundColor: '#fff',
 				flexDirection: 'column',
 				marginTop: 20,
 				paddingVertical: 20,
 				paddingRight: 20,
 				alignItems: 'flex-start',
-				width: width - 20,
-			},
-			shadow: {
-				borderRadius: 4,
-				backgroundColor: '#fff',
-				shadowColor: '#000000',
-				shadowOffset: {
-					width: 0,
-					height: 0,
-				},
-				shadowRadius: 1,
-				shadowOpacity: 1.0,
-				elevation: 2,
+				...Theme.Core.shadow,
 			},
 			imageLocation: {
-				width: isPortrait ? width * 0.32 : height * 0.32,
-				height: isPortrait ? width * 0.23 : height * 0.23,
+				width: deviceWidth * 0.32,
+				height: deviceWidth * 0.23,
 			},
 			imageTitleContainer: {
 				flex: 1,
@@ -198,24 +197,31 @@ class Success extends View<void, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'flex-start',
 			},
+			iconBackMask: {
+				position: 'absolute',
+				top: 22,
+				left: deviceWidth * 0.185,
+				width: iconContCheckSize,
+				height: iconContCheckSize,
+				borderRadius: iconContCheckSize / 2,
+				backgroundColor: '#fff',
+			},
 			iconCheck: {
 				position: 'absolute',
 				top: 20,
-				left: isPortrait ? width * 0.18 : height * 0.18,
-				backgroundColor: '#fff',
-				borderBottomLeftRadius: 35,
-				borderTopRightRadius: 25,
+				left: deviceWidth * 0.18,
+				backgroundColor: 'transparent',
 			},
 			messageTitle: {
 				color: '#00000099',
-				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
+				fontSize: Math.floor(deviceWidth * 0.068),
 				flexWrap: 'wrap',
 			},
 			messageBody: {
 				marginLeft: 20,
 				marginTop: 10,
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: Math.floor(deviceWidth * 0.042),
 			},
 			hyperLinkButton: {
 				flexDirection: 'row',
@@ -240,4 +246,4 @@ class Success extends View<void, Props, State> {
 	}
 }
 
-export default connect()(Success);
+export default Success;

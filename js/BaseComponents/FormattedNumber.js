@@ -20,12 +20,13 @@
 // @flow
 
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import { Text } from 'react-native';
+import Text from './Text';
 import * as Intl from 'react-intl';
 
 const FormattedNumberComponent = (props: Object): React$Element<any> => {
-	const style = props.style;
+	const { style, suffix = null, suffixStyle = {} } = props;
 
 	const formatOptions = {
 		localeMatcher: props.localeMatcher,
@@ -43,7 +44,16 @@ const FormattedNumberComponent = (props: Object): React$Element<any> => {
 
 	return (
 		<Intl.FormattedNumber {...formatOptions}>
-			{(localized: number): React$Element<any> => <Text style={style} allowFontScaling={false}>{props.prefix}{localized}{props.suffix}</Text>}
+			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{localized}
+				{!!suffix && (
+					[<Text style={styles.space} key={'1'}>
+						{' '}
+					</Text>,
+					<Text style={suffixStyle} key={'2'}>
+						{suffix}
+					</Text>]
+				)}
+			</Text>}
 		</Intl.FormattedNumber>
 	);
 };
@@ -64,5 +74,14 @@ FormattedNumberComponent.propTypes = {
 	prefix: PropTypes.any,
 	suffix: PropTypes.any,
 };
+
+const styles = StyleSheet.create({
+	space: {
+		color: 'rgba(0,0,0,0)',
+		textShadowColor: 'rgba(0,0,0,0)',
+		backgroundColor: 'rgba(0,0,0,0)',
+		fontSize: 6,
+	},
+});
 
 export default FormattedNumberComponent;

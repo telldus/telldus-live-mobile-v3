@@ -45,7 +45,7 @@ import {
 	formatLastUpdated,
 	checkIfLarge,
 	shouldUpdate,
-	getSensorIconLabelUnit,
+	getSensorInfo,
 	getWindDirection,
 } from '../../../Lib';
 
@@ -59,6 +59,9 @@ type Props = {
 	isGatewayActive: boolean,
 	propsSwipeRow: Object,
 	defaultType?: string,
+	screenReaderEnabled: boolean,
+	isLast: boolean,
+
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
 	onSettingsSelected: Object => void,
@@ -78,26 +81,6 @@ class SensorRow extends View<Props, State> {
 	state: State;
 
 	labelSensor: string;
-	labelHumidity: string;
-	labelTemperature: string;
-	labelRainRate: string;
-	labelRainTotal: string;
-	labelWindGust: string;
-	labelWindAverage: string;
-	labelWindDirection: string;
-	labelUVIndex: string;
-	labelWatt: string;
-	labelCurrent: string;
-	labelEnergy: string;
-	labelAccumulated: string;
-	labelAcc: string;
-	labelVoltage: string;
-	labelPowerFactor: string;
-	labelPulse: string;
-	labelLuminance: string;
-	labelDewPoint: string;
-	labelBarometricPressure: string;
-	labelGenericMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
@@ -105,7 +88,6 @@ class SensorRow extends View<Props, State> {
 	helpViewHiddenRow: string;
 	helpCloseHiddenRow: string;
 
-	onLayout: (Object) => void;
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
@@ -124,6 +106,8 @@ class SensorRow extends View<Props, State> {
 
 	formatSensorLastUpdate: (string) => string;
 
+	shouldUpdateSwipeRow: (Object) => boolean;
+
 	state = {
 		isOpen: false,
 		forceClose: false,
@@ -135,13 +119,10 @@ class SensorRow extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.width = 0;
+
 		const { formatMessage } = props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
-
-		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelAcc = formatMessage(i18n.acc);
 
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
@@ -150,7 +131,6 @@ class SensorRow extends View<Props, State> {
 		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
 		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
-		this.onLayout = this.onLayout.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
@@ -171,17 +151,22 @@ class SensorRow extends View<Props, State> {
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
 
 		this.formatSensorLastUpdate = this.formatSensorLastUpdate.bind(this);
+		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
 		if (currentScreenN === 'Sensors') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Sensors' && nextProps.screenReaderEnabled) {
+				return true;
+			}
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
 
-			const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line		
 			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
 			const { sensor } = otherProps;
 
@@ -190,7 +175,7 @@ class SensorRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'sensor', 'isGatewayActive', 'defaultType',
+				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
 			]);
 			if (propsChange) {
 				return true;
@@ -198,7 +183,8 @@ class SensorRow extends View<Props, State> {
 
 			return false;
 		}
-		if (currentScreenN !== 'Sensors' && this.state.isOpen) {
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Sensors' && currentScreen === 'Sensors' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 
@@ -212,6 +198,10 @@ class SensorRow extends View<Props, State> {
 		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
 			this.closeSwipeRow();
 		}
+	}
+
+	shouldUpdateSwipeRow(items: Object): boolean {
+		return true;
 	}
 
 	onRowOpen() {
@@ -265,6 +255,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onSettingsSelected() {
+		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.sensor);
 	}
 
@@ -327,19 +318,22 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onLayoutDeviceName(ev: Object) {
-		if (!this.state.showFullName) {
-			let { x, width } = ev.nativeEvent.layout;
-			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
-			const maxRightPadd = 12;
+		const { x, width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
+		const maxRightPadd = 12;
+		const newOccWidth = width + x + maxRightPadd;
+		if (!this.state.showFullName && (newOccWidth !== coverMaxWidth)) {
 			this.setState({
-				coverOccupiedWidth: width + x + maxRightPadd,
+				coverOccupiedWidth: newOccWidth,
 			});
 		}
 	}
 
 	onLayoutCover(ev: Object) {
-		if (!this.state.showFullName) {
-			let { width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		const { width } = ev.nativeEvent.layout;
+		if (!this.state.showFullName && (coverMaxWidth !== width)) {
 			this.setState({
 				coverMaxWidth: width,
 			});
@@ -347,7 +341,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	onLayoutButtons(ev: Object) {
-		let { buttonsWidth } = this.state;
+		const { buttonsWidth } = this.state;
 		if (!buttonsWidth) {
 			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
 			this.setState({
@@ -364,21 +358,27 @@ class SensorRow extends View<Props, State> {
 
 		// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
 		// This prevent from showing 'in 1 second' which is illogic!
-		const relNextSec = formatRelative(moment.unix(now).add(1, 'seconds')).replace(/[0-9]/g, '').trim();// As a CAUTION
-		const relNextSecs = formatRelative(moment.unix(now).add(3, 'seconds')).replace(/[0-9]/g, '').trim();// As a CAUTION
+		let futureTimes = [];
+		for (let i = 1; i < 5; i++) {
+			futureTimes.push(formatRelative(moment.unix(now).add(i, 'seconds')).replace(/[0-9]/g, '').trim());// As a CAUTION
+		}
 
 		const relNow = formatRelative(moment.unix(now)).replace(/[0-9]/g, '').trim();
-		const secondAgo = formatRelative(moment.unix(now).subtract(1, 'seconds')).replace(/[0-9]/g, '').trim();
-		const secondsAgo = formatRelative(moment.unix(now).subtract(2, 'seconds')).replace(/[0-9]/g, '').trim();
-		if (timeAgo === relNextSec || timeAgo === relNextSecs || timeAgo === relNow || timeAgo === secondAgo || timeAgo === secondsAgo) {
+
+		let pastSeconds = [];
+		for (let i = 1; i < 4; i++) {
+			pastSeconds.push(formatRelative(moment.unix(now).subtract(i, 'seconds')).replace(/[0-9]/g, '').trim());
+		}
+
+		if (timeAgo === relNow || (futureTimes.indexOf(timeAgo) !== -1) || (pastSeconds.indexOf(timeAgo) !== -1)) {
 			return formatMessage(i18n.justNow);
 		}
 
 		return time;
 	}
 
-	getSensors(data: Object): Object {
-		let sensors = {}, sensorInfo = '';
+	getSensors(data: Object, styles: Object): Object {
+		let sensors = {}, sensorAccessibilityInfo = '';
 		const { formatMessage } = this.props.intl;
 		const {
 			valueUnitCoverStyle,
@@ -386,14 +386,14 @@ class SensorRow extends View<Props, State> {
 			unitStyle,
 			labelStyle,
 			sensorValueCoverStyle,
-		} = this.getStyles();
+		} = styles;
 
 		for (let key in data) {
 			const values = data[key];
 			const { value, scale, name } = values;
 			const isLarge = checkIfLarge(value.toString());
 
-			const { label, unit, icon } = getSensorIconLabelUnit(name, scale, formatMessage);
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
 
 			let sharedProps = {
 				key,
@@ -408,95 +408,36 @@ class SensorRow extends View<Props, State> {
 				unitStyle,
 				labelStyle,
 				sensorValueCoverStyle,
+				formatOptions,
 			};
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 
-			if (name === 'humidity') {
-				sensors[key] = <GenericSensor {...sharedProps}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
+			if (name === 'wdir') {
+				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 			}
-			if (name === 'temp') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'rrate' || name === 'rtot') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-
-				let rrateInfo = name === 'rrate' ? `${label} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtot' ? `${label} ${value}${unit}` : '';
-				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
-			}
-			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let direction = '';
-				if (name === 'wdir') {
-					direction = [...getWindDirection(value, formatMessage)].toString();
-					sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
-				}
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-
-				let wgustInfo = name === 'wgust' ? `${label} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${label} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${label} ${direction}` : '';
-				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
-			}
-			if (name === 'uv') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'watt') {
-				if (scale === '0') {
-					sharedProps = { ...sharedProps, label: isLarge ? label :
-						`${this.labelAcc} ${this.labelWatt}` };
-				}
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'lum') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: 0}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'dewp') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'barpress') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
-			if (name === 'genmeter') {
-				sensors[key] = <GenericSensor {...sharedProps}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>;
-				sensorInfo = `${sensorInfo}, ${label} ${value}${unit}`;
-			}
+			sensors[key] = <GenericSensor {...sharedProps}/>;
 		}
-		return {sensors, sensorInfo};
+		return {sensors, sensorAccessibilityInfo};
 	}
 
 	render(): Object {
-		const { sensor, currentScreen, isGatewayActive, intl } = this.props;
+		const { sensor = {}, currentScreen, isGatewayActive, intl } = this.props;
 		const styles = this.getStyles();
 		const {
-			data,
+			data = {},
 			name,
 			lastUpdated,
 			id,
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
-		let { sensors, sensorInfo } = this.getSensors(data);
+		let { sensors, sensorAccessibilityInfo } = this.getSensors(data, styles);
 
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
-		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentScreen === 'Sensors';
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
@@ -515,24 +456,25 @@ class SensorRow extends View<Props, State> {
 				disableRightSwipe={true}
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
-				recalculateHiddenLayout={true}
 				swipeToOpenPercent={20}
-				directionalDistanceChangeThreshold={2}>
+				directionalDistanceChangeThreshold={2}
+				shouldItemUpdate={this.shouldUpdateSwipeRow}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
 					onPressSettings={this.onSettingsSelected}/>
 				<ListItem
 					style={styles.row}
-					onLayout={this.onLayout}
-					accessible={accessible}
-					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-					accessibilityLabel={accessible ? accessibilityLabel : ''}
+					accessible={false}
+					importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}
 					// By passing onPress to visible content of 'SwipeRow', prevents it from
 					// being placed inside a touchable.
 					onPress={this.noOp}>
 					<View style={styles.cover}>
 						<TouchableOpacity onPress={this.onPressSensorName} disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
-							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+							style={styles.container}
+							accessible={accessible}
+							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+							accessibilityLabel={accessible ? accessibilityLabel : ''}>
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
 						</TouchableOpacity>
@@ -598,17 +540,14 @@ class SensorRow extends View<Props, State> {
 		);
 	}
 
-	onLayout(event: Object) {
-		this.width = event.nativeEvent.layout.width;
-	}
-
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor } = this.props;
+		const { appLayout, isGatewayActive, sensor = {}, isLast } = this.props;
+		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		let {
+		const {
 			rowHeight,
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
@@ -654,7 +593,8 @@ class SensorRow extends View<Props, State> {
 			},
 			row: {
 				marginHorizontal: padding,
-				marginBottom: padding / 2,
+				marginTop: padding / 2,
+				marginBottom: isLast ? padding : 0,
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
@@ -668,6 +608,7 @@ class SensorRow extends View<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'center',
 				marginRight: padding,
+				marginTop: padding / 2,
 			},
 			cover: {
 				flex: 1,
@@ -708,7 +649,7 @@ class SensorRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			sensorValueCoverStyle: {
-				marginBottom: Object.keys(sensor.data).length <= 1 ? 0 : rowHeight * 0.16,
+				marginBottom: Object.keys(data).length <= 1 ? 0 : rowHeight * 0.16,
 			},
 			sensorValueCover: {
 				width: widthValueBlock,

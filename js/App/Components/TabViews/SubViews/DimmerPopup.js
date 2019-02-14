@@ -154,7 +154,7 @@ class DimmerPopup extends Component<Props, State> {
 					position: 'absolute',
 					width: deviceWidth - 16,
 					height: 56,
-					backgroundColor: 'white',
+					backgroundColor: '#fff',
 					borderRadius: 7,
 					alignItems: 'center',
 					justifyContent: 'center',
@@ -168,12 +168,16 @@ class DimmerPopup extends Component<Props, State> {
 				</Text>
 				<DimmerProgressBar
 					progress={this.props.value}
-					height={16}
+					height={18}
 					width={deviceWidth - 32}
 					style={{
 						alignItems: 'center',
 						justifyContent: 'center',
+						marginTop: 2,
 					}}
+					borderColor={'#fff'}
+					unfilledColor={'#efefef'}
+					borderWidth={0}
 				/>
 			</View>
 		);

@@ -20,6 +20,7 @@
 import Color from 'color';
 
 import { Platform } from 'react-native';
+import { isIphoneX } from 'react-native-iphone-x-helper';
 
 export default {
 	brandPrimary: '#1b365d',
@@ -55,6 +56,11 @@ export default {
 		return this.brandSecondary;
 	},
 
+	get navBarTopPadding() {
+		return (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 10;
+	},
+
+	appBackground: '#eeeeee',
 	sectionTextColor: '#8e8e93',
 	rowTextColor: '#8e8e93',
 	eulaContentColor: '#555555',
@@ -69,6 +75,8 @@ export default {
 	subtitleColor: '#8e8e93',
 
 	rowHeight: 60,
+
+	buttonRowKey: '  **buttonRow**  ',
 
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,
@@ -122,6 +130,17 @@ export default {
 	 */
 	get paddingFactor() {
 		return 0.027777;
+	},
+
+	get headerHeightFactor() {
+		return {
+			port: 0.05,
+			land: 0.1111,
+		};
+	},
+
+	get editBoxPaddingFactor() {
+		return 0.05;
 	},
 
 	buttonPadding: 6,

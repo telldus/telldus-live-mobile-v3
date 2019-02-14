@@ -27,6 +27,8 @@ import Ripple from 'react-native-material-ripple';
 
 import { View, Text, IconTelldus, FormattedMessage } from '../../../../BaseComponents';
 
+import shouldUpdate from '../../../Lib/shouldUpdate';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -35,9 +37,10 @@ type Props = {
     selectedOne: Object,
 	selectedTwo: Object,
 	list: Array<string>,
-    onValueChangeOne: (string, number) => void,
-	onValueChangeTwo: (string, number) => void,
+    onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void,
+	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void,
 	appLayout: Object,
+	intl: Object,
 };
 
 type State = {
@@ -55,6 +58,9 @@ class GraphValuesDropDown extends View<Props, State> {
 	propsExtractorOne: (Object, number) => Object;
 	propsExtractorTwo: (Object, number) => Object;
 
+	onValueChangeOne: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
+	onValueChangeTwo: (itemValue: string, itemIndex: number, data: Array<Object>) => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -66,11 +72,28 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.onPressPickerTwo = this.onPressPickerTwo.bind(this);
 		this.propsExtractorTwo = this.propsExtractorTwo.bind(this);
 		this.propsExtractorOne = this.propsExtractorOne.bind(this);
+
+		this.onValueChangeOne = this.onValueChangeOne.bind(this);
+		this.onValueChangeTwo = this.onValueChangeTwo.bind(this);
+
+		const { intl } = this.props;
+		this.phraseOne = `${intl.formatMessage(i18n.labelGraphValues)} ${intl.formatMessage(i18n.labelDropdown)}`;
+		this.phraseTwo = props.intl.formatMessage(i18n.labelSelected);
+		this.phraseThree = props.intl.formatMessage(i18n.defaultDescriptionButton);
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'appLayout', 'list']);
+		if (propsChange) {
+			return true;
+		}
+		return false;
 	}
 
 	renderBaseOne(items: Object): Object {
 		const { data, title } = items;
-		const { appLayout } = this.props;
+		const { appLayout, selectedOne } = this.props;
+		const { type, scale } = selectedOne;
 
 		const {
 			pickerBaseCoverStyle,
@@ -78,23 +101,28 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
-		const {icon} = data.find((item: Object): boolean => {
-			return item.value === title;
+		const { rippleColor, rippleOpacity } = Theme.Core;
+		const result = data.find((item: Object): boolean => {
+			return item.scale === scale && item.type === type;
 		});
+		const {icon} = result ? result : {};
+
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
+				rippleDuration={250}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPickerOne}>
-				<IconTelldus icon={icon} style={leftIconStyle}/>
+				onPress={this.onPressPickerOne}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon={icon} style={leftIconStyle} accessible={false}/>
 				<Text style={pickerBaseTextStyle} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={'down'} style={rightIconStyle}/>
+				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
 			</Ripple>
 		);
 	}
@@ -107,9 +135,26 @@ class GraphValuesDropDown extends View<Props, State> {
 		this.refs.listTwo.focus();
 	}
 
+	onValueChangeOne(itemValue: string, itemIndex: number, data: Array<Object>) {
+		const { onValueChangeOne } = this.props;
+		if (onValueChangeOne) {
+			onValueChangeOne(itemValue, itemIndex, data);
+			this.refs.listOne.blur();
+		}
+	}
+
+	onValueChangeTwo(itemValue: string, itemIndex: number, data: Array<Object>) {
+		const { onValueChangeTwo } = this.props;
+		if (onValueChangeTwo) {
+			onValueChangeTwo(itemValue, itemIndex, data);
+			this.refs.listTwo.blur();
+		}
+	}
+
 	propsExtractorOne(item: Object, index: number): Object {
 		const { selectedTwo } = this.props;
-		if (selectedTwo.value === item.value) {
+		const { type, scale } = selectedTwo;
+		if (item.scale === scale && item.type === type) {
 			return {
 				...item,
 				disabled: true,
@@ -123,7 +168,8 @@ class GraphValuesDropDown extends View<Props, State> {
 
 	propsExtractorTwo(item: Object, index: number): Object {
 		const { selectedOne } = this.props;
-		if (selectedOne.value === item.value) {
+		const { type, scale } = selectedOne;
+		if (item.scale === scale && item.type === type) {
 			return {
 				...item,
 				disabled: true,
@@ -137,7 +183,8 @@ class GraphValuesDropDown extends View<Props, State> {
 
 	renderBaseTwo(items: Object): Object {
 		const { data, title } = items;
-		const { appLayout } = this.props;
+		const { appLayout, selectedTwo } = this.props;
+		const { type, scale } = selectedTwo;
 
 		const {
 			pickerBaseCoverStyle,
@@ -145,23 +192,28 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
-		const {icon} = data.find((item: Object): boolean => {
-			return item.value === title;
+		const { rippleColor, rippleOpacity } = Theme.Core;
+		const result = data.find((item: Object): boolean => {
+			return item.scale === scale && item.type === type;
 		});
+		const {icon} = result ? result : {};
+
+		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
 			<Ripple
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
+				rippleDuration={250}
 				style={pickerBaseCoverStyle}
-				onPress={this.onPressPickerTwo}>
-				<IconTelldus icon={icon} style={leftIconStyle}/>
+				onPress={this.onPressPickerTwo}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
+				<IconTelldus icon={icon} style={leftIconStyle} accessible={false}/>
 				<Text style={pickerBaseTextStyle} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={'down'} style={rightIconStyle}/>
+				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
 			</Ripple>
 		);
 	}
@@ -171,8 +223,6 @@ class GraphValuesDropDown extends View<Props, State> {
 			selectedOne,
 			selectedTwo,
 			list,
-			onValueChangeOne,
-			onValueChangeTwo,
 			appLayout,
 		} = this.props;
 
@@ -191,8 +241,11 @@ class GraphValuesDropDown extends View<Props, State> {
 			brandInfo,
 			itemPadding,
 			itemCount,
+			padding,
 		} = this.getStyle(appLayout);
-		const dropDownPosition = list.length + 1;
+		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
+		const iCount = list.length < itemCount ? list.length : itemCount;
+		const dropdownTop = -(iCount * itemSize);
 
 		return (
 			<View style={dropDownContainerStyle}>
@@ -202,34 +255,50 @@ class GraphValuesDropDown extends View<Props, State> {
 						ref={'listOne'}
 						data={list}
 						value={selectedOne.value}
-						onChangeText={onValueChangeOne}
+						onChangeText={this.onValueChangeOne}
 						renderBase={this.renderBaseOne}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
-						itemCount={itemCount}
+						itemCount={iCount}
 						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandDanger}
-						dropdownPosition={dropDownPosition}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
+						dropdownMargins={{
+							min: padding,
+							max: padding,
+						}}
 						propsExtractor={this.propsExtractorOne}
 					/>
 					<Dropdown
 						ref={'listTwo'}
 						data={list}
 						value={selectedTwo.value}
-						onChangeText={onValueChangeTwo}
+						onChangeText={this.onValueChangeTwo}
 						renderBase={this.renderBaseTwo}
 						containerStyle={pickerContainerStyle}
 						fontSize={fontSize}
-						itemCount={itemCount}
+						itemCount={iCount}
 						itemPadding={itemPadding}
 						baseColor={'#000'}
 						itemColor={'#000'}
 						disabledItemColor={rowTextColor}
 						selectedItemColor={brandInfo}
-						dropdownPosition={dropDownPosition}
+						dropdownPosition={0}
+						dropdownOffset={{
+							top: dropdownTop,
+							left: 0,
+						}}
+						dropdownMargins={{
+							min: padding,
+							max: padding,
+						}}
 						propsExtractor={this.propsExtractorTwo}
 					/>
 				</View>
@@ -257,6 +326,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const itemPadding = 8;
 
 		return {
+			padding,
 			dropDownContainerStyle: {
 				flex: 0,
 				alignItems: 'flex-start',

@@ -30,7 +30,6 @@ import Swiper from 'react-native-swiper';
 import Platform from 'Platform';
 
 import {
-	FloatingButton,
 	FullPageActivityIndicator,
 	View,
 	StyleSheet,
@@ -42,6 +41,8 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
+
+import Theme from '../../Theme';
 
 import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
@@ -88,15 +89,15 @@ class SchedulerTab extends View<null, Props, State> {
 			isRefreshing: false,
 			isLoading: !Object.keys(props.rowsAndSections).length,
 		};
-		this.newSchedule = this.newSchedule.bind(this);
 		this.onIndexChanged = this.onIndexChanged.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
 		this.onToggleVisibility = this.onToggleVisibility.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
-		return currentScreen === 'Scheduler';
+		const { currentScreen, screenReaderEnabled } = nextProps.screenProps;
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Scheduler') || (currentScreen !== 'Scheduler' && prevScreen === 'Scheduler' && screenReaderEnabled);
 	}
 
 	componentDidMount() {
@@ -127,14 +128,6 @@ class SchedulerTab extends View<null, Props, State> {
 		});
 	}
 
-	newSchedule = () => {
-		this.props.navigation.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
-			params: { editMode: false },
-		});
-	};
-
 	editJob = (schedule: Schedule) => {
 		const { dispatch, navigation } = this.props;
 
@@ -147,9 +140,13 @@ class SchedulerTab extends View<null, Props, State> {
 	};
 
 	onIndexChanged = (index: number) => {
-		this.setState({
-			todayIndex: index,
-		});
+		if (index < 0 || index > 7) {
+			this._scroll(0);
+		} else {
+			this.setState({
+				todayIndex: index,
+			});
+		}
 	}
 
 	onToggleVisibility(show: boolean) {
@@ -159,8 +156,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { rowsAndSections, screenProps, showInactive } = this.props;
-		const { appLayout, intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
+		const { appLayout, currentScreen } = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -171,7 +167,9 @@ class SchedulerTab extends View<null, Props, State> {
 		const { swiperContainer } = this.getStyles(appLayout);
 
 		return (
-			<View style={swiperContainer}>
+			<View style={swiperContainer}
+				accessible={false}
+				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
 					days={days}
 					todayIndex={todayIndex}
@@ -188,15 +186,11 @@ class SchedulerTab extends View<null, Props, State> {
 					loadMinimal={true}
 					loadMinimalSize={0}
 					loop={false}
+					index={todayIndex}
 					showsPagination={false}
 					onIndexChanged={this.onIndexChanged}>
 					{daysToRender}
 				</Swiper>
-				<FloatingButton
-					onPress={this.newSchedule}
-					imageSource={{uri: 'icon_plus'}}
-					accessibilityLabel={`${formatMessage(i18n.addSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`}
-				/>
 			</View>
 		);
 	}
@@ -307,7 +301,6 @@ class SchedulerTab extends View<null, Props, State> {
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
 		const { rowsAndSections, screenProps } = this.props;
-		const { appLayout, intl } = screenProps;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -316,12 +309,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
 
 		return (
-			<JobRow {...item}
+			<JobRow
+				{...item}
 				showNow={showNow}
 				editJob={this.editJob}
 				isFirst={props.index === 0}
-				intl={intl}
-				appLayout={appLayout}/>
+				{...screenProps}/>
 		);
 	};
 }
@@ -343,7 +336,7 @@ const getRowsAndSections = createSelector(
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#eeeeef',
+		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
 		flexDirection: 'row',

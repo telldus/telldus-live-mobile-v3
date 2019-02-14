@@ -1,0 +1,3 @@
+- Fixes app hanging, in some iOS devices
+- Setting for sortorder on Dashboard
+

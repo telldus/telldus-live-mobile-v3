@@ -23,32 +23,48 @@
 'use strict';
 
 import React from 'react';
-import { Image, TouchableOpacity, TouchableWithoutFeedback, Alert, NetInfo } from 'react-native';
+import {
+	Image,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	Alert,
+	NetInfo,
+	ScrollView,
+} from 'react-native';
 import { connect } from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
 
 import {
 	View, Text, TouchableButton, StyleSheet,
 	FormattedNumber, Icon, TitledInfoBlock,
+	TabBar, Throbber,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
-import Theme from '../../../Theme';
+import { getGatewayInfo, getGateways, removeGateway } from '../../../Actions/Gateways';
+import { getAppData } from '../../../Actions/AppData';
 import { hasTokenExpired } from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
+
+import Theme from '../../../Theme';
+
 import i18n from '../../../Translations/common';
 
 type Props = {
-	containerWidth: number,
 	navigation: Object,
 	location: Object,
-	actions: Object,
-	intl: Object,
-	appLayout: Object,
+	dispatch: Function,
+	screenProps: Object,
 };
 
-class Details extends View {
+type State = {
+	isLoading: boolean,
+};
+
+class Details extends View<Props, State> {
 	props: Props;
+	state: State;
 
 	onEditName: () => void;
 	onEditTimeZone: () => void;
@@ -71,10 +87,32 @@ class Details extends View {
 
 	labelAutoDetected: string;
 
+	onConfirmRemoveLocation: () => void;
+
+	static navigationOptions = ({ navigation }: Object): Object => ({
+		tabBarLabel: ({ tintColor }: Object): Object => (
+			<TabBar
+				icon="home"
+				tintColor={tintColor}
+				label={i18n.overviewHeader}
+				accessibilityLabel={i18n.locationOverviewTab}/>
+		),
+		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
+			navigation.navigate({
+				routeName: 'LOverview',
+				key: 'LOverview',
+			});
+		},
+	});
+
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage } = props.intl;
+		this.state = {
+			isLoading: false,
+		};
+
+		let { formatMessage } = props.screenProps.intl;
 		this.labelName = formatMessage(i18n.name);
 		this.labelTimeZone = formatMessage(i18n.headerOneTimeZoneCity);
 		this.labelGeoPosition = formatMessage(i18n.geoPosition);
@@ -98,21 +136,28 @@ class Details extends View {
 		this.onPressGatewayInfo = this.onPressGatewayInfo.bind(this);
 		this.infoPressCount = 0;
 		this.timeoutInfoPress = null;
+
+		this.labelModalheaderOnDel = `${formatMessage(i18n.delete)} ${formatMessage(i18n.location)}?`;
+
+		this.onConfirmRemoveLocation = this.onConfirmRemoveLocation.bind(this);
+		this.onRemoveLocationError = `${formatMessage(i18n.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 	}
 
 	componentDidMount() {
-		const { actions, location, navigation } = this.props;
-		let { id } = location, extras = 'timezoneAutodetect';
-		actions.getGatewayInfo({id}, extras).then((response: Object) => {
-			let { autodetectedTimezone } = response;
-			let { params } = navigation.state;
-			let newParams = { ...params, autodetectedTimezone };
-			navigation.setParams(newParams);
-		});
+		const { location, navigation, dispatch } = this.props;
+		if (location && location.id) {
+			let { id } = location, extras = 'timezoneAutodetect';
+			dispatch(getGatewayInfo({id}, extras)).then((response: Object) => {
+				let { autodetectedTimezone } = response;
+				let { params } = navigation.state;
+				let newParams = { ...params, autodetectedTimezone };
+				navigation.setParams(newParams);
+			});
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.currentScreen === 'Details';
+		return nextProps.screenProps.currentScreen === 'LOverview';
 	}
 
 	componentWillUnmount() {
@@ -134,7 +179,7 @@ class Details extends View {
 	}
 
 	onEditTimeZone() {
-		let { navigation, location } = this.props;
+		let { navigation, location = {} } = this.props;
 		let { params } = navigation.state;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
 		navigation.navigate('EditTimeZoneContinent', newParams);
@@ -142,7 +187,7 @@ class Details extends View {
 	}
 
 	onEditGeoPosition() {
-		let { navigation, location } = this.props;
+		let { navigation, location = {} } = this.props;
 		let { latitude, longitude, id } = location;
 		navigation.navigate({
 			routeName: 'EditGeoPosition',
@@ -155,22 +200,65 @@ class Details extends View {
 	}
 
 	onPressRemoveLocation() {
-		let { actions } = this.props;
-		actions.showModal(this.confirmMessage, 'DELETE_LOCATION');
+		const { screenProps } = this.props;
+		const dialogueData = {
+			show: true,
+			header: this.labelModalheaderOnDel,
+			positiveText: this.labelDelete.toUpperCase(),
+			showPositive: true,
+			showNegative: true,
+			onPressPositive: this.onConfirmRemoveLocation,
+			closeOnPressPositive: true,
+			text: this.confirmMessage,
+			showHeader: true,
+		};
+		screenProps.toggleDialogueBox(dialogueData);
 		this.infoPressCount = 0;
+	}
+
+	onConfirmRemoveLocation() {
+		const { dispatch, navigation, screenProps } = this.props;
+		const location = navigation.getParam('location', {id: null});
+		this.setState({
+			isLoading: true,
+		});
+		dispatch(removeGateway(location.id)).then((res: Object) => {
+			dispatch(getGateways()).then(() => {
+				dispatch(getAppData());
+			});
+			this.setState({
+				isLoading: false,
+			}, () => {
+				navigation.pop();
+			});
+		}).catch(() => {
+			this.setState({
+				isLoading: false,
+			});
+			const dialogueData = {
+				show: true,
+				showPositive: true,
+				text: this.onRemoveLocationError,
+				showHeader: true,
+				closeOnPressPositive: true,
+			};
+			screenProps.toggleDialogueBox(dialogueData);
+		});
 	}
 
 	onPressGatewayInfo() {
 		clearTimeout(this.timeoutInfoPress);
 		this.infoPressCount++;
 		if (this.infoPressCount >= 5) {
-			const { location } = this.props;
+			const { location = {} } = this.props;
 			const { online, websocketOnline, localKey = {} } = location;
 			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
 				this.infoPressCount = 0;
 				const { type, effectiveType } = connectionInfo;
 				const { ttl = null } = localKey;
 				const tokenExpired = hasTokenExpired(ttl);
+				const deviceName = DeviceInfo.getDeviceName();
+				const deviceUniqueID = DeviceInfo.getUniqueID();
 				const debugData = {
 					online,
 					websocketOnline,
@@ -178,6 +266,8 @@ class Details extends View {
 					tokenExpired,
 					connectionType: type,
 					connectionEffectiveType: effectiveType,
+					deviceName,
+					deviceUniqueID,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
@@ -189,23 +279,23 @@ class Details extends View {
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
 		return (
-			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl} localKey={localKey}/>
+			<Status online={online} websocketOnline={websocketOnline} intl={this.props.screenProps.intl} localKey={localKey}/>
 		);
 	}
 
 	render(): Object | null {
-		const { containerWidth, location, appLayout } = this.props;
+		const { isLoading } = this.state;
+		const { location, screenProps } = this.props;
+		const { appLayout } = screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const fontSize = Math.floor(deviceWidth * 0.045);
 		const iconSize = Math.floor(deviceWidth * 0.08);
-		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		if (!location) {
 			return null;
 		}
-
 
 		const {
 			name,
@@ -223,89 +313,107 @@ class Details extends View {
 		const { address, key } = localKey;
 		const image = getLocationImageUrl(type);
 		const {
-			locationImage, textName, locationInfo,
-			infoOneContainerStyle, boxItemsCover,
+			locationImage,
+			textName,
+			locationInfo,
+			infoOneContainerStyle,
+			boxItemsCover,
+			padding,
+			container,
+			throbberContainer,
 		} = this.getStyles(appLayout);
-		const labelWidth = containerWidth * 0.36;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
 
 		const timezoneLabel = timezoneAutodetected ? `${this.labelTimeZone}\n(${this.labelAutoDetected})` : this.labelTimeZone;
 
 		return (
-			<View style={{flex: 1, paddingVertical: padding}}>
-				<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
-					<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
-					<TouchableWithoutFeedback style={{flex: 1}} onPress={this.onPressGatewayInfo}>
-						<View style={boxItemsCover}>
-							<Text style={[textName]}>
-								{type}
+			<ScrollView style={{
+				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
+			}}>
+				<View style={container}>
+					<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
+						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
+						<TouchableWithoutFeedback style={{flex: 1}} onPress={this.onPressGatewayInfo}>
+							<View style={boxItemsCover}>
+								<Text style={[textName]}>
+									{type}
+								</Text>
+								<Text style={locationInfo}>
+									{`${this.labelIPPublic}: ${ip}`}
+								</Text>
+								{
+									(!!address && !!key) && (
+										<Text style={locationInfo}>
+											{`${this.labelIPLocal}: ${address}`}
+										</Text>
+									)
+								}
+								<Text style={locationInfo}>
+									{`${this.labelSoftware}: v${version}`}
+								</Text>
+								{!!info && (info)}
+							</View>
+						</TouchableWithoutFeedback>
+					</LabelBox>
+					<TitledInfoBlock
+						label={this.labelName}
+						value={name}
+						icon={'angle-right'}
+						iconColor="#A59F9A90"
+						blockContainerStyle={{
+							marginTop: padding / 2,
+							marginBottom: padding / 2,
+						}}
+						valueTextStyle={{
+							marginRight: 20,
+						}}
+						onPress={isLoading ? null : this.onEditName}
+					/>
+					<TitledInfoBlock
+						label={timezoneLabel}
+						value={timezone}
+						icon={'angle-right'}
+						iconColor="#A59F9A90"
+						blockContainerStyle={{
+							marginBottom: padding / 2,
+						}}
+						valueTextStyle={{
+							marginRight: 20,
+						}}
+						onPress={isLoading ? null : this.onEditTimeZone}
+					/>
+					<TouchableOpacity style={[styles.infoTwoContainerStyle, {
+						padding: fontSize,
+						marginBottom: padding / 2,
+					}]} onPress={isLoading ? null : this.onEditGeoPosition}>
+						<Text style={[styles.textLabel, {fontSize}]}>
+							{this.labelGeoPosition}
+						</Text>
+						<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
+							<Text style={[styles.textValue, {fontSize}]}>
+								{`${this.labelLat}: `}
+								<FormattedNumber value={latitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
-							<Text style={locationInfo}>
-								{`${this.labelIPPublic}: ${ip}`}
+							<Text style={[styles.textValue, {fontSize}]}>
+								{` ${this.labelLong}: `}
+								<FormattedNumber value={longitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
-							{
-								(!!address && !!key) && (
-									<Text style={locationInfo}>
-										{`${this.labelIPLocal}: ${address}`}
-									</Text>
-								)
-							}
-							<Text style={locationInfo}>
-								{`${this.labelSoftware}: v${version}`}
-							</Text>
-							{!!info && (info)}
 						</View>
-					</TouchableWithoutFeedback>
-				</LabelBox>
-				<TitledInfoBlock
-					label={this.labelName}
-					value={name}
-					icon={'angle-right'}
-					iconColor="#A59F9A90"
-					blockContainerStyle={{
-						marginTop: padding / 2,
-						marginBottom: padding / 2,
-					}}
-					valueTextStyle={{
-						marginRight: 20,
-					}}
-					onPress={this.onEditName}
-				/>
-				<TitledInfoBlock
-					label={timezoneLabel}
-					value={timezone}
-					icon={'angle-right'}
-					iconColor="#A59F9A90"
-					blockContainerStyle={{
-						marginBottom: padding / 2,
-					}}
-					valueTextStyle={{
-						marginRight: 20,
-					}}
-					onPress={this.onEditTimeZone}
-				/>
-				<TouchableOpacity style={[styles.infoTwoContainerStyle, {
-					padding: fontSize,
-					marginBottom: padding / 2,
-				}]} onPress={this.onEditGeoPosition}>
-					<Text style={[styles.textLabel, {fontSize, width: labelWidth}]}>
-						{this.labelGeoPosition}
-					</Text>
-					<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
-						<Text style={[styles.textValue, {fontSize}]}>
-							{`${this.labelLat}: `}
-							<FormattedNumber value={latitude} maximumFractionDigits={3} style={styles.textValue}/>
-						</Text>
-						<Text style={[styles.textValue, {fontSize}]}>
-							{` ${this.labelLong}: `}
-							<FormattedNumber value={longitude} maximumFractionDigits={3} style={styles.textValue}/>
-						</Text>
+						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
+					</TouchableOpacity>
+					<View style={styles.buttonCover}>
+						<TouchableButton text={this.labelDelete} style={styles.button} onPress={isLoading ? null : this.onPressRemoveLocation}/>
+						{isLoading &&
+					(
+						<Throbber
+							throbberContainerStyle={throbberContainer}
+						/>
+					)}
 					</View>
-					<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
-				</TouchableOpacity>
-				<TouchableButton text={this.labelDelete} style={styles.button} onPress={this.onPressRemoveLocation}/>
-			</View>
+				</View>
+			</ScrollView>
 		);
 	}
 
@@ -317,7 +425,16 @@ class Details extends View {
 
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
 
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
 		return {
+			container: {
+				flex: 1,
+				padding: padding,
+				alignItems: 'stretch',
+				justifyContent: 'center',
+				backgroundColor: Theme.Core.appBackground,
+			},
 			infoOneContainerStyle: {
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -344,6 +461,10 @@ class Details extends View {
 				fontSize: Math.floor(deviceWidth * 0.045),
 				color: Theme.Core.rowTextColor,
 			},
+			throbberContainer: {
+				right: (deviceWidth * 0.12),
+			},
+			padding,
 		};
 	}
 }
@@ -351,6 +472,12 @@ class Details extends View {
 const styles = StyleSheet.create({
 	button: {
 		backgroundColor: Theme.Core.brandDanger,
+	},
+	buttonCover: {
+		flexDirection: 'row',
+		width: '100%',
+		justifyContent: 'center',
+		alignItems: 'center',
 		marginTop: 10,
 	},
 	infoTwoContainerStyle: {
@@ -377,8 +504,13 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	let { id } = ownProps.navigation.getParam('location', {id: null});
 	return {
 		location: store.gateways.byId[id],
-		appLayout: store.app.layout,
 	};
 }
 
-export default connect(mapStateToProps, null)(Details);
+function mapDispatchToProps(dispatch: Function, ownPRops: Object): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details);

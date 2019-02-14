@@ -30,7 +30,6 @@ import {
 	TouchableWithoutFeedback,
 	ScrollView,
 	LayoutAnimation,
-	KeyboardAvoidingView,
 } from 'react-native';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
@@ -75,7 +74,7 @@ export default class Time extends View<null, Props, State> {
 		const { isEditMode, intl, schedule } = this.props;
 		const { formatMessage } = intl;
 
-		this.h1 = isEditMode() ? formatMessage(i18n.time) : `3. ${formatMessage(i18n.time)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.time) : formatMessage(i18n.time);
 		this.h2 = formatMessage(i18n.posterChooseTime);
 		this.labelSliderInterval = formatMessage(i18n.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
 		this.labelSliderOffset = formatMessage(i18n.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
@@ -205,9 +204,8 @@ export default class Time extends View<null, Props, State> {
 		const shouldRender = !!selectedType;
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
-				<KeyboardAvoidingView
-					behavior="padding">
+			<View style={{flex: 1}}>
+				<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}} keyboardShouldPersistTaps={'always'}>
 					<View style={container}>
 						<View style={[type.container, { marginBottom }]}>
 							{this._renderTypes(TYPES)}
@@ -230,15 +228,15 @@ export default class Time extends View<null, Props, State> {
 							</Row>
 						)}
 					</View>
-					{shouldRender && (
-						<FloatingButton
-							onPress={this.selectTime}
-							imageSource={{uri: 'right_arrow_key'}}
-							paddingRight={this.props.paddingRight - 2}
-						/>
-					)}
-				</KeyboardAvoidingView>
-			</ScrollView>
+				</ScrollView>
+				{shouldRender && (
+					<FloatingButton
+						onPress={this.selectTime}
+						imageSource={{uri: 'right_arrow_key'}}
+						paddingRight={this.props.paddingRight - 2}
+					/>
+				)}
+			</View>
 		);
 	}
 

@@ -23,6 +23,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import org.wonday.orientation.OrientationPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -38,15 +39,12 @@ import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
-import com.smixx.fabric.FabricPackage;
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.core.CrashlyticsCore;
-import io.fabric.sdk.android.Fabric;
 import org.pgsqlite.SQLitePluginPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
 import com.RNRSA.RNRSAPackage;
 import com.tradle.react.UdpSocketsModule;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
@@ -66,18 +64,19 @@ public class MainApplication extends Application implements ReactApplication {
 		@Override
 		protected List<ReactPackage> getPackages() {
 			return Arrays.<ReactPackage>asList(
-				new FabricPackage(),
 				new SQLitePluginPackage(),
 				new RNDeviceInfo(),
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
+				new RNGestureHandlerPackage(),
 				new RNGoogleSigninPackage(),
 				new OrientationPackage(),
 				new SvgPackage(),
 				new RNFirebasePackage(),
 				new RNFirebaseMessagingPackage(),
 				new RNFirebaseNotificationsPackage(),
+				new RNFirebaseCrashlyticsPackage(),
 				new RNRSAPackage(),
 				new UdpSocketsModule(),
 				new RNSensitiveInfoPackage(),
@@ -104,11 +103,7 @@ public class MainApplication extends Application implements ReactApplication {
         super.onCreate();
 		// saving current locale of the user inorder to reload the app(inside MainActivity) on locale change.
 		MainActivity.currentLocale = getResources().getConfiguration().locale.toString();
-        // Set up Crashlytics, disabled for debug builds
-        Crashlytics crashlyticsKit = new Crashlytics.Builder()
-          .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-          .build();
-        Fabric.with(this, crashlyticsKit);
+
         SoLoader.init(this, /* native exopackage */ false);
     }
 }

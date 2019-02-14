@@ -74,7 +74,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`1. ${formatMessage(i18n.labelSelectLocation)}`, formatMessage(i18n.AddZDSLHeaderTwo));
+	onDidMount(formatMessage(i18n.labelSelectLocation), formatMessage(i18n.AddZDSLHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -150,7 +150,7 @@ const getRows = createSelector(
 	[
 		({ gateways }: Object): Object => gateways,
 	],
-	(gateways: Object): Array<any> => parseGatewaysForListView(gateways)
+	(gateways: Object): Array<any> => parseGatewaysForListView(gateways, true)
 );
 
 function mapStateToProps(state: Object, ownProps: Object): Object {

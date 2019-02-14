@@ -35,6 +35,7 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import View from './View';
 import Header from './Header';
 import { hasStatusBar } from '../App/Lib';
+import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 type Props = {
@@ -43,11 +44,13 @@ type Props = {
 	intl: intlShape.isRequired,
 	showLeftIcon?: boolean,
 	topMargin?: boolean,
+	leftIcon?: string,
 };
 
 type DefaultProps = {
 	topMargin: boolean,
 	showLeftIcon: boolean,
+	leftIcon: string,
 };
 
 class NavigationHeader extends PureComponent<Props, null> {
@@ -61,6 +64,7 @@ class NavigationHeader extends PureComponent<Props, null> {
 	static defaultProps: DefaultProps = {
 		showLeftIcon: true,
 		topMargin: true,
+		leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
 	}
 
 	constructor(props: Props) {
@@ -79,18 +83,18 @@ class NavigationHeader extends PureComponent<Props, null> {
 	}
 
 	getLeftIcon(): Object {
-		let { appLayout } = this.props;
+		let { appLayout, leftIcon } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let size = isPortrait ? width * 0.06 : height * 0.06;
-		if (Platform.OS === 'ios') {
+		if (Platform.OS === 'ios' && leftIcon !== 'close') {
 			return (
-				<FontAwesome name={'angle-left'} size={size} color="#fff" style={styles.iconLeft}/>
+				<FontAwesome name={leftIcon} size={size} color="#fff" style={styles.iconLeft}/>
 			);
 		}
 
 		return (
-			<MaterialIcons name={'arrow-back'} size={size} color="#fff" style={styles.iconLeft}/>
+			<MaterialIcons name={leftIcon} size={size} color="#fff" style={styles.iconLeft}/>
 		);
 	}
 
@@ -116,13 +120,17 @@ class NavigationHeader extends PureComponent<Props, null> {
 			accessibilityLabel: this.labelLeftIcon,
 		} : null;
 
+		const { land } = Theme.Core.headerHeightFactor;
 		return (
-			<Header leftButton={leftIcon} style={{
-				height: Platform.OS === 'android' ?
-					deviceHeight * 0.08
-					:
-					(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 ),
-			}}/>
+			<Header
+				leftButton={leftIcon}
+				appLayout={appLayout}
+				style={{
+					height: Platform.OS === 'android' ?
+						deviceHeight * 0.08
+						:
+						(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land ),
+				}}/>
 		);
 	}
 }

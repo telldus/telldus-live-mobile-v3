@@ -27,7 +27,7 @@ let isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 SQLite.DEBUG(isDebuggingInChrome);
 SQLite.enablePromise(true);
 
-import { getSensorIconLabelUnit } from './SensorUtils';
+import { getSensorInfo } from './SensorUtils';
 
 
 const databaseName = 'tellduslocalstorage.db';
@@ -198,7 +198,7 @@ export default class TelldusLocalStorage {
 			+ 'ts INTEGER, '
 			+ 'sensorId INTEGER, '
 			+ 'type VARCHAR(150), '
-			+ 'value VARCHAR(100), '
+			+ 'value REAL, '
 			+ 'scale VARCHAR(50)'
 			+ '); ',
 			['CREATE UNIQUE INDEX IF NOT EXISTS IndexIdXSensor ON SensorHistory(ts, sensorId, type, scale);'],
@@ -224,7 +224,7 @@ export default class TelldusLocalStorage {
 					+ `${ts}, `
 					+ `${sensorId}, `
 					+ `"${name}", `
-					+ `"${value}", `
+					+ `${value}, `
 					+ `"${scale}"`
 					+ ')');
 
@@ -247,7 +247,7 @@ export default class TelldusLocalStorage {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				let { value, ts } = results.rows.item(i);
-				let row = { ts, value: parseInt(value, 10) };
+				let row = { ts, value: parseFloat(value) };
 				data.push(row);
 			}
 			return data;
@@ -271,10 +271,12 @@ export default class TelldusLocalStorage {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				const { type, scale } = results.rows.item(i);
-				const { label, unit, icon } = getSensorIconLabelUnit(type, scale, formatMessage);
-				const postFix = unit ? ` (${unit})` : '';
-				let row = { type, scale, value: `${label}${postFix}`, icon};
-				data.push(row);
+				if (type !== 'wdir') {// excluding wind direction sensor
+					const { label, unit, icon } = getSensorInfo(type, scale, 0, false, formatMessage);
+					const postFix = unit ? ` (${unit})` : '';
+					let row = { type, scale, value: `${label}${postFix}`, icon};
+					data.push(row);
+				}
 			}
 			return data;
 		}).catch((error: Object) => {

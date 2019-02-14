@@ -34,12 +34,14 @@ import DialogueHeader from './DialogueHeader';
 
 import capitalize from '../App/Lib/capitalize';
 import i18n from '../App/Translations/common';
+import Theme from '../App/Theme';
 
 
 type Props = {
 	showDialogue?: boolean,
 	appLayout: Object,
 
+	backdropOpacity?: number,
 	showIconOnHeader?: boolean,
 	imageHeader?: boolean,
 	text: string,
@@ -57,6 +59,11 @@ type Props = {
 	intl: intlShape.isRequired,
 	accessibilityLabel?: string,
 	style?: number | Object | Array<any>,
+	showHeader?: boolean,
+	backdropColor?: string,
+	capitalizeHeader?: boolean,
+	negTextColor?: string,
+	posTextColor?: string,
 };
 
 type defaultProps = {
@@ -65,6 +72,11 @@ type defaultProps = {
 	exit: string,
 	entryDuration: number,
 	exitDuration: number,
+	backdropOpacity: number,
+	showHeader: boolean,
+	capitalizeHeader: boolean,
+	negTextColor: string,
+	posTextColor: string,
 };
 
 class DialogueBox extends Component<Props, null> {
@@ -77,6 +89,12 @@ class DialogueBox extends Component<Props, null> {
 		exit: 'ZoomOut',
 		entryDuration: 300,
 		exitDuration: 100,
+		backdropColor: '#000',
+		backdropOpacity: 0.60,
+		showHeader: true,
+		capitalizeHeader: true,
+		negTextColor: '#6B6969',
+		posTextColor: Theme.Core.brandSecondary,
 	}
 
 	renderHeader: (Object) => void;
@@ -156,25 +174,26 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
-	dialogueImageHeader({ showIconOnHeader, header, onPressHeader, onPressHeaderIcon, dialogueHeaderStyle, notificationModalHeaderText }: Object): Object {
+	dialogueImageHeader({ showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon, dialogueHeaderStyle, notificationModalHeaderText }: Object): Object {
 		return (
 			<DialogueHeader
-				headerText={typeof header === 'string' ? capitalize(header) : header}
+				headerText={typeof header === 'string' && capitalizeHeader ? capitalize(header) : header}
 				showIcon={showIconOnHeader}
 				onPressHeader={onPressHeader}
 				headerStyle={dialogueHeaderStyle}
 				onPressIcon={onPressHeaderIcon}
-				textStyle={notificationModalHeaderText}/>
+				textStyle={notificationModalHeaderText}
+				shouldCapitalize={capitalizeHeader}/>
 		);
 	}
 
 	renderHeader(styles: Object): any {
-		let { header, showIconOnHeader, imageHeader, onPressHeader, onPressHeaderIcon } = this.props;
+		let { header, capitalizeHeader, showIconOnHeader, imageHeader, onPressHeader, onPressHeaderIcon } = this.props;
 		const { notificationModalHeader, dialogueHeaderStyle, notificationModalHeaderText } = styles;
 
 		if (imageHeader) {
 			return this.dialogueImageHeader({
-				showIconOnHeader, header, onPressHeader, onPressHeaderIcon,
+				showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon,
 				dialogueHeaderStyle, notificationModalHeaderText});
 		} else if (header && typeof header === 'object') {
 			return (
@@ -184,7 +203,7 @@ class DialogueBox extends Component<Props, null> {
 			header = this.defaultHeader;
 		}
 
-		header = typeof header === 'string' ? capitalize(header) : header;
+		header = typeof header === 'string' && capitalizeHeader ? capitalize(header) : header;
 		return (
 			<View style={notificationModalHeader}>
 				<Text style={notificationModalHeaderText}>
@@ -278,13 +297,17 @@ class DialogueBox extends Component<Props, null> {
 			style,
 			entryDuration,
 			exitDuration,
+			backdropOpacity,
+			showHeader,
+			backdropColor,
 		} = this.props;
 		const styles = this.getStyles();
 
 		return (
 			<Modal
 				style={styles.modal}
-				backdropOpacity={0.60}
+				backdropColor={backdropColor}
+				backdropOpacity={backdropOpacity}
 				isVisible={showDialogue}
 				animationInTiming={entryDuration}
 				animationOutTiming={exitDuration}
@@ -292,7 +315,7 @@ class DialogueBox extends Component<Props, null> {
 				onModalShow={this.onModalOpened}
 				supportedOrientations={['portrait', 'landscape']}>
 				<View style={[styles.container, style]}>
-					{this.renderHeader(styles)}
+					{!!showHeader && this.renderHeader(styles)}
 					{this.renderBody(styles)}
 					{this.renderFooter(styles)}
 				</View>
@@ -301,7 +324,7 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	getStyles(): Object {
-		const { appLayout } = this.props;
+		const { appLayout, negTextColor, posTextColor } = this.props;
 		const { width, height } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -362,12 +385,12 @@ class DialogueBox extends Component<Props, null> {
 				paddingLeft: 5,
 			},
 			notificationModalFooterNegativeText: {
-				color: '#6B6969',
+				color: negTextColor,
 				fontSize,
 				fontWeight: 'bold',
 			},
 			notificationModalFooterPositiveText: {
-				color: '#e26901',
+				color: posTextColor,
 				fontSize,
 				fontWeight: 'bold',
 			},

@@ -1,8 +1,16 @@
 import { parseDevicesForListView } from '../../Reducers/Devices.js';
+import Theme from '../../Theme';
 
 jest.useFakeTimers();
 
-const initialState = { hiddenList: [], visibleList: []};
+const toggleHiddenButtonRow = {
+	header: Theme.Core.buttonRowKey,
+	data: [{
+		buttonRow: true,
+		id: Theme.Core.buttonRowKey,
+	}],
+};
+const initialState = {hiddenList: [], visibleList: [toggleHiddenButtonRow]};
 
 describe('Test Devices reducers', ()=>{
 

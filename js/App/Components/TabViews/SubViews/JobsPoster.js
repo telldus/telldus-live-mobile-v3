@@ -316,6 +316,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			arrowContainer,
 			arrowContainerRight,
 			arrow,
+			checkButtonStyle,
 		} = this._getStyle();
 		const posterWidth = this.getPosterWidth();
 		const { rippleColor, rippleOpacity } = Theme.Core;
@@ -332,9 +333,7 @@ export default class JobsPoster extends View<null, Props, State> {
 						</View>
 					</View>
 					<CheckBoxIconText
-						style={{
-							marginBottom: 5,
-						}}
+						style={checkButtonStyle}
 						onToggleCheckBox={this.onToggleVisibilty}
 						isChecked={showInactive}
 						text={this.checkBoxText}
@@ -465,7 +464,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+
+		const { land } = Theme.Core.headerHeightFactor;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;// Android tab bar height in landscape.
 
 		const dayWidth = this._getDayWidth(weekday);
 		const dayHeight = deviceWidth * 0.1;
@@ -473,7 +474,7 @@ export default class JobsPoster extends View<null, Props, State> {
 		const todayOffset = (width - headerHeight) * 0.205333333;
 
 		const dayTop = deviceWidth * 0.117333333;
-		const todayTop = deviceWidth * 0.058666667;
+		const todayTop = deviceWidth * 0.058;
 
 		const dayFontSize = Math.floor(deviceWidth * 0.037333333);
 		const todayFontSize = Math.floor(deviceWidth * 0.084);
@@ -624,7 +625,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+
+		const { land } = Theme.Core.headerHeightFactor;
+		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
 		const prevDay = days[todayIndex - 1];
 		const nextDay = days[todayIndex + 1];
 		const prevDayWidth = prevDay ? this._getDayWidth(prevDay.day) + (width * 0.0555) : undefined;
@@ -640,7 +643,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				bottom: 0,
 				borderWidth: 0,
 				alignItems: 'center',
-				justifyContent: 'flex-end',
+				justifyContent: 'center',
 			},
 			daysContainer: {
 				borderWidth: 0,
@@ -660,7 +663,11 @@ export default class JobsPoster extends View<null, Props, State> {
 				overflow: 'hidden',
 				position: 'absolute',
 				left: (width - headerHeight) * 0.205333333,
-				top: deviceWidth * 0.176,
+				top: deviceWidth * 0.17,
+			},
+			checkButtonStyle: {
+				position: 'absolute',
+				top: deviceWidth * 0.25,
 			},
 			arrowContainer: {
 				position: 'absolute',

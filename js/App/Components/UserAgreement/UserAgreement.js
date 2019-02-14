@@ -36,6 +36,7 @@ import {
 	getEULA,
 	acceptEULA,
 } from '../../Actions';
+import shouldUpdate from '../../Lib/shouldUpdate';
 
 const ViewX = isIphoneX() ? SafeAreaView : View;
 
@@ -87,6 +88,21 @@ class UserAgreement extends View<Props, State> {
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { eulaVersion } = this.state;
+		const { eulaVersion: eulaVersionN } = nextState;
+		if (eulaVersion !== eulaVersionN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(this.props, nextProps, ['showModal', 'appLayout']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	getEULA() {
 		this.props.getEULA().then((res: Object) => {
 			const { text: eulaContent, version: eulaVersion } = res;
@@ -131,7 +147,7 @@ class UserAgreement extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
 						<NavigationHeader showLeftIcon={false} topMargin={false}/>
 						<ScrollView

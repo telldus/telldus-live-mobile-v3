@@ -155,7 +155,7 @@ class DimmerProgressBar extends Component<Props, State> {
 		const containerStyle = {
 			width,
 			borderWidth,
-			borderColor: borderColor || color,
+			borderColor: borderColor,
 			borderRadius,
 			overflow: 'hidden',
 			backgroundColor: unfilledColor,

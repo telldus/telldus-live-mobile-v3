@@ -31,13 +31,18 @@ import SelectLocation from './SelectLocation';
 import SelectDeviceType from './SelectDeviceType';
 import IncludeDevice from './IncludeDevice';
 import DeviceName from './DeviceName';
+import AlreadyIncluded from './AlreadyIncluded';
+import NoDeviceFound from './NoDeviceFound';
+import ExcludeScreen from './ExcludeScreen';
+import IncludeFailed from './IncludeFailed';
+import CantEnterInclusion from './CantEnterInclusion';
 
 const initialRouteName = 'InitialScreen';
 
-type renderContainer = (Object) => Object;
+type renderContainer = (Object, string) => Object;
 
-const renderAddDeviceContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
-	<AddDeviceContainer navigation={navigation} screenProps={screenProps}>
+const renderAddDeviceContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
+	<AddDeviceContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</AddDeviceContainer>
 );
@@ -50,21 +55,37 @@ const RouteConfigs = {
 				SelectLocation
 				:
 				SelectDeviceType
-		),
+			, 'InitialScreen'),
 	},
 	SelectDeviceType: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SelectDeviceType),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SelectDeviceType, 'SelectDeviceType'),
 	},
 	IncludeDevice: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeDevice),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeDevice, 'IncludeDevice'),
 	},
 	DeviceName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(DeviceName),
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(DeviceName, 'DeviceName'),
+	},
+	AlreadyIncluded: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(AlreadyIncluded, 'AlreadyIncluded'),
+	},
+	NoDeviceFound: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(NoDeviceFound, 'NoDeviceFound'),
+	},
+	ExcludeScreen: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(ExcludeScreen, 'ExcludeScreen'),
+	},
+	IncludeFailed: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeFailed, 'IncludeFailed'),
+	},
+	CantEnterInclusion: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(CantEnterInclusion, 'CantEnterInclusion'),
 	},
 };
 
 const StackNavigatorConfig = {
 	initialRouteName,
+	initialRouteKey: initialRouteName,
 	headerMode: 'none',
 	cardStyle: {
 		shadowColor: 'transparent',

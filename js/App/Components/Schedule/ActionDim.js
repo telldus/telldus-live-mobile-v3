@@ -55,7 +55,7 @@ export default class ActionDim extends View<null, Props, State> {
 		const { isEditMode, intl, schedule } = this.props;
 		const { formatMessage } = intl;
 
-		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : `2. ${formatMessage(i18n.labelAction)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
 		this.h2 = formatMessage(i18n.posterChooseAction);
 		this.infoButton = {
 			tmp: true, // TODO: fill with real fields

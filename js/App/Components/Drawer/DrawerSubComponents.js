@@ -78,7 +78,7 @@ const SettingsButton = ({ onPress, styles }: Object): Object => (
 		rippleDuration={Theme.Core.rippleDuration}
 		style={styles.settingsCover}
 		onPress={onPress}>
-		<IconTelldus icon={'settings'} size={styles.settingsIconSize} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
+		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
 	</Ripple>
 );

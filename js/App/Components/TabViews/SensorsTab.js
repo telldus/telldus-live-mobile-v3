@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { SectionList, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
+import { SectionList, TouchableOpacity, RefreshControl, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
@@ -30,11 +30,11 @@ import Platform from 'Platform';
 import { View, IconTelldus, DialogueBox, DialogueHeader, Text } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
 
-import { getSensors, setIgnoreSensor, showToast } from '../../Actions';
+import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actions';
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon } from '../../Lib';
+import { getTabBarIcon, LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
@@ -68,6 +68,9 @@ class SensorsTab extends View {
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: () => void;
 	openSensorDetail: (number) => void;
+
+	setRef: (any) => void;
+	listView: any;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.sensors),
@@ -114,27 +117,43 @@ class SensorsTab extends View {
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
 
 		this.openSensorDetail = this.openSensorDetail.bind(this);
+		this.setRef = this.setRef.bind(this);
+		this.listView = null;
+
+		this.timeoutScrollToHidden = null;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
-		return currentScreen === 'Sensors';
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Sensors') || (currentScreen !== 'Sensors' && prevScreen === 'Sensors');
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.timeoutScrollToHidden);
+	}
+
+	setRef(ref: any) {
+		this.listView = ref;
 	}
 
 	onRefresh() {
 		this.setState({
 			isRefreshing: true,
 		});
-		this.props.dispatch(getSensors())
-			.then(() => {
-				this.setState({
-					isRefreshing: false,
-				});
-			}).catch(() => {
-				this.setState({
-					isRefreshing: false,
-				});
+		let promises = [
+			this.props.dispatch(getGateways()),
+			this.props.dispatch(getSensors()),
+		];
+		Promise.all(promises).then(() => {
+			this.setState({
+				isRefreshing: false,
 			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		});
 	}
 
 	keyExtractor(item: Object): string {
@@ -142,8 +161,26 @@ class SensorsTab extends View {
 	}
 
 	toggleHiddenList() {
+		const { rowsAndSections } = this.props;
+		const { hiddenList, visibleList } = rowsAndSections;
+
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
+		}, () => {
+			const { showHiddenList } = this.state;
+			if (showHiddenList && hiddenList.length > 0 && visibleList.length > 0) {
+				this.timeoutScrollToHidden = setTimeout(() => {
+					if (this.listView) {
+						this.listView.scrollToLocation({
+							animated: true,
+							sectionIndex: visibleList.length - 1,
+							itemIndex: 0,
+							viewPosition: 0.7,
+						});
+					}
+				}, 500);
+			}
 		});
 	}
 
@@ -188,11 +225,20 @@ class SensorsTab extends View {
 		});
 	}
 
-	toggleHiddenListButton(style: Object): Object {
+	toggleHiddenListButton(): Object {
+		const { screenProps } = this.props;
+		const accessible = screenProps.currentScreen === 'Sensors';
+		const style = this.getStyles(screenProps.appLayout);
+
 		return (
-			<TouchableOpacity style={style.toggleHiddenListButton} onPress={this.toggleHiddenList}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}/>
-				<Text style={style.toggleHiddenListText}>
+			<TouchableOpacity
+				style={style.toggleHiddenListButton}
+				onPress={this.toggleHiddenList}
+				accessible={accessible}
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
+				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
+					importantForAccessibility="no" accessible={false}/>
+				<Text style={style.toggleHiddenListText} accessible={accessible}>
 					{this.state.showHiddenList ?
 						this.hideHidden
 						:
@@ -203,17 +249,24 @@ class SensorsTab extends View {
 		);
 	}
 
+	prepareFinalListData(rowsAndSections: Object): Array<Object> {
+		const { showHiddenList } = this.state;
+		const { visibleList, hiddenList } = rowsAndSections;
+		if (!showHiddenList) {
+			return visibleList;
+		}
+		return visibleList.concat(hiddenList);
+	}
+
 	render(): Object {
 
 		const { rowsAndSections, screenReaderEnabled, screenProps } = this.props;
 		const { appLayout } = screenProps;
 		const {
-			showHiddenList,
 			isRefreshing,
 			propsSwipeRow,
 			showConfirmDialogue,
 		} = this.state;
-		const { visibleList, hiddenList } = rowsAndSections;
 
 		const style = this.getStyles(appLayout);
 
@@ -221,6 +274,8 @@ class SensorsTab extends View {
 		if (screenReaderEnabled && screenProps.currentScreen === 'Sensors') {
 			makeRowAccessible = 1;
 		}
+
+		const listData = this.prepareFinalListData(rowsAndSections);
 		const extraData = {
 			makeRowAccessible,
 			appLayout,
@@ -228,34 +283,22 @@ class SensorsTab extends View {
 		};
 
 		return (
-			<ScrollView style={style.container}
-				refreshControl={
-					<RefreshControl
-						refreshing={isRefreshing}
-						onRefresh={this.onRefresh}
-					/>}>
+			<View style={style.container}>
 				<SectionList
-					sections={visibleList}
+					sections={listData}
 					renderItem={this.renderRow}
 					renderSectionHeader={this.renderSectionHeader}
 					initialNumToRender={15}
 					keyExtractor={this.keyExtractor}
 					extraData={extraData}
+					stickySectionHeadersEnabled={true}
+					refreshControl={
+						<RefreshControl
+							refreshing={isRefreshing}
+							onRefresh={this.onRefresh}
+						/>}
+					ref={this.setRef}
 				/>
-				<View>
-					{this.toggleHiddenListButton(style)}
-					{showHiddenList ?
-						<SectionList
-							sections={hiddenList}
-							renderItem={this.renderRow}
-							renderSectionHeader={this.renderSectionHeader}
-							keyExtractor={this.keyExtractor}
-							extraData={extraData}
-						/>
-						:
-						<View style={{height: 80}}/>
-					}
-				</View>
 				<DialogueBox
 					showDialogue={showConfirmDialogue}
 					header={
@@ -278,16 +321,20 @@ class SensorsTab extends View {
 					positiveText={this.labelHide}
 					onPressPositive={this.onConfirmDialogueHide}
 				/>
-			</ScrollView>
+			</View>
 		);
 	}
 
-	renderSectionHeader(sectionData: Object): Object {
+	renderSectionHeader(sectionData: Object): Object | null {
 		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
+
+		if (sectionData.section.header === Theme.Core.buttonRowKey) {
+			return null;
+		}
 
 		return (
 			<DeviceHeader
-				gateway={sectionData.section.key}
+				gateway={sectionData.section.header}
 				appLayout={this.props.screenProps.appLayout}
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
@@ -299,9 +346,20 @@ class SensorsTab extends View {
 	renderRow(row: Object): Object {
 		const { screenProps } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen, appLayout } = screenProps;
-		const { item } = row;
-		const { isOnline } = item;
+		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
+		const { item, section, index } = row;
+		const { isOnline, buttonRow } = item;
+
+		if (buttonRow) {
+			return (
+				<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
+					{this.toggleHiddenListButton()}
+				</View>
+			);
+		}
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<SensorRow
@@ -313,7 +371,9 @@ class SensorsTab extends View {
 				setIgnoreSensor={this.setIgnoreSensor}
 				onHiddenRowOpen={this.closeVisibleRows}
 				propsSwipeRow={propsSwipeRow}
-				onSettingsSelected={this.openSensorDetail}/>
+				onSettingsSelected={this.openSensorDetail}
+				screenReaderEnabled={screenReaderEnabled}
+				isLast={isLast}/>
 		);
 	}
 
@@ -340,7 +400,8 @@ class SensorsTab extends View {
 		return {
 			container: {
 				flex: 1,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				backgroundColor: Theme.Core.appBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',

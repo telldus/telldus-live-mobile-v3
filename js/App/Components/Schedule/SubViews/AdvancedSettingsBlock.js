@@ -90,7 +90,8 @@ render(): Object {
 	} = this.getStyles();
 
 	return (
-		<View style={{flex: 1}}>
+		<View
+			style={{flex: 1}}>
 			<TouchableOpacity
 				onPress={this.toggleAdvanced}
 				style={toggleAdvancedCover}>

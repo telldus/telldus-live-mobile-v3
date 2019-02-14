@@ -74,7 +74,7 @@ class TimeZone extends View<void, Props, State> {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(i18n.LTZheaderOne)}`;
+		this.h1 = formatMessage(i18n.LTZheaderOne);
 		this.h2 = formatMessage(i18n.LTZheaderTwo);
 		this.label = formatMessage(i18n.LTZheaderOne);
 

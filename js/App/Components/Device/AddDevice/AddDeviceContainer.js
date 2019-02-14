@@ -22,10 +22,10 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { BackHandler, KeyboardAvoidingView } from 'react-native';
+import { BackHandler, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -41,15 +41,21 @@ import {
 	getSocketObject,
 	setDeviceName,
 	getDevices,
+	getDeviceManufacturerInfo,
+	showToast,
+	processWebsocketMessage,
 } from '../../../Actions';
 
 type Props = {
+	addDevice: Object,
 	navigation: Object,
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
 	showModal: boolean,
 	validationMessage: any,
+	ScreenName: string,
+	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
 type State = {
@@ -57,25 +63,20 @@ type State = {
 	h2: string,
 	infoButton: null | Object,
 	loading: boolean,
+	keyboardShown: boolean,
 };
 
 class AddDeviceContainer extends View<Props, State> {
 
 	handleBackPress: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		actions: PropTypes.objectOf(PropTypes.func),
-		screenProps: PropTypes.object,
-		showModal: PropTypes.bool,
-		validationMessage: PropTypes.any,
-	};
+	_keyboardDidShow: () => void;
+	_keyboardDidHide: () => void;
 
 	state = {
 		h1: '',
 		h2: '',
 		infoButton: null,
+		keyboardShown: false,
 	};
 
 	constructor(props: Props) {
@@ -89,20 +90,63 @@ class AddDeviceContainer extends View<Props, State> {
 		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 		this.getRelativeData = this.getRelativeData.bind(this);
+		this._keyboardDidShow = this._keyboardDidShow.bind(this);
+		this._keyboardDidHide = this._keyboardDidHide.bind(this);
 	}
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+	}
+
+	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
+		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+			const isPropsEqual = isEqual(this.props, nextProps);
+			if (!isPropsEqual) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+
+	_keyboardDidShow() {
+		this.setState({
+			keyboardShown: true,
+		});
+	}
+
+	_keyboardDidHide() {
+		this.setState({
+			keyboardShown: false,
+		});
 	}
 
 	componentWillUnmount() {
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
 	}
 
 	handleBackPress(): boolean {
-		let {navigation} = this.props;
+		let { navigation } = this.props;
+		if (this.disAllowBackNavigation()) {
+			return true;
+		}
 		navigation.pop();
 		return true;
+	}
+
+	disAllowBackNavigation(): boolean {
+		const {screenProps} = this.props;
+		const { currentScreen } = screenProps;
+		const screens = ['AlreadyIncluded', 'IncludeFailed', 'DeviceName', 'NoDeviceFound', 'ExcludeScreen', 'CantEnterInclusion'];
+		return screens.indexOf(currentScreen) !== -1;
 	}
 
 	onChildDidMount = (h1: string, h2: string, infoButton?: Object | null = null) => {
@@ -117,7 +161,7 @@ class AddDeviceContainer extends View<Props, State> {
 		this.props.actions.hideModal();
 	};
 
-	getRelativeData = (styles: Object): Object => {
+	getRelativeData = (): Object => {
 		let {validationMessage} = this.props;
 		return {
 			dialogueHeader: false,
@@ -133,43 +177,52 @@ class AddDeviceContainer extends View<Props, State> {
 			screenProps,
 			showModal,
 			navigation,
+			addDevice,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
 		const deviceWidth = isPortrait ? width : height;
 
-		const styles = this.getStyle(appLayout);
-
 		const padding = deviceWidth * Theme.Core.paddingFactor;
-		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
+		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData();
+
+		const showLeftIcon = !this.disAllowBackNavigation();
 
 		return (
-			<View style={{
-				flex: 1,
-			}}>
-				<KeyboardAvoidingView behavior="padding" style={{flex: 1}} contentContainerStyle={{ justifyContent: 'center'}}>
-					<NavigationHeaderPoster
-						h1={h1} h2={h2}
-						infoButton={infoButton}
-						align={'right'}
-						navigation={navigation}
-						{...screenProps}/>
-					<View style={[styles.style, {paddingHorizontal: padding}]}>
-						{React.cloneElement(
-							children,
-							{
-								onDidMount: this.onChildDidMount,
-								actions,
-								...screenProps,
-								navigation,
-								dialogueOpen: showModal,
-								paddingHorizontal: padding,
-							},
-						)}
-					</View>
+			<View
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}>
+				<NavigationHeaderPoster
+					h1={h1} h2={h2}
+					infoButton={infoButton}
+					align={'right'}
+					navigation={navigation}
+					showLeftIcon={showLeftIcon}
+					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
+					{...screenProps}/>
+				<KeyboardAvoidingView
+					behavior="padding"
+					style={{flex: 1}}
+					contentContainerStyle={{ flexGrow: 1 }}
+					keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+					{React.cloneElement(
+						children,
+						{
+							onDidMount: this.onChildDidMount,
+							actions,
+							...screenProps,
+							navigation,
+							dialogueOpen: showModal,
+							paddingHorizontal: padding,
+							addDevice,
+							processWebsocketMessage: this.props.processWebsocketMessage,
+						},
+					)}
 				</KeyboardAvoidingView>
 				<DialogueBox
 					dialogueContainerStyle={{elevation: 0}}
@@ -182,14 +235,6 @@ class AddDeviceContainer extends View<Props, State> {
 			</View>
 		);
 	}
-
-	getStyle(appLayout: Object): Object {
-		return {
-			style: {
-				flex: 1,
-			},
-		};
-	}
 }
 
 const mapStateToProps = (store: Object): Object => {
@@ -198,6 +243,7 @@ const mapStateToProps = (store: Object): Object => {
 		showModal: openModal,
 		validationMessage: data,
 		modalExtras: extras,
+		addDevice: store.addDevice,
 	};
 };
 
@@ -211,8 +257,11 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getSocketObject,
 				setDeviceName,
 				getDevices,
+				getDeviceManufacturerInfo,
+				showToast,
 			}, dispatch),
 		},
+		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
 	}
 );
 

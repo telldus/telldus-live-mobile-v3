@@ -11,9 +11,8 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "2.44.1"
+fastlane_version "2.113.0"
 
-ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
 ENV["APP_VERSION"] = JSON.parse(IO.read("../package.json"))["version"]
 
 default_platform :android
@@ -31,7 +30,9 @@ platform :android do
   lane :alpha do
     supply(
       track: "alpha",
-      apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
+      apk: "android/app/build/outputs/apk/release/app-release.apk"
+      # Use this if the apk was build by fastlane
+      # apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
     )
     slack(
       message: "Successfully deployed new App Update.",
@@ -67,12 +68,6 @@ platform :ios do
   lane :beta do
     pilot(
       skip_submission: true
-    )
-    # This requires the Fabric app. Can be downloaded here:
-    # https://www.fabric.io/downloads/apple
-    upload_symbols_to_crashlytics(
-      dsym_path: "./TelldusLiveApp.app.dSYM.zip",
-      api_token: "6ddcb9201beba571821a466b7b634103262d6903"
     )
     slack(
       message: "Successfully deployed new version of Telldus Live! mobile to TestFlight.",

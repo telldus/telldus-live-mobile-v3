@@ -39,7 +39,7 @@ import { refreshAccessToken } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
-	refreshAccessToken: () => Promise<any>,
+	refreshAccessToken: (Object) => Promise<any>,
 	logoutFromTelldus: () => Promise<any>,
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -50,6 +50,7 @@ type Props = {
 	styles: Object,
 	headerText: string,
 	toggleOnPressLogout: (boolean) => void,
+	accessToken: Object,
 };
 
 type State = {
@@ -120,7 +121,7 @@ class SessionLocked extends View {
 		this.setState({
 			isLogginIn: true,
 		});
-		this.props.refreshAccessToken()
+		this.props.refreshAccessToken(this.props.accessToken)
 			.catch(() => {
 				// This is to reset the loading state(isLogginIn) and thereby update the
 				// button label.
@@ -199,6 +200,7 @@ function mapStateToProps(store: Object): Object {
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
 		appLayout: store.app.layout,
+		accessToken: store.user.accessToken,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {
@@ -210,8 +212,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 				return dispatch(logoutFromTelldus());
 			});
 		},
-		refreshAccessToken: (): Promise<any> => {
-			return refreshAccessToken();
+		refreshAccessToken: (accessToken: Object): Promise<any> => {
+			return refreshAccessToken('', '', accessToken, dispatch);
 		},
 		dispatch,
 	};

@@ -25,21 +25,25 @@ import PropTypes from 'prop-types';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+const isEqual = require('react-fast-compare');
+
+import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
 	isInState: string,
-	style: Object | number | Array<any>,
 	methodRequested: string,
 	name: string,
 	isGatewayActive: boolean,
 	enabled: boolean,
+	local: boolean,
+
+	style: Object | number | Array<any>,
 	onPress: () => void,
 	intl: Object,
 	iconStyle: Object | number | Array<any>,
-	local: boolean,
 };
 
 type State = {
@@ -72,6 +76,21 @@ class DimmerOffButton extends View {
 		if (onPress) {
 			onPress();
 		}
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const propsChange = shouldUpdate(this.props, nextProps, [
+			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local',
+		]);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
 	}
 
 	render(): Object {

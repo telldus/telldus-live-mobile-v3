@@ -31,6 +31,7 @@ import Ripple from 'react-native-material-ripple';
 import {
 	View,
 	Text,
+	IconTelldus,
 } from '../../../../../BaseComponents';
 
 import Theme from '../../../../Theme';
@@ -39,9 +40,11 @@ type Props = {
     module: string,
     action: string,
     h1: string,
-    h2: string,
+	h2: string,
+	icon: string,
 	appLayout: Object,
 	onPress: (Object) => void,
+	id: number,
 };
 
 type State = {
@@ -59,17 +62,18 @@ constructor(props: Props) {
 }
 
 onPress() {
-	const { onPress, module, action } = this.props;
+	const { onPress, module, action, id } = this.props;
 	if (onPress) {
 		onPress({
 			module,
 			action,
+			secure: id === 2,
 		});
 	}
 }
 
 render(): Object {
-	const { h1, h2 } = this.props;
+	const { h1, h2, icon, id } = this.props;
 	const {
 		arrowCover,
 		arrow,
@@ -78,6 +82,7 @@ render(): Object {
 		itemsCover,
 		h1Style,
 		h2Style,
+		iconSecurity,
 	} = this.getStyles();
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 	return (
@@ -88,13 +93,25 @@ render(): Object {
 			onPress={this.onPress}>
 			<View style={container}>
 				<View style={itemsCover}>
-					<Image source={{uri: 'icon_location_otio_box'}} resizeMode={'cover'} style={imageType}/>
+					<IconTelldus icon={icon} style={imageType}/>
 					<View style={{
+						flex: 1,
 						flexDirection: 'column',
+						flexWrap: 'wrap',
 					}}>
 
-						<Text style={h1Style}>
-							{h1}
+						<Text>
+							{(id === 2) && (
+								<Text>
+									<IconTelldus icon={'security'} style={iconSecurity}/>
+									<Text style={Theme.Styles.hiddenText}>
+										{' '}
+									</Text>
+								</Text>
+							)}
+							<Text style={h1Style}>
+								{h1}
+							</Text>
 						</Text>
 						<Text style={h2Style}>
 							{h2}
@@ -129,6 +146,7 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 			justifyContent: 'center',
 			borderRadius: 2,
+			marginHorizontal: padding,
 		},
 		arrowCover: {
 			flex: 0,
@@ -144,7 +162,7 @@ getStyles(): Object {
 		},
 		itemsCover: {
 			flexDirection: 'row',
-			paddingVertical: 5 + h1FontSize,
+			paddingVertical: h1FontSize,
 			alignItems: 'center',
 			paddingRight: padding * 4,
 		},
@@ -157,8 +175,13 @@ getStyles(): Object {
 			color: rowTextColor,
 		},
 		imageType: {
-			height: deviceWidth * 0.18,
-			width: deviceWidth * 0.26,
+			fontSize: deviceWidth * 0.18,
+			color: '#1b365d',
+			marginHorizontal: padding * 2,
+		},
+		iconSecurity: {
+			fontSize: h1FontSize,
+			color: brandSecondary,
 		},
 	};
 }

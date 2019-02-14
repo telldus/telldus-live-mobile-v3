@@ -64,8 +64,8 @@ class OverviewTab extends View<Props, State> {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			navigation.navigate({
-				routeName: 'Overview',
-				key: 'Overview',
+				routeName: 'SOverview',
+				key: 'SOverview',
 			});
 		},
 	});
@@ -100,8 +100,8 @@ class OverviewTab extends View<Props, State> {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
-		if (currentScreen === 'Overview') {
-			if (this.props.screenProps.currentScreen !== 'Overview') {
+		if (currentScreen === 'SOverview') {
+			if (this.props.screenProps.currentScreen !== 'SOverview') {
 				return true;
 			}
 
@@ -125,9 +125,14 @@ class OverviewTab extends View<Props, State> {
 		return false;
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { isRefreshing } = this.state;
 		const { sensor, screenProps, gatewayName, gatewayType } = this.props;
+
+		if (!sensor) {
+			return null;
+		}
+
 		const { battery } = sensor;
 		const { intl, appLayout } = screenProps;
 		const locationImageUrl = getLocationImageUrl(gatewayType);
@@ -147,7 +152,10 @@ class OverviewTab extends View<Props, State> {
 
 		return (
 			<ScrollView
-				style={{flex: 1}}
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
 				contentContainerStyle={contentContainerStyle}
 				refreshControl={
 					<RefreshControl
@@ -209,8 +217,10 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
-	const { clientId } = sensor;
-	const { name: gatewayName, type: gatewayType } = state.gateways.byId[clientId];
+	const { clientId } = sensor ? sensor : {};
+
+	const gateway = state.gateways.byId[clientId];
+	const { name: gatewayName, type: gatewayType } = gateway ? gateway : {};
 
 	return {
 		sensor,

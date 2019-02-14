@@ -37,8 +37,8 @@ import Edit from './Edit';
 
 const initialRouteName = 'InitialScreen';
 
-const renderScheduleScreen = (navigation, screenProps) => Component => (
-	<ScheduleScreen navigation={navigation} screenProps={screenProps}>
+const renderScheduleScreen = (navigation, screenProps) => (Component, ScreenName) => (
+	<ScheduleScreen navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</ScheduleScreen>
 );
@@ -49,27 +49,28 @@ const RouteConfigs = {
 			navigation.getParam('editMode', false) ?
 				Edit
 				:
-				Device),
+				Device, 'InitialScreen'),
 	},
 	Action: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Action),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Action, 'Action'),
 	},
 	ActionDim: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(ActionDim),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(ActionDim, 'ActionDim'),
 	},
 	Time: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Time),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Time, 'Time'),
 	},
 	Days: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Days),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Days, 'Days'),
 	},
 	Summary: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Summary),
+		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Summary, 'Summary'),
 	},
 };
 
 const StackNavigatorConfig = {
 	initialRouteName,
+	initialRouteKey: initialRouteName,
 	headerMode: 'none',
 	cardStyle: {
 		shadowColor: 'transparent',

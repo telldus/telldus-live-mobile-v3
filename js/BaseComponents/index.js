@@ -52,7 +52,6 @@ import Card from './Card';
 import Badge from './Badge';
 import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
-import ScrollableTabView from './Tabs';
 import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
@@ -83,6 +82,10 @@ import LocationDetails from './LocationDetails';
 import EditBox from './EditBox';
 import FormattedRelative from './FormattedRelative';
 import ProgressBarLinear from './ProgressBarLinear';
+import DropDown from './DropDown';
+import MainTabBarAndroid from './MainTabBarAndroid';
+import MainTabsAndroid from './MainTabsAndroid';
+import AttentionCatcher from './AttentionCatcher';
 
 import {
 	AppState,
@@ -128,7 +131,6 @@ module.exports = {
 	CheckBox: CheckBox,
 	Radio: Radio,
 	ProgressBar: ProgressBar,
-	Tabs: ScrollableTabView,
 	TouchableButton: TouchableButton,
 	Modal: Modal,
 	FloatingButton,
@@ -157,6 +159,10 @@ module.exports = {
 	EditBox,
 	FormattedRelative,
 	ProgressBarLinear,
+	DropDown,
+	MainTabBarAndroid,
+	MainTabsAndroid,
+	AttentionCatcher,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

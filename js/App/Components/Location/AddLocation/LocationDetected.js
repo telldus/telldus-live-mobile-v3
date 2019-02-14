@@ -154,6 +154,7 @@ class LocationDetected extends View {
 			},
 			button: {
 				alignSelf: 'center',
+				marginTop: padding,
 			},
 		};
 	}

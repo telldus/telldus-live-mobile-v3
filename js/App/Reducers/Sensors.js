@@ -27,6 +27,7 @@ import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
 
 import { hasTokenExpired } from '../Lib/LocalControl';
+import Theme from '../Theme';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
@@ -51,12 +52,16 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 	});
 	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
-			key: index,
+			header: index,
 			data: next,
 		});
 		return acc;
 	}, []);
-	return result;
+	return orderBy(result, [(item: Object): any => {
+		let { header = '' } = item;
+		header = typeof header !== 'string' ? '' : header;
+		return header.toLowerCase();
+	}], ['asc']);
 }
 
 export function parseSensorsForListView(sensors: Object = {}, gateways: Object = {}): Object {
@@ -65,15 +70,28 @@ export function parseSensorsForListView(sensors: Object = {}, gateways: Object =
 	let isSensorsEmpty = isEmpty(sensors);
 	if (!isGatwaysEmpty && !isSensorsEmpty) {
 		let orderedList = orderBy(sensors, [(sensor: Object): any => {
-			let { name } = sensor;
-			return name ? name.toLowerCase() : null;
+			let { name = '' } = sensor;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
 		}], ['asc']);
 		let [hidden, visible] = partition(orderedList, (sensor: Object): Object => {
 			return sensor.ignored;
 		});
-		visibleList = prepareSectionRow(visible, gateways);
-		hiddenList = prepareSectionRow(hidden, gateways);
+		if (visible && visible.length > 0) {
+			visibleList = prepareSectionRow(visible, gateways);
+		}
+		if (hidden && hidden.length > 0) {
+			hiddenList = prepareSectionRow(hidden, gateways);
+		}
 	}
+	const toggleHiddenButtonRow = {
+		header: Theme.Core.buttonRowKey,
+		data: [{
+			buttonRow: true,
+			id: Theme.Core.buttonRowKey,
+		}],
+	};
+	visibleList.push(toggleHiddenButtonRow);
 	return { visibleList, hiddenList };
 }
 

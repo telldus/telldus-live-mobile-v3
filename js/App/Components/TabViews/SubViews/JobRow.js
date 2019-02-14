@@ -46,8 +46,10 @@ import {
 	getWeekdays,
 	getWeekends,
 	getTranslatableDays,
+	getDeviceActionIcon,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
+import { methods } from '../../../../Constants';
 
 import i18n from '../../../Translations/common';
 
@@ -65,6 +67,8 @@ type Props = {
 	appLayout: Object,
 	showNow: boolean,
 	expired: boolean,
+	deviceType: string,
+	deviceSupportedMethods: Object,
 
 	intl: intlShape,
 	editJob: (schedule: Schedule) => void,
@@ -91,19 +95,29 @@ class JobRow extends View<null, Props, null> {
 	};
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { appLayout, intl, editJob, weekdays, ...others } = this.props;// eslint-disable-line
-		const newLayout = nextProps.appLayout.width !== appLayout.width;
-		if (newLayout) {
-			return true;
-		}
-		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, ...othersN } = nextProps;// eslint-disable-line
+		const { appLayout, intl, editJob, weekdays, currentScreen, ...others } = this.props;// eslint-disable-line
+		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, currentScreen: currentScreenN, ...othersN } = nextProps;// eslint-disable-line
+		if (currentScreenN === 'Scheduler') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Scheduler' && nextProps.screenReaderEnabled) {
+				return true;
+			}
+			const newLayout = nextProps.appLayout.width !== appLayout.width;
+			if (newLayout) {
+				return true;
+			}
 
-		if (weekdays.length !== weekdaysN.length) {
-			return true;
-		}
+			if (weekdays.length !== weekdaysN.length) {
+				return true;
+			}
 
-		const propsEqual = isEqual(others, othersN);
-		if (!propsEqual) {
+			const propsEqual = isEqual(others, othersN);
+			if (!propsEqual) {
+				return true;
+			}
+		}
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Scheduler' && currentScreen === 'Scheduler' && nextProps.screenReaderEnabled) {
 			return true;
 		}
 		return false;
@@ -164,6 +178,7 @@ class JobRow extends View<null, Props, null> {
 			intl,
 			showNow,
 			expired,
+			currentScreen,
 		} = this.props;
 
 		const {
@@ -195,15 +210,19 @@ class JobRow extends View<null, Props, null> {
 		const deviceName = dName ? dName : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
+
+		const accessible = currentScreen === 'Scheduler';
 		const accessibilityLabel = `${formatMessage(i18n.phraseOneSheduler)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
-			<View>
+			<View importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}>
 				<TouchableOpacity
 					style={container}
 					onPress={this.editJob}
 					disabled={!editJob}
-					accessibilityLabel={accessibilityLabel}
+					accessible={accessible}
+					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+					accessibilityLabel={accessible ? accessibilityLabel : ''}
 				>
 					<ListRow
 						roundIcon={type}
@@ -216,7 +235,6 @@ class JobRow extends View<null, Props, null> {
 						}}
 						timeStyle={time}
 						timeContainerStyle={{ opacity }}
-						rowStyle={{ opacity }}
 						rowContainerStyle={rowContainer}
 						rowWithTriangleContainerStyle={rowWithTriangleContainer}
 						triangleColor={methodIconContainer.backgroundColor}
@@ -224,34 +242,36 @@ class JobRow extends View<null, Props, null> {
 						isFirst={isFirst}
 					>
 						{actionIcon}
-						<TextRowWrapper style={textWrapper} appLayout={appLayout}>
-							<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
-								{deviceName}
-							</Title>
-							<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
-								{repeat}
-								{type === 'time' && (
-									<FormattedTime
-										value={timestamp}
-										hour="numeric"
-										minute="numeric"
-										style={description}
-									/>)
-								}
-							</Description>
-						</TextRowWrapper>
-						{!!offset && (
-							<IconTelldus
-								icon="offset"
-								style={iconOffset}
-							/>
-						)}
-						{!!randomInterval && (
-							<IconTelldus
-								icon="random"
-								style={iconRandom}
-							/>
-						)}
+						<View style={{ flex: 1, opacity }}>
+							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
+								<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
+									{deviceName}
+								</Title>
+								<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
+									{repeat}{' '}
+									{type === 'time' && (
+										<FormattedTime
+											value={timestamp}
+											hour="numeric"
+											minute="numeric"
+											style={description}
+										/>)
+									}
+								</Description>
+							</TextRowWrapper>
+							{!!offset && (
+								<IconTelldus
+									icon="offset"
+									style={iconOffset}
+								/>
+							)}
+							{!!randomInterval && (
+								<IconTelldus
+									icon="random"
+									style={iconRandom}
+								/>
+							)}
+						</View>
 					</ListRow>
 				</TouchableOpacity>
 				{!!showNow && (
@@ -272,12 +292,16 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue, expired } = this.props;
+		const { intl, method, appLayout, methodValue, expired, deviceSupportedMethods, deviceType } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
-		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
 
 		if (action) {
+			const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
+			const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
+			const methodString = methods[action.method];
+			let iconName = actionIcons[methodString];
+
 			if (action.name === 'Dim') {
 				const roundVal = Math.round(methodValue / 255 * 100);
 				const value = `${roundVal}%`;
@@ -295,7 +319,7 @@ class JobRow extends View<null, Props, null> {
 			return (
 				{
 					actionIcon: <BlockIcon
-						icon={action.icon}
+						icon={iconName ? iconName : action.icon}
 						bgColor={expired ? '#999999' : action.bgColor}
 						containerStyle={methodIconContainer}
 						style={methodIcon}
@@ -348,7 +372,9 @@ class JobRow extends View<null, Props, null> {
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
-		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+
+		const { land } = Theme.Core.headerHeightFactor;
+		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
 		width = width - headerHeight;
 
 		const timeWidth = width * 0.26;

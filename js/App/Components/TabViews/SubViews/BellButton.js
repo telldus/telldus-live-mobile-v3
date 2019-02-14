@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Icon } from '../../../../BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
@@ -45,6 +45,7 @@ type Props = {
 	bellButtonStyle: number | Object,
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
+	onPressDeviceAction?: () => void,
 };
 
 class BellButton extends View {
@@ -76,10 +77,13 @@ class BellButton extends View {
 	}
 
 	onBell() {
-		const { command, device, isOpen, closeSwipeRow } = this.props;
+		const { command, device, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(device.id, command);
 	}
@@ -93,7 +97,7 @@ class BellButton extends View {
 
 		return (
 			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
-				<Icon name="bell" size={22} color={iconColor} />
+				<IconTelldus icon="bell" size={22} color={iconColor} />
 
 				{
 					methodRequested === 'BELL' ?

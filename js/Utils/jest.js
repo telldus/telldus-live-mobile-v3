@@ -19,18 +19,6 @@
 
 import { NativeModules } from 'react-native';
 
-jest.mock('react-native-fabric', () => {
-	return {
-		Crashlytics: {
-			crash: () => {},
-		},
-		Answers: {
-			logCustom: () => {},
-			logContentView: () => {},
-		},
-	};
-});
-
 jest.mock('react-native-orientation-locker', () => {
 	return {
 		addEventListener: jest.fn(),
@@ -49,6 +37,19 @@ jest.mock('react-native-google-signin', () => {
 			IN_PROGRESS: '',
 			PLAY_SERVICES_NOT_AVAILABLE: '',
 		},
+	};
+});
+
+jest.mock('react-native-device-info', () => {
+	return {
+		getSystemVersion: jest.fn(),
+	};
+});
+
+jest.mock('react-native-firebase', () => {
+	return {
+		crashlytics: jest.fn(),
+		notifications: jest.fn(),
 	};
 });
 

@@ -74,6 +74,7 @@ getStyles(width: number): Object {
 			paddingTop: 30,
 			paddingHorizontal: 25,
 			alignItems: 'center',
+			backgroundColor: Theme.Core.appBackground,
 		},
 		headerStyle: {
 			color: eulaContentColor,

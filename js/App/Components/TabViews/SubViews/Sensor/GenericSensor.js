@@ -32,7 +32,7 @@ type sensorProps = {
 	value: string,
 	unit?: string,
 	icon: string,
-	label?: string,
+	label: string,
 	isLarge: boolean,
 	formatOptions?: Object,
 	coverStyle?: Object,
@@ -51,9 +51,11 @@ const GenericSensor = ({
 
 	const { sensorValue, sensorValueText, sensorValueLabelText } = Theme.Styles;
 
+	const labelLength = label.length;
+
 	return (
 		<View style={[sensorValue, coverStyle]}>
-			{!isLarge && (
+			{!isLarge && labelLength < 13 && (
 				<IconTelldus icon={icon} style={{
 					fontSize: 40,
 					color: '#fff',
@@ -67,20 +69,12 @@ const GenericSensor = ({
 						</Text>
 						:
 						<View style={{flex: 0, flexDirection: 'row', alignItems: 'center'}}>
-							<Text style={[valueUnitCoverStyle]}>
-								<Text style={[sensorValueText, valueStyle]}>
-									<FormattedNumber value={value} {...formatOptions}/>
-								</Text>
-								{/** {'\n\n'}
-							  *	A workaround to add space between the two Texts which are children of the same parent Text node.
-							  */}
-								<Text style={{fontSize: 8, color: 'transparent'}} allowFontScaling={false}>
-								!
-								</Text>
-								<Text style={[sensorValueLabelText, unitStyle]}>
-									{unit}
-								</Text>
-							</Text>
+							<FormattedNumber
+								value={value}
+								{...formatOptions}
+								suffix={unit}
+								style={[sensorValueText, valueStyle]}
+								suffixStyle={[sensorValueLabelText, unitStyle]}/>
 						</View>
 				}
 				<Text style={[{color: '#ffffff'}, labelStyle]}>

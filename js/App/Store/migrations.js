@@ -40,6 +40,20 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
+	const { app } = newState;
+	if (app && !app.defaultSettings) {
+		newState = {
+			...newState,
+			app: {
+				...app,
+				defaultSettings: {
+					dimmerSensitivity: 5,
+					sortingDB: 'Chronological',
+				},
+			},
+		};
+	}
+
 	const { gateways, sensorsList } = newState;
 	if (gateways) {
 		// Insert the attribute/property 'localKey' to each gateways object if not already present.
@@ -56,6 +70,34 @@ export default function migrations(state: Object = {}): Promise<any> {
 			...newState,
 			sensorsList: {
 				defaultSensorSettings,
+			},
+		};
+	}
+
+	if (sensorsList && sensorsList.defaultSensorSettings) {
+		let newDefaultSensorSettings = {};
+		let { defaultSensorSettings } = sensorsList;
+		for (let key in defaultSensorSettings) {
+			const { historySettings = {}, ...others } = defaultSensorSettings[key];
+			const { selectedTwo, selectedOne, ...othersH } = historySettings;
+			if ((selectedTwo && selectedTwo.type === 'wdir') || (selectedOne && selectedOne.type === 'wdir')) {
+				newDefaultSensorSettings[key] = {
+					...others,
+					historySettings: {
+						...othersH,
+						selectedTwo: undefined,
+						selectedOne: undefined,
+					},
+				};
+			} else {
+				newDefaultSensorSettings[key] = defaultSensorSettings[key];
+			}
+		}
+
+		newState = {
+			...newState,
+			sensorsList: {
+				defaultSensorSettings: newDefaultSensorSettings,
 			},
 		};
 	}

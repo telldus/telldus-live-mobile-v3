@@ -22,21 +22,28 @@
 'use strict';
 
 import React from 'react';
+import { SectionList } from 'react-native';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
+import filter from 'lodash/filter';
+import isEmpty from 'lodash/isEmpty';
+import groupBy from 'lodash/groupBy';
+import reduce from 'lodash/reduce';
 
-import { List, ListDataSource, View } from '../../../BaseComponents';
+import { View, Text } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { DeviceRow } from './SubViews';
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 interface Props extends ScheduleProps {
 	devices: Object,
+	gateways: Object,
 	resetSchedule: () => void,
 }
 
 type State = {
-	dataSource: Object,
+	dataSource: Array<Object>,
+	refreshing: boolean,
 };
 
 export default class Device extends View<void, Props, State> {
@@ -51,18 +58,50 @@ export default class Device extends View<void, Props, State> {
 	};
 
 	state = {
-		dataSource: new ListDataSource({
-			rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-		}).cloneWithRows(orderBy(this.props.devices.byId, [(device: Object): any => device.name.toLowerCase()], ['asc'])),
+		dataSource: this.parseDataForList(this.props.devices.byId, this.props.gateways.byId),
+		refreshing: false,
 	};
 
+	_renderSectionHeader: (Object) => Object;
 	constructor(props: Props) {
 		super(props);
 
 		let { formatMessage } = this.props.intl;
 
-		this.h1 = `1. ${formatMessage(i18n.labelDevice)}`;
+		this.h1 = formatMessage(i18n.labelDevice);
 		this.h2 = formatMessage(i18n.posterChooseDevice);
+
+		this._renderSectionHeader = this._renderSectionHeader.bind(this);
+	}
+
+	parseDataForList(devices: Object, gateways: Object): Array<Object> {
+		devices = filter(devices, (device: Object): any => !isEmpty(device.supportedMethods));
+		devices = orderBy(devices, [(device: Object): any => {
+			let { name } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
+		if (Object.keys(gateways).length > 1) {
+			devices = groupBy(devices, (items: Object): Array<any> => {
+				let gateway = gateways[items.clientId];
+				return gateway && gateway.name;
+			});
+			devices = reduce(devices, (acc: Array<any>, next: Object, index: number): Array<any> => {
+				acc.push({
+					key: `${index}`,
+					data: next,
+				});
+				return acc;
+			}, []);
+			return devices;
+		} else if (Object.keys(gateways).length === 1) {
+			return [{
+				key: '1',
+				data: [...devices],
+
+			}];
+		}
+		return [];
 	}
 
 	componentDidMount() {
@@ -80,7 +119,18 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	onRefresh = () => {
-		this.props.actions.getDevices();
+		this.setState({
+			refreshing: true,
+		});
+		this.props.actions.getDevices().then(() => {
+			this.setState({
+				refreshing: false,
+			});
+		}).catch(() => {
+			this.setState({
+				refreshing: false,
+			});
+		});
 	};
 
 	selectDevice = (row: Object) => {
@@ -92,35 +142,116 @@ export default class Device extends View<void, Props, State> {
 		actions.selectDevice(row.id);
 	};
 
-	render(): React$Element<List> {
+	_keyExtractor(item: Object, index: number): string {
+		return index.toString();
+	}
+
+	render(): React$Element<SectionList> | null {
+		const { dataSource, refreshing } = this.state;
+		if (!dataSource || dataSource.length <= 0) {
+			return null;
+		}
+		const {padding} = this.getStyles();
 		return (
-			<List
-				dataSource={this.state.dataSource}
-				renderRow={this._renderRow}
+			<SectionList
+				sections={dataSource}
+				renderItem={this._renderRow}
+				renderSectionHeader={this._renderSectionHeader}
+				keyExtractor={this._keyExtractor}
 				onRefresh={this.onRefresh}
+				refreshing={refreshing}
+				contentContainerStyle={{
+					flexGrow: 1,
+					paddingTop: padding,
+				}}
+				stickySectionHeadersEnabled={true}
 			/>
 		);
 	}
 
-	_renderRow = (row: Object, sId: string, rId: string): Object => {
+	_renderRow = (row: Object): Object => {
 		const { appLayout, intl } = this.props;
+		const { item, section, index } = row;
 		// TODO: use device description
-		const preparedRow = Object.assign({}, row, { description: '' });
+		const preparedRow = Object.assign({}, item, { description: '' });
+		const {
+			padding,
+		} = this.getStyles();
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
+
+		return (
+			<DeviceRow
+				row={preparedRow}
+				onPress={this.selectDevice}
+				appLayout={appLayout}
+				intl={intl}
+				labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
+				containerStyle = {{
+					flex: 1,
+					alignItems: 'stretch',
+					justifyContent: 'space-between',
+					marginVertical: undefined,
+					height: undefined,
+					marginTop: padding / 2,
+					marginBottom: isLast ? padding : 0,
+					marginHorizontal: padding,
+				}}
+			/>
+		);
+	};
+
+	_renderSectionHeader(sectionData: Object): Object | null {
+		const { key } = sectionData.section;
+		const { dataSource } = this.state;
+		if (dataSource.length === 1) {
+			return null;
+		}
+		const {
+			nameFontSize,
+			sectionHeader,
+		} = this.getStyles();
+		return (
+			<View style={sectionHeader}>
+				<Text style={[Theme.Styles.sectionHeaderText, {fontSize: nameFontSize}]}>
+					{key}
+				</Text>
+			</View>
+		);
+	}
+
+	getStyles(): Object {
+		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		return <DeviceRow row={preparedRow} onPress={this.selectDevice} appLayout={appLayout}
-			intl={intl} labelPostScript={intl.formatMessage(i18n.defaultDescriptionButton)}
-			containerStyle = {{
-				flex: 1,
-				alignItems: 'stretch',
-				justifyContent: 'space-between',
-				marginVertical: undefined,
-				marginTop: parseInt(rId, 10) === 0 ? padding : 0,
+		const {
+			maxSizeRowTextOne,
+			paddingFactor,
+			shadow,
+		} = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
+
+		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+
+		return {
+			nameFontSize,
+			padding,
+			sectionHeader: {
+				flexDirection: 'row',
+				paddingVertical: 2 + (nameFontSize * 0.2),
+				backgroundColor: '#ffffff',
+				alignItems: 'center',
+				paddingLeft: 5 + (nameFontSize * 0.2),
+				justifyContent: 'flex-start',
 				marginBottom: padding / 2,
-			}}/>;
-	};
+				...shadow,
+			},
+		};
+	}
 
 }

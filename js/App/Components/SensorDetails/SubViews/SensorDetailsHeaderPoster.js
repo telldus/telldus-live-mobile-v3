@@ -30,7 +30,7 @@ import { closeDatabase } from '../../../Actions/LocalStorage';
 import i18n from '../../../Translations/common';
 
 type Props = {
-	sensor: Object,
+	sensorName: string,
 	screenProps: Object,
 	navigation: Object,
 };
@@ -58,7 +58,7 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 	handleBackPress(): boolean {
 		let { screenProps } = this.props;
 		let { currentScreen } = screenProps;
-		if (currentScreen === 'Overview') {
+		if (currentScreen === 'SOverview') {
 			this.goBack();
 			return true;
 		}
@@ -70,10 +70,11 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { navigation, sensor, screenProps } = this.props;
+		const { navigation, screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
 
-		const sensorName = sensor.name ? sensor.name : this.noName;
+		let { sensorName } = this.props;
+		sensorName = sensorName ? sensorName : this.noName;
 
 		return (
 			<NavigationHeaderPoster
@@ -83,6 +84,7 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 				intl={intl}
 				navigation={navigation}
 				handleBackPress={this.handleBackPress}
+				leftIcon={'close'}
 			/>
 		);
 	}
@@ -90,9 +92,9 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
-	const sensor = store.sensors.byId[id];
+	const { name: sensorName } = store.sensors.byId[id] ? store.sensors.byId[id] : {};
 	return {
-		sensor,
+		sensorName,
 	};
 }
 

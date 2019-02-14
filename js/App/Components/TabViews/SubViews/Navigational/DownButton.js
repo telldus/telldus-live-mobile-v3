@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from '../../../../../BaseComponents';
+import { IconTelldus, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
@@ -47,6 +47,7 @@ type Props = {
 	local: boolean,
 	isOpen: boolean,
 	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 class DownButton extends View {
@@ -63,10 +64,13 @@ class DownButton extends View {
 	}
 
 	onDown() {
-		const { commandDown, id, isOpen, closeSwipeRow } = this.props;
+		const { commandDown, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
 		}
 		this.props.deviceSetState(id, commandDown);
 	}
@@ -90,7 +94,7 @@ class DownButton extends View {
 				style={[downButtonStyle, style]}
 				onPress={supportedMethod ? this.onDown : noop}
 				accessibilityLabel={`${this.labelDownButton}, ${name}`}>
-				<Icon name="caret-down" size={iconSize}
+				<IconTelldus icon="down" size={iconSize}
 					style={{
 						color: supportedMethod ? downIconColor : '#eeeeee',
 					}}

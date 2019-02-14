@@ -46,6 +46,8 @@ import shouldUpdate from './shouldUpdate';
 import * as LayoutAnimations from './LayoutAnimations';
 import * as UserUtils from './UserUtils';
 import * as LocalControl from './LocalControl';
+import * as appUtils from './appUtils';
+import * as gatewayUtils from './gatewayUtils';
 
 
 module.exports = {
@@ -75,4 +77,6 @@ module.exports = {
 	LayoutAnimations,
 	...UserUtils,
 	...LocalControl,
+	...appUtils,
+	...gatewayUtils,
 };

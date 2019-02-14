@@ -116,8 +116,8 @@ class SettingsTab extends View {
 		),
 		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 			navigation.navigate({
-				routeName: 'Settings',
-				key: 'Settings',
+				routeName: 'SSettings',
+				key: 'SSettings',
 			});
 		},
 	});
@@ -129,7 +129,7 @@ class SettingsTab extends View {
 
 		// This is required to make the 'keepHistory' prop update when changed from history tab
 		// also while toggling switch prevent update in between API response.
-		if (screenProps.currentScreen === 'Settings' &&
+		if (screenProps.currentScreen === 'SSettings' &&
 			state.keepHistory !== sensor.keepHistory &&
 			source !== 'keepHistory' && !transition
 		) {
@@ -194,8 +194,8 @@ class SettingsTab extends View {
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
-		if (currentScreen === 'Settings') {
-			if (this.props.screenProps.currentScreen !== 'Settings') {
+		if (currentScreen === 'SSettings') {
+			if (this.props.screenProps.currentScreen !== 'SSettings') {
 				return true;
 			}
 
@@ -256,7 +256,7 @@ class SettingsTab extends View {
 			});
 		}).catch((err: Object) => {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-			this.seState({
+			this.setState({
 				editName: false,
 				sensorName: sensor.name,
 			});
@@ -455,9 +455,14 @@ class SettingsTab extends View {
 		};
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { keepHistory, isHidden, editName, sensorName, dialogueConfig } = this.state;
 		const { inDashboard, sensor } = this.props;
+
+		if (!sensor.sensorId) {
+			return null;
+		}
+
 		const { model, protocol, sensorId, name } = sensor;
 		const { appLayout, intl } = this.props.screenProps;
 		const { formatMessage } = intl;
@@ -502,7 +507,12 @@ class SettingsTab extends View {
 		};
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+			<ScrollView
+				style={{
+					flex: 1,
+					backgroundColor: Theme.Core.appBackground,
+				}}
+				contentContainerStyle={{flexGrow: 1}}>
 				<View style={container}>
 					<SettingsRow
 						type={'text'}
@@ -533,15 +543,18 @@ class SettingsTab extends View {
 					<TouchableButton
 						text={formatMessage(i18n.clearHistory).toUpperCase()}
 						onPress={this.clearHistory}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						accessible={true}/>
 					<TouchableButton
 						text={formatMessage(i18n.resetMaxMin).toUpperCase()}
 						onPress={this.resetMaxMin}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						accessible={true}/>
 					<TouchableButton
 						text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
 						onPress={this.clearHistoryCache}
-						style={buttonStyle}/>
+						style={buttonStyle}
+						accessible={true}/>
 					<Text style={clearCacheHintStyle}>
 						{formatMessage(i18n.hintHistoryCache)}.
 					</Text>
@@ -640,7 +653,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
 	return {
-		sensor,
+		sensor: sensor ? sensor : {},
 		inDashboard: !!state.dashboard.sensorsById[id],
 	};
 }

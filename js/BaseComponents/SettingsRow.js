@@ -51,6 +51,7 @@ type Props = {
 	onChangeText?: (string) => void,
 	onSubmitEditing?: () => void,
 	keyboardTypeInLineEdit?: string,
+	style?: Object | Array<any> | number,
 };
 
 type DefaultProps = {
@@ -145,6 +146,7 @@ class SettingsRow extends Component<Props, null> {
 			inLineEditActive,
 			keyboardTypeInLineEdit,
 			valuePostfix,
+			style,
 		} = this.props;
 
 		const {
@@ -179,7 +181,7 @@ class SettingsRow extends Component<Props, null> {
 		}
 
 		return (
-			<View style={ShowOnDashCover}>
+			<View style={[ShowOnDashCover, style]} accessible={true} importantForAccessibility={'yes'}>
 				{type === 'switch' ?
 					<View
 						style={touchableStyle}>
@@ -200,9 +202,11 @@ class SettingsRow extends Component<Props, null> {
 							<Text style={textShowOnDash}>
 								{label}
 							</Text>
-							<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
-								<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
-							</TouchableOpacity>
+							{!!iconLabelRight && (
+								<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
+									<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+								</TouchableOpacity>
+							)}
 						</View>
 						<View style={valueCover}>
 							{inLineEditActive ?

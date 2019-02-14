@@ -23,23 +23,6 @@
 'use strict';
 import { translations } from 'live-shared-data';
 
-// Activate languages when they have been translated.
-
-import {addLocaleData} from 'react-intl';
-// import cs from 'react-intl/locale-data/cs';
-import de from 'react-intl/locale-data/de';
-import en from 'react-intl/locale-data/en';
-import fi from 'react-intl/locale-data/fi';
-import fr from 'react-intl/locale-data/fr';
-import nb from 'react-intl/locale-data/nb';
-// import nl from 'react-intl/locale-data/nl';
-// import pl from 'react-intl/locale-data/pl';
-// import ru from 'react-intl/locale-data/ru';
-import sv from 'react-intl/locale-data/sv';
-// import th from 'react-intl/locale-data/th';
-
-addLocaleData([...de, ...en, ...fi, ...fr, ...nb, ...sv]);
-
 module.exports = {
 	...translations,
 };

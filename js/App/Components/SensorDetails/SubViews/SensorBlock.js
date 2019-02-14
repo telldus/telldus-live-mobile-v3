@@ -82,7 +82,7 @@ export default class SensorBlock extends View<Props, null> {
 		const { brandSecondary } = Theme.Core;
 
 		return (
-			<View style={containerStyle}>
+			<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
 				<IconTelldus icon={icon} style={iconStyle}/>
 				<View style={textContainer}>
 					<Text style={labelStyle}>
@@ -93,38 +93,31 @@ export default class SensorBlock extends View<Props, null> {
 							{value}
 						</Text>
 						:
-						<Text style={valueStyle} numberOfLines={1}>
-							<FormattedNumber value={value} {...formatOptions}/>
-							{unit}
-						</Text>
+						<FormattedNumber
+							value={value}
+							{...formatOptions}
+							style={valueStyle}
+							suffix={unit}
+							suffixStyle={valueStyle}/>
 					}
 					<Text style={updatedInfoStyle}>
 						<FormattedDate value={lastUpdated} style={updatedInfoStyle}/>
-						<Text style={{
-							color: 'transparent',
-							fontSize: 14,
-						}}>
-						!
+						<Text style={Theme.Styles.hiddenText}>
+							{' '}
 						</Text>
 						<FormattedTime value={lastUpdated} style={updatedInfoStyle}/>
 					</Text>
 					{!!max && (
 						<Text style={updatedInfoStyle}>
 							<Icon name={'angle-up'} color={brandSecondary} size={iconSize}/>
-							<Text style={{
-								color: 'transparent',
-								fontSize: 14,
-							}}>
-							!
+							<Text style={Theme.Styles.hiddenText}>
+								{' '}
 							</Text>
 							<FormattedMessage {...i18n.labelMax} style={updatedInfoStyle}/>
 							{`: ${max}${unit}, `}
 							<FormattedDate value={maxTime} style={updatedInfoStyle}/>
-							<Text style={{
-								color: 'transparent',
-								fontSize: 14,
-							}}>
-							!
+							<Text style={Theme.Styles.hiddenText}>
+								{' '}
 							</Text>
 							<FormattedTime value={maxTime} style={updatedInfoStyle}/>
 						</Text>
@@ -132,20 +125,14 @@ export default class SensorBlock extends View<Props, null> {
 					{!!min && (
 						<Text style={updatedInfoStyle}>
 							<Icon name={'angle-down'} color={brandSecondary} size={iconSize}/>
-							<Text style={{
-								color: 'transparent',
-								fontSize: 14,
-							}}>
-							!
+							<Text style={Theme.Styles.hiddenText}>
+								{' '}
 							</Text>
 							<FormattedMessage {...i18n.labelMin} style={updatedInfoStyle}/>
 							{`: ${min}${unit}, `}
 							<FormattedDate value={minTime} style={updatedInfoStyle}/>
-							<Text style={{
-								color: 'transparent',
-								fontSize: 14,
-							}}>
-							!
+							<Text style={Theme.Styles.hiddenText}>
+								{' '}
 							</Text>
 							<FormattedTime value={minTime} style={updatedInfoStyle}/>
 						</Text>
@@ -199,10 +186,14 @@ export default class SensorBlock extends View<Props, null> {
 			valueStyle: {
 				fontSize: valueFontSize,
 				color: brandSecondary,
+				textShadowColor: 'rgba(0,0,0,0)',
+				backgroundColor: 'rgba(0,0,0,0)',
 			},
 			updatedInfoStyle: {
 				fontSize: updateInfoFontSize,
 				color: '#000',
+				backgroundColor: 'rgba(0,0,0,0)',
+				textShadowColor: 'rgba(0,0,0,0)',
 			},
 			iconSize: updateInfoFontSize * 1.5,
 		};

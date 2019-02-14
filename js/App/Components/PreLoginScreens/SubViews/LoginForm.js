@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Platform } from 'react-native';
+import { TextInput, Platform, Keyboard, InteractionManager } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -100,8 +100,6 @@ class LoginForm extends View {
 	}
 
 	configureGoogleSignIn() {
-		// TODO: AUTOMATE values of secret key's webClientId, iosClientId and iosReversedClientId for release builds.
-		// iosReversedClientId : used as URL Scheme in info.plist file
 		GoogleSignin.configure({
 			webClientId: webClientId,
 			offlineAccess: true,
@@ -164,12 +162,14 @@ class LoginForm extends View {
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
 				/>
+				<View style={{ height: 10 }}/>
 				<GoogleSigninButton
-					style={{ width: 200, height: 48, alignSelf: 'center' }}
+					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}
 					color={GoogleSigninButton.Color.Dark}
 					onPress={this.signIn}
 					disabled={this.state.isSigninInProgress} />
+				<View style={{ height: 10 }}/>
 			</View>
 		);
 	}
@@ -195,16 +195,19 @@ class LoginForm extends View {
 			const data = await GoogleSignin.signIn();
 			const { idToken } = data;
 			if (idToken) {
-				const credential = {
-					idToken,
-				};
-				this.props.loginToTelldus(credential, 'google')
-					.catch((err: Object) => {
-						this.setState({
-							isSigninInProgress: false,
+				Keyboard.dismiss();
+				InteractionManager.runAfterInteractions(() => {
+					const credential = {
+						idToken,
+					};
+					this.props.loginToTelldus(credential, 'google')
+						.catch((err: Object) => {
+							this.setState({
+								isSigninInProgress: false,
+							});
+							this.handleLoginError(err);
 						});
-						this.handleLoginError(err);
-					});
+				});
 			} else {
 				dispatch(showModal(this.unknownError));
 			}
@@ -243,15 +246,18 @@ class LoginForm extends View {
 		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
-			const credential = {
-				username,
-				password,
-			};
-			this.props.loginToTelldus(credential)
-				.catch((err: Object) => {
-					this.postSubmit();
-					this.handleLoginError(err);
-				});
+			Keyboard.dismiss();
+			InteractionManager.runAfterInteractions(() => {
+				const credential = {
+					username,
+					password,
+				};
+				this.props.loginToTelldus(credential, 'password')
+					.catch((err: Object) => {
+						this.postSubmit();
+						this.handleLoginError(err);
+					});
+			});
 		} else {
 			let message = intl.formatMessage(i18n.fieldEmpty);
 			dispatch(showModal(message));
@@ -293,8 +299,8 @@ function mapStateToProps(store: Object): Object {
 
 function dispatchToProps(dispatch: Function): Object {
 	return {
-		loginToTelldus: (userName: string, password: string): Promise<any> => {
-			return dispatch(loginToTelldus(userName, password));
+		loginToTelldus: (credential: Object, grantType: string): Promise<any> => {
+			return dispatch(loginToTelldus(credential, grantType));
 		},
 		dispatch,
 	};

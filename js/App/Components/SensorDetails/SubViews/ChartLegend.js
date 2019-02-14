@@ -27,6 +27,9 @@ import Ripple from 'react-native-material-ripple';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
+
+import shouldUpdate from '../../../Lib/shouldUpdate';
+
 import Theme from '../../../Theme';
 
 type Props = {
@@ -40,6 +43,16 @@ export default class ChartLegend extends View<Props, null> {
 props: Props;
 constructor(props: Props) {
 	super(props);
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const propsChange = shouldUpdate( this.props, nextProps, [
+		'legendData', 'appLayout', 'fullscreen',
+	]);
+	if (propsChange) {
+		return propsChange;
+	}
+	return false;
 }
 
 render(): Object | null {

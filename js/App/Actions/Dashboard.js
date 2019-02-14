@@ -27,7 +27,7 @@ import type { ThunkAction } from './Types';
 import { actions } from 'live-shared-data';
 const { Dashboard } = actions;
 
-function getSupportedDisplayTypes(data: Object): Array<string> {
+function getSupportedDisplayTypes(data: Object = {}): Array<string> {
 	return Object.keys(data);
 }
 

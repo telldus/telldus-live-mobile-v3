@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { ScrollView } from 'react-native';
 
 import {
 	View,
@@ -63,7 +64,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(`2. ${formatMessage(i18n.labelDeviceType)}`, formatMessage(i18n.AddZDTypeHeaderTwo));
+	onDidMount(formatMessage(i18n.labelDeviceType), formatMessage(i18n.AddZDTypeHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -79,13 +80,26 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-onChooseType({module, action}: Object) {
+onChooseType({module, action, secure}: Object) {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
+
+	// get all nodes list in the chosen gateway, to check if device already included
+	this.getNodesList(gateway.id);
+
 	navigation.navigate('IncludeDevice', {
 		gateway,
 		module,
 		action,
+		secure,
+	});
+}
+
+getNodesList(id: number) {
+	const { actions } = this.props;
+	actions.sendSocketMessage(id, 'client', 'forward', {
+		'module': 'zwave',
+		'action': 'nodeList',
 	});
 }
 
@@ -93,7 +107,7 @@ getDeviceTypes(): Array<any> {
 	const { navigation, intl } = this.props, types = [];
 	const { formatMessage } = intl;
 	const gateway = navigation.getParam('gateway', {});
-	const { transports } = gateway;
+	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 
 	transportsAsArray.map((ts: string) => {
@@ -127,9 +141,9 @@ render(): Object {
 	} = this.getStyles();
 
 	return (
-		<View style={container}>
+		<ScrollView style={container}>
 			{typesToRender}
-		</View>
+		</ScrollView>
 	);
 }
 getStyles(): Object {

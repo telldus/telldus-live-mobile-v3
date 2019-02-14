@@ -45,21 +45,9 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>3.0.0.1</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>6ddcb9201beba571821a466b7b634103262d6903</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-		</array>
-	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>firebase_crashlytics_collection_enabled</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -89,6 +77,10 @@
 		<string>Roboto-Medium.ttf</string>
 		<string>Roboto-Regular.ttf</string>
 		<string>SFNS Display.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

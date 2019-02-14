@@ -31,7 +31,7 @@ import {
 	View,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays } from '../../Lib';
+import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
 import { ActionRow, DaysRow, DeviceRow, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 
@@ -66,7 +66,7 @@ class Summary extends View<null, Props, State> {
 
 		let { formatMessage } = intl;
 
-		this.h1 = `5. ${formatMessage(i18n.summary)}`;
+		this.h1 = formatMessage(i18n.summary);
 		this.h2 = formatMessage(i18n.posterSummary);
 		this.messageOnAdd = formatMessage(i18n.addScheduleSuccess);
 		this.infoButton = {
@@ -145,54 +145,58 @@ class Summary extends View<null, Props, State> {
 			iconContainerStyle,
 		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
+		const { deviceType, supportedMethods = {} } = this.device;
+		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
 
 		const { retries = 0, retryInterval = 0, reps = 0 } = schedule;
 
 		return (
-			<View style={{flex: 1}}>
-				<ScrollView ref={this.setRefScroll} style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
-					<View style={container}>
-						<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
-						<ActionRow
-							method={method}
-							showValue={true}
-							methodValue={methodValue}
-							containerStyle={row}
-							iconContainerStyle={iconContainerStyle}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<TimeRow
-							schedule={schedule}
-							device={this.device}
-							containerStyle={row}
-							appLayout={appLayout}
-							intl={intl}
-							getSuntime={actions.getSuntime}
-						/>
-						<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
-						<AdvancedSettingsBlock
-							appLayout={appLayout}
-							intl={intl}
-							onPressInfo={actions.showModal}
-							onDoneEditAdvanced={actions.setAdvancedSettings}
-							retries={retries}
-							retryInterval={retryInterval}
-							reps={reps}
-							onToggleAdvanced={this.onToggleAdvanced}/>
-					</View>
-					<FloatingButton
-						buttonStyle={buttonStyle}
-						iconStyle={iconStyle}
-						onPress={this.saveSchedule}
-						iconName={this.state.isLoading ? false : 'checkmark'}
-						iconSize={iconSize}
-						paddingRight={paddingRight - 2}
-						showThrobber={this.state.isLoading}
-						accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
+			<ScrollView
+				ref={this.setRefScroll}
+				keyboardShouldPersistTaps={'always'}
+				style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+				<View style={container}>
+					<DeviceRow row={this.device} containerStyle={row} appLayout={appLayout} intl={intl}/>
+					<ActionRow
+						method={method}
+						actionIcons={actionIcons}
+						showValue={true}
+						methodValue={methodValue}
+						containerStyle={row}
+						iconContainerStyle={iconContainerStyle}
+						appLayout={appLayout}
+						intl={intl}
 					/>
-				</ScrollView>
-			</View>
+					<TimeRow
+						schedule={schedule}
+						device={this.device}
+						containerStyle={row}
+						appLayout={appLayout}
+						intl={intl}
+						getSuntime={actions.getSuntime}
+					/>
+					<DaysRow selectedDays={selectedDays} appLayout={appLayout} intl={intl}/>
+					<AdvancedSettingsBlock
+						appLayout={appLayout}
+						intl={intl}
+						onPressInfo={actions.showModal}
+						onDoneEditAdvanced={actions.setAdvancedSettings}
+						retries={retries}
+						retryInterval={retryInterval}
+						reps={reps}
+						onToggleAdvanced={this.onToggleAdvanced}/>
+				</View>
+				<FloatingButton
+					buttonStyle={buttonStyle}
+					iconStyle={iconStyle}
+					onPress={this.saveSchedule}
+					iconName={this.state.isLoading ? false : 'checkmark'}
+					iconSize={iconSize}
+					paddingRight={paddingRight - 2}
+					showThrobber={this.state.isLoading}
+					accessibilityLabel={`${intl.formatMessage(i18n.confirmButton)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
+				/>
+			</ScrollView>
 		);
 	}
 

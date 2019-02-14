@@ -1,0 +1,3 @@
+- Fixes hang in iPhone7&8 plus models in sensors tab
+- Fixes sensor charts
+

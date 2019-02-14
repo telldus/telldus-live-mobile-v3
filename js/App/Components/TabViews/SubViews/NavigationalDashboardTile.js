@@ -68,7 +68,7 @@ class NavigationalDashboardTile extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth']);
 		if (propsChange) {
 			return true;
 		}
@@ -79,7 +79,7 @@ class NavigationalDashboardTile extends View<Props, null> {
 	render(): Object {
 		const { item, intl, isGatewayActive, containerStyle, upButtonStyle,
 			downButtonStyle, stopButtonStyle, showStopButton } = this.props;
-		const { name, supportedMethods, isInState, local } = item;
+		const { name, supportedMethods = {}, isInState, local } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 
 		const upButton = UP ? <UpButton isEnabled={true} style={[styles.navigationButton, {borderLeftWidth: 0}, upButtonStyle]}
