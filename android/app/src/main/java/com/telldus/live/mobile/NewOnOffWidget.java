@@ -52,56 +52,51 @@ import com.telldus.live.mobile.Model.DeviceInfo;
  */
 public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
-    private static final String ACTION_OFF="ACTION_OFF";
+    private static final String ACTION_OFF = "ACTION_OFF";
 
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
+
+        PrefManager prefManager = new PrefManager(context);
+        String accessToken = prefManager.getAccess();
+        // On log out, only prefManager is cleared and not DB, so we do not want device to show back again during the
+        // socket update.
+        if (accessToken == "") {
+            return;
+        }
+
         MyDBHandler db = new MyDBHandler(context);
 
         CharSequence widgetText = "Telldus";
         String transparent;
-        DeviceInfo widgetID=db.findUser(appWidgetId);
-        Log.i("widgetID","------->"+appWidgetId);
-        Log.i("dbValue","-------->"+widgetID);
+        DeviceInfo widgetID = db.findUser(appWidgetId);
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
 
         views.setOnClickPendingIntent(R.id.iconOn,getPendingSelf(context,ACTION_ON,appWidgetId));
         views.setOnClickPendingIntent(R.id.iconOff,getPendingSelf(context,ACTION_OFF,appWidgetId));
-        if(widgetID!=null){
-
+        if (widgetID != null){
             widgetText = widgetID.getDeviceName();
             String action=widgetID.getState();
-            if(action.equals("1"))
-            {
 
+            if (action.equals("1")) {
                 views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                //  views.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
-                //  views.setImageViewResource(R.id.iconOff,R.drawable.off_light);
                 views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#FFFFFF",80,70));
                 views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#1b365d",80,70));
                 views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
                 views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
 
             }
-            if(action.equals("2"))
-            {
+            if (action.equals("2")) {
                 views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
-                //  Toast.makeText(context,"OFF",Toast.LENGTH_LONG).show();
-              /*  views.setImageViewResource(R.id.iconOn, R.drawable.on_light);
-                views.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
-*/
                 views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#E26901",80,70));
                 views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#FFFFFF",80,70));
                 views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
                 views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1b365d"));
-
             }
-
-            transparent=widgetID.getTransparent();
-            if(transparent.equals("true"))
-            {
+            transparent = widgetID.getTransparent();
+            if (transparent.equals("true")) {
                 views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
@@ -156,29 +151,24 @@ public class NewOnOffWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         MyDBHandler db = new MyDBHandler(context);
-        PrefManager prefManager=new PrefManager(context);
+        PrefManager prefManager = new PrefManager(context);
         for (int appWidgetId : appWidgetIds) {
-            boolean b=db.delete(appWidgetId);
-            if(b)
-            {
+            boolean b = db.delete(appWidgetId);
+            if (b) {
                 Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
-            }else
-            {
+            } else {
                 Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
             }
-            int count=db.CountDeviceWidgetValues();
+            int count = db.CountDeviceWidgetValues();
 
-            if(count>0)
-            {
+            if (count > 0) {
                 Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
 
-            }else
-            {
+            } else {
                 Toast.makeText(context,"No Device",Toast.LENGTH_SHORT).show();
                 prefManager.DeviceDB(false);
                 prefManager.websocketService(false);
                 context.stopService(new Intent(context, MyService.class));
-
             }
         }
     }
@@ -199,52 +189,41 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         MyDBHandler db = new MyDBHandler(context);
 
-
         if (ACTION_ON.equals(intent.getAction())) {
-            String accessToken="";
+            String accessToken = "";
             String expiresIn;
             String refreshToken;
 
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-            DeviceInfo widgetID=db.getSinlgeDeviceID(wigetID);
+            Bundle extras = intent.getExtras();
+            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+            DeviceInfo widgetID = db.getSinlgeDeviceID(wigetID);
 
-            String state=widgetID.getState();
-            if(state.equals("1"))
-            {
+            String state = widgetID.getState();
+            if (state.equals("1")) {
                 Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
-            }else
-            {
+            } else {
                 createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
             }
-
         }
-        if(ACTION_OFF.equals(intent.getAction()))
-        {
-            // DeviceInfo widgetID=db.findUser(appWidgetId);
+        if (ACTION_OFF.equals(intent.getAction())) {
 
+            Bundle extras = intent.getExtras();
+            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-            Bundle extras=intent.getExtras();
-            int wigetID=extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
 
-            DeviceInfo id=db.getSinlgeDeviceID(wigetID);
-
-            String state=id.getState();
-            if(state.equals("2"))
-            {
+            String state = id.getState();
+            if (state.equals("2")) {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
-            }else
-            {
+            } else {
                 createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
             }
         }
     }
     void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
-        PrefManager prefManager=new PrefManager(ctx);
-        String  accessToken=prefManager.getAccess();
+        PrefManager prefManager = new PrefManager(ctx);
+        String  accessToken = prefManager.getAccess();
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
-
-        Log.v("***********",str);
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
                 .addHeaders("Content-Type", "application/json")
@@ -256,20 +235,16 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Log.v("------->",response.toString());
 
-                            String status=response.optString("status");
-                            String error=response.optString("error");
+                            String status = response.optString("status");
+                            String error = response.optString("error");
 
-                            if(!status.isEmpty()&&status!=null&&action.equals("On"))
-                            {
-                                boolean b=db.updateAction("1",wigetID);
+                            if (!status.isEmpty() && status != null && action.equals("On")) {
+                                boolean b = db.updateAction("1",wigetID);
                                 RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.new_on_off_widget);
-                                //   remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_dark);
-                                //   remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_light);
+
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
-                                // appWidgetManager.updateAppWidget(wigetID,views);
+
                                 views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#E26901",80,70));
                                 views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#FFFFFF",80,70));
                                 views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
@@ -279,46 +254,33 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                 Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
                             }
 
-                            if(!status.isEmpty()&&status!=null&&action.equals("Off"))
-                            {
-                                boolean b=db.updateAction("2",wigetID);
+                            if (!status.isEmpty() && status != null && action.equals("Off")) {
+                                boolean b = db.updateAction("2",wigetID);
                                 RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_on_off_widget);
-                                //   remoteViews.setImageViewResource(R.id.iconOn, R.drawable.on_light);
-                                //   remoteViews.setImageViewResource(R.id.iconOff,R.drawable.off_dark);
+
                                 remoteViews.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#FFFFFF",80,70));
                                 remoteViews.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#1b365d",80,70));
                                 remoteViews.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
                                 remoteViews.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
 
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                //   appWidgetManager.updateAppWidget(appWidget, remoteViews);
                                 appWidgetManager.updateAppWidget(wigetID,remoteViews);
 
                                 Toast.makeText(ctx,"Turn off "+status,Toast.LENGTH_LONG).show();
                             }
 
-                            if(!status.isEmpty()&&status!=null&&action.equals("Bell"))
-                            {
-
-
+                            if(!status.isEmpty() && status != null && action.equals("Bell")) {
                                 Toast.makeText(ctx,"SuccessFully",Toast.LENGTH_SHORT).show();
-
                             }
-                            if(!status.isEmpty()&&status!=null&&action.equals("UDS"))
-                            {
+                            if (!status.isEmpty() && status != null && action.equals("UDS")) {
                                 Toast.makeText(ctx,"Success",Toast.LENGTH_LONG).show();
                             }
 
-                            if(!error.isEmpty()&&error!=null)
-                            {
-
+                            if (!error.isEmpty() && error != null) {
                                 Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
                             }
 
-
-                            if(!error.isEmpty()&&error!=null&&action.equals("Off"))
-                            {
-
+                            if (!error.isEmpty() && error != null && action.equals("Off")) {
                                 Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
                             }
 
@@ -333,6 +295,5 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
                     }
                 });
-              
     }
 }

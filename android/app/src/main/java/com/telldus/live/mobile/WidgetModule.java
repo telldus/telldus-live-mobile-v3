@@ -73,7 +73,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void disableAllWidgets(String message) {
     RemoteViews widgetView = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.new_app_widget);
-    
+
     widgetView.removeAllViews(R.id.widget_content_cover);
     widgetView.setTextViewText(R.id.txtWidgetTitle, message);
 
