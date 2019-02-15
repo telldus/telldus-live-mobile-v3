@@ -66,12 +66,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_REGISTER + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
                 + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT," + TRANSPARENT + " TEXT" + ")";
 
-/*
-        String CREATE_SENSOR_TABLE = "CREATE TABLE " +
-                TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
-                + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT" + ")";*/
-
-
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
                 + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE + " TEXT,"+ SENSOR_VALUE + " TEXT," + TRANSPARENT + " TEXT" + ")";
@@ -311,7 +305,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
       //  db.delete(this.TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs);
         //return  true;
-        return  db.delete(this.TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs)>0;
+        return  db.delete(TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs)>0;
     }
 
     public  boolean deleteSensor(int id)
@@ -322,7 +316,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         //  db.delete(this.TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs);
         //return  true;
-        return  db.delete(this.TABLE_SENSOR ,SENSOR_WIDGET_ID+" = ?",whereArgs)>0;
+        return  db.delete(TABLE_SENSOR ,SENSOR_WIDGET_ID+" = ?",whereArgs)>0;
     }
 
 public int CountSensorTableValues()
@@ -389,7 +383,6 @@ public int CountDeviceWidgetValues()
                 list.add(cursor.getString(1));//adding 2nd column data
             } while (cursor.moveToNext());
         }
-        Log.v("Sampleeeeeeeeeeeee",list.toString());
         // closing connection
         cursor.close();
         db.close();
@@ -403,5 +396,4 @@ public int CountDeviceWidgetValues()
         this.close();
         super.finalize();
     }
-
 }
