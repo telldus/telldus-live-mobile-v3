@@ -1,5 +1,5 @@
-- Add timout for when it's not possible to enter inclusion/exclusion mode
-- Stick gateway header when scrolling device and sensor list
+- Add timout for when it's not possible to enter inclusion/exclusion
+- Stick gateway header when scrolling device/sensor list
 - Better handle push token submission errors
 - Add option to use same or different scales on Y-axis in sensor history
 - Crashfix when re-register for push notifications
