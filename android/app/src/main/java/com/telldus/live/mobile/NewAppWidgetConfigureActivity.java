@@ -41,6 +41,7 @@ import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.Gravity;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -82,15 +83,12 @@ public class NewAppWidgetConfigureActivity extends Activity {
     Map<String,Integer> DeviceID=new HashMap<String,Integer>();
     int id;
 
-    //  List<String> mList=new ArrayList<String>();
-
     MyDBHandler db = new MyDBHandler(this);
-
 
     //UI
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    //    private EditText etUrl;
+
     private Button btAdd,btnCan;
     private View btSelectDevice;
     TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest,deviceText,settingText,tvIcon1;
@@ -99,7 +97,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private RemoteViews views;
     Switch switch_background;
 
-
     private String accessToken;
     private String expiresIn;
     private String refreshToken;
@@ -107,16 +104,14 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
-
     int stateID;
 
     private String sesID;
-    MyDBHandler database=new MyDBHandler(this);
+    MyDBHandler database = new MyDBHandler(this);
     private PrefManager prefManager;
-    private String switchStatus="false";
+    private String switchStatus = "false";
     private ImageView backDevice;
     private RelativeLayout mBackLayout;
-
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -135,14 +130,14 @@ public class NewAppWidgetConfigureActivity extends Activity {
         views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
-        textTest=(TextView)findViewById(R.id.testText);
-        chooseSetting=(TextView)findViewById(R.id.chooseSetting);
+        textTest = (TextView)findViewById(R.id.testText);
+        chooseSetting = (TextView)findViewById(R.id.chooseSetting);
         deviceName = (TextView) findViewById(R.id.txtDeviceName);
         deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
-        backDevice=(ImageView)findViewById(R.id.backdevice);
-        mBackLayout=(RelativeLayout)findViewById(R.id.deviceBack);
-        btnCan=(Button)findViewById(R.id.btn_cancel);
-        switch_background=(Switch)findViewById(R.id.switch_background);
+        backDevice = (ImageView)findViewById(R.id.backdevice);
+        mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
+        btnCan = (Button)findViewById(R.id.btn_cancel);
+        switch_background = (Switch)findViewById(R.id.switch_background);
         btAdd = (Button) findViewById(R.id.btAdd);
         btSelectDevice = (View) findViewById(R.id.btSelectDevice);
         deviceText = (TextView)findViewById(R.id.deviceText);
@@ -154,7 +149,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
         tvIcon1.setTypeface(iconFont);
-
 
         mBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,17 +168,14 @@ public class NewAppWidgetConfigureActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // do something, the isChecked will be
                 // true if the switch is in the On position
-                if(isChecked)
-                {
+                if (isChecked) {
                     switchStatus="true";
                     // switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
                     // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
-                }else
-                {
+                } else {
                     switchStatus="false";
                     // switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
-
                 }
             }
         });
@@ -192,8 +183,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            mAppWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -201,57 +191,54 @@ public class NewAppWidgetConfigureActivity extends Activity {
             finish();
             return;
         }
-    //    Toast.makeText(getApplicationContext(),String.valueOf(mAppWidgetId),Toast.LENGTH_LONG).show();
         final String[] deviceStateVal = {"0"};
 
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            //    Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_SHORT).show();
-
-
-
-                boolean b=isMyServiceRunning(NetworkInfo.class);
-                if (!b)
-                {
-                    startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
+                if (id == 0) {
+                    Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP , 0, 0);
+                    toast.show();
+                    return;
                 }
 
-                boolean b1=prefManager.getDeviceDB();
-                if(!b1)
-                {
+                boolean b = isMyServiceRunning(NetworkInfo.class);
+                if (!b) {
+                    startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                }
+
+                boolean b1 = prefManager.getDeviceDB();
+                if (!b1) {
                     prefManager.DeviceDB(true);
                 }
 
 
-                boolean token_service=prefManager.getTokenService();
-                if(!token_service) {
+                boolean token_service = prefManager.getTokenService();
+                if (!token_service) {
                     prefManager.TokenService(true);
                     // Service for Access token
                     Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
                     startService(serviceIntent);
-                }else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                 }
                 views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
 
 
-                DeviceInfo mInsert=new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
+                DeviceInfo mInsert = new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
                 db.addUser(mInsert);
                 NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
 
-                boolean web_service=prefManager.getWebService();
-                if(!web_service) {
+                boolean web_service = prefManager.getWebService();
+                if (!web_service) {
                     prefManager.websocketService(true);
                     // Service for Access token
                     Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
                     startService(serviceIntent);
-                }else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                 }
 
@@ -270,20 +257,18 @@ public class NewAppWidgetConfigureActivity extends Activity {
             public void onClick(View view) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                 builder.setTitle(R.string.pick_device)
-                        .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                deviceName.setText(deviceNameList[which]);
-                                id=DeviceID.get(deviceNameList[which]);
+                    .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            deviceName.setText(deviceNameList[which]);
+                            id=DeviceID.get(deviceNameList[which]);
 
-                            //    deviceHint.setText(null);
-                                deviceStateVal[0] = (String) deviceStateList[which];
-                                   Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
-                                ad.dismiss();
-
-
-                            }
-                        });
-                ad = builder.show();//   builder.show();
+                            // deviceHint.setText(null);
+                            deviceStateVal[0] = (String) deviceStateList[which];
+                            Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
+                            ad.dismiss();
+                        }
+                    });
+                ad = builder.show();
             }
         });
 
@@ -297,53 +282,41 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
     void createDeviceApi() {
     accessToken=prefManager.getAccess();
-      AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
-              .addHeaders("Content-Type", "application/json")
-              .addHeaders("Accpet", "application/json")
-              .addHeaders("Authorization", "Bearer " + accessToken)
-              .setPriority(Priority.LOW)
-              .build()
-              .getAsJSONObject(new JSONObjectRequestListener() {
-                  @Override
-                  public void onResponse(JSONObject response) {
-                      try {
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
+            .addHeaders("Content-Type", "application/json")
+            .addHeaders("Accpet", "application/json")
+            .addHeaders("Authorization", "Bearer " + accessToken)
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
 
-                          JSONObject deviceData = new JSONObject(response.toString());
-                          JSONArray deviceList = deviceData.getJSONArray("device");
+                        JSONObject deviceData = new JSONObject(response.toString());
+                        JSONArray deviceList = deviceData.getJSONArray("device");
 
-                          for (int i = 0; i < deviceList.length(); i++) {
-                              JSONObject curObj = deviceList.getJSONObject(i);
-                              String name = curObj.getString("name");
-                              stateID = curObj.getInt("state");
+                        for (int i = 0; i < deviceList.length(); i++) {
+                            JSONObject curObj = deviceList.getJSONObject(i);
+                            String name = curObj.getString("name");
+                            stateID = curObj.getInt("state");
 
-                              if (stateID == 1 || stateID == 2 || stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
-                                  Integer id = curObj.getInt("id");
-                                  DeviceID.put(name, id);
-                                  nameListItems.add(name);
-                                  stateListItems.add(String.valueOf(stateID));
-                              }
-                          }
-                          deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                          deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
-                          /*  if (pDialog.isShowing())
-                              pDialog.dismiss();*/
-                          //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
-                      } catch (JSONException e) {
-                          e.printStackTrace();
-                      };
-                  }
-
-                  @Override
-                  public void onError(ANError anError) {
-                     /* if (pDialog.isShowing())
-                      {
-
-                          pDialog.dismiss();
-
-
-                      }*/
-                  }
-
+                            if (stateID == 1 || stateID == 2 || stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16) {
+                                Integer id = curObj.getInt("id");
+                                DeviceID.put(name, id);
+                                nameListItems.add(name);
+                                stateListItems.add(String.valueOf(stateID));
+                            }
+                        }
+                        deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                        deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    };
+                }
+                @Override
+                public void onError(ANError anError) {
+                }
               });
     }
 

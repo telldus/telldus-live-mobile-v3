@@ -42,6 +42,7 @@ import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.Gravity;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -67,30 +68,22 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
-/**
- * The configuration screen for the {@link NewOnOffWidget NewOnOffWidget} AppWidget.
- */
+
 public class NewOnOffWidgetConfigureActivity extends Activity {
     private static final String ACTION_ON = "ACTION_ON";
-    private static final String ACTION_OFF="ACTION_OFF";
+    private static final String ACTION_OFF = "ACTION_OFF";
     private ProgressDialog pDialog;
     CharSequence[] deviceNameList = null;
     List<String> nameListItems = new ArrayList<String>();
     CharSequence[] deviceStateList = null;
     List<String> stateListItems = new ArrayList<String>();
-    Map<String,Integer> DeviceID=new HashMap<String,Integer>();
+    Map<String,Integer> DeviceID = new HashMap<String,Integer>();
     int id;
-
-
-    //  List<String> mList=new ArrayList<String>();
 
     MyDBHandler db = new MyDBHandler(this);
 
-
     //UI
-
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-    //    private EditText etUrl;
     private Button btAdd,btnCan;
     private View btSelectDevice;
     TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText;
@@ -99,7 +92,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private RemoteViews views;
     Switch switch_background;
 
-
     private String accessToken;
     private String expiresIn;
     private String refreshToken;
@@ -107,19 +99,18 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
-
     int stateID;
 
     private String sesID;
-    MyDBHandler database=new MyDBHandler(this);
+    MyDBHandler database = new MyDBHandler(this);
     private PrefManager prefManager;
-    private String switchStatus="false";
+    private String switchStatus = "false";
     private ImageView backDevice;
     private RelativeLayout mBackLayout;
     TextView tvIcon1;
 
     public static final String ROOT = "fonts/",
-            FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
+    FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
 
     public static Typeface getTypeface(Context context, String font) {
         return Typeface.createFromAsset(context.getAssets(), font);
@@ -157,22 +148,22 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
         widgetManager = AppWidgetManager.getInstance(this);
 
-        textTest=(TextView)findViewById(R.id.testText);
-        chooseSetting=(TextView)findViewById(R.id.chooseSetting);
+        textTest = (TextView)findViewById(R.id.testText);
+        chooseSetting = (TextView)findViewById(R.id.chooseSetting);
         deviceName = (TextView) findViewById(R.id.txtDeviceName);
         deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
-        backDevice=(ImageView)findViewById(R.id.backdevice);
+        backDevice = (ImageView)findViewById(R.id.backdevice);
         deviceText = (TextView)findViewById(R.id.deviceText);
         settingText = (TextView)findViewById(R.id.settingText);
 
-        mBackLayout=(RelativeLayout)findViewById(R.id.deviceBack);
+        mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
         mBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        btnCan=(Button)findViewById(R.id.btn_cancel);
+        btnCan = (Button)findViewById(R.id.btn_cancel);
         btnCan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,35 +171,27 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             }
         });
 
-
-        switch_background=(Switch)findViewById(R.id.switch_background);
+        switch_background = (Switch)findViewById(R.id.switch_background);
         // switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
         // switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
-
-
 
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
         tvIcon1.setText("device-alt");
         tvIcon1.setTypeface(iconFont);
 
-
         switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // do something, the isChecked will be
                 // true if the switch is in the On position
-                if(isChecked)
-                {
+                if (isChecked)  {
                     switchStatus="true";
                     // switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
                     // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
-
-                }else
-                {
+                } else {
                     switchStatus="false";
                     // switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
                     // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
-
                 }
             }
         });
@@ -217,7 +200,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             mAppWidgetId = extras.getInt(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         }
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -225,59 +208,55 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             finish();
             return;
         }
-        //    Toast.makeText(getApplicationContext(),String.valueOf(mAppWidgetId),Toast.LENGTH_LONG).show();
         final String[] deviceStateVal = {"0"};
-
 
         btAdd = (Button) findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //    Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_SHORT).show();
+                if (id == 0) {
+                    Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.TOP , 0, 0);
+                    toast.show();
+                    return;
+                }
 
-
-
-                boolean b=isMyServiceRunning(NetworkInfo.class);
+                boolean b = isMyServiceRunning(NetworkInfo.class);
                 if (!b)
                 {
                     startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    // startService(new Intent(getApplicationContext(), AEScreenOnOffService.class));
                 }
 
-                boolean b1=prefManager.getDeviceDB();
+                boolean b1 = prefManager.getDeviceDB();
                 if(!b1)
                 {
                     prefManager.DeviceDB(true);
                 }
 
 
-                boolean token_service=prefManager.getTokenService();
-                if(!token_service) {
+                boolean token_service = prefManager.getTokenService();
+                if (!token_service) {
                     prefManager.TokenService(true);
                     // Service for Access token
                     Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
                     startService(serviceIntent);
-                }else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                 }
                 views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
-
-
-                DeviceInfo mInsert=new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
+                DeviceInfo mInsert = new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
                 db.addUser(mInsert);
                 NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
 
-                boolean web_service=prefManager.getWebService();
-                if(!web_service) {
+                boolean web_service = prefManager.getWebService();
+                if (!web_service) {
                     prefManager.websocketService(true);
                     // Service for Access token
                     Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
                     startService(serviceIntent);
-                }else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                 }
 
@@ -289,7 +268,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 finish();
             }
         });
-
 
         btSelectDevice = (View) findViewById(R.id.btSelectDevice);
         btSelectDevice.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +282,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 deviceName.setText(deviceNameList[which]);
                                 id=DeviceID.get(deviceNameList[which]);
 
-                                //    deviceHint.setText(null);
+                                // deviceHint.setText(null);
                                 deviceStateVal[0] = (String) deviceStateList[which];
                                 Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
                                 ad.dismiss();
@@ -312,12 +290,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                             }
                         });
-                ad = builder.show();//   builder.show();
+                ad = builder.show();
             }
         });
-        //AwesomeFont--
-        //   Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
-
         Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
         Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
         textTest.setTypeface(titleFont);
@@ -329,23 +304,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         btAdd.setTypeface(subtitleFont);
         btnCan.setTypeface(subtitleFont);
         switch_background.setTypeface(subtitleFont);
-
-
-
-        //  deviceText.setTypeface(iconFont);
-
-
-
     }
 
 
     void createDeviceApi() {
         accessToken=prefManager.getAccess();
-      /*  pDialog = new ProgressDialog(NewAppWidgetConfigureActivity.this);
-        pDialog.setMax(5);
-        pDialog.setMessage("Please wait...");
-        pDialog.setCancelable(false);
-        pDialog.show();*/
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
                 .addHeaders("Content-Type", "application/json")
@@ -376,9 +339,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                             deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
-                          /*  if (pDialog.isShowing())
-                                pDialog.dismiss();*/
-                            //  Toast.makeText(getApplicationContext(),deviceStateList.toString(),Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         };
@@ -386,18 +346,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                     @Override
                     public void onError(ANError anError) {
-                       /* if (pDialog.isShowing())
-                        {
-
-                            pDialog.dismiss();
-
-
-                        }*/
                     }
-
                 });
     }
-
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
