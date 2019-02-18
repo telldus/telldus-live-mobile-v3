@@ -72,6 +72,7 @@ import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.Utility.Sensor;
 import com.telldus.live.mobile.MainActivity;
+import com.telldus.live.mobile.Utility.SensorsUtilities;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
@@ -293,11 +294,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             id = DeviceID.get(sensorNameList[which]);
                             String str = String.valueOf(sensorNameList[which]);
 
-                            String temp = null, hum = null, windAvg = null, windGust = null,
-                                rainRate = null, rainTotal = null, luminance = null,
-                                watt = null, windDirection = null, uv = null;
+                            String name = null;
+                            String scale = null;
+                            String value = null;
                             List<String> sensorValue = new ArrayList<String>();
-                                searchObject = new JSONObject();
+                            searchObject = new JSONObject();
+                            SensorsUtilities sc = new SensorsUtilities();
 
                             for (int i = 0; i < JsonsensorList.length(); i++) {
                                 try {
@@ -305,72 +307,59 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                     String sensorname = currObject.getString("name");
                                     if (sensorname.equals(str)) {
                                         searchObject = currObject;
-                                        Log.v("SearchObject",searchObject.toString(10));
-                                        temp = searchObject.optString("temp");
-                                        hum = searchObject.optString("humidity");
-                                        luminance = searchObject.optString("lum");
-                                        uv = searchObject.optString("uv");
-                                        rainRate = searchObject.optString("rrate");
-                                        rainTotal = searchObject.optString("rtot");
-                                        windDirection = searchObject.optString("wdir");
-                                        windAvg = searchObject.optString("wavg");
-                                        windGust = searchObject.optString("wgust");
-                                        watt = searchObject.optString("watt");
-                                        lastUp = searchObject.optString("lastUpdated");
+                                        JSONArray SensorData = searchObject.getJSONArray("data");
+                                        for (int j = 0; j < SensorData.length(); j++) {
+                                            JSONObject currData = SensorData.getJSONObject(j);
 
-                                        Log.v("lastUpdated",lastUp);
-                                        Log.v("temp",temp);
-                                        Log.v("hum",hum);
-                                        Log.v("luminance",luminance);
-                                        Log.v("uv",uv);
-                                        Log.v("rainRate",rainRate);
-                                        Log.v("rainTotal",rainTotal);
-                                        Log.v("windDirection",windDirection);
-                                        Log.v("windAvg",windAvg);
-                                        Log.v("windGust",windGust);
-                                        Log.v("Watt",watt);
+                                            lastUp = currData.optString("lastUpdated");
+                                            name = currData.optString("name");
+                                            scale = currData.optString("scale");
+                                            value = currData.optString("value");
 
-                                        if (watt != null && !watt.equals("")) {
-                                            if (!sensorValue.contains("Watt"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("watt"));
+                                            Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+
+                                            if (name.equals("watt")) {
+                                                if (!sensorValue.contains("Watt"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("watt"));
+                                            }
+                                            if (name.equals("temp")) {
+                                                if (!sensorValue.contains("Temperature"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("temp"));
+                                            }
+                                            if (name.equals("humidity")) {
+                                                if (!sensorValue.contains("Humidity"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("humidity"));
+                                            }
+                                            if (name.equals("lum")) {
+                                                if (!sensorValue.contains("Luminance"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("lum"));
+                                            }
+                                            if (name.equals("uv")) {
+                                                if (!sensorValue.contains("Uv"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("uv"));
+                                            }
+                                            if (name.equals("rrate")) {
+                                                if (!sensorValue.contains("Rain_rate"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("rrate"));
+                                            }
+                                            if (name.equals("rtot")) {
+                                                if (!sensorValue.contains("Rain_total"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("rtot"));
+                                            }
+                                            if (name.equals("wdir")) {
+                                                if(!sensorValue.contains("Wind_direction"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("wdir"));
+                                            }
+                                            if (name.equals("wavg")) {
+                                                if (!sensorValue.contains("Wind_average"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("wavg"));
+                                            }
+                                            if (name.equals("wgust")) {
+                                                if (!sensorValue.contains("Wgust"))
+                                                    sensorValue.add(Sensor.getStringValueFromLang("wgust"));
+                                            }
+                                            sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
                                         }
-                                        if (temp != null && !temp.equals("")) {
-                                            if (!sensorValue.contains("Temperature"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("temp"));
-                                        }
-                                        if (hum != null && !hum.equals("")) {
-                                            if (!sensorValue.contains("Humidity"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("humidity"));
-                                        }
-                                        if (luminance != null && !luminance.equals("")) {
-                                            if (!sensorValue.contains("Luminance"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("lum"));
-                                        }
-                                        if (uv != null && !uv.equals("")) {
-                                            if (!sensorValue.contains("Uv"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("uv"));
-                                        }
-                                        if (rainRate != null && !rainRate.equals("")) {
-                                            if (!sensorValue.contains("Rain_rate"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("rrate"));
-                                        }
-                                        if (rainTotal != null && !rainTotal.equals("")) {
-                                            if (!sensorValue.contains("Rain_total"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("rtot"));
-                                        }
-                                        if (windDirection != null && !windDirection.equals("")) {
-                                            if(!sensorValue.contains("Wind_direction"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("wdir"));
-                                        }
-                                        if (windAvg != null && !windAvg.equals("")) {
-                                            if (!sensorValue.contains("Wind_average"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("wavg"));
-                                        }
-                                        if (windGust != null && !windGust.equals("")) {
-                                            if (!sensorValue.contains("Wgust"))
-                                                sensorValue.add(Sensor.getStringValueFromLang("wgust"));
-                                        }
-                                        sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
                                     }
                                 }
                                 catch (Exception e) {
@@ -422,7 +411,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 imgSensorType.setTextSize(50f);
                                 imgSensorType.setBackground(null);
                                 imgSensorType.setTypeface(iconFont);
-                                // imgSensorType.setImageBitmap(buildUpdate(iconName,getApplicationContext()));
 
                             } catch (Exception ex) {
                                 ex.printStackTrace();
@@ -456,7 +444,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     void createSensorApi() {
         accessToken = prefManager.getAccess();
 
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/sensors/list?includeValues=1")
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/sensors/list?includeValues=1&includeScale=1")
             .addHeaders("Content-Type", "application/json")
             .addHeaders("Accpet", "application/json")
             .addHeaders("Authorization", "Bearer " + accessToken)
