@@ -54,7 +54,6 @@ public enum Sensor {
         for (Sensor status : Sensor.values()) {
             if (status.toString().equals(lan)) {
                 return status.name();
-
             }
         }
         return null;
