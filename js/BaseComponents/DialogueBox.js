@@ -388,11 +388,13 @@ class DialogueBox extends Component<Props, null> {
 				color: negTextColor,
 				fontSize,
 				fontWeight: 'bold',
+				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
 				color: posTextColor,
 				fontSize,
 				fontWeight: 'bold',
+				fontFamily: 'Roboto-Regular',
 			},
 		};
 	}

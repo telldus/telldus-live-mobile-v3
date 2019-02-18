@@ -298,6 +298,7 @@ class GeoPosition extends View {
 						description: {
 							fontWeight: 'bold',
 							color: '#000',
+							fontFamily: 'Roboto-Regular',
 						},
 						container: styles.searchBoxContainer,
 					}}
