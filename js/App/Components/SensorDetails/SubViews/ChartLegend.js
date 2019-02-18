@@ -68,6 +68,8 @@ render(): Object | null {
 		legendsContainerStyle,
 	} = this.getStyles(appLayout);
 
+	console.log("legendData ===> ", legendData);
+
 	return (
 		<View style={containerStyle}>
 			<View style={legendsContainerStyle}>

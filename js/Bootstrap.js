@@ -55,9 +55,9 @@ function Bootstrap(): Object {
 		constructor() {
 			super();
 
-			if (!__DEV__) {
+			// if (!__DEV__) {
 				firebase.crashlytics().enableCrashlyticsCollection();
-			}
+			// }
 
 			let locale = this.getLocale();
 			let messages = Translations.en;

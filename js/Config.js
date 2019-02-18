@@ -20,7 +20,7 @@
 
 'use strict';
 
-import localConfig from '../config.local.js';
+import localConfig from './config.local.js';
 import Constants from './Constants.js';
 
 /**
