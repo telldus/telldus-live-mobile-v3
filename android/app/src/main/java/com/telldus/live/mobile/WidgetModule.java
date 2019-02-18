@@ -27,9 +27,9 @@ import com.facebook.react.bridge.ReactMethod;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.view.View;
+import android.content.Intent;
 
 import java.lang.System;
 import java.lang.String;
@@ -74,9 +74,14 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   public void disableAllWidgets(String message) {
     RemoteViews widgetView = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.new_app_widget);
 
+    // Replace Widget UI with loggedout message
     widgetView.removeAllViews(R.id.widget_content_cover);
     widgetView.setTextViewText(R.id.txtWidgetTitle, message);
 
+    // Stop socket service
+    getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), MyService.class));
+
+    // Clear token and other credentials from shared preference
     prefManager = new PrefManager(getReactApplicationContext());
     prefManager.clear();
 

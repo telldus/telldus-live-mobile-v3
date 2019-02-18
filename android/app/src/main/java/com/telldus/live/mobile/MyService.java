@@ -29,7 +29,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -58,13 +57,13 @@ import com.telldus.live.mobile.Utility.helper;
 
 public class MyService extends Service {
     MyDBHandler db = new MyDBHandler(this);
-    ArrayList<String> client_list=new ArrayList<>();
+    ArrayList<String> client_list = new ArrayList<>();
     private WebSocketClient mWebSocketClient;
-    boolean isConnecting=false;
+    boolean isConnecting = false;
     private PrefManager prefManager;
 
-    String parent="ws://";
-    String endpoint="websocket";
+    String parent = "ws://";
+    String endpoint = "websocket";
     String port;
     String address;
     String socket_address;
@@ -72,7 +71,7 @@ public class MyService extends Service {
     Runnable r;
 
     String ctD;
-    boolean isError=false;
+    boolean isError = false;
 
     private String accessToken;
 
@@ -80,149 +79,111 @@ public class MyService extends Service {
 
     String SOC_ADDR;
     String SOC_CLI;
-    int  count = 0;;
+    int count = 0;;
     private Handler handler;
     Runnable mRunnable;
-    boolean isRunnable=false;
+    boolean isRunnable = false;
 
 
     @Override
     public void onCreate() {
-       // Toast.makeText(this, "Service Created", Toast.LENGTH_LONG).show();
-
     }
 
     @Override
     public void onStart(Intent intent, int startid) {
-        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
-        prefManager=new PrefManager(this);
+        prefManager = new PrefManager(this);
 
-        uniqueId=prefManager.getSession();
-        accessToken=prefManager.getAccess();
+        uniqueId = prefManager.getSession();
+        accessToken = prefManager.getAccess();
 
-        handler = new Handler(  (Looper.getMainLooper()));
+        handler = new Handler((Looper.getMainLooper()));
         getClientList();
-        
     }
 
     void getClientList() {
         client_list.clear();
-     //   addressMap.clear();
 
-        uniqueId=prefManager.getSession();
-        accessToken=prefManager.getAccess();
-
-        Log.d("&&&&&&&&&&&&&&&&&&&&&&&", "&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        uniqueId = prefManager.getSession();
+        accessToken = prefManager.getAccess();
 
         AndroidNetworking.get("https://api.telldus.com/oauth2/clients/list")
-                .addHeaders("Authorization","Bearer "+accessToken)
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray jsonArray=response.getJSONArray("client");
-                            client_list.clear();
-                            Log.v("Client list",jsonArray.toString(jsonArray.length()));
-                            for(int i=0;i<jsonArray.length();i++)
-                            {
-                                JSONObject jsonObject=jsonArray.getJSONObject(i);
-                                boolean check=client_list.contains(jsonObject.getString("id"));
-                                if(!check) {
-                                    client_list.add(jsonObject.getString("id"));
-                                }
+            .addHeaders("Authorization","Bearer "+accessToken)
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("client");
+                        client_list.clear();
+                        for (int i = 0;i < jsonArray.length();i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            boolean check = client_list.contains(jsonObject.getString("id"));
+                            if (!check) {
+                                client_list.add(jsonObject.getString("id"));
                             }
-                            Log.v("ArrayList",client_list.toString());
-                            FetchWebAddress();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-
-                        };
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.v("Error an GetClientList",anError.toString());
-
-                    }
-                });
+                        }
+                        FetchWebAddress();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    };
+                }
+                @Override
+                public void onError(ANError anError) {
+                }
+            });
     }
 
-public void FetchWebAddress()
-{
-           accessToken = prefManager.getAccess();
+    public void FetchWebAddress() {
+        accessToken = prefManager.getAccess();
 
-            final String id = client_list.get(count);
-            String url = "https://api.telldus.com/oauth2/client/serverAddress?id=" + id;
+        final String id = client_list.get(count);
+        String url = "https://api.telldus.com/oauth2/client/serverAddress?id=" + id;
 
-            AndroidNetworking.get(url)
-                    .addHeaders("Authorization", "Bearer " + accessToken)
-                    .setPriority(Priority.LOW)
-                    .build()
-                    .getAsString(new StringRequestListener() {
-                        @Override
-                        public void onResponse(String response) {
-                            //Log.v("response", response.toLowerCase());
-                            try {
-                                JSONObject jsonObject = new JSONObject(response.toString());
-                                Log.v("JSON Address Response", "---->" + jsonObject.toString(5));
-                                address = jsonObject.getString("address");
-                                port = jsonObject.getString("port");
-                                socket_address = parent + address + ":" + port + "/" + endpoint;
-                                ctD = id;
-                                SOC_ADDR = socket_address;
-                                SOC_CLI = id;
+        AndroidNetworking.get(url)
+            .addHeaders("Authorization", "Bearer " + accessToken)
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsString(new StringRequestListener() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.toString());
+                        address = jsonObject.getString("address");
+                        port = jsonObject.getString("port");
+                        socket_address = parent + address + ":" + port + "/" + endpoint;
+                        ctD = id;
+                        SOC_ADDR = socket_address;
+                        SOC_CLI = id;
 
-                                ConnectWebsocketAddress();
+                        ConnectWebsocketAddress();
 
-                                Log.v("socket addr",SOC_ADDR);
-                                Log.v("Soc_Client_ID",SOC_CLI);
+                    } catch (Exception e) {
+                        if (count + 1 < client_list.size()) {
+                            count = count + 1;
+                            FetchWebAddress();
 
-                            } catch (Exception e) {
-                                  Log.v("JSON Array empty","[]");
-
-
-
-                                if(count+1<client_list.size())
-                                {
-                                    count=count+1;
-                                    FetchWebAddress();
-
-                                }else
-                                {
-                                    count=0;
-                                    Log.v("Called  FetchWebAddress","-----" +"*****************************************************");
-                                    getClientList();
-
-                                    //new MyTask().execute(client_list);
-                                }
-                            }
+                        } else {
+                            count = 0;
+                            getClientList();
                         }
+                    }
+                }
 
-                        @Override
-                        public void onError(ANError anError) {
-                            Log.v("Error on FetchWebsocket",anError.toString());
-
-                        }
-                    });
-
-
-
+                @Override
+                public void onError(ANError anError) {
+                }
+            });
     }
 
     public void ConnectWebsocketAddress() {
-        uniqueId=prefManager.getSession();
+        uniqueId = prefManager.getSession();
 
-
-            URI uri = null;
-            try {
-
-                uri = new URI(SOC_ADDR);
-            } catch (URISyntaxException e) {
-                Log.v("URISyntaxException", e.getMessage());
-
-            }
+        URI uri = null;
+        try {
+            uri = new URI(SOC_ADDR);
+        } catch (URISyntaxException e) {
+        }
             mWebSocketClient = new WebSocketClient(uri, new Draft_17()) {
                 @Override
                 public void onOpen(ServerHandshake handshakedata) {
@@ -249,47 +210,37 @@ public void FetchWebAddress()
 
                 @Override
                 public void onMessage(String message) {
-                    Log.v("message", message);
                     if (message.equals("validconnection")) {
                         isConnecting = true;
-                        Log.v("Websocket open", "websocket_opened @" + SOC_CLI);
-                        if(isRunnable)
-                        {
-                            isRunnable=false;
+                        if (isRunnable) {
+                            isRunnable = false;
                             handler.removeCallbacks(mRunnable);
                         }
                     }
-                    if(message.equals("error"))
-                    {
-                        isError=true;
+                    if (message.equals("error")) {
+                        isError = true;
                     }
-                    if (!message.equals("validconnection") && !message.equals("error")&& !message.equals("nothere")) {
-
+                    if (!message.equals("validconnection") && !message.equals("error") && !message.equals("nothere")) {
                         try {
                             JSONObject jsonObject = new JSONObject(message);
-                            Log.v("Json_Response", jsonObject.toString(10));
 
                             JSONObject jsonDataObject = new JSONObject();
-                            String chooseWidget=jsonObject.getString("module");
+                            String chooseWidget = jsonObject.getString("module");
 
-                            if(chooseWidget.equals("device"))
-                            {
+                            if (chooseWidget.equals("device")) {
                                 jsonDataObject = jsonObject.getJSONObject("data");
-                                int deviceID=jsonDataObject.getInt("deviceId");
-                                String method=jsonDataObject.getString("method");
+                                int deviceID = jsonDataObject.getInt("deviceId");
+                                String method = jsonDataObject.getString("method");
 
-                                boolean b=db.updateActionDevice(method,deviceID);
+                                boolean b = db.updateActionDevice(method,deviceID);
 
-                                if(b)
-                                {
+                                if (b) {
                                   int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
                                   AppWidgetManager onOffWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
 
-                                  for(int id : widgetIDsOnOff) {
+                                  for (int id : widgetIDsOnOff) {
                                       AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
-
                                       NewOnOffWidget.updateAppWidget(getApplicationContext(),onOffWidgetManager,id);
-
                                   }
                                 }
 
@@ -301,7 +252,6 @@ public void FetchWebAddress()
                                 String time = jsonDataObject.getString("time");
 
                                 JSONArray jsonArray = jsonDataObject.optJSONArray("data");
-                                //   Log.v("JSON ARRAY",jsonArray.toString(10));
 
                                 String valueSensor = null;
 
@@ -313,8 +263,6 @@ public void FetchWebAddress()
                                     String widgetName = objInfo.getWidgetName();
                                     int widgetID = objInfo.getWidgetID();
                                     String widgetType = objInfo.getWidgetType();
-                                    //      int SensorID=objInfo.getDeviceID();
-
 
                                     for (int j = 0; j < jsonArray.length(); j++) {
                                         JSONObject jsonObject1 = jsonArray.getJSONObject(j);
@@ -323,12 +271,6 @@ public void FetchWebAddress()
                                         String typeValue = String.valueOf(SensorType.getValueLang(widgetType));
 
                                         if (type.equals(typeValue)) {
-                                            //Log.v("JSONObject",jsonObject1.toString(10));
-
-                                            Log.v("Widget name", widgetName);
-                                            Log.v("Widget ID", String.valueOf(widgetID));
-                                            Log.v("Widget Type", widgetType);
-                                            Log.v(" Sensor ID", String.valueOf(objInfo.getDeviceID()));
                                             valueSensor = jsonObject1.optString("value");
                                             long timeStamp = Long.parseLong(time);
                                             int result = db.updateSensorInfo(valueSensor, timeStamp, widgetID);
@@ -337,28 +279,22 @@ public void FetchWebAddress()
                                     }
                                 }
                             }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                   }
+                    }
                 }
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
-                    Log.v("Websocket", "Closed " + reason);
-                    Log.v("Websocket close", "websocket_closed @" + SOC_CLI);
                     boolean screenCheck = helper.screenOn;
                     if (screenCheck) {
                         boolean bol = isNetworkConnected();
                         if (bol) {
-                            Log.v("Network enabled", "Network enabled");
                             boolean sensorDB = prefManager.getSensorDB();
                             boolean deviceDB = prefManager.getDeviceDB();
 
                             if (sensorDB || deviceDB) {
-
-                                Log.v("sensorDB || deviceDB", "sensorDB || deviceDB");
                                 if (!isError) {
                                     isConnecting = false;
                                     if (count + 1 < client_list.size()) {
@@ -367,8 +303,6 @@ public void FetchWebAddress()
                                     } else {
                                         count = 0;
                                         getClientList();
-                                        Log.v("Called  OnClose", "-----" + "*****************************************************");
-
                                     }
                                     if (!isRunnable && !isConnecting) {
                                         reconnectWebsocket();
@@ -378,23 +312,18 @@ public void FetchWebAddress()
                                     SessionID();
                                 }
                             } else {
-
                                 if (isRunnable) {
                                     isRunnable = false;
                                     handler.removeCallbacks(mRunnable);
                                 }
-                                Log.v("WebSocket Stopped", "????????????????????????????????????????????????" + " No database");
                             }
                         } else {
                             if (isRunnable) {
                                 isRunnable = false;
                                 handler.removeCallbacks(mRunnable);
                             }
-                            Log.v("WebSocket Stoped", "No internet Connection");
                         }
-
                     } else {
-                        Log.v("Websocket stopted","Device screen off");
                         if (isRunnable) {
                             isRunnable = false;
                             handler.removeCallbacks(mRunnable);
@@ -404,31 +333,19 @@ public void FetchWebAddress()
 
                 @Override
                 public void onError(Exception ex) {
-                    Log.v("Websocket", "Error " + ex.getMessage());
                 }
             };
             mWebSocketClient.connect();
-
     }
 
-    public void reconnectWebsocket()
-    {
-        Log.v("Triggering reconnect","triggered" +"Runnable");
-        isRunnable=true;
+    public void reconnectWebsocket() {
+        isRunnable = true;
 
         mRunnable = new Runnable() {
             public void run() {
-
-                Log.v("Fireeeeeeeeee","@@@@@@@@@@@"+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-                if(!isConnecting)
-                {
-                   // mWebSocketClient.close();
-                    Log.v("Called  Reconnection","-----" +"*****************************************************");
+                if (!isConnecting) {
                     getClientList();
-
                 }
-
                 handler.postDelayed(this, 30000);
             }
         };
@@ -437,22 +354,16 @@ public void FetchWebAddress()
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Service Destroyed", Toast.LENGTH_LONG).show();
-
-      if(isConnecting) {
-          mWebSocketClient.close();
-      }
+        if (isConnecting) {
+            mWebSocketClient.close();
+        }
         prefManager.websocketService(false);
-
     }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         return cm.getActiveNetworkInfo() != null;
     }
-
-
-
 
     @Nullable
     @Override
@@ -471,14 +382,10 @@ public void FetchWebAddress()
             jsonObject1.put("clientId", clientID);
             jsonObject.put("data", jsonObject1);
 
-            Log.v("AuthoriseWebsocket",jsonObject.toString(4));
             mWebSocketClient.send(jsonObject.toString());
         } catch (Exception e) {
-            Log.v("authoriseWebsocket",e.getMessage());
-
         }
     }
-
 
     public void addWebsocketFilter(String module, String action,WebSocketClient mWebSocketClient) {
         JSONObject jsonObjectParent = new JSONObject();
@@ -494,51 +401,38 @@ public void FetchWebAddress()
             e.printStackTrace();
 
         }
-
     }
 
-
-    private void SessionID()
-    {
-
+    private void SessionID() {
         UUID uuid = UUID.randomUUID();
         final String uniq = uuid.toString();
 
-        Log.v("***Session id****",uniq);
+        accessToken = prefManager.getAccess();
 
-      accessToken=prefManager.getAccess();
-
-        String url="https://api3.telldus.com/oauth2/user/authenticateSession?session="+uniq;
-        Log.v("URL",url);
+        String url = "https://api3.telldus.com/oauth2/user/authenticateSession?session="+uniq;
         AndroidNetworking.get(url)
-                .addHeaders("Authorization", "Bearer " + accessToken)
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status=response.optString("status");
-                            if(status.equals("success"))
-                            {
-                                // start();
-                                Log.v("JSON Response",response.toString(5));
-                                //CallJSONResponse(uniqueId);
-                               prefManager.saveSessionID(uniq);
+            .addHeaders("Authorization", "Bearer " + accessToken)
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String status = response.optString("status");
+                        if (status.equals("success")) {
+                            prefManager.saveSessionID(uniq);
 
-                              ConnectWebsocketAddress();
+                            ConnectWebsocketAddress();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    };
+                }
 
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        };
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.v("onError---->",anError.toString());
-                    }
-                });
+                @Override
+                public void onError(ANError anError) {
+                }
+            });
     }
 
 }
