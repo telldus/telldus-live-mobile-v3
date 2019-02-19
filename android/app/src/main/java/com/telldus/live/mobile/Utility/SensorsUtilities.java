@@ -125,6 +125,8 @@ public class SensorsUtilities {
         info.put("icon", "sensor");
         info.put("unit", unit);
         info.put("value", value);
+        info.put("name", name);
+        info.put("scale", scale);
 
         Map<String, String> sensorTypes = getSensorTypes(context);
         String sensorType = sensorTypes.get(name);
