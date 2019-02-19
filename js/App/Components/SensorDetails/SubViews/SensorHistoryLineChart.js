@@ -34,8 +34,6 @@ import { View, FullPageActivityIndicator } from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
 import LineChartDetailed from './LineChartDetailed';
 import LineChart from './LineChart';
-import { showToast } from '../../../Actions';
-
 
 import {
 	storeHistory,
@@ -169,15 +167,21 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	toggleTwo() {
-		const { showTwo, showOne, onToggleChartData, showToast } = this.props;
-		if (showOne || (!showOne && !showTwo)) onToggleChartData({ showTwo: !showTwo });
-		else if (!showOne && !showTwo) onToggleChartData({ showTwo: true });
+		const { showTwo, showOne, onToggleChartData } = this.props;
+		if (showOne || (!showOne && !showTwo)) {
+			onToggleChartData({ showTwo: !showTwo });
+		} else if (!showOne && !showTwo) {
+			onToggleChartData({ showTwo: true });
+		}
 	}
 
 	toggleOne() {
-		const { showOne, showTwo, onToggleChartData, showToast } = this.props;
-		if (showTwo || (!showTwo && !showOne)) onToggleChartData({ showOne: !showOne })
-		else if (!showOne && !showTwo) onToggleChartData({ showOne: true });
+		const { showOne, showTwo, onToggleChartData } = this.props;
+		if (showTwo || (!showTwo && !showOne)) {
+			onToggleChartData({ showOne: !showOne });
+		} else if (!showOne && !showTwo) {
+			onToggleChartData({ showOne: true });
+		}
 	}
 
 	onPressToggleView() {
@@ -554,6 +558,4 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, {
-	showToast
-})(SensorHistoryLineChart);
+export default connect(mapStateToProps)(SensorHistoryLineChart);

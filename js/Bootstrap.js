@@ -56,8 +56,10 @@ function Bootstrap(): Object {
 			super();
 
 			// if (!__DEV__) {
-				firebase.crashlytics().enableCrashlyticsCollection();
+			// firebase.crashlytics().enableCrashlyticsCollection();
 			// }
+
+			firebase.crashlytics().enableCrashlyticsCollection();
 
 			let locale = this.getLocale();
 			let messages = Translations.en;
