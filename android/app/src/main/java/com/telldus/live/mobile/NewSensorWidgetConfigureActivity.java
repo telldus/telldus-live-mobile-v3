@@ -70,7 +70,6 @@ import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
-import com.telldus.live.mobile.Utility.Sensor;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 
@@ -101,7 +100,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String expiresIn;
     private String refreshToken;
     private String sesID;
-    String lastUp, senValue;
+    String lastUp, senValue, senUnit, senIcon;
     MyDBHandler database = new MyDBHandler(this);
     private JSONArray JsonsensorList;
     JSONObject searchObject;
@@ -197,12 +196,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 // true if the switch is in the On position
                 if (isChecked) {
                     transparent="true";
-                    // switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
-                    // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
                 } else {
                     transparent="false";
-                    // switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
-                    // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
                 }
             }
         });
@@ -243,8 +238,16 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                 }
 
-                SensorInfo mSensorInfo = new SensorInfo(mAppWidgetId,sensorName.getText().toString(),
-                Sensor.getValueLang(sensorDataName.getText().toString()),id,senValue,lastUp,transparent);
+                SensorInfo mSensorInfo = new SensorInfo(
+                    mAppWidgetId,
+                    sensorName.getText().toString(),
+                    sensorDataName.getText().toString(),
+                    id,
+                    senValue,
+                    senUnit,
+                    senIcon,
+                    lastUp,
+                    transparent);
                 database.addSensor(mSensorInfo);
                 views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
@@ -317,47 +320,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                             value = currData.optString("value");
 
                                             Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
-
-                                            if (name.equals("watt")) {
-                                                if (!sensorValue.contains("Watt"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("watt"));
-                                            }
-                                            if (name.equals("temp")) {
-                                                if (!sensorValue.contains("Temperature"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("temp"));
-                                            }
-                                            if (name.equals("humidity")) {
-                                                if (!sensorValue.contains("Humidity"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("humidity"));
-                                            }
-                                            if (name.equals("lum")) {
-                                                if (!sensorValue.contains("Luminance"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("lum"));
-                                            }
-                                            if (name.equals("uv")) {
-                                                if (!sensorValue.contains("Uv"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("uv"));
-                                            }
-                                            if (name.equals("rrate")) {
-                                                if (!sensorValue.contains("Rain_rate"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("rrate"));
-                                            }
-                                            if (name.equals("rtot")) {
-                                                if (!sensorValue.contains("Rain_total"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("rtot"));
-                                            }
-                                            if (name.equals("wdir")) {
-                                                if(!sensorValue.contains("Wind_direction"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("wdir"));
-                                            }
-                                            if (name.equals("wavg")) {
-                                                if (!sensorValue.contains("Wind_average"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("wavg"));
-                                            }
-                                            if (name.equals("wgust")) {
-                                                if (!sensorValue.contains("Wgust"))
-                                                    sensorValue.add(Sensor.getStringValueFromLang("wgust"));
-                                            }
+                                            Object label = info.get("label").toString();
+                                            Object unit = info.get("unit").toString();
+                                            String labelUnit = label+"("+unit+")";
+                                            sensorValue.add(labelUnit);
                                             sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
                                         }
                                     }
@@ -384,30 +350,31 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             sensorDataName.setText(sensorDataList[i]);
 
+                            SensorsUtilities sc = new SensorsUtilities();
+
                             try {
                                 String iconName = "";
-                                String sensorIcon = sensorDataList[i].toString();
-                                String str = Sensor.getValueLang(sensorIcon);
-                                Log.i("sensorIcon",Sensor.getValueLang(sensorIcon));
+                                String chosenLabel = sensorDataList[i].toString();
+                                JSONArray SensorData = searchObject.getJSONArray("data");
+                                for (int j = 0; j < SensorData.length(); j++) {
+                                    JSONObject currData = SensorData.getJSONObject(j);
 
-                                senValue = searchObject.getString(str);
+                                    String lastUp = currData.optString("lastUpdated");
+                                    String name = currData.optString("name");
+                                    String scale = currData.optString("scale");
+                                    String value = currData.optString("value");
 
-                                if (str.equals("wgust") || str.equals("wavg") || str.equals("wdir")) {
-                                    iconName = "wind";
-                                } else if (str.equals("watt")) {
-                                    iconName = "watt";
-                                } else if (str.equals("temp")) {
-                                    iconName = "temperature";
-                                } else if (str.equals("humidity")) {
-                                    iconName = "humidity";
-                                } else if (str.equals("lum")) {
-                                    iconName = "luminance";
-                                } else if (str.equals("rrate") || str.equals("rtot")) {
-                                    iconName = "rain";
-                                } else if(str.equals("uv")) {
-                                    iconName = "uv";
+                                    Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                    Object label = info.get("label").toString();
+                                    Object unit = info.get("unit").toString();
+                                    String labelUnit = label+"("+unit+")";
+                                    if (labelUnit.trim().equalsIgnoreCase(chosenLabel.trim())) {
+                                        senIcon = info.get("icon").toString();
+                                        senValue = info.get("value").toString();
+                                        senUnit = String.valueOf(unit);
+                                    }
                                 }
-                                imgSensorType.setText(iconName);
+                                imgSensorType.setText(senIcon);
                                 imgSensorType.setTextSize(50f);
                                 imgSensorType.setBackground(null);
                                 imgSensorType.setTypeface(iconFont);
@@ -415,7 +382,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
-                            // sensorDataHint.setText(null);
                             ad1.dismiss();
                         }
                     });

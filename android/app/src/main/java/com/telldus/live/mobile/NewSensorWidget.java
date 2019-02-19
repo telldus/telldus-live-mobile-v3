@@ -56,10 +56,10 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
-        String iconName="";
+        String sensorIcon = "";
         CharSequence widgetText = "";
         String sensorHistory = "";
-        CharSequence sensorValue = "";
+        CharSequence sensorValue = "", sensorUnit = "";
         int src = R.drawable.sensor;
         String widgetType;
         MyDBHandler db = new MyDBHandler(context);
@@ -70,31 +70,11 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (sensorID != null) {
             widgetText = sensorID.getWidgetName();
             sensorValue = sensorID.getSensorValue();
+            sensorUnit = sensorID.getSensorUnit();
+            sensorIcon = sensorID.getSensorIcon();
             sensorHistory = sensorID.getSensorUpdate();
             widgetType = sensorID.getWidgetType();
             transparent = sensorID.getTransparent();
-            if (widgetType.equals("wgust") || widgetType.equals("wavg") || widgetType.equals("wdir")) {
-                src = R.drawable.wind;
-                iconName = "wind";
-            } else if (widgetType.equals("watt")) {
-                src = R.drawable.watt;
-                iconName = "watt";
-            } else if (widgetType.equals("temp")) {
-                src = R.drawable.temperature;
-                iconName = "temperature";
-            } else if (widgetType.equals("humidity")) {
-                src = R.drawable.humidity;
-                iconName = "humidity";
-            } else if (widgetType.equals("lum")) {
-                src = R.drawable.luminance;
-                iconName = "luminance";
-            } else if (widgetType.equals("rrate")|| widgetType.equals("rtot")) {
-                src = R.drawable.rain;
-                iconName = "rain";
-            } else if (widgetType.equals("uv")) {
-                src = R.drawable.uv;
-                iconName = "uv";
-            }
 
             long time = Long.parseLong(sensorHistory);
             // String timeStamp = GetTimeAgo.getTimeAgo(time, context);
@@ -116,10 +96,11 @@ public class NewSensorWidget extends AppWidgetProvider {
             }
         }
 
-        view.setImageViewBitmap(R.id.iconSensor, buildUpdate(iconName, context));
+        view.setImageViewBitmap(R.id.iconSensor, buildUpdate(sensorIcon, context));
         view.setTextViewText(R.id.txtSensorType, widgetText);
-        view.setTextViewText(R.id.txtHistoryInfo,sensorHistory);
-        view.setTextViewText(R.id.txtSensorValue,sensorValue);
+        view.setTextViewText(R.id.txtHistoryInfo, sensorHistory);
+        view.setTextViewText(R.id.txtSensorValue, sensorValue);
+        view.setTextViewText(R.id.txtSensorUnit, sensorUnit);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, view);
@@ -138,7 +119,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         paint.setColor(Color.WHITE);
         paint.setTextSize(65);
         paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(time, 30, 70, paint);
+        myCanvas.drawText(time, 50, 70, paint);
         return myBitmap;
     }
 

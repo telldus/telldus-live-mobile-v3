@@ -52,6 +52,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String SENSOR_VALUE_TYPE="SENSOR_TYPE";
     public static final String SENSOR_UPDATE="Last_update";
     public static final String SENSOR_VALUE="Sensor_value";
+    public static final String SENSOR_UNIT="Sensor_unit";
+    public static final String SENSOR_ICON="Sensor_icon";
 
 
 
@@ -68,7 +70,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
-                + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE + " TEXT,"+ SENSOR_VALUE + " TEXT," + TRANSPARENT + " TEXT" + ")";
+                + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE
+                 + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT + " TEXT" + ")";
 
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
@@ -109,6 +112,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(SENSOR_VALUE_TYPE,mSensorInfo.getWidgetType());
         values.put(SENSOR_UPDATE,mSensorInfo.getSensorUpdate());
         values.put(SENSOR_VALUE,mSensorInfo.getSensorValue());
+        values.put(SENSOR_UNIT,mSensorInfo.getSensorUnit());
+        values.put(SENSOR_ICON,mSensorInfo.getSensorIcon());
         values.put(TRANSPARENT,mSensorInfo.getTransparent());
 
         //Inserting Row
@@ -163,7 +168,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setWidgetType(cursor.getString(3));
             r.setSensorUpdate(cursor.getString(4));
             r.setSensorValue(cursor.getString(5));
-            r.setTransparent(cursor.getString(6));
+            r.setSensorUnit(cursor.getString(6));
+            r.setSensorIcon(cursor.getString(7));
+            r.setTransparent(cursor.getString(8));
 
 
             cursor.close();
