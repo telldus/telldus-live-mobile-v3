@@ -118,7 +118,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate( this.props, nextProps, ['showOne', 'showTwo', 'isChartLoading', 'smoothing', 'graphView', 'liveData']);
+		const propsChange = shouldUpdate(this.props, nextProps, ['showOne', 'showTwo', 'isChartLoading', 'smoothing', 'graphView', 'liveData']);
 		if (propsChange) {
 			return propsChange;
 		}
@@ -167,19 +167,21 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	toggleTwo() {
-		const { showTwo, onToggleChartData } = this.props;
-		const settings = {
-			showTwo: !showTwo,
-		};
-		onToggleChartData(settings);
+		const { showTwo, showOne, onToggleChartData } = this.props;
+		if (showOne || (!showOne && !showTwo)) {
+			onToggleChartData({ showTwo: !showTwo });
+		} else if (!showOne && !showTwo) {
+			onToggleChartData({ showTwo: true });
+		} 
 	}
 
 	toggleOne() {
-		const { showOne, onToggleChartData } = this.props;
-		const settings = {
-			showOne: !showOne,
-		};
-		onToggleChartData(settings);
+		const { showOne, showTwo, onToggleChartData } = this.props;
+		if (showTwo || (!showTwo && !showOne)) {
+			onToggleChartData({ showOne: !showOne });
+		} else if (!showOne && !showTwo) {
+			onToggleChartData({ showOne: true });
+		}
 	}
 
 	onPressToggleView() {
@@ -338,10 +340,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 			color: showTwo ? colorsScatter[1] : Theme.Core.inactiveTintColor,
 		}];
 
-		const max1 = maxBy(chartDataOne, 'value') || {value: 0};
-		const max2 = maxBy(chartDataTwo, 'value') || {value: 0};
-		const min1 = minBy(chartDataOne, 'value') || {value: 0};
-		const min2 = minBy(chartDataTwo, 'value') || {value: 0};
+		const max1 = maxBy(chartDataOne, 'value') || { value: 0 };
+		const max2 = maxBy(chartDataTwo, 'value') || { value: 0 };
+		const min1 = minBy(chartDataOne, 'value') || { value: 0 };
+		const min2 = minBy(chartDataTwo, 'value') || { value: 0 };
 
 		const max = maxBy([max1, max2], 'value');
 		const min = minBy([min1, min2], 'value');
@@ -370,21 +372,21 @@ class SensorHistoryLineChart extends View<Props, State> {
 					legendData={legendData}
 					appLayout={appLayout}
 					fullscreen={show}
-					onPressToggleView={this.onPressToggleView}/>
+					onPressToggleView={this.onPressToggleView} />
 				{isLoading || isChartLoading ?
-					<View style={{width: chartWidth, height: chartHeight}}>
-						<FullPageActivityIndicator size={'small'}/>
+					<View style={{ width: chartWidth, height: chartHeight }}>
+						<FullPageActivityIndicator size={'small'} />
 					</View>
 					:
-					<View style={{flex: 0}}>
+					<View style={{ flex: 0 }}>
 						{graphView === 'overview' ?
 							<LineChart
-								{...chartCommonProps}/>
+								{...chartCommonProps} />
 							:
 							<LineChartDetailed
 								{...chartCommonProps}
 								max={max}
-								min={min}/>
+								min={min} />
 						}
 					</View>
 				}
@@ -527,7 +529,7 @@ const checkForNewData = createSelector(
 );
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const { sensors: { byId }} = state;
+	const { sensors: { byId } } = state;
 	const {
 		timestamp,
 		sensorId,
@@ -537,8 +539,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		chartDataTwo = [],
 	} = ownProps;
 	const sensor = byId[sensorId];
-	const { scale: scale1, type: type1 } = selectedOne ? selectedOne : {scale: null, type: null};
-	const { scale: scale2, type: type2 } = selectedTwo ? selectedTwo : {scale: null, type: null};
+	const { scale: scale1, type: type1 } = selectedOne ? selectedOne : { scale: null, type: null };
+	const { scale: scale2, type: type2 } = selectedTwo ? selectedTwo : { scale: null, type: null };
 	const selectedData = { scale1, type1, scale2, type2 };
 
 	let tsOne, tsTwo;
@@ -549,11 +551,11 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		tsTwo = chartDataTwo[0].ts;
 	}
 
-	let liveData = checkForNewData({...sensor, ...timestamp, selectedData, tsOne, tsTwo});
+	let liveData = checkForNewData({ ...sensor, ...timestamp, selectedData, tsOne, tsTwo });
 
 	return {
 		liveData,
 	};
 }
 
-export default connect(mapStateToProps, null)(SensorHistoryLineChart);
+export default connect(mapStateToProps)(SensorHistoryLineChart);
