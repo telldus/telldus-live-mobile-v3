@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -71,28 +72,42 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String transparent;
         DeviceInfo widgetID = db.findUser(appWidgetId);
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
-
-        views.setOnClickPendingIntent(R.id.iconOn,getPendingSelf(context,ACTION_ON,appWidgetId));
-        views.setOnClickPendingIntent(R.id.iconOff,getPendingSelf(context,ACTION_OFF,appWidgetId));
-        if (widgetID != null){
+        if (widgetID != null) {
             widgetText = widgetID.getDeviceName();
-            String action=widgetID.getState();
+            String state = widgetID.getState();
+            Integer methods = widgetID.getDeviceMethods();
 
-            if (action.equals("1")) {
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
+
+            if (state.equals("1")) {
+                views.setOnClickPendingIntent(R.id.iconOn,getPendingSelf(context,ACTION_ON,appWidgetId));
                 views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
                 views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#FFFFFF",80,70));
-                views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#1b365d",80,70));
                 views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
-                views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
 
+                if (methods == 0) {
+                    views.setViewVisibility(R.id.offLinear, View.GONE);
+                }
+
+                if (methods != 0) {
+                    views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#1b365d",80,70));
+                    views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+                }
             }
-            if (action.equals("2")) {
+            if (state.equals("2")) {
+                views.setOnClickPendingIntent(R.id.iconOff,getPendingSelf(context,ACTION_OFF,appWidgetId));
                 views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
-                views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#E26901",80,70));
                 views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#FFFFFF",80,70));
-                views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
                 views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1b365d"));
+
+                if (methods == 0) {
+                    views.setViewVisibility(R.id.onLayout, View.GONE);
+                }
+
+                if (methods != 0) {
+                    views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#E26901",80,70));
+                    views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+                }
             }
             transparent = widgetID.getTransparent();
             if (transparent.equals("true")) {
@@ -103,12 +118,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setInt(R.id.updownarrowwidget, "setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.dimmerWidget, "setBackgroundColor", Color.TRANSPARENT);
             }
+
+            views.setTextViewText(R.id.txtWidgetTitle, widgetText);
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-
-
-        views.setTextViewText(R.id.txtWidgetTitle, widgetText);
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     public static Bitmap buildUpdate(String fontNmae, Context context, String color, float y, float x)

@@ -82,6 +82,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     List<String> stateListItems = new ArrayList<String>();
     Map<String,Integer> DeviceID=new HashMap<String,Integer>();
     int id;
+    Integer methods = 0;
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -227,7 +228,13 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
 
-                DeviceInfo mInsert = new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
+                DeviceInfo mInsert = new DeviceInfo(
+                    deviceStateVal[0],
+                    mAppWidgetId,
+                    id,
+                    deviceName.getText().toString(),
+                    methods,
+                    switchStatus);
                 db.addUser(mInsert);
                 NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 

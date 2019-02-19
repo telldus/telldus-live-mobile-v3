@@ -68,6 +68,7 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
+import com.telldus.live.mobile.Utility.DevicesUtilities;
 
 public class NewOnOffWidgetConfigureActivity extends Activity {
     private static final String ACTION_ON = "ACTION_ON";
@@ -75,10 +76,12 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private ProgressDialog pDialog;
     CharSequence[] deviceNameList = null;
     List<String> nameListItems = new ArrayList<String>();
-    CharSequence[] deviceStateList = null;
+    Map<String, Map> DeviceInfoMap = new HashMap<String, Map>();
     List<String> stateListItems = new ArrayList<String>();
     Map<String,Integer> DeviceID = new HashMap<String,Integer>();
     int id;
+    Integer deviceSupportedMethods = 0;
+    String deviceCurrentState;
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -172,8 +175,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         });
 
         switch_background = (Switch)findViewById(R.id.switch_background);
-        // switch_background.getThumbDrawable().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-        // switch_background.getTrackDrawable().setColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY);
 
         Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
         tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
@@ -185,13 +186,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 // do something, the isChecked will be
                 // true if the switch is in the On position
                 if (isChecked)  {
-                    switchStatus="true";
-                    // switch_background.getThumbDrawable().setColorFilter(isChecked ? getResources().getColor(R.color.lightblue) : Color.WHITE, PorterDuff.Mode.MULTIPLY);
-                    // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
+                    switchStatus = "true";
                 } else {
-                    switchStatus="false";
-                    // switch_background.getThumbDrawable().setColorFilter(isChecked ? Color.BLACK : Color.GRAY, PorterDuff.Mode.MULTIPLY);
-                    // switch_background.getTrackDrawable().setColorFilter(!isChecked ? Color.DKGRAY : Color.WHITE, PorterDuff.Mode.MULTIPLY);
+                    switchStatus = "false";
                 }
             }
         });
@@ -208,13 +205,12 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             finish();
             return;
         }
-        final String[] deviceStateVal = {"0"};
 
         btAdd = (Button) findViewById(R.id.btAdd);
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (id == 0) {
+                if (id == 0) {// ToDo: translate
                     Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.TOP , 0, 0);
                     toast.show();
@@ -222,14 +218,12 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 }
 
                 boolean b = isMyServiceRunning(NetworkInfo.class);
-                if (!b)
-                {
+                if (!b) {
                     startService(new Intent(getApplicationContext(), NetworkInfo.class));
                 }
 
                 boolean b1 = prefManager.getDeviceDB();
-                if(!b1)
-                {
+                if (!b1) {
                     prefManager.DeviceDB(true);
                 }
 
@@ -245,8 +239,15 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 }
                 views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
-                DeviceInfo mInsert = new DeviceInfo(deviceStateVal[0],mAppWidgetId,id,deviceName.getText().toString(),switchStatus);
+                DeviceInfo mInsert = new DeviceInfo(
+                    deviceCurrentState,
+                    mAppWidgetId,
+                    id,
+                    deviceName.getText().toString(),
+                    deviceSupportedMethods,
+                    switchStatus);
                 db.addUser(mInsert);
+
                 NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
 
@@ -280,14 +281,14 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 deviceName.setText(deviceNameList[which]);
-                                id=DeviceID.get(deviceNameList[which]);
+                                id = DeviceID.get(deviceNameList[which]);
 
-                                // deviceHint.setText(null);
-                                deviceStateVal[0] = (String) deviceStateList[which];
-                                Toast.makeText(getApplicationContext(),deviceStateVal[0].toString(),Toast.LENGTH_LONG).show();
+                                Map<String, Object> info = DeviceInfoMap.get(deviceNameList[which]);
+
+                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                deviceCurrentState = info.get("state").toString();
+
                                 ad.dismiss();
-
-
                             }
                         });
                 ad = builder.show();
@@ -306,11 +307,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         switch_background.setTypeface(subtitleFont);
     }
 
-
     void createDeviceApi() {
         accessToken=prefManager.getAccess();
 
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=1975&includeIgnored=1&extras=devicetype,transport,room")
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
@@ -322,23 +322,30 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         try {
 
                             JSONObject deviceData = new JSONObject(response.toString());
-                            Log.v("JSON Object",deviceData.toString());
                             JSONArray deviceList = deviceData.getJSONArray("device");
-
+                            DevicesUtilities deviceUtils = new DevicesUtilities();
                             for (int i = 0; i < deviceList.length(); i++) {
                                 JSONObject curObj = deviceList.getJSONObject(i);
                                 String name = curObj.getString("name");
                                 stateID = curObj.getInt("state");
+                                Integer methods = curObj.getInt("methods");
 
-                                if (stateID == 1 || stateID == 2 /*||stateID == 4 || stateID == 128 ||stateID == 256 || stateID == 512 || stateID == 16*/) {
+                                Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+                                Boolean showDevice = supportedMethods.size() <= 2;
+
+                                if (showDevice) {
                                     Integer id = curObj.getInt("id");
                                     DeviceID.put(name, id);
                                     nameListItems.add(name);
                                     stateListItems.add(String.valueOf(stateID));
+
+                                    Map<String, Object> info = new HashMap<String, Object>();
+                                    info.put("state", String.valueOf(stateID));
+                                    info.put("methods", methods);
+                                    DeviceInfoMap.put(name, info);
                                 }
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                            deviceStateList = stateListItems.toArray(new CharSequence[stateListItems.size()]);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         };

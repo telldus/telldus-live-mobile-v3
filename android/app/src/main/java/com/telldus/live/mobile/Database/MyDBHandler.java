@@ -41,19 +41,20 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String WIDGET_ID = "widget_id";
     public static final String DEVICE_ID = "deviceid";
     public static final String WIDGET_NAME = "device_name";
-    public static final String WIDGET_ACTION="widget_action";
-    public static final String TRANSPARENT="transparent";
+    public static final String WIDGET_ACTION = "widget_action";
+    public static final String DEVICE_METHODS = "methods";
+    public static final String TRANSPARENT = "transparent";
 
 
-    public static final String TABLE_SENSOR="sensor";
+    public static final String TABLE_SENSOR = "sensor";
     public static final String SENSOR_WIDGET_ID = "SENSOR_widget_id";
     public static final String SENSOR_DEVICE_ID = "SENSOR_deviceid";
     public static final String SENSOR_WIDGET_NAME = "SENSOR_device_name";
-    public static final String SENSOR_VALUE_TYPE="SENSOR_TYPE";
-    public static final String SENSOR_UPDATE="Last_update";
-    public static final String SENSOR_VALUE="Sensor_value";
-    public static final String SENSOR_UNIT="Sensor_unit";
-    public static final String SENSOR_ICON="Sensor_icon";
+    public static final String SENSOR_VALUE_TYPE = "SENSOR_TYPE";
+    public static final String SENSOR_UPDATE = "Last_update";
+    public static final String SENSOR_VALUE = "Sensor_value";
+    public static final String SENSOR_UNIT = "Sensor_unit";
+    public static final String SENSOR_ICON = "Sensor_icon";
 
 
 
@@ -66,7 +67,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " +
                 TABLE_REGISTER + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
-                + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT," + TRANSPARENT + " TEXT" + ")";
+                + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT," + DEVICE_METHODS + " INTEGER," + TRANSPARENT + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
@@ -92,8 +93,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(DEVICE_ID,mDeviceInfo.getDeviceID());
         values.put(WIDGET_NAME,mDeviceInfo.getDeviceName());
         values.put(WIDGET_ACTION,mDeviceInfo.getState());
+        values.put(DEVICE_METHODS,mDeviceInfo.getDeviceMethods());
         values.put(TRANSPARENT,mDeviceInfo.getTransparent());
-        //values.put(WIDGET_ACTION,"null");
 
 
         //Inserting Row
@@ -139,7 +140,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setDeviceName(cursor.getString(2));
             r.setWidgetID(cursor.getInt(0));
             r.setState(cursor.getString(3));
-            r.setTransparent(cursor.getString(4));
+            r.setDeviceMethods(cursor.getInt(4));
+            r.setTransparent(cursor.getString(5));
 
             cursor.close();
         } else {
