@@ -55,9 +55,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_OFF = "ACTION_OFF";
 
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
+    static void updateAppWidget(
+        Context context,
+        AppWidgetManager appWidgetManager,
+        int appWidgetId
+    ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccess();
         // On log out, only prefManager is cleared and not DB, so we do not want device to show back again during the
@@ -79,11 +81,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
 
+            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
+            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
+
             if (state.equals("1")) {
-                views.setOnClickPendingIntent(R.id.iconOn,getPendingSelf(context,ACTION_ON,appWidgetId));
                 views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#FFFFFF",80,70));
-                views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
+                views.setImageViewBitmap(R.id.iconOn, buildUpdate("ondark", context, "#FFFFFF", 80, 70));
+                views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#E26901"));
 
                 if (methods == 0) {
                     views.setViewVisibility(R.id.offLinear, View.GONE);
@@ -95,7 +99,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
             }
             if (state.equals("2")) {
-                views.setOnClickPendingIntent(R.id.iconOff,getPendingSelf(context,ACTION_OFF,appWidgetId));
                 views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
                 views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#FFFFFF",80,70));
                 views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1b365d"));
@@ -200,40 +203,40 @@ public class NewOnOffWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        MyDBHandler db = new MyDBHandler(context);
+        Bundle extras = intent.getExtras();
+        int widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
 
-        if (ACTION_ON.equals(intent.getAction())) {
+        MyDBHandler db = new MyDBHandler(context);
+        DeviceInfo widgetInfo = db.findUser(widgetID);
+        Integer methods = widgetInfo.getDeviceMethods();
+
+        if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
             String accessToken = "";
             String expiresIn;
             String refreshToken;
 
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-            DeviceInfo widgetID = db.getSinlgeDeviceID(wigetID);
+            DeviceInfo info = db.getSinlgeDeviceID(widgetID);
 
-            String state = widgetID.getState();
+            String state = info.getState();
             if (state.equals("1")) {
                 Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
             } else {
-                createDeviceApi(context,widgetID.getDeviceID(),1,wigetID,db,"On");
+                createDeviceApi(context, info.getDeviceID(), 1, widgetID, db, "On");
             }
         }
-        if (ACTION_OFF.equals(intent.getAction())) {
+        if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
 
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+            DeviceInfo info = db.getSinlgeDeviceID(widgetID);
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-
-            String state = id.getState();
+            String state = info.getState();
             if (state.equals("2")) {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
             } else {
-                createDeviceApi(context,id.getDeviceID(),2,wigetID,db,"Off");
+                createDeviceApi(context, info.getDeviceID(), 2, widgetID, db, "Off");
             }
         }
     }
-    void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
+    void createDeviceApi(final Context ctx, int deviceid, int method, final int widgetID, final MyDBHandler db, final String action) {
         PrefManager prefManager = new PrefManager(ctx);
         String  accessToken = prefManager.getAccess();
         String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
@@ -248,38 +251,21 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
                             String status = response.optString("status");
                             String error = response.optString("error");
 
                             if (!status.isEmpty() && status != null && action.equals("On")) {
-                                boolean b = db.updateAction("1",wigetID);
-                                RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.new_on_off_widget);
+                                db.updateAction("1",widgetID);
 
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-
-                                views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#E26901",80,70));
-                                views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#FFFFFF",80,70));
-                                views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-                                views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1b365d"));
-                                appWidgetManager.updateAppWidget(wigetID,views);
-
-                                Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
+                                updateAppWidget(ctx, appWidgetManager, widgetID);
                             }
 
                             if (!status.isEmpty() && status != null && action.equals("Off")) {
-                                boolean b = db.updateAction("2",wigetID);
-                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_on_off_widget);
-
-                                remoteViews.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#FFFFFF",80,70));
-                                remoteViews.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#1b365d",80,70));
-                                remoteViews.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
-                                remoteViews.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+                                db.updateAction("2",widgetID);
 
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
-
-                                Toast.makeText(ctx,"Turn off "+status,Toast.LENGTH_LONG).show();
+                                updateAppWidget(ctx, appWidgetManager, widgetID);
                             }
 
                             if(!status.isEmpty() && status != null && action.equals("Bell")) {
