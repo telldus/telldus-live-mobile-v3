@@ -310,6 +310,7 @@ getStyle(appLayout: Object): Object {
 			fontSize: fontSizePosterTextTwo,
 			color: '#fff',
 			fontWeight: 'bold',
+			fontFamily: 'Roboto-Regular',
 		},
 		calendarTheme: {
 			textSectionTitleColor: offlineColor,
