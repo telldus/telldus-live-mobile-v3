@@ -24,9 +24,10 @@
 import React from 'react';
 import { FormattedTime } from 'react-intl';
 import Text from './Text';
+import DeviceInfo from 'react-native-device-info';
 
 const FormattedTimeComponent = (props: Object): React$Element<any> => (
-	<FormattedTime {...props}>{(formattedTime: string): React$Element<any> => {
+	<FormattedTime {...props} hour12={!DeviceInfo.is24Hour()}>{(formattedTime: string): React$Element<any> => {
 		return <Text style={props.style}>{formattedTime}</Text>;
 	}}
 	</FormattedTime>
