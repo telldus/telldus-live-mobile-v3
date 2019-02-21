@@ -77,8 +77,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     CharSequence[] deviceNameList = null;
     List<String> nameListItems = new ArrayList<String>();
     Map<String, Map> DeviceInfoMap = new HashMap<String, Map>();
-    List<String> stateListItems = new ArrayList<String>();
-    Map<String,Integer> DeviceID = new HashMap<String,Integer>();
     int id;
     Integer deviceSupportedMethods = 0;
     String deviceCurrentState;
@@ -281,12 +279,12 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 deviceName.setText(deviceNameList[which]);
-                                id = DeviceID.get(deviceNameList[which]);
 
                                 Map<String, Object> info = DeviceInfoMap.get(deviceNameList[which]);
 
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
                                 deviceCurrentState = info.get("state").toString();
+                                id = Integer.parseInt(info.get("id").toString());
 
                                 ad.dismiss();
                             }
@@ -308,7 +306,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-        accessToken=prefManager.getAccess();
+        accessToken = prefManager.getAccess();
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=1975&includeIgnored=1&extras=devicetype,transport,room")
                 .addHeaders("Content-Type", "application/json")
@@ -321,9 +319,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     public void onResponse(JSONObject response) {
                         try {
 
+                            DevicesUtilities deviceUtils = new DevicesUtilities();
+
                             JSONObject deviceData = new JSONObject(response.toString());
                             JSONArray deviceList = deviceData.getJSONArray("device");
-                            DevicesUtilities deviceUtils = new DevicesUtilities();
+
                             for (int i = 0; i < deviceList.length(); i++) {
                                 JSONObject curObj = deviceList.getJSONObject(i);
                                 String name = curObj.getString("name");
@@ -331,17 +331,21 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 Integer methods = curObj.getInt("methods");
 
                                 Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
-                                Boolean showDevice = supportedMethods.size() <= 2;
+                                Integer sizeSuppMeth = supportedMethods.size();
+                                Boolean hasLearn = supportedMethods.get("LEARN");
+                                if (hasLearn != null && hasLearn) {
+                                    sizeSuppMeth = sizeSuppMeth - 1;
+                                }
+                                Boolean showDevice = sizeSuppMeth <= 2;
 
                                 if (showDevice) {
                                     Integer id = curObj.getInt("id");
-                                    DeviceID.put(name, id);
                                     nameListItems.add(name);
-                                    stateListItems.add(String.valueOf(stateID));
 
                                     Map<String, Object> info = new HashMap<String, Object>();
                                     info.put("state", String.valueOf(stateID));
                                     info.put("methods", methods);
+                                    info.put("id", id);
                                     DeviceInfoMap.put(name, info);
                                 }
                             }

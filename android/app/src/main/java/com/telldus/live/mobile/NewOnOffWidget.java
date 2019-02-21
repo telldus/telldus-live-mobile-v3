@@ -283,7 +283,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                 Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
                             }
 
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         };
