@@ -42,9 +42,12 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.DevicesUtilities;
 
 /**
  * Implementation of App Widget functionality.
@@ -78,15 +81,23 @@ public class NewOnOffWidget extends AppWidgetProvider {
             widgetText = widgetID.getDeviceName();
             String state = widgetID.getState();
             Integer methods = widgetID.getDeviceMethods();
+            String deviceType = widgetID.getDeviceType();
 
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
 
             views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
             views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
+            DevicesUtilities deviceUtils = new DevicesUtilities();
+            Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+            Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
+
+            String onActionIcon = actionIconSet.get("TURNON");
+            String offActionIcon = actionIconSet.get("TURNOFF");
+
             if (state.equals("1")) {
                 views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                views.setImageViewBitmap(R.id.iconOn, buildUpdate("ondark", context, "#FFFFFF", 80, 70));
+                views.setImageViewBitmap(R.id.iconOn, buildUpdate(onActionIcon, context, "#FFFFFF", 80, 70));
                 views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#E26901"));
 
                 if (methods == 0) {
@@ -94,13 +105,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
 
                 if (methods != 0) {
-                    views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#1b365d",80,70));
+                    views.setImageViewBitmap(R.id.iconOff,buildUpdate(offActionIcon,context,"#1b365d",80,70));
                     views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
                 }
             }
             if (state.equals("2")) {
                 views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
-                views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",context,"#FFFFFF",80,70));
+                views.setImageViewBitmap(R.id.iconOff,buildUpdate(offActionIcon,context,"#FFFFFF",80,70));
                 views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1b365d"));
 
                 if (methods == 0) {
@@ -108,7 +119,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
 
                 if (methods != 0) {
-                    views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",context,"#E26901",80,70));
+                    views.setImageViewBitmap(R.id.iconOn,buildUpdate(onActionIcon,context,"#E26901",80,70));
                     views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
                 }
             }

@@ -43,9 +43,12 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.DevicesUtilities;
 
 /**
  * Implementation of App Widget functionality.
@@ -91,24 +94,33 @@ public class NewAppWidget extends AppWidgetProvider {
 
         if (widgetID != null) {
             widgetText = widgetID.getDeviceName();
-            String action = widgetID.getState();
+            String state = widgetID.getState();
+            String deviceType = widgetID.getDeviceType();
+            Integer methods = widgetID.getDeviceMethods();
 
-            if (action.equals("4")) {
+            DevicesUtilities deviceUtils = new DevicesUtilities();
+            Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+            Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
+
+            String onActionIcon = actionIconSet.get("TURNON");
+            String offActionIcon = actionIconSet.get("TURNOFF");
+
+            if (state.equals("4")) {
                 views.setViewVisibility(R.id.bellLinear,View.VISIBLE);
                 views.setOnClickPendingIntent(R.id.bell,getPendingBELL(context,ACTION_BELL,appWidgetId));
             }
 
-            if (action.equals("128")|| action.equals("256")|| action.equals("512")) {
+            if (state.equals("128")|| state.equals("256")|| state.equals("512")) {
                 views.setViewVisibility(R.id.updownarrow,View.VISIBLE);
                 views.setOnClickPendingIntent(R.id.uparrow,getPendingBELL(context,ACTION_UP,appWidgetId));
                 views.setOnClickPendingIntent(R.id.downarrow,getPendingBELL(context,ACTION_DOWN,appWidgetId));
                 views.setOnClickPendingIntent(R.id.stopicon,getPendingBELL(context,ACTION_STOP,appWidgetId));
             }
 
-            if (action.equals("16")) {
+            if (state.equals("16")) {
                 views.setViewVisibility(R.id.seekbarlayout, View.VISIBLE);
-                views.setImageViewBitmap(R.id.dimmerOn, buildUpdate("ondark", context, "#E26901", 70, 70));
-                views.setImageViewBitmap(R.id.dimmerOff, buildUpdate("offdark", context, "#1A365D", 70, 80));
+                views.setImageViewBitmap(R.id.dimmerOn, buildUpdate(onActionIcon, context, "#E26901", 70, 70));
+                views.setImageViewBitmap(R.id.dimmerOff, buildUpdate(offActionIcon, context, "#1A365D", 70, 80));
                 views.setImageViewBitmap(R.id.dimmer25, buildUpdate("dim25", context, "#E26901", 60, 80));
                 views.setImageViewBitmap(R.id.dimmer75, buildUpdate("dim75", context, "#E26901", 60, 80));
                 views.setImageViewBitmap(R.id.dimmer50, buildUpdate("dim", context, "#E26901", 60, 80));
@@ -185,6 +197,17 @@ public class NewAppWidget extends AppWidgetProvider {
             return;
         }
 
+        String state = id.getState();
+        String deviceType = id.getDeviceType();
+        Integer methods = id.getDeviceMethods();
+
+        DevicesUtilities deviceUtils = new DevicesUtilities();
+        Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+        Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
+
+        String onActionIcon = actionIconSet.get("TURNON");
+        String offActionIcon = actionIconSet.get("TURNOFF");
+
         if (ACTION_BELL.equals(intent.getAction())) {
             createDeviceApi(context, id.getDeviceID(), 4, wigetID, db, "Bell");
         }
@@ -210,7 +233,7 @@ public class NewAppWidget extends AppWidgetProvider {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
 
             remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#FFFFFF",70,80));
+            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#FFFFFF",70,80));
 
             remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
@@ -219,7 +242,7 @@ public class NewAppWidget extends AppWidgetProvider {
             remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
             remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
             remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
             remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
@@ -246,13 +269,13 @@ public class NewAppWidget extends AppWidgetProvider {
             remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#FFFFFF",60,80));
 
             remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
             remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
 
             remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#FFFFFF"));
             remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
@@ -276,13 +299,13 @@ public class NewAppWidget extends AppWidgetProvider {
             remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#FFFFFF",60,80));
 
             remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
             remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
 
             remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
             remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
@@ -306,13 +329,13 @@ public class NewAppWidget extends AppWidgetProvider {
             remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#FFFFFF",60,80));
 
             remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
             remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#E26901",70,70));
+            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
 
             remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
             remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#FFFFFF"));
@@ -333,10 +356,10 @@ public class NewAppWidget extends AppWidgetProvider {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
 
             remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate("ondark",context,"#FFFFFF",70,70));
+            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#FFFFFF",70,70));
 
             remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate("offdark",context,"#1A365D",70,80));
+            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
             remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
             remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
             remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
@@ -454,32 +477,15 @@ public class NewAppWidget extends AppWidgetProvider {
 
                             if (!status.isEmpty() && status != null && action.equals("On")) {
                                 boolean b = db.updateAction("1",wigetID);
-                                RemoteViews views = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
 
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-
-                                views.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#E26901",80,70));
-                                views.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#FFFFFF",80,70));
-                                views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-                                views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1A365D"));
-                                appWidgetManager.updateAppWidget(wigetID,views);
-
-                                Toast.makeText(ctx,"Turn on  "+status,Toast.LENGTH_LONG).show();
+                                updateAppWidget(ctx, appWidgetManager, wigetID);
                             }
                             if (!status.isEmpty() && status != null && action.equals("Off")) {
                                 boolean b = db.updateAction("2",wigetID);
-                                RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
-
-                                remoteViews.setImageViewBitmap(R.id.iconOn,buildUpdate("ondark",ctx,"#FFFFFF",80,70));
-                                remoteViews.setImageViewBitmap(R.id.iconOff,buildUpdate("offdark",ctx,"#1A365D",80,70));
-                                remoteViews.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#E26901"));
-                                remoteViews.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
 
                                 AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-
-                                appWidgetManager.updateAppWidget(wigetID,remoteViews);
-
-                                Toast.makeText(ctx,"Turn off "+status,Toast.LENGTH_LONG).show();
+                                updateAppWidget(ctx, appWidgetManager, wigetID);
                             }
                             if (!status.isEmpty() && status !=null && action.equals("Bell")) {
                                 Toast.makeText(ctx,"SuccessFully",Toast.LENGTH_SHORT).show();
