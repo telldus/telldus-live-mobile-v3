@@ -81,4 +81,211 @@ public class DevicesUtilities {
         }
         return methodHashmap;
     }
+
+    public String getDeviceIcons(String deviceType) {
+        switch (deviceType) {
+            case "0000001-0001-1000-2005-ACCA54000000":// ToDo: remove support for length "7" once backend is ready
+            case "00000001-0001-1000-2005-ACCA54000000":
+                return "alarm";
+            case "0000002-0001-1000-2005-ACCA54000000":
+            case "00000002-0001-1000-2005-ACCA54000000":
+                return "group";
+            case "0000003-0001-1000-2005-ACCA54000000":
+            case "00000003-0001-1000-2005-ACCA54000000":
+                return "location";
+            case "0000004-0001-1000-2005-ACCA54000000":
+            case "00000004-0001-1000-2005-ACCA54000000":
+                return "doorclosed";
+            case "0000005-0001-1000-2005-ACCA54000000":
+            case "00000005-0001-1000-2005-ACCA54000000":
+                return "bulb";
+            case "0000006-0001-1000-2005-ACCA54000000":
+            case "00000006-0001-1000-2005-ACCA54000000":
+                return "keyhole";
+            case "0000007-0001-1000-2005-ACCA54000000":
+            case "00000007-0001-1000-2005-ACCA54000000":
+                return "music";
+            case "0000008-0001-1000-2005-ACCA54000000":
+            case "00000008-0001-1000-2005-ACCA54000000":
+                return "gauge";
+            case "0000009-0001-1000-2005-ACCA54000000":
+            case "00000009-0001-1000-2005-ACCA54000000":
+                return "monitoring";
+            case "000000A-0001-1000-2005-ACCA54000000":
+            case "0000000A-0001-1000-2005-ACCA54000000":
+                return "sensor";
+            case "000000B-0001-1000-2005-ACCA54000000":
+            case "0000000B-0001-1000-2005-ACCA54000000":
+                return "user";
+            case "000000C-0001-1000-2005-ACCA54000000":
+            case "0000000C-0001-1000-2005-ACCA54000000":
+                return "remotecontrol";
+            case "000000D-0001-1000-2005-ACCA54000000":
+            case "0000000D-0001-1000-2005-ACCA54000000":
+                return "sensor";
+            case "000000E-0001-1000-2005-ACCA54000000":
+            case "0000000E-0001-1000-2005-ACCA54000000":
+                return "alarm";
+            case "000000F-0001-1000-2005-ACCA54000000":
+            case "0000000F-0001-1000-2005-ACCA54000000":
+                return "speaker";
+            case "0000010-0001-1000-2005-ACCA54000000":
+            case "00000010-0001-1000-2005-ACCA54000000":
+                return "outlet";
+            case "0000011-0001-1000-2005-ACCA54000000":
+            case "00000011-0001-1000-2005-ACCA54000000":
+                return "thermostat";
+            case "0000012-0001-1000-2005-ACCA54000000":
+            case "00000012-0001-1000-2005-ACCA54000000":
+                return "buttononoff";
+            case "0000013-0001-1000-2005-ACCA54000000":
+            case "00000013-0001-1000-2005-ACCA54000000":
+                return "curtain";
+            case "0000014-0001-1000-2005-ACCA54000000":
+            case "00000014-0001-1000-2005-ACCA54000000":
+                return "curtain";
+            default:
+                return "devicealt";
+        }
+    }
+
+    public Map<String, String> getDeviceActionIcon(String deviceType, String state, Map<String, Boolean> supportedMethods) {
+        Boolean TURNON = supportedMethods.get("TURNON");
+        Boolean TURNOFF = supportedMethods.get("TURNOFF");
+        Boolean BELL = supportedMethods.get("BELL");
+        Boolean DIM = supportedMethods.get("DIM");
+        Boolean UP = supportedMethods.get("UP");
+        Boolean DOWN = supportedMethods.get("DOWN");
+        Boolean STOP = supportedMethods.get("STOP");
+
+        Map<String, String> actionsIconSet = new HashMap<String, String>();
+        actionsIconSet.put("TURNON", "on");
+        actionsIconSet.put("TURNOFF", "off");
+        actionsIconSet.put("BELL", "bell");
+        actionsIconSet.put("DIM", "dim");
+        actionsIconSet.put("UP", "up");
+        actionsIconSet.put("DOWN", "down");
+        actionsIconSet.put("STOP", "stop");
+
+        if (deviceType == null) {
+            return actionsIconSet;
+        }
+
+        switch(deviceType) {
+            case "0000001-0001-1000-2005-ACCA54000000":// ToDo: remove support for length "7" once backend is ready
+            case "00000001-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "alarmtriggered");
+                actionsIconSet.put("TURNOFF", "alarmtriggered");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "alarm");
+                    actionsIconSet.put("TURNOFF", "alarm");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON", "alarmtriggered");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "alarm");
+                }
+                return actionsIconSet;
+
+            case "0000004-0001-1000-2005-ACCA54000000":
+            case "00000004-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "dooropen");
+                actionsIconSet.put("TURNOFF", "dooropen");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "doorclosed");
+                    actionsIconSet.put("TURNOFF", "doorclosed");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON", "dooropen");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "doorclosed");
+                }
+                return actionsIconSet;
+
+            case "0000006-0001-1000-2005-ACCA54000000":
+            case "00000006-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "locked");
+                actionsIconSet.put("TURNOFF", "locked");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "unlocked");
+                    actionsIconSet.put("TURNOFF", "unlocked");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON", "locked");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "unlocked");
+                }
+                return actionsIconSet;
+
+            case "0000009-0001-1000-2005-ACCA54000000":
+            case "00000009-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "motion-triggered");
+                actionsIconSet.put("TURNOFF", "motion-triggered");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "motion");
+                    actionsIconSet.put("TURNOFF", "motion");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON", "motion-triggered");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "motion");
+                }
+                return actionsIconSet;
+
+            case "000000B-0001-1000-2005-ACCA54000000":
+            case "0000000B-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "userhome");
+                actionsIconSet.put("TURNOFF", "userhome");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "useraway");
+                    actionsIconSet.put("TURNOFF", "useraway");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON", "userhome");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "useraway");
+                }
+                return actionsIconSet;
+
+            case "000000E-0001-1000-2005-ACCA54000000":
+            case "0000000E-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "fire");
+                actionsIconSet.put("TURNOFF", "fire");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "off");
+                    actionsIconSet.put("TURNOFF", "off");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON", "fire");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "off");
+                }
+                return actionsIconSet;
+
+            case "0000007-0001-1000-2005-ACCA54000000":
+            case "00000007-0001-1000-2005-ACCA54000000":
+                actionsIconSet.put("TURNON", "play");
+                actionsIconSet.put("TURNOFF", "play");
+                if (state.equals("2")) {
+                    actionsIconSet.put("TURNON", "pause");
+                    actionsIconSet.put("TURNOFF", "pause");
+                }
+                if (TURNON != null && TURNON) {
+                    actionsIconSet.put("TURNON" ,"play");
+                }
+                if (TURNOFF != null && TURNOFF) {
+                    actionsIconSet.put("TURNOFF", "pause");
+                }
+                return actionsIconSet;
+
+            default:
+                return actionsIconSet;
+        }
+    }
 }
