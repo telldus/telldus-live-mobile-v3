@@ -86,8 +86,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     //UI
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd,btnCan;
-    private View btSelectDevice;
-    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText;
+    private View btSelectDevice, screenCover;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText, loadingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -142,20 +142,16 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             getApplicationContext().startActivity(launchActivity);
             return;
         }
+
         createDeviceApi();
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.new_on_off_widget_configure);
-        views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
-        widgetManager = AppWidgetManager.getInstance(this);
 
-        textTest = (TextView)findViewById(R.id.testText);
-        chooseSetting = (TextView)findViewById(R.id.chooseSetting);
-        deviceName = (TextView) findViewById(R.id.txtDeviceName);
-        deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
-        backDevice = (ImageView)findViewById(R.id.backdevice);
-        deviceText = (TextView)findViewById(R.id.deviceText);
-        settingText = (TextView)findViewById(R.id.settingText);
+        updateUI();
+    }
+
+    public void updateUI() {
 
         mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
         mBackLayout.setOnClickListener(new View.OnClickListener() {
@@ -164,145 +160,169 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 finish();
             }
         });
-        btnCan = (Button)findViewById(R.id.btn_cancel);
-        btnCan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+        loadingText = (TextView)findViewById(R.id.loadingText);
+        screenCover = (View)findViewById(R.id.screenCover);
+        if (DeviceInfoMap.size() == 0) {
+            loadingText.setVisibility(View.VISIBLE);
+            screenCover.setVisibility(View.GONE);
+        } else {
+            views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
+            widgetManager = AppWidgetManager.getInstance(this);
+
+            loadingText.setVisibility(View.GONE);
+            screenCover.setVisibility(View.VISIBLE);
+
+            textTest = (TextView)findViewById(R.id.testText);
+            chooseSetting = (TextView)findViewById(R.id.chooseSetting);
+            deviceName = (TextView) findViewById(R.id.txtDeviceName);
+            deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
+            backDevice = (ImageView)findViewById(R.id.backdevice);
+            deviceText = (TextView)findViewById(R.id.deviceText);
+            settingText = (TextView)findViewById(R.id.settingText);
+
+            views.setViewVisibility(R.id.offLinear, View.GONE);
+
+            btnCan = (Button)findViewById(R.id.btn_cancel);
+            btnCan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            switch_background = (Switch)findViewById(R.id.switch_background);
+
+            Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+            tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
+            tvIcon1.setText("device-alt");
+            tvIcon1.setTypeface(iconFont);
+
+            switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // do something, the isChecked will be
+                    // true if the switch is in the On position
+                    if (isChecked)  {
+                        switchStatus = "true";
+                    } else {
+                        switchStatus = "false";
+                    }
+                }
+            });
+
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                mAppWidgetId = extras.getInt(
+                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            }
+
+            // If this activity was started with an intent without an app widget ID, finish with an error.
+            if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
                 finish();
+                return;
             }
-        });
 
-        switch_background = (Switch)findViewById(R.id.switch_background);
+            btAdd = (Button) findViewById(R.id.btAdd);
+            btAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (id == 0) {// ToDo: translate
+                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP , 0, 0);
+                        toast.show();
+                        return;
+                    }
 
-        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
-        tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
-        tvIcon1.setText("device-alt");
-        tvIcon1.setTypeface(iconFont);
+                    boolean b = isMyServiceRunning(NetworkInfo.class);
+                    if (!b) {
+                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                    }
 
-        switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // do something, the isChecked will be
-                // true if the switch is in the On position
-                if (isChecked)  {
-                    switchStatus = "true";
-                } else {
-                    switchStatus = "false";
+                    boolean b1 = prefManager.getDeviceDB();
+                    if (!b1) {
+                        prefManager.DeviceDB(true);
+                    }
+
+
+                    boolean token_service = prefManager.getTokenService();
+                    if (!token_service) {
+                        prefManager.TokenService(true);
+                        // Service for Access token
+                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
+                        startService(serviceIntent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                    }
+                    views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
+
+                    DeviceInfo mInsert = new DeviceInfo(
+                        deviceCurrentState,
+                        mAppWidgetId,
+                        id,
+                        deviceName.getText().toString(),
+                        deviceSupportedMethods,
+                        switchStatus);
+                    db.addUser(mInsert);
+
+                    NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+
+
+                    boolean web_service = prefManager.getWebService();
+                    if (!web_service) {
+                        prefManager.websocketService(true);
+                        // Service for Access token
+                        Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
+                        startService(serviceIntent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                    }
+
+
+                    Intent resultValue = new Intent();
+                    // Set the results as expected from a 'configure activity'.
+                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                    setResult(RESULT_OK, resultValue);
+                    finish();
                 }
-            }
-        });
+            });
 
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            mAppWidgetId = extras.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            btSelectDevice = (View) findViewById(R.id.btSelectDevice);
+            btSelectDevice.setOnClickListener(new View.OnClickListener() {
+                public int checkedItem;
+                AlertDialog ad;
+                public void onClick(View view) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
+                            ,R.style.MaterialThemeDialog);
+                    builder.setTitle(R.string.pick_device)
+                            .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    deviceName.setText(deviceNameList[which]);
+
+                                    Map<String, Object> info = DeviceInfoMap.get(deviceNameList[which]);
+
+                                    deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                    deviceCurrentState = info.get("state").toString();
+                                    id = Integer.parseInt(info.get("id").toString());
+
+                                    ad.dismiss();
+                                }
+                            });
+                    ad = builder.show();
+                }
+            });
+            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+            textTest.setTypeface(titleFont);
+            chooseSetting.setTypeface(titleFont);
+            deviceName.setTypeface(subtitleFont);
+            deviceHint.setTypeface(subtitleFont);
+            deviceText.setTypeface(subtitleFont);
+            settingText.setTypeface(subtitleFont);
+            btAdd.setTypeface(subtitleFont);
+            btnCan.setTypeface(subtitleFont);
+            switch_background.setTypeface(subtitleFont);
         }
-
-        // If this activity was started with an intent without an app widget ID, finish with an error.
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-            return;
-        }
-
-        btAdd = (Button) findViewById(R.id.btAdd);
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (id == 0) {// ToDo: translate
-                    Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP , 0, 0);
-                    toast.show();
-                    return;
-                }
-
-                boolean b = isMyServiceRunning(NetworkInfo.class);
-                if (!b) {
-                    startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                }
-
-                boolean b1 = prefManager.getDeviceDB();
-                if (!b1) {
-                    prefManager.DeviceDB(true);
-                }
-
-
-                boolean token_service = prefManager.getTokenService();
-                if (!token_service) {
-                    prefManager.TokenService(true);
-                    // Service for Access token
-                    Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                    startService(serviceIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                }
-                views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
-
-                DeviceInfo mInsert = new DeviceInfo(
-                    deviceCurrentState,
-                    mAppWidgetId,
-                    id,
-                    deviceName.getText().toString(),
-                    deviceSupportedMethods,
-                    switchStatus);
-                db.addUser(mInsert);
-
-                NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
-
-
-                boolean web_service = prefManager.getWebService();
-                if (!web_service) {
-                    prefManager.websocketService(true);
-                    // Service for Access token
-                    Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
-                    startService(serviceIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                }
-
-
-                Intent resultValue = new Intent();
-                // Set the results as expected from a 'configure activity'.
-                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                setResult(RESULT_OK, resultValue);
-                finish();
-            }
-        });
-
-        btSelectDevice = (View) findViewById(R.id.btSelectDevice);
-        btSelectDevice.setOnClickListener(new View.OnClickListener() {
-            public int checkedItem;
-            AlertDialog ad;
-            public void onClick(View view) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
-                        ,R.style.MaterialThemeDialog);
-                builder.setTitle(R.string.pick_device)
-                        .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                deviceName.setText(deviceNameList[which]);
-
-                                Map<String, Object> info = DeviceInfoMap.get(deviceNameList[which]);
-
-                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceCurrentState = info.get("state").toString();
-                                id = Integer.parseInt(info.get("id").toString());
-
-                                ad.dismiss();
-                            }
-                        });
-                ad = builder.show();
-            }
-        });
-        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-        textTest.setTypeface(titleFont);
-        chooseSetting.setTypeface(titleFont);
-        deviceName.setTypeface(subtitleFont);
-        deviceHint.setTypeface(subtitleFont);
-        deviceText.setTypeface(subtitleFont);
-        settingText.setTypeface(subtitleFont);
-        btAdd.setTypeface(subtitleFont);
-        btnCan.setTypeface(subtitleFont);
-        switch_background.setTypeface(subtitleFont);
     }
 
     void createDeviceApi() {
@@ -350,13 +370,16 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 }
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                            updateUI();
                         } catch (JSONException e) {
+                            updateUI();
                             e.printStackTrace();
                         };
                     }
 
                     @Override
                     public void onError(ANError anError) {
+                        updateUI();
                     }
                 });
     }

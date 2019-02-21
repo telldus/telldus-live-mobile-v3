@@ -70,194 +70,203 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_weight="0.79"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
-
             <TextView
+                android:id="@+id/loadingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Sensor:"
-                android:textSize="16sp"
-                android:textColor="@color/darkGray"/>
-
+                android:text="Loading..."
+                android:textSize="22sp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center|center"
+                android:textColor="@color/orange"/>
             <LinearLayout
+                android:id="@+id/screenCover"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.38"
-                    android:background="@drawable/shape_left"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:padding="10dp"
-                        android:src="@drawable/sensor"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btSelectSensor"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.62"
-                    android:background="@drawable/shape_right"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/txtSensorName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Select sensor"
-                        android:textSize="20sp"
-                        android:textColor="@color/orange"/>
-
-                    <TextView
-                        android:id="@+id/txtSensorHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="Tap to select sensor"
-                        android:textSize="10sp"
-                        android:textColor="@color/darkGray"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Value to display:"
-                android:textSize="16sp"
-                android:textColor="@color/darkGray"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <LinearLayout
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.38"
-                    android:background="@drawable/shape_left"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/imgSensorType"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:padding="10dp"
-                        android:src="@drawable/temperature"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btSelectDisplayItem"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.62"
-                    android:background="@drawable/shape_right"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center">
-
-                    <TextView
-                        android:id="@+id/txtSensorDataName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Select data item"
-                        android:textSize="20sp"
-                        android:textColor="@color/orange"/>
-
-                    <TextView
-                        android:id="@+id/txtSensorDataHint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="Tap to change value to display"
-                        android:textSize="10sp"
-                        android:textColor="@color/darkGray"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Settings:"
-                android:layout_marginBottom="10dp"
-                android:textSize="16sp"
-                android:textColor="@color/darkGray"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/shape">
-
-                <Switch
-                    android:id="@+id/switch_background"
-                    android:layout_width="fill_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Transparent Background"/>
+                    android:paddingLeft="10dp"
+                    android:text="Sensor:"
+                    android:textSize="16sp"
+                    android:textColor="@color/darkGray"/>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="30dp"
-                android:gravity="center"
-                android:layout_gravity="center">
-
-                <Button
-                    android:id="@+id/btAdd"
-                    android:layout_width="220sp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/orangebutton"
-                    android:text="@string/confirm"/>
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
-                <Button
-                    android:layout_width="220sp"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:textColor="@color/white"
-                    android:background="@drawable/redbutton"
-                    android:text="CANCEL"/>
+                    <LinearLayout
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.38"
+                        android:background="@drawable/shape_left"
+                        android:gravity="center">
 
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:padding="10dp"
+                            android:src="@drawable/sensor"/>
 
-            <!--             <EditText
-                            android:id="@+id/etUrl"
-                            android:layout_width="match_parent"
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btSelectSensor"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.62"
+                        android:background="@drawable/shape_right"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/txtSensorName"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="URL"
-                            android:inputType="text"/> -->
+                            android:layout_marginTop="16dp"
+                            android:text="Select sensor"
+                            android:textSize="20sp"
+                            android:textColor="@color/orange"/>
+
+                        <TextView
+                            android:id="@+id/txtSensorHint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:text="Tap to select sensor"
+                            android:textSize="10sp"
+                            android:textColor="@color/darkGray"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="Value to display:"
+                    android:textSize="16sp"
+                    android:textColor="@color/darkGray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <LinearLayout
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.38"
+                        android:background="@drawable/shape_left"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/imgSensorType"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:padding="10dp"
+                            android:src="@drawable/temperature"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btSelectDisplayItem"
+                        android:layout_width="0dip"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.62"
+                        android:background="@drawable/shape_right"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center">
+
+                        <TextView
+                            android:id="@+id/txtSensorDataName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Select data item"
+                            android:textSize="20sp"
+                            android:textColor="@color/orange"/>
+
+                        <TextView
+                            android:id="@+id/txtSensorDataHint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:text="Tap to change value to display"
+                            android:textSize="10sp"
+                            android:textColor="@color/darkGray"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="Settings:"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16sp"
+                    android:textColor="@color/darkGray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/shape">
+
+                    <Switch
+                        android:id="@+id/switch_background"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Transparent Background"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="30dp"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+                    <Button
+                        android:id="@+id/btAdd"
+                        android:layout_width="220sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/orangebutton"
+                        android:text="@string/confirm"/>
+
+                    <Button
+                        android:layout_width="220sp"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/redbutton"
+                        android:text="CANCEL"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -43,14 +43,6 @@
                 android:layout_marginRight="3dp"
                 android:layout_weight="0.5">
 
-                <!--<TextView-->
-                <!--android:id="@+id/txtDeviceOn"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/ic_device_on"-->
-                <!--android:textColor="@color/orange"-->
-                <!--android:textSize="20sp"/>-->
-
                 <ImageView
                     android:id="@+id/iconOn"
                     android:layout_gravity="center"
@@ -74,14 +66,6 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/off_dark"
                     android:padding="8sp"/>
-
-                <!--<TextView-->
-                <!--android:id="@+id/txtDeviceOff"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:text="@string/ic_device_off"-->
-                <!--android:textColor="@color/orange"-->
-                <!--android:textSize="20sp"/>-->
 
             </LinearLayout>
 

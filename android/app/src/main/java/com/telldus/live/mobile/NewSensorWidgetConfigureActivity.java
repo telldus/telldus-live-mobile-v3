@@ -77,8 +77,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, button_cancel;
-    private View btSelectSensor, btSelectDisplayItem;
-    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor, testText, sensorText, settingText, valueText, tvIcon1, imgSensorType;
+    private View btSelectSensor, btSelectDisplayItem, screenCover;
+    private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
+    testText, sensorText, settingText, valueText, tvIcon1, imgSensorType, loadingText;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
     private ProgressDialog pDialog;
@@ -124,270 +125,281 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         createSensorApi();
 
         setResult(RESULT_CANCELED);
-
         setContentView(R.layout.activity_sensor_widget_configure);
 
-        iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
-        tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
-        imgSensorType = (TextView) findViewById(R.id.imgSensorType);
-        tvIcon1.setTypeface(iconFont);
+        updateUI();
+    }
 
-        widgetManager = AppWidgetManager.getInstance(this);
-        views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
-        // Find the widget id from the intent.
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
-        if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-            return;
-        }
-        sensorName = (TextView) findViewById(R.id.txtSensorName);
-        sensorHint = (TextView) findViewById(R.id.txtSensorHint);
-        sensorDataName = (TextView) findViewById(R.id.txtSensorDataName);
-        sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
-
-        btAdd = (Button) findViewById(R.id.btAdd);
-        button_cancel = (Button) findViewById(R.id.button_cancel);
-        switch_background = (Switch) findViewById(R.id.switch_background);
-        chooseSettingSensor = (TextView) findViewById(R.id.chooseSettingSensor);
-        testText = (TextView) findViewById(R.id.testTextSensor);
-        settingText = (TextView) findViewById(R.id.settingText);
-        valueText = (TextView) findViewById(R.id.valueText);
-        sensorText = (TextView) findViewById(R.id.sensorText);
-
-
-
+    public void updateUI() {
         mSensorBack = (RelativeLayout )findViewById(R.id.sensorBack);
-
-        Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-        Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-        testText.setTypeface(titleFont);
-        chooseSettingSensor.setTypeface(titleFont);
-        sensorName.setTypeface(subtitleFont);
-        sensorDataName.setTypeface(subtitleFont);
-        sensorHint.setTypeface(subtitleFont);
-        sensorDataHint.setTypeface(subtitleFont);
-        settingText.setTypeface(subtitleFont);
-        valueText.setTypeface(subtitleFont);
-        sensorText.setTypeface(subtitleFont);
-        btAdd.setTypeface(subtitleFont);
-        button_cancel.setTypeface(subtitleFont);
-        switch_background.setTypeface(subtitleFont);
-
         mSensorBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        button_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
+        loadingText = (TextView)findViewById(R.id.loadingText);
+        screenCover = (View)findViewById(R.id.screenCover);
+        if (sensorNameList == null) {
+            loadingText.setVisibility(View.VISIBLE);
+            screenCover.setVisibility(View.GONE);
+        } else {
+            loadingText.setVisibility(View.GONE);
+            screenCover.setVisibility(View.VISIBLE);
+
+            iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+            tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
+            imgSensorType = (TextView) findViewById(R.id.imgSensorType);
+            tvIcon1.setTypeface(iconFont);
+
+            widgetManager = AppWidgetManager.getInstance(this);
+            views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
+            // Find the widget id from the intent.
+            Intent intent = getIntent();
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            }
+            if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
                 finish();
+                return;
             }
-        });
+            sensorName = (TextView) findViewById(R.id.txtSensorName);
+            sensorHint = (TextView) findViewById(R.id.txtSensorHint);
+            sensorDataName = (TextView) findViewById(R.id.txtSensorDataName);
+            sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
 
-        switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // do something, the isChecked will be
-                // true if the switch is in the On position
-                if (isChecked) {
-                    transparent="true";
-                } else {
-                    transparent="false";
+            btAdd = (Button) findViewById(R.id.btAdd);
+            button_cancel = (Button) findViewById(R.id.button_cancel);
+            switch_background = (Switch) findViewById(R.id.switch_background);
+            chooseSettingSensor = (TextView) findViewById(R.id.chooseSettingSensor);
+            testText = (TextView) findViewById(R.id.testTextSensor);
+            settingText = (TextView) findViewById(R.id.settingText);
+            valueText = (TextView) findViewById(R.id.valueText);
+            sensorText = (TextView) findViewById(R.id.sensorText);
+
+            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+            testText.setTypeface(titleFont);
+            chooseSettingSensor.setTypeface(titleFont);
+            sensorName.setTypeface(subtitleFont);
+            sensorDataName.setTypeface(subtitleFont);
+            sensorHint.setTypeface(subtitleFont);
+            sensorDataHint.setTypeface(subtitleFont);
+            settingText.setTypeface(subtitleFont);
+            valueText.setTypeface(subtitleFont);
+            sensorText.setTypeface(subtitleFont);
+            btAdd.setTypeface(subtitleFont);
+            button_cancel.setTypeface(subtitleFont);
+            switch_background.setTypeface(subtitleFont);
+
+            button_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
                 }
-            }
-        });
+            });
 
-        btAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (id == 0) {
-                    Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any sensor. Please select a sensor to add as widget.",Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP , 0, 0);
-                    toast.show();
-                    return;
+            switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    // do something, the isChecked will be
+                    // true if the switch is in the On position
+                    if (isChecked) {
+                        transparent="true";
+                    } else {
+                        transparent="false";
+                    }
                 }
-                if (senValue == null) {
-                    Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any value to display for sensor. Please select a value from the list.",Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.TOP , 0, 0);
-                    toast.show();
-                    return;
+            });
+
+            btAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (id == 0) {
+                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any sensor. Please select a sensor to add as widget.",Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP , 0, 0);
+                        toast.show();
+                        return;
+                    }
+                    if (senValue == null) {
+                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any value to display for sensor. Please select a value from the list.",Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.TOP , 0, 0);
+                        toast.show();
+                        return;
+                    }
+
+                    boolean token_service = prefManager.getTokenService();
+                    boolean b = isMyServiceRunning(NetworkInfo.class);
+                    if (!b) {
+                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                    }
+
+                    boolean b1 = prefManager.getSensorDB();
+                    if (!b1) {
+                        prefManager.sensorDB(true);
+                    }
+
+                    if (!token_service) {
+                        prefManager.TokenService(true);
+                        // Service for Access token
+                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
+                        startService(serviceIntent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                    }
+
+                    SensorInfo mSensorInfo = new SensorInfo(
+                        mAppWidgetId,
+                        sensorName.getText().toString(),
+                        sensorDataName.getText().toString(),
+                        id,
+                        senValue,
+                        senUnit,
+                        senIcon,
+                        lastUp,
+                        transparent);
+                    database.addSensor(mSensorInfo);
+                    views.setTextViewText(R.id.txtSensorType, sensorName.getText());
+
+                    NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+
+                    boolean web_service = prefManager.getWebService();
+                    if (!web_service) {
+                        prefManager.websocketService(true);
+                        // Service for Access token
+                        Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
+                        startService(serviceIntent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
+                    }
+
+                    Intent resultValue = new Intent();
+                    // Set the results as expected from a 'configure activity'.
+                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                    setResult(RESULT_OK, resultValue);
+                    finish();
                 }
+            });
+            btSelectSensor = (View) findViewById(R.id.btSelectSensor);
+            btSelectSensor.setOnClickListener(new View.OnClickListener() {
+                public int checkedItem;
+                AlertDialog ad;
 
-                boolean token_service = prefManager.getTokenService();
-                boolean b = isMyServiceRunning(NetworkInfo.class);
-                if (!b) {
-                    startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                }
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                    builder.setTitle(R.string.pick_sensor)
+                        .setSingleChoiceItems(sensorNameList, checkedItem, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                boolean b1 = prefManager.getSensorDB();
-                if (!b1) {
-                    prefManager.sensorDB(true);
-                }
+                                //refersh datatype
+                                sensorDataName.setText("Select value");
+                                sensorDataHint.setText("Tap to change value to display");
 
-                if (!token_service) {
-                    prefManager.TokenService(true);
-                    // Service for Access token
-                    Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                    startService(serviceIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                }
+                                imgSensorType.setText("");
+                                imgSensorType.setTypeface(iconFont);
+                                imgSensorType.setBackgroundResource(R.drawable.penscg);
 
-                SensorInfo mSensorInfo = new SensorInfo(
-                    mAppWidgetId,
-                    sensorName.getText().toString(),
-                    sensorDataName.getText().toString(),
-                    id,
-                    senValue,
-                    senUnit,
-                    senIcon,
-                    lastUp,
-                    transparent);
-                database.addSensor(mSensorInfo);
-                views.setTextViewText(R.id.txtSensorType, sensorName.getText());
+                                sensorName.setText(sensorNameList[which]);
 
-                NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                                // sensorHint.setText(null);
+                                id = DeviceID.get(sensorNameList[which]);
+                                String str = String.valueOf(sensorNameList[which]);
 
-                boolean web_service = prefManager.getWebService();
-                if (!web_service) {
-                    prefManager.websocketService(true);
-                    // Service for Access token
-                    Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
-                    startService(serviceIntent);
-                } else {
-                    Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                }
+                                String name = null;
+                                String scale = null;
+                                String value = null;
+                                List<String> sensorValue = new ArrayList<String>();
+                                searchObject = new JSONObject();
+                                SensorsUtilities sc = new SensorsUtilities();
 
-                Intent resultValue = new Intent();
-                // Set the results as expected from a 'configure activity'.
-                resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-                setResult(RESULT_OK, resultValue);
-                finish();
-            }
-        });
-        btSelectSensor = (View) findViewById(R.id.btSelectSensor);
-        btSelectSensor.setOnClickListener(new View.OnClickListener() {
-            public int checkedItem;
-            AlertDialog ad;
+                                for (int i = 0; i < JsonsensorList.length(); i++) {
+                                    try {
+                                        JSONObject currObject = JsonsensorList.getJSONObject(i);
+                                        String sensorname = currObject.getString("name");
+                                        if (sensorname.equals(str)) {
+                                            searchObject = currObject;
+                                            JSONArray SensorData = searchObject.getJSONArray("data");
+                                            for (int j = 0; j < SensorData.length(); j++) {
+                                                JSONObject currData = SensorData.getJSONObject(j);
 
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setTitle(R.string.pick_sensor)
-                    .setSingleChoiceItems(sensorNameList, checkedItem, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                                                lastUp = currData.optString("lastUpdated");
+                                                name = currData.optString("name");
+                                                scale = currData.optString("scale");
+                                                value = currData.optString("value");
 
-                            //refersh datatype
-                            sensorDataName.setText("Select value");
-                            sensorDataHint.setText("Tap to change value to display");
-
-                            imgSensorType.setText("");
-                            imgSensorType.setTypeface(iconFont);
-                            imgSensorType.setBackgroundResource(R.drawable.penscg);
-
-                            sensorName.setText(sensorNameList[which]);
-
-                            // sensorHint.setText(null);
-                            id = DeviceID.get(sensorNameList[which]);
-                            String str = String.valueOf(sensorNameList[which]);
-
-                            String name = null;
-                            String scale = null;
-                            String value = null;
-                            List<String> sensorValue = new ArrayList<String>();
-                            searchObject = new JSONObject();
-                            SensorsUtilities sc = new SensorsUtilities();
-
-                            for (int i = 0; i < JsonsensorList.length(); i++) {
-                                try {
-                                    JSONObject currObject = JsonsensorList.getJSONObject(i);
-                                    String sensorname = currObject.getString("name");
-                                    if (sensorname.equals(str)) {
-                                        searchObject = currObject;
-                                        JSONArray SensorData = searchObject.getJSONArray("data");
-                                        for (int j = 0; j < SensorData.length(); j++) {
-                                            JSONObject currData = SensorData.getJSONObject(j);
-
-                                            lastUp = currData.optString("lastUpdated");
-                                            name = currData.optString("name");
-                                            scale = currData.optString("scale");
-                                            value = currData.optString("value");
-
-                                            Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
-                                            Object label = info.get("label").toString();
-                                            Object unit = info.get("unit").toString();
-                                            String labelUnit = label+"("+unit+")";
-                                            sensorValue.add(labelUnit);
-                                            sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
+                                                Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                                Object label = info.get("label").toString();
+                                                Object unit = info.get("unit").toString();
+                                                String labelUnit = label+"("+unit+")";
+                                                sensorValue.add(labelUnit);
+                                                sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception e) {
-                                }
-                            }
-                            ad.dismiss();
-                        }
-                    });
-                ad = builder.show();
-            }
-        });
-        btSelectDisplayItem = (View) findViewById(R.id.btSelectDisplayItem);
-        btSelectDisplayItem.setOnClickListener(new View.OnClickListener() {
-            public int checkedItem;
-            AlertDialog ad1;
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setTitle(R.string.pick_sensor_data)
-                    .setSingleChoiceItems(sensorDataList, checkedItem, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            sensorDataName.setText(sensorDataList[i]);
-
-                            SensorsUtilities sc = new SensorsUtilities();
-
-                            try {
-                                String iconName = "";
-                                String chosenLabel = sensorDataList[i].toString();
-                                JSONArray SensorData = searchObject.getJSONArray("data");
-                                for (int j = 0; j < SensorData.length(); j++) {
-                                    JSONObject currData = SensorData.getJSONObject(j);
-
-                                    String lastUp = currData.optString("lastUpdated");
-                                    String name = currData.optString("name");
-                                    String scale = currData.optString("scale");
-                                    String value = currData.optString("value");
-
-                                    Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
-                                    Object label = info.get("label").toString();
-                                    Object unit = info.get("unit").toString();
-                                    String labelUnit = label+"("+unit+")";
-                                    if (labelUnit.trim().equalsIgnoreCase(chosenLabel.trim())) {
-                                        senIcon = info.get("icon").toString();
-                                        senValue = info.get("value").toString();
-                                        senUnit = String.valueOf(unit);
+                                    catch (Exception e) {
                                     }
                                 }
-                                imgSensorType.setText(senIcon);
-                                imgSensorType.setTextSize(50f);
-                                imgSensorType.setBackground(null);
-                                imgSensorType.setTypeface(iconFont);
-
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
+                                ad.dismiss();
                             }
-                            ad1.dismiss();
-                        }
-                    });
-                ad1 = builder.show();
-            }
-        });
+                        });
+                    ad = builder.show();
+                }
+            });
+            btSelectDisplayItem = (View) findViewById(R.id.btSelectDisplayItem);
+            btSelectDisplayItem.setOnClickListener(new View.OnClickListener() {
+                public int checkedItem;
+                AlertDialog ad1;
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                    builder.setTitle(R.string.pick_sensor_data)
+                        .setSingleChoiceItems(sensorDataList, checkedItem, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                sensorDataName.setText(sensorDataList[i]);
+
+                                SensorsUtilities sc = new SensorsUtilities();
+
+                                try {
+                                    String iconName = "";
+                                    String chosenLabel = sensorDataList[i].toString();
+                                    JSONArray SensorData = searchObject.getJSONArray("data");
+                                    for (int j = 0; j < SensorData.length(); j++) {
+                                        JSONObject currData = SensorData.getJSONObject(j);
+
+                                        String lastUp = currData.optString("lastUpdated");
+                                        String name = currData.optString("name");
+                                        String scale = currData.optString("scale");
+                                        String value = currData.optString("value");
+
+                                        Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                        Object label = info.get("label").toString();
+                                        Object unit = info.get("unit").toString();
+                                        String labelUnit = label+"("+unit+")";
+                                        if (labelUnit.trim().equalsIgnoreCase(chosenLabel.trim())) {
+                                            senIcon = info.get("icon").toString();
+                                            senValue = info.get("value").toString();
+                                            senUnit = String.valueOf(unit);
+                                        }
+                                    }
+                                    imgSensorType.setText(senIcon);
+                                    imgSensorType.setTextSize(50f);
+                                    imgSensorType.setBackground(null);
+                                    imgSensorType.setTypeface(iconFont);
+
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                }
+                                ad1.dismiss();
+                            }
+                        });
+                    ad1 = builder.show();
+                }
+            });
+        }
     }
 
     public static Bitmap buildUpdate(String time, Context context) {
@@ -433,12 +445,15 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             }
                         }
                         sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                        updateUI();
                     } catch (JSONException e) {
+                        updateUI();
                         e.printStackTrace();
                     }
                 }
                 @Override
                 public void onError(ANError anError) {
+                    updateUI();
                 }
             });
     }

@@ -235,15 +235,14 @@ public class MyService extends Service {
                                 boolean b = db.updateActionDevice(method,deviceID);
 
                                 if (b) {
-                                  int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
-                                  AppWidgetManager onOffWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+                                    int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
+                                    AppWidgetManager onOffWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
 
-                                  for (int id : widgetIDsOnOff) {
-                                      AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
-                                      NewOnOffWidget.updateAppWidget(getApplicationContext(),onOffWidgetManager,id);
-                                  }
+                                    for (int id : widgetIDsOnOff) {
+                                        AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
+                                        NewOnOffWidget.updateAppWidget(getApplicationContext(),onOffWidgetManager,id);
+                                    }
                                 }
-
                             }
                             else {
                                 jsonDataObject = jsonObject.getJSONObject("data");
