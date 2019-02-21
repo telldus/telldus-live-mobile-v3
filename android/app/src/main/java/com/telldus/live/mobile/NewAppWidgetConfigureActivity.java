@@ -82,7 +82,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     Map<String, Map> DeviceInfoMap = new HashMap<String, Map>();
     int id;
     Integer deviceSupportedMethods = 0;
-    String deviceCurrentState;
+    String deviceCurrentState, deviceTypeCurrent;
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -148,6 +148,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
         } else {
             views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
             widgetManager = AppWidgetManager.getInstance(this);
+
+            loadingText.setVisibility(View.GONE);
+            screenCover.setVisibility(View.VISIBLE);
 
             textTest = (TextView)findViewById(R.id.testText);
             chooseSetting = (TextView)findViewById(R.id.chooseSetting);
@@ -236,6 +239,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         id,
                         deviceName.getText().toString(),
                         deviceSupportedMethods,
+                        deviceTypeCurrent,
                         switchStatus);
                     db.addUser(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -263,6 +267,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
             btSelectDevice.setOnClickListener(new View.OnClickListener() {
                 public int checkedItem;
                 AlertDialog ad;
+                DevicesUtilities deviceUtils = new DevicesUtilities();
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.pick_device)
@@ -275,6 +280,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
                                 deviceCurrentState = info.get("state").toString();
                                 id = Integer.parseInt(info.get("id").toString());
+
+                                deviceTypeCurrent = info.get("deviceType").toString();
+                                String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
+                                tvIcon1.setText(deviceIcon);
 
                                 ad.dismiss();
                             }
@@ -293,8 +302,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
 
     void createDeviceApi() {
-    accessToken=prefManager.getAccess();
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1")
+    accessToken = prefManager.getAccess();
+        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room")
             .addHeaders("Content-Type", "application/json")
             .addHeaders("Accpet", "application/json")
             .addHeaders("Authorization", "Bearer " + accessToken)
@@ -315,6 +324,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                             String name = curObj.getString("name");
                             stateID = curObj.getInt("state");
                             Integer methods = curObj.getInt("methods");
+                            String deviceType = curObj.getString("deviceType");
 
                             Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                             Integer sizeSuppMeth = supportedMethods.size();
@@ -332,16 +342,20 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 info.put("state", String.valueOf(stateID));
                                 info.put("methods", methods);
                                 info.put("id", id);
+                                info.put("deviceType", deviceType);
                                 DeviceInfoMap.put(name, info);
                             }
                         }
                         deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                        updateUI();
                     } catch (JSONException e) {
+                        updateUI();
                         e.printStackTrace();
                     };
                 }
                 @Override
                 public void onError(ANError anError) {
+                    updateUI();
                 }
               });
     }

@@ -43,6 +43,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String WIDGET_NAME = "device_name";
     public static final String WIDGET_ACTION = "widget_action";
     public static final String DEVICE_METHODS = "methods";
+    public static final String DEVICE_TYPE = "deviceType";
     public static final String TRANSPARENT = "transparent";
 
 
@@ -67,7 +68,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " +
                 TABLE_REGISTER + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
-                + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT," + DEVICE_METHODS + " INTEGER," + TRANSPARENT + " TEXT" + ")";
+                + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT," + DEVICE_METHODS
+                + " INTEGER," +  DEVICE_TYPE + " TEXT," + TRANSPARENT + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
@@ -94,6 +96,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(WIDGET_NAME,mDeviceInfo.getDeviceName());
         values.put(WIDGET_ACTION,mDeviceInfo.getState());
         values.put(DEVICE_METHODS,mDeviceInfo.getDeviceMethods());
+        values.put(DEVICE_TYPE,mDeviceInfo.getDeviceType());
         values.put(TRANSPARENT,mDeviceInfo.getTransparent());
 
 
@@ -141,7 +144,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setWidgetID(cursor.getInt(0));
             r.setState(cursor.getString(3));
             r.setDeviceMethods(cursor.getInt(4));
-            r.setTransparent(cursor.getString(5));
+            r.setDeviceType(cursor.getString(5));
+            r.setTransparent(cursor.getString(6));
 
             cursor.close();
         } else {
@@ -252,7 +256,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
             cursor.moveToFirst();
             r.setDeviceID(cursor.getInt(1));
             r.setState(cursor.getString(3));
-
+            r.setDeviceMethods(cursor.getInt(4));
+            r.setDeviceType(cursor.getString(5));
 
             cursor.close();
         } else {
