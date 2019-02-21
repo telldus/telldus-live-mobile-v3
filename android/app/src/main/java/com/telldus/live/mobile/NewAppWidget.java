@@ -169,50 +169,43 @@ public class NewAppWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
+        Bundle extras = intent.getExtras();
+        if (extras == null) {
+            return;
+        }
+
+        int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (wigetID == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            return;
+        }
+
         MyDBHandler db = new MyDBHandler(context);
+        DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+        if (id == null) {
+            return;
+        }
 
         if (ACTION_BELL.equals(intent.getAction())) {
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),4,wigetID,db,"Bell");
-
+            createDeviceApi(context, id.getDeviceID(), 4, wigetID, db, "Bell");
         }
         if (ACTION_UP.equals(intent.getAction())) {
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),128,wigetID,db,"UDS");
+            createDeviceApi(context, id.getDeviceID(), 128, wigetID, db, "UDS");
         }
         if (ACTION_DOWN.equals(intent.getAction())) {
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),256,wigetID,db,"UDS");
+            createDeviceApi(context, id.getDeviceID(), 256, wigetID, db, "UDS");
         }
         if (ACTION_STOP.equals(intent.getAction())) {
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
-            createDeviceApi(context,id.getDeviceID(),512,wigetID,db,"UDS");
+            createDeviceApi(context, id.getDeviceID(), 512, wigetID, db, "UDS");
         }
         if (DIMMER_OFF.equals(intent.getAction())) {
             PrefManager prefManager = new PrefManager(context);
             String status = prefManager.getDimmer();
             String  accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
+            createAPIDIMMER(id.getDeviceID(), 2, accessToken, "0", wigetID, context, prefManager);
 
-            createAPIDIMMER(id.getDeviceID(),2,accessToken,"0",wigetID,context,prefManager);
-
-            Toast.makeText(context,"Dimmer-0",Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Dimmer-0", Toast.LENGTH_LONG).show();
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
 
@@ -241,11 +234,8 @@ public class NewAppWidget extends AppWidgetProvider {
             PrefManager prefManager = new PrefManager(context);
             String status = prefManager.getDimmer();
             String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
             createAPIDIMMER(id.getDeviceID(), 25, accessToken, "25", wigetID, context, prefManager);
 
             Toast.makeText(context,"Dimmer-25",Toast.LENGTH_LONG).show();
@@ -274,11 +264,8 @@ public class NewAppWidget extends AppWidgetProvider {
             PrefManager prefManager = new PrefManager(context);
             String status = prefManager.getDimmer();
             String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
             createAPIDIMMER(id.getDeviceID(), 50, accessToken, "50", wigetID, context, prefManager);
 
             Toast.makeText(context,"Dimmer-50",Toast.LENGTH_LONG).show();
@@ -307,11 +294,8 @@ public class NewAppWidget extends AppWidgetProvider {
             PrefManager prefManager = new PrefManager(context);
             String status = prefManager.getDimmer();
             String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
             createAPIDIMMER(id.getDeviceID(), 75, accessToken, "75", wigetID, context, prefManager);
 
             Toast.makeText(context,"Dimmer-75",Toast.LENGTH_LONG).show();
@@ -340,11 +324,8 @@ public class NewAppWidget extends AppWidgetProvider {
             PrefManager prefManager = new PrefManager(context);
             String status = prefManager.getDimmer();
             String accessToken = prefManager.getAccess();
-            Bundle extras = intent.getExtras();
-            int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
 
-            DeviceInfo id = db.getSinlgeDeviceID(wigetID);
             createAPIDIMMER(id.getDeviceID(), 1, accessToken, "1", wigetID, context, prefManager);
 
             Toast.makeText(context,"Dimmer-100",Toast.LENGTH_LONG).show();

@@ -204,16 +204,24 @@ public class NewOnOffWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
 
         Bundle extras = intent.getExtras();
+        if (extras == null) {
+            return;
+        }
+
         int widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (widgetID == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            return;
+        }
 
         MyDBHandler db = new MyDBHandler(context);
         DeviceInfo widgetInfo = db.findUser(widgetID);
+        if (widgetInfo == null) {
+            return;
+        }
+
         Integer methods = widgetInfo.getDeviceMethods();
 
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
-            String accessToken = "";
-            String expiresIn;
-            String refreshToken;
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetID);
 
@@ -236,6 +244,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
         }
     }
+
     void createDeviceApi(final Context ctx, int deviceid, int method, final int widgetID, final MyDBHandler db, final String action) {
         PrefManager prefManager = new PrefManager(ctx);
         String  accessToken = prefManager.getAccess();
