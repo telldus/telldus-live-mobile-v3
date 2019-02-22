@@ -52,8 +52,9 @@
 
                 <LinearLayout
                     android:id="@+id/offLinear"
-                    android:layout_width="54dp"
+                    android:layout_width="110dp"
                     android:layout_height="40sp"
+                    android:layout_weight="0.5"
                     android:layout_gravity="center|center">
                     <TextView
                         android:id="@+id/iconOff"
@@ -68,8 +69,9 @@
 
                 <LinearLayout
                     android:id="@+id/onLayout"
-                    android:layout_width="54dp"
+                    android:layout_width="110dp"
                     android:layout_height="40sp"
+                    android:layout_weight="0.5"
                     android:layout_gravity="center|center">
                     <TextView
                         android:id="@+id/iconOn"

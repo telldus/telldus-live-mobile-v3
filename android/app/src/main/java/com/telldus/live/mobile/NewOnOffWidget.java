@@ -83,14 +83,23 @@ public class NewOnOffWidget extends AppWidgetProvider {
             Integer methods = widgetID.getDeviceMethods();
             String deviceType = widgetID.getDeviceType();
 
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
-
-            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
-            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
-
             DevicesUtilities deviceUtils = new DevicesUtilities();
             Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
             Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
+
+            Integer buttonsCount = supportedMethods.size();
+            Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
+            if (hasLearn) {
+                buttonsCount = buttonsCount - 1;
+            }
+
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
+            if (buttonsCount < 2) {
+                views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget_one);
+            }
+
+            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
+            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
             String onActionIcon = actionIconSet.get("TURNON");
             String offActionIcon = actionIconSet.get("TURNOFF");
@@ -143,9 +152,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.onLayout, "setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.bellWidget, "setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.updownarrowwidget, "setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.dimmerWidget, "setBackgroundColor", Color.TRANSPARENT);
             }
 
             views.setTextViewText(R.id.txtWidgetTitle, widgetText);
