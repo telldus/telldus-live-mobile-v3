@@ -88,6 +88,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 	toggleOne: () => void;
 	toggleTwo: () => void;
 	onPressToggleView: () => void;
+	onPressResetChartView: () => void;
+	getLinearChartRef: (any) => void;
 	_orientationDidChange: (string) => void;
 	onRequestClose: () => void;
 
@@ -103,12 +105,16 @@ class SensorHistoryLineChart extends View<Props, State> {
 			isLoading: false,
 			isUpdating: false,
 		};
+
+		this.linearChartRef = undefined;
 		this.toggleOne = this.toggleOne.bind(this);
 		this.toggleTwo = this.toggleTwo.bind(this);
 		this._orientationDidChange = this._orientationDidChange.bind(this);
 		this.onRequestClose = this.onRequestClose.bind(this);
 
 		this.onPressToggleView = this.onPressToggleView.bind(this);
+		this.onPressResetChartView = this.onPressResetChartView.bind(this);
+		this.getLinearChartRef = this.getLinearChartRef.bind(this);
 		Orientation.addOrientationListener(this._orientationDidChange);
 	}
 
@@ -172,7 +178,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			onToggleChartData({ showTwo: !showTwo });
 		} else if (!showOne && !showTwo) {
 			onToggleChartData({ showTwo: true });
-		} 
+		}
 	}
 
 	toggleOne() {
@@ -214,6 +220,14 @@ class SensorHistoryLineChart extends View<Props, State> {
 				Orientation.unlockAllOrientations();
 			}
 		});
+	}
+
+	getLinearChartRef(ref: any) {
+		this.linearChartRef = ref;
+	}
+
+	onPressResetChartView() {
+		this.linearChartRef && this.linearChartRef.resetZoomDomainData();
 	}
 
 	setFullscreenState(show: boolean, force: boolean = false, isLoading: boolean, orientation?: string = this.state.orientation) {
@@ -372,6 +386,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 					legendData={legendData}
 					appLayout={appLayout}
 					fullscreen={show}
+					onPressResetChartView={this.onPressResetChartView}
 					onPressToggleView={this.onPressToggleView} />
 				{isLoading || isChartLoading ?
 					<View style={{ width: chartWidth, height: chartHeight }}>
@@ -381,6 +396,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 					<View style={{ flex: 0 }}>
 						{graphView === 'overview' ?
 							<LineChart
+								ref={this.getLinearChartRef}
 								{...chartCommonProps} />
 							:
 							<LineChartDetailed

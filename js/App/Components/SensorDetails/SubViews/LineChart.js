@@ -37,6 +37,7 @@ import { View } from '../../../../BaseComponents';
 
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
+import _ from 'lodash';
 
 type Props = {
 	chartDataOne: Array<Object>,
@@ -62,33 +63,47 @@ type DefaultProps = {
 	smoothing: boolean,
 };
 
-class LineChart extends View<Props, null> {
-props: Props;
-static defaultProps: DefaultProps = {
-	showOne: true,
-	showTwo: true,
-	smoothing: false,
+type State = {
+	zoomDomain: Object,
 };
 
-getY: (Object) => number;
-getX: (Object) => number;
-formatXTick: (number) => string;
-renderAxis: (Array<Object>, number, Object) => Object;
+class LineChart extends View<Props, null> {
+	props: Props;
+	state: State;
+	static defaultProps: DefaultProps = {
+		showOne: true,
+		showTwo: true,
+		smoothing: false,
+	};
+
+	getY: (Object) => number;
+	getX: (Object) => number;
+	formatXTick: (number) => string;
+	onZoomDomainChange: (Object) => void;
+	resetZoomDomainData: () => void;
+	getEntireDomain: () => Object;
+	renderAxis: (Array<Object>, number, Object) => Object;
 renderLine: (Array<Object>, number, Object) => Object;
 
 constructor(props: Props) {
 	super(props);
 
+	this.state = {
+		zoomDomain: {},
+	};
 	this.getY = this.getY.bind(this);
 	this.getX = this.getX.bind(this);
 	this.formatXTick = this.formatXTick.bind(this);
 	this.renderAxis = this.renderAxis.bind(this);
 	this.renderLine = this.renderLine.bind(this);
+	this.onZoomDomainChange = this.onZoomDomainChange.bind(this);
+	this.resetZoomDomainData = this.resetZoomDomainData.bind(this);
+	this.getEntireDomain = this.getEntireDomain.bind(this);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-	const propsChange = shouldUpdate( this.props, nextProps, [
+	const propsChange = shouldUpdate(this.props, nextProps, [
 		'showOne', 'showTwo', 'smoothing', 'fullscreen',
 	]);
 	if (propsChange) {
@@ -118,7 +133,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	if (!isDataTwoEqual) {
 		return true;
 	}
-	return false;
+
+	return true;
 }
 
 getTickConfigX(): Object {
@@ -229,6 +245,25 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 	/>);
 }
 
+getEntireDomain(): null | Object {
+	const { chartDataOne, chartDataTwo } = this.props;
+	const data = Array.from(chartDataOne).concat(chartDataTwo);
+	return {
+		y: [_.minBy(data, (d: Object): number => d.value).value, _.maxBy(data, (d: Object): number => d.value).value],
+		x: [_.minBy(data, (d: Object): number => d.ts).ts - 0.9, _.maxBy(data, (d: Object): number => d.ts).ts - 0.9],
+	};
+}
+
+onZoomDomainChange(zoomDomainData: Object) {
+	this.setState({ zoomDomain: zoomDomainData });
+}
+
+resetZoomDomainData() {
+	this.setState({
+		zoomDomain: this.getEntireDomain(),
+	});
+}
+
 render(): Object | null {
 	const {
 		chartDataOne,
@@ -249,6 +284,8 @@ render(): Object | null {
 		...others
 	} = styles;
 
+	const { zoomDomain } = this.state;
+
 	const { ticks } = this.getTickConfigX();
 
 	const axisOne = this.renderAxis(chartDataOne, 0, styles);
@@ -264,7 +301,10 @@ render(): Object | null {
 			padding={chartPadding}
 			domainPadding={{ y: domainPadding, x: 20 }}
 			containerComponent={
-				<VictoryZoomContainer/>
+				<VictoryZoomContainer
+					onZoomDomainChange={this.onZoomDomainChange}
+					zoomDomain={zoomDomain}
+				/>
 			}
 		>
 			<VictoryAxis
