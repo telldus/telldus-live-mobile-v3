@@ -163,9 +163,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
             deviceText = (TextView)findViewById(R.id.deviceText);
             settingText = (TextView)findViewById(R.id.settingText);
 
-            Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
             tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
-            tvIcon1.setTypeface(iconFont);
+            tvIcon1.setText("device-alt");
 
             btnCan.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -135,7 +135,7 @@
                                 android:gravity="center"
                                 android:textColor="#FFFFFF"
                                 android:textSize="50sp"
-                                />
+                                android:fontFamily="@font/telldusicons"/>
                         </LinearLayout>
 
                         <RelativeLayout

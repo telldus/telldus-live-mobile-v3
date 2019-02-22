@@ -79,7 +79,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private Button btAdd, button_cancel;
     private View btSelectSensor, btSelectDisplayItem, screenCover;
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
-    testText, sensorText, settingText, valueText, tvIcon1, imgSensorType, loadingText;
+    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
     private ProgressDialog pDialog;
@@ -108,7 +108,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
     private String client_ID;
     private String client_secret;
-    Typeface iconFont;
 
 
 
@@ -148,10 +147,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             loadingText.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
-            iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
-            tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
+            imgSensorTypeEdit = (TextView) findViewById(R.id.imgSensorTypeEdit);
             imgSensorType = (TextView) findViewById(R.id.imgSensorType);
-            tvIcon1.setTypeface(iconFont);
+            imgSensorType.setVisibility(View.GONE);
 
             widgetManager = AppWidgetManager.getInstance(this);
             views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
@@ -298,10 +296,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 sensorDataName.setText("Select value");
                                 sensorDataHint.setText("Tap to change value to display");
 
-                                imgSensorType.setText("");
-                                imgSensorType.setTypeface(iconFont);
-                                imgSensorType.setBackgroundResource(R.drawable.penscg);
-
                                 sensorName.setText(sensorNameList[which]);
 
                                 // sensorHint.setText(null);
@@ -385,11 +379,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                             senUnit = String.valueOf(unit);
                                         }
                                     }
+                                    imgSensorTypeEdit.setVisibility(View.GONE);
                                     imgSensorType.setText(senIcon);
-                                    imgSensorType.setTextSize(50f);
-                                    imgSensorType.setBackground(null);
-                                    imgSensorType.setTypeface(iconFont);
-
+                                    imgSensorType.setVisibility(View.VISIBLE);
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                 }
@@ -400,24 +392,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 }
             });
         }
-    }
-
-    public static Bitmap buildUpdate(String time, Context context) {
-        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_8888);
-        Canvas myCanvas = new Canvas(myBitmap);
-        Paint paint = new Paint();
-
-        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
-
-        paint.setAntiAlias(true);
-        paint.setSubpixelText(true);
-        paint.setTypeface(iconFont);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(65);
-        paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(time, 80, 60, paint);
-        return myBitmap;
     }
     void createSensorApi() {
         accessToken = prefManager.getAccess();

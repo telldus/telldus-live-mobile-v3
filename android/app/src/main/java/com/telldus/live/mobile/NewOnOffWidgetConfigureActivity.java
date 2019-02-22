@@ -193,10 +193,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
             switch_background = (Switch)findViewById(R.id.switch_background);
 
-            Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
             tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
             tvIcon1.setText("device-alt");
-            tvIcon1.setTypeface(iconFont);
 
             switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

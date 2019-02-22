@@ -129,13 +129,14 @@
                             android:gravity="center">
 
                             <TextView
-                            android:id="@+id/tvIcon1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textColor="#FFFFFF"
-                            android:textSize="50sp"
-                            android:text="@string/device"/>
+                                android:id="@+id/tvIcon1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:textColor="#FFFFFF"
+                                android:textSize="50sp"
+                                android:text="@string/device"
+                                android:fontFamily="@font/telldusicons"/>
 
                         </LinearLayout>
 

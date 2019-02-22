@@ -126,7 +126,8 @@
                                 android:gravity="center"
                                 android:textSize="50sp"
                                 android:textColor="#FFFFFF"
-                                android:text="@string/sensor"/>
+                                android:text="@string/sensor"
+                                android:fontFamily="@font/telldusicons"/>
 
                         </LinearLayout>
 
@@ -188,12 +189,21 @@
                             android:gravity="center">
 
                             <TextView
-                                android:id="@+id/imgSensorType"
+                                android:id="@+id/imgSensorTypeEdit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:background="@drawable/penscg"
-                                android:textColor="#FFFFFF" />
+                                android:textColor="#FFFFFF"/>
+                            <TextView
+                                android:id="@+id/imgSensorType"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:textSize="50sp"
+                                android:textColor="#FFFFFF"
+                                android:fontFamily="@font/telldusicons"
+                                android:visibility="gone"/>
 
                         </LinearLayout>
 
