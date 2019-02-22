@@ -37,7 +37,7 @@ android:padding="@dimen/widget_margin">
             android:id="@+id/widget_content_cover">
             <TextView
                 android:id="@+id/bell"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:textSize="26sp"
                 android:gravity="center"
@@ -48,7 +48,7 @@ android:padding="@dimen/widget_margin">
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/uparrow"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:textSize="26sp"
                 android:gravity="center"
@@ -59,7 +59,7 @@ android:padding="@dimen/widget_margin">
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/downarrow"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:textSize="26sp"
                 android:gravity="center"
@@ -70,7 +70,7 @@ android:padding="@dimen/widget_margin">
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/stopicon"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:textSize="26sp"
                 android:gravity="center"
@@ -81,7 +81,7 @@ android:padding="@dimen/widget_margin">
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/iconOff"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:textSize="26sp"
                 android:gravity="center"
@@ -92,7 +92,7 @@ android:padding="@dimen/widget_margin">
                 android:visibility="gone"/>
             <FrameLayout
                 android:id="@+id/dimmer25Cover"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:layout_marginLeft="1dp"
                 android:layout_gravity="center|center"
@@ -124,7 +124,7 @@ android:padding="@dimen/widget_margin">
 
             <FrameLayout
                 android:id="@+id/dimmer50Cover"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:layout_marginLeft="1dp"
                 android:layout_gravity="center|center"
@@ -155,7 +155,7 @@ android:padding="@dimen/widget_margin">
 
             <FrameLayout
                 android:id="@+id/dimmer75Cover"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:layout_marginLeft="1dp"
                 android:layout_gravity="center|center"
@@ -185,7 +185,7 @@ android:padding="@dimen/widget_margin">
             </FrameLayout>
             <TextView
                 android:id="@+id/iconOn"
-                android:layout_width="33dp"
+                android:layout_width="41.5dp"
                 android:layout_height="40sp"
                 android:textSize="26sp"
                 android:gravity="center"

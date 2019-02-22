@@ -87,11 +87,6 @@ public class NewAppWidget extends AppWidgetProvider {
         String transparent;
         DeviceInfo widgetID = db.findUser(appWidgetId);
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-        views.setOnClickPendingIntent(R.id.iconOn,getPendingSelf(context,ACTION_ON,appWidgetId));
-        views.setOnClickPendingIntent(R.id.iconOff,getPendingSelf(context,ACTION_OFF,appWidgetId));
-
         if (widgetID != null) {
             widgetText = widgetID.getDeviceName();
             String state = widgetID.getState();
@@ -102,49 +97,148 @@ public class NewAppWidget extends AppWidgetProvider {
             Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
             Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
 
+            Integer buttonsCount = supportedMethods.size();
+
             String onActionIcon = actionIconSet.get("TURNON");
             String offActionIcon = actionIconSet.get("TURNOFF");
 
-            if (state.equals("4")) {
-                views.setViewVisibility(R.id.bellLinear,View.VISIBLE);
-                views.setOnClickPendingIntent(R.id.bell,getPendingBELL(context,ACTION_BELL,appWidgetId));
+            Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
+            Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
+            Boolean hasBell = ((supportedMethods.get("BELL") != null) && supportedMethods.get("BELL"));
+            Boolean hasDim = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
+            Boolean hasUp = ((supportedMethods.get("UP") != null) && supportedMethods.get("UP"));
+            Boolean hasDown = ((supportedMethods.get("DOWN") != null) && supportedMethods.get("DOWN"));
+            Boolean hasStop = ((supportedMethods.get("STOP") != null) && supportedMethods.get("STOP"));
+
+            Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
+            if (hasLearn) {
+                buttonsCount = buttonsCount - 1;
+            }
+            if (hasDim) {
+                buttonsCount = buttonsCount + 2;
             }
 
-            if (state.equals("128")|| state.equals("256")|| state.equals("512")) {
-                views.setViewVisibility(R.id.updownarrow,View.VISIBLE);
-                views.setOnClickPendingIntent(R.id.uparrow,getPendingBELL(context,ACTION_UP,appWidgetId));
-                views.setOnClickPendingIntent(R.id.downarrow,getPendingBELL(context,ACTION_DOWN,appWidgetId));
-                views.setOnClickPendingIntent(R.id.stopicon,getPendingBELL(context,ACTION_STOP,appWidgetId));
+            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+            if (buttonsCount == 3) {
+                views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget_three);
+            } else if (buttonsCount == 4) {
+                views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget_four);
             }
 
-            if (state.equals("16")) {
-                views.setViewVisibility(R.id.seekbarlayout, View.VISIBLE);
-                views.setImageViewBitmap(R.id.dimmerOn, buildUpdate(onActionIcon, context, "#E26901", 70, 70));
-                views.setImageViewBitmap(R.id.dimmerOff, buildUpdate(offActionIcon, context, "#1A365D", 70, 80));
-                views.setImageViewBitmap(R.id.dimmer25, buildUpdate("dim25", context, "#E26901", 60, 80));
-                views.setImageViewBitmap(R.id.dimmer75, buildUpdate("dim75", context, "#E26901", 60, 80));
-                views.setImageViewBitmap(R.id.dimmer50, buildUpdate("dim", context, "#E26901", 60, 80));
+            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
+            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
-                views.setOnClickPendingIntent(R.id.dimmerOff, getPendingBELL(context, DIMMER_OFF, appWidgetId));
-                views.setOnClickPendingIntent(R.id.dimmerOn, getPendingBELL(context, DIMMER_ON, appWidgetId));
+            if (hasBell) {
+                views.setViewVisibility(R.id.bell,View.VISIBLE);
+                views.setTextViewText(R.id.bell, "bell");
+                views.setInt(R.id.bell, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                views.setOnClickPendingIntent(R.id.bell, getPendingBELL(context,ACTION_BELL,appWidgetId));
+            }
+
+            if (hasOn) {
+                views.setViewVisibility(R.id.iconOn, View.VISIBLE);
+                views.setTextViewText(R.id.iconOn, onActionIcon);
+                views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
+                views.setInt(R.id.iconOn, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                views.setOnClickPendingIntent(R.id.iconOn, getPendingBELL(context, DIMMER_ON, appWidgetId));
+
+                if (state.equals("1")) {
+                    views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.iconOn, "setBackgroundColor", Color.parseColor("#E26901"));
+                }
+            }
+
+            if (hasOff) {
+                views.setViewVisibility(R.id.iconOff, View.VISIBLE);
+                views.setTextViewText(R.id.iconOff, offActionIcon);
+                views.setTextColor(R.id.iconOff, Color.parseColor("#1A365D"));
+                views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                views.setOnClickPendingIntent(R.id.iconOff, getPendingBELL(context, DIMMER_OFF, appWidgetId));
+
+                if (state.equals("2")) {
+                    views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#1A365D"));
+                }
+            }
+
+            if (hasDim) {
+                views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
+                views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
+                views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
+                views.setTextViewText(R.id.dimmer25, "dim25");
+                views.setTextViewText(R.id.dimmer50, "dim");
+                views.setTextViewText(R.id.dimmer75, "dim75");
+
+                views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
+                views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
+                views.setTextColor(R.id.dimmer75, Color.parseColor("#E26901"));
+
+                views.setTextColor(R.id.txtDimmer25, Color.parseColor("#E26901"));
+                views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
+                views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
+
+                views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
                 views.setOnClickPendingIntent(R.id.dimmer25, getPendingBELL(context, DIMMER_25, appWidgetId));
                 views.setOnClickPendingIntent(R.id.dimmer50, getPendingBELL(context, DIMMER_50, appWidgetId));
                 views.setOnClickPendingIntent(R.id.dimmer75, getPendingBELL(context, DIMMER_75, appWidgetId));
+                if (state.equals("16")) {
+                    // Calculate closest dim button value to that of current dim value, set background color(focus)
+                }
+            }
+
+            if (hasUp) {
+                views.setViewVisibility(R.id.uparrow, View.VISIBLE);
+                views.setTextViewText(R.id.uparrow, "up");
+                views.setTextColor(R.id.uparrow, Color.parseColor("#E26901"));
+                views.setInt(R.id.uparrow, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                views.setOnClickPendingIntent(R.id.uparrow, getPendingBELL(context, ACTION_UP, appWidgetId));
+                if (state.equals("128")) {
+                    views.setTextColor(R.id.uparrow, Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.uparrow, "setBackgroundColor", Color.parseColor("#E26901"));
+                }
+            }
+
+            if (hasDown) {
+                views.setViewVisibility(R.id.downarrow, View.VISIBLE);
+                views.setTextViewText(R.id.downarrow, "down");
+                views.setTextColor(R.id.downarrow, Color.parseColor("#E26901"));
+                views.setInt(R.id.downarrow, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                views.setOnClickPendingIntent(R.id.downarrow, getPendingBELL(context, ACTION_DOWN, appWidgetId));
+                if (state.equals("256")) {
+                    views.setTextColor(R.id.downarrow, Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.downarrow, "setBackgroundColor", Color.parseColor("#E26901"));
+                }
+            }
+
+            if (hasStop) {
+                views.setViewVisibility(R.id.stopicon, View.VISIBLE);
+                views.setTextViewText(R.id.stopicon, "stop");
+                views.setTextColor(R.id.stopicon, Color.parseColor("#1A365D"));
+                views.setInt(R.id.stopicon, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                views.setOnClickPendingIntent(R.id.stopicon, getPendingBELL(context, ACTION_STOP, appWidgetId));
+                if (state.equals("512")) {
+                    views.setTextColor(R.id.stopicon, Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.stopicon, "setBackgroundColor", Color.parseColor("#1A365D"));
+                }
             }
 
             transparent = widgetID.getTransparent();
             if (transparent.equals("true")) {
-                views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.bellWidget, "setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.updownarrowwidget, "setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.dimmerWidget, "setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
             }
+
+            views.setTextViewText(R.id.txtWidgetTitle, widgetText);
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-        views.setTextViewText(R.id.txtWidgetTitle, widgetText);
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     @Override
@@ -198,15 +292,6 @@ public class NewAppWidget extends AppWidgetProvider {
         }
 
         String state = id.getState();
-        String deviceType = id.getDeviceType();
-        Integer methods = id.getDeviceMethods();
-
-        DevicesUtilities deviceUtils = new DevicesUtilities();
-        Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
-        Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
-
-        String onActionIcon = actionIconSet.get("TURNON");
-        String offActionIcon = actionIconSet.get("TURNOFF");
 
         if (ACTION_BELL.equals(intent.getAction())) {
             createDeviceApi(context, id.getDeviceID(), 4, wigetID, db, "Bell");
@@ -221,156 +306,19 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(context, id.getDeviceID(), 512, wigetID, db, "UDS");
         }
         if (DIMMER_OFF.equals(intent.getAction())) {
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String  accessToken = prefManager.getAccess();
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
-            createAPIDIMMER(id.getDeviceID(), 2, accessToken, "0", wigetID, context, prefManager);
-
-            Toast.makeText(context, "Dimmer-0", Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-            remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#FFFFFF",70,80));
-
-            remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
-            remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
-
-            remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
-
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+            createAPIDIMMER(id.getDeviceID(), 2, "0", wigetID, context);
         }
         if (DIMMER_25.equals(intent.getAction())) {
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
-
-            createAPIDIMMER(id.getDeviceID(), 25, accessToken, "25", wigetID, context, prefManager);
-
-            Toast.makeText(context,"Dimmer-25",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-            remoteViews.setInt(R.id.dimmer25,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#FFFFFF",60,80));
-
-            remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
-            remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
-
-            remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#FFFFFF"));
-            remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
-
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+            createAPIDIMMER(id.getDeviceID(), 25, "25", wigetID, context);
         }
         if (DIMMER_50.equals(intent.getAction())) {
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
-
-            createAPIDIMMER(id.getDeviceID(), 50, accessToken, "50", wigetID, context, prefManager);
-
-            Toast.makeText(context,"Dimmer-50",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-            remoteViews.setInt(R.id.dimmer50,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#FFFFFF",60,80));
-
-            remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
-            remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
-
-            remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#FFFFFF"));
-
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+            createAPIDIMMER(id.getDeviceID(), 50, "50", wigetID, context);
         }
         if (DIMMER_75.equals(intent.getAction())) {
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
-
-            createAPIDIMMER(id.getDeviceID(), 75, accessToken, "75", wigetID, context, prefManager);
-
-            Toast.makeText(context,"Dimmer-75",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-            remoteViews.setInt(R.id.dimmer75,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#FFFFFF",60,80));
-
-            remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
-            remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#E26901",70,70));
-
-            remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#FFFFFF"));
-            remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
-
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+            createAPIDIMMER(id.getDeviceID(), 75, "75", wigetID, context);
         }
         if (DIMMER_ON.equals(intent.getAction())) {
-            PrefManager prefManager = new PrefManager(context);
-            String status = prefManager.getDimmer();
-            String accessToken = prefManager.getAccess();
-            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(context);
-
-            createAPIDIMMER(id.getDeviceID(), 1, accessToken, "1", wigetID, context, prefManager);
-
-            Toast.makeText(context,"Dimmer-100",Toast.LENGTH_LONG).show();
-
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-            remoteViews.setInt(R.id.dimmerOn,"setBackgroundColor", Color.parseColor("#E26901"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOn,buildUpdate(onActionIcon,context,"#FFFFFF",70,70));
-
-            remoteViews.setInt(R.id.dimmerOff,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmerOff,buildUpdate(offActionIcon,context,"#1A365D",70,80));
-            remoteViews.setInt(R.id.dimmer25,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer25,buildUpdate("dim25",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer50,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer50,buildUpdate("dim",context,"#E26901",60,80));
-            remoteViews.setInt(R.id.dimmer75,"setBackgroundColor",Color.parseColor("#FFFFFF"));
-            remoteViews.setImageViewBitmap(R.id.dimmer75,buildUpdate("dim75",context,"#E26901",60,80));
-            remoteViews.setTextColor(R.id.txtDimmer25,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer75,Color.parseColor("#E26901"));
-            remoteViews.setTextColor(R.id.txtDimmer50,Color.parseColor("#E26901"));
-
-            appWidgetManager.updateAppWidget(wigetID,remoteViews);
+            createAPIDIMMER(id.getDeviceID(), 1, "1", wigetID, context);
         }
     }
 
@@ -410,9 +358,12 @@ public class NewAppWidget extends AppWidgetProvider {
     }
 
 
-    void createAPIDIMMER(int deviceid, int value, String accessToken, final String action, final int wigetID,
-                         final Context ctx, final PrefManager prefManager)
+    public void createAPIDIMMER(int deviceid, int value, final String action, final int wigetID,
+                         final Context ctx)
     {
+
+        final PrefManager prefManager = new PrefManager(ctx);
+        String  accessToken = prefManager.getAccess();
         String str = "https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+16+"&value="+value;
 
             AndroidNetworking.get(str)
@@ -428,7 +379,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             String status = response.optString("status");
                             String error = response.optString("error");
                             RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
-                            AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
+                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ctx);
                             if (!status.isEmpty() && status != null && action.equals("0")) {
                                 prefManager.setDimmer("0");
                             }
@@ -451,18 +402,17 @@ public class NewAppWidget extends AppWidgetProvider {
 
                         @Override
                         public void onError(ANError anError) {
-
                         }
                     });
     }
 
 
-    void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
+    public void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
         PrefManager prefManager = new PrefManager(ctx);
         String  accessToken = prefManager.getAccess();
         String str = "https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
 
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
+        AndroidNetworking.get(str)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
@@ -510,25 +460,5 @@ public class NewAppWidget extends AppWidgetProvider {
                     }
                 });
 
-    }
-
-    public static Bitmap buildUpdate(String fontNmae, Context context,String color,float y,float x)
-    {
-        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_4444);
-        Canvas myCanvas = new Canvas(myBitmap);
-        Paint paint = new Paint();
-
-        // Typeface iconFont = Typeface.createFromAsset(context.getAssets(),"fonts/Comfortaa_Thin.ttf");
-        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
-
-        paint.setAntiAlias(true);
-        paint.setSubpixelText(true);
-        paint.setTypeface(iconFont);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.parseColor(color));
-        paint.setTextSize(85);
-        paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(fontNmae, x, y, paint);
-        return myBitmap;
     }
 }
