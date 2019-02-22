@@ -28,7 +28,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -56,6 +55,7 @@ import com.telldus.live.mobile.Utility.DevicesUtilities;
 public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF = "ACTION_OFF";
+    private static final String ACTION_BELL = "ACTION_BELL";
 
 
     static void updateAppWidget(
@@ -94,39 +94,54 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             String onActionIcon = actionIconSet.get("TURNON");
             String offActionIcon = actionIconSet.get("TURNOFF");
+            // Bell
+            if (state.equals("4") || (supportedMethods.get("BELL") != null && supportedMethods.get("BELL"))) {
+                views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_BELL, appWidgetId));
+                views.setViewVisibility(R.id.offLinear, View.GONE);
 
+                views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+                views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                views.setTextViewText(R.id.iconOn, "bell");
+                views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
+            }
+            // ON
             if (state.equals("1")) {
                 views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                views.setImageViewBitmap(R.id.iconOn, buildUpdate(onActionIcon, context, "#FFFFFF", 80, 70));
                 views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#E26901"));
+                views.setTextViewText(R.id.iconOn, onActionIcon);
+                views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
 
                 if (methods == 0) {
                     views.setViewVisibility(R.id.offLinear, View.GONE);
                 }
 
                 if (methods != 0) {
-                    views.setImageViewBitmap(R.id.iconOff,buildUpdate(offActionIcon,context,"#1b365d",80,70));
-                    views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+                    views.setTextViewText(R.id.iconOff, offActionIcon);
+                    views.setTextColor(R.id.iconOff, Color.parseColor("#1b365d"));
+                    views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                 }
             }
+            // OFF
             if (state.equals("2")) {
-                views.setViewVisibility(R.id.parentLayout,View.VISIBLE);
-                views.setImageViewBitmap(R.id.iconOff,buildUpdate(offActionIcon,context,"#FFFFFF",80,70));
-                views.setInt(R.id.offLinear,"setBackgroundColor",Color.parseColor("#1b365d"));
+                views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+                views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#1b365d"));
+                views.setTextViewText(R.id.iconOff, offActionIcon);
+                views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
 
                 if (methods == 0) {
                     views.setViewVisibility(R.id.onLayout, View.GONE);
                 }
 
                 if (methods != 0) {
-                    views.setImageViewBitmap(R.id.iconOn,buildUpdate(onActionIcon,context,"#E26901",80,70));
-                    views.setInt(R.id.onLayout,"setBackgroundColor",Color.parseColor("#FFFFFF"));
+                    views.setTextViewText(R.id.iconOn, onActionIcon);
+                    views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
+                    views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                 }
             }
             transparent = widgetID.getTransparent();
             if (transparent.equals("true")) {
-                views.setInt(R.id.iconWidget,"setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.onLayout,"setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
+                views.setInt(R.id.onLayout, "setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.bellWidget, "setBackgroundColor", Color.TRANSPARENT);
                 views.setInt(R.id.updownarrowwidget, "setBackgroundColor", Color.TRANSPARENT);
@@ -137,26 +152,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
-    }
-
-    public static Bitmap buildUpdate(String fontNmae, Context context, String color, float y, float x)
-    {
-        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_4444);
-        Canvas myCanvas = new Canvas(myBitmap);
-        Paint paint = new Paint();
-
-        // Typeface iconFont = Typeface.createFromAsset(context.getAssets(),"fonts/Comfortaa_Thin.ttf");
-        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
-
-        paint.setAntiAlias(true);
-        paint.setSubpixelText(true);
-        paint.setTypeface(iconFont);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.parseColor(color));
-        paint.setTextSize(85);
-        paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(fontNmae, x, y, paint);
-        return myBitmap;
     }
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
@@ -232,6 +227,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         Integer methods = widgetInfo.getDeviceMethods();
 
+        if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
+
+            DeviceInfo info = db.getSinlgeDeviceID(widgetID);
+
+            String state = info.getState();
+            createDeviceActionApi(context, info.getDeviceID(), 4, widgetID, db, "Bell");
+        }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetID);
@@ -240,7 +242,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (state.equals("1")) {
                 Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
             } else {
-                createDeviceApi(context, info.getDeviceID(), 1, widgetID, db, "On");
+                createDeviceActionApi(context, info.getDeviceID(), 1, widgetID, db, "On");
             }
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
@@ -251,15 +253,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (state.equals("2")) {
                 Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
             } else {
-                createDeviceApi(context, info.getDeviceID(), 2, widgetID, db, "Off");
+                createDeviceActionApi(context, info.getDeviceID(), 2, widgetID, db, "Off");
             }
         }
     }
 
-    void createDeviceApi(final Context ctx, int deviceid, int method, final int widgetID, final MyDBHandler db, final String action) {
+    void createDeviceActionApi(final Context ctx, int deviceid, int method, final int widgetID, final MyDBHandler db, final String action) {
         PrefManager prefManager = new PrefManager(ctx);
         String  accessToken = prefManager.getAccess();
-        String str="https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
 
         AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
                 .addHeaders("Content-Type", "application/json")
@@ -289,7 +290,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                             }
 
                             if(!status.isEmpty() && status != null && action.equals("Bell")) {
-                                Toast.makeText(ctx,"SuccessFully",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ctx,"Device action success",Toast.LENGTH_SHORT).show();
                             }
                             if (!status.isEmpty() && status != null && action.equals("UDS")) {
                                 Toast.makeText(ctx,"Success",Toast.LENGTH_LONG).show();
