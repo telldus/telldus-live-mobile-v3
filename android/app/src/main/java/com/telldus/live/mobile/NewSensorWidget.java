@@ -67,36 +67,39 @@ public class NewSensorWidget extends AppWidgetProvider {
         String transparent;
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
-        if (sensorID != null) {
-            widgetText = sensorID.getWidgetName();
-            sensorValue = sensorID.getSensorValue();
-            sensorUnit = sensorID.getSensorUnit();
-            sensorIcon = sensorID.getSensorIcon();
-            sensorHistory = sensorID.getSensorUpdate();
-            widgetType = sensorID.getWidgetType();
-            transparent = sensorID.getTransparent();
-
-            long time = Long.parseLong(sensorHistory);
-            // String timeStamp = GetTimeAgo.getTimeAgo(time, context);
-            long now = System.currentTimeMillis();
-
-            // if timestamp given in seconds, convert to millis
-            if (time < 1000000000000L) {
-                time *= 1000;
-            }
-
-            Date date = new Date(time);
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-
-            sensorHistory = formatter.format(date);
-
-            if (transparent.equals("true")) {
-                view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
-                view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
-            }
+        if (sensorID == null) {
+            return;
         }
 
-        view.setImageViewBitmap(R.id.iconSensor, buildUpdate(sensorIcon, context));
+        widgetText = sensorID.getWidgetName();
+        sensorValue = sensorID.getSensorValue();
+        sensorUnit = sensorID.getSensorUnit();
+        sensorIcon = sensorID.getSensorIcon();
+        sensorHistory = sensorID.getSensorUpdate();
+        widgetType = sensorID.getWidgetType();
+        transparent = sensorID.getTransparent();
+
+        long time = Long.parseLong(sensorHistory);
+        // String timeStamp = GetTimeAgo.getTimeAgo(time, context);
+        long now = System.currentTimeMillis();
+
+        // if timestamp given in seconds, convert to millis
+        if (time < 1000000000000L) {
+            time *= 1000;
+        }
+
+        Date date = new Date(time);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+
+        sensorHistory = formatter.format(date);
+
+        if (transparent.equals("true")) {
+            view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+            view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
+        }
+
+        view.setTextViewText(R.id.iconSensor, sensorIcon);
+        view.setTextColor(R.id.iconSensor, Color.parseColor("#FFFFFF"));
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo, sensorHistory);
         view.setTextViewText(R.id.txtSensorValue, sensorValue);
@@ -104,23 +107,6 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, view);
-    }
-
-    public static Bitmap buildUpdate(String time,Context context) {
-        Bitmap myBitmap = Bitmap.createBitmap(160, 84, Bitmap.Config.ARGB_8888);
-        Canvas myCanvas = new Canvas(myBitmap);
-        Paint paint = new Paint();
-        Typeface iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME);
-
-        paint.setAntiAlias(true);
-        paint.setSubpixelText(true);
-        paint.setTypeface(iconFont);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(65);
-        paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(time, 50, 70, paint);
-        return myBitmap;
     }
 
     @Override
