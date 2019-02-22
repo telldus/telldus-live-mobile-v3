@@ -91,6 +91,7 @@ constructor(props: Props) {
 	this.state = {
 		zoomDomain: {},
 	};
+	this.zoomDomain = {};
 	this.getY = this.getY.bind(this);
 	this.getX = this.getX.bind(this);
 	this.formatXTick = this.formatXTick.bind(this);
@@ -134,7 +135,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	return true;
+	return false;
 }
 
 getTickConfigX(): Object {
@@ -248,9 +249,10 @@ renderLine(d: Array<Object>, i: number, styles: Object): null | Object {
 getEntireDomain(): null | Object {
 	const { chartDataOne, chartDataTwo } = this.props;
 	const data = Array.from(chartDataOne).concat(chartDataTwo);
+
 	return {
 		y: [_.minBy(data, (d: Object): number => d.value).value, _.maxBy(data, (d: Object): number => d.value).value],
-		x: [_.minBy(data, (d: Object): number => d.ts).ts - 0.9, _.maxBy(data, (d: Object): number => d.ts).ts - 0.9],
+		x: [_.minBy(data, (d: Object): number => d.ts).ts, _.maxBy(data, (d: Object): number => d.ts).ts ],
 	};
 }
 
