@@ -76,12 +76,17 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private ProgressDialog pDialog;
     CharSequence[] deviceNameList = null;
     List<String> nameListItems = new ArrayList<String>();
-    Map<String, Map> DeviceInfoMap = new HashMap<String, Map>();
-    int id;
+    Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
+    Integer id;
     Integer deviceSupportedMethods = 0;
     String deviceCurrentState, deviceTypeCurrent;
 
     MyDBHandler db = new MyDBHandler(this);
+
+    List<String> idList = new ArrayList<String>();
+    CharSequence[] deviceIdList = null;
+
+    public int selectedDeviceIndex;
 
     //UI
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -288,22 +293,22 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
             btSelectDevice = (View) findViewById(R.id.btSelectDevice);
             btSelectDevice.setOnClickListener(new View.OnClickListener() {
-                public int checkedItem;
                 AlertDialog ad;
                 DevicesUtilities deviceUtils = new DevicesUtilities();
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
                             ,R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.pick_device)
-                            .setSingleChoiceItems(deviceNameList, checkedItem, new DialogInterface.OnClickListener() {
+                            .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
+                                    selectedDeviceIndex = which;
                                     deviceName.setText(deviceNameList[which]);
+                                    id = Integer.parseInt(String.valueOf(deviceIdList[which]));
 
-                                    Map<String, Object> info = DeviceInfoMap.get(deviceNameList[which]);
+                                    Map<String, Object> info = DeviceInfoMap.get(id);
 
                                     deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
                                     deviceCurrentState = info.get("state").toString();
-                                    id = Integer.parseInt(info.get("id").toString());
 
                                     deviceTypeCurrent = info.get("deviceType").toString();
                                     String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
@@ -366,16 +371,18 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 if (showDevice) {
                                     Integer id = curObj.getInt("id");
                                     nameListItems.add(name);
+                                    idList.add(id.toString());
 
                                     Map<String, Object> info = new HashMap<String, Object>();
                                     info.put("state", String.valueOf(stateID));
                                     info.put("methods", methods);
-                                    info.put("id", id);
+                                    info.put("name", name);
                                     info.put("deviceType", deviceType);
-                                    DeviceInfoMap.put(name, info);
+                                    DeviceInfoMap.put(id, info);
                                 }
                             }
                             deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                            deviceIdList = idList.toArray(new CharSequence[idList.size()]);
                             updateUI();
                         } catch (JSONException e) {
                             updateUI();

@@ -91,11 +91,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
+    CharSequence[] sensorIdList = null;
 
     List<String> nameListItems = new ArrayList<String>();
+    List<String> idList = new ArrayList<String>();
 
-    private Map<String,Integer> DeviceID=new HashMap<String,Integer>();
-    private int id;
+    private Integer id;
 
     Map<String, Map> SensorInfoMap = new HashMap<String, Map>();
 
@@ -111,6 +112,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
+    public int selectedSensorIndex, selectedSensorValueIndex;
 
 
     @Override
@@ -283,25 +285,24 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
             btSelectSensor = (View) findViewById(R.id.btSelectSensor);
             btSelectSensor.setOnClickListener(new View.OnClickListener() {
-                public int checkedItem;
                 AlertDialog ad;
 
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.pick_sensor)
-                        .setSingleChoiceItems(sensorNameList, checkedItem, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(sensorNameList, selectedSensorIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
                                 sensorDataName.setText("Select value");
                                 sensorDataHint.setText("Tap to change value to display");
 
+                                selectedSensorIndex = which;
                                 sensorName.setText(sensorNameList[which]);
 
-                                id = DeviceID.get(sensorNameList[which]);
+                                id = Integer.parseInt(String.valueOf(sensorIdList[which]));
                                 String str = String.valueOf(sensorNameList[which]);
-
                                 String name = null;
                                 String scale = null;
                                 String value = null;
@@ -312,8 +313,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 for (int i = 0; i < JsonsensorList.length(); i++) {
                                     try {
                                         JSONObject currObject = JsonsensorList.getJSONObject(i);
-                                        String sensorname = currObject.getString("name");
-                                        if (sensorname.equals(str)) {
+                                        Integer sensorId = currObject.getInt("id");
+                                        if (id.intValue() == sensorId.intValue()) {
                                             searchObject = currObject;
                                             JSONArray SensorData = searchObject.getJSONArray("data");
                                             for (int j = 0; j < SensorData.length(); j++) {
@@ -344,15 +345,16 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
             btSelectDisplayItem = (View) findViewById(R.id.btSelectDisplayItem);
             btSelectDisplayItem.setOnClickListener(new View.OnClickListener() {
-                public int checkedItem;
+                public int selectedSensorValueIndex;
                 AlertDialog ad1;
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.pick_sensor_data)
-                        .setSingleChoiceItems(sensorDataList, checkedItem, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(sensorDataList, selectedSensorValueIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                selectedSensorValueIndex = i;
                                 sensorDataName.setText(sensorDataList[i]);
 
                                 SensorsUtilities sc = new SensorsUtilities();
@@ -416,10 +418,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             }
                             Integer id = curObj.getInt("id");
                             String last = String.valueOf(curObj.getLong("lastUpdated"));
-                            DeviceID.put(name,id);
                             nameListItems.add(name);
+                            idList.add(id.toString());
                         }
                         sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                        sensorIdList = idList.toArray(new CharSequence[idList.size()]);
                         updateUI();
                     } catch (JSONException e) {
                         updateUI();
