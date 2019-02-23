@@ -112,7 +112,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
-    public int selectedSensorIndex, selectedSensorValueIndex;
+    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1;
 
 
     @Override
@@ -294,9 +294,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         .setSingleChoiceItems(sensorNameList, selectedSensorIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                // Reset the previously chosen sensor value, when user choose a different sensor
+                                Boolean isSame = String.valueOf(which).equals(String.valueOf(selectedSensorIndex));
+                                if ((selectedSensorIndex != -1) && (selectedSensorValueIndex != -1) && !isSame) {
+                                    imgSensorTypeEdit.setVisibility(View.VISIBLE);
+                                    imgSensorType.setVisibility(View.GONE);
 
-                                sensorDataName.setText("Select value");
-                                sensorDataHint.setText("Tap to change value to display");
+                                    sensorDataName.setText("Select value");
+                                    sensorDataHint.setText("Tap to change value to display");
+
+                                    senValue = null;
+                                    selectedSensorValueIndex = -1;
+                                }
 
                                 selectedSensorIndex = which;
                                 sensorName.setText(sensorNameList[which]);
@@ -345,7 +354,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
             btSelectDisplayItem = (View) findViewById(R.id.btSelectDisplayItem);
             btSelectDisplayItem.setOnClickListener(new View.OnClickListener() {
-                public int selectedSensorValueIndex;
                 AlertDialog ad1;
                 @Override
                 public void onClick(View view) {
