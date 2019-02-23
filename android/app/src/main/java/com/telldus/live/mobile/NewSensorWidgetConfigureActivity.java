@@ -97,6 +97,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private Map<String,Integer> DeviceID=new HashMap<String,Integer>();
     private int id;
 
+    Map<String, Map> SensorInfoMap = new HashMap<String, Map>();
+
     private String accessToken;
     private String expiresIn;
     private String refreshToken;
@@ -292,13 +294,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                //refersh datatype
                                 sensorDataName.setText("Select value");
                                 sensorDataHint.setText("Tap to change value to display");
 
                                 sensorName.setText(sensorNameList[which]);
 
-                                // sensorHint.setText(null);
                                 id = DeviceID.get(sensorNameList[which]);
                                 String str = String.valueOf(sensorNameList[which]);
 
@@ -411,12 +411,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         for (int i = 0; i < JsonsensorList.length(); i++) {
                             JSONObject curObj = JsonsensorList.getJSONObject(i);
                             String name = curObj.getString("name");
-                            if (name != null && !name.equals("null")) {
-                                Integer id = curObj.getInt("id");
-                                String last = String.valueOf(curObj.getLong("lastUpdated"));
-                                DeviceID.put(name,id);
-                                nameListItems.add(name);
+                            if (name == null || name.equals("null")) {
+                                name = "Unknown";
                             }
+                            Integer id = curObj.getInt("id");
+                            String last = String.valueOf(curObj.getLong("lastUpdated"));
+                            DeviceID.put(name,id);
+                            nameListItems.add(name);
                         }
                         sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                         updateUI();
