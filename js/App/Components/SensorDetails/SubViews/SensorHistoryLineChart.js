@@ -227,7 +227,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	onPressResetChartView() {
-		// this.linearChartRef && this.linearChartRef.resetZoomDomainData();
 		this.setState({ isLoading: true });
 		setTimeout(() => {
 		  this.setState({ isLoading: false });
