@@ -266,6 +266,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         deviceName.getText().toString(),
                         deviceSupportedMethods,
                         deviceTypeCurrent,
+                        "", // As of now deviceStateValue does matters for only DIM devices.
                         switchStatus);
                     db.addUser(mInsert);
 

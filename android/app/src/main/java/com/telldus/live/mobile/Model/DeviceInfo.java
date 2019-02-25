@@ -27,13 +27,14 @@ public class DeviceInfo {
     Integer methods;
     String transparent;
     String deviceType;
+    String deviceStateValue;
 
     public DeviceInfo()
     {
 
     }
 
-    public DeviceInfo(String state, int widgetID, int deviceID, String deviceName, Integer methods, String deviceType, String transparent) {
+    public DeviceInfo(String state, int widgetID, int deviceID, String deviceName, Integer methods, String deviceType, String deviceStateValue, String transparent) {
         this.state = state;
         this.widgetID = widgetID;
         this.deviceID = deviceID;
@@ -41,6 +42,7 @@ public class DeviceInfo {
         this.methods = methods;
         this.transparent = transparent;
         this.deviceType = deviceType;
+        this.deviceStateValue = deviceStateValue;
     }
 
     public String getState() {
@@ -97,5 +99,13 @@ public class DeviceInfo {
 
     public void setDeviceType(String deviceType) {
         this.deviceType = deviceType;
+    }
+
+    public String getDeviceStateValue() {
+        return deviceStateValue;
+    }
+
+    public void setDeviceStateValue(String deviceStateValue) {
+        this.deviceStateValue = deviceStateValue;
     }
 }

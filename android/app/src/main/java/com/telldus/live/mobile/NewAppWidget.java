@@ -91,6 +91,7 @@ public class NewAppWidget extends AppWidgetProvider {
             widgetText = widgetID.getDeviceName();
             String state = widgetID.getState();
             String deviceType = widgetID.getDeviceType();
+            String deviceStateValue = widgetID.getDeviceStateValue();
             Integer methods = widgetID.getDeviceMethods();
 
             DevicesUtilities deviceUtils = new DevicesUtilities();
@@ -186,8 +187,83 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.dimmer25, getPendingBELL(context, DIMMER_25, appWidgetId));
                 views.setOnClickPendingIntent(R.id.dimmer50, getPendingBELL(context, DIMMER_50, appWidgetId));
                 views.setOnClickPendingIntent(R.id.dimmer75, getPendingBELL(context, DIMMER_75, appWidgetId));
+
                 if (state.equals("16")) {
-                    // Calculate closest dim button value to that of current dim value, set background color(focus)
+                    Integer checkPoint = 0;
+                    if (deviceStateValue != null && deviceStateValue != "null") {
+                        checkPoint = getClosestCheckPoint(Integer.parseInt(deviceStateValue));
+                    }
+                    if (checkPoint == 25) {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#E26901"));
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                        views.setTextColor(R.id.dimmer25, Color.parseColor("#FFFFFF"));
+                        views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer75, Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.txtDimmer25, Color.parseColor("#FFFFFF"));
+                        views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
+                    }
+                    if (checkPoint == 50) {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#E26901"));
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                        views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer50, Color.parseColor("#FFFFFF"));
+                        views.setTextColor(R.id.dimmer75, Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.txtDimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer50, Color.parseColor("#FFFFFF"));
+                        views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
+                    }
+                    if (checkPoint == 75) {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer75, Color.parseColor("#FFFFFF"));
+
+                        views.setTextColor(R.id.txtDimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer75, Color.parseColor("#FFFFFF"));
+                    }
+                    if (deviceStateValue == "0") {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                        views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer75, Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.txtDimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#1A365D"));
+                    }
+                    if (deviceStateValue == "100") {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+
+                        views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.dimmer75, Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.txtDimmer25, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
+                        views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
+
+                        views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
+                        views.setInt(R.id.iconOn, "setBackgroundColor", Color.parseColor("#E26901"));
+                    }
                 }
             }
 
@@ -270,7 +346,6 @@ public class NewAppWidget extends AppWidgetProvider {
         return PendingIntent.getBroadcast(context,id,intent,0);
     }
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -347,7 +422,6 @@ public class NewAppWidget extends AppWidgetProvider {
             int count = db.CountDeviceWidgetValues();
             if (count > 0) {
                 Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
-
             } else {
                 Toast.makeText(context,"No Device",Toast.LENGTH_SHORT).show();
                 prefManager.DeviceDB(false);
@@ -378,7 +452,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
                             String status = response.optString("status");
                             String error = response.optString("error");
-                            RemoteViews remoteViews = new RemoteViews(ctx.getPackageName(), R.layout.new_app_widget);
                             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ctx);
                             if (!status.isEmpty() && status != null && action.equals("0")) {
                                 prefManager.setDimmer("0");
@@ -398,6 +471,7 @@ public class NewAppWidget extends AppWidgetProvider {
                             if (!error.isEmpty() && error != null) {
                                 Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
                             }
+                            updateAppWidget(ctx, appWidgetManager, wigetID);
                         }
 
                         @Override
@@ -459,6 +533,24 @@ public class NewAppWidget extends AppWidgetProvider {
 
                     }
                 });
+    }
 
+    public static Integer getClosestCheckPoint(Integer value) {
+        if (value == null) {
+            return 0;
+        }
+        Integer[] checkPoints = new Integer[]{25, 50, 70};
+        Integer distOne = Math.abs(checkPoints[0] - value);
+        Integer distTwo = Math.abs(checkPoints[1] - value);
+        Integer distThree = Math.abs(checkPoints[2] - value);
+        Integer minOne = Math.min(distOne, distTwo);
+        Integer minTwo = Math.min(minOne, distThree);
+        if (minTwo == distOne) {
+            return checkPoints[0];
+        } else if (minTwo == distTwo) {
+            return checkPoints[1];
+        } else {
+            return checkPoints[2];
+        }
     }
 }

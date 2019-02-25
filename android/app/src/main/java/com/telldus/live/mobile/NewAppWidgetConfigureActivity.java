@@ -82,7 +82,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
     Integer id;
     Integer deviceSupportedMethods = 0;
-    String deviceCurrentState, deviceTypeCurrent;
+    String deviceCurrentState, deviceTypeCurrent, deviceStateValueCurrent;
 
     public int selectedDeviceIndex;
 
@@ -223,7 +223,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         prefManager.DeviceDB(true);
                     }
 
-
                     boolean token_service = prefManager.getTokenService();
                     if (!token_service) {
                         prefManager.TokenService(true);
@@ -235,8 +234,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     }
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
-
-
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -244,10 +241,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceName.getText().toString(),
                         deviceSupportedMethods,
                         deviceTypeCurrent,
+                        deviceStateValueCurrent,
                         switchStatus);
                     db.addUser(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
-
 
                     boolean web_service = prefManager.getWebService();
                     if (!web_service) {
@@ -258,7 +255,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     } else {
                         Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                     }
-
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.
@@ -286,6 +282,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 deviceCurrentState = info.get("state").toString();
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
+                                deviceStateValueCurrent = info.get("stateValue").toString();
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
                                 tvIcon1.setText(deviceIcon);
 
@@ -302,8 +299,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
             chooseSetting.setTypeface(titleFont);
         }
     }
-
-
 
     void createDeviceApi() {
     accessToken = prefManager.getAccess();
@@ -329,6 +324,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                             stateID = curObj.getInt("state");
                             Integer methods = curObj.getInt("methods");
                             String deviceType = curObj.getString("deviceType");
+                            // ToDo : Only statevalue(String) is handled at widget side.
+                            // The app has migrated to new/future data structure
+                            // "statevalues"(Object).
+                            String stateValue = curObj.getString("statevalue");
 
                             Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                             Integer sizeSuppMeth = supportedMethods.size();
@@ -348,6 +347,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 info.put("methods", methods);
                                 info.put("name", name);
                                 info.put("deviceType", deviceType);
+                                info.put("stateValue", stateValue);
                                 DeviceInfoMap.put(id, info);
                             }
                         }
