@@ -42,11 +42,14 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
+import com.telldus.live.mobile.API.DevicesAPI;
+import com.telldus.live.mobile.API.OnAPITaskComplete;
 
 /**
  * Implementation of App Widget functionality.
@@ -56,6 +59,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF = "ACTION_OFF";
     private static final String ACTION_BELL = "ACTION_BELL";
+
+    // Important to instantiate here and not inside 'createDeviceActionApi'.
+    // This is to keep a single instance of 'handler' and 'runnable' created inside 'setDeviceState'
+    // for each device/widget.
+    static DevicesAPI deviceAPI = new DevicesAPI();
 
 
     static void updateAppWidget(
@@ -78,6 +86,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         DeviceInfo widgetID = db.findUser(appWidgetId);
 
         if (widgetID != null) {
+
             widgetText = widgetID.getDeviceName();
             String state = widgetID.getState();
             Integer methods = widgetID.getDeviceMethods();
@@ -237,88 +246,38 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetID);
 
-            String state = info.getState();
             createDeviceActionApi(context, info.getDeviceID(), 4, widgetID, db, "Bell");
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetID);
 
-            String state = info.getState();
-            if (state.equals("1")) {
-                Toast.makeText(context,"Already Turned on",Toast.LENGTH_LONG).show();
-            } else {
-                createDeviceActionApi(context, info.getDeviceID(), 1, widgetID, db, "On");
-            }
+            createDeviceActionApi(context, info.getDeviceID(), 1, widgetID, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetID);
 
-            String state = info.getState();
-            if (state.equals("2")) {
-                Toast.makeText(context,"Already Turned off",Toast.LENGTH_LONG).show();
-            } else {
-                createDeviceActionApi(context, info.getDeviceID(), 2, widgetID, db, "Off");
-            }
+            createDeviceActionApi(context, info.getDeviceID(), 2, widgetID, db, "Off");
         }
     }
 
-    void createDeviceActionApi(final Context ctx, int deviceid, int method, final int widgetID, final MyDBHandler db, final String action) {
-        PrefManager prefManager = new PrefManager(ctx);
+    void createDeviceActionApi(final Context context, final int deviceId, int method, final int widgetId, final MyDBHandler db, final String action) {
+        PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
 
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null")
-                .addHeaders("Content-Type", "application/json")
-                .addHeaders("Accpet", "application/json")
-                .addHeaders("Authorization", "Bearer " + accessToken)
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.optString("status");
-                            String error = response.optString("error");
-
-                            if (!status.isEmpty() && status != null && action.equals("On")) {
-                                db.updateAction("1",widgetID);
-
-                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                updateAppWidget(ctx, appWidgetManager, widgetID);
-                            }
-
-                            if (!status.isEmpty() && status != null && action.equals("Off")) {
-                                db.updateAction("2",widgetID);
-
-                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                updateAppWidget(ctx, appWidgetManager, widgetID);
-                            }
-
-                            if(!status.isEmpty() && status != null && action.equals("Bell")) {
-                                Toast.makeText(ctx,"Device action success",Toast.LENGTH_SHORT).show();
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("UDS")) {
-                                Toast.makeText(ctx,"Success",Toast.LENGTH_LONG).show();
-                            }
-
-                            if (!error.isEmpty() && error != null) {
-                                Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
-                            }
-
-                            if (!error.isEmpty() && error != null && action.equals("Off")) {
-                                Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        };
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+        String params = "device/command?id="+deviceId+"&method="+method+"&value=null";
+        deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+            @Override
+            public void onError(ANError error) {
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+        });
     }
 }

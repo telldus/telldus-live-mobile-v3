@@ -51,7 +51,7 @@ public class DevicesAPI {
     private static Runnable runnable;
     private static Map<Integer, Handler> deviceInfoPendingCheckList = new HashMap<Integer, Handler>();
 
-    public void setDeviceState(final Integer deviceId, final Integer method, Integer stateValue, int widgetID, final Context context, final OnAPITaskComplete callBack) {
+    public void setDeviceState(final Integer deviceId, final Integer method, Integer stateValue, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
         String params = "device/command?id="+deviceId+"&method="+method+"&value=stateValue";
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
@@ -109,7 +109,7 @@ public class DevicesAPI {
         });
     }
 
-    public void getDeviceInfo(final Integer deviceId, final Integer requestedState, int widgetID, final Context context, final OnAPITaskComplete callBack) {
+    public void getDeviceInfo(final Integer deviceId, final Integer requestedState, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
         String params =  "device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
