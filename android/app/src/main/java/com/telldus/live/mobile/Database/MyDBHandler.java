@@ -61,7 +61,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " +
@@ -246,30 +245,29 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int count = db.update(TABLE_REGISTER,contentValues, WIDGET_ID+" = ?",whereArgs );
         return true;
     }
-    public boolean updateActionDevice(String action,int id) {
+    public boolean updateActionDevice(String action, int id, String value) {
         String val = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        //contentValues.put(myDbHelper.NAME,newName);
 
-        contentValues.put(WIDGET_ACTION,action);
+        contentValues.put(WIDGET_ACTION, action);
+        contentValues.put(DEVICE_STATE_VALUE, value);
         String[] whereArgs = {val};
-        int count = db.update(TABLE_REGISTER,contentValues, DEVICE_ID+" = ?",whereArgs );
+        int count = db.update(TABLE_REGISTER, contentValues, DEVICE_ID+" = ?", whereArgs);
         return true;
     }
 
     public int updateSensorInfo(String value,long time,int Wid) {
-          String time1 = String.valueOf(time);
-          SQLiteDatabase db = this.getWritableDatabase();
-          ContentValues contentValues = new ContentValues();
-        //contentValues.put(myDbHelper.NAME,newName);
+        String time1 = String.valueOf(time);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
 
-        String id=String.valueOf(Wid);
+        String id = String.valueOf(Wid);
 
-        contentValues.put(SENSOR_VALUE,value);
-        contentValues.put(SENSOR_UPDATE,time1);
+        contentValues.put(SENSOR_VALUE, value);
+        contentValues.put(SENSOR_UPDATE, time1);
         String[] whereArgs = {id};
-        int count = db.update(TABLE_SENSOR,contentValues, SENSOR_WIDGET_ID+" = ?",whereArgs );
+        int count = db.update(TABLE_SENSOR, contentValues, SENSOR_WIDGET_ID+" = ?", whereArgs );
         return count;
     }
 
@@ -301,7 +299,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
 
-
         return icount;
     }
 
@@ -313,7 +310,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int icount = mcursor.getInt(0);
 
         return icount;
-
     }
 
     public ArrayList<String> getAllLabels() {

@@ -51,12 +51,12 @@ public class DevicesAPI {
     private static Runnable runnable;
     private static Map<Integer, Handler> deviceInfoPendingCheckList = new HashMap<Integer, Handler>();
 
-    public void setDeviceState(final Integer deviceId, final Integer method, Integer stateValue, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
-        String params = "device/command?id="+deviceId+"&method="+method+"&value=stateValue";
+    public void setDeviceState(final Integer deviceId, final Integer method, final Integer stateValue, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
+        String params = "device/command?id="+deviceId+"&method="+method+"&value="+stateValue;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(final JSONObject response) {
                 try {
                     String status = response.optString("status");
                     String error = response.optString("error");
@@ -77,8 +77,12 @@ public class DevicesAPI {
                                     if (info != null) {
                                         String currentState = info.getState();
                                         String requestedState = String.valueOf(method);
-                                        if (!currentState.equals(requestedState)) {
+                                        String currentStateValue = info.getDeviceStateValue();
+                                        String requestedStateValue = String.valueOf(stateValue);
+                                        if (!currentState.equals(requestedState) || !currentStateValue.equals(requestedStateValue)) {
                                             getDeviceInfo(deviceId, method, widgetID, context, callBack);
+                                        } else {
+                                            callBack.onSuccess(response);
                                         }
                                     }
 
@@ -122,15 +126,15 @@ public class DevicesAPI {
                         String currentState = info.getState();
                         String reqState = String.valueOf(requestedState);
                         String newState = response.optString("state");
-
+                        String stateValue = response.optString("statevalue");
                         if (newState.equals(currentState)) {
-                            db.updateActionDevice(newState, deviceId);
+                            db.updateActionDevice(newState, deviceId, stateValue);
                             if (!newState.equals(reqState)) {
                                 Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                             }
                             callBack.onSuccess(response);
                         } else {
-                            db.updateActionDevice(newState, deviceId);
+                            db.updateActionDevice(newState, deviceId, stateValue);
                             callBack.onSuccess(response);
                         }
                     }
