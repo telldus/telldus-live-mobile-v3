@@ -288,4 +288,12 @@ public class DevicesUtilities {
                 return actionsIconSet;
         }
     }
+
+    public int toSliderValue (Integer dimmerValue) {
+        return (int) Math.round(dimmerValue * 100.0 / 255);
+    }
+
+    public int toDimmerValue (Integer sliderValue) {
+        return (int) Math.round(sliderValue * 255 / 100.0);
+    }
 }
