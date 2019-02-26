@@ -28,10 +28,10 @@ import type { ThunkAction } from './Types';
 export const configureAndroid = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		const { user, websockets } = getState();
-		const { accessToken = {} } = user;
+		const { accessToken = {}, userProfile = {} } = user;
 		const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
 		const { AndroidWidget } = NativeModules;
-		AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey);
+		AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, userProfile.email);
 
 		const { session } = websockets;
 		if (session && session.id) {
