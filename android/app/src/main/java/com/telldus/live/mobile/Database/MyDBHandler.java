@@ -36,26 +36,26 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Telldus.db";
-    private static final String TABLE_REGISTER = "Widget";
+    private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
 
-    public static final String WIDGET_ID = "widget_id";
-    public static final String DEVICE_ID = "deviceid";
-    public static final String WIDGET_NAME = "device_name";
-    public static final String WIDGET_ACTION = "widget_action";
-    public static final String DEVICE_METHODS = "methods";
+    public static final String WIDGET_ID = "widgetIdDevice";
+    public static final String DEVICE_ID = "deviceId";
+    public static final String WIDGET_NAME = "deviceName";
+    public static final String WIDGET_STATE = "deviceState";
+    public static final String DEVICE_METHODS = "deviceMethods";
     public static final String DEVICE_TYPE = "deviceType";
     public static final String DEVICE_STATE_VALUE = "deviceStateValue";
     public static final String TRANSPARENT = "transparent";
 
-    public static final String TABLE_SENSOR = "sensor";
-    public static final String SENSOR_WIDGET_ID = "SENSOR_widget_id";
-    public static final String SENSOR_DEVICE_ID = "SENSOR_deviceid";
-    public static final String SENSOR_WIDGET_NAME = "SENSOR_device_name";
-    public static final String SENSOR_VALUE_TYPE = "SENSOR_TYPE";
-    public static final String SENSOR_UPDATE = "Last_update";
-    public static final String SENSOR_VALUE = "Sensor_value";
-    public static final String SENSOR_UNIT = "Sensor_unit";
-    public static final String SENSOR_ICON = "Sensor_icon";
+    public static final String TABLE_WIDGET_INFO_SENSOR = "WidgetInfoSensor";
+    public static final String SENSOR_WIDGET_ID = "widgetIdSensor";
+    public static final String SENSOR_DEVICE_ID = "sensorId";
+    public static final String SENSOR_WIDGET_NAME = "sensorName";
+    public static final String SENSOR_VALUE_TYPE = "sensorScaleType";
+    public static final String SENSOR_UPDATE = "sensorLastUpdated";
+    public static final String SENSOR_VALUE = "sensorValue";
+    public static final String SENSOR_UNIT = "sensorUnit";
+    public static final String SENSOR_ICON = "sensorIcon";
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,12 +64,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " +
-                TABLE_REGISTER + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
-                + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_ACTION + " TEXT," + DEVICE_METHODS
+                TABLE_WIDGET_INFO_DEVICE + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
+                + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_STATE + " TEXT," + DEVICE_METHODS
                 + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
-                TABLE_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
+                TABLE_WIDGET_INFO_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
                 + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE
                  + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT + " TEXT" + ")";
 
@@ -78,8 +78,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REGISTER);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SENSOR);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WIDGET_INFO_DEVICE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WIDGET_INFO_SENSOR);
         onCreate(db);
     }
 
@@ -90,14 +90,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(WIDGET_ID, mDeviceInfo.getWidgetID());
         values.put(DEVICE_ID, mDeviceInfo.getDeviceID());
         values.put(WIDGET_NAME, mDeviceInfo.getDeviceName());
-        values.put(WIDGET_ACTION, mDeviceInfo.getState());
+        values.put(WIDGET_STATE, mDeviceInfo.getState());
         values.put(DEVICE_METHODS, mDeviceInfo.getDeviceMethods());
         values.put(DEVICE_TYPE, mDeviceInfo.getDeviceType());
         values.put(DEVICE_STATE_VALUE, mDeviceInfo.getDeviceStateValue());
         values.put(TRANSPARENT, mDeviceInfo.getTransparent());
 
         //Inserting Row
-        db.insert(TABLE_REGISTER, null, values);
+        db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
         db.close();
     }
 
@@ -117,7 +117,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(TRANSPARENT, mSensorInfo.getTransparent());
 
         //Inserting Row
-        db.insert(TABLE_SENSOR, null, values);
+        db.insert(TABLE_WIDGET_INFO_SENSOR, null, values);
         db.close();
 
     }
@@ -125,7 +125,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
 
     public DeviceInfo findUser(int id) {
-        String query = "Select * FROM " + TABLE_REGISTER + " WHERE " + WIDGET_ID + " =  \"" + id + "\"";
+        String query = "Select * FROM " + TABLE_WIDGET_INFO_DEVICE + " WHERE " + WIDGET_ID + " =  \"" + id + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -153,7 +153,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     public SensorInfo findSensor(int id) {
-        String query = "Select * FROM " + TABLE_SENSOR + " WHERE " + SENSOR_WIDGET_ID + " =  \"" + id + "\"";
+        String query = "Select * FROM " + TABLE_WIDGET_INFO_SENSOR + " WHERE " + SENSOR_WIDGET_ID + " =  \"" + id + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -182,7 +182,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return r;
     }
     public ArrayList<SensorInfo> findSensorDevice(int id) {
-        String selectQuery = "Select * FROM " + TABLE_SENSOR + " WHERE " + SENSOR_DEVICE_ID + " =  \"" + id + "\"";
+        String selectQuery = "Select * FROM " + TABLE_WIDGET_INFO_SENSOR + " WHERE " + SENSOR_DEVICE_ID + " =  \"" + id + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -208,7 +208,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     // Login user name and password
     public DeviceInfo getSinlgeDeviceID(int id) {
 
-        String query = "Select * FROM " + TABLE_REGISTER + " WHERE " + WIDGET_ID + " =  \"" + id + "\"";
+        String query = "Select * FROM " + TABLE_WIDGET_INFO_DEVICE + " WHERE " + WIDGET_ID + " =  \"" + id + "\"";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -234,15 +234,15 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
-    public boolean updateAction(String action,int id) {
+    public boolean updateAction(String action, int id) {
         String val = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         //contentValues.put(myDbHelper.NAME,newName);
 
-        contentValues.put(WIDGET_ACTION,action);
+        contentValues.put(WIDGET_STATE, action);
         String[] whereArgs = {val};
-        int count = db.update(TABLE_REGISTER,contentValues, WIDGET_ID+" = ?",whereArgs );
+        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID+" = ?", whereArgs );
         return true;
     }
     public boolean updateActionDevice(String action, int id, String value) {
@@ -250,14 +250,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(WIDGET_ACTION, action);
+        contentValues.put(WIDGET_STATE, action);
         contentValues.put(DEVICE_STATE_VALUE, value);
         String[] whereArgs = {val};
-        int count = db.update(TABLE_REGISTER, contentValues, DEVICE_ID+" = ?", whereArgs);
+        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs);
         return true;
     }
 
-    public int updateSensorInfo(String value,long time,int Wid) {
+    public int updateSensorInfo(String value, long time, int Wid) {
         String time1 = String.valueOf(time);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -267,7 +267,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         contentValues.put(SENSOR_VALUE, value);
         contentValues.put(SENSOR_UPDATE, time1);
         String[] whereArgs = {id};
-        int count = db.update(TABLE_SENSOR, contentValues, SENSOR_WIDGET_ID+" = ?", whereArgs );
+        int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, SENSOR_WIDGET_ID+" = ?", whereArgs );
         return count;
     }
 
@@ -275,26 +275,22 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public  boolean delete(int id) {
         String widget = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        String[] whereArgs ={widget};
+        String[] whereArgs = {widget};
 
-      //  db.delete(this.TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs);
-        //return  true;
-        return  db.delete(TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs)>0;
+        return  db.delete(TABLE_WIDGET_INFO_DEVICE, WIDGET_ID+" = ?", whereArgs) > 0;
     }
 
     public  boolean deleteSensor(int id) {
-        String widget=String.valueOf(id);
+        String widget = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
         String[] whereArgs = {widget};
 
-        //  db.delete(this.TABLE_REGISTER ,WIDGET_ID+" = ?",whereArgs);
-        //return  true;
-        return  db.delete(TABLE_SENSOR ,SENSOR_WIDGET_ID+" = ?",whereArgs)>0;
+        return  db.delete(TABLE_WIDGET_INFO_SENSOR, SENSOR_WIDGET_ID+" = ?", whereArgs) > 0;
     }
 
     public int CountSensorTableValues() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String count = "SELECT count(*) FROM sensor";
+        String count = "SELECT count(*) FROM " + TABLE_WIDGET_INFO_SENSOR;
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
@@ -304,7 +300,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public int CountDeviceWidgetValues() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String count = "SELECT count(*) FROM Widget";
+        String count = "SELECT count(*) FROM " + TABLE_WIDGET_INFO_DEVICE;
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
@@ -316,7 +312,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         ArrayList<String> list = new ArrayList<String>();
 
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_SENSOR;
+        String selectQuery = "SELECT  * FROM " + TABLE_WIDGET_INFO_SENSOR;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
