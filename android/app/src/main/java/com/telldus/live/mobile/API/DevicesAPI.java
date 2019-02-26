@@ -128,13 +128,13 @@ public class DevicesAPI {
                         String newState = response.optString("state");
                         String stateValue = response.optString("statevalue");
                         if (newState.equals(currentState)) {
-                            db.updateActionDevice(newState, deviceId, stateValue);
+                            db.updateDeviceState(newState, deviceId, stateValue);
                             if (!newState.equals(reqState)) {
                                 Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                             }
                             callBack.onSuccess(response);
                         } else {
-                            db.updateActionDevice(newState, deviceId, stateValue);
+                            db.updateDeviceState(newState, deviceId, stateValue);
                             callBack.onSuccess(response);
                         }
                     }

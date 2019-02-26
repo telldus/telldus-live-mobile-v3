@@ -232,7 +232,7 @@ public class MyService extends Service {
                                 int deviceID = jsonDataObject.getInt("deviceId");
                                 String method = jsonDataObject.getString("method");
                                 String value = jsonDataObject.getString("value");
-                                boolean b = db.updateActionDevice(method, deviceID, value);
+                                boolean b = db.updateDeviceState(method, deviceID, value);
 
                                 if (b) {
                                     int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
