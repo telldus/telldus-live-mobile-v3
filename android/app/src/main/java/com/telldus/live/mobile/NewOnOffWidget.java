@@ -81,90 +81,98 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         CharSequence widgetText = "Telldus";
         String transparent;
-        DeviceInfo widgetID = db.findUser(appWidgetId);
+        DeviceInfo DeviceWidgetInfo = db.findUser(appWidgetId);
 
-        if (widgetID != null) {
-
-            widgetText = widgetID.getDeviceName();
-            String state = widgetID.getState();
-            Integer methods = widgetID.getDeviceMethods();
-            String deviceType = widgetID.getDeviceType();
-
-            DevicesUtilities deviceUtils = new DevicesUtilities();
-            Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
-            Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
-
-            Integer buttonsCount = supportedMethods.size();
-            Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
-            if (hasLearn) {
-                buttonsCount = buttonsCount - 1;
-            }
-
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
-            if (buttonsCount < 2) {
-                views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget_one);
-            }
-
-            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
-            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
-
-            String onActionIcon = actionIconSet.get("TURNON");
-            String offActionIcon = actionIconSet.get("TURNOFF");
-            // Bell
-            if (state.equals("4") || (supportedMethods.get("BELL") != null && supportedMethods.get("BELL"))) {
-                views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_BELL, appWidgetId));
-                views.setViewVisibility(R.id.offLinear, View.GONE);
-
-                views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                views.setTextViewText(R.id.iconOn, "bell");
-                views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
-            }
-            // ON
-            if (state.equals("1")) {
-                views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#E26901"));
-                views.setTextViewText(R.id.iconOn, onActionIcon);
-                views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
-
-                if (methods == 0) {
-                    views.setViewVisibility(R.id.offLinear, View.GONE);
-                }
-
-                if (methods != 0) {
-                    views.setTextViewText(R.id.iconOff, offActionIcon);
-                    views.setTextColor(R.id.iconOff, Color.parseColor("#1b365d"));
-                    views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                }
-            }
-            // OFF
-            if (state.equals("2")) {
-                views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-                views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#1b365d"));
-                views.setTextViewText(R.id.iconOff, offActionIcon);
-                views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
-
-                if (methods == 0) {
-                    views.setViewVisibility(R.id.onLayout, View.GONE);
-                }
-
-                if (methods != 0) {
-                    views.setTextViewText(R.id.iconOn, onActionIcon);
-                    views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
-                    views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                }
-            }
-            transparent = widgetID.getTransparent();
-            if (transparent.equals("true")) {
-                views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.onLayout, "setBackgroundColor", Color.TRANSPARENT);
-                views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
-            }
-
-            views.setTextViewText(R.id.txtWidgetTitle, widgetText);
-            // Instruct the widget manager to update the widget
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+        if (DeviceWidgetInfo == null) {
+            return;
         }
+
+        String userId = DeviceWidgetInfo.getUserId();
+        String currentUserId = prefManager.getUserId();
+        Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
+        if (!isSameAccount) {
+            return;
+        }
+
+        widgetText = DeviceWidgetInfo.getDeviceName();
+        String state = DeviceWidgetInfo.getState();
+        Integer methods = DeviceWidgetInfo.getDeviceMethods();
+        String deviceType = DeviceWidgetInfo.getDeviceType();
+
+        DevicesUtilities deviceUtils = new DevicesUtilities();
+        Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+        Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
+
+        Integer buttonsCount = supportedMethods.size();
+        Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
+        if (hasLearn) {
+            buttonsCount = buttonsCount - 1;
+        }
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
+        if (buttonsCount < 2) {
+            views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget_one);
+        }
+
+        views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
+        views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
+
+        String onActionIcon = actionIconSet.get("TURNON");
+        String offActionIcon = actionIconSet.get("TURNOFF");
+        // Bell
+        if (state.equals("4") || (supportedMethods.get("BELL") != null && supportedMethods.get("BELL"))) {
+            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            views.setViewVisibility(R.id.offLinear, View.GONE);
+
+            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+            views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setTextViewText(R.id.iconOn, "bell");
+            views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
+        }
+        // ON
+        if (state.equals("1")) {
+            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+            views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#E26901"));
+            views.setTextViewText(R.id.iconOn, onActionIcon);
+            views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
+
+            if (methods == 0) {
+                views.setViewVisibility(R.id.offLinear, View.GONE);
+            }
+
+            if (methods != 0) {
+                views.setTextViewText(R.id.iconOff, offActionIcon);
+                views.setTextColor(R.id.iconOff, Color.parseColor("#1b365d"));
+                views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            }
+        }
+        // OFF
+        if (state.equals("2")) {
+            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+            views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#1b365d"));
+            views.setTextViewText(R.id.iconOff, offActionIcon);
+            views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
+
+            if (methods == 0) {
+                views.setViewVisibility(R.id.onLayout, View.GONE);
+            }
+
+            if (methods != 0) {
+                views.setTextViewText(R.id.iconOn, onActionIcon);
+                views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
+                views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            }
+        }
+        transparent = DeviceWidgetInfo.getTransparent();
+        if (transparent.equals("true")) {
+            views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
+            views.setInt(R.id.onLayout, "setBackgroundColor", Color.TRANSPARENT);
+            views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
+        }
+
+        views.setTextViewText(R.id.txtWidgetTitle, widgetText);
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
@@ -227,13 +235,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        int widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
-        if (widgetID == AppWidgetManager.INVALID_APPWIDGET_ID) {
+        int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             return;
         }
 
         MyDBHandler db = new MyDBHandler(context);
-        DeviceInfo widgetInfo = db.findUser(widgetID);
+        DeviceInfo widgetInfo = db.findUser(widgetId);
         if (widgetInfo == null) {
             return;
         }
@@ -242,21 +250,21 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.getSinlgeDeviceID(widgetID);
+            DeviceInfo info = db.getSinlgeDeviceID(widgetId);
 
-            createDeviceActionApi(context, info.getDeviceID(), 4, widgetID, db, "Bell");
+            createDeviceActionApi(context, info.getDeviceID(), 4, widgetId, db, "Bell");
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.getSinlgeDeviceID(widgetID);
+            DeviceInfo info = db.getSinlgeDeviceID(widgetId);
 
-            createDeviceActionApi(context, info.getDeviceID(), 1, widgetID, db, "On");
+            createDeviceActionApi(context, info.getDeviceID(), 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.getSinlgeDeviceID(widgetID);
+            DeviceInfo info = db.getSinlgeDeviceID(widgetId);
 
-            createDeviceActionApi(context, info.getDeviceID(), 2, widgetID, db, "Off");
+            createDeviceActionApi(context, info.getDeviceID(), 2, widgetId, db, "Off");
         }
     }
 

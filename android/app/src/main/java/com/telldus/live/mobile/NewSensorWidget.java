@@ -63,21 +63,29 @@ public class NewSensorWidget extends AppWidgetProvider {
         int src = R.drawable.sensor;
         String widgetType;
         MyDBHandler db = new MyDBHandler(context);
-        SensorInfo sensorID = db.findSensor(appWidgetId);
+        SensorInfo sensorWidgetInfo = db.findSensor(appWidgetId);
         String transparent;
-        RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
-        if (sensorID == null) {
+        String userId = sensorWidgetInfo.getUserId();
+        String currentUserId = prefManager.getUserId();
+        Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
+        if (!isSameAccount) {
             return;
         }
 
-        widgetText = sensorID.getWidgetName();
-        sensorValue = sensorID.getSensorValue();
-        sensorUnit = sensorID.getSensorUnit();
-        sensorIcon = sensorID.getSensorIcon();
-        sensorHistory = sensorID.getSensorUpdate();
-        widgetType = sensorID.getWidgetType();
-        transparent = sensorID.getTransparent();
+        RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
+
+        if (sensorWidgetInfo == null) {
+            return;
+        }
+
+        widgetText = sensorWidgetInfo.getWidgetName();
+        sensorValue = sensorWidgetInfo.getSensorValue();
+        sensorUnit = sensorWidgetInfo.getSensorUnit();
+        sensorIcon = sensorWidgetInfo.getSensorIcon();
+        sensorHistory = sensorWidgetInfo.getSensorUpdate();
+        widgetType = sensorWidgetInfo.getWidgetType();
+        transparent = sensorWidgetInfo.getTransparent();
 
         long time = Long.parseLong(sensorHistory);
         // String timeStamp = GetTimeAgo.getTimeAgo(time, context);
