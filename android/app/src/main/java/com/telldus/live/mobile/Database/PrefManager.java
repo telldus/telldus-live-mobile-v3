@@ -172,6 +172,16 @@ public class PrefManager {
         return pref.getString("dimmer","0");
     }
 
+    public void setUserId(String userId) {
+        editor.putString("userId", userId);
+        editor.commit();
+        editor.apply();
+    }
+
+    public String getUserId() {
+        return pref.getString("userId", null);
+    }
+
     public void clear() {
         editor.clear();
         editor.commit();
