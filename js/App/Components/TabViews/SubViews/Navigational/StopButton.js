@@ -24,19 +24,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, View } from '../../../../../BaseComponents';
+import { IconTelldus, View } from '../../../../../BaseComponents';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 import i18n from '../../../../Translations/common';
-import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
+import { deviceSetState } from '../../../../Actions/Devices';
 import Theme from '../../../../Theme';
 
 type Props = {
 	device: Object,
 	commandStop: number,
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
 	isGatewayActive: boolean,
 	isInState: boolean,
@@ -46,6 +45,10 @@ type Props = {
 	id: number,
 	iconSize: number,
 	style: Object | Array<any> | number,
+	local: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 class StopButton extends View {
@@ -61,8 +64,15 @@ class StopButton extends View {
 		this.labelStopButton = `${props.intl.formatMessage(i18n.stop)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 	onStop() {
-		this.props.requestDeviceAction(this.props.id, this.props.commandStop);
-		this.props.deviceSetState(this.props.id, this.props.commandStop);
+		const { commandStop, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
+		}
+		this.props.deviceSetState(id, commandStop);
 	}
 
 	render(): Object {
@@ -70,26 +80,27 @@ class StopButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style } = this.props;
+			name, methodRequested, iconSize, style, local } = this.props;
 
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
 		let stopIconColor = !isGatewayActive ?
 			(isInState === 'STOP' ? '#fff' : '#a2a2a2') : (isInState === 'STOP' ? '#fff' : Theme.Core.brandPrimary);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity
 				style={[stopButtonStyle, style]}
 				onPress={supportedMethod ? this.onStop : noop}
 				accessibilityLabel={`${this.labelStopButton}, ${name}`}>
-				<Icon name="stop" size={iconSize}
+				<IconTelldus icon="stop" size={iconSize}
 					style={{
 						color: supportedMethod ? stopIconColor : '#eeeeee',
 					}}
 				/>
 				{
 					methodRequested === 'STOP' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
 				}
@@ -138,7 +149,6 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number): any => dispatch(deviceSetState(id, command, value)),
-		requestDeviceAction: (id: number, command: number): any => dispatch(requestDeviceAction(id, command)),
 	};
 }
 

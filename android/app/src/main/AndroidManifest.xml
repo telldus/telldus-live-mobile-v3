@@ -2,16 +2,11 @@
     package="com.telldus.live.mobile">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <permission
-        android:name="com.telldus.live.mobile.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.telldus.live.mobile.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
@@ -29,41 +24,116 @@
           android:label="@string/app_name"
       		android:launchMode="singleTop"
           android:theme="@style/SplashTheme"
-      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|layoutDirection|locale">
+      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
         </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <receiver
-          android:name="com.google.android.gms.gcm.GcmReceiver"
-          android:exported="true"
-          android:permission="com.google.android.c2dm.permission.SEND" >
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+        <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
           <intent-filter>
-              <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-              <category android:name="com.telldus.live.mobile" />
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+          </intent-filter>
+        </service>
+        <service android:name="io.invertase.firebase.messaging.RNFirebaseInstanceIdService">
+          <intent-filter>
+            <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+          </intent-filter>
+        </service>
+        <receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
+        <receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
+          <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+            <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            <category android:name="android.intent.category.DEFAULT" />
           </intent-filter>
         </receiver>
 
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-          <intent-filter>
-              <action android:name="android.intent.action.BOOT_COMPLETED" />
-          </intent-filter>
-        </receiver>
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-        <service
-          android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-          android:exported="false" >
-          <intent-filter>
-              <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-          </intent-filter>
-        </service>
+        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
+        See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
-          android:name="io.fabric.ApiKey"
-          android:value="6ddcb9201beba571821a466b7b634103262d6903"
-        />
+          android:name="com.google.firebase.messaging.default_notification_icon"
+          android:resource="@drawable/icon_notif" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+            notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+          android:name="com.google.firebase.messaging.default_notification_color"
+          android:resource="@color/brandSecondary" />
+        <meta-data
+          android:name="com.google.firebase.messaging.default_notification_channel_id"
+          android:value="${pushSenderId}"/>
+        <receiver android:name=".DeviceWidget"/>
+        <service
+            android:name=".MyService"
+            android:enabled="true" />
+
+        <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- <service android:name=".ServiceBackground.UpdateService"></service> -->
+        <service android:name=".UpdateSensorService" />
+
+        <receiver android:name=".NewAppWidget"
+            android:label="Device 3+ btn">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/new_app_widget_info" />
+        </receiver>
+
+        <activity android:name=".NewAppWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver android:name=".NewSensorWidget"
+            android:label="Sensor">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/new_sensor_widget_info" />
+        </receiver>
+
+        <activity android:name=".NewSensorWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <service android:name=".ServiceBackground.AccessTokenService"></service>
+
+        <service android:name=".ServiceBackground.NetworkInfo"></service>
+
+        <receiver android:name=".NewOnOffWidget"
+            android:label="Device 1-2 btn">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/new_on_off_widget_info" />
+        </receiver>
+
+        <activity android:name=".NewOnOffWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
     </application>
 
 </manifest>

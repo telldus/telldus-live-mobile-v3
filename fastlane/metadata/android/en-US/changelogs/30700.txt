@@ -1,0 +1,4 @@
+- Local control when using TellStick Net v2 and ZNet v1/v2 (requires firmware 1.1 or later).
+- Minimum of Android 5.0 (LOLLIPOP) is required to run the app.
+- Bug fixes.
+

@@ -23,13 +23,14 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
+import Ripple from 'react-native-material-ripple';
 
 import { IconTelldus, View } from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
+import Theme from '../../Theme';
 
 type Props = {
 	gateway: Object,
@@ -41,17 +42,10 @@ type Props = {
 class Gateway extends PureComponent<Props, null> {
 	props: Props;
 
-	offline: number;
-	socketOffline: number;
-	online: number;
 	onPress: () => void;
 
 	constructor(props: Props) {
 		super();
-
-		this.offline = require('../TabViews/img/tabIcons/location-red.png');
-		this.socketOffline = require('../TabViews/img/tabIcons/location-orange.png');
-		this.online = require('../TabViews/img/tabIcons/location-green.png');
 
 		this.onPress = this.onPress.bind(this);
 	}
@@ -61,16 +55,16 @@ class Gateway extends PureComponent<Props, null> {
 		onPressGateway(gateway);
 	}
 
-	getLocationStatus(online: boolean, websocketOnline: boolean, statusStyle: any, statusInfoStyle: any): Object {
+	getLocationStatus(online: boolean, websocketOnline: boolean, statusStyle: any, statusInfoStyle: any, localKey: Object): Object {
 		return (
 			<Status online={online} websocketOnline={websocketOnline} intl={this.props.intl}
-				textStyle={statusStyle} statusInfoStyle={statusInfoStyle}/>
+				textStyle={statusStyle} statusInfoStyle={statusInfoStyle} localKey={localKey}/>
 		);
 	}
 
 	render(): Object {
 		const { gateway, appLayout } = this.props;
-		const { name, online, websocketOnline, type } = gateway;
+		const { name, online, websocketOnline, type, localKey = {} } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;
 		const drawerWidth = getDrawerWidth(deviceWidth);
@@ -86,8 +80,9 @@ class Gateway extends PureComponent<Props, null> {
 			iconSize,
 			statusInfoStyle,
 		} = this.getStyles(drawerWidth);
+		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
-		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle);
+		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle, localKey);
 		const locationImageUrl = getLocationImageUrl(type);
 		const locationData = {
 			image: locationImageUrl,
@@ -97,7 +92,12 @@ class Gateway extends PureComponent<Props, null> {
 		};
 
 		return (
-			<TouchableOpacity style={gatewayContainer} onPress={this.onPress}>
+			<Ripple
+				rippleColor={rippleColor}
+				rippleOpacity={rippleOpacity}
+				rippleDuration={rippleDuration}
+				style={gatewayContainer}
+				onPress={this.onPress}>
 				<LocationDetails {...locationData}
 					style={detailsContainer}
 					imageStyle={image}
@@ -107,7 +107,7 @@ class Gateway extends PureComponent<Props, null> {
 				<View style={iconSettingsContainer}>
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
-			</TouchableOpacity>
+			</Ripple>
 		);
 	}
 	getStyles(drawerWidth: number): Object {
@@ -116,6 +116,8 @@ class Gateway extends PureComponent<Props, null> {
 		const fontSizeH2 = Math.floor(drawerWidth * 0.042);
 		const fontSizeH3 = Math.floor(drawerWidth * 0.038);
 		const iconSize = Math.floor(drawerWidth * 0.088);
+
+		const iconContainerWidth = iconSize + 15;
 
 		return {
 			iconSize,
@@ -154,6 +156,7 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			h1Style: {
 				fontSize: fontSizeH1,
+				marginRight: iconContainerWidth,
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
@@ -162,16 +165,14 @@ class Gateway extends PureComponent<Props, null> {
 				fontSize: fontSizeH3,
 			},
 			statusInfoStyle: {
-				width: fontSizeH3,
-				height: fontSizeH3,
-				borderRadius: fontSizeH3 / 2,
+				fontSize: fontSizeH3 * 2,
 			},
 			iconSettingsContainer: {
-				width: iconSize + 15,
+				width: iconContainerWidth,
 				justifyContent: 'center',
 				position: 'absolute',
 				right: 5,
-				bottom: drawerWidth * 0.04,
+				top: drawerWidth * 0.04,
 			},
 		};
 	}

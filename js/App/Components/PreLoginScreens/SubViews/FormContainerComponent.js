@@ -28,7 +28,6 @@ import DeviceInfo from 'react-native-device-info';
 
 import { BackgroundImage, View, Image } from '../../../../BaseComponents';
 
-import { getRelativeDimensions } from '../../../Lib';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -47,7 +46,6 @@ class FormContainerComponent extends View<Props, null> {
 		super(props);
 
 		this.isTablet = DeviceInfo.isTablet();
-		this.background = require('./../img/home5.jpg');
 		this.logo = require('./../img/telldusLogoBlack.png');
 	}
 
@@ -62,33 +60,35 @@ class FormContainerComponent extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={this.background} style={styles.container}>
-				<ScrollView
-					keyboardShouldPersistTaps={'always'}
-					style={{ flex: 1 }}
-					contentContainerStyle={styles.contentContainerStyle}>
-					<KeyboardAvoidingView
-						behavior="padding"
-						style={{ justifyContent: 'center', alignItems: 'center' }}
-						contentContainerStyle={{ paddingTop: 20, justifyContent: 'center' }}>
-						<Image
-							source={this.logo}
-							style={styles.logoStyle}
-						/>
-						<View style={styles.formContainer}>
-							{React.cloneElement(
-								children,
-								{
-									isTablet: this.isTablet,
-									appLayout,
-									navigation,
-									screenProps,
-									styles,
-								},
-							)}
-						</View>
-					</KeyboardAvoidingView>
-				</ScrollView>
+			<BackgroundImage source={{uri: 'home'}} style={styles.container}>
+				{!!appLayout.width && (
+					<ScrollView
+						keyboardShouldPersistTaps={'always'}
+						style={{ flex: 1 }}
+						contentContainerStyle={styles.contentContainerStyle}>
+						<KeyboardAvoidingView
+							behavior="padding"
+							style={{ justifyContent: 'center', alignItems: 'center' }}
+							contentContainerStyle={{ paddingTop: 20, justifyContent: 'center' }}>
+							<Image
+								source={this.logo}
+								style={styles.logoStyle}
+							/>
+							<View style={styles.formContainer}>
+								{React.cloneElement(
+									children,
+									{
+										isTablet: this.isTablet,
+										appLayout,
+										navigation,
+										screenProps,
+										styles,
+									},
+								)}
+							</View>
+						</KeyboardAvoidingView>
+					</ScrollView>
+				)}
 			</BackgroundImage>
 		);
 	}
@@ -183,13 +183,20 @@ class FormContainerComponent extends View<Props, null> {
 				left: Platform.OS === 'android' ? 3 : 0,
 			},
 			iconSize: textFieldFontSize,
+			loginButtonStyleG: {
+				minWidth: 200,
+				maxWidth: 300,
+				minHeight: 50,
+				maxHeight: 80,
+				alignSelf: 'center',
+			},
 		};
 	}
 }
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 	};
 }
 

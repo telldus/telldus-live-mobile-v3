@@ -24,23 +24,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { View, Icon } from '../../../../BaseComponents';
+import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+
+import { shouldUpdate } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
-	device: Object,
-	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
-	style: Object,
 	command: number,
-	intl: Object,
+
+	device: Object,
+	isOpen: boolean,
+
 	isGatewayActive: boolean,
-	appLayout: Object,
+	intl: Object,
+	style: Object,
 	bellButtonStyle: number | Object,
+	closeSwipeRow: () => void,
+	deviceSetState: (id: number, command: number, value?: number) => void,
+	onPressDeviceAction?: () => void,
 };
 
 class BellButton extends View {
@@ -55,24 +60,48 @@ class BellButton extends View {
 		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { isOpen, ...others } = this.props;
+		const { isOpenN, ...othersN } = nextProps;
+		if (isOpen !== isOpenN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['device']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	onBell() {
-		this.props.deviceSetState(this.props.device.id, this.props.command);
-		this.props.requestDeviceAction(this.props.device.id, this.props.command);
+		const { command, device, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
+		}
+		this.props.deviceSetState(device.id, command);
 	}
 
 	render(): Object {
 		let { device, isGatewayActive, bellButtonStyle } = this.props;
-		let { methodRequested, name } = device;
+		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
+		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity onPress={this.onBell} style={[styles.bell, this.props.style, bellButtonStyle]} accessibilityLabel={accessibilityLabel}>
-				<Icon name="bell" size={22} color={iconColor} />
+				<IconTelldus icon="bell" size={22} color={iconColor} />
 
 				{
 					methodRequested === 'BELL' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
 				}
@@ -102,9 +131,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) =>{
 			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
 		},
 	};
 }

@@ -22,32 +22,93 @@
 'use strict';
 
 import React from 'react';
-import { View, Text } from '../../../../BaseComponents';
+import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
+import { getControlIconColor } from '../../../Lib/gatewayUtils';
 import Theme from '../../../Theme';
 
 type Props = {
 	gateway: Object,
 	appLayout: Object,
+	supportLocalControl: boolean,
+	isOnline: boolean,
+	websocketOnline: boolean,
 };
 
-export default ({ gateway, appLayout }: Props ): Object => {
-	let { height, width } = appLayout;
-	let isPortrait = height > width;
-	let deviceWidth = isPortrait ? width : height;
+export default class DeviceHeader extends View<Props, null> {
+	props: Props;
+	constructor(props: Props) {
+		super(props);
+	}
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { appLayout, supportLocalControl, isOnline, websocketOnline } = this.props;
 
-	let {
-		maxSizeRowTextOne,
-	} = Theme.Core;
+		return appLayout.width !== nextProps.appLayout.width || supportLocalControl !== nextProps.supportLocalControl ||
+		isOnline !== nextProps.isOnline || websocketOnline !== nextProps.websocketOnline;
+	}
 
-	let nameFontSize = Math.floor(deviceWidth * 0.047);
-	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+	render(): Object {
+		const {
+			appLayout,
+			gateway,
+			supportLocalControl,
+			isOnline,
+			websocketOnline,
+		} = this.props;
 
-	return (
-		<View style={Theme.Styles.sectionHeader}>
-			<Text style={[Theme.Styles.sectionHeaderText, { fontSize: nameFontSize }]}>
-				{gateway}
-			</Text>
-		</View>
-	);
-};
+		const icon = supportLocalControl ? 'localcontrol' : 'cloudcontrol';
+		const {
+			statusInfo,
+			nameFontSize,
+			sectionHeader,
+		} = this.getStyles(appLayout, supportLocalControl);
+		const controlIconColor = getControlIconColor(isOnline, websocketOnline, supportLocalControl);
+
+		return (
+			<View style={sectionHeader}>
+				<IconTelldus icon={icon} style={{...statusInfo, color: controlIconColor}}/>
+				<Text style={[Theme.Styles.sectionHeaderText, { fontSize: nameFontSize }]}>
+					{gateway}
+				</Text>
+			</View>
+		);
+	}
+
+	getStyles(appLayout: Object, supportLocalControl: boolean): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			maxSizeRowTextOne,
+			shadow,
+			paddingFactor,
+		} = Theme.Core;
+
+		let statusInfoSize = Math.floor(deviceWidth * 0.055);
+		statusInfoSize = statusInfoSize > 28 ? 28 : statusInfoSize;
+
+		let nameFontSize = Math.floor(deviceWidth * 0.047);
+		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+
+		const padding = deviceWidth * paddingFactor;
+
+		return {
+			statusInfo: {
+				fontSize: statusInfoSize,
+				marginRight: 5,
+			},
+			nameFontSize,
+			sectionHeader: {
+				flexDirection: 'row',
+				paddingVertical: 2 + (nameFontSize * 0.2),
+				backgroundColor: '#ffffff',
+				alignItems: 'center',
+				paddingLeft: 5 + (nameFontSize * 0.2),
+				justifyContent: 'flex-start',
+				marginBottom: padding / 2,
+				...shadow,
+			},
+		};
+	}
+}

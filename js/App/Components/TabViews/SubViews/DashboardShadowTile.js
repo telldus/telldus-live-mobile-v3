@@ -22,20 +22,20 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { View, Text, BlockIcon } from '../../../../BaseComponents';
-import { StyleSheet } from 'react-native';
+
+import { View, Text, BlockIcon, StyleSheet } from '../../../../BaseComponents';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContainerStyle, iconStyle, info, isGatewayActive, formatMessage }: Object): Object => (
+const Title = ({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, formatMessage }: Object): Object => (
 	<View style={[styles.title, {
 		width: tileWidth,
-		height: tileWidth * 0.6,
+		height: Math.ceil(tileWidth * 0.6),
 		paddingHorizontal: tileWidth * 0.06,
 		paddingVertical: tileWidth * 0.06,
 	}]}>
-		{icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
+		{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<View style={styles.textCover}>
 			<Text
 				ellipsizeMode="middle"
@@ -48,7 +48,7 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 				]}>
 				{name ? name : formatMessage(i18n.noName)}
 			</Text>
-			{info &&
+			{!!info &&
 			(<Text
 				ellipsizeMode="middle"
 				numberOfLines={1}
@@ -66,17 +66,15 @@ const Title = ({ isEnabled, name, tileWidth, type = 'device', icon, iconContaine
 );
 
 type Props = {
-	hasShadow: boolean,
 	style: Object,
 	children: Object,
-	type: string,
 	item: string,
 	intl: Object,
 	accessibilityLabel: string,
 	icon?: string,
 };
 
-class DashboardShadowTile extends View {
+class DashboardShadowTile extends View<Props, null> {
 	props: Props;
 
 	render(): Object {
@@ -88,7 +86,7 @@ class DashboardShadowTile extends View {
 			<View
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}
-				style={[this.props.style, Theme.Core.shadow, {elevation: 3}]}>
+				style={[this.props.style, Theme.Core.shadow, {elevation: 3, backgroundColor: '#fff'}]}>
 				<View style={{
 					flexDirection: 'column',
 					borderRadius: 2,
@@ -128,16 +126,5 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 });
-
-DashboardShadowTile.propTypes = {
-	hasShadow: PropTypes.bool,
-	isEnabled: PropTypes.bool,
-	name: PropTypes.string,
-	tileWidth: PropTypes.number,
-};
-
-DashboardShadowTile.defaultProps = {
-	hasShadow: true,
-};
 
 module.exports = DashboardShadowTile;

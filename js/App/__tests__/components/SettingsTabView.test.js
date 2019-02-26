@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 
-import SettingsTab from '../../Components/DeviceDetails/SettingsTab';
+import SettingsTab from '../../Components/Device/DeviceDetails/SettingsTab';
 import { addToDashboard, removeFromDashboard } from '../../Actions';
 import { LearnButton } from '../../Components/TabViews/SubViews';
 

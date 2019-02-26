@@ -24,43 +24,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
-import { defineMessages, intlShape } from 'react-intl';
-import { connect } from 'react-redux';
+import { intlShape } from 'react-intl';
 import _ from 'lodash';
 import Platform from 'Platform';
+const isEqual = require('react-fast-compare');
 
-import { BlockIcon, IconTelldus, ListRow, View, Text, FormattedTime } from '../../../../BaseComponents';
+import {
+	BlockIcon,
+	IconTelldus,
+	ListRow,
+	View,
+	Text,
+	FormattedTime,
+} from '../../../../BaseComponents';
+import NowRow from './Jobs/NowRow';
 import Theme from '../../../Theme';
 import { ACTIONS, Description, TextRowWrapper, Title } from '../../Schedule/SubViews';
-import { capitalize, getSelectedDays, getWeekdays, getWeekends,
-	getRelativeDimensions, getTranslatableDays } from '../../../Lib';
+import {
+	capitalize,
+	getSelectedDays,
+	getWeekdays,
+	getWeekends,
+	getTranslatableDays,
+	getDeviceActionIcon,
+} from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
+import { methods } from '../../../../Constants';
 
 import i18n from '../../../Translations/common';
 
-const messages = defineMessages({
-	phraseOne: {
-		id: 'accessibilityLabel.scheduler.phraseOne',
-		defaultMessage: 'Schedule for',
-	},
-	repeatDays: {
-		id: 'scheduler.repeatDays',
-		defaultMessage: 'Every day at {value}',
-	},
-	repeatWeekday: {
-		id: 'scheduler.repeatWeekday',
-		defaultMessage: 'Weekdays at {value}',
-	},
-	repeatWeekend: {
-		id: 'scheduler.repeatWeekend',
-		defaultMessage: 'Weekends at {value}',
-	},
-});
-
-
 type Props = {
 	active: boolean,
-	device: Object,
 	method: number,
 	methodValue?: number,
 	effectiveHour: string,
@@ -70,9 +64,14 @@ type Props = {
 	type: string,
 	weekdays: number[],
 	isFirst: boolean,
-	editJob: (schedule: Schedule) => void,
 	appLayout: Object,
+	showNow: boolean,
+	expired: boolean,
+	deviceType: string,
+	deviceSupportedMethods: Object,
+
 	intl: intlShape,
+	editJob: (schedule: Schedule) => void,
 };
 
 class JobRow extends View<null, Props, null> {
@@ -81,7 +80,6 @@ class JobRow extends View<null, Props, null> {
 		id: PropTypes.number.isRequired,
 		deviceId: PropTypes.number.isRequired,
 		active: PropTypes.bool.isRequired,
-		device: PropTypes.object.isRequired,
 		method: PropTypes.number.isRequired,
 		methodValue: PropTypes.number,
 		hour: PropTypes.number.isRequired,
@@ -95,6 +93,35 @@ class JobRow extends View<null, Props, null> {
 		isFirst: PropTypes.bool.isRequired,
 		editJob: PropTypes.func.isRequired,
 	};
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { appLayout, intl, editJob, weekdays, currentScreen, ...others } = this.props;// eslint-disable-line
+		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, currentScreen: currentScreenN, ...othersN } = nextProps;// eslint-disable-line
+		if (currentScreenN === 'Scheduler') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Scheduler' && nextProps.screenReaderEnabled) {
+				return true;
+			}
+			const newLayout = nextProps.appLayout.width !== appLayout.width;
+			if (newLayout) {
+				return true;
+			}
+
+			if (weekdays.length !== weekdaysN.length) {
+				return true;
+			}
+
+			const propsEqual = isEqual(others, othersN);
+			if (!propsEqual) {
+				return true;
+			}
+		}
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Scheduler' && currentScreen === 'Scheduler' && nextProps.screenReaderEnabled) {
+			return true;
+		}
+		return false;
+	}
 
 	editJob = () => {
 		const {
@@ -110,6 +137,9 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		} = this.props;
 
 		const schedule: Schedule = {
@@ -124,21 +154,21 @@ class JobRow extends View<null, Props, null> {
 			randomInterval,
 			active,
 			weekdays,
+			retries,
+			retryInterval,
+			reps,
 		};
 
 		editJob(schedule);
 	};
 
 	render(): React$Element<any> | null {
-		if (!this.props.device) {
-			return null;
-		}
 
 		const {
 			type,
 			effectiveHour,
 			effectiveMinute,
-			device,
+			deviceName: dName,
 			offset,
 			randomInterval,
 			active,
@@ -146,6 +176,9 @@ class JobRow extends View<null, Props, null> {
 			editJob,
 			appLayout,
 			intl,
+			showNow,
+			expired,
+			currentScreen,
 		} = this.props;
 
 		const {
@@ -161,8 +194,11 @@ class JobRow extends View<null, Props, null> {
 			rowContainer,
 			roundIconContainer,
 			rowWithTriangleContainer,
+			lineStyle,
+			rowWithTriangleContainerNow,
 		} = this._getStyle(appLayout);
 		const opacity = active ? 1 : 0.5;
+		const color = !active ? '#BDBDBD' : (expired ? '#999999' : '#929292');
 
 		const repeat = this._getRepeatDescription();
 		const date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
@@ -171,75 +207,101 @@ class JobRow extends View<null, Props, null> {
 		const { actionIcon, actionLabel } = this._renderActionIcon();
 
 		const { formatMessage } = intl;
-		const deviceName = device.name ? device.name : formatMessage(i18n.noName);
+		const deviceName = dName ? dName : formatMessage(i18n.noName);
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
-		const accessibilityLabel = `${formatMessage(messages.phraseOne)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
+
+		const accessible = currentScreen === 'Scheduler';
+		const accessibilityLabel = `${formatMessage(i18n.phraseOneSheduler)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (
-			<TouchableOpacity
-				style={container}
-				onPress={this.editJob}
-				disabled={!editJob}
-				accessibilityLabel={accessibilityLabel}
-			>
-				<ListRow
-					roundIcon={type}
-					roundIconStyle={roundIcon}
-					roundIconContainerStyle={[roundIconContainer, { backgroundColor: active ? '#929292' : '#BDBDBD'} ]}
-					time={timestamp}
-					timeFormat= {{
-						hour: 'numeric',
-						minute: 'numeric',
-					}}
-					timeStyle={time}
-					timeContainerStyle={{ opacity }}
-					rowContainerStyle={[rowContainer]}
-					rowWithTriangleContainerStyle={[rowWithTriangleContainer, { opacity }]}
-					triangleColor={methodIconContainer.backgroundColor}
-					isFirst={isFirst}
+			<View importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}>
+				<TouchableOpacity
+					style={container}
+					onPress={this.editJob}
+					disabled={!editJob}
+					accessible={accessible}
+					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+					accessibilityLabel={accessible ? accessibilityLabel : ''}
 				>
-					{actionIcon}
-					<TextRowWrapper style={textWrapper} appLayout={appLayout}>
-						<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
-							{device.name}
-						</Title>
-						<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
-							{repeat}
-							{type === 'time' && (
-								<FormattedTime
-									value={timestamp}
-									hour="numeric"
-									minute="numeric"
-									style={description}
-								/>)
-							}
-						</Description>
-					</TextRowWrapper>
-					{!!offset && (
-						<IconTelldus
-							icon="offset"
-							style={iconOffset}
+					<ListRow
+						roundIcon={type}
+						roundIconStyle={roundIcon}
+						roundIconContainerStyle={[roundIconContainer, { backgroundColor: color } ]}
+						time={timestamp}
+						timeFormat= {{
+							hour: 'numeric',
+							minute: 'numeric',
+						}}
+						timeStyle={time}
+						timeContainerStyle={{ opacity }}
+						rowContainerStyle={rowContainer}
+						rowWithTriangleContainerStyle={rowWithTriangleContainer}
+						triangleColor={methodIconContainer.backgroundColor}
+						triangleContainerStyle={{ opacity }}
+						isFirst={isFirst}
+					>
+						{actionIcon}
+						<View style={{ flex: 1, opacity }}>
+							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
+								<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
+									{deviceName}
+								</Title>
+								<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
+									{repeat}{' '}
+									{type === 'time' && (
+										<FormattedTime
+											value={timestamp}
+											hour="numeric"
+											minute="numeric"
+											style={description}
+										/>)
+									}
+								</Description>
+							</TextRowWrapper>
+							{!!offset && (
+								<IconTelldus
+									icon="offset"
+									style={iconOffset}
+								/>
+							)}
+							{!!randomInterval && (
+								<IconTelldus
+									icon="random"
+									style={iconRandom}
+								/>
+							)}
+						</View>
+					</ListRow>
+				</TouchableOpacity>
+				{!!showNow && (
+					<View
+						style={container}
+					>
+						<NowRow
+							text={formatMessage(i18n.now)}
+							roundIconContainerStyle={roundIconContainer}
+							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
+							textStyle={time}
+							lineStyle={lineStyle}
 						/>
-					)}
-					{!!randomInterval && (
-						<IconTelldus
-							icon="random"
-							style={iconRandom}
-						/>
-					)}
-				</ListRow>
-			</TouchableOpacity>
+					</View>
+				)}
+			</View>
 		);
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue } = this.props;
+		const { intl, method, appLayout, methodValue, expired, deviceSupportedMethods, deviceType } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
-		const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
 
 		if (action) {
+			const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
+			const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
+			const methodString = methods[action.method];
+			let iconName = actionIcons[methodString];
+
 			if (action.name === 'Dim') {
 				const roundVal = Math.round(methodValue / 255 * 100);
 				const value = `${roundVal}%`;
@@ -257,8 +319,8 @@ class JobRow extends View<null, Props, null> {
 			return (
 				{
 					actionIcon: <BlockIcon
-						icon={action.icon}
-						bgColor={action.bgColor}
+						icon={iconName ? iconName : action.icon}
+						bgColor={expired ? '#999999' : action.bgColor}
 						containerStyle={methodIconContainer}
 						style={methodIcon}
 					/>,
@@ -279,11 +341,11 @@ class JobRow extends View<null, Props, null> {
 
 		let repeatDays: string = '';
 		if (selectedDays.length === DAYS.length) {
-			repeatDays = formatMessage(messages.repeatDays, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatDays, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekdays(formatDate))) {
-			repeatDays = formatMessage(messages.repeatWeekday, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatWeekday, { value: repeatTime });
 		} else if (_.isEqual(selectedDays, getWeekends(formatDate))) {
-			repeatDays = formatMessage(messages.repeatWeekend, { value: repeatTime });
+			repeatDays = formatMessage(i18n.repeatWeekend, { value: repeatTime });
 		} else {
 			for (let day of selectedDays) {
 				repeatDays += `${day.slice(0, 3).toLowerCase()}, `;
@@ -306,12 +368,18 @@ class JobRow extends View<null, Props, null> {
 
 	_getStyle = (appLayout: Object): Object => {
 		let { fonts, borderRadiusRow } = Theme.Core;
-		let { active, method, methodValue } = this.props;
+		let { active, method, methodValue, expired } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
-		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.1111) + (height * 0.13) : 0;
+
+		const { land } = Theme.Core.headerHeightFactor;
+		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
 		width = width - headerHeight;
+
+		const timeWidth = width * 0.26;
+		const rowWidth = width * 0.57;
+		const rowWithTriangleWidth = width * 0.59;
 
 		let backgroundColor;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
@@ -321,7 +389,7 @@ class JobRow extends View<null, Props, null> {
 				let roundVal = Math.round(methodValue / 255 * 100);
 				showDarkBG = roundVal >= 50 && roundVal < 100;
 			}
-			backgroundColor = active ? (showDarkBG ? action.bgColorDark : action.bgColor) : '#bdbdbd';
+			backgroundColor = !active ? '#bdbdbd' : (expired ? '#999999' : (showDarkBG ? action.bgColorDark : action.bgColor));
 		}
 
 		return {
@@ -330,6 +398,7 @@ class JobRow extends View<null, Props, null> {
 				alignItems: 'center',
 				paddingHorizontal: width * 0.03888888,
 				width: width,
+				backgroundColor: 'transparent',
 			},
 			methodIconContainer: {
 				backgroundColor,
@@ -375,18 +444,29 @@ class JobRow extends View<null, Props, null> {
 				fontSize: deviceWidth * 0.044,
 			},
 			time: {
-				width: width * 0.26,
+				width: timeWidth,
 				textAlign: 'center',
 				fontSize: deviceWidth * 0.044,
+				color: '#707070',
 			},
 			rowContainer: {
-				width: width * 0.57,
+				width: rowWidth,
 			},
 			roundIconContainer: {
 				marginLeft: isPortrait ? 0 : width * 0.01788,
 			},
 			rowWithTriangleContainer: {
-				width: width * 0.59,
+				width: rowWithTriangleWidth,
+				justifyContent: 'center',
+			},
+			lineStyle: {
+				height: 1 + (deviceWidth * 0.005),
+				width: '100%',
+				backgroundColor: Theme.Core.brandPrimary,
+			},
+			rowWithTriangleContainerNow: {
+				width: rowWithTriangleWidth + timeWidth,
+				height: deviceWidth * 0.082,
 				justifyContent: 'center',
 			},
 		};
@@ -394,10 +474,4 @@ class JobRow extends View<null, Props, null> {
 
 }
 
-function mapStateToProps(state: Object): Object {
-	return {
-		appLayout: getRelativeDimensions(state.App.layout),
-	};
-}
-
-export default connect(mapStateToProps, null)(JobRow);
+export default JobRow;

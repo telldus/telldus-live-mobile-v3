@@ -24,27 +24,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
-import { defineMessages } from 'react-intl';
 
 import { BlockIcon, IconTelldus, Row, View } from '../../../../BaseComponents';
 import Description from './Description';
 import Theme from '../../../Theme';
-import { getSuntime, getHoursAndMinutes } from '../../../Lib';
+import { getHoursAndMinutes } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import i18n from '../../../Translations/common';
-
-const messages = defineMessages({
-	descriptionOffset: {
-		id: 'schedule.time.descriptionOffset',
-		defaultMessage: 'Offset {value}',
-		description: 'Details about time of the schedule',
-	},
-	descriptionInterval: {
-		id: 'schedule.time.descriptionInterval',
-		defaultMessage: 'Random interval {value}',
-		description: 'Details about interval of the schedule',
-	},
-});
 
 type Time = {
 	hour: number,
@@ -75,6 +61,26 @@ export default class TimeRow extends View<null, Props, State> {
 		onPress: PropTypes.func,
 	};
 
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const { schedule } = props;
+		const { hour, minute, type } = schedule;
+		const { time } = state;
+		if (hour !== time.hour || minute !== time.minute) {
+			if (type !== 'time') {
+				return {
+					loading: true,
+				};
+			}
+			return {
+				time: {
+					hour,
+					minute,
+				},
+			};
+		}
+		return null;
+	}
+
 	constructor(props: Props) {
 		super(props);
 
@@ -89,7 +95,7 @@ export default class TimeRow extends View<null, Props, State> {
 		};
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		const { schedule, device } = this.props;
 
 		if (schedule.type !== 'time') {
@@ -98,22 +104,12 @@ export default class TimeRow extends View<null, Props, State> {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Props) {
-		const { hour, minute, type } = nextProps.schedule;
-		const { time } = this.state;
-
-		if (hour !== time.hour || minute !== time.minute) {
-			if (type !== 'time') {
-				this.setState({ loading: true });
-				this._getSuntime(nextProps.device.clientId, type);
-			} else {
-				this.setState({
-					time: {
-						hour,
-						minute,
-					},
-				});
-			}
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { loading } = this.state;
+		const { schedule, device } = this.props;
+		const { type } = schedule;
+		if (loading && schedule.type !== 'time') {
+			this._getSuntime(device.clientId, type);
 		}
 	}
 
@@ -151,8 +147,8 @@ export default class TimeRow extends View<null, Props, State> {
 		const offsetIcon = offset ? 'offset' : null;
 		const randomIcon = randomInterval ? 'random' : null;
 
-		const labelInterval = randomInterval ? intl.formatMessage(messages.descriptionInterval, {value: getHoursAndMinutes(randomInterval)}) : null;
-		const labelOffset = offset ? intl.formatMessage(messages.descriptionOffset, {value: getHoursAndMinutes(offset)}) : null;
+		const labelInterval = randomInterval ? intl.formatMessage(i18n.descriptionInterval, {value: getHoursAndMinutes(randomInterval)}) : null;
+		const labelOffset = offset ? intl.formatMessage(i18n.descriptionOffset, {value: getHoursAndMinutes(offset)}) : null;
 		const time = this._formatTime();
 
 		const accessibilityLabel = this._getAccessibilityLabel(label, time, labelInterval, labelOffset);
@@ -205,28 +201,27 @@ export default class TimeRow extends View<null, Props, State> {
 		return `${label} ${time} ${labelInterval} ${labelOffset}, ${labelPostScript}`;
 	}
 
-	// $FlowFixMe
-	_getSuntime = async (clientId: number, type: string): void => {
+	_getSuntime = (clientId: number, type: string) => {
 		const { hour, minute } = this.state.time;
 
-		const time: Time = await getSuntime(clientId, type);
-
-		if ((time: Time)) {
-			if (time.hour !== hour && time.minute !== minute) {
-				this.setState({
-					time,
-					loading: false,
-				});
+		this.props.getSuntime(clientId, type).then((time: Time) => {
+			if ((time: Time)) {
+				if (time.hour !== hour && time.minute !== minute) {
+					this.setState({
+						time,
+						loading: false,
+					});
+				} else {
+					this.setState({
+						loading: false,
+					});
+				}
 			} else {
 				this.setState({
 					loading: false,
 				});
 			}
-		} else {
-			this.setState({
-				loading: false,
-			});
-		}
+		});
 	};
 
 	_formatTime = (): string => {

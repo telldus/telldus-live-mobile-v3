@@ -26,9 +26,6 @@ import { connect } from 'react-redux';
 import { Text, View } from '../../../../../BaseComponents';
 import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 import Theme from '../../../../Theme';
-import {
-	getRelativeDimensions,
-} from '../../../../Lib';
 type Props = {
 	title?: any,
 	image: string,
@@ -101,7 +98,7 @@ class LocationDetails extends View {
 							<Text numberOfLines={1} style={[textLocation, h2Style]}>
 								{!!H2 && H2}
 							</Text>
-							{info && (
+							{!!info && (
 								info
 							)}
 						</View>
@@ -171,7 +168,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(store.App.layout),
+		appLayout: store.app.layout,
 	};
 }
 

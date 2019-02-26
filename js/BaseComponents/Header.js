@@ -22,13 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Platform, Image, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { hasStatusBar } from '../App/Lib';
+import Theme from '../App/Theme';
 
 import Base from './Base';
 import computeProps from './computeProps';
@@ -37,6 +35,7 @@ import View from './View';
 import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
+import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
 
 type Props = {
@@ -47,14 +46,24 @@ type Props = {
 	rightButton: Object,
 	leftButton: Object,
 	appLayout: Object,
+	showAttentionCapture: boolean,
+	attentionCaptureText: string,
 };
 
-class HeaderComponent extends Base {
+type DefaultProps = {
+	showAttentionCapture: boolean,
+};
+
+export default class HeaderComponent extends Base {
 
 	deviceWidth: number;
 	paddingHorizontal: number;
 	paddingTop: number;
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		showAttentionCapture: false,
+	};
 
 	getInitialStyle: () => Object;
 	prepareRootProps: () => Object;
@@ -69,7 +78,7 @@ class HeaderComponent extends Base {
 		this.deviceWidth = height > width ? width : height;
 
 		this.paddingHorizontal = 15;
-		this.paddingTop = (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 0;
+		this.paddingTop = Theme.Core.navBarTopPadding;
 
 		return {
 			navbar: {
@@ -132,7 +141,7 @@ class HeaderComponent extends Base {
 		if (!this.props.children) {
 			return (
 				<Image
-					source={require('../App/Components/TabViews/img/telldus-logo3.png')}
+					source={{uri: 'telldus_logo'}}
 					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
 				/>
 			);
@@ -314,16 +323,46 @@ class HeaderComponent extends Base {
 			return <Icon name={name} size={size} color={color} style={iconStyle}/>;
 		}
 		if (button.title) {
-			return <Text>{button.title}</Text>;
+			return <Text allowFontScaling={false}>{button.title}</Text>;
 		}
 		if (button.component) {
 			return button.component;
 		}
 	};
 
+	getPropsAttentionCatcher(): Object {
+		const { appLayout, attentionCaptureText } = this.props;
+		let top = Theme.Core.navBarTopPadding, pos = 'right', right = 35, left;
+
+		if (Platform.OS === 'android') {
+			const { height, width } = appLayout;
+			const isPortrait = height > width;
+
+			top = isPortrait ? Theme.Core.navBarTopPadding : 0;
+			if (!isPortrait) {
+				pos = 'left';
+				right = undefined;
+				left = height - 35;
+			}
+		}
+		return {top, right, left, pos, text: attentionCaptureText};
+	}
+
+	renderRightButtonAttentionCapture = (): Object => {
+		const { top, right, left, pos, text } = this.getPropsAttentionCatcher();
+		return (
+			<AttentionCatcher
+				containerTop={top}
+				right={right}
+				arrowPos={pos}
+				left={left}
+				text={text}/>
+		);
+	}
+
 	renderRightButton = (rightButton: Object): Object => {
-		let { accessibilityLabel, icon } = rightButton;
-		let style = icon ? icon.style : null;
+		let { accessibilityLabel, icon, style } = rightButton;
+		style = icon ? icon.style : style;
 		return (
 			<TouchableOpacity
 				onPress={rightButton.onPress}
@@ -366,7 +405,7 @@ class HeaderComponent extends Base {
 	};
 
 	render(): Object {
-		const { leftButton, rightButton } = this.props;
+		const { leftButton, rightButton, showAttentionCapture } = this.props;
 
 		return (
 			<View style={{ flex: 0 }}>
@@ -376,27 +415,13 @@ class HeaderComponent extends Base {
 					) : null
 				}
 				<View {...this.prepareRootProps()}>
-					{leftButton && this.renderLeftButton(leftButton)}
+					{!!leftButton && this.renderLeftButton(leftButton)}
 					{this.renderChildren()}
-					{rightButton && this.renderRightButton(rightButton)}
+					{showAttentionCapture && this.renderRightButtonAttentionCapture()}
+					{!!rightButton && this.renderRightButton(rightButton)}
 				</View>
 			</View>
 		);
 	}
 }
 
-HeaderComponent.propTypes = {
-	children: PropTypes.object,
-	rounded: PropTypes.number,
-	searchBar: PropTypes.object,
-	rightButton: PropTypes.object,
-	leftButton: PropTypes.object,
-};
-
-function mapStateToProps(store: Object): Object {
-	return {
-		appLayout: store.App.layout,
-	};
-}
-
-export default connect(mapStateToProps, null)(HeaderComponent);

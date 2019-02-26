@@ -23,16 +23,13 @@
 
 import React from 'react';
 import { FlatList } from 'react-native';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
 import Platform from 'Platform';
 
 import {
-	FloatingButton,
 	FullPageActivityIndicator,
 	View,
 	StyleSheet,
@@ -40,26 +37,15 @@ import {
 	Icon,
 } from '../../../BaseComponents';
 import { JobRow, JobsPoster } from './SubViews';
-import { editSchedule, getJobs } from '../../Actions';
+import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
 
-import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
-import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 
-const messages = defineMessages({
-	scheduler: {
-		id: 'pages.scheduler',
-		defaultMessage: 'Scheduler',
-		description: 'The Schedulers tab',
-	},
-	noUpcommingSchedule: {
-		id: 'schedule.noUpcommingSchedule',
-		defaultMessage: 'No upcoming schedules on this day',
-		description: 'Message when no schedules',
-	},
-});
+import { getTabBarIcon } from '../../Lib';
+import i18n from '../../Translations/common';
 
 type NavigationParams = {
 	focused: boolean, tintColor: string,
@@ -67,35 +53,25 @@ type NavigationParams = {
 
 type Props = {
 	rowsAndSections: Object,
-	devices: Object,
-	dispatch: Function,
+	showInactive: boolean,
 	navigation: Object,
 	screenProps: Object,
-	appLayout: Object,
+	dispatch: Function,
 };
 
 type State = {
-	daysToRender?: React$Element<any>[],
 	todayIndex?: number,
 	isRefreshing: boolean,
 	loading: boolean,
-	days: Array<any>,
 };
 
 class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
-
-	static propTypes = {
-		rowsAndSections: PropTypes.object,
-		devices: PropTypes.object,
-		dispatch: PropTypes.func,
-		navigation: PropTypes.object,
-		screenProps: PropTypes.object,
-	};
+	onToggleVisibility: (boolean) => void;
 
 	static navigationOptions = (props: Object): Object => ({
-		title: props.screenProps.intl.formatMessage(messages.scheduler),
+		title: props.screenProps.intl.formatMessage(i18n.scheduler),
 		tabBarIcon: ({ focused, tintColor }: NavigationParams): Object => {
 			return getTabBarIcon(focused, tintColor, 'scheduler');
 		},
@@ -104,7 +80,7 @@ class SchedulerTab extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.noScheduleMessage = props.screenProps.intl.formatMessage(messages.noUpcommingSchedule);
+		this.noScheduleMessage = props.screenProps.intl.formatMessage(i18n.noUpcommingSchedule);
 
 		this.contentOffset = 0;
 
@@ -113,17 +89,22 @@ class SchedulerTab extends View<null, Props, State> {
 			isRefreshing: false,
 			isLoading: !Object.keys(props.rowsAndSections).length,
 		};
-		this.newSchedule = this.newSchedule.bind(this);
 		this.onIndexChanged = this.onIndexChanged.bind(this);
 		this.keyExtractor = this.keyExtractor.bind(this);
+		this.onToggleVisibility = this.onToggleVisibility.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.tab === 'schedulerTab';
+		const { currentScreen, screenReaderEnabled } = nextProps.screenProps;
+		const { currentScreen: prevScreen } = this.props.screenProps;
+		return (currentScreen === 'Scheduler') || (currentScreen !== 'Scheduler' && prevScreen === 'Scheduler' && screenReaderEnabled);
 	}
 
 	componentDidMount() {
-		this.refreshJobs();
+		const { currentScreen } = this.props.screenProps;
+		if (currentScreen === 'Scheduler') {
+			this.refreshJobs();
+		}
 	}
 
 	onRefresh = () => {
@@ -147,26 +128,35 @@ class SchedulerTab extends View<null, Props, State> {
 		});
 	}
 
-	newSchedule = () => {
-		this.props.screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: false});
-	};
-
 	editJob = (schedule: Schedule) => {
-		const { dispatch, screenProps } = this.props;
+		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		screenProps.stackNavigator.navigate('Schedule', {renderRootHeader: true, editMode: true});
+		navigation.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: true },
+		});
 	};
 
 	onIndexChanged = (index: number) => {
-		this.setState({
-			todayIndex: index,
-		});
+		if (index < 0 || index > 7) {
+			this._scroll(0);
+		} else {
+			this.setState({
+				todayIndex: index,
+			});
+		}
+	}
+
+	onToggleVisibility(show: boolean) {
+		const { dispatch } = this.props;
+		dispatch(toggleInactive(show));
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, appLayout, screenProps } = this.props;
-		const { formatMessage } = screenProps.intl;
+		const { rowsAndSections, screenProps, showInactive } = this.props;
+		const { appLayout, currentScreen } = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -177,13 +167,18 @@ class SchedulerTab extends View<null, Props, State> {
 		const { swiperContainer } = this.getStyles(appLayout);
 
 		return (
-			<View style={swiperContainer}>
+			<View style={swiperContainer}
+				accessible={false}
+				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
 					days={days}
 					todayIndex={todayIndex}
 					scroll={this._scroll}
 					appLayout={appLayout}
 					intl={screenProps.intl}
+					onToggleVisibility={this.onToggleVisibility}
+					currentScreen={currentScreen}
+					showInactive={showInactive}
 				/>
 				<Swiper
 					ref={this._refScroll}
@@ -191,15 +186,11 @@ class SchedulerTab extends View<null, Props, State> {
 					loadMinimal={true}
 					loadMinimalSize={0}
 					loop={false}
+					index={todayIndex}
 					showsPagination={false}
 					onIndexChanged={this.onIndexChanged}>
 					{daysToRender}
 				</Swiper>
-				<FloatingButton
-					onPress={this.newSchedule}
-					imageSource={require('./img/iconPlus.png')}
-					accessibilityLabel={`${formatMessage(i18n.addSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`}
-				/>
 			</View>
 		);
 	}
@@ -253,6 +244,7 @@ class SchedulerTab extends View<null, Props, State> {
 	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
 		let days = [], daysToRender = [];
 		let { screenProps } = this.props;
+		let { todayIndex } = this.state;
 		let { formatDate } = screenProps.intl;
 
 		for (let key in dataArray) {
@@ -279,6 +271,11 @@ class SchedulerTab extends View<null, Props, State> {
 								onRefresh={this.onRefresh}
 								keyExtractor={this.keyExtractor}
 								refreshing={this.state.isRefreshing}
+								// To re-render the list to update row style on different weekdays(today screen will have different row design
+								// if there is any expired schedule)
+								extraData={{
+									todayIndex,
+								}}
 							/>
 						</View>
 					}
@@ -301,21 +298,23 @@ class SchedulerTab extends View<null, Props, State> {
 		return { days, daysToRender };
 	};
 
-	_rowHasChanged = (r1: Object, r2: Object): boolean => {
-		if (r1 === r2) {
-			return false;
-		}
-		return (
-			r1.effectiveHour !== r2.effectiveHour ||
-			r1.effectiveMinute !== r2.effectiveMinute ||
-			r1.method !== r2.method ||
-			r1.deviceId !== r2.deviceId
-		);
-	}
-
 	_renderRow = (props: Object): React$Element<JobRow> => {
+		// Trying to identify if&where the 'Now' row has to be inserted.
+		const { rowsAndSections, screenProps } = this.props;
+		const { todayIndex } = this.state;
+		const { item } = props;
+		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
+		const lengthExpired = expiredJobs.length;
+		const lastExpired = lengthExpired === 0 ? null : expiredJobs[lengthExpired - 1];
+		const showNow = ((todayIndex === 0) && lastExpired && (lastExpired.id === item.id));
+
 		return (
-			<JobRow {...props.item} editJob={this.editJob} isFirst={props.index === 0} intl={this.props.screenProps.intl}/>
+			<JobRow
+				{...item}
+				showNow={showNow}
+				editJob={this.editJob}
+				isFirst={props.index === 0}
+				{...screenProps}/>
 		);
 	};
 }
@@ -325,9 +324,10 @@ const getRowsAndSections = createSelector(
 		({ jobs }: { jobs: Object[] }): Object[] => jobs,
 		({ gateways }: { gateways: Object }): Object => gateways,
 		({ devices }: { devices: Object }): Object => devices,
+		({ jobsList }: { jobsList: Object }): Object => jobsList.userOptions,
 	],
-	(jobs: Object[], gateways: Object, devices: Object): Object => {
-		const { sections } = parseJobsForListView(jobs, gateways, devices);
+	(jobs: Object[], gateways: Object, devices: Object, userOptions: Object): Object => {
+		const { sections } = parseJobsForListView(jobs, gateways, devices, userOptions);
 
 		return sections;
 	},
@@ -336,7 +336,7 @@ const getRowsAndSections = createSelector(
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#eeeeef',
+		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
 		flexDirection: 'row',
@@ -348,17 +348,15 @@ const styles = StyleSheet.create({
 
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
-	devices: Object,
-	tab: string,
-	appLayout: Object,
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
+	const { jobsList = {} } = store;
+	const { userOptions = {} } = jobsList;
+	const { showInactive = true } = userOptions;
 	return {
 		rowsAndSections: getRowsAndSections(store),
-		devices: store.devices,
-		tab: store.navigation.tab,
-		appLayout: getRelativeDimensions(store.App.layout),
+		showInactive,
 	};
 };
 

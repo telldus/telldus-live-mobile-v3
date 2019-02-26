@@ -21,39 +21,39 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
-import { FormattedNumber, View } from '../../../../BaseComponents';
-
-import SensorDashboardTileSlide from './SensorDashboardTileSlide';
+import {
+	View,
+} from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import TypeBlockDB from './Sensor/TypeBlockDB';
+import GenericSensor from './Sensor/GenericSensor';
 
-import { formatLastUpdated, checkIfLarge } from '../../../Lib';
+import {
+	formatLastUpdated,
+	checkIfLarge,
+	shouldUpdate,
+	getSensorInfo,
+	getWindDirection,
+} from '../../../Lib';
 import i18n from '../../../Translations/common';
-import { utils } from 'live-shared-data';
-const { sensorUtils } = utils;
-const { getSensorTypes, getSensorUnits } = sensorUtils;
 import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
+
 	style: Object,
 	onPress: () => void,
 	intl: Object,
 	isGatewayActive: boolean,
 };
 
-type State = {
-	currentDisplayType: string,
-};
-
-class SensorDashboardTile extends PureComponent<Props, State> {
+class SensorDashboardTile extends View<Props, null> {
 	props: Props;
-	state: State;
 
 	getSlideList: Object => Object;
 
@@ -87,240 +87,88 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		this.state = {
-			currentDisplayType: 'default',
-		};
-
-		let { formatMessage } = this.props.intl;
+		const { formatMessage } = this.props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
-		this.labelHumidity = formatMessage(i18n.labelHumidity);
-		this.labelTemperature = formatMessage(i18n.labelTemperature);
-		this.labelRainRate = formatMessage(i18n.labelRainRate);
-		this.labelRainTotal = formatMessage(i18n.labelRainTotal);
-		this.labelWindGust = formatMessage(i18n.labelWindGust);
-		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
-		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
-		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
 
 		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelCurrent = formatMessage(i18n.current);
-		this.labelEnergy = formatMessage(i18n.energy);
-		this.labelAccumulated = formatMessage(i18n.accumulated);
 		this.labelAcc = formatMessage(i18n.acc);
-		this.labelVoltage = formatMessage(i18n.voltage);
-		this.labelPowerFactor = formatMessage(i18n.powerFactor);
-		this.labelPulse = formatMessage(i18n.pulse);
-
-		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
-		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
-		this.labelGenericMeter = formatMessage(i18n.labelGenericMeter);
-		this.labelLuminance = formatMessage(i18n.labelLuminance);
 
 		this.offline = formatMessage(i18n.offline);
 
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
-		this.sensorTypes = getSensorTypes();
-
 		this.getSlideList = this.getSlideList.bind(this);
 	}
 
-	getSlideList(item: Object): Object {
-		let slideList = [], sensorInfo = '';
-		for (let key in item.data) {
-			let { value, scale, name } = item.data[key];
-			let sensorType = this.sensorTypes[name];
-			let sensorUnits = getSensorUnits(sensorType);
-			let unit = sensorUnits[scale];
-			let isLarge = checkIfLarge(value.toString());
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item']);
+	}
 
-			if (name === 'humidity') {
-				slideList.push({
-					key: 'humidity',
-					icon: 'humidity',
-					label: this.labelHumidity,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
+	getSlideList(item: Object): Object {
+		let slideList = {}, sensorAccessibilityInfo = '';
+		const { intl } = this.props;
+		const { formatMessage } = intl;
+
+		const {
+			iconStyle,
+			valueUnitCoverStyle,
+			valueStyle,
+			unitStyle,
+			labelStyle,
+			sensorValueCoverStyle,
+		} = this.getStyles();
+
+		for (let key in item.data) {
+			const { value, scale, name } = item.data[key];
+			const isLarge = checkIfLarge(value.toString());
+
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
+
+			let sharedProps = {
+				key,
+				unit,
+				label,
+				icon,
+				isLarge,
+				name,
+				value,
+				iconStyle,
+				valueUnitCoverStyle,
+				valueStyle,
+				unitStyle,
+				labelStyle,
+				sensorValueCoverStyle,
+				formatOptions,
+			};
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
+
+			if (name === 'wdir') {
+				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 			}
-			if (name === 'temp') {
-				slideList.push({
-					key: 'temperature',
-					icon: 'temperature',
-					label: this.labelTemperature,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} minimumFractionDigits={isLarge ? 0 : 1}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
-			}
-			if (name === 'rrate' || name === 'rtotal') {
-				slideList.push({
-					key: `rain${key}`,
-					icon: 'rain',
-					label: name === 'rrate' ? this.labelRainRate : this.labelRainTotal,
-					unit,
-					isLarge,
-					text: (name === 'rrate' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
-					text2: (name === 'rtotal' && <FormattedNumber value={value} maximumFractionDigits={0}/> ),
-				});
-				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtotal' ? `${this.labelRainTotal} ${value}${unit}` : '';
-				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
-			}
-			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let directions = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
-				if (name === 'wdir') {
-					directions = [...this._windDirection(value)].toString();
-					label = this.labelWindDirection;
-				}
-				slideList.push({
-					key: `wind${key}`,
-					icon: 'wind',
-					label: label,
-					unit,
-					isLarge,
-					text: (name === 'wavg' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
-					text2: (name === 'wgust' && <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/> ),
-					text3: (name === 'wdir' && this._windDirection(value)),
-				});
-				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${this.labelWindDirection} ${directions}` : '';
-				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
-			}
-			if (name === 'uv') {
-				slideList.push({
-					key: 'uv',
-					icon: 'uv',
-					label: this.labelUVIndex,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
-			}
-			if (name === 'watt') {
-				let label = this.labelEnergy, labelWatt = this.labelEnergy;
-				if (scale === '0') {
-					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
-						`${this.labelAcc} ${this.labelWatt}`;
-					labelWatt = `${this.labelAccumulated} ${this.labelWatt}`;
-				}
-				if (scale === '2') {
-					label = this.labelWatt;
-					labelWatt = this.labelWatt;
-				}
-				if (scale === '3') {
-					label = this.labelPulse;
-					labelWatt = this.labelPulse;
-				}
-				if (scale === '4') {
-					label = this.labelVoltage;
-					labelWatt = this.labelVoltage;
-				}
-				if (scale === '5') {
-					label = this.labelCurrent;
-					labelWatt = this.labelCurrent;
-				}
-				if (scale === '6') {
-					label = this.labelPowerFactor;
-					labelWatt = this.labelPowerFactor;
-				}
-				slideList.push({
-					key: `watt${key}`,
-					icon: 'watt',
-					label: label,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
-			}
-			if (name === 'lum') {
-				slideList.push({
-					key: 'luminance',
-					icon: 'luminance',
-					label: this.labelLuminance,
-					isLarge: isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1} suffix={unit}
-						useGrouping={false}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
-			}
-			if (name === 'dewp') {
-				slideList.push({
-					key: 'dewpoint',
-					icon: 'humidity',
-					label: this.labelDewPoint,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
-			}
-			if (name === 'barpress') {
-				slideList.push({
-					key: 'barometricpressure',
-					icon: 'guage',
-					label: this.labelBarometricPressure,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={isLarge ? 0 : 1}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
-			}
-			if (name === 'genmeter') {
-				slideList.push({
-					key: 'genricmeter',
-					icon: 'sensor',
-					label: this.labelGenericMeter,
-					unit,
-					isLarge,
-					text: <FormattedNumber value={value} maximumFractionDigits={0}/>,
-				});
-				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
-			}
+			slideList[key] = <GenericSensor {...sharedProps}/>;
 		}
 
-		return {slideList, sensorInfo};
+		return {slideList, sensorAccessibilityInfo};
 	}
 
 	render(): Object {
-		const { item, tileWidth, isGatewayActive, intl } = this.props;
-		const displayType = this.props.displayType;
-		const { slideList, sensorInfo } = this.getSlideList(item);
+		const { item, tileWidth, isGatewayActive, intl, onPress } = this.props;
+		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
 		const { lastUpdated } = item;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
 
-		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
-
-		const slides = slideList.map((data: Object): Object =>
-			<SensorDashboardTileSlide
-				key={data.key}
-				data={data}
-				tileWidth={tileWidth}
-				isGatewayActive={isGatewayActive}/>
-		);
-
-		let selectedSlideIndex = 0;
-		if (displayType !== 'default') {
-			for (let i = 0; i < slideList.length; ++i) {
-				if (slideList[i].key === displayType) {
-					selectedSlideIndex = i;
-					break;
-				}
-			}
-		}
+		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
 		let iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerActive;
-		let background = slideList.length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
+		let background = Object.keys(slideList).length === 0 ? (isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor) : 'transparent';
+		const {
+			sensorValueCover,
+			dotCoverStyle,
+			dotStyle,
+		} = this.getStyles();
 
 		return (
 			<DashboardShadowTile
@@ -331,12 +179,15 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 				icon={'sensor'}
 				iconStyle={{
 					color: '#fff',
-					fontSize: tileWidth / 6,
+					fontSize: Math.floor(tileWidth / 6.5),
+					borderRadius: Math.floor(tileWidth / 8),
+					textAlign: 'center',
+					alignSelf: 'center',
 				}}
 				iconContainerStyle={[iconContainerStyle, {
-					width: tileWidth / 4.8,
-					height: tileWidth / 4.8,
-					borderRadius: tileWidth / 9.6,
+					width: Math.floor(tileWidth / 4),
+					height: Math.floor(tileWidth / 4),
+					borderRadius: Math.floor(tileWidth / 8),
 					alignItems: 'center',
 					justifyContent: 'center',
 				}]}
@@ -350,33 +201,74 @@ class SensorDashboardTile extends PureComponent<Props, State> {
 						height: tileWidth,
 					},
 				]}>
-				<TouchableOpacity
-					onPress={this.props.onPress}
-					activeOpacity={1}
-					style={{
-						width: tileWidth,
-						height: tileWidth * 0.4,
-						flexDirection: 'row',
-					}}
-					accessible={false}
-					importantForAccessibility="no-hide-descendants">
-					<View style={[styles.body, {
+				<TypeBlockDB
+					sensors={slideList}
+					onPress={onPress}
+					id={item.id}
+					lastUpdated={lastUpdated}
+					style={[styles.body, {
 						width: tileWidth,
 						height: tileWidth * 0.4,
 						backgroundColor: background,
-					}]}>
-						{slides[selectedSlideIndex]}
-					</View>
-				</TouchableOpacity>
+					}]}
+					valueCoverStyle={sensorValueCover}
+					dotCoverStyle={dotCoverStyle}
+					dotStyle={dotStyle}/>
 			</DashboardShadowTile>
 		);
 	}
 
-	_windDirection(value: number): string {
-		const directions = [
-			'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-		];
-		return directions[Math.floor(value / 22.5)];
+	getStyles(): Object {
+		const { tileWidth, isGatewayActive, item } = this.props;
+		const { data = {}} = item;
+
+		const backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
+
+		const dotSize = tileWidth * 0.045;
+
+		return {
+			iconStyle: {
+				fontSize: tileWidth * 0.28,
+			},
+			valueUnitCoverStyle: {
+				height: tileWidth * 0.16,
+			},
+			valueStyle: {
+				fontSize: tileWidth * 0.14,
+				height: tileWidth * 0.16,
+			},
+			unitStyle: {
+				fontSize: tileWidth * 0.09,
+			},
+			labelStyle: {
+				fontSize: tileWidth * 0.09,
+				height: tileWidth * 0.12,
+			},
+			sensorValueCoverStyle: {
+				marginBottom: Object.keys(data).length <= 1 ? 0 : tileWidth * 0.1,
+			},
+			sensorValueCover: {
+				height: '100%',
+				width: tileWidth,
+				backgroundColor: backgroundColor,
+				alignItems: 'flex-start',
+				justifyContent: 'center',
+			},
+			dotCoverStyle: {
+				position: 'absolute',
+				width: '100%',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				bottom: 3,
+			},
+			dotStyle: {
+				width: dotSize,
+				height: dotSize,
+				borderRadius: dotSize / 2,
+				marginLeft: 2 + (dotSize * 0.2),
+			},
+		};
 	}
 }
 
@@ -400,10 +292,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-function mapStateToProps(state: Object, { item }: Object): Object {
-	return {
-		displayType: state.dashboard.sensorDisplayTypeById[item.id],
-	};
-}
-
-module.exports = connect(mapStateToProps)(SensorDashboardTile);
+module.exports = SensorDashboardTile;

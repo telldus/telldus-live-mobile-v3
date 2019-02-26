@@ -27,8 +27,9 @@ import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/sv';
 
 import React from 'react';
+import { Text } from './BaseComponents';
 import { Provider } from 'react-redux';
-import { Crashlytics } from 'react-native-fabric';
+import firebase from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
 
 import App from './App';
@@ -53,6 +54,11 @@ function Bootstrap(): Object {
 
 		constructor() {
 			super();
+
+			if (!__DEV__) {
+				firebase.crashlytics().enableCrashlyticsCollection();
+			}
+
 			let locale = this.getLocale();
 			let messages = Translations.en;
 			if (Translations[locale]) {
@@ -70,8 +76,9 @@ function Bootstrap(): Object {
 			this.setState({ isLoading: false });
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
-				Crashlytics.setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
-				Crashlytics.setUserEmail(state.user.userProfile.email);
+				firebase.crashlytics().setUserIdentifier(state.user.userProfile.email);
+				// TODO: Enable once the method is supported.
+				// firebase.crashlytics().setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
 			}
 		}
 
@@ -93,8 +100,8 @@ function Bootstrap(): Object {
 			}
 			return (
 				<Provider store={this.state.store}>
-					<IntlProvider locale={this.state.locale} messages={this.state.messages}>
-						<App />
+					<IntlProvider locale={this.state.locale} messages={this.state.messages} textComponent={Text}>
+						<App locale={this.state.locale}/>
 					</IntlProvider>
 				</Provider>
 			);
@@ -122,5 +129,15 @@ if (process.env.NODE_ENV !== 'production') {
 		};
 	}
 }
+// Fixes a warning! https://github.com/facebook/react-native/issues/18868
+// Can be removed once upgraded to RNv0.56
+global.__old_console_warn = global.__old_console_warn || console.warn;
+global.console.warn = (str: string): any => {
+	let tst = `${str || ''}`;
+	if (tst.startsWith('Warning: isMounted(...) is deprecated')) {
+		return;
+	}
+	return global.__old_console_warn.apply(console, [str]);
+};
 
 module.exports = Bootstrap;

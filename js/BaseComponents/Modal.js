@@ -50,7 +50,19 @@ type Props = {
 	appLayout: Object,
 };
 
-class Modal extends Component<Props, void> {
+type State = {
+	showModal: boolean,
+};
+
+type DefaultProps = {
+	entryDuration: number,
+	exitDuration: number,
+	startValue: number,
+	endValue: number,
+	showOverlay: boolean,
+};
+
+class Modal extends Component<Props, State> {
 	animationZoomOut: (duration?: number) => void;
 	animationZoomIn: (duration?: number) => void;
 	animationSlideInY: (duration?: number) => void;
@@ -61,11 +73,32 @@ class Modal extends Component<Props, void> {
 	animatedOpacity: any;
 	animatedYValue: any;
 
-	static defaultProps: Object;
+	static defaultProps: DefaultProps = {
+		entryDuration: 500,
+		exitDuration: 500,
+		startValue: 0,
+		endValue: 100,
+		showOverlay: true,
+	};
 	props: Props;
+	state: State;
+
+	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
+		const { showModal } = props;
+		if (props.showModal !== state.showModal) {
+			return {
+				showModal,
+			};
+		}
+		return null;
+	}
 
 	constructor(props: Props) {
 		super(props);
+		const { showModal } = props;
+		this.state = {
+			showModal,
+		};
 
 		this.animationZoomOut = this.animationZoomOut.bind(this);
 		this.animationZoomIn = this.animationZoomIn.bind(this);
@@ -75,6 +108,14 @@ class Modal extends Component<Props, void> {
 		this.animatedScale = new Animated.Value(0.01);
 		this.animatedOpacity = new Animated.Value(0);
 		this.animatedYValue = new Animated.Value(props.startValue ? props.startValue : 0);
+
+		if (showModal) {
+			this.onOpen(props);
+			this.animatedOpacity.setValue(0);
+			this.animatedScale.setValue(0.01);
+			let entryAnimationType = this.handleAnimationEntryType(this.props.entry);
+			entryAnimationType(this.props.entryDuration);
+		}
 	}
 
 	componentWillUnmount() {
@@ -123,6 +164,7 @@ class Modal extends Component<Props, void> {
 			{
 				toValue: this.props.endValue,
 				duration,
+				useNativeDriver: true,
 			}).start();
 	}
 
@@ -131,6 +173,7 @@ class Modal extends Component<Props, void> {
 			{
 				toValue: this.props.startValue,
 				duration,
+				useNativeDriver: true,
 			}).start((event: Object) => {
 			if (event.finished) {
 				this.animatedScale.setValue(0.01);
@@ -144,6 +187,7 @@ class Modal extends Component<Props, void> {
 				toValue: 1,
 				duration: duration,
 				easing: Easing.linear,
+				useNativeDriver: true,
 			}).start();
 	}
 
@@ -153,6 +197,7 @@ class Modal extends Component<Props, void> {
 				toValue: 0.01,
 				duration: duration,
 				easing: Easing.linear,
+				useNativeDriver: true,
 			}).start();
 	}
 
@@ -162,6 +207,7 @@ class Modal extends Component<Props, void> {
 				toValue: 1,
 				duration: duration,
 				easing: Easing.linear,
+				useNativeDriver: true,
 			}).start();
 	}
 
@@ -171,25 +217,28 @@ class Modal extends Component<Props, void> {
 				toValue: 0,
 				duration: duration,
 				easing: Easing.linear,
+				useNativeDriver: true,
 			}).start();
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.showModal && !this.props.showModal) {
-			this.onOpen(nextProps);
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { showModal: prevShowModal } = prevState;
+		const { showModal } = this.state;
+		if (showModal && !prevShowModal) {
+			this.onOpen(this.props);
 			this.animatedOpacity.setValue(0);
 			this.animatedScale.setValue(0.01);
-			let entryAnimationType = this.handleAnimationEntryType(nextProps.entry);
-			entryAnimationType(nextProps.entryDuration);
+			let entryAnimationType = this.handleAnimationEntryType(this.props.entry);
+			entryAnimationType(this.props.entryDuration);
 		}
-		if (!nextProps.showModal && this.props.showModal) {
-			this.onClose(nextProps);
-			let exitAnimationType = this.handleAnimationExitType(nextProps.exit);
-			exitAnimationType(nextProps.exitDuration);
+		if (!showModal && prevShowModal) {
+			this.onClose(this.props);
+			let exitAnimationType = this.handleAnimationExitType(this.props.exit);
+			exitAnimationType(this.props.exitDuration);
 		}
 	}
 
-	handleAnimationEntryType(type?: string): (number) => void {
+	handleAnimationEntryType(type?: string): (any) => void {
 		switch (type) {
 			case 'ZoomIn':
 				return this.animationZoomIn;
@@ -200,7 +249,7 @@ class Modal extends Component<Props, void> {
 		}
 	}
 
-	handleAnimationExitType(type?: string): (number) => void {
+	handleAnimationExitType(type?: string): (any) => void {
 		switch (type) {
 			case 'ZoomOut':
 				return this.animationZoomOut;
@@ -324,17 +373,9 @@ class Modal extends Component<Props, void> {
 	}
 }
 
-Modal.defaultProps = {
-	entryDuration: 500,
-	exitDuration: 500,
-	startValue: 0,
-	endValue: 100,
-	showOverlay: true,
-};
-
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

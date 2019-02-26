@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native/React/Modules/RCTDevLoadingView.h
+../../../../../node_modules/react-native/React/DevSupport/RCTDevLoadingView.h

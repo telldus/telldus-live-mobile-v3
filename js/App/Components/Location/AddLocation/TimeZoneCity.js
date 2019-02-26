@@ -31,7 +31,6 @@ import { View } from '../../../../BaseComponents';
 import CitiesList from '../Common/CitiesList';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -53,8 +52,8 @@ class TimeZoneCity extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(commonMessages.headerOneTimeZoneCity)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneCity);
+		this.h1 = formatMessage(i18n.headerOneTimeZoneCity);
+		this.h2 = formatMessage(i18n.headerTwoTimeZoneCity);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}
@@ -69,9 +68,9 @@ class TimeZoneCity extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'TimeZoneCity' && this.props.currentScreen !== 'TimeZoneCity';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'TimeZoneCity' && prevProps.currentScreen !== 'TimeZoneCity';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -82,10 +81,15 @@ class TimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
+		const { navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		clientInfo.timezone = `${clientInfo.continent}/${city}`;
 		clientInfo.autoDetected = false;
-		this.props.navigation.navigate('TimeZone', {clientInfo});
+		navigation.navigate({
+			routeName: 'TimeZone',
+			key: 'TimeZone',
+			params: {clientInfo},
+		});
 	}
 
 	render(): Object {

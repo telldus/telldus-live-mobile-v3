@@ -22,18 +22,13 @@
 
 'use strict';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
+import DeviceInfo from 'react-native-device-info';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import { View, Header, SafeAreaView, IconTelldus } from '../../../BaseComponents';
 
-import { toggleEditMode, syncWithServer, switchTab } from '../../Actions';
 import TabViews from './index';
 
-import { getUserProfile } from '../../Reducers/User';
-import { TabNavigator } from 'react-navigation';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -55,6 +50,7 @@ const RouteConfigs = {
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
+	initialRouteKey: 'Dashboard',
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: false,
@@ -63,146 +59,13 @@ const TabNavigatorConfig = {
 		style: {
 			...ifIphoneX({height: 20}),
 		},
+		labelStyle: {
+			fontSize: DeviceInfo.isTablet() ? 18 : 12,
+		},
+		allowFontScaling: false,
 	},
 };
 
-const Tabs = TabNavigator(RouteConfigs, TabNavigatorConfig);
+const TabsView = createBottomTabNavigator(RouteConfigs, TabNavigatorConfig);
 
-type Props = {
-	intl: intlShape.isRequired,
-	tab: string,
-	userIcon: boolean,
-	userProfile: Object,
-	dashboard: Object,
-	onTabSelect: (string) => void,
-	onToggleEditMode: (string) => void,
-	dispatch: Function,
-	stackNavigator: Object,
-	screenProps: Object,
-	appLayout: Object,
-};
-
-type Tab = {
-	index: number,
-	routeName: string,
-};
-
-type State = {
-	tab: Tab,
-	settings: boolean,
-};
-
-class TabsView extends View {
-	props: Props;
-	state: State;
-
-	onNavigationStateChange: (Object, Object) => void;
-	onOpenSetting: () => void;
-	onCloseSetting: () => void;
-	onToggleEditMode: () => void;
-
-	constructor(props: Props) {
-		super(props);
-
-		this.state = {
-			tab: {
-				index: 0,
-				routeName: 'Dashboard',
-			},
-			settings: false,
-		};
-
-		this.tabNames = ['dashboardTab', 'devicesTab', 'sensorsTab', 'schedulerTab', 'gatewaysTab'];
-
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-		const size = Math.floor(deviceHeight * 0.03);
-
-		let fontSize = size < 20 ? 20 : size;
-		this.settingsButton = {
-			component: <IconTelldus icon={'settings'} style={{
-				fontSize,
-				color: '#fff',
-			}}/>,
-			onPress: this.onOpenSetting,
-		};
-	}
-
-	onNavigationStateChange = (prevState: Object, newState: Object) => {
-		const index = newState.index;
-
-		const tab = {
-			index,
-			routeName: newState.routes[index].routeName,
-		};
-
-		this.setState({ tab });
-		this.props.onTabSelect(this.tabNames[index]);
-	};
-
-	onOpenSetting = () => {
-		// this.setState({ settings: true });
-		this.props.stackNavigator.navigate('Settings');
-	};
-
-	onCloseSetting = () => {
-		// this.setState({ settings: false });
-	};
-
-	onToggleEditMode = () => {
-		const tab = this.tabNames[this.state.tab.index];
-		this.props.onToggleEditMode(tab);
-	};
-
-	render(): Object {
-		const { routeName } = this.state.tab;
-		const { appLayout } = this.props;
-		let { currentScreen } = this.props.screenProps;
-
-		let leftButton = this.settingsButton;
-
-		let screenProps = {
-			stackNavigator: this.props.stackNavigator,
-			currentTab: routeName,
-			currentScreen,
-		};
-
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let deviceHeight = isPortrait ? height : width;
-
-		return (
-			<SafeAreaView>
-				<Header leftButton={leftButton} style={{height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * 0.1111 )}}/>
-				<Tabs screenProps={{...screenProps, intl: this.props.intl}} onNavigationStateChange={this.onNavigationStateChange}/>
-			</SafeAreaView>
-		);
-	}
-}
-
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	return {
-		stackNavigator: ownProps.navigation,
-		tab: store.navigation.tab,
-		userIcon: false,
-		userProfile: getUserProfile(store),
-		appLayout: store.App.layout,
-	};
-}
-
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		onTabSelect: (tab: string) => {
-			dispatch(syncWithServer(tab));
-			dispatch(switchTab(tab));
-		},
-		onToggleEditMode: (tab: string) => {
-			dispatch(toggleEditMode(tab));
-		},
-		dispatch,
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(TabsView));
+module.exports = TabsView;

@@ -1,0 +1,512 @@
+{
+	"version": "3.1",
+	"sensorTypes": {
+		"TELLSTICK_UNKNOWN": [
+			0,
+			"unknown",
+			[
+				"TELLSTICK_SCALE_UNKNOWN"
+			],
+			-1
+		],
+		"TELLSTICK_TEMPERATURE": [
+			1,
+			"temp",
+			[
+				"TELLSTICK_SCALE_TEMPERATURE_CELCIUS",
+				"TELLSTICK_SCALE_TEMPERATURE_FAHRENHEIT"
+			],
+			0
+		],
+		"TELLSTICK_HUMIDITY": [
+			2,
+			"humidity",
+			[
+				"TELLSTICK_SCALE_HUMIDITY_PERCENT"
+			],
+			1
+		],
+		"TELLSTICK_RAINRATE": [
+			4,
+			"rrate",
+			[
+				"TELLSTICK_SCALE_RAINRATE_MMH"
+			],
+			4
+		],
+		"TELLSTICK_RAINTOTAL": [
+			8,
+			"rtot",
+			[
+				"TELLSTICK_SCALE_RAINTOTAL_MM"
+			],
+			5
+		],
+		"TELLSTICK_WINDDIRECTION": [
+			16,
+			"wdir",
+			[
+				"TELLSTICK_SCALE_WIND_DIRECTION"
+			],
+			12
+		],
+		"TELLSTICK_WINDAVERAGE": [
+			32,
+			"wavg",
+			[
+				"TELLSTICK_SCALE_WIND_VELOCITY_MS"
+			],
+			3
+		],
+		"TELLSTICK_WINDGUST": [
+			64,
+			"wgust",
+			[
+				"TELLSTICK_SCALE_WIND_VELOCITY_MS"
+			],
+			2
+		],
+		"TELLSTICK_UV": [
+			128,
+			"uv",
+			[
+				"TELLSTICK_SCALE_UV_INDEX"
+			],
+			6
+		],
+		"TELLSTICK_WATT": [
+			256,
+			"watt",
+			[
+				"TELLSTICK_SCALE_POWER_AMPERE",
+				"TELLSTICK_SCALE_POWER_KVAH",
+				"TELLSTICK_SCALE_POWER_KWH",
+				"TELLSTICK_SCALE_POWER_POWERFACTOR",
+				"TELLSTICK_SCALE_POWER_PULSE",
+				"TELLSTICK_SCALE_POWER_VOLT",
+				"TELLSTICK_SCALE_POWER_WATT"
+			],
+			7
+		],
+		"TELLSTICK_LUMINANCE": [
+			512,
+			"lum",
+			[
+				"TELLSTICK_SCALE_LUMINANCE_PERCENT",
+				"TELLSTICK_SCALE_LUMINANCE_LUX"
+			],
+			8
+		],
+		"TELLSTICK_DEWPOINT": [
+			1024,
+			"dewp",
+			[
+				"TELLSTICK_SCALE_TEMPERATURE_CELCIUS",
+				"TELLSTICK_SCALE_TEMPERATURE_FAHRENHEIT"
+			],
+			9
+		],
+		"TELLSTICK_BAROMETRICPRESSURE": [
+			2048,
+			"barpress",
+			[
+				"TELLSTICK_SCALE_KPA",
+				"TELLSTICK_SCALE_INHG"
+			],
+			10
+		],
+		"TELLSTICK_GENRIC_METER": [
+			4096,
+			"genmeter",
+			[
+				"TELLSTICK_SCALE_PULSE"
+			],
+			11
+		],
+		"TELLSTICK_CO2": [
+			8192,
+			"co2",
+			[
+				"TELLSTICK_SCALE_PPM"
+			],
+			12
+		],
+		"TELLSTICK_VOLUME": [
+			16384,
+			"volume",
+			[
+				"TELLSTICK_SCALE_LITRE",
+				"TELLSTICK_SCALE_M3"
+			],
+			13
+		],
+		"TELLSTICK_LOUDNESS": [
+			32768,
+			"loudness",
+			[
+				"TELLSTICK_SCALE_DB",
+				"TELLSTICK_SCALE_DBA"
+			],
+			14
+		],
+		"TELLSTICK_PM25": [
+			65536,
+			"particulatematter2.5",
+			[
+				"TELLSTICK_SCALE_MICROGPERM3"
+			],
+			15
+		],
+		"TELLSTICK_CO": [
+			131072,
+			"co",
+			[
+				"TELLSTICK_SCALE_PPM"
+			],
+			16
+		],
+		"TELLSTICK_WEIGHT": [
+			262144,
+			"weight",
+			[
+				"TELLSTICK_SCALE_KG"
+			],
+			17
+		],
+		"TELLSTICK_MOISTURE": [
+			524288,
+			"moisture",
+			[
+				"TELLSTICK_SCALE_HUMIDITY_PERCENT"
+			],
+			18
+		]
+	},
+	"unitTypes": {
+		"TELLSTICK_SCALE_DB": [
+			0,
+			"dB"
+		],
+		"TELLSTICK_SCALE_DBA": [
+			1,
+			"dBA"
+		],
+		"TELLSTICK_SCALE_HUMIDITY_PERCENT": [
+			0,
+			"%"
+		],
+		"TELLSTICK_SCALE_INHG": [
+			1,
+			"inHg"
+		],
+		"TELLSTICK_SCALE_KG": [
+			0,
+			"kg"
+		],
+		"TELLSTICK_SCALE_KPA": [
+			0,
+			"kPa"
+		],
+		"TELLSTICK_SCALE_LITRE": [
+			0,
+			"l"
+		],
+		"TELLSTICK_SCALE_LUMINANCE_LUX": [
+			1,
+			"lx"
+		],
+		"TELLSTICK_SCALE_LUMINANCE_PERCENT": [
+			0,
+			"%"
+		],
+		"TELLSTICK_SCALE_M3": [
+			1,
+			"m³"
+		],
+		"TELLSTICK_SCALE_MICROGPERM3": [
+			1,
+			"µg/m³"
+		],
+		"TELLSTICK_SCALE_POWER_AMPERE": [
+			5,
+			"A"
+		],
+		"TELLSTICK_SCALE_POWER_KVAH": [
+			1,
+			"kvAh"
+		],
+		"TELLSTICK_SCALE_POWER_KWH": [
+			0,
+			"kWh"
+		],
+		"TELLSTICK_SCALE_POWER_POWERFACTOR": [
+			6,
+			""
+		],
+		"TELLSTICK_SCALE_POWER_PULSE": [
+			3,
+			""
+		],
+		"TELLSTICK_SCALE_POWER_VOLT": [
+			4,
+			"V"
+		],
+		"TELLSTICK_SCALE_POWER_WATT": [
+			2,
+			"W"
+		],
+		"TELLSTICK_SCALE_PPM": [
+			1,
+			"PPM"
+		],
+		"TELLSTICK_SCALE_PULSE": [
+			3,
+			""
+		],
+		"TELLSTICK_SCALE_RAINRATE_MMH": [
+			0,
+			"mm/h"
+		],
+		"TELLSTICK_SCALE_RAINTOTAL_MM": [
+			0,
+			"mm"
+		],
+		"TELLSTICK_SCALE_TEMPERATURE_CELCIUS": [
+			0,
+			"°C"
+		],
+		"TELLSTICK_SCALE_TEMPERATURE_FAHRENHEIT": [
+			1,
+			"°F"
+		],
+		"TELLSTICK_SCALE_UNKNOWN": [
+			0,
+			""
+		],
+		"TELLSTICK_SCALE_UV_INDEX": [
+			0,
+			""
+		],
+		"TELLSTICK_SCALE_WIND_DIRECTION": [
+			0,
+			""
+		],
+		"TELLSTICK_SCALE_WIND_VELOCITY_MS": [
+			0,
+			"m/s"
+		]
+	},
+	"sensorTypesDict": {
+		"TELLSTICK_UNKNOWN": {
+			"storage": 0,
+			"lexical": "unknown",
+			"scale": [
+				"TELLSTICK_SCALE_UNKNOWN"
+			],
+			"callback": -1
+		},
+		"TELLSTICK_TEMPERATURE": {
+			"storage": 1,
+			"lexical": "temp",
+			"scale": [
+				"TELLSTICK_SCALE_TEMPERATURE_CELCIUS",
+				"TELLSTICK_SCALE_TEMPERATURE_FAHRENHEIT"
+			],
+			"callback": 0,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_HUMIDITY": {
+			"storage": 2,
+			"lexical": "humidity",
+			"scale": [
+				"TELLSTICK_SCALE_HUMIDITY_PERCENT"
+			],
+			"callback": 1,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_RAINRATE": {
+			"storage": 4,
+			"lexical": "rrate",
+			"scale": [
+				"TELLSTICK_SCALE_RAINRATE_MMH"
+			],
+			"callback": 4,
+			"max": 1
+		},
+		"TELLSTICK_RAINTOTAL": {
+			"storage": 8,
+			"lexical": "rtot",
+			"scale": [
+				"TELLSTICK_SCALE_RAINTOTAL_MM"
+			],
+			"callback": 5
+		},
+		"TELLSTICK_WINDDIRECTION": {
+			"storage": 16,
+			"lexical": "wdir",
+			"scale": [
+				"TELLSTICK_SCALE_WIND_DIRECTION"
+			],
+			"callback": 12,
+			"trigger": 0
+		},
+		"TELLSTICK_WINDAVERAGE": {
+			"storage": 32,
+			"lexical": "wavg",
+			"scale": [
+				"TELLSTICK_SCALE_WIND_VELOCITY_MS"
+			],
+			"callback": 3,
+			"max": 1
+		},
+		"TELLSTICK_WINDGUST": {
+			"storage": 64,
+			"lexical": "wgust",
+			"scale": [
+				"TELLSTICK_SCALE_WIND_VELOCITY_MS"
+			],
+			"callback": 2,
+			"max": 1
+		},
+		"TELLSTICK_UV": {
+			"storage": 128,
+			"lexical": "uv",
+			"scale": [
+				"TELLSTICK_SCALE_UV_INDEX"
+			],
+			"callback": 6,
+			"max": 1
+		},
+		"TELLSTICK_WATT": {
+			"storage": 256,
+			"lexical": "watt",
+			"scale": [
+				"TELLSTICK_SCALE_POWER_AMPERE",
+				"TELLSTICK_SCALE_POWER_KVAH",
+				"TELLSTICK_SCALE_POWER_KWH",
+				"TELLSTICK_SCALE_POWER_POWERFACTOR",
+				"TELLSTICK_SCALE_POWER_PULSE",
+				"TELLSTICK_SCALE_POWER_VOLT",
+				"TELLSTICK_SCALE_POWER_WATT"
+			],
+			"callback": 7,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_LUMINANCE": {
+			"storage": 512,
+			"lexical": "lum",
+			"scale": [
+				"TELLSTICK_SCALE_LUMINANCE_PERCENT",
+				"TELLSTICK_SCALE_LUMINANCE_LUX"
+			],
+			"callback": 8,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_DEWPOINT": {
+			"storage": 1024,
+			"lexical": "dewp",
+			"scale": [
+				"TELLSTICK_SCALE_TEMPERATURE_CELCIUS",
+				"TELLSTICK_SCALE_TEMPERATURE_FAHRENHEIT"
+			],
+			"callback": 9,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_BAROMETRICPRESSURE": {
+			"storage": 2048,
+			"lexical": "barpress",
+			"scale": [
+				"TELLSTICK_SCALE_KPA",
+				"TELLSTICK_SCALE_INHG"
+			],
+			"callback": 10,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_GENRIC_METER": {
+			"storage": 4096,
+			"lexical": "genmeter",
+			"scale": [
+				"TELLSTICK_SCALE_PULSE"
+			],
+			"callback": 11
+		},
+		"TELLSTICK_CO2": {
+			"storage": 8192,
+			"lexical": "co2",
+			"scale": [
+				"TELLSTICK_SCALE_PPM"
+			],
+			"callback": 12,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_VOLUME": {
+			"storage": 16384,
+			"lexical": "volume",
+			"scale": [
+				"TELLSTICK_SCALE_LITRE",
+				"TELLSTICK_SCALE_M3"
+			],
+			"callback": 13,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_LOUDNESS": {
+			"storage": 32768,
+			"lexical": "loudness",
+			"scale": [
+				"TELLSTICK_SCALE_DB",
+				"TELLSTICK_SCALE_DBA"
+			],
+			"callback": 14,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_PM25": {
+			"storage": 65536,
+			"lexical": "particulatematter2.5",
+			"scale": [
+				"TELLSTICK_SCALE_MICROGPERM3"
+			],
+			"callback": 15,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_CO": {
+			"storage": 131072,
+			"lexical": "co",
+			"scale": [
+				"TELLSTICK_SCALE_PPM"
+			],
+			"callback": 16,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_WEIGHT": {
+			"storage": 262144,
+			"lexical": "weight",
+			"scale": [
+				"TELLSTICK_SCALE_KG"
+			],
+			"callback": 17,
+			"max": 1,
+			"min": 1
+		},
+		"TELLSTICK_MOISTURE": {
+			"storage": 524288,
+			"lexical": "moisture",
+			"scale": [
+				"TELLSTICK_SCALE_HUMIDITY_PERCENT"
+			],
+			"callback": 18,
+			"max": 1,
+			"min": 1
+		}
+	}
+}

@@ -22,13 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { View, Text, Poster } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
-import { getRelativeDimensions } from '../../../Lib';
 
 type Props = {
 	h1: string,
@@ -93,10 +91,4 @@ class ChangeLogPoster extends View {
 	}
 }
 
-function mapStateToProps(state: Object): Object {
-	return {
-		appLayout: getRelativeDimensions(state.App.layout),
-	};
-}
-
-export default connect(mapStateToProps, null)(ChangeLogPoster);
+export default ChangeLogPoster;

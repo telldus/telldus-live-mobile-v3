@@ -28,20 +28,42 @@ import reduce from 'lodash/reduce';
 import partition from 'lodash/partition';
 import isEmpty from 'lodash/isEmpty';
 
+import { hasTokenExpired } from '../Lib/LocalControl';
+import Theme from '../Theme';
+
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
-	let result = groupBy(paramOne, (items: Object): Array<any> => {
+	let modifiedData = paramOne.map((item: Object, index: number): Object => {
+		let gateway = gateways[item.clientId];
+		if (gateway) {
+			const { localKey, online, websocketOnline } = gateway;
+			const {
+				address,
+				key,
+				ttl,
+				supportLocal,
+			} = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
+		}
+		return { ...item, isOnline: false, websocketOnline: false, supportLocalControl: false };
+	});
+	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
-		items.isOnline = gateway.online;
 		return gateway && gateway.name;
 	});
 	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
-			key: index,
 			data: next,
+			header: index,
 		});
 		return acc;
 	}, []);
-	return result;
+	return orderBy(result, [(item: Object): any => {
+		let { header = '' } = item;
+		header = typeof header !== 'string' ? '' : header;
+		return header.toLowerCase();
+	}], ['asc']);
 }
 
 export function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
@@ -50,14 +72,27 @@ export function parseDevicesForListView(devices: Object = {}, gateways: Object =
 	let isDevicesEmpty = isEmpty(devices);
 	if (!isGatwaysEmpty && !isDevicesEmpty) {
 		let orderedList = orderBy(devices, [(device: Object): any => {
-			let { name } = device;
-			return name ? name.toLowerCase() : null;
+			let { name = '' } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
 		}], ['asc']);
 		let [hidden, visible] = partition(orderedList, (device: Object): Object => {
 			return device.ignored;
 		});
-		visibleList = prepareSectionRow(visible, gateways);
-		hiddenList = prepareSectionRow(hidden, gateways);
+		if (visible && visible.length > 0) {
+			visibleList = prepareSectionRow(visible, gateways);
+		}
+		if (hidden && hidden.length > 0) {
+			hiddenList = prepareSectionRow(hidden, gateways);
+		}
 	}
+	const toggleHiddenButtonRow = {
+		header: Theme.Core.buttonRowKey,
+		data: [{
+			buttonRow: true,
+			id: Theme.Core.buttonRowKey,
+		}],
+	};
+	visibleList.push(toggleHiddenButtonRow);
 	return { visibleList, hiddenList };
 }

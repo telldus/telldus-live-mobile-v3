@@ -23,9 +23,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
 import View from './View';
-import Text from './Text';
 import Slider from 'react-native-slider';
 import Theme from '../App/Theme';
 import { getDeviceWidth } from '../App/Lib';
@@ -150,9 +149,9 @@ export default class SliderComponent extends Component<Props, State> {
 		const defaultValueStyle = this._getValueStyle();
 
 		return (
-			<Text style={[defaultValueStyle, this.props.valueStyle]}>
+			<Animated.Text style={[defaultValueStyle, this.props.valueStyle]}>
 				{value}
-			</Text>
+			</Animated.Text>
 		);
 	};
 
@@ -162,7 +161,7 @@ export default class SliderComponent extends Component<Props, State> {
 
 		const fontSize = this._getValueFontSize();
 		const width = this._getTextWidth(fontSize);
-		const translateX = (thumbStyle.width / 2) + this._getLeftPosition(value) - (width / 4);
+		const translateX = (thumbStyle.width / 2) + this._getLeftPosition(value);
 
 		return {
 			backgroundColor: 'transparent',

@@ -1,0 +1,9 @@
+- Add timout for when it's not possible to enter inclusion/exclusion
+- Stick gateway header when scrolling device/sensor list
+- Better handle push token submission errors
+- Add option to use same or different scales on Y-axis in sensor history
+- Crashfix when re-register for push notifications
+- Crashfix when visiting sensor history for wind sensors
+- Bugfix in Scheduler where icon was not visible for inactive schedules
+- Bugfix where sensor last updated information could be in the future
+

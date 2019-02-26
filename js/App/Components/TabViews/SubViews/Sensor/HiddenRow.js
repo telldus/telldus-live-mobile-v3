@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 
 import { addToDashboard, removeFromDashboard } from '../../../../Actions';
 
@@ -32,25 +31,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Theme from '../../../../Theme';
 import i18n from '../../../../Translations/common';
-
-const messages = defineMessages({
-	iconAddPhraseOne: {
-		id: 'accessibilityLabel.sensors.iconAddPhraseOne',
-		defaultMessage: 'add sensor',
-	},
-	iconAddPhraseTwo: {
-		id: 'accessibilityLabel.sensors.iconAddPhraseTwo',
-		defaultMessage: 'to dashboard',
-	},
-	iconRemovePhraseOne: {
-		id: 'accessibilityLabel.sensors.iconRemovePhraseOne',
-		defaultMessage: 'remove sensor',
-	},
-	iconRemovePhraseTwo: {
-		id: 'accessibilityLabel.sensors.iconRemovePhraseTwo',
-		defaultMessage: 'from dashboard',
-	},
-});
 
 type Props = {
 	sensor: Object,
@@ -61,24 +41,27 @@ type Props = {
 	onSetIgnoreSensor: () => void,
 	isOpen: boolean,
 	style: Object,
+	onPressSettings: () => void,
 };
 
 class SensorHiddenRow extends View {
 	props: Props;
 	onStarSelected: () => void;
 	onSetIgnoreSensor: () => void;
+	onPressSettings: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.onStarSelected = this.onStarSelected.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
+		this.onPressSettings = this.onPressSettings.bind(this);
 
 		let { intl, sensor } = props;
 		let { formatMessage } = intl;
 
-		this.iconAddAccessibilityLabel = `${intl.formatMessage(messages.iconAddPhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconAddPhraseTwo)}`;
-		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(messages.iconRemovePhraseOne)}, ${sensor.name}, ${intl.formatMessage(messages.iconRemovePhraseTwo)}`;
+		this.iconAddAccessibilityLabel = `${intl.formatMessage(i18n.iconAddPhraseOneS)}, ${sensor.name}, ${intl.formatMessage(i18n.iconAddPhraseTwoS)}`;
+		this.iconRemoveAccessibilityLabel = `${intl.formatMessage(i18n.iconRemovePhraseOneS)}, ${sensor.name}, ${intl.formatMessage(i18n.iconRemovePhraseTwoS)}`;
 
 		this.labelHidePhraseOne = `${formatMessage(i18n.move)} ${formatMessage(i18n.labelSensor)}`;
 		this.labelHidePhraseTwo = `${formatMessage(i18n.toHiddenList)}`;
@@ -87,6 +70,11 @@ class SensorHiddenRow extends View {
 		this.labelUnHidePhraseOne = `${formatMessage(i18n.remove)} ${formatMessage(i18n.labelSensor)}`;
 		this.labelUnHidePhraseTwo = `${formatMessage(i18n.fromHiddenList)}`;
 		this.labelUnHide = `${this.labelUnHidePhraseOne} ${sensor.name} ${this.labelUnHidePhraseTwo}`;
+
+		this.labelButton = formatMessage(i18n.button);
+		this.labelSettings = formatMessage(i18n.settingsHeader);
+		this.labelGearButton = `${this.labelSettings} ${this.labelButton}`;
+		this.labelGearButtonAccessibilityLabel = `${this.labelGearButton}, ${sensor.name}`;
 	}
 
 	onStarSelected() {
@@ -108,6 +96,13 @@ class SensorHiddenRow extends View {
 		}
 	}
 
+	onPressSettings() {
+		let { onPressSettings } = this.props;
+		if (onPressSettings) {
+			onPressSettings();
+		}
+	}
+
 	render(): Object {
 		const { sensorIds, sensor, isOpen, style } = this.props;
 		const { id, ignored } = sensor;
@@ -120,6 +115,8 @@ class SensorHiddenRow extends View {
 		let accessibilityLabelFavorite = isOnDB ? this.iconRemoveAccessibilityLabel : this.iconAddAccessibilityLabel;
 		accessibilityLabelFavorite = isOpen ? accessibilityLabelFavorite : '';
 		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
+
+		let accessibilityLabelSettings = isOpen ? this.labelGearButtonAccessibilityLabel : '';
 
 		return (
 			<View style={style} importantForAccessibility={importantForAccessibility}>
@@ -136,6 +133,13 @@ class SensorHiddenRow extends View {
 					accessible={isOpen}
 					accessibilityLabel={accessibilityLabelFavorite}>
 					<IconTelldus icon={icon} style={styles.favoriteIcon}/>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={Theme.Styles.hiddenRowItem}
+					onPress={this.onPressSettings}
+					accessible={isOpen}
+					accessibilityLabel={accessibilityLabelSettings}>
+					<IconTelldus icon={'settings'} style={styles.favoriteIcon}/>
 				</TouchableOpacity>
 			</View>
 		);

@@ -22,6 +22,8 @@
 
 'use strict';
 
+import { NativeModules } from 'react-native';
+
 import type { ThunkAction } from './Types';
 import { actions } from 'live-shared-data';
 const {Devices: {getDevices}} = actions;
@@ -31,7 +33,12 @@ const {Websockets: {authenticateSession, connectToGateways}} = actions;
 
 function getAppData(): ThunkAction {
 	return (dispatch: Function, getState: Object) => {
-		dispatch(authenticateSession());
+		dispatch(authenticateSession()).then((sessionId: string) => {
+			if (sessionId) {
+				const { AndroidWidget } = NativeModules;
+				AndroidWidget.configureWidgetSessionData(sessionId);
+			}
+		});
 		dispatch(connectToGateways());
 
 		dispatch(getDevices());

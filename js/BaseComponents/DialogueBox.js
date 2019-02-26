@@ -25,39 +25,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import View from './View';
 import Text from './Text';
-import i18n from '../App/Translations/common';
+import DialogueHeader from './DialogueHeader';
 
-const messages = defineMessages({
-	defaultHeader: {
-		id: 'dialogueBox.defaultHeader',
-		defaultMessage: 'OOPS',
-		description: 'Default Header for the notification component',
-	},
-	defaultPositiveText: {
-		id: 'dialogueBox.defaultPositiveText',
-		defaultMessage: 'OK',
-		description: 'Default Positive text for the notification component',
-	},
-	defaultNegativeText: {
-		id: 'dialogueBox.defaultNegativeText',
-		defaultMessage: 'CANCEL',
-		description: 'Default Negative text for the notification component',
-	},
-});
+import capitalize from '../App/Lib/capitalize';
+import i18n from '../App/Translations/common';
+import Theme from '../App/Theme';
 
 
 type Props = {
 	showDialogue?: boolean,
-	style?: number | Object | Array<any>,
-	entryDuration?: number,
-	exitDuration?: number,
+	appLayout: Object,
+
+	backdropOpacity?: number,
+	showIconOnHeader?: boolean,
+	imageHeader?: boolean,
 	text: string,
 	header?: string,
+	onPressHeader?: () => void,
+	onPressHeaderIcon?: () => void,
+	entryDuration?: number,
+	exitDuration?: number,
 	showPositive: boolean,
 	showNegative: boolean,
 	positiveText?: string,
@@ -65,8 +57,13 @@ type Props = {
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
-	appLayout: Object,
 	accessibilityLabel?: string,
+	style?: number | Object | Array<any>,
+	showHeader?: boolean,
+	backdropColor?: string,
+	capitalizeHeader?: boolean,
+	negTextColor?: string,
+	posTextColor?: string,
 };
 
 type defaultProps = {
@@ -75,6 +72,11 @@ type defaultProps = {
 	exit: string,
 	entryDuration: number,
 	exitDuration: number,
+	backdropOpacity: number,
+	showHeader: boolean,
+	capitalizeHeader: boolean,
+	negTextColor: string,
+	posTextColor: string,
 };
 
 class DialogueBox extends Component<Props, null> {
@@ -87,6 +89,12 @@ class DialogueBox extends Component<Props, null> {
 		exit: 'ZoomOut',
 		entryDuration: 300,
 		exitDuration: 100,
+		backdropColor: '#000',
+		backdropOpacity: 0.60,
+		showHeader: true,
+		capitalizeHeader: true,
+		negTextColor: '#6B6969',
+		posTextColor: Theme.Core.brandSecondary,
 	}
 
 	renderHeader: (Object) => void;
@@ -118,9 +126,9 @@ class DialogueBox extends Component<Props, null> {
 		this.onPressNegative = this.onPressNegative.bind(this);
 		this.onModalOpened = this.onModalOpened.bind(this);
 
-		this.defaultHeader = `${this.props.intl.formatMessage(messages.defaultHeader)}!`;
-		this.defaultPositiveText = `${this.props.intl.formatMessage(messages.defaultPositiveText)}`;
-		this.defaultNegativeText = `${this.props.intl.formatMessage(messages.defaultNegativeText)}`;
+		this.defaultHeader = `${this.props.intl.formatMessage(i18n.defaultHeader)}!`;
+		this.defaultPositiveText = `${this.props.intl.formatMessage(i18n.defaultPositiveText)}`;
+		this.defaultNegativeText = `${this.props.intl.formatMessage(i18n.defaultNegativeText)}`;
 
 		this.labelButton = `${this.props.intl.formatMessage(i18n.button)}`;
 		this.labelButtondefaultDescription = `${this.props.intl.formatMessage(i18n.defaultDescriptionButton)}`;
@@ -129,6 +137,19 @@ class DialogueBox extends Component<Props, null> {
 		this.labelPress = `${this.props.intl.formatMessage(i18n.labelPress)}!`;
 		this.labelToConfirm = `${this.props.intl.formatMessage(i18n.labelToConfirm)}!`;
 		this.labelToReturn = `${this.props.intl.formatMessage(i18n.labelToReturn)}!`;
+	}
+
+	shouldComponentUpdate(nextProps: Object): boolean {
+		const { showDialogue, appLayout } = this.props;
+		if (showDialogue !== nextProps.showDialogue) {
+			return true;
+		}
+
+		if (appLayout.width !== nextProps.appLayout.width) {
+			return true;
+		}
+
+		return false;
 	}
 
 	onPressNegative() {
@@ -153,20 +174,39 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
+	dialogueImageHeader({ showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon, dialogueHeaderStyle, notificationModalHeaderText }: Object): Object {
+		return (
+			<DialogueHeader
+				headerText={typeof header === 'string' && capitalizeHeader ? capitalize(header) : header}
+				showIcon={showIconOnHeader}
+				onPressHeader={onPressHeader}
+				headerStyle={dialogueHeaderStyle}
+				onPressIcon={onPressHeaderIcon}
+				textStyle={notificationModalHeaderText}
+				shouldCapitalize={capitalizeHeader}/>
+		);
+	}
+
 	renderHeader(styles: Object): any {
-		let { header } = this.props;
-		if (header && typeof header === 'object') {
+		let { header, capitalizeHeader, showIconOnHeader, imageHeader, onPressHeader, onPressHeaderIcon } = this.props;
+		const { notificationModalHeader, dialogueHeaderStyle, notificationModalHeaderText } = styles;
+
+		if (imageHeader) {
+			return this.dialogueImageHeader({
+				showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon,
+				dialogueHeaderStyle, notificationModalHeaderText});
+		} else if (header && typeof header === 'object') {
 			return (
 				header
 			);
-		}
-		if (!header) {
+		} else if (!header) {
 			header = this.defaultHeader;
 		}
 
+		header = typeof header === 'string' && capitalizeHeader ? capitalize(header) : header;
 		return (
-			<View style={styles.notificationModalHeader}>
-				<Text style={styles.notificationModalHeaderText}>
+			<View style={notificationModalHeader}>
+				<Text style={notificationModalHeaderText}>
 					{header}
 				</Text>
 			</View>
@@ -189,30 +229,34 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	renderFooter(styles: Object): any {
-		let positiveText = this.props.positiveText ? this.props.positiveText :
+		const { positiveText, negativeText, showNegative, showPositive } = this.props;
+		if (!showNegative && !showPositive) {
+			return null;
+		}
+		let pText = positiveText ? positiveText :
 			this.defaultPositiveText;
-		let negativeText = this.props.negativeText ? this.props.negativeText :
+		let nText = negativeText ? negativeText :
 			this.defaultNegativeText;
 
-		let accessibilityLabelPositive = `${positiveText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
-		let accessibilityLabelNegative = `${negativeText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+		let accessibilityLabelPositive = `${pText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
+		let accessibilityLabelNegative = `${nText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
 
 		return (
 			<View style={styles.notificationModalFooter}>
-				{this.props.showNegative ?
+				{showNegative ?
 					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
 						onPress={this.onPressNegative}
 						accessibilityLabel={accessibilityLabelNegative}>
-						<Text style={styles.notificationModalFooterNegativeText}>{negativeText}</Text>
+						<Text style={styles.notificationModalFooterNegativeText}>{nText}</Text>
 					</TouchableOpacity>
 					:
 					null
 				}
-				{this.props.showPositive ?
+				{showPositive ?
 					<TouchableOpacity style={styles.notificationModalFooterTextCover}
 						onPress={this.onPressPositive}
 						accessibilityLabel={accessibilityLabelPositive}>
-						<Text style={styles.notificationModalFooterPositiveText}>{positiveText}</Text>
+						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
 					</TouchableOpacity>
 					:
 					null
@@ -248,19 +292,22 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let {
+		const {
 			showDialogue,
 			style,
 			entryDuration,
 			exitDuration,
-			appLayout,
+			backdropOpacity,
+			showHeader,
+			backdropColor,
 		} = this.props;
-		let styles = this.getStyles(appLayout);
+		const styles = this.getStyles();
 
 		return (
 			<Modal
 				style={styles.modal}
-				backdropOpacity={0.60}
+				backdropColor={backdropColor}
+				backdropOpacity={backdropOpacity}
 				isVisible={showDialogue}
 				animationInTiming={entryDuration}
 				animationOutTiming={exitDuration}
@@ -268,7 +315,7 @@ class DialogueBox extends Component<Props, null> {
 				onModalShow={this.onModalOpened}
 				supportedOrientations={['portrait', 'landscape']}>
 				<View style={[styles.container, style]}>
-					{this.renderHeader(styles)}
+					{!!showHeader && this.renderHeader(styles)}
 					{this.renderBody(styles)}
 					{this.renderFooter(styles)}
 				</View>
@@ -276,12 +323,14 @@ class DialogueBox extends Component<Props, null> {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+	getStyles(): Object {
+		const { appLayout, negTextColor, posTextColor } = this.props;
+		const { width, height } = appLayout;
 		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
+		const fontSize = Math.floor(deviceWidth * 0.042);
 
 		return {
 			modal: {
@@ -297,25 +346,28 @@ class DialogueBox extends Component<Props, null> {
 			notificationModalHeader: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
-				paddingLeft: 20,
-				height: deviceHeight * 0.08,
+				paddingVertical: fontSize,
+				paddingHorizontal: 5 + fontSize,
 				width: deviceWidth * 0.75,
 				backgroundColor: '#e26901',
 			},
+			dialogueHeaderStyle: {
+				paddingVertical: fontSize,
+				paddingHorizontal: 5 + fontSize,
+				width: deviceWidth * 0.75,
+			},
 			notificationModalHeaderText: {
 				color: '#ffffff',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: fontSizeHeader,
 			},
 			notificationModalBody: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
-				paddingLeft: 20,
-				paddingRight: 10,
-				height: deviceHeight * 0.2,
+				padding: 5 + fontSize,
 				width: deviceWidth * 0.75,
 			},
 			notificationModalBodyText: {
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize,
 				color: '#6B6969',
 			},
 			notificationModalFooter: {
@@ -323,25 +375,26 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'flex-end',
 				flexDirection: 'row',
 				paddingRight: 20,
-				height: deviceHeight * 0.08,
 				width: deviceWidth * 0.75,
+				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterTextCover: {
 				alignItems: 'flex-end',
 				justifyContent: 'center',
-				height: deviceHeight * 0.08,
 				paddingRight: 5,
 				paddingLeft: 5,
 			},
 			notificationModalFooterNegativeText: {
-				color: '#6B6969',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				color: negTextColor,
+				fontSize,
 				fontWeight: 'bold',
+				fontFamily: 'Roboto-Regular',
 			},
 			notificationModalFooterPositiveText: {
-				color: '#e26901',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				color: posTextColor,
+				fontSize,
 				fontWeight: 'bold',
+				fontFamily: 'Roboto-Regular',
 			},
 		};
 	}
@@ -349,7 +402,7 @@ class DialogueBox extends Component<Props, null> {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

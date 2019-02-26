@@ -33,7 +33,7 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import BellDashboardTile from './BellDashboardTile';
 import ToggleDashboardTile from './ToggleDashboardTile';
 
-import { getLabelDevice, getPowerConsumed } from '../../../Lib';
+import { getLabelDevice, getPowerConsumed, shouldUpdate, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -42,10 +42,10 @@ type Props = {
     tileWidth: number,
     intl: Object,
     powerConsumed?: number,
-    appLayout: Object,
-    setScrollEnabled: (boolean) => void,
-    isGatewayActive: boolean,
+	appLayout: Object,
     style: Object,
+	setScrollEnabled: (boolean) => void,
+	onPressDimButton: (Object) => void,
 };
 
 type State = {
@@ -72,9 +72,29 @@ constructor(props: Props) {
 	this.closeMoreActions = this.closeMoreActions.bind(this);
 }
 
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { showMoreActions } = this.state;
+	if (showMoreActions !== nextState.showMoreActions) {
+		return true;
+	}
+
+	const { tileWidth, ...others } = this.props;
+	const { tileWidth: tileWidthN, ...othersN } = nextProps;
+	if (tileWidth !== tileWidthN) {
+		return true;
+	}
+
+	const propsChange = shouldUpdate(others, othersN, ['item', 'powerConsumed']);
+	if (propsChange) {
+		return true;
+	}
+
+	return false;
+}
+
 getButtonsInfo(item: Object, styles: Object): Object {
-	let { supportedMethods, isInState } = item, buttons = [], buttonsInfo = [];
-	let { tileWidth, setScrollEnabled, isGatewayActive } = this.props;
+	let { supportedMethods = {}, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
+	let { tileWidth, setScrollEnabled, onPressDimButton } = this.props;
 	const {
 		TURNON,
 		TURNOFF,
@@ -84,66 +104,72 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		DOWN,
 		STOP,
 	} = supportedMethods;
+	const iconsName = getDeviceIcons(deviceType);
+
+	// Some device type, mostly with single button, the action(mostly inactive) icon will change wrt. it's state
+	// For now this value is passed(and logic handled) only to 'ToggleDashboardTile'(as those device's state seem to be 'TURNON || TURNOFF')
+	// if these type of devices has any chance of having state other than 'TURNON || TURNOFF', pass it to required button component.(also handle the logic)
+	const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 
 	if (BELL) {
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 
 		buttons.unshift(<BellDashboardTile key={4} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'bell',
+			iconsName,
 		});
 	}
 
 	if (UP || DOWN || STOP) {
 		const showStopButton = !TURNON && !TURNOFF && !BELL && !DIM;
 		const width = showStopButton ? tileWidth : tileWidth * (2 / 3);
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'STOP' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<NavigationalDashboardTile key={1} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
 			showStopButton={showStopButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'curtain',
+			iconsName,
 		});
 	}
 
 	if (DIM) {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
 		buttons.unshift(<DimmerDashboardTile key={2} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
-			showSlider={showSlider} setScrollEnabled={setScrollEnabled}/>);
+			showSlider={showSlider} setScrollEnabled={setScrollEnabled} onPressDimButton={onPressDimButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'device-alt',
+			iconsName,
 		});
 	}
 
 	if ((TURNON || TURNOFF) && !DIM) {
 		const showMoreButtons = BELL || UP || DOWN || STOP;
 		const width = !showMoreButtons ? tileWidth : tileWidth * (2 / 3);
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
+		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'device-alt',
+			iconsName,
 		});
 	}
 
 	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
-		const iconContainerStyle = !isGatewayActive ? styles.itemIconContainerOffline :
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
+		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
-			iconsName: 'device-alt',
+			iconsName,
 		});
 	}
 
@@ -170,12 +196,15 @@ render(): Object {
 			icon={iconsName}
 			iconStyle={{
 				color: '#fff',
-				fontSize: tileWidth / 5.2,
+				fontSize: Math.floor(tileWidth / 5.7),
+				borderRadius: Math.floor(tileWidth / 8),
+				textAlign: 'center',
+				alignSelf: 'center',
 			}}
 			iconContainerStyle={[iconContainerStyle, {
-				width: tileWidth / 4.8,
-				height: tileWidth / 4.8,
-				borderRadius: tileWidth / 9.6,
+				width: Math.floor(tileWidth / 4),
+				height: Math.floor(tileWidth / 4),
+				borderRadius: Math.floor(tileWidth / 8),
 				alignItems: 'center',
 				justifyContent: 'center',
 			}]}
@@ -200,6 +229,7 @@ render(): Object {
 						showModal={showMoreActions}
 						buttons={buttons}
 						name={deviceName}
+						item={item}
 						closeModal={this.closeMoreActions}
 					/>
 				)}
@@ -250,9 +280,11 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let powerConsumed = getPowerConsumed(store.sensors.byId, ownProps.item.clientDeviceId);
+	const { clientDeviceId, clientId } = ownProps.item;
+	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 		powerConsumed,
 	};
 }

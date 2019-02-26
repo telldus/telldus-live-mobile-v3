@@ -28,7 +28,6 @@ import { intlShape, injectIntl } from 'react-intl';
 import i18n from '../App/Translations/common';
 import Text from './Text';
 import Theme from '../App/Theme';
-import { getRelativeDimensions } from '../App/Lib';
 
 type Props = {
 	style?: Object | number | Array<any>,
@@ -41,6 +40,11 @@ type Props = {
 	appLayout: Object,
 	accessible: boolean,
 	accessibilityLabel?: string,
+	disabled?: boolean,
+};
+
+type DefaultProps = {
+	disabled: boolean,
 };
 
 class TouchableButton extends Component<Props, void> {
@@ -49,6 +53,10 @@ class TouchableButton extends Component<Props, void> {
 	labelButton: string;
 
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		disabled: false,
+	}
 
 	constructor(props: Props) {
 		super(props);
@@ -71,7 +79,7 @@ class TouchableButton extends Component<Props, void> {
 
 
 	render(): Object {
-		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel, accessible } = this.props;
+		let { style, labelStyle, intl, text, preScript, postScript, accessibilityLabel, accessible, disabled } = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		let shadow = Theme.Core.shadow;
 		accessibilityLabel = !accessible ? '' :
@@ -89,6 +97,7 @@ class TouchableButton extends Component<Props, void> {
 				importantForAccessibility={importantForAccessibility}
 				accessibilityLabel={accessibilityLabel}
 				style={[shadow, buttonContainer, style]}
+				disabled={disabled}
 				onPress={this.onPress}>
 				<Text style={[buttonLabel, labelStyle]}
 					accessible={accessible}
@@ -110,13 +119,16 @@ class TouchableButton extends Component<Props, void> {
 		let fontSize = deviceWidth * 0.04;
 		fontSize = fontSize > maxFontSize ? maxFontSize : fontSize;
 
+		const borderRadius = 18 + fontSize;
+
 		return {
 			buttonContainer: {
 				backgroundColor: btnPrimaryBg,
-				paddingVertical: 18,
-				width: deviceWidth * 0.5,
-				maxWidth: 250,
-				borderRadius: 18 + fontSize,
+				paddingVertical: borderRadius / 2,
+				paddingHorizontal: borderRadius / 2,
+				maxWidth: width * 0.9,
+				minWidth: width * 0.5,
+				borderRadius,
 				alignSelf: 'center',
 				alignItems: 'center',
 				justifyContent: 'center',
@@ -135,7 +147,7 @@ class TouchableButton extends Component<Props, void> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

@@ -26,13 +26,14 @@ import Day from './Day';
 import DaysRow from './DaysRow';
 import Description from './Description';
 import DeviceRow from './DeviceRow';
-import SchedulePoster from './SchedulePoster';
 import TextRowWrapper from './TextRowWrapper';
 import TimeBlock from './TimeBlock';
 import TimeRow from './TimeRow';
 import TimeSlider from './TimeSlider';
 import Title from './Title';
 import ScheduleSwitch from './ScheduleSwitch';
+import AdvancedSettings from './AdvancedSettings';
+import AdvancedSettingsBlock from './AdvancedSettingsBlock';
 
 module.exports = {
 	ActionRow,
@@ -42,11 +43,12 @@ module.exports = {
 	DaysRow,
 	Description,
 	DeviceRow,
-	SchedulePoster,
 	TextRowWrapper,
 	TimeBlock,
 	TimeRow,
 	TimeSlider,
 	Title,
 	ScheduleSwitch,
+	AdvancedSettings,
+	AdvancedSettingsBlock,
 };

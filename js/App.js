@@ -21,27 +21,33 @@
 'use strict';
 
 import React from 'react';
-import { AccessibilityInfo } from 'react-native';
+import { AccessibilityInfo, UIManager, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
+import { LocaleConfig } from 'react-native-calendars';
+import { injectIntl } from 'react-intl';
 import userDefaults from 'react-native-user-defaults';
 
 import {
 	PreLoginNavigator,
-	AppNavigator,
+	PostLoginNavigatorCommon,
 	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
-import { View } from './BaseComponents';
+import { SafeAreaView, DialogueBox } from './BaseComponents';
 import {
 	setAppLayout,
 	setAccessibilityListener,
 	setAccessibilityInfo,
 } from './App/Actions';
+import {
+	getTranslatableDayNames,
+	getTranslatableMonthNames,
+} from './App/Lib';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.6';
+const changeLogVersion = '3.9';
 
 type Props = {
 	dispatch: Function,
@@ -50,16 +56,60 @@ type Props = {
 	pushTokenRegistered: boolean,
 	prevChangeLogVersion: string,
 	forceShowChangeLog: boolean,
+	intl: Object,
+	locale: string,
+	deviceId?: string,
 };
 
-class App extends React.Component<Props, null> {
+type State = {
+	dialogueData: Object,
+	keyboard: boolean,
+};
+
+class App extends React.Component<Props, State> {
 	props: Props;
+	state: State;
 
 	onLayout: (Object) => void;
+	onNotification: Function | null;
+	setCalendarLocale: () => void;
 
-	constructor() {
-		super();
+	toggleDialogueBox: (Object) => null;
+	closeDialogue: (?() => void) => void;
+	onPressDialoguePositive: () => void;
+
+	_keyboardDidShow: () => void;
+	_keyboardDidHide: () => void;
+	keyboardDidShowListener: Object;
+	keyboardDidHideListener: Object;
+
+	constructor(props: Props) {
+		super(props);
 		this.onLayout = this.onLayout.bind(this);
+		this.setCalendarLocale = this.setCalendarLocale.bind(this);
+
+		this.state = {
+			dialogueData: {
+				show: false,
+			},
+			keyboard: false,
+		};
+
+		this.setCalendarLocale();
+		if (Platform.OS === 'android') {
+			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+		}
+		this.onNotification = null;
+
+		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
+		this.closeDialogue = this.closeDialogue.bind(this);
+		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
+
+		this._keyboardDidShow = this._keyboardDidShow.bind(this);
+		this._keyboardDidHide = this._keyboardDidHide.bind(this);
+
+		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 	}
 
 	componentDidMount() {
@@ -77,7 +127,22 @@ class App extends React.Component<Props, null> {
 			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
 
-		userDefaults.set("accessToken", accessToken, "group.com.telldus.TokenUserDefaults");
+		// sets push notification listeners and returns a method that clears all listeners.
+		this.onNotification = Push.onNotification();
+
+		userDefaults.set('accessToken', accessToken, 'group.com.telldus.TokenUserDefaults');
+	}
+
+	setCalendarLocale() {
+		const { intl, locale } = this.props;
+		const { formatDate } = intl;
+		LocaleConfig.locales[locale] = {
+			monthNames: getTranslatableMonthNames(formatDate, 'long'),
+			monthNamesShort: getTranslatableMonthNames(formatDate, 'short'),
+			dayNames: getTranslatableDayNames(formatDate, 'long'),
+			dayNamesShort: getTranslatableDayNames(formatDate, 'short'),
+		};
+		LocaleConfig.defaultLocale = locale;
 	}
 
 	componentDidUpdate() {
@@ -89,20 +154,69 @@ class App extends React.Component<Props, null> {
 			'change',
 			setAccessibilityInfo
 		);
+
+		if (this.onNotification && typeof this.onNotification === 'function') {
+			// Remove Push notification listener.
+			this.onNotification();
+		}
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
 	}
+
+	_keyboardDidShow() {
+		this.setState({
+			keyboard: true,
+		});
+	  }
+
+	  _keyboardDidHide() {
+		this.setState({
+			keyboard: false,
+		});
+	  }
 
 	/*
 	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
 	 * remote push notifications.
 	 */
 	pushConf() {
+		const { dispatch, ...otherProps } = this.props;
 		if (this.props.accessToken) {
-			Push.configure(this.props);
+			dispatch(Push.configure(otherProps));
 		}
 	}
 
 	onLayout(ev: Object) {
-		this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+		if (!this.state.keyboard) {
+			this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+		}
+	}
+
+	toggleDialogueBox(dialogueData: Object) {
+		this.setState({
+			dialogueData,
+		});
+	}
+
+	closeDialogue(postClose?: () => void = (): void => undefined) {
+		const { dialogueData } = this.state;
+		this.setState({
+			dialogueData: {
+				...dialogueData,
+				show: false,
+			},
+		}, () => {
+			postClose();
+		});
+	}
+
+	onPressDialoguePositive() {
+		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false } = this.state.dialogueData;
+		if (closeOnPressPositive) {
+			this.closeDialogue(onPressPositive);
+		} else if (onPressPositive) {
+			onPressPositive();
+		}
 	}
 
 	render(): Object {
@@ -112,19 +226,35 @@ class App extends React.Component<Props, null> {
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
+		let {
+			show = false,
+			showHeader = false,
+			imageHeader = false,
+			onPressNegative = this.closeDialogue,
+			...others
+		} = this.state.dialogueData;
+
 		return (
-			<View style={{ flex: 1 }} onLayout={this.onLayout}>
+			<SafeAreaView onLayout={this.onLayout} backgroundColor={Theme.Core.appBackground}>
 				{hasNotLoggedIn ?
 					<PreLoginNavigator />
 					:
-					<AppNavigator {...this.props} />
+					<PostLoginNavigatorCommon {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}
 					showChangeLog={showChangeLog}
 					forceShowChangeLog={forceShowChangeLog}
-					onLayout={this.onLayout} />
-			</View>
+					onLayout={this.onLayout}/>
+				<DialogueBox
+					{...others}
+					showDialogue={show}
+					showHeader={showHeader}
+					imageHeader={imageHeader}
+					onPressNegative={onPressNegative}
+					onPressPositive={this.onPressDialoguePositive}
+				/>
+			</SafeAreaView>
 		);
 	}
 }
@@ -136,10 +266,11 @@ function mapStateToProps(store: Object): Object {
 		isTokenValid,
 		pushTokenRegistered,
 		showChangeLog: forceShowChangeLog,
+		deviceId = null,
 	} = store.user;
 	let {
 		changeLogVersion: prevChangeLogVersion,
-	} = store.App;
+	} = store.app;
 
 	return {
 		accessToken,
@@ -148,6 +279,7 @@ function mapStateToProps(store: Object): Object {
 		pushTokenRegistered,
 		prevChangeLogVersion,
 		forceShowChangeLog,
+		deviceId,
 	};
 }
 
@@ -157,4 +289,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(App);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(App));

@@ -21,10 +21,29 @@
 // @flow
 
 'use strict';
+import type { Action } from './Types';
 // Sensors actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Sensors } = actions;
 
+const changeDefaultDisplayType = (id: number, displayType: string): Action => {
+	return {
+		type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE',
+		id,
+		displayType,
+	};
+};
+
+const changeDefaultHistorySettings = (id: number, historySettings: Object): Action => {
+	return {
+		type: 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS',
+		id,
+		historySettings,
+	};
+};
+
 module.exports = {
 	...Sensors,
+	changeDefaultDisplayType,
+	changeDefaultHistorySettings,
 };

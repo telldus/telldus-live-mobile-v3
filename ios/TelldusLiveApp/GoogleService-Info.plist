@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>*****************</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>***************</string>
+	<key>CLIENT_ID</key>
+	<string>335992541329-dt0d2antleugo6egffukmvfhpfjnhjrp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.335992541329-dt0d2antleugo6egffukmvfhpfjnhjrp</string>
+	<key>API_KEY</key>
+	<string>*****************</string>
+	<key>GCM_SENDER_ID</key>
+	<string>*****************</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.telldus.live.mobile</string>
+	<key>PROJECT_ID</key>
+	<string>telldus-1111</string>
+	<key>STORAGE_BUCKET</key>
+	<string>telldus-dfde8.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:335992541329:ios:c3fa29fd35b7c867</string>
+	<key>DATABASE_URL</key>
+	<string>https://telldus-1111.firebaseio.com</string>
+</dict>
+</plist>

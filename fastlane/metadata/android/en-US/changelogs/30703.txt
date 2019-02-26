@@ -1,0 +1,4 @@
+- Fix push on iOS when app is open
+- Fix crash on Android when updating from 3.6 to 3.7
+- Updated translations
+

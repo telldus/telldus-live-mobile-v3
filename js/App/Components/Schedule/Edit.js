@@ -24,12 +24,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import {View, TouchableButton, Throbber} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
-import { getSelectedDays } from '../../Lib';
-import { ActionRow, DaysRow, ScheduleSwitch, TimeRow } from './SubViews';
+import { getSelectedDays, getDeviceActionIcon } from '../../Lib';
+import { ActionRow, DaysRow, ScheduleSwitch, TimeRow, AdvancedSettingsBlock } from './SubViews';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -37,53 +37,6 @@ interface Props extends ScheduleProps {
 	devices: Object,
 	intl: intlShape.isRequired,
 }
-
-const messages = defineMessages({
-	confirmAndSave: {
-		id: 'button.confirmAndSave',
-		defaultMessage: 'Confirm & Save',
-		description: 'save button label in edit schedule page',
-	},
-	delete: {
-		id: 'button.delete',
-		defaultMessage: 'Delete',
-		description: 'delete button label in edit schedule page',
-	},
-	updateScheduleSuccess: {
-		id: 'toast.updateScheduleSuccess',
-		defaultMessage: 'Schedule has been updated successfully',
-		description: 'The message to show, when a schedule is updated and saved successfully',
-	},
-	updateScheduleFailure: {
-		id: 'toast.updateScheduleFailure',
-		defaultMessage: 'Could not save the shedule. Please try again later',
-		description: 'The message to show, when a schedule is update fail',
-	},
-	deleteScheduleSuccess: {
-		id: 'toast.deleteScheduleSuccess',
-		defaultMessage: 'Schedule has been deleted successfully',
-		description: 'The message to show, when a schedule is deleted successfully',
-	},
-	deleteScheduleFailure: {
-		id: 'toast.deleteScheduleFailure',
-		defaultMessage: 'Could not delete the shedule. Please try again later',
-		description: 'The message to show, when a schedule is failed',
-	},
-	deleteScheduleDialogue: {
-		id: 'modal.deleteScheduleDialogue',
-		defaultMessage: 'Are you sure you want to delete the schedule ?',
-		description: 'Dialogue box content when user choose to delete schedule.',
-	},
-	deleteScheduleDialogueHeader: {
-		id: 'modal.deleteScheduleDialogueHeader',
-		defaultMessage: 'DELETE',
-		description: 'Dialogue box header when user choose to delete schedule.',
-	},
-	posterEditDevice: {
-		id: 'schedule.posterEditDevice',
-		defaultMessage: 'Click the details you want to edit',
-	},
-});
 
 type State = {
 	isSaving: boolean,
@@ -98,6 +51,10 @@ class Edit extends View<null, Props, State> {
 	onSaveSchedule: () => void;
 	onDeleteSchedule: () => void;
 	onDeleteConfirm: () => void;
+
+	onToggleAdvanced: (boolean) => void;
+	setRefScroll: (any) => void;
+	scrollView: any;
 
 	static propTypes = {
 		navigation: PropTypes.object,
@@ -122,19 +79,23 @@ class Edit extends View<null, Props, State> {
 		let { formatMessage } = this.props.intl;
 
 		this.h1 = `${formatMessage(i18n.edit)} ${this.device.name}`;
-		this.h2 = formatMessage(messages.posterEditDevice);
-		this.messageOnDelete = formatMessage(messages.deleteScheduleSuccess);
-		this.messageOnUpdate = formatMessage(messages.updateScheduleSuccess);
-		this.deleteScheduleDialogue = formatMessage(messages.deleteScheduleDialogue);
-		this.deleteScheduleDialogueHeader = `${formatMessage(messages.deleteScheduleDialogueHeader)}?`;
+		this.h2 = formatMessage(i18n.posterEditDevice);
+		this.messageOnDelete = formatMessage(i18n.deleteScheduleSuccess);
+		this.messageOnUpdate = formatMessage(i18n.updateScheduleSuccess);
+		this.deleteScheduleDialogue = formatMessage(i18n.deleteScheduleDialogue);
+		this.deleteScheduleDialogueHeader = `${formatMessage(i18n.deleteScheduleDialogueHeader)}?`;
 
-		this.messageOnDeleteFail = formatMessage(messages.deleteScheduleFailure);
-		this.messageOnUpdateFail = formatMessage(messages.updateScheduleFailure);
+		this.messageOnDeleteFail = formatMessage(i18n.deleteScheduleFailure);
+		this.messageOnUpdateFail = formatMessage(i18n.updateScheduleFailure);
 
 		this.onSaveSchedule = this.onSaveSchedule.bind(this);
 		this.onDeleteSchedule = this.onDeleteSchedule.bind(this);
 
 		this.onDeleteConfirm = this.onDeleteConfirm.bind(this);
+
+		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
+		this.setRefScroll = this.setRefScroll.bind(this);
+		this.scrollView = null;
 	}
 
 	componentDidMount() {
@@ -184,13 +145,15 @@ class Edit extends View<null, Props, State> {
 					isSaving: false,
 				});
 				let message = error.message ? error.message : this.messageOnUpdateFail;
-				this.props.actions.showModal(message);
+				this.props.actions.showModal(message, {
+					showPositive: true,
+				});
 			});
 		}
 	};
 
 	resetNavigation = () => {
-		this.props.rootNavigator.goBack();
+		this.props.navigation.pop();
 	}
 
 	onDeleteCancel = () => {
@@ -219,7 +182,9 @@ class Edit extends View<null, Props, State> {
 				choseDelete: false,
 			});
 			let message = error.message ? error.message : this.messageOnDeleteFail;
-			this.props.actions.showModal(message);
+			this.props.actions.showModal(message, {
+				showPositive: true,
+			});
 		});
 	}
 
@@ -228,9 +193,12 @@ class Edit extends View<null, Props, State> {
 			this.setState({
 				choseDelete: true,
 			});
-			let modalExtras = {
+			const { formatMessage } = this.props.intl;
+			const modalExtras = {
 				dialogueHeader: this.deleteScheduleDialogueHeader,
+				showPositive: true,
 				showNegative: true,
+				positiveText: formatMessage(i18n.delete).toUpperCase(),
 				onPressPositive: this.onDeleteConfirm,
 				onPressNegative: this.onDeleteCancel,
 				showBackground: true,
@@ -239,22 +207,42 @@ class Edit extends View<null, Props, State> {
 		}
 	}
 
+	onToggleAdvanced(state: boolean) {
+		if (state && this.scrollView) {
+			this.scrollView.scrollToEnd({animated: true});
+		}
+	}
+
+	setRefScroll(ref: any) {
+		this.scrollView = ref;
+	}
+
 	render(): React$Element<any> {
-		const { appLayout, schedule, intl } = this.props;
+		const { appLayout, schedule, intl, actions } = this.props;
 		const { formatMessage, formatDate } = intl;
-		const { active, method, methodValue, weekdays } = schedule;
-		const { container, row, save, cancel, throbber, buttonStyle, labelStyle,
-			throbberContainer, throbberContainerOnSave, throbberContainerOnDelete } = this._getStyle(appLayout);
+		const { active, method, methodValue, weekdays, retries = 0, retryInterval = 0, reps = 0 } = schedule;
+		const {
+			container, row, save, cancel, throbber,
+			buttonStyle, labelStyle,
+			throbberContainer,
+			buttonCoverStyle,
+		} = this._getStyle(appLayout);
 		const selectedDays = getSelectedDays(weekdays, formatDate);
-		const throbberContainerStyle = this.state.isSaving ? throbberContainerOnSave : this.state.isDeleting ? throbberContainerOnDelete : {};
 		const labelPostScript = formatMessage(i18n.activateEdit);
+		const { deviceType, supportedMethods = {} } = this.device;
+		const actionIcons = getDeviceActionIcon(deviceType, null, supportedMethods);
 
 		return (
-			<ScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+			<ScrollView
+				ref={this.setRefScroll}
+				style={{flex: 1}}
+				contentContainerStyle={{flexGrow: 1}}
+				keyboardShouldPersistTaps={'always'}>
 				<View style={container}>
 					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
 					<ActionRow
 						method={method}
+						actionIcons={actionIcons}
 						showValue={true}
 						methodValue={methodValue}
 						onPress={this.editAction}
@@ -271,6 +259,7 @@ class Edit extends View<null, Props, State> {
 						appLayout={appLayout}
 						intl={intl}
 						labelPostScript={labelPostScript}
+						getSuntime={actions.getSuntime}
 					/>
 					<DaysRow
 						selectedDays={selectedDays}
@@ -280,25 +269,43 @@ class Edit extends View<null, Props, State> {
 						labelPostScript={labelPostScript}
 						containerStyle={row}
 					/>
-					<View style={{flex: 1, alignSelf: 'stretch'}}>
+					<AdvancedSettingsBlock
+						appLayout={appLayout}
+						intl={intl}
+						onPressInfo={actions.showModal}
+						onDoneEditAdvanced={actions.setAdvancedSettings}
+						retries={retries}
+						retryInterval={retryInterval}
+						reps={reps}
+						onToggleAdvanced={this.onToggleAdvanced}/>
+					<View style={buttonCoverStyle}>
 						<TouchableButton
-							text={messages.confirmAndSave}
+							text={i18n.confirmAndSave}
 							style={[buttonStyle, save]}
 							labelStyle={labelStyle}
 							onPress={this.onSaveSchedule}
 							accessible={true}
 						/>
+						{this.state.isSaving &&
+							(
+								<Throbber
+									throbberContainerStyle={throbberContainer}
+									throbberStyle={throbber}
+								/>
+							)}
+					</View>
+					<View style={buttonCoverStyle}>
 						<TouchableButton
-							text={messages.delete}
+							text={i18n.delete}
 							style={[buttonStyle, cancel]}
 							labelStyle={labelStyle}
 							onPress={this.onDeleteSchedule}
 							accessible={true}
 						/>
-						{!!(this.state.isDeleting || this.state.isSaving) &&
+						{this.state.isDeleting &&
 					(
 						<Throbber
-							throbberContainerStyle={[throbberContainer, throbberContainerStyle]}
+							throbberContainerStyle={throbberContainer}
 							throbberStyle={throbber}
 						/>
 					)}
@@ -309,14 +316,18 @@ class Edit extends View<null, Props, State> {
 	}
 
 	_navigate = (routeName: string) => {
-		this.props.rootNavigator.setParams({
-			renderRootHeader: false,
+		this.props.navigation.navigate({
+			routeName,
+			key: routeName,
+			params: {
+				editMode: true,
+			},
 		});
-		this.props.navigation.navigate(routeName, { editMode: true });
 	};
 
 	_getDeviceById = (deviceId: number): Object => {
-		return this.props.devices.byId[deviceId];
+		const device = this.props.devices.byId[deviceId];
+		return device ? device : {};
 	};
 
 	_getStyle = (appLayout: Object): Object => {
@@ -335,31 +346,31 @@ class Edit extends View<null, Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const fontSizeButtonLabel = deviceWidth * 0.03;
-		const buttonWidth = deviceWidth * 0.3;
-		const paddingVertical = fontSizeButtonLabel * 0.9;
-		const buttonHeight = (paddingVertical * 2) + fontSizeButtonLabel;
+		const fontSizeButtonLabel = deviceWidth * 0.033;
 
 		return {
 			container: {
+				flex: 1,
 				paddingHorizontal: padding,
-				alignItems: 'center',
+				paddingVertical: padding - (padding / 4),
 			},
 			row: {
 				marginVertical: padding / 4,
 			},
 			save: {
 				backgroundColor: Theme.Core.brandSecondary,
+				marginTop: padding / 2,
 			},
 			cancel: {
 				backgroundColor: Theme.Core.brandDanger,
 			},
-			buttonStyle: {
-				width: buttonWidth,
-				borderRadius: buttonHeight / 2,
+			buttonCoverStyle: {
+				alignItems: 'center',
+				justifyContent: 'center',
 				marginVertical: padding / 4,
+			},
+			buttonStyle: {
 				maxWidth: undefined,
-				paddingVertical: fontSizeButtonLabel * 0.9,
 				...shadow,
 			},
 			labelStyle: {
@@ -367,14 +378,6 @@ class Edit extends View<null, Props, State> {
 			},
 			throbberContainer: {
 				right: -(deviceWidth * 0.12),
-			},
-			throbberContainerOnDelete: {
-				top: 82,
-				right: width * 0.1,
-			},
-			throbberContainerOnSave: {
-				top: 22,
-				right: width * 0.1,
 			},
 			throbber: {
 				fontSize: 30,

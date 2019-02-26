@@ -1,6 +1,28 @@
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+let externalEditor = require('external-editor');
+let edit = externalEditor.edit;
+
 let exec = require('child-process-promise').exec;
 let fs = require('fs');
-let ExternalEditor = require('external-editor');
 let prompt = require('prompt');
 
 let changelog = '';
@@ -21,15 +43,15 @@ prompt.start();
 exec('git diff-index --quiet HEAD --')
 	.then(() => exec('git describe --abbrev=0'))
 	.then(({stdout}) => exec(`git log ${stdout.trim()}..HEAD`, {maxBuffer: 1024 * 500}))
-	.then(result => (result.stdout.split('\n')))  // Split lines
-	.then(lines => lines.map(line => line.trim()))  // Trim them
-	.then(lines => lines.filter(line => regex.exec(line)))  // Filter changelog rows
+	.then(result => (result.stdout.split('\n')))// Split lines
+	.then(lines => lines.map(line => line.trim()))// Trim them
+	.then(lines => lines.filter(line => regex.exec(line)))// Filter changelog rows
 	.then(lines => lines.map(line => {
 		// Strip the changelog prefix
 		let m = regex.exec(line);
 		return line.substr(m[0].length).trim();
 	}))
-	.then(changes => changes.map(line => `- ${line}`))  // Prepend "-" to each row
+	.then(changes => changes.map(line => `- ${line}`))// Prepend "-" to each row
 	.then(changes => changes.join('\n'))
 	.then(changes => {
 		// Store changes
@@ -52,7 +74,7 @@ exec('git diff-index --quiet HEAD --')
 	})
 	.then(() => {
 		// Let the user edit the changelog before commiting
-		changelog = ExternalEditor.edit(changelog);
+		changelog = edit(changelog);
 	})
 	.then(() => {
 		// Generate changelog for Android

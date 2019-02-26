@@ -24,7 +24,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import { defineMessages } from 'react-intl';
 
 import { ScheduleProps } from './ScheduleScreen';
 import { CheckButton, DaysRow, Description } from './SubViews';
@@ -34,16 +33,6 @@ import _ from 'lodash';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-const messages = defineMessages({
-	checkAll: {
-		id: 'button.checkAll',
-		defaultMessage: 'Check all',
-	},
-	unCheckAll: {
-		id: 'button.unCheckAll',
-		defaultMessage: 'Uncheck all',
-	},
-});
 interface Props extends ScheduleProps {
 	paddingRight: number,
 }
@@ -70,14 +59,15 @@ export default class Days extends View<null, Props, State> {
 	constructor(props: Props) {
 		super(props);
 
-		let { formatMessage, formatDate } = this.props.intl;
+		const { isEditMode, intl, schedule } = this.props;
+		const { formatMessage, formatDate } = intl;
 
 		this.days = getTranslatableDays(formatDate);
 
-		this.h1 = `4. ${formatMessage(i18n.posterDays)}`;
+		this.h1 = isEditMode() ? formatMessage(i18n.posterDays) : formatMessage(i18n.posterDays);
 		this.h2 = formatMessage(i18n.posterChooseDays);
-		this.labelCheckAll = formatMessage(messages.checkAll);
-		this.labelUncheckAll = formatMessage(messages.unCheckAll);
+		this.labelCheckAll = formatMessage(i18n.checkAll);
+		this.labelUncheckAll = formatMessage(i18n.unCheckAll);
 		this.labelWeekDays = `${formatMessage(i18n.weekdays)} (${formatMessage(i18n.weekdaysDescription)})`;
 		this.labelWeekEnds = `${formatMessage(i18n.weekends)} (${formatMessage(i18n.weekendsDescription)})`;
 		this.infoButton = {
@@ -85,9 +75,9 @@ export default class Days extends View<null, Props, State> {
 		};
 
 		this.state = {
-			selectedDays: getSelectedDays(props.schedule.weekdays, formatDate),
+			selectedDays: getSelectedDays(schedule.weekdays, formatDate),
 			shouldCheckAll: true,
-			shouldUncheckAll: getSelectedDays(props.schedule.weekdays, formatDate).length > 0,
+			shouldUncheckAll: getSelectedDays(schedule.weekdays, formatDate).length > 0,
 			isWeekdaysSelected: false,
 			isWeekendsSelected: false,
 		};
@@ -195,7 +185,10 @@ export default class Days extends View<null, Props, State> {
 		if (isEditMode()) {
 			navigation.goBack();
 		} else {
-			navigation.navigate('Summary');
+			navigation.navigate({
+				routeName: 'Summary',
+				key: 'Summary',
+			});
 		}
 	};
 
@@ -227,6 +220,7 @@ export default class Days extends View<null, Props, State> {
 						onPress={this.toggleWeekdays}
 						style={row}
 						containerStyle={rowContainer}
+						accessible={true}
 						importantForAccessibility={'yes'}
 						accessibilityLabel={`${this.labelWeekDays}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					>
@@ -248,6 +242,7 @@ export default class Days extends View<null, Props, State> {
 							rowContainer,
 							{ marginBottom: checkBoxBottom },
 						]}
+						accessible={true}
 						importantForAccessibility={'yes'}
 						accessibilityLabel={`${this.labelWeekEnds}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`}
 					>
@@ -274,7 +269,7 @@ export default class Days extends View<null, Props, State> {
 					<FloatingButton
 						buttonStyle={buttonStyle}
 						onPress={this.selectDays}
-						imageSource={require('./img/right-arrow-key.png')}
+						imageSource={{uri: 'right_arrow_key'}}
 						paddingRight={this.props.paddingRight - 2}
 					/>
 				)}
@@ -322,6 +317,7 @@ export default class Days extends View<null, Props, State> {
 				flex: 1,
 				justifyContent: 'flex-start',
 				marginBottom: (buttonSize / 2) + buttonBottom,
+				paddingVertical: padding - (padding / 4),
 			},
 			buttonsContainer: {
 				flexDirection: 'row',

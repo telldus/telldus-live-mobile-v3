@@ -6,8 +6,9 @@
 
 **Notes:**
 
-- keep the README.md complete and up to date! Goal is that it contains everything you need to get started.
+- Keep the README.md complete and up to date! Goal is that it contains everything you need to get started.
 - Feel free to adapt it as you see fit, you don't need permission.
+- Take flow type seriously, JS might not care but Java and Obj-C underneath can be very rude.
 
 ## Install
 
@@ -55,15 +56,11 @@ All commands are assumed to be ran from project root.
 
 The app uses react-intl for translating strings.
 
-Before commiting the code, update the english translation file by running:
-```
-npm run manage:translations
-```
-Make sure there is no duplicate keys.
+All string definitions and translated strings are stored in separate repo(live-shared-data) for sharing convenience. Make sure new entries are done inside `live-shared-data`
 
-There is three ways of translating a string in the code.
+There are three ways of translating a string in the code.
 
-#### 1) Use the <FormattedMessage> component available in base components.
+#### 1) Use the <FormattedMessage> component available in base components.(DEPRECATED -  All string definition has to be done in live-shared-data)
 
 **Example:**
 ```
@@ -75,7 +72,8 @@ There is three ways of translating a string in the code.
 This is similar to the above variant but if the same tag is to be reused it must be defined separately
 
 **Example:**
-```
+```javascript
+// definition need to be done in live-shared-data
 const messages = defineMessages({
 	tag: {
 		id: 'unique.id.for.this.tag',
@@ -92,7 +90,8 @@ First wrap the component using `injectIntl`
 https://github.com/yahoo/react-intl/wiki/API#injection-api
 
 **Example:**
-```
+```javascript
+// definition need to be done in live-shared-data
 const messages = defineMessages({
 	tag: {
 		id: 'unique.id.for.this.tag',
@@ -158,6 +157,8 @@ module.exports = {
  - `pushSenderId`: string - Used to identify the remote notification sender
  - `pushServiceId`: integer - Used to Identify the Push Service (GCM or APNS)
  - `googleMapsAPIKey`: string - Used to access Google Maps and Maps Geocode APIs
+ - `webClientId`: string - Used for google authentication
+ - `iosClientId`: string - Used for google authentication(only iOS)
 
 ### Docker
 
@@ -230,8 +231,9 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 ## Testing
 
 Before commiting code. Please make sure tests pass. Test the code:  
-`npm run lint`  
-`npm run flow`
+`yarn run lint`  
+`yarn run flow`
+`yarn run test`
 
 ## Naming convention branches, commits and pull requests
 
@@ -265,6 +267,12 @@ Changelog: Fix a crash on startup
 
 If you are not sure if your commit should be included in the changelog or not, ask the maintainer first!
 
+### Commit messages
+
+Please read these guidelines:  
+https://chris.beams.io/posts/git-commit/
+
+
 ## Logging
 
 ## Redux
@@ -279,6 +287,7 @@ This app uses [Redux](http://redux.js.org/) to manage its state. Redux is opinio
 - `connect`: function that binds the Redux store to a React component passing two functions:
   - `mapStateToProps`: a function that uses Selectors to filter relevant props from the state
   - `mapDispatchToProps`: a function that exposes relevant Action creators in the props
+- `migrate`: Upon adding/removing a reducer or adding/removing any property of a reducer give a thought about app upgradation and compatibilty.(see `js/App/Store/migrations`)
 
 For more info, from the man himself @dan_ambramov: https://github.com/reactjs/react-redux/blob/master/docs/api.md
 

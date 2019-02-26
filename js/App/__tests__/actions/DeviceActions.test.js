@@ -102,11 +102,13 @@ describe('Test device actions', ()=>{
 	it('check requestDeviceAction', () => {
 		const DeviceId = 37;
 		const Method = 10;
+		const local = false;
 		const expectedAction = {
 			type: 'REQUEST_DEVICE_ACTION',
 			payload: {
 				deviceId: DeviceId,
 				method: Method,
+				local,
 			}};
 		expect(requestDeviceAction( DeviceId, Method)).toEqual(expectedAction);
 

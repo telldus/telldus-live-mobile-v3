@@ -26,16 +26,12 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
-import FormattedMessage from './FormattedMessage';
-import { getRelativeDimensions } from '../App/Lib';
-
-import { createIconSetFromIcoMoon } from 'react-native-vector-icons';
-import icon_home from '../App/Components/TabViews/img/selection.json';
-const CustomIcon = createIconSetFromIcoMoon(icon_home);
+import Text from './Text';
+import IconTelldus from './IconTelldus';
 
 type Props = {
 	icon: string,
-	tintColor: number | string,
+	tintColor: string,
 	label: any,
 	appLayout: Object,
 	intl: intlShape.isRequired,
@@ -50,7 +46,7 @@ class TabBar extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { icon, tintColor, label, intl, accessibilityLabel, appLayout } = this.props;
+		let { icon, tintColor, label = '', intl, accessibilityLabel, appLayout } = this.props;
 		accessibilityLabel = intl.formatMessage(accessibilityLabel);
 
 		const {
@@ -59,10 +55,14 @@ class TabBar extends Component<Props, null> {
 			labelStyle,
 		} = this.getStyles(appLayout);
 
+		label = typeof label === 'string' ? label : intl.formatMessage(label);
+
 		return (
 			<View style={container} accessibilityLabel={accessibilityLabel}>
-				<CustomIcon name={icon} size={iconSize} color={tintColor}/>
-				<FormattedMessage {...label} style={[labelStyle, {color: tintColor}]}/>
+				<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
+				<Text style={[labelStyle, {color: tintColor}]}>
+					{label}
+				</Text>
 			</View>
 		);
 	}
@@ -91,7 +91,7 @@ class TabBar extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: getRelativeDimensions(state.App.layout),
+		appLayout: state.app.layout,
 	};
 }
 

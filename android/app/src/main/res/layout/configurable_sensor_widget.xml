@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/widget_margin">
+
+    <LinearLayout
+        android:id="@+id/iconWidgetSensor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center|center"
+        android:gravity="center"
+        android:background="@drawable/shape_widget">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtSensorType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unknown"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:maxLines="1"
+                android:layout_centerInParent="true"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="5dp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_blue"
+            android:orientation="horizontal"
+            android:layout_gravity="center|center_vertical">
+
+            <FrameLayout
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/iconSensor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="36sp"
+                    android:gravity="left|center"
+                    android:layout_gravity="left|center"
+                    android:fontFamily="@font/telldusicons"
+                    android:textColor="@color/white"/>
+                <LinearLayout
+                    android:layout_gravity="end|center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="13dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="start|center_vertical">
+
+                <TextView
+                    android:id="@+id/txtSensorValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="56"
+                    android:maxLines="1"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"/>
+                <TextView
+                android:id="@+id/txtSensorUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:layout_gravity="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    />
+
+                </LinearLayout>
+                        <TextView
+                            android:id="@+id/txtHistoryInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="5 min ago "
+                            android:layout_gravity="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="13sp"/>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -23,29 +23,12 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { FormattedMessage, View, Text, TouchableButton, H1 } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
-const messages = defineMessages({
-	welcomeHeader: {
-		id: 'user.welcome',
-		defaultMessage: 'Welcome to Telldus',
-	},
-	welcomeButton: {
-		id: 'button.welcome',
-		defaultMessage: 'GOT IT',
-	},
-	accountCreated: {
-		id: 'user.accountCreated',
-		defaultMessage: 'Your account is created and you will now be logged in.',
-	},
-	confirmMessage: {
-		id: 'user.confirmMessage',
-		defaultMessage: 'An email is sent to you with a link to confirm your account. Please confirm your account within 24 hours, otherwise the account will be deleted.',
-	},
-});
+import i18n from '../../Translations/common';
 
 type Props = {
 	accessToken: Object,
@@ -78,14 +61,14 @@ class WelcomeScreen extends View {
 		return (
 			<View style={{flex: 1, alignItems: 'center'}}>
 				<H1 style={commonStyles.headerTextStyle}>
-					{intl.formatMessage(messages.welcomeHeader)}
+					{intl.formatMessage(i18n.welcomeHeader)}
 				</H1>
-				<Text style={styles.textBody}><FormattedMessage {...messages.accountCreated} style={styles.textBody}/></Text>
-				<Text style={styles.textBody}><FormattedMessage {...messages.confirmMessage} style={styles.textBody}/></Text>
+				<Text style={styles.textBody}><FormattedMessage {...i18n.accountCreated} style={styles.textBody}/></Text>
+				<Text style={styles.textBody}><FormattedMessage {...i18n.confirmMessage} style={styles.textBody}/></Text>
 				<TouchableButton
 					style={styles.button}
 					onPress={this.onPressOK}
-					text={messages.welcomeButton}
+					text={i18n.welcomeButton}
 				/>
 			</View>
 		);

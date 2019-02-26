@@ -25,18 +25,23 @@ import PropTypes from 'prop-types';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
+const isEqual = require('react-fast-compare');
+
+import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
 type Props = {
 	isInState: string,
-	style: Object | number | Array<any>,
 	methodRequested: string,
 	name: string,
 	isGatewayActive: boolean,
 	enabled: boolean,
-	onPress: () => void;
+	local: boolean,
+
+	style: Object | number | Array<any>,
+	onPress: () => void,
 	intl: Object,
 	iconStyle: Object | number | Array<any>,
 };
@@ -73,13 +78,29 @@ class DimmerOffButton extends View {
 		}
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const propsChange = shouldUpdate(this.props, nextProps, [
+			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local',
+		]);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	render(): Object {
-		let { isInState, style, methodRequested, name, isGatewayActive, iconStyle } = this.props;
+		let { isInState, style, methodRequested, name, isGatewayActive, iconStyle, local } = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState === 'TURNOFF' ? '#fff' : Theme.Core.brandPrimary);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<View
@@ -89,7 +110,7 @@ class DimmerOffButton extends View {
 				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNOFF' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
 			</View>

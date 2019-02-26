@@ -57,7 +57,9 @@ export default class ListRow extends View {
 		return (
 			<TouchableOpacity onPress={this.onPress}>
 				<View style={styles.rowItems}>
-					<Text style={styles.text}>{this.props.item}</Text>
+					<Text
+						style={styles.text}
+						allowFontScaling={false}>{this.props.item}</Text>
 				</View>
 			</TouchableOpacity>
 		);

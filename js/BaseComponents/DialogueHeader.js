@@ -26,36 +26,40 @@ import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 
 import Text from './Text';
 import Icon from './Icon';
+import capitalize from '../App/Lib/capitalize';
 
 type Props = {
     headerText: string,
     headerStyle: number | Object | Array<Object>,
     textStyle: number | Object | Array<Object>,
-    source: number,
-	onPressIcon?: () => void;
-	onPressHeader?: () => void;
+    source: Object | number,
+	onPressIcon?: () => void,
+	onPressHeader?: () => void,
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
-    iconColor?: string,
+	iconColor?: string,
+	shouldCapitalize?: boolean,
 };
 
 type defaultProps = {
-    source: number,
+    source: Object | number,
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
-    iconColor?: string,
+	iconColor?: string,
+	shouldCapitalize: boolean,
 };
 
 export default class DialogueHeader extends Component<Props, null> {
 props: Props;
 static defaultProps: defaultProps = {
-	source: require('./img/telldus-geometric-header-bg.png'),
+	source: {uri: 'telldus_geometric_bg'},
 	showIcon: false,
 	iconName: 'times-circle',
 	iconSize: 12,
 	iconColor: '#fff',
+	shouldCapitalize: true,
 }
 
 onPressIcon: () => void;
@@ -83,11 +87,22 @@ onPressHeader() {
 }
 
 render(): Object {
-	let { headerText, headerStyle, textStyle, showIcon, iconName, iconSize, iconColor } = this.props;
+	let {
+		headerText,
+		headerStyle,
+		textStyle,
+		showIcon,
+		iconName,
+		iconSize,
+		iconColor,
+		shouldCapitalize,
+		onPressHeader,
+	} = this.props;
+	headerText = typeof headerText === 'string' && shouldCapitalize ? capitalize(headerText) : headerText;
 
 	return (
-		<TouchableOpacity onPress={this.onPressHeader}>
-			<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
+		<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
+			<TouchableOpacity onPress={this.onPressHeader} disabled={!onPressHeader} style={styles.touchable}>
 
 				<Text style={[styles.text, textStyle]}>
 					{headerText}
@@ -96,13 +111,19 @@ render(): Object {
 					<Icon name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
 				)}
 
-			</ImageBackground>
-		</TouchableOpacity>
+			</TouchableOpacity>
+		</ImageBackground>
 	);
 }
 }
 
 const styles = StyleSheet.create({
+	touchable: {
+		flex: 1,
+		justifyContent: 'space-between',
+		alignItems: 'stretch',
+		flexDirection: 'row',
+	},
 	image: {
 		height: undefined,
 		width: undefined,

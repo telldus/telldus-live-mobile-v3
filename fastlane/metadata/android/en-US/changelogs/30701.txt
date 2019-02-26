@@ -1,0 +1,5 @@
+- Remove debug popus from iOS
+- Fix for change of day in Scheduler
+- Swedish translation updated
+- Other small bugfixes
+

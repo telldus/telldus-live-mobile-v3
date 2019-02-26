@@ -21,11 +21,12 @@
 // @flow
 
 'use strict';
-import { format } from 'url';
 
-import { Platform } from 'react-native';
-import { LiveApi } from '../Lib/LiveApi';
+import { Platform, NetInfo } from 'react-native';
+
 import { reportException } from '../Lib/Analytics';
+import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
+import { supportRSA } from '../Lib/appUtils';
 import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
@@ -33,80 +34,127 @@ import { actions } from 'live-shared-data';
 const { Gateways } = actions;
 
 import dgram from 'dgram';
+
+let socket: Object = {};
+let openSocketID = null;
+let closingSocketID = null;
 const broardcastAddress = '255.255.255.255';
 const broardcastPort = 30303;
+const STATE = {
+	UNBOUND: 0,
+	BINDING: 1,
+	BOUND: 2,
+};
 
+function autoDetectLocalTellStick(): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		// No need to do local discovery if the platform is iOS 9 or less, as it does not support RSAAlgorithm
+		if (supportRSA()) {
 
-function getTokenForLocalControl(id: string, publicKey: string): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
-		let formData = new FormData();
-		formData.append('id', id);
-		formData.append('publicKey', publicKey);
-		const url = format({
-			pathname: '/client/requestLocalKey',
-		});
-		const payload = {
-			url,
-			requestParams: {
-				method: 'POST',
-				body: formData,
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'multipart/form-data',
-				},
-			},
-		};
-		return LiveApi(payload).then((response: Object): Object => {
-			if (response && response.uuid) {
-				dispatch(localControlSuccess(id, response.uuid));
-				return response;
-			}
-			throw response;
-		}).catch((err: Object) => {
-			dispatch(localControlError(id));
-			throw err;
-		});
+			// Establish new UDP socket only after closing the existing socket completely.
+			closeUDPSocket(() => {
+			// $FlowFixMe
+				socket = dgram.createSocket({
+					type: 'udp4',
+					reuseAddr: true,
+					reusePort: true,
+				});
+				// $FlowFixMe
+				openSocketID = socket._id;
+				const aPort = randomPort();
+
+				socket.on('error', (error: any) => {
+					reportException(error);
+				});
+
+				// $FlowFixMe
+				try {
+					socket.bind(aPort);
+				} catch (error) {
+				// Handle thrown.
+					reportException(error);
+				}
+
+				socket.once('listening', () => {
+				// Important to check connectivity right before send.
+					NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+						if ((socket._id === openSocketID) && (socket._id !== closingSocketID) && (connectionInfo.type !== 'none')) {
+							if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
+								socket.setBroadcast(true);
+							}
+
+							let buf = toByteArray('D');
+							try {
+							// Some errors are being thrown, and some others are received as callback.
+								socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
+									if (err) {
+										reportException(err);
+									}
+								});
+							} catch (error) {
+							// Handle thrown.
+								reportException(error);
+							}
+						}
+					});
+				});
+
+				socket.on('message', (msg: any, rinfo: Object) => {
+					let str = String.fromCharCode.apply(null, new Uint8Array(msg));
+					let items = str.split(':');
+					let gatewayInfo = {
+						product: items[0] ? items[0] : null,
+						macAddress: items[1] ? items[1] : null,
+						activationCode: items[2] ? items[2] : null,
+						firmwareVersion: items[3] ? items[3] : null,
+						uuid: items[4] ? items[4] : null,
+					};
+					dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
+
+					let { gateways: { byId: gateways } } = getState();
+					for (let key in gateways) {
+						let item = gateways[key];
+						let { uuid, id, websocketOnline, websocketConnected, localKey } = item;
+						if (localKey) {
+							let { key: token, ttl } = localKey;
+							if (items[4] && uuid && (items[4] === uuid)) {
+								if (websocketOnline && websocketConnected && !token) {
+									dispatch(getTokenForLocalControl(id));
+								}
+								const tokenExpired = hasTokenExpired(ttl);
+								if (websocketOnline && websocketConnected && token && ttl && tokenExpired) {
+									dispatch(getTokenForLocalControl(id));
+								}
+							}
+						}
+					}
+				});
+			});
+		}
 	};
 }
 
-function autoDetectLocalTellStick(): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
-		const socket: Object = dgram.createSocket('udp4');
-		const aPort = randomPort();
-		try {
-			socket.bind(aPort, (err: any) => {
-				if (err) {
-					throw err;
-				}
-				if (Platform.OS !== 'android') {
-					socket.setBroadcast(true);
-				}
-			});
-		} catch (err) {
-			reportException(err);
-		}
-		socket.once('listening', () => {
-			let buf = toByteArray('D');
-			socket.send(buf, 0, buf.length, broardcastPort, broardcastAddress, (err: any) => {
-				if (err) {
-					throw err;
-				}
-			});
-		});
+/**
+ *
+ * @param {Function} callback = Optional function to be called after socket is closed, or right away if socket is already closed.
+ */
+function closeUDPSocket(callback?: Function | null = null) {
+	if (socket && socket.close) {
+		// $FlowFixMe
+		closingSocketID = socket._id;
+		socket.close(() => {
+			socket = {};
+			openSocketID = null;
+			closingSocketID = null;
 
-		socket.on('message', (msg: any, rinfo: Object) => {
-			let str = String.fromCharCode.apply(null, new Uint8Array(msg));
-			let items = str.split(':');
-			let gatewayInfo = {
-				product: items[0] ? items[0] : null,
-				macAddress: items[1] ? items[1] : null,
-				activationCode: items[2] ? items[2] : null,
-				firmwareVersion: items[3] ? items[3] : null,
-				uuid: items[4] ? items[4] : null,
-			};
-			dispatch(autoDetectLocalTellStickSuccess(gatewayInfo, rinfo));
+			if (callback && typeof callback === 'function') {
+				callback();
+			}
 		});
-	};
+	} else if (callback && typeof callback === 'function') {
+		socket = {};
+		callback();
+	}
 }
 
 function toByteArray(obj: string): any {
@@ -122,25 +170,6 @@ function randomPort(): number {
 	return Math.random() * 60536 | 0 + 5000; // 60536-65536
 }
 
-const localControlSuccess = (gatewayId: string, uuid: string): Action => {
-	return {
-		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS',
-		payload: {
-			gatewayId,
-			uuid,
-		},
-	};
-};
-
-const localControlError = (gatewayId: string): Action => {
-	return {
-		type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR',
-		payload: {
-			gatewayId,
-		},
-	};
-};
-
 const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Object): Action => {
 	let payload: Object = {
 		...tellStickInfo,
@@ -152,15 +181,37 @@ const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Objec
 	};
 };
 
-const resetLocalControlIP = (): Action => {
+const resetLocalControlSupport = (): Action => {
 	return {
-		type: 'GATEWAY_RESET_LOCAL_CONTROL_IP',
+		type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT',
+	};
+};
+
+const validateLocalControlSupport = (gatewayId: number, supportLocal: boolean): Action => {
+	return {
+		type: 'VALIDATE_LOCAL_CONTROL_SUPPORT',
+		payload: {
+			gatewayId,
+			supportLocal,
+		},
+	};
+};
+
+const resetLocalControlAddress = (gatewayId: number, address: string): Action => {
+	return {
+		type: 'RESET_LOCAL_CONTROL_ADDRESS',
+		gatewayId,
+		payload: {
+			address,
+		},
 	};
 };
 
 module.exports = {
 	...Gateways,
-	getTokenForLocalControl,
 	autoDetectLocalTellStick,
-	resetLocalControlIP,
+	resetLocalControlSupport,
+	closeUDPSocket,
+	validateLocalControlSupport,
+	resetLocalControlAddress,
 };

@@ -19,8 +19,8 @@
  */
 
 'use strict';
-import SettingsScreen from './SettingsScreen';
+import PushSettings from './PushSettings';
 
 module.exports = {
-	SettingsScreen,
+	PushSettings,
 };

@@ -21,78 +21,66 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
-import { TouchableOpacity, UIManager, LayoutAnimation, Animated, Easing } from 'react-native';
-import { connect } from 'react-redux';
+import React from 'react';
+import { TouchableOpacity, Animated, Easing } from 'react-native';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
-const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+const isEqual = require('react-fast-compare');
+import moment from 'moment';
 
-import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
+import {
+	ListItem,
+	Text,
+	View,
+	BlockIcon,
+	FormattedRelative,
+} from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
+import TypeBlockList from './Sensor/TypeBlockList';
 
 import i18n from '../../../Translations/common';
 
-import { formatLastUpdated, checkIfLarge } from '../../../Lib';
-import { utils, actions } from 'live-shared-data';
-const { sensorUtils } = utils;
-const { getSensorTypes, getSensorUnits } = sensorUtils;
-const { Dashboard: { getSupportedDisplayTypes } } = actions;
+import {
+	formatLastUpdated,
+	checkIfLarge,
+	shouldUpdate,
+	getSensorInfo,
+	getWindDirection,
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
-
-const directions = [
-	'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N',
-];
 
 type Props = {
 	sensor: Object,
 	intl: Object,
-	currentTab: string,
 	currentScreen: string,
 	appLayout: Object,
 	isGatewayActive: boolean,
-	tab: string,
-	setIgnoreSensor: (Object) => void,
-	onHiddenRowOpen: (string) => void;
 	propsSwipeRow: Object,
+	defaultType?: string,
+	screenReaderEnabled: boolean,
+	isLast: boolean,
+
+	setIgnoreSensor: (Object) => void,
+	onHiddenRowOpen: (string) => void,
+	onSettingsSelected: Object => void,
 };
 
 type State = {
-	currentIndex: number,
 	isOpen: boolean,
+	forceClose: boolean,
 	showFullName: boolean,
 	coverMaxWidth: number,
 	coverOccupiedWidth: number,
 	buttonsWidth?: number,
 };
 
-class SensorRow extends PureComponent<Props, State> {
+class SensorRow extends View<Props, State> {
 	props: Props;
 	state: State;
 
 	labelSensor: string;
-	labelHumidity: string;
-	labelTemperature: string;
-	labelRainRate: string;
-	labelRainTotal: string;
-	labelWindGust: string;
-	labelWindAverage: string;
-	labelWindDirection: string;
-	labelUVIndex: string;
-	labelWatt: string;
-	labelCurrent: string;
-	labelEnergy: string;
-	labelAccumulated: string;
-	labelAcc: string;
-	labelVoltage: string;
-	labelPowerFactor: string;
-	labelPulse: string;
-	labelLuminance: string;
-	labelDewPoint: string;
-	labelBarometricPressure: string;
-	labelGenericMeter: string;
 	labelTimeAgo: string;
 	width: number;
 	offline: string;
@@ -100,13 +88,13 @@ class SensorRow extends PureComponent<Props, State> {
 	helpViewHiddenRow: string;
 	helpCloseHiddenRow: string;
 
-	onLayout: (Object) => void;
-	changeDisplayType: (number) => void;
 	LayoutLinear: Object;
 	onRowOpen: () => void;
 	onRowClose: () => void;
 	onSetIgnoreSensor: () => void;
 	onPressSensorName: () => void;
+	onSettingsSelected: (Object) => void;
+	closeSwipeRow: () => void;
 
 	onLayoutDeviceName: (Object) => void;
 	onLayoutCover: (Object) => void;
@@ -116,9 +104,13 @@ class SensorRow extends PureComponent<Props, State> {
 	animatedScaleX: any;
 	isTablet: boolean;
 
+	formatSensorLastUpdate: (string) => string;
+
+	shouldUpdateSwipeRow: (Object) => boolean;
+
 	state = {
-		currentIndex: 0,
 		isOpen: false,
+		forceClose: false,
 		showFullName: false,
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
@@ -127,32 +119,11 @@ class SensorRow extends PureComponent<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.width = 0;
-		let { formatMessage } = props.intl;
+
+		const { formatMessage } = props.intl;
 
 		this.labelSensor = formatMessage(i18n.labelSensor);
-		this.labelHumidity = formatMessage(i18n.labelHumidity);
-		this.labelTemperature = formatMessage(i18n.labelTemperature);
-		this.labelRainRate = formatMessage(i18n.labelRainRate);
-		this.labelRainTotal = formatMessage(i18n.labelRainTotal);
-		this.labelWindGust = formatMessage(i18n.labelWindGust);
-		this.labelWindAverage = formatMessage(i18n.labelWindAverage);
-		this.labelWindDirection = formatMessage(i18n.labelWindDirection);
-		this.labelUVIndex = formatMessage(i18n.labelUVIndex);
 
-		this.labelWatt = formatMessage(i18n.labelWatt);
-		this.labelCurrent = formatMessage(i18n.current);
-		this.labelEnergy = formatMessage(i18n.energy);
-		this.labelAccumulated = formatMessage(i18n.accumulated);
-		this.labelAcc = formatMessage(i18n.acc);
-		this.labelVoltage = formatMessage(i18n.voltage);
-		this.labelPowerFactor = formatMessage(i18n.powerFactor);
-		this.labelPulse = formatMessage(i18n.pulse);
-
-		this.labelLuminance = formatMessage(i18n.labelLuminance);
-		this.labelDewPoint = formatMessage(i18n.labelDewPoint);
-		this.labelBarometricPressure = formatMessage(i18n.labelBarometricPressure);
-		this.labelGenericMeter = formatMessage(i18n.labelGenericMeter);
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
 		this.offline = formatMessage(i18n.offline);
@@ -160,10 +131,6 @@ class SensorRow extends PureComponent<Props, State> {
 		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
 		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
-		this.sensorTypes = getSensorTypes();
-
-		this.onLayout = this.onLayout.bind(this);
-		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
 		this.onRowOpen = this.onRowOpen.bind(this);
@@ -180,30 +147,67 @@ class SensorRow extends PureComponent<Props, State> {
 
 		this.isTablet = DeviceInfo.isTablet();
 
-		UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-		this.LayoutLinear = {
-			duration: 200,
-			create: {
-				type: LayoutAnimation.Types.linear,
-				property: LayoutAnimation.Properties.opacity,
-			  },
-			update: {
-			  type: LayoutAnimation.Types.linear,
-			},
-		};
+		this.onSettingsSelected = this.onSettingsSelected.bind(this);
+		this.closeSwipeRow = this.closeSwipeRow.bind(this);
+
+		this.formatSensorLastUpdate = this.formatSensorLastUpdate.bind(this);
+		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { tab, propsSwipeRow, sensor } = nextProps;
-		let { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (this.state.isOpen && (tab !== 'sensorsTab' || (forceClose && sensor.id !== idToKeepOpen)) ) {
-			this.refs.SwipeRow.closeRow();
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { propsSwipeRow: nextPropsSwipeRow, currentScreen: currentScreenN, ...nextOtherProps } = nextProps;
+		const { propsSwipeRow, currentScreen, ...otherProps } = this.props;// eslint-disable-line
+		if (currentScreenN === 'Sensors') {
+			// Force re-render once to gain/loose accessibility
+			if (currentScreen !== 'Sensors' && nextProps.screenReaderEnabled) {
+				return true;
+			}
+			const isStateEqual = isEqual(this.state, nextState);
+			if (!isStateEqual) {
+				return true;
+			}
+
+			const { idToKeepOpen, forceClose } = nextPropsSwipeRow;
+			const { sensor } = otherProps;
+
+			if (forceClose && this.state.isOpen && idToKeepOpen !== sensor.id) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
+				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
+			]);
+			if (propsChange) {
+				return true;
+			}
+
+			return false;
 		}
+		// Force re-render once to gain/loose accessibility
+		if (currentScreenN !== 'Sensors' && currentScreen === 'Sensors' && nextProps.screenReaderEnabled) {
+			return true;
+		}
+
+		return false;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { currentScreen, propsSwipeRow, sensor } = this.props;
+		const { isOpen } = this.state;
+		const { idToKeepOpen, forceClose } = propsSwipeRow;
+		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
+			this.closeSwipeRow();
+		}
+	}
+
+	shouldUpdateSwipeRow(items: Object): boolean {
+		return true;
 	}
 
 	onRowOpen() {
 		this.setState({
 			isOpen: true,
+			forceClose: false,
 		});
 		let { onHiddenRowOpen, sensor } = this.props;
 		if (onHiddenRowOpen) {
@@ -214,6 +218,7 @@ class SensorRow extends PureComponent<Props, State> {
 	onRowClose() {
 		this.setState({
 			isOpen: false,
+			forceClose: false,
 		});
 	}
 
@@ -224,7 +229,7 @@ class SensorRow extends PureComponent<Props, State> {
 	onPressSensorName() {
 		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
 		if (isOpen) {
-			this.refs.SwipeRow.closeRow();
+			this.closeSwipeRow();
 		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
 			if (!showFullName) {
 				this.isAnimating = true;
@@ -242,6 +247,16 @@ class SensorRow extends PureComponent<Props, State> {
 				});
 			}
 		}
+	}
+
+
+	closeSwipeRow() {
+		this.refs.SwipeRow.closeRow();
+	}
+
+	onSettingsSelected() {
+		this.closeSwipeRow();
+		this.props.onSettingsSelected(this.props.sensor);
 	}
 
 	showFullName(duration: number, delay: number, easing: any) {
@@ -303,19 +318,22 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	onLayoutDeviceName(ev: Object) {
-		if (!this.state.showFullName) {
-			let { x, width } = ev.nativeEvent.layout;
-			// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
-			const maxRightPadd = 12;
+		const { x, width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
+		const maxRightPadd = 12;
+		const newOccWidth = width + x + maxRightPadd;
+		if (!this.state.showFullName && (newOccWidth !== coverMaxWidth)) {
 			this.setState({
-				coverOccupiedWidth: width + x + maxRightPadd,
+				coverOccupiedWidth: newOccWidth,
 			});
 		}
 	}
 
 	onLayoutCover(ev: Object) {
-		if (!this.state.showFullName) {
-			let { width } = ev.nativeEvent.layout;
+		const { coverMaxWidth } = this.state;
+		const { width } = ev.nativeEvent.layout;
+		if (!this.state.showFullName && (coverMaxWidth !== width)) {
 			this.setState({
 				coverMaxWidth: width,
 			});
@@ -323,7 +341,7 @@ class SensorRow extends PureComponent<Props, State> {
 	}
 
 	onLayoutButtons(ev: Object) {
-		let { buttonsWidth } = this.state;
+		const { buttonsWidth } = this.state;
 		if (!buttonsWidth) {
 			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
 			this.setState({
@@ -332,136 +350,95 @@ class SensorRow extends PureComponent<Props, State> {
 		}
 	}
 
-	getSensors(data: Object): Object {
-		let sensors = [], sensorInfo = '';
-		for (let key in data) {
-			let values = data[key];
-			let { value, scale, name } = values;
-			let sensorType = this.sensorTypes[values.name];
-			let sensorUnits = getSensorUnits(sensorType);
-			let unit = sensorUnits[scale];
-			let isLarge = checkIfLarge(value.toString());
-			if (name === 'humidity') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'humidity'} label={this.labelHumidity} isLarge={isLarge} key={key}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelHumidity} ${value}${unit}`;
-			}
-			if (name === 'temp') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'temperature'} label={this.labelTemperature} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1, minimumFractionDigits: isLarge ? 0 : 1}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelTemperature} ${value}${unit}`;
-			}
-			if (name === 'rrate' || name === 'rtot') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'rain'} label={name === 'rrate' ? this.labelRainRate : this.labelRainTotal}
-					isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 0}}/>);
+	formatSensorLastUpdate(time: string): string {
+		const timeAgo = time.replace(/[0-9]/g, '').trim();
 
-				let rrateInfo = name === 'rrate' ? `${this.labelRainRate} ${value}${unit}` : '';
-				let rtotalInfo = name === 'rtot' ? `${this.labelRainTotal} ${value}${unit}` : '';
-				sensorInfo = `${sensorInfo}, ${rrateInfo}, ${rtotalInfo}`;
-			}
-			if (name === 'wgust' || name === 'wavg' || name === 'wdir') {
-				let direction = '', label = name === 'wgust' ? this.labelWindGust : this.labelWindAverage;
-				if (name === 'wdir') {
-					const getWindDirection = (sValue: number): string => directions[Math.floor(sValue / 22.5)];
-					direction = [...getWindDirection(value)].toString();
-					value = getWindDirection(value);
-					label = this.labelWindDirection;
-				}
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'wind'} isLarge={isLarge} label={label} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
+		const { formatRelative, formatMessage } = this.props.intl;
+		const now = moment().unix();
 
-				let wgustInfo = name === 'wgust' ? `${this.labelWindGust} ${value}${unit}` : '';
-				let wavgInfo = name === 'wavg' ? `${this.labelWindAverage} ${value}${unit}` : '';
-				let wdirInfo = name === 'wdir' ? `${this.labelWindDirection} ${direction}` : '';
-				sensorInfo = `${sensorInfo}, ${wgustInfo}, ${wavgInfo}, ${wdirInfo}`;
-			}
-			if (name === 'uv') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'uv'} label={this.labelUVIndex} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 0}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelUVIndex} ${value}${unit}`;
-			}
-			if (name === 'watt') {
-				let label = this.labelEnergy, labelWatt = this.labelEnergy;
-				if (scale === '0') {
-					label = isLarge ? `${this.labelAccumulated} ${this.labelWatt}` :
-						`${this.labelAcc} ${this.labelWatt}`;
-					labelWatt = `${this.labelAccumulated} ${this.labelWatt}`;
-				}
-				if (scale === '2') {
-					label = this.labelWatt;
-					labelWatt = this.labelWatt;
-				}
-				if (scale === '3') {
-					label = this.labelPulse;
-					labelWatt = this.labelPulse;
-				}
-				if (scale === '4') {
-					label = this.labelVoltage;
-					labelWatt = this.labelVoltage;
-				}
-				if (scale === '5') {
-					label = this.labelCurrent;
-					labelWatt = this.labelCurrent;
-				}
-				if (scale === '6') {
-					label = this.labelPowerFactor;
-					labelWatt = this.labelPowerFactor;
-				}
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'watt'} label={label} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
-				sensorInfo = `${sensorInfo}, ${labelWatt} ${value}${unit}`;
-			}
-			if (name === 'lum') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'luminance'} label={this.labelLuminance} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: 0}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelLuminance} ${value}${unit}`;
-			}
-			if (name === 'dewp') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'humidity'} label={this.labelDewPoint} key={key} isLarge={isLarge}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelDewPoint} ${value}${unit}`;
-			}
-			if (name === 'barpress') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'guage'} label={this.labelBarometricPressure} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelBarometricPressure} ${value}${unit}`;
-			}
-			if (name === 'genmeter') {
-				sensors.push(<GenericSensor name={name} value={value} unit={unit}
-					icon={'sensor'} label={this.labelGenericMeter} isLarge={isLarge} key={key}
-					formatOptions={{maximumFractionDigits: isLarge ? 0 : 1}}/>);
-				sensorInfo = `${sensorInfo}, ${this.labelGenericMeter} ${value}${unit}`;
-			}
+		// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
+		// This prevent from showing 'in 1 second' which is illogic!
+		let futureTimes = [];
+		for (let i = 1; i < 5; i++) {
+			futureTimes.push(formatRelative(moment.unix(now).add(i, 'seconds')).replace(/[0-9]/g, '').trim());// As a CAUTION
 		}
-		return {sensors, sensorInfo};
+
+		const relNow = formatRelative(moment.unix(now)).replace(/[0-9]/g, '').trim();
+
+		let pastSeconds = [];
+		for (let i = 1; i < 4; i++) {
+			pastSeconds.push(formatRelative(moment.unix(now).subtract(i, 'seconds')).replace(/[0-9]/g, '').trim());
+		}
+
+		if (timeAgo === relNow || (futureTimes.indexOf(timeAgo) !== -1) || (pastSeconds.indexOf(timeAgo) !== -1)) {
+			return formatMessage(i18n.justNow);
+		}
+
+		return time;
+	}
+
+	getSensors(data: Object, styles: Object): Object {
+		let sensors = {}, sensorAccessibilityInfo = '';
+		const { formatMessage } = this.props.intl;
+		const {
+			valueUnitCoverStyle,
+			valueStyle,
+			unitStyle,
+			labelStyle,
+			sensorValueCoverStyle,
+		} = styles;
+
+		for (let key in data) {
+			const values = data[key];
+			const { value, scale, name } = values;
+			const isLarge = checkIfLarge(value.toString());
+
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
+
+			let sharedProps = {
+				key,
+				name,
+				value,
+				unit,
+				label,
+				icon,
+				isLarge,
+				valueUnitCoverStyle,
+				valueStyle,
+				unitStyle,
+				labelStyle,
+				sensorValueCoverStyle,
+				formatOptions,
+			};
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
+
+			if (name === 'wdir') {
+				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
+			}
+			sensors[key] = <GenericSensor {...sharedProps}/>;
+		}
+		return {sensors, sensorAccessibilityInfo};
 	}
 
 	render(): Object {
-		const { sensor, currentTab, currentScreen, appLayout, isGatewayActive, intl } = this.props;
-		const styles = this.getStyles(appLayout, isGatewayActive);
+		const { sensor = {}, currentScreen, isGatewayActive, intl } = this.props;
+		const styles = this.getStyles();
 		const {
-			data,
+			data = {},
 			name,
 			lastUpdated,
+			id,
 		} = sensor;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
-		let { sensors, sensorInfo } = this.getSensors(data);
+		let { sensors, sensorAccessibilityInfo } = this.getSensors(data, styles);
+
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let { currentIndex, isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
+		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
-		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
-		let accessible = currentTab === 'Sensors' && currentScreen === 'Tabs';
+		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
+		let accessible = currentScreen === 'Sensors';
 		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 
@@ -470,7 +447,7 @@ class SensorRow extends PureComponent<Props, State> {
 			outputRange: [0, 1, 1],
 		});
 
-		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdatedValue, isGatewayActive, styles);
+		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdated, isGatewayActive, styles);
 
 		return (
 			<SwipeRow
@@ -479,38 +456,44 @@ class SensorRow extends PureComponent<Props, State> {
 				disableRightSwipe={true}
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
-				recalculateHiddenLayout={true}
 				swipeToOpenPercent={20}
-				directionalDistanceChangeThreshold={2}>
+				directionalDistanceChangeThreshold={2}
+				shouldItemUpdate={this.shouldUpdateSwipeRow}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
-					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}/>
+					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
+					onPressSettings={this.onSettingsSelected}/>
 				<ListItem
 					style={styles.row}
-					onLayout={this.onLayout}
-					accessible={accessible}
-					importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
-					accessibilityLabel={accessible ? accessibilityLabel : ''}>
+					accessible={false}
+					importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}
+					// By passing onPress to visible content of 'SwipeRow', prevents it from
+					// being placed inside a touchable.
+					onPress={this.noOp}>
 					<View style={styles.cover}>
-						<TouchableOpacity onPress={this.onPressSensorName} disabled={coverOccupiedWidth < coverMaxWidth}
-							style={styles.container} accessible={false} importantForAccessibility="no-hide-descendants">
+						<TouchableOpacity onPress={this.onPressSensorName} disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
+							style={styles.container}
+							accessible={accessible}
+							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+							accessibilityLabel={accessible ? accessibilityLabel : ''}>
 							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
 							{nameInfo}
 						</TouchableOpacity>
-						<AnimatedTouchable onPress={this.changeDisplayType} accessible={false}
-							disabled={sensors.length <= 1}
+						<TypeBlockList
+							sensors={sensors}
+							lastUpdated={lastUpdated}
+							id={id}
+							isOpen={isOpen}
+							closeSwipeRow={this.closeSwipeRow}
 							onLayout={this.onLayoutButtons}
 							style={[styles.sensorValueCover, {
 								width: this.animatedWidth,
 								transform: [{
 									scaleX: interpolatedScale,
 								}],
-							}]} importantForAccessibility="no-hide-descendants">
-							<View style={styles.sensorValueCover} importantForAccessibility="no-hide-descendants">
-								{sensors[currentIndex] && (
-									sensors[currentIndex]
-								)}
-							</View>
-						</AnimatedTouchable>
+							}]}
+							valueCoverStyle={styles.sensorValueCover}
+							dotCoverStyle={styles.dotCoverStyle}
+							dotStyle={styles.dotStyle}/>
 					</View>
 				</ListItem>
 			</SwipeRow>
@@ -534,14 +517,15 @@ class SensorRow extends PureComponent<Props, State> {
 					{sensorName}
 				</Text>
 				{isGatewayActive ?
-					<Text style={[
-						textInfoStyle, {
-							color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-							opacity: minutesAgo < 1440 ? 1 : 0.5,
-						},
-					]}>
-						{lastUpdatedValue}
-					</Text>
+					<FormattedRelative
+						value={moment.unix(lastUpdatedValue)}
+						formatterFunction={this.formatSensorLastUpdate}
+						textStyle={[
+							textInfoStyle, {
+								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+								opacity: minutesAgo < 1440 ? 1 : 0.5,
+							},
+						]}/>
 					:
 					<Text style={[
 						textInfoStyle, {
@@ -556,28 +540,14 @@ class SensorRow extends PureComponent<Props, State> {
 		);
 	}
 
-	changeDisplayType(index: number) {
-		let { data } = this.props.sensor;
-		let { currentIndex } = this.state;
-		let displayTypes = getSupportedDisplayTypes(data);
-		let nextIndex = currentIndex + 1;
-		nextIndex = nextIndex > (displayTypes.length - 1) ? 0 : nextIndex;
-		LayoutAnimation.configureNext(this.LayoutLinear);
-		this.setState({
-			currentIndex: nextIndex,
-		});
-	}
+	getStyles(): Object {
+		const { appLayout, isGatewayActive, sensor = {}, isLast } = this.props;
+		const { data = {} } = sensor;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
-	onLayout(event: Object) {
-		this.width = event.nativeEvent.layout.width;
-	}
-
-	getStyles(appLayout: Object, isGatewayActive: boolean): Object {
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let deviceWidth = isPortrait ? width : height;
-
-		let {
+		const {
 			rowHeight,
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
@@ -593,6 +563,8 @@ class SensorRow extends PureComponent<Props, State> {
 		let backgroundColor = isGatewayActive ? Theme.Core.brandPrimary : Theme.Core.offlineColor;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const widthValueBlock = (buttonWidth * 2) + 6;
+		const dotSize = rowHeight * 0.09;
 
 		return {
 			container: {
@@ -621,7 +593,8 @@ class SensorRow extends PureComponent<Props, State> {
 			},
 			row: {
 				marginHorizontal: padding,
-				marginBottom: padding / 2,
+				marginTop: padding / 2,
+				marginBottom: isLast ? padding : 0,
 				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
@@ -629,12 +602,13 @@ class SensorRow extends PureComponent<Props, State> {
 			},
 			hiddenRow: {
 				flexDirection: 'row',
-				height: Theme.Core.rowHeight,
-				width: Theme.Core.buttonWidth * 2,
+				height: rowHeight,
+				width: buttonWidth * 2,
 				alignSelf: 'flex-end',
 				justifyContent: 'center',
 				alignItems: 'center',
 				marginRight: padding,
+				marginTop: padding / 2,
 			},
 			cover: {
 				flex: 1,
@@ -674,21 +648,49 @@ class SensorRow extends PureComponent<Props, State> {
 				maxWidth: 216,
 				flexDirection: 'row',
 			},
+			sensorValueCoverStyle: {
+				marginBottom: Object.keys(data).length <= 1 ? 0 : rowHeight * 0.16,
+			},
 			sensorValueCover: {
-				width: (buttonWidth * 2) + 6,
+				width: widthValueBlock,
 				backgroundColor: backgroundColor,
 				height: rowHeight,
 				alignItems: 'flex-start',
 				justifyContent: 'center',
 			},
+			dotCoverStyle: {
+				position: 'absolute',
+				width: '100%',
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				bottom: 5,
+			},
+			dotStyle: {
+				width: dotSize,
+				height: dotSize,
+				borderRadius: dotSize / 2,
+				marginLeft: 2 + (dotSize * 0.2),
+			},
+			valueUnitCoverStyle: {
+				height: rowHeight * 0.39,
+			},
+			valueStyle: {
+				fontSize: rowHeight * 0.33,
+				height: rowHeight * 0.39,
+			},
+			unitStyle: {
+				fontSize: rowHeight * 0.2,
+			},
+			labelStyle: {
+				fontSize: rowHeight * 0.21,
+				height: rowHeight * 0.3,
+			},
 		};
+	}
+
+	noOp() {
 	}
 }
 
-function mapStateToProps(store: Object): Object {
-	return {
-		tab: store.navigation.tab,
-	};
-}
-
-module.exports = connect(mapStateToProps, null)(SensorRow);
+module.exports = SensorRow;

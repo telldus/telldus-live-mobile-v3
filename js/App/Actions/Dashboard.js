@@ -21,10 +21,41 @@
 // @flow
 
 'use strict';
+import type { ThunkAction } from './Types';
+
 // Dashboard actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Dashboard } = actions;
 
+function getSupportedDisplayTypes(data: Object = {}): Array<string> {
+	return Object.keys(data);
+}
+
+const changeSensorDisplayTypeDB = (): ThunkAction => (dispatch: Function, getState: Function) => {
+	const { sensors, dashboard, sensorsList } = getState();
+	const { sensorIds } = dashboard;
+	const { defaultSensorSettings } = sensorsList;
+
+	sensorIds.forEach((sensorId: number) => {
+		const sensor = sensors.byId[sensorId];
+		const supportedDisplayTypes = getSupportedDisplayTypes(sensor.data);
+		const { displayTypeDB = supportedDisplayTypes[0] } = defaultSensorSettings[sensorId] ? defaultSensorSettings[sensorId] : {};
+
+		const max = supportedDisplayTypes.length;
+		const currentTypeIndex = supportedDisplayTypes.indexOf(displayTypeDB);
+		const nextTypeIndex = currentTypeIndex + 1;
+		const nextType = nextTypeIndex > (max - 1) ? supportedDisplayTypes[0] : supportedDisplayTypes[nextTypeIndex];
+		if (displayTypeDB !== nextType) {
+			dispatch({
+				type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE_DB',
+				id: sensorId,
+				displayTypeDB: nextType,
+			});
+		}
+	});
+};
+
 module.exports = {
 	...Dashboard,
+	changeSensorDisplayTypeDB,
 };

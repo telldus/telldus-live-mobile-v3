@@ -22,21 +22,42 @@
 'use strict';
 
 import TelldusLocalStorage from '../Lib/LocalStorage';
+import type { SensorHistoryQueryParams } from '../Lib/LocalStorage';
 
 
-export function storeDeviceHistory(data: Object): Promise<any> {
+export function storeHistory(type: string, data: Object): Promise<any> | any {
 	let localStorage = new TelldusLocalStorage();
-	return localStorage.storeDeviceHistory(data);
+	if (type === 'device') {
+		return localStorage.storeDeviceHistory(data);
+	}
+	if (type === 'sensor') {
+		return localStorage.storeSensorHistory(data);
+	}
+}
+// $FlowFixMe
+export function getHistory(type: string, queryParam: number | SensorHistoryQueryParams): Promise<any> | any {
+	let localStorage = new TelldusLocalStorage();
+	if (type === 'device') {
+		return localStorage.getDeviceHistory(queryParam);
+	}
+	if (type === 'sensor') {
+		return localStorage.getSensorHistory(queryParam);
+	}
 }
 
-export function getDeviceHistory(id: number): Promise<any> {
+export function getSensorTypes(id: number, formatMessage: Function): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
-	return localStorage.getDeviceHistory(id);
+	return localStorage.getSensorTypes(id, formatMessage);
 }
 
 export function getLatestTimestamp(type: string, id: number): Promise<any> {
 	let localStorage = new TelldusLocalStorage();
 	return localStorage.getLatestTimestamp(type, id);
+}
+
+export function clearHistory(type: string, id: number): Promise<any> {
+	let localStorage = new TelldusLocalStorage();
+	return localStorage.clearHistory(type, id);
 }
 
 export function closeDatabase() {

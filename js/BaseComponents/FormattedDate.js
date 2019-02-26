@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { injectIntl, FormattedDate } from 'react-intl';
+import { FormattedDate } from 'react-intl';
 import Text from './Text';
 
 const FormattedDateComponent = (props: Object): React$Element<any> => (
@@ -32,4 +32,4 @@ const FormattedDateComponent = (props: Object): React$Element<any> => (
 	</FormattedDate>
 );
 
-export default injectIntl(FormattedDateComponent);
+export default FormattedDateComponent;

@@ -6,7 +6,6 @@ import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 const store = mockStore({});
 
 import SensorsTab from '../../Components/TabViews/SensorsTab';
-import { toggleEditMode } from '../../Actions';
 
 
 describe('<SensorsTab />', () => {
@@ -27,13 +26,4 @@ describe('<SensorsTab />', () => {
 		const Tab = wrapper.props().children.type.displayName;
 		expect(Tab).toEqual('Connect(SensorsTab)');
 	});
-
-	it(' check toggleEditMode action on dispatching ', () => {
-		store.dispatch(toggleEditMode('sensorsTab'));
-		let action = store.getActions();
-		expect(action[0].type).toBe('TOGGLE_EDIT_MODE');
-	  expect(action[0].tab).toBe('sensorsTab');
-	});
-
-
 });

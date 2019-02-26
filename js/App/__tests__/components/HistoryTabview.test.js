@@ -4,8 +4,8 @@ import { IntlProvider } from 'react-intl';
 import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 const store = mockStore({});
 
-import HistoryTab from '../../Components/DeviceDetails/HistoryTab';
-import { DeviceHistoryDetails, HistoryRow } from '../../Components/DeviceDetails/SubViews';
+import HistoryTab from '../../Components/Device/DeviceDetails/HistoryTab';
+import { DeviceHistoryDetails } from '../../Components/Device/DeviceDetails/SubViews';
 import { hideModal } from '../../Actions/Modal';
 
 
@@ -63,28 +63,6 @@ describe('DeviceHistoryDetails', () => {
 		expect(wrapper.find(DeviceHistoryDetails).length).toBe(1);
 		const screen = wrapper.props().children.type.displayName;
 		expect(screen).toEqual('Connect(DeviceHistoryDetails)');
-	});
-
-});
-
-describe('HistoryRow', () => {
-
-	let wrapper;
-	beforeEach(()=>{
-		wrapper = shallow(
-			<Provider store={store}>
-				<IntlProvider>
-					<HistoryRow />
-				</IntlProvider>
-			</Provider>
-		);
-		expect(wrapper).toBeTruthy();
-	});
-
-	it('should shallow HistoryRow', () => {
-		expect(wrapper.find(HistoryRow).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
-		expect(screen).toEqual('Connect(HistoryRow)');
 	});
 
 });

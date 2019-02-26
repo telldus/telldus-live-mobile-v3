@@ -22,25 +22,29 @@
 'use strict';
 
 import React from 'react';
-
-import { View } from '../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 
+import { View } from '../../../../BaseComponents';
 import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
 import Theme from '../../../Theme';
 
+import { shouldUpdate } from '../../../Lib';
+
 type Props = {
 	device: Object,
-	style: Object,
-	intl: Object,
+	showStopButton?: boolean,
+	isOpen: boolean,
+
 	isGatewayActive: boolean,
-	appLayout: Object,
 	upButtonStyle?: number | Object | Array<any>,
 	downButtonStyle?: number | Object | Array<any>,
 	stopButtonStyle?: number | Object | Array<any>,
-	showStopButton?: boolean,
+	style: Object,
+	intl: Object,
+	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 type DefaultProps = {
@@ -58,23 +62,70 @@ class NavigationalButton extends View {
 		super(props);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { isOpen, showStopButton, ...others } = this.props;
+		const { isOpen: isOpenN, showStopButton: showStopButtonN, ...othersN } = nextProps;
+		if (isOpen !== isOpenN || showStopButton !== showStopButtonN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['device']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	render(): Object {
 
-		let { device, isGatewayActive, intl, style, upButtonStyle, downButtonStyle, stopButtonStyle, showStopButton } = this.props;
-		const { supportedMethods, methodRequested, isInState, id, name } = device;
+		let {
+			device,
+			isGatewayActive,
+			intl,
+			style,
+			upButtonStyle,
+			downButtonStyle,
+			stopButtonStyle,
+			showStopButton,
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+		} = this.props;
+		const { supportedMethods = {}, methodRequested, isInState, id, name, local } = device;
 		const { UP, DOWN, STOP } = supportedMethods;
+
+		const sharedProps = {
+			id,
+			name,
+			isInState,
+			methodRequested,
+			isGatewayActive,
+			local,
+			isOpen,
+			closeSwipeRow,
+			intl,
+			onPressDeviceAction,
+		};
 
 		return (
 			<View style={style}>
-				<UpButton supportedMethod={UP} methodRequested={methodRequested} intl={intl}
-					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, upButtonStyle]} name={name}/>
-				<DownButton supportedMethod={DOWN} methodRequested={methodRequested} intl={intl}
-					iconSize={30} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, downButtonStyle]} name={name}/>
-				{!!showStopButton && (<StopButton supportedMethod={STOP} methodRequested={methodRequested} intl={intl}
-					iconSize={20} isGatewayActive={isGatewayActive} isInState={isInState}
-					id={id} style={[styles.navigationButton, stopButtonStyle]} name={name}/>
+				<UpButton
+					{...sharedProps}
+					supportedMethod={UP}
+					iconSize={30}
+					style={[styles.navigationButton, upButtonStyle]}/>
+				<DownButton
+					{...sharedProps}
+					supportedMethod={DOWN}
+					iconSize={30}
+					style={[styles.navigationButton, downButtonStyle]}/>
+				{!!showStopButton && (<StopButton
+					{...sharedProps}
+					supportedMethod={STOP}
+					iconSize={20}
+					style={[styles.navigationButton, stopButtonStyle]}/>
 				)}
 			</View>
 		);

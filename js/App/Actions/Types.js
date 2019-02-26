@@ -32,15 +32,21 @@ export type Action =
 	| { type: 'RECEIVED_JOBS', payload: Object }
 	| { type: 'PUSH_TOKEN_REGISTERED', token: string, payload: Object }
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
+	| { type: 'PUSH_TOKEN_DELETED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
-	| { type: 'SWITCH_TAB', tab: 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab' }
+
+	| { type: 'SWITCH_TAB', tab: 'Dashboard' | 'Devices' | 'Sensors' | 'Scheduler' | 'Gateways' }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }
 	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
 
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
+	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE', id: number, displayType: string }
+	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE_DB', id: number, displayTypeDB: string }
+
+	| { type: 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS', id: number, newSettings: Object }
 	| { type: 'SHOW_DIMMER_POPUP', name: string, value: number }
 	| { type: 'HIDE_DIMMER_POPUP' }
 	| { type: 'SET_DIMMER_VALUE', payload: Object }
@@ -106,17 +112,26 @@ export type Action =
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_SUCCESS', payload: Object }
 	| { type: 'GATEWAY_API_LOCAL_CONTROL_TOKEN_ERROR', payload: Object }
 	| { type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS', payload: Object }
-	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_IP'}
+	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT' }
+	| { type: 'VALIDATE_LOCAL_CONTROL_SUPPORT', payload: Object }
+	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string, payload: Object }
 	| { type: typeof REHYDRATE }
+	| { type: 'persist/REHYDRATE', payload: Object }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }
 
 	| { type: 'SHOW_CHANGE_LOG' }
 	| { type: 'HIDE_CHANGE_LOG' }
+
+	| { type: 'TOGGLE_INACTIVE_VISIBILITY', payload: Object }
+
+	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
 export type GetState = () => Object;
 export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
 export type PromiseAction = Promise<Action>;
+
+export type GrantType = 'password' | 'google' | 'refresh_token';

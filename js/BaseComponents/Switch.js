@@ -28,7 +28,7 @@ import Theme from '../App/Theme';
 
 type Props = {
 	value: boolean,
-	onValueChange: (boolean) => void;
+	onValueChange: (boolean) => void,
 	thumbTintColor?: any,
 	onTintColor?: any,
 	tintColor?: any,

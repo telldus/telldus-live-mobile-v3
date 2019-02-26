@@ -36,6 +36,8 @@ type Props = {
 	triangleColor: string,
 	appLayout: Object,
 	rowWithTriangleContainerStyle?: number | Object | Array<any>,
+	triangleContainerStyle?: number | Object | Array<any>,
+	triangleStyle?: number | Object | Array<any>,
 };
 
 type DefaultProps = {
@@ -52,7 +54,7 @@ class RowWithTriangle extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { children, layout, containerStyle, style, rowWithTriangleContainerStyle } = this.props;
+		const { children, layout, containerStyle, style, rowWithTriangleContainerStyle, triangleStyle, triangleContainerStyle } = this.props;
 
 		const {
 			container,
@@ -66,14 +68,14 @@ class RowWithTriangle extends Component<Props, null> {
 		let styles = {...row, ...style};
 		return (
 			<View style={[container, rowWithTriangleContainerStyle]}>
-				<View style={triangleContainer}>
+				<View style={[triangleContainer, triangleContainerStyle]}>
 					<Image
-						source={require('./img/triangle-shadow.png')}
-						style={[triangleCommon, triangleShadow]}
+						source={{uri: 'triangle_shadow'}}
+						style={[triangleCommon, triangleShadow, triangleStyle]}
 					/>
 					<Image
-						source={require('./img/triangle.png')}
-						style={[triangleCommon, triangle]}
+						source={{uri: 'triangle'}}
+						style={[triangleCommon, triangle, triangleStyle]}
 					/>
 				</View>
 				<Row
@@ -134,7 +136,7 @@ class RowWithTriangle extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: state.app.layout,
 	};
 }
 

@@ -43,7 +43,7 @@ describe('<SchedulerTab />', () => {
 	it(' check getjobs action on dispatching ', () => {
 		store.dispatch(getJobs());
 		let state = store.getState();
-		 expect(state.App.active).toEqual(true);
+		 expect(state.app.active).toEqual(true);
 	});
 
 });

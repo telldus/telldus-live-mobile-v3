@@ -11,9 +11,8 @@
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "2.44.1"
+fastlane_version "2.113.0"
 
-ENV["SLACK_URL"] = "https://hooks.slack.com/services/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"
 ENV["APP_VERSION"] = JSON.parse(IO.read("../package.json"))["version"]
 
 default_platform :android
@@ -29,35 +28,19 @@ platform :android do
 
   desc "Deploy a new alpha version to the Google Play Store"
   lane :alpha do
-    gradle(
-      project_dir: "./android",
-      task: "assemble",
-      build_type: "Release"
-    )
     supply(
       track: "alpha",
-      apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
+      apk: "android/app/build/outputs/apk/release/app-release.apk"
+      # Use this if the apk was build by fastlane
+      # apk: "#{lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]}"
     )
-
-
-  end
-
-  after_all do |lane|
-    # This block is called, only if the executed lane was successful
-
     slack(
       message: "Successfully deployed new App Update.",
       payload: {
         Version: ENV["APP_VERSION"]
       }
     )
-  end
 
-  error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
   end
 end
 

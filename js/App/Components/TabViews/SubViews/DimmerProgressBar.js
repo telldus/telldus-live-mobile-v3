@@ -64,11 +64,58 @@ type State = {
 	containerHeight: number,
 };
 
+const animate = (animationValue: any) => {
+	animationValue.setValue(0);
+	Animated.timing(animationValue, {
+		toValue: 1,
+		duration: 1000,
+		easing: Easing.linear,
+		isInteraction: false,
+	}).start((endState: Object) => {
+		if (endState.finished) {
+			animate(animationValue);
+		}
+	});
+};
+
 class DimmerProgressBar extends Component<Props, State> {
 	props: Props;
 	static defaultProps: DefaultProps;
 	state: State;
 	layoutView: Object => void;
+
+	static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+		if (props.indeterminate !== state.indeterminate) {
+			if (props.indeterminate) {
+				animate(state.animationValue);
+			} else {
+				Animated.spring(state.animationValue, {
+					toValue: BAR_WIDTH_ZERO_POSITION,
+				}).start();
+			}
+		}
+
+		if (props.indeterminate !== state.indeterminate ||
+		    props.progress !== state.progress) {
+			const progress = (props.indeterminate
+				? INDETERMINATE_WIDTH_FACTOR
+				: Math.min(Math.max(props.progress, 0), 1));
+			if (props.animated) {
+				Animated.spring(state.progress, {
+					toValue: progress,
+					bounciness: 0,
+				}).start();
+			} else {
+				state.progress.setValue(progress);
+			}
+		}
+		if (props.indeterminate !== state.indeterminate) {
+			return {
+				indeterminate: props.indeterminate,
+			};
+		}
+		return null;
+	}
 
 	constructor(props: Props) {
 		super(props);
@@ -78,6 +125,7 @@ class DimmerProgressBar extends Component<Props, State> {
 			animationValue: new Animated.Value(BAR_WIDTH_ZERO_POSITION),
 			containerWidth: 0,
 			containerHeight: 0,
+			indeterminate: props.indeterminate,
 		};
 
 		this.layoutView = this.layoutView.bind(this);
@@ -85,34 +133,7 @@ class DimmerProgressBar extends Component<Props, State> {
 
 	componentDidMount() {
 		if (this.props.indeterminate) {
-			this.animate();
-		}
-	}
-
-	componentWillReceiveProps(props: Props) {
-		if (props.indeterminate !== this.props.indeterminate) {
-			if (props.indeterminate) {
-				this.animate();
-			} else {
-				Animated.spring(this.state.animationValue, {
-					toValue: BAR_WIDTH_ZERO_POSITION,
-				}).start();
-			}
-		}
-
-		if (props.indeterminate !== this.props.indeterminate ||
-		    props.progress !== this.props.progress) {
-			const progress = (props.indeterminate
-				? INDETERMINATE_WIDTH_FACTOR
-				: Math.min(Math.max(props.progress, 0), 1));
-			if (props.animated) {
-				Animated.spring(this.state.progress, {
-					toValue: progress,
-					bounciness: 0,
-				}).start();
-			} else {
-				this.state.progress.setValue(progress);
-			}
+			animate(this.state.animationValue);
 		}
 	}
 
@@ -121,20 +142,6 @@ class DimmerProgressBar extends Component<Props, State> {
 		this.setState({
 			containerWidth: width,
 			containerHeight: height,
-		});
-	}
-
-	animate() {
-		this.state.animationValue.setValue(0);
-		Animated.timing(this.state.animationValue, {
-			toValue: 1,
-			duration: 1000,
-			easing: Easing.linear,
-			isInteraction: false,
-		}).start((endState: Object) => {
-			if (endState.finished) {
-				this.animate();
-			}
 		});
 	}
 
@@ -148,7 +155,7 @@ class DimmerProgressBar extends Component<Props, State> {
 		const containerStyle = {
 			width,
 			borderWidth,
-			borderColor: borderColor || color,
+			borderColor: borderColor,
 			borderRadius,
 			overflow: 'hidden',
 			backgroundColor: unfilledColor,
@@ -200,7 +207,8 @@ class DimmerProgressBar extends Component<Props, State> {
 					},
 				]}>
 					<Text ellipsizeMode="middle"
-					      style={styles.text}>
+						  style={styles.text}
+						  allowFontScaling={false}>
 						{progressText}
 					</Text>
 				</View>

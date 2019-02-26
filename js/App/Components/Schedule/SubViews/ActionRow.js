@@ -23,45 +23,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages } from 'react-intl';
 
 import { BlockIcon, Row, Text, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
+import { methods } from '../../../../Constants';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
-
-const messages = defineMessages({
-	onDescription: {
-		id: 'actions.onDescription',
-		defaultMessage: 'Turns the device on',
-	},
-	offDescription: {
-		id: 'actions.offDescription',
-		defaultMessage: 'Turns the device off',
-	},
-	bellDescription: {
-		id: 'actions.bellDescription',
-		defaultMessage: 'Ring the bell',
-	},
-	dimDescription: {
-		id: 'actions.dimDescription',
-		defaultMessage: 'Dims the device',
-	},
-	upDescription: {
-		id: 'actions.upDescription',
-		defaultMessage: 'Send up to the device',
-	},
-	downDescription: {
-		id: 'actions.downDescription',
-		defaultMessage: 'Send down to the device',
-	},
-	stopDescription: {
-		id: 'actions.stopDescription',
-		defaultMessage: 'Stop the device',
-	},
-});
 
 type ActionType = {
 	name: string,
@@ -78,7 +48,7 @@ type ActionType = {
 export const ACTIONS: ActionType[] = [
 	{
 		name: 'On',
-		description: messages.onDescription,
+		description: i18n.onDescription,
 		label: i18n.on,
 		actionLabel: i18n.turnOn,
 		method: 1,
@@ -88,7 +58,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Off',
-		description: messages.offDescription,
+		description: i18n.offDescription,
 		label: i18n.off,
 		actionLabel: i18n.turnOff,
 		method: 2,
@@ -98,7 +68,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Bell',
-		description: messages.bellDescription,
+		description: i18n.bellDescription,
 		label: i18n.bell,
 		actionLabel: i18n.bell,
 		method: 4,
@@ -108,7 +78,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Dim',
-		description: messages.dimDescription,
+		description: i18n.dimDescription,
 		label: i18n.dim,
 		actionLabel: i18n.dim,
 		method: 16,
@@ -119,7 +89,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Up',
-		description: messages.upDescription,
+		description: i18n.upDescription,
 		label: i18n.up,
 		actionLabel: i18n.up,
 		method: 128,
@@ -129,7 +99,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Down',
-		description: messages.downDescription,
+		description: i18n.downDescription,
 		label: i18n.down,
 		actionLabel: i18n.down,
 		method: 256,
@@ -139,7 +109,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Stop',
-		description: messages.stopDescription,
+		description: i18n.stopDescription,
 		label: i18n.stop,
 		actionLabel: i18n.stop,
 		method: 512,
@@ -156,6 +126,7 @@ type DefaultProps = {
 
 type Props = {
 	method: number,
+	actionIcons: Object,
 	onPress?: Function,
 	containerStyle?: Object,
 	showValue?: boolean,
@@ -196,6 +167,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}
+				accessible={true}
 				importantForAccessibility={'yes'}
 				accessibilityLabel={accessibilityLabel}>
 				{this._renderIcon(action)}
@@ -208,8 +180,8 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue, appLayout, iconContainerStyle } = this.props;
-		const { dimContainer, dimValue, icon, iconContainer } = this._getStyle(appLayout);
+		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons } = this.props;
+		const { dimContainer, dimValue, icon: iconStyle, iconContainer } = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
 			const roundVal = Math.round(methodValue / 255 * 100);
@@ -227,11 +199,14 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			);
 		}
 
+		const methodString = methods[action.method];
+		let iconName = actionIcons[methodString];
+
 		return (
 			<BlockIcon
-				icon={action.icon}
+				icon={iconName ? iconName : action.icon}
 				bgColor={action.bgColor}
-				style={icon}
+				style={iconStyle}
 				containerStyle={[iconContainer, iconContainerStyle]}
 			/>
 		);

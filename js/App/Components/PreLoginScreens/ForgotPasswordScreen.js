@@ -25,45 +25,46 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 
-import { FormattedMessage, View } from '../../../BaseComponents';
+import {
+	FormattedMessage,
+	View,
+	DialogueBox,
+} from '../../../BaseComponents';
 import { ForgotPasswordForm } from './SubViews';
+
+import { hideModal } from '../../Actions/Modal';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
-const messages = defineMessages({
-	backToLogin: {
-		id: 'user.backToLogin',
-		defaultMessage: 'Back to Login',
-		description: 'Message to show on the forgot password screen',
-	},
-});
+import { intlShape, injectIntl } from 'react-intl';
 
 type Props = {
 	navigation: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	styles: Object,
+	validationMessage?: string,
+	validationMessageHeader?: string,
+	showModal: boolean,
+	dispatch: Function,
 };
 
-class ForgotPasswordScreen extends View {
+class ForgotPasswordScreen extends View<Props, null> {
 
 	props: Props;
 
 	goBackToLogin: () => void;
+	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			validationMessage: '',
-			formSubmitted: false,
-		};
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
+		this.closeModal = this.closeModal.bind(this);
 
 		let { formatMessage } = props.intl;
 
-		this.backToLogin = formatMessage(messages.backToLogin);
+		this.backToLogin = formatMessage(i18n.backToLogin);
 
 		this.labelLink = formatMessage(i18n.labelLink);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
@@ -72,11 +73,18 @@ class ForgotPasswordScreen extends View {
 	}
 
 	goBackToLogin() {
-		this.props.navigation.navigate('Login');
+		this.props.navigation.navigate({
+			routeName: 'Login',
+			key: 'Login',
+		});
+	}
+
+	closeModal() {
+		this.props.dispatch(hideModal());
 	}
 
 	render(): Object {
-		let { appLayout, intl, styles: commonStyles } = this.props;
+		let { showModal, validationMessage, validationMessageHeader, appLayout, intl, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
@@ -92,8 +100,15 @@ class ForgotPasswordScreen extends View {
 					style={{
 						alignSelf: 'center',
 					}}>
-					<FormattedMessage {...messages.backToLogin} style={styles.accountExist} />
+					<FormattedMessage {...i18n.backToLogin} style={styles.accountExist} />
 				</TouchableOpacity>
+				<DialogueBox
+					showDialogue={showModal}
+					text={validationMessage}
+					header={validationMessageHeader}
+					showPositive={true}
+					showNegative={false}
+					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
@@ -118,4 +133,18 @@ class ForgotPasswordScreen extends View {
 	}
 }
 
-export default connect(null, null)(injectIntl(ForgotPasswordScreen));
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+function mapStateToProps(store: Object): Object {
+	return {
+		validationMessage: store.modal.data,
+		validationMessageHeader: store.modal.extras,
+		showModal: store.modal.openModal,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ForgotPasswordScreen));

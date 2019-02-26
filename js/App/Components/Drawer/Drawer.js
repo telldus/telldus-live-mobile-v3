@@ -23,88 +23,62 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 
-import { FormattedMessage, Text, View, Icon, Image, IconTelldus } from '../../../BaseComponents';
+import { View } from '../../../BaseComponents';
 import Gateway from './Gateway';
-import i18n from '../../Translations/common';
-import { hasStatusBar, getDrawerWidth } from '../../Lib';
-import Theme from '../../Theme';
+import {
+	SettingsButton,
+	ConnectedLocations,
+	NavigationHeader,
+	AddLocation,
+} from './DrawerSubComponents';
 
-const messages = defineMessages({
-	connectedLocations: {
-		id: 'settings.connectedLocations',
-		defaultMessage: 'Connected Locations',
-	},
-	addNewLocation: {
-		id: 'settings.addNewLocation',
-		defaultMessage: 'Add New Location',
-	},
-});
-
-const AddLocation = ({onPress, styles}: Object): Object => {
-	return (
-		<View style={styles.addNewLocationContainer}>
-			<TouchableOpacity onPress={onPress} style={styles.addNewLocationCover}>
-				<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
-				<FormattedMessage {...messages.addNewLocation} style={styles.addNewLocationText}/>
-			</TouchableOpacity>
-		</View>
-	);
-};
-
-const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
-	return (
-		<View style={styles.navigationHeader}>
-			<Image style={styles.navigationHeaderImage}
-		       source={require('../TabViews/img/telldus.png')}
-		       resizeMode={'contain'}/>
-			<View style={styles.navigationHeaderTextCover}>
-				<Text numberOfLines={1} style={styles.navigationHeaderText}>
-					{firstName}
-				</Text>
-				{lastName ?
-					<Text numberOfLines={1} style={styles.navigationHeaderText}>
-						{lastName}
-					</Text>
-					:
-					null
-				}
-			</View>
-		</View>
-	);
-};
-
-const ConnectedLocations = ({styles}: Object): Object => (
-	<View style={styles.navigationTitle}>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...messages.connectedLocations} style={styles.navigationTextTitle}/></Text>
-	</View>
-);
-
-const SettingsButton = ({ onPress, styles }: Object): Object => (
-	<TouchableOpacity onPress={onPress} style={[styles.navigationTitle, {marginLeft: 12}]}>
-		<IconTelldus icon={'settings'} size={styles.settingsIconSize} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
-	</TouchableOpacity>
-);
+import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
+import { hasStatusBar, getDrawerWidth, shouldUpdate } from '../../Lib';
 
 type Props = {
 	gateways: Object,
+	appLayout: Object,
+	isOpen: boolean,
+
 	userProfile: Function,
 	onOpenSetting: Function,
 	addNewLocation: Function,
-	appLayout: Object,
 	onPressGateway: () => void,
 };
 
 class Drawer extends View<Props, null> {
 	props: Props;
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { appLayout, isOpen, ...others } = this.props;
+		const { appLayout: appLayoutN, isOpen: isOpenN, ...othersN } = nextProps;
+		if (isOpenN) {
+			if (!isOpen) {
+				return true;
+			}
+
+			if (appLayout.width !== appLayoutN.width) {
+				return true;
+			}
+
+			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
+			if (propsChange) {
+				return true;
+			}
+
+			return false;
+		}
+
+		return false;
+	}
+
 	render(): Object {
-		let { gateways, userProfile, onOpenSetting, addNewLocation, appLayout, onPressGateway } = this.props;
-		let styles = this.getStyles(appLayout);
+		const { gateways, userProfile, onOpenSetting, addNewLocation, appLayout, onPressGateway } = this.props;
+		const styles = this.getStyles(appLayout);
 
 		return (
 			<ScrollView
@@ -178,6 +152,12 @@ class Drawer extends View<Props, null> {
 				marginLeft: 10,
 				alignItems: 'center',
 			},
+			settingsCover: {
+				flexDirection: 'row',
+				paddingVertical: 5 + (fontSizeRow * 0.5),
+				marginLeft: 12,
+				alignItems: 'center',
+			},
 			iconAddLocSize: fontSizeAddLocText * 1.2,
 			settingsIconSize: fontSizeRow * 1.6,
 			navigationTextTitle: {
@@ -193,11 +173,8 @@ class Drawer extends View<Props, null> {
 				color: 'white',
 				fontSize: fontSizeRow,
 			},
-			addNewLocationCover: {
-				flexDirection: 'row',
-				alignItems: 'center',
-			},
 			addNewLocationContainer: {
+				flexDirection: 'row',
 				borderBottomWidth: 1,
 				borderBottomColor: '#eeeeef',
 				marginLeft: 16,
@@ -217,6 +194,7 @@ class Drawer extends View<Props, null> {
 function mapStateToProps(store: Object): Object {
 	return {
 		gateways: store.gateways,
+		userProfile: getUserProfileSelector(store),
 	};
 }
 export default connect(mapStateToProps, null)(Drawer);

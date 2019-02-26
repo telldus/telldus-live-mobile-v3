@@ -1,0 +1,2 @@
+- Fixes issue, Text getting cut-off in OnePlus devices.
+

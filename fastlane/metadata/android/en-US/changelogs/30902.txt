@@ -1,0 +1,5 @@
+- Fixes sensor history performance
+- Resetting zoom level when changing view in sensor history
+- Crashfix when changing name on mobile device
+- Other bugfixes
+

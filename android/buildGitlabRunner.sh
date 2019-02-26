@@ -19,21 +19,22 @@ module.exports = {
     forceLocale: '',
     pushSenderId: '${PUSH_SENDER_ID}',
     pushServiceId: ${PUSH_SERVICE_ID_ANDROID},
-    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}'
+    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}',
+    webClientId: '${GOOGLE_WEB_CLIENT_ID}',
 };
 EOF
 
 cat > gradle.properties <<EOF
-android.useDeprecatedNdk=true
 android.enableAapt2=false
 TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE=../android-signing/telldus.keystore
 TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS=telldus
 TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD=${ANDROID_STORE_PASSWORD}
 TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD=${ANDROID_KEY_PASSWORD}
 GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+PUSH_SENDER_ID=${PUSH_SENDER_ID}
 EOF
 
-echo "${GOOGLE_SERVICES_JSON}" > app/google-services.json
+echo "${GOOGLE_SERVICES}" > app/google-services.json
 
 # Add deploy key to be able to fetch android keystore
 if [ "${DEPLOY_KEY}" != "" ]; then

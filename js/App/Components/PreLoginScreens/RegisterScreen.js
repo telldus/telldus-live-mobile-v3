@@ -24,25 +24,13 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import { defineMessages, intlShape, injectIntl } from 'react-intl';
+import { intlShape, injectIntl } from 'react-intl';
 
 import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
 import { RegisterForm } from './SubViews';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
-const messages = defineMessages({
-	createAccount: {
-		id: 'user.createAccount',
-		defaultMessage: 'Create Account',
-		description: 'Header for the create account screen',
-	},
-	alreadyHaveAccount: {
-		id: 'user.alreadyHaveAccount',
-		defaultMessage: 'I already have an account',
-		description: 'Message to show on the create account screen',
-	},
-});
 
 type Props = {
 	navigation: Object,
@@ -54,6 +42,7 @@ type Props = {
 	validationMessageHeader: string,
 	appLayout: Object,
 	styles: Object,
+	screenProps: Object,
 };
 
 class RegisterScreen extends View {
@@ -71,12 +60,22 @@ class RegisterScreen extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.alreadyHaveAccount = formatMessage(messages.alreadyHaveAccount);
+		this.alreadyHaveAccount = formatMessage(i18n.alreadyHaveAccount);
 
 		this.labelLink = formatMessage(i18n.labelLink);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
 		this.labelAlreadyHaveAccount = `${this.labelLink} ${this.alreadyHaveAccount} ${this.labelButtondefaultDescription}`;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { screenProps, registeredCredential, navigation } = this.props;
+		if (registeredCredential && screenProps.currentScreen !== 'Welcome') {
+			navigation.navigate({
+				routeName: 'Welcome',
+				key: 'Welcome',
+			});
+		}
 	}
 
 	closeModal() {
@@ -87,13 +86,10 @@ class RegisterScreen extends View {
 
 	goBackToLogin() {
 		this.closeModal();
-		this.props.navigation.navigate('Login');
-	}
-
-	componentWillReceiveProps(nextProps: Object) {
-		if (nextProps.registeredCredential && nextProps.screenProps.currentScreen !== 'Welcome') {
-			nextProps.navigation.navigate('Welcome');
-		}
+		this.props.navigation.navigate({
+			routeName: 'Login',
+			key: 'Login',
+		});
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -115,7 +111,7 @@ class RegisterScreen extends View {
 				<RegisterForm
 					appLayout={appLayout}
 					dialogueOpen={this.props.showModal}
-					headerText={intl.formatMessage(messages.createAccount)}
+					headerText={intl.formatMessage(i18n.createAccount)}
 					styles={commonStyles}/>
 				<TouchableOpacity
 					onPress={this.goBackToLogin}
@@ -123,7 +119,7 @@ class RegisterScreen extends View {
 					style={{
 						alignSelf: 'center',
 					}}>
-					<FormattedMessage {...messages.alreadyHaveAccount} style={styles.accountExist}/>
+					<FormattedMessage {...i18n.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>
 				<DialogueBox
 					showDialogue={showModal}

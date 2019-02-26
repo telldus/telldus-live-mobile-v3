@@ -19,7 +19,7 @@
 
 // @flow
 
-export default function getDeviceType(supportedMethods: Object): string {
+export default function getDeviceType(supportedMethods: Object = {}): string {
 	const {
 		TURNON,
 		TURNOFF,

@@ -25,38 +25,27 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import { defineMessages } from 'react-intl';
 
-import { View, FloatingButton } from '../../../BaseComponents';
+import { View } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
-import { getGateways, addNewGateway, showToast } from '../../Actions';
+import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import { getRelativeDimensions, getTabBarIcon } from '../../Lib';
+import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-const messages = defineMessages({
-	gateways: {
-		id: 'pages.gateways',
-		defaultMessage: 'Gateways',
-		description: 'The gateways tab',
-	},
-});
 
 type Props = {
 	rows: Array<Object>,
+	screenProps: Object,
+	navigation: Object,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
-	screenProps: Object,
-	appLayout: Object,
 };
 
 type State = {
-	dataSource: Array<Object>,
-	settings: boolean,
-	isLoading: boolean,
 	isRefreshing: boolean,
 };
 
@@ -74,10 +63,9 @@ class GatewaysTab extends View {
 
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
-	addLocation: () => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
-		title: screenProps.intl.formatMessage(messages.gateways),
+		title: screenProps.intl.formatMessage(i18n.gateways),
 		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
 	});
 
@@ -87,9 +75,6 @@ class GatewaysTab extends View {
 		let { formatMessage } = props.screenProps.intl;
 
 		this.state = {
-			dataSource: this.props.rows,
-			settings: false,
-			isLoading: false,
 			isRefreshing: false,
 		};
 
@@ -98,13 +83,11 @@ class GatewaysTab extends View {
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.addLocation = this.addLocation.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		this.setState({
-			dataSource: nextProps.rows,
-		});
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { currentScreen } = nextProps.screenProps;
+		return currentScreen === 'Gateways';
 	}
 
 	onRefresh() {
@@ -112,9 +95,10 @@ class GatewaysTab extends View {
 	}
 
 	renderRow(item: Object): Object {
-		let { stackNavigator, intl } = this.props.screenProps;
+		const { navigation, screenProps } = this.props;
+		const { intl } = screenProps;
 		return (
-			<GatewayRow location={item.item} stackNavigator={stackNavigator} intl={intl}/>
+			<GatewayRow location={item.item} navigation={navigation} intl={intl}/>
 		);
 	}
 
@@ -122,27 +106,8 @@ class GatewaysTab extends View {
 		return item.id.toString();
 	}
 
-	addLocation() {
-		this.setState({
-			isLoading: true,
-		});
-		this.props.addNewLocation()
-			.then((response: Object) => {
-				this.props.screenProps.stackNavigator.navigate('AddLocation', {clients: response.client, renderRootHeader: true});
-				this.setState({
-					isLoading: false,
-				});
-			}).catch((error: Object) => {
-				let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
-				this.setState({
-					isLoading: false,
-				});
-				this.props.dispatch(showToast(message));
-			});
-	}
-
 	getPadding(): number {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -151,10 +116,15 @@ class GatewaysTab extends View {
 
 	render(): Object {
 		const padding = this.getPadding();
+		const { rows } = this.props;
+
 		return (
-			<View style={{flex: 1}}>
+			<View style={{
+				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				<FlatList
-					data={this.state.dataSource}
+					data={rows}
 					renderItem={this.renderRow}
 					onRefresh={this.onRefresh}
 					refreshing={this.state.isRefreshing}
@@ -163,10 +133,6 @@ class GatewaysTab extends View {
 						marginVertical: padding - (padding / 4),
 					}}
 				/>
-				<FloatingButton
-					onPress={this.addLocation}
-					imageSource={this.state.isLoading ? false : require('../TabViews/img/iconPlus.png')}
-					showThrobber={this.state.isLoading}/>
 			</View>
 		);
 	}
@@ -182,7 +148,6 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
-		appLayout: getRelativeDimensions(state.App.layout),
 	};
 }
 

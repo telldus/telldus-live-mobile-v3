@@ -1,0 +1,4 @@
+- Fix bug in Local Control
+- Fix crash in Android devices
+- Fix crash in iOS devices
+

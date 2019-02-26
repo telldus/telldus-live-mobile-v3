@@ -24,10 +24,10 @@
 'use strict';
 
 import React from 'react';
-import { Linking, ScrollView } from 'react-native';
-import { connect } from 'react-redux';
-import { defineMessages, intlShape } from 'react-intl';
+import { Linking } from 'react-native';
+import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { NavigationActions } from 'react-navigation';
 
 import Theme from '../../../Theme';
 import {
@@ -41,51 +41,11 @@ import {
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 
 import i18n from '../../../Translations/common';
-const messages = defineMessages({
-	headerOne: {
-		id: 'addNewLocation.success.headerOne',
-		defaultMessage: 'Congratulations',
-		description: 'Main header for the add location success Screen',
-	},
-	headerTwo: {
-		id: 'addNewLocation.success.headerTwo',
-		defaultMessage: 'Location added successfully',
-		description: 'Secondary header for the add location success Screen',
-	},
-	messageTitle: {
-		id: 'addNewLocation.success.messageTitle',
-		defaultMessage: 'Welcome to your smart home',
-		description: 'Message Title for the add location success Screen',
-	},
-	messageBodyParaOne: {
-		id: 'addNewLocation.success.messageBodyParaOne',
-		defaultMessage: 'You have now taken the first step towards your smart home! ' +
-		'Now you can start adding devices, view sensors, schedule devices and events and much more.',
-		description: 'Message Body for the add location success Screen Para One',
-	},
-	messageBodyParaTwo: {
-		id: 'addNewLocation.success.messageBodyParaTwo',
-		defaultMessage: 'If you want help or would like to learn tips and tricks on how to setup your smart home you ' +
-		'can view our guides by clicking below',
-		description: 'Message Body for the add location success Screen Para two',
-	},
-	hyperLintText: {
-		id: 'addNewLocation.success.hyperLintText',
-		defaultMessage: 'Guides',
-		description: 'Hyper link button text',
-	},
-	continue: {
-		id: 'button.success.continue',
-		defaultMessage: 'CONTINUE',
-		description: 'Button Text',
-	},
-});
 
 type Props = {
 	intl: intlShape.isRequired,
 	navigation: Object,
 	onDidMount: Function,
-	rootNavigator: Object,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
@@ -107,11 +67,11 @@ class Success extends View<void, Props, State> {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = formatMessage(messages.headerOne);
-		this.h2 = formatMessage(messages.headerTwo);
+		this.h1 = formatMessage(i18n.LSheaderOne);
+		this.h2 = formatMessage(i18n.LSheaderTwo);
 
-		this.title = `${formatMessage(messages.messageTitle)}!`;
-		this.body = formatMessage(messages.messageBodyParaOne);
+		this.title = `${formatMessage(i18n.messageTitle)}!`;
+		this.body = formatMessage(i18n.messageBodyParaOne);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 	}
@@ -126,9 +86,9 @@ class Success extends View<void, Props, State> {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'Success' && this.props.currentScreen !== 'Success';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'Success' && prevProps.currentScreen !== 'Success';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -139,7 +99,15 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.rootNavigator.navigate('Tabs');
+		const navigateAction = NavigationActions.navigate({
+			routeName: 'Tabs',
+			key: 'Tabs',
+			action: NavigationActions.navigate({
+				routeName: 'Gateways',
+				key: 'Gateways',
+			}),
+		  });
+		this.props.navigation.dispatch(navigateAction);
 	}
 
 	onPressHelp() {
@@ -156,78 +124,72 @@ class Success extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		let { appLayout } = this.props;
+		const { appLayout, navigation } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		let clientInfo = this.props.navigation.state.params.clientInfo;
-		let locationImageUrl = getLocationImageUrl(clientInfo.type);
+		const clientInfo = navigation.getParam('clientInfo', {});
+		const locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (
-			<View style={{flex: 1}}>
-				<ScrollView>
-					<View style={[styles.itemsContainer, styles.shadow]}>
-						<View style={styles.imageTitleContainer}>
-							<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
-							<Icon name="check-circle" size={44} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
-							<View style={{flex: 1, flexWrap: 'wrap'}}>
-								<Text style={styles.messageTitle}>
-									{this.title}
-								</Text>
-							</View>
+			<View style={{
+				flex: 1,
+				alignItems: 'stretch',
+			}}>
+				<View style={styles.itemsContainer}>
+					<View style={styles.imageTitleContainer}>
+						<Image resizeMode="contain" style={styles.imageLocation} source={{uri: locationImageUrl, isStatic: true}} />
+						<View style={styles.iconBackMask}/>
+						<Icon name="check-circle" size={styles.iconCheckSize} style={styles.iconCheck} color={Theme.Core.brandSuccess}/>
+						<View style={{flex: 1, flexWrap: 'wrap'}}>
+							<Text style={styles.messageTitle}>
+								{this.title}
+							</Text>
 						</View>
-						<Text style={styles.messageBody}>
-							{this.body}
-							{/** {'\n\n'}
+					</View>
+					<Text style={styles.messageBody}>
+						{this.body}
+						{/** {'\n\n'}
 							TODO: Bring back this when guides are available in live-v3
-							<FormattedMessage {...messages.messageBodyParaTwo} style={styles.messageBody}/>
+							<FormattedMessage {...i18n.messageBodyParaTwo} style={styles.messageBody}/>
 							*/}
-						</Text>
-						{/** <TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
+					</Text>
+					{/** <TouchableOpacity onPress={this.onPressHelp} style={styles.hyperLinkButton}>
 							<CustomIcon name="icon_guide" size={36} color={Theme.Core.brandSecondary} />
-							<FormattedMessage {...messages.hyperLintText} style={styles.hyperLink}/>
+							<FormattedMessage {...i18n.hyperLintText} style={styles.hyperLink}/>
 							<Icon name="angle-right" size={26} color={'#A59F9A'}/>
 						</TouchableOpacity> */}
-					</View>
-					<TouchableButton
-						text={this.props.intl.formatMessage(messages.continue)}
-						onPress={this.onPressContinue}
-						style={styles.button}
-					/>
-				</ScrollView>
+				</View>
+				<TouchableButton
+					text={this.props.intl.formatMessage(i18n.continue)}
+					onPress={this.onPressContinue}
+					style={styles.button}
+				/>
 			</View>
 		);
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const iconCheckSize = deviceWidth * 0.13;
+		const iconContCheckSize = iconCheckSize * 0.96;
 
 		return {
+			iconCheckSize: iconCheckSize,
 			itemsContainer: {
-				flex: 1,
+				backgroundColor: '#fff',
 				flexDirection: 'column',
 				marginTop: 20,
 				paddingVertical: 20,
 				paddingRight: 20,
 				alignItems: 'flex-start',
-				width: width - 20,
-			},
-			shadow: {
-				borderRadius: 4,
-				backgroundColor: '#fff',
-				shadowColor: '#000000',
-				shadowOffset: {
-					width: 0,
-					height: 0,
-				},
-				shadowRadius: 1,
-				shadowOpacity: 1.0,
-				elevation: 2,
+				...Theme.Core.shadow,
 			},
 			imageLocation: {
-				width: isPortrait ? width * 0.32 : height * 0.32,
-				height: isPortrait ? width * 0.23 : height * 0.23,
+				width: deviceWidth * 0.32,
+				height: deviceWidth * 0.23,
 			},
 			imageTitleContainer: {
 				flex: 1,
@@ -235,24 +197,31 @@ class Success extends View<void, Props, State> {
 				alignItems: 'center',
 				justifyContent: 'flex-start',
 			},
+			iconBackMask: {
+				position: 'absolute',
+				top: 22,
+				left: deviceWidth * 0.185,
+				width: iconContCheckSize,
+				height: iconContCheckSize,
+				borderRadius: iconContCheckSize / 2,
+				backgroundColor: '#fff',
+			},
 			iconCheck: {
 				position: 'absolute',
 				top: 20,
-				left: isPortrait ? width * 0.18 : height * 0.18,
-				backgroundColor: '#fff',
-				borderBottomLeftRadius: 35,
-				borderTopRightRadius: 25,
+				left: deviceWidth * 0.18,
+				backgroundColor: 'transparent',
 			},
 			messageTitle: {
 				color: '#00000099',
-				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
+				fontSize: Math.floor(deviceWidth * 0.068),
 				flexWrap: 'wrap',
 			},
 			messageBody: {
 				marginLeft: 20,
 				marginTop: 10,
 				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				fontSize: Math.floor(deviceWidth * 0.042),
 			},
 			hyperLinkButton: {
 				flexDirection: 'row',
@@ -277,4 +246,4 @@ class Success extends View<void, Props, State> {
 	}
 }
 
-export default connect()(Success);
+export default Success;

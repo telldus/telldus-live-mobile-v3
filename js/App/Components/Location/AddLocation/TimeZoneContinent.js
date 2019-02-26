@@ -33,7 +33,6 @@ import { View } from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
-import { messages as commonMessages } from '../Common/messages';
 
 type Props = {
 	navigation: Object,
@@ -54,8 +53,8 @@ class TimeZoneContinent extends View {
 
 		let { formatMessage } = props.intl;
 
-		this.h1 = `3. ${formatMessage(commonMessages.headerOneTimeZoneContinent)}`;
-		this.h2 = formatMessage(commonMessages.headerTwoTimeZoneContinent);
+		this.h1 = formatMessage(i18n.headerOneTimeZoneContinent);
+		this.h2 = formatMessage(i18n.headerTwoTimeZoneContinent);
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
@@ -72,9 +71,9 @@ class TimeZoneContinent extends View {
 		}
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		let { screenReaderEnabled, currentScreen } = nextProps;
-		let shouldAnnounce = currentScreen === 'TimeZoneContinent' && this.props.currentScreen !== 'TimeZoneContinent';
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		let { screenReaderEnabled, currentScreen } = this.props;
+		let shouldAnnounce = currentScreen === 'TimeZoneContinent' && prevProps.currentScreen !== 'TimeZoneContinent';
 		if (screenReaderEnabled && shouldAnnounce) {
 			announceForAccessibility(this.labelMessageToAnnounce);
 		}
@@ -85,18 +84,29 @@ class TimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		let clientInfo = this.props.navigation.state.params.clientInfo;
+		const { navigation } = this.props;
+		let clientInfo = navigation.getParam('clientInfo', {});
 		if (continent === 'UTC') {
 			clientInfo.timezone = continent;
-			this.props.navigation.navigate('Position', {clientInfo});
+			navigation.navigate({
+				routeName: 'Position',
+				key: 'Position',
+				params: {clientInfo},
+			});
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
-				let flag = items[0] === v2 ? false : true;
-				return flag;
+				return !(items[0] === v2);
 			});
 			clientInfo.continent = continent;
-			this.props.navigation.navigate('TimeZoneCity', {cities: data, clientInfo});
+			navigation.navigate({
+				routeName: 'TimeZoneCity',
+				key: 'TimeZoneCity',
+				params: {
+					clientInfo,
+					cities: data,
+				},
+			});
 		}
 	}
 

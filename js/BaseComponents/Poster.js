@@ -30,18 +30,14 @@ import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 type Props = {
 	children?: any,
-	source?: number,
+	source?: number | Object,
 	appLayout: Object,
-	source750: number,
-	source1500: number,
-	source3000: number,
 	posterWidth?: number,
+	posterHeight?: number,
 };
 
 type DefaultProps = {
-	source750: number,
-	source1500: number,
-	source3000: number,
+	source: number | Object,
 };
 
 class Poster extends Component<Props, null> {
@@ -49,67 +45,47 @@ class Poster extends Component<Props, null> {
 
 	static propTypes = {
 		children: PropTypes.any,
-		source: PropTypes.number,
+		source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 	};
 
 	static defaultProps: DefaultProps = {
-		source750: require('../App/Components/TabViews/img/telldus-geometric-bg-750.png'),
-		source1500: require('../App/Components/TabViews/img/telldus-geometric-bg-1500.png'),
-		source3000: require('../App/Components/TabViews/img/telldus-geometric-bg-3000.png'),
+		source: { uri: 'telldus_geometric_bg'},
 	};
 
 	constructor(props: Props) {
 		super(props);
 	}
 
-	getImageSource(height: number): number {
-		let { source750, source1500, source3000 } = this.props;
-		switch (height) {
-			case height > 700 && height < 1400:
-				return source1500;
-			case height >= 1400:
-				return source3000;
-			default:
-				return source750;
-		}
-	}
-
 	render(): Object {
 		const { children, appLayout, source } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-
-		let imageSource = source;
-		if (!imageSource) {
-			imageSource = this.getImageSource(deviceHeight);
-		}
 
 		const { image, mask } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={imageSource} style={image}/>
+				<Image source={source} style={image}/>
 				{!!children && children}
 			</View>
 		);
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		let { posterWidth } = this.props;
+		let { posterWidth, posterHeight } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
 		posterWidth = posterWidth ? posterWidth : width;
+		posterHeight = posterHeight ? posterHeight : deviceWidth * 0.333333333;
 
 		return {
 			image: {
-				flex: 1,
-				height: undefined,
+				height: posterHeight,
 				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				resizeMode: 'cover',
 			},
 			mask: {
 				borderWidth: 0,
-				height: isPortrait ? width * 0.333333333 : height * 0.333333333,
+				height: posterHeight,
 				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				overflow: 'hidden',
 			},
@@ -120,7 +96,7 @@ class Poster extends Component<Props, null> {
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.App.layout,
+		appLayout: state.app.layout,
 	};
 }
 

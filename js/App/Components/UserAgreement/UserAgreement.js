@@ -29,21 +29,21 @@ import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from reac
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import Markdown from 'react-native-markdown-renderer';
 
-import { View, Text, StyleSheet, Poster } from '../../../BaseComponents';
-import { NavigationHeader } from '../DeviceDetails/SubViews';
+import { View, Text, StyleSheet, Poster, NavigationHeader } from '../../../BaseComponents';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import {
 	getEULA,
 	acceptEULA,
 } from '../../Actions';
+import shouldUpdate from '../../Lib/shouldUpdate';
 
 const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	showModal: boolean,
 	intl: intlShape,
-	onLayout: (Object) => void;
+	onLayout: (Object) => void,
 	appLayout: Object,
 	getEULA: any,
 	acceptEULA: any,
@@ -74,6 +74,36 @@ class UserAgreement extends View<Props, State> {
 	}
 
 	componentDidMount() {
+		const { showModal } = this.props;
+		if (showModal) {
+			this.getEULA();
+		}
+	}
+
+	componentDidUpdate(prevProps: Object) {
+		const { showModal } = this.props;
+		const { eulaContent } = this.state;
+		if (showModal && !eulaContent) {
+			this.getEULA();
+		}
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { eulaVersion } = this.state;
+		const { eulaVersion: eulaVersionN } = nextState;
+		if (eulaVersion !== eulaVersionN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(this.props, nextProps, ['showModal', 'appLayout']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
+	getEULA() {
 		this.props.getEULA().then((res: Object) => {
 			const { text: eulaContent, version: eulaVersion } = res;
 			if (eulaContent && eulaVersion) {
@@ -103,7 +133,6 @@ class UserAgreement extends View<Props, State> {
 	render(): Object | null {
 		const { showModal, appLayout } = this.props;
 		const { eulaContent } = this.state;
-
 		if (!eulaContent) {
 			return null;
 		}
@@ -118,7 +147,7 @@ class UserAgreement extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1 }) }}>
+				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
 						<NavigationHeader showLeftIcon={false} topMargin={false}/>
 						<ScrollView
@@ -209,6 +238,7 @@ class UserAgreement extends View<Props, State> {
 				fontSize: Math.floor(deviceWidth * 0.04),
 				color: Theme.Core.brandSecondary,
 				fontWeight: 'bold',
+				fontFamily: 'Roboto-Regular',
 			},
 			markupStyle: {
 				heading: {
@@ -236,7 +266,7 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
-		appLayout: store.App.layout,
+		appLayout: store.app.layout,
 	};
 }
 

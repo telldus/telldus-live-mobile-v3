@@ -25,39 +25,32 @@
 
 import React from 'react';
 import uniqBy from 'lodash/uniqBy';
+import {
+	FlatList,
+} from 'react-native';
 
 import timeZone from '../../../Lib/TimeZone';
-import {View, List, ListDataSource} from '../../../../BaseComponents';
+import {View} from '../../../../BaseComponents';
 import ListRow from './SubViews/ListRow';
-
-const listDataSource = new ListDataSource({
-	rowHasChanged: (r1: Object, r2: Object): boolean => r1 !== r2,
-});
 
 type Props = {
 	appLayout: Object,
 	onSubmit: (string) => void,
 };
 
-type State = {
-	dataSource: Object,
-};
-
 class ContinentsList extends View {
+	props: Props;
+
+	keyExtractor: (Object) => number;
 	renderRow: (string) => void;
 	onContinentChoose: (string) => void;
 
-	props: Props;
-	state: State;
-
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			dataSource: listDataSource.cloneWithRows(this.parseDataForList(timeZone)),
-		};
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onContinentChoose = this.onContinentChoose.bind(this);
+		this.keyExtractor = this.keyExtractor.bind(this);
 	}
 
 	parseDataForList(data: Array<string>): Array<string> {
@@ -74,22 +67,29 @@ class ContinentsList extends View {
 		}
 	}
 
-	renderRow(item: Object): Object {
+	renderRow({item}: Object): Object {
 		item = item.split('/');
-		item = item[0];
 		return (
-			<ListRow item={item} onPress={this.onContinentChoose} appLayout={this.props.appLayout}/>
+			<ListRow item={item[0]} onPress={this.onContinentChoose} appLayout={this.props.appLayout}/>
 		);
 	}
 
+	keyExtractor(item: string): string {
+		return item;
+	}
+
 	render(): Object {
+		const { appLayout } = this.props;
+
 		return (
 			<View style={{flex: 1}}>
-				<List
+				<FlatList
 					contentContainerStyle={{paddingTop: 20, justifyContent: 'center'}}
-					dataSource={this.state.dataSource}
-					renderRow={this.renderRow}
-					key={this.props.appLayout.width}
+					data={this.parseDataForList(timeZone)}
+					renderItem={this.renderRow}
+					numColumns={1}
+					keyExtractor={this.keyExtractor}
+					extraData={appLayout.width}
 				/>
 			</View>
 		);

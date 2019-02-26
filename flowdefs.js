@@ -29,7 +29,16 @@ declare module 'react-native-tab-view' {
 declare module 'react-native-udp' {
 	declare module.exports: any;
 }
+declare module 'react-native-firebase' {
+	declare module.exports: any;
+}
+declare module 'react-native-swiper' {
+	declare module.exports: any;
+}
 declare module '../../local-cli/bundle/assetPathUtils' {
+	declare module.exports: any;
+}
+declare module 'react-native-google-signin' {
 	declare module.exports: any;
 }
 declare var console: any;

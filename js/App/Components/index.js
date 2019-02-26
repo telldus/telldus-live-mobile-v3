@@ -20,12 +20,14 @@
 
 'use strict';
 
-import AppNavigator from './AppNavigator';
+import AppNavigatorRenderer from './AppNavigatorRenderer';
 import PreLoginNavigator from './PreLoginNavigator';
 import Push from './Push';
+import PostLoginNavigatorCommon from './PostLoginNavigatorCommon';
 
 module.exports = {
-	AppNavigator: AppNavigator,
-	PreLoginNavigator: PreLoginNavigator,
-	Push: Push,
+	AppNavigatorRenderer,
+	PreLoginNavigator,
+	Push,
+	PostLoginNavigatorCommon,
 };

@@ -24,19 +24,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions, FlatList, RefreshControl } from 'react-native';
+import { Dimensions, FlatList, RefreshControl, LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { defineMessages } from 'react-intl';
 
-import { Text, View } from '../../../BaseComponents';
-import { getDevices } from '../../Actions/Devices';
-import { changeSensorDisplayType } from '../../Actions/Dashboard';
+import {
+	Text,
+	View,
+	DialogueBox,
+} from '../../../BaseComponents';
+import { DimmerControlInfo } from './SubViews/Device';
+import { getDevices, getSensors, getGateways } from '../../Actions';
+import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
-import { getUserProfile } from '../../Reducers/User';
 import Theme from '../../Theme';
 
 import {
@@ -44,34 +47,16 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon, getRelativeDimensions } from '../../Lib';
-
-const messages = defineMessages({
-	messageNoItemsTitle: {
-		id: 'pages.dashboard.messageNoItemsTitle',
-		defaultMessage: 'Your dashboard is empty.',
-		description: 'Message title when no items',
-	},
-	messageNoItemsContent: {
-		id: 'pages.dashboard.messageNoItemsContent',
-		defaultMessage: 'You have not added any devices or sensors to your dashboard yet. ' +
-		'Go to devices or sensors tab, swipe left on the row and click the star to select the ' +
-		'ones you want to add.',
-		description: 'Message title when no items',
-	},
-});
+import { getTabBarIcon, LayoutAnimations } from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
-	gateways: Object,
-	userProfile: Object,
+	isDBEmpty: boolean,
+	screenProps: Object,
 	navigation: Object,
-	dashboard: Object,
-	tab: string,
-	onChangeDisplayType: () => void,
-	dashboard: Object,
+	navigation: Object,
+	changeSensorDisplayTypeDB: () => void,
 	dispatch: Function,
-	navigation: Object,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
 	onDim: (number) => void,
@@ -80,20 +65,17 @@ type Props = {
 	onUp: (number) => void,
 	onDown: (number) => void,
 	onStop: (number) => void,
-	events: Object,
-	screenProps: Object,
-	appLayout: Object,
 };
 
 type State = {
 	tileWidth: number,
 	listWidth: number,
-	dataSource: Array<Object>,
 	settings: boolean,
 	numColumns: number,
 	isRefreshing: boolean,
 	scrollEnabled: boolean,
 	showRefresh: boolean,
+	dialogueBoxConf: Object,
 };
 
 class DashboardTab extends View {
@@ -101,7 +83,6 @@ class DashboardTab extends View {
 	props: Props;
 	state: State;
 
-	tab: string;
 	_onLayout: (Object) => void;
 	setScrollEnabled: (boolean) => void;
 	onSlidingStart: (name: string, value: number) => void;
@@ -112,6 +93,9 @@ class DashboardTab extends View {
 	changeDisplayType: () => void;
 	onRefresh: () => void;
 	_renderRow: (number) => Object;
+	onDismissDialogueHide: () => void;
+
+	showDimInfo: (Object) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
 		title: screenProps.intl.formatMessage(i18n.dashboard),
@@ -125,15 +109,19 @@ class DashboardTab extends View {
 		this.state = {
 			tileWidth,
 			listWidth: 0,
-			dataSource: this.props.rows,
 			settings: false,
 			numColumns,
 			isRefreshing: false,
 			scrollEnabled: true,
 			showRefresh: true,
+			dialogueBoxConf: {
+				show: false,
+				action: '',
+				device: {},
+			},
 		};
 
-		this.tab = 'Dashboard';
+		this.timer = null;
 
 		this._onLayout = this._onLayout.bind(this);
 		this._renderRow = this._renderRow.bind(this);
@@ -143,23 +131,29 @@ class DashboardTab extends View {
 		this.changeDisplayType = this.changeDisplayType.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
 
-		this.noItemsTitle = props.screenProps.intl.formatMessage(messages.messageNoItemsTitle);
-		this.noItemsContent = props.screenProps.intl.formatMessage(messages.messageNoItemsContent);
+		this.noItemsTitle = props.screenProps.intl.formatMessage(i18n.messageNoItemsTitle);
+		this.noItemsContent = props.screenProps.intl.formatMessage(i18n.messageNoItemsContent);
+
+		this.showDimInfo = this.showDimInfo.bind(this);
+		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 	}
 
 	startSensorTimer() {
 		this.timer = setInterval(() => {
-			this.props.onChangeDisplayType();
+			LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
+			this.props.changeSensorDisplayTypeDB();
 		}, 5000);
 	}
 
 	stopSensorTimer() {
 		clearInterval(this.timer);
+		this.timer = null;
 	}
 
 	changeDisplayType() {
 		this.stopSensorTimer();
-		this.props.onChangeDisplayType();
+		LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
+		this.props.changeSensorDisplayTypeDB();
 		this.startSensorTimer();
 	}
 
@@ -179,24 +173,31 @@ class DashboardTab extends View {
 		this.setState({
 			isRefreshing: true,
 		});
-		this.props.dispatch(getDevices())
-			.then(() => {
-				this.setState({
-					isRefreshing: false,
-				});
-			})
-			.catch(() => {
-				this.setState({
-					isRefreshing: false,
-				});
+
+		let promises = [
+			this.props.dispatch(getGateways()),
+			this.props.dispatch(getDevices()),
+			this.props.dispatch(getSensors()),
+		];
+		Promise.all(promises).then(() => {
+			this.setState({
+				isRefreshing: false,
 			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		});
 	}
 
 	componentDidMount() {
-		if (!this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0) {
-			this.props.navigation.navigate('Devices');
+		const { isDBEmpty, navigation } = this.props;
+		if (isDBEmpty) {
+			navigation.navigate({
+				routeName: 'Devices',
+				key: 'Devices',
+			});
 		}
-
 		this.startSensorTimer();
 	}
 
@@ -204,23 +205,19 @@ class DashboardTab extends View {
 		this.stopSensorTimer();
 	}
 
-	componentWillReceiveProps(nextProps: Object) {
-		this.setState({
-			dataSource: nextProps.rows,
-		});
-
-		let { currentTab } = nextProps.screenProps;
-		if (currentTab !== 'Dashboard') {
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		const { currentScreen } = nextProps.screenProps;
+		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
-			this.tab = currentTab;
-		} else if (currentTab === 'Dashboard' && this.tab !== 'Dashboard') {
-			this.startSensorTimer();
-			this.tab = 'Dashboard';
 		}
+		return currentScreen === 'Dashboard';
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentTab === 'Dashboard';
+	componentDidUpdate(prevProps: Object) {
+		const { currentScreen } = this.props.screenProps;
+		if (currentScreen === 'Dashboard' && prevProps.screenProps.currentScreen !== 'Dashboard' && !this.timer) {
+			this.startSensorTimer();
+		}
 	}
 
 	_onLayout = (event: Object) => {
@@ -234,7 +231,7 @@ class DashboardTab extends View {
 	};
 
 	calculateTileWidth(listWidth: number): Object {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const margin = this.getPadding() * 2;
@@ -269,26 +266,94 @@ class DashboardTab extends View {
 		return false;
 	}
 
+	onDismissDialogueHide() {
+		const { dialogueBoxConf } = this.state;
+		this.setState({
+			dialogueBoxConf: {
+				...dialogueBoxConf,
+				show: false,
+			},
+		});
+	}
+
+	showDimInfo(device: Object) {
+		this.setState({
+			dialogueBoxConf: {
+				show: true,
+				action: 'dim_info',
+				device,
+			},
+		});
+	}
+
+	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
+		const { show, action, device } = this.state.dialogueBoxConf;
+		let data = {
+			showDialogue: show,
+		};
+		if (action === 'dim_info') {
+			const { isOnline, name, id } = device;
+			const styles = {
+				dialogueHeaderStyle: style.dialogueHeaderStyle,
+				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
+				dialogueBodyStyle: style.dialogueBodyStyle,
+				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
+			};
+
+			return {
+				...data,
+				showHeader: false,
+				text: <DimmerControlInfo
+					style={styles}
+					name={name}
+					id={id}
+					onPressButton={this.onDismissDialogueHide}
+					isOnline={isOnline}
+					appLayout={appLayout}
+					intl={intl}
+				/>,
+				dialogueBoxStyle: style.dialogueBoxStyle,
+				backdropOpacity: 0,
+			};
+		}
+		return data;
+	}
+
 	render(): Object {
-		let { appLayout, dashboard } = this.props;
-		let { dataSource, isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		const { screenProps, isDBEmpty, rows } = this.props;
+		const { appLayout, intl } = screenProps;
+		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
-		let style = this.getStyles(appLayout);
+		const style = this.getStyles(appLayout);
 
-		if (!dashboard.deviceIds.length > 0 && !dashboard.sensorIds.length > 0) {
+		if (isDBEmpty) {
 			return this.noItemsMessage(style);
 		}
 
-		let extraData = {
+		const extraData = {
 			propOne: tileWidth,
 			propTwo: appLayout,
 		};
+
+		const {
+			showDialogue,
+			header,
+			text,
+			showNegative,
+			onPressNegative,
+			showPositive,
+			positiveText,
+			onPressPositive,
+			dialogueBoxStyle,
+			backdropOpacity,
+			showHeader,
+		} = this.getDialogueBoxData(style, appLayout, intl);
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
 				<FlatList
 					ref="list"
-					data={dataSource}
+					data={rows}
 					renderItem={this._renderRow}
 					refreshControl={
 						<RefreshControl
@@ -297,31 +362,61 @@ class DashboardTab extends View {
 							onRefresh={this.onRefresh}
 						/>
 					}
+					key={numColumns}
 					numColumns={numColumns}
 					extraData={extraData}
-					key={numColumns}
 					style={{width: '100%'}}
+					contentContainerStyle={{
+						flexGrow: 1,
+						paddingVertical: style.padding,
+					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+				/>
+				<DialogueBox
+					showDialogue={showDialogue}
+					showHeader={showHeader}
+					header={header}
+					text={text}
+					style={dialogueBoxStyle}
+					showNegative={showNegative}
+					onPressNegative={onPressNegative}
+					showPositive={showPositive}
+					positiveText={positiveText}
+					onPressPositive={onPressPositive}
+					backdropOpacity={backdropOpacity}
 				/>
 			</View>
 		);
 	}
 
+	renderUnknown(id: number, tileStyle: Object, message: string): Object {
+		return (
+			<View
+				style={[tileStyle,
+					{
+						...Theme.Core.shadow,
+						backgroundColor: '#fff',
+					},
+				]}>
+				<Text
+					style={{
+						color: Theme.Core.eulaContentColor,
+					}}
+					key={id}>
+					{message}
+				</Text>
+			</View>
+		);
+	}
+
 	_renderRow(row: Object): Object {
-		let { screenProps, gateways } = this.props;
+		const { screenProps } = this.props;
+		const { intl } = screenProps;
 		let { tileWidth } = this.state;
-		let { data, objectType } = row.item;
-		let isGatewayActive = gateways.byId[data.clientId] && gateways.byId[data.clientId].online;
-		let tileMargin = this.getPadding() / 4;
+		const { data, objectType } = row.item;
+		const tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
-		let key = data.id;
-		if (objectType !== 'sensor' && objectType !== 'device') {
-			return <Text key={key}>unknown device or sensor</Text>;
-		}
-		if (!data) {
-			return <Text key={key}>Unknown device or sensor</Text>;
-		}
 
 		let tileStyle = {
 			flexDirection: 'column',
@@ -334,33 +429,39 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
+		if (objectType !== 'sensor' && objectType !== 'device') {
+			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(i18n.unknownItem));
+		}
+		if (!data) {
+			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(i18n.unknownItem));
+		}
+
 		if (objectType === 'sensor') {
 			return <SensorDashboardTile
+				key={data.id}
+				item={data}
+				isGatewayActive={data.isOnline}
 				style={tileStyle}
 				tileWidth={tileWidth}
-				item={data}
-				onPress={this.changeDisplayType}
 				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isGatewayActive}
+				onPress={this.changeDisplayType}
 			/>;
 		}
 
-		return (
-			<DashboardRow
-				style={tileStyle}
-				item={data}
-				tileWidth={tileWidth}
-				intl={screenProps.intl}
-				key={key}
-				isGatewayActive={isGatewayActive}
-				setScrollEnabled={this.setScrollEnabled}
-			/>
-		);
+		return <DashboardRow
+			key={data.id}
+			item={data}
+			isGatewayActive={data.isOnline}
+			style={tileStyle}
+			tileWidth={tileWidth}
+			intl={screenProps.intl}
+			setScrollEnabled={this.setScrollEnabled}
+			onPressDimButton={this.showDimInfo}
+		/>;
 	}
 
 	getPadding(): number {
-		const { appLayout } = this.props;
+		const { appLayout } = this.props.screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -370,7 +471,8 @@ class DashboardTab extends View {
 	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const isEmpty = !this.props.dashboard.deviceIds.length > 0 && !this.props.dashboard.sensorIds.length > 0;
+		const { isDBEmpty } = this.props;
+		const deviceWidth = isPortrait ? width : height;
 
 		const padding = this.getPadding();
 
@@ -379,8 +481,9 @@ class DashboardTab extends View {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				padding: isEmpty ? 30 : padding,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
+				paddingHorizontal: isDBEmpty ? 30 : padding,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				backgroundColor: Theme.Core.appBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
 			noItemsTitle: {
@@ -393,6 +496,36 @@ class DashboardTab extends View {
 				textAlign: 'center',
 				color: '#4C4C4C',
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			},
+			padding,
+			dialogueHeaderStyle: {
+				paddingVertical: 10,
+				paddingHorizontal: 20,
+				width: deviceWidth * 0.75,
+			},
+			dialogueHeaderTextStyle: {
+				fontSize: 13,
+			},
+			dialogueBodyStyle: {
+				paddingHorizontal: 20,
+				paddingVertical: 10,
+				width: deviceWidth * 0.75,
+			},
+			dialogueBodyTextStyle: {
+				fontSize: 13,
+				color: '#6B6969',
+			},
+			dialogueBoxStyle: {
+				borderRadius: 8,
+				elevation: 2,
+				shadowColor: '#000',
+				shadowRadius: 8,
+				shadowOpacity: 0.23,
+				shadowOffset: {
+					width: 0,
+					height: 1,
+				},
+				backgroundColor: '#fff',
 			},
 		};
 	}
@@ -407,26 +540,24 @@ const getRows = createSelector(
 		({ dashboard }: Object): Object => dashboard,
 		({ devices }: Object): Object => devices,
 		({ sensors }: Object): Object => sensors,
+		({ gateways }: Object): Object => gateways,
+		({ app }: Object): Object => app,
 	],
-	(dashboard: Object, devices: Object, sensors: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
+	const { deviceIds = [], sensorIds = []} = state.dashboard;
 	return {
 		rows: getRows(state),
-		gateways: state.gateways,
-		sensorsById: state.sensors.byId,
-		userProfile: getUserProfile(state),
-		tab: state.navigation.tab,
-		dashboard: state.dashboard,
-		appLayout: getRelativeDimensions(state.App.layout),
+		isDBEmpty: (deviceIds.length === 0) && (sensorIds.length === 0),
 	};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onChangeDisplayType: () => {
-			dispatch(changeSensorDisplayType());
+		changeSensorDisplayTypeDB: () => {
+			dispatch(changeSensorDisplayTypeDB());
 		},
 		dispatch,
 	};

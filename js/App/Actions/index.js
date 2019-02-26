@@ -28,7 +28,6 @@ import NavigationActions from './Navigation';
 import SensorActions from './Sensors';
 import DeviceActions from './Devices';
 import LiveApiActions from './LiveApi';
-import TabActions from './Tabs';
 import DashboardActions from './Dashboard';
 import JobActions from './Jobs';
 import AppStateActions from './AppState';
@@ -39,6 +38,8 @@ import WebSocketActions from './Websockets';
 import AppActions from './App';
 import ScheduleActions from './Schedule';
 import UserActions from './User';
+import LocalTest from './LocalTest';
+import LocalControl from './LocalControl';
 
 module.exports = {
 	...GatewayActions,
@@ -47,7 +48,6 @@ module.exports = {
 	...SensorActions,
 	...DeviceActions,
 	...LiveApiActions,
-	...TabActions,
 	...DashboardActions,
 	...JobActions,
 	...AppStateActions,
@@ -58,4 +58,6 @@ module.exports = {
 	...AppActions,
 	...ScheduleActions,
 	...UserActions,
+	...LocalTest,
+	...LocalControl,
 };

@@ -2,12 +2,9 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item
-		android:drawable="@color/gray"/>
+		android:drawable="@drawable/telldusliveapp_launchscreen"/>
 
-	<item>
-		<bitmap
-			android:gravity="fill"
-			android:src="@drawable/telldusliveapp_launchscreen"/>
-	</item>
+	<item
+		android:drawable="@drawable/logo_splash"/>
 
 </layer-list>

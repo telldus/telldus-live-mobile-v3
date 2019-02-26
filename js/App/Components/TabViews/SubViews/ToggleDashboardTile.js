@@ -21,42 +21,72 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
 import OffButton from './OffButton';
 import OnButton from './OnButton';
 
+import { shouldUpdate } from '../../../Lib';
+
 type Props = {
 	item: Object,
-	style: Object,
 	tileWidth: number,
+	actionIcons?: Object,
+
 	intl: Object,
 	isGatewayActive: boolean,
+	style: Object,
 	containerStyle?: number | Object | Array<any>,
 	offButtonStyle?: number | Object | Array<any>,
 	onButtonStyle?: number | Object | Array<any>,
 };
 
-class ToggleDashboardTile extends PureComponent<Props, null> {
+class ToggleDashboardTile extends View<Props, null> {
 	props: Props;
 
 	constructor(props: Props) {
 		super(props);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { tileWidth, ...others } = this.props;
+		const { tileWidth: tileWidthN, ...othersN } = nextProps;
+		if (tileWidth !== tileWidthN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'item']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	render(): Object {
-		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle } = this.props;
-		const { id, name, isInState, supportedMethods, methodRequested } = item;
+		const { item, tileWidth, intl, isGatewayActive, containerStyle, onButtonStyle, offButtonStyle, actionIcons = {} } = this.props;
+		const { id, name, isInState, supportedMethods = {}, methodRequested, local } = item;
 		const { TURNON, TURNOFF } = supportedMethods;
 
-		const onButton = <OnButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]} iconStyle={styles.iconStyle}
-			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl}/>;
-		const offButton = <OffButton id={id} name={name} isInState={isInState} fontSize={Math.floor(tileWidth / 8)}
-			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]} iconStyle={styles.iconStyle}
-			isGatewayActive={isGatewayActive} methodRequested={methodRequested} intl={intl}/>;
+		const sharedProps = {
+			id: id,
+			name: name,
+			isInState: isInState,
+			fontSize: Math.floor(tileWidth / 8),
+			isGatewayActive: isGatewayActive,
+			methodRequested: methodRequested,
+			intl: intl,
+			local: local,
+			iconStyle: styles.iconStyle,
+		};
+
+		const onButton = <OnButton {...sharedProps} actionIcon={actionIcons.TURNON}
+			enabled={!!TURNON} style={[styles.turnOnButtonContainer, onButtonStyle]}/>;
+		const offButton = <OffButton {...sharedProps} actionIcon={actionIcons.TURNOFF}
+			enabled={!!TURNOFF} style={[styles.turnOffButtonContainer, offButtonStyle]}/>;
 
 		let style = { ...this.props.style };
 		style.width = tileWidth;
@@ -64,8 +94,8 @@ class ToggleDashboardTile extends PureComponent<Props, null> {
 
 		return (
 			<View style={containerStyle}>
-				{(TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
-				{(TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
+				{(!!TURNOFF || (!TURNOFF && isInState === 'TURNOFF')) && offButton }
+				{(!!TURNON || (!TURNON && isInState === 'TURNON')) && onButton }
 			</View>
 		);
 	}
@@ -122,6 +152,9 @@ const styles = StyleSheet.create({
 	},
 	iconStyle: {
 		fontSize: 22,
+	},
+	iconStyleLarge: {
+		fontSize: 38,
 	},
 });
 

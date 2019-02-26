@@ -25,7 +25,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
-import { deviceSetState, requestDeviceAction } from '../../../Actions/Devices';
+import { deviceSetState } from '../../../Actions/Devices';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import i18n from '../../../Translations/common';
@@ -34,7 +34,6 @@ import Theme from '../../../Theme';
 
 type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
-	requestDeviceAction: (id: number, command: number) => void,
 	intl: Object,
 	name: string,
 	isGatewayActive: boolean,
@@ -45,6 +44,11 @@ type Props = {
 	enabled: boolean,
 	command: number,
 	id: number,
+	local: boolean,
+	isOpen: boolean,
+	closeSwipeRow: () => void,
+	actionIcon?: string,
+	onPressDeviceAction?: () => void,
 };
 
 class OnButton extends View {
@@ -60,17 +64,27 @@ class OnButton extends View {
 	}
 
 	onPress() {
-		this.props.requestDeviceAction(this.props.id, this.props.command);
-		this.props.deviceSetState(this.props.id, this.props.command);
+		const { command, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
+		}
+		this.props.deviceSetState(id, command);
 	}
 
 	render(): Object {
-		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle } = this.props;
+		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle, local, actionIcon } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState !== 'TURNOFF' ? '#fff' : '#a2a2a2') : (isInState !== 'TURNOFF' ? '#fff' : Theme.Core.brandSecondary);
+		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
+
+		const iconName = actionIcon ? actionIcon : 'on';
 
 		return (
 			<TouchableOpacity
@@ -78,10 +92,10 @@ class OnButton extends View {
 				onPress={this.onPress}
 				style={[this.props.style, buttonStyle]}
 				accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="on" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
+				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
 					methodRequested === 'TURNON' ?
-						<ButtonLoadingIndicator style={styles.dot} />
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
 				}
@@ -139,9 +153,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetState: (id: number, command: number, value?: number) => {
 			dispatch(deviceSetState(id, command, value));
-		},
-		requestDeviceAction: (id: number, command: number) => {
-			dispatch(requestDeviceAction(id, command));
 		},
 	};
 }

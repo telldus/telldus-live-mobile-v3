@@ -19,7 +19,7 @@
 // @flow
 'use strict';
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
@@ -27,16 +27,19 @@ import StopButton from './Navigational/StopButton';
 import UpButton from './Navigational/UpButton';
 import DownButton from './Navigational/DownButton';
 
+import { shouldUpdate } from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 type Props = {
 	item: Object,
 	tileWidth: number,
+	showStopButton?: boolean,
+
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
 	containerStyle?: number | Object | Array<any>,
-	showStopButton?: boolean,
 	upButtonStyle?: number | Object | Array<any>,
 	downButtonStyle?: number | Object | Array<any>,
 	stopButtonStyle?: number | Object | Array<any>,
@@ -46,7 +49,7 @@ type DefaultProps = {
 	showStopButton: boolean,
 };
 
-class NavigationalDashboardTile extends PureComponent<Props, null> {
+class NavigationalDashboardTile extends View<Props, null> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -57,21 +60,37 @@ class NavigationalDashboardTile extends PureComponent<Props, null> {
 		super(props);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+
+		const { showStopButton, ...others } = this.props;
+		const { showStopButton: showStopButtonN, ...othersN } = nextProps;
+		if (showStopButton !== showStopButtonN) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth']);
+		if (propsChange) {
+			return true;
+		}
+
+		return false;
+	}
+
 	render(): Object {
 		const { item, intl, isGatewayActive, containerStyle, upButtonStyle,
 			downButtonStyle, stopButtonStyle, showStopButton } = this.props;
-		const { name, supportedMethods, isInState } = item;
+		const { name, supportedMethods = {}, isInState, local } = item;
 		const { UP, DOWN, STOP } = supportedMethods;
 
 		const upButton = UP ? <UpButton isEnabled={true} style={[styles.navigationButton, {borderLeftWidth: 0}, upButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={UP} id={item.id} name={name} local={local}/> : null;
 		const downButton = DOWN ? <DownButton isEnabled={true} style={[styles.navigationButton, downButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={30} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={DOWN} id={item.id} name={name} local={local}/> : null;
 		const stopButton = STOP ? <StopButton isEnabled={true} style={[styles.navigationButton, stopButtonStyle]}
 			methodRequested={item.methodRequested} iconSize={16} isGatewayActive={isGatewayActive}
-			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name}/> : null;
+			intl={intl} isInState={isInState} supportedMethod={STOP} id={item.id} name={name} local={local}/> : null;
 
 		return (
 			<View style={containerStyle}>

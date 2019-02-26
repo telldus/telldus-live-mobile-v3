@@ -18,12 +18,12 @@
  */
 
 #import "AppDelegate.h"
+#import <Firebase.h>
 
 #import "React/RCTBundleURLProvider.h"
 #import "React/RCTRootView.h"
 #import "React/RCTPushNotificationManager.h"
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
+#import "RNGoogleSignin.h"
 
 #import "Orientation.h"
 #import "WidgetViewController.h"
@@ -33,7 +33,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	NSURL *jsCodeLocation;
-	[Fabric with:@[[Crashlytics class]]];
+	[FIRApp configure];
 
 	jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
   
@@ -101,10 +101,14 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 	[RCTPushNotificationManager didReceiveLocalNotification:notification];
 }
 
-- (NSURL *)applicationDocumentsDirectory
-{
-//  NSLog(@"---rahul--- %@", NSFileManager.defaultManager.)
-  return [[NSFileManager defaultManager] containerURLForSecurityApplicationGroupIdentifier:@"group.com.telldus.TodayWidgetDemo"];
+// method to respond to the google auth URL scheme
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+  
+  return [RNGoogleSignin application:application
+                         openURL:url
+               sourceApplication:sourceApplication
+                      annotation:annotation
+      ];
 }
-
 @end
