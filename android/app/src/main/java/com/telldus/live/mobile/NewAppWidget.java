@@ -49,6 +49,8 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
+import com.telldus.live.mobile.API.DevicesAPI;
+import com.telldus.live.mobile.API.OnAPITaskComplete;
 
 /**
  * Implementation of App Widget functionality.
@@ -62,13 +64,16 @@ public class NewAppWidget extends AppWidgetProvider {
     private static final String ACTION_UP = "ACTION_UP";
     private static final String ACTION_DOWN = "ACTION_DOWN";
     private static final String ACTION_STOP = "ACTION_STOP";
-    private static final String DIMMER_OFF = "ACTION_TRIM";
-    private static final String DIMMER_ON = "ACTION_DIMMERONE";
-    private static final String DIMMER_25 = "ACTION_DIMMERTWO";
-    private static final String DIMMER_50 = "ACTION_DIMMERTHREE";
-    private static final String DIMMER_75 = "ACTION_DIMMERFOUR";
+    private static final String DIMMER_25 = "ACTION_DIMMER_ONE";
+    private static final String DIMMER_50 = "ACTION_DIMMER_TWO";
+    private static final String DIMMER_75 = "ACTION_DIMMER_THREE";
 
     private PendingIntent pendingIntent;
+
+    // Important to instantiate here and not inside 'createDeviceActionApi'.
+    // This is to keep a single instance of 'handler' and 'runnable' created inside 'setDeviceState'
+    // for each device/widget.
+    static DevicesAPI deviceAPI = new DevicesAPI();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -126,14 +131,11 @@ public class NewAppWidget extends AppWidgetProvider {
                 views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget_four);
             }
 
-            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
-            views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
-
             if (hasBell) {
                 views.setViewVisibility(R.id.bell,View.VISIBLE);
                 views.setTextViewText(R.id.bell, "bell");
                 views.setInt(R.id.bell, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                views.setOnClickPendingIntent(R.id.bell, getPendingBELL(context,ACTION_BELL,appWidgetId));
+                views.setOnClickPendingIntent(R.id.bell, getPendingSelf(context, ACTION_BELL, appWidgetId));
             }
 
             if (hasOn) {
@@ -142,7 +144,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
                 views.setInt(R.id.iconOn, "setBackgroundColor", Color.parseColor("#FFFFFF"));
 
-                views.setOnClickPendingIntent(R.id.iconOn, getPendingBELL(context, DIMMER_ON, appWidgetId));
+                views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
 
                 if (state.equals("1")) {
                     views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
@@ -156,7 +158,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.iconOff, Color.parseColor("#1A365D"));
                 views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#FFFFFF"));
 
-                views.setOnClickPendingIntent(R.id.iconOff, getPendingBELL(context, DIMMER_OFF, appWidgetId));
+                views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
                 if (state.equals("2")) {
                     views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
@@ -184,15 +186,17 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                 views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
 
-                views.setOnClickPendingIntent(R.id.dimmer25, getPendingBELL(context, DIMMER_25, appWidgetId));
-                views.setOnClickPendingIntent(R.id.dimmer50, getPendingBELL(context, DIMMER_50, appWidgetId));
-                views.setOnClickPendingIntent(R.id.dimmer75, getPendingBELL(context, DIMMER_75, appWidgetId));
+                views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
+                views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
+                views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
 
                 if (state.equals("16")) {
                     Integer checkPoint = 0;
-                    if (deviceStateValue != null && deviceStateValue != "null") {
-                        checkPoint = getClosestCheckPoint(Integer.parseInt(deviceStateValue));
+                    if (deviceStateValue != null && deviceStateValue != "null" && !deviceStateValue.equals("0") && !deviceStateValue.equals("100")) {
+                        int value = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
+                        checkPoint = getClosestCheckPoint(value);
                     }
+
                     if (checkPoint == 25) {
                         views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#E26901"));
                         views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
@@ -232,7 +236,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
                         views.setTextColor(R.id.txtDimmer75, Color.parseColor("#FFFFFF"));
                     }
-                    if (deviceStateValue == "0") {
+                    if (deviceStateValue.equals("0")) {
                         views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                         views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                         views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
@@ -248,7 +252,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
                         views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#1A365D"));
                     }
-                    if (deviceStateValue == "100") {
+                    if (deviceStateValue.equals("100")) {
                         views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                         views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
                         views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
@@ -273,7 +277,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.uparrow, Color.parseColor("#E26901"));
                 views.setInt(R.id.uparrow, "setBackgroundColor", Color.parseColor("#FFFFFF"));
 
-                views.setOnClickPendingIntent(R.id.uparrow, getPendingBELL(context, ACTION_UP, appWidgetId));
+                views.setOnClickPendingIntent(R.id.uparrow, getPendingSelf(context, ACTION_UP, appWidgetId));
                 if (state.equals("128")) {
                     views.setTextColor(R.id.uparrow, Color.parseColor("#FFFFFF"));
                     views.setInt(R.id.uparrow, "setBackgroundColor", Color.parseColor("#E26901"));
@@ -286,7 +290,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.downarrow, Color.parseColor("#E26901"));
                 views.setInt(R.id.downarrow, "setBackgroundColor", Color.parseColor("#FFFFFF"));
 
-                views.setOnClickPendingIntent(R.id.downarrow, getPendingBELL(context, ACTION_DOWN, appWidgetId));
+                views.setOnClickPendingIntent(R.id.downarrow, getPendingSelf(context, ACTION_DOWN, appWidgetId));
                 if (state.equals("256")) {
                     views.setTextColor(R.id.downarrow, Color.parseColor("#FFFFFF"));
                     views.setInt(R.id.downarrow, "setBackgroundColor", Color.parseColor("#E26901"));
@@ -299,7 +303,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.stopicon, Color.parseColor("#1A365D"));
                 views.setInt(R.id.stopicon, "setBackgroundColor", Color.parseColor("#FFFFFF"));
 
-                views.setOnClickPendingIntent(R.id.stopicon, getPendingBELL(context, ACTION_STOP, appWidgetId));
+                views.setOnClickPendingIntent(R.id.stopicon, getPendingSelf(context, ACTION_STOP, appWidgetId));
                 if (state.equals("512")) {
                     views.setTextColor(R.id.stopicon, Color.parseColor("#FFFFFF"));
                     views.setInt(R.id.stopicon, "setBackgroundColor", Color.parseColor("#1A365D"));
@@ -325,25 +329,11 @@ public class NewAppWidget extends AppWidgetProvider {
         }
     }
 
-    protected PendingIntent getPendingSelfIntent(Context context, String action, int id) {
-        Intent intent = new Intent(context, getClass());
-        intent.setAction(action);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
-        return PendingIntent.getBroadcast(context, id, intent, 0);
-    }
-
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
         Intent intent = new Intent(context, NewAppWidget.class);
         intent.setAction(action);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
         return PendingIntent.getBroadcast(context, id, intent, 0);
-    }
-
-    private static PendingIntent getPendingBELL(Context context,String action,int id) {
-        Intent intent = new Intent(context,NewAppWidget.class);
-        intent.setAction(action);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
-        return PendingIntent.getBroadcast(context,id,intent,0);
     }
 
     @Override
@@ -355,7 +345,7 @@ public class NewAppWidget extends AppWidgetProvider {
             return;
         }
 
-        int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        int wigetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         if (wigetID == AppWidgetManager.INVALID_APPWIDGET_ID) {
             return;
         }
@@ -369,31 +359,37 @@ public class NewAppWidget extends AppWidgetProvider {
         String state = id.getState();
 
         if (ACTION_BELL.equals(intent.getAction())) {
-            createDeviceApi(context, id.getDeviceID(), 4, wigetID, db, "Bell");
+            createDeviceApi(id.getDeviceID(), 4, 0, wigetID, context);
         }
         if (ACTION_UP.equals(intent.getAction())) {
-            createDeviceApi(context, id.getDeviceID(), 128, wigetID, db, "UDS");
+            createDeviceApi(id.getDeviceID(), 128, 0, wigetID, context);
         }
         if (ACTION_DOWN.equals(intent.getAction())) {
-            createDeviceApi(context, id.getDeviceID(), 256, wigetID, db, "UDS");
+            createDeviceApi(id.getDeviceID(), 256, 0, wigetID, context);
         }
         if (ACTION_STOP.equals(intent.getAction())) {
-            createDeviceApi(context, id.getDeviceID(), 512, wigetID, db, "UDS");
+            createDeviceApi(id.getDeviceID(), 512, 0, wigetID, context);
         }
-        if (DIMMER_OFF.equals(intent.getAction())) {
-            createAPIDIMMER(id.getDeviceID(), 2, "0", wigetID, context);
+        if (ACTION_OFF.equals(intent.getAction())) {
+            createDeviceApi(id.getDeviceID(), 2, 0, wigetID, context);
         }
         if (DIMMER_25.equals(intent.getAction())) {
-            createAPIDIMMER(id.getDeviceID(), 25, "25", wigetID, context);
+            DevicesUtilities deviceUtils = new DevicesUtilities();
+            int value = deviceUtils.toDimmerValue(25);
+            createDeviceApi(id.getDeviceID(), 16, value, wigetID, context);
         }
         if (DIMMER_50.equals(intent.getAction())) {
-            createAPIDIMMER(id.getDeviceID(), 50, "50", wigetID, context);
+            DevicesUtilities deviceUtils = new DevicesUtilities();
+            int value = deviceUtils.toDimmerValue(50);
+            createDeviceApi(id.getDeviceID(), 16, value, wigetID, context);
         }
         if (DIMMER_75.equals(intent.getAction())) {
-            createAPIDIMMER(id.getDeviceID(), 75, "75", wigetID, context);
+            DevicesUtilities deviceUtils = new DevicesUtilities();
+            int value = deviceUtils.toDimmerValue(75);
+            createDeviceApi(id.getDeviceID(), 16, value, wigetID, context);
         }
-        if (DIMMER_ON.equals(intent.getAction())) {
-            createAPIDIMMER(id.getDeviceID(), 1, "1", wigetID, context);
+        if (ACTION_ON.equals(intent.getAction())) {
+            createDeviceApi(id.getDeviceID(), 1, 0, wigetID, context);
         }
     }
 
@@ -415,15 +411,15 @@ public class NewAppWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             boolean b = db.delete(appWidgetId);
             if (b) {
-                Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Successfully deleted", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Widget not created", Toast.LENGTH_LONG).show();
             }
             int count = db.CountDeviceWidgetValues();
             if (count > 0) {
-                Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "have data", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(context,"No Device",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"No Device", Toast.LENGTH_SHORT).show();
                 prefManager.DeviceDB(false);
                 prefManager.websocketService(false);
                 context.stopService(new Intent(context, MyService.class));
@@ -431,115 +427,29 @@ public class NewAppWidget extends AppWidgetProvider {
         }
     }
 
-
-    public void createAPIDIMMER(int deviceid, int value, final String action, final int wigetID,
-                         final Context ctx)
-    {
-
-        final PrefManager prefManager = new PrefManager(ctx);
+    public void createDeviceApi(int deviceId, int method, int value, final int widgetId, final Context context) {
+        PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
-        String str = "https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+16+"&value="+value;
-
-            AndroidNetworking.get(str)
-                    .addHeaders("Content-Type", "application/json")
-                    .addHeaders("Accpet", "application/json")
-                    .addHeaders("Authorization", "Bearer " + accessToken)
-                    .setPriority(Priority.LOW)
-                    .build()
-                    .getAsJSONObject(new JSONObjectRequestListener() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-
-                            String status = response.optString("status");
-                            String error = response.optString("error");
-                            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(ctx);
-                            if (!status.isEmpty() && status != null && action.equals("0")) {
-                                prefManager.setDimmer("0");
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("25")) {
-                                prefManager.setDimmer("25");
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("50")) {
-                                prefManager.setDimmer("50");
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("75")) {
-                                prefManager.setDimmer("75");
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("1")) {
-                                prefManager.setDimmer("1");
-                            }
-                            if (!error.isEmpty() && error != null) {
-                                Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
-                            }
-                            updateAppWidget(ctx, appWidgetManager, wigetID);
-                        }
-
-                        @Override
-                        public void onError(ANError anError) {
-                        }
-                    });
-    }
-
-
-    public void createDeviceApi(final Context ctx, int deviceid, int method, final int wigetID, final MyDBHandler db, final String action) {
-        PrefManager prefManager = new PrefManager(ctx);
-        String  accessToken = prefManager.getAccess();
-        String str = "https://api3.telldus.com/oauth2/device/command?id="+deviceid+"&method="+method+"&value=null";
-
-        AndroidNetworking.get(str)
-                .addHeaders("Content-Type", "application/json")
-                .addHeaders("Accpet", "application/json")
-                .addHeaders("Authorization", "Bearer " + accessToken)
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String status = response.optString("status");
-                            String error = response.optString("error");
-
-                            if (!status.isEmpty() && status != null && action.equals("On")) {
-                                boolean b = db.updateAction("1",wigetID);
-
-                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                updateAppWidget(ctx, appWidgetManager, wigetID);
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("Off")) {
-                                boolean b = db.updateAction("2",wigetID);
-
-                                AppWidgetManager appWidgetManager  = AppWidgetManager.getInstance(ctx);
-                                updateAppWidget(ctx, appWidgetManager, wigetID);
-                            }
-                            if (!status.isEmpty() && status !=null && action.equals("Bell")) {
-                                Toast.makeText(ctx,"SuccessFully",Toast.LENGTH_SHORT).show();
-                            }
-                            if (!status.isEmpty() && status != null && action.equals("UDS")) {
-                                Toast.makeText(ctx,"Success",Toast.LENGTH_LONG).show();
-                            }
-                            if (!error.isEmpty() && error != null) {
-                                Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
-                            }
-                            if (!error.isEmpty() && error != null && action.equals("Off")) {
-                                Toast.makeText(ctx,error,Toast.LENGTH_LONG).show();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        };
-                    }
-
-                    @Override
-                    public void onError(ANError anError) {
-
-                    }
-                });
+        String params = "device/command?id="+deviceId+"&method="+method+"&value="+value;
+        deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+            @Override
+            public void onError(ANError error) {
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+        });
     }
 
     public static Integer getClosestCheckPoint(Integer value) {
         if (value == null) {
             return 0;
         }
-        Integer[] checkPoints = new Integer[]{25, 50, 70};
+        Integer[] checkPoints = new Integer[]{25, 50, 75};
         Integer distOne = Math.abs(checkPoints[0] - value);
         Integer distTwo = Math.abs(checkPoints[1] - value);
         Integer distThree = Math.abs(checkPoints[2] - value);
