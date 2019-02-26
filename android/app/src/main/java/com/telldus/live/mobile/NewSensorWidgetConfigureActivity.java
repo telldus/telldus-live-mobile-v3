@@ -47,8 +47,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
@@ -72,6 +70,8 @@ import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
+import com.telldus.live.mobile.API.API;
+import com.telldus.live.mobile.API.OnAPITaskComplete;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
@@ -404,44 +404,39 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         }
     }
     void createSensorApi() {
-        accessToken = prefManager.getAccess();
 
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/sensors/list?includeValues=1&includeScale=1")
-            .addHeaders("Content-Type", "application/json")
-            .addHeaders("Accpet", "application/json")
-            .addHeaders("Authorization", "Bearer " + accessToken)
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsJSONObject(new JSONObjectRequestListener() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        JSONObject sensorData = new JSONObject(response.toString());
-                        JsonsensorList = sensorData.getJSONArray("sensor");
-                        for (int i = 0; i < JsonsensorList.length(); i++) {
-                            JSONObject curObj = JsonsensorList.getJSONObject(i);
-                            String name = curObj.getString("name");
-                            if (name == null || name.equals("null")) {
-                                name = "Unknown";
-                            }
-                            Integer id = curObj.getInt("id");
-                            String last = String.valueOf(curObj.getLong("lastUpdated"));
-                            nameListItems.add(name);
-                            idList.add(id.toString());
+        String params = "sensors/list?includeValues=1&includeScale=1";
+        API endPoints = new API();
+        endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+                try {
+                    JSONObject sensorData = new JSONObject(response.toString());
+                    JsonsensorList = sensorData.getJSONArray("sensor");
+                    for (int i = 0; i < JsonsensorList.length(); i++) {
+                        JSONObject curObj = JsonsensorList.getJSONObject(i);
+                        String name = curObj.getString("name");
+                        if (name == null || name.equals("null")) {
+                            name = "Unknown";
                         }
-                        sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                        sensorIdList = idList.toArray(new CharSequence[idList.size()]);
-                        updateUI();
-                    } catch (JSONException e) {
-                        updateUI();
-                        e.printStackTrace();
+                        Integer id = curObj.getInt("id");
+                        String last = String.valueOf(curObj.getLong("lastUpdated"));
+                        nameListItems.add(name);
+                        idList.add(id.toString());
                     }
-                }
-                @Override
-                public void onError(ANError anError) {
+                    sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                    sensorIdList = idList.toArray(new CharSequence[idList.size()]);
                     updateUI();
+                } catch (JSONException e) {
+                    updateUI();
+                    e.printStackTrace();
                 }
-            });
+            }
+            @Override
+            public void onError(ANError error) {
+                updateUI();
+            }
+        });
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

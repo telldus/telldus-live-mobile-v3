@@ -43,8 +43,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
@@ -68,6 +66,8 @@ import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
+import com.telldus.live.mobile.API.API;
+import com.telldus.live.mobile.API.OnAPITaskComplete;
 
 /**
  * The configuration screen for the {@link NewAppWidget NewAppWidget} AppWidget.
@@ -301,69 +301,64 @@ public class NewAppWidgetConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-    accessToken = prefManager.getAccess();
-        AndroidNetworking.get("https://api3.telldus.com/oauth2/devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room")
-            .addHeaders("Content-Type", "application/json")
-            .addHeaders("Accpet", "application/json")
-            .addHeaders("Authorization", "Bearer " + accessToken)
-            .setPriority(Priority.LOW)
-            .build()
-            .getAsJSONObject(new JSONObjectRequestListener() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
+        String params = "devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room";
+        API endPoints = new API();
+        endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+                try {
 
-                        DevicesUtilities deviceUtils = new DevicesUtilities();
+                    DevicesUtilities deviceUtils = new DevicesUtilities();
 
-                        JSONObject deviceData = new JSONObject(response.toString());
-                        JSONArray deviceList = deviceData.getJSONArray("device");
+                    JSONObject deviceData = new JSONObject(response.toString());
+                    JSONArray deviceList = deviceData.getJSONArray("device");
 
-                        for (int i = 0; i < deviceList.length(); i++) {
-                            JSONObject curObj = deviceList.getJSONObject(i);
-                            String name = curObj.getString("name");
-                            stateID = curObj.getInt("state");
-                            Integer methods = curObj.getInt("methods");
-                            String deviceType = curObj.getString("deviceType");
-                            // ToDo : Only statevalue(String) is handled at widget side.
-                            // The app has migrated to new/future data structure
-                            // "statevalues"(Object).
-                            String stateValue = curObj.getString("statevalue");
+                    for (int i = 0; i < deviceList.length(); i++) {
+                        JSONObject curObj = deviceList.getJSONObject(i);
+                        String name = curObj.getString("name");
+                        stateID = curObj.getInt("state");
+                        Integer methods = curObj.getInt("methods");
+                        String deviceType = curObj.getString("deviceType");
+                        // ToDo : Only statevalue(String) is handled at widget side.
+                        // The app has migrated to new/future data structure
+                        // "statevalues"(Object).
+                        String stateValue = curObj.getString("statevalue");
 
-                            Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
-                            Integer sizeSuppMeth = supportedMethods.size();
-                            Boolean hasLearn = supportedMethods.get("LEARN");
-                            if (hasLearn != null && hasLearn) {
-                                sizeSuppMeth = sizeSuppMeth - 1;
-                            }
-                            Boolean showDevice = sizeSuppMeth > 2;
-
-                            if (showDevice) {
-                                Integer id = curObj.getInt("id");
-                                nameListItems.add(name);
-                                idList.add(id.toString());
-
-                                Map<String, Object> info = new HashMap<String, Object>();
-                                info.put("state", String.valueOf(stateID));
-                                info.put("methods", methods);
-                                info.put("name", name);
-                                info.put("deviceType", deviceType);
-                                info.put("stateValue", stateValue);
-                                DeviceInfoMap.put(id, info);
-                            }
+                        Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+                        Integer sizeSuppMeth = supportedMethods.size();
+                        Boolean hasLearn = supportedMethods.get("LEARN");
+                        if (hasLearn != null && hasLearn) {
+                            sizeSuppMeth = sizeSuppMeth - 1;
                         }
-                        deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
-                        deviceIdList = idList.toArray(new CharSequence[idList.size()]);
-                        updateUI();
-                    } catch (JSONException e) {
-                        updateUI();
-                        e.printStackTrace();
-                    };
-                }
-                @Override
-                public void onError(ANError anError) {
+                        Boolean showDevice = sizeSuppMeth > 2;
+
+                        if (showDevice) {
+                            Integer id = curObj.getInt("id");
+                            nameListItems.add(name);
+                            idList.add(id.toString());
+
+                            Map<String, Object> info = new HashMap<String, Object>();
+                            info.put("state", String.valueOf(stateID));
+                            info.put("methods", methods);
+                            info.put("name", name);
+                            info.put("deviceType", deviceType);
+                            info.put("stateValue", stateValue);
+                            DeviceInfoMap.put(id, info);
+                        }
+                    }
+                    deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
+                    deviceIdList = idList.toArray(new CharSequence[idList.size()]);
                     updateUI();
-                }
-              });
+                } catch (JSONException e) {
+                    updateUI();
+                    e.printStackTrace();
+                };
+            }
+            @Override
+            public void onError(ANError error) {
+                updateUI();
+            }
+        });
     }
 
 

@@ -26,8 +26,6 @@ import android.util.Log;
 import android.widget.Toast;
 import android.appwidget.AppWidgetManager;
 
-import com.androidnetworking.AndroidNetworking;
-import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
