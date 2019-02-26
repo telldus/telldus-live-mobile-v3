@@ -230,7 +230,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             btAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (id == 0) {// ToDo: translate
+                    if (id == null || id == 0 ) {// ToDo: translate
                         Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
@@ -259,6 +259,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     }
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
+                    String currentUserId = prefManager.getUserId();
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -267,11 +268,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         deviceSupportedMethods,
                         deviceTypeCurrent,
                         "", // As of now deviceStateValue does matters for only DIM devices.
-                        switchStatus);
+                        switchStatus,
+                        currentUserId);
                     db.addUser(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
-
 
                     boolean web_service = prefManager.getWebService();
                     if (!web_service) {
@@ -300,24 +301,24 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
                             ,R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.pick_device)
-                            .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    selectedDeviceIndex = which;
-                                    deviceName.setText(deviceNameList[which]);
-                                    id = Integer.parseInt(String.valueOf(deviceIdList[which]));
+                        .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                selectedDeviceIndex = which;
+                                deviceName.setText(deviceNameList[which]);
+                                id = Integer.parseInt(String.valueOf(deviceIdList[which]));
 
-                                    Map<String, Object> info = DeviceInfoMap.get(id);
+                                Map<String, Object> info = DeviceInfoMap.get(id);
 
-                                    deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                    deviceCurrentState = info.get("state").toString();
+                                deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                deviceCurrentState = info.get("state").toString();
 
-                                    deviceTypeCurrent = info.get("deviceType").toString();
-                                    String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
-                                    tvIcon1.setText(deviceIcon);
+                                deviceTypeCurrent = info.get("deviceType").toString();
+                                String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
+                                tvIcon1.setText(deviceIcon);
 
-                                    ad.dismiss();
-                                }
-                            });
+                                ad.dismiss();
+                            }
+                        });
                     ad = builder.show();
                 }
             });

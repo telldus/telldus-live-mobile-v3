@@ -36,9 +36,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "Telldus.db";
-    private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
 
+    private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
     public static final String WIDGET_ID = "widgetIdDevice";
+    public static final String WIDGET_DEVICE_USER_ID = "userId";
     public static final String DEVICE_ID = "deviceId";
     public static final String WIDGET_NAME = "deviceName";
     public static final String WIDGET_STATE = "deviceState";
@@ -49,6 +50,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public static final String TABLE_WIDGET_INFO_SENSOR = "WidgetInfoSensor";
     public static final String SENSOR_WIDGET_ID = "widgetIdSensor";
+    public static final String WIDGET_SENSOR_USER_ID = "userId";
     public static final String SENSOR_DEVICE_ID = "sensorId";
     public static final String SENSOR_WIDGET_NAME = "sensorName";
     public static final String SENSOR_VALUE_TYPE = "sensorScaleType";
@@ -66,12 +68,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         String CREATE_USER_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_DEVICE + "("+ WIDGET_ID + " INTEGER," + DEVICE_ID
                 + " INTEGER," + WIDGET_NAME + " TEXT," + WIDGET_STATE + " TEXT," + DEVICE_METHODS
-                + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT + " TEXT" + ")";
+                + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT
+                + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ SENSOR_WIDGET_ID + " INTEGER," + SENSOR_DEVICE_ID
                 + " INTEGER," + SENSOR_WIDGET_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE
-                 + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT + " TEXT" + ")";
+                + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT
+                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT" + ")";
 
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
@@ -95,6 +99,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(DEVICE_TYPE, mDeviceInfo.getDeviceType());
         values.put(DEVICE_STATE_VALUE, mDeviceInfo.getDeviceStateValue());
         values.put(TRANSPARENT, mDeviceInfo.getTransparent());
+        values.put(WIDGET_DEVICE_USER_ID, mDeviceInfo.getUserId());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -114,13 +119,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(SENSOR_UNIT, mSensorInfo.getSensorUnit());
         values.put(SENSOR_ICON, mSensorInfo.getSensorIcon());
         values.put(TRANSPARENT, mSensorInfo.getTransparent());
+        values.put(WIDGET_SENSOR_USER_ID, mSensorInfo.getUserId());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_SENSOR, null, values);
         db.close();
     }
-
-
 
     public DeviceInfo findUser(int id) {
         String query = "Select * FROM " + TABLE_WIDGET_INFO_DEVICE + " WHERE " + WIDGET_ID + " =  \"" + id + "\"";
@@ -138,6 +142,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setDeviceType(cursor.getString(5));
             r.setDeviceStateValue(cursor.getString(6));
             r.setTransparent(cursor.getString(7));
+            r.setUserId(cursor.getString(8));
 
             cursor.close();
         } else {
@@ -165,6 +170,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setSensorUnit(cursor.getString(6));
             r.setSensorIcon(cursor.getString(7));
             r.setTransparent(cursor.getString(8));
+            r.setUserId(cursor.getString(9));
 
             cursor.close();
         } else {
@@ -209,6 +215,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setDeviceMethods(cursor.getInt(4));
             r.setDeviceType(cursor.getString(5));
             r.setDeviceStateValue(cursor.getString(6));
+            r.setUserId(cursor.getString(8));
 
             cursor.close();
         } else {

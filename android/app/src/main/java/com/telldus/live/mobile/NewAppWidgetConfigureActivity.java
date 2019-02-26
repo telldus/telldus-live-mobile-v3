@@ -206,7 +206,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
             btAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (id == 0) {
+                    if (id == null || id == 0) {
                         Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any device. Please select a device to add as widget.",Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
@@ -234,6 +234,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     }
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
+                    String currentUserId = prefManager.getUserId();
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -242,7 +243,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceSupportedMethods,
                         deviceTypeCurrent,
                         deviceStateValueCurrent,
-                        switchStatus);
+                        switchStatus,
+                        currentUserId);
                     db.addUser(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 

@@ -218,7 +218,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             btAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (id == 0) {
+                    if (id == null || id == 0) {
                         Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any sensor. Please select a sensor to add as widget.",Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
@@ -251,6 +251,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                     }
 
+                    String currentUserId = prefManager.getUserId();
                     SensorInfo mSensorInfo = new SensorInfo(
                         mAppWidgetId,
                         sensorName.getText().toString(),
@@ -260,7 +261,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         senUnit,
                         senIcon,
                         lastUp,
-                        transparent);
+                        transparent,
+                        currentUserId);
                     database.addSensor(mSensorInfo);
                     views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 

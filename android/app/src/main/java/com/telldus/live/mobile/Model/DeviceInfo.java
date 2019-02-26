@@ -28,13 +28,13 @@ public class DeviceInfo {
     String transparent;
     String deviceType;
     String deviceStateValue;
+    String userId;
 
-    public DeviceInfo()
-    {
+    public DeviceInfo() {
 
     }
 
-    public DeviceInfo(String state, int widgetID, int deviceID, String deviceName, Integer methods, String deviceType, String deviceStateValue, String transparent) {
+    public DeviceInfo(String state, int widgetID, int deviceID, String deviceName, Integer methods, String deviceType, String deviceStateValue, String transparent, String userId) {
         this.state = state;
         this.widgetID = widgetID;
         this.deviceID = deviceID;
@@ -43,17 +43,18 @@ public class DeviceInfo {
         this.transparent = transparent;
         this.deviceType = deviceType;
         this.deviceStateValue = deviceStateValue;
+        this.userId = userId;
     }
 
     public String getState() {
         return state;
     }
-    public String getTransparent()
-    {
+
+    public String getTransparent() {
         return transparent;
     }
-    public void setTransparent(String transparent)
-    {
+
+    public void setTransparent(String transparent) {
         this.transparent=transparent;
     }
 
@@ -107,5 +108,13 @@ public class DeviceInfo {
 
     public void setDeviceStateValue(String deviceStateValue) {
         this.deviceStateValue = deviceStateValue;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
