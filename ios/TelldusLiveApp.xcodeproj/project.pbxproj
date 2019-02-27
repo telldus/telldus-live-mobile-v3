@@ -25,6 +25,8 @@
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
 		26591AF421E899F300B1AF0F /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */; };
 		267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 267ABE5920F78730006CD1B5 /* libRNSVG.a */; };
+		26AE96182226874F00AC557A /* DisplayMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96162226874E00AC557A /* DisplayMode.m */; };
+		26AE96192226874F00AC557A /* Linking.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96172226874E00AC557A /* Linking.m */; };
 		26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */; };
 		26BB28B2216230CA0027C32A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28B1216230CA0027C32A /* Release.xcconfig */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
@@ -33,6 +35,21 @@
 		26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */; };
 		26D4DC5F21424DCC0060DC8E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5E21424DCB0060DC8E /* libz.tbd */; };
 		26D4DD542142612A0060DC8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 26D4DD1E214261290060DC8E /* GoogleService-Info.plist */; };
+		26EDB68222266AD0003EF9E3 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26EDB68122266ACF003EF9E3 /* NotificationCenter.framework */; };
+		26EDB68622266AD0003EF9E3 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 26EDB68522266AD0003EF9E3 /* TodayViewController.m */; };
+		26EDB68D22266AD1003EF9E3 /* Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 26EDB68022266ACF003EF9E3 /* Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		26EDB6CB22266DC9003EF9E3 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
+		26EDB6CC22266DC9003EF9E3 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1440287A1EE69001000945A3 /* libRCTAnimation.a */; };
+		26EDB6CD22266DC9003EF9E3 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
+		26EDB6CE22266DC9003EF9E3 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
+		26EDB6CF22266DC9003EF9E3 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
+		26EDB6D022266DC9003EF9E3 /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
+		26EDB6D122266DC9003EF9E3 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
+		26EDB6D222266DC9003EF9E3 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		26EDB6D322266DC9003EF9E3 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 265C72D921AD38660003B41D /* libRNGestureHandler.a */; };
+		26EDB6D422266DF8003EF9E3 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
+		26EDB6D522266DF8003EF9E3 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
+		26EDB6D622266E36003EF9E3 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
 		28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F593D0DBCA743F4997FEAF8 /* EvilIcons.ttf */; };
 		30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1D49054AB364C649FCD5506 /* Zocial.ttf */; };
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
@@ -338,6 +355,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFirebase;
 		};
+		26EDB68B22266AD1003EF9E3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26EDB67F22266ACF003EF9E3;
+			remoteInfo = Widget;
+		};
 		26F1F820209B276400ADBBC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B4B40A8A593241268FE52652 /* RNRSA.xcodeproj */;
@@ -459,6 +483,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		26EDB6C922266AD2003EF9E3 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				26EDB68D22266AD1003EF9E3 /* Widget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTActionSheet.xcodeproj; path = "../node_modules/react-native/Libraries/ActionSheetIOS/RCTActionSheet.xcodeproj"; sourceTree = "<group>"; };
@@ -486,6 +524,10 @@
 		26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		267ABE2520F78730006CD1B5 /* RNSVG.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		26A439EF2100AB5500022896 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTOrientation.xcodeproj; path = "../node_modules/react-native-orientation-locker/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; };
+		26AE96142226874E00AC557A /* Linking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Linking.h; sourceTree = "<group>"; };
+		26AE96152226874E00AC557A /* DisplayMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisplayMode.h; sourceTree = "<group>"; };
+		26AE96162226874E00AC557A /* DisplayMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DisplayMode.m; sourceTree = "<group>"; };
+		26AE96172226874E00AC557A /* Linking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Linking.m; sourceTree = "<group>"; };
 		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		26BB28B1216230CA0027C32A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		26C0E617205C17B600E9AD6A /* RNI18n.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; };
@@ -499,6 +541,11 @@
 		26DA5FD32045A28C003FCA91 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		26DA5FD42045A28D003FCA91 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		26DA5FD52045A28D003FCA91 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		26EDB68022266ACF003EF9E3 /* Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Widget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		26EDB68122266ACF003EF9E3 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		26EDB68422266AD0003EF9E3 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		26EDB68522266AD0003EF9E3 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		26EDB68A22266AD1003EF9E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		34DA95593A1544E09D95F18F /* libRNReactNativeAccessibility.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNReactNativeAccessibility.a; sourceTree = "<group>"; };
 		3D81ECCBA2B14DAB9C26E714 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
@@ -576,6 +623,26 @@
 				7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */,
 				77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */,
 				7B031B537B7F4F948A5901C4 /* libRNGestureHandler.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		26EDB67D22266ACF003EF9E3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26EDB6D222266DC9003EF9E3 /* libReact.a in Frameworks */,
+				26EDB68222266AD0003EF9E3 /* NotificationCenter.framework in Frameworks */,
+				26EDB6D622266E36003EF9E3 /* libRCTGeolocation.a in Frameworks */,
+				26EDB6D422266DF8003EF9E3 /* libRCTVibration.a in Frameworks */,
+				26EDB6D522266DF8003EF9E3 /* libRCTWebSocket.a in Frameworks */,
+				26EDB6CB22266DC9003EF9E3 /* libRCTActionSheet.a in Frameworks */,
+				26EDB6CC22266DC9003EF9E3 /* libRCTAnimation.a in Frameworks */,
+				26EDB6CD22266DC9003EF9E3 /* libRCTImage.a in Frameworks */,
+				26EDB6CE22266DC9003EF9E3 /* libRCTLinking.a in Frameworks */,
+				26EDB6CF22266DC9003EF9E3 /* libRCTNetwork.a in Frameworks */,
+				26EDB6D022266DC9003EF9E3 /* libRCTSettings.a in Frameworks */,
+				26EDB6D122266DC9003EF9E3 /* libRCTText.a in Frameworks */,
+				26EDB6D322266DC9003EF9E3 /* libRNGestureHandler.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,6 +860,20 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		26EDB68322266AD0003EF9E3 /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				26AE96152226874E00AC557A /* DisplayMode.h */,
+				26AE96162226874E00AC557A /* DisplayMode.m */,
+				26AE96142226874E00AC557A /* Linking.h */,
+				26AE96172226874E00AC557A /* Linking.m */,
+				26EDB68422266AD0003EF9E3 /* TodayViewController.h */,
+				26EDB68522266AD0003EF9E3 /* TodayViewController.m */,
+				26EDB68A22266AD1003EF9E3 /* Info.plist */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
 		26F1F81D209B276400ADBBC0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -845,6 +926,7 @@
 				26D4DC5A21424DAC0060DC8E /* SafariServices.framework */,
 				26D4DC2221424D8A0060DC8E /* AddressBook.framework */,
 				9E4E10C72947027C61D0AB0E /* libPods-TelldusLiveApp.a */,
+				26EDB68122266ACF003EF9E3 /* NotificationCenter.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -907,6 +989,7 @@
 				26BB28AF21622F8F0027C32A /* Debug.xcconfig */,
 				13B07FAE1A68108700A75B9A /* TelldusLiveApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
+				26EDB68322266AD0003EF9E3 /* Widget */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				978DD6CDC2824ACE99408D92 /* Resources */,
 				35B6E1CA58815496FB5B4C7C /* Pods */,
@@ -922,6 +1005,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */,
+				26EDB68022266ACF003EF9E3 /* Widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -977,15 +1061,35 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				B99843B15E0A99117432243F /* [CP] Copy Pods Resources */,
 				2699DC2B21EF50C8009D8983 /* ShellScript */,
+				26EDB6C922266AD2003EF9E3 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				26EDB68C22266AD1003EF9E3 /* PBXTargetDependency */,
 			);
 			name = TelldusLiveApp;
 			productName = "Hello World";
 			productReference = 13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */;
 			productType = "com.apple.product-type.application";
+		};
+		26EDB67F22266ACF003EF9E3 /* Widget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 26EDB6C822266AD1003EF9E3 /* Build configuration list for PBXNativeTarget "Widget" */;
+			buildPhases = (
+				26EDB67C22266ACF003EF9E3 /* Sources */,
+				26EDB67D22266ACF003EF9E3 /* Frameworks */,
+				26EDB67E22266ACF003EF9E3 /* Resources */,
+				26AE96132226785700AC557A /* Bundle React Native code and images */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Widget;
+			productName = Widget;
+			productReference = 26EDB68022266ACF003EF9E3 /* Widget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -1006,6 +1110,11 @@
 								enabled = 1;
 							};
 						};
+					};
+					26EDB67F22266ACF003EF9E3 = {
+						CreatedOnToolsVersion = 10.1;
+						DevelopmentTeam = M2879GJ5VD;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -1129,6 +1238,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* TelldusLiveApp */,
+				26EDB67F22266ACF003EF9E3 /* Widget */,
 			);
 		};
 /* End PBXProject section */
@@ -1558,6 +1668,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		26EDB67E22266ACF003EF9E3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1591,6 +1708,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\"\n";
+		};
+		26AE96132226785700AC557A /* Bundle React Native code and images */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle React Native code and images";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh index.widget.js\n";
 		};
 		811565FD9DF7088506EC7B92 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1640,7 +1775,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		26EDB67C22266ACF003EF9E3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26AE96192226874F00AC557A /* Linking.m in Sources */,
+				26EDB68622266AD0003EF9E3 /* TodayViewController.m in Sources */,
+				26AE96182226874F00AC557A /* DisplayMode.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		26EDB68C22266AD1003EF9E3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26EDB67F22266ACF003EF9E3 /* Widget */;
+			targetProxy = 26EDB68B22266AD1003EF9E3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -1649,6 +1802,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M2879GJ5VD;
@@ -1695,6 +1849,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = M2879GJ5VD;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1731,6 +1886,66 @@
 				PRODUCT_NAME = TelldusLiveApp;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		26EDB68E22266AD1003EF9E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M2879GJ5VD;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Widget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		26EDB68F22266AD1003EF9E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M2879GJ5VD;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = Widget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.Widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -1843,6 +2058,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		26EDB6C822266AD1003EF9E3 /* Build configuration list for PBXNativeTarget "Widget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26EDB68E22266AD1003EF9E3 /* Debug */,
+				26EDB68F22266AD1003EF9E3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
