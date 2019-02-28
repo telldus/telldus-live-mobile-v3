@@ -99,7 +99,7 @@ export default class ChartLegend extends View<Props, null> {
 						<Icon name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} size={fontSizeFullscreenIcon} color={rowTextColor} />
 					</TouchableOpacity>
 					<TouchableOpacity onPress={onPressResetChartView}>
-						<Icon name={'crop-square'} size={fontSizeFullscreenIcon} color={rowTextColor} />
+						<IconTelldus icon={'resetzoom'} style={{ fontSize: fontSizeFullscreenIcon - 4, color: rowTextColor }} />
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -126,7 +126,6 @@ export default class ChartLegend extends View<Props, null> {
 			legendsContainerStyle: {
 				flex: 1,
 				flexDirection: 'row',
-				marginRight: fontSizeFullscreenIcon,
 			},
 			labelContainerStyle: {
 				flex: 1,
@@ -146,13 +145,10 @@ export default class ChartLegend extends View<Props, null> {
 			btnContainerIconStyle: {
 				flex: 0,
 				padding: 0,
-				position: 'absolute',
-				right: 0,
-				top: 0,
 				width: 30,
 				height: 40,
 				alignItems: 'center',
-				justifyContent: 'flex-start',
+				justifyContent: 'center',
 			},
 			fontSizeFullscreenIcon,
 		};
