@@ -418,4 +418,72 @@ public class MyDBHandler extends SQLiteOpenHelper {
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
         return true;
     }
+
+    public ArrayList<Integer> getAllWidgetDevices() {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_WIDGET_INFO_DEVICE;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getInt(1));//adding 2nd column data
+            } while (cursor.moveToNext());
+        }
+        // closing connection
+        cursor.close();
+        db.close();
+
+        // returning lables
+        return list;
+    }
+
+    public ArrayList<Integer> getAllWidgetSensors() {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_WIDGET_INFO_SENSOR;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);//selectQuery,selectedArguments
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                list.add(cursor.getInt(1));//adding 2nd column data
+            } while (cursor.moveToNext());
+        }
+        // closing connection
+        cursor.close();
+        db.close();
+
+        // returning lables
+        return list;
+    }
+
+    public boolean nullifyDeviceIdDeviceWidget(Integer deviceId) {
+        String val = String.valueOf(deviceId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DEVICE_ID, -1);
+
+        String[] whereArgs = {val};
+        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs );
+        return true;
+    }
+
+    public boolean nullifySensorIdSensorWidget(Integer sensorId) {
+        String val = String.valueOf(sensorId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SENSOR_ID, -1);
+
+        String[] whereArgs = {val};
+        int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, SENSOR_ID+" = ?", whereArgs );
+        return true;
+    }
 }
