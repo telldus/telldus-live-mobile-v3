@@ -16,18 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
+// @flow
 
 'use strict';
 
-import React from 'react';
-import {AppRegistry, Platform, Text, View} from 'react-native';
-const TodayWidget = () => (
-	<View style={{ flex: 1, justifyContent: 'center' }}>
-		<Text>
-			Hello Today Widget!
-		</Text>
-	</View>
-);
+import React, { Component } from 'react';
+import {
+	AppRegistry,
+	Platform,
+	Text,
+	View,
+	NativeModules,
+} from 'react-native';
+
+type State = {
+	showSelected: true,
+};
+class DeviceWidget extends Component<null, State> {
+	state: State;
+	constructor(props: Props) {
+		super();
+		this.state = {
+			showSelected: true,
+		};
+
+		// Calculate max list length and set here, to be able to show all items when expanded.
+		NativeModules.DisplayMode.setExpandable(true, 500);
+	}
+
+	render(): Object {
+		const { showSelected } = this.state;
+		return (
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<Text>
+					{showSelected ? 'Selected List' : 'Select From List'}
+				</Text>
+			</View>
+		);
+	}
+}
 if (Platform.OS === 'ios') {
-	AppRegistry.registerComponent('Widget', () => TodayWidget);
+	AppRegistry.registerComponent('Widget', (): Object => DeviceWidget);
 }
