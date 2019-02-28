@@ -20,22 +20,45 @@
 
 'use strict';
 
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 import { publicKey, privateKey } from '../../Config';
 import type { ThunkAction } from './Types';
 
-export const configureAndroid = (): ThunkAction => {
+export const widgetAndroidConfigure = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
-		const { user, websockets } = getState();
-		const { accessToken = {}, userProfile = {} } = user;
-		const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
-		const { AndroidWidget } = NativeModules;
-		AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, userProfile.email);
+		if (Platform.OS === 'android') {
+			const { user, websockets } = getState();
+			const { accessToken = {}, userProfile = {} } = user;
+			const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
+			const { AndroidWidget } = NativeModules;
+			AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, userProfile.email);
 
-		const { session } = websockets;
-		if (session && session.id) {
-			AndroidWidget.configureWidgetSessionData(session.id);
+			const { session } = websockets;
+			if (session && session.id) {
+				AndroidWidget.configureWidgetSessionData(session.id);
+			}
 		}
+		return;
+	};
+};
+
+export const widgetAndroidConfigureSessionData = (sessionId: string): ThunkAction => {
+	return (dispatch: Function, getState: Function): any => {
+		if (Platform.OS === 'android') {
+			const { AndroidWidget } = NativeModules;
+			AndroidWidget.configureWidgetSessionData(sessionId);
+		}
+		return;
+	};
+};
+
+export const widgetAndroidDisableAll = (message: string): ThunkAction => {
+	return (dispatch: Function, getState: Function): any => {
+		if (Platform.OS === 'android') {
+			const { AndroidWidget } = NativeModules;
+			AndroidWidget.disableAllWidgets(message);
+		}
+		return;
 	};
 };

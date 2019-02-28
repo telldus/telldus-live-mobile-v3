@@ -22,7 +22,6 @@
 
 'use strict';
 
-import { NativeModules } from 'react-native';
 import axios from 'axios';
 import type { Action, ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
@@ -30,6 +29,7 @@ import firebase from 'react-native-firebase';
 
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
+import { widgetAndroidDisableAll } from './Widget';
 
 type loginCredential = {
 	username: string,
@@ -105,12 +105,10 @@ function getUserProfile(): ThunkAction {
 }
 
 function logoutFromTelldus(): ThunkAction {
-
-	const { AndroidWidget } = NativeModules;
-	AndroidWidget.disableAllWidgets('Telldus Live! Logged Out!!');
 	destroyAllConnections();
 
 	return (dispatch: Function): Function => {
+		dispatch(widgetAndroidDisableAll('Telldus Live! Logged Out!!'));
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});
