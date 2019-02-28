@@ -34,7 +34,7 @@ type State = {
 };
 class DeviceWidget extends Component<null, State> {
 	state: State;
-	constructor(props: Props) {
+	constructor() {
 		super();
 		this.state = {
 			showSelected: true,
