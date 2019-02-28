@@ -48,7 +48,7 @@
     "react-native-modal": "~7.0.0",
     "react-native-orientation-locker": "~1.0.21",
     "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git",
-    "react-native-sensitive-info": "~5.2.6",
+    "react-native-sensitive-info": "5.2.6",
     "react-native-simple-toast": "~0.0.8",
     "react-native-slider": "~0.11.0",
     "react-native-sqlite-storage": "~3.3.8",
