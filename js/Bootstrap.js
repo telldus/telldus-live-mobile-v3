@@ -29,7 +29,6 @@ import 'intl/locale-data/jsonp/sv';
 import React from 'react';
 import { Text } from './BaseComponents';
 import { Provider } from 'react-redux';
-import firebase from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
 
 import App from './App';
@@ -37,6 +36,7 @@ import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
 import * as Translations from './App/Translations';
 import { forceLocale } from './Config';
+import { setUserIdentifier, enableCrashlyticsCollection } from './App/Lib/Analytics';
 
 function Bootstrap(): Object {
 
@@ -55,9 +55,7 @@ function Bootstrap(): Object {
 		constructor() {
 			super();
 
-			if (!__DEV__) {
-				firebase.crashlytics().enableCrashlyticsCollection();
-			}
+			enableCrashlyticsCollection();
 
 			let locale = this.getLocale();
 			let messages = Translations.en;
@@ -76,7 +74,7 @@ function Bootstrap(): Object {
 			this.setState({ isLoading: false });
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
-				firebase.crashlytics().setUserIdentifier(state.user.userProfile.email);
+				setUserIdentifier(state.user.userProfile.email);
 				// TODO: Enable once the method is supported.
 				// firebase.crashlytics().setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
 			}
