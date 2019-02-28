@@ -21,7 +21,6 @@
 // @flow
 
 'use strict';
-import firebase from 'react-native-firebase';
 import { format } from 'url';
 
 // User actions that are shared by both Web and Mobile.
@@ -31,6 +30,7 @@ const { User } = actions;
 import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
 import { LiveApi } from '../Lib';
+import { setBoolean } from '../Lib/Analytics';
 
 
 /*
@@ -148,14 +148,14 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			if (responseData.error) {
 				throw responseData;
 			}
-			firebase.crashlytics().setBoolValue('Email', true);
+			setBoolean('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: responseData,
 			});
 			return responseData;
 		}).catch((e: Object): any => {
-			firebase.crashlytics().setBoolValue('Email', false);
+			setBoolean('Email', false);
 			throw e;
 		});
 };

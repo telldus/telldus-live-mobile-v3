@@ -25,15 +25,37 @@
 import firebase from 'react-native-firebase';
 
 export function reportError(msg: string) {
-	firebase.crashlytics().recordError(101, msg);
+	if (!__DEV__) {
+		firebase.crashlytics().recordError(101, msg);
+	}
 }
 
 export function reportException(e: Error | string) {
-	if (e instanceof Error) {
-		// Log the stack trace
-		firebase.crashlytics().log(e.stack);
-		reportError(e.message);
-	} else {
-		reportError(JSON.stringify(e));
+	if (!__DEV__) {
+		if (e instanceof Error) {
+			// Log the stack trace
+			firebase.crashlytics().log(e.stack);
+			reportError(e.message);
+		} else {
+			reportError(JSON.stringify(e));
+		}
+	}
+}
+
+export function setBoolean(key: string, value: boolean) {
+	if (!__DEV__) {
+		firebase.crashlytics().setBoolValue(key, value);
+	}
+}
+
+export function setUserIdentifier(userId: string = '') {
+	if (!__DEV__) {
+		firebase.crashlytics().setUserIdentifier(userId);
+	}
+}
+
+export function enableCrashlyticsCollection() {
+	if (!__DEV__) {
+		firebase.crashlytics().enableCrashlyticsCollection();
 	}
 }

@@ -25,11 +25,11 @@
 import axios from 'axios';
 import type { Action, ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
-import firebase from 'react-native-firebase';
 
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
 import { widgetAndroidDisableAll } from './Widget';
+import { setBoolean } from '../Lib/Analytics';
 
 type loginCredential = {
 	username: string,
@@ -59,7 +59,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 	  })
 		.then((response: Object): Object => {
 			if (response.status === 200) {
-				firebase.crashlytics().setBoolValue('Password', true);
+				setBoolean('Password', true);
 				dispatch({
 					type: 'RECEIVED_ACCESS_TOKEN',
 					accessToken: response.data,
@@ -69,7 +69,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 			throw response;
 		})
 		.catch((error: Object): Object => {
-			firebase.crashlytics().setBoolValue('Password', true);
+			setBoolean('Password', true);
 			throw error;
 		});
 };
