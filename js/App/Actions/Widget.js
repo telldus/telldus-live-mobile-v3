@@ -25,7 +25,7 @@ import { NativeModules, Platform } from 'react-native';
 import { publicKey, privateKey } from '../../Config';
 import type { ThunkAction } from './Types';
 
-export const widgetAndroidConfigure = (): ThunkAction => {
+const widgetAndroidConfigure = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
 			const { user, websockets } = getState();
@@ -43,7 +43,7 @@ export const widgetAndroidConfigure = (): ThunkAction => {
 	};
 };
 
-export const widgetAndroidConfigureSessionData = (sessionId: string): ThunkAction => {
+const widgetAndroidConfigureSessionData = (sessionId: string): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
 			const { AndroidWidget } = NativeModules;
@@ -53,7 +53,7 @@ export const widgetAndroidConfigureSessionData = (sessionId: string): ThunkActio
 	};
 };
 
-export const widgetAndroidDisableAll = (message: string): ThunkAction => {
+const widgetAndroidDisableAll = (message: string): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
 			const { AndroidWidget } = NativeModules;
@@ -61,4 +61,18 @@ export const widgetAndroidDisableAll = (message: string): ThunkAction => {
 		}
 		return;
 	};
+};
+
+const widgetAndroidDisableWidget = (id: number, widgetType: "SENSOR" | "DEVICE") => {
+	if (Platform.OS === 'android') {
+		const { AndroidWidget } = NativeModules;
+		AndroidWidget.disableWidget(id, widgetType);
+	}
+};
+
+module.exports = {
+	widgetAndroidConfigure,
+	widgetAndroidConfigureSessionData,
+	widgetAndroidDisableWidget,
+	widgetAndroidDisableAll,
 };
