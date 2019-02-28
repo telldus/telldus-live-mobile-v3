@@ -47,6 +47,7 @@ import com.telldus.live.mobile.NewSensorWidget;
 
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.facebook.react.bridge.ReadableArray;
 
 public class WidgetModule extends ReactContextBaseJavaModule {
 
@@ -133,5 +134,53 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     AppWidgetManager.getInstance(getReactApplicationContext()).updateAppWidget(new ComponentName(getReactApplicationContext(), NewAppWidget.class), widgetView);
     AppWidgetManager.getInstance(getReactApplicationContext()).updateAppWidget(new ComponentName(getReactApplicationContext(), NewOnOffWidget.class), widgetView);
     AppWidgetManager.getInstance(getReactApplicationContext()).updateAppWidget(new ComponentName(getReactApplicationContext(), NewSensorWidget.class), widgetView);
+  }
+
+  @ReactMethod
+  public void refreshWidgetsDevices(ReadableArray deviceIds) {
+    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
+    ArrayList<Integer> devices = db.getAllWidgetDevices();
+
+    Iterator<Integer> iterator = devices.iterator();
+    while (iterator.hasNext()) {
+      Integer item = iterator.next();
+      Boolean isInList = false;
+      for (int i = 0; i < deviceIds.size(); i++) {
+        String id = deviceIds.getString(i);
+        if (id.trim().equals(item.toString())) {
+          isInList = true;
+        }
+      }
+      if (!isInList) {
+        if (item.intValue() != -1) {// If not already nullified
+          db.nullifyDeviceIdDeviceWidget(item);
+        }
+        // ToDo: Trigger Update widget here
+      }
+    }
+  }
+
+  @ReactMethod
+  public void refreshWidgetsSensors(ReadableArray sensorIds) {
+    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
+    ArrayList<Integer> sensors = db.getAllWidgetSensors();
+
+    Iterator<Integer> iterator = sensors.iterator();
+    while (iterator.hasNext()) {
+      Integer item = iterator.next();
+      Boolean isInList = false;
+      for (int i = 0; i < sensorIds.size(); i++) {
+        String id = sensorIds.getString(i);
+        if (id.trim().equals(item.toString())) {
+          isInList = true;
+        }
+      }
+      if (!isInList) {
+        if (item.intValue() != -1) {// If not already nullified
+          db.nullifySensorIdSensorWidget(item);
+        }
+        // ToDo: Trigger Update widget here
+      }
+    }
   }
 }
