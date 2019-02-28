@@ -138,6 +138,14 @@ public class NewAppWidget extends AppWidgetProvider {
             views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget_four);
         }
 
+        Integer deviceId = DeviceWidgetInfo.getDeviceID();
+        if (deviceId.intValue() == -1) {
+            views.removeAllViews(R.id.widget_content_cover);
+            views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+            return;
+        }
+
         if (hasBell) {
             views.setViewVisibility(R.id.bell,View.VISIBLE);
             views.setTextViewText(R.id.bell, "bell");

@@ -114,6 +114,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget_one);
         }
 
+        Integer deviceId = DeviceWidgetInfo.getDeviceID();
+        if (deviceId.intValue() == -1) {
+            views.removeAllViews(R.id.widget_content_cover);
+            views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
+            appWidgetManager.updateAppWidget(appWidgetId, views);
+            return;
+        }
+
         views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
         views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
 

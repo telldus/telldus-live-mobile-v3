@@ -66,6 +66,10 @@ public class NewSensorWidget extends AppWidgetProvider {
         SensorInfo sensorWidgetInfo = db.findSensor(appWidgetId);
         String transparent;
 
+        if (sensorWidgetInfo == null) {
+            return;
+        }
+
         String userId = sensorWidgetInfo.getUserId();
         String currentUserId = prefManager.getUserId();
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
@@ -75,7 +79,11 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
-        if (sensorWidgetInfo == null) {
+        Integer deviceId = sensorWidgetInfo.getDeviceID();
+        if (deviceId.intValue() == -1) {
+            view.removeAllViews(R.id.linear_background);
+            view.setTextViewText(R.id.txtSensorType, "Sensor not found");
+            appWidgetManager.updateAppWidget(appWidgetId, view);
             return;
         }
 
