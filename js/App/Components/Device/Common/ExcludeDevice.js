@@ -34,6 +34,7 @@ import {
 } from '../../../../BaseComponents';
 import ZWaveIncludeExcludeUI from './ZWaveIncludeExcludeUI';
 import CantEnterInclusionExclusionUI from './CantEnterInclusionExclusionUI';
+import { widgetAndroidDisableWidget } from '../../../Actions/Widget';
 
 import { LayoutAnimations } from '../../../Lib';
 
@@ -273,6 +274,12 @@ setSocketListeners() {
 						cantEnterLearnMode: false,
 					});
 				}
+				const { id } = data;
+				widgetAndroidDisableWidget(id, 'DEVICE');
+			}
+			if (module === 'sensor' && action === 'removed') {
+				const { id } = data;
+				widgetAndroidDisableWidget(id, 'SENSOR');
 			}
 		}
 		processWebsocketMessage(clientId.toString(), message, title, that.websocket);
