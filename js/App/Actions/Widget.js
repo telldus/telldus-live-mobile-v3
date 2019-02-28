@@ -70,9 +70,41 @@ const widgetAndroidDisableWidget = (id: number, widgetType: "SENSOR" | "DEVICE")
 	}
 };
 
+const widgetAndroidRefresh = (message: string): ThunkAction => {
+	return (dispatch: Function, getState: Function): any => {
+		if (Platform.OS === 'android') {
+			const { devices: {allIds: allDevices}, sensors: {allIds: allSensors} } = getState();
+			if (allDevices.length !== 0) {
+				widgetAndroidRefreshDevices(allDevices);
+			}
+			if (allSensors.length !== 0) {
+				widgetAndroidRefreshSensors(allSensors);
+			}
+		}
+		return;
+	};
+};
+
+const widgetAndroidRefreshDevices = (deviceIds: Array<string>) => {
+	if (Platform.OS === 'android') {
+		const { AndroidWidget } = NativeModules;
+		AndroidWidget.refreshWidgetsDevices(deviceIds);
+	}
+};
+
+const widgetAndroidRefreshSensors = (sensorIds: Array<string>) => {
+	if (Platform.OS === 'android') {
+		const { AndroidWidget } = NativeModules;
+		AndroidWidget.refreshWidgetsSensors(sensorIds);
+	}
+};
+
 module.exports = {
 	widgetAndroidConfigure,
 	widgetAndroidConfigureSessionData,
 	widgetAndroidDisableWidget,
 	widgetAndroidDisableAll,
+	widgetAndroidRefreshSensors,
+	widgetAndroidRefreshDevices,
+	widgetAndroidRefresh,
 };

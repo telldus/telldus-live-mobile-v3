@@ -54,7 +54,7 @@ import {
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
-import { widgetAndroidConfigure } from '../Actions/Widget';
+import { widgetAndroidConfigure, widgetAndroidRefresh } from '../Actions/Widget';
 
 import {
 	getRSAKey,
@@ -141,7 +141,9 @@ componentDidMount() {
 		this.props.dispatch(widgetAndroidConfigure());
 		dispatch(syncLiveApiOnForeground());
 		dispatch(getGateways());
-		dispatch(getAppData());
+		dispatch(getAppData()).then(() => {
+			dispatch(widgetAndroidRefresh());
+		});
 		dispatch(resetSchedule());
 		dispatch(getPhonesList());
 
