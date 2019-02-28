@@ -27,19 +27,26 @@ import com.facebook.react.bridge.ReactMethod;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.view.View;
 import android.content.Intent;
+import android.database.Cursor;
 
 import java.lang.System;
 import java.lang.String;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-
+import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.NewAppWidget;
 import com.telldus.live.mobile.NewOnOffWidget;
 import com.telldus.live.mobile.NewSensorWidget;
 
 import com.telldus.live.mobile.Database.PrefManager;
+import com.telldus.live.mobile.Database.MyDBHandler;
 
 public class WidgetModule extends ReactContextBaseJavaModule {
 
@@ -69,6 +76,43 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     prefManager = new PrefManager(getReactApplicationContext());
 
     prefManager.saveSessionID(sessionId);
+  }
+
+  @ReactMethod
+  public void disableWidget(Integer id, String widgetType) {
+
+    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
+    if (String.valueOf(widgetType).equals("SENSOR")) {
+      ArrayList<SensorInfo> list = new ArrayList<SensorInfo>();
+      list = db.getAllWidgetsWithSensorId(id);
+      Iterator<SensorInfo> iterator = list.iterator();
+      while (iterator.hasNext()) {
+        SensorInfo item = iterator.next();
+        Integer wId = item.getWidgetID();
+        if (wId != null) {
+          db.updateSensorIdSensorWidget(-1, wId);
+
+          AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+          NewSensorWidget.updateAppWidget(getReactApplicationContext(), widgetManager, wId);
+        }
+      }
+    }
+    if (String.valueOf(widgetType).equals("DEVICE")) {
+      ArrayList<DeviceInfo> list = new ArrayList<DeviceInfo>();
+      list = db.getAllWidgetsWithDeviceId(id);
+      Iterator<DeviceInfo> iterator = list.iterator();
+      while (iterator.hasNext()) {
+        DeviceInfo item = iterator.next();
+        Integer wId = item.getWidgetID();
+        if (wId != null) {
+          db.updateDeviceIdDeviceWidget(-1, wId);
+
+          AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+          NewOnOffWidget.updateAppWidget(getReactApplicationContext(), widgetManager, wId);
+          NewAppWidget.updateAppWidget(getReactApplicationContext(), widgetManager, wId);
+        }
+      }
+    }
   }
 
   @ReactMethod
