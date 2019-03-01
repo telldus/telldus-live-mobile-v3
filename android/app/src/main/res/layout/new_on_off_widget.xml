@@ -70,7 +70,8 @@
                     android:id="@+id/onLayout"
                     android:layout_width="54dp"
                     android:layout_height="40sp"
-                    android:layout_gravity="center|center">
+                    android:layout_gravity="center|center"
+                    android:layout_marginLeft="1dp">
                     <TextView
                         android:id="@+id/iconOn"
                         android:layout_width="match_parent"

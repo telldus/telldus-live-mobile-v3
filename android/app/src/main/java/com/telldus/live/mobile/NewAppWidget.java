@@ -149,7 +149,7 @@ public class NewAppWidget extends AppWidgetProvider {
         if (hasBell) {
             views.setViewVisibility(R.id.bell,View.VISIBLE);
             views.setTextViewText(R.id.bell, "bell");
-            views.setInt(R.id.bell, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.bell, "setBackgroundColor", Color.parseColor("#eeeeee"));
             views.setOnClickPendingIntent(R.id.bell, getPendingSelf(context, ACTION_BELL, appWidgetId));
         }
 
@@ -157,7 +157,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.iconOn, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
             views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
-            views.setInt(R.id.iconOn, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.iconOn, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
             views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
 
@@ -171,7 +171,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.iconOff, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
             views.setTextColor(R.id.iconOff, Color.parseColor("#1A365D"));
-            views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
             views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
@@ -197,9 +197,9 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextColor(R.id.txtDimmer50, Color.parseColor("#E26901"));
             views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
 
-            views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-            views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-            views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+            views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+            views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
             views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
             views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
@@ -214,8 +214,8 @@ public class NewAppWidget extends AppWidgetProvider {
 
                 if (checkPoint == 25) {
                     views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#E26901"));
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
                     views.setTextColor(R.id.dimmer25, Color.parseColor("#FFFFFF"));
                     views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
@@ -226,9 +226,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
                 }
                 if (checkPoint == 50) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
                     views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#E26901"));
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
                     views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
                     views.setTextColor(R.id.dimmer50, Color.parseColor("#FFFFFF"));
@@ -239,8 +239,8 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextColor(R.id.txtDimmer75, Color.parseColor("#E26901"));
                 }
                 if (checkPoint == 75) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
                     views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#E26901"));
 
                     views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
@@ -252,9 +252,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextColor(R.id.txtDimmer75, Color.parseColor("#FFFFFF"));
                 }
                 if (deviceStateValue.equals("0")) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
                     views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
                     views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
@@ -268,9 +268,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setInt(R.id.iconOff, "setBackgroundColor", Color.parseColor("#1A365D"));
                 }
                 if (deviceStateValue.equals("100")) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
+                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
                     views.setTextColor(R.id.dimmer25, Color.parseColor("#E26901"));
                     views.setTextColor(R.id.dimmer50, Color.parseColor("#E26901"));
@@ -290,7 +290,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.uparrow, View.VISIBLE);
             views.setTextViewText(R.id.uparrow, "up");
             views.setTextColor(R.id.uparrow, Color.parseColor("#E26901"));
-            views.setInt(R.id.uparrow, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.uparrow, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
             views.setOnClickPendingIntent(R.id.uparrow, getPendingSelf(context, ACTION_UP, appWidgetId));
             if (state.equals("128")) {
@@ -303,7 +303,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.downarrow, View.VISIBLE);
             views.setTextViewText(R.id.downarrow, "down");
             views.setTextColor(R.id.downarrow, Color.parseColor("#E26901"));
-            views.setInt(R.id.downarrow, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.downarrow, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
             views.setOnClickPendingIntent(R.id.downarrow, getPendingSelf(context, ACTION_DOWN, appWidgetId));
             if (state.equals("256")) {
@@ -316,7 +316,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.stopicon, View.VISIBLE);
             views.setTextViewText(R.id.stopicon, "stop");
             views.setTextColor(R.id.stopicon, Color.parseColor("#1A365D"));
-            views.setInt(R.id.stopicon, "setBackgroundColor", Color.parseColor("#FFFFFF"));
+            views.setInt(R.id.stopicon, "setBackgroundColor", Color.parseColor("#eeeeee"));
 
             views.setOnClickPendingIntent(R.id.stopicon, getPendingSelf(context, ACTION_STOP, appWidgetId));
             if (state.equals("512")) {
