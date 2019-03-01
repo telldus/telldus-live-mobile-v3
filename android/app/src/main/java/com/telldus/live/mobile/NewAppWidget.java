@@ -441,13 +441,22 @@ public class NewAppWidget extends AppWidgetProvider {
         }
     }
 
-    public void createDeviceApi(int deviceId, int method, int value, final int widgetId, final Context context) {
+    public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
         String params = "device/command?id="+deviceId+"&method="+method+"&value="+value;
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
+                String error = response.optString("error");
+                if (!error.isEmpty() && error != null) {
+                    String noDeviceMessage = "Device \""+deviceId+"\" not found!";
+                    if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
+                        MyDBHandler db = new MyDBHandler(context);
+                        db.updateDeviceIdDeviceWidget(-1, widgetId);
+                    }
+                }
+
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId);
             }

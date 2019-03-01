@@ -284,6 +284,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
         deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
+                String error = response.optString("error");
+                if (!error.isEmpty() && error != null) {
+                    String noDeviceMessage = "Device \""+deviceId+"\" not found!";
+                    if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
+                        db.updateDeviceIdDeviceWidget(-1, widgetId);
+                    }
+                }
+
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId);
             }
