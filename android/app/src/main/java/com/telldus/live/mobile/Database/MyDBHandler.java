@@ -58,6 +58,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String SENSOR_VALUE = "sensorValue";
     public static final String SENSOR_UNIT = "sensorUnit";
     public static final String SENSOR_ICON = "sensorIcon";
+    public static final String SENSOR_UPDATE_INTERVAL = "sensorUpdateInterval";
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,7 +76,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
                 + " INTEGER," + SENSOR_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE
                 + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT
-                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT" + ")";
+                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT," + SENSOR_UPDATE_INTERVAL + " INTEGER)";
 
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
@@ -120,6 +121,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(SENSOR_ICON, mSensorInfo.getSensorIcon());
         values.put(TRANSPARENT, mSensorInfo.getTransparent());
         values.put(WIDGET_SENSOR_USER_ID, mSensorInfo.getUserId());
+        values.put(SENSOR_UPDATE_INTERVAL, mSensorInfo.getUpdateInterval());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_SENSOR, null, values);
@@ -172,6 +174,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setSensorIcon(cursor.getString(7));
             r.setTransparent(cursor.getString(8));
             r.setUserId(cursor.getString(9));
+            r.setUpdateInterval(cursor.getInt(10));
 
             cursor.close();
         } else {
@@ -193,6 +196,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setDeviceID(1);
                 r.setWidgetName(cursor.getString(2));
                 r.setWidgetType(cursor.getString(3));
+                r.setUpdateInterval(cursor.getInt(10));
                 mSensorInfo.add(r);
             } while (cursor.moveToNext());
         }
@@ -386,6 +390,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setSensorIcon(cursor.getString(7));
                 r.setTransparent(cursor.getString(8));
                 r.setUserId(cursor.getString(9));
+                r.setUpdateInterval(cursor.getInt(10));
 
                 list.add(r);
             } while (cursor.moveToNext());

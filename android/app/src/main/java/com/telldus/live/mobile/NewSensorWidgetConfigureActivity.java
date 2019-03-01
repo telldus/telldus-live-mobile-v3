@@ -77,9 +77,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, button_cancel;
-    private View btSelectSensor, btSelectDisplayItem, screenCover;
+    private View btSelectSensor, btSelectDisplayItem, screenCover, btSelectPollInterval;
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
-    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit;
+    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit, sensorRepeatIntervalLabel;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
     private ProgressDialog pDialog;
@@ -92,11 +92,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
     CharSequence[] sensorIdList = null;
+    CharSequence[] intervalOptions = {
+        "Update every 10 minutes", "Update every 30 minutes", "Update every 1 hour",
+    };
+    CharSequence[] intervalOptionsValues = {
+        "10", "30", "60",
+    };
+    int multiplierMilli = 60000;
 
     List<String> nameListItems = new ArrayList<String>();
     List<String> idList = new ArrayList<String>();
 
-    private Integer id;
+    private Integer id, selectInterval;
 
     Map<String, Map> SensorInfoMap = new HashMap<String, Map>();
 
@@ -112,7 +119,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
-    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1;
+    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1, selectedIntervalOptionsIndex = 0;
 
 
     @Override
@@ -171,6 +178,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             sensorHint = (TextView) findViewById(R.id.txtSensorHint);
             sensorDataName = (TextView) findViewById(R.id.txtSensorDataName);
             sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
+            sensorRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
 
             btAdd = (Button) findViewById(R.id.btAdd);
             button_cancel = (Button) findViewById(R.id.button_cancel);
@@ -252,6 +260,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+                    Log.d("TEST selectInterval", String.valueOf(selectInterval));
                     SensorInfo mSensorInfo = new SensorInfo(
                         mAppWidgetId,
                         sensorName.getText().toString(),
@@ -262,7 +271,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         senIcon,
                         lastUp,
                         transparent,
-                        currentUserId);
+                        currentUserId,
+                        selectInterval);
                     database.addSensor(mSensorInfo);
                     views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
@@ -401,6 +411,30 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                             }
                         });
                     ad1 = builder.show();
+                }
+            });
+
+            btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
+            btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
+                AlertDialog ad;
+
+                @Override
+                public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sensorDataName.setText(intervalOptions[which]);
+
+                            selectedIntervalOptionsIndex = which;
+                            String selected = intervalOptions[which].toString();
+                            Integer selectedValue = Integer.parseInt(intervalOptionsValues[which].toString());
+                            selectInterval = selectedValue * multiplierMilli;
+
+                            ad.dismiss();
+                        }
+                    });
+                    ad = builder.show();
                 }
             });
         }
