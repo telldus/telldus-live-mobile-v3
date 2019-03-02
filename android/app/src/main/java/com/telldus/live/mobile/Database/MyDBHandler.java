@@ -254,12 +254,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public int updateSensorInfo(String value, long time, int Wid) {
+    public int updateSensorInfo(String name, String value, long time, int Wid) {
         String time1 = String.valueOf(time);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         String id = String.valueOf(Wid);
 
+        contentValues.put(SENSOR_NAME, name);
         contentValues.put(SENSOR_VALUE, value);
         contentValues.put(SENSOR_UPDATE, time1);
         String[] whereArgs = {id};

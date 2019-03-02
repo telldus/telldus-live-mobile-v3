@@ -272,8 +272,7 @@ public class MyService extends Service {
                                         if (type.equals(typeValue)) {
                                             valueSensor = jsonObject1.optString("value");
                                             long timeStamp = Long.parseLong(time);
-                                            int result = db.updateSensorInfo(valueSensor, timeStamp, widgetID);
-
+                                            int result = db.updateSensorInfo(widgetName, valueSensor, timeStamp, widgetID);
                                         }
                                     }
                                 }
