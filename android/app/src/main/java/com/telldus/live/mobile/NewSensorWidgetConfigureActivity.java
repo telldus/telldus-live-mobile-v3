@@ -132,7 +132,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             getApplicationContext().startActivity(launchActivity);
             return;
         }
-        createSensorApi();
+        createSensorsApi();
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -439,7 +439,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
         }
     }
-    void createSensorApi() {
+    void createSensorsApi() {
 
         String params = "sensors/list?includeValues=1&includeScale=1";
         API endPoints = new API();
