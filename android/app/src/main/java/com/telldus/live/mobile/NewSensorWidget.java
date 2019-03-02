@@ -37,6 +37,10 @@ import android.widget.Toast;
 import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Bundle;
+
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -47,11 +51,19 @@ import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Utility.HandlerRunnablePair;
+import com.telldus.live.mobile.Utility.SensorsUtilities;
+import com.telldus.live.mobile.API.API;
+import com.telldus.live.mobile.API.OnAPITaskComplete;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class NewSensorWidget extends AppWidgetProvider {
+    private static final String ACTION_SENSOR_UPDATE = "ACTION_SENSOR_UPDATE";
     private PendingIntent pendingIntent;
 
     // 'handlerAPIPollingList' is kept static, handler and runnable are created from a non-static context.
@@ -131,6 +143,8 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
         }
 
+        view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
+
         view.setTextViewText(R.id.iconSensor, sensorIcon);
         view.setTextColor(R.id.iconSensor, Color.parseColor("#FFFFFF"));
         view.setTextViewText(R.id.txtSensorType, widgetText);
@@ -187,6 +201,43 @@ public class NewSensorWidget extends AppWidgetProvider {
         // Enter relevant functionality for when the last widget is disabled
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        Bundle extras = intent.getExtras();
+        if (extras == null) {
+            return;
+        }
+
+        int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            return;
+        }
+
+        MyDBHandler db = new MyDBHandler(context);
+        SensorInfo widgetInfo = db.findSensor(widgetId);
+        if (widgetInfo == null) {
+            return;
+        }
+
+        Integer sensorId = widgetInfo.getDeviceID();
+        if (sensorId.intValue() == -1) {
+            return;
+        }
+
+        if (ACTION_SENSOR_UPDATE.equals(intent.getAction())) {
+            createSensorApi(sensorId, widgetId, db, context);
+        }
+    }
+
+    private static PendingIntent getPendingSelf(Context context, String action, int id) {
+        Intent intent = new Intent(context, NewSensorWidget.class);
+        intent.setAction(action);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+        return PendingIntent.getBroadcast(context, id, intent, 0);
+    }
+
     // Need to be non-static
     public Map<String, HandlerRunnablePair> createAPIPollingHandler(final int appWidgetId) {
         final Handler handler = new Handler(Looper.getMainLooper());// Need to be non-static
@@ -217,5 +268,53 @@ public class NewSensorWidget extends AppWidgetProvider {
             prevHandlerRunnablePair.remove("HandlerRunnablePair");
             handlerAPIPollingList.remove(appWidgetId);
         }
+    }
+
+    void createSensorApi(final Integer sensorId, final Integer widgetId, final MyDBHandler database, final Context context) {
+
+        String params = "sensor/info?id="+sensorId;
+        API endPoints = new API();
+        endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+                try {
+                    SensorInfo sensorWidgetInfo = database.findSensor(widgetId);
+
+                    if (sensorWidgetInfo != null) {
+                        JSONObject responseObject = new JSONObject(response.toString());
+                        JSONArray sensorData = responseObject.getJSONArray("data");
+
+                        SensorsUtilities sc = new SensorsUtilities();
+
+                        for (int j = 0; j < sensorData.length(); j++) {
+                            JSONObject currData = sensorData.getJSONObject(j);
+
+                            String lastUp = currData.optString("lastUpdated");
+                            String name = currData.optString("name");
+                            String scale = currData.optString("scale");
+                            String value = currData.optString("value");
+
+                            Map<String, Object> info = sc.getSensorInfo(name, scale, value, context);
+                            Object label = info.get("label").toString();
+                            Object unit = info.get("unit").toString();
+                            String labelUnit = label+"("+unit+")";
+
+                            String widgetLabelUnit = sensorWidgetInfo.getWidgetType();
+                            if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
+                                database.updateSensorInfo(name, value, Long.parseLong(lastUp), widgetId);
+
+                                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                updateAppWidget(context, widgetManager, widgetId);
+                            }
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void onError(ANError error) {
+            }
+        });
     }
 }
