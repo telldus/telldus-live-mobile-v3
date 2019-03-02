@@ -303,6 +303,19 @@ public class NewSensorWidget extends AppWidgetProvider {
                     SensorInfo sensorWidgetInfo = database.findSensor(widgetId);
 
                     if (sensorWidgetInfo != null) {
+
+                        String error = response.optString("error");
+                        if (!error.isEmpty() && error != null) {
+                            String noSensorMessage = "The sensor with id \""+sensorId+"\" does not exist";
+                            if (String.valueOf(error).trim().equalsIgnoreCase(noSensorMessage.trim())) {
+                                database.updateSensorIdSensorWidget(-1, widgetId);
+
+                                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                updateAppWidget(context, widgetManager, widgetId);
+                            }
+                            return;
+                        }
+
                         JSONObject responseObject = new JSONObject(response.toString());
                         JSONArray sensorData = responseObject.getJSONArray("data");
 
