@@ -77,9 +77,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- <service android:name=".ServiceBackground.UpdateService"></service> -->
-        <service android:name=".UpdateSensorService" />
-
         <receiver android:name=".NewAppWidget"
             android:label="Device 3+ btn">
             <intent-filter>
