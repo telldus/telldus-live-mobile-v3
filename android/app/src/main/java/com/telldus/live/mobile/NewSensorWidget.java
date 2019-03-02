@@ -162,7 +162,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
             if (prevHandlerRunnablePair == null) {
-                Map<String, HandlerRunnablePair> newHandlerRunnablePair = createAPIPollingHandler(appWidgetId);
+                Map<String, HandlerRunnablePair> newHandlerRunnablePair = createAPIPollingHandler(appWidgetId, context);
                 handlerAPIPollingList.put(appWidgetId, newHandlerRunnablePair);
             }
             updateAppWidget(context, appWidgetManager, appWidgetId);
@@ -239,17 +239,39 @@ public class NewSensorWidget extends AppWidgetProvider {
     }
 
     // Need to be non-static
-    public Map<String, HandlerRunnablePair> createAPIPollingHandler(final int appWidgetId) {
+    public Map<String, HandlerRunnablePair> createAPIPollingHandler(final int appWidgetId, final Context context) {
         final Handler handler = new Handler(Looper.getMainLooper());// Need to be non-static
         runnable = new Runnable(){// Need to be non-static
             @Override
             public void run() {
                 if (runnable != null) {
-                    handler.postDelayed(runnable, 10000);
+                    MyDBHandler db = new MyDBHandler(context);
+                    SensorInfo widgetInfo = db.findSensor(appWidgetId);
+                    if (widgetInfo != null) {
+                        Integer sensorId = widgetInfo.getDeviceID();
+                        Integer updateInterval = widgetInfo.getUpdateInterval();
+                        createSensorApi(sensorId, appWidgetId, db, context);
+                        handler.postDelayed(runnable, updateInterval);
+                    } else {
+                        // createAPIPollingHandler will be called before widget addition is confirmed.
+                        // So till confirm button is pressed 'widgetInfo' will be null, we do not want the loop to stop
+                        // so keep checking after 30secs, to get the actual interval and runnable
+                        handler.postDelayed(runnable, 30000);
+                    }
                 }
             }
         };
-        handler.postDelayed(runnable, 10000);
+        MyDBHandler db = new MyDBHandler(context);
+        SensorInfo widgetInfo = db.findSensor(appWidgetId);
+        if (widgetInfo != null) {
+            Integer updateInterval = widgetInfo.getUpdateInterval();
+            handler.postDelayed(runnable, updateInterval);
+        } else {
+            // createAPIPollingHandler will be called before widget addition is confirmed.
+            // So till confirm button is pressed 'widgetInfo' will be null, we do not want the loop to stop
+            // so keep checking after 30secs, to get the actual interval and runnable
+            handler.postDelayed(runnable, 30000);
+        }
         Map<String, HandlerRunnablePair> handlerRunnableHashMap = new HashMap<String, HandlerRunnablePair>();
         HandlerRunnablePair handlerRunnablePair = new HandlerRunnablePair(handler, runnable);
         handlerRunnablePair.setRunnable(runnable);
@@ -286,6 +308,11 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                         SensorsUtilities sc = new SensorsUtilities();
 
+                        String sensorName = responseObject.optString("name");
+                        if (sensorName == null || sensorName.equals("null")) {
+                            sensorName = "Unknown";
+                        }
+
                         for (int j = 0; j < sensorData.length(); j++) {
                             JSONObject currData = sensorData.getJSONObject(j);
 
@@ -301,7 +328,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                             String widgetLabelUnit = sensorWidgetInfo.getWidgetType();
                             if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
-                                database.updateSensorInfo(name, value, Long.parseLong(lastUp), widgetId);
+                                database.updateSensorInfo(sensorName, value, Long.parseLong(lastUp), widgetId);
 
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateAppWidget(context, widgetManager, widgetId);
