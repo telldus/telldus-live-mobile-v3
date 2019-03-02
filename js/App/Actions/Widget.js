@@ -70,7 +70,7 @@ const widgetAndroidDisableWidget = (id: number, widgetType: "SENSOR" | "DEVICE")
 	}
 };
 
-const widgetAndroidRefresh = (message: string): ThunkAction => {
+const widgetAndroidRefresh = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
 			const { devices: {allIds: allDevices}, sensors: {allIds: allSensors} } = getState();
