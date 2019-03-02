@@ -138,7 +138,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget_four);
         }
 
-        Integer deviceId = DeviceWidgetInfo.getDeviceID();
+        Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
             views.removeAllViews(R.id.widget_content_cover);
             views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
@@ -373,37 +373,37 @@ public class NewAppWidget extends AppWidgetProvider {
         String state = id.getState();
 
         if (ACTION_BELL.equals(intent.getAction())) {
-            createDeviceApi(id.getDeviceID(), 4, 0, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 4, 0, widgetId, context);
         }
         if (ACTION_UP.equals(intent.getAction())) {
-            createDeviceApi(id.getDeviceID(), 128, 0, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 128, 0, widgetId, context);
         }
         if (ACTION_DOWN.equals(intent.getAction())) {
-            createDeviceApi(id.getDeviceID(), 256, 0, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 256, 0, widgetId, context);
         }
         if (ACTION_STOP.equals(intent.getAction())) {
-            createDeviceApi(id.getDeviceID(), 512, 0, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 512, 0, widgetId, context);
         }
         if (ACTION_OFF.equals(intent.getAction())) {
-            createDeviceApi(id.getDeviceID(), 2, 0, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 2, 0, widgetId, context);
         }
         if (DIMMER_25.equals(intent.getAction())) {
             DevicesUtilities deviceUtils = new DevicesUtilities();
             int value = deviceUtils.toDimmerValue(25);
-            createDeviceApi(id.getDeviceID(), 16, value, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 16, value, widgetId, context);
         }
         if (DIMMER_50.equals(intent.getAction())) {
             DevicesUtilities deviceUtils = new DevicesUtilities();
             int value = deviceUtils.toDimmerValue(50);
-            createDeviceApi(id.getDeviceID(), 16, value, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 16, value, widgetId, context);
         }
         if (DIMMER_75.equals(intent.getAction())) {
             DevicesUtilities deviceUtils = new DevicesUtilities();
             int value = deviceUtils.toDimmerValue(75);
-            createDeviceApi(id.getDeviceID(), 16, value, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 16, value, widgetId, context);
         }
         if (ACTION_ON.equals(intent.getAction())) {
-            createDeviceApi(id.getDeviceID(), 1, 0, widgetId, context);
+            createDeviceApi(id.getDeviceId(), 1, 0, widgetId, context);
         }
     }
 

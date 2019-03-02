@@ -92,8 +92,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(WIDGET_ID_DEVICE, mDeviceInfo.getWidgetID());
-        values.put(DEVICE_ID, mDeviceInfo.getDeviceID());
+        values.put(WIDGET_ID_DEVICE, mDeviceInfo.getWidgetId());
+        values.put(DEVICE_ID, mDeviceInfo.getDeviceId());
         values.put(DEVICE_NAME, mDeviceInfo.getDeviceName());
         values.put(DEVICE_STATE, mDeviceInfo.getState());
         values.put(DEVICE_METHODS, mDeviceInfo.getDeviceMethods());
@@ -111,10 +111,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(WIDGET_ID_SENSOR, mSensorInfo.getWidgetID());
-        values.put(SENSOR_ID, mSensorInfo.getDeviceID());
-        values.put(SENSOR_NAME, mSensorInfo.getWidgetName());
-        values.put(SENSOR_VALUE_TYPE, mSensorInfo.getWidgetType());
+        values.put(WIDGET_ID_SENSOR, mSensorInfo.getWidgetId());
+        values.put(SENSOR_ID, mSensorInfo.getSensorId());
+        values.put(SENSOR_NAME, mSensorInfo.getSensorName());
+        values.put(SENSOR_VALUE_TYPE, mSensorInfo.getSensorDisplayType());
         values.put(SENSOR_UPDATE, mSensorInfo.getSensorUpdate());
         values.put(SENSOR_VALUE, mSensorInfo.getSensorValue());
         values.put(SENSOR_UNIT, mSensorInfo.getSensorUnit());
@@ -137,8 +137,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
 
-            r.setWidgetID(cursor.getInt(0));
-            r.setDeviceID(cursor.getInt(1));
+            r.setWidgetId(cursor.getInt(0));
+            r.setDeviceId(cursor.getInt(1));
             r.setDeviceName(cursor.getString(2));
             r.setState(cursor.getString(3));
             r.setDeviceMethods(cursor.getInt(4));
@@ -164,10 +164,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
 
-            r.setWidgetID(cursor.getInt(0));
-            r.setDeviceID(cursor.getInt(1));
-            r.setWidgetName(cursor.getString(2));
-            r.setWidgetType(cursor.getString(3));
+            r.setWidgetId(cursor.getInt(0));
+            r.setSensorId(cursor.getInt(1));
+            r.setSensorName(cursor.getString(2));
+            r.setSensorDisplayType(cursor.getString(3));
             r.setSensorUpdate(cursor.getString(4));
             r.setSensorValue(cursor.getString(5));
             r.setSensorUnit(cursor.getString(6));
@@ -192,10 +192,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 SensorInfo r = new SensorInfo();
-                r.setWidgetID(cursor.getInt(0));
-                r.setDeviceID(1);
-                r.setWidgetName(cursor.getString(2));
-                r.setWidgetType(cursor.getString(3));
+                r.setWidgetId(cursor.getInt(0));
+                r.setSensorId(cursor.getInt(1));
+                r.setSensorName(cursor.getString(2));
+                r.setSensorDisplayType(cursor.getString(3));
                 r.setUpdateInterval(cursor.getInt(10));
                 mSensorInfo.add(r);
             } while (cursor.moveToNext());
@@ -215,7 +215,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             cursor.moveToFirst();
-            r.setDeviceID(cursor.getInt(1));
+            r.setDeviceId(cursor.getInt(1));
             r.setState(cursor.getString(3));
             r.setDeviceMethods(cursor.getInt(4));
             r.setDeviceType(cursor.getString(5));
@@ -348,8 +348,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
             do {
 
                 DeviceInfo r = new DeviceInfo();
-                r.setWidgetID(cursor.getInt(0));
-                r.setDeviceID(cursor.getInt(1));
+                r.setWidgetId(cursor.getInt(0));
+                r.setDeviceId(cursor.getInt(1));
                 r.setDeviceName(cursor.getString(2));
                 r.setState(cursor.getString(3));
                 r.setDeviceMethods(cursor.getInt(4));
@@ -381,10 +381,10 @@ public class MyDBHandler extends SQLiteOpenHelper {
             do {
 
                 SensorInfo r = new SensorInfo();
-                r.setWidgetID(cursor.getInt(0));
-                r.setDeviceID(cursor.getInt(1));
-                r.setWidgetName(cursor.getString(2));
-                r.setWidgetType(cursor.getString(3));
+                r.setWidgetId(cursor.getInt(0));
+                r.setSensorId(cursor.getInt(1));
+                r.setSensorName(cursor.getString(2));
+                r.setSensorDisplayType(cursor.getString(3));
                 r.setSensorUpdate(cursor.getString(4));
                 r.setSensorValue(cursor.getString(5));
                 r.setSensorUnit(cursor.getString(6));

@@ -89,7 +89,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       Iterator<SensorInfo> iterator = list.iterator();
       while (iterator.hasNext()) {
         SensorInfo item = iterator.next();
-        Integer wId = item.getWidgetID();
+        Integer wId = item.getWidgetId();
         if (wId != null) {
           db.updateSensorIdSensorWidget(-1, wId);
 
@@ -104,7 +104,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       Iterator<DeviceInfo> iterator = list.iterator();
       while (iterator.hasNext()) {
         DeviceInfo item = iterator.next();
-        Integer wId = item.getWidgetID();
+        Integer wId = item.getWidgetId();
         if (wId != null) {
           db.updateDeviceIdDeviceWidget(-1, wId);
 

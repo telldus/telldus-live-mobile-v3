@@ -106,7 +106,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
-        Integer deviceId = sensorWidgetInfo.getDeviceID();
+        Integer deviceId = sensorWidgetInfo.getSensorId();
         if (deviceId.intValue() == -1) {
             view.removeAllViews(R.id.linear_background);
             view.setTextViewText(R.id.txtSensorType, "Sensor not found");
@@ -116,12 +116,12 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
-        widgetText = sensorWidgetInfo.getWidgetName();
+        widgetText = sensorWidgetInfo.getSensorName();
         sensorValue = sensorWidgetInfo.getSensorValue();
         sensorUnit = sensorWidgetInfo.getSensorUnit();
         sensorIcon = sensorWidgetInfo.getSensorIcon();
         sensorHistory = sensorWidgetInfo.getSensorUpdate();
-        widgetType = sensorWidgetInfo.getWidgetType();
+        widgetType = sensorWidgetInfo.getSensorDisplayType();
         transparent = sensorWidgetInfo.getTransparent();
 
         long time = Long.parseLong(sensorHistory);
@@ -221,7 +221,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
-        Integer sensorId = widgetInfo.getDeviceID();
+        Integer sensorId = widgetInfo.getSensorId();
         if (sensorId.intValue() == -1) {
             return;
         }
@@ -248,7 +248,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                     MyDBHandler db = new MyDBHandler(context);
                     SensorInfo widgetInfo = db.findSensor(appWidgetId);
                     if (widgetInfo != null) {
-                        Integer sensorId = widgetInfo.getDeviceID();
+                        Integer sensorId = widgetInfo.getSensorId();
                         Integer updateInterval = widgetInfo.getUpdateInterval();
                         createSensorApi(sensorId, appWidgetId, db, context);
                         handler.postDelayed(runnable, updateInterval);
@@ -339,7 +339,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                             Object unit = info.get("unit").toString();
                             String labelUnit = label+"("+unit+")";
 
-                            String widgetLabelUnit = sensorWidgetInfo.getWidgetType();
+                            String widgetLabelUnit = sensorWidgetInfo.getSensorDisplayType();
                             if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
                                 database.updateSensorInfo(sensorName, value, Long.parseLong(lastUp), widgetId);
 

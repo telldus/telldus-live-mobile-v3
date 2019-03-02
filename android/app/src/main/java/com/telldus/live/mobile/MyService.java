@@ -259,9 +259,9 @@ public class MyService extends Service {
                                 for (int i = 0; i < mSensorInfoList.size(); i++) {
                                     SensorInfo objInfo = mSensorInfoList.get(i);
 
-                                    String widgetName = objInfo.getWidgetName();
-                                    int widgetID = objInfo.getWidgetID();
-                                    String widgetType = objInfo.getWidgetType();
+                                    String widgetName = objInfo.getSensorName();
+                                    int widgetID = objInfo.getWidgetId();
+                                    String widgetType = objInfo.getSensorDisplayType();
 
                                     for (int j = 0; j < jsonArray.length(); j++) {
                                         JSONObject jsonObject1 = jsonArray.getJSONObject(j);

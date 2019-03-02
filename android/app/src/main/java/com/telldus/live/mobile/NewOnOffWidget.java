@@ -114,7 +114,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget_one);
         }
 
-        Integer deviceId = DeviceWidgetInfo.getDeviceID();
+        Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
             views.removeAllViews(R.id.widget_content_cover);
             views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
@@ -276,19 +276,19 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetId);
 
-            createDeviceActionApi(context, info.getDeviceID(), 4, widgetId, db, "Bell");
+            createDeviceActionApi(context, info.getDeviceId(), 4, widgetId, db, "Bell");
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetId);
 
-            createDeviceActionApi(context, info.getDeviceID(), 1, widgetId, db, "On");
+            createDeviceActionApi(context, info.getDeviceId(), 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
 
             DeviceInfo info = db.getSinlgeDeviceID(widgetId);
 
-            createDeviceActionApi(context, info.getDeviceID(), 2, widgetId, db, "Off");
+            createDeviceActionApi(context, info.getDeviceId(), 2, widgetId, db, "Off");
         }
     }
 
