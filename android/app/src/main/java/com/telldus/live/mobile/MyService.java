@@ -356,7 +356,9 @@ public class MyService extends Service {
         if (isConnecting) {
             mWebSocketClient.close();
         }
-        prefManager.websocketService(false);
+        if (prefManager != null) {
+            prefManager.websocketService(false);
+        }
     }
 
     private boolean isNetworkConnected() {
