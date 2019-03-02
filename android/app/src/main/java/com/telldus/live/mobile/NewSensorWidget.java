@@ -34,18 +34,32 @@ import android.os.SystemClock;
 import android.text.format.DateUtils;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
+
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import android.util.Log;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Database.PrefManager;
+import com.telldus.live.mobile.Utility.HandlerRunnablePair;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewSensorWidget extends AppWidgetProvider {
     private PendingIntent pendingIntent;
+
+    // 'handlerAPIPollingList' is kept static, handler and runnable are created from a non-static context.
+    // This is important for each sensor widget to have it's own handler and runnable, also be able to remove
+    // callbacks by using each widget id during different cases.
+    private static Map<Integer, Map> handlerAPIPollingList = new HashMap<Integer, Map>();
+    Runnable runnable;// Need to be non-static
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         PrefManager prefManager = new PrefManager(context);
@@ -74,6 +88,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         String currentUserId = prefManager.getUserId();
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
+            removeHandlerRunnablePair(appWidgetId);
             return;
         }
 
@@ -84,6 +99,8 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.removeAllViews(R.id.linear_background);
             view.setTextViewText(R.id.txtSensorType, "Sensor not found");
             appWidgetManager.updateAppWidget(appWidgetId, view);
+
+            removeHandlerRunnablePair(appWidgetId);
             return;
         }
 
@@ -129,16 +146,13 @@ public class NewSensorWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
+            Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
+            if (prevHandlerRunnablePair == null) {
+                Map<String, HandlerRunnablePair> newHandlerRunnablePair = createAPIPollingHandler(appWidgetId);
+                handlerAPIPollingList.put(appWidgetId, newHandlerRunnablePair);
+            }
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-        final AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-        final Intent i = new Intent(context, UpdateSensorService.class);
-
-        if (pendingIntent == null) {
-            pendingIntent = PendingIntent.getService(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);
-        }
-        manager.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), 60000, pendingIntent);
     }
 
     @Override
@@ -163,16 +177,45 @@ public class NewSensorWidget extends AppWidgetProvider {
                 prefManager.websocketService(false);
                 context.stopService(new Intent(context, MyService.class));
             }
+            removeHandlerRunnablePair(appWidgetId);
         }
     }
 
     @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+        // Enter relevant functionality for when the last widget is disabled
     }
 
-    @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+    // Need to be non-static
+    public Map<String, HandlerRunnablePair> createAPIPollingHandler(final int appWidgetId) {
+        final Handler handler = new Handler(Looper.getMainLooper());// Need to be non-static
+        runnable = new Runnable(){// Need to be non-static
+            @Override
+            public void run() {
+                if (runnable != null) {
+                    handler.postDelayed(runnable, 10000);
+                }
+            }
+        };
+        handler.postDelayed(runnable, 10000);
+        Map<String, HandlerRunnablePair> handlerRunnableHashMap = new HashMap<String, HandlerRunnablePair>();
+        HandlerRunnablePair handlerRunnablePair = new HandlerRunnablePair(handler, runnable);
+        handlerRunnablePair.setRunnable(runnable);
+        handlerRunnablePair.setHandler(handler);
+        handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
+        return handlerRunnableHashMap;
+    }
+
+    static void removeHandlerRunnablePair(Integer appWidgetId) {
+        Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
+        if (prevHandlerRunnablePair != null) {
+            HandlerRunnablePair handlerRunnablePair = prevHandlerRunnablePair.get("HandlerRunnablePair");
+            Runnable prevRunnable = handlerRunnablePair.getRunnable();
+            Handler prevHandler = handlerRunnablePair.getHandler();
+            prevHandler.removeCallbacks(prevRunnable);
+            prevHandlerRunnablePair.remove("HandlerRunnablePair");
+            handlerAPIPollingList.remove(appWidgetId);
+        }
     }
 }
