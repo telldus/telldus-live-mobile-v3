@@ -89,7 +89,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         int src = R.drawable.sensor;
         String widgetType;
         MyDBHandler db = new MyDBHandler(context);
-        SensorInfo sensorWidgetInfo = db.findSensor(appWidgetId);
+        SensorInfo sensorWidgetInfo = db.findWidgetInfoSensor(appWidgetId);
         String transparent;
 
         if (sensorWidgetInfo == null) {
@@ -175,13 +175,13 @@ public class NewSensorWidget extends AppWidgetProvider {
         PrefManager prefManager = new PrefManager(context);
         MyDBHandler db = new MyDBHandler(context);
         for (int appWidgetId : appWidgetIds) {
-            boolean b = db.deleteSensor(appWidgetId);
+            boolean b = db.deleteWidgetInfoSensor(appWidgetId);
             if (b) {
                 Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
             }
-            int count = db.CountSensorTableValues();
+            int count = db.countWidgetSensorTableValues();
             if (count > 0) {
                 Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
 
@@ -216,7 +216,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         MyDBHandler db = new MyDBHandler(context);
-        SensorInfo widgetInfo = db.findSensor(widgetId);
+        SensorInfo widgetInfo = db.findWidgetInfoSensor(widgetId);
         if (widgetInfo == null) {
             return;
         }
@@ -246,7 +246,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             public void run() {
                 if (runnable != null) {
                     MyDBHandler db = new MyDBHandler(context);
-                    SensorInfo widgetInfo = db.findSensor(appWidgetId);
+                    SensorInfo widgetInfo = db.findWidgetInfoSensor(appWidgetId);
                     if (widgetInfo != null) {
                         Integer sensorId = widgetInfo.getSensorId();
                         Integer updateInterval = widgetInfo.getUpdateInterval();
@@ -262,7 +262,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             }
         };
         MyDBHandler db = new MyDBHandler(context);
-        SensorInfo widgetInfo = db.findSensor(appWidgetId);
+        SensorInfo widgetInfo = db.findWidgetInfoSensor(appWidgetId);
         if (widgetInfo != null) {
             Integer updateInterval = widgetInfo.getUpdateInterval();
             handler.postDelayed(runnable, updateInterval);
@@ -300,7 +300,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(final JSONObject response) {
                 try {
-                    SensorInfo sensorWidgetInfo = database.findSensor(widgetId);
+                    SensorInfo sensorWidgetInfo = database.findWidgetInfoSensor(widgetId);
 
                     if (sensorWidgetInfo != null) {
 

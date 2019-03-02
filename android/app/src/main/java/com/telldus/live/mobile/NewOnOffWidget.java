@@ -81,7 +81,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         CharSequence widgetText = "Telldus";
         String transparent;
-        DeviceInfo DeviceWidgetInfo = db.findUser(appWidgetId);
+        DeviceInfo DeviceWidgetInfo = db.findWidgetInfoDevice(appWidgetId);
 
         if (DeviceWidgetInfo == null) {
             return;
@@ -220,13 +220,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         PrefManager prefManager = new PrefManager(context);
         for (int appWidgetId : appWidgetIds) {
-            boolean b = db.delete(appWidgetId);
+            boolean b = db.deleteWidgetInfoDevice(appWidgetId);
             if (b) {
                 Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
             }
-            int count = db.CountDeviceWidgetValues();
+            int count = db.countWidgetDeviceTableValues();
 
             if (count > 0) {
                 Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
@@ -265,7 +265,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         MyDBHandler db = new MyDBHandler(context);
-        DeviceInfo widgetInfo = db.findUser(widgetId);
+        DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
         if (widgetInfo == null) {
             return;
         }
@@ -274,19 +274,19 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.getSinlgeDeviceID(widgetId);
+            DeviceInfo info = db.findWidgetInfoDevice(widgetId);
 
             createDeviceActionApi(context, info.getDeviceId(), 4, widgetId, db, "Bell");
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.getSinlgeDeviceID(widgetId);
+            DeviceInfo info = db.findWidgetInfoDevice(widgetId);
 
             createDeviceActionApi(context, info.getDeviceId(), 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.getSinlgeDeviceID(widgetId);
+            DeviceInfo info = db.findWidgetInfoDevice(widgetId);
 
             createDeviceActionApi(context, info.getDeviceId(), 2, widgetId, db, "Off");
         }

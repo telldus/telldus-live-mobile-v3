@@ -254,7 +254,7 @@ public class MyService extends Service {
 
                                 String valueSensor = null;
 
-                                ArrayList<SensorInfo> mSensorInfoList = db.findSensorDevice(sensorid);
+                                ArrayList<SensorInfo> mSensorInfoList = db.findWidgetInfoSensorWithSensorId(sensorid);
 
                                 for (int i = 0; i < mSensorInfoList.size(); i++) {
                                     SensorInfo objInfo = mSensorInfoList.get(i);

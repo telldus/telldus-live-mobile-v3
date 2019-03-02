@@ -71,7 +71,7 @@ public class DevicesAPI {
                                 public void run() {
                                     // Check if socket has already updated.
                                     MyDBHandler db = new MyDBHandler(context);
-                                    DeviceInfo info = db.findUser(widgetID);
+                                    DeviceInfo info = db.findWidgetInfoDevice(widgetID);
                                     if (info != null) {
                                         String currentState = info.getState();
                                         String requestedState = String.valueOf(method);
@@ -119,7 +119,7 @@ public class DevicesAPI {
             public void onSuccess(JSONObject response) {
                 try {
                     MyDBHandler db = new MyDBHandler(context);
-                    DeviceInfo info = db.findUser(widgetID);
+                    DeviceInfo info = db.findWidgetInfoDevice(widgetID);
                     if (info != null) {
                         String currentState = info.getState();
                         String reqState = String.valueOf(requestedState);

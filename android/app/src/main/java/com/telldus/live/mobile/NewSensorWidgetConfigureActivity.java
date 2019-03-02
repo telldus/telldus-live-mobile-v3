@@ -273,7 +273,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         transparent,
                         currentUserId,
                         selectInterval);
-                    database.addSensor(mSensorInfo);
+                    database.addWidgetSensor(mSensorInfo);
                     views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);

@@ -245,7 +245,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceStateValueCurrent,
                         switchStatus,
                         currentUserId);
-                    db.addUser(mInsert);
+                    db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
                     boolean web_service = prefManager.getWebService();
