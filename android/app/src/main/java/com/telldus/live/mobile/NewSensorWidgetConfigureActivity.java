@@ -103,7 +103,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     List<String> nameListItems = new ArrayList<String>();
     List<String> idList = new ArrayList<String>();
 
-    private Integer id, selectInterval;
+    private Integer id, selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
 
     Map<String, Map> SensorInfoMap = new HashMap<String, Map>();
 
@@ -424,7 +424,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            sensorDataName.setText(intervalOptions[which]);
+                            sensorRepeatIntervalLabel.setText(intervalOptions[which]);
 
                             selectedIntervalOptionsIndex = which;
                             String selected = intervalOptions[which].toString();
