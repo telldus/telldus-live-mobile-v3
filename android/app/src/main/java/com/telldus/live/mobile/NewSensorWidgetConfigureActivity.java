@@ -66,7 +66,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
@@ -248,15 +247,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     boolean b1 = prefManager.getSensorDB();
                     if (!b1) {
                         prefManager.sensorDB(true);
-                    }
-
-                    if (!token_service) {
-                        prefManager.TokenService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
                     }
 
                     String currentUserId = prefManager.getUserId();

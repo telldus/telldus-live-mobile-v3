@@ -63,7 +63,6 @@ import java.io.IOException;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
@@ -247,16 +246,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         prefManager.DeviceDB(true);
                     }
 
-
-                    boolean token_service = prefManager.getTokenService();
-                    if (!token_service) {
-                        prefManager.TokenService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
