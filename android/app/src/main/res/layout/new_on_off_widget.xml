@@ -48,7 +48,8 @@
                 android:visibility="gone"
                 android:layout_gravity="center|center"
                 android:gravity="center|center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/button_background">
 
                 <LinearLayout
                     android:id="@+id/offLinear"
@@ -66,14 +67,16 @@
                         android:textColor="@color/white"
                         android:padding="5dp"/>
                 </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/grayligt"/>
                 <LinearLayout
                     android:id="@+id/onLayout"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:layout_gravity="center|center"
-                    android:layout_marginLeft="1dp">
+                    android:layout_gravity="center|center">
                     <TextView
                         android:id="@+id/iconOn"
                         android:layout_width="match_parent"

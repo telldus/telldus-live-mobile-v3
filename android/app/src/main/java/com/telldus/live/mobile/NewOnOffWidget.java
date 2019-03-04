@@ -134,7 +134,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.offLinear, View.GONE);
 
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-            views.setInt(R.id.onLayout, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setTextViewText(R.id.iconOn, "bell");
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
         }
@@ -145,7 +144,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
 
-            views.setInt(R.id.onLayout, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+            // views.setInt(R.id.onLayout, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
         }
 
@@ -155,7 +154,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
 
-            views.setInt(R.id.offLinear, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+            // views.setInt(R.id.offLinear, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
         }
         transparent = DeviceWidgetInfo.getTransparent();

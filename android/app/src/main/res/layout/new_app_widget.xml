@@ -33,8 +33,16 @@ android:padding="@dimen/widget_margin">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:layout_gravity="center|center"
             android:gravity="center|center"
-            android:id="@+id/widget_content_cover">
+            android:id="@+id/widget_content_cover"
+            android:background="@drawable/button_background">
+            <LinearLayout
+                android:id="@+id/leftMarginBell"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/bell"
                 android:layout_height="match_parent"
@@ -45,7 +53,12 @@ android:padding="@dimen/widget_margin">
                 android:layout_gravity="center"
                 android:fontFamily="@font/telldusicons"
                 android:textColor="@color/white"
-                android:layout_marginLeft="1dp"
+                android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/leftMarginUp"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/uparrow"
@@ -57,7 +70,12 @@ android:padding="@dimen/widget_margin">
                 android:layout_gravity="center"
                 android:fontFamily="@font/telldusicons"
                 android:textColor="@color/white"
-                android:layout_marginLeft="1dp"
+                android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/leftMarginDown"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/downarrow"
@@ -69,7 +87,12 @@ android:padding="@dimen/widget_margin">
                 android:layout_gravity="center"
                 android:fontFamily="@font/telldusicons"
                 android:textColor="@color/white"
-                android:layout_marginLeft="1dp"
+                android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/leftMarginStop"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/stopicon"
@@ -81,7 +104,12 @@ android:padding="@dimen/widget_margin">
                 android:layout_gravity="center"
                 android:fontFamily="@font/telldusicons"
                 android:textColor="@color/white"
-                android:layout_marginLeft="1dp"
+                android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/leftMarginOff"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
                 android:visibility="gone"/>
             <TextView
                 android:id="@+id/iconOff"
@@ -93,14 +121,18 @@ android:padding="@dimen/widget_margin">
                 android:layout_gravity="center"
                 android:fontFamily="@font/telldusicons"
                 android:textColor="@color/white"
-                android:layout_marginLeft="1dp"
+                android:visibility="gone"/>
+            <LinearLayout
+                android:id="@+id/leftMarginDim25"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
                 android:visibility="gone"/>
             <FrameLayout
                 android:id="@+id/dimmer25Cover"
                 android:layout_width="0dip"
                 android:layout_weight="0.2"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
                 android:layout_gravity="center|center"
                 android:visibility="gone">
             <TextView
@@ -127,13 +159,17 @@ android:padding="@dimen/widget_margin">
                 android:textStyle="bold"
                 android:background="@android:color/transparent"/>
             </FrameLayout>
-
+            <LinearLayout
+                android:id="@+id/leftMarginDim50"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
+                android:visibility="gone"/>
             <FrameLayout
                 android:id="@+id/dimmer50Cover"
                 android:layout_width="0dip"
                 android:layout_weight="0.2"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
                 android:layout_gravity="center|center"
                 android:visibility="gone">
             <TextView
@@ -159,13 +195,17 @@ android:padding="@dimen/widget_margin">
                 android:textStyle="bold"
                 android:background="@android:color/transparent"/>
             </FrameLayout>
-
+            <LinearLayout
+                android:id="@+id/leftMarginDim75"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
+                android:visibility="gone"/>
             <FrameLayout
                 android:id="@+id/dimmer75Cover"
                 android:layout_width="0dip"
                 android:layout_weight="0.2"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="1dp"
                 android:layout_gravity="center|center"
                 android:visibility="gone">
             <TextView
@@ -191,6 +231,12 @@ android:padding="@dimen/widget_margin">
                 android:textStyle="bold"
                 android:background="@android:color/transparent"/>
             </FrameLayout>
+            <LinearLayout
+                android:id="@+id/leftMarginOn"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/grayligt"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/iconOn"
                 android:layout_width="0dip"
@@ -201,7 +247,6 @@ android:padding="@dimen/widget_margin">
                 android:layout_gravity="center"
                 android:fontFamily="@font/telldusicons"
                 android:textColor="@color/white"
-                android:layout_marginLeft="1dp"
                 android:visibility="gone"/>
         </LinearLayout>
 

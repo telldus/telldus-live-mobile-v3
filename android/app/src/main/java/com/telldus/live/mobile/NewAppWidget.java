@@ -147,29 +147,62 @@ public class NewAppWidget extends AppWidgetProvider {
             return;
         }
 
+        Boolean isFirstButton = true;
         if (hasBell) {
+            isFirstButton = false;
             views.setViewVisibility(R.id.bell,View.VISIBLE);
             views.setTextViewText(R.id.bell, "bell");
-            views.setInt(R.id.bell, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setOnClickPendingIntent(R.id.bell, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            isFirstButton = false;
         }
 
-        if (hasOn) {
-            views.setViewVisibility(R.id.iconOn, View.VISIBLE);
-            views.setTextViewText(R.id.iconOn, onActionIcon);
-            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.iconOn, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+        if (hasUp) {
+            views.setViewVisibility(R.id.uparrow, View.VISIBLE);
+            views.setTextViewText(R.id.uparrow, "up");
+            views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.brandSecondary));
 
-            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
+            views.setOnClickPendingIntent(R.id.uparrow, getPendingSelf(context, ACTION_UP, appWidgetId));
+
+            if (!isFirstButton) {
+                views.setViewVisibility(R.id.leftMarginUp, View.VISIBLE);
+            }
+            isFirstButton = false;
+        }
+
+        if (hasDown) {
+            views.setViewVisibility(R.id.downarrow, View.VISIBLE);
+            views.setTextViewText(R.id.downarrow, "down");
+            views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.brandSecondary));
+
+            views.setOnClickPendingIntent(R.id.downarrow, getPendingSelf(context, ACTION_DOWN, appWidgetId));
+            if (!isFirstButton) {
+                views.setViewVisibility(R.id.leftMarginDown, View.VISIBLE);
+            }
+            isFirstButton = false;
+        }
+
+        if (hasStop) {
+            views.setViewVisibility(R.id.stopicon, View.VISIBLE);
+            views.setTextViewText(R.id.stopicon, "stop");
+            views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.brandPrimary));
+
+            views.setOnClickPendingIntent(R.id.stopicon, getPendingSelf(context, ACTION_STOP, appWidgetId));
+            if (!isFirstButton) {
+                views.setViewVisibility(R.id.leftMarginStop, View.VISIBLE);
+            }
+            isFirstButton = false;
         }
 
         if (hasOff) {
             views.setViewVisibility(R.id.iconOff, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
-            views.setInt(R.id.iconOff, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
             views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
+            if (!isFirstButton) {
+                views.setViewVisibility(R.id.leftMarginOff, View.VISIBLE);
+            }
+            isFirstButton = false;
         }
 
         if (hasDim) {
@@ -188,40 +221,28 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
 
-            views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
             views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
             views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
             views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
+
+            if (!isFirstButton) {
+                views.setViewVisibility(R.id.leftMarginDim25, View.VISIBLE);
+            }
+            views.setViewVisibility(R.id.leftMarginDim50, View.VISIBLE);
+            views.setViewVisibility(R.id.leftMarginDim75, View.VISIBLE);
+            isFirstButton = false;
         }
 
-        if (hasUp) {
-            views.setViewVisibility(R.id.uparrow, View.VISIBLE);
-            views.setTextViewText(R.id.uparrow, "up");
-            views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.uparrow, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+        if (hasOn) {
+            views.setViewVisibility(R.id.iconOn, View.VISIBLE);
+            views.setTextViewText(R.id.iconOn, onActionIcon);
+            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
 
-            views.setOnClickPendingIntent(R.id.uparrow, getPendingSelf(context, ACTION_UP, appWidgetId));
-        }
-
-        if (hasDown) {
-            views.setViewVisibility(R.id.downarrow, View.VISIBLE);
-            views.setTextViewText(R.id.downarrow, "down");
-            views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.downarrow, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
-            views.setOnClickPendingIntent(R.id.downarrow, getPendingSelf(context, ACTION_DOWN, appWidgetId));
-        }
-
-        if (hasStop) {
-            views.setViewVisibility(R.id.stopicon, View.VISIBLE);
-            views.setTextViewText(R.id.stopicon, "stop");
-            views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.brandPrimary));
-            views.setInt(R.id.stopicon, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
-            views.setOnClickPendingIntent(R.id.stopicon, getPendingSelf(context, ACTION_STOP, appWidgetId));
+            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
+            if (!isFirstButton) {
+                views.setViewVisibility(R.id.leftMarginOn, View.VISIBLE);
+            }
+            isFirstButton = false;
         }
 
         transparent = DeviceWidgetInfo.getTransparent();
