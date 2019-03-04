@@ -39,6 +39,7 @@ import {
 	setAppLayout,
 	setAccessibilityListener,
 	setAccessibilityInfo,
+	widgetAndroidConfigure,
 } from './App/Actions';
 import {
 	getTranslatableDayNames,
@@ -51,7 +52,7 @@ const changeLogVersion = '3.9';
 type Props = {
 	dispatch: Function,
 	isTokenValid: boolean,
-	accessToken: string,
+	accessToken: Object,
 	pushTokenRegistered: boolean,
 	prevChangeLogVersion: string,
 	forceShowChangeLog: boolean,
@@ -142,8 +143,17 @@ class App extends React.Component<Props, State> {
 		LocaleConfig.defaultLocale = locale;
 	}
 
-	componentDidUpdate() {
-		this.pushConf();
+	componentDidUpdate(prevProps: Object) {
+		const { dispatch, accessToken } = this.props;
+		const { accessToken: accessTokenPrev = {} } = prevProps;
+		if (accessToken) {
+			this.pushConf();
+			// Update accesstoken at the widget side, when ever it is refreshed at the App.
+			if (accessTokenPrev.access_token !== accessToken.access_token) {
+				dispatch(widgetAndroidConfigure());// Android.
+				// TODO: Do for iOS once widget is implemented.
+			}
+		}
 	}
 
 	componentWillUnmount() {
@@ -178,9 +188,7 @@ class App extends React.Component<Props, State> {
 	 */
 	pushConf() {
 		const { dispatch, ...otherProps } = this.props;
-		if (this.props.accessToken) {
-			dispatch(Push.configure(otherProps));
-		}
+		dispatch(Push.configure(otherProps));
 	}
 
 	onLayout(ev: Object) {
