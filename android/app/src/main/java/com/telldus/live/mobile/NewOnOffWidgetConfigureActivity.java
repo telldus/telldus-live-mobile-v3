@@ -351,7 +351,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         if (hasLearn != null && hasLearn) {
                             sizeSuppMeth = sizeSuppMeth - 1;
                         }
-                        Boolean showDevice = sizeSuppMeth <= 2;
+                        Boolean showDevice = sizeSuppMeth <= 2 && sizeSuppMeth > 0;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");
