@@ -29,6 +29,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -128,64 +129,34 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
-        if (state.equals("4") || (supportedMethods.get("BELL") != null && supportedMethods.get("BELL"))) {
+        if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
             views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_BELL, appWidgetId));
             views.setViewVisibility(R.id.offLinear, View.GONE);
 
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-            views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#eeeeee"));
+            views.setInt(R.id.onLayout, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setTextViewText(R.id.iconOn, "bell");
-            views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
+            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
         }
 
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
         // ON
-        if (hasOn || state.equals("1")) {
+        if (hasOn) {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
 
-            views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#eeeeee"));
-            views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
-
-            if (state.equals("1")) {
-                views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#E26901"));
-                views.setTextColor(R.id.iconOn, Color.parseColor("#FFFFFF"));
-
-                if (methods == 0) {
-                    views.setViewVisibility(R.id.offLinear, View.GONE);
-                }
-
-                if (methods != 0) {
-                    views.setTextViewText(R.id.iconOff, offActionIcon);
-                    views.setTextColor(R.id.iconOff, Color.parseColor("#1b365d"));
-                    views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#eeeeee"));
-                }
-            }
+            views.setInt(R.id.onLayout, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
         }
 
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
         // OFF
-        if (hasOff || state.equals("2")) {
+        if (hasOff) {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
 
-            views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#eeeeee"));
-            views.setTextColor(R.id.iconOff, Color.parseColor("#1b365d"));
-
-            if (state.equals("2")) {
-                views.setInt(R.id.offLinear, "setBackgroundColor", Color.parseColor("#1b365d"));
-                views.setTextColor(R.id.iconOff, Color.parseColor("#FFFFFF"));
-
-                if (methods == 0) {
-                    views.setViewVisibility(R.id.onLayout, View.GONE);
-                }
-
-                if (methods != 0) {
-                    views.setTextViewText(R.id.iconOn, onActionIcon);
-                    views.setTextColor(R.id.iconOn, Color.parseColor("#E26901"));
-                    views.setInt(R.id.onLayout, "setBackgroundColor", Color.parseColor("#eeeeee"));
-                }
-            }
+            views.setInt(R.id.offLinear, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+            views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
         }
         transparent = DeviceWidgetInfo.getTransparent();
         if (transparent.equals("true")) {
