@@ -140,7 +140,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
         // ON
-        if (hasOn) {
+        if (hasOn || state.equals("1")) {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
 
@@ -165,7 +165,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
         // OFF
-        if (hasOff) {
+        if (hasOff || state.equals("2")) {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
 
