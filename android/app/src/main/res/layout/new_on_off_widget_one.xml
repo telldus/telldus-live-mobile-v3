@@ -48,21 +48,22 @@
                 android:visibility="gone"
                 android:layout_gravity="center|center"
                 android:gravity="center|center"
-                android:orientation="horizontal"
-                android:background="@drawable/button_background">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/offLinear"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center|center">
+                    android:layout_gravity="center|center"
+                    android:gravity="center|center">
                     <TextView
                         android:id="@+id/iconOff"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="26sp"
-                        android:gravity="center"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center"
                         android:fontFamily="@font/telldusicons"
                         android:textColor="@color/white"
                         android:padding="5dp"/>
@@ -73,13 +74,15 @@
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_gravity="center|center">
+                    android:layout_gravity="center|center"
+                    android:gravity="center|center">
                     <TextView
                         android:id="@+id/iconOn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="26sp"
-                        android:gravity="center"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center"
                         android:fontFamily="@font/telldusicons"
                         android:textColor="@color/white"
                         android:padding="5dp"/>
