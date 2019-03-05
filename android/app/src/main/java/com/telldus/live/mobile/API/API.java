@@ -65,14 +65,7 @@ public class API {
                                         if (!error.isEmpty() && error != null) {
                                             callBack.onSuccess(response);
                                         } else {
-                                            callEndPoint(context, params, new OnAPITaskComplete() {
-                                                @Override
-                                                public void onSuccess(final JSONObject responseFinal) {
-                                                }
-                                                @Override
-                                                public void onError(ANError errorFinal) {
-                                                }
-                                            });
+                                            callEndPoint(context, params, callBack);
                                         }
                                     }
                                     @Override
@@ -103,14 +96,7 @@ public class API {
                                             if (!errorRefreshToken.isEmpty() && errorRefreshToken != null) {
                                                 callBack.onError(error);
                                             } else {
-                                                callEndPoint(context, params, new OnAPITaskComplete() {
-                                                    @Override
-                                                    public void onSuccess(final JSONObject responseFinal) {
-                                                    }
-                                                    @Override
-                                                    public void onError(ANError errorFinal) {
-                                                    }
-                                                });
+                                                callEndPoint(context, params, callBack);
                                             }
                                         }
                                         @Override
@@ -139,38 +125,38 @@ public class API {
         String Url = API_SERVER+"accessToken";
 
         AndroidNetworking.post(Url)
-                .addBodyParameter("client_id", clientId)
-                .addBodyParameter("client_secret", clientSecret)
-                .addBodyParameter("grant_type", "refresh_token")
-                .addBodyParameter("refresh_token", refreshToken)
-                .addHeaders("Content-Type", "application/json")
-                .addHeaders("Accpet", "application/json")
-                .setPriority(Priority.LOW)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        String error = response.optString("error");
-                        if (!error.isEmpty() && error != null) {
-                            callBack.onSuccess(response);
-                        } else {
+            .addBodyParameter("client_id", clientId)
+            .addBodyParameter("client_secret", clientSecret)
+            .addBodyParameter("grant_type", "refresh_token")
+            .addBodyParameter("refresh_token", refreshToken)
+            .addHeaders("Content-Type", "application/json")
+            .addHeaders("Accpet", "application/json")
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String error = response.optString("error");
+                    if (!error.isEmpty() && error != null) {
+                        callBack.onSuccess(response);
+                    } else {
 
-                            String accessTokenN = response.optString("access_token");
-                            String refreshTokenN = response.optString("refresh_token");
-                            String expiresInN = response.optString("expires_in");
+                        String accessTokenN = response.optString("access_token");
+                        String refreshTokenN = response.optString("refresh_token");
+                        String expiresInN = response.optString("expires_in");
 
-                            prefManager.timeStampAccessToken(expiresInN);
-                            prefManager.AccessTokenDetails(accessTokenN, expiresInN);
-                            prefManager.infoAccessToken(clientId, clientSecret, refreshTokenN);
+                        prefManager.timeStampAccessToken(expiresInN);
+                        prefManager.AccessTokenDetails(accessTokenN, expiresInN);
+                        prefManager.infoAccessToken(clientId, clientSecret, refreshTokenN);
 
-                            callBack.onSuccess(response);
-                        }
+                        callBack.onSuccess(response);
                     }
+                }
 
-                    @Override
-                    public void onError(ANError anError) {
-                        callBack.onError(anError);
-                    }
-                });
+                @Override
+                public void onError(ANError anError) {
+                    callBack.onError(anError);
+                }
+            });
     }
 }
