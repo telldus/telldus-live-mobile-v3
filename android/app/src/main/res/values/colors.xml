@@ -15,4 +15,5 @@
     <color name="lightblue">#FF6676CC</color>
 	<color name="brandPrimary">#1b365d</color>
     <color name="brandSecondary">#e26901</color>
+    <color name="brandSuccess">#5cb85c</color>
 </resources>
