@@ -102,12 +102,14 @@ public class DevicesAPI {
                         Toast.makeText(context, error, Toast.LENGTH_LONG).show();
                         MyDBHandler db = new MyDBHandler(context);
                         db.updateDeviceMethodRequested(null, deviceId);
+                        Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                         callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     MyDBHandler db = new MyDBHandler(context);
                     db.updateDeviceMethodRequested(null, deviceId);
+                    Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                     callBack.onSuccess(response);
                 };
             }
@@ -115,6 +117,7 @@ public class DevicesAPI {
             public void onError(ANError error) {
                 MyDBHandler db = new MyDBHandler(context);
                 db.updateDeviceMethodRequested(null, deviceId);
+                Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                 callBack.onError(error);
             }
         });
@@ -144,6 +147,7 @@ public class DevicesAPI {
                     e.printStackTrace();
                     MyDBHandler db = new MyDBHandler(context);
                     db.updateDeviceMethodRequested(null, deviceId);
+                    Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                     callBack.onSuccess(response);
                 };
             }
@@ -151,6 +155,7 @@ public class DevicesAPI {
             public void onError(ANError error) {
                 MyDBHandler db = new MyDBHandler(context);
                 db.updateDeviceMethodRequested(null, deviceId);
+                Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                 callBack.onError(error);
             }
         });
