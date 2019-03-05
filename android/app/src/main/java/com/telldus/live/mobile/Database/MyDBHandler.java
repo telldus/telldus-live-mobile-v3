@@ -47,6 +47,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String DEVICE_TYPE = "deviceType";
     public static final String DEVICE_STATE_VALUE = "deviceStateValue";
     public static final String TRANSPARENT = "transparent";
+    public static final String DEVICE_METHOD_REQUESTED = "deviceMethodRequested";
 
     public static final String TABLE_WIDGET_INFO_SENSOR = "WidgetInfoSensor";
     public static final String WIDGET_ID_SENSOR = "widgetIdSensor";
@@ -70,7 +71,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_WIDGET_INFO_DEVICE + "("+ WIDGET_ID_DEVICE + " INTEGER," + DEVICE_ID
                 + " INTEGER," + DEVICE_NAME + " TEXT," + DEVICE_STATE + " TEXT," + DEVICE_METHODS
                 + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT
-                + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT" + ")";
+                + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT," + DEVICE_METHOD_REQUESTED + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
@@ -101,6 +102,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(DEVICE_STATE_VALUE, mDeviceInfo.getDeviceStateValue());
         values.put(TRANSPARENT, mDeviceInfo.getTransparent());
         values.put(WIDGET_DEVICE_USER_ID, mDeviceInfo.getUserId());
+        values.put(DEVICE_METHOD_REQUESTED, mDeviceInfo.getMethodRequested());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -146,6 +148,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setDeviceStateValue(cursor.getString(6));
             r.setTransparent(cursor.getString(7));
             r.setUserId(cursor.getString(8));
+            r.setMethodRequested(cursor.getString(9));
 
             cursor.close();
         } else {
@@ -212,6 +215,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_STATE, action);
         contentValues.put(DEVICE_STATE_VALUE, value);
+
+        String[] whereArgs = {val};
+        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs);
+        return true;
+    }
+
+    public boolean updateDeviceMethodRequested(String methodRequested, int id) {
+        String val = String.valueOf(id);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DEVICE_METHOD_REQUESTED, methodRequested);
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs);
@@ -297,6 +311,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setDeviceType(cursor.getString(5));
                 r.setDeviceStateValue(cursor.getString(6));
                 r.setUserId(cursor.getString(8));
+                r.setMethodRequested(cursor.getString(9));
 
                 list.add(r);
             } while (cursor.moveToNext());

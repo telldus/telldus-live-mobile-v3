@@ -81,7 +81,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
     Integer id;
     Integer deviceSupportedMethods = 0;
-    String deviceCurrentState, deviceTypeCurrent, deviceStateValueCurrent;
+    String deviceTypeCurrent, deviceStateValueCurrent;
 
     public int selectedDeviceIndex;
 
@@ -225,6 +225,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
+                    String methodRequested = null;
+                    String deviceCurrentState = null;
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -234,7 +236,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceTypeCurrent,
                         deviceStateValueCurrent,
                         switchStatus,
-                        currentUserId);
+                        currentUserId,
+                        methodRequested);
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
@@ -271,7 +274,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 Map<String, Object> info = DeviceInfoMap.get(id);
 
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceCurrentState = info.get("state").toString();
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 deviceStateValueCurrent = info.get("stateValue").toString();

@@ -78,7 +78,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
     Integer id;
     Integer deviceSupportedMethods = 0;
-    String deviceCurrentState, deviceTypeCurrent;
+    String deviceTypeCurrent;
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -249,6 +249,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
+                    String methodRequested = null;
+                    String deviceCurrentState = null;
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -258,7 +260,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         deviceTypeCurrent,
                         "", // As of now deviceStateValue does matters for only DIM devices.
                         switchStatus,
-                        currentUserId);
+                        currentUserId,
+                        methodRequested);
                     db.addWidgetDevice(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -299,7 +302,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 Map<String, Object> info = DeviceInfoMap.get(id);
 
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceCurrentState = info.get("state").toString();
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
