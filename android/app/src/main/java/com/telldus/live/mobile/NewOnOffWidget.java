@@ -34,6 +34,8 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import android.util.Log;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
@@ -50,6 +52,8 @@ import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 
+import static android.util.TypedValue.COMPLEX_UNIT_SP;
+
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link NewOnOffWidgetConfigureActivity NewOnOffWidgetConfigureActivity}
@@ -59,12 +63,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_OFF = "ACTION_OFF";
     private static final String ACTION_BELL = "ACTION_BELL";
 
+    private static final String METHOD_ON = "1";
+    private static final String METHOD_OFF = "2";
+    private static final String METHOD_BELL = "4";
+
     // Important to instantiate here and not inside 'createDeviceActionApi'.
     // This is to keep a single instance of 'handler' and 'runnable' created inside 'setDeviceState'
     // for each device/widget.
     static DevicesAPI deviceAPI = new DevicesAPI();
 
-
+    private Handler handlerResetDeviceStateToNull;
+    private Runnable runnableResetDeviceStateToNull;
     static void updateAppWidget(
         Context context,
         AppWidgetManager appWidgetManager,
@@ -97,6 +106,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         widgetText = DeviceWidgetInfo.getDeviceName();
         String state = DeviceWidgetInfo.getState();
+        String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String deviceType = DeviceWidgetInfo.getDeviceType();
 
@@ -123,19 +133,34 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_ON, appWidgetId));
-        views.setOnClickPendingIntent(R.id.iconOff, getPendingSelf(context, ACTION_OFF, appWidgetId));
+        views.setOnClickPendingIntent(R.id.onLayout, getPendingSelf(context, ACTION_ON, appWidgetId));
+        views.setOnClickPendingIntent(R.id.offLinear, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
-            views.setOnClickPendingIntent(R.id.iconOn, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            views.setOnClickPendingIntent(R.id.onLayout, getPendingSelf(context, ACTION_BELL, appWidgetId));
             views.setViewVisibility(R.id.offLinear, View.GONE);
 
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+            views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.button_background);
             views.setTextViewText(R.id.iconOn, "bell");
+            views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
+            views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
+
+            if (methodRequested != null && methodRequested.equals("4")) {
+                views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.button_background_secondary_fill);
+                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+            }
+
+            if (methodRequested == null && state != null && state.equals("4")) {
+                views.setTextViewText(R.id.iconOn, "checkmark");
+                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+                views.setInt(R.id.iconOn, "setBackgroundResource", R.drawable.shape_circular_background_green);
+            }
         }
 
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
@@ -143,9 +168,23 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (hasOn) {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
+            views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            // views.setInt(R.id.onLayout, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+            views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
+            views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
+
+            if (methodRequested != null && methodRequested.equals("1")) {
+                views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
+                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+            }
+
+            if (methodRequested == null && state != null && state.equals("1")) {
+                views.setTextViewText(R.id.iconOn, "checkmark");
+                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+                views.setInt(R.id.iconOn, "setBackgroundResource", R.drawable.shape_circular_background_green);
+            }
         }
 
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
@@ -153,15 +192,27 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (hasOff) {
             views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
+            views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            // views.setInt(R.id.offLinear, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+            views.setInt(R.id.offLinear, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
+            views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
+
+            if (methodRequested != null && methodRequested.equals("2")) {
+                views.setInt(R.id.offLinear, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
+                views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
+            }
+
+            if (methodRequested == null && state != null && state.equals("2")) {
+                views.setTextViewText(R.id.iconOff, "checkmark");
+                views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
+                views.setInt(R.id.iconOff, "setBackgroundResource", R.drawable.shape_circular_background_green);
+            }
         }
         transparent = DeviceWidgetInfo.getTransparent();
         if (transparent.equals("true")) {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
-            views.setInt(R.id.onLayout, "setBackgroundColor", Color.TRANSPARENT);
-            views.setInt(R.id.offLinear,"setBackgroundColor", Color.TRANSPARENT);
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
@@ -241,24 +292,31 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         Integer methods = widgetInfo.getDeviceMethods();
+        int deviceId = widgetInfo.getDeviceId();
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.findWidgetInfoDevice(widgetId);
+            db.updateDeviceMethodRequested(METHOD_BELL, deviceId);
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            updateAppWidget(context, widgetManager, widgetId);
 
-            createDeviceActionApi(context, info.getDeviceId(), 4, widgetId, db, "Bell");
+            createDeviceActionApi(context, deviceId, 4, widgetId, db, "Bell");
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.findWidgetInfoDevice(widgetId);
+            db.updateDeviceMethodRequested(METHOD_ON, deviceId);
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            updateAppWidget(context, widgetManager, widgetId);
 
-            createDeviceActionApi(context, info.getDeviceId(), 1, widgetId, db, "On");
+            createDeviceActionApi(context, deviceId, 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
 
-            DeviceInfo info = db.findWidgetInfoDevice(widgetId);
+            db.updateDeviceMethodRequested(METHOD_OFF, deviceId);
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            updateAppWidget(context, widgetManager, widgetId);
 
-            createDeviceActionApi(context, info.getDeviceId(), 2, widgetId, db, "Off");
+            createDeviceActionApi(context, deviceId, 2, widgetId, db, "Off");
         }
     }
 
@@ -277,6 +335,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         db.updateDeviceIdDeviceWidget(-1, widgetId);
                     }
                 }
+                resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId);
@@ -287,5 +346,20 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 updateAppWidget(context, widgetManager, widgetId);
             }
         });
+    }
+
+    public void resetDeviceStateToNull(final int deviceId, final int widgetId, final Context context) {
+        handlerResetDeviceStateToNull = new Handler(Looper.getMainLooper());
+        runnableResetDeviceStateToNull = new Runnable() {
+            @Override
+            public void run() {
+                MyDBHandler db = new MyDBHandler(context);
+                db.updateDeviceState(null, deviceId, "");
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+        };
+
+        handlerResetDeviceStateToNull.postDelayed(runnableResetDeviceStateToNull, 5000);
     }
 }
