@@ -33,10 +33,12 @@ import com.telldus.live.mobile.API.OnAPITaskComplete;
 import java.util.concurrent.Callable;
 
 import org.json.JSONObject;
+import org.json.JSONException;
 
 public class API {
     private static String API_SERVER = "https://api3.telldus.com/oauth2/";
-    public void callEndPoint(Context context, String params, final OnAPITaskComplete callBack) {
+
+    public void callEndPoint(final Context context, final String params, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
 
@@ -50,14 +52,111 @@ public class API {
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        callBack.onSuccess(response);
+                    public void onResponse(final JSONObject response) {
+                        String error = response.optString("error");
+
+                        if (!error.isEmpty() && error != null) {
+                            if ((error.equalsIgnoreCase("invalid_token")) || (error.equalsIgnoreCase("expired_token"))) {
+                                refreshAccessToken(context, new OnAPITaskComplete() {
+                                    @Override
+                                    public void onSuccess(final JSONObject responseRefreshToken) {
+
+                                        String error = responseRefreshToken.optString("error");
+                                        if (!error.isEmpty() && error != null) {
+                                            callBack.onSuccess(response);
+                                        } else {
+                                            callEndPoint(context, params, callBack);
+                                        }
+                                    }
+                                    @Override
+                                    public void onError(ANError errorRefreshToken) {
+                                        callBack.onSuccess(response);
+                                    }
+                                });
+                            } else {
+                                callBack.onSuccess(response);
+                            }
+                        } else {
+                            callBack.onSuccess(response);
+                        }
                     }
 
                     @Override
-                    public void onError(ANError anError) {
-                        callBack.onError(anError);
+                    public void onError(final ANError error) {
+                        if (error.getErrorCode() != 0) {
+                            try {
+                                JSONObject errorBody = new JSONObject(error.getErrorBody());
+                                String errorMessage = errorBody.optString("error");
+                                Boolean hasMessage = !errorMessage.isEmpty() && errorMessage != null;
+                                if (hasMessage && (errorMessage.equalsIgnoreCase("invalid_token")) || (errorMessage.equalsIgnoreCase("expired_token"))) {
+                                    refreshAccessToken(context, new OnAPITaskComplete() {
+                                        @Override
+                                        public void onSuccess(final JSONObject responseRefreshToken) {
+                                            String errorRefreshToken = responseRefreshToken.optString("error");
+                                            if (!errorRefreshToken.isEmpty() && errorRefreshToken != null) {
+                                                callBack.onError(error);
+                                            } else {
+                                                callEndPoint(context, params, callBack);
+                                            }
+                                        }
+                                        @Override
+                                        public void onError(ANError errorRefreshToken) {
+                                            callBack.onError(errorRefreshToken);
+                                        }
+                                    });
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                callBack.onError(error);
+                            };
+                       } else {
+                            callBack.onError(error);
+                       }
                     }
                 });
+    }
+
+    public void refreshAccessToken(final Context context, final OnAPITaskComplete callBack) {
+        final PrefManager prefManager = new PrefManager(context);
+        final String  clientId = prefManager.getClientID();
+        final String  clientSecret = prefManager.getClientSecret();
+        final String  refreshToken = prefManager.refToken();
+
+        String Url = API_SERVER+"accessToken";
+
+        AndroidNetworking.post(Url)
+            .addBodyParameter("client_id", clientId)
+            .addBodyParameter("client_secret", clientSecret)
+            .addBodyParameter("grant_type", "refresh_token")
+            .addBodyParameter("refresh_token", refreshToken)
+            .addHeaders("Content-Type", "application/json")
+            .addHeaders("Accpet", "application/json")
+            .setPriority(Priority.LOW)
+            .build()
+            .getAsJSONObject(new JSONObjectRequestListener() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String error = response.optString("error");
+                    if (!error.isEmpty() && error != null) {
+                        callBack.onSuccess(response);
+                    } else {
+
+                        String accessTokenN = response.optString("access_token");
+                        String refreshTokenN = response.optString("refresh_token");
+                        String expiresInN = response.optString("expires_in");
+
+                        prefManager.timeStampAccessToken(expiresInN);
+                        prefManager.AccessTokenDetails(accessTokenN, expiresInN);
+                        prefManager.infoAccessToken(clientId, clientSecret, refreshTokenN);
+
+                        callBack.onSuccess(response);
+                    }
+                }
+
+                @Override
+                public void onError(ANError anError) {
+                    callBack.onError(anError);
+                }
+            });
     }
 }

@@ -265,7 +265,48 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:text="Transparent Background"
+                            android:textSize="14sp"
+                            android:textColor="@color/gray"
                             android:theme="@style/SCBSwitch"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/btSelectPollInterval"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.62"
+                            android:background="@drawable/shape"
+                            android:orientation="horizontal"
+                            android:paddingVertical="14dp"
+                            android:paddingHorizontal="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_gravity="center|center"
+                            android:gravity="center|center">
+
+                        <TextView
+                            android:id="@+id/labelSelectPoll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Update every 10 minutes"
+                            android:textSize="14sp"
+                            android:layout_gravity="center|left"
+                            android:gravity="center|left"
+                            android:textColor="@color/gray"/>
+
+                        <TextView
+                            android:id="@+id/iconDropDown"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="down"
+                            android:textSize="14sp"
+                            android:textColor="@color/darkGray"
+                            android:gravity="center|right"
+                            android:layout_gravity="center|right"
+                            android:fontFamily="@font/telldusicons"
+                            android:layout_marginRight="11dp"/>
 
                     </LinearLayout>
 

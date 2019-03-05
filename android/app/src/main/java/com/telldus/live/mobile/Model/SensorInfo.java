@@ -20,28 +20,31 @@
 package com.telldus.live.mobile.Model;
 
 public class SensorInfo {
-    int widgetID;
-    String WidgetName;
-    String WidgetType;
-    int DeviceID;
+    int widgetId;
+    String sensorName;
+    String sensorDisplayType;
+    int sensorId;
     String sensorValue;
     String sensorUnit;
     String sensorIcon;
     String sensorUpdate;
     String transparent;
     String userId;
+    Integer updateInterval;
 
-    public SensorInfo(int widgetID, String widgetName, String widgetType, int deviceID, String sensorValue, String sensorUnit, String sensorIcon, String sensorUpdate, String transparent, String userId) {
-        this.widgetID = widgetID;
-        WidgetName = widgetName;
-        WidgetType = widgetType;
-        DeviceID = deviceID;
+    public SensorInfo(int widgetId, String sensorName, String sensorDisplayType, int sensorId, String sensorValue, String sensorUnit,
+    String sensorIcon, String sensorUpdate, String transparent, String userId, Integer updateInterval) {
+        this.widgetId = widgetId;
+        this.sensorName = sensorName;
+        this.sensorDisplayType = sensorDisplayType;
+        this.sensorId = sensorId;
         this.sensorValue = sensorValue;
         this.sensorUnit = sensorUnit;
         this.sensorIcon = sensorIcon;
         this.sensorUpdate = sensorUpdate;
         this.transparent = transparent;
         this.userId = userId;
+        this.updateInterval = updateInterval;
     }
 
     public SensorInfo() {
@@ -56,36 +59,36 @@ public class SensorInfo {
         this.transparent=transparent;
     }
 
-    public int getWidgetID() {
-        return widgetID;
+    public int getWidgetId() {
+        return widgetId;
     }
 
-    public void setWidgetID(int widgetID) {
-        this.widgetID = widgetID;
+    public void setWidgetId(int widgetId) {
+        this.widgetId = widgetId;
     }
 
-    public String getWidgetName() {
-        return WidgetName;
+    public String getSensorName() {
+        return sensorName;
     }
 
-    public void setWidgetName(String widgetName) {
-        WidgetName = widgetName;
+    public void setSensorName(String sensorName) {
+        this.sensorName = sensorName;
     }
 
-    public String getWidgetType() {
-        return WidgetType;
+    public String getSensorDisplayType() {
+        return sensorDisplayType;
     }
 
-    public void setWidgetType(String widgetType) {
-        WidgetType = widgetType;
+    public void setSensorDisplayType(String sensorDisplayType) {
+        this.sensorDisplayType = sensorDisplayType;
     }
 
-    public int getDeviceID() {
-        return DeviceID;
+    public int getSensorId() {
+        return sensorId;
     }
 
-    public void setDeviceID(int deviceID) {
-        DeviceID = deviceID;
+    public void setSensorId(int sensorId) {
+        this.sensorId = sensorId;
     }
 
     public String getSensorValue() {
@@ -126,5 +129,13 @@ public class SensorInfo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Integer getUpdateInterval() {
+        return updateInterval;
+    }
+
+    public void setUpdateInterval(Integer updateInterval) {
+        this.updateInterval = updateInterval;
     }
 }

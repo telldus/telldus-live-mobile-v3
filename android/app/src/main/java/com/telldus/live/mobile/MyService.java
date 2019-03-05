@@ -189,23 +189,8 @@ public class MyService extends Service {
                 public void onOpen(ServerHandshake handshakedata) {
 
                     authoriseWebsocket(SOC_CLI, uniqueId, mWebSocketClient);
-                    addWebsocketFilter("device", "added", mWebSocketClient);
-                    addWebsocketFilter("device", "removed", mWebSocketClient);
                     addWebsocketFilter("device", "failSetState", mWebSocketClient);
                     addWebsocketFilter("device", "setState", mWebSocketClient);
-
-                    addWebsocketFilter("sensor", "added", mWebSocketClient);
-                    addWebsocketFilter("sensor", "removed", mWebSocketClient);
-                    addWebsocketFilter("sensor", "setName", mWebSocketClient);
-                    addWebsocketFilter("sensor", "setPower", mWebSocketClient);
-                    addWebsocketFilter("sensor", "value", mWebSocketClient);
-
-                    addWebsocketFilter("zwave", "removeNodeFromNetwork", mWebSocketClient);
-                    addWebsocketFilter("zwave", "removeNodeFromNetworkStartTimeout", mWebSocketClient);
-                    addWebsocketFilter("zwave", "addNodeToNetwork", mWebSocketClient);
-                    addWebsocketFilter("zwave", "addNodeToNetworkStartTimeout", mWebSocketClient);
-                    addWebsocketFilter("zwave", "interviewDone", mWebSocketClient);
-                    addWebsocketFilter("zwave", "nodeInfo", mWebSocketClient);
                 }
 
                 @Override
@@ -228,55 +213,21 @@ public class MyService extends Service {
                             String chooseWidget = jsonObject.getString("module");
 
                             if (chooseWidget.equals("device")) {
-                                jsonDataObject = jsonObject.getJSONObject("data");
-                                int deviceID = jsonDataObject.getInt("deviceId");
-                                String method = jsonDataObject.getString("method");
-                                String value = jsonDataObject.getString("value");
-                                boolean b = db.updateDeviceState(method, deviceID, value);
+                                // jsonDataObject = jsonObject.getJSONObject("data");
+                                // int deviceID = jsonDataObject.getInt("deviceId");
+                                // String method = jsonDataObject.getString("method");
+                                // String value = jsonDataObject.getString("value");
+                                // boolean b = db.updateDeviceState(method, deviceID, value);
 
-                                if (b) {
-                                    int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
-                                    AppWidgetManager onOffWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+                                // if (b) {
+                                //     int widgetIDsOnOff[] = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), NewOnOffWidget.class));
+                                //     AppWidgetManager onOffWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
 
-                                    for (int id : widgetIDsOnOff) {
-                                        AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
-                                        NewOnOffWidget.updateAppWidget(getApplicationContext(),onOffWidgetManager,id);
-                                    }
-                                }
-                            }
-                            else {
-                                jsonDataObject = jsonObject.getJSONObject("data");
-                                int sensorid = Integer.parseInt(jsonDataObject.getString("sensorId"));
-
-                                String time = jsonDataObject.getString("time");
-
-                                JSONArray jsonArray = jsonDataObject.optJSONArray("data");
-
-                                String valueSensor = null;
-
-                                ArrayList<SensorInfo> mSensorInfoList = db.findSensorDevice(sensorid);
-
-                                for (int i = 0; i < mSensorInfoList.size(); i++) {
-                                    SensorInfo objInfo = mSensorInfoList.get(i);
-
-                                    String widgetName = objInfo.getWidgetName();
-                                    int widgetID = objInfo.getWidgetID();
-                                    String widgetType = objInfo.getWidgetType();
-
-                                    for (int j = 0; j < jsonArray.length(); j++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(j);
-                                        String type = jsonObject1.getString("type");
-                                        String scale = jsonObject1.getString("scale");
-                                        String typeValue = String.valueOf(SensorType.getValueLang(widgetType));
-
-                                        if (type.equals(typeValue)) {
-                                            valueSensor = jsonObject1.optString("value");
-                                            long timeStamp = Long.parseLong(time);
-                                            int result = db.updateSensorInfo(valueSensor, timeStamp, widgetID);
-
-                                        }
-                                    }
-                                }
+                                //     for (int id : widgetIDsOnOff) {
+                                //         AppWidgetManager.getInstance(getApplication()).notifyAppWidgetViewDataChanged(id, R.id.never);
+                                //         NewOnOffWidget.updateAppWidget(getApplicationContext(),onOffWidgetManager,id);
+                                //     }
+                                // }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -356,7 +307,9 @@ public class MyService extends Service {
         if (isConnecting) {
             mWebSocketClient.close();
         }
-        prefManager.websocketService(false);
+        if (prefManager != null) {
+            prefManager.websocketService(false);
+        }
     }
 
     private boolean isNetworkConnected() {

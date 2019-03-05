@@ -21,29 +21,31 @@ package com.telldus.live.mobile.Model;
 
 public class DeviceInfo {
     String state;
-    int widgetID;
-    int deviceID;
+    int widgetId;
+    int deviceId;
     String deviceName;
     Integer methods;
     String transparent;
     String deviceType;
     String deviceStateValue;
     String userId;
+    String methodRequested;
 
     public DeviceInfo() {
-
     }
 
-    public DeviceInfo(String state, int widgetID, int deviceID, String deviceName, Integer methods, String deviceType, String deviceStateValue, String transparent, String userId) {
+    public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
+    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested) {
         this.state = state;
-        this.widgetID = widgetID;
-        this.deviceID = deviceID;
+        this.widgetId = widgetId;
+        this.deviceId = deviceId;
         this.deviceName = deviceName;
         this.methods = methods;
         this.transparent = transparent;
         this.deviceType = deviceType;
         this.deviceStateValue = deviceStateValue;
         this.userId = userId;
+        this.methodRequested = methodRequested;
     }
 
     public String getState() {
@@ -62,20 +64,20 @@ public class DeviceInfo {
         this.state = state;
     }
 
-    public int getWidgetID() {
-        return widgetID;
+    public int getWidgetId() {
+        return widgetId;
     }
 
-    public void setWidgetID(int widgetID) {
-        this.widgetID = widgetID;
+    public void setWidgetId(int widgetId) {
+        this.widgetId = widgetId;
     }
 
-    public int getDeviceID() {
-        return deviceID;
+    public int getDeviceId() {
+        return deviceId;
     }
 
-    public void setDeviceID(int deviceID) {
-        this.deviceID = deviceID;
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getDeviceName() {
@@ -116,5 +118,13 @@ public class DeviceInfo {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getMethodRequested() {
+        return methodRequested;
+    }
+
+    public void setMethodRequested(String methodRequested) {
+        this.methodRequested = methodRequested;
     }
 }

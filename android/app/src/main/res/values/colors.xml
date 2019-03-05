@@ -13,5 +13,8 @@
     <color name="gray">#444440</color>
     <color name="grayligt">#A6A6A6</color>
     <color name="lightblue">#FF6676CC</color>
-	<color name="brandSecondary">#e26901</color>
+	<color name="brandPrimary">#1b365d</color>
+    <color name="brandSecondary">#e26901</color>
+    <color name="brandSuccess">#5cb85c</color>
+    <color name="widgetBackground">#b2b2b2</color>
 </resources>

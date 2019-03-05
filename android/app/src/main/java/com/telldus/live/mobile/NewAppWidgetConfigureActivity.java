@@ -62,7 +62,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
@@ -82,7 +81,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
     Integer id;
     Integer deviceSupportedMethods = 0;
-    String deviceCurrentState, deviceTypeCurrent, deviceStateValueCurrent;
+    String deviceTypeCurrent, deviceStateValueCurrent;
 
     public int selectedDeviceIndex;
 
@@ -223,18 +222,11 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         prefManager.DeviceDB(true);
                     }
 
-                    boolean token_service = prefManager.getTokenService();
-                    if (!token_service) {
-                        prefManager.TokenService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
+                    String methodRequested = null;
+                    String deviceCurrentState = null;
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -244,8 +236,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceTypeCurrent,
                         deviceStateValueCurrent,
                         switchStatus,
-                        currentUserId);
-                    db.addUser(mInsert);
+                        currentUserId,
+                        methodRequested);
+                    db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
                     boolean web_service = prefManager.getWebService();
@@ -281,7 +274,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 Map<String, Object> info = DeviceInfoMap.get(id);
 
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceCurrentState = info.get("state").toString();
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 deviceStateValueCurrent = info.get("stateValue").toString();

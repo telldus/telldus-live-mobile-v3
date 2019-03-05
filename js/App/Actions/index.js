@@ -40,6 +40,7 @@ import ScheduleActions from './Schedule';
 import UserActions from './User';
 import LocalTest from './LocalTest';
 import LocalControl from './LocalControl';
+import Widget from './Widget';
 
 module.exports = {
 	...GatewayActions,
@@ -60,4 +61,5 @@ module.exports = {
 	...UserActions,
 	...LocalTest,
 	...LocalControl,
+	...Widget,
 };

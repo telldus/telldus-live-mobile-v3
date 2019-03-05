@@ -77,9 +77,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- <service android:name=".ServiceBackground.UpdateService"></service> -->
-        <service android:name=".UpdateSensorService" />
-
         <receiver android:name=".NewAppWidget"
             android:label="Device 3+ btn">
             <intent-filter>
@@ -113,7 +110,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <service android:name=".ServiceBackground.AccessTokenService"></service>
 
         <service android:name=".ServiceBackground.NetworkInfo"></service>
 

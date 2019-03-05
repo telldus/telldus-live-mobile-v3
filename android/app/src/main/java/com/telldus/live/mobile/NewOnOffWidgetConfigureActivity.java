@@ -63,7 +63,6 @@ import java.io.IOException;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
@@ -79,7 +78,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
     Integer id;
     Integer deviceSupportedMethods = 0;
-    String deviceCurrentState, deviceTypeCurrent;
+    String deviceTypeCurrent;
 
     MyDBHandler db = new MyDBHandler(this);
 
@@ -247,19 +246,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         prefManager.DeviceDB(true);
                     }
 
-
-                    boolean token_service = prefManager.getTokenService();
-                    if (!token_service) {
-                        prefManager.TokenService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
+                    String methodRequested = null;
+                    String deviceCurrentState = null;
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -269,8 +260,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         deviceTypeCurrent,
                         "", // As of now deviceStateValue does matters for only DIM devices.
                         switchStatus,
-                        currentUserId);
-                    db.addUser(mInsert);
+                        currentUserId,
+                        methodRequested);
+                    db.addWidgetDevice(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
@@ -310,7 +302,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 Map<String, Object> info = DeviceInfoMap.get(id);
 
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
-                                deviceCurrentState = info.get("state").toString();
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
@@ -362,7 +353,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         if (hasLearn != null && hasLearn) {
                             sizeSuppMeth = sizeSuppMeth - 1;
                         }
-                        Boolean showDevice = sizeSuppMeth <= 2;
+                        Boolean showDevice = sizeSuppMeth <= 2 && sizeSuppMeth > 0;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");

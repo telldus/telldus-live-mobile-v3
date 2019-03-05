@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="@dimen/widget_margin"
     android:id="@+id/widget_root">
-
     <LinearLayout
         android:id="@+id/iconWidget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@drawable/shape_widget"
         android:layout_gravity="center|center"
         android:gravity="center">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_gravity="center|center">
-
             <TextView
                 android:id="@+id/txtWidgetTitle"
                 android:layout_width="wrap_content"
@@ -30,53 +27,59 @@
                 android:textStyle="bold"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:layout_marginBottom="5dp"/>
-
+                android:layout_marginBottom="3dp"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center|center"
             android:layout_gravity="center|center"
             android:id="@+id/widget_content_cover">
-
             <LinearLayout
                 android:id="@+id/parentLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:visibility="gone"
                 android:layout_gravity="center|center"
                 android:gravity="center|center"
                 android:orientation="horizontal">
-
                 <LinearLayout
                     android:id="@+id/offLinear"
-                    android:layout_width="54dp"
-                    android:layout_height="40sp"
-                    android:layout_gravity="center|center">
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center|center"
+                    android:gravity="center|center">
                     <TextView
                         android:id="@+id/iconOff"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="26sp"
-                        android:gravity="center"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center"
                         android:fontFamily="@font/telldusicons"
                         android:textColor="@color/white"
                         android:padding="5dp"/>
                 </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/grayligt"/>
                 <LinearLayout
                     android:id="@+id/onLayout"
-                    android:layout_width="54dp"
-                    android:layout_height="40sp"
-                    android:layout_gravity="center|center">
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:layout_gravity="center|center"
+                    android:gravity="center|center">
                     <TextView
                         android:id="@+id/iconOn"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="26sp"
-                        android:gravity="center"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center"
                         android:fontFamily="@font/telldusicons"
                         android:textColor="@color/white"
                         android:padding="5dp"/>

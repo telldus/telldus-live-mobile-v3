@@ -66,7 +66,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.ServiceBackground.AccessTokenService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
@@ -77,9 +76,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, button_cancel;
-    private View btSelectSensor, btSelectDisplayItem, screenCover;
+    private View btSelectSensor, btSelectDisplayItem, screenCover, btSelectPollInterval;
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
-    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit;
+    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit, sensorRepeatIntervalLabel;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
     private ProgressDialog pDialog;
@@ -92,11 +91,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
     CharSequence[] sensorIdList = null;
+    CharSequence[] intervalOptions = {
+        "Update every 10 minutes", "Update every 30 minutes", "Update every 1 hour",
+    };
+    CharSequence[] intervalOptionsValues = {
+        "10", "30", "60",
+    };
+    int multiplierMilli = 60000;
 
     List<String> nameListItems = new ArrayList<String>();
     List<String> idList = new ArrayList<String>();
 
-    private Integer id;
+    private Integer id, selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
 
     Map<String, Map> SensorInfoMap = new HashMap<String, Map>();
 
@@ -112,7 +118,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
-    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1;
+    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1, selectedIntervalOptionsIndex = 0;
 
 
     @Override
@@ -125,7 +131,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             getApplicationContext().startActivity(launchActivity);
             return;
         }
-        createSensorApi();
+        createSensorsApi();
 
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_sensor_widget_configure);
@@ -171,6 +177,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             sensorHint = (TextView) findViewById(R.id.txtSensorHint);
             sensorDataName = (TextView) findViewById(R.id.txtSensorDataName);
             sensorDataHint = (TextView) findViewById(R.id.txtSensorDataHint);
+            sensorRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
 
             btAdd = (Button) findViewById(R.id.btAdd);
             button_cancel = (Button) findViewById(R.id.button_cancel);
@@ -242,16 +249,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         prefManager.sensorDB(true);
                     }
 
-                    if (!token_service) {
-                        prefManager.TokenService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), AccessTokenService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
-
                     String currentUserId = prefManager.getUserId();
+                    Log.d("TEST selectInterval", String.valueOf(selectInterval));
                     SensorInfo mSensorInfo = new SensorInfo(
                         mAppWidgetId,
                         sensorName.getText().toString(),
@@ -262,8 +261,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         senIcon,
                         lastUp,
                         transparent,
-                        currentUserId);
-                    database.addSensor(mSensorInfo);
+                        currentUserId,
+                        selectInterval);
+                    database.addWidgetSensor(mSensorInfo);
                     views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -403,9 +403,33 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     ad1 = builder.show();
                 }
             });
+
+            btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
+            btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
+                AlertDialog ad;
+
+                @Override
+                public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sensorRepeatIntervalLabel.setText(intervalOptions[which]);
+
+                            selectedIntervalOptionsIndex = which;
+                            String selected = intervalOptions[which].toString();
+                            Integer selectedValue = Integer.parseInt(intervalOptionsValues[which].toString());
+                            selectInterval = selectedValue * multiplierMilli;
+
+                            ad.dismiss();
+                        }
+                    });
+                    ad = builder.show();
+                }
+            });
         }
     }
-    void createSensorApi() {
+    void createSensorsApi() {
 
         String params = "sensors/list?includeValues=1&includeScale=1";
         API endPoints = new API();
