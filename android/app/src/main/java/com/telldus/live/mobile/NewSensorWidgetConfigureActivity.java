@@ -250,7 +250,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
-                    Log.d("TEST selectInterval", String.valueOf(selectInterval));
                     SensorInfo mSensorInfo = new SensorInfo(
                         mAppWidgetId,
                         sensorName.getText().toString(),
