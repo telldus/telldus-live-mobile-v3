@@ -45,8 +45,8 @@ import org.json.JSONObject;
 public class DevicesAPI {
     private static Integer supportedMethodsAggreg = 1975;
 
-    private static Handler handler;
-    private static Runnable runnable;
+    private static Handler handlerDeviceInfoCheck;
+    private static Runnable runnableDeviceInfoCheck;
     private static Map<Integer, Handler> deviceInfoPendingCheckList = new HashMap<Integer, Handler>();
 
     public void setDeviceState(final Integer deviceId, final Integer method, final Integer stateValue, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
@@ -62,11 +62,11 @@ public class DevicesAPI {
                         if (method.intValue() != 32) {
                             Handler pendingHandler = deviceInfoPendingCheckList.get(deviceId);
                             if (pendingHandler != null) {
-                                pendingHandler.removeCallbacks(runnable);
+                                pendingHandler.removeCallbacks(runnableDeviceInfoCheck);
                                 deviceInfoPendingCheckList.remove(deviceId);
                             }
-                            handler = new Handler(Looper.getMainLooper());
-                            runnable = new Runnable(){
+                            handlerDeviceInfoCheck = new Handler(Looper.getMainLooper());
+                            runnableDeviceInfoCheck = new Runnable(){
                                 @Override
                                 public void run() {
                                     // Check if socket has already updated.
@@ -74,10 +74,13 @@ public class DevicesAPI {
                                     DeviceInfo info = db.findWidgetInfoDevice(widgetID);
                                     if (info != null) {
                                         String currentState = info.getState();
+                                        if (currentState == null) {
+                                            currentState = "";
+                                        }
                                         String requestedState = String.valueOf(method);
                                         String currentStateValue = info.getDeviceStateValue();
                                         String requestedStateValue = String.valueOf(stateValue);
-                                        if (!currentState.equals(requestedState) || !currentStateValue.equals(requestedStateValue)) {
+                                        if (!requestedState.equals(currentState) || !currentStateValue.equals(requestedStateValue)) {
                                             getDeviceInfo(deviceId, method, widgetID, context, callBack);
                                         } else {
                                             callBack.onSuccess(response);
@@ -86,26 +89,32 @@ public class DevicesAPI {
 
                                     Handler finishedHandler = deviceInfoPendingCheckList.get(deviceId);
                                     if (finishedHandler != null) {
-                                        finishedHandler.removeCallbacks(runnable);
+                                        finishedHandler.removeCallbacks(runnableDeviceInfoCheck);
                                     }
                                     deviceInfoPendingCheckList.remove(deviceId);
                                 }
                             };
-                            deviceInfoPendingCheckList.put(deviceId, handler);
-                            handler.postDelayed(runnable, 10000);
+                            deviceInfoPendingCheckList.put(deviceId, handlerDeviceInfoCheck);
+                            handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, 10000);
                         }
                     }
                     if (!error.isEmpty() && error != null) {
                         Toast.makeText(context, error, Toast.LENGTH_LONG).show();
+                        MyDBHandler db = new MyDBHandler(context);
+                        db.updateDeviceMethodRequested(null, deviceId);
                         callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    MyDBHandler db = new MyDBHandler(context);
+                    db.updateDeviceMethodRequested(null, deviceId);
                     callBack.onSuccess(response);
                 };
             }
             @Override
             public void onError(ANError error) {
+                MyDBHandler db = new MyDBHandler(context);
+                db.updateDeviceMethodRequested(null, deviceId);
                 callBack.onError(error);
             }
         });
@@ -121,28 +130,27 @@ public class DevicesAPI {
                     MyDBHandler db = new MyDBHandler(context);
                     DeviceInfo info = db.findWidgetInfoDevice(widgetID);
                     if (info != null) {
-                        String currentState = info.getState();
                         String reqState = String.valueOf(requestedState);
                         String newState = response.optString("state");
                         String stateValue = response.optString("statevalue");
-                        if (newState.equals(currentState)) {
-                            db.updateDeviceState(newState, deviceId, stateValue);
-                            if (!newState.equals(reqState)) {
-                                Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
-                            }
-                            callBack.onSuccess(response);
-                        } else {
-                            db.updateDeviceState(newState, deviceId, stateValue);
-                            callBack.onSuccess(response);
+                        db.updateDeviceState(newState, deviceId, stateValue);
+                        db.updateDeviceMethodRequested(null, deviceId);
+                        if (!newState.equals(reqState)) {
+                            Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                         }
+                        callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    MyDBHandler db = new MyDBHandler(context);
+                    db.updateDeviceMethodRequested(null, deviceId);
                     callBack.onSuccess(response);
                 };
             }
             @Override
             public void onError(ANError error) {
+                MyDBHandler db = new MyDBHandler(context);
+                db.updateDeviceMethodRequested(null, deviceId);
                 callBack.onError(error);
             }
         });
