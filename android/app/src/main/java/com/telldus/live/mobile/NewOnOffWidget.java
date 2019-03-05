@@ -121,9 +121,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
-        if (buttonsCount < 2) {
-            views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget_one);
-        }
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
