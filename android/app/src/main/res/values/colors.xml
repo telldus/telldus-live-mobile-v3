@@ -16,4 +16,5 @@
 	<color name="brandPrimary">#1b365d</color>
     <color name="brandSecondary">#e26901</color>
     <color name="brandSuccess">#5cb85c</color>
+    <color name="widgetBackground">#b2b2b2</color>
 </resources>
