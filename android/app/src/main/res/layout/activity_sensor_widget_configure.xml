@@ -137,7 +137,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.62"
                             android:background="@drawable/shape_right"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_gravity="left">
 
                             <TextView
                                 android:id="@+id/txtSensorName"
@@ -213,7 +214,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.62"
                             android:background="@drawable/shape_right"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_gravity="left">
 
                             <TextView
                                 android:id="@+id/txtSensorDataName"
