@@ -151,7 +151,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             if (methodRequested == null && state != null && state.equals("4")) {
                 views.setTextViewText(R.id.iconOn, "checkmark");
-                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("18"));
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.iconOn, "setBackgroundResource", R.drawable.shape_circular_background_green);
             }
@@ -175,7 +175,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             if (methodRequested == null && state != null && state.equals("1")) {
                 views.setTextViewText(R.id.iconOn, "checkmark");
-                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("18"));
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.iconOn, "setBackgroundResource", R.drawable.shape_circular_background_green);
             }
@@ -199,7 +199,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             if (methodRequested == null && state != null && state.equals("2")) {
                 views.setTextViewText(R.id.iconOff, "checkmark");
-                views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("18"));
                 views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.iconOff, "setBackgroundResource", R.drawable.shape_circular_background_green);
             }

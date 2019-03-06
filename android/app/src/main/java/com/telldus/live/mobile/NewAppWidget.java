@@ -187,7 +187,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (methodRequested == null && state != null && state.equals("4")) {
                 views.setTextViewText(R.id.bell, "checkmark");
-                views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                 views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.bell, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
             }
@@ -225,7 +225,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (methodRequested == null && state != null && state.equals("128")) {
                 views.setTextViewText(R.id.uparrow, "checkmark");
-                views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                 views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.uparrow, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
             }
@@ -266,7 +266,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (methodRequested == null && state != null && state.equals("256")) {
                 views.setTextViewText(R.id.downarrow, "checkmark");
-                views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                 views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.downarrow, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
             }
@@ -307,7 +307,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (methodRequested == null && state != null && state.equals("512")) {
                 views.setTextViewText(R.id.stopicon, "checkmark");
-                views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                 views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.stopicon, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
             }
@@ -348,7 +348,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (methodRequested == null && state != null && state.equals("2")) {
                 views.setTextViewText(R.id.iconOff, "checkmark");
-                views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                 views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.iconOff, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
             }
@@ -429,7 +429,7 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
                     views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
                     views.setTextViewText(R.id.iconCheck25, "checkmark");
-                    views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                    views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                     views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.white));
                     views.setInt(R.id.iconCheck25, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
                 }
@@ -437,7 +437,7 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
                     views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
                     views.setTextViewText(R.id.iconCheck50, "checkmark");
-                    views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                    views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                     views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.white));
                     views.setInt(R.id.iconCheck50, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
                 }
@@ -445,7 +445,7 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
                     views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
                     views.setTextViewText(R.id.iconCheck75, "checkmark");
-                    views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                    views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                     views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.white));
                     views.setInt(R.id.iconCheck75, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
                 }
@@ -489,7 +489,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             if (methodRequested == null && state != null && state.equals("1")) {
                 views.setTextViewText(R.id.iconOn, "checkmark");
-                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("20"));
+                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("17"));
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
                 views.setInt(R.id.iconOn, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
             }
