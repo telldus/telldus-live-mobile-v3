@@ -20,5 +20,5 @@
 package com.telldus.live.mobile.Utility;
 
 public class helper  {
-    public static boolean screenOn=false;
+    public static boolean screenOff = false;
 }

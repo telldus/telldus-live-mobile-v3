@@ -22,6 +22,7 @@ package com.telldus.live.mobile.BroadcastReceiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 
@@ -33,11 +34,9 @@ public class AEScreenOnOffReceiver extends BroadcastReceiver {
 
 
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-
             screenOff = true;
 
         } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-
             screenOff = false;
 
         }

@@ -72,21 +72,19 @@ public class NetworkInfo extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        prefManager=new PrefManager(this);
-       // HandlerForNetwork();
-
-        boolean screenOn = false;
+        prefManager = new PrefManager(this);
+        boolean screenOff = false;
 
         try{
-            screenOn = intent.getBooleanExtra("screen_state", false);
+            screenOff = intent.getBooleanExtra("screen_state", false);
 
         }catch(Exception e){}
 
-       if (!screenOn) {
+       if (!screenOff) {
             Log.v("Screen on/off service","Screen on");
            {
-               helper.screenOn=true;
-               boolean b=isMyServiceRunning(MyService.class);
+               helper.screenOff = true;
+               boolean b = isMyServiceRunning(MyService.class);
                if (!b)
                {
                  //  HandlerForNetwork();
@@ -96,7 +94,7 @@ public class NetworkInfo extends Service {
 
         } else {
            //handler.removeCallbacks(mRunnable);
-            helper.screenOn=false;
+            helper.screenOff = false;
             Log.v("Screen on/off service","Screen off");
            boolean b=isMyServiceRunning(MyService.class);
           if (b) {

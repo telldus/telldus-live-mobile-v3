@@ -237,7 +237,7 @@ public class MyService extends Service {
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
-                    boolean screenCheck = helper.screenOn;
+                    boolean screenCheck = helper.screenOff;
                     if (screenCheck) {
                         boolean bol = isNetworkConnected();
                         if (bol) {
