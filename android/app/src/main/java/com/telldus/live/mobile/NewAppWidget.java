@@ -82,10 +82,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
     private PendingIntent pendingIntent;
 
-    // Important to instantiate here and not inside 'createDeviceActionApi'.
-    // This is to keep a single instance of 'handler' and 'runnable' created inside 'setDeviceState'
-    // for each device/widget.
-    static DevicesAPI deviceAPI = new DevicesAPI();
+    DevicesAPI deviceAPI = new DevicesAPI();
 
     private Handler handlerResetDeviceStateToNull;
     private Runnable runnableResetDeviceStateToNull;
@@ -165,6 +162,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.bell, "bell");
             views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.bell, "setBackgroundColor", Color.TRANSPARENT);
+            views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
             views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
@@ -202,6 +200,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.uparrow, "up");
             views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.uparrow, "setBackgroundColor", Color.TRANSPARENT);
+            views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
             views.setInt(R.id.upCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
@@ -242,6 +241,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.downarrow, "down");
             views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.downarrow, "setBackgroundColor", Color.TRANSPARENT);
+            views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
             views.setInt(R.id.downCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
@@ -282,6 +282,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.stopicon, "stop");
             views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.brandPrimary));
             views.setInt(R.id.stopicon, "setBackgroundColor", Color.TRANSPARENT);
+            views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
             views.setInt(R.id.stopCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
@@ -322,6 +323,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.iconOff, offActionIcon);
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
             views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
+            views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
             views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
@@ -462,6 +464,7 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextViewText(R.id.iconOn, onActionIcon);
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
+            views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
             views.setInt(R.id.onCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 

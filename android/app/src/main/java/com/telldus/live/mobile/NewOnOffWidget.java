@@ -67,10 +67,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String METHOD_OFF = "2";
     private static final String METHOD_BELL = "4";
 
-    // Important to instantiate here and not inside 'createDeviceActionApi'.
-    // This is to keep a single instance of 'handler' and 'runnable' created inside 'setDeviceState'
-    // for each device/widget.
-    static DevicesAPI deviceAPI = new DevicesAPI();
+    DevicesAPI deviceAPI = new DevicesAPI();
 
     private Handler handlerResetDeviceStateToNull;
     private Runnable runnableResetDeviceStateToNull;
