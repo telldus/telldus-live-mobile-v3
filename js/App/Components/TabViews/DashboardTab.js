@@ -24,7 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions, FlatList, RefreshControl, LayoutAnimation } from 'react-native';
+import { Dimensions, FlatList, RefreshControl, LayoutAnimation, NativeModules } from 'react-native';
 import { connect } from 'react-redux';
 import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -136,6 +136,11 @@ class DashboardTab extends View {
 
 		this.showDimInfo = this.showDimInfo.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
+
+		// Show Widget if user login
+		// value, key, groupId
+		// groupId: determine which group its belong to, it help when accessing from widget. we can acess via groupid.
+		 NativeModules.DataShare.setBool(true, 'isUserLogin', '123');
 	}
 
 	startSensorTimer() {

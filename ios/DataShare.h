@@ -6,11 +6,11 @@
 //  Copyright © 2019 Telldus Technologies AB. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <React/RCTBridgeModule.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DataShare : NSObject
+@interface DataShare : NSObject <RCTBridgeModule>
 
 @end
 

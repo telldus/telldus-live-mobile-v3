@@ -58,6 +58,9 @@ const widgetAndroidDisableAll = (message: string): ThunkAction => {
 		if (Platform.OS === 'android') {
 			const { AndroidWidget } = NativeModules;
 			AndroidWidget.disableAllWidgets(message);
+		} else {
+			// Hide Widget when user logout
+			NativeModules.DataShare.setBool(false, 'isUserLogin', '123');
 		}
 		return;
 	};
