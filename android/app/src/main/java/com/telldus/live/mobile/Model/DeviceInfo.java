@@ -30,12 +30,13 @@ public class DeviceInfo {
     String deviceStateValue;
     String userId;
     String methodRequested;
+    Integer updateInterval;
 
     public DeviceInfo() {
     }
 
     public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
-    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested) {
+    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested, Integer updateInterval) {
         this.state = state;
         this.widgetId = widgetId;
         this.deviceId = deviceId;
@@ -46,6 +47,7 @@ public class DeviceInfo {
         this.deviceStateValue = deviceStateValue;
         this.userId = userId;
         this.methodRequested = methodRequested;
+        this.updateInterval = updateInterval;
     }
 
     public String getState() {
@@ -126,5 +128,13 @@ public class DeviceInfo {
 
     public void setMethodRequested(String methodRequested) {
         this.methodRequested = methodRequested;
+    }
+
+    public Integer getUpdateInterval() {
+        return updateInterval;
+    }
+
+    public void setUpdateInterval(Integer updateInterval) {
+        this.updateInterval = updateInterval;
     }
 }
