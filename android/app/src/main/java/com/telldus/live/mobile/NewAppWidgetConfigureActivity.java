@@ -95,9 +95,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 
     private Button btAdd,btnCan;
-    private View btSelectDevice, screenCover, btSelectPollInterval;
-    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText, settingText, tvIcon1,
-    loadingText, deviceRepeatIntervalLabel;
+    private View btSelectDevice, screenCover;
+    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText, settingText, tvIcon1, loadingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -117,15 +116,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private PrefManager prefManager;
     private String switchStatus = "false";
     private RelativeLayout mBackLayout;
-
-    CharSequence[] intervalOptions = {
-        "Update every 10 minutes", "Update every 30 minutes", "Update every 1 hour",
-    };
-    CharSequence[] intervalOptionsValues = {
-        "10", "30", "60",
-    };
-    int multiplierMilli = 60000, selectedIntervalOptionsIndex = 0;
-    int selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -176,7 +166,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
             btSelectDevice = (View) findViewById(R.id.btSelectDevice);
             deviceText = (TextView)findViewById(R.id.deviceText);
             settingText = (TextView)findViewById(R.id.settingText);
-            deviceRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
 
             tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
             tvIcon1.setText("device-alt");
@@ -248,8 +237,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceStateValueCurrent,
                         switchStatus,
                         currentUserId,
-                        methodRequested,
-                        selectInterval);
+                        methodRequested);
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
@@ -295,30 +283,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                                 ad.dismiss();
                             }
                         });
-                    ad = builder.show();
-                }
-            });
-
-            btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
-            btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
-                AlertDialog ad;
-
-                @Override
-                public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            deviceRepeatIntervalLabel.setText(intervalOptions[which]);
-
-                            selectedIntervalOptionsIndex = which;
-                            String selected = intervalOptions[which].toString();
-                            Integer selectedValue = Integer.parseInt(intervalOptionsValues[which].toString());
-                            selectInterval = selectedValue * multiplierMilli;
-
-                            ad.dismiss();
-                        }
-                    });
                     ad = builder.show();
                 }
             });

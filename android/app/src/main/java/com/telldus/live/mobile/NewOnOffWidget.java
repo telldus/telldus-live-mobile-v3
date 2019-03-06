@@ -41,11 +41,9 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
-import org.json.JSONException;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.HashMap;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -53,8 +51,6 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
-import com.telldus.live.mobile.Utility.HandlerRunnablePair;
-import com.telldus.live.mobile.API.API;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -67,8 +63,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_OFF = "ACTION_OFF";
     private static final String ACTION_BELL = "ACTION_BELL";
 
-    private static final int SUPPORTED_METHODS = 1975;
-
     private static final String METHOD_ON = "1";
     private static final String METHOD_OFF = "2";
     private static final String METHOD_BELL = "4";
@@ -77,13 +71,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
     private Handler handlerResetDeviceStateToNull;
     private Runnable runnableResetDeviceStateToNull;
-
-    // 'handlerAPIPollingList' is kept static, handler and runnable are created from a non-static context.
-    // This is important for each sensor widget to have it's own handler and runnable, also be able to remove
-    // callbacks by using each widget id during different cases.
-    private static Map<Integer, Map> handlerAPIPollingList = new HashMap<Integer, Map>();
-    Runnable runnable;// Need to be non-static
-
     static void updateAppWidget(
         Context context,
         AppWidgetManager appWidgetManager,
@@ -111,7 +98,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String currentUserId = prefManager.getUserId();
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
-            removeHandlerRunnablePair(appWidgetId);
             return;
         }
 
@@ -138,8 +124,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.removeAllViews(R.id.widget_content_cover);
             views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
             appWidgetManager.updateAppWidget(appWidgetId, views);
-
-            removeHandlerRunnablePair(appWidgetId);
             return;
         }
 
@@ -241,11 +225,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
-            if (prevHandlerRunnablePair == null) {
-                Map<String, HandlerRunnablePair> newHandlerRunnablePair = createAPIPollingHandler(appWidgetId, context);
-                handlerAPIPollingList.put(appWidgetId, newHandlerRunnablePair);
-            }
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
@@ -273,7 +252,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 prefManager.websocketService(false);
                 context.stopService(new Intent(context, MyService.class));
             }
-            removeHandlerRunnablePair(appWidgetId);
         }
     }
 
@@ -377,100 +355,5 @@ public class NewOnOffWidget extends AppWidgetProvider {
         };
 
         handlerResetDeviceStateToNull.postDelayed(runnableResetDeviceStateToNull, 5000);
-    }
-
-    void createDeviceInfoApi(final Integer deviceId, final Integer widgetId, final MyDBHandler database, final Context context) {
-
-        String params = "device/info?id="+deviceId+"&supportedMethods="+SUPPORTED_METHODS;
-        API endPoints = new API();
-        endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
-            @Override
-            public void onSuccess(final JSONObject response) {
-                try {
-                    DeviceInfo deviceWidgetInfo = database.findWidgetInfoDevice(widgetId);
-                    if (deviceWidgetInfo != null) {
-                        String error = response.optString("error");
-                        if (!error.isEmpty() && error != null) {
-                            String noDeviceMessage = "Device \""+deviceId+"\" not found!";
-                            if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
-                                database.updateDeviceIdDeviceWidget(-1, widgetId);
-                            }
-                            return;
-                        }
-
-                        JSONObject responseObject = new JSONObject(response.toString());
-                        String name = responseObject.optString("name");
-                        if (name == null || name.equals("null")) {
-                            name = "Unknown";
-                        }
-                        String namePrev = deviceWidgetInfo.getDeviceName();
-                        if (!name.equalsIgnoreCase(namePrev)) {
-                            database.updateDeviceInfo(name, deviceId);
-                            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                            updateAppWidget(context, widgetManager, widgetId);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            @Override
-            public void onError(ANError error) {
-            }
-        });
-    }
-
-    // Need to be non-static
-    public Map<String, HandlerRunnablePair> createAPIPollingHandler(final int appWidgetId, final Context context) {
-        final Handler handler = new Handler(Looper.getMainLooper());// Need to be non-static
-        runnable = new Runnable(){// Need to be non-static
-            @Override
-            public void run() {
-                if (runnable != null) {
-                    MyDBHandler db = new MyDBHandler(context);
-                    DeviceInfo widgetInfo = db.findWidgetInfoDevice(appWidgetId);
-                    if (widgetInfo != null) {
-                        Integer deviceId = widgetInfo.getDeviceId();
-                        Integer updateInterval = widgetInfo.getUpdateInterval();
-                        createDeviceInfoApi(deviceId, appWidgetId, db, context);
-                        handler.postDelayed(runnable, updateInterval);
-                    } else {
-                        // createAPIPollingHandler will be called before widget addition is confirmed.
-                        // So till confirm button is pressed 'widgetInfo' will be null, we do not want the loop to stop
-                        // so keep checking after 30secs, to get the actual interval and runnable
-                        handler.postDelayed(runnable, 30000);
-                    }
-                }
-            }
-        };
-        MyDBHandler db = new MyDBHandler(context);
-        DeviceInfo widgetInfo = db.findWidgetInfoDevice(appWidgetId);
-        if (widgetInfo != null) {
-            Integer updateInterval = widgetInfo.getUpdateInterval();
-            handler.postDelayed(runnable, updateInterval);
-        } else {
-            // createAPIPollingHandler will be called before widget addition is confirmed.
-            // So till confirm button is pressed 'widgetInfo' will be null, we do not want the loop to stop
-            // so keep checking after 30secs, to get the actual interval and runnable
-            handler.postDelayed(runnable, 30000);
-        }
-        Map<String, HandlerRunnablePair> handlerRunnableHashMap = new HashMap<String, HandlerRunnablePair>();
-        HandlerRunnablePair handlerRunnablePair = new HandlerRunnablePair(handler, runnable);
-        handlerRunnablePair.setRunnable(runnable);
-        handlerRunnablePair.setHandler(handler);
-        handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
-        return handlerRunnableHashMap;
-    }
-
-    static void removeHandlerRunnablePair(Integer appWidgetId) {
-        Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
-        if (prevHandlerRunnablePair != null) {
-            HandlerRunnablePair handlerRunnablePair = prevHandlerRunnablePair.get("HandlerRunnablePair");
-            Runnable prevRunnable = handlerRunnablePair.getRunnable();
-            Handler prevHandler = handlerRunnablePair.getHandler();
-            prevHandler.removeCallbacks(prevRunnable);
-            prevHandlerRunnablePair.remove("HandlerRunnablePair");
-            handlerAPIPollingList.remove(appWidgetId);
-        }
     }
 }

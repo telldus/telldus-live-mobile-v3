@@ -90,9 +90,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     //UI
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd,btnCan;
-    private View btSelectDevice, screenCover, btSelectPollInterval;
-    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText,
-    settingText, loadingText, deviceRepeatIntervalLabel;
+    private View btSelectDevice, screenCover;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText, loadingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     private RemoteViews views;
@@ -106,15 +105,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private String client_secret;
 
     int stateID;
-
-    CharSequence[] intervalOptions = {
-        "Update every 10 minutes", "Update every 30 minutes", "Update every 1 hour",
-    };
-    CharSequence[] intervalOptionsValues = {
-        "10", "30", "60",
-    };
-    int multiplierMilli = 60000, selectedIntervalOptionsIndex = 0;
-    int selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
 
     private String sesID;
     MyDBHandler database = new MyDBHandler(this);
@@ -194,7 +184,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             backDevice = (ImageView)findViewById(R.id.backdevice);
             deviceText = (TextView)findViewById(R.id.deviceText);
             settingText = (TextView)findViewById(R.id.settingText);
-            deviceRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
 
             views.setViewVisibility(R.id.offLinear, View.GONE);
 
@@ -272,8 +261,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         "", // As of now deviceStateValue does matters for only DIM devices.
                         switchStatus,
                         currentUserId,
-                        methodRequested,
-                        selectInterval);
+                        methodRequested);
                     db.addWidgetDevice(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -325,31 +313,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     ad = builder.show();
                 }
             });
-
-            btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
-            btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
-                AlertDialog ad;
-
-                @Override
-                public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            deviceRepeatIntervalLabel.setText(intervalOptions[which]);
-
-                            selectedIntervalOptionsIndex = which;
-                            String selected = intervalOptions[which].toString();
-                            Integer selectedValue = Integer.parseInt(intervalOptionsValues[which].toString());
-                            selectInterval = selectedValue * multiplierMilli;
-
-                            ad.dismiss();
-                        }
-                    });
-                    ad = builder.show();
-                }
-            });
-
             Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
             Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
             textTest.setTypeface(titleFont);
