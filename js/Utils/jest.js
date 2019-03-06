@@ -60,3 +60,7 @@ NativeModules.AndroidWidget = {
 	configureWidgetSessionData: jest.fn(),
 	disableAllWidgets: jest.fn(),
 };
+
+NativeModules.DataShare = {
+	setBool: jest.fn(),
+};
