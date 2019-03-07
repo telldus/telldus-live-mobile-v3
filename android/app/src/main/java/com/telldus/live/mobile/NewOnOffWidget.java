@@ -252,22 +252,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         PrefManager prefManager = new PrefManager(context);
         for (int appWidgetId : appWidgetIds) {
             boolean b = db.deleteWidgetInfoDevice(appWidgetId);
-            if (b) {
-                Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
-            }
-            int count = db.countWidgetDeviceTableValues();
-
-            if (count > 0) {
-                Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
-
-            } else {
-                Toast.makeText(context,"No Device",Toast.LENGTH_SHORT).show();
-                prefManager.DeviceDB(false);
-                prefManager.websocketService(false);
-                context.stopService(new Intent(context, MyService.class));
-            }
         }
     }
 
