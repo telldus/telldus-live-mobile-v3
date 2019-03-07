@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.telldus.live.mobile.Database.PrefManager;
-import com.telldus.live.mobile.MyService;
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 
 public class BootCompleteReceiver extends BroadcastReceiver {
@@ -40,13 +39,6 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 
         Intent networkService = new Intent(context, NetworkInfo.class);
         context.startActivity(networkService);
-
-        boolean serivce = prefManager.getWebService();
-        if (serivce) {
-            Toast.makeText(context, "Myservice turned on", Toast.LENGTH_SHORT).show();
-            Intent service = new Intent(context, MyService.class);
-            context.startService(service);
-        }
     }
 
 }

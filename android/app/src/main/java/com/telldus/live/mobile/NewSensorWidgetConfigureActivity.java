@@ -239,10 +239,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     boolean token_service = prefManager.getTokenService();
-                    boolean b = isMyServiceRunning(NetworkInfo.class);
-                    if (!b) {
-                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    }
+                    // boolean b = isMyServiceRunning(NetworkInfo.class);
+                    // if (!b) {
+                    //     startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                    // }
 
                     boolean b1 = prefManager.getSensorDB();
                     if (!b1) {
