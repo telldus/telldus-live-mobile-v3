@@ -306,7 +306,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_BELL, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_BELL, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -316,7 +316,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_ON, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_ON, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -325,7 +325,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             createDeviceActionApi(context, deviceId, 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
-            db.updateDeviceInfo(METHOD_OFF, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_OFF, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -350,7 +350,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         db.updateDeviceIdDeviceWidget(-1, widgetId);
                     }
                 }
-                db.updateIsShowingStatus(1, deviceId);
+                db.updateIsShowingStatus(1, widgetId);
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -358,7 +358,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
-                db.updateIsShowingStatus(1, deviceId);
+                db.updateIsShowingStatus(1, widgetId);
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -375,7 +375,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, deviceId);
+                    db.updateDeviceInfo(null, null, null, 0, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId);
                 }

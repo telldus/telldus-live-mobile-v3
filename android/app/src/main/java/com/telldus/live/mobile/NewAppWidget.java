@@ -604,7 +604,7 @@ public class NewAppWidget extends AppWidgetProvider {
         int deviceId = widgetInfo.getDeviceId();
 
         if (ACTION_BELL.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_BELL, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_BELL, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -613,7 +613,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 4, 0, widgetId, context);
         }
         if (ACTION_UP.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_UP, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_UP, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -622,7 +622,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 128, 0, widgetId, context);
         }
         if (ACTION_DOWN.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DOWN, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_DOWN, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -631,7 +631,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 256, 0, widgetId, context);
         }
         if (ACTION_STOP.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_STOP, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_STOP, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -640,7 +640,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 512, 0, widgetId, context);
         }
         if (ACTION_OFF.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_OFF, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_OFF, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -649,7 +649,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 2, 0, widgetId, context);
         }
         if (DIMMER_25.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DIMMER_25, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_DIMMER_25, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -660,7 +660,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (DIMMER_50.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DIMMER_50, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_DIMMER_50, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -671,7 +671,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (DIMMER_75.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_DIMMER_75, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_DIMMER_75, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -682,7 +682,7 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (ACTION_ON.equals(intent.getAction())) {
-            db.updateDeviceInfo(METHOD_ON, null, null, 0, deviceId);
+            db.updateDeviceInfo(METHOD_ON, null, null, 0, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -741,7 +741,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         db.updateDeviceIdDeviceWidget(-1, widgetId);
                     }
                 }
-                db.updateIsShowingStatus(1, deviceId);
+                db.updateIsShowingStatus(1, widgetId);
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -749,7 +749,7 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
-                db.updateIsShowingStatus(1, deviceId);
+                db.updateIsShowingStatus(1, widgetId);
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -766,7 +766,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, deviceId);
+                    db.updateDeviceInfo(null, null, null, 0, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId);
                 }

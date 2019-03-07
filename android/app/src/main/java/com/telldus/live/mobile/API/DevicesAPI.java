@@ -136,7 +136,7 @@ public class DevicesAPI {
                         String newState = response.optString("state");
                         String stateValue = response.optString("statevalue");
                         if (newState.equals(reqState)) {
-                            db.updateDeviceState(newState, deviceId, stateValue);
+                            db.updateDeviceState(newState, widgetId, stateValue);
                             removeHandlerRunnablePair(deviceId, widgetId);
                             callBack.onSuccess(response);
                             return;
