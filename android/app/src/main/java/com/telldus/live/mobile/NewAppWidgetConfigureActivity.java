@@ -237,7 +237,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceStateValueCurrent,
                         switchStatus,
                         currentUserId,
-                        methodRequested);
+                        methodRequested,
+                        0);
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
 
