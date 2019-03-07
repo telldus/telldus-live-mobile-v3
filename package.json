@@ -56,6 +56,7 @@
     "react-native-swipe-list-view": "https://github.com/rimzici/react-native-swipe-list-view.git",
     "react-native-swiper": "~1.5.14",
     "react-native-udp": "~2.3.1",
+    "react-native-user-defaults": "^0.1.5",
     "react-native-uuid": "~1.4.9",
     "react-native-vector-icons": "~6.1.0",
     "react-navigation": "^3.0.5",

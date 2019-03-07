@@ -50,6 +50,8 @@
 		26EDB6D422266DF8003EF9E3 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
 		26EDB6D522266DF8003EF9E3 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
 		26EDB6D622266E36003EF9E3 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
+		26FCBB5B22314C1200AE524D /* libRCTUserDefaults.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26FCBB3622314BED00AE524D /* libRCTUserDefaults.a */; };
+		26FCBB5C2231532300AE524D /* libRCTUserDefaults.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26FCBB3622314BED00AE524D /* libRCTUserDefaults.a */; };
 		28061C46E49841668FDE1C6C /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8F593D0DBCA743F4997FEAF8 /* EvilIcons.ttf */; };
 		30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1D49054AB364C649FCD5506 /* Zocial.ttf */; };
 		34E11B4601B44855BF4069E4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */; };
@@ -369,6 +371,13 @@
 			remoteGlobalIDString = BF40FFBD1F05EC4000DC4E95;
 			remoteInfo = RNRSA;
 		};
+		26FCBB3522314BED00AE524D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26FCBB1D22314BEC00AE524D /* RCTUserDefaults.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RCTUserDefaults;
+		};
 		3052375C1F0B93250046DE13 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
@@ -546,6 +555,8 @@
 		26EDB68422266AD0003EF9E3 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
 		26EDB68522266AD0003EF9E3 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
 		26EDB68A22266AD1003EF9E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26FCBB1D22314BEC00AE524D /* RCTUserDefaults.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTUserDefaults.xcodeproj; path = "../node_modules/react-native-user-defaults/RCTUserDefaults.xcodeproj"; sourceTree = "<group>"; };
+		26FCBB5D2231554B00AE524D /* Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Widget.entitlements; sourceTree = "<group>"; };
 		32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
 		34DA95593A1544E09D95F18F /* libRNReactNativeAccessibility.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNReactNativeAccessibility.a; sourceTree = "<group>"; };
 		3D81ECCBA2B14DAB9C26E714 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
@@ -622,6 +633,7 @@
 				1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */,
 				7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */,
 				77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */,
+				26FCBB5B22314C1200AE524D /* libRCTUserDefaults.a in Frameworks */,
 				7B031B537B7F4F948A5901C4 /* libRNGestureHandler.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -642,6 +654,7 @@
 				26EDB6CF22266DC9003EF9E3 /* libRCTNetwork.a in Frameworks */,
 				26EDB6D022266DC9003EF9E3 /* libRCTSettings.a in Frameworks */,
 				26EDB6D122266DC9003EF9E3 /* libRCTText.a in Frameworks */,
+				26FCBB5C2231532300AE524D /* libRCTUserDefaults.a in Frameworks */,
 				26EDB6D322266DC9003EF9E3 /* libRNGestureHandler.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -863,6 +876,7 @@
 		26EDB68322266AD0003EF9E3 /* Widget */ = {
 			isa = PBXGroup;
 			children = (
+				26FCBB5D2231554B00AE524D /* Widget.entitlements */,
 				26AE96152226874E00AC557A /* DisplayMode.h */,
 				26AE96162226874E00AC557A /* DisplayMode.m */,
 				26AE96142226874E00AC557A /* Linking.h */,
@@ -878,6 +892,14 @@
 			isa = PBXGroup;
 			children = (
 				26F1F821209B276400ADBBC0 /* libRNRSA.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		26FCBB1E22314BEC00AE524D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				26FCBB3622314BED00AE524D /* libRCTUserDefaults.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -943,6 +965,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				26FCBB1D22314BEC00AE524D /* RCTUserDefaults.xcodeproj */,
 				26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */,
 				261FCCC3217F5EB5006F74C1 /* RNDeviceInfo.xcodeproj */,
 				26A439EF2100AB5500022896 /* RCTOrientation.xcodeproj */,
@@ -1118,6 +1141,11 @@
 						CreatedOnToolsVersion = 10.1;
 						DevelopmentTeam = M2879GJ5VD;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1180,6 +1208,10 @@
 				{
 					ProductGroup = 832341B11AAA6A8300B99B32 /* Products */;
 					ProjectRef = 832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */;
+				},
+				{
+					ProductGroup = 26FCBB1E22314BEC00AE524D /* Products */;
+					ProjectRef = 26FCBB1D22314BEC00AE524D /* RCTUserDefaults.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302E01ABCB9EE00DB3ED1 /* Products */;
@@ -1525,6 +1557,13 @@
 			fileType = archive.ar;
 			path = libRNRSA.a;
 			remoteRef = 26F1F820209B276400ADBBC0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		26FCBB3622314BED00AE524D /* libRCTUserDefaults.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTUserDefaults.a;
+			remoteRef = 26FCBB3522314BED00AE524D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3052375D1F0B93250046DE13 /* libyoga.a */ = {
@@ -1901,6 +1940,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Widget/Widget.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1931,6 +1971,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Widget/Widget.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
