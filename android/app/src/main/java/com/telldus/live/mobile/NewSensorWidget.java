@@ -38,6 +38,8 @@ import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Bundle;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
@@ -54,6 +56,7 @@ import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.BroadcastReceiver.AEScreenOnOffReceiver;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -157,6 +160,15 @@ public class NewSensorWidget extends AppWidgetProvider {
     }
 
     @Override
+    public void onEnabled(Context context) {
+        // Enter relevant functionality for when the first widget is created
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new AEScreenOnOffReceiver();
+        context.getApplicationContext().registerReceiver(mReceiver, filter);
+    }
+
+    @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
@@ -189,7 +201,6 @@ public class NewSensorWidget extends AppWidgetProvider {
                 Toast.makeText(context,"No sensor",Toast.LENGTH_SHORT).show();
                 prefManager.sensorDB(false);
                 prefManager.websocketService(false);
-                context.stopService(new Intent(context, MyService.class));
             }
             removeHandlerRunnablePair(appWidgetId);
         }
@@ -210,7 +221,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
-        int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,AppWidgetManager.INVALID_APPWIDGET_ID);
+        int widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
         if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             return;
         }
@@ -264,6 +275,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         SensorInfo widgetInfo = db.findWidgetInfoSensor(appWidgetId);
         if (widgetInfo != null) {
+            Integer sensorId = widgetInfo.getSensorId();
+            createSensorApi(sensorId, appWidgetId, db, context);
+
             Integer updateInterval = widgetInfo.getUpdateInterval();
             handler.postDelayed(runnable, updateInterval);
         } else {
@@ -278,6 +292,12 @@ public class NewSensorWidget extends AppWidgetProvider {
         handlerRunnablePair.setHandler(handler);
         handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
         return handlerRunnableHashMap;
+    }
+
+    public static void removeAllHandlerRunnablePair(int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            removeHandlerRunnablePair(appWidgetId);
+        }
     }
 
     static void removeHandlerRunnablePair(Integer appWidgetId) {

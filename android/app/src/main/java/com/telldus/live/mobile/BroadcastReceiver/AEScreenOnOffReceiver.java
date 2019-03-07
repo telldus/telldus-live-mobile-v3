@@ -23,26 +23,34 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 
 import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
+import com.telldus.live.mobile.NewSensorWidget;
 
 public class AEScreenOnOffReceiver extends BroadcastReceiver {
-    private boolean screenOff;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-            screenOff = true;
-
+            removeAllAPIPollHandlerSensorWidgets(context);
         } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-            screenOff = false;
-
+            removeAllAPIPollHandlerSensorWidgets(context);
+            refreshAllSensorWidgets(context);
         }
+    }
 
-        Intent i = new Intent(context, NetworkInfo.class);
-        i.putExtra("screen_state", screenOff);
-        context.startService(i);
+    public void refreshAllSensorWidgets(Context context) {
+        Intent intentNew = new Intent(context, NewSensorWidget.class);
+        intentNew.setAction("android.appwidget.action.APPWIDGET_UPDATE");
+        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext()).getAppWidgetIds(new ComponentName(context.getApplicationContext(), NewSensorWidget.class));
+        intentNew.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(intentNew);
+    }
+
+    public void removeAllAPIPollHandlerSensorWidgets(Context context) {
+        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext()).getAppWidgetIds(new ComponentName(context.getApplicationContext(), NewSensorWidget.class));
+        NewSensorWidget.removeAllHandlerRunnablePair(ids);
     }
 }
