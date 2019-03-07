@@ -64,3 +64,7 @@ NativeModules.AndroidWidget = {
 NativeModules.DataShare = {
 	setBool: jest.fn(),
 };
+
+NativeModules.WidgetManager = {
+	showWidget: jest.fn(),
+};

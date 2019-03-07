@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, NativeModules } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
@@ -85,6 +85,10 @@ class LoginScreen extends View {
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 		this.labelForgotPassword = `${this.labelLink} ${this.forgotPassword} ${this.labelButtondefaultDescription}`;
 		this.labelNeedAccount = `${this.labelLink} ${this.needAccount} ${this.labelButtondefaultDescription}`;
+	}
+
+	componentDidMount = () => {
+		NativeModules.WidgetManager.showWidget(false);
 	}
 
 	closeModal() {

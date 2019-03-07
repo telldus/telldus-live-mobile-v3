@@ -60,7 +60,7 @@ const widgetAndroidDisableAll = (message: string): ThunkAction => {
 			AndroidWidget.disableAllWidgets(message);
 		} else {
 			// Hide Widget when user logout
-			NativeModules.DataShare.setBool(false, 'isUserLogin', '123');
+			NativeModules.WidgetManager.showWidget(false);
 		}
 		return;
 	};

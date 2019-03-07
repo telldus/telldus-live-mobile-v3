@@ -140,7 +140,8 @@ class DashboardTab extends View {
 		// Show Widget if user login
 		// value, key, groupId
 		// groupId: determine which group its belong to, it help when accessing from widget. we can acess via groupid.
-		 NativeModules.DataShare.setBool(true, 'isUserLogin', '123');
+		// NativeModules.DataShare.setBool(true, 'isUserLogin', '123');
+		 NativeModules.WidgetManager.showWidget(true);
 	}
 
 	startSensorTimer() {

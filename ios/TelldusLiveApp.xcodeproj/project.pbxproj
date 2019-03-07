@@ -68,6 +68,7 @@
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8A0C59785D134F67BFBC177A /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */; };
 		8D5DC0A1222FDCEA00608AE2 /* DataShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D5DC0A0222FDCEA00608AE2 /* DataShare.m */; };
+		8DFD2C4122312356007B6993 /* WidgetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DFD2C4022312356007B6993 /* WidgetManager.m */; };
 		A17FFBC3ED7A45A28EE23A2E /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 23582646277C436FB236C344 /* MaterialIcons.ttf */; };
 		A796F25C81DE46E0A81A31B8 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32D76CC4AAED4E2F94ADAE4F /* libRNDeviceInfo.a */; };
 		AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */ = {isa = PBXBuildFile; fileRef = FED4ABDECE1A45289BE59CD1 /* telldusicons.woff */; };
@@ -577,6 +578,8 @@
 		8D5DC09E222FC80D00608AE2 /* Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Widget.entitlements; sourceTree = "<group>"; };
 		8D5DC09F222FDCEA00608AE2 /* DataShare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataShare.h; sourceTree = "<group>"; };
 		8D5DC0A0222FDCEA00608AE2 /* DataShare.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataShare.m; sourceTree = "<group>"; };
+		8DFD2C3F22312356007B6993 /* WidgetManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WidgetManager.h; sourceTree = "<group>"; };
+		8DFD2C4022312356007B6993 /* WidgetManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetManager.m; sourceTree = "<group>"; };
 		8F593D0DBCA743F4997FEAF8 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		93967CC4C9724316AFF74B50 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		9BC2DF123914425BAD931A67 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
@@ -733,6 +736,8 @@
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				8D5DC09F222FDCEA00608AE2 /* DataShare.h */,
 				8D5DC0A0222FDCEA00608AE2 /* DataShare.m */,
+				8DFD2C3F22312356007B6993 /* WidgetManager.h */,
+				8DFD2C4022312356007B6993 /* WidgetManager.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -1801,6 +1806,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				8DFD2C4122312356007B6993 /* WidgetManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				8D5DC0A1222FDCEA00608AE2 /* DataShare.m in Sources */,
 			);

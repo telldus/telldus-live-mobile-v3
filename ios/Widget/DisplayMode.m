@@ -40,10 +40,4 @@ RCT_EXPORT_METHOD(setExpandable:(BOOL)expandable height:(float)height )
   }
 }
 
-RCT_EXPORT_METHOD(showWidget:(BOOL)show)
-{
-  NSLog(@"showWidget = %d", show);
-  [[NCWidgetController widgetController] setHasContent:show forWidgetWithBundleIdentifier:@"com.telldus.live.mobile.Widget"];
-}
-
 @end
