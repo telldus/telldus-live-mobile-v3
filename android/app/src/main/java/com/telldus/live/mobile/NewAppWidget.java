@@ -120,6 +120,7 @@ public class NewAppWidget extends AppWidgetProvider {
         String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
+        Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -175,7 +176,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton) {
                 views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_BELL)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
                 } else if (isLastButton) {
@@ -185,11 +186,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested == null && state != null && state.equals("4")) {
-                views.setTextViewText(R.id.bell, "checkmark");
-                views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.white));
-                views.setInt(R.id.bell, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
+                if (state == null || !state.equals("4")) {
+                    views.setTextViewText(R.id.bell, "statusx");
+                    views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.widgetRed));
+                    views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                } else {
+                    views.setTextViewText(R.id.bell, "statuscheck");
+                    views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.widgetGreen));
+                    views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                }
             }
 
             renderedButtonsCount++;
@@ -213,7 +219,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton && methodRequested == null) {
                 views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_UP)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
                 } else if (isLastButton) {
@@ -223,11 +229,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested == null && state != null && state.equals("128")) {
-                views.setTextViewText(R.id.uparrow, "checkmark");
-                views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.white));
-                views.setInt(R.id.uparrow, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
+                if (state.equals("128")) {
+                    views.setTextViewText(R.id.uparrow, "statuscheck");
+                    views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.widgetGreen));
+                    views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                } else {
+                    views.setTextViewText(R.id.uparrow, "statusx");
+                    views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.widgetRed));
+                    views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                }
             }
 
             if (renderedButtonsCount != 0) {
@@ -254,7 +265,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton) {
                 views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_DOWN)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
                 } else if (isLastButton) {
@@ -264,11 +275,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested == null && state != null && state.equals("256")) {
-                views.setTextViewText(R.id.downarrow, "checkmark");
-                views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.white));
-                views.setInt(R.id.downarrow, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
+                if (state.equals("256")) {
+                    views.setTextViewText(R.id.downarrow, "statuscheck");
+                    views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.widgetGreen));
+                    views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                } else {
+                    views.setTextViewText(R.id.downarrow, "statusx");
+                    views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.widgetRed));
+                    views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                }
             }
 
             if (renderedButtonsCount != 0) {
@@ -295,7 +311,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton) {
                 views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_STOP)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
                 } else if (isLastButton) {
@@ -305,11 +321,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested == null && state != null && state.equals("512")) {
-                views.setTextViewText(R.id.stopicon, "checkmark");
-                views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.white));
-                views.setInt(R.id.stopicon, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
+                if (state.equals("512")) {
+                    views.setTextViewText(R.id.stopicon, "statuscheck");
+                    views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.widgetGreen));
+                    views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                } else {
+                    views.setTextViewText(R.id.stopicon, "statusx");
+                    views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.widgetRed));
+                    views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                }
             }
 
             if (renderedButtonsCount != 0) {
@@ -336,7 +357,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton) {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_OFF)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
                 } else if (isLastButton) {
@@ -346,11 +367,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested == null && state != null && state.equals("2")) {
-                views.setTextViewText(R.id.iconOff, "checkmark");
-                views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
-                views.setInt(R.id.iconOff, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
+                if (state.equals("2")) {
+                    views.setTextViewText(R.id.iconOff, "statuscheck");
+                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetGreen));
+                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("19"));
+                } else {
+                    views.setTextViewText(R.id.iconOff, "statusx");
+                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetRed));
+                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("19"));
+                }
             }
 
             if (renderedButtonsCount != 0) {
@@ -397,7 +423,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton) {
                 views.setInt(R.id.leftMarginDim75, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_25)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
                 } else {
@@ -406,12 +432,12 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.white));
                 views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_50)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
                 views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
                 views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_75)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
                 if (isLastButton) {
                     views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
                 } else {
@@ -421,33 +447,57 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.white));
             }
 
-            if (state != null && state.equals("16")) {
-                int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-                int checkpoint = getClosestCheckPoint(slidervalue);
+            if (methodRequested != null && isShowingStatus == 1) {
+                int checkpoint = 0;
+                if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                    int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
+                    checkpoint = getClosestCheckPoint(slidervalue);
+                }
 
-                if (checkpoint == 25) {
-                    views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
-                    views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
-                    views.setTextViewText(R.id.iconCheck25, "checkmark");
-                    views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                    views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.white));
-                    views.setInt(R.id.iconCheck25, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+                if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_25)) {
+                    if (checkpoint == 25) {
+                        views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
+                        views.setTextViewText(R.id.iconCheck25, "statuscheck");
+                        views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetGreen));
+                        views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    } else {
+                        views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
+                        views.setTextViewText(R.id.iconCheck25, "statusx");
+                        views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetRed));
+                        views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    }
                 }
-                if (checkpoint == 50) {
-                    views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
-                    views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
-                    views.setTextViewText(R.id.iconCheck50, "checkmark");
-                    views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                    views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.white));
-                    views.setInt(R.id.iconCheck50, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+                if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_50)) {
+                    if (checkpoint == 50) {
+                        views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
+                        views.setTextViewText(R.id.iconCheck50, "statuscheck");
+                        views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetGreen));
+                        views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    } else {
+                        views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
+                        views.setTextViewText(R.id.iconCheck50, "statusx");
+                        views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetRed));
+                        views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    }
                 }
-                if (checkpoint == 75) {
-                    views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
-                    views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
-                    views.setTextViewText(R.id.iconCheck75, "checkmark");
-                    views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                    views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.white));
-                    views.setInt(R.id.iconCheck75, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+                if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_75)) {
+                    if (checkpoint == 75) {
+                        views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
+                        views.setTextViewText(R.id.iconCheck75, "statuscheck");
+                        views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetGreen));
+                        views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    } else {
+                        views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
+                        views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
+                        views.setTextViewText(R.id.iconCheck75, "statusx");
+                        views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetRed));
+                        views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    }
                 }
             }
 
@@ -477,7 +527,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (isLastButton) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
-            if (methodRequested != null && methodRequested.equals(METHOD_ON)) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
                 } else if (isLastButton) {
@@ -487,11 +537,16 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
             }
-            if (methodRequested == null && state != null && state.equals("1")) {
-                views.setTextViewText(R.id.iconOn, "checkmark");
-                views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("17"));
-                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
-                views.setInt(R.id.iconOn, "setBackgroundResource", R.drawable.shape_circular_background_green_small);
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
+                if (state.equals("1")) {
+                    views.setTextViewText(R.id.iconOn, "statuscheck");
+                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetGreen));
+                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                } else {
+                    views.setTextViewText(R.id.iconOn, "statusx");
+                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetRed));
+                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                }
             }
 
             if (renderedButtonsCount != 0) {
@@ -549,42 +604,54 @@ public class NewAppWidget extends AppWidgetProvider {
         int deviceId = widgetInfo.getDeviceId();
 
         if (ACTION_BELL.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_BELL, deviceId);
+            db.updateDeviceInfo(METHOD_BELL, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceApi(deviceId, 4, 0, widgetId, context);
         }
         if (ACTION_UP.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_UP, deviceId);
+            db.updateDeviceInfo(METHOD_UP, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceApi(deviceId, 128, 0, widgetId, context);
         }
         if (ACTION_DOWN.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_DOWN, deviceId);
+            db.updateDeviceInfo(METHOD_DOWN, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceApi(deviceId, 256, 0, widgetId, context);
         }
         if (ACTION_STOP.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_STOP, deviceId);
+            db.updateDeviceInfo(METHOD_STOP, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceApi(deviceId, 512, 0, widgetId, context);
         }
         if (ACTION_OFF.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_OFF, deviceId);
+            db.updateDeviceInfo(METHOD_OFF, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceApi(deviceId, 2, 0, widgetId, context);
         }
         if (DIMMER_25.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_DIMMER_25, deviceId);
+            db.updateDeviceInfo(METHOD_DIMMER_25, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
@@ -593,7 +660,9 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (DIMMER_50.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_DIMMER_50, deviceId);
+            db.updateDeviceInfo(METHOD_DIMMER_50, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
@@ -602,7 +671,9 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (DIMMER_75.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_DIMMER_75, deviceId);
+            db.updateDeviceInfo(METHOD_DIMMER_75, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
@@ -611,7 +682,9 @@ public class NewAppWidget extends AppWidgetProvider {
             createDeviceApi(deviceId, 16, value, widgetId, context);
         }
         if (ACTION_ON.equals(intent.getAction())) {
-            db.updateDeviceMethodRequested(METHOD_ON, deviceId);
+            db.updateDeviceInfo(METHOD_ON, null, null, 0, deviceId);
+            removeHandlerResetDeviceStateToNull();
+
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
@@ -656,6 +729,7 @@ public class NewAppWidget extends AppWidgetProvider {
     public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
+        final MyDBHandler db = new MyDBHandler(context);
         String params = "device/command?id="+deviceId+"&method="+method+"&value="+value;
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, new OnAPITaskComplete() {
             @Override
@@ -664,10 +738,10 @@ public class NewAppWidget extends AppWidgetProvider {
                 if (!error.isEmpty() && error != null) {
                     String noDeviceMessage = "Device \""+deviceId+"\" not found!";
                     if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
-                        MyDBHandler db = new MyDBHandler(context);
                         db.updateDeviceIdDeviceWidget(-1, widgetId);
                     }
                 }
+                db.updateIsShowingStatus(1, deviceId);
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -675,6 +749,9 @@ public class NewAppWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
+                db.updateIsShowingStatus(1, deviceId);
+                resetDeviceStateToNull(deviceId, widgetId, context);
+
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId);
             }
@@ -687,9 +764,12 @@ public class NewAppWidget extends AppWidgetProvider {
             @Override
             public void run() {
                 MyDBHandler db = new MyDBHandler(context);
-                db.updateDeviceState(null, deviceId, "");
-                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+                if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
+                    db.updateDeviceInfo(null, null, null, 0, deviceId);
+                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                    updateAppWidget(context, widgetManager, widgetId);
+                }
             }
         };
 
@@ -712,6 +792,12 @@ public class NewAppWidget extends AppWidgetProvider {
             return checkPoints[1];
         } else {
             return checkPoints[2];
+        }
+    }
+
+    public void removeHandlerResetDeviceStateToNull() {
+        if (handlerResetDeviceStateToNull != null && runnableResetDeviceStateToNull != null) {
+            handlerResetDeviceStateToNull.removeCallbacks(runnableResetDeviceStateToNull);
         }
     }
 }
