@@ -233,7 +233,7 @@
 		],
 		"TELLSTICK_SCALE_POWER_KVAH": [
 			1,
-			"kvAh"
+			"kVAh"
 		],
 		"TELLSTICK_SCALE_POWER_KWH": [
 			0,
