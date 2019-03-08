@@ -63,6 +63,23 @@ class DeviceWidget extends Component<null, State> {
 		NativeModules.DisplayMode.openURLString('telldus://');
 	}
 
+	// eslint-disable-next-line flowtype/require-return-type
+	renderLoginButton = () => {
+		const { email } = this.state;
+		const { txtNotLogin, btnContainer } = styles;
+		if (email === 'Not logged in') {
+			return (
+				<TouchableOpacity
+					style={btnContainer}
+					onPress={this.openApp}
+				>
+					<Text style={txtNotLogin}>LOG IN</Text>
+				</TouchableOpacity>
+			);
+		}
+		return <View />;
+	}
+
 	render(): Object {
 		const { txtNotLogin, btnContainer } = styles;
 		const { email } = this.state;
@@ -71,12 +88,7 @@ class DeviceWidget extends Component<null, State> {
 				<Text style={txtNotLogin}>
 					{email}
 				</Text>
-				<TouchableOpacity
-					 style={btnContainer}
-					 onPress={this.openApp}
-				>
-					<Text style={txtNotLogin}>LOG IN</Text>
-				</TouchableOpacity>
+				{this.renderLoginButton()}
 				{(__DEV__ && <DevMenu/>)}
 			</View>
 		);
