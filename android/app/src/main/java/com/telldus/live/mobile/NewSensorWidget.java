@@ -45,8 +45,11 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.NumberFormat;
+import java.text.DateFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -127,9 +130,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         widgetType = sensorWidgetInfo.getSensorDisplayType();
         transparent = sensorWidgetInfo.getTransparent();
 
+        String formattedValue = formatValue(sensorValue);
+
         long time = Long.parseLong(sensorHistory);
-        // String timeStamp = GetTimeAgo.getTimeAgo(time, context);
-        long now = System.currentTimeMillis();
 
         // if timestamp given in seconds, convert to millis
         if (time < 1000000000000L) {
@@ -137,9 +140,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         Date date = new Date(time);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-
-        sensorHistory = formatter.format(date);
+        String formattedDate = DateFormat.getDateTimeInstance().format(date);
 
         if (transparent.equals("true")) {
             view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
@@ -151,8 +152,8 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setTextViewText(R.id.iconSensor, sensorIcon);
         view.setTextColor(R.id.iconSensor, Color.parseColor("#FFFFFF"));
         view.setTextViewText(R.id.txtSensorType, widgetText);
-        view.setTextViewText(R.id.txtHistoryInfo, sensorHistory);
-        view.setTextViewText(R.id.txtSensorValue, sensorValue);
+        view.setTextViewText(R.id.txtHistoryInfo, formattedDate);
+        view.setTextViewText(R.id.txtSensorValue, formattedValue);
         view.setTextViewText(R.id.txtSensorUnit, sensorUnit);
 
         // Instruct the widget manager to update the widget
@@ -376,5 +377,13 @@ public class NewSensorWidget extends AppWidgetProvider {
             public void onError(ANError error) {
             }
         });
+    }
+
+    public static String formatValue(CharSequence sensorValue) {
+        String value = String.valueOf(sensorValue);
+        Double valueAsDouble = Double.valueOf(value);
+        DecimalFormat df = new DecimalFormat("#.#");
+        String formattedDecimal = df.format(valueAsDouble);
+        return formattedDecimal;
     }
 }
