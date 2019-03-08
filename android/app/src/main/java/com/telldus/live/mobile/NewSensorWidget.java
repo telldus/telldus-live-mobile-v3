@@ -66,6 +66,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class NewSensorWidget extends AppWidgetProvider {
@@ -140,7 +141,13 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         Date date = new Date(time);
-        String formattedDate = DateFormat.getDateTimeInstance().format(date);
+
+        Locale locale = Locale.getDefault();
+        DateFormat dMWY = formatDate(locale);
+        String formattedDate = dMWY.format(date);
+        String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
+
+        String formattedDT = formattedDate + " " + formattedTime;
 
         if (transparent.equals("true")) {
             view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
@@ -152,7 +159,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setTextViewText(R.id.iconSensor, sensorIcon);
         view.setTextColor(R.id.iconSensor, Color.parseColor("#FFFFFF"));
         view.setTextViewText(R.id.txtSensorType, widgetText);
-        view.setTextViewText(R.id.txtHistoryInfo, formattedDate);
+        view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
         view.setTextViewText(R.id.txtSensorValue, formattedValue);
         view.setTextViewText(R.id.txtSensorUnit, sensorUnit);
 
@@ -385,5 +392,13 @@ public class NewSensorWidget extends AppWidgetProvider {
         DecimalFormat df = new DecimalFormat("#.#");
         String formattedDecimal = df.format(valueAsDouble);
         return formattedDecimal;
+    }
+
+    public static DateFormat formatDate(Locale locale) {
+        SimpleDateFormat formattedDate = (SimpleDateFormat) DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+        formattedDate.applyPattern(formattedDate.toPattern().replaceAll(
+            "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
+            ""));
+        return formattedDate;
     }
 }
