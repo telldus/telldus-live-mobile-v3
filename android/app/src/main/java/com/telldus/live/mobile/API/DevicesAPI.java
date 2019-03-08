@@ -35,6 +35,7 @@ import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.NewOnOffWidget;
+import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 
 import java.util.concurrent.Callable;
 import java.util.HashMap;
@@ -45,11 +46,13 @@ import org.json.JSONObject;
 public class DevicesAPI {
     private static Integer supportedMethodsAggreg = 1975;
 
-    private static Handler handlerDeviceInfoCheck;
-    private static Runnable runnableDeviceInfoCheck;
-    private static Map<Integer, Handler> deviceInfoPendingCheckList = new HashMap<Integer, Handler>();
+    private static Map<String, Map> deviceInfoPendingCheckList = new HashMap<String, Map>();
+    Runnable runnableDeviceInfoCheck;
+    private int runnableDeviceInfoCheckCount = 0;
+    private long runnableDeviceInfoCheckInterval = 2000;
+    private long runnableDeviceInfoCheckMaxTimeout = 10000;
 
-    public void setDeviceState(final Integer deviceId, final Integer method, final Integer stateValue, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
+    public void setDeviceState(final Integer deviceId, final Integer method, final Integer stateValue, final int widgetId, final Context context, final OnAPITaskComplete callBack) {
         String params = "device/command?id="+deviceId+"&method="+method+"&value="+stateValue;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
@@ -60,55 +63,48 @@ public class DevicesAPI {
                     String error = response.optString("error");
                     if (!status.isEmpty() && status != null && status.equalsIgnoreCase("success")) {
                         if (method.intValue() != 32) {
-                            Handler pendingHandler = deviceInfoPendingCheckList.get(deviceId);
-                            if (pendingHandler != null) {
-                                pendingHandler.removeCallbacks(runnableDeviceInfoCheck);
-                                deviceInfoPendingCheckList.remove(deviceId);
-                            }
-                            handlerDeviceInfoCheck = new Handler(Looper.getMainLooper());
+                            removeHandlerRunnablePair(deviceId, widgetId);
+                            final Handler handlerDeviceInfoCheck = new Handler(Looper.getMainLooper());
                             runnableDeviceInfoCheck = new Runnable(){
                                 @Override
                                 public void run() {
                                     // Check if socket has already updated.
                                     MyDBHandler db = new MyDBHandler(context);
-                                    DeviceInfo info = db.findWidgetInfoDevice(widgetID);
+                                    DeviceInfo info = db.findWidgetInfoDevice(widgetId);
+                                    Boolean reset = runnableDeviceInfoCheckCount == ((int) (runnableDeviceInfoCheckMaxTimeout / runnableDeviceInfoCheckInterval)) - 1;
+
                                     if (info != null) {
                                         String currentState = info.getState();
                                         if (currentState == null) {
-                                            currentState = "";
+                                            currentState = "null";
                                         }
                                         String requestedState = String.valueOf(method);
                                         String currentStateValue = info.getDeviceStateValue();
                                         String requestedStateValue = String.valueOf(stateValue);
-                                        if (!requestedState.equals(currentState) || !currentStateValue.equals(requestedStateValue)) {
-                                            getDeviceInfo(deviceId, method, widgetID, context, callBack);
-                                        } else {
-                                            callBack.onSuccess(response);
-                                        }
+                                        getDeviceInfo(deviceId, method, widgetId, reset, context, callBack);
                                     }
-
-                                    Handler finishedHandler = deviceInfoPendingCheckList.get(deviceId);
-                                    if (finishedHandler != null) {
-                                        finishedHandler.removeCallbacks(runnableDeviceInfoCheck);
-                                    }
-                                    deviceInfoPendingCheckList.remove(deviceId);
+                                    handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
+                                    runnableDeviceInfoCheckCount++;
                                 }
                             };
-                            deviceInfoPendingCheckList.put(deviceId, handlerDeviceInfoCheck);
-                            handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, 10000);
+                            String key = String.valueOf(deviceId)+String.valueOf(widgetId);
+                            handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
+                            Map<String, HandlerRunnablePair> handlerRunnableHashMap = new HashMap<String, HandlerRunnablePair>();
+                            HandlerRunnablePair handlerRunnablePair = new HandlerRunnablePair(handlerDeviceInfoCheck, runnableDeviceInfoCheck);
+                            handlerRunnablePair.setRunnable(runnableDeviceInfoCheck);
+                            handlerRunnablePair.setHandler(handlerDeviceInfoCheck);
+                            handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
+                            deviceInfoPendingCheckList.put(key, handlerRunnableHashMap);
                         }
                     }
                     if (!error.isEmpty() && error != null) {
-                        Toast.makeText(context, error, Toast.LENGTH_LONG).show();
                         MyDBHandler db = new MyDBHandler(context);
-                        db.updateDeviceMethodRequested(null, deviceId);
                         Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                         callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     MyDBHandler db = new MyDBHandler(context);
-                    db.updateDeviceMethodRequested(null, deviceId);
                     Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                     callBack.onSuccess(response);
                 };
@@ -116,48 +112,77 @@ public class DevicesAPI {
             @Override
             public void onError(ANError error) {
                 MyDBHandler db = new MyDBHandler(context);
-                db.updateDeviceMethodRequested(null, deviceId);
                 Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
                 callBack.onError(error);
             }
         });
     }
 
-    public void getDeviceInfo(final Integer deviceId, final Integer requestedState, final int widgetID, final Context context, final OnAPITaskComplete callBack) {
+    public void getDeviceInfo(final Integer deviceId, final Integer requestedState, final int widgetId, final Boolean reset, final Context context, final OnAPITaskComplete callBack) {
         String params =  "device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
+                    String key = String.valueOf(deviceId)+String.valueOf(widgetId);
+                    Map<String, HandlerRunnablePair> finishedHandlerRunnableHash = deviceInfoPendingCheckList.get(key);
+
                     MyDBHandler db = new MyDBHandler(context);
-                    DeviceInfo info = db.findWidgetInfoDevice(widgetID);
-                    if (info != null) {
+                    DeviceInfo info = db.findWidgetInfoDevice(widgetId);
+
+                    if (info != null && finishedHandlerRunnableHash != null) {
                         String reqState = String.valueOf(requestedState);
                         String newState = response.optString("state");
                         String stateValue = response.optString("statevalue");
-                        db.updateDeviceState(newState, deviceId, stateValue);
-                        db.updateDeviceMethodRequested(null, deviceId);
-                        if (!newState.equals(reqState)) {
-                            Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                        if (newState.equals(reqState)) {
+                            db.updateDeviceState(newState, widgetId, stateValue);
+                            removeHandlerRunnablePair(deviceId, widgetId);
+                            callBack.onSuccess(response);
+                            return;
                         }
-                        callBack.onSuccess(response);
+                        if (reset && !newState.equals(reqState)) {
+                            Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                            removeHandlerRunnablePair(deviceId, widgetId);
+                            callBack.onSuccess(response);
+                            return;
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MyDBHandler db = new MyDBHandler(context);
-                    db.updateDeviceMethodRequested(null, deviceId);
-                    Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
-                    callBack.onSuccess(response);
+                    if (reset) {
+                        MyDBHandler db = new MyDBHandler(context);
+                        Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                        removeHandlerRunnablePair(deviceId, widgetId);
+                        callBack.onSuccess(response);
+                    }
                 };
             }
             @Override
             public void onError(ANError error) {
-                MyDBHandler db = new MyDBHandler(context);
-                db.updateDeviceMethodRequested(null, deviceId);
-                Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
-                callBack.onError(error);
+                if (reset) {
+                    MyDBHandler db = new MyDBHandler(context);
+                    Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                    removeHandlerRunnablePair(deviceId, widgetId);
+                    callBack.onError(error);
+                }
             }
         });
+    }
+
+    public void removeHandlerRunnablePair(int deviceId, int widgetId) {
+        String key = String.valueOf(deviceId)+String.valueOf(widgetId);
+        Map<String, HandlerRunnablePair> finishedHandlerRunnableHash = deviceInfoPendingCheckList.get(key);
+        if (finishedHandlerRunnableHash != null) {
+            HandlerRunnablePair finishedHandlerRunnablePair = finishedHandlerRunnableHash.get("HandlerRunnablePair");
+            if (finishedHandlerRunnablePair != null) {
+                Runnable finishedRunnable = finishedHandlerRunnablePair.getRunnable();
+                Handler finishedHandler =  finishedHandlerRunnablePair.getHandler();
+                finishedHandler.removeCallbacks(finishedRunnable);
+                finishedHandlerRunnableHash.remove("HandlerRunnablePair");
+                deviceInfoPendingCheckList.remove(key);
+                runnableDeviceInfoCheckCount = 0;
+            }
+        }
     }
 }

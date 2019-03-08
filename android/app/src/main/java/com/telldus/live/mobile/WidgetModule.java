@@ -124,9 +124,6 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     widgetView.removeAllViews(R.id.widget_content_cover);
     widgetView.setTextViewText(R.id.txtWidgetTitle, message);
 
-    // Stop socket service
-    getReactApplicationContext().stopService(new Intent(getReactApplicationContext(), MyService.class));
-
     // Clear token and other credentials from shared preference
     prefManager = new PrefManager(getReactApplicationContext());
     prefManager.clear();

@@ -65,9 +65,6 @@
           android:name="com.google.firebase.messaging.default_notification_channel_id"
           android:value="${pushSenderId}"/>
         <receiver android:name=".DeviceWidget"/>
-        <service
-            android:name=".MyService"
-            android:enabled="true" />
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
             <intent-filter>

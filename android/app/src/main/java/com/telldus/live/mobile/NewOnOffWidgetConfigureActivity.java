@@ -261,21 +261,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         "", // As of now deviceStateValue does matters for only DIM devices.
                         switchStatus,
                         currentUserId,
-                        methodRequested);
+                        methodRequested,
+                        0);
                     db.addWidgetDevice(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
-
-                    boolean web_service = prefManager.getWebService();
-                    if (!web_service) {
-                        prefManager.websocketService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
-
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

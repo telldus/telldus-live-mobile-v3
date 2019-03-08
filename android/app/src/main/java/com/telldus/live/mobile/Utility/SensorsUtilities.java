@@ -283,7 +283,7 @@ public class SensorsUtilities {
             "N",
         };
 
-        Double index = Math.floor(Integer.parseInt(value, 10) / 22.5);
+        Double index = Math.floor(Float.parseFloat(value) / 22.5);
         if (index.intValue() <= list.length - 1) {
             return list[index.intValue()];
         }

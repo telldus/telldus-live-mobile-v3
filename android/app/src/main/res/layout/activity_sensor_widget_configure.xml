@@ -137,29 +137,27 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.62"
                             android:background="@drawable/shape_right"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_gravity="left"
+                            android:paddingVertical="15dp"
+                            android:paddingHorizontal="10dp">
 
                             <TextView
                                 android:id="@+id/txtSensorName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
                                 android:text="Select sensor"
                                 android:textSize="22sp"
                                 android:layout_gravity="center"
-                                android:textColor="@color/orange"
-                                android:layout_marginLeft="25sp"
-                                android:layout_marginRight="10sp"/>
+                                android:textColor="@color/orange"/>
 
                             <TextView
                                 android:id="@+id/txtSensorHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="16dp"
                                 android:text="Tap to select sensor"
                                 android:textSize="12sp"
                                 android:layout_gravity="center"
-                                android:layout_marginLeft="23sp"
                                 android:textColor="@color/darkGray"/>
 
                         </LinearLayout>
@@ -213,28 +211,26 @@
                             android:layout_height="match_parent"
                             android:layout_weight="0.62"
                             android:background="@drawable/shape_right"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_gravity="left"
+                            android:paddingVertical="15dp"
+                            android:paddingHorizontal="10dp">
 
                             <TextView
                                 android:id="@+id/txtSensorDataName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
                                 android:text="Select value"
                                 android:textSize="22sp"
                                 android:textColor="@color/orange"
-                                android:layout_marginLeft="25sp"
-                                android:layout_marginRight="10sp"
                                 android:layout_gravity="center"/>
 
                             <TextView
                                 android:id="@+id/txtSensorDataHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="16dp"
                                 android:text="Tap to change value to display"
                                 android:textSize="12sp"
-                                android:layout_marginLeft="23sp"
                                 android:textColor="@color/darkGray"
                                 android:layout_gravity="center"/>
 

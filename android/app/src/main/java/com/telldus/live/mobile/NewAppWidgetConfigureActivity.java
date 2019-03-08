@@ -237,19 +237,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceStateValueCurrent,
                         switchStatus,
                         currentUserId,
-                        methodRequested);
+                        methodRequested,
+                        0);
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
-
-                    boolean web_service = prefManager.getWebService();
-                    if (!web_service) {
-                        prefManager.websocketService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

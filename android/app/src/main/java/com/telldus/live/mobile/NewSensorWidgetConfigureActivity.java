@@ -239,10 +239,10 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     boolean token_service = prefManager.getTokenService();
-                    boolean b = isMyServiceRunning(NetworkInfo.class);
-                    if (!b) {
-                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    }
+                    // boolean b = isMyServiceRunning(NetworkInfo.class);
+                    // if (!b) {
+                    //     startService(new Intent(getApplicationContext(), NetworkInfo.class));
+                    // }
 
                     boolean b1 = prefManager.getSensorDB();
                     if (!b1) {
@@ -250,7 +250,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
-                    Log.d("TEST selectInterval", String.valueOf(selectInterval));
                     SensorInfo mSensorInfo = new SensorInfo(
                         mAppWidgetId,
                         sensorName.getText().toString(),
@@ -267,16 +266,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
-
-                    boolean web_service = prefManager.getWebService();
-                    if (!web_service) {
-                        prefManager.websocketService(true);
-                        // Service for Access token
-                        Intent serviceIntent = new Intent(getApplicationContext(), MyService.class);
-                        startService(serviceIntent);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"service already running",Toast.LENGTH_SHORT).show();
-                    }
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.
