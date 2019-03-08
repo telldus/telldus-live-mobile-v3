@@ -31,7 +31,7 @@ import {
 import SInfo from 'react-native-sensitive-info';
 
 type State = {
-	showSelected: true,
+	email: string,
 };
 class DeviceWidget extends Component<null, State> {
 	state: State;
