@@ -25,6 +25,7 @@
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
 		26591AF421E899F300B1AF0F /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */; };
 		267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 267ABE5920F78730006CD1B5 /* libRNSVG.a */; };
+		26AD3A7822322CE40043A56E /* libRNSensitiveInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26A5EF3120918EC900A11C37 /* libRNSensitiveInfo.a */; };
 		26AE96182226874F00AC557A /* DisplayMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96162226874E00AC557A /* DisplayMode.m */; };
 		26AE96192226874F00AC557A /* Linking.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96172226874E00AC557A /* Linking.m */; };
 		26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */; };
@@ -644,6 +645,7 @@
 				26EDB6D022266DC9003EF9E3 /* libRCTSettings.a in Frameworks */,
 				26EDB6D122266DC9003EF9E3 /* libRCTText.a in Frameworks */,
 				26EDB6D322266DC9003EF9E3 /* libRNGestureHandler.a in Frameworks */,
+				26AD3A7822322CE40043A56E /* libRNSensitiveInfo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
