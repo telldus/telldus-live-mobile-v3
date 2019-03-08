@@ -40,4 +40,14 @@ RCT_EXPORT_METHOD(setExpandable:(BOOL)expandable height:(float)height )
   }
 }
 
+RCT_EXPORT_METHOD(openURLString:(NSString *)urlString )
+{
+  NSURL *url = [NSURL URLWithString: urlString];
+  [extensionContext openURL:url completionHandler:^(BOOL success) {
+    if (!success) {
+      NSLog(@"error: failed to open app.");
+    }
+  }];
+}
+
 @end

@@ -26,6 +26,7 @@ import {
 	Platform,
 	Text,
 	View,
+	TouchableOpacity,
 	NativeModules,
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
@@ -58,13 +59,24 @@ class DeviceWidget extends Component<null, State> {
 		NativeModules.DisplayMode.setExpandable(true, 500);
 	}
 
+	openApp = () => {
+		NativeModules.DisplayMode.openURLString('telldus://');
+	}
+
 	render(): Object {
+		const { txtNotLogin, btnContainer } = styles;
 		const { email } = this.state;
 		return (
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<Text>
+				<Text style={txtNotLogin}>
 					{email}
 				</Text>
+				<TouchableOpacity
+					 style={btnContainer}
+					 onPress={this.openApp}
+				>
+					<Text style={txtNotLogin}>LOG IN</Text>
+				</TouchableOpacity>
 				{(__DEV__ && <DevMenu/>)}
 			</View>
 		);
@@ -73,3 +85,21 @@ class DeviceWidget extends Component<null, State> {
 if (Platform.OS === 'ios') {
 	AppRegistry.registerComponent('Widget', (): Object => DeviceWidget);
 }
+
+const styles = {
+	txtNotLogin: {
+		color: '#FFF',
+		fontSize: 18,
+		fontWeight: '700',
+		marginTop: 5,
+	},
+	btnContainer: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 20,
+		width: 200,
+		height: 50,
+		borderRadius: 25,
+		backgroundColor: '#F05201',
+	},
+};

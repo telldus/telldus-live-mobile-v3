@@ -42,12 +42,18 @@
 				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>telldus</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>3.0.0.1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>firebase_crashlytics_collection_enabled</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -96,6 +102,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>firebase_crashlytics_collection_enabled</key>
 	<false/>
 </dict>
 </plist>
