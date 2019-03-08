@@ -53,6 +53,15 @@ jest.mock('react-native-firebase', () => {
 	};
 });
 
+jest.mock('react-native-sensitive-info', () => {
+	return {
+		setItem: jest.fn(),
+		getItem: jest.fn(),
+		deleteItem: jest.fn(),
+		getAllItems: jest.fn(),
+	};
+});
+
 global.window.addEventListener = () => null;
 
 NativeModules.AndroidWidget = {
