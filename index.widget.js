@@ -28,6 +28,7 @@ import {
 	View,
 	NativeModules,
 } from 'react-native';
+import SInfo from 'react-native-sensitive-info';
 
 type State = {
 	showSelected: true,
@@ -37,19 +38,30 @@ class DeviceWidget extends Component<null, State> {
 	constructor() {
 		super();
 		this.state = {
-			showSelected: true,
+			email: 'Not logged in',
 		};
+
+		SInfo.getItem('widgetData', {
+			keychainService: 'TelldusKeychain',
+		}).then((values: any) => {
+			if (values) {
+				const { email } = JSON.parse(values);
+				this.setState({
+					email,
+				});
+			}
+		});
 
 		// Calculate max list length and set here, to be able to show all items when expanded.
 		NativeModules.DisplayMode.setExpandable(true, 500);
 	}
 
 	render(): Object {
-		const { showSelected } = this.state;
+		const { email } = this.state;
 		return (
 			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
 				<Text>
-					{showSelected ? 'Selected List' : 'Select From List'}
+					{email}
 				</Text>
 			</View>
 		);
