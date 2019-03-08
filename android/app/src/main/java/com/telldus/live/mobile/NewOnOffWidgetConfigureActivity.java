@@ -318,7 +318,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-        String params = "devices/list?supportedMethods=1975&includeIgnored=1&extras=devicetype,transport,room";
+        String params = "/devices/list?supportedMethods=1975&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override

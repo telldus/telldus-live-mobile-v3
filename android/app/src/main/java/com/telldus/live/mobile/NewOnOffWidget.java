@@ -323,7 +323,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
 
-        String params = "device/command?id="+deviceId+"&method="+method+"&value=null";
+        String params = "/device/command?id="+deviceId+"&method="+method+"&value=null";
         deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {

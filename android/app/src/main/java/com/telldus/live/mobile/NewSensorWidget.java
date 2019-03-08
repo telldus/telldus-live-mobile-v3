@@ -314,7 +314,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
     void createSensorApi(final Integer sensorId, final Integer widgetId, final MyDBHandler database, final Context context) {
 
-        String params = "sensor/info?id="+sensorId;
+        String params = "/sensor/info?id="+sensorId;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override

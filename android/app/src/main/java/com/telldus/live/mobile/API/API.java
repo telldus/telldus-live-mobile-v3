@@ -29,6 +29,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.BuildConfig;
 
 import java.util.concurrent.Callable;
 
@@ -36,14 +37,13 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 public class API {
-    private static String API_SERVER = "https://api3.telldus.com/oauth2/";
+    private static String API_SERVER = BuildConfig.TELLDUS_API_SERVER;
 
     public void callEndPoint(final Context context, final String params, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
 
-        String Url = API_SERVER+params;
-
+        String Url = API_SERVER+"/oauth2"+params;
         AndroidNetworking.get(Url)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accpet", "application/json")
@@ -122,7 +122,7 @@ public class API {
         final String  clientSecret = prefManager.getClientSecret();
         final String  refreshToken = prefManager.refToken();
 
-        String Url = API_SERVER+"accessToken";
+        String Url = API_SERVER+"/oauth2/accessToken";
 
         AndroidNetworking.post(Url)
             .addBodyParameter("client_id", clientId)

@@ -53,7 +53,7 @@ public class DevicesAPI {
     private long runnableDeviceInfoCheckMaxTimeout = 10000;
 
     public void setDeviceState(final Integer deviceId, final Integer method, final Integer stateValue, final int widgetId, final Context context, final OnAPITaskComplete callBack) {
-        String params = "device/command?id="+deviceId+"&method="+method+"&value="+stateValue;
+        String params = "/device/command?id="+deviceId+"&method="+method+"&value="+stateValue;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override
@@ -119,7 +119,7 @@ public class DevicesAPI {
     }
 
     public void getDeviceInfo(final Integer deviceId, final Integer requestedState, final int widgetId, final Boolean reset, final Context context, final OnAPITaskComplete callBack) {
-        String params =  "device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
+        String params =  "/device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override

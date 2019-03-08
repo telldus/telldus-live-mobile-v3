@@ -716,7 +716,7 @@ public class NewAppWidget extends AppWidgetProvider {
         PrefManager prefManager = new PrefManager(context);
         String  accessToken = prefManager.getAccess();
         final MyDBHandler db = new MyDBHandler(context);
-        String params = "device/command?id="+deviceId+"&method="+method+"&value="+value;
+        String params = "/device/command?id="+deviceId+"&method="+method+"&value="+value;
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {

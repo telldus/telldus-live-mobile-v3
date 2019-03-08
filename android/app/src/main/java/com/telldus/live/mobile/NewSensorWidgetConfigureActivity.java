@@ -420,7 +420,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     }
     void createSensorsApi() {
 
-        String params = "sensors/list?includeValues=1&includeScale=1";
+        String params = "/sensors/list?includeValues=1&includeScale=1";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override

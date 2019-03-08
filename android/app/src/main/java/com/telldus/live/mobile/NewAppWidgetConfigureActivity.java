@@ -286,7 +286,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-        String params = "devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room";
+        String params = "/devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
