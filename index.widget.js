@@ -30,6 +30,8 @@ import {
 } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
 
+import { DevMenu } from './js/WidgetiOS';
+
 type State = {
 	email: string,
 };
@@ -63,6 +65,7 @@ class DeviceWidget extends Component<null, State> {
 				<Text>
 					{email}
 				</Text>
+				{(__DEV__ && <DevMenu/>)}
 			</View>
 		);
 	}
