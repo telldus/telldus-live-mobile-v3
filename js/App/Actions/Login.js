@@ -28,7 +28,7 @@ import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../C
 
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
-import { widgetAndroidDisableAll } from './Widget';
+import { widgetAndroidDisableAll, widgetiOSRemoveDataFromKeychain } from './Widget';
 import { setBoolean } from '../Lib/Analytics';
 
 type loginCredential = {
@@ -106,6 +106,7 @@ function getUserProfile(): ThunkAction {
 
 function logoutFromTelldus(): ThunkAction {
 	destroyAllConnections();
+	widgetiOSRemoveDataFromKeychain();
 
 	return (dispatch: Function): Function => {
 		dispatch(widgetAndroidDisableAll('Telldus Live! Logged Out!!'));
