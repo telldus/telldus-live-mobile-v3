@@ -155,12 +155,14 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ""
+            buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
         }
         release {
             applicationIdSuffix ""
             minifyEnabled enableProguardInReleaseBuilds
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
         }
     }
     // applicationVariants are e.g. debug, release
