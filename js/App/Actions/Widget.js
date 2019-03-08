@@ -21,6 +21,7 @@
 'use strict';
 
 import { NativeModules, Platform } from 'react-native';
+import SInfo from 'react-native-sensitive-info';
 
 import { publicKey, privateKey } from '../../Config';
 import type { ThunkAction } from './Types';
@@ -99,6 +100,37 @@ const widgetAndroidRefreshSensors = (sensorIds: Array<string>) => {
 	}
 };
 
+const widgetiOSConfigure = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): any => {
+		if (Platform.OS === 'ios') {
+			const { user } = getState();
+			const { accessToken = {}, userProfile = {} } = user;
+			const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
+			const { email } = userProfile;
+
+			const widgetData = JSON.stringify({
+				access_token,
+				refresh_token,
+				expires_in,
+				email,
+				publicKey,
+				privateKey,
+			});
+			SInfo.setItem('widgetData', widgetData, {
+				keychainService: 'TelldusKeychain',
+			});
+		}
+	};
+};
+
+const widgetiOSRemoveDataFromKeychain = () => {
+	if (Platform.OS === 'ios') {
+		SInfo.deleteItem('widgetData', {
+			keychainService: 'TelldusKeychain',
+		});
+	}
+};
+
 module.exports = {
 	widgetAndroidConfigure,
 	widgetAndroidConfigureSessionData,
@@ -107,4 +139,6 @@ module.exports = {
 	widgetAndroidRefreshSensors,
 	widgetAndroidRefreshDevices,
 	widgetAndroidRefresh,
+	widgetiOSConfigure,
+	widgetiOSRemoveDataFromKeychain,
 };
