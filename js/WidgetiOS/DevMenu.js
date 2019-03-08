@@ -26,10 +26,14 @@ import {
 } from 'react-native';
 
 type State = {
-    debug: false,
+    debug: boolean,
 };
 
-export default class DevMenu extends Component<nulll, State> {
+type Props = {
+};
+
+export default class DevMenu extends Component<Props, State> {
+props: Props;
 state: State;
 reload: () => void;
 remoteDebug: () => void;
