@@ -54,7 +54,7 @@ import {
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
-import { widgetAndroidConfigure, widgetAndroidRefresh } from '../Actions/Widget';
+import { widgetAndroidConfigure, widgetAndroidRefresh, widgetiOSConfigure } from '../Actions/Widget';
 
 import {
 	getRSAKey,
@@ -138,7 +138,8 @@ componentDidMount() {
 	// and results in generating multiple tokens.
 	const { dispatch, addNewGatewayBool } = this.props;
 	dispatch(getUserProfile()).then(() => {
-		this.props.dispatch(widgetAndroidConfigure());
+		dispatch(widgetAndroidConfigure());
+		dispatch(widgetiOSConfigure());
 		dispatch(syncLiveApiOnForeground());
 		dispatch(getGateways());
 		dispatch(getAppData()).then(() => {
