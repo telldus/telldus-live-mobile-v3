@@ -157,7 +157,6 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
 
         view.setTextViewText(R.id.iconSensor, sensorIcon);
-        view.setTextColor(R.id.iconSensor, Color.parseColor("#FFFFFF"));
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
         view.setTextViewText(R.id.txtSensorValue, formattedValue);
