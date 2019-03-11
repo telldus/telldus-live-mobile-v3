@@ -167,8 +167,6 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
-            views.setInt(R.id.bellCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
             }
@@ -207,8 +205,6 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.uparrow, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("26"));
-
-            views.setInt(R.id.upCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
             views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
 
@@ -254,8 +250,6 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setInt(R.id.downarrow, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            views.setInt(R.id.downCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
             views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
             if (renderedButtonsCount == 0) {
@@ -300,8 +294,6 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setInt(R.id.stopicon, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            views.setInt(R.id.stopCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
             views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
             if (renderedButtonsCount == 0) {
@@ -345,8 +337,6 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
             views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
-
-            views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
@@ -515,8 +505,6 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
-
-            views.setInt(R.id.onCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
 
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
