@@ -73,6 +73,8 @@ public class NewSensorWidget extends AppWidgetProvider {
     private static final String ACTION_SENSOR_UPDATE = "ACTION_SENSOR_UPDATE";
     private PendingIntent pendingIntent;
 
+    static BroadcastReceiver mReceiver = new AEScreenOnOffReceiver();
+
     // 'handlerAPIPollingList' is kept static, handler and runnable are created from a non-static context.
     // This is important for each sensor widget to have it's own handler and runnable, also be able to remove
     // callbacks by using each widget id during different cases.
@@ -169,10 +171,7 @@ public class NewSensorWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        BroadcastReceiver mReceiver = new AEScreenOnOffReceiver();
-        context.getApplicationContext().registerReceiver(mReceiver, filter);
+        setScreenOnOffBroardcastListener(context);
     }
 
     @Override
@@ -245,7 +244,10 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         if (ACTION_SENSOR_UPDATE.equals(intent.getAction())) {
-            createSensorApi(sensorId, widgetId, db, context);
+            setScreenOnOffBroardcastListener(context);
+
+            removeHandlerRunnablePair(widgetId);
+            createAPIPollingHandler(widgetId, context);
         }
     }
 
@@ -399,5 +401,11 @@ public class NewSensorWidget extends AppWidgetProvider {
             "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
             ""));
         return formattedDate;
+    }
+
+    public static void setScreenOnOffBroardcastListener(Context context) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        context.getApplicationContext().registerReceiver(mReceiver, filter);
     }
 }
