@@ -46,7 +46,7 @@ public class API {
         String Url = API_SERVER+"/oauth2"+params;
         AndroidNetworking.get(Url)
                 .addHeaders("Content-Type", "application/json")
-                .addHeaders("Accpet", "application/json")
+                .addHeaders("Accept", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
                 .setPriority(Priority.LOW)
                 .build()
@@ -130,7 +130,7 @@ public class API {
             .addBodyParameter("grant_type", "refresh_token")
             .addBodyParameter("refresh_token", refreshToken)
             .addHeaders("Content-Type", "application/json")
-            .addHeaders("Accpet", "application/json")
+            .addHeaders("Accept", "application/json")
             .setPriority(Priority.LOW)
             .build()
             .getAsJSONObject(new JSONObjectRequestListener() {
@@ -140,7 +140,6 @@ public class API {
                     if (!error.isEmpty() && error != null) {
                         callBack.onSuccess(response);
                     } else {
-
                         String accessTokenN = response.optString("access_token");
                         String refreshTokenN = response.optString("refresh_token");
                         String expiresInN = response.optString("expires_in");
