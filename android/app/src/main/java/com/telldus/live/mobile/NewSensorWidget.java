@@ -391,6 +391,8 @@ public class NewSensorWidget extends AppWidgetProvider {
         String value = String.valueOf(sensorValue);
         Double valueAsDouble = Double.valueOf(value);
         DecimalFormat df = new DecimalFormat("#.#");
+        Boolean hasDecimal = (valueAsDouble - valueAsDouble.intValue()) != 0;
+        df.setMaximumIntegerDigits(hasDecimal ? 4 : 5);
         String formattedDecimal = df.format(valueAsDouble);
         return formattedDecimal;
     }
