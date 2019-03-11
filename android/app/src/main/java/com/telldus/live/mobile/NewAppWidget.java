@@ -70,6 +70,8 @@ public class NewAppWidget extends AppWidgetProvider {
     private static final String DIMMER_50 = "ACTION_DIMMER_TWO";
     private static final String DIMMER_75 = "ACTION_DIMMER_THREE";
 
+    private static final String ACTION_MORE_ACTIONS = "ACTION_MORE_ACTIONS";
+
     private static final String METHOD_ON = "1";
     private static final String METHOD_OFF = "2";
     private static final String METHOD_BELL = "4";
@@ -158,7 +160,8 @@ public class NewAppWidget extends AppWidgetProvider {
 
         int renderedButtonsCount = 0;
         int maxButtonsOnWidget = 5;
-        if (hasBell) {
+        Boolean showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasBell && !showMoreActions) {
             views.setViewVisibility(R.id.bellCover,View.VISIBLE);
             views.setTextViewText(R.id.bell, "bell");
             views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.brandSecondary));
@@ -199,7 +202,8 @@ public class NewAppWidget extends AppWidgetProvider {
             renderedButtonsCount++;
         }
 
-        if (hasUp) {
+        showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasUp && !showMoreActions) {
             views.setViewVisibility(R.id.upCover, View.VISIBLE);
             views.setTextViewText(R.id.uparrow, "up");
             views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.brandSecondary));
@@ -243,7 +247,8 @@ public class NewAppWidget extends AppWidgetProvider {
             renderedButtonsCount++;
         }
 
-        if (hasDown) {
+        showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasDown && !showMoreActions) {
             views.setViewVisibility(R.id.downCover, View.VISIBLE);
             views.setTextViewText(R.id.downarrow, "down");
             views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.brandSecondary));
@@ -287,7 +292,8 @@ public class NewAppWidget extends AppWidgetProvider {
             renderedButtonsCount++;
         }
 
-        if (hasStop) {
+        showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasStop && !showMoreActions) {
             views.setViewVisibility(R.id.stopCover, View.VISIBLE);
             views.setTextViewText(R.id.stopicon, "stop");
             views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.brandPrimary));
@@ -331,13 +337,15 @@ public class NewAppWidget extends AppWidgetProvider {
             renderedButtonsCount++;
         }
 
-        if (hasOff) {
+        showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasOff && !showMoreActions) {
             views.setViewVisibility(R.id.offCover, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
             views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
+            views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
             if (renderedButtonsCount == 0) {
@@ -375,7 +383,8 @@ public class NewAppWidget extends AppWidgetProvider {
             renderedButtonsCount++;
         }
 
-        if (hasDim) {
+        showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasDim && !showMoreActions) {
             views.setViewVisibility(R.id.iconCheck25, View.GONE);
             views.setViewVisibility(R.id.iconCheck50, View.GONE);
             views.setViewVisibility(R.id.iconCheck75, View.GONE);
@@ -383,123 +392,156 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.dimmer50CoverLinear, View.VISIBLE);
             views.setViewVisibility(R.id.dimmer75CoverLinear, View.VISIBLE);
 
-            views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
-            views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
-            views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
-            views.setTextViewText(R.id.dimmer25, "dim25");
-            views.setTextViewText(R.id.dimmer50, "dim");
-            views.setTextViewText(R.id.dimmer75, "dim75");
-
-            views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-
-            views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
-
-            views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
-
-            views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
-            views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
-            views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
-
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 3)) || (renderedButtonsCount == (maxButtonsOnWidget - 3));
-            if (isLastButton) {
-                views.setInt(R.id.leftMarginDim75, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            }
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
+            showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+            if (!showMoreActions) {
+                views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
+                views.setTextViewText(R.id.dimmer25, "dim25");
+                views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+                views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
+                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
+                    if (renderedButtonsCount == 0) {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
+                    } else {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
+                    }
+                    views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
+                }
                 if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
-                } else {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
                 }
-                views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.white));
-                views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
-            }
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
-                views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
-                views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
-            }
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                } else {
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
                 }
-                views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.white));
-                views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.white));
-            }
-
-            if (methodRequested != null && isShowingStatus == 1) {
-                int checkpoint = 0;
-                if (deviceStateValue != null && !deviceStateValue.equals("")) {
-                    int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-                    checkpoint = getClosestCheckPoint(slidervalue);
+                if (renderedButtonsCount != 0) {
+                    views.setViewVisibility(R.id.leftMarginDim25, View.VISIBLE);
                 }
+                if (methodRequested != null && isShowingStatus == 1) {
+                    int checkpoint = 0;
+                    if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                        int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
+                        checkpoint = getClosestCheckPoint(slidervalue);
+                    }
 
-                if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_25)) {
-                    if (checkpoint == 25) {
-                        views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
-                        views.setTextViewText(R.id.iconCheck25, "statuscheck");
-                        views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetGreen));
-                        views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
-                    } else {
-                        views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
-                        views.setTextViewText(R.id.iconCheck25, "statusx");
-                        views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetRed));
-                        views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_25)) {
+                        if (checkpoint == 25) {
+                            views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
+                            views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
+                            views.setTextViewText(R.id.iconCheck25, "statuscheck");
+                            views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetGreen));
+                            views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                        } else {
+                            views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
+                            views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
+                            views.setTextViewText(R.id.iconCheck25, "statusx");
+                            views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetRed));
+                            views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                        }
                     }
                 }
-                if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_50)) {
-                    if (checkpoint == 50) {
-                        views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
-                        views.setTextViewText(R.id.iconCheck50, "statuscheck");
-                        views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetGreen));
-                        views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
-                    } else {
-                        views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
-                        views.setTextViewText(R.id.iconCheck50, "statusx");
-                        views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetRed));
-                        views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
-                    }
-                }
-                if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_75)) {
-                    if (checkpoint == 75) {
-                        views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
-                        views.setTextViewText(R.id.iconCheck75, "statuscheck");
-                        views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetGreen));
-                        views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
-                    } else {
-                        views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
-                        views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
-                        views.setTextViewText(R.id.iconCheck75, "statusx");
-                        views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetRed));
-                        views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
-                    }
-                }
+                renderedButtonsCount++;
             }
 
-            if (renderedButtonsCount != 0) {
-                views.setViewVisibility(R.id.leftMarginDim25, View.VISIBLE);
+            showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+            if (!showMoreActions) {
+                views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
+                views.setTextViewText(R.id.dimmer50, "dim");
+                views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+                views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
+                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
+                    views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
+                }
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+                if (isLastButton) {
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+                }
+                if (renderedButtonsCount != 0) {
+                    views.setViewVisibility(R.id.leftMarginDim50, View.VISIBLE);
+                }
+                if (methodRequested != null && isShowingStatus == 1) {
+                    int checkpoint = 0;
+                    if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                        int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
+                        checkpoint = getClosestCheckPoint(slidervalue);
+                    }
+                    if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_50)) {
+                        if (checkpoint == 50) {
+                            views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
+                            views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
+                            views.setTextViewText(R.id.iconCheck50, "statuscheck");
+                            views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetGreen));
+                            views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                        } else {
+                            views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
+                            views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
+                            views.setTextViewText(R.id.iconCheck50, "statusx");
+                            views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetRed));
+                            views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                        }
+                    }
+                }
+                renderedButtonsCount++;
             }
-            views.setViewVisibility(R.id.leftMarginDim50, View.VISIBLE);
-            views.setViewVisibility(R.id.leftMarginDim75, View.VISIBLE);
-            renderedButtonsCount+=3;
+
+            showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+            if (!showMoreActions) {
+                views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
+                views.setTextViewText(R.id.dimmer75, "dim75");
+                views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+                views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+                if (isLastButton) {
+                    views.setInt(R.id.leftMarginDim75, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+                }
+                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
+                    if (isLastButton) {
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
+                    } else {
+                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
+                    }
+                    views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.white));
+                }
+                if (renderedButtonsCount != 0) {
+                    views.setViewVisibility(R.id.leftMarginDim75, View.VISIBLE);
+                }
+                if (methodRequested != null && isShowingStatus == 1) {
+                    int checkpoint = 0;
+                    if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                        int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
+                        checkpoint = getClosestCheckPoint(slidervalue);
+                    }
+                    if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_75)) {
+                        if (checkpoint == 75) {
+                            views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
+                            views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
+                            views.setTextViewText(R.id.iconCheck75, "statuscheck");
+                            views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetGreen));
+                            views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                        } else {
+                            views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
+                            views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
+                            views.setTextViewText(R.id.iconCheck75, "statusx");
+                            views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetRed));
+                            views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                        }
+                    }
+                }
+                renderedButtonsCount++;
+            }
         }
 
-        if (hasOn) {
+        showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+        if (hasOn && !showMoreActions) {
             views.setViewVisibility(R.id.onCover, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
@@ -541,6 +583,15 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.leftMarginOn, View.VISIBLE);
             }
             renderedButtonsCount++;
+        }
+
+        // More actions button
+        if (renderedButtonsCount == 4 && buttonsCount > 5) {
+            views.setViewVisibility(R.id.moreActionsCover, View.VISIBLE);
+            views.setViewVisibility(R.id.leftMarginMoreActions, View.VISIBLE);
+            views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+
+            views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
         }
 
         transparent = DeviceWidgetInfo.getTransparent();
@@ -677,6 +728,11 @@ public class NewAppWidget extends AppWidgetProvider {
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceApi(deviceId, 1, 0, widgetId, context);
+        }
+        if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
+            Intent dialogueIntent = new Intent(context, DevicesGroupDialogueActivity.class);
+            dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(dialogueIntent);
         }
     }
 
