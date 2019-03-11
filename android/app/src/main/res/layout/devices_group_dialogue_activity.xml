@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    <include layout="@layout/widget_3_1_devices"/>
+    <TextView
+        android:id="@+id/closeDialogue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/brandSecondary"
+        android:gravity="center"/>
+</LinearLayout>
