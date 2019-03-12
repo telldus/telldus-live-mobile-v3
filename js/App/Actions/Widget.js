@@ -28,26 +28,11 @@ import type { ThunkAction } from './Types';
 const widgetAndroidConfigure = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
-			const { user, websockets } = getState();
+			const { user } = getState();
 			const { accessToken = {}, userProfile = {} } = user;
 			const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
 			const { AndroidWidget } = NativeModules;
 			AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, userProfile.email);
-
-			const { session } = websockets;
-			if (session && session.id) {
-				AndroidWidget.configureWidgetSessionData(session.id);
-			}
-		}
-		return;
-	};
-};
-
-const widgetAndroidConfigureSessionData = (sessionId: string): ThunkAction => {
-	return (dispatch: Function, getState: Function): any => {
-		if (Platform.OS === 'android') {
-			const { AndroidWidget } = NativeModules;
-			AndroidWidget.configureWidgetSessionData(sessionId);
 		}
 		return;
 	};
@@ -101,7 +86,6 @@ const widgetAndroidRefreshSensors = (sensorIds: Array<string>) => {
 
 module.exports = {
 	widgetAndroidConfigure,
-	widgetAndroidConfigureSessionData,
 	widgetAndroidDisableWidget,
 	widgetAndroidDisableAll,
 	widgetAndroidRefreshSensors,
