@@ -170,12 +170,13 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (isLastButton) {
+            } else if (isLastButton) {
                 views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            } else {
+                views.setInt(R.id.bellCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
                 if (renderedButtonsCount == 0) {
@@ -212,12 +213,13 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
 
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (isLastButton && methodRequested == null) {
+            } else if (isLastButton && methodRequested == null) {
                 views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            } else {
+                views.setInt(R.id.upCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
                 if (renderedButtonsCount == 0) {
@@ -230,7 +232,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
-                if (state.equals("128")) {
+                if (state != null && state.equals("128")) {
                     views.setTextViewText(R.id.uparrow, "statuscheck");
                     views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.widgetGreen));
                     views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
@@ -257,12 +259,13 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (isLastButton) {
+            } else if (isLastButton) {
                 views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            } else {
+                views.setInt(R.id.downCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
                 if (renderedButtonsCount == 0) {
@@ -275,7 +278,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
-                if (state.equals("256")) {
+                if (state != null && state.equals("256")) {
                     views.setTextViewText(R.id.downarrow, "statuscheck");
                     views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.widgetGreen));
                     views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
@@ -302,12 +305,13 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (isLastButton) {
+            } else if (isLastButton) {
                 views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            } else {
+                views.setInt(R.id.stopCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
                 if (renderedButtonsCount == 0) {
@@ -320,7 +324,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
-                if (state.equals("512")) {
+                if (state != null && state.equals("512")) {
                     views.setTextViewText(R.id.stopicon, "statuscheck");
                     views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.widgetGreen));
                     views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("22"));
@@ -345,15 +349,15 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
             views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (isLastButton) {
+            } else if (isLastButton) {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            } else {
+                views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
                 if (renderedButtonsCount == 0) {
@@ -366,7 +370,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     views.setTextViewText(R.id.iconOff, "statuscheck");
                     views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetGreen));
                     views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("19"));
@@ -396,25 +400,27 @@ public class NewAppWidget extends AppWidgetProvider {
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
                 views.setTextViewText(R.id.dimmer25, "dim25");
-                views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
                 views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+                if (renderedButtonsCount == 0) {
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
+                } else if (isLastButton) {
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+                } else {
+                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+                }
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
                     if (renderedButtonsCount == 0) {
                         views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
+                    } else if (isLastButton) {
+                        views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
                     } else {
                         views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                     }
                     views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.white));
                     views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
-                }
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-                }
-                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                if (isLastButton) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
                 }
                 if (renderedButtonsCount != 0) {
                     views.setViewVisibility(R.id.leftMarginDim25, View.VISIBLE);
@@ -449,18 +455,23 @@ public class NewAppWidget extends AppWidgetProvider {
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
                 views.setTextViewText(R.id.dimmer50, "dim");
-                views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
                 views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
-                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                    views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
-                    views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
-                }
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
                     views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+                } else {
+                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
+                }
+                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
+                    if (isLastButton) {
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
+                    } else {
+                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
+                    }
+                    views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
                 }
                 if (renderedButtonsCount != 0) {
                     views.setViewVisibility(R.id.leftMarginDim50, View.VISIBLE);
@@ -494,13 +505,14 @@ public class NewAppWidget extends AppWidgetProvider {
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
                 views.setTextViewText(R.id.dimmer75, "dim75");
-                views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
                 views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
-                    views.setInt(R.id.leftMarginDim75, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+                    views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+                } else {
+                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
                 }
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
                     if (isLastButton) {
@@ -550,13 +562,15 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            }
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (isLastButton) {
+            } else if (isLastButton) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            } else {
+                views.setInt(R.id.onCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
             }
+
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
@@ -568,7 +582,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
-                if (state.equals("1")) {
+                if (state != null && state.equals("1")) {
                     views.setTextViewText(R.id.iconOn, "statuscheck");
                     views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetGreen));
                     views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("22"));
@@ -731,6 +745,7 @@ public class NewAppWidget extends AppWidgetProvider {
         }
         if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
             Intent dialogueIntent = new Intent(context, DevicesGroupDialogueActivity.class);
+            dialogueIntent.putExtra("widgetId", widgetId);
             dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(dialogueIntent);
         }
