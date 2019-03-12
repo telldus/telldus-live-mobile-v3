@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="250dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
-    <include layout="@layout/widget_3_1_devices"/>
-    <TextView
-        android:id="@+id/closeDialogue"
+    android:orientation="vertical"
+    android:background="@drawable/shape_no_padding">
+    <RelativeLayout
+        android:id="@+id/headerImageCover"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/shape_no_padding_top">
+        <ImageView
+            android:id="@+id/headerImage"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/telldus_geometric_header_bg"
+            android:background="@drawable/shape_no_padding_top"/>
+        <TextView
+            android:id="@+id/txtWidgetTitleDialogue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unknown"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_alignLeft="@id/headerImage"
+            android:layout_alignTop="@id/headerImage"
+            android:layout_alignRight="@id/headerImage"
+            android:layout_alignBottom="@id/headerImage"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="5dp"/>
+        <TextView
+            android:id="@+id/widgetDialogueCloseIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="statusx"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:fontFamily="@font/telldusicons"
+            android:background="@android:color/transparent"
+            android:layout_alignLeft="@id/headerImage"
+            android:layout_alignTop="@id/headerImage"
+            android:layout_alignRight="@id/headerImage"
+            android:layout_alignBottom="@id/headerImage"
+            android:gravity="center_vertical|right"
+            android:layout_marginRight="5dp"/>
+    </RelativeLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Close"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:textColor="@color/brandSecondary"
-        android:gravity="center"/>
+        android:padding="8dp">
+        <include layout="@layout/widget_3_1_devices"/>
+    </LinearLayout>
 </LinearLayout>
