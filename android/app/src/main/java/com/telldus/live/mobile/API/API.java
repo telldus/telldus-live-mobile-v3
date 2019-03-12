@@ -41,7 +41,7 @@ public class API {
 
     public void callEndPoint(final Context context, final String params, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
-        String  accessToken = prefManager.getAccess();
+        String accessToken = prefManager.getAccessToken();
 
         String Url = API_SERVER+"/oauth2"+params;
         AndroidNetworking.get(Url)
@@ -118,9 +118,9 @@ public class API {
 
     public void refreshAccessToken(final Context context, final OnAPITaskComplete callBack) {
         final PrefManager prefManager = new PrefManager(context);
-        final String  clientId = prefManager.getClientID();
-        final String  clientSecret = prefManager.getClientSecret();
-        final String  refreshToken = prefManager.refToken();
+        final String clientId = prefManager.getClientID();
+        final String clientSecret = prefManager.getClientSecret();
+        final String refreshToken = prefManager.getRefreshToken();
 
         String Url = API_SERVER+"/oauth2/accessToken";
 
@@ -141,12 +141,9 @@ public class API {
                         callBack.onSuccess(response);
                     } else {
                         String accessTokenN = response.optString("access_token");
-                        String refreshTokenN = response.optString("refresh_token");
                         String expiresInN = response.optString("expires_in");
 
-                        prefManager.timeStampAccessToken(expiresInN);
-                        prefManager.AccessTokenDetails(accessTokenN, expiresInN);
-                        prefManager.infoAccessToken(clientId, clientSecret, refreshTokenN);
+                        prefManager.setAccessDetails(accessTokenN, expiresInN, clientId, clientSecret, refreshToken);
 
                         callBack.onSuccess(response);
                     }

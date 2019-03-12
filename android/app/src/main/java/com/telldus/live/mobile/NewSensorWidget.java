@@ -84,7 +84,7 @@ public class NewSensorWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         PrefManager prefManager = new PrefManager(context);
-        String accessToken = prefManager.getAccess();
+        String accessToken = prefManager.getAccessToken();
         // On log out, only prefManager is cleared and not DB, so we do not want sensor to show back again during the timed interval
         // or socket update.
         if (accessToken == "") {
@@ -205,8 +205,6 @@ public class NewSensorWidget extends AppWidgetProvider {
 
             } else {
                 Toast.makeText(context,"No sensor",Toast.LENGTH_SHORT).show();
-                prefManager.sensorDB(false);
-                prefManager.websocketService(false);
             }
             removeHandlerRunnablePair(appWidgetId);
         }

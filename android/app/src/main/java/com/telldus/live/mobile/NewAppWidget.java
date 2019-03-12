@@ -93,7 +93,7 @@ public class NewAppWidget extends AppWidgetProvider {
                                 int appWidgetId) {
 
         PrefManager prefManager = new PrefManager(context);
-        String accessToken = prefManager.getAccess();
+        String accessToken = prefManager.getAccessToken();
         // On log out, only prefManager is cleared and not DB, so we do not want device to show back again during the
         // socket update.
         if (accessToken == "") {
@@ -758,7 +758,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
     public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
-        String  accessToken = prefManager.getAccess();
+        String  accessToken = prefManager.getAccessToken();
         final MyDBHandler db = new MyDBHandler(context);
         String params = "/device/command?id="+deviceId+"&method="+method+"&value="+value;
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, new OnAPITaskComplete() {

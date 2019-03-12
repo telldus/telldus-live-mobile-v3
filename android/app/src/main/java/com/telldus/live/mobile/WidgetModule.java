@@ -66,17 +66,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret, String userId) {
     prefManager = new PrefManager(getReactApplicationContext());
 
-    prefManager.timeStampAccessToken(expiresIn);
-    prefManager.AccessTokenDetails(accessToken, expiresIn);
-    prefManager.infoAccessToken(clientId, clientSecret, refreshToken);
+    prefManager.setAccessDetails(accessToken, expiresIn, clientId, clientSecret, refreshToken);
     prefManager.setUserId(userId);
-  }
-
-  @ReactMethod
-  public void configureWidgetSessionData(String sessionId) {
-    prefManager = new PrefManager(getReactApplicationContext());
-
-    prefManager.saveSessionID(sessionId);
   }
 
   @ReactMethod

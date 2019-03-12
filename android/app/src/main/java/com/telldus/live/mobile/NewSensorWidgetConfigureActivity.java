@@ -125,7 +125,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         prefManager = new PrefManager(this);
-        accessToken = prefManager.getAccess();
+        accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
             Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
             getApplicationContext().startActivity(launchActivity);
@@ -236,17 +236,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
-                    }
-
-                    boolean token_service = prefManager.getTokenService();
-                    // boolean b = isMyServiceRunning(NetworkInfo.class);
-                    // if (!b) {
-                    //     startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    // }
-
-                    boolean b1 = prefManager.getSensorDB();
-                    if (!b1) {
-                        prefManager.sensorDB(true);
                     }
 
                     String currentUserId = prefManager.getUserId();

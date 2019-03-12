@@ -121,7 +121,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         prefManager = new PrefManager(this);
-        accessToken = prefManager.getAccess();
+        accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
             Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
             getApplicationContext().startActivity(launchActivity);
@@ -215,11 +215,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     boolean b = isMyServiceRunning(NetworkInfo.class);
                     if (!b) {
                         startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    }
-
-                    boolean b1 = prefManager.getDeviceDB();
-                    if (!b1) {
-                        prefManager.DeviceDB(true);
                     }
 
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
