@@ -38,24 +38,24 @@ public class SensorUpdateAlarmManager {
         mContext = context;
     }
 
-    public void startAlarm(int appWidgetId, int updateInterval) {
+    public void startAlarm(int widgetId, int updateInterval) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, updateInterval);
 
         Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
         alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
-        alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, appWidgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), updateInterval, pendingIntent);
     }
 
 
-    public void stopAlarm(int appWidgetId) {
+    public void stopAlarm(int widgetId) {
         Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
         alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, appWidgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
