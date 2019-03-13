@@ -6,17 +6,20 @@
     android:orientation="vertical"
     android:background="@drawable/shape_no_padding">
     <RelativeLayout
-        android:id="@+id/headerImageCover"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="@drawable/shape_no_padding_top">
-        <ImageView
-            android:id="@+id/headerImage"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/telldus_geometric_header_bg"
-            android:background="@drawable/shape_no_padding_top"/>
+        android:layout_height="fill_parent">
+        <LinearLayout
+            android:id="@+id/headerImageCover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_no_padding">
+            <ImageView
+                android:id="@+id/headerImage"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/telldus_geometric_header_bg"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/txtWidgetTitleDialogue"
             android:layout_width="wrap_content"
@@ -25,10 +28,10 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:layout_alignLeft="@id/headerImage"
-            android:layout_alignTop="@id/headerImage"
-            android:layout_alignRight="@id/headerImage"
-            android:layout_alignBottom="@id/headerImage"
+            android:layout_alignLeft="@id/headerImageCover"
+            android:layout_alignTop="@id/headerImageCover"
+            android:layout_alignRight="@id/headerImageCover"
+            android:layout_alignBottom="@id/headerImageCover"
             android:gravity="center_vertical|left"
             android:layout_marginLeft="5dp"/>
         <TextView
@@ -41,10 +44,10 @@
             android:textColor="@color/white"
             android:fontFamily="@font/telldusicons"
             android:background="@android:color/transparent"
-            android:layout_alignLeft="@id/headerImage"
-            android:layout_alignTop="@id/headerImage"
-            android:layout_alignRight="@id/headerImage"
-            android:layout_alignBottom="@id/headerImage"
+            android:layout_alignLeft="@id/headerImageCover"
+            android:layout_alignTop="@id/headerImageCover"
+            android:layout_alignRight="@id/headerImageCover"
+            android:layout_alignBottom="@id/headerImageCover"
             android:gravity="center_vertical|right"
             android:layout_marginRight="5dp"/>
     </RelativeLayout>

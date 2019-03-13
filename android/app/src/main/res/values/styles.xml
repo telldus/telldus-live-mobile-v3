@@ -29,4 +29,8 @@
         </item>
     </style>
 
+	<style name="CustomDialogStyle" parent="@android:style/Theme.Dialog">
+		<item name="android:windowBackground">@drawable/shape_no_padding</item>
+	</style>
+
 </resources>

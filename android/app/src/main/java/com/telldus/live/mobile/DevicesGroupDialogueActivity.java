@@ -161,7 +161,6 @@ public class DevicesGroupDialogueActivity extends Activity {
         View widgetTitleCover = (View) findViewById(R.id.widgetTitleCover);
         widgetTitleCover.setVisibility(View.GONE);
         txtWidgetTitle.setText(deviceName);
-        headerImage.setClipToOutline(true);
         headerImageCover.setClipToOutline(true);
         headerImage.setOnClickListener(new OnClickListener() {
             @Override
