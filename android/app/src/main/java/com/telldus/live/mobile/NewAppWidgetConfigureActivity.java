@@ -62,7 +62,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
@@ -212,11 +211,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         return;
                     }
 
-                    boolean b = isMyServiceRunning(NetworkInfo.class);
-                    if (!b) {
-                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    }
-
                     views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
@@ -339,16 +333,5 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 updateUI();
             }
         });
-    }
-
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

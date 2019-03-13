@@ -59,7 +59,6 @@ import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
-import com.telldus.live.mobile.BroadcastReceiver.AEScreenOnOffReceiver;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 import org.json.JSONObject;

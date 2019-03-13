@@ -110,7 +110,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ServiceBackground.NetworkInfo"></service>
+        <service android:name=".ServiceBackground.RestartSensorUpdateAlarmManager"></service>
 
         <receiver android:name=".NewOnOffWidget"
           android:label="Device 1-2 btn">
