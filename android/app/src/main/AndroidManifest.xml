@@ -68,8 +68,9 @@
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -94,7 +95,8 @@
         <receiver android:name=".NewSensorWidget"
             android:label="Sensor">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+              <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+              <action android:name="com.telldus.live.mobile.AUTO_UPDATE" />
             </intent-filter>
 
             <meta-data

@@ -60,6 +60,7 @@ import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.BroadcastReceiver.AEScreenOnOffReceiver;
+import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -71,15 +72,8 @@ import java.util.Map;
 
 public class NewSensorWidget extends AppWidgetProvider {
     private static final String ACTION_SENSOR_UPDATE = "ACTION_SENSOR_UPDATE";
+    public static final String ACTION_AUTO_UPDATE = "com.telldus.live.mobile.AUTO_UPDATE";
     private PendingIntent pendingIntent;
-
-    static BroadcastReceiver mReceiver = new AEScreenOnOffReceiver();
-
-    // 'handlerAPIPollingList' is kept static, handler and runnable are created from a non-static context.
-    // This is important for each sensor widget to have it's own handler and runnable, also be able to remove
-    // callbacks by using each widget id during different cases.
-    private static Map<Integer, Map> handlerAPIPollingList = new HashMap<Integer, Map>();
-    Runnable runnable;// Need to be non-static
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -97,6 +91,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         CharSequence sensorValue = "", sensorUnit = "";
         int src = R.drawable.sensor;
         String widgetType;
+        SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
         MyDBHandler db = new MyDBHandler(context);
         SensorInfo sensorWidgetInfo = db.findWidgetInfoSensor(appWidgetId);
         String transparent;
@@ -109,7 +104,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         String currentUserId = prefManager.getUserId();
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
-            removeHandlerRunnablePair(appWidgetId);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
             return;
         }
 
@@ -121,7 +116,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setTextViewText(R.id.txtSensorType, "Sensor not found");
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
-            removeHandlerRunnablePair(appWidgetId);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
             return;
         }
 
@@ -171,18 +166,12 @@ public class NewSensorWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
-        setScreenOnOffBroardcastListener(context);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
-            if (prevHandlerRunnablePair == null) {
-                Map<String, HandlerRunnablePair> newHandlerRunnablePair = createAPIPollingHandler(appWidgetId, context);
-                handlerAPIPollingList.put(appWidgetId, newHandlerRunnablePair);
-            }
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
@@ -192,6 +181,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         // When the user deletes the widget, delete the preference associated with it.
         PrefManager prefManager = new PrefManager(context);
         MyDBHandler db = new MyDBHandler(context);
+        SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
         for (int appWidgetId : appWidgetIds) {
             boolean b = db.deleteWidgetInfoSensor(appWidgetId);
             if (b) {
@@ -206,7 +196,8 @@ public class NewSensorWidget extends AppWidgetProvider {
             } else {
                 Toast.makeText(context,"No sensor",Toast.LENGTH_SHORT).show();
             }
-            removeHandlerRunnablePair(appWidgetId);
+
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
         }
     }
 
@@ -219,7 +210,6 @@ public class NewSensorWidget extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
         Bundle extras = intent.getExtras();
         if (extras == null) {
             return;
@@ -242,10 +232,11 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         if (ACTION_SENSOR_UPDATE.equals(intent.getAction())) {
-            setScreenOnOffBroardcastListener(context);
+            createSensorApi(sensorId, widgetId, db, context);
+        }
 
-            removeHandlerRunnablePair(widgetId);
-            createAPIPollingHandler(widgetId, context);
+        if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
+            createSensorApi(sensorId, widgetId, db, context);
         }
     }
 
@@ -256,69 +247,6 @@ public class NewSensorWidget extends AppWidgetProvider {
         return PendingIntent.getBroadcast(context, id, intent, 0);
     }
 
-    // Need to be non-static
-    public Map<String, HandlerRunnablePair> createAPIPollingHandler(final int appWidgetId, final Context context) {
-        final Handler handler = new Handler(Looper.getMainLooper());// Need to be non-static
-        runnable = new Runnable(){// Need to be non-static
-            @Override
-            public void run() {
-                if (runnable != null) {
-                    MyDBHandler db = new MyDBHandler(context);
-                    SensorInfo widgetInfo = db.findWidgetInfoSensor(appWidgetId);
-                    if (widgetInfo != null) {
-                        Integer sensorId = widgetInfo.getSensorId();
-                        Integer updateInterval = widgetInfo.getUpdateInterval();
-                        createSensorApi(sensorId, appWidgetId, db, context);
-                        handler.postDelayed(runnable, updateInterval);
-                    } else {
-                        // createAPIPollingHandler will be called before widget addition is confirmed.
-                        // So till confirm button is pressed 'widgetInfo' will be null, we do not want the loop to stop
-                        // so keep checking after 30secs, to get the actual interval and runnable
-                        handler.postDelayed(runnable, 30000);
-                    }
-                }
-            }
-        };
-        MyDBHandler db = new MyDBHandler(context);
-        SensorInfo widgetInfo = db.findWidgetInfoSensor(appWidgetId);
-        if (widgetInfo != null) {
-            Integer sensorId = widgetInfo.getSensorId();
-            createSensorApi(sensorId, appWidgetId, db, context);
-
-            Integer updateInterval = widgetInfo.getUpdateInterval();
-            handler.postDelayed(runnable, updateInterval);
-        } else {
-            // createAPIPollingHandler will be called before widget addition is confirmed.
-            // So till confirm button is pressed 'widgetInfo' will be null, we do not want the loop to stop
-            // so keep checking after 30secs, to get the actual interval and runnable
-            handler.postDelayed(runnable, 30000);
-        }
-        Map<String, HandlerRunnablePair> handlerRunnableHashMap = new HashMap<String, HandlerRunnablePair>();
-        HandlerRunnablePair handlerRunnablePair = new HandlerRunnablePair(handler, runnable);
-        handlerRunnablePair.setRunnable(runnable);
-        handlerRunnablePair.setHandler(handler);
-        handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
-        return handlerRunnableHashMap;
-    }
-
-    public static void removeAllHandlerRunnablePair(int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            removeHandlerRunnablePair(appWidgetId);
-        }
-    }
-
-    static void removeHandlerRunnablePair(Integer appWidgetId) {
-        Map<String, HandlerRunnablePair> prevHandlerRunnablePair = handlerAPIPollingList.get(appWidgetId);
-        if (prevHandlerRunnablePair != null) {
-            HandlerRunnablePair handlerRunnablePair = prevHandlerRunnablePair.get("HandlerRunnablePair");
-            Runnable prevRunnable = handlerRunnablePair.getRunnable();
-            Handler prevHandler = handlerRunnablePair.getHandler();
-            prevHandler.removeCallbacks(prevRunnable);
-            prevHandlerRunnablePair.remove("HandlerRunnablePair");
-            handlerAPIPollingList.remove(appWidgetId);
-        }
-    }
-
     void createSensorApi(final Integer sensorId, final Integer widgetId, final MyDBHandler database, final Context context) {
 
         String params = "/sensor/info?id="+sensorId;
@@ -327,12 +255,14 @@ public class NewSensorWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(final JSONObject response) {
                 try {
+                    Toast.makeText(context,"createSensorApi response try ",Toast.LENGTH_LONG).show();
                     SensorInfo sensorWidgetInfo = database.findWidgetInfoSensor(widgetId);
 
                     if (sensorWidgetInfo != null) {
 
                         String error = response.optString("error");
                         if (!error.isEmpty() && error != null) {
+                            Toast.makeText(context,"createSensorApi response error "+String.valueOf(error),Toast.LENGTH_LONG).show();
                             String noSensorMessage = "The sensor with id \""+sensorId+"\" does not exist";
                             if (String.valueOf(error).trim().equalsIgnoreCase(noSensorMessage.trim())) {
                                 database.updateSensorIdSensorWidget(-1, widgetId);
@@ -368,6 +298,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                             String widgetLabelUnit = sensorWidgetInfo.getSensorDisplayType();
                             if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
+                                Toast.makeText(context,"createSensorApi update succes "+sensorName,Toast.LENGTH_LONG).show();
                                 database.updateSensorInfo(sensorName, value, Long.parseLong(lastUp), widgetId);
 
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -376,11 +307,17 @@ public class NewSensorWidget extends AppWidgetProvider {
                         }
                     }
                 } catch (JSONException e) {
+                    Toast.makeText(context,"createSensorApi JSONException",Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
             @Override
             public void onError(ANError error) {
+                if (error.getErrorCode() != 0) {
+                    Toast.makeText(context,"createSensorApi error "+error.getErrorBody()+" :: "+error.getErrorDetail(),Toast.LENGTH_LONG).show();
+               } else {
+                    Toast.makeText(context,"createSensorApi error code != 0 "+error.getErrorDetail(),Toast.LENGTH_LONG).show();
+            }
             }
         });
     }
@@ -401,11 +338,5 @@ public class NewSensorWidget extends AppWidgetProvider {
             "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
             ""));
         return formattedDate;
-    }
-
-    public static void setScreenOnOffBroardcastListener(Context context) {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        context.getApplicationContext().registerReceiver(mReceiver, filter);
     }
 }

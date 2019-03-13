@@ -33,24 +33,5 @@ public class AEScreenOnOffReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-            removeAllAPIPollHandlerSensorWidgets(context);
-        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-            removeAllAPIPollHandlerSensorWidgets(context);
-            refreshAllSensorWidgets(context);
-        }
-    }
-
-    public void refreshAllSensorWidgets(Context context) {
-        Intent intentNew = new Intent(context, NewSensorWidget.class);
-        intentNew.setAction("android.appwidget.action.APPWIDGET_UPDATE");
-        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext()).getAppWidgetIds(new ComponentName(context.getApplicationContext(), NewSensorWidget.class));
-        intentNew.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-        context.sendBroadcast(intentNew);
-    }
-
-    public void removeAllAPIPollHandlerSensorWidgets(Context context) {
-        int ids[] = AppWidgetManager.getInstance(context.getApplicationContext()).getAppWidgetIds(new ComponentName(context.getApplicationContext(), NewSensorWidget.class));
-        NewSensorWidget.removeAllHandlerRunnablePair(ids);
     }
 }

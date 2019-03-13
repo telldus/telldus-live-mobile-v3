@@ -71,10 +71,11 @@ import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, button_cancel;
     private View btSelectSensor, btSelectDisplayItem, screenCover, btSelectPollInterval;
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
@@ -167,9 +168,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             }
-            if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
                 finish();
                 return;
             }
@@ -240,7 +241,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
                     String currentUserId = prefManager.getUserId();
                     SensorInfo mSensorInfo = new SensorInfo(
-                        mAppWidgetId,
+                        appWidgetId,
                         sensorName.getText().toString(),
                         sensorDataName.getText().toString(),
                         id,
@@ -254,11 +255,14 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     database.addWidgetSensor(mSensorInfo);
                     views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
-                    NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                    NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);
+
+                    SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(getApplicationContext());
+                    sensorUpdateAlarmManager.startAlarm(appWidgetId, selectInterval);
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.
-                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                     setResult(RESULT_OK, resultValue);
                     finish();
                 }
