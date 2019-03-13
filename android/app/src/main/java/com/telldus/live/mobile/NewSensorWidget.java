@@ -182,20 +182,6 @@ public class NewSensorWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
         for (int appWidgetId : appWidgetIds) {
-            boolean b = db.deleteWidgetInfoSensor(appWidgetId);
-            if (b) {
-                Toast.makeText(context,"Successfully deleted",Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(context,"Widget not created",Toast.LENGTH_LONG).show();
-            }
-            int count = db.countWidgetSensorTableValues();
-            if (count > 0) {
-                Toast.makeText(context,"have data",Toast.LENGTH_LONG).show();
-
-            } else {
-                Toast.makeText(context,"No sensor",Toast.LENGTH_SHORT).show();
-            }
-
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
         }
     }
@@ -254,14 +240,12 @@ public class NewSensorWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(final JSONObject response) {
                 try {
-                    Toast.makeText(context,"createSensorApi response try ",Toast.LENGTH_LONG).show();
                     SensorInfo sensorWidgetInfo = database.findWidgetInfoSensor(widgetId);
 
                     if (sensorWidgetInfo != null) {
 
                         String error = response.optString("error");
                         if (!error.isEmpty() && error != null) {
-                            Toast.makeText(context,"createSensorApi response error "+String.valueOf(error),Toast.LENGTH_LONG).show();
                             String noSensorMessage = "The sensor with id \""+sensorId+"\" does not exist";
                             if (String.valueOf(error).trim().equalsIgnoreCase(noSensorMessage.trim())) {
                                 database.updateSensorIdSensorWidget(-1, widgetId);
@@ -297,7 +281,6 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                             String widgetLabelUnit = sensorWidgetInfo.getSensorDisplayType();
                             if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
-                                Toast.makeText(context,"createSensorApi update succes "+sensorName,Toast.LENGTH_LONG).show();
                                 database.updateSensorInfo(sensorName, value, Long.parseLong(lastUp), widgetId);
 
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -306,17 +289,11 @@ public class NewSensorWidget extends AppWidgetProvider {
                         }
                     }
                 } catch (JSONException e) {
-                    Toast.makeText(context,"createSensorApi JSONException",Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
             @Override
             public void onError(ANError error) {
-                if (error.getErrorCode() != 0) {
-                    Toast.makeText(context,"createSensorApi error "+error.getErrorBody()+" :: "+error.getErrorDetail(),Toast.LENGTH_LONG).show();
-               } else {
-                    Toast.makeText(context,"createSensorApi error code != 0 "+error.getErrorDetail(),Toast.LENGTH_LONG).show();
-            }
             }
         });
     }
