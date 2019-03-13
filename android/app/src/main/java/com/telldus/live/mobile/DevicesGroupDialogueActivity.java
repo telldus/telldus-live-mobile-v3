@@ -156,12 +156,10 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
 
         View headerImage = (View) findViewById(R.id.headerImage);
-        View headerImageCover = (View) findViewById(R.id.headerImageCover);
         TextView txtWidgetTitle = (TextView) findViewById(R.id.txtWidgetTitleDialogue);
         View widgetTitleCover = (View) findViewById(R.id.widgetTitleCover);
         widgetTitleCover.setVisibility(View.GONE);
         txtWidgetTitle.setText(deviceName);
-        headerImageCover.setClipToOutline(true);
         headerImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
