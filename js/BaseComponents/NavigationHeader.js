@@ -45,12 +45,14 @@ type Props = {
 	showLeftIcon?: boolean,
 	topMargin?: boolean,
 	leftIcon?: string,
+	isFromModal?: boolean,
 };
 
 type DefaultProps = {
 	topMargin: boolean,
 	showLeftIcon: boolean,
 	leftIcon: string,
+	isFromModal: boolean,
 };
 
 class NavigationHeader extends PureComponent<Props, null> {
@@ -58,10 +60,12 @@ class NavigationHeader extends PureComponent<Props, null> {
 
 	goBack: () => void;
 	isTablet: boolean;
+	isFromModal: boolean;
 	defaultDescription: string;
 	labelLeftIcon: string;
 
 	static defaultProps: DefaultProps = {
+		isFromModal: false,
 		showLeftIcon: true,
 		topMargin: true,
 		leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
@@ -79,7 +83,12 @@ class NavigationHeader extends PureComponent<Props, null> {
 	}
 
 	goBack() {
-		this.props.navigation.pop();
+		const { isFromModal, onClose } = this.props;
+		if (isFromModal) {
+			onClose();
+		} else {
+			this.props.navigation.pop();
+		}
 	}
 
 	getLeftIcon(): Object {
