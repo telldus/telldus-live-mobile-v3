@@ -27,7 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
@@ -157,8 +157,6 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         View headerImage = (View) findViewById(R.id.headerImage);
         TextView txtWidgetTitle = (TextView) findViewById(R.id.txtWidgetTitleDialogue);
-        View widgetTitleCover = (View) findViewById(R.id.widgetTitleCover);
-        widgetTitleCover.setVisibility(View.GONE);
         txtWidgetTitle.setText(deviceName);
         headerImage.setOnClickListener(new OnClickListener() {
             @Override
@@ -175,6 +173,10 @@ public class DevicesGroupDialogueActivity extends Activity {
             View bellCover = (View) findViewById(R.id.bellCover);
             TextView bellText = (TextView)findViewById(R.id.bell);
             bellCover.setVisibility(View.VISIBLE);
+            LayoutParams layoutParamsB = bellCover.getLayoutParams();
+            layoutParamsB.width = 80;
+            layoutParamsB.height = 80;
+            bellCover.setLayoutParams(layoutParamsB);
             bellText.setText("bell");
             bellText.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
             bellText.setBackgroundColor(Color.TRANSPARENT);
@@ -209,6 +211,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             }
 
+            View leftMarginBell = (View) findViewById(R.id.leftMarginBell);
+            leftMarginBell.setVisibility(View.VISIBLE);
+            View topMarginBell = (View) findViewById(R.id.topMarginBell);
+            topMarginBell.setVisibility(View.VISIBLE);
             renderedButtonsCount++;
         }
 
@@ -222,6 +228,10 @@ public class DevicesGroupDialogueActivity extends Activity {
             upText.setBackgroundColor(Color.TRANSPARENT);
             upText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
+            LayoutParams layoutParamsB = upCover.getLayoutParams();
+            layoutParamsB.width = 80;
+            layoutParamsB.height = 80;
+            upCover.setLayoutParams(layoutParamsB);
             upCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -252,15 +262,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             }
 
-            if (renderedButtonsCount != 0) {
-                View leftMarginUp = (View) findViewById(R.id.leftMarginUp);
-                leftMarginUp.setVisibility(View.VISIBLE);
-
-                ViewGroup.LayoutParams layoutParams = leftMarginUp.getLayoutParams();
-                layoutParams.width = 8;
-                leftMarginUp.setLayoutParams(layoutParams);
-                leftMarginUp.setBackgroundColor(Color.TRANSPARENT);
-            }
+            View leftMarginUp = (View) findViewById(R.id.leftMarginUp);
+            leftMarginUp.setVisibility(View.VISIBLE);
+            View topMarginUp = (View) findViewById(R.id.topMarginUp);
+            topMarginUp.setVisibility(View.VISIBLE);
             renderedButtonsCount++;
         }
 
@@ -274,6 +279,10 @@ public class DevicesGroupDialogueActivity extends Activity {
             downText.setBackgroundColor(Color.TRANSPARENT);
             downText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
+            LayoutParams layoutParamsB = downCover.getLayoutParams();
+            layoutParamsB.width = 80;
+            layoutParamsB.height = 80;
+            downCover.setLayoutParams(layoutParamsB);
             downCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -303,16 +312,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                     downText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                View leftMarginDown = (View) findViewById(R.id.leftMarginDown);
-                leftMarginDown.setVisibility(View.VISIBLE);
-
-                ViewGroup.LayoutParams layoutParams = leftMarginDown.getLayoutParams();
-                layoutParams.width = 8;
-                leftMarginDown.setLayoutParams(layoutParams);
-                leftMarginDown.setBackgroundColor(Color.TRANSPARENT);
-            }
+            View leftMarginDown = (View) findViewById(R.id.leftMarginDown);
+            leftMarginDown.setVisibility(View.VISIBLE);
+            View topMarginDown = (View) findViewById(R.id.topMarginDown);
+            topMarginDown.setVisibility(View.VISIBLE);
             renderedButtonsCount++;
         }
 
@@ -326,6 +329,10 @@ public class DevicesGroupDialogueActivity extends Activity {
             stopText.setBackgroundColor(Color.TRANSPARENT);
             stopText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
+            LayoutParams layoutParamsB = stopCover.getLayoutParams();
+            layoutParamsB.width = 80;
+            layoutParamsB.height = 80;
+            stopCover.setLayoutParams(layoutParamsB);
             stopCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -355,16 +362,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                     stopText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                View leftMarginStop = (View) findViewById(R.id.leftMarginStop);
-                leftMarginStop.setVisibility(View.VISIBLE);
-
-                ViewGroup.LayoutParams layoutParams = leftMarginStop.getLayoutParams();
-                layoutParams.width = 8;
-                leftMarginStop.setLayoutParams(layoutParams);
-                leftMarginStop.setBackgroundColor(Color.TRANSPARENT);
-            }
+            View leftMarginStop = (View) findViewById(R.id.leftMarginStop);
+            leftMarginStop.setVisibility(View.VISIBLE);
+            View topMarginStop = (View) findViewById(R.id.topMarginStop);
+            topMarginStop.setVisibility(View.VISIBLE);
             renderedButtonsCount++;
         }
 
@@ -378,6 +379,10 @@ public class DevicesGroupDialogueActivity extends Activity {
             offText.setBackgroundColor(Color.TRANSPARENT);
             offText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
+            LayoutParams layoutParamsB = offCover.getLayoutParams();
+            layoutParamsB.width = 80;
+            layoutParamsB.height = 80;
+            offCover.setLayoutParams(layoutParamsB);
             offCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -407,16 +412,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                     offText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                View leftMarginOff = (View) findViewById(R.id.leftMarginOff);
-                leftMarginOff.setVisibility(View.VISIBLE);
-
-                ViewGroup.LayoutParams layoutParams = leftMarginOff.getLayoutParams();
-                layoutParams.width = 8;
-                leftMarginOff.setLayoutParams(layoutParams);
-                leftMarginOff.setBackgroundColor(Color.TRANSPARENT);
-            }
+            View leftMarginOff = (View) findViewById(R.id.leftMarginOff);
+            leftMarginOff.setVisibility(View.VISIBLE);
+            View topMarginOff = (View) findViewById(R.id.topMarginOff);
+            topMarginOff.setVisibility(View.VISIBLE);
             renderedButtonsCount++;
         }
 
@@ -445,6 +444,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                 txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
                 dimmer25.setBackgroundColor(Color.TRANSPARENT);
 
+                LayoutParams layoutParamsB = dimmer25Cover.getLayoutParams();
+                layoutParamsB.width = 80;
+                layoutParamsB.height = 80;
+                dimmer25Cover.setLayoutParams(layoutParamsB);
                 dimmer25Cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -465,15 +468,6 @@ public class DevicesGroupDialogueActivity extends Activity {
                     dimmer25Cover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
                     dimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
                     txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
-                }
-                if (renderedButtonsCount != 0) {
-                    View leftMarginDim25 = (View) findViewById(R.id.leftMarginDim25);
-                    leftMarginDim25.setVisibility(View.VISIBLE);
-
-                    ViewGroup.LayoutParams layoutParams = leftMarginDim25.getLayoutParams();
-                    layoutParams.width = 8;
-                    leftMarginDim25.setLayoutParams(layoutParams);
-                    leftMarginDim25.setBackgroundColor(Color.TRANSPARENT);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -498,6 +492,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                         }
                     }
                 }
+                View leftMarginDim25 = (View) findViewById(R.id.leftMarginDim25);
+                leftMarginDim25.setVisibility(View.VISIBLE);
+                View topMarginDim25 = (View) findViewById(R.id.topMarginDim25);
+                topMarginDim25.setVisibility(View.VISIBLE);
                 renderedButtonsCount++;
 
             // "50%" dimmer button
@@ -510,6 +508,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                 txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
                 dimmer50.setBackgroundColor(Color.TRANSPARENT);
 
+                layoutParamsB = dimmer50Cover.getLayoutParams();
+                layoutParamsB.width = 80;
+                layoutParamsB.height = 80;
+                dimmer50Cover.setLayoutParams(layoutParamsB);
                 dimmer50Cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -529,16 +531,6 @@ public class DevicesGroupDialogueActivity extends Activity {
                     dimmer50Cover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
                     dimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
                     txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
-                }
-
-                if (renderedButtonsCount != 0) {
-                    View leftMarginDim50 = (View) findViewById(R.id.leftMarginDim50);
-                    leftMarginDim50.setVisibility(View.VISIBLE);
-
-                    ViewGroup.LayoutParams layoutParams = leftMarginDim50.getLayoutParams();
-                    layoutParams.width = 8;
-                    leftMarginDim50.setLayoutParams(layoutParams);
-                    leftMarginDim50.setBackgroundColor(Color.TRANSPARENT);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -562,6 +554,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                         }
                     }
                 }
+                View leftMarginDim50 = (View) findViewById(R.id.leftMarginDim50);
+                leftMarginDim50.setVisibility(View.VISIBLE);
+                View topMarginDim50 = (View) findViewById(R.id.topMarginDim50);
+                topMarginDim50.setVisibility(View.VISIBLE);
                 renderedButtonsCount++;
 
             // "75%" dimmer button
@@ -574,6 +570,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                 txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
                 dimmer75.setBackgroundColor(Color.TRANSPARENT);
 
+                layoutParamsB = dimmer75Cover.getLayoutParams();
+                layoutParamsB.width = 80;
+                layoutParamsB.height = 80;
+                dimmer75Cover.setLayoutParams(layoutParamsB);
                 dimmer75Cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -593,15 +593,6 @@ public class DevicesGroupDialogueActivity extends Activity {
                     dimmer75Cover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
                     dimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
                     txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
-                }
-                if (renderedButtonsCount != 0) {
-                    View leftMarginDim75 = (View) findViewById(R.id.leftMarginDim75);
-                    leftMarginDim75.setVisibility(View.VISIBLE);
-
-                    ViewGroup.LayoutParams layoutParams = leftMarginDim75.getLayoutParams();
-                    layoutParams.width = 8;
-                    leftMarginDim75.setLayoutParams(layoutParams);
-                    leftMarginDim75.setBackgroundColor(Color.TRANSPARENT);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -625,6 +616,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                         }
                     }
                 }
+                View leftMarginDim75 = (View) findViewById(R.id.leftMarginDim75);
+                leftMarginDim75.setVisibility(View.VISIBLE);
+                View topMarginDim75 = (View) findViewById(R.id.topMarginDim75);
+                topMarginDim75.setVisibility(View.VISIBLE);
                 renderedButtonsCount++;
         }
 
@@ -638,6 +633,10 @@ public class DevicesGroupDialogueActivity extends Activity {
             onText.setBackgroundColor(Color.TRANSPARENT);
             onText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
+            LayoutParams layoutParamsB = onCover.getLayoutParams();
+            layoutParamsB.width = 80;
+            layoutParamsB.height = 80;
+            onCover.setLayoutParams(layoutParamsB);
             onCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -668,16 +667,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                     onText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                View leftMarginOn = (View) findViewById(R.id.leftMarginOn);
-                leftMarginOn.setVisibility(View.VISIBLE);
-
-                ViewGroup.LayoutParams layoutParams = leftMarginOn.getLayoutParams();
-                layoutParams.width = 8;
-                leftMarginOn.setLayoutParams(layoutParams);
-                leftMarginOn.setBackgroundColor(Color.TRANSPARENT);
-            }
+            View leftMarginOn = (View) findViewById(R.id.leftMarginOn);
+            leftMarginOn.setVisibility(View.VISIBLE);
+            View topMarginOn = (View) findViewById(R.id.topMarginOn);
+            topMarginOn.setVisibility(View.VISIBLE);
             renderedButtonsCount++;
         }
     }
