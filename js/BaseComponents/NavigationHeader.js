@@ -59,6 +59,7 @@ class NavigationHeader extends PureComponent<Props, null> {
 	props: Props;
 
 	goBack: () => void;
+	onClose: () => void;
 	isTablet: boolean;
 	isFromModal: boolean;
 	defaultDescription: string;
