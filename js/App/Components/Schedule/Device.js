@@ -114,10 +114,6 @@ export default class Device extends View<void, Props, State> {
 		return nextProps.currentScreen === 'InitialScreen';
 	}
 
-	componentWillUnmount() {
-		this.props.actions.resetSchedule();
-	}
-
 	onRefresh = () => {
 		this.setState({
 			refreshing: true,

@@ -36,7 +36,6 @@ import { DimmerPopup } from './TabViews/SubViews';
 
 import {
 	setAppLayout,
-	resetSchedule,
 	getUserProfile,
 	appStart,
 	appState,
@@ -144,7 +143,6 @@ componentDidMount() {
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
-		dispatch(resetSchedule());
 		dispatch(getPhonesList());
 
 		// test gateway local control end-point on app restart.

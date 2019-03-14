@@ -106,11 +106,6 @@ class Edit extends View<null, Props, State> {
 		return nextProps.currentScreen === 'InitialScreen';
 	}
 
-	componentWillUnmount() {
-		this.props.actions.resetSchedule();
-		clearInterval(this.rotateInterval);
-	}
-
 	editAction = () => {
 		this._navigate('Action');
 	};
