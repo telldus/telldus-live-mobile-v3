@@ -56,7 +56,7 @@ type DefaultProps = {
 };
 
 class NavigationHeader extends PureComponent<Props, null> {
-	props: Props;
+	props: Props = this.props;
 
 	goBack: () => void;
 	onClose: () => void;
