@@ -34,6 +34,7 @@ import Navigator from './AppNavigator';
 import {
 	syncWithServer,
 	switchTab,
+	resetSchedule,
 } from '../Actions';
 import {
 	setTopLevelNavigator,
@@ -156,6 +157,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	newSchedule() {
+		this.props.dispatch(resetSchedule());
 		navigate('Schedule', {
 			key: 'Schedule',
 			params: { editMode: false },
