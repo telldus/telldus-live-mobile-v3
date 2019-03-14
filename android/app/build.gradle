@@ -237,9 +237,6 @@ dependencies {
         force = true;
     }
     implementation "com.amitshekhar.android:jackson-android-networking:1.0.0"
-    implementation "com.amitshekhar.android:jackson-android-networking:1.0.0"
-    implementation 'com.koushikdutta.async:androidasync:2.+'
-    implementation "org.java-websocket:Java-WebSocket:1.3.0"
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.google.android:flexbox:1.0.0'
 }
