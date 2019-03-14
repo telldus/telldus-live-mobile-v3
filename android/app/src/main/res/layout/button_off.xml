@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/offCover"
+    android:layout_width="0dip"
+    android:layout_height="match_parent"
+    android:layout_weight="0.2"
+    android:layout_gravity="center|center"
+    android:gravity="center|center"
+    android:visibility="gone">
+    <TextView
+        android:id="@+id/iconOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:layout_gravity="center|center"
+        android:gravity="center|center"
+        android:fontFamily="@font/telldusicons"
+        android:textColor="@color/white"/>
+</LinearLayout>
