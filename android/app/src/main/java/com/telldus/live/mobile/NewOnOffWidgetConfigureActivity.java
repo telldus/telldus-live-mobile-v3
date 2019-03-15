@@ -38,7 +38,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,7 +92,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText, loadingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
-    private RemoteViews views;
     Switch switch_background;
 
     private String accessToken;
@@ -170,7 +168,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             loadingText.setVisibility(View.VISIBLE);
             screenCover.setVisibility(View.GONE);
         } else {
-            views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
             widgetManager = AppWidgetManager.getInstance(this);
 
             loadingText.setVisibility(View.GONE);
@@ -183,8 +180,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             backDevice = (ImageView)findViewById(R.id.backdevice);
             deviceText = (TextView)findViewById(R.id.deviceText);
             settingText = (TextView)findViewById(R.id.settingText);
-
-            views.setViewVisibility(R.id.offLinear, View.GONE);
 
             btnCan = (Button)findViewById(R.id.btn_cancel);
             btnCan.setOnClickListener(new View.OnClickListener() {
@@ -234,8 +229,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         toast.show();
                         return;
                     }
-
-                    views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
 
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;

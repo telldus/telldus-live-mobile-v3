@@ -128,25 +128,26 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        views.setOnClickPendingIntent(R.id.onLayout, getPendingSelf(context, ACTION_ON, appWidgetId));
-        views.setOnClickPendingIntent(R.id.offLinear, getPendingSelf(context, ACTION_OFF, appWidgetId));
+        views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
+        views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
-            views.setOnClickPendingIntent(R.id.onLayout, getPendingSelf(context, ACTION_BELL, appWidgetId));
-            views.setViewVisibility(R.id.offLinear, View.GONE);
+            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            views.setViewVisibility(R.id.offCover, View.GONE);
 
-            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-            views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.button_background);
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.onCover, View.VISIBLE);
+            views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.button_background);
             views.setTextViewText(R.id.iconOn, "bell");
             views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("4")) {
-                views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.button_background_secondary_fill);
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.button_background_secondary_fill);
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
             }
 
@@ -166,16 +167,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
         // ON
         if (hasOn) {
-            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.onCover, View.VISIBLE);
             views.setTextViewText(R.id.iconOn, onActionIcon);
             views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
             views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("1")) {
-                views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
                 views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
             }
 
@@ -195,16 +197,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
         // OFF
         if (hasOff) {
-            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.offCover, View.VISIBLE);
             views.setTextViewText(R.id.iconOff, offActionIcon);
             views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
 
-            views.setInt(R.id.offLinear, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
+            views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
             views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
             views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("2")) {
-                views.setInt(R.id.offLinear, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
+                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
                 views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
             }
 
