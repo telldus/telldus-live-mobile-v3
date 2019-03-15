@@ -6,11 +6,6 @@
         android:color="@color/blue">
     </solid>
 
-    <stroke
-        android:width="2dp"
-        android:color="@color/blue">
-    </stroke>
-
     <padding
         android:left="5dp"
         android:top="0dp"
