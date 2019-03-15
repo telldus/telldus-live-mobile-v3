@@ -21,15 +21,18 @@
 
 'use strict';
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { SwipeRow } from 'react-native-swipe-list-view';
-import { TouchableOpacity, PixelRatio, Animated, Easing } from 'react-native';
+import { TouchableOpacity, PixelRatio, Animated, Easing, Modal, BackHandler, Dimensions } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
+import { ColorWheel } from 'react-native-color-wheel';
 
-import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
+import { ListItem, Text, View, BlockIcon, IconTelldus, Poster, NavigationHeader } from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
+import RGBButton from './RGBButton';
 import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
@@ -47,6 +50,7 @@ import {
 import i18n from '../../../Translations/common';
 
 import Theme from '../../../Theme';
+import Slider from 'react-native-slider';
 
 type Props = {
 	device: Object,
@@ -88,7 +92,6 @@ type State = {
 	coverOccupiedWidth: number,
 	buttonsWidth?: number,
 };
-
 class DeviceRow extends View<Props, State> {
 	props: Props;
 	state: State;
@@ -125,6 +128,8 @@ class DeviceRow extends View<Props, State> {
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
 		buttonsWidth: undefined,
+		isModelRGB: false,
+		sliderValue: 10,
 	};
 
 	constructor(props: Props) {
@@ -196,6 +201,10 @@ class DeviceRow extends View<Props, State> {
 		return false;
 	}
 
+	componentWillMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+	}
+
 	componentDidMount() {
 		const { onNewlyAddedDidMount, device, isNew, gatewayName } = this.props;
 		if (onNewlyAddedDidMount && isNew) {
@@ -216,8 +225,16 @@ class DeviceRow extends View<Props, State> {
 		}
 	}
 
+	componentWillUnmount() {
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+	}
+
 	shouldUpdateSwipeRow(items: Object): boolean {
 		return true;
+	}
+
+	handleBackButtonClick = () => {
+		this.setState({ isModelRGB: false });
 	}
 
 	onSlideActive() {
@@ -374,6 +391,88 @@ class DeviceRow extends View<Props, State> {
 		this.refs.SwipeRow.closeRow();
 	}
 
+	openRGBModel = () => {
+		this.setState({ isModelRGB: true });
+	}
+
+	onColorChanged = (color: any) => {
+		console.log(color);
+	}
+
+	// eslint-disable-next-line flowtype/require-return-type
+	renderBanner = () => {
+		const { circle, txtLbl } = styles;
+		return (
+			<Poster>
+				<View style={{ position: 'absolute', alignSelf: 'center', top: 10 }}>
+					<View style={circle}>
+						<IconTelldus icon="device-alt" size={40} color={Theme.Core.brandSecondary} />
+					</View>
+					<Text style={txtLbl}>RGB Light Bulb</Text>
+				</View>
+			</Poster>
+		);
+	}
+
+	// eslint-disable-next-line flowtype/require-return-type
+	renderColorPicker = () => (
+		<View style={[ styles.shadowCard, { flex: 1, alignItems: 'center' }]}>
+			<ColorWheel
+				initialColor="#30A9DE"
+				onColorChangeComplete={this.onColorChanged}
+				style={{ width: Dimensions.get('window').width - 60 }}
+			/>
+		</View>
+	);
+
+	onSliderValueChange = (value: any) => {
+		this.setState({ sliderValue: value });
+	}
+
+	// eslint-disable-next-line flowtype/require-return-type
+	renderSlider = () => {
+		const { sliderValue } = this.state;
+		const color = Theme.Core.brandSecondary;
+		return (
+			<View style={styles.shadowCard}>
+				<Text>Dim Value ({Math.floor(sliderValue)}%)</Text>
+				<Slider
+					maximumValue={100}
+					minimumValue={10}
+					value={sliderValue}
+					onValueChange={this.onSliderValueChange}
+					thumbTintColor={color}
+					minimumTrackTintColor={color}
+				/>
+			</View>
+		);
+	}
+
+	// eslint-disable-next-line flowtype/require-return-type
+	renderRGBModel = () => {
+		const { isModelRGB } = this.state;
+		return (
+			<Modal
+				animationType="slide"
+				visible={isModelRGB}
+				supportedOrientations={['portrait', 'landscape']}
+				onRequestClose={this.handleBackButtonClick}
+			>
+				<Fragment>
+				 <SafeAreaView style={{ flex: 0, backgroundColor: Theme.Core.brandPrimary }} />
+				 <SafeAreaView style={{ flex: 1, backgroundColor: '#ECEBEB' }}>
+				  <NavigationHeader leftIcon="close" isFromModal={true} onClose={this.handleBackButtonClick} />
+				  {this.renderBanner()}
+				  <View style={{ height: 300 }}>
+				  {this.renderColorPicker()}
+				  </View>
+				  {this.renderSlider()}
+			     </SafeAreaView>
+				</Fragment>
+			</Modal>
+		);
+	}
+
 	render(): Object {
 		let button = [];
 		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
@@ -400,6 +499,7 @@ class DeviceRow extends View<Props, State> {
 			UP,
 			DOWN,
 			STOP,
+			RGB,
 		} = supportedMethods;
 
 		const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
@@ -414,6 +514,17 @@ class DeviceRow extends View<Props, State> {
 			onPressDeviceAction: onPressDeviceAction,
 		};
 		const icon = getDeviceIcons(deviceType);
+
+		if ((TURNOFF || TURNON) && RGB && DIM) {
+			button.unshift(
+				<RGBButton
+					{...sharedProps}
+					openRGBModel={this.openRGBModel}
+					style={styles.toggle}
+					key={3}
+				/>
+			);
+		}
 
 		if (BELL) {
 			button.unshift(
@@ -434,7 +545,7 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-		if (DIM) {
+		if (DIM && !RGB) {
 			button.unshift(
 				<DimmerButton
 					{...sharedProps}
@@ -540,6 +651,7 @@ class DeviceRow extends View<Props, State> {
 							closeModal={this.closeMoreActions}
 						/>
 					)}
+				{this.renderRGBModel()}
 			</View>
 		);
 	}
@@ -727,6 +839,50 @@ class DeviceRow extends View<Props, State> {
 	noOp() {
 	}
 }
+
+const styles = {
+	// Modal style
+	header: {
+		height: 80,
+		paddingTop: 50,
+		paddingHorizontal: 20,
+		flexDirection: 'row',
+		backgroundColor: '#192F53',
+	},
+	lbl: {
+		textAlign: 'center',
+		fontSize: 18,
+		fontWeight: '700',
+		marginBottom: 5,
+		color: '#FFF',
+	},
+	banner: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingVertical: 12,
+	},
+	circle: {
+		height: 80,
+		width: 80,
+		borderRadius: 40,
+		backgroundColor: 'white',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	txtLbl: {
+		color: 'white',
+		fontSize: 14,
+		marginTop: 10,
+	},
+	shadowCard: {
+		backgroundColor: '#fff',
+		...Theme.Core.shadow,
+		borderRadius: 2,
+		marginHorizontal: 12,
+		marginTop: 8,
+		padding: 10,
+	},
+};
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { clientDeviceId, clientId } = ownProps.device;

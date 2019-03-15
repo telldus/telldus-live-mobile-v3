@@ -41,4 +41,7 @@ declare module '../../local-cli/bundle/assetPathUtils' {
 declare module 'react-native-google-signin' {
 	declare module.exports: any;
 }
+declare module 'react-native-color-wheel' {
+	declare module.exports: any;
+}
 declare var console: any;

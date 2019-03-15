@@ -40,6 +40,7 @@
 .*/node_modules/react-native/Libraries/Components/Slider/Slider.js
 .*/node_modules/react-native/Libraries/react-native/react-native-implementation.js
 .*/node_modules/react-native-google-signin/.*
+.*/node_modules/react-native-color-wheel/.*
 [include]
 
 [libs]
