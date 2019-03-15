@@ -41,7 +41,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -80,7 +79,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
     testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit, sensorRepeatIntervalLabel;
     private AppWidgetManager widgetManager;
-    private RemoteViews views;
     private ProgressDialog pDialog;
     private PrefManager prefManager;
     private String transparent = "false";
@@ -162,7 +160,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             imgSensorType.setVisibility(View.GONE);
 
             widgetManager = AppWidgetManager.getInstance(this);
-            views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
             // Find the widget id from the intent.
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
@@ -252,7 +249,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         currentUserId,
                         selectInterval);
                     database.addWidgetSensor(mSensorInfo);
-                    views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);
 
