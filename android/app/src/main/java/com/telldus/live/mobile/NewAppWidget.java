@@ -242,10 +242,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                views.setViewVisibility(R.id.leftMarginUp, View.VISIBLE);
-            }
             renderedButtonsCount++;
         }
 
@@ -287,10 +283,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.widgetRed));
                     views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
                 }
-            }
-
-            if (renderedButtonsCount != 0) {
-                views.setViewVisibility(R.id.leftMarginDown, View.VISIBLE);
             }
             renderedButtonsCount++;
         }
@@ -334,10 +326,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("22"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                views.setViewVisibility(R.id.leftMarginStop, View.VISIBLE);
-            }
             renderedButtonsCount++;
         }
 
@@ -380,10 +368,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("19"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                views.setViewVisibility(R.id.leftMarginOff, View.VISIBLE);
-            }
             renderedButtonsCount++;
         }
 
@@ -421,9 +405,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     }
                     views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.white));
                     views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
-                }
-                if (renderedButtonsCount != 0) {
-                    views.setViewVisibility(R.id.leftMarginDim25, View.VISIBLE);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -473,9 +454,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
                     views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
                 }
-                if (renderedButtonsCount != 0) {
-                    views.setViewVisibility(R.id.leftMarginDim50, View.VISIBLE);
-                }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
                     if (deviceStateValue != null && !deviceStateValue.equals("")) {
@@ -522,9 +500,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     }
                     views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.white));
                     views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.white));
-                }
-                if (renderedButtonsCount != 0) {
-                    views.setViewVisibility(R.id.leftMarginDim75, View.VISIBLE);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -592,17 +567,12 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("22"));
                 }
             }
-
-            if (renderedButtonsCount != 0) {
-                views.setViewVisibility(R.id.leftMarginOn, View.VISIBLE);
-            }
             renderedButtonsCount++;
         }
 
         // More actions button
         if (renderedButtonsCount == 4 && buttonsCount > 5) {
             views.setViewVisibility(R.id.moreActionsCover, View.VISIBLE);
-            views.setViewVisibility(R.id.leftMarginMoreActions, View.VISIBLE);
             views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
 
             views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));

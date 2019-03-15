@@ -9,77 +9,21 @@
     android:layout_gravity="center|center"
     android:gravity="center|center"
     android:id="@+id/widget_content_cover">
-    <LinearLayout
-        android:id="@+id/leftMarginBell"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_bell"/>
-    <LinearLayout
-        android:id="@+id/leftMarginUp"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_up"/>
-    <LinearLayout
-        android:id="@+id/leftMarginDown"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_down"/>
-    <LinearLayout
-        android:id="@+id/leftMarginStop"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_stop"/>
-    <LinearLayout
-        android:id="@+id/leftMarginOff"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_off"/>
-    <LinearLayout
-        android:id="@+id/leftMarginDim25"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_dim25"/>
-    <LinearLayout
-        android:id="@+id/leftMarginDim50"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_dim50"/>
-    <LinearLayout
-        android:id="@+id/leftMarginDim75"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_dim75"/>
-    <LinearLayout
-        android:id="@+id/leftMarginOn"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
     <include layout="@layout/button_on"/>
     <LinearLayout
-        android:id="@+id/leftMarginMoreActions"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grayligt"
-        android:visibility="gone"/>
-    <LinearLayout
         android:id="@+id/moreActionsCover"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginBottom="2dp"
+        android:elevation="5dp"
         android:layout_width="0dip"
         android:layout_height="match_parent"
         android:layout_weight="0.2"
