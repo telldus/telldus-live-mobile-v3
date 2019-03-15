@@ -46,6 +46,7 @@ type Props = {
 	topMargin?: boolean,
 	leftIcon?: string,
 	isFromModal?: boolean,
+	onClose: () => void,
 };
 
 type DefaultProps = {
@@ -56,10 +57,9 @@ type DefaultProps = {
 };
 
 class NavigationHeader extends PureComponent<Props, null> {
-	props: Props = this.props;
+	props: Props;
 
 	goBack: () => void;
-	onClose: () => void;
 	isTablet: boolean;
 	isFromModal: boolean;
 	defaultDescription: string;
