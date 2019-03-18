@@ -1,5 +1,26 @@
+/* eslint-disable flowtype/require-return-type */
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// @flow
 /* eslint-disable no-mixed-spaces-and-tabs */
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Modal, View, BackHandler, Text, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { ColorWheel } from 'react-native-color-wheel';
@@ -9,13 +30,22 @@ import Slider from 'react-native-slider';
 import { NavigationHeader, IconTelldus, Poster } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
-class ModalRGB extends Component {
+type Props = {
+	isModelRGB?: boolean,
+	openModal: () => void,
+};
+
+type State = {
+    sliderValue: number,
+};
+
+class ModalRGB extends View<Props, State> {
+    props: Props;
+    state: State;
 
     state = {
-    	isModelRGB: false,
     	sliderValue: 10,
     };
-
 
     componentWillMount() {
     	BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -109,7 +139,6 @@ class ModalRGB extends Component {
 }
 
 const styles = {
-	// Modal style
 	header: {
 		height: 80,
 		paddingTop: 50,
