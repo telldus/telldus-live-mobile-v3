@@ -15,9 +15,10 @@
             android:id="@+id/deviceBack">
         <ImageView
             android:id="@+id/backdevice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/backarrow"
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:background="@drawable/left_arrow_key"
+            android:scaleType="centerCrop"
             android:tint="@color/white"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
