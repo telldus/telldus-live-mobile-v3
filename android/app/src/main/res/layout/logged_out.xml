@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/widget_root">
+    <LinearLayout
+        android:id="@+id/iconWidget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/shape_widget"
+        android:layout_gravity="center|center"
+        android:gravity="center"
+        android:paddingRight="5dp"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center|center">
+            <TextView
+                android:id="@+id/txtWidgetTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telldus Live! Mobile!!"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center|center"
+            android:layout_gravity="center|center"
+            android:id="@+id/widget_content_cover">
+            <TextView
+                android:id="@+id/textWidgetBodyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logged Out!!"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

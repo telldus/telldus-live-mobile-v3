@@ -102,6 +102,9 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         String userId = sensorWidgetInfo.getUserId();
         String currentUserId = prefManager.getUserId();
+        if (currentUserId == null || userId == null) {
+            return;
+        }
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);

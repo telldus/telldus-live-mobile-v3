@@ -38,12 +38,14 @@ import java.lang.String;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.NewAppWidget;
 import com.telldus.live.mobile.NewOnOffWidget;
 import com.telldus.live.mobile.NewSensorWidget;
+import com.telldus.live.mobile.Utility.DevicesUtilities;
 
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Database.MyDBHandler;
@@ -68,6 +70,18 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
     prefManager.setAccessDetails(accessToken, expiresIn, clientId, clientSecret, refreshToken);
     prefManager.setUserId(userId);
+    int widgetIdsSensor[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewSensorWidget.class));
+    for (int widgetId : widgetIdsSensor) {
+      updateUIWidgetSensor(widgetId);
+    }
+    int widgetIdsDevice2By1[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewOnOffWidget.class));
+    for (int widgetId : widgetIdsDevice2By1) {
+      updateUIWidgetDevice2By1(widgetId);
+    }
+    int widgetIdsDevice3By1[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewAppWidget.class));
+    for (int widgetId : widgetIdsDevice3By1) {
+      updateUIWidgetDevice3By1(widgetId);
+    }
   }
 
   @ReactMethod
@@ -109,11 +123,10 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void disableAllWidgets(String message) {
-    RemoteViews widgetView = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.new_app_widget);
+    RemoteViews widgetView = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.logged_out);
 
     // Replace Widget UI with loggedout message
-    widgetView.removeAllViews(R.id.widget_content_cover);
-    widgetView.setTextViewText(R.id.txtWidgetTitle, message);
+    widgetView.setTextViewText(R.id.textWidgetBodyText, message);
 
     // Clear token and other credentials from shared preference
     prefManager = new PrefManager(getReactApplicationContext());
@@ -171,4 +184,52 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       }
     }
   }
+
+  public void updateUIWidgetSensor(int widgetId) {
+    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+    NewSensorWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
+  }
+
+  public void updateUIWidgetDevice2By1(int widgetId) {
+    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+    NewOnOffWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
+  }
+
+  public void updateUIWidgetDevice3By1(int widgetId) {
+    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+    NewAppWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
+  }
+
+  // public void updateUIWidgetDeviceWithDeviceId(int widgetId) {
+  //   MyDBHandler db = new MyDBHandler(getReactApplicationContext());
+  //   DevicesUtilities deviceUtils = new DevicesUtilities();
+  //   AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+
+  //   DeviceInfo deviceInfo = db.findWidgetInfoDevice(widgetId);
+  //   if (deviceInfo == null) {
+  //     return;
+  //   }
+  //   int methods = deviceInfo.getDeviceMethods();
+  //   Log.d("TEST methods", String.valueOf(methods));
+
+  //   Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+  //   Integer sizeSuppMeth = supportedMethods.size();
+  //   Boolean hasLearn = supportedMethods.get("LEARN");
+  //   if (hasLearn != null && hasLearn) {
+  //       sizeSuppMeth = sizeSuppMeth - 1;
+  //   }
+
+  //   Log.d("TEST sizeSuppMeth", String.valueOf(sizeSuppMeth));
+  //   Log.d("TEST widgetId", String.valueOf(widgetId));
+  //   Boolean is2By1 = sizeSuppMeth <= 2 && sizeSuppMeth > 0;
+  //   if (is2By1) {
+  //     updateUIWidgetDevice2By1(widgetId);
+  //   }
+  //   Boolean is3By1 = sizeSuppMeth > 2;
+  //   if (is3By1) {
+  //     updateUIWidgetDevice3By1(widgetId);
+  //   }
+  // }
+  // public void updateUIWidgetSensoreWithSensorId(int widgetId) {
+  // }
 }

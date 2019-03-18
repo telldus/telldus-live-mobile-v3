@@ -111,6 +111,9 @@ public class NewAppWidget extends AppWidgetProvider {
 
         String userId = DeviceWidgetInfo.getUserId();
         String currentUserId = prefManager.getUserId();
+        if (currentUserId == null || userId == null) {
+            return;
+        }
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
             return;
@@ -161,6 +164,8 @@ public class NewAppWidget extends AppWidgetProvider {
         int renderedButtonsCount = 0;
         int maxButtonsOnWidget = 5;
         Boolean showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
+
+        views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
         if (hasBell && !showMoreActions) {
             views.setViewVisibility(R.id.bellCover,View.VISIBLE);
             views.setTextViewText(R.id.bell, "bell");

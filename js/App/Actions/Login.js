@@ -108,7 +108,7 @@ function logoutFromTelldus(): ThunkAction {
 	destroyAllConnections();
 
 	return (dispatch: Function): Function => {
-		dispatch(widgetAndroidDisableAll('Telldus Live! Logged Out!!'));
+		dispatch(widgetAndroidDisableAll('Logged Out!!'));
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});

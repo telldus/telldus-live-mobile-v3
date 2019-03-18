@@ -96,6 +96,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         String userId = DeviceWidgetInfo.getUserId();
         String currentUserId = prefManager.getUserId();
+        if (currentUserId == null || userId == null) {
+            return;
+        }
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
             return;
