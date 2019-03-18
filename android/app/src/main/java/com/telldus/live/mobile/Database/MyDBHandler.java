@@ -457,25 +457,25 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public boolean nullifyDeviceIdDeviceWidget(Integer deviceId) {
-        String val = String.valueOf(deviceId);
+    public boolean setDeviceIdDeviceWidget(Integer widgetId, Integer deviceId) {
+        String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DEVICE_ID, -1);
+        contentValues.put(DEVICE_ID, deviceId);
 
         String[] whereArgs = {val};
-        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs );
+        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs );
         return true;
     }
 
-    public boolean nullifySensorIdSensorWidget(Integer sensorId) {
-        String val = String.valueOf(sensorId);
+    public boolean setSensorIdSensorWidget(Integer widgetId, Integer sensorId) {
+        String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SENSOR_ID, -1);
+        contentValues.put(SENSOR_ID, sensorId);
 
         String[] whereArgs = {val};
-        int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, SENSOR_ID+" = ?", whereArgs );
+        int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
         return true;
     }
 }

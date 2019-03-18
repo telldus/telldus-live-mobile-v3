@@ -55,6 +55,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   private PrefManager prefManager;
 
+  private static String widgetDevice2By1 = "WIDGET_DEVICE_2_BY_1";
+  private static String widgetDevice3By1 = "WIDGET_DEVICE_3_BY_1";
+
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
@@ -139,24 +142,57 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void refreshWidgetsDevices(ReadableArray deviceIds) {
-    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
-    ArrayList<Integer> devices = db.getAllWidgetDevices();
+    refreshWidgetsDevices2By1(deviceIds);
+    refreshWidgetsDevices3By1(deviceIds);
+  }
 
-    Iterator<Integer> iterator = devices.iterator();
-    while (iterator.hasNext()) {
-      Integer item = iterator.next();
+  public void refreshWidgetsDevices2By1(ReadableArray deviceIds) {
+    int widgetIds[] = getAllWidgetsDevice2By1();
+    refreshWidgetsDevicesCommon(widgetIds, deviceIds, widgetDevice2By1);
+  }
+
+  public void refreshWidgetsDevices3By1(ReadableArray deviceIds) {
+    int widgetIds[] = getAllWidgetsDevice3By1();
+    refreshWidgetsDevicesCommon(widgetIds, deviceIds, widgetDevice3By1);
+  }
+
+  public void refreshWidgetsDevicesCommon(int[] widgetIds, ReadableArray deviceIds, String widgetType) {
+    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
+    prefManager = new PrefManager(getReactApplicationContext());
+    String currentUserId = prefManager.getUserId();
+
+    for (int widgetId : widgetIds) {
       Boolean isInList = false;
+      String userId = "";
+      Integer deviceIdCurrent = -1;
       for (int i = 0; i < deviceIds.size(); i++) {
         String id = deviceIds.getString(i);
-        if (id.trim().equals(item.toString())) {
+
+        DeviceInfo deviceInfo = db.findWidgetInfoDevice(widgetId);
+        if (deviceInfo == null) {
+          return;
+        }
+
+        deviceIdCurrent = deviceInfo.getDeviceId();
+        userId = deviceInfo.getUserId();
+
+        if (id.trim().equals(deviceIdCurrent.toString())) {
           isInList = true;
+          break;
         }
       }
-      if (!isInList) {
-        if (item.intValue() != -1) {// If not already nullified
-          db.nullifyDeviceIdDeviceWidget(item);
+
+      Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
+      if (!isInList && isSameAccount) {
+        if (deviceIdCurrent.intValue() != -1) {// If not already nullified
+          db.setDeviceIdDeviceWidget(widgetId, -1);
+          if (widgetType.equals(widgetDevice2By1)) {
+            updateUIWidgetDevice2By1(widgetId);
+          }
+          if (widgetType.equals(widgetDevice3By1)) {
+            updateUIWidgetDevice3By1(widgetId);
+          }
         }
-        // ToDo: Trigger Update widget here
       }
     }
   }
@@ -164,23 +200,36 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void refreshWidgetsSensors(ReadableArray sensorIds) {
     MyDBHandler db = new MyDBHandler(getReactApplicationContext());
-    ArrayList<Integer> sensors = db.getAllWidgetSensors();
+    prefManager = new PrefManager(getReactApplicationContext());
+    String currentUserId = prefManager.getUserId();
 
-    Iterator<Integer> iterator = sensors.iterator();
-    while (iterator.hasNext()) {
-      Integer item = iterator.next();
+    int widgetIds[] = getAllWidgetsSensor();
+    for (int widgetId : widgetIds) {
       Boolean isInList = false;
+      String userId = "";
+      Integer sensorIdCurrent = -1;
       for (int i = 0; i < sensorIds.size(); i++) {
         String id = sensorIds.getString(i);
-        if (id.trim().equals(item.toString())) {
+
+        SensorInfo sensorInfo = db.findWidgetInfoSensor(widgetId);
+        if (sensorInfo == null) {
+          return;
+        }
+        sensorIdCurrent = sensorInfo.getSensorId();
+        userId = sensorInfo.getUserId();
+
+        if (id.trim().equals(sensorIdCurrent.toString())) {
           isInList = true;
+          break;
         }
       }
-      if (!isInList) {
-        if (item.intValue() != -1) {// If not already nullified
-          db.nullifySensorIdSensorWidget(item);
+
+      Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
+      if (!isInList && isSameAccount) {
+        if (sensorIdCurrent.intValue() != -1) {// If not already nullified
+          db.setSensorIdSensorWidget(widgetId, -1);
+          updateUIWidgetSensor(widgetId);
         }
-        // ToDo: Trigger Update widget here
       }
     }
   }
@@ -200,36 +249,15 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     NewAppWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
   }
 
-  // public void updateUIWidgetDeviceWithDeviceId(int widgetId) {
-  //   MyDBHandler db = new MyDBHandler(getReactApplicationContext());
-  //   DevicesUtilities deviceUtils = new DevicesUtilities();
-  //   AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
+  public int[] getAllWidgetsSensor() {
+    return AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewSensorWidget.class));
+  }
 
-  //   DeviceInfo deviceInfo = db.findWidgetInfoDevice(widgetId);
-  //   if (deviceInfo == null) {
-  //     return;
-  //   }
-  //   int methods = deviceInfo.getDeviceMethods();
-  //   Log.d("TEST methods", String.valueOf(methods));
+  public int[] getAllWidgetsDevice2By1() {
+    return AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewOnOffWidget.class));
+  }
 
-  //   Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
-  //   Integer sizeSuppMeth = supportedMethods.size();
-  //   Boolean hasLearn = supportedMethods.get("LEARN");
-  //   if (hasLearn != null && hasLearn) {
-  //       sizeSuppMeth = sizeSuppMeth - 1;
-  //   }
-
-  //   Log.d("TEST sizeSuppMeth", String.valueOf(sizeSuppMeth));
-  //   Log.d("TEST widgetId", String.valueOf(widgetId));
-  //   Boolean is2By1 = sizeSuppMeth <= 2 && sizeSuppMeth > 0;
-  //   if (is2By1) {
-  //     updateUIWidgetDevice2By1(widgetId);
-  //   }
-  //   Boolean is3By1 = sizeSuppMeth > 2;
-  //   if (is3By1) {
-  //     updateUIWidgetDevice3By1(widgetId);
-  //   }
-  // }
-  // public void updateUIWidgetSensoreWithSensorId(int widgetId) {
-  // }
+  public int[] getAllWidgetsDevice3By1() {
+    return AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewAppWidget.class));
+  }
 }
