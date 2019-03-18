@@ -89,7 +89,6 @@ public class NewSensorWidget extends AppWidgetProvider {
         CharSequence widgetText = "";
         String sensorLastUpdated = "";
         CharSequence sensorValue = "", sensorUnit = "";
-        int src = R.drawable.sensor;
         String widgetType;
         SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
         MyDBHandler db = new MyDBHandler(context);
