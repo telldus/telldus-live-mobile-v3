@@ -1,7 +1,0 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="@color/widgetGreen"/>
-    <size
-        android:width="26dp"
-        android:height="26dp" />
-</shape>
