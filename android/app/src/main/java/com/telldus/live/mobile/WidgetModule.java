@@ -129,7 +129,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     RemoteViews widgetView = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.logged_out);
 
     // Replace Widget UI with loggedout message
-    widgetView.setTextViewText(R.id.textWidgetBodyText, message);
+    widgetView.setTextViewText(R.id.textWidgetBodyText, getReactApplicationContext().getResources().getString(R.string.message_user_logged_out));
 
     // Clear token and other credentials from shared preference
     prefManager = new PrefManager(getReactApplicationContext());

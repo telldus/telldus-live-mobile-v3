@@ -59,7 +59,7 @@
                     android:id="@+id/testTextSensor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add sensor widget"
+                    android:text="@string/sensor_configure_header_one"
                     android:textSize="33sp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="27sp"
@@ -69,7 +69,7 @@
                     android:id="@+id/chooseSettingSensor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Choose settings for your widget"
+                    android:text="@string/configure_header_two"
                     android:textSize="22sp"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
@@ -86,7 +86,6 @@
                     android:id="@+id/loadingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
                     android:textSize="22sp"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center|center"
@@ -102,7 +101,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="Sensor:"
                         android:textSize="16sp"
                         android:textColor="@color/darkGray"
                         android:layout_marginTop="5dp"/>
@@ -147,7 +145,7 @@
                                 android:id="@+id/txtSensorName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Select sensor"
+                                android:text="@string/sensor_select"
                                 android:textSize="22sp"
                                 android:layout_gravity="center"
                                 android:textColor="@color/orange"/>
@@ -156,7 +154,7 @@
                                 android:id="@+id/txtSensorHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Tap to select sensor"
+                                android:text="@string/sensor_tap_change_sensor"
                                 android:textSize="12sp"
                                 android:layout_gravity="center"
                                 android:textColor="@color/darkGray"/>
@@ -170,7 +168,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="Value to display:"
                         android:textSize="16sp"
                         android:textColor="@color/darkGray"/>
 
@@ -221,19 +218,19 @@
                                 android:id="@+id/txtSensorDataName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Select value"
                                 android:textSize="22sp"
                                 android:textColor="@color/orange"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:text="@string/sensor_select_value"/>
 
                             <TextView
                                 android:id="@+id/txtSensorDataHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Tap to change value to display"
                                 android:textSize="12sp"
                                 android:textColor="@color/darkGray"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:text="@string/sensor_tap_change_value"/>
 
                         </LinearLayout>
 
@@ -244,7 +241,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="10dp"
-                        android:text="Settings:"
                         android:layout_marginBottom="10dp"
                         android:textSize="16sp"
                         android:textColor="@color/darkGray"/>
@@ -261,7 +257,7 @@
                             android:id="@+id/switch_background"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="Transparent Background"
+                            android:text="@string/label_transparent"
                             android:textSize="14sp"
                             android:textColor="@color/gray"
                             android:theme="@style/SCBSwitch"/>
@@ -287,7 +283,7 @@
                             android:id="@+id/labelSelectPoll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Update every 10 minutes"
+                            android:text="@string/label_update_interval_1"
                             android:textSize="14sp"
                             android:layout_gravity="center|left"
                             android:gravity="center|left"
@@ -335,7 +331,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/redbutton"
-                            android:text="CANCEL"/>
+                            android:text="@string/cancel"/>
 
                     </LinearLayout>
                 </LinearLayout>

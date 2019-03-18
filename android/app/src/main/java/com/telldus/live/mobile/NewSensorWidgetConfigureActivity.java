@@ -89,9 +89,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
     CharSequence[] sensorIdList = null;
-    CharSequence[] intervalOptions = {
-        "Update every 10 minutes", "Update every 30 minutes", "Update every 1 hour",
-    };
     CharSequence[] intervalOptionsValues = {
         "10", "30", "60",
     };
@@ -122,6 +119,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
         prefManager = new PrefManager(this);
         accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
@@ -150,6 +148,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         screenCover = (View)findViewById(R.id.screenCover);
         if (sensorNameList == null) {
             loadingText.setVisibility(View.VISIBLE);
+            loadingText.setText(getResources().getString(R.string.label_loading)+"...");
             screenCover.setVisibility(View.GONE);
         } else {
             loadingText.setVisibility(View.GONE);
@@ -194,8 +193,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             sensorHint.setTypeface(subtitleFont);
             sensorDataHint.setTypeface(subtitleFont);
             settingText.setTypeface(subtitleFont);
+            settingText.setText(getResources().getString(R.string.label_settings)+":");
             valueText.setTypeface(subtitleFont);
+            valueText.setText(getResources().getString(R.string.sensor_value_to_display)+":");
             sensorText.setTypeface(subtitleFont);
+            sensorText.setText(getResources().getString(R.string.widget_info_sensor)+":");
             btAdd.setTypeface(subtitleFont);
             button_cancel.setTypeface(subtitleFont);
             switch_background.setTypeface(subtitleFont);
@@ -223,13 +225,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     if (id == null || id == 0) {
-                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any sensor. Please select a sensor to add as widget.",Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_sensor_not_selected), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
                     }
                     if (senValue == null) {
-                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any value to display for sensor. Please select a value from the list.",Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_sensor_scale_not_selected), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
@@ -279,8 +281,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                     imgSensorTypeEdit.setVisibility(View.VISIBLE);
                                     imgSensorType.setVisibility(View.GONE);
 
-                                    sensorDataName.setText("Select value");
-                                    sensorDataHint.setText("Tap to change value to display");
+                                    sensorDataName.setText(R.string.sensor_select_value);
+                                    sensorDataHint.setText(R.string.sensor_tap_change_value);
 
                                     senValue = null;
                                     selectedSensorValueIndex = -1;
@@ -381,6 +383,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 }
             });
 
+            final CharSequence[] intervalOptions = {
+                getResources().getString(R.string.label_update_interval_1),
+                getResources().getString(R.string.label_update_interval_2),
+                getResources().getString(R.string.label_update_interval_3),
+            };
+
             btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
             btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
                 AlertDialog ad;
@@ -420,7 +428,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         JSONObject curObj = JsonsensorList.getJSONObject(i);
                         String name = curObj.getString("name");
                         if (name == null || name.equals("null")) {
-                            name = "Unknown";
+                            name = getResources().getString(R.string.text_unknown);
                         }
                         Integer id = curObj.getInt("id");
                         String last = String.valueOf(curObj.getLong("lastUpdated"));

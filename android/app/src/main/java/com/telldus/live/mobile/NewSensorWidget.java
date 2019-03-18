@@ -115,7 +115,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         Integer deviceId = sensorWidgetInfo.getSensorId();
         if (deviceId.intValue() == -1) {
             view.removeAllViews(R.id.linear_background);
-            view.setTextViewText(R.id.txtSensorType, "Sensor not found");
+            view.setTextViewText(R.id.txtSensorType, context.getResources().getString(R.string.message_sensor_not_found));
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
@@ -275,7 +275,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                         String sensorName = responseObject.optString("name");
                         if (sensorName == null || sensorName.equals("null")) {
-                            sensorName = "Unknown";
+                            sensorName = context.getResources().getString(R.string.text_unknown);
                         }
 
                         for (int j = 0; j < sensorData.length(); j++) {

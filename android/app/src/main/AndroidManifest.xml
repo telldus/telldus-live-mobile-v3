@@ -75,8 +75,9 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".NewAppWidget"
-            android:label="Device 3+ btn">
+        <receiver
+            android:name=".NewAppWidget"
+            android:label="@string/widget_info_device_3">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -93,7 +94,7 @@
         </activity>
 
         <receiver android:name=".NewSensorWidget"
-            android:label="Sensor">
+            android:label="@string/widget_info_sensor">
             <intent-filter>
               <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
               <action android:name="com.telldus.live.mobile.AUTO_UPDATE" />
@@ -113,7 +114,7 @@
         <service android:name=".ServiceBackground.RestartSensorUpdateAlarmManager"></service>
 
         <receiver android:name=".NewOnOffWidget"
-          android:label="Device 1-2 btn">
+          android:label="@string/widget_info_device_2">
           <intent-filter>
             <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
           </intent-filter>
