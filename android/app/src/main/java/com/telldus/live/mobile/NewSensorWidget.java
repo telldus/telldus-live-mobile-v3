@@ -40,6 +40,7 @@ import android.os.Looper;
 import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
+import android.support.v4.content.ContextCompat;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
@@ -86,7 +87,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         String sensorIcon = "";
         CharSequence widgetText = "";
-        String sensorHistory = "";
+        String sensorLastUpdated = "";
         CharSequence sensorValue = "", sensorUnit = "";
         int src = R.drawable.sensor;
         String widgetType;
@@ -123,13 +124,13 @@ public class NewSensorWidget extends AppWidgetProvider {
         sensorValue = sensorWidgetInfo.getSensorValue();
         sensorUnit = sensorWidgetInfo.getSensorUnit();
         sensorIcon = sensorWidgetInfo.getSensorIcon();
-        sensorHistory = sensorWidgetInfo.getSensorUpdate();
+        sensorLastUpdated = sensorWidgetInfo.getSensorUpdate();
         widgetType = sensorWidgetInfo.getSensorDisplayType();
         transparent = sensorWidgetInfo.getTransparent();
 
         String formattedValue = formatValue(sensorValue);
 
-        long time = Long.parseLong(sensorHistory);
+        long time = Long.parseLong(sensorLastUpdated);
 
         // if timestamp given in seconds, convert to millis
         if (time < 1000000000000L) {
@@ -157,6 +158,15 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
         view.setTextViewText(R.id.txtSensorValue, formattedValue);
         view.setTextViewText(R.id.txtSensorUnit, sensorUnit);
+
+        long currentTime = new Date().getTime();
+        long timeAgo = currentTime - time;
+        int limit = (24 * 3600 * 1000);
+        if (timeAgo < limit) {
+            view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.white));
+        } else {
+            view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.darkRed));
+        }
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, view);
