@@ -21,13 +21,13 @@
 // @flow
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { Fragment } from 'react';
-import { Modal, View, BackHandler, Text, Dimensions } from 'react-native';
+import { Modal, BackHandler, Text, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { ColorWheel } from 'react-native-color-wheel';
 import Slider from 'react-native-slider';
 
 // Relative import
-import { NavigationHeader, IconTelldus, Poster } from '../../../../../BaseComponents';
+import { NavigationHeader, IconTelldus, Poster, View } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
 type Props = {
