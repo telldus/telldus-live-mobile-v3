@@ -198,9 +198,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             });
 
-            bellCover.setBackgroundResource(R.drawable.button_background_padding);
+            bellCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
-                bellCover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                bellCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 bellText.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
@@ -249,9 +249,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             });
 
-            upCover.setBackgroundResource(R.drawable.button_background_padding);
+            upCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
-                upCover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                upCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 upText.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
@@ -300,9 +300,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             });
 
-            downCover.setBackgroundResource(R.drawable.button_background_padding);
+            downCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
-                downCover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                downCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 downText.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
@@ -351,9 +351,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             });
 
-            stopCover.setBackgroundResource(R.drawable.button_background_padding);
+            stopCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
-                stopCover.setBackgroundResource(R.drawable.button_background_primary_fill_padding);
+                stopCover.setBackgroundResource(R.drawable.button_background_primary_fill);
                 stopText.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
@@ -402,9 +402,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             });
 
-            offCover.setBackgroundResource(R.drawable.button_background_padding);
+            offCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
-                offCover.setBackgroundResource(R.drawable.button_background_primary_fill_padding);
+                offCover.setBackgroundResource(R.drawable.button_background_primary_fill);
                 offText.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
@@ -469,10 +469,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                     }
                 });
 
-                dimmer25Cover.setBackgroundResource(R.drawable.button_background_padding);
+                dimmer25Cover.setBackgroundResource(R.drawable.button_background);
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
-                    dimmer25Cover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                    dimmer25Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                     dimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
                     txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
                 }
@@ -533,9 +533,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                     }
                 });
 
-                dimmer50Cover.setBackgroundResource(R.drawable.button_background_padding);
+                dimmer50Cover.setBackgroundResource(R.drawable.button_background);
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
-                    dimmer50Cover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                    dimmer50Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                     dimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
                     txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
                 }
@@ -595,9 +595,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                     }
                 });
 
-                dimmer75Cover.setBackgroundResource(R.drawable.button_background_padding);
+                dimmer75Cover.setBackgroundResource(R.drawable.button_background);
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
-                    dimmer75Cover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                    dimmer75Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                     dimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
                     txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
                 }
@@ -657,10 +657,10 @@ public class DevicesGroupDialogueActivity extends Activity {
                 }
             });
 
-            onCover.setBackgroundResource(R.drawable.button_background_padding);
+            onCover.setBackgroundResource(R.drawable.button_background);
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
-                onCover.setBackgroundResource(R.drawable.button_background_secondary_fill_padding);
+                onCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
                 onText.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
