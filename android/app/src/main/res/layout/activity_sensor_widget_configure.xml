@@ -17,19 +17,20 @@
             android:id="@+id/backsensor"
             android:layout_width="16dp"
             android:layout_height="20dp"
-            android:background="@drawable/left_arrow_key"
-            android:scaleType="centerCrop"
+            android:src="@drawable/left_arrow_key"
+            android:scaleType="centerInside"
             android:tint="@color/white"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_marginStart="15dp"/>
     </RelativeLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/telldus_logo"/>
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="20dp"
+            android:scaleType="centerInside"
+            android:layout_centerInParent="true"
+            android:src="@drawable/telldus_logo"/>
 
     </RelativeLayout>
 
