@@ -167,7 +167,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (timeAgo < limit) {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.white));
         } else {
-            view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.darkRed));
+            view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.brightRed));
         }
 
         // Instruct the widget manager to update the widget
