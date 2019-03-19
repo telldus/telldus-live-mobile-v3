@@ -507,8 +507,7 @@ class DeviceRow extends View<Props, State> {
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
-								disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
-								onPress={this.onShowFullName}
+								onPress={this.onSettingsSelected}
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
