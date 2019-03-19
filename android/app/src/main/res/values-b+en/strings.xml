@@ -11,8 +11,8 @@
 
 	<string name="text_unknown">Unknown</string>
 
-	<string name="widget_info_device_2">Device 3+ btn</string>
-	<string name="widget_info_device_3">Device 1-2 btn</string>
+	<string name="widget_info_device_2">Device 1-2 btn</string>
+	<string name="widget_info_device_3">Device 3+ btn</string>
 	<string name="widget_info_sensor">Sensor</string>
 
 	<string name="device_select">Select device</string>
