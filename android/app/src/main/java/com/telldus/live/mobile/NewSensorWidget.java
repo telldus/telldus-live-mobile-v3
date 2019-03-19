@@ -107,6 +107,16 @@ public class NewSensorWidget extends AppWidgetProvider {
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+
+            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
+            String preScript = context.getResources().getString(R.string.message_user_logged_out_one);
+            String phraseTwo = context.getResources().getString(R.string.message_user_logged_out_two);
+            view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
+            view.setTextViewText(R.id.loggedOutInfoEmail, userId);
+            view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
+
+            appWidgetManager.updateAppWidget(appWidgetId, view);
+
             return;
         }
 

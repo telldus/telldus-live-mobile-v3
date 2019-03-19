@@ -25,6 +25,7 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.util.Log;
@@ -32,6 +33,8 @@ import android.widget.RemoteViews;
 import android.view.View;
 import android.content.Intent;
 import android.database.Cursor;
+import android.widget.Button;
+import android.content.Context;
 
 import java.lang.System;
 import java.lang.String;
@@ -57,6 +60,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   private static String widgetDevice2By1 = "WIDGET_DEVICE_2_BY_1";
   private static String widgetDevice3By1 = "WIDGET_DEVICE_3_BY_1";
+  private static String widgetSensor = "WIDGET_SENSOR";
+
+  private static String ACTION_LOGIN = "ACTION_LOGIN";
 
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -125,19 +131,37 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void disableAllWidgets(String message) {
-    RemoteViews widgetView = new RemoteViews(getReactApplicationContext().getPackageName(), R.layout.logged_out);
+  public void disableAllWidgets() {
+    prefManager = new PrefManager(getReactApplicationContext());
+    prefManager.setUserId("null");
 
-    // Replace Widget UI with loggedout message
-    widgetView.setTextViewText(R.id.textWidgetBodyText, getReactApplicationContext().getResources().getString(R.string.message_user_logged_out));
+    int widgetIdsS[] = getAllWidgetsSensor();
+    disableWidgetsOnLogout(widgetIdsS, widgetSensor);
+    int widgetIdsD2[] = getAllWidgetsDevice2By1();
+    disableWidgetsOnLogout(widgetIdsD2, widgetDevice2By1);
+    int widgetIdsD3[] = getAllWidgetsDevice3By1();
+    disableWidgetsOnLogout(widgetIdsD3, widgetDevice3By1);
 
     // Clear token and other credentials from shared preference
-    prefManager = new PrefManager(getReactApplicationContext());
     prefManager.clear();
+  }
 
-    AppWidgetManager.getInstance(getReactApplicationContext()).updateAppWidget(new ComponentName(getReactApplicationContext(), NewAppWidget.class), widgetView);
-    AppWidgetManager.getInstance(getReactApplicationContext()).updateAppWidget(new ComponentName(getReactApplicationContext(), NewOnOffWidget.class), widgetView);
-    AppWidgetManager.getInstance(getReactApplicationContext()).updateAppWidget(new ComponentName(getReactApplicationContext(), NewSensorWidget.class), widgetView);
+  public void disableWidgetsOnLogout (int[] widgetIds, String widgetType) {
+    Context context = getReactApplicationContext();
+    MyDBHandler db = new MyDBHandler(context);
+
+    for (int widgetId : widgetIds) {
+
+      if (widgetType.equals(widgetSensor)) {
+        updateUIWidgetSensor(widgetId);
+      }
+      if (widgetType.equals(widgetDevice2By1)) {
+        updateUIWidgetDevice2By1(widgetId);
+      }
+      if (widgetType.equals(widgetDevice3By1)) {
+        updateUIWidgetDevice3By1(widgetId);
+      }
+    }
   }
 
   @ReactMethod

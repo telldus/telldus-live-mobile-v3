@@ -39,7 +39,8 @@
 	<string name="label_update_interval_3">Update every 1 hour</string>
 	<string name="label_loading">Loading</string>
 
-	<string name="message_user_logged_out">You have logged out</string>
+	<string name="message_user_logged_out_one">This widget was added for</string>
+	<string name="message_user_logged_out_two">Please log in to that account to view this widget.</string>
 	<string name="message_device_not_found">Could not find the device</string>
 	<string name="message_sensor_not_found">Could not find the sensor</string>
 	<string name="message_device_not_selected">You have not chosen any device. Please select a device to add as widget.</string>

@@ -38,11 +38,11 @@ const widgetAndroidConfigure = (): ThunkAction => {
 	};
 };
 
-const widgetAndroidDisableAll = (message: string): ThunkAction => {
+const widgetAndroidDisableAll = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
 			const { AndroidWidget } = NativeModules;
-			AndroidWidget.disableAllWidgets(message);
+			AndroidWidget.disableAllWidgets();
 		}
 		return;
 	};
