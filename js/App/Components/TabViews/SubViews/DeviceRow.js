@@ -415,6 +415,10 @@ class DeviceRow extends View<Props, State> {
 		};
 		const icon = getDeviceIcons(deviceType);
 
+		// NOTE: the prop "key" serves two purpose.
+		// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
+		// 2. The same prop is used/accessed inside "TabViews/SubViews/Device/MultiActionModal.js" to override the style
+		// in the case of device groups.
 		if (BELL) {
 			button.unshift(
 				<BellButton
