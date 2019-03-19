@@ -145,6 +145,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         screenCover = (View)findViewById(R.id.screenCover);
         if (DeviceInfoMap.size() == 0) {
             loadingText.setVisibility(View.VISIBLE);
+            loadingText.setText(getResources().getString(R.string.label_loading)+"...");
             screenCover.setVisibility(View.GONE);
         } else {
             widgetManager = AppWidgetManager.getInstance(this);
@@ -265,6 +266,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
             Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
             Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
             textTest.setTypeface(titleFont);
+            deviceText.setText(getResources().getString(R.string.label_device)+":");
+            settingText.setText(getResources().getString(R.string.label_settings)+":");
             chooseSetting.setTypeface(titleFont);
         }
     }

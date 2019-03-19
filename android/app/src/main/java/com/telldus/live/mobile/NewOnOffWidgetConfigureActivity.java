@@ -166,6 +166,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         screenCover = (View)findViewById(R.id.screenCover);
         if (DeviceInfoMap.size() == 0) {
             loadingText.setVisibility(View.VISIBLE);
+            loadingText.setText(getResources().getString(R.string.label_loading)+"...");
             screenCover.setVisibility(View.GONE);
         } else {
             widgetManager = AppWidgetManager.getInstance(this);
@@ -292,6 +293,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceName.setTypeface(subtitleFont);
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);
+            deviceText.setText(getResources().getString(R.string.label_device)+":");
+            settingText.setText(getResources().getString(R.string.label_settings)+":");
             settingText.setTypeface(subtitleFont);
             btAdd.setTypeface(subtitleFont);
             btnCan.setTypeface(subtitleFont);

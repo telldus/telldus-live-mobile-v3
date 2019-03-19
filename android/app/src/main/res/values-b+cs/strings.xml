@@ -7,13 +7,16 @@
 	<string name="pick_sensor">Pick a sensor</string>
 	<string name="pick_sensor_data">Pick a sensor data type</string>
 	<string name="confirm">Confirm &amp; Save</string>
-	<string name="cancel">CANCEL</string>
+	<string name="cancel">Cancel</string>
 
 	<string name="text_unknown">Unknown</string>
 
 	<string name="widget_info_device_2">Device 3+ btn</string>
 	<string name="widget_info_device_3">Device 1-2 btn</string>
 	<string name="widget_info_sensor">Sensor</string>
+
+	<string name="device_select">Select device</string>
+	<string name="device_tap_change_device">Tap to select device</string>
 
 	<string name="sensor_select">Select sensor</string>
 	<string name="sensor_tap_change_sensor">Tap to select sensor</string>
@@ -28,6 +31,7 @@
 
 	<string name="error_action_fail">Action Currently Unavailable</string>
 
+	<string name="label_device">Device</string>
 	<string name="label_settings">Settings</string>
 	<string name="label_transparent">Transparent Background</string>
 	<string name="label_update_interval_1">Update every 10 minutes</string>
