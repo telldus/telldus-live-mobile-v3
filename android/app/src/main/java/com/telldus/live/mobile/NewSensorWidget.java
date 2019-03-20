@@ -120,17 +120,18 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
-        RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
+        Integer sensorId = sensorWidgetInfo.getSensorId();
+        if (sensorId.intValue() == -1) {
+            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
+            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.message_sensor_not_found));
 
-        Integer deviceId = sensorWidgetInfo.getSensorId();
-        if (deviceId.intValue() == -1) {
-            view.removeAllViews(R.id.linear_background);
-            view.setTextViewText(R.id.txtSensorType, context.getResources().getString(R.string.message_sensor_not_found));
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
             return;
         }
+
+        RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
         widgetText = sensorWidgetInfo.getSensorName();
         sensorValue = sensorWidgetInfo.getSensorValue();

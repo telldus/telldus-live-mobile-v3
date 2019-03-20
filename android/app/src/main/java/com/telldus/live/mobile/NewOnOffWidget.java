@@ -86,8 +86,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         MyDBHandler db = new MyDBHandler(context);
 
-        CharSequence widgetText = "Telldus";
-        String transparent;
         DeviceInfo DeviceWidgetInfo = db.findWidgetInfoDevice(appWidgetId);
 
         if (DeviceWidgetInfo == null) {
@@ -114,7 +112,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        widgetText = DeviceWidgetInfo.getDeviceName();
+        Integer deviceId = DeviceWidgetInfo.getDeviceId();
+        if (deviceId.intValue() == -1) {
+            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
+            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.message_device_not_found));
+
+            appWidgetManager.updateAppWidget(appWidgetId, view);
+            return;
+        }
+
+        String transparent;
+        CharSequence widgetText = DeviceWidgetInfo.getDeviceName();
         String state = DeviceWidgetInfo.getState();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
@@ -132,14 +140,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
-
-        Integer deviceId = DeviceWidgetInfo.getDeviceId();
-        if (deviceId.intValue() == -1) {
-            views.removeAllViews(R.id.widget_content_cover);
-            views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-            return;
-        }
 
         views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
         views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));

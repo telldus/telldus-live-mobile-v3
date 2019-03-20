@@ -147,9 +147,6 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   public void disableWidgetsOnLogout (int[] widgetIds, String widgetType) {
-    Context context = getReactApplicationContext();
-    MyDBHandler db = new MyDBHandler(context);
-
     for (int widgetId : widgetIds) {
 
       if (widgetType.equals(widgetSensor)) {

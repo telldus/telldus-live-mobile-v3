@@ -41,8 +41,8 @@
 
 	<string name="message_user_logged_out_one">This widget was added for</string>
 	<string name="message_user_logged_out_two">Please log in to that account to view this widget.</string>
-	<string name="message_device_not_found">Could not find the device</string>
-	<string name="message_sensor_not_found">Could not find the sensor</string>
+	<string name="message_device_not_found">This device has been removed from your account.</string>
+	<string name="message_sensor_not_found">This sensor has been removed from your account.</string>
 	<string name="message_device_not_selected">You have not chosen any device. Please select a device to add as widget.</string>
 	<string name="message_sensor_not_selected">You have not chosen any sensor. Please select a sensor to add as widget.</string>
 	<string name="message_sensor_scale_not_selected">You have not chosen any value to display for sensor. Please select a value from the list.</string>
