@@ -1,6 +1,5 @@
 <resources>
 	<string name="app_name">Telldus Live! Mobile</string>
-	<string name="configure">Configure</string>
 	<string name="add_widget">Add widget</string>
 	<string name="pick_device">Pick a device</string>
 
@@ -43,8 +42,22 @@
 	<string name="message_user_logged_out_two">Please log in to that account to view this widget.</string>
 	<string name="message_device_not_found">This device has been removed from your account.</string>
 	<string name="message_sensor_not_found">This sensor has been removed from your account.</string>
+
+	<!-- Toast message when user press add widget confirm button, without choosing any device-->
 	<string name="message_device_not_selected">You have not chosen any device. Please select a device to add as widget.</string>
+	<!-- Toast message when user press add widget confirm button, without choosing any sensor-->
 	<string name="message_sensor_not_selected">You have not chosen any sensor. Please select a sensor to add as widget.</string>
+	<!-- Toast message when user press add widget confirm button, without choosing any sensor scale to display-->
 	<string name="message_sensor_scale_not_selected">You have not chosen any value to display for sensor. Please select a value from the list.</string>
+
+	<!-- When there are no device's with 2 or less buttons in the account-->
+	<string name="message_add_widget_no_device_2">Could not find any device with 2 or less buttons.</string>
+	<!-- When there are no device's with 3 or more buttons in the account-->
+	<string name="message_add_widget_no_device_3">Could not find any device with 3 or more buttons.</string>
+	<!-- When there are no sensors in the account-->
+	<string name="message_add_widget_no_sensor">Could not find any sensors.</string>
+
+	<!-- Network error - Re-using same message as in main app-->
+	<string name="message_network_failure">Network request failed. Please check your internet connection</string>
 
 </resources>

@@ -132,10 +132,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_sensor_widget_configure);
 
-        updateUI();
+        String message = getResources().getString(R.string.label_loading)+"...";
+        updateUI(message);
     }
 
-    public void updateUI() {
+    public void updateUI(String message) {
         mSensorBack = (RelativeLayout )findViewById(R.id.sensorBack);
         mSensorBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +149,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         screenCover = (View)findViewById(R.id.screenCover);
         if (sensorNameList == null) {
             loadingText.setVisibility(View.VISIBLE);
-            loadingText.setText(getResources().getString(R.string.label_loading)+"...");
+            loadingText.setText(message);
             screenCover.setVisibility(View.GONE);
         } else {
             loadingText.setVisibility(View.GONE);
@@ -421,6 +422,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
+                String message = getResources().getString(R.string.message_add_widget_no_device_3);
                 try {
                     JSONObject sensorData = new JSONObject(response.toString());
                     JsonsensorList = sensorData.getJSONArray("sensor");
@@ -437,15 +439,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
                     sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                     sensorIdList = idList.toArray(new CharSequence[idList.size()]);
-                    updateUI();
+
+                    message = sensorNameList == null ? message : null;
+                    updateUI(message);
                 } catch (JSONException e) {
-                    updateUI();
+                    updateUI(message);
                     e.printStackTrace();
                 }
             }
             @Override
             public void onError(ANError error) {
-                updateUI();
+                String message = getResources().getString(R.string.message_network_failure);
+                updateUI(message);
             }
         });
     }
