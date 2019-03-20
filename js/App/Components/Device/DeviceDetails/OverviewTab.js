@@ -45,6 +45,7 @@ type Props = {
 	isGatewayActive: boolean,
 
 	screenProps: Object,
+	dispatch: Function,
 };
 
 type State = {

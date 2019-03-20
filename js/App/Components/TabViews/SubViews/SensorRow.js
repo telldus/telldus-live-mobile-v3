@@ -434,7 +434,7 @@ class SensorRow extends View<Props, State> {
 		let { sensors, sensorAccessibilityInfo } = this.getSensors(data, styles);
 
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
+		let { isOpen } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;

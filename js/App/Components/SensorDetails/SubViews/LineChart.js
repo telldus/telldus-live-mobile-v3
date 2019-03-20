@@ -37,7 +37,6 @@ import { View } from '../../../../BaseComponents';
 
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
-import _ from 'lodash';
 
 type Props = {
 	chartDataOne: Array<Object>,

@@ -376,7 +376,7 @@ class DeviceRow extends View<Props, State> {
 
 	render(): Object {
 		let button = [];
-		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth } = this.state;
+		let { isOpen, showMoreActions } = this.state;
 		const {
 			device,
 			intl,
