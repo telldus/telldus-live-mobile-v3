@@ -73,6 +73,7 @@
 		AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */ = {isa = PBXBuildFile; fileRef = FED4ABDECE1A45289BE59CD1 /* telldusicons.woff */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		BD3450422506459CA03BAFFE /* libLRDRCTSimpleToast.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67549022A05F434F8B812357 /* libLRDRCTSimpleToast.a */; };
+		C06A469DF20B4340A12943A8 /* libRNPixelColor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA333255669B4DD3BCDDDE90 /* libRNPixelColor.a */; };
 		CAAD62D4956A49EA96EC30FA /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 598B9ECEAE4E41CCAF3F07D3 /* libRCTOrientation.a */; };
 		D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 150121A613CD46DD95BDC072 /* FontAwesome.ttf */; };
 		DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93967CC4C9724316AFF74B50 /* Foundation.ttf */; };
@@ -475,6 +476,20 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
+		8DD844722242382B005E847D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F113F3F0F88F4EB286931905 /* RNGestureHandler.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
+			remoteInfo = "RNGestureHandler-tvOS";
+		};
+		8DD844822242382B005E847D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C50B677FB3FB44D2B1AEE2EE /* RNGetPixel.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5D72D2E81C16249000E22EC1;
+			remoteInfo = RNPixelColor;
+		};
 		ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
@@ -580,12 +595,14 @@
 		B5E8B17FC3BC433DA0620A43 /* libRNSensitiveInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNSensitiveInfo.a; sourceTree = "<group>"; };
 		B604CB39C11F43B48FD5A634 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		BD4E8D787A68404D96264B38 /* libUdpSockets.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libUdpSockets.a; sourceTree = "<group>"; };
+		C50B677FB3FB44D2B1AEE2EE /* RNGetPixel.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGetPixel.xcodeproj; path = "../node_modules/react-native-get-pixel/ios/RNGetPixel.xcodeproj"; sourceTree = "<group>"; };
 		DAF7EACF6B594393AB324DCE /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		DB8C12D469844F34ABBA0A64 /* telldusicons.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = telldusicons.svg; path = ../assets/fonts/telldusicons.svg; sourceTree = "<group>"; };
 		DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E3C5F7C8FDE3C261C5988FCF /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
 		F113F3F0F88F4EB286931905 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		F455C17D479C4210A202688C /* SFNS Display.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFNS Display.ttf"; path = "../assets/fonts/SFNS Display.ttf"; sourceTree = "<group>"; };
+		FA333255669B4DD3BCDDDE90 /* libRNPixelColor.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNPixelColor.a; sourceTree = "<group>"; };
 		FED4ABDECE1A45289BE59CD1 /* telldusicons.woff */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = telldusicons.woff; path = ../assets/fonts/telldusicons.woff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -625,6 +642,7 @@
 				7008063F35A94AD09D95F9DD /* libRNRSA.a in Frameworks */,
 				77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */,
 				7B031B537B7F4F948A5901C4 /* libRNGestureHandler.a in Frameworks */,
+				C06A469DF20B4340A12943A8 /* libRNPixelColor.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,6 +801,7 @@
 			isa = PBXGroup;
 			children = (
 				265C72D921AD38660003B41D /* libRNGestureHandler.a */,
+				8DD844732242382B005E847D /* libRNGestureHandler-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -859,6 +878,7 @@
 				7C59689631C948E3A30CAA55 /* libRNRSA.a */,
 				5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */,
 				3D81ECCBA2B14DAB9C26E714 /* libRNGestureHandler.a */,
+				FA333255669B4DD3BCDDDE90 /* libRNPixelColor.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -973,6 +993,7 @@
 				B4B40A8A593241268FE52652 /* RNRSA.xcodeproj */,
 				099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */,
 				F113F3F0F88F4EB286931905 /* RNGestureHandler.xcodeproj */,
+				C50B677FB3FB44D2B1AEE2EE /* RNGetPixel.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1010,6 +1031,14 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */,
 				26EDB68022266ACF003EF9E3 /* Widget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8DD8447F2242382B005E847D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD844832242382B005E847D /* libRNPixelColor.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1213,6 +1242,10 @@
 				{
 					ProductGroup = 265C72D521AD38660003B41D /* Products */;
 					ProjectRef = F113F3F0F88F4EB286931905 /* RNGestureHandler.xcodeproj */;
+				},
+				{
+					ProductGroup = 8DD8447F2242382B005E847D /* Products */;
+					ProjectRef = C50B677FB3FB44D2B1AEE2EE /* RNGetPixel.xcodeproj */;
 				},
 				{
 					ProductGroup = 26D4DBCE21424C610060DC8E /* Products */;
@@ -1641,6 +1674,20 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		8DD844732242382B005E847D /* libRNGestureHandler-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNGestureHandler-tvOS.a";
+			remoteRef = 8DD844722242382B005E847D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		8DD844832242382B005E847D /* libRNPixelColor.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNPixelColor.a;
+			remoteRef = 8DD844822242382B005E847D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1838,11 +1885,16 @@
 					"$(SRCROOT)/../node_modules/react-native-rsa-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-get-pixel/ios/PNGetPixel",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1884,11 +1936,16 @@
 					"$(SRCROOT)/../node_modules/react-native-rsa-native/ios",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-get-pixel/ios/PNGetPixel",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/TelldusLiveApp\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1916,6 +1973,11 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = M2879GJ5VD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-get-pixel/ios/PNGetPixel",
+				);
 				INFOPLIST_FILE = Widget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -1948,6 +2010,11 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = M2879GJ5VD;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-get-pixel/ios/PNGetPixel",
+				);
 				INFOPLIST_FILE = Widget/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";

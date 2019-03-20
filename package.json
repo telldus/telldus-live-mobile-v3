@@ -38,6 +38,7 @@
     "react-native-extra-dimensions-android": "~0.22",
     "react-native-firebase": "~5.2.0",
     "react-native-gesture-handler": "^1.0.9",
+    "react-native-get-pixel": "0.0.5",
     "react-native-google-places-autocomplete": "~1.3.9",
     "react-native-google-signin": "~1.0.1",
     "react-native-i18n": "~2.0.15",

@@ -1,3 +1,4 @@
+/* eslint-disable flowtype/require-parameter-type */
 /* eslint-disable flowtype/require-return-type */
 /**
  * Copyright 2016-present Telldus Technologies AB.
@@ -21,10 +22,11 @@
 // @flow
 /* eslint-disable no-mixed-spaces-and-tabs */
 import React, { Fragment } from 'react';
-import { Modal, BackHandler, Text, Dimensions } from 'react-native';
+import { Modal, BackHandler, Text, Animated, PanResponder,
+	 TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import { ColorWheel } from 'react-native-color-wheel';
 import Slider from 'react-native-slider';
+import { getPixelRGBA } from 'react-native-get-pixel';
 
 // Relative import
 import { NavigationHeader, IconTelldus, Poster, View } from '../../../../../BaseComponents';
@@ -36,7 +38,10 @@ type Props = {
 };
 
 type State = {
-    sliderValue: number,
+	sliderValue: number,
+	PixelColor: string,
+	width: number,
+	height: number,
 };
 
 class ModalRGB extends View<Props, State> {
@@ -45,24 +50,60 @@ class ModalRGB extends View<Props, State> {
 
     state = {
     	sliderValue: 10,
+    	pixelColor: 'transparent',
+    	width: 1,
+    	height: 1,
     };
 
-    componentWillMount() {
-    	BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-    }
+	animations = {
+		handlePosition: new Animated.ValueXY({ x: 0, y: 0 }),
+	}
 
-    componentWillUnmount() {
+	panResponders = {
+		handle: PanResponder.create({
+			onMoveShouldSetResponderCapture: () => true,
+			onStartShouldSetPanResponder: (e, gestureState) => true,
+			onMoveShouldSetPanResponderCapture: () => true,
+			onResponderTerminationRequest: () => false,
+		  onPanResponderGrant: (e, gestureState) => {
+			  this.animations.handlePosition.setOffset({ x: this.lastHandlePosition.x, y: this.lastHandlePosition.y });
+			  this.animations.handlePosition.setValue({ x: 0, y: 0 });
+		  },
+		  onPanResponderMove: (e, gestureState) => {
+				getPixelRGBA('rgbpicker.png', e.nativeEvent.pageX, e.nativeEvent.pageY)
+					.then(color => this.setState({ pixelColor: color })) // [243, 123, 0]
+					.catch(err => {});
+
+				return this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
+		  },
+		  onPanResponderRelease: (e, { vx, vy }) => this.animations.handlePosition.flattenOffset(),
+		}),
+	}
+
+	lastHandlePosition = {
+		x: 0,
+		y: 0,
+	}
+
+	componentWillMount() {
+		this.animations.handlePosition.x.addListener(({ value }) => this.lastHandlePosition.x = value);
+    	this.animations.handlePosition.y.addListener(({ value }) => this.lastHandlePosition.y = value);
+    	BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+	}
+
+	componentWillUnmount() {
     	BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-    }
+	}
 
     handleBackButtonClick = () => {
     	const { openModal } = this.props;
     	openModal();
     }
 
-	onColorChanged = (color: any) => {
-		console.log(color);
-	}
+	  onLayout = ({ nativeEvent }: { nativeEvent: { layout: Object }}) => {
+	  	const { width, height } = nativeEvent.layout;
+    	this.setState({ width, height });
+	  }
 
 	// eslint-disable-next-line flowtype/require-return-type
 	renderBanner = () => {
@@ -80,15 +121,26 @@ class ModalRGB extends View<Props, State> {
 	}
 
 	// eslint-disable-next-line flowtype/require-return-type
-	renderColorPicker = () => (
-		<View style={[ styles.shadowCard, { flex: 1, alignItems: 'center' }]}>
-			<ColorWheel
-				initialColor="#30A9DE"
-				onColorChangeComplete={this.onColorChanged}
-				style={{ width: Dimensions.get('window').width - 60 }}
-			/>
-		</View>
-	);
+	renderColorPicker = () => {
+		const { pixelColor } = this.state;
+		return (
+			<Animated.View style={[ styles.shadowCard, { flex: 1, alignItems: 'center' }]} >
+				<TouchableWithoutFeedback>
+					<ImageBackground
+						imageStyle={{ borderRadius: 2 }}
+						style={{ height: '100%', width: '100%'}}
+						source={require('../../img/rgbpicker.png')}
+						onLayout={this.onLayout}
+					>
+						<Animated.View
+							{...this.panResponders.handle.panHandlers}
+							style={[styles.handle, { transform: this.animations.handlePosition.getTranslateTransform(), backgroundColor: `rgb(${pixelColor})` }]}
+						/>
+					</ImageBackground>
+				</TouchableWithoutFeedback>
+			</Animated.View>
+		);
+	}
 
 	onSliderValueChange = (value: any) => {
 		this.setState({ sliderValue: value });
@@ -99,7 +151,7 @@ class ModalRGB extends View<Props, State> {
 		const { sliderValue } = this.state;
 		const color = Theme.Core.brandSecondary;
 		return (
-			<View style={styles.shadowCard}>
+			<View style={[styles.shadowCard, { padding: 12 }]}>
 				<Text>Dim Value ({Math.floor(sliderValue)}%)</Text>
 				<Slider
 					maximumValue={100}
@@ -130,7 +182,7 @@ class ModalRGB extends View<Props, State> {
     					<View style={{ height: 300 }}>
     						{this.renderColorPicker()}
     					</View>
-    					{this.renderSlider()}
+						{this.renderSlider()}
     				</SafeAreaView>
     			</Fragment>
     		</Modal>
@@ -177,7 +229,13 @@ const styles = {
 		borderRadius: 2,
 		marginHorizontal: 12,
 		marginTop: 8,
-		padding: 10,
+	},
+	handle: {
+		borderRadius: 28,
+		borderWidth: 4,
+		borderColor: Theme.Core.brandSecondary,
+		height: 28,
+		width: 28,
 	},
 };
 

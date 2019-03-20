@@ -179,6 +179,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-get-pixel')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-orientation-locker')
     implementation project(':react-native-svg')
