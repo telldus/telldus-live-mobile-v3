@@ -1,10 +1,7 @@
 <resources>
 	<string name="app_name">Telldus Live! Mobile</string>
 	<string name="add_widget">Add widget</string>
-	<string name="pick_device">Pick a device</string>
 
-	<string name="pick_sensor">Pick a sensor</string>
-	<string name="pick_sensor_data">Pick a sensor data type</string>
 	<string name="confirm">Confirm &amp; Save</string>
 	<string name="cancel">Cancel</string>
 
@@ -14,17 +11,19 @@
 	<string name="widget_info_device_3">Device 3+ btn</string>
 	<string name="widget_info_sensor">Sensor</string>
 
+	<string name="pick_device">Select a device</string>
 	<string name="device_select">Select device</string>
 	<string name="device_tap_change_device">Tap to select device</string>
+	<string name="device_configure_header_one">Add device widget</string>
 
 	<string name="sensor_select">Select sensor</string>
 	<string name="sensor_tap_change_sensor">Tap to select sensor</string>
 	<string name="sensor_select_value">Select value</string>
 	<string name="sensor_tap_change_value">Tap to change value to display</string>
 	<string name="sensor_value_to_display">Value to display</string>
+	<string name="pick_sensor">Select a sensor</string>
+	<string name="pick_sensor_data">Select sensor value</string>
 	<string name="sensor_configure_header_one">Add sensor widget</string>
-
-	<string name="device_configure_header_one">Add device widget</string>
 
 	<string name="configure_header_two">Choose settings for your widget</string>
 
