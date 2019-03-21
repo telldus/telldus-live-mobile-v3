@@ -46,6 +46,7 @@ android: &android-ubuntu
   script:
     - $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*
     - yarn install --quiet
+    - manage:translations-widget-android
     - cd android
     - ./buildGitlabRunner.sh
   only:
