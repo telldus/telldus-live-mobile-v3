@@ -22,7 +22,7 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import {
 	CachedImage,
@@ -44,6 +44,7 @@ type Props = {
 	accessible?: boolean,
 	info?: Object,
 	infoContainerStyle?: any,
+	isStatic?: boolean,
 };
 
 type DefaultProps = {
