@@ -28,7 +28,7 @@ const isEqual = require('react-fast-compare');
 
 import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
 
-import { getDeviceManufacturerInfo } from '../../../Actions/Devices';
+import { getDeviceManufacturerInfo, deviceZWaveInfo } from '../../../Actions/Devices';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import {
@@ -43,18 +43,14 @@ type Props = {
 	gatewayType: string,
 	gatewayName: string,
 	isGatewayActive: boolean,
+	zwaveInfo: Object,
 
 	screenProps: Object,
 	dispatch: Function,
 };
 
-type State = {
-	zwaveInfo: Object,
-};
-
-class OverviewTab extends View<Props, State> {
+class OverviewTab extends View<Props, null> {
 	props: Props;
-	state: State;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -76,15 +72,11 @@ class OverviewTab extends View<Props, State> {
 		super(props);
 
 		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
-
-		this.state = {
-			zwaveInfo: {},
-		};
 	}
 
 	componentDidMount() {
 		const { dispatch, device } = this.props;
-		const { nodeInfo } = device;
+		const { nodeInfo, id } = device;
 		if (nodeInfo) {
 			const {
 				manufacturerId,
@@ -95,13 +87,13 @@ class OverviewTab extends View<Props, State> {
 				.then((res: Object) => {
 					if (res && res.Name) {
 						const { Image, Name, Brand } = res;
-						this.setState({
-							zwaveInfo: {
-								Image,
-								Name,
-								Brand,
-							},
-						});
+						const payload = {
+							Image,
+							Name,
+							Brand,
+							deviceId: id,
+						};
+						dispatch(deviceZWaveInfo(payload));
 					}
 				});
 		}
@@ -112,16 +104,12 @@ class OverviewTab extends View<Props, State> {
 		const { currentScreen, appLayout } = screenPropsN;
 		if (currentScreen === 'Overview') {
 
-			if (!isEqual(this.state, nextState)) {
-				return true;
-			}
-
 			const { screenProps, gatewayName, isGatewayActive, device } = this.props;
 			if ((screenProps.appLayout.width !== appLayout.width) || (gatewayName !== gatewayNameN) || (isGatewayActive !== isGatewayActiveN)) {
 				return true;
 			}
 
-			if (!isEqual(device, deviceN)) {
+			if (!isEqual(deviceN, device)) {
 				return true;
 			}
 
@@ -160,11 +148,12 @@ class OverviewTab extends View<Props, State> {
 			H2: gatewayType,
 		};
 
+		const { zwaveInfo = {} } = device;
 		const {
 			Image,
 			Name,
 			Brand,
-		} = this.state.zwaveInfo;
+		} = zwaveInfo;
 		const locationDataZWave = {
 			image: Image,
 			H1: Name,
@@ -185,8 +174,8 @@ class OverviewTab extends View<Props, State> {
 					appLayout={appLayout}
 					isGatewayActive={isGatewayActive}
 					containerStyle={styles.actionDetails}/>
-				{Name && <LocationDetails {...locationDataZWave} style={styles.LocationDetail}/>}
-				<LocationDetails {...locationData} style={[styles.LocationDetail, {
+				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
+				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
 					marginBottom: styles.padding,
 				}]}/>
 			</ScrollView>
