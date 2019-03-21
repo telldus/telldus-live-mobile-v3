@@ -15,6 +15,11 @@ js/App/Translations/whitelist_en.json
 # Android
 android/app/src/main/assets/index.android.bundle
 android/app/src/main/assets/index.android.bundle.meta
+android/.project
+android/.settings
+android/app/.classpath
+android/app/.project
+android/app/.settings
 
 # Xcode
 #
@@ -58,3 +63,9 @@ android/app/libs
 
 # Bundle artifact
 *.jsbundle
+
+#yarn
+yarn-error.log
+
+#others
+package-lock.json
