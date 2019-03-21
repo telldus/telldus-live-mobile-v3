@@ -89,7 +89,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText, loadingText;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
     Switch switch_background;
@@ -163,16 +163,17 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             }
         });
 
-        loadingText = (TextView)findViewById(R.id.loadingText);
+        View infoView = (View)findViewById(R.id.infoView);
+        TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
         if (DeviceInfoMap.size() == 0) {
-            loadingText.setVisibility(View.VISIBLE);
-            loadingText.setText(message);
+            infoView.setVisibility(View.VISIBLE);
+            infoText.setText(message);
             screenCover.setVisibility(View.GONE);
         } else {
             widgetManager = AppWidgetManager.getInstance(this);
 
-            loadingText.setVisibility(View.GONE);
+            infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
             textTest = (TextView)findViewById(R.id.testText);

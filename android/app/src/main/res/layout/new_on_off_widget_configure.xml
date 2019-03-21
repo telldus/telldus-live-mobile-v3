@@ -91,18 +91,37 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/loadingText"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/infoView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_gravity="center|center"
                     android:gravity="center|center"
-                    android:textColor="@color/orange"/>
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:padding="15dp"
+                    android:background="@drawable/shape_low_radius">
+                    <TextView
+                        android:id="@+id/infoIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="info"
+                        android:textSize="40sp"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center"
+                        android:textColor="@color/brandSecondary"
+                        android:fontFamily="@font/telldusicons"/>
+                    <TextView
+                        android:id="@+id/infoText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_gravity="left|center"
+                        android:gravity="left|center"
+                        android:textColor="@color/gray"/>
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/screenCover"
                     android:layout_width="match_parent"

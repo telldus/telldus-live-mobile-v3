@@ -77,7 +77,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private Button btAdd, button_cancel;
     private View btSelectSensor, btSelectDisplayItem, screenCover, btSelectPollInterval;
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
-    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit, sensorRepeatIntervalLabel;
+    testText, sensorText, settingText, valueText, imgSensorType, imgSensorTypeEdit, sensorRepeatIntervalLabel;
     private AppWidgetManager widgetManager;
     private ProgressDialog pDialog;
     private PrefManager prefManager;
@@ -145,14 +145,15 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             }
         });
 
-        loadingText = (TextView)findViewById(R.id.loadingText);
+        View infoView = (View)findViewById(R.id.infoView);
+        TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
         if (sensorNameList == null) {
-            loadingText.setVisibility(View.VISIBLE);
-            loadingText.setText(message);
+            infoView.setVisibility(View.VISIBLE);
+            infoText.setText(message);
             screenCover.setVisibility(View.GONE);
         } else {
-            loadingText.setVisibility(View.GONE);
+            infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
             imgSensorTypeEdit = (TextView) findViewById(R.id.imgSensorTypeEdit);
