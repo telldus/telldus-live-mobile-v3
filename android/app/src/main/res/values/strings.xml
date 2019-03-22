@@ -1,4 +1,7 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+	xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
 	<!--**************************************************************-->
 	<!--**************************** NOTE ****************************-->
@@ -8,7 +11,7 @@
 	<!-- And should be defined inside repo 'live-shared-data' with the above name as intl 'id' but by replacing "_" with "." -->
 
 
-	<string name="app_name">Telldus Live! Mobile</string>
+	<string name="app_name" translatable="false">Telldus Live! Mobile</string>
 
 	<string name="reserved_widget_android_confirm">Confirm &amp; Save</string>
 	<string name="reserved_widget_android_dialogueBox_defaultNegativeText">Cancel</string>
