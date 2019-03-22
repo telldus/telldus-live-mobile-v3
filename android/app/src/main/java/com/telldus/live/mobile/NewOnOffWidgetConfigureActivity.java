@@ -358,7 +358,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             }
             @Override
             public void onError(ANError error) {
-                String message = getResources().getString(R.string.message_network_failure);
+                String message = getResources().getString(R.string.reserved_widget_android_error_networkFailed);
                 updateUI(message);
             }
         });
