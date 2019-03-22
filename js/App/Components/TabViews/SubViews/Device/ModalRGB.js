@@ -25,8 +25,14 @@ import React, { Fragment } from 'react';
 import { Modal, BackHandler, Text, Animated, PanResponder,
 	 TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import { connect } from 'react-redux';
 import Slider from 'react-native-slider';
 import { getPixelRGBA } from 'react-native-get-pixel';
+
+// Device actions that are shared by both Web and Mobile.
+import { actions } from 'live-shared-data';
+const { Devices } = actions;
+const { deviceSetStateRGB } = Devices;
 
 // Relative import
 import { NavigationHeader, IconTelldus, Poster, View } from '../../../../../BaseComponents';
@@ -35,6 +41,7 @@ import Theme from '../../../../Theme';
 type Props = {
 	isModelRGB?: boolean,
 	openModal: () => void,
+	device: Object,
 };
 
 type State = {
@@ -50,7 +57,7 @@ class ModalRGB extends View<Props, State> {
 
     state = {
     	sliderValue: 10,
-    	pixelColor: 'transparent',
+    	pixelColor: [255, 73, 51],
     	width: 1,
     	height: 1,
     };
@@ -76,8 +83,15 @@ class ModalRGB extends View<Props, State> {
 
 				return this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
 		  },
-		  onPanResponderRelease: (e, { vx, vy }) => this.animations.handlePosition.flattenOffset(),
+		  onPanResponderRelease: (e, { vx, vy }) => this.onRelease(),
 		}),
+	}
+
+	onRelease = () => {
+		this.animations.handlePosition.flattenOffset();
+		const { pixelColor } = this.state;
+		const { device } = this.props;
+		this.props.deviceSetStateRGB(device.id, pixelColor[0], pixelColor[1], pixelColor[2]);
 	}
 
 	lastHandlePosition = {
@@ -166,7 +180,7 @@ class ModalRGB extends View<Props, State> {
 	}
 
 	render() {
-    	const { isModelRGB } = this.props;
+		  const { isModelRGB } = this.props;
     	return (
     		<Modal
     			animationType="slide"
@@ -239,4 +253,14 @@ const styles = {
 	},
 };
 
-export default ModalRGB;
+
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		deviceSetStateRGB: (id: number, r: number, g: number, b: number) => {
+			dispatch(deviceSetStateRGB(id, r, g, b));
+		},
+	};
+}
+
+
+export default connect(null, mapDispatchToProps)(ModalRGB);
