@@ -60,7 +60,7 @@
                     android:id="@+id/testTextSensor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sensor_configure_header_one"
+                    android:text="@string/reserved_widget_android_sensor_configure_header_one"
                     android:textSize="33sp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="27sp"
@@ -70,7 +70,7 @@
                     android:id="@+id/chooseSettingSensor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/configure_header_two"
+                    android:text="@string/reserved_widget_android_configure_header_two"
                     android:textSize="22sp"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
@@ -169,7 +169,7 @@
                                 android:id="@+id/txtSensorName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/sensor_select"
+                                android:text="@string/reserved_widget_android_sensor_select"
                                 android:textSize="22sp"
                                 android:layout_gravity="center"
                                 android:textColor="@color/orange"/>
@@ -178,7 +178,7 @@
                                 android:id="@+id/txtSensorHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/sensor_tap_change_sensor"
+                                android:text="@string/reserved_widget_android_sensor_tap_change_sensor"
                                 android:textSize="12sp"
                                 android:layout_gravity="center"
                                 android:textColor="@color/darkGray"/>
@@ -245,7 +245,7 @@
                                 android:textSize="22sp"
                                 android:textColor="@color/orange"
                                 android:layout_gravity="center"
-                                android:text="@string/sensor_select_value"/>
+                                android:text="@string/reserved_widget_android_sensor_select_value"/>
 
                             <TextView
                                 android:id="@+id/txtSensorDataHint"
@@ -254,7 +254,7 @@
                                 android:textSize="12sp"
                                 android:textColor="@color/darkGray"
                                 android:layout_gravity="center"
-                                android:text="@string/sensor_tap_change_value"/>
+                                android:text="@string/reserved_widget_android_sensor_tap_change_value"/>
 
                         </LinearLayout>
 
@@ -281,7 +281,7 @@
                             android:id="@+id/switch_background"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_transparent"
+                            android:text="@string/reserved_widget_android_label_transparent"
                             android:textSize="14sp"
                             android:textColor="@color/gray"
                             android:theme="@style/SCBSwitch"/>
@@ -307,7 +307,7 @@
                             android:id="@+id/labelSelectPoll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_update_interval_1"
+                            android:text="@string/reserved_widget_android_label_update_interval_1"
                             android:textSize="14sp"
                             android:layout_gravity="center|left"
                             android:gravity="center|left"
@@ -345,7 +345,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/orangebutton"
-                            android:text="@string/confirm"/>
+                            android:text="@string/reserved_widget_android_confirm"/>
 
                         <Button
                             android:id="@+id/button_cancel"

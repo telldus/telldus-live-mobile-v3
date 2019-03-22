@@ -67,7 +67,7 @@
                     android:id="@+id/testText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/device_configure_header_one"
+                    android:text="@string/reserved_widget_android_device_configure_header_one"
                     android:textSize="33sp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="27sp"
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/configure_header_two"
+                    android:text="@string/reserved_widget_android_configure_header_two"
                     android:textSize="22sp"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
@@ -180,7 +180,7 @@
                                 android:id="@+id/txtDeviceName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/device_select"
+                                android:text="@string/reserved_widget_android_device_select"
                                 android:textSize="25sp"
                                 android:textColor="@color/orange"/>
 
@@ -188,7 +188,7 @@
                                 android:id="@+id/txtDeviceHint"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@string/device_tap_change_device"
+                                android:text="@string/reserved_widget_android_device_tap_change_device"
                                 android:textSize="15sp"
                                 android:textColor="@color/darkGray"/>
 
@@ -219,7 +219,7 @@
                             android:id="@+id/switch_background"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_transparent"
+                            android:text="@string/reserved_widget_android_label_transparent"
                             android:theme="@style/SCBSwitch"/>
 
                     </LinearLayout>
@@ -241,7 +241,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/orangebutton"
-                            android:text="@string/confirm"/>
+                            android:text="@string/reserved_widget_android_confirm"/>
 
                         <Button
                             android:id="@+id/btn_cancel"

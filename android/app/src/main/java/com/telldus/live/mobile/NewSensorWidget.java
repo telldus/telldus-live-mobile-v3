@@ -109,8 +109,8 @@ public class NewSensorWidget extends AppWidgetProvider {
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
 
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
-            String preScript = context.getResources().getString(R.string.message_user_logged_out_one);
-            String phraseTwo = context.getResources().getString(R.string.message_user_logged_out_two);
+            String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
+            String phraseTwo = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_two);
             view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
             view.setTextViewText(R.id.loggedOutInfoEmail, userId);
             view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
@@ -123,7 +123,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         Integer sensorId = sensorWidgetInfo.getSensorId();
         if (sensorId.intValue() == -1) {
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
-            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.message_sensor_not_found));
+            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_sensor_not_found));
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
 

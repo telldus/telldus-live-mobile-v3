@@ -197,7 +197,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             settingText.setTypeface(subtitleFont);
             settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             valueText.setTypeface(subtitleFont);
-            valueText.setText(getResources().getString(R.string.sensor_value_to_display)+":");
+            valueText.setText(getResources().getString(R.string.reserved_widget_android_sensor_value_to_display)+":");
             sensorText.setTypeface(subtitleFont);
             sensorText.setText(getResources().getString(R.string.reserved_widget_android_labelSensor)+":");
             btAdd.setTypeface(subtitleFont);
@@ -227,13 +227,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     if (id == null || id == 0) {
-                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_sensor_not_selected), Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.reserved_widget_android_message_sensor_not_selected), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
                     }
                     if (senValue == null) {
-                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.message_sensor_scale_not_selected), Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.reserved_widget_android_message_sensor_scale_not_selected), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
@@ -273,7 +273,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_sensor)
+                    builder.setTitle(R.string.reserved_widget_android_pick_sensor)
                         .setSingleChoiceItems(sensorNameList, selectedSensorIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -283,8 +283,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                     imgSensorTypeEdit.setVisibility(View.VISIBLE);
                                     imgSensorType.setVisibility(View.GONE);
 
-                                    sensorDataName.setText(R.string.sensor_select_value);
-                                    sensorDataHint.setText(R.string.sensor_tap_change_value);
+                                    sensorDataName.setText(R.string.reserved_widget_android_sensor_select_value);
+                                    sensorDataHint.setText(R.string.reserved_widget_android_sensor_tap_change_value);
 
                                     senValue = null;
                                     selectedSensorValueIndex = -1;
@@ -341,7 +341,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_sensor_data)
+                    builder.setTitle(R.string.reserved_widget_android_pick_sensor_data)
                         .setSingleChoiceItems(sensorDataList, selectedSensorValueIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -386,9 +386,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
 
             final CharSequence[] intervalOptions = {
-                getResources().getString(R.string.label_update_interval_1),
-                getResources().getString(R.string.label_update_interval_2),
-                getResources().getString(R.string.label_update_interval_3),
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
             };
 
             btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
@@ -423,7 +423,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
-                String message = getResources().getString(R.string.message_add_widget_no_device_3);
+                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
                 try {
                     JSONObject sensorData = new JSONObject(response.toString());
                     JsonsensorList = sensorData.getJSONArray("sensor");

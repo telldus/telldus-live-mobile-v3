@@ -267,7 +267,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
                             ,R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_device)
+                    builder.setTitle(R.string.reserved_widget_android_pick_device)
                         .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 selectedDeviceIndex = which;
@@ -310,7 +310,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
-                String message = getResources().getString(R.string.message_add_widget_no_device_2);
+                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_2);
                 try {
 
                     DevicesUtilities deviceUtils = new DevicesUtilities();
