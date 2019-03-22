@@ -131,6 +131,13 @@ public class NewAppWidget extends AppWidgetProvider {
         if (deviceId.intValue() == -1) {
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
             view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
+            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
+                    "info",
+                    ContextCompat.getColor(context, R.color.brightRed),
+                    80,
+                    95,
+                    65,
+                    context));
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
             return;
@@ -178,10 +185,13 @@ public class NewAppWidget extends AppWidgetProvider {
         views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
         if (hasBell && !showMoreActions) {
             views.setViewVisibility(R.id.bellCover,View.VISIBLE);
-            views.setTextViewText(R.id.bell, "bell");
-            views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.bell, "setBackgroundColor", Color.TRANSPARENT);
-            views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                "bell",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                80,
+                95,
+                65,
+                context));
 
             views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
@@ -201,17 +211,31 @@ public class NewAppWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.bellCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                 }
-                views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                    "bell",
+                    ContextCompat.getColor(context, R.color.white),
+                    80,
+                    95,
+                    65,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
                 if (state == null || !state.equals("4")) {
-                    views.setTextViewText(R.id.bell, "statusx");
-                    views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        80,
+                        95,
+                        65,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.bell, "statuscheck");
-                    views.setTextColor(R.id.bell, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.bell, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        80,
+                        95,
+                        65,
+                        context));
                 }
             }
 
@@ -221,10 +245,13 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasUp && !showMoreActions) {
             views.setViewVisibility(R.id.upCover, View.VISIBLE);
-            views.setTextViewText(R.id.uparrow, "up");
-            views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.uparrow, "setBackgroundColor", Color.TRANSPARENT);
-            views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                "up",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                80,
+                95,
+                65,
+                context));
 
             views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
 
@@ -244,17 +271,31 @@ public class NewAppWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.upCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                 }
-                views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                    "up",
+                    ContextCompat.getColor(context, R.color.white),
+                    80,
+                    95,
+                    65,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
                 if (state != null && state.equals("128")) {
-                    views.setTextViewText(R.id.uparrow, "statuscheck");
-                    views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        80,
+                        95,
+                        65,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.uparrow, "statusx");
-                    views.setTextColor(R.id.uparrow, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.uparrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        80,
+                        95,
+                        65,
+                        context));
                 }
             }
             renderedButtonsCount++;
@@ -263,10 +304,13 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasDown && !showMoreActions) {
             views.setViewVisibility(R.id.downCover, View.VISIBLE);
-            views.setTextViewText(R.id.downarrow, "down");
-            views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.downarrow, "setBackgroundColor", Color.TRANSPARENT);
-            views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                "down",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                80,
+                95,
+                65,
+                context));
 
             views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
@@ -286,17 +330,31 @@ public class NewAppWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.downCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                 }
-                views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                    "down",
+                    ContextCompat.getColor(context, R.color.white),
+                    80,
+                    95,
+                    65,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
                 if (state != null && state.equals("256")) {
-                    views.setTextViewText(R.id.downarrow, "statuscheck");
-                    views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        80,
+                        95,
+                        65,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.downarrow, "statusx");
-                    views.setTextColor(R.id.downarrow, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.downarrow, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        80,
+                        95,
+                        65,
+                        context));
                 }
             }
             renderedButtonsCount++;
@@ -305,10 +363,13 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasStop && !showMoreActions) {
             views.setViewVisibility(R.id.stopCover, View.VISIBLE);
-            views.setTextViewText(R.id.stopicon, "stop");
-            views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.brandPrimary));
-            views.setInt(R.id.stopicon, "setBackgroundColor", Color.TRANSPARENT);
-            views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                "stop",
+                ContextCompat.getColor(context, R.color.brandPrimary),
+                80,
+                95,
+                65,
+                context));
 
             views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
@@ -328,17 +389,31 @@ public class NewAppWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.stopCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandPrimary));
                 }
-                views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                    "stop",
+                    ContextCompat.getColor(context, R.color.white),
+                    80,
+                    95,
+                    65,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
                 if (state != null && state.equals("512")) {
-                    views.setTextViewText(R.id.stopicon, "statuscheck");
-                    views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        80,
+                        95,
+                        65,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.stopicon, "statusx");
-                    views.setTextColor(R.id.stopicon, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.stopicon, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        80,
+                        95,
+                        65,
+                        context));
                 }
             }
             renderedButtonsCount++;
@@ -350,9 +425,9 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                 offActionIcon,
                 ContextCompat.getColor(context, R.color.brandPrimary),
-                140,
+                80,
                 95,
-                95,
+                65,
                 context));
 
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
@@ -376,9 +451,9 @@ public class NewAppWidget extends AppWidgetProvider {
                 views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                     offActionIcon,
                     ContextCompat.getColor(context, R.color.white),
-                    140,
+                    80,
                     95,
-                    95,
+                    65,
                     context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
@@ -386,17 +461,17 @@ public class NewAppWidget extends AppWidgetProvider {
                     views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                         "statuscheck",
                         ContextCompat.getColor(context, R.color.widgetGreen),
-                        140,
+                        80,
                         95,
-                        95,
+                        65,
                         context));
                 } else {
                     views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                         "statusx",
                         ContextCompat.getColor(context, R.color.widgetRed),
-                        140,
+                        80,
                         95,
-                        95,
+                        65,
                         context));
                 }
             }
@@ -415,8 +490,13 @@ public class NewAppWidget extends AppWidgetProvider {
             showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
-                views.setTextViewText(R.id.dimmer25, "dim25");
-                views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setImageViewBitmap(R.id.dimmer25, CommonUtilities.buildTelldusIcon(
+                    "dim25",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    80,
+                    35,
+                    65,
+                    context));
                 views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
@@ -435,7 +515,13 @@ public class NewAppWidget extends AppWidgetProvider {
                     } else {
                         views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                     }
-                    views.setTextColor(R.id.dimmer25, ContextCompat.getColor(context, R.color.white));
+                    views.setImageViewBitmap(R.id.dimmer25, CommonUtilities.buildTelldusIcon(
+                        "dim25",
+                        ContextCompat.getColor(context, R.color.white),
+                        80,
+                        35,
+                        65,
+                        context));
                     views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -449,15 +535,23 @@ public class NewAppWidget extends AppWidgetProvider {
                         if (checkpoint == 25) {
                             views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
-                            views.setTextViewText(R.id.iconCheck25, "statuscheck");
-                            views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetGreen));
-                            views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                            views.setImageViewBitmap(R.id.iconCheck25, CommonUtilities.buildTelldusIcon(
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
+                                80,
+                                95,
+                                65,
+                                context));
                         } else {
                             views.setViewVisibility(R.id.iconCheck25, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer25CoverLinear, View.GONE);
-                            views.setTextViewText(R.id.iconCheck25, "statusx");
-                            views.setTextColor(R.id.iconCheck25, ContextCompat.getColor(context, R.color.widgetRed));
-                            views.setTextViewTextSize(R.id.iconCheck25, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                            views.setImageViewBitmap(R.id.iconCheck25, CommonUtilities.buildTelldusIcon(
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                80,
+                                95,
+                                65,
+                                context));
                         }
                     }
                 }
@@ -467,8 +561,13 @@ public class NewAppWidget extends AppWidgetProvider {
             showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
-                views.setTextViewText(R.id.dimmer50, "dim");
-                views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setImageViewBitmap(R.id.dimmer50, CommonUtilities.buildTelldusIcon(
+                    "dim",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    80,
+                    35,
+                    65,
+                    context));
                 views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
@@ -483,7 +582,13 @@ public class NewAppWidget extends AppWidgetProvider {
                     } else {
                         views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                     }
-                    views.setTextColor(R.id.dimmer50, ContextCompat.getColor(context, R.color.white));
+                    views.setImageViewBitmap(R.id.dimmer50, CommonUtilities.buildTelldusIcon(
+                        "dim",
+                        ContextCompat.getColor(context, R.color.white),
+                        80,
+                        35,
+                        65,
+                        context));
                     views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -496,15 +601,23 @@ public class NewAppWidget extends AppWidgetProvider {
                         if (checkpoint == 50) {
                             views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
-                            views.setTextViewText(R.id.iconCheck50, "statuscheck");
-                            views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetGreen));
-                            views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                            views.setImageViewBitmap(R.id.iconCheck50, CommonUtilities.buildTelldusIcon(
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
+                                80,
+                                95,
+                                65,
+                                context));
                         } else {
                             views.setViewVisibility(R.id.iconCheck50, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer50CoverLinear, View.GONE);
-                            views.setTextViewText(R.id.iconCheck50, "statusx");
-                            views.setTextColor(R.id.iconCheck50, ContextCompat.getColor(context, R.color.widgetRed));
-                            views.setTextViewTextSize(R.id.iconCheck50, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                            views.setImageViewBitmap(R.id.iconCheck50, CommonUtilities.buildTelldusIcon(
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                80,
+                                95,
+                                65,
+                                context));
                         }
                     }
                 }
@@ -514,8 +627,13 @@ public class NewAppWidget extends AppWidgetProvider {
             showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
-                views.setTextViewText(R.id.dimmer75, "dim75");
-                views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setImageViewBitmap(R.id.dimmer75, CommonUtilities.buildTelldusIcon(
+                    "dim75",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    80,
+                    35,
+                    65,
+                    context));
                 views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
                 views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
@@ -530,7 +648,13 @@ public class NewAppWidget extends AppWidgetProvider {
                     } else {
                         views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                     }
-                    views.setTextColor(R.id.dimmer75, ContextCompat.getColor(context, R.color.white));
+                    views.setImageViewBitmap(R.id.dimmer75, CommonUtilities.buildTelldusIcon(
+                        "dim75",
+                        ContextCompat.getColor(context, R.color.white),
+                        80,
+                        35,
+                        65,
+                        context));
                     views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.white));
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -543,12 +667,23 @@ public class NewAppWidget extends AppWidgetProvider {
                         if (checkpoint == 75) {
                             views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
-                            views.setTextViewText(R.id.iconCheck75, "statuscheck");
-                            views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetGreen));
-                            views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                            views.setImageViewBitmap(R.id.iconCheck75, CommonUtilities.buildTelldusIcon(
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
+                                80,
+                                95,
+                                65,
+                                context));
                         } else {
                             views.setViewVisibility(R.id.iconCheck75, View.VISIBLE);
                             views.setViewVisibility(R.id.dimmer75CoverLinear, View.GONE);
+                            views.setImageViewBitmap(R.id.iconCheck75, CommonUtilities.buildTelldusIcon(
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                80,
+                                95,
+                                65,
+                                context));
                             views.setTextViewText(R.id.iconCheck75, "statusx");
                             views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetRed));
                             views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
@@ -562,10 +697,13 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasOn && !showMoreActions) {
             views.setViewVisibility(R.id.onCover, View.VISIBLE);
-            views.setTextViewText(R.id.iconOn, onActionIcon);
-            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
-            views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                onActionIcon,
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                80,
+                95,
+                65,
+                context));
 
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
@@ -586,17 +724,31 @@ public class NewAppWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.onCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
                 }
-                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                    onActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    80,
+                    95,
+                    65,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
                 if (state != null && state.equals("1")) {
-                    views.setTextViewText(R.id.iconOn, "statuscheck");
-                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        80,
+                        95,
+                        65,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.iconOn, "statusx");
-                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("22"));
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        80,
+                        95,
+                        65,
+                        context));
                 }
             }
             renderedButtonsCount++;
@@ -606,6 +758,13 @@ public class NewAppWidget extends AppWidgetProvider {
         if (renderedButtonsCount == 4 && buttonsCount > 5) {
             views.setViewVisibility(R.id.moreActionsCover, View.VISIBLE);
             views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            views.setImageViewBitmap(R.id.moreActions, CommonUtilities.buildTelldusIcon(
+                "overflow",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                80,
+                95,
+                65,
+                context));
 
             views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
         }

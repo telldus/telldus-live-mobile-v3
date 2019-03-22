@@ -31,15 +31,11 @@
         android:gravity="center|center"
         android:visibility="gone"
         android:background="@drawable/shape_right_rounded_corner">
-        <TextView
+        <ImageView
             android:id="@+id/moreActions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="26sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center|center"
-            android:gravity="center|center"
-            android:fontFamily="@font/telldusicons"
-            android:text="overflow"
-            android:textColor="@color/brandSecondary"/>
+            android:gravity="center|center"/>
     </LinearLayout>
 </LinearLayout>

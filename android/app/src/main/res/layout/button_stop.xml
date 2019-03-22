@@ -14,13 +14,10 @@
     android:layout_marginLeft="1dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="5dp">
-    <TextView
+    <ImageView
         android:id="@+id/stopicon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="26sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center|center"
-        android:gravity="center|center"
-        android:fontFamily="@font/telldusicons"
-        android:textColor="@color/white"/>
+        android:gravity="center|center"/>
 </LinearLayout>

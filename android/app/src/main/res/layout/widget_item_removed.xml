@@ -12,15 +12,12 @@
         android:layout_gravity="center|center"
         android:gravity="center"
         android:padding="5dp">
-        <TextView
+        <ImageView
             android:id="@+id/infoIcon"
-            android:text="info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="28sp"
-            android:gravity="center"
-            android:textColor="@color/brightRed"
-            android:fontFamily="@font/telldusicons"/>
+            android:layout_gravity="center|center"
+            android:gravity="center|center"/>
         <TextView
             android:id="@+id/widgetItemRemovedInfo"
             android:layout_width="wrap_content"

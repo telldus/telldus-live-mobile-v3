@@ -173,7 +173,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         Boolean showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasBell) {
             View bellCover = (View) findViewById(R.id.bellCover);
-            TextView bellText = (TextView)findViewById(R.id.bell);
+            ImageView bellText = (ImageView)findViewById(R.id.bell);
             bellCover.setVisibility(View.VISIBLE);
             bellCover.setElevation(5f);
             LayoutParams layoutParamsB = bellCover.getLayoutParams();
@@ -183,10 +183,13 @@ public class DevicesGroupDialogueActivity extends Activity {
             ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) bellCover.getLayoutParams();
             marginParams.setMargins(8, 8, 8, 8);
             bellCover.requestLayout();
-            bellText.setText("bell");
-            bellText.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-            bellText.setBackgroundColor(Color.TRANSPARENT);
-            bellText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                "bell",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                160,
+                95,
+                95,
+                context));
             bellCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -203,17 +206,31 @@ public class DevicesGroupDialogueActivity extends Activity {
             bellCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
                 bellCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                bellText.setTextColor(ContextCompat.getColor(context, R.color.white));
+                bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "bell",
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
                 if (state == null || !state.equals("4")) {
-                    bellText.setText("statusx");
-                    bellText.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                    bellText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        95,
+                        95,
+                        context));
                 } else {
-                    bellText.setText("statuscheck");
-                    bellText.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                    bellText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    bellText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        95,
+                        95,
+                        context));
                 }
             }
 
@@ -223,13 +240,16 @@ public class DevicesGroupDialogueActivity extends Activity {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasUp) {
             View upCover = (View) findViewById(R.id.upCover);
-            TextView upText = (TextView)findViewById(R.id.uparrow);
+            ImageView upText = (ImageView)findViewById(R.id.uparrow);
             upCover.setVisibility(View.VISIBLE);
             upCover.setElevation(5f);
-            upText.setText("up");
-            upText.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-            upText.setBackgroundColor(Color.TRANSPARENT);
-            upText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                "up",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                160,
+                95,
+                95,
+                context));
 
             LayoutParams layoutParamsB = upCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -254,17 +274,31 @@ public class DevicesGroupDialogueActivity extends Activity {
             upCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
                 upCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                upText.setTextColor(ContextCompat.getColor(context, R.color.white));
+                upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "up",
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
                 if (state != null && state.equals("128")) {
-                    upText.setText("statuscheck");
-                    upText.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                    upText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        95,
+                        95,
+                        context));
                 } else {
-                    upText.setText("statusx");
-                    upText.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                    upText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    upText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        95,
+                        95,
+                        context));
                 }
             }
 
@@ -274,13 +308,16 @@ public class DevicesGroupDialogueActivity extends Activity {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasDown) {
             View downCover = (View) findViewById(R.id.downCover);
-            TextView downText = (TextView)findViewById(R.id.downarrow);
+            ImageView downText = (ImageView)findViewById(R.id.downarrow);
             downCover.setVisibility(View.VISIBLE);
             downCover.setElevation(5f);
-            downText.setText("down");
-            downText.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-            downText.setBackgroundColor(Color.TRANSPARENT);
-            downText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                "down",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                160,
+                95,
+                95,
+                context));
 
             LayoutParams layoutParamsB = downCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -305,17 +342,31 @@ public class DevicesGroupDialogueActivity extends Activity {
             downCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
                 downCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                downText.setTextColor(ContextCompat.getColor(context, R.color.white));
+                downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "down",
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
                 if (state != null && state.equals("256")) {
-                    downText.setText("statuscheck");
-                    downText.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                    downText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        95,
+                        95,
+                        context));
                 } else {
-                    downText.setText("statusx");
-                    downText.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                    downText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    downText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        95,
+                        95,
+                        context));
                 }
             }
 
@@ -325,13 +376,16 @@ public class DevicesGroupDialogueActivity extends Activity {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasStop) {
             View stopCover = (View) findViewById(R.id.stopCover);
-            TextView stopText = (TextView)findViewById(R.id.stopicon);
+            ImageView stopText = (ImageView)findViewById(R.id.stopicon);
             stopCover.setVisibility(View.VISIBLE);
             stopCover.setElevation(5f);
-            stopText.setText("stop");
-            stopText.setTextColor(ContextCompat.getColor(context, R.color.brandPrimary));
-            stopText.setBackgroundColor(Color.TRANSPARENT);
-            stopText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                "stop",
+                ContextCompat.getColor(context, R.color.brandPrimary),
+                160,
+                95,
+                95,
+                context));
 
             LayoutParams layoutParamsB = stopCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -356,17 +410,31 @@ public class DevicesGroupDialogueActivity extends Activity {
             stopCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
                 stopCover.setBackgroundResource(R.drawable.button_background_primary_fill);
-                stopText.setTextColor(ContextCompat.getColor(context, R.color.white));
+                stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "stop",
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
                 if (state != null && state.equals("512")) {
-                    stopText.setText("statuscheck");
-                    stopText.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                    stopText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        95,
+                        95,
+                        context));
                 } else {
-                    stopText.setText("statusx");
-                    stopText.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                    stopText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    stopText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        95,
+                        95,
+                        context));
                 }
             }
 
@@ -443,9 +511,9 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasDim) {
-            TextView iconCheck25 = (TextView) findViewById(R.id.iconCheck25);
-            TextView iconCheck50 = (TextView) findViewById(R.id.iconCheck50);
-            TextView iconCheck75 = (TextView) findViewById(R.id.iconCheck75);
+            ImageView iconCheck25 = (ImageView) findViewById(R.id.iconCheck25);
+            ImageView iconCheck50 = (ImageView) findViewById(R.id.iconCheck50);
+            ImageView iconCheck75 = (ImageView) findViewById(R.id.iconCheck75);
             View dimmer25CoverLinear = (View)findViewById(R.id.dimmer25CoverLinear);
             View dimmer50CoverLinear = (View)findViewById(R.id.dimmer50CoverLinear);
             View dimmer75CoverLinear = (View)findViewById(R.id.dimmer75CoverLinear);
@@ -458,14 +526,18 @@ public class DevicesGroupDialogueActivity extends Activity {
 
             // "25%" dimmer button
                 View dimmer25Cover = (View) findViewById(R.id.dimmer25Cover);
-                TextView dimmer25 = (TextView)findViewById(R.id.dimmer25);
+                ImageView dimmer25 = (ImageView)findViewById(R.id.dimmer25);
                 TextView txtDimmer25 = (TextView)findViewById(R.id.txtDimmer25);
                 dimmer25Cover.setVisibility(View.VISIBLE);
                 dimmer25Cover.setElevation(5f);
-                dimmer25.setText("dim25");
-                dimmer25.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
+                dimmer25.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "dim25",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    35,
+                    95,
+                    context));
                 txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-                dimmer25.setBackgroundColor(Color.TRANSPARENT);
 
                 LayoutParams layoutParamsB = dimmer25Cover.getLayoutParams();
                 layoutParamsB.width = 80;
@@ -492,7 +564,13 @@ public class DevicesGroupDialogueActivity extends Activity {
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
                     dimmer25Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                    dimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
+                    dimmer25.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "dim25",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        35,
+                        95,
+                        context));
                     txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -506,15 +584,23 @@ public class DevicesGroupDialogueActivity extends Activity {
                         if (checkpoint == 25) {
                             iconCheck25.setVisibility(View.VISIBLE);
                             dimmer25CoverLinear.setVisibility(View.GONE);
-                            iconCheck25.setText("statuscheck");
-                            iconCheck25.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                            iconCheck25.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                            iconCheck25.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
+                                160,
+                                95,
+                                95,
+                                context));
                         } else {
                             iconCheck25.setVisibility(View.VISIBLE);
                             dimmer25CoverLinear.setVisibility(View.GONE);
-                            iconCheck25.setText("statusx");
-                            iconCheck25.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                            iconCheck25.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                            iconCheck25.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                160,
+                                95,
+                                95,
+                                context));
                         }
                     }
                 }
@@ -522,14 +608,18 @@ public class DevicesGroupDialogueActivity extends Activity {
 
             // "50%" dimmer button
                 View dimmer50Cover = (View) findViewById(R.id.dimmer50Cover);
-                TextView dimmer50 = (TextView)findViewById(R.id.dimmer50);
+                ImageView dimmer50 = (ImageView)findViewById(R.id.dimmer50);
                 TextView txtDimmer50 = (TextView)findViewById(R.id.txtDimmer50);
                 dimmer50Cover.setVisibility(View.VISIBLE);
                 dimmer50Cover.setElevation(5f);
-                dimmer50.setText("dim");
-                dimmer50.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
+                dimmer50.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "dim",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    35,
+                    95,
+                    context));
                 txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-                dimmer50.setBackgroundColor(Color.TRANSPARENT);
 
                 layoutParamsB = dimmer50Cover.getLayoutParams();
                 layoutParamsB.width = 80;
@@ -555,7 +645,13 @@ public class DevicesGroupDialogueActivity extends Activity {
                 dimmer50Cover.setBackgroundResource(R.drawable.button_background);
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
                     dimmer50Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                    dimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
+                    dimmer50.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "dim",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        35,
+                        95,
+                        context));
                     txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -568,15 +664,23 @@ public class DevicesGroupDialogueActivity extends Activity {
                         if (checkpoint == 50) {
                             iconCheck50.setVisibility(View.VISIBLE);
                             dimmer50CoverLinear.setVisibility(View.GONE);
-                            iconCheck50.setText("statuscheck");
-                            iconCheck50.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                            iconCheck50.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                            iconCheck50.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
+                                160,
+                                95,
+                                95,
+                                context));
                         } else {
                             iconCheck50.setVisibility(View.VISIBLE);
                             dimmer50CoverLinear.setVisibility(View.GONE);
-                            iconCheck50.setText("statusx");
-                            iconCheck50.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                            iconCheck50.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                            iconCheck50.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                160,
+                                95,
+                                95,
+                                context));
                         }
                     }
                 }
@@ -584,14 +688,18 @@ public class DevicesGroupDialogueActivity extends Activity {
 
             // "75%" dimmer button
                 View dimmer75Cover = (View) findViewById(R.id.dimmer75Cover);
-                TextView dimmer75 = (TextView)findViewById(R.id.dimmer75);
+                ImageView dimmer75 = (ImageView)findViewById(R.id.dimmer75);
                 TextView txtDimmer75 = (TextView)findViewById(R.id.txtDimmer75);
                 dimmer75Cover.setVisibility(View.VISIBLE);
                 dimmer75Cover.setElevation(5f);
-                dimmer75.setText("dim75");
-                dimmer75.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
+                dimmer75.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    "dim75",
+                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    160,
+                    35,
+                    95,
+                    context));
                 txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-                dimmer75.setBackgroundColor(Color.TRANSPARENT);
 
                 layoutParamsB = dimmer75Cover.getLayoutParams();
                 layoutParamsB.width = 80;
@@ -617,7 +725,13 @@ public class DevicesGroupDialogueActivity extends Activity {
                 dimmer75Cover.setBackgroundResource(R.drawable.button_background);
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
                     dimmer75Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                    dimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
+                    dimmer75.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "dim75",
+                        ContextCompat.getColor(context, R.color.white),
+                        160,
+                        35,
+                        95,
+                        context));
                     txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
@@ -630,15 +744,23 @@ public class DevicesGroupDialogueActivity extends Activity {
                         if (checkpoint == 75) {
                             iconCheck75.setVisibility(View.VISIBLE);
                             dimmer75CoverLinear.setVisibility(View.GONE);
-                            iconCheck75.setText("statuscheck");
-                            iconCheck75.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                            iconCheck75.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                            iconCheck75.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                                "statuscheck",
+                                ContextCompat.getColor(context, R.color.widgetGreen),
+                                160,
+                                95,
+                                95,
+                                context));
                         } else {
                             iconCheck75.setVisibility(View.VISIBLE);
                             dimmer75CoverLinear.setVisibility(View.GONE);
-                            iconCheck75.setText("statusx");
-                            iconCheck75.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                            iconCheck75.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                            iconCheck75.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                                "statusx",
+                                ContextCompat.getColor(context, R.color.widgetRed),
+                                160,
+                                95,
+                                95,
+                                context));;
                         }
                     }
                 }
@@ -648,13 +770,16 @@ public class DevicesGroupDialogueActivity extends Activity {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasOn) {
             View onCover = (View) findViewById(R.id.onCover);
-            TextView onText = (TextView)findViewById(R.id.iconOn);
+            ImageView onText = (ImageView)findViewById(R.id.iconOn);
             onCover.setVisibility(View.VISIBLE);
             onCover.setElevation(5f);
-            onText.setText(onActionIcon);
-            onText.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-            onText.setBackgroundColor(Color.TRANSPARENT);
-            onText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                onActionIcon,
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                160,
+                95,
+                95,
+                context));
 
             LayoutParams layoutParamsB = onCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -680,17 +805,31 @@ public class DevicesGroupDialogueActivity extends Activity {
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
                 onCover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                onText.setTextColor(ContextCompat.getColor(context, R.color.white));
+                onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    onActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
                 if (state != null && state.equals("1")) {
-                    onText.setText("statuscheck");
-                    onText.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                    onText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        95,
+                        95,
+                        context));
                 } else {
-                    onText.setText("statusx");
-                    onText.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                    onText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    onText.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        95,
+                        95,
+                        context));
                 }
             }
             renderedButtonsCount++;

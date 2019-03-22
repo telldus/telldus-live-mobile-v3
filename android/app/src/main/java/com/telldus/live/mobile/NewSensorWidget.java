@@ -61,6 +61,7 @@ import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
+import com.telldus.live.mobile.Utility.CommonUtilities;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -124,6 +125,13 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (sensorId.intValue() == -1) {
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
             view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_sensor_not_found));
+            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
+                    "info",
+                    ContextCompat.getColor(context, R.color.brightRed),
+                    80,
+                    95,
+                    65,
+                    context));
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
@@ -166,7 +174,13 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
 
-        view.setTextViewText(R.id.iconSensor, sensorIcon);
+        view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
+                sensorIcon,
+                ContextCompat.getColor(context, R.color.white),
+                50,
+                90,
+                60,
+                context));
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
         view.setTextViewText(R.id.txtSensorValue, formattedValue);

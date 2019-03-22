@@ -14,16 +14,12 @@
     android:layout_marginLeft="1dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="5dp">
-    <TextView
+    <ImageView
         android:id="@+id/iconCheck25"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="17sp"
-        android:text="statuscheck"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center|center"
         android:gravity="center|center"
-        android:fontFamily="@font/telldusicons"
-        android:textColor="@color/widgetGreen"
         android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/dimmer25CoverLinear"
@@ -32,17 +28,13 @@
         android:layout_gravity="center|center"
         android:gravity="center|center"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/dimmer25"
-            android:layout_width="wrap_content"
-            android:layout_height="16sp"
-            android:textSize="26sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:fontFamily="@font/telldusicons"
-            android:textColor="@color/white"
-            android:background="@android:color/transparent"
-            android:layout_marginTop="-5dp"/>
+    <ImageView
+        android:id="@+id/dimmer25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|center"
+        android:gravity="center|center"
+        android:layout_marginTop="-2dp"/>
         <TextView
             android:id="@+id/txtDimmer25"
             android:layout_width="wrap_content"
@@ -53,6 +45,7 @@
             android:layout_gravity="center"
             android:textColor="@color/orange"
             android:textStyle="bold"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:layout_marginTop="-4dp"/>
     </LinearLayout>
 </FrameLayout>
