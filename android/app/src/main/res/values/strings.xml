@@ -1,4 +1,13 @@
 <resources>
+
+	<!--**************************************************************-->
+	<!--**************************** NOTE ****************************-->
+	<!--**************************************************************-->
+	<!-- All strings that need to be localised, should prepend 'reserved_widget_android' to it's name
+		Eg: <string name="reserved_widget_android_unknown">Unknown</string> -->
+	<!-- And should be defined inside repo 'live-shared-data' with the above name as intl 'id' but by replacing "_" with "." -->
+
+
 	<string name="app_name">Telldus Live! Mobile</string>
 	<string name="add_widget">Add widget</string>
 
