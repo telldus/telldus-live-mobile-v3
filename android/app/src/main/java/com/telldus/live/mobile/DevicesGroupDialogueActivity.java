@@ -29,6 +29,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.content.Context;
 import android.content.Intent;
 import android.appwidget.AppWidgetManager;
@@ -51,6 +52,7 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.CommonUtilities;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -374,13 +376,16 @@ public class DevicesGroupDialogueActivity extends Activity {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasOff) {
             View offCover = (View) findViewById(R.id.offCover);
-            TextView offText = (TextView)findViewById(R.id.iconOff);
+            ImageView offIcon = (ImageView)findViewById(R.id.iconOff);
             offCover.setVisibility(View.VISIBLE);
             offCover.setElevation(5f);
-            offText.setText(offActionIcon);
-            offText.setTextColor(ContextCompat.getColor(context, R.color.brandPrimary));
-            offText.setBackgroundColor(Color.TRANSPARENT);
-            offText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                offActionIcon,
+                ContextCompat.getColor(context, R.color.brandPrimary),
+                160,
+                95,
+                95,
+                context));
 
             LayoutParams layoutParamsB = offCover.getLayoutParams();
             layoutParamsB.width = 80;
@@ -405,17 +410,31 @@ public class DevicesGroupDialogueActivity extends Activity {
             offCover.setBackgroundResource(R.drawable.button_background);
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
                 offCover.setBackgroundResource(R.drawable.button_background_primary_fill);
-                offText.setTextColor(ContextCompat.getColor(context, R.color.white));
+                offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                    offActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
                 if (state != null && state.equals("2")) {
-                    offText.setText("statuscheck");
-                    offText.setTextColor(ContextCompat.getColor(context, R.color.widgetGreen));
-                    offText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        95,
+                        95,
+                        context));
                 } else {
-                    offText.setText("statusx");
-                    offText.setTextColor(ContextCompat.getColor(context, R.color.widgetRed));
-                    offText.setTextSize(COMPLEX_UNIT_SP, Float.parseFloat("23"));
+                    offIcon.setImageBitmap(CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        95,
+                        95,
+                        context));
                 }
             }
 

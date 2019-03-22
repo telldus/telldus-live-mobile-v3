@@ -25,9 +25,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -49,6 +48,7 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
+import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 
@@ -212,27 +212,44 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (hasOff) {
             views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
             views.setViewVisibility(R.id.offCover, View.VISIBLE);
-            views.setTextViewText(R.id.iconOff, offActionIcon);
-            views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                offActionIcon,
+                ContextCompat.getColor(context, R.color.brandPrimary),
+                160,
+                85,
+                85,
+                context));
 
             views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
-            views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("2")) {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
-                views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                    offActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    85,
+                    85,
+                    context));
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
                 if (state == null || !state.equals("2")) {
-                    views.setTextViewText(R.id.iconOff, "statusx");
-                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        85,
+                        85,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.iconOff, "statuscheck");
-                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        85,
+                        85,
+                        context));
                 }
             }
         }

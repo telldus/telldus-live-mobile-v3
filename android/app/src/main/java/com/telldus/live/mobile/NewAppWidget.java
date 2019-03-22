@@ -52,6 +52,7 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.CommonUtilities;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 /**
@@ -346,10 +347,13 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasOff && !showMoreActions) {
             views.setViewVisibility(R.id.offCover, View.VISIBLE);
-            views.setTextViewText(R.id.iconOff, offActionIcon);
-            views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
-            views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
-            views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                offActionIcon,
+                ContextCompat.getColor(context, R.color.brandPrimary),
+                140,
+                95,
+                95,
+                context));
 
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
@@ -369,17 +373,31 @@ public class NewAppWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandPrimary));
                 }
-                views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
+                views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                    offActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    140,
+                    95,
+                    95,
+                    context));
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
                 if (state != null && state.equals("2")) {
-                    views.setTextViewText(R.id.iconOff, "statuscheck");
-                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("19"));
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        140,
+                        95,
+                        95,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.iconOff, "statusx");
-                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("19"));
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        140,
+                        95,
+                        95,
+                        context));
                 }
             }
             renderedButtonsCount++;
