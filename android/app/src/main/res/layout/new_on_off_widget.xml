@@ -24,7 +24,7 @@
                 android:id="@+id/txtWidgetTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_unknown"
+                android:text="@string/reserved_widget_android_unknown"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:gravity="center"

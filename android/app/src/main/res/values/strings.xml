@@ -3,13 +3,13 @@
 	<string name="add_widget">Add widget</string>
 
 	<string name="confirm">Confirm &amp; Save</string>
-	<string name="cancel">Cancel</string>
+	<string name="reserved_widget_android_dialogueBox_defaultNegativeText">Cancel</string>
 
-	<string name="text_unknown">Unknown</string>
+	<string name="reserved_widget_android_unknown">Unknown</string>
 
 	<string name="widget_info_device_2">Device 1-2 btn</string>
 	<string name="widget_info_device_3">Device 3+ btn</string>
-	<string name="widget_info_sensor">Sensor</string>
+	<string name="reserved_widget_android_labelSensor">Sensor</string>
 
 	<string name="pick_device">Select a device</string>
 	<string name="device_select">Select device</string>
@@ -29,13 +29,13 @@
 
 	<string name="reserved_widget_android_toast_deviceActionError">Action Currently Unavailable</string>
 
-	<string name="label_device">Device</string>
-	<string name="label_settings">Settings</string>
+	<string name="reserved_widget_android_labelDevice">Device</string>
+	<string name="reserved_widget_android_settings">Settings</string>
 	<string name="label_transparent">Transparent Background</string>
 	<string name="label_update_interval_1">Update every 10 minutes</string>
 	<string name="label_update_interval_2">Update every 30 minutes</string>
 	<string name="label_update_interval_3">Update every 1 hour</string>
-	<string name="label_loading">Loading</string>
+	<string name="reserved_widget_android_loading">Loading</string>
 
 	<string name="message_user_logged_out_one">This widget was added for</string>
 	<string name="message_user_logged_out_two">Please log in to that account to view this widget.</string>

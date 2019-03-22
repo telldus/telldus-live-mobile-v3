@@ -149,7 +149,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.new_on_off_widget_configure);
 
-        String message = getResources().getString(R.string.label_loading)+"...";
+        String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
         updateUI(message);
     }
 
@@ -295,8 +295,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceName.setTypeface(subtitleFont);
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);
-            deviceText.setText(getResources().getString(R.string.label_device)+":");
-            settingText.setText(getResources().getString(R.string.label_settings)+":");
+            deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
+            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             settingText.setTypeface(subtitleFont);
             btAdd.setTypeface(subtitleFont);
             btnCan.setTypeface(subtitleFont);

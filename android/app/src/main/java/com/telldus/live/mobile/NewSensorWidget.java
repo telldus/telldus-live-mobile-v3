@@ -286,7 +286,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                         String sensorName = responseObject.optString("name");
                         if (sensorName == null || sensorName.equals("null")) {
-                            sensorName = context.getResources().getString(R.string.text_unknown);
+                            sensorName = context.getResources().getString(R.string.reserved_widget_android_unknown);
                         }
 
                         for (int j = 0; j < sensorData.length(); j++) {

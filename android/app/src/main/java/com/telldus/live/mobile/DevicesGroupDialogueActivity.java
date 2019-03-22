@@ -104,7 +104,7 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         final MyDBHandler db = new MyDBHandler(context);
 
-        CharSequence deviceName = getResources().getString(R.string.text_unknown);
+        CharSequence deviceName = getResources().getString(R.string.reserved_widget_android_unknown);
         String transparent;
         DeviceInfo DeviceWidgetInfo = db.findWidgetInfoDevice(widgetId);
         if (DeviceWidgetInfo == null) {

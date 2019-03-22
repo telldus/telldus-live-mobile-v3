@@ -355,7 +355,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/redbutton"
-                            android:text="@string/cancel"/>
+                            android:text="@string/reserved_widget_android_dialogueBox_defaultNegativeText"/>
 
                     </LinearLayout>
                 </LinearLayout>

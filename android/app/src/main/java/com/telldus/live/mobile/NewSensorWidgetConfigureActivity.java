@@ -132,7 +132,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_sensor_widget_configure);
 
-        String message = getResources().getString(R.string.label_loading)+"...";
+        String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
         updateUI(message);
     }
 
@@ -195,11 +195,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             sensorHint.setTypeface(subtitleFont);
             sensorDataHint.setTypeface(subtitleFont);
             settingText.setTypeface(subtitleFont);
-            settingText.setText(getResources().getString(R.string.label_settings)+":");
+            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             valueText.setTypeface(subtitleFont);
             valueText.setText(getResources().getString(R.string.sensor_value_to_display)+":");
             sensorText.setTypeface(subtitleFont);
-            sensorText.setText(getResources().getString(R.string.widget_info_sensor)+":");
+            sensorText.setText(getResources().getString(R.string.reserved_widget_android_labelSensor)+":");
             btAdd.setTypeface(subtitleFont);
             button_cancel.setTypeface(subtitleFont);
             switch_background.setTypeface(subtitleFont);
@@ -431,7 +431,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         JSONObject curObj = JsonsensorList.getJSONObject(i);
                         String name = curObj.getString("name");
                         if (name == null || name.equals("null")) {
-                            name = getResources().getString(R.string.text_unknown);
+                            name = getResources().getString(R.string.reserved_widget_android_unknown);
                         }
                         Integer id = curObj.getInt("id");
                         String last = String.valueOf(curObj.getLong("lastUpdated"));

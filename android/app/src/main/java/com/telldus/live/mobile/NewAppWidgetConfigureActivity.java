@@ -129,7 +129,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
 
-        String message = getResources().getString(R.string.label_loading)+"...";
+        String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
         updateUI(message);
     }
 
@@ -268,8 +268,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
             Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
             Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
             textTest.setTypeface(titleFont);
-            deviceText.setText(getResources().getString(R.string.label_device)+":");
-            settingText.setText(getResources().getString(R.string.label_settings)+":");
+            deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
+            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             chooseSetting.setTypeface(titleFont);
         }
     }
