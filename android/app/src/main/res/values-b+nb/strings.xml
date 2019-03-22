@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<resources>
-    <string name="reserved_widget_android_error_networkFailed">Vennligst sjekk internett-tilkoblingen din</string>
-    <string name="reserved_widget_android_toast_deviceActionError">Handling utilgjengelig</string>
-</resources>

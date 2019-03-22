@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<resources>
-    <string name="reserved_widget_android_error_networkFailed">Požadavek na síť selhal. Prosím zkontrolujte internetové připojení</string>
-    <string name="reserved_widget_android_toast_deviceActionError">Akce je momentálně nedostupná</string>
-</resources>

@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<resources>
-    <string name="reserved_widget_android_error_networkFailed">Vänligen kontrollera din internetuppkoppling</string>
-    <string name="reserved_widget_android_toast_deviceActionError">Åtgärden är inte tillgänglig för tillfället</string>
-</resources>

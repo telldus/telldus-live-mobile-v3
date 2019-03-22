@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<resources>
-    <string name="reserved_widget_android_error_networkFailed">Netzwerk-Anfrage fehlgeschlagen. Bitte prüfen Sie ihre Internetverbindung</string>
-    <string name="reserved_widget_android_toast_deviceActionError">Aktion momentan nicht verfügbar</string>
-</resources>
