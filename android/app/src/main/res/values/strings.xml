@@ -9,7 +9,6 @@
 
 
 	<string name="app_name">Telldus Live! Mobile</string>
-	<string name="reserved_widget_android_add_widget">Add widget</string>
 
 	<string name="reserved_widget_android_confirm">Confirm &amp; Save</string>
 	<string name="reserved_widget_android_dialogueBox_defaultNegativeText">Cancel</string>
