@@ -42,6 +42,7 @@ type Props = {
 	isModelRGB?: boolean,
 	openModal: () => void,
 	device: Object,
+	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
 };
 
 type State = {
@@ -148,7 +149,10 @@ class ModalRGB extends View<Props, State> {
 					>
 						<Animated.View
 							{...this.panResponders.handle.panHandlers}
+							// $FlowFixMe
 							style={[styles.handle, { transform: this.animations.handlePosition.getTranslateTransform(), backgroundColor: `rgb(${pixelColor})` }]}
+
+
 						/>
 					</ImageBackground>
 				</TouchableWithoutFeedback>
