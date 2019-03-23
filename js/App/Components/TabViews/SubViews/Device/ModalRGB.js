@@ -79,7 +79,7 @@ class ModalRGB extends View<Props, State> {
 			},
 			onPanResponderMove: (e: Object, gestureState: Object) => {
 				getPixelRGBA('rgbpicker', e.nativeEvent.pageX, e.nativeEvent.pageY)
-					.then((color: Array) => {
+					.then((color: Array<number>) => {
 						this.setState({ pixelColor: color });
 				 });
 				 return this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
