@@ -561,7 +561,7 @@ class DeviceRow extends View<Props, State> {
 							closeModal={this.closeMoreActions}
 						/>
 					)}
-				<ModalRGB isModelRGB={isModelRGB} openModal={this.openRGBModel} {...sharedProps} />
+				<ModalRGB isModelRGB={isModelRGB} openModal={this.openRGBModel} deviceName={deviceName} {...sharedProps} />
 			</View>
 		);
 	}

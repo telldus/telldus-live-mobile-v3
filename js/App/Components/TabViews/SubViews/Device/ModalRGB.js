@@ -41,6 +41,7 @@ type Props = {
 	isModelRGB?: boolean,
 	openModal: () => void,
 	device: Object,
+	deviceName: string,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
 };
 
@@ -77,7 +78,7 @@ class ModalRGB extends View<Props, State> {
 				this.animations.handlePosition.setValue({ x: 0, y: 0 });
 			},
 			onPanResponderMove: (e: Object, gestureState: Object) => {
-				getPixelRGBA('rgbpicker.png', e.nativeEvent.pageX, e.nativeEvent.pageY)
+				getPixelRGBA('rgbpicker', e.nativeEvent.pageX, e.nativeEvent.pageY)
 					.then((color: Array) => {
 						this.setState({ pixelColor: color });
 				 });
@@ -121,13 +122,16 @@ class ModalRGB extends View<Props, State> {
 
 	renderBanner(): Object {
 		const { circle, txtLbl } = styles;
+		const { deviceName } = this.props;
 		return (
 			<Poster>
 				<View style={{ position: 'absolute', alignSelf: 'center', top: 10 }}>
 					<View style={circle}>
 						<IconTelldus icon="device-alt" size={40} color={Theme.Core.brandSecondary} />
 					</View>
-					<Text style={txtLbl}>RGB Light Bulb</Text>
+					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+						<Text style={txtLbl}>{deviceName}</Text>
+					</View>
 				</View>
 			</Poster>
 		);
@@ -166,7 +170,7 @@ class ModalRGB extends View<Props, State> {
 		const color = Theme.Core.brandSecondary;
 		return (
 			<View style={[styles.shadowCard, { padding: 12 }]}>
-				<Text>Dim Value ({Math.floor(sliderValue)}%)</Text>
+				<Text style={{ color: '#666' }}>Dim Value ({Math.floor(sliderValue)}%)</Text>
 				<Slider
 					maximumValue={100}
 					minimumValue={10}
@@ -205,25 +209,6 @@ class ModalRGB extends View<Props, State> {
 }
 
 const styles = {
-	header: {
-		height: 80,
-		paddingTop: 50,
-		paddingHorizontal: 20,
-		flexDirection: 'row',
-		backgroundColor: '#192F53',
-	},
-	lbl: {
-		textAlign: 'center',
-		fontSize: 18,
-		fontWeight: '700',
-		marginBottom: 5,
-		color: '#FFF',
-	},
-	banner: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		paddingVertical: 12,
-	},
 	circle: {
 		height: 80,
 		width: 80,
@@ -236,6 +221,7 @@ const styles = {
 		color: 'white',
 		fontSize: 14,
 		marginTop: 10,
+		textAlign: 'center',
 	},
 	shadowCard: {
 		backgroundColor: '#fff',
@@ -261,6 +247,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 		},
 	};
 }
-
 
 export default connect(null, mapDispatchToProps)(ModalRGB);
