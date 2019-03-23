@@ -24,7 +24,6 @@ import android.util.Log;
 
 import com.facebook.react.ReactApplication;
 import org.bvic23.rngetpixel.RNPixelColorPackage;
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import org.wonday.orientation.OrientationPackage;
 import com.facebook.react.ReactInstanceManager;
@@ -71,8 +70,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
-            new RNPixelColorPackage(),
-            new ImageResizerPackage(),
+            	new RNPixelColorPackage(),
 				new RNGestureHandlerPackage(),
 				new RNGoogleSigninPackage(),
 				new OrientationPackage(),
