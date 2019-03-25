@@ -53,6 +53,7 @@ import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 
 public class WidgetModule extends ReactContextBaseJavaModule {
 
@@ -162,25 +163,28 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void refreshWidgetsDevices(ReadableArray deviceIds) {
-    refreshWidgetsDevices2By1(deviceIds);
-    refreshWidgetsDevices3By1(deviceIds);
+  public void refreshWidgetsDevices(ReadableArray deviceIds, ReadableMap devicesData) {
+    refreshWidgetsDevices2By1(deviceIds, devicesData);
+    refreshWidgetsDevices3By1(deviceIds, devicesData);
   }
 
-  public void refreshWidgetsDevices2By1(ReadableArray deviceIds) {
+  public void refreshWidgetsDevices2By1(ReadableArray deviceIds, ReadableMap devicesData) {
     int widgetIds[] = getAllWidgetsDevice2By1();
-    refreshWidgetsDevicesCommon(widgetIds, deviceIds, widgetDevice2By1);
+    refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDevice2By1);
   }
 
-  public void refreshWidgetsDevices3By1(ReadableArray deviceIds) {
+  public void refreshWidgetsDevices3By1(ReadableArray deviceIds, ReadableMap devicesData) {
     int widgetIds[] = getAllWidgetsDevice3By1();
-    refreshWidgetsDevicesCommon(widgetIds, deviceIds, widgetDevice3By1);
+    refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDevice3By1);
   }
 
-  public void refreshWidgetsDevicesCommon(int[] widgetIds, ReadableArray deviceIds, String widgetType) {
+  public void refreshWidgetsDevicesCommon(int[] widgetIds, ReadableArray deviceIds, ReadableMap devicesData, String widgetType) {
     MyDBHandler db = new MyDBHandler(getReactApplicationContext());
     prefManager = new PrefManager(getReactApplicationContext());
     String currentUserId = prefManager.getUserId();
+
+    ReadableMap deviceData = null;
+    String currentName = null;
 
     for (int widgetId : widgetIds) {
       Boolean isInList = false;
@@ -195,10 +199,16 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         }
 
         deviceIdCurrent = deviceInfo.getDeviceId();
-        userId = deviceInfo.getUserId();
 
         if (id.trim().equals(deviceIdCurrent.toString())) {
           isInList = true;
+          deviceIdCurrent = deviceInfo.getDeviceId();
+          userId = deviceInfo.getUserId();
+          currentName = deviceInfo.getDeviceName();
+
+          if (devicesData.hasKey(id)) {
+            deviceData = devicesData.getMap(id);
+          }
           break;
         }
       }
@@ -215,14 +225,30 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           }
         }
       }
+
+      if (isInList && isSameAccount && deviceData != null && deviceData.hasKey("name")) {
+        String newName = deviceData.getString("name");
+        if (newName != null && !newName.equals(currentName) && deviceIdCurrent.intValue() != -1) {
+          db.updateDeviceName(newName, deviceIdCurrent);
+          if (widgetType.equals(widgetDevice2By1)) {
+            updateUIWidgetDevice2By1(widgetId);
+          }
+          if (widgetType.equals(widgetDevice3By1)) {
+            updateUIWidgetDevice3By1(widgetId);
+          }
+        }
+      }
     }
   }
 
   @ReactMethod
-  public void refreshWidgetsSensors(ReadableArray sensorIds) {
+  public void refreshWidgetsSensors(ReadableArray sensorIds, ReadableMap sensorsData) {
     MyDBHandler db = new MyDBHandler(getReactApplicationContext());
     prefManager = new PrefManager(getReactApplicationContext());
     String currentUserId = prefManager.getUserId();
+
+    ReadableMap sensorData = null;
+    String currentName = null;
 
     int widgetIds[] = getAllWidgetsSensor();
     for (int widgetId : widgetIds) {
@@ -236,11 +262,18 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         if (sensorInfo == null) {
           return;
         }
+
         sensorIdCurrent = sensorInfo.getSensorId();
-        userId = sensorInfo.getUserId();
 
         if (id.trim().equals(sensorIdCurrent.toString())) {
           isInList = true;
+          sensorIdCurrent = sensorInfo.getSensorId();
+          userId = sensorInfo.getUserId();
+          currentName = sensorInfo.getSensorName();
+
+          if (sensorsData.hasKey(id)) {
+            sensorData = sensorsData.getMap(id);
+          }
           break;
         }
       }
@@ -249,6 +282,14 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       if (!isInList && isSameAccount) {
         if (sensorIdCurrent.intValue() != -1) {// If not already nullified
           db.setSensorIdSensorWidget(widgetId, -1);
+          updateUIWidgetSensor(widgetId);
+        }
+      }
+
+      if (isInList && isSameAccount && sensorData != null && sensorData.hasKey("name")) {
+        String newName = sensorData.getString("name");
+        if (newName != null && !newName.equals(currentName) && sensorIdCurrent.intValue() != -1) {
+          db.updateSensorName(newName, sensorIdCurrent);
           updateUIWidgetSensor(widgetId);
         }
       }

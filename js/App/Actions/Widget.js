@@ -58,29 +58,29 @@ const widgetAndroidDisableWidget = (id: number, widgetType: "SENSOR" | "DEVICE")
 const widgetAndroidRefresh = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): any => {
 		if (Platform.OS === 'android') {
-			const { devices: {allIds: allDevices}, sensors: {allIds: allSensors} } = getState();
+			const { devices: {allIds: allDevices, byId: byIdDevices}, sensors: {allIds: allSensors, byId: byIdSensors} } = getState();
 			if (allDevices.length !== 0) {
-				widgetAndroidRefreshDevices(allDevices);
+				widgetAndroidRefreshDevices(allDevices, byIdDevices);
 			}
 			if (allSensors.length !== 0) {
-				widgetAndroidRefreshSensors(allSensors);
+				widgetAndroidRefreshSensors(allSensors, byIdSensors);
 			}
 		}
 		return;
 	};
 };
 
-const widgetAndroidRefreshDevices = (deviceIds: Array<string>) => {
+const widgetAndroidRefreshDevices = (deviceIds: Array<string>, byIdDevices: Object) => {
 	if (Platform.OS === 'android') {
 		const { AndroidWidget } = NativeModules;
-		AndroidWidget.refreshWidgetsDevices(deviceIds);
+		AndroidWidget.refreshWidgetsDevices(deviceIds, byIdDevices);
 	}
 };
 
-const widgetAndroidRefreshSensors = (sensorIds: Array<string>) => {
+const widgetAndroidRefreshSensors = (sensorIds: Array<string>, byIdSensors: Object) => {
 	if (Platform.OS === 'android') {
 		const { AndroidWidget } = NativeModules;
-		AndroidWidget.refreshWidgetsSensors(sensorIds);
+		AndroidWidget.refreshWidgetsSensors(sensorIds, byIdSensors);
 	}
 };
 
