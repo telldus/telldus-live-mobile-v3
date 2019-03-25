@@ -52,11 +52,11 @@ class RGBPalette extends View {
 	render(): Object {
 		let { device, isGatewayActive } = this.props;
 		let { value } = device;
-		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
+		let iconColor = !isGatewayActive ? '#21A296' : '#FFF';
 
 		return (
 			<TouchableOpacity onPress={this.onPalette} style={[styles.palette]}>
-				<IconTelldus icon="palette" size={22} color={iconColor} /><Text style={styles.lbl}>{`${value}%`}</Text>
+				<IconTelldus icon="palette" size={26} color={iconColor} /><Text style={[styles.lbl, { color: iconColor }]}>{`${value}%`}</Text>
 			</TouchableOpacity>
 		);
 	}
@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
 		borderLeftColor: '#ddd',
 	},
 	lbl: {
-		color: '#FFF',
-		fontSize: 14,
+		fontSize: 12,
+		marginTop: 3,
 	},
 });
 
