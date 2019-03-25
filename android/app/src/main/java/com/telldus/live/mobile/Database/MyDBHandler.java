@@ -261,6 +261,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateDeviceName(String deviceName, int deviceId) {
+        String val = String.valueOf(deviceId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DEVICE_NAME, deviceName);
+
+        String[] whereArgs = {val};
+        int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs);
+        return true;
+    }
+
     public int updateSensorInfo(String name, String value, long time, int Wid) {
         String time1 = String.valueOf(time);
         SQLiteDatabase db = this.getWritableDatabase();
@@ -275,6 +286,16 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return count;
     }
 
+    public boolean updateSensorName(String sensorName, int sensorId) {
+        String val = String.valueOf(sensorId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SENSOR_NAME, sensorName);
+
+        String[] whereArgs = {val};
+        int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, SENSOR_ID+" = ?", whereArgs);
+        return true;
+    }
 
     public boolean deleteWidgetInfoDevice(int id) {
         String widget = String.valueOf(id);
