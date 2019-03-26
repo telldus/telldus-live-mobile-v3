@@ -25,13 +25,14 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
-import Slider from 'react-native-slider';
 import { getPixelRGBA } from 'react-native-get-pixel';
 
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { Devices } = actions;
 const { deviceSetStateRGB } = Devices;
+
+import SliderDetails from '../../../Device/DeviceDetails/SubViews/SliderDetails';
 
 // Relative import
 import { NavigationHeader, IconTelldus, Poster, View } from '../../../../../BaseComponents';
@@ -152,8 +153,6 @@ class ModalRGB extends View<Props, State> {
 							{...this.panResponders.handle.panHandlers}
 							// $FlowFixMe
 							style={[styles.handle, { transform: this.animations.handlePosition.getTranslateTransform(), backgroundColor: `rgb(${pixelColor})` }]}
-
-
 						/>
 					</ImageBackground>
 				</TouchableWithoutFeedback>
@@ -161,24 +160,16 @@ class ModalRGB extends View<Props, State> {
 		);
 	}
 
-	onSliderValueChange = (value: any) => {
-		this.setState({ sliderValue: value });
-	}
-
 	renderSlider(): Object {
-		const { sliderValue } = this.state;
-		const color = Theme.Core.brandSecondary;
+		const { device, intl, isGatewayActive, appLayout } = this.props;
+		console.log(this.props);
 		return (
-			<View style={[styles.shadowCard, { padding: 12 }]}>
-				<Text style={{ color: '#666' }}>Dim Value ({Math.floor(sliderValue)}%)</Text>
-				<Slider
-					maximumValue={100}
-					minimumValue={10}
-					value={sliderValue}
-					onValueChange={this.onSliderValueChange}
-					thumbTintColor={color}
-					minimumTrackTintColor={color}
-				/>
+			<View style={[styles.shadowCard2, { padding: 12 }]}>
+				<SliderDetails
+					device={device}
+					intl={intl}
+					isGatewayActive={isGatewayActive}
+					appLayout={appLayout}/>
 			</View>
 		);
 	}
@@ -229,6 +220,15 @@ const styles = {
 		borderRadius: 2,
 		marginHorizontal: 12,
 		marginTop: 8,
+	},
+	shadowCard2: {
+		flex: 1,
+		backgroundColor: '#fff',
+		...Theme.Core.shadow,
+		borderRadius: 2,
+		marginHorizontal: 12,
+		marginTop: 8,
+		maxHeight: 100,
 	},
 	handle: {
 		borderRadius: 28,
