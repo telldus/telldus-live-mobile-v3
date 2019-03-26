@@ -75,11 +75,11 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret, String userId) {
+  public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret, String userId, Integer pro) {
     prefManager = new PrefManager(getReactApplicationContext());
 
     prefManager.setAccessDetails(accessToken, expiresIn, clientId, clientSecret, refreshToken);
-    prefManager.setUserId(userId);
+    prefManager.setUserId(userId, pro);
     int widgetIdsSensor[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewSensorWidget.class));
     for (int widgetId : widgetIdsSensor) {
       updateUIWidgetSensor(widgetId);
@@ -134,7 +134,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void disableAllWidgets() {
     prefManager = new PrefManager(getReactApplicationContext());
-    prefManager.setUserId("null");
+    prefManager.setUserId("null", -1);
 
     int widgetIdsS[] = getAllWidgetsSensor();
     disableWidgetsOnLogout(widgetIdsS, widgetSensor);

@@ -30,9 +30,10 @@ const widgetAndroidConfigure = (): ThunkAction => {
 		if (Platform.OS === 'android') {
 			const { user } = getState();
 			const { accessToken = {}, userProfile = {} } = user;
+			const { pro = -1, email } = userProfile;
 			const { access_token = '', refresh_token = '', expires_in = ''} = accessToken;
 			const { AndroidWidget } = NativeModules;
-			AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, userProfile.email);
+			AndroidWidget.configureWidgetAuthData(access_token, refresh_token, expires_in.toString(), publicKey, privateKey, email, pro);
 		}
 		return;
 	};

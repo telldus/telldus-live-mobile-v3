@@ -66,13 +66,18 @@ public class PrefManager {
         return pref.getString("refreshToken", "");
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(String userId, int pro) {
         editor.putString("userId", userId);
+        editor.putInt("pro", pro);
         editor.apply();
     }
 
     public String getUserId() {
         return pref.getString("userId", null);
+    }
+
+    public int getPro() {
+        return pref.getInt("pro", -1);
     }
 
     public void clear() {
