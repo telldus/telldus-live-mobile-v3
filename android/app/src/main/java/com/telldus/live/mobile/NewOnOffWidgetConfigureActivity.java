@@ -58,6 +58,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -66,6 +68,8 @@ import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+
+import com.google.android.flexbox.FlexboxLayout;
 
 public class NewOnOffWidgetConfigureActivity extends Activity {
     private static final String ACTION_ON = "ACTION_ON";
@@ -144,13 +148,76 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             return;
         }
 
-        createDeviceApi();
-
         setResult(RESULT_CANCELED);
+        int pro = prefManager.getPro();
+        if (pro != -1) {
+            setContentView(R.layout.view_with_header_poster);
+
+            mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
+            mBackLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            updateUIBasic();
+
+            return;
+        }
+
+        createDeviceApi();
         setContentView(R.layout.new_on_off_widget_configure);
 
         String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
         updateUI(message);
+    }
+
+    public void updateUIBasic() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String euro = getResources().getString(R.string.euro);
+        String pm = getResources().getString(R.string.reserved_widget_android_per_month);
+
+        FlexboxLayout p_p_1 = (FlexboxLayout) findViewById(R.id.p_p_1);
+
+        TextView validityInfoText1 = (TextView) p_p_1.findViewById(R.id.validityInfoText);
+        validityInfoText1.setText(getResources().getString(R.string.reserved_widget_android_12_months));
+
+        TextView smsCreditText1 = (TextView) p_p_1.findViewById(R.id.smsCreditText);
+        smsCreditText1.setText(getResources().getString(R.string.reserved_widget_android_25_sms));
+
+        TextView priceInfoOne1 = (TextView) p_p_1.findViewById(R.id.priceInfoOne);
+        priceInfoOne1.setText(euro+df.format(2.10));
+        TextView priceInfoTwo1 = (TextView) p_p_1.findViewById(R.id.priceInfoTwo);
+        priceInfoTwo1.setText(pm);
+
+
+        FlexboxLayout p_p_2 = (FlexboxLayout) findViewById(R.id.p_p_2);
+
+        TextView validityInfoText2 = (TextView) p_p_2.findViewById(R.id.validityInfoText);
+        validityInfoText2.setText(getResources().getString(R.string.reserved_widget_android_6_months));
+
+        TextView smsCreditText2 = (TextView) p_p_2.findViewById(R.id.smsCreditText);
+        smsCreditText2.setText(getResources().getString(R.string.reserved_widget_android_12_sms));
+
+        TextView priceInfoOne2 = (TextView) p_p_2.findViewById(R.id.priceInfoOne);
+        priceInfoOne2.setText(euro+df.format(2.50));
+        TextView priceInfoTwo2 = (TextView) p_p_2.findViewById(R.id.priceInfoTwo);
+        priceInfoTwo2.setText(pm);
+
+
+        FlexboxLayout p_p_3 = (FlexboxLayout) findViewById(R.id.p_p_3);
+
+        TextView validityInfoText3 = (TextView) p_p_3.findViewById(R.id.validityInfoText);
+        validityInfoText3.setText(getResources().getString(R.string.reserved_widget_android_1_month));
+
+        TextView smsCreditText3 = (TextView) p_p_3.findViewById(R.id.smsCreditText);
+        smsCreditText3.setText(getResources().getString(R.string.reserved_widget_android_3_sms));
+
+        TextView priceInfoOne3 = (TextView) p_p_3.findViewById(R.id.priceInfoOne);
+        priceInfoOne3.setText(euro+NumberFormat.getInstance().format(3));
+        TextView priceInfoTwo3 = (TextView) p_p_3.findViewById(R.id.priceInfoTwo);
+        priceInfoTwo3.setText(pm);
     }
 
     public void updateUI(String message) {
