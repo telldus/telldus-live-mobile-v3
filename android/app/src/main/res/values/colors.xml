@@ -21,4 +21,5 @@
     <color name="widgetRed">#F44336</color>
     <color name="darkRed">#990000</color>
     <color name="brightRed">#FF5E5A</color>
+    <color name="twine">#C4A362</color>
 </resources>
