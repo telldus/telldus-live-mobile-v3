@@ -44,6 +44,9 @@ type Props = {
 	device: Object,
 	deviceName: string,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
+	intl: Object,
+    isGatewayActive: boolean,
+	appLayout: Object,
 };
 
 type State = {
