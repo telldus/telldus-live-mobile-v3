@@ -70,4 +70,31 @@
 	<!-- Network error - Re-using same message as in main app-->
 	<string name="reserved_widget_android_error_networkFailed">Network request failed. Please check your internet connection</string>
 
+	<string name="reserved_widget_android_premium_required">Premium required</string>
+	<string name="reserved_widget_android_upgrade_below">Upgrade below</string>
+
+	<string name="reserved_widget_android_upgrade_prem_info">Premium Access is required to use widgets. Read more and
+	upgrade below.</string>
+
+	<string name="reserved_widget_android_12_months">12 Months</string>
+	<string name="reserved_widget_android_6_months">6 Months</string>
+	<string name="reserved_widget_android_1_month">1 Month</string>
+
+	<string name="reserved_widget_android_25_sms">Including 25 SMS Credits</string>
+	<string name="reserved_widget_android_12_sms">Including 12 SMS Credits</string>
+	<string name="reserved_widget_android_3_sms">Including 3 SMS Credits</string>
+
+	<string name="reserved_widget_android_buy_12_months">Buy 12 Months</string>
+	<string name="reserved_widget_android_buy_6_months">Buy 6 Months</string>
+	<string name="reserved_widget_android_buy_1_month">Buy 1 Month</string>
+
+	<string name="reserved_widget_android_save_16">Save 16%</string>
+	<string name="reserved_widget_android_save_30">Save 30%</string>
+
+	<string name="reserved_widget_android_per_month">Per month</string>
+
+	<string name="reserved_widget_android_total">Total</string>
+
+	<string name="euro" translatable="false">&#8364;</string>
+
 </resources>
