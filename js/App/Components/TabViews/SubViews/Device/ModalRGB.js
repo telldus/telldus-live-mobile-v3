@@ -189,8 +189,7 @@ class ModalRGB extends View<Props, State> {
 				animationType="slide"
 				visible={isModelRGB}
 				supportedOrientations={['portrait', 'landscape']}
-				onRequestClose={this.handleBackButtonClick}
-			>
+				onRequestClose={this.handleBackButtonClick}>
 				<Fragment>
 					<SafeAreaView style={{ flex: 0, backgroundColor: Theme.Core.brandPrimary }} />
 					<SafeAreaView style={{ flex: 1, backgroundColor: '#ECEBEB' }}>

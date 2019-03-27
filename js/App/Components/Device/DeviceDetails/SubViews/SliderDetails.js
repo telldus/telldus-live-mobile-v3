@@ -51,6 +51,7 @@ type Props = {
 	onTurnOn: number => void,
 	onLearn: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
+	requestDeviceAction: (number) => any,
 	intl: Object,
 	isGatewayActive: boolean,
 	style: Object | number | Array<any>,
