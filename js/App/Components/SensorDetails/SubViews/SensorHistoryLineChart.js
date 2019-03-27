@@ -89,7 +89,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 	toggleTwo: () => void;
 	onPressToggleView: () => void;
 	onPressResetChartView: () => void;
-	getLinearChartRef: (any) => void;
 	_orientationDidChange: (string) => void;
 	onRequestClose: () => void;
 
@@ -106,7 +105,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 			isUpdating: false,
 		};
 
-		this.linearChartRef = undefined;
 		this.toggleOne = this.toggleOne.bind(this);
 		this.toggleTwo = this.toggleTwo.bind(this);
 		this._orientationDidChange = this._orientationDidChange.bind(this);
@@ -114,7 +112,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 
 		this.onPressToggleView = this.onPressToggleView.bind(this);
 		this.onPressResetChartView = this.onPressResetChartView.bind(this);
-		this.getLinearChartRef = this.getLinearChartRef.bind(this);
 		Orientation.addOrientationListener(this._orientationDidChange);
 	}
 
@@ -220,10 +217,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 				Orientation.unlockAllOrientations();
 			}
 		});
-	}
-
-	getLinearChartRef(ref: any) {
-		this.linearChartRef = ref;
 	}
 
 	onPressResetChartView() {
@@ -399,7 +392,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 					<View style={{ flex: 0 }}>
 						{graphView === 'overview' ?
 							<LineChart
-								ref={this.getLinearChartRef}
 								{...chartCommonProps} />
 							:
 							<LineChartDetailed
