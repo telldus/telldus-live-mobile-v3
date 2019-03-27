@@ -83,6 +83,8 @@ class App extends React.Component<Props, State> {
 	keyboardDidShowListener: Object;
 	keyboardDidHideListener: Object;
 
+	onTokenRefreshListener: null | Function;
+
 	constructor(props: Props) {
 		super(props);
 		this.onLayout = this.onLayout.bind(this);
