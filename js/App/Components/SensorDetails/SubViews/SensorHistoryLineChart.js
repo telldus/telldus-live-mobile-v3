@@ -208,10 +208,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 			// So, forcing landscape on show fullscreen and unlock on hide.
 			// [IOS cannot be handled this way because it has issue when unlocking all orientation]
 			if (Platform.OS === 'android' && currShow && (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-RIGHT')) {
-				Orientation.lockToLandscapeLeft();
+				Orientation.lockToLandscapeRight();
 			}
 			if (Platform.OS === 'android' && currShow && orientation === 'LANDSCAPE-LEFT') {
-				Orientation.lockToLandscapeRight();
+				Orientation.lockToLandscapeLeft();
 			}
 			if (Platform.OS === 'android' && !currShow) {
 				Orientation.unlockAllOrientations();
