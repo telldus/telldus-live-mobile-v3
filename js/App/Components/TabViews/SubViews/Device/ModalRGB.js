@@ -75,10 +75,10 @@ class ModalRGB extends View<Props, State> {
 
 	panResponders = {
 		handle: PanResponder.create({
-			onMoveShouldSetResponderCapture: () => true,
-			onStartShouldSetPanResponder: (e: Object, gestureState: Object) => true,
-			onMoveShouldSetPanResponderCapture: () => true,
-			onResponderTerminationRequest: () => false,
+			onMoveShouldSetResponderCapture: (): boolean => true,
+			onStartShouldSetPanResponder: (e: Object, gestureState: Object): boolean => true,
+			onMoveShouldSetPanResponderCapture: (): boolean => true,
+			onResponderTerminationRequest: (): boolean => false,
 			onPanResponderGrant: (e: Object, gestureState: Object) => {
 				this.animations.handlePosition.setOffset({ x: this.lastHandlePosition.x, y: this.lastHandlePosition.y });
 				this.animations.handlePosition.setValue({ x: 0, y: 0 });
@@ -88,9 +88,11 @@ class ModalRGB extends View<Props, State> {
 					.then((color: Array<number>) => {
 						this.setState({ pixelColor: color });
 				 });
-				 return this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
+				 this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
 			},
-			onPanResponderRelease: () => this.onRelease(),
+			onPanResponderRelease: () => {
+				this.onRelease();
+			},
 		}),
 	}
 
@@ -107,8 +109,12 @@ class ModalRGB extends View<Props, State> {
 	}
 
 	componentWillMount() {
-		this.animations.handlePosition.x.addListener(({ value }: { value: number } ) => this.lastHandlePosition.x = value);
-		this.animations.handlePosition.y.addListener(({ value }: { value: number }) => this.lastHandlePosition.y = value);
+		this.animations.handlePosition.x.addListener(({ value }: { value: number }) => {
+			this.lastHandlePosition.x = value;
+		});
+		this.animations.handlePosition.y.addListener(({ value }: { value: number }) => {
+			this.lastHandlePosition.y = value;
+		});
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 	}
 
