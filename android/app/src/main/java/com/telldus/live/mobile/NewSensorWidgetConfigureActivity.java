@@ -41,7 +41,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,21 +65,20 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
-    int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd, button_cancel;
     private View btSelectSensor, btSelectDisplayItem, screenCover, btSelectPollInterval;
     private TextView sensorName, sensorHint, sensorDataName, sensorDataHint, chooseSettingSensor,
-    testText, sensorText, settingText, valueText, imgSensorType, loadingText, imgSensorTypeEdit, sensorRepeatIntervalLabel;
+    testText, sensorText, settingText, valueText, imgSensorType, imgSensorTypeEdit, sensorRepeatIntervalLabel;
     private AppWidgetManager widgetManager;
-    private RemoteViews views;
     private ProgressDialog pDialog;
     private PrefManager prefManager;
     private String transparent = "false";
@@ -91,9 +89,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     CharSequence[] sensorDataList = null;
     CharSequence[] sensorNameList = null;
     CharSequence[] sensorIdList = null;
-    CharSequence[] intervalOptions = {
-        "Update every 10 minutes", "Update every 30 minutes", "Update every 1 hour",
-    };
     CharSequence[] intervalOptionsValues = {
         "10", "30", "60",
     };
@@ -124,8 +119,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+
         prefManager = new PrefManager(this);
-        accessToken = prefManager.getAccess();
+        accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
             Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
             getApplicationContext().startActivity(launchActivity);
@@ -136,10 +132,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_sensor_widget_configure);
 
-        updateUI();
+        String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
+        updateUI(message);
     }
 
-    public void updateUI() {
+    public void updateUI(String message) {
         mSensorBack = (RelativeLayout )findViewById(R.id.sensorBack);
         mSensorBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,13 +145,15 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             }
         });
 
-        loadingText = (TextView)findViewById(R.id.loadingText);
+        View infoView = (View)findViewById(R.id.infoView);
+        TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
         if (sensorNameList == null) {
-            loadingText.setVisibility(View.VISIBLE);
+            infoView.setVisibility(View.VISIBLE);
+            infoText.setText(message);
             screenCover.setVisibility(View.GONE);
         } else {
-            loadingText.setVisibility(View.GONE);
+            infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
             imgSensorTypeEdit = (TextView) findViewById(R.id.imgSensorTypeEdit);
@@ -162,14 +161,13 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             imgSensorType.setVisibility(View.GONE);
 
             widgetManager = AppWidgetManager.getInstance(this);
-            views = new RemoteViews(this.getPackageName(), R.layout.configurable_sensor_widget);
             // Find the widget id from the intent.
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
             if (extras != null) {
-                mAppWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+                appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
             }
-            if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
                 finish();
                 return;
             }
@@ -197,8 +195,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             sensorHint.setTypeface(subtitleFont);
             sensorDataHint.setTypeface(subtitleFont);
             settingText.setTypeface(subtitleFont);
+            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             valueText.setTypeface(subtitleFont);
+            valueText.setText(getResources().getString(R.string.reserved_widget_android_sensor_value_to_display)+":");
             sensorText.setTypeface(subtitleFont);
+            sensorText.setText(getResources().getString(R.string.reserved_widget_android_labelSensor)+":");
             btAdd.setTypeface(subtitleFont);
             button_cancel.setTypeface(subtitleFont);
             switch_background.setTypeface(subtitleFont);
@@ -226,32 +227,21 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     if (id == null || id == 0) {
-                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any sensor. Please select a sensor to add as widget.",Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.reserved_widget_android_message_sensor_not_selected), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
                     }
                     if (senValue == null) {
-                        Toast toast = Toast.makeText(getApplicationContext(),"You have not chosen any value to display for sensor. Please select a value from the list.",Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.reserved_widget_android_message_sensor_scale_not_selected), Toast.LENGTH_LONG);
                         toast.setGravity(Gravity.TOP , 0, 0);
                         toast.show();
                         return;
                     }
 
-                    boolean token_service = prefManager.getTokenService();
-                    // boolean b = isMyServiceRunning(NetworkInfo.class);
-                    // if (!b) {
-                    //     startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    // }
-
-                    boolean b1 = prefManager.getSensorDB();
-                    if (!b1) {
-                        prefManager.sensorDB(true);
-                    }
-
                     String currentUserId = prefManager.getUserId();
                     SensorInfo mSensorInfo = new SensorInfo(
-                        mAppWidgetId,
+                        appWidgetId,
                         sensorName.getText().toString(),
                         sensorDataName.getText().toString(),
                         id,
@@ -263,13 +253,15 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         currentUserId,
                         selectInterval);
                     database.addWidgetSensor(mSensorInfo);
-                    views.setTextViewText(R.id.txtSensorType, sensorName.getText());
 
-                    NewSensorWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                    NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);
+
+                    SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(getApplicationContext());
+                    sensorUpdateAlarmManager.startAlarm(appWidgetId, selectInterval);
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.
-                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                     setResult(RESULT_OK, resultValue);
                     finish();
                 }
@@ -281,7 +273,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_sensor)
+                    builder.setTitle(R.string.reserved_widget_android_pick_sensor)
                         .setSingleChoiceItems(sensorNameList, selectedSensorIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -291,8 +283,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                     imgSensorTypeEdit.setVisibility(View.VISIBLE);
                                     imgSensorType.setVisibility(View.GONE);
 
-                                    sensorDataName.setText("Select value");
-                                    sensorDataHint.setText("Tap to change value to display");
+                                    sensorDataName.setText(R.string.reserved_widget_android_sensor_select_value);
+                                    sensorDataHint.setText(R.string.reserved_widget_android_sensor_tap_change_value);
 
                                     senValue = null;
                                     selectedSensorValueIndex = -1;
@@ -349,7 +341,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 @Override
                 public void onClick(View view) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewSensorWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_sensor_data)
+                    builder.setTitle(R.string.reserved_widget_android_pick_sensor_data)
                         .setSingleChoiceItems(sensorDataList, selectedSensorValueIndex, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -393,6 +385,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                 }
             });
 
+            final CharSequence[] intervalOptions = {
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
+            };
+
             btSelectPollInterval = (View) findViewById(R.id.btSelectPollInterval);
             btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
                 AlertDialog ad;
@@ -420,11 +418,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     }
     void createSensorsApi() {
 
-        String params = "sensors/list?includeValues=1&includeScale=1";
+        String params = "/sensors/list?includeValues=1&includeScale=1";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
+                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
                 try {
                     JSONObject sensorData = new JSONObject(response.toString());
                     JsonsensorList = sensorData.getJSONArray("sensor");
@@ -432,7 +431,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         JSONObject curObj = JsonsensorList.getJSONObject(i);
                         String name = curObj.getString("name");
                         if (name == null || name.equals("null")) {
-                            name = "Unknown";
+                            name = getResources().getString(R.string.reserved_widget_android_unknown);
                         }
                         Integer id = curObj.getInt("id");
                         String last = String.valueOf(curObj.getLong("lastUpdated"));
@@ -441,29 +440,19 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
                     sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                     sensorIdList = idList.toArray(new CharSequence[idList.size()]);
-                    updateUI();
+
+                    message = sensorNameList == null ? message : null;
+                    updateUI(message);
                 } catch (JSONException e) {
-                    updateUI();
+                    updateUI(message);
                     e.printStackTrace();
                 }
             }
             @Override
             public void onError(ANError error) {
-                updateUI();
+                String message = getResources().getString(R.string.reserved_widget_android_error_networkFailed);
+                updateUI(message);
             }
         });
     }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
 }

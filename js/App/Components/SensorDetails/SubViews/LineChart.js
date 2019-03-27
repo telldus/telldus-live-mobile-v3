@@ -63,17 +63,17 @@ type DefaultProps = {
 };
 
 class LineChart extends View<Props, null> {
-props: Props;
-static defaultProps: DefaultProps = {
-	showOne: true,
-	showTwo: true,
-	smoothing: false,
-};
+	props: Props;
+	static defaultProps: DefaultProps = {
+		showOne: true,
+		showTwo: true,
+		smoothing: false,
+	};
 
-getY: (Object) => number;
-getX: (Object) => number;
-formatXTick: (number) => string;
-renderAxis: (Array<Object>, number, Object) => Object;
+	getY: (Object) => number;
+	getX: (Object) => number;
+	formatXTick: (number) => string;
+	renderAxis: (Array<Object>, number, Object) => Object;
 renderLine: (Array<Object>, number, Object) => Object;
 
 constructor(props: Props) {
@@ -88,7 +88,7 @@ constructor(props: Props) {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-	const propsChange = shouldUpdate( this.props, nextProps, [
+	const propsChange = shouldUpdate(this.props, nextProps, [
 		'showOne', 'showTwo', 'smoothing', 'fullscreen',
 	]);
 	if (propsChange) {
@@ -118,6 +118,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	if (!isDataTwoEqual) {
 		return true;
 	}
+
 	return false;
 }
 

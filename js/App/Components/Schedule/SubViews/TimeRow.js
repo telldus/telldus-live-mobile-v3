@@ -61,45 +61,25 @@ export default class TimeRow extends View<null, Props, State> {
 		onPress: PropTypes.func,
 	};
 
-	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { schedule } = props;
-		const { hour, minute, type } = schedule;
-		const { time } = state;
-		if (hour !== time.hour || minute !== time.minute) {
-			if (type !== 'time') {
-				return {
-					loading: true,
-				};
-			}
-			return {
-				time: {
-					hour,
-					minute,
-				},
-			};
-		}
-		return null;
-	}
-
 	constructor(props: Props) {
 		super(props);
 
-		const { hour, minute } = props.schedule;
+		const { hour, minute, type } = props.schedule;
 
 		this.state = {
 			time: {
 				hour,
 				minute,
 			},
-			loading: false,
+			loading: type !== 'time',
 		};
 	}
 
 	componentDidMount() {
+		const { loading } = this.state;
 		const { schedule, device } = this.props;
 
-		if (schedule.type !== 'time') {
-			this.setState({ loading: true });
+		if (loading && schedule.type !== 'time') {
 			this._getSuntime(device.clientId, schedule.type);
 		}
 	}
@@ -206,7 +186,7 @@ export default class TimeRow extends View<null, Props, State> {
 
 		this.props.getSuntime(clientId, type).then((time: Time) => {
 			if ((time: Time)) {
-				if (time.hour !== hour && time.minute !== minute) {
+				if (time.hour !== hour || time.minute !== minute) {
 					this.setState({
 						time,
 						loading: false,

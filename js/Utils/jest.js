@@ -66,6 +66,5 @@ global.window.addEventListener = () => null;
 
 NativeModules.AndroidWidget = {
 	configureWidgetAuthData: jest.fn(),
-	configureWidgetSessionData: jest.fn(),
 	disableAllWidgets: jest.fn(),
 };

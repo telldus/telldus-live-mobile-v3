@@ -23,9 +23,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import org.bvic23.rngetpixel.RNPixelColorPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import org.wonday.orientation.OrientationPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -53,6 +50,10 @@ import com.reactlibrary.RNReactNativeAccessibilityPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.telldus.live.mobile.WidgetPackage;
+import org.bvic23.rngetpixel.RNPixelColorPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import org.wonday.orientation.OrientationPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -71,6 +72,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
             	new RNPixelColorPackage(),
+				new RNFetchBlobPackage(),
 				new RNGestureHandlerPackage(),
 				new RNGoogleSigninPackage(),
 				new OrientationPackage(),

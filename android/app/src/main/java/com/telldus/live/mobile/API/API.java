@@ -29,6 +29,7 @@ import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.BuildConfig;
 
 import java.util.concurrent.Callable;
 
@@ -36,17 +37,16 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 public class API {
-    private static String API_SERVER = "https://api3.telldus.com/oauth2/";
+    private static String API_SERVER = BuildConfig.TELLDUS_API_SERVER;
 
     public void callEndPoint(final Context context, final String params, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
-        String  accessToken = prefManager.getAccess();
+        String accessToken = prefManager.getAccessToken();
 
-        String Url = API_SERVER+params;
-
+        String Url = API_SERVER+"/oauth2"+params;
         AndroidNetworking.get(Url)
                 .addHeaders("Content-Type", "application/json")
-                .addHeaders("Accpet", "application/json")
+                .addHeaders("Accept", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
                 .setPriority(Priority.LOW)
                 .build()
@@ -118,11 +118,11 @@ public class API {
 
     public void refreshAccessToken(final Context context, final OnAPITaskComplete callBack) {
         final PrefManager prefManager = new PrefManager(context);
-        final String  clientId = prefManager.getClientID();
-        final String  clientSecret = prefManager.getClientSecret();
-        final String  refreshToken = prefManager.refToken();
+        final String clientId = prefManager.getClientID();
+        final String clientSecret = prefManager.getClientSecret();
+        final String refreshToken = prefManager.getRefreshToken();
 
-        String Url = API_SERVER+"accessToken";
+        String Url = API_SERVER+"/oauth2/accessToken";
 
         AndroidNetworking.post(Url)
             .addBodyParameter("client_id", clientId)
@@ -130,7 +130,7 @@ public class API {
             .addBodyParameter("grant_type", "refresh_token")
             .addBodyParameter("refresh_token", refreshToken)
             .addHeaders("Content-Type", "application/json")
-            .addHeaders("Accpet", "application/json")
+            .addHeaders("Accept", "application/json")
             .setPriority(Priority.LOW)
             .build()
             .getAsJSONObject(new JSONObjectRequestListener() {
@@ -140,14 +140,10 @@ public class API {
                     if (!error.isEmpty() && error != null) {
                         callBack.onSuccess(response);
                     } else {
-
                         String accessTokenN = response.optString("access_token");
-                        String refreshTokenN = response.optString("refresh_token");
                         String expiresInN = response.optString("expires_in");
 
-                        prefManager.timeStampAccessToken(expiresInN);
-                        prefManager.AccessTokenDetails(accessTokenN, expiresInN);
-                        prefManager.infoAccessToken(clientId, clientSecret, refreshTokenN);
+                        prefManager.setAccessDetails(accessTokenN, expiresInN, clientId, clientSecret, refreshToken);
 
                         callBack.onSuccess(response);
                     }

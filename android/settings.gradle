@@ -1,6 +1,8 @@
 rootProject.name = 'TelldusLiveApp'
 include ':react-native-get-pixel'
 project(':react-native-get-pixel').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-get-pixel/android')
+include ':react-native-fetch-blob'
+project(':react-native-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fetch-blob/android')
 include ':react-native-gesture-handler'
 project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
 include ':react-native-google-signin'

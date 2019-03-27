@@ -155,12 +155,14 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ""
+            buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
         }
         release {
             applicationIdSuffix ""
             minifyEnabled enableProguardInReleaseBuilds
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
         }
     }
     // applicationVariants are e.g. debug, release
@@ -176,10 +178,14 @@ android {
             }
         }
     }
+    lintOptions{
+        disable 'MissingTranslation'
+    }
 }
 
 dependencies {
     implementation project(':react-native-get-pixel')
+    implementation project(':react-native-fetch-blob')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-orientation-locker')
     implementation project(':react-native-svg')
@@ -236,9 +242,8 @@ dependencies {
         force = true;
     }
     implementation "com.amitshekhar.android:jackson-android-networking:1.0.0"
-    implementation "com.amitshekhar.android:jackson-android-networking:1.0.0"
-    implementation 'com.koushikdutta.async:androidasync:2.+'
-    implementation "org.java-websocket:Java-WebSocket:1.3.0"
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+    implementation 'com.google.android:flexbox:1.0.0'
 }
 
 // Run this once to be able to run the application with BUCK

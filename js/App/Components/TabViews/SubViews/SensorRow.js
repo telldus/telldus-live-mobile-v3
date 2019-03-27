@@ -195,7 +195,7 @@ class SensorRow extends View<Props, State> {
 		const { currentScreen, propsSwipeRow, sensor } = this.props;
 		const { isOpen } = this.state;
 		const { idToKeepOpen, forceClose } = propsSwipeRow;
-		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen)) ) {
+		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen))) {
 			this.closeSwipeRow();
 		}
 	}
@@ -279,7 +279,7 @@ class SensorRow extends View<Props, State> {
 			delay,
 			toValue: 0,
 			easing,
-		  }).start();
+		}).start();
 	}
 
 	scaleUp(duration: number, delay: number, easing: any) {
@@ -288,7 +288,7 @@ class SensorRow extends View<Props, State> {
 			delay,
 			toValue: 1,
 			easing,
-		  }).start();
+		}).start();
 	}
 
 	reduceButtons(duration: number, delay: number, easing: any) {
@@ -297,11 +297,11 @@ class SensorRow extends View<Props, State> {
 			delay,
 			toValue: 0,
 			easing,
-		  }).start(({finished}: Object) => {
-			  if (finished) {
+		}).start(({ finished }: Object) => {
+			if (finished) {
 				this.isAnimating = false;
-			  }
-		  });
+			}
+		});
 	}
 
 	expandButtons(duration: number, delay: number, easing: any) {
@@ -310,9 +310,9 @@ class SensorRow extends View<Props, State> {
 			delay,
 			toValue: this.state.buttonsWidth,
 			easing,
-		  }).start(({finished}: Object) => {
+		}).start(({ finished }: Object) => {
 			if (finished) {
-			  this.isAnimating = false;
+				this.isAnimating = false;
 			}
 		});
 	}
@@ -415,9 +415,9 @@ class SensorRow extends View<Props, State> {
 			if (name === 'wdir') {
 				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
 			}
-			sensors[key] = <GenericSensor {...sharedProps}/>;
+			sensors[key] = <GenericSensor {...sharedProps} />;
 		}
-		return {sensors, sensorAccessibilityInfo};
+		return { sensors, sensorAccessibilityInfo };
 	}
 
 	render(): Object {
@@ -434,7 +434,7 @@ class SensorRow extends View<Props, State> {
 		let { sensors, sensorAccessibilityInfo } = this.getSensors(data, styles);
 
 		let lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
-		let { isOpen, coverOccupiedWidth, coverMaxWidth } = this.state;
+		let { isOpen } = this.state;
 
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
@@ -461,7 +461,7 @@ class SensorRow extends View<Props, State> {
 				shouldItemUpdate={this.shouldUpdateSwipeRow}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
-					onPressSettings={this.onSettingsSelected}/>
+					onPressSettings={this.onSettingsSelected} />
 				<ListItem
 					style={styles.row}
 					accessible={false}
@@ -470,12 +470,13 @@ class SensorRow extends View<Props, State> {
 					// being placed inside a touchable.
 					onPress={this.noOp}>
 					<View style={styles.cover}>
-						<TouchableOpacity onPress={this.onPressSensorName} disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
+						<TouchableOpacity
+							onPress={this.onSettingsSelected}
 							style={styles.container}
 							accessible={accessible}
 							importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 							accessibilityLabel={accessible ? accessibilityLabel : ''}>
-							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle}/>
+							<BlockIcon icon="sensor" style={styles.sensorIcon} containerStyle={styles.iconContainerStyle} />
 							{nameInfo}
 						</TouchableOpacity>
 						<TypeBlockList
@@ -493,7 +494,7 @@ class SensorRow extends View<Props, State> {
 							}]}
 							valueCoverStyle={styles.sensorValueCover}
 							dotCoverStyle={styles.dotCoverStyle}
-							dotStyle={styles.dotStyle}/>
+							dotStyle={styles.dotStyle} />
 					</View>
 				</ListItem>
 			</SwipeRow>
@@ -525,7 +526,7 @@ class SensorRow extends View<Props, State> {
 								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
 								opacity: minutesAgo < 1440 ? 1 : 0.5,
 							},
-						]}/>
+						]} />
 					:
 					<Text style={[
 						textInfoStyle, {

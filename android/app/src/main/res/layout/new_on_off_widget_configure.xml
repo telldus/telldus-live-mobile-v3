@@ -15,9 +15,10 @@
             android:id="@+id/deviceBack">
             <ImageView
                 android:id="@+id/backdevice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/backarrow"
+                android:layout_width="16dp"
+                android:layout_height="20dp"
+                android:src="@drawable/left_arrow_key"
+                android:scaleType="centerInside"
                 android:tint="@color/white"
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"
@@ -25,15 +26,16 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="20dp"
+            android:scaleType="centerInside"
             android:orientation="horizontal"
             android:layout_centerInParent="true">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/telldus_1"/>
+                android:src="@drawable/telldus_logo"/>
         </LinearLayout>
 
     </RelativeLayout>
@@ -65,23 +67,22 @@
                         android:id="@+id/testText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add device widget"
+                        android:text="@string/reserved_widget_android_device_configure_header_one"
                         android:textSize="33sp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="27sp"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:id="@+id/chooseSetting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="Choose settings for your widget"
+                        android:text="@string/reserved_widget_android_configure_header_two"
                         android:textSize="22sp"
                         android:textColor="@color/white"
                         android:layout_gravity="center"
-                        android:paddingLeft="15sp"
-                        />
+                        android:paddingLeft="15sp"/>
                 </LinearLayout>
             </RelativeLayout>
 
@@ -90,16 +91,37 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/loadingText"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/infoView"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
-                    android:textSize="22sp"
-                    android:layout_marginTop="10dp"
                     android:layout_gravity="center|center"
-                    android:textColor="@color/orange"/>
+                    android:gravity="center|center"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp"
+                    android:elevation="5dp"
+                    android:padding="15dp"
+                    android:background="@drawable/shape_low_radius">
+                    <TextView
+                        android:id="@+id/infoIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="info"
+                        android:textSize="40sp"
+                        android:layout_gravity="center|center"
+                        android:gravity="center|center"
+                        android:textColor="@color/brandSecondary"
+                        android:fontFamily="@font/telldusicons"/>
+                    <TextView
+                        android:id="@+id/infoText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_gravity="left|center"
+                        android:gravity="left|center"
+                        android:textColor="@color/gray"/>
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/screenCover"
                     android:layout_width="match_parent"
@@ -109,7 +131,6 @@
                         android:id="@+id/deviceText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Device:"
                         android:layout_marginLeft="10dp"
                         android:textSize="16sp"
                         android:textColor="@color/darkGray"
@@ -145,8 +166,6 @@
                             android:layout_weight="0.62"
                             android:background="@drawable/shape_right">
 
-
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -157,7 +176,7 @@
                                     android:id="@+id/txtDeviceName"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Select device"
+                                    android:text="@string/reserved_widget_android_device_select"
                                     android:textSize="25sp"
                                     android:textColor="@color/orange"/>
 
@@ -165,7 +184,7 @@
                                     android:id="@+id/txtDeviceHint"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Tap to select device"
+                                    android:text="@string/reserved_widget_android_device_tap_change_device"
                                     android:textSize="15sp"
                                     android:textColor="@color/darkGray"/>
 
@@ -179,7 +198,6 @@
                         android:id="@+id/settingText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Settings:"
                         android:layout_marginLeft="10dp"
                         android:textSize="16sp"
                         android:layout_marginBottom="10dp"
@@ -197,9 +215,8 @@
                             android:id="@+id/switch_background"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="Transparent Background"
-                            android:theme="@style/SCBSwitch"
-                            />
+                            android:text="@string/reserved_widget_android_label_transparent"
+                            android:theme="@style/SCBSwitch"/>
 
                     </LinearLayout>
 
@@ -220,7 +237,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/orangebutton"
-                            android:text="@string/confirm"/>
+                            android:text="@string/reserved_widget_android_confirm"/>
 
                         <Button
                             android:id="@+id/btn_cancel"
@@ -230,7 +247,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/redbutton"
-                            android:text="CANCEL"/>
+                            android:text="@string/reserved_widget_android_dialogueBox_defaultNegativeText"/>
 
                     </LinearLayout>
                 </LinearLayout>

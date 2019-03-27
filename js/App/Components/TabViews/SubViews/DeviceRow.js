@@ -385,7 +385,7 @@ class DeviceRow extends View<Props, State> {
 
 	render(): Object {
 		let button = [];
-		let { isOpen, showMoreActions, coverOccupiedWidth, coverMaxWidth, isModelRGB } = this.state;
+		let { isOpen, showMoreActions, isModelRGB } = this.state;
 		const {
 			device,
 			intl,
@@ -425,6 +425,10 @@ class DeviceRow extends View<Props, State> {
 		};
 		const icon = getDeviceIcons(deviceType);
 
+		// NOTE: the prop "key" serves two purpose.
+		// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
+		// 2. The same prop is used/accessed inside "TabViews/SubViews/Device/MultiActionModal.js" to override the style
+		// in the case of device groups.
 		if ((TURNOFF || TURNON) && RGB && DIM) {
 			button.unshift(
 				<RGBButton
@@ -435,7 +439,6 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-
 		if (BELL) {
 			button.unshift(
 				<BellButton
@@ -524,8 +527,7 @@ class DeviceRow extends View<Props, State> {
 						<View style={styles.cover}>
 							<TouchableOpacity
 								style={[styles.touchableContainer]}
-								disabled={!isOpen && coverOccupiedWidth < coverMaxWidth}
-								onPress={this.onShowFullName}
+								onPress={this.onSettingsSelected}
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>

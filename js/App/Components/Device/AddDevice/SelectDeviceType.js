@@ -105,13 +105,13 @@ getNodesList(id: number) {
 
 getDeviceTypes(): Array<any> {
 	const { navigation, intl } = this.props, types = [];
-	const { formatMessage } = intl;
+	const { formatMessage, formatNumber } = intl;
 	const gateway = navigation.getParam('gateway', {});
 	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 
 	transportsAsArray.map((ts: string) => {
-		const availableTypes = getAvailableDeviceTypesAndInfo(formatMessage)[ts];
+		const availableTypes = getAvailableDeviceTypesAndInfo(formatMessage, formatNumber, true)[ts];
 		if (availableTypes) {
 			types.push(...availableTypes);
 		}

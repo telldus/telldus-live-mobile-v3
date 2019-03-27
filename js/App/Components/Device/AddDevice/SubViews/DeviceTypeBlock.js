@@ -33,6 +33,7 @@ import {
 	Text,
 	IconTelldus,
 } from '../../../../../BaseComponents';
+import Device_433 from '../../../TabViews/img/device/device_433.svg';
 
 import Theme from '../../../../Theme';
 
@@ -41,10 +42,12 @@ type Props = {
     action: string,
     h1: string,
 	h2: string,
-	icon: string,
+	icon?: string,
 	appLayout: Object,
 	onPress: (Object) => void,
 	id: number,
+	enabled: boolean,
+	image?: string,
 };
 
 type State = {
@@ -72,8 +75,21 @@ onPress() {
 	}
 }
 
+getImageSVG(image: string): any {
+	switch (image) {
+		case 'device_433':
+			return Device_433;
+		default:
+			return null;
+	}
+}
+
 render(): Object {
-	const { h1, h2, icon, id } = this.props;
+	const { h1, h2, icon, id, enabled, image } = this.props;
+	let ImageComponent;
+	if (image) {
+		ImageComponent = this.getImageSVG(image);
+	}
 	const {
 		arrowCover,
 		arrow,
@@ -83,6 +99,10 @@ render(): Object {
 		h1Style,
 		h2Style,
 		iconSecurity,
+		notAvailableIcon,
+		imageComponentStyle,
+		imageComponentHeight,
+		imageComponentWidth,
 	} = this.getStyles();
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 	return (
@@ -90,10 +110,15 @@ render(): Object {
 			rippleColor={rippleColor}
 			rippleOpacity={rippleOpacity}
 			rippleDuration={rippleDuration}
-			onPress={this.onPress}>
+			onPress={this.onPress}
+			disabled={!enabled}>
 			<View style={container}>
 				<View style={itemsCover}>
-					<IconTelldus icon={icon} style={imageType}/>
+					{!!icon && <IconTelldus icon={icon} style={imageType}/>}
+					{!!ImageComponent && <ImageComponent
+						height={imageComponentHeight}
+						width={imageComponentWidth}
+						style={imageComponentStyle}/>}
 					<View style={{
 						flex: 1,
 						flexDirection: 'column',
@@ -119,14 +144,18 @@ render(): Object {
 					</View>
 				</View>
 				<View style={arrowCover} pointerEvents={'none'}>
-					<Image source={{uri: 'right_arrow_key'}} style={arrow}/>
+					{enabled ?
+						<Image source={{uri: 'right_arrow_key'}} style={arrow}/>
+						:
+						<IconTelldus icon={'notavailable'} style={notAvailableIcon}/>
+					}
 				</View>
 			</View>
 		</Ripple>
 	);
 }
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, enabled } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -139,10 +168,17 @@ getStyles(): Object {
 	const h1FontSize = deviceWidth * 0.065;
 	const h2FontSize = deviceWidth * 0.033;
 
+	const colorBackground = enabled ? '#fff' : '#f5f5f5';
+	const colorHeaderOneText = enabled ? brandSecondary : '#999999';
+	const colorIcon = enabled ? '#1b365d' : '#bdbdbd';
+
+	const imageComponentWidth = deviceWidth * 0.16;
+	const imageComponentHeight = deviceWidth * 0.22;
+
 	return {
 		container: {
 			...shadow,
-			backgroundColor: '#fff',
+			backgroundColor: colorBackground,
 			marginBottom: padding / 2,
 			justifyContent: 'center',
 			borderRadius: 2,
@@ -168,7 +204,7 @@ getStyles(): Object {
 		},
 		h1Style: {
 			fontSize: h1FontSize,
-			color: brandSecondary,
+			color: colorHeaderOneText,
 		},
 		h2Style: {
 			fontSize: h2FontSize,
@@ -176,13 +212,23 @@ getStyles(): Object {
 		},
 		imageType: {
 			fontSize: deviceWidth * 0.18,
-			color: '#1b365d',
+			color: colorIcon,
 			marginHorizontal: padding * 2,
 		},
 		iconSecurity: {
 			fontSize: h1FontSize,
 			color: brandSecondary,
 		},
+		notAvailableIcon: {
+			fontSize: rowHeight * 0.25,
+			color: '#bdbdbd',
+		},
+		imageComponentStyle: {
+			marginHorizontal: padding * 2,
+			color: colorIcon,
+		},
+		imageComponentHeight,
+		imageComponentWidth,
 	};
 }
 }

@@ -36,6 +36,7 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.NewOnOffWidget;
 import com.telldus.live.mobile.Utility.HandlerRunnablePair;
+import com.telldus.live.mobile.R;
 
 import java.util.concurrent.Callable;
 import java.util.HashMap;
@@ -53,7 +54,7 @@ public class DevicesAPI {
     private long runnableDeviceInfoCheckMaxTimeout = 10000;
 
     public void setDeviceState(final Integer deviceId, final Integer method, final Integer stateValue, final int widgetId, final Context context, final OnAPITaskComplete callBack) {
-        String params = "device/command?id="+deviceId+"&method="+method+"&value="+stateValue;
+        String params = "/device/command?id="+deviceId+"&method="+method+"&value="+stateValue;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override
@@ -99,27 +100,27 @@ public class DevicesAPI {
                     }
                     if (!error.isEmpty() && error != null) {
                         MyDBHandler db = new MyDBHandler(context);
-                        Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                         callBack.onSuccess(response);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     MyDBHandler db = new MyDBHandler(context);
-                    Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                     callBack.onSuccess(response);
                 };
             }
             @Override
             public void onError(ANError error) {
                 MyDBHandler db = new MyDBHandler(context);
-                Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                 callBack.onError(error);
             }
         });
     }
 
     public void getDeviceInfo(final Integer deviceId, final Integer requestedState, final int widgetId, final Boolean reset, final Context context, final OnAPITaskComplete callBack) {
-        String params =  "device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
+        String params =  "/device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override
@@ -142,7 +143,7 @@ public class DevicesAPI {
                             return;
                         }
                         if (reset && !newState.equals(reqState)) {
-                            Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                             removeHandlerRunnablePair(deviceId, widgetId);
                             callBack.onSuccess(response);
                             return;
@@ -152,7 +153,7 @@ public class DevicesAPI {
                     e.printStackTrace();
                     if (reset) {
                         MyDBHandler db = new MyDBHandler(context);
-                        Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                         removeHandlerRunnablePair(deviceId, widgetId);
                         callBack.onSuccess(response);
                     }
@@ -162,7 +163,7 @@ public class DevicesAPI {
             public void onError(ANError error) {
                 if (reset) {
                     MyDBHandler db = new MyDBHandler(context);
-                    Toast.makeText(context, "Action Currently Unavailable", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
                     removeHandlerRunnablePair(deviceId, widgetId);
                     callBack.onError(error);
                 }

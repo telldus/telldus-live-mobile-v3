@@ -29,15 +29,9 @@ const {Sensors: {getSensors}} = actions;
 const {Jobs: {getJobs}} = actions;
 const {Websockets: {authenticateSession, connectToGateways}} = actions;
 
-import { widgetAndroidConfigureSessionData } from './Widget';
-
 function getAppData(): ThunkAction {
 	return (dispatch: Function, getState: Object): any => {
-		dispatch(authenticateSession()).then((sessionId: string) => {
-			if (sessionId) {
-				dispatch(widgetAndroidConfigureSessionData(sessionId));
-			}
-		});
+		dispatch(authenticateSession());
 		dispatch(connectToGateways());
 		dispatch(getJobs());
 		return Promise.all([

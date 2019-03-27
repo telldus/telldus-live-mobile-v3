@@ -38,7 +38,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,15 +58,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+
+import com.google.android.flexbox.FlexboxLayout;
 
 public class NewOnOffWidgetConfigureActivity extends Activity {
     private static final String ACTION_ON = "ACTION_ON";
@@ -91,10 +93,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText, loadingText;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
-    private RemoteViews views;
     Switch switch_background;
 
     private String accessToken;
@@ -140,22 +141,86 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         prefManager = new PrefManager(this);
-        accessToken = prefManager.getAccess();
+        accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
             Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
             getApplicationContext().startActivity(launchActivity);
             return;
         }
 
-        createDeviceApi();
-
         setResult(RESULT_CANCELED);
+        int pro = prefManager.getPro();
+        if (pro != -1) {
+            setContentView(R.layout.view_with_header_poster);
+
+            mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
+            mBackLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            updateUIBasic();
+
+            return;
+        }
+
+        createDeviceApi();
         setContentView(R.layout.new_on_off_widget_configure);
 
-        updateUI();
+        String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
+        updateUI(message);
     }
 
-    public void updateUI() {
+    public void updateUIBasic() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String euro = getResources().getString(R.string.euro);
+        String pm = getResources().getString(R.string.reserved_widget_android_per_month);
+
+        FlexboxLayout p_p_1 = (FlexboxLayout) findViewById(R.id.p_p_1);
+
+        TextView validityInfoText1 = (TextView) p_p_1.findViewById(R.id.validityInfoText);
+        validityInfoText1.setText(getResources().getString(R.string.reserved_widget_android_12_months));
+
+        TextView smsCreditText1 = (TextView) p_p_1.findViewById(R.id.smsCreditText);
+        smsCreditText1.setText(getResources().getString(R.string.reserved_widget_android_25_sms));
+
+        TextView priceInfoOne1 = (TextView) p_p_1.findViewById(R.id.priceInfoOne);
+        priceInfoOne1.setText(euro+df.format(2.10));
+        TextView priceInfoTwo1 = (TextView) p_p_1.findViewById(R.id.priceInfoTwo);
+        priceInfoTwo1.setText(pm);
+
+
+        FlexboxLayout p_p_2 = (FlexboxLayout) findViewById(R.id.p_p_2);
+
+        TextView validityInfoText2 = (TextView) p_p_2.findViewById(R.id.validityInfoText);
+        validityInfoText2.setText(getResources().getString(R.string.reserved_widget_android_6_months));
+
+        TextView smsCreditText2 = (TextView) p_p_2.findViewById(R.id.smsCreditText);
+        smsCreditText2.setText(getResources().getString(R.string.reserved_widget_android_12_sms));
+
+        TextView priceInfoOne2 = (TextView) p_p_2.findViewById(R.id.priceInfoOne);
+        priceInfoOne2.setText(euro+df.format(2.50));
+        TextView priceInfoTwo2 = (TextView) p_p_2.findViewById(R.id.priceInfoTwo);
+        priceInfoTwo2.setText(pm);
+
+
+        FlexboxLayout p_p_3 = (FlexboxLayout) findViewById(R.id.p_p_3);
+
+        TextView validityInfoText3 = (TextView) p_p_3.findViewById(R.id.validityInfoText);
+        validityInfoText3.setText(getResources().getString(R.string.reserved_widget_android_1_month));
+
+        TextView smsCreditText3 = (TextView) p_p_3.findViewById(R.id.smsCreditText);
+        smsCreditText3.setText(getResources().getString(R.string.reserved_widget_android_3_sms));
+
+        TextView priceInfoOne3 = (TextView) p_p_3.findViewById(R.id.priceInfoOne);
+        priceInfoOne3.setText(euro+NumberFormat.getInstance().format(3));
+        TextView priceInfoTwo3 = (TextView) p_p_3.findViewById(R.id.priceInfoTwo);
+        priceInfoTwo3.setText(pm);
+    }
+
+    public void updateUI(String message) {
 
         mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
         mBackLayout.setOnClickListener(new View.OnClickListener() {
@@ -165,16 +230,17 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             }
         });
 
-        loadingText = (TextView)findViewById(R.id.loadingText);
+        View infoView = (View)findViewById(R.id.infoView);
+        TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
         if (DeviceInfoMap.size() == 0) {
-            loadingText.setVisibility(View.VISIBLE);
+            infoView.setVisibility(View.VISIBLE);
+            infoText.setText(message);
             screenCover.setVisibility(View.GONE);
         } else {
-            views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
             widgetManager = AppWidgetManager.getInstance(this);
 
-            loadingText.setVisibility(View.GONE);
+            infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
             textTest = (TextView)findViewById(R.id.testText);
@@ -184,8 +250,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             backDevice = (ImageView)findViewById(R.id.backdevice);
             deviceText = (TextView)findViewById(R.id.deviceText);
             settingText = (TextView)findViewById(R.id.settingText);
-
-            views.setViewVisibility(R.id.offLinear, View.GONE);
 
             btnCan = (Button)findViewById(R.id.btn_cancel);
             btnCan.setOnClickListener(new View.OnClickListener() {
@@ -236,18 +300,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         return;
                     }
 
-                    boolean b = isMyServiceRunning(NetworkInfo.class);
-                    if (!b) {
-                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    }
-
-                    boolean b1 = prefManager.getDeviceDB();
-                    if (!b1) {
-                        prefManager.DeviceDB(true);
-                    }
-
-                    views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
-
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
                     String deviceCurrentState = null;
@@ -282,7 +334,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this
                             ,R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_device)
+                    builder.setTitle(R.string.reserved_widget_android_pick_device)
                         .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 selectedDeviceIndex = which;
@@ -310,6 +362,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceName.setTypeface(subtitleFont);
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);
+            deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
+            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             settingText.setTypeface(subtitleFont);
             btAdd.setTypeface(subtitleFont);
             btnCan.setTypeface(subtitleFont);
@@ -318,11 +372,12 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-        String params = "devices/list?supportedMethods=1975&includeIgnored=1&extras=devicetype,transport,room";
+        String params = "/devices/list?supportedMethods=1975&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
+                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_2);
                 try {
 
                     DevicesUtilities deviceUtils = new DevicesUtilities();
@@ -360,26 +415,19 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     }
                     deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                     deviceIdList = idList.toArray(new CharSequence[idList.size()]);
-                    updateUI();
+
+                    message = DeviceInfoMap.size() == 0 ? message : null;
+                    updateUI(message);
                 } catch (JSONException e) {
-                    updateUI();
+                    updateUI(message);
                     e.printStackTrace();
                 };
             }
             @Override
             public void onError(ANError error) {
-                updateUI();
+                String message = getResources().getString(R.string.reserved_widget_android_error_networkFailed);
+                updateUI(message);
             }
         });
-    }
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

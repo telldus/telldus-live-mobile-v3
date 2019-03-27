@@ -28,6 +28,7 @@ const isEqual = require('react-fast-compare');
 
 import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
 
+import { getDeviceManufacturerInfo, deviceZWaveInfo } from '../../../Actions/Devices';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import {
@@ -42,8 +43,10 @@ type Props = {
 	gatewayType: string,
 	gatewayName: string,
 	isGatewayActive: boolean,
+	zwaveInfo: Object,
 
 	screenProps: Object,
+	dispatch: Function,
 };
 
 class OverviewTab extends View<Props, null> {
@@ -71,6 +74,31 @@ class OverviewTab extends View<Props, null> {
 		this.boxTitle = `${props.screenProps.intl.formatMessage(i18n.location)}:`;
 	}
 
+	componentDidMount() {
+		const { dispatch, device } = this.props;
+		const { nodeInfo, id } = device;
+		if (nodeInfo) {
+			const {
+				manufacturerId,
+				productId,
+				productTypeId,
+			} = nodeInfo;
+			dispatch(getDeviceManufacturerInfo(manufacturerId, productTypeId, productId))
+				.then((res: Object) => {
+					if (res && res.Name) {
+						const { Image, Name, Brand } = res;
+						const payload = {
+							Image,
+							Name,
+							Brand,
+							deviceId: id,
+						};
+						dispatch(deviceZWaveInfo(payload));
+					}
+				});
+		}
+	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { screenProps: screenPropsN, gatewayName: gatewayNameN, isGatewayActive: isGatewayActiveN, device: deviceN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
@@ -81,7 +109,7 @@ class OverviewTab extends View<Props, null> {
 				return true;
 			}
 
-			if (!isEqual(device, deviceN)) {
+			if (!isEqual(deviceN, device)) {
 				return true;
 			}
 
@@ -120,6 +148,17 @@ class OverviewTab extends View<Props, null> {
 			H2: gatewayType,
 		};
 
+		const { zwaveInfo = {} } = device;
+		const {
+			Image,
+			Name,
+			Brand,
+		} = zwaveInfo;
+		const locationDataZWave = {
+			image: Image,
+			H1: Name,
+			H2: Brand,
+		};
 		const styles = this.getStyles(appLayout);
 
 		return (
@@ -135,7 +174,10 @@ class OverviewTab extends View<Props, null> {
 					appLayout={appLayout}
 					isGatewayActive={isGatewayActive}
 					containerStyle={styles.actionDetails}/>
-				<LocationDetails {...locationData} style={styles.LocationDetail}/>
+				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
+				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
+					marginBottom: styles.padding,
+				}]}/>
 			</ScrollView>
 		);
 	}
@@ -148,6 +190,7 @@ class OverviewTab extends View<Props, null> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
+			padding,
 			itemsContainer: {
 				flexGrow: 1,
 				marginTop: padding,
@@ -155,7 +198,6 @@ class OverviewTab extends View<Props, null> {
 			LocationDetail: {
 				flex: 0,
 				marginTop: (padding / 2),
-				marginBottom: padding,
 				marginHorizontal: padding,
 			},
 			actionDetails: {

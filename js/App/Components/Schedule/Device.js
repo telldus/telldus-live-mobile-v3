@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { SectionList } from 'react-native';
-import PropTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 import filter from 'lodash/filter';
 import isEmpty from 'lodash/isEmpty';
@@ -38,7 +37,6 @@ import Theme from '../../Theme';
 interface Props extends ScheduleProps {
 	devices: Object,
 	gateways: Object,
-	resetSchedule: () => void,
 }
 
 type State = {
@@ -47,15 +45,6 @@ type State = {
 };
 
 export default class Device extends View<void, Props, State> {
-
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		devices: PropTypes.object,
-		onDidMount: PropTypes.func,
-		schedule: PropTypes.object,
-		resetSchedule: PropTypes.func,
-	};
 
 	state = {
 		dataSource: this.parseDataForList(this.props.devices.byId, this.props.gateways.byId),
@@ -112,10 +101,6 @@ export default class Device extends View<void, Props, State> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return nextProps.currentScreen === 'InitialScreen';
-	}
-
-	componentWillUnmount() {
-		this.props.actions.resetSchedule();
 	}
 
 	onRefresh = () => {

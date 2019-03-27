@@ -37,7 +37,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +61,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
 import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
@@ -96,10 +94,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText, settingText, tvIcon1, loadingText;
+    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText, settingText, tvIcon1;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
-    private RemoteViews views;
     Switch switch_background;
 
     private String accessToken;
@@ -121,7 +118,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         prefManager = new PrefManager(this);
-        accessToken = prefManager.getAccess();
+        accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
             Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
             getApplicationContext().startActivity(launchActivity);
@@ -132,10 +129,11 @@ public class NewAppWidgetConfigureActivity extends Activity {
         setResult(RESULT_CANCELED);
         setContentView(R.layout.activity_device_widget_configure);
 
-        updateUI();
+        String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
+        updateUI(message);
     }
 
-    public void updateUI() {
+    public void updateUI(String message) {
         mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
         mBackLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,16 +142,17 @@ public class NewAppWidgetConfigureActivity extends Activity {
             }
         });
 
-        loadingText = (TextView)findViewById(R.id.loadingText);
+        View infoView = (View)findViewById(R.id.infoView);
+        TextView infoText = (TextView)findViewById(R.id.infoText);
         screenCover = (View)findViewById(R.id.screenCover);
         if (DeviceInfoMap.size() == 0) {
-            loadingText.setVisibility(View.VISIBLE);
+            infoView.setVisibility(View.VISIBLE);
+            infoText.setText(message);
             screenCover.setVisibility(View.GONE);
         } else {
-            views = new RemoteViews(this.getPackageName(), R.layout.new_app_widget);
             widgetManager = AppWidgetManager.getInstance(this);
 
-            loadingText.setVisibility(View.GONE);
+            infoView.setVisibility(View.GONE);
             screenCover.setVisibility(View.VISIBLE);
 
             textTest = (TextView)findViewById(R.id.testText);
@@ -212,18 +211,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         return;
                     }
 
-                    boolean b = isMyServiceRunning(NetworkInfo.class);
-                    if (!b) {
-                        startService(new Intent(getApplicationContext(), NetworkInfo.class));
-                    }
-
-                    boolean b1 = prefManager.getDeviceDB();
-                    if (!b1) {
-                        prefManager.DeviceDB(true);
-                    }
-
-                    views.setTextViewText(R.id.txtWidgetTitle, deviceName.getText());
-
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
                     String deviceCurrentState = null;
@@ -255,7 +242,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 DevicesUtilities deviceUtils = new DevicesUtilities();
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewAppWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                    builder.setTitle(R.string.pick_device)
+                    builder.setTitle(R.string.reserved_widget_android_pick_device)
                         .setSingleChoiceItems(deviceNameList, selectedDeviceIndex, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 selectedDeviceIndex = which;
@@ -281,16 +268,19 @@ public class NewAppWidgetConfigureActivity extends Activity {
             Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
             Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
             textTest.setTypeface(titleFont);
+            deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
+            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
             chooseSetting.setTypeface(titleFont);
         }
     }
 
     void createDeviceApi() {
-        String params = "devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room";
+        String params = "/devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
+                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
                 try {
 
                     DevicesUtilities deviceUtils = new DevicesUtilities();
@@ -333,27 +323,19 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     }
                     deviceNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                     deviceIdList = idList.toArray(new CharSequence[idList.size()]);
-                    updateUI();
+
+                    message = DeviceInfoMap.size() == 0 ? message : null;
+                    updateUI(message);
                 } catch (JSONException e) {
-                    updateUI();
+                    updateUI(message);
                     e.printStackTrace();
                 };
             }
             @Override
             public void onError(ANError error) {
-                updateUI();
+                String message = getResources().getString(R.string.reserved_widget_android_error_networkFailed);
+                updateUI(message);
             }
         });
-    }
-
-
-    private boolean isMyServiceRunning(Class<?> serviceClass) {
-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 }

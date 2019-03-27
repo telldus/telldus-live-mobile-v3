@@ -22,12 +22,17 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import {
+	CachedImage,
+} from 'react-native-cached-image';
+
 
 import Text from './Text';
 import View from './View';
 import Theme from '../App/Theme';
+
 type Props = {
 	title?: any,
 	image: string,
@@ -39,6 +44,11 @@ type Props = {
 	accessible?: boolean,
 	info?: Object,
 	infoContainerStyle?: any,
+	isStatic?: boolean,
+};
+
+type DefaultProps = {
+	isStatic: boolean,
 };
 
 
@@ -46,6 +56,10 @@ class LocationDetails extends Component<Props, null> {
 	props: Props;
 
 	onPress: () => void;
+
+	static defaultProps: DefaultProps = {
+		isStatic: true,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -66,7 +80,19 @@ class LocationDetails extends Component<Props, null> {
 
 	render(): Object {
 
-		const { title, H1, H2, image, style, appLayout, accessible, info, onPress, infoContainerStyle } = this.props;
+		const {
+			title,
+			H1,
+			H2,
+			image,
+			style,
+			appLayout,
+			accessible,
+			info,
+			onPress,
+			infoContainerStyle,
+			isStatic,
+		} = this.props;
 
 		const {
 			container,
@@ -90,7 +116,13 @@ class LocationDetails extends Component<Props, null> {
 				}
 				<View style={styles.imageHeaderContainer}>
 					<View style={locationImageContainer}>
-						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
+						<CachedImage
+							resizeMode={'contain'}
+							source={{
+								uri: image,
+								isStatic,
+							}}
+							style={locationImage}/>
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
 						<Text numberOfLines={1} style={textHSH}>

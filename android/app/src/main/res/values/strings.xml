@@ -1,11 +1,100 @@
-<resources>
-	<string name="app_name">Telldus Live! Mobile</string>
-	<string name="appwidget_text">EXAMPLE</string>
-	<string name="configure">Configure</string>
-	<string name="add_widget">Add widget</string>
-	<string name="pick_device">Pick a device</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources
+	xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
 
-	<string name="pick_sensor">Pick a sensor</string>
-	<string name="pick_sensor_data">Pick a sensor data type</string>
-	<string name="confirm">Confirm &amp; Save</string>
+	<!--**************************************************************-->
+	<!--**************************** NOTE ****************************-->
+	<!--**************************************************************-->
+	<!-- All strings that need to be localised, should prepend 'reserved_widget_android' to it's name
+		Eg: <string name="reserved_widget_android_unknown">Unknown</string> -->
+	<!-- And should be defined inside repo 'live-shared-data' with the above name as intl 'id' but by replacing "_" with "." -->
+
+
+	<string name="app_name" translatable="false">Telldus Live! Mobile</string>
+
+	<string name="reserved_widget_android_confirm">Confirm &amp; Save</string>
+	<string name="reserved_widget_android_dialogueBox_defaultNegativeText">Cancel</string>
+
+	<string name="reserved_widget_android_unknown">Unknown</string>
+
+	<string name="reserved_widget_android_widget_info_device_2">Device 1-2 btn</string>
+	<string name="reserved_widget_android_widget_info_device_3">Device 3+ btn</string>
+	<string name="reserved_widget_android_labelSensor">Sensor</string>
+
+	<string name="reserved_widget_android_pick_device">Select a device</string>
+	<string name="reserved_widget_android_device_select">Select device</string>
+	<string name="reserved_widget_android_device_tap_change_device">Tap to select device</string>
+	<string name="reserved_widget_android_device_configure_header_one">Add device widget</string>
+
+	<string name="reserved_widget_android_sensor_select">Select sensor</string>
+	<string name="reserved_widget_android_sensor_tap_change_sensor">Tap to select sensor</string>
+	<string name="reserved_widget_android_sensor_select_value">Select value</string>
+	<string name="reserved_widget_android_sensor_tap_change_value">Tap to change value to display</string>
+	<string name="reserved_widget_android_sensor_value_to_display">Value to display</string>
+	<string name="reserved_widget_android_pick_sensor">Select a sensor</string>
+	<string name="reserved_widget_android_pick_sensor_data">Select sensor value</string>
+	<string name="reserved_widget_android_sensor_configure_header_one">Add sensor widget</string>
+
+	<string name="reserved_widget_android_configure_header_two">Choose settings for your widget</string>
+
+	<string name="reserved_widget_android_toast_deviceActionError">Action Currently Unavailable</string>
+
+	<string name="reserved_widget_android_labelDevice">Device</string>
+	<string name="reserved_widget_android_settings">Settings</string>
+	<string name="reserved_widget_android_label_transparent">Transparent Background</string>
+	<string name="reserved_widget_android_label_update_interval_1">Update every 10 minutes</string>
+	<string name="reserved_widget_android_label_update_interval_2">Update every 30 minutes</string>
+	<string name="reserved_widget_android_label_update_interval_3">Update every 1 hour</string>
+	<string name="reserved_widget_android_loading">Loading</string>
+
+	<string name="reserved_widget_android_message_user_logged_out_one">This widget was added for</string>
+	<string name="reserved_widget_android_message_user_logged_out_two">Please log in to that account to view this widget.</string>
+	<string name="reserved_widget_android_message_device_not_found">This device has been removed from your account.</string>
+	<string name="reserved_widget_android_message_sensor_not_found">This sensor has been removed from your account.</string>
+
+	<!-- Toast message when user press add widget confirm button, without choosing any device-->
+	<string name="reserved_widget_android_message_device_not_selected">You have not chosen any device. Please select a device to add as widget.</string>
+	<!-- Toast message when user press add widget confirm button, without choosing any sensor-->
+	<string name="reserved_widget_android_message_sensor_not_selected">You have not chosen any sensor. Please select a sensor to add as widget.</string>
+	<!-- Toast message when user press add widget confirm button, without choosing any sensor scale to display-->
+	<string name="reserved_widget_android_message_sensor_scale_not_selected">You have not chosen any value to display for sensor. Please select a value from the list.</string>
+
+	<!-- When there are no device's with 2 or less buttons in the account-->
+	<string name="reserved_widget_android_message_add_widget_no_device_2">Could not find any device with 2 or less buttons.</string>
+	<!-- When there are no device's with 3 or more buttons in the account-->
+	<string name="reserved_widget_android_message_add_widget_no_device_3">Could not find any device with 3 or more buttons.</string>
+	<!-- When there are no sensors in the account-->
+	<string name="reserved_widget_android_message_add_widget_no_sensor">Could not find any sensors.</string>
+
+	<!-- Network error - Re-using same message as in main app-->
+	<string name="reserved_widget_android_error_networkFailed">Network request failed. Please check your internet connection</string>
+
+	<string name="reserved_widget_android_premium_required">Premium required</string>
+	<string name="reserved_widget_android_upgrade_below">Upgrade below</string>
+
+	<string name="reserved_widget_android_upgrade_prem_info">Premium Access is required to use widgets. Read more and
+	upgrade below.</string>
+
+	<string name="reserved_widget_android_12_months">12 Months</string>
+	<string name="reserved_widget_android_6_months">6 Months</string>
+	<string name="reserved_widget_android_1_month">1 Month</string>
+
+	<string name="reserved_widget_android_25_sms">Including 25 SMS Credits</string>
+	<string name="reserved_widget_android_12_sms">Including 12 SMS Credits</string>
+	<string name="reserved_widget_android_3_sms">Including 3 SMS Credits</string>
+
+	<string name="reserved_widget_android_buy_12_months">Buy 12 Months</string>
+	<string name="reserved_widget_android_buy_6_months">Buy 6 Months</string>
+	<string name="reserved_widget_android_buy_1_month">Buy 1 Month</string>
+
+	<string name="reserved_widget_android_save_16">Save 16%</string>
+	<string name="reserved_widget_android_save_30">Save 30%</string>
+
+	<string name="reserved_widget_android_per_month">Per month</string>
+
+	<string name="reserved_widget_android_total">Total</string>
+
+	<string name="euro" translatable="false">&#8364;</string>
+
 </resources>

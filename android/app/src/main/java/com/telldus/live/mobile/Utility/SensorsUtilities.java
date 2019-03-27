@@ -35,6 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import com.telldus.live.mobile.R;
+
 public class SensorsUtilities {
     public String getConstants(Context context) {
         String json = null;
@@ -121,7 +123,7 @@ public class SensorsUtilities {
     public Map<String, Object> getSensorInfo(String name, String scale, String value, Context context) {
         Map<String, Object> info = new HashMap<String, Object>();
         String unit = "";
-        info.put("label", "Unknown");
+        info.put("label", context.getResources().getString(R.string.reserved_widget_android_unknown));
         info.put("icon", "sensor");
         info.put("unit", unit);
         info.put("value", value);

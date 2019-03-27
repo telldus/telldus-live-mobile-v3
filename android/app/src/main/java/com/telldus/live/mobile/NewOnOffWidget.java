@@ -25,9 +25,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -49,6 +48,7 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
+import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 
@@ -77,7 +77,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         int appWidgetId
     ) {
         PrefManager prefManager = new PrefManager(context);
-        String accessToken = prefManager.getAccess();
+        String accessToken = prefManager.getAccessToken();
         // On log out, only prefManager is cleared and not DB, so we do not want device to show back again during the
         // socket update.
         if (accessToken == "") {
@@ -86,8 +86,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         MyDBHandler db = new MyDBHandler(context);
 
-        CharSequence widgetText = "Telldus";
-        String transparent;
         DeviceInfo DeviceWidgetInfo = db.findWidgetInfoDevice(appWidgetId);
 
         if (DeviceWidgetInfo == null) {
@@ -96,12 +94,42 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         String userId = DeviceWidgetInfo.getUserId();
         String currentUserId = prefManager.getUserId();
+        if (currentUserId == null || userId == null) {
+            return;
+        }
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
+
+            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
+            String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
+            String phraseTwo = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_two);
+            view.setTextViewText(R.id.loggedOutInfoOne, preScript + ": ");
+            view.setTextViewText(R.id.loggedOutInfoEmail, userId);
+            view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
+
+            appWidgetManager.updateAppWidget(appWidgetId, view);
+
             return;
         }
 
-        widgetText = DeviceWidgetInfo.getDeviceName();
+        Integer deviceId = DeviceWidgetInfo.getDeviceId();
+        if (deviceId.intValue() == -1) {
+            RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
+            view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
+            view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
+                "info",
+                ContextCompat.getColor(context, R.color.brightRed),
+                80,
+                95,
+                65,
+                context));
+
+            appWidgetManager.updateAppWidget(appWidgetId, view);
+            return;
+        }
+
+        String transparent;
+        CharSequence widgetText = DeviceWidgetInfo.getDeviceName();
         String state = DeviceWidgetInfo.getState();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
@@ -120,45 +148,55 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
 
-        Integer deviceId = DeviceWidgetInfo.getDeviceId();
-        if (deviceId.intValue() == -1) {
-            views.removeAllViews(R.id.widget_content_cover);
-            views.setTextViewText(R.id.txtWidgetTitle, "Device not found");
-            appWidgetManager.updateAppWidget(appWidgetId, views);
-            return;
-        }
-
-        views.setOnClickPendingIntent(R.id.onLayout, getPendingSelf(context, ACTION_ON, appWidgetId));
-        views.setOnClickPendingIntent(R.id.offLinear, getPendingSelf(context, ACTION_OFF, appWidgetId));
+        views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
+        views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
-            views.setOnClickPendingIntent(R.id.onLayout, getPendingSelf(context, ACTION_BELL, appWidgetId));
-            views.setViewVisibility(R.id.offLinear, View.GONE);
+            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            views.setViewVisibility(R.id.offCover, View.GONE);
 
-            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-            views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.button_background);
-            views.setTextViewText(R.id.iconOn, "bell");
-            views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
-            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.onCover, View.VISIBLE);
+            views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.button_background);
+            views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                "bell",
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                160,
+                85,
+                85,
+                context));
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("4")) {
-                views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.button_background_secondary_fill);
-                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.button_background_secondary_fill);
+                views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                    "bell",
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    85,
+                    85,
+                    context));
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
                 if (state == null || !state.equals("4")) {
-                    views.setTextViewText(R.id.iconOn, "statusx");
-                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        85,
+                        85,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.iconOn, "statuscheck");
-                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        85,
+                        85,
+                        context));
                 }
             }
         }
@@ -166,28 +204,45 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
         // ON
         if (hasOn) {
-            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-            views.setTextViewText(R.id.iconOn, onActionIcon);
-            views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("26"));
-
-            views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.brandSecondary));
-            views.setInt(R.id.iconOn, "setBackgroundColor", Color.TRANSPARENT);
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.onCover, View.VISIBLE);
+            views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                onActionIcon,
+                ContextCompat.getColor(context, R.color.brandSecondary),
+                160,
+                85,
+                85,
+                context));
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("1")) {
-                views.setInt(R.id.onLayout, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.white));
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
+                views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                    onActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    85,
+                    85,
+                    context));
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
                 if (state == null || !state.equals("1")) {
-                    views.setTextViewText(R.id.iconOn, "statusx");
-                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        85,
+                        85,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.iconOn, "statuscheck");
-                    views.setTextColor(R.id.iconOn, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.iconOn, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        85,
+                        85,
+                        context));
                 }
             }
         }
@@ -195,28 +250,46 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
         // OFF
         if (hasOff) {
-            views.setViewVisibility(R.id.parentLayout, View.VISIBLE);
-            views.setTextViewText(R.id.iconOff, offActionIcon);
-            views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("26"));
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.offCover, View.VISIBLE);
+            views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                offActionIcon,
+                ContextCompat.getColor(context, R.color.brandPrimary),
+                160,
+                85,
+                85,
+                context));
 
-            views.setInt(R.id.offLinear, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.brandPrimary));
-            views.setInt(R.id.iconOff, "setBackgroundColor", Color.TRANSPARENT);
+            views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("2")) {
-                views.setInt(R.id.offLinear, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
-                views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.white));
+                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
+                views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                    offActionIcon,
+                    ContextCompat.getColor(context, R.color.white),
+                    160,
+                    85,
+                    85,
+                    context));
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
                 if (state == null || !state.equals("2")) {
-                    views.setTextViewText(R.id.iconOff, "statusx");
-                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetRed));
-                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        "statusx",
+                        ContextCompat.getColor(context, R.color.widgetRed),
+                        160,
+                        85,
+                        85,
+                        context));
                 } else {
-                    views.setTextViewText(R.id.iconOff, "statuscheck");
-                    views.setTextColor(R.id.iconOff, ContextCompat.getColor(context, R.color.widgetGreen));
-                    views.setTextViewTextSize(R.id.iconOff, COMPLEX_UNIT_SP, Float.parseFloat("24"));
+                    views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
+                        "statuscheck",
+                        ContextCompat.getColor(context, R.color.widgetGreen),
+                        160,
+                        85,
+                        85,
+                        context));
                 }
             }
         }
@@ -321,9 +394,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
     void createDeviceActionApi(final Context context, final int deviceId, int method, final int widgetId, final MyDBHandler db, final String action) {
         PrefManager prefManager = new PrefManager(context);
-        String  accessToken = prefManager.getAccess();
+        String  accessToken = prefManager.getAccessToken();
 
-        String params = "device/command?id="+deviceId+"&method="+method+"&value=null";
+        String params = "/device/command?id="+deviceId+"&method="+method+"&value=null";
         deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {

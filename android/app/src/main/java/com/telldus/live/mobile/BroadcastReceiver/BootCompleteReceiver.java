@@ -22,11 +22,12 @@ package com.telldus.live.mobile.BroadcastReceiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.widget.Toast;
 
 import com.telldus.live.mobile.Database.PrefManager;
-import com.telldus.live.mobile.ServiceBackground.NetworkInfo;
+import com.telldus.live.mobile.ServiceBackground.RestartSensorUpdateAlarmManager;
 
 public class BootCompleteReceiver extends BroadcastReceiver {
     PrefManager prefManager;
@@ -37,8 +38,11 @@ public class BootCompleteReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         prefManager = new PrefManager(context);
 
-        Intent networkService = new Intent(context, NetworkInfo.class);
-        context.startActivity(networkService);
+        Intent restartSensorUpdateAlarmManager = new Intent(context, RestartSensorUpdateAlarmManager.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(restartSensorUpdateAlarmManager);
+        } else {
+            context.startService(restartSensorUpdateAlarmManager);
+        }
     }
-
 }

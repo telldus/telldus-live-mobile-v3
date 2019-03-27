@@ -109,7 +109,7 @@ function logoutFromTelldus(): ThunkAction {
 	widgetiOSRemoveDataFromKeychain();
 
 	return (dispatch: Function): Function => {
-		dispatch(widgetAndroidDisableAll('Telldus Live! Logged Out!!'));
+		dispatch(widgetAndroidDisableAll());
 		return dispatch({
 			type: 'LOGGED_OUT',
 		});

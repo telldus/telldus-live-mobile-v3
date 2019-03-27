@@ -22,7 +22,7 @@
         <activity
           android:name=".MainActivity"
           android:label="@string/app_name"
-      		android:launchMode="singleTop"
+      		android:launchMode="singleInstance"
           android:theme="@style/SplashTheme"
       		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation">
           <intent-filter>
@@ -68,14 +68,16 @@
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".NewAppWidget"
-            android:label="Device 3+ btn">
+        <receiver
+            android:name=".NewAppWidget"
+            android:label="@string/reserved_widget_android_widget_info_device_3">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -92,9 +94,10 @@
         </activity>
 
         <receiver android:name=".NewSensorWidget"
-            android:label="Sensor">
+            android:label="@string/reserved_widget_android_labelSensor">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+              <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+              <action android:name="com.telldus.live.mobile.AUTO_UPDATE" />
             </intent-filter>
 
             <meta-data
@@ -108,24 +111,30 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ServiceBackground.NetworkInfo"></service>
+        <service android:name=".ServiceBackground.RestartSensorUpdateAlarmManager"></service>
 
         <receiver android:name=".NewOnOffWidget"
-            android:label="Device 1-2 btn">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
+          android:label="@string/reserved_widget_android_widget_info_device_2">
+          <intent-filter>
+            <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+          </intent-filter>
 
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/new_on_off_widget_info" />
+          <meta-data
+            android:name="android.appwidget.provider"
+            android:resource="@xml/new_on_off_widget_info" />
         </receiver>
 
         <activity android:name=".NewOnOffWidgetConfigureActivity">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
+          <intent-filter>
+            <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+          </intent-filter>
         </activity>
+
+        <activity
+          android:name="com.telldus.live.mobile.DevicesGroupDialogueActivity"
+          android:noHistory="true"
+          android:theme="@style/CustomDialogStyle"/>
+
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
     </application>
 

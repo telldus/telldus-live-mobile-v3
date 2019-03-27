@@ -19,4 +19,7 @@
     <color name="widgetBackground">#b2b2b2</color>
     <color name="widgetGreen">#9CCC65</color>
     <color name="widgetRed">#F44336</color>
+    <color name="darkRed">#990000</color>
+    <color name="brightRed">#FF5E5A</color>
+    <color name="twine">#C4A362</color>
 </resources>
