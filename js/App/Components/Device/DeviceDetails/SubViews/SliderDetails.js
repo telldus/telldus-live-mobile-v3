@@ -30,7 +30,7 @@ import Slider from 'react-native-slider';
 const deviceHeight = Dimensions.get('window').height;
 
 import { setDimmerValue, saveDimmerInitialState } from '../../../../Actions/Dimmer';
-import { deviceSetState } from '../../../../Actions/Devices';
+import { deviceSetState, requestDeviceAction } from '../../../../Actions/Devices';
 import { FormattedMessage, Text, View } from '../../../../../BaseComponents';
 import i18n from '../../../../Translations/common';
 import {
@@ -86,10 +86,7 @@ class SliderDetails extends View {
 		const { device } = props;
 		const dimmerValue = prepareDimmerValue(device);
 
-		// '!state.isControlling' Will make sure while controlling it never renders with previous value.
-		// Other two checks will make sure re-render(value update) happens only when device set/reset happens and there is a
-		// change in the value.
-		if (!state.isControlling && state.dimmerValue !== dimmerValue && device.methodRequested === '') {
+		if (state.dimmerValue !== dimmerValue && device.methodRequested === '') {
 			return {
 				dimmerValue,
 			};
@@ -104,7 +101,6 @@ class SliderDetails extends View {
 
 		this.state = {
 			dimmerValue,
-			isControlling: false,
 		};
 		this.onSlidingStart = this.onSlidingStart.bind(this);
 		this.onValueChange = this.onValueChange.bind(this);
@@ -114,12 +110,13 @@ class SliderDetails extends View {
 	}
 
 	onSlidingStart() {
-		this.setState({
-			isControlling: true,
-		});
-		const { id, stateValues, isInState, value } = this.props.device;
+		const { device, requestDeviceAction: rDA, saveDimmerInitialState: sDIS } = this.props;
+
+		const { id, stateValues, isInState, value } = device;
 		const stateValue = stateValues ? stateValues.DIM : value;
-		this.props.saveDimmerInitialState(id, stateValue, isInState);
+		sDIS(id, stateValue, isInState);
+
+		rDA(id);
 	}
 
 	onValueChange(dimmerValue: number) {
@@ -127,9 +124,6 @@ class SliderDetails extends View {
 	}
 
 	onSlidingComplete(sliderValue: number) {
-		this.setState({
-			isControlling: false,
-		});
 		let dimValue = toDimmerValue(sliderValue);
 		let command = dimValue === 0 ? this.props.commandOFF : this.props.commandDIM;
 		this.props.deviceSetState(this.props.device.id, command, dimValue);
@@ -238,6 +232,7 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
+		requestDeviceAction: (deviceId: number): any => dispatch(requestDeviceAction(deviceId, 'DIM', false)),
 		onDimmerSlide: (id: number, value: number): any => dispatch(setDimmerValue(id, value)),
 		deviceSetState: (id: number, command: number, value: number): any => {
 			return dispatch(deviceSetState(id, command, value));
