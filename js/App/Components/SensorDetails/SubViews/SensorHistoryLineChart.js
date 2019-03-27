@@ -207,7 +207,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 			// Modal property 'supportedOrientations' is not supported in Android.
 			// So, forcing landscape on show fullscreen and unlock on hide.
 			// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-			if (Platform.OS === 'android' && currShow && (orientation === 'PORTRAIT' || orientation === 'LANDSCAPE-RIGHT')) {
+			if (Platform.OS === 'android' && currShow && (orientation === 'PORTRAIT')) {
+				Orientation.lockToLandscapeLeft();
+			}
+			if (Platform.OS === 'android' && currShow && (orientation === 'LANDSCAPE-RIGHT')) {
 				Orientation.lockToLandscapeRight();
 			}
 			if (Platform.OS === 'android' && currShow && orientation === 'LANDSCAPE-LEFT') {
