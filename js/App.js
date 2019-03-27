@@ -110,12 +110,15 @@ class App extends React.Component<Props, State> {
 
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+		this.onTokenRefreshListener = null;
 	}
 
 	componentDidMount() {
-		let { dispatch } = this.props;
+		let { dispatch, accessToken } = this.props;
 
-		this.pushConf();
+		if (accessToken) {
+			this.pushConf();
+		}
 		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -168,6 +171,10 @@ class App extends React.Component<Props, State> {
 		}
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
+		if (this.onTokenRefreshListener) {
+			this.onTokenRefreshListener();
+			this.onTokenRefreshListener = null;
+		}
 	}
 
 	_keyboardDidShow() {
@@ -189,6 +196,9 @@ class App extends React.Component<Props, State> {
 	pushConf() {
 		const { dispatch, ...otherProps } = this.props;
 		dispatch(Push.configure(otherProps));
+		if (!this.onTokenRefreshListener) {
+			this.onTokenRefreshListener = dispatch(Push.refreshTokenListener(otherProps));
+		}
 	}
 
 	onLayout(ev: Object) {

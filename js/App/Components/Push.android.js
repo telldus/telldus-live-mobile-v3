@@ -121,6 +121,17 @@ const Push = {
 				reportException(err);
 			});
 	},
+	refreshTokenListener: ({ deviceId }: Object): ThunkAction => {
+		return (dispatch: Function, getState: Object): Function => {
+			return firebase.messaging().onTokenRefresh((token: string) => {
+				if (token) {
+					const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+					dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+					dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
+				}
+			});
+		};
+	},
 };
 
 module.exports = Push;
