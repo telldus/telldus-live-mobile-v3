@@ -18,17 +18,15 @@
  */
 
 // @flow
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
 	Modal,
 	BackHandler,
-	Text,
 	Animated,
 	PanResponder,
 	TouchableWithoutFeedback,
 	ImageBackground,
 } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { getPixelRGBA } from 'react-native-get-pixel';
 
@@ -41,6 +39,8 @@ import {
 	IconTelldus,
 	Poster,
 	View,
+	SafeAreaView,
+	Text,
 } from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
@@ -196,17 +196,14 @@ class ModalRGB extends View<Props, State> {
 				visible={isModelRGB}
 				supportedOrientations={['portrait', 'landscape']}
 				onRequestClose={this.handleBackButtonClick}>
-				<Fragment>
-					<SafeAreaView style={{ flex: 0, backgroundColor: Theme.Core.brandPrimary }} />
-					<SafeAreaView style={{ flex: 1, backgroundColor: '#ECEBEB' }}>
-						<NavigationHeader leftIcon="close" isFromModal={true} onClose={this.handleBackButtonClick} />
-						{this.renderBanner()}
-						<View style={{ height: 300 }}>
-							{this.renderColorPicker()}
-						</View>
-						{this.renderSlider()}
-					</SafeAreaView>
-				</Fragment>
+				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
+					<NavigationHeader leftIcon="close" isFromModal={true} onClose={this.handleBackButtonClick} />
+					{this.renderBanner()}
+					<View style={{ height: 300 }}>
+						{this.renderColorPicker()}
+					</View>
+					{this.renderSlider()}
+				</SafeAreaView>
 			</Modal>
 		);
 	}
