@@ -98,9 +98,11 @@ export default class ChartLegend extends View<Props, null> {
 					<TouchableOpacity onPress={onPressToggleView}>
 						<Icon name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} size={fontSizeFullscreenIcon} color={rowTextColor} />
 					</TouchableOpacity>
-					<TouchableOpacity onPress={onPressResetChartView}>
-						<IconTelldus icon={'resetzoom'} style={{ fontSize: fontSizeFullscreenIcon - 4, color: rowTextColor }} />
-					</TouchableOpacity>
+					{!fullscreen &&
+						<TouchableOpacity onPress={onPressResetChartView}>
+							<IconTelldus icon={'resetzoom'} style={{ fontSize: fontSizeFullscreenIcon - 4, color: rowTextColor }} />
+						</TouchableOpacity>
+					}
 				</View>
 			</View>
 		);
