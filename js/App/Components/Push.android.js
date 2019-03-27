@@ -55,8 +55,11 @@ const Push = {
 									return dispatch(Push.getToken(params));
 								}
 							})
-							.catch(() => {
-							// User has rejected permissions
+							.catch((): any => {
+								// User has rejected permissions
+								if (!pushToken || !pushTokenRegistered) {
+									return dispatch(Push.getToken(params));
+								}
 							});
 					}
 				});
