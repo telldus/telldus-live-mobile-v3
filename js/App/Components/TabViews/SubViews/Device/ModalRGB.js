@@ -20,22 +20,28 @@
 // @flow
 import React, { Fragment } from 'react';
 import {
-	Modal, BackHandler, Text, Animated, PanResponder,
-	TouchableWithoutFeedback, ImageBackground,
+	Modal,
+	BackHandler,
+	Text,
+	Animated,
+	PanResponder,
+	TouchableWithoutFeedback,
+	ImageBackground,
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { connect } from 'react-redux';
 import { getPixelRGBA } from 'react-native-get-pixel';
 
-// Device actions that are shared by both Web and Mobile.
-import { actions } from 'live-shared-data';
-const { Devices } = actions;
-const { deviceSetStateRGB } = Devices;
+import { deviceSetStateRGB } from '../../../../Actions/Devices';
 
 import SliderDetails from '../../../Device/DeviceDetails/SubViews/SliderDetails';
 
-// Relative import
-import { NavigationHeader, IconTelldus, Poster, View } from '../../../../../BaseComponents';
+import {
+	NavigationHeader,
+	IconTelldus,
+	Poster,
+	View,
+} from '../../../../../BaseComponents';
 import Theme from '../../../../Theme';
 
 type Props = {
@@ -52,8 +58,6 @@ type Props = {
 type State = {
 	sliderValue: number,
 	PixelColor: string,
-	width: number,
-	height: number,
 };
 
 class ModalRGB extends View<Props, State> {
@@ -63,8 +67,6 @@ class ModalRGB extends View<Props, State> {
 	state = {
 		sliderValue: 10,
 		pixelColor: [255, 73, 51],
-		width: 1,
-		height: 1,
 	};
 
 	animations = {
@@ -110,6 +112,16 @@ class ModalRGB extends View<Props, State> {
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		if (nextProps.isModelRGB) {
+			return true;
+		}
+		if (nextProps.isModelRGB !== this.props.isModelRGB) {
+			return true;
+		}
+		return false;
+	}
+
 	componentWillUnmount() {
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
 	}
@@ -117,11 +129,6 @@ class ModalRGB extends View<Props, State> {
 	handleBackButtonClick = () => {
 		const { openModal } = this.props;
 		openModal();
-	}
-
-	onLayout = ({ nativeEvent }: { nativeEvent: { layout: Object } }) => {
-		const { width, height } = nativeEvent.layout;
-		this.setState({ width, height });
 	}
 
 	renderBanner(): Object {
@@ -149,9 +156,7 @@ class ModalRGB extends View<Props, State> {
 					<ImageBackground
 						imageStyle={{ borderRadius: 2 }}
 						style={{ height: '100%', width: '100%' }}
-						source={require('../../img/rgbpicker.png')}
-						onLayout={this.onLayout}
-					>
+						source={require('../../img/rgbpicker.png')}>
 						<Animated.View
 							{...this.panResponders.handle.panHandlers}
 							// $FlowFixMe
@@ -165,7 +170,7 @@ class ModalRGB extends View<Props, State> {
 
 	renderSlider(): Object {
 		const { device, intl, isGatewayActive, appLayout } = this.props;
-		console.log(this.props);
+
 		return (
 			<View style={[styles.shadowCard2, { padding: 12 }]}>
 				<SliderDetails
