@@ -20,22 +20,13 @@
 package com.telldus.live.mobile;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -47,17 +38,13 @@ import android.widget.Toast;
 import android.view.Gravity;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +52,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -127,6 +113,17 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             getApplicationContext().startActivity(launchActivity);
             return;
         }
+
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        if (pro == -1 || pro < now) {
+            Intent basicActivity = new Intent(getApplicationContext(), BasicUserActivity.class);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getApplicationContext().startActivity(basicActivity);
+            return;
+        }
+
         createSensorsApi();
 
         setResult(RESULT_CANCELED);

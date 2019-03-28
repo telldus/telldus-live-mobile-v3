@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,14 +140,17 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             return;
         }
 
-        setResult(RESULT_CANCELED);
         int pro = prefManager.getPro();
-        if (pro != -1) {
+        long now = new Date().getTime() / 1000;
+        if (pro == -1 || pro < now) {
             Intent basicActivity = new Intent(getApplicationContext(), BasicUserActivity.class);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             getApplicationContext().startActivity(basicActivity);
             return;
         }
 
+        setResult(RESULT_CANCELED);
         createDeviceApi();
         setContentView(R.layout.new_on_off_widget_configure);
 

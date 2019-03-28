@@ -36,7 +36,6 @@ public class BasicUserActivity extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        setResult(RESULT_CANCELED);
         setContentView(R.layout.view_with_header_poster);
 
         RelativeLayout mBackLayout = (RelativeLayout)findViewById(R.id.deviceBack);
@@ -51,10 +50,12 @@ public class BasicUserActivity extends Activity {
     }
 
     public void updateUIBasic() {
-        DecimalFormat df = new DecimalFormat("#.##");
+        DecimalFormat df = new DecimalFormat("#.00");
         String euro = getResources().getString(R.string.euro);
         String pm = getResources().getString(R.string.reserved_widget_android_per_month);
+        String total = getResources().getString(R.string.reserved_widget_android_total).toLowerCase();
 
+        // Block 1
         FlexboxLayout p_p_1 = (FlexboxLayout) findViewById(R.id.p_p_1);
 
         TextView validityInfoText1 = (TextView) p_p_1.findViewById(R.id.validityInfoText);
@@ -68,7 +69,23 @@ public class BasicUserActivity extends Activity {
         TextView priceInfoTwo1 = (TextView) p_p_1.findViewById(R.id.priceInfoTwo);
         priceInfoTwo1.setText(pm);
 
+        View saveInfoCover1 = (View) p_p_1.findViewById(R.id.saveInfoCover);
+        saveInfoCover1.setVisibility(View.VISIBLE);
+        TextView saveInfoStrikeOne1 = (TextView) p_p_1.findViewById(R.id.saveInfoStrikeOne);
+        saveInfoStrikeOne1.setText(euro+NumberFormat.getInstance().format(30));
+        TextView saveInfoOne1 = (TextView) p_p_1.findViewById(R.id.saveInfoOne);
+        saveInfoOne1.setText(euro+NumberFormat.getInstance().format(25));
+        TextView saveInfoThree1 = (TextView) p_p_1.findViewById(R.id.saveInfoThree);
+        saveInfoThree1.setText(total);
 
+        TextView saveInfoTwo1 = (TextView) p_p_1.findViewById(R.id.saveInfoTwo);
+        saveInfoTwo1.setText(getResources().getString(R.string.reserved_widget_android_save_30));
+
+        TextView buttonBuyText1 = (TextView) p_p_1.findViewById(R.id.buttonBuyText3);
+        buttonBuyText1.setText(getResources().getString(R.string.reserved_widget_android_buy_12_months));
+
+
+        // Block 2
         FlexboxLayout p_p_2 = (FlexboxLayout) findViewById(R.id.p_p_2);
 
         TextView validityInfoText2 = (TextView) p_p_2.findViewById(R.id.validityInfoText);
@@ -82,7 +99,23 @@ public class BasicUserActivity extends Activity {
         TextView priceInfoTwo2 = (TextView) p_p_2.findViewById(R.id.priceInfoTwo);
         priceInfoTwo2.setText(pm);
 
+        View saveInfoCover2 = (View) p_p_2.findViewById(R.id.saveInfoCover);
+        saveInfoCover2.setVisibility(View.VISIBLE);
+        TextView saveInfoStrikeOne2 = (TextView) p_p_2.findViewById(R.id.saveInfoStrikeOne);
+        saveInfoStrikeOne2.setText(euro+NumberFormat.getInstance().format(18));
+        TextView saveInfoOne2 = (TextView) p_p_2.findViewById(R.id.saveInfoOne);
+        saveInfoOne2.setText(euro+NumberFormat.getInstance().format(15));
+        TextView saveInfoThree2 = (TextView) p_p_2.findViewById(R.id.saveInfoThree);
+        saveInfoThree2.setText(total);
 
+        TextView saveInfoTwo2 = (TextView) p_p_2.findViewById(R.id.saveInfoTwo);
+        saveInfoTwo2.setText(getResources().getString(R.string.reserved_widget_android_save_16));
+
+        TextView buttonBuyText2 = (TextView) p_p_2.findViewById(R.id.buttonBuyText3);
+        buttonBuyText2.setText(getResources().getString(R.string.reserved_widget_android_buy_6_months));
+
+
+        // Block 3
         FlexboxLayout p_p_3 = (FlexboxLayout) findViewById(R.id.p_p_3);
 
         TextView validityInfoText3 = (TextView) p_p_3.findViewById(R.id.validityInfoText);
@@ -95,5 +128,8 @@ public class BasicUserActivity extends Activity {
         priceInfoOne3.setText(euro+NumberFormat.getInstance().format(3));
         TextView priceInfoTwo3 = (TextView) p_p_3.findViewById(R.id.priceInfoTwo);
         priceInfoTwo3.setText(pm);
+
+        TextView buttonBuyText3 = (TextView) p_p_3.findViewById(R.id.buttonBuyText3);
+        buttonBuyText3.setText(getResources().getString(R.string.reserved_widget_android_buy_1_month));
     }
 }
