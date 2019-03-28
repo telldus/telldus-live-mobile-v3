@@ -19,44 +19,26 @@
 
 package com.telldus.live.mobile;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.SystemClock;
-import android.text.format.DateUtils;
 import android.widget.RemoteViews;
-import android.widget.Toast;
-import android.util.Log;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Bundle;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
 import android.support.v4.content.ContextCompat;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.text.NumberFormat;
 import java.text.DateFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.Database.PrefManager;
-import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -67,7 +49,6 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 

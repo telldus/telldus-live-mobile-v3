@@ -19,36 +19,19 @@
 
 package com.telldus.live.mobile;
 
-import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
-import android.util.Log;
-import android.widget.RemoteViews;
-import android.view.View;
-import android.content.Intent;
-import android.database.Cursor;
-import android.widget.Button;
-import android.content.Context;
 
-import java.lang.System;
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.NewAppWidget;
-import com.telldus.live.mobile.NewOnOffWidget;
-import com.telldus.live.mobile.NewSensorWidget;
-import com.telldus.live.mobile.Utility.DevicesUtilities;
 
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Database.MyDBHandler;
