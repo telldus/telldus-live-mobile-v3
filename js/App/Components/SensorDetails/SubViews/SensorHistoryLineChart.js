@@ -188,14 +188,11 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	onPressToggleView() {
-		const { fullscreen, orientation } = this.state;
-		const { appLayout } = this.props;
-		const { width, height } = appLayout;
-		const isPortrait = height > width;
+		const { fullscreen } = this.state;
 		const { show } = fullscreen;
 		const force = !show ? true : false;
 
-		const isLoading = (Platform.OS === 'android' && isPortrait) ? true : false;
+		const isLoading = Platform.OS === 'android' ? true : false;
 		this.setState({
 			fullscreen: {
 				show: !show,
@@ -204,18 +201,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 			isLoading,
 		}, () => {
 			const { show: currShow } = this.state.fullscreen;
-			// Modal property 'supportedOrientations' is not supported in Android.
-			// So, forcing landscape on show fullscreen and unlock on hide.
-			// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-			if (Platform.OS === 'android' && currShow && (orientation === 'PORTRAIT')) {
-				Orientation.lockToLandscapeLeft();
-			}
-			if (Platform.OS === 'android' && currShow && (orientation === 'LANDSCAPE-RIGHT')) {
-				Orientation.lockToLandscapeRight();
-			}
-			if (Platform.OS === 'android' && currShow && orientation === 'LANDSCAPE-LEFT') {
-				Orientation.lockToLandscapeLeft();
-			}
 			if (Platform.OS === 'android' && !currShow) {
 				Orientation.unlockAllOrientations();
 			}
@@ -241,7 +226,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { fullscreen, isLoading } = this.state;
+		const { fullscreen, isLoading, orientation } = this.state;
 		const { show, force } = fullscreen;
 		const { appLayout, showCalendar } = this.props;
 		const { width, height } = appLayout;
@@ -255,6 +240,27 @@ class SensorHistoryLineChart extends View<Props, State> {
 			if (Platform.OS === 'android' && show && isLoading) {
 				this.setFullscreenState(show, force, false);
 			}
+		}
+
+		// Modal property 'supportedOrientations' is not supported in Android.
+		// So, forcing landscape on show fullscreen and unlock on hide.
+		// [IOS cannot be handled this way because it has issue when unlocking all orientation]
+		if (Platform.OS === 'android' && show && !prevState.fullscreen.show && isLoading) {
+			if (orientation === 'PORTRAIT') {
+				Orientation.lockToLandscapeLeft();
+			}
+			if (orientation === 'LANDSCAPE-RIGHT') {
+				Orientation.lockToLandscapeRight();
+			}
+			if (orientation === 'LANDSCAPE-LEFT') {
+				Orientation.lockToLandscapeLeft();
+			}
+		}
+
+		if (Platform.OS === 'android' && width > height && (show !== prevState.fullscreen.show) && isLoading) {
+			this.setState({
+				isLoading: false,
+			});
 		}
 
 		this.checkForLiveDataAndRefresh(prevProps);
