@@ -75,6 +75,9 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".BasicUserActivity">
+        </activity>
+
         <receiver
             android:name=".NewAppWidget"
             android:label="@string/reserved_widget_android_widget_info_device_3">
