@@ -58,6 +58,7 @@ type Props = {
 
 	navigation: Object,
 	intl: Object,
+	dispatch: Function,
 };
 
 type State = {
@@ -235,11 +236,11 @@ supportLocalTS() {
 		// If All other params are available and only supportLocal is false.
 		// Set supportLocal as true here
 	} else {
-		this.updateTest(4, 'fail');
+		this.updateTest(4, 'fail', 0, () => {});
 	}
 }
 
-validateTest(i: number): boolean {
+validateTest(i: number): Object {
 	const { localKey = {} } = this.props.location;
 	const { address, key, ttl, supportLocal } = localKey;
 
@@ -303,7 +304,7 @@ validateTest(i: number): boolean {
 	}
 }
 
-updateTest(index: number, status: string, timeout: number = 0, callback?: Function) {
+updateTest(index?: number, status?: string, timeout: number = 0, callback: Function) {
 	this.setState({
 		currentRunningTest: {
 			index,
