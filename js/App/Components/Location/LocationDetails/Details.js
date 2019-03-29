@@ -41,6 +41,7 @@ import {
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
+import TestLocalControl from './TestLocalControl';
 
 import { getGatewayInfo, getGateways, removeGateway } from '../../../Actions/Gateways';
 import { getAppData } from '../../../Actions/AppData';
@@ -61,6 +62,7 @@ type Props = {
 
 type State = {
 	isLoading: boolean,
+	showTestLocalControl: boolean,
 };
 
 class Details extends View<Props, State> {
@@ -90,6 +92,8 @@ class Details extends View<Props, State> {
 
 	onConfirmRemoveLocation: () => void;
 
+	onPressTestLocalControl: () => void;
+
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
@@ -111,6 +115,7 @@ class Details extends View<Props, State> {
 
 		this.state = {
 			isLoading: false,
+			showTestLocalControl: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -137,6 +142,8 @@ class Details extends View<Props, State> {
 		this.onPressGatewayInfo = this.onPressGatewayInfo.bind(this);
 		this.infoPressCount = 0;
 		this.timeoutInfoPress = null;
+
+		this.onPressTestLocalControl = this.onPressTestLocalControl.bind(this);
 
 		this.labelModalheaderOnDel = `${formatMessage(i18n.delete)} ${formatMessage(i18n.location)}?`;
 
@@ -279,6 +286,12 @@ class Details extends View<Props, State> {
 		}, 3000);
 	}
 
+	onPressTestLocalControl() {
+		this.setState({
+			showTestLocalControl: true,
+		});
+	}
+
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
 		return (
 			<Status online={online} websocketOnline={websocketOnline} intl={this.props.screenProps.intl} localKey={localKey}/>
@@ -286,9 +299,9 @@ class Details extends View<Props, State> {
 	}
 
 	render(): Object | null {
-		const { isLoading } = this.state;
-		const { location, screenProps } = this.props;
-		const { appLayout } = screenProps;
+		const { isLoading, showTestLocalControl } = this.state;
+		const { location, screenProps, navigation, dispatch } = this.props;
+		const { appLayout, intl, currentScreen } = screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -323,6 +336,7 @@ class Details extends View<Props, State> {
 			padding,
 			container,
 			throbberContainer,
+			minWidthButton,
 		} = this.getStyles(appLayout);
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
@@ -405,8 +419,15 @@ class Details extends View<Props, State> {
 						</View>
 						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 					</TouchableOpacity>
+					<TouchableButton text={'Test Local Control'} style={{
+						marginTop: padding,
+						minWidth: minWidthButton,
+						backgroundColor: Theme.Core.brandSecondary,
+					}} onPress={this.onPressTestLocalControl}/>
 					<View style={styles.buttonCover}>
-						<TouchableButton text={this.labelDelete} style={styles.button} onPress={isLoading ? null : this.onPressRemoveLocation}/>
+						<TouchableButton text={this.labelDelete} style={[styles.button, {
+							minWidth: minWidthButton,
+						}]} onPress={isLoading ? null : this.onPressRemoveLocation}/>
 						{isLoading &&
 					(
 						<Throbber
@@ -415,6 +436,14 @@ class Details extends View<Props, State> {
 					)}
 					</View>
 				</View>
+				<TestLocalControl
+					show={showTestLocalControl}
+					navigation={navigation}
+					appLayout={appLayout}
+					intl={intl}
+					currentScreen={currentScreen}
+					location={location}
+					dispatch={dispatch}/>
 			</ScrollView>
 		);
 	}
@@ -428,6 +457,7 @@ class Details extends View<Props, State> {
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const minWidthButton = Math.floor(deviceWidth * 0.6);
 
 		return {
 			container: {
@@ -467,6 +497,7 @@ class Details extends View<Props, State> {
 				right: (deviceWidth * 0.12),
 			},
 			padding,
+			minWidthButton,
 		};
 	}
 }
