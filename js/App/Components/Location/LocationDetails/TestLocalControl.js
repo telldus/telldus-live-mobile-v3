@@ -21,40 +21,33 @@
 
 'use strict';
 import React from 'react';
-import {
-	ScrollView,
-	LayoutAnimation,
-} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import {
 	View,
-	NavigationHeaderPoster,
 	LocationDetails,
 	TouchableButton,
 } from '../../../../BaseComponents';
 import {
 	TestRow,
-	ContactSupport,
 } from './SubViews';
-
-import {
-	autoDetectLocalTellStick,
-} from '../../../Actions/Gateways';
 
 import {
 	capitalize,
 	getLocationImageUrl,
 	getRSAKey,
 	hasTokenExpired,
-	getTokenForLocalControl,
-	LayoutAnimations,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
 type Props = {
-	screenProps: Object,
+	appLayout: Object,
+	currentScreen: string,
+
+	onDidMount: Function,
+	intl: Object,
+	actions: Object,
 	navigation: Object,
 	toggleDialogueBox: (Object) => void,
 };
@@ -135,15 +128,20 @@ constructor(props: Props) {
 			this.hasRSAKeys = false;
 		}
 	});
+
+	this.h1 = capitalize('Local control');
+	this.h2 = 'Troubleshooting wizard';
 }
 
 componentDidMount() {
-	const { currentScreen } = this.props.screenProps;
+	const { currentScreen, onDidMount } = this.props;
 	if (currentScreen === 'TestLocalControl') {
 		this.startTimeout = setTimeout(() => {
 			this.validateAndRunTests();
 		}, 50);
 	}
+
+	onDidMount(this.h1, this.h2);
 }
 
 componentWillUnmount() {
@@ -153,7 +151,7 @@ componentWillUnmount() {
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
-	const { currentScreen } = this.props.screenProps;
+	const { currentScreen } = this.props;
 	if (currentScreen === 'TestLocalControl' && !this.startTimeout) {
 		this.startTimeout = setTimeout(() => {
 			this.validateAndRunTests();
@@ -182,7 +180,7 @@ validateAndRunTests() {
 }
 
 autoDetectLocalTellStickTS() {
-	this.props.screenProps.dispatch(autoDetectLocalTellStick());
+	this.props.actions.autoDetectLocalTellStick();
 	this.retryTSTimeout = setTimeout(() => {
 		let { status } = this.validateTest(0);
 		if (status) {
@@ -198,9 +196,8 @@ autoDetectLocalTellStickTS() {
 }
 
 getTokenForLocalControlTS() {
-	const { screenProps, navigation } = this.props;
-	const location = navigation.getParam('location', {});
-	screenProps.dispatch(getTokenForLocalControl(location.id));
+	const { actions, location } = this.props;
+	actions.getTokenForLocalControl(location.id);
 	this.retryTSTimeout = setTimeout(() => {
 		let { status } = this.validateTest(2);
 		if (status) {
@@ -230,8 +227,8 @@ getRSAKeyTS() {
 }
 
 supportLocalTS() {
-	const { navigation } = this.props;
-	const { localKey = {} } = navigation.getParam('location', {});
+	const { location } = this.props;
+	const { localKey = {} } = location;
 	const { address, key, ttl } = localKey;
 	const tokenExpired = hasTokenExpired(ttl);
 	if (address && key && ttl && !tokenExpired) {
@@ -244,8 +241,8 @@ supportLocalTS() {
 }
 
 validateTest(i: number): Object {
-	const { navigation } = this.props;
-	const { localKey = {} } = navigation.getParam('location', {});
+	const { location } = this.props;
+	const { localKey = {} } = location;
 	const { address, key, ttl, supportLocal } = localKey;
 
 	const respSuccess = {
@@ -354,50 +351,38 @@ onPressReRunTest() {
 }
 
 onPressRequestSupport() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-	this.setState({
-		showSupportScreen: true,
+	const { location, navigation } = this.props;
+	navigation.navigate({
+		routeName: 'ContactSupport',
+		key: 'ContactSupport',
+		params: {
+			location,
+		},
 	});
 }
 
 renderTestRow(testData: Object, index: number): Object {
-	const { screenProps } = this.props;
+	const { appLayout } = this.props;
 	return (
 		<TestRow
 			{...testData}
 			index={index}
 			key={index}
-			appLayout={screenProps.appLayout}/>
+			appLayout={appLayout}/>
 	);
 }
 
 render(): Object {
 
 	const {
-		screenProps,
-		navigation,
-	} = this.props;
-	const {
 		appLayout,
-		intl,
-		toggleDialogueBox,
-	} = screenProps;
-	const location = navigation.getParam('location', {});
+		location,
+	} = this.props;
 	if (!location.id) {
 		return null;
 	}
-	const { currentRunningTest, showSupportScreen } = this.state;
+	const { currentRunningTest } = this.state;
 	const { index, status } = currentRunningTest;
-
-	const posterData = {
-		navigation,
-		appLayout,
-		intl,
-		align: 'right',
-		leftIcon: 'close',
-		h1: capitalize('Local control'),
-		h2: 'Troubleshooting wizard',
-	};
 
 	const {
 		name,
@@ -432,29 +417,18 @@ render(): Object {
 	const showButtons = (index === (this.TESTS_TO_RUN.length - 1)) && (status === 'ok' || status === 'fail');
 
 	return (
-		<View>
-			<NavigationHeaderPoster {...posterData}/>
-			<ScrollView>
-				{showSupportScreen ?
-					<ContactSupport
-						appLayout={appLayout}
-						toggleDialogueBox={toggleDialogueBox}/>
-					:
-					<View>
-						<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
-						<View style={testsCover}>
-							{tests}
-						</View>
-						{showButtons &&
-							<>
-							<TouchableButton text={'Run tests again'} style={button} onPress={this.onPressReRunTest}/>
-							<TouchableButton text={'Request support'} style={button} onPress={this.onPressRequestSupport}/>
-							</>
-						}
-					</View>
+			<>
+				<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
+				<View style={testsCover}>
+					{tests}
+				</View>
+				{showButtons &&
+					<>
+					<TouchableButton text={'Run tests again'} style={button} onPress={this.onPressReRunTest}/>
+					<TouchableButton text={'Request support'} style={button} onPress={this.onPressRequestSupport}/>
+					</>
 				}
-			</ScrollView>
-		</View>
+			</>
 	);
 }
 
@@ -471,13 +445,11 @@ getStyles(appLayout: Object): Object {
 		LocationDetail: {
 			flex: 0,
 			marginTop: padding,
-			marginHorizontal: padding,
 			padding: 10,
 		},
 		testsCover: {
 			flex: 0,
 			flexDirection: 'column',
-			marginHorizontal: padding,
 			marginTop: padding / 2,
 			marginBottom: padding,
 			padding: 10,

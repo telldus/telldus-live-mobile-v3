@@ -34,6 +34,7 @@ import EditTimeZoneContinent from './EditTimeZoneContinent';
 import EditTimeZoneCity from './EditTimeZoneCity';
 import EditGeoPosition from './EditGeoPosition';
 import TestLocalControl from './TestLocalControl';
+import ContactSupport from './ContactSupport';
 
 const initialRouteName = 'Details';
 
@@ -62,7 +63,10 @@ const RouteConfigs = {
 		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition, 'EditGeoPosition'),
 	},
 	TestLocalControl: {
-		screen: TestLocalControl,
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(TestLocalControl, 'TestLocalControl'),
+	},
+	ContactSupport: {
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(ContactSupport, 'ContactSupport'),
 	},
 };
 
@@ -85,7 +89,7 @@ const StackNavigatorConfig = {
 		screenInterpolator: (sceneProps: Object): Object => {
 			const { layout, position, scene } = sceneProps;
 			const { index, route } = scene;
-			if (route.routeName === 'TestLocalControl') {
+			if (route.routeName === 'TestLocalControl' || route.routeName === 'ContactSupport') {
 				const height = layout.initHeight;
 				const translateY = position.interpolate({
 					inputRange: [index - 1, index, index + 1],

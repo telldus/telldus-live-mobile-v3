@@ -287,16 +287,14 @@ class Details extends View<Props, State> {
 	}
 
 	onPressTestLocalControl() {
-		const { dispatch, location, navigation } = this.props;
-		const navigateAction = NavigationActions.navigate({
+		const { location, navigation } = this.props;
+		navigation.navigate({
 			routeName: 'TestLocalControl',
 			key: 'TestLocalControl',
 			params: {
 				location,
-				dispatch,
 			},
 		});
-		navigation.dispatch(navigateAction);
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {

@@ -22,9 +22,7 @@
 'use strict';
 
 import TestRow from './TestRow';
-import ContactSupport from './ContactSupport';
 
 module.exports = {
 	TestRow,
-	ContactSupport,
 };

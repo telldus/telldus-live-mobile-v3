@@ -30,19 +30,19 @@ const isEqual = require('react-fast-compare');
 import {
 	View,
 	Text,
-	IconTelldus,
-	Throbber,
 	TouchableButton,
-} from '../../../../../BaseComponents';
+} from '../../../../BaseComponents';
 
-import shouldUpdate from '../../../../Lib/shouldUpdate';
+import shouldUpdate from '../../../Lib/shouldUpdate';
+import { capitalize } from '../../../Lib';
 
-import Theme from '../../../../Theme';
+import Theme from '../../../Theme';
 
 type Props = {
     appLayout: Object,
 
-    toggleDialogueBox: (Object) => void,
+	toggleDialogueBox: (Object) => void,
+	onDidMount: Function,
 };
 
 type State = {
@@ -66,6 +66,14 @@ constructor(props: Props) {
 	this.onChangeText = this.onChangeText.bind(this);
 	this.showDialogue = this.showDialogue.bind(this);
 	this.onSubmitEditing = this.onSubmitEditing.bind(this);
+
+	this.h1 = 'Local Control';
+	this.h2 = 'Contact Support';
+}
+
+componentDidMount() {
+	const { h1, h2 } = this;
+	this.props.onDidMount(h1, h2);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -85,12 +93,13 @@ showDialogue() {
 	const dialogueData = {
 		show: true,
 		showPositive: true,
-		header: 'Support ticket created',
+		header: 'Support ticket Created',
 		imageHeader: true,
 		text: 'A support ticket has now been created and a confirmation of this has been sent to your email address.' +
         ' Your ticket number is {ticketNum}, please save this for future reference.',
 		showHeader: true,
 		closeOnPressPositive: true,
+		capitalizeHeader: true,
 	};
 	toggleDialogueBox(dialogueData);
 }
@@ -174,7 +183,7 @@ getStyles(appLayout: Object): Object {
 		container: {
 			backgroundColor: '#fff',
 			...shadow,
-			margin: padding,
+			marginVertical: padding,
 			padding: padding * 2,
 		},
 		title: {

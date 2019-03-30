@@ -34,6 +34,10 @@ import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 import * as appDataActions from '../../../Actions/AppData';
 
+import {
+	getTokenForLocalControl,
+} from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 type Props = {
@@ -41,6 +45,7 @@ type Props = {
 	screenProps: Object,
 	showModal: boolean,
 	validationMessage: any,
+	location: Object,
 
 	navigation: Object,
 	children: Object,
@@ -143,6 +148,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			validationMessage,
 			modalExtras,
 			navigation,
+			location,
 		} = this.props;
 		const {
 			appLayout,
@@ -151,7 +157,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
-		const location = navigation.getParam('location', {});
 
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;
@@ -175,6 +180,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				h1,
 				h2,
 				align: 'right',
+				leftIcon: currentScreen === 'TestLocalControl' || currentScreen === 'ContactSupport' ? 'close' : undefined,
 			};
 
 		return (
@@ -199,6 +205,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 									navigation,
 									dialogueOpen: showModal,
 									containerWidth: width - (2 * paddingHorizontal),
+									location,
 								},
 							)}
 						</View>
@@ -263,18 +270,20 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	}
 }
 
-const mapStateToProps = (store: Object): Object => (
-	{
+const mapStateToProps = (store: Object, ownProps: Object): Object => {
+	let { id } = ownProps.navigation.getParam('location', {id: null});
+	return {
+		location: store.gateways.byId[id],
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-	}
-);
+	};
+};
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions, ...gatewayActions, ...appDataActions}, dispatch),
+			...bindActionCreators({...modalActions, ...gatewayActions, ...appDataActions, getTokenForLocalControl}, dispatch),
 		},
 	}
 );
