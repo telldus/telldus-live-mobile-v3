@@ -44,6 +44,7 @@ import Theme from '../../../Theme';
 type Props = {
 	appLayout: Object,
 	currentScreen: string,
+	location: Object,
 
 	onDidMount: Function,
 	intl: Object,
@@ -372,7 +373,7 @@ renderTestRow(testData: Object, index: number): Object {
 	);
 }
 
-render(): Object {
+render(): Object | null {
 
 	const {
 		appLayout,
