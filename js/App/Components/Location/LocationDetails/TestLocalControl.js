@@ -20,21 +20,23 @@
 // @flow
 
 'use strict';
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
-	Modal,
 	ScrollView,
+	LayoutAnimation,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 import {
 	View,
-	SafeAreaView,
 	NavigationHeaderPoster,
 	LocationDetails,
 	TouchableButton,
 } from '../../../../BaseComponents';
-import { TestRow } from './SubViews';
+import {
+	TestRow,
+	ContactSupport,
+} from './SubViews';
 
 import {
 	autoDetectLocalTellStick,
@@ -46,31 +48,28 @@ import {
 	getRSAKey,
 	hasTokenExpired,
 	getTokenForLocalControl,
+	LayoutAnimations,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
 type Props = {
-	show: boolean,
-	appLayout: Object,
-	currentScreen: string,
-	location: Object,
-
+	screenProps: Object,
 	navigation: Object,
-	intl: Object,
-	dispatch: Function,
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
 	currentRunningTest: Object,
+	showSupportScreen: boolean,
 };
 
 class TestLocalControl extends View<Props, State> {
 props: Props;
 state: State = {
 	currentRunningTest: {
-
 	},
+	showSupportScreen: false,
 };
 
 onPressReRunTest: () => void;
@@ -139,7 +138,8 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	if (this.props.show) {
+	const { currentScreen } = this.props.screenProps;
+	if (currentScreen === 'TestLocalControl') {
 		this.startTimeout = setTimeout(() => {
 			this.validateAndRunTests();
 		}, 50);
@@ -153,7 +153,8 @@ componentWillUnmount() {
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
-	if (this.props.show && !this.startTimeout) {
+	const { currentScreen } = this.props.screenProps;
+	if (currentScreen === 'TestLocalControl' && !this.startTimeout) {
 		this.startTimeout = setTimeout(() => {
 			this.validateAndRunTests();
 		}, 50);
@@ -181,7 +182,7 @@ validateAndRunTests() {
 }
 
 autoDetectLocalTellStickTS() {
-	this.props.dispatch(autoDetectLocalTellStick());
+	this.props.screenProps.dispatch(autoDetectLocalTellStick());
 	this.retryTSTimeout = setTimeout(() => {
 		let { status } = this.validateTest(0);
 		if (status) {
@@ -197,8 +198,9 @@ autoDetectLocalTellStickTS() {
 }
 
 getTokenForLocalControlTS() {
-	const { location, dispatch } = this.props;
-	dispatch(getTokenForLocalControl(location.id));
+	const { screenProps, navigation } = this.props;
+	const location = navigation.getParam('location', {});
+	screenProps.dispatch(getTokenForLocalControl(location.id));
 	this.retryTSTimeout = setTimeout(() => {
 		let { status } = this.validateTest(2);
 		if (status) {
@@ -228,7 +230,8 @@ getRSAKeyTS() {
 }
 
 supportLocalTS() {
-	const { localKey = {} } = this.props.location;
+	const { navigation } = this.props;
+	const { localKey = {} } = navigation.getParam('location', {});
 	const { address, key, ttl } = localKey;
 	const tokenExpired = hasTokenExpired(ttl);
 	if (address && key && ttl && !tokenExpired) {
@@ -241,7 +244,8 @@ supportLocalTS() {
 }
 
 validateTest(i: number): Object {
-	const { localKey = {} } = this.props.location;
+	const { navigation } = this.props;
+	const { localKey = {} } = navigation.getParam('location', {});
 	const { address, key, ttl, supportLocal } = localKey;
 
 	const respSuccess = {
@@ -350,29 +354,39 @@ onPressReRunTest() {
 }
 
 onPressRequestSupport() {
-
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	this.setState({
+		showSupportScreen: true,
+	});
 }
 
 renderTestRow(testData: Object, index: number): Object {
+	const { screenProps } = this.props;
 	return (
 		<TestRow
 			{...testData}
 			index={index}
 			key={index}
-			appLayout={this.props.appLayout}/>
+			appLayout={screenProps.appLayout}/>
 	);
 }
 
 render(): Object {
 
 	const {
-		show,
+		screenProps,
 		navigation,
+	} = this.props;
+	const {
 		appLayout,
 		intl,
-		location,
-	} = this.props;
-	const { currentRunningTest } = this.state;
+		toggleDialogueBox,
+	} = screenProps;
+	const location = navigation.getParam('location', {});
+	if (!location.id) {
+		return null;
+	}
+	const { currentRunningTest, showSupportScreen } = this.state;
 	const { index, status } = currentRunningTest;
 
 	const posterData = {
@@ -418,29 +432,29 @@ render(): Object {
 	const showButtons = (index === (this.TESTS_TO_RUN.length - 1)) && (status === 'ok' || status === 'fail');
 
 	return (
-		<Modal
-			visible={show}
-			transparent={false}
-			animationType={'slide'}
-			presentationStyle={'fullScreen'}
-			onRequestClose={this.noOP}
-			supportedOrientations={['portrait', 'landscape']}>
-			<SafeAreaView backgroundColor={Theme.Core.appBackground}>
-				<NavigationHeaderPoster {...posterData}/>
-				<ScrollView>
-					<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
-					<View style={testsCover}>
-						{tests}
-					</View>
-					{showButtons &&
-						<Fragment>
+		<View>
+			<NavigationHeaderPoster {...posterData}/>
+			<ScrollView>
+				{showSupportScreen ?
+					<ContactSupport
+						appLayout={appLayout}
+						toggleDialogueBox={toggleDialogueBox}/>
+					:
+					<View>
+						<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
+						<View style={testsCover}>
+							{tests}
+						</View>
+						{showButtons &&
+							<>
 							<TouchableButton text={'Run tests again'} style={button} onPress={this.onPressReRunTest}/>
 							<TouchableButton text={'Request support'} style={button} onPress={this.onPressRequestSupport}/>
-						</Fragment>
-					}
-				</ScrollView>
-			</SafeAreaView>
-		</Modal>
+							</>
+						}
+					</View>
+				}
+			</ScrollView>
+		</View>
 	);
 }
 

@@ -33,6 +33,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import { NavigationActions } from 'react-navigation';
 
 import {
 	View, Text, TouchableButton, StyleSheet,
@@ -41,7 +42,6 @@ import {
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
-import TestLocalControl from './TestLocalControl';
 
 import { getGatewayInfo, getGateways, removeGateway } from '../../../Actions/Gateways';
 import { getAppData } from '../../../Actions/AppData';
@@ -287,9 +287,16 @@ class Details extends View<Props, State> {
 	}
 
 	onPressTestLocalControl() {
-		this.setState({
-			showTestLocalControl: true,
+		const { dispatch, location, navigation } = this.props;
+		const navigateAction = NavigationActions.navigate({
+			routeName: 'TestLocalControl',
+			key: 'TestLocalControl',
+			params: {
+				location,
+				dispatch,
+			},
 		});
+		navigation.dispatch(navigateAction);
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -299,9 +306,9 @@ class Details extends View<Props, State> {
 	}
 
 	render(): Object | null {
-		const { isLoading, showTestLocalControl } = this.state;
-		const { location, screenProps, navigation, dispatch } = this.props;
-		const { appLayout, intl, currentScreen } = screenProps;
+		const { isLoading } = this.state;
+		const { location, screenProps } = this.props;
+		const { appLayout } = screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -436,14 +443,6 @@ class Details extends View<Props, State> {
 					)}
 					</View>
 				</View>
-				<TestLocalControl
-					show={showTestLocalControl}
-					navigation={navigation}
-					appLayout={appLayout}
-					intl={intl}
-					currentScreen={currentScreen}
-					location={location}
-					dispatch={dispatch}/>
 			</ScrollView>
 		);
 	}
