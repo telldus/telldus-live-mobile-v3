@@ -33,7 +33,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
-import { NavigationActions } from 'react-navigation';
 
 import {
 	View, Text, TouchableButton, StyleSheet,
