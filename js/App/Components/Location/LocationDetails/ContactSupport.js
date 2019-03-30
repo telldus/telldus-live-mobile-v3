@@ -34,7 +34,6 @@ import {
 } from '../../../../BaseComponents';
 
 import shouldUpdate from '../../../Lib/shouldUpdate';
-import { capitalize } from '../../../Lib';
 
 import Theme from '../../../Theme';
 
