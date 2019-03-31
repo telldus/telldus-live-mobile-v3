@@ -423,7 +423,7 @@ class Details extends View<Props, State> {
 						</View>
 						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 					</TouchableOpacity>
-					<TouchableButton text={'Test Local Control'} style={{
+					<TouchableButton text={i18n.labelTestLocalControl} style={{
 						marginTop: padding,
 						minWidth: minWidthButton,
 						backgroundColor: Theme.Core.brandSecondary,

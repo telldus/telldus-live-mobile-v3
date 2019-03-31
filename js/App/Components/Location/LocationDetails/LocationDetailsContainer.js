@@ -180,7 +180,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				h1,
 				h2,
 				align: 'right',
-				leftIcon: currentScreen === 'TestLocalControl' || currentScreen === 'ContactSupport' ? 'close' : undefined,
+				leftIcon: currentScreen === 'TestLocalControl' || currentScreen === 'RequestSupport' ? 'close' : undefined,
 			};
 
 		return (

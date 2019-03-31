@@ -33,9 +33,12 @@ import {
 	TouchableButton,
 } from '../../../../BaseComponents';
 
+import capitalise from '../../../Lib/capitalize';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
     appLayout: Object,
@@ -48,7 +51,7 @@ type State = {
     value: string,
 };
 
-class ContactSupport extends View<Props, State> {
+class RequestSupport extends View<Props, State> {
 props: Props;
 
 state: State = {
@@ -66,8 +69,10 @@ constructor(props: Props) {
 	this.showDialogue = this.showDialogue.bind(this);
 	this.onSubmitEditing = this.onSubmitEditing.bind(this);
 
-	this.h1 = 'Local Control';
-	this.h2 = 'Contact Support';
+	const { formatMessage } = this.props.intl;
+
+	this.h1 = formatMessage(i18n.labelLocalControl);
+	this.h2 = formatMessage(i18n.labelContactSupport);
 }
 
 componentDidMount() {
@@ -88,14 +93,15 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 showDialogue() {
-	const { toggleDialogueBox } = this.props;
+	const { toggleDialogueBox, intl } = this.props;
+	const ticketNum = 112233;
+
 	const dialogueData = {
 		show: true,
 		showPositive: true,
-		header: 'Support ticket Created',
+		header: intl.formatMessage(i18n.labelSupportTicketCreated),
 		imageHeader: true,
-		text: 'A support ticket has now been created and a confirmation of this has been sent to your email address.' +
-        ' Your ticket number is {ticketNum}, please save this for future reference.',
+		text: intl.formatMessage(i18n.messageSupportTicket, {ticketNum}),
 		showHeader: true,
 		closeOnPressPositive: true,
 		capitalizeHeader: true,
@@ -115,6 +121,7 @@ onSubmitEditing() {
 render(testData: Object): Object {
 	const {
 		appLayout,
+		intl,
 	} = this.props;
 	const {
 		value,
@@ -128,38 +135,38 @@ render(testData: Object): Object {
 		brandSecondary,
 		button,
 	} = this.getStyles(appLayout);
+	const { formatMessage } = intl;
 
 	return (
-<>
-<View style={container}>
-	<KeyboardAvoidingView
-		behavior="padding">
-		<Text style={title}>
-Create Support Ticket
-		</Text>
-		<Text style={body}>
-In order to help you, information about your local control troubleshooting tests will be sent to us.
-If you have anything else you would like to add, please do that below.
-		</Text>
-		<Text style={label}>
-Message
-		</Text>
-		<TextInput
-			value={value}
-			style={textField}
-			onChangeText={this.onChangeText}
-			onSubmitEditing={this.onSubmitEditing}
-			autoCapitalize="sentences"
-			autoCorrect={false}
-			autoFocus={true}
-			underlineColorAndroid={brandSecondary}
-			returnKeyType={'done'}
-			multiline={true}
-		/>
-	</KeyboardAvoidingView>
-</View>
-<TouchableButton text={'Send'} style={button} onPress={this.showDialogue}/>
-</>
+			<>
+				<View style={container}>
+					<KeyboardAvoidingView
+						behavior="padding">
+						<Text style={title}>
+							{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
+						</Text>
+						<Text style={body}>
+							{formatMessage(i18n.messageCreateSupportTicket)}
+						</Text>
+						<Text style={label}>
+							{formatMessage(i18n.labelMessage)}
+						</Text>
+						<TextInput
+							value={value}
+							style={textField}
+							onChangeText={this.onChangeText}
+							onSubmitEditing={this.onSubmitEditing}
+							autoCapitalize="sentences"
+							autoCorrect={false}
+							autoFocus={true}
+							underlineColorAndroid={brandSecondary}
+							returnKeyType={'done'}
+							multiline={true}
+						/>
+					</KeyboardAvoidingView>
+				</View>
+				<TouchableButton text={i18n.labelSend} style={button} onPress={this.showDialogue}/>
+			</>
 	);
 }
 
@@ -212,4 +219,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-export default ContactSupport;
+export default RequestSupport;

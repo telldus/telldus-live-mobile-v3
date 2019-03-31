@@ -41,6 +41,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	appLayout: Object,
 	currentScreen: string,
@@ -77,34 +79,36 @@ supportLocalTS: () => void;
 constructor(props: Props) {
 	super(props);
 
+	const { formatMessage } = this.props.intl;
+
 	this.TESTS_TO_RUN = [
 		{
-			h1: 'Local IP',
-			h2: 'Checking TellStick local IP address',
+			h1: formatMessage(i18n.ipLocal),
+			h2: formatMessage(i18n.labelTestIPH2),
 			icon: 'localcontrol',
 			status: null,
 		},
 		{
 			h1: 'UUID',
-			h2: 'Checking for correct UUID',
+			h2: formatMessage(i18n.labelTestUUIDH2),
 			icon: 'user',
 			status: null,
 		},
 		{
-			h1: 'Token',
-			h2: 'Checking for valid token',
+			h1: formatMessage(i18n.labelToken),
+			h2: formatMessage(i18n.labelTestTokenH2),
 			icon: 'locked',
 			status: null,
 		},
 		{
-			h1: 'Encrypt Keys',
-			h2: 'Checking encrypt/decrypt keys',
+			h1: formatMessage(i18n.labelEncryptKeys),
+			h2: formatMessage(i18n.labelTestKeysH2),
 			icon: 'keyhole',
 			status: null,
 		},
 		{
-			h1: 'Local Support',
-			h2: 'Checking gateway local support',
+			h1: formatMessage(i18n.labelLocalSupport),
+			h2: formatMessage(i18n.labelTestLocalSupportH2),
 			icon: 'location',
 			status: null,
 		},
@@ -130,8 +134,8 @@ constructor(props: Props) {
 		}
 	});
 
-	this.h1 = capitalize('Local control');
-	this.h2 = 'Troubleshooting wizard';
+	this.h1 = capitalize(formatMessage(i18n.labelLocalControl));
+	this.h2 = formatMessage(i18n.labelTroubleshootingWizard);
 }
 
 componentDidMount() {
@@ -354,8 +358,8 @@ onPressReRunTest() {
 onPressRequestSupport() {
 	const { location, navigation } = this.props;
 	navigation.navigate({
-		routeName: 'ContactSupport',
-		key: 'ContactSupport',
+		routeName: 'RequestSupport',
+		key: 'RequestSupport',
 		params: {
 			location,
 		},
@@ -378,6 +382,7 @@ render(): Object | null {
 	const {
 		appLayout,
 		location,
+		intl,
 	} = this.props;
 	if (!location.id) {
 		return null;
@@ -407,10 +412,10 @@ render(): Object | null {
 			test.status = status;
 		}
 		if (test.status === 'fail') {
-			test = { ...test, h2: 'Failed'};
+			test = { ...test, h2: intl.formatMessage(i18n.failed)};
 		}
 		if (test.status === 'ok') {
-			test = { ...test, h2: 'OK'};
+			test = { ...test, h2: intl.formatMessage(i18n.defaultPositiveText)};
 		}
 		return this.renderTestRow(test, i);
 	});
@@ -425,8 +430,8 @@ render(): Object | null {
 				</View>
 				{showButtons &&
 					<>
-					<TouchableButton text={'Run tests again'} style={button} onPress={this.onPressReRunTest}/>
-					<TouchableButton text={'Request support'} style={button} onPress={this.onPressRequestSupport}/>
+					<TouchableButton text={i18n.labelButtonRunTestsAgain} style={button} onPress={this.onPressReRunTest}/>
+					<TouchableButton text={i18n.labelButtonRequestSupport} style={button} onPress={this.onPressRequestSupport}/>
 					</>
 				}
 			</>
