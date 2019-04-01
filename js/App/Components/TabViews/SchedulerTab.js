@@ -47,10 +47,6 @@ import Theme from '../../Theme';
 import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
-type NavigationParams = {
-	focused: boolean, tintColor: string,
-};
-
 type Props = {
 	rowsAndSections: Object,
 	showInactive: boolean,
