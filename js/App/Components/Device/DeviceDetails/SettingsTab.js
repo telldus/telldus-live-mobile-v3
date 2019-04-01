@@ -174,7 +174,8 @@ class SettingsTab extends View {
 	}
 
 	onPressMarkAsFailed() {
-		const { clientId, clientDeviceId } = this.props.device;
+		const { screenProps, device } = this.props;
+		const { clientId, clientDeviceId } = device;
 		this.sendSocketMessage(clientId, 'markNodeAsFailed', clientDeviceId);
 
 		const that = this;
@@ -187,7 +188,7 @@ class SettingsTab extends View {
 				const { nodeInfo = {} } = that.props.device;
 				const { isFailed = false } = nodeInfo;
 				if (!isFailed) {
-					const message = 'The node is still alive, cannot mark as failed.';
+					const message = screenProps.intl.formatMessage(i18n.errorCannotMarkAsFailed);
 					that.props.showToast(message);
 				}
 			}, 1000);
@@ -313,14 +314,14 @@ class SettingsTab extends View {
 								{isFailed ?
 									<>
 										<TouchableButton
-											text={'Remove failed node'}
+											text={i18n.labelRemoveFailed}
 											onPress={this.onPressRemoveFailedNode}
 											disabled={!isGatewayReachable}
 											style={[excludeButtonStyle, {
 												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 											}]}/>
 										<TouchableButton
-											text={'Replace failed node'}
+											text={i18n.labelReplaceFailed}
 											onPress={this.onPressReplaceFailedNode}
 											disabled={!isGatewayReachable}
 											style={[excludeButtonStyle, {
@@ -330,7 +331,7 @@ class SettingsTab extends View {
 									:
 									<>
 										<TouchableButton
-											text={'Mark node as failed'}
+											text={i18n.labelMarkAsFailed}
 											onPress={this.onPressMarkAsFailed}
 											disabled={!isGatewayReachable}
 											style={[excludeButtonStyle, {
