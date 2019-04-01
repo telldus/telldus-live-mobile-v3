@@ -45,6 +45,7 @@ type Props = {
 
 type DefaultProps = {
 	disabled: boolean,
+	accessible: boolean,
 };
 
 class TouchableButton extends Component<Props, void> {
@@ -56,6 +57,7 @@ class TouchableButton extends Component<Props, void> {
 
 	static defaultProps: DefaultProps = {
 		disabled: false,
+		accessible: true,
 	}
 
 	constructor(props: Props) {
