@@ -45,6 +45,7 @@ type Props = {
 
 	toggleDialogueBox: (Object) => void,
 	onDidMount: Function,
+	intl: Object,
 };
 
 type State = {
