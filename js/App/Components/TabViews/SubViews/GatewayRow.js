@@ -27,17 +27,21 @@ import { NavigationActions } from 'react-navigation';
 
 import { View, Image, LocationDetails } from '../../../../BaseComponents';
 
+import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
     location: Object,
-	appLayout: Object,
-	intl: Object,
-	navigation: Object,
-	onPress: (Object) => void,
+		appLayout: Object,
+		screenReaderEnabled: boolean,
+		intl: Object,
+		navigation: Object,
+		onPress: (Object) => void,
 };
 
 type State = {
@@ -82,7 +86,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 
 	render(): Object {
-		let { location, appLayout } = this.props;
+		let { location, appLayout, intl, screenReaderEnabled } = this.props;
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
@@ -97,8 +101,34 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		let styles = this.getStyles(appLayout);
 
+		let accessibilityLabel = '';
+		if (screenReaderEnabled) {
+			const { address, key, ttl, supportLocal } = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+
+			const { formatMessage } = intl;
+			const pOne = `${formatMessage(i18n.location)} ${name}`;
+			const pTwo = `${formatMessage(i18n.labelType)} ${type}`;
+
+			const labelLocal = formatMessage(i18n.labelLocal);
+			const labelCloud = formatMessage(i18n.labelCloud);
+			const pThree = `${formatMessage(i18n.labelControl)} ${supportLocalControl ? labelLocal : labelCloud}`;
+
+			const labelOnline = formatMessage(i18n.online);
+			const offline = formatMessage(i18n.offline);
+			const noLiveUpdates = formatMessage(i18n.noLiveUpdates);
+
+			const pFour = `${formatMessage(i18n.status)} ${!online ? offline :
+				!websocketOnline ? noLiveUpdates : labelOnline}`;
+			const pFive = `${formatMessage(i18n.labelAddEditDetails)}`;
+			accessibilityLabel = `${pOne}, ${pTwo}, ${pThree}, ${pFour}, ${pFive}.`;
+		}
+
 		return (
-			<View style={styles.rowItemsCover}>
+			<View style={styles.rowItemsCover}
+				accessible={true}
+				accessibilityLabel={accessibilityLabel}>
 				<LocationDetails {...locationData}
 					style={styles.locationDetails}
 					onPress={this.onPressGateway}/>
@@ -145,8 +175,10 @@ class GatewayRow extends PureComponent<Props, State> {
 }
 
 function mapStateToProps(state: Object, props: Object): Object {
+	const { screenReaderEnabled } = state.app;
 	return {
 		appLayout: state.app.layout,
+		screenReaderEnabled,
 	};
 }
 
