@@ -125,6 +125,9 @@ class SettingsTab extends View {
 		this.onPressMarkAsFailed = this.onPressMarkAsFailed.bind(this);
 		this.onPressReplaceFailedNode = this.onPressReplaceFailedNode.bind(this);
 		this.onPressRemoveFailedNode = this.onPressRemoveFailedNode.bind(this);
+
+		this.markAsFailedTimeoutOne = null;
+		this.markAsFailedTimeoutTwo = null;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -151,6 +154,11 @@ class SettingsTab extends View {
 		return false;
 	}
 
+	componentWillUnmount() {
+		clearTimeout(this.markAsFailedTimeoutOne);
+		clearTimeout(this.markAsFailedTimeoutTwo);
+	}
+
 	onPressExcludeDevice() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
@@ -166,12 +174,40 @@ class SettingsTab extends View {
 	}
 
 	onPressMarkAsFailed() {
+		const { clientId, clientDeviceId } = this.props.device;
+		this.sendSocketMessage(clientId, 'markNodeAsFailed', clientDeviceId);
+
+		const that = this;
+		this.markAsFailedTimeoutOne = setTimeout(() => {
+			// Request for latest node info
+			that.sendSocketMessage(clientId, 'nodeInfo', clientDeviceId);
+
+			// Can take some time to receive, so the second timeout
+			that.markAsFailedTimeoutTwo = setTimeout(() => {
+				const { nodeInfo = {} } = that.props.device;
+				const { isFailed = false } = nodeInfo;
+				if (!isFailed) {
+					const message = 'The node is still alive, cannot mark as failed.';
+					that.props.showToast(message);
+				}
+			}, 1000);
+		}, 5000);
 	}
 
 	onPressReplaceFailedNode() {
 	}
 
 	onPressRemoveFailedNode() {
+		const { clientId, clientDeviceId } = this.props.device;
+		this.sendSocketMessage(clientId, 'removeFailedNode', clientDeviceId);
+	}
+
+	sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
+		sendSocketMessage(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': action,
+			'device': clientDeviceId,
+		});
 	}
 
 	goBack() {
@@ -214,7 +250,7 @@ class SettingsTab extends View {
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
-		const { supportedMethods = {}, id, clientId, transport } = device;
+		const { supportedMethods = {}, id, clientId, transport, nodeInfo = {} } = device;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -237,7 +273,7 @@ class SettingsTab extends View {
 		}
 
 		const isZWave = transport === 'zwave';
-		const isFailed = false;
+		const { isFailed = false } = nodeInfo;
 
 		return (
 			<ScrollView style={{
@@ -274,14 +310,14 @@ class SettingsTab extends View {
 								{isFailed ?
 									<>
 										<TouchableButton
-											text={'Remove dead node'}
+											text={'Remove failed node'}
 											onPress={this.onPressRemoveFailedNode}
 											disabled={!isGatewayReachable}
 											style={[excludeButtonStyle, {
 												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 											}]}/>
 										<TouchableButton
-											text={'Replace dead node'}
+											text={'Replace failed node'}
 											onPress={this.onPressReplaceFailedNode}
 											disabled={!isGatewayReachable}
 											style={[excludeButtonStyle, {
@@ -291,8 +327,8 @@ class SettingsTab extends View {
 									:
 									<>
 										<TouchableButton
-											text={'Mark node as dead'}
-											onPress={this.onPressExcludeDevice}
+											text={'Mark node as failed'}
+											onPress={this.onPressMarkAsFailed}
 											disabled={!isGatewayReachable}
 											style={[excludeButtonStyle, {
 												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
