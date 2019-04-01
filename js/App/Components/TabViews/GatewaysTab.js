@@ -91,7 +91,18 @@ class GatewaysTab extends View {
 	}
 
 	onRefresh() {
-		this.props.dispatch(getGateways());
+		this.setState({
+			isRefreshing: true,
+		});
+		this.props.dispatch(getGateways()).then(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		}).catch(() => {
+			this.setState({
+				isRefreshing: false,
+			});
+		});
 	}
 
 	renderRow(item: Object): Object {
