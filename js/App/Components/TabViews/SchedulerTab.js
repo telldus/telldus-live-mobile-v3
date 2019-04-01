@@ -70,12 +70,16 @@ class SchedulerTab extends View<null, Props, State> {
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
 
-	static navigationOptions = (props: Object): Object => ({
-		title: props.screenProps.intl.formatMessage(i18n.scheduler),
-		tabBarIcon: ({ focused, tintColor }: NavigationParams): Object => {
-			return getTabBarIcon(focused, tintColor, 'scheduler');
-		},
-	});
+	static navigationOptions = ({navigation, screenProps}: Object): Object => {
+		const { intl, currentScreen } = screenProps;
+		const { formatMessage } = intl;
+		const postScript = currentScreen === 'Scheduler' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		return {
+			title: formatMessage(i18n.scheduler),
+			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'scheduler'),
+			tabBarAccessibilityLabel: `${formatMessage(i18n.schedulerTab)}, ${postScript}`,
+		};
+	};
 
 	constructor(props: Props) {
 		super(props);
