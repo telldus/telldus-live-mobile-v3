@@ -227,21 +227,26 @@ class AppNavigatorRenderer extends View<Props, State> {
 			style: styles.rightButtonStyle,
 			onPress: () => {},
 		};
+		const { intl } = this.props;
+		const { formatMessage } = intl;
 		switch (CS) {
 			case 'Devices':
 				return {
 					...this.AddButton,
 					onPress: this.addNewDevice,
+					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Gateways':
 				return {
 					...this.AddButton,
 					onPress: this.addNewLocation,
+					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Scheduler':
 				return {
 					...this.AddButton,
 					onPress: this.newSchedule,
+					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			default:
 				return null;
