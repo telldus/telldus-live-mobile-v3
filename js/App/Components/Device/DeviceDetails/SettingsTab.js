@@ -83,6 +83,10 @@ class SettingsTab extends View {
 	goBack: () => void;
 	onPressCancelExclude: () => void;
 
+	onPressMarkAsFailed: () => void;
+	onPressReplaceFailedNode: () => void;
+	onPressRemoveFailedNode: () => void;
+
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
@@ -117,6 +121,10 @@ class SettingsTab extends View {
 		this.onPressExcludeDevice = this.onPressExcludeDevice.bind(this);
 		this.goBack = this.goBack.bind(this);
 		this.onPressCancelExclude = this.onPressCancelExclude.bind(this);
+
+		this.onPressMarkAsFailed = this.onPressMarkAsFailed.bind(this);
+		this.onPressReplaceFailedNode = this.onPressReplaceFailedNode.bind(this);
+		this.onPressRemoveFailedNode = this.onPressRemoveFailedNode.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -155,6 +163,15 @@ class SettingsTab extends View {
 		this.setState({
 			excludeActive: false,
 		});
+	}
+
+	onPressMarkAsFailed() {
+	}
+
+	onPressReplaceFailedNode() {
+	}
+
+	onPressRemoveFailedNode() {
 	}
 
 	goBack() {
@@ -219,7 +236,8 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={id} style={learn} />;
 		}
 
-		const canExclude = transport === 'zwave';
+		const isZWave = transport === 'zwave';
+		const isFailed = false;
 
 		return (
 			<ScrollView style={{
@@ -251,14 +269,44 @@ class SettingsTab extends View {
 							appLayout={appLayout}
 						/>
 						{learnButton}
-						{canExclude && (
-							<TouchableButton
-								text={formatMessage(i18n.headerExclude).toUpperCase()}
-								onPress={this.onPressExcludeDevice}
-								disabled={!isGatewayReachable}
-								style={[excludeButtonStyle, {
-									backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-								}]}/>
+						{isZWave && (
+							<>
+								{isFailed ?
+									<>
+										<TouchableButton
+											text={'Remove dead node'}
+											onPress={this.onPressRemoveFailedNode}
+											disabled={!isGatewayReachable}
+											style={[excludeButtonStyle, {
+												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+											}]}/>
+										<TouchableButton
+											text={'Replace dead node'}
+											onPress={this.onPressReplaceFailedNode}
+											disabled={!isGatewayReachable}
+											style={[excludeButtonStyle, {
+												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+											}]}/>
+									</>
+									:
+									<>
+										<TouchableButton
+											text={'Mark node as dead'}
+											onPress={this.onPressExcludeDevice}
+											disabled={!isGatewayReachable}
+											style={[excludeButtonStyle, {
+												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+											}]}/>
+										<TouchableButton
+											text={formatMessage(i18n.headerExclude).toUpperCase()}
+											onPress={this.onPressExcludeDevice}
+											disabled={!isGatewayReachable}
+											style={[excludeButtonStyle, {
+												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+											}]}/>
+									</>
+								}
+							</>
 						)}
 					</View>
 				}
@@ -290,6 +338,7 @@ class SettingsTab extends View {
 			},
 			excludeButtonStyle: {
 				marginTop: padding * 2,
+				minWidth: Math.floor(deviceWidth * 0.6),
 			},
 		};
 	}
