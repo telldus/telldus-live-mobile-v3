@@ -195,6 +195,8 @@ class SettingsTab extends View {
 	}
 
 	onPressReplaceFailedNode() {
+		const { clientId, clientDeviceId } = this.props.device;
+		this.sendSocketMessage(clientId, 'replaceFailedNode', clientDeviceId);
 	}
 
 	onPressRemoveFailedNode() {
@@ -203,7 +205,8 @@ class SettingsTab extends View {
 	}
 
 	sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
-		sendSocketMessage(clientId, 'client', 'forward', {
+		const { sendSocketMessage: SSM } = this.props;
+		SSM(clientId, 'client', 'forward', {
 			'module': 'zwave',
 			'action': action,
 			'device': clientDeviceId,
