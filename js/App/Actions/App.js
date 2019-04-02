@@ -21,11 +21,57 @@
 // @flow
 
 'use strict';
+
+import type { ThunkAction } from './Types';
+
+import { APIKey } from '../../Config';
+
+import { ticketTopicIds } from '../../Constants';
+const { LOCAL_CONTROL_TROUBLESHOOT } = ticketTopicIds;
+const { dev, release } = LOCAL_CONTROL_TROUBLESHOOT;
+
+const topicId = __DEV__ ? dev : release;
+
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
 const { App } = actions;
 
+function createSupportTicket(message: string): ThunkAction {
+	return (dispatch: Function, getState: Object): any => {
+		const { user } = getState();
+		const { userProfile = {} } = user;
+		const { email, firstname, lastname } = userProfile;
+
+		let data = JSON.stringify({
+			'alert': false,
+			'message': message,
+			'errorMsg': 'errorMsg',
+			'subject': 'Local control does not work',
+			'name': `${firstname} ${lastname}`,
+			'email': email,
+			'source': 'Web',
+			'autorespond': true,
+			'topicId': topicId,
+		});
+		return fetch('http://stage.telldus.se/osticket/api/tickets.json', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-API-Key': APIKey,
+			},
+			body: data,
+		}).then((response: Object): any => response.json())
+			.then((responseJson: Object): any => {
+				return responseJson;
+			})
+			.catch((error: any) => {
+				throw error;
+			});
+	};
+}
 
 module.exports = {
 	...App,
+	createSupportTicket,
 };
+
