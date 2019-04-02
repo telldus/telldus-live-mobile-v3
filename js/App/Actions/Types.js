@@ -117,6 +117,7 @@ export type Action =
 	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string, payload: Object }
 	| { type: typeof REHYDRATE }
 	| { type: 'persist/REHYDRATE', payload: Object }
+	| { type: 'TOGGLE_SUPPORT_LOCAL', gatewayId: string, payload: Object }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }

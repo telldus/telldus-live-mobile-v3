@@ -232,14 +232,24 @@ getRSAKeyTS() {
 }
 
 supportLocalTS() {
-	const { location } = this.props;
-	const { localKey = {} } = location;
+	const { location, actions } = this.props;
+	const { localKey = {}, id } = location;
 	const { address, key, ttl } = localKey;
 	const tokenExpired = hasTokenExpired(ttl);
 	if (address && key && ttl && !tokenExpired) {
-		// Very Unlikely But still
-		// If All other params are available and only supportLocal is false.
-		// Set supportLocal as true here
+		actions.toggleSupportLocal(id, true);
+		this.retryTSTimeout = setTimeout(() => {
+			let { status } = this.validateTest(4);
+			if (status) {
+				this.updateTest(4, 'ok', 0, () => {
+					this.validateAndRunTests();
+				});
+			} else {
+				this.updateTest(4, 'fail', 0, () => {
+					this.validateAndRunTests();
+				});
+			}
+		}, 2000);
 	} else {
 		this.updateTest(4, 'fail', 0, () => {});
 	}
