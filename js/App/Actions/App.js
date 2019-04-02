@@ -58,7 +58,7 @@ function createSupportTicketLCT(gatewayId: number, message: string, error: strin
 			let data = JSON.stringify({
 				'alert': false,
 				'message': message,
-				'errorMsg': error,
+				'failedTests': error,
 				'subject': 'Local control does not work',
 				'name': `${firstname} ${lastname}`,
 				'email': email,
@@ -67,15 +67,15 @@ function createSupportTicketLCT(gatewayId: number, message: string, error: strin
 				'topicId': topicId,
 				'online': online,
 				'key': keyInfo,
-				'uuid': uuid,
-				'phoneIp': ip,
-				'gatewayIp': address,
-				'macAddress': macAddress,
+				'uuid': uuid === null ? 'null' : uuid,
+				'phoneIP': ip === null ? 'null' : ip,
+				'gatewayIP': address === null ? 'null' : address,
+				'macAddress': macAddress === null ? 'null' : macAddress,
 				'connectionType': connectionType,
 				'connectionEffectiveType': connectionEffectiveType,
 				'deviceName': DeviceInfo.getDeviceName(),
 				'deviceUniqueID': deviceUniqueID,
-				router: router,
+				'router': router,
 			});
 			return dispatch(createSupportTicket(data));
 		  });
