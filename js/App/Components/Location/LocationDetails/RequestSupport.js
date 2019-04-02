@@ -44,15 +44,20 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	location: Object,
 
 	toggleDialogueBox: (Object) => void,
 	onDidMount: Function,
 	intl: Object,
+	navigation: Object,
+	actions: Object,
 };
 
 type State = {
-    value: string,
+	value: string,
+	routerValue: string,
+	isLoading: boolean,
 };
 
 class RequestSupport extends View<Props, State> {
@@ -65,7 +70,7 @@ state: State = {
 };
 
 onChangeText: (string) => void;
-showDialogue: () => void;
+showDialogue: (string, string) => void;
 onSubmitEditing: () => void;
 contactSupport: () => void;
 onPressPositive: () => void;
@@ -95,7 +100,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	if (!isStateEqual) {
 		return true;
 	}
-	const propsChange = shouldUpdate(this.props, nextProps, ['appLayout']);
+	const propsChange = shouldUpdate(this.props, nextProps, ['appLayout', 'location']);
 	if (propsChange) {
 		return true;
 	}

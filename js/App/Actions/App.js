@@ -41,7 +41,7 @@ import { actions } from 'live-shared-data';
 const { App } = actions;
 
 function createSupportTicketLCT(gatewayId: number, message: string, error: string, router: string, connectionType: string, connectionEffectiveType: string): ThunkAction {
-	return (dispatch: Function, getState: Object): any => {
+	return (dispatch: Function, getState: Function): any => {
 		const { user, gateways: {byId} } = getState();
 		const { userProfile = {} } = user;
 		const { email, firstname, lastname } = userProfile;
