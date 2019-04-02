@@ -16,7 +16,8 @@ module.exports = {
     webClientId: '${GOOGLE_WEB_CLIENT_ID}',
 	iosClientId: '${GOOGLE_IOS_CLIENT_ID}',
 	iosReversedClientId: '${GOOGLE_IOS_REVERSED_CLIENT_ID}',
-    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}'
+    googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}',
+    osTicketKey: '${OSTICKET_KEY}'
 };
 EOF
 
