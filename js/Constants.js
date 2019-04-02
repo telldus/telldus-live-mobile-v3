@@ -55,4 +55,10 @@ module.exports = {
 		3: 'Timed Out',
 	},
 	DAYS: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+	ticketTopicIds: {
+		'LOCAL_CONTROL_TROUBLESHOOT': {
+			dev: 15,
+			release: 21,
+		},
+	},
 };
