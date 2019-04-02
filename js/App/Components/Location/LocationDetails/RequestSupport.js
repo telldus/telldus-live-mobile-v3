@@ -25,6 +25,7 @@ import {
 	TextInput,
 	KeyboardAvoidingView,
 	Keyboard,
+	NetInfo,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
 import startCase from 'lodash/startCase';
@@ -60,6 +61,7 @@ props: Props;
 state: State = {
 	value: '',
 	isLoading: false,
+	routerValue: '',
 };
 
 onChangeText: (string) => void;
@@ -101,41 +103,51 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 contactSupport() {
-	const { actions } = this.props;
-	const { value, isLoading } = this.state;
+	const { actions, location, navigation, intl } = this.props;
+	const { formatMessage } = intl;
+	const { id } = location;
+	const { value, isLoading, routerValue } = this.state;
+
+	const errorH = startCase(formatMessage(i18n.errorCannotCreateTicketH));
+	const errorB = formatMessage(i18n.errorCannotCreateTicketB, {url: 'support.telldus.com.'});
 
 	Keyboard.dismiss();
 	if (!isLoading) {
 		this.setState({
 			isLoading: true,
 		});
-		actions.createSupportTicket(value).then((ticketNum: number) => {
-			if (ticketNum && typeof ticketNum === 'number') {
-				this.showDialogue(ticketNum);
-			} else {
-				actions.showToast('Could not contact support. Please try later.');
-			}
-			this.setState({
-				isLoading: false,
-			});
-		}).catch(() => {
-			actions.showToast('Could not contact support. Please try later.');
-			this.setState({
-				isLoading: false,
+		NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+			const { type, effectiveType } = connectionInfo;
+
+			const failedTests = navigation.getParam('failedTests', '');
+			actions.createSupportTicketLCT(id, value, failedTests, routerValue, type, effectiveType).then((ticketNum: number) => {
+				if (ticketNum && typeof ticketNum === 'number') {
+					this.showDialogue(startCase(formatMessage(i18n.labelSupportTicketCreated)), formatMessage(i18n.messageSupportTicket, {ticketNum}));
+				} else {
+					this.showDialogue(errorH, errorB);
+				}
+				this.setState({
+					isLoading: false,
+				});
+			}).catch(() => {
+				this.showDialogue(errorH, errorB);
+				this.setState({
+					isLoading: false,
+				});
 			});
 		});
 	}
 }
 
-showDialogue(ticketNum: number) {
-	const { toggleDialogueBox, intl } = this.props;
+showDialogue(header: string, text: string) {
+	const { toggleDialogueBox } = this.props;
 
 	const dialogueData = {
 		show: true,
 		showPositive: true,
-		header: startCase(intl.formatMessage(i18n.labelSupportTicketCreated)),
+		header,
 		imageHeader: true,
-		text: intl.formatMessage(i18n.messageSupportTicket, {ticketNum}),
+		text,
 		showHeader: true,
 		closeOnPressPositive: true,
 		onPressPositive: this.onPressPositive,

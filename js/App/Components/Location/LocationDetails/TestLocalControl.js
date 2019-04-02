@@ -87,30 +87,35 @@ constructor(props: Props) {
 			h2: formatMessage(i18n.labelTestIPH2),
 			icon: 'localcontrol',
 			status: null,
+			name: 'Local IP',
 		},
 		{
 			h1: 'UUID',
 			h2: formatMessage(i18n.labelTestUUIDH2),
 			icon: 'user',
 			status: null,
+			name: 'UUID',
 		},
 		{
 			h1: formatMessage(i18n.labelToken),
 			h2: formatMessage(i18n.labelTestTokenH2),
 			icon: 'locked',
 			status: null,
+			name: 'Token',
 		},
 		{
 			h1: formatMessage(i18n.labelEncryptKeys),
 			h2: formatMessage(i18n.labelTestKeysH2),
 			icon: 'keyhole',
 			status: null,
+			name: 'Encrypt Keys',
 		},
 		{
 			h1: formatMessage(i18n.labelLocalSupport),
 			h2: formatMessage(i18n.labelTestLocalSupportH2),
 			icon: 'location',
 			status: null,
+			name: 'Support Local',
 		},
 	];
 
@@ -367,11 +372,21 @@ onPressReRunTest() {
 
 onPressRequestSupport() {
 	const { location, navigation } = this.props;
+
+	let failedTests = '';
+	this.TESTS_TO_RUN.map((test: Object, index: number) => {
+		let { status } = this.validateTest(index);
+		if (!status) {
+			failedTests = failedTests ? `${failedTests}, ${test.name}` : test.name;
+		}
+	});
+
 	navigation.navigate({
 		routeName: 'RequestSupport',
 		key: 'RequestSupport',
 		params: {
 			location,
+			failedTests: `Failed tests: ${failedTests}`,
 		},
 	});
 }
