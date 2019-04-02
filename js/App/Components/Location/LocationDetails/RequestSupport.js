@@ -24,8 +24,10 @@ import React from 'react';
 import {
 	TextInput,
 	KeyboardAvoidingView,
+	Keyboard,
 } from 'react-native';
 const isEqual = require('react-fast-compare');
+import startCase from 'lodash/startCase';
 
 import {
 	View,
@@ -57,11 +59,14 @@ props: Props;
 
 state: State = {
 	value: '',
+	isLoading: false,
 };
 
 onChangeText: (string) => void;
 showDialogue: () => void;
 onSubmitEditing: () => void;
+contactSupport: () => void;
+onPressPositive: () => void;
 
 constructor(props: Props) {
 	super(props);
@@ -69,6 +74,8 @@ constructor(props: Props) {
 	this.onChangeText = this.onChangeText.bind(this);
 	this.showDialogue = this.showDialogue.bind(this);
 	this.onSubmitEditing = this.onSubmitEditing.bind(this);
+	this.contactSupport = this.contactSupport.bind(this);
+	this.onPressPositive = this.onPressPositive.bind(this);
 
 	const { formatMessage } = this.props.intl;
 
@@ -93,21 +100,53 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-showDialogue() {
+contactSupport() {
+	const { actions } = this.props;
+	const { value, isLoading } = this.state;
+
+	Keyboard.dismiss();
+	if (!isLoading) {
+		this.setState({
+			isLoading: true,
+		});
+		actions.createSupportTicket(value).then((ticketNum: number) => {
+			if (ticketNum && typeof ticketNum === 'number') {
+				this.showDialogue(ticketNum);
+			} else {
+				actions.showToast('Could not contact support. Please try later.');
+			}
+			this.setState({
+				isLoading: false,
+			});
+		}).catch(() => {
+			actions.showToast('Could not contact support. Please try later.');
+			this.setState({
+				isLoading: false,
+			});
+		});
+	}
+}
+
+showDialogue(ticketNum: number) {
 	const { toggleDialogueBox, intl } = this.props;
-	const ticketNum = 112233;
 
 	const dialogueData = {
 		show: true,
 		showPositive: true,
-		header: intl.formatMessage(i18n.labelSupportTicketCreated),
+		header: startCase(intl.formatMessage(i18n.labelSupportTicketCreated)),
 		imageHeader: true,
 		text: intl.formatMessage(i18n.messageSupportTicket, {ticketNum}),
 		showHeader: true,
 		closeOnPressPositive: true,
-		capitalizeHeader: true,
+		onPressPositive: this.onPressPositive,
+		capitalizeHeader: false,
 	};
 	toggleDialogueBox(dialogueData);
+}
+
+onPressPositive() {
+	const { navigation } = this.props;
+	navigation.popToTop();
 }
 
 onChangeText(value: string) {
@@ -117,6 +156,7 @@ onChangeText(value: string) {
 }
 
 onSubmitEditing() {
+	Keyboard.dismiss();
 }
 
 render(testData: Object): Object {
@@ -166,7 +206,7 @@ render(testData: Object): Object {
 						/>
 					</KeyboardAvoidingView>
 				</View>
-				<TouchableButton text={i18n.labelSend} style={button} onPress={this.showDialogue}/>
+				<TouchableButton text={i18n.labelSend} style={button} onPress={this.contactSupport}/>
 			</>
 	);
 }

@@ -33,6 +33,7 @@ import { View, DialogueBox, NavigationHeaderPoster } from '../../../../BaseCompo
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 import * as appDataActions from '../../../Actions/AppData';
+import { createSupportTicket, showToast } from '../../../Actions/App';
 
 import {
 	getTokenForLocalControl,
@@ -283,7 +284,14 @@ const mapStateToProps = (store: Object, ownProps: Object): Object => {
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions, ...gatewayActions, ...appDataActions, getTokenForLocalControl}, dispatch),
+			...bindActionCreators({
+				...modalActions,
+				...gatewayActions,
+				...appDataActions,
+				getTokenForLocalControl,
+				createSupportTicket,
+				showToast,
+			}, dispatch),
 		},
 	}
 );
