@@ -58,6 +58,7 @@ type State = {
 	value: string,
 	routerValue: string,
 	isLoading: boolean,
+	emailValue: string,
 };
 
 class RequestSupport extends View<Props, State> {
@@ -213,6 +214,7 @@ render(testData: Object): Object {
 		value,
 		routerValue,
 		emailValue,
+		isLoading,
 	} = this.state;
 	const {
 		container,
@@ -276,7 +278,12 @@ render(testData: Object): Object {
 						returnKeyType={'done'}
 					/>
 				</View>
-				<TouchableButton text={i18n.labelSend} style={button} onPress={this.contactSupport}/>
+				<TouchableButton
+					text={i18n.labelSend}
+					style={button}
+					onPress={this.contactSupport}
+					disabled={isLoading}
+					showThrobber={isLoading}/>
 			</>
 	);
 }
@@ -324,7 +331,7 @@ getStyles(appLayout: Object): Object {
 			marginTop: 8,
 		},
 		button: {
-			marginTop: padding * 1.5,
+			marginVertical: padding * 1.5,
 		},
 	};
 }

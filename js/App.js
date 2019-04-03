@@ -85,6 +85,8 @@ class App extends React.Component<Props, State> {
 
 	onTokenRefreshListener: null | Function;
 
+	timeoutToCallPositive: any;
+
 	constructor(props: Props) {
 		super(props);
 		this.onLayout = this.onLayout.bind(this);
