@@ -188,6 +188,7 @@ class SettingsTab extends View {
 
 	onPressMarkAsFailed() {
 		const { screenProps, device } = this.props;
+		const { formatMessage } = screenProps.intl;
 		const { clientId, clientDeviceId } = device;
 		this.setState({
 			isMarking: true,
@@ -207,8 +208,18 @@ class SettingsTab extends View {
 					isMarking: false,
 				});
 				if (!isFailed) {
-					const message = screenProps.intl.formatMessage(i18n.errorCannotMarkAsFailed);
-					that.props.showToast(message);
+
+					const dialogueData = {
+						show: true,
+						showPositive: true,
+						header: formatMessage(i18n.messageCouldNotMarkFailedH),
+						imageHeader: true,
+						text: formatMessage(i18n.messageCouldNotMarkFailedB),
+						showHeader: true,
+						closeOnPressPositive: true,
+						capitalizeHeader: false,
+					};
+					screenProps.toggleDialogueBox(dialogueData);
 				}
 			}, 1000);
 		}, 8000);
