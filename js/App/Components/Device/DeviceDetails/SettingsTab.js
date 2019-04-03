@@ -88,6 +88,8 @@ class SettingsTab extends View {
 	onPressReplaceFailedNode: () => void;
 	onPressRemoveFailedNode: () => void;
 
+	onConfirmRemoveFailedNode: () => void;
+
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
@@ -130,6 +132,8 @@ class SettingsTab extends View {
 
 		this.markAsFailedTimeoutOne = null;
 		this.markAsFailedTimeoutTwo = null;
+
+		this.onConfirmRemoveFailedNode = this.onConfirmRemoveFailedNode.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -154,6 +158,13 @@ class SettingsTab extends View {
 			return false;
 		}
 		return false;
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { device, navigation } = this.props;
+		if ((prevProps.device && prevProps.device.id) && (!device || !device.id)) {
+			navigation.popToTop();
+		}
 	}
 
 	componentWillUnmount() {
@@ -200,7 +211,7 @@ class SettingsTab extends View {
 					that.props.showToast(message);
 				}
 			}, 1000);
-		}, 5000);
+		}, 8000);
 	}
 
 	onPressReplaceFailedNode() {
@@ -209,6 +220,26 @@ class SettingsTab extends View {
 	}
 
 	onPressRemoveFailedNode() {
+		const { toggleDialogueBox, intl } = this.props.screenProps;
+		const { formatMessage } = intl;
+
+		const dialogueData = {
+			show: true,
+			showPositive: true,
+			positiveText: formatMessage(i18n.remove).toUpperCase(),
+			showNegative: true,
+			header: `${formatMessage(i18n.labelRemoveFailed)}?`,
+			imageHeader: true,
+			text: formatMessage(i18n.messageOnRemoveFailedNode),
+			showHeader: true,
+			closeOnPressPositive: true,
+			onPressPositive: this.onConfirmRemoveFailedNode,
+			capitalizeHeader: false,
+		};
+		toggleDialogueBox(dialogueData);
+	}
+
+	onConfirmRemoveFailedNode() {
 		const { clientId, clientDeviceId } = this.props.device;
 		this.sendSocketMessage(clientId, 'removeFailedNode', clientDeviceId);
 	}
