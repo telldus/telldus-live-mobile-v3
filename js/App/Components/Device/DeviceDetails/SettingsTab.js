@@ -70,6 +70,7 @@ type Props = {
 type State = {
 	isHidden: boolean,
 	excludeActive: boolean,
+	isMarking: boolean,
 };
 
 
@@ -111,6 +112,7 @@ class SettingsTab extends View {
 		this.state = {
 			isHidden: props.device.ignored,
 			excludeActive: false,
+			isMarking: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -176,6 +178,9 @@ class SettingsTab extends View {
 	onPressMarkAsFailed() {
 		const { screenProps, device } = this.props;
 		const { clientId, clientDeviceId } = device;
+		this.setState({
+			isMarking: true,
+		});
 		this.sendSocketMessage(clientId, 'markNodeAsFailed', clientDeviceId);
 
 		const that = this;
@@ -187,6 +192,9 @@ class SettingsTab extends View {
 			that.markAsFailedTimeoutTwo = setTimeout(() => {
 				const { nodeInfo = {} } = that.props.device;
 				const { isFailed = false } = nodeInfo;
+				this.setState({
+					isMarking: false,
+				});
 				if (!isFailed) {
 					const message = screenProps.intl.formatMessage(i18n.errorCannotMarkAsFailed);
 					that.props.showToast(message);
@@ -250,7 +258,7 @@ class SettingsTab extends View {
 	}
 
 	render(): Object | null {
-		const { isHidden, excludeActive } = this.state;
+		const { isHidden, excludeActive, isMarking } = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -333,10 +341,11 @@ class SettingsTab extends View {
 										<TouchableButton
 											text={i18n.labelMarkAsFailed}
 											onPress={this.onPressMarkAsFailed}
-											disabled={!isGatewayReachable}
+											disabled={!isGatewayReachable || isMarking}
 											style={[excludeButtonStyle, {
 												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-											}]}/>
+											}]}
+											showThrobber={isMarking}/>
 										<TouchableButton
 											text={formatMessage(i18n.headerExclude).toUpperCase()}
 											onPress={this.onPressExcludeDevice}
