@@ -35,8 +35,10 @@ import {
 
 import { LearnButton } from '../../TabViews/SubViews';
 import { ExcludeDevice } from '../Common';
+import { ReplaceFailedNode } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';
+import { requestNodeInfo } from '../../../Actions/Websockets';
 import {
 	addToDashboard,
 	removeFromDashboard,
@@ -71,6 +73,7 @@ type State = {
 	isHidden: boolean,
 	excludeActive: boolean,
 	isMarking: boolean,
+	isReplacing: boolean,
 };
 
 
@@ -87,6 +90,7 @@ class SettingsTab extends View {
 	onPressMarkAsFailed: () => void;
 	onPressReplaceFailedNode: () => void;
 	onPressRemoveFailedNode: () => void;
+	onDoneReplaceFailedNode: () => void;
 
 	onConfirmRemoveFailedNode: () => void;
 
@@ -115,6 +119,7 @@ class SettingsTab extends View {
 			isHidden: props.device.ignored,
 			excludeActive: false,
 			isMarking: false,
+			isReplacing: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -129,6 +134,7 @@ class SettingsTab extends View {
 		this.onPressMarkAsFailed = this.onPressMarkAsFailed.bind(this);
 		this.onPressReplaceFailedNode = this.onPressReplaceFailedNode.bind(this);
 		this.onPressRemoveFailedNode = this.onPressRemoveFailedNode.bind(this);
+		this.onDoneReplaceFailedNode = this.onDoneReplaceFailedNode.bind(this);
 
 		this.markAsFailedTimeoutOne = null;
 		this.markAsFailedTimeoutTwo = null;
@@ -245,8 +251,18 @@ class SettingsTab extends View {
 	}
 
 	onPressReplaceFailedNode() {
-		const { clientId, clientDeviceId } = this.props.device;
-		this.sendSocketMessage(clientId, 'replaceFailedNode', clientDeviceId);
+		this.setState({
+			isReplacing: true,
+		});
+	}
+
+	onDoneReplaceFailedNode() {
+		const { dispatch, device } = this.props;
+		const { clientId, clientDeviceId } = device;
+		dispatch(requestNodeInfo(clientId, clientDeviceId));
+		this.setState({
+			isReplacing: false,
+		});
 	}
 
 	onPressRemoveFailedNode() {
@@ -319,7 +335,7 @@ class SettingsTab extends View {
 	}
 
 	render(): Object | null {
-		const { isHidden, excludeActive, isMarking } = this.state;
+		const { isHidden, excludeActive, isMarking, isReplacing } = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -351,7 +367,8 @@ class SettingsTab extends View {
 		return (
 			<ScrollView style={{
 				backgroundColor: Theme.Core.appBackground,
-			}}>{excludeActive ?
+			}}>
+				{excludeActive ?
 
 					<ExcludeDevice
 						clientId={clientId}
@@ -365,59 +382,76 @@ class SettingsTab extends View {
 						onPressCancelExclude={this.onPressCancelExclude}/>
 					:
 					<View style={container}>
-						<SettingsRow
-							label={formatMessage(i18n.showOnDashborad)}
-							onValueChange={this.onValueChange}
-							value={inDashboard}
-							appLayout={appLayout}
-						/>
-						<SettingsRow
-							label={formatMessage(i18n.hideFromListD)}
-							onValueChange={this.setIgnoreDevice}
-							value={isHidden}
-							appLayout={appLayout}
-						/>
-						{learnButton}
-						{isZWave && (
+						{isReplacing ?
+							<ReplaceFailedNode
+								intl={intl}
+								appLayout={appLayout}
+								device={device}
+								processWebsocketMessage={this.props.processWebsocketMessage}
+								sendSocketMessage={this.props.sendSocketMessage}
+								getSocketObject={this.props.getSocketObject}
+								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}/>
+							:
 							<>
-								{isFailed ?
+								<SettingsRow
+									label={formatMessage(i18n.showOnDashborad)}
+									onValueChange={this.onValueChange}
+									value={inDashboard}
+									appLayout={appLayout}
+								/>
+								<SettingsRow
+									label={formatMessage(i18n.hideFromListD)}
+									onValueChange={this.setIgnoreDevice}
+									value={isHidden}
+									appLayout={appLayout}
+								/>
+								{learnButton}
+								{isZWave && (
 									<>
-										<TouchableButton
-											text={i18n.labelRemoveFailed}
-											onPress={this.onPressRemoveFailedNode}
-											disabled={!isGatewayReachable}
-											style={[excludeButtonStyle, {
-												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-											}]}/>
-										<TouchableButton
-											text={i18n.labelReplaceFailed}
-											onPress={this.onPressReplaceFailedNode}
-											disabled={!isGatewayReachable}
-											style={[excludeButtonStyle, {
-												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-											}]}/>
+										{isFailed ?
+											<>
+												{!isReplacing &&
+													<>
+														<TouchableButton
+															text={i18n.labelRemoveFailed}
+															onPress={this.onPressRemoveFailedNode}
+															disabled={!isGatewayReachable}
+															style={[excludeButtonStyle, {
+																backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+															}]}/>
+														<TouchableButton
+															text={i18n.labelReplaceFailed}
+															onPress={this.onPressReplaceFailedNode}
+															disabled={!isGatewayReachable}
+															style={[excludeButtonStyle, {
+																backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+															}]}/>
+													</>
+												}
+											</>
+											:
+											<>
+												<TouchableButton
+													text={i18n.labelMarkAsFailed}
+													onPress={this.onPressMarkAsFailed}
+													disabled={!isGatewayReachable || isMarking}
+													style={[excludeButtonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}
+													showThrobber={isMarking}/>
+												<TouchableButton
+													text={formatMessage(i18n.headerExclude).toUpperCase()}
+													onPress={this.onPressExcludeDevice}
+													disabled={!isGatewayReachable}
+													style={[excludeButtonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}/>
+											</>
+										}
 									</>
-									:
-									<>
-										<TouchableButton
-											text={i18n.labelMarkAsFailed}
-											onPress={this.onPressMarkAsFailed}
-											disabled={!isGatewayReachable || isMarking}
-											style={[excludeButtonStyle, {
-												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-											}]}
-											showThrobber={isMarking}/>
-										<TouchableButton
-											text={formatMessage(i18n.headerExclude).toUpperCase()}
-											onPress={this.onPressExcludeDevice}
-											disabled={!isGatewayReachable}
-											style={[excludeButtonStyle, {
-												backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-											}]}/>
-									</>
-								}
+								)}
 							</>
-						)}
+						}
 					</View>
 				}
 			</ScrollView>
