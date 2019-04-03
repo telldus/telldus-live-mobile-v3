@@ -113,6 +113,8 @@ class App extends React.Component<Props, State> {
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 		this.onTokenRefreshListener = null;
+
+		this.timeoutToCallPositive = null;
 	}
 
 	componentDidMount() {
@@ -177,6 +179,7 @@ class App extends React.Component<Props, State> {
 			this.onTokenRefreshListener();
 			this.onTokenRefreshListener = null;
 		}
+		clearTimeout(this.timeoutToCallPositive);
 	}
 
 	_keyboardDidShow() {
@@ -223,7 +226,10 @@ class App extends React.Component<Props, State> {
 				show: false,
 			},
 		}, () => {
-			postClose();
+			const { timeoutToCallPositive = 0 } = dialogueData;
+			this.timeoutToCallPositive = setTimeout(() => {
+				postClose();
+			}, timeoutToCallPositive);
 		});
 	}
 
