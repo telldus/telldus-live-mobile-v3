@@ -44,7 +44,7 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 	return (dispatch: Function, getState: Function): any => {
 		const { user, gateways: {byId} } = getState();
 		const { userProfile = {} } = user;
-		const { firstname, lastname } = userProfile;
+		const { email, firstname, lastname } = userProfile;
 
 		const gateway = byId[gatewayId];
 		const { localKey = {}, online, uuid } = gateway || {};
@@ -70,6 +70,7 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				'macAddress': macAddress === null ? 'null' : macAddress,
 				'deviceName': DeviceInfo.getDeviceName(),
 				'deviceUniqueID': deviceUniqueID,
+				'liveAccount': email,
 				...ticketData,
 			});
 			return dispatch(createSupportTicket(data));
