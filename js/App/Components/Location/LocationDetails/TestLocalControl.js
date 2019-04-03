@@ -386,7 +386,7 @@ onPressRequestSupport() {
 		key: 'RequestSupport',
 		params: {
 			location,
-			failedTests: `${failedTests}`,
+			failedTests: failedTests ? `${failedTests}` : 'null',
 		},
 	});
 }

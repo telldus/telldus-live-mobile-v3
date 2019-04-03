@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BackHandler, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -47,6 +46,7 @@ type Props = {
 	showModal: boolean,
 	validationMessage: any,
 	location: Object,
+	email: string,
 
 	navigation: Object,
 	children: Object,
@@ -64,15 +64,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress: () => void;
 	closeModal: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		actions: PropTypes.objectOf(PropTypes.func),
-		screenProps: PropTypes.object,
-		showModal: PropTypes.bool,
-		validationMessage: PropTypes.any,
-	};
 
 	state = {
 		h1: '',
@@ -150,6 +141,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			modalExtras,
 			navigation,
 			location,
+			email,
 		} = this.props;
 		const {
 			appLayout,
@@ -207,6 +199,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 									dialogueOpen: showModal,
 									containerWidth: width - (2 * paddingHorizontal),
 									location,
+									email,
 								},
 							)}
 						</View>
@@ -273,11 +266,16 @@ class LocationDetailsContainer extends View<null, Props, State> {
 
 const mapStateToProps = (store: Object, ownProps: Object): Object => {
 	let { id } = ownProps.navigation.getParam('location', {id: null});
+
+	const { userProfile = {} } = store.user;
+	const { email } = userProfile;
+
 	return {
 		location: store.gateways.byId[id],
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
+		email,
 	};
 };
 

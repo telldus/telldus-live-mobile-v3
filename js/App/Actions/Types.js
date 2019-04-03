@@ -136,3 +136,12 @@ export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
 export type PromiseAction = Promise<Action>;
 
 export type GrantType = 'password' | 'google' | 'refresh_token';
+
+export type TicketData = {
+	email: string,
+	message: string,
+	failedTests: string,
+	router: string,
+	connectionType: string,
+	connectionEffectiveType: string,
+};

@@ -23,7 +23,6 @@
 import React from 'react';
 import {
 	TextInput,
-	KeyboardAvoidingView,
 	Keyboard,
 	NetInfo,
 } from 'react-native';
@@ -46,6 +45,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	location: Object,
+	email: string,
 
 	toggleDialogueBox: (Object) => void,
 	onDidMount: Function,
@@ -67,6 +67,7 @@ state: State = {
 	value: '',
 	isLoading: false,
 	routerValue: '',
+	emailValue: this.props.email,
 };
 
 onChangeText: (string) => void;
@@ -74,6 +75,9 @@ showDialogue: (string, string) => void;
 onSubmitEditing: () => void;
 contactSupport: () => void;
 onPressPositive: () => void;
+
+onChangeTextRouter: (string) => void;
+onChangeTextEmail: (string) => void;
 
 constructor(props: Props) {
 	super(props);
@@ -88,6 +92,9 @@ constructor(props: Props) {
 
 	this.h1 = formatMessage(i18n.labelLocalControl);
 	this.h2 = formatMessage(i18n.labelContactSupport);
+
+	this.onChangeTextRouter = this.onChangeTextRouter.bind(this);
+	this.onChangeTextEmail = this.onChangeTextEmail.bind(this);
 }
 
 componentDidMount() {
@@ -107,11 +114,23 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
+onChangeTextRouter(routerValue: string) {
+	this.setState({
+		routerValue,
+	});
+}
+
+onChangeTextEmail(emailValue: string) {
+	this.setState({
+		emailValue,
+	});
+}
+
 contactSupport() {
 	const { actions, location, navigation, intl } = this.props;
 	const { formatMessage } = intl;
 	const { id } = location;
-	const { value, isLoading, routerValue } = this.state;
+	const { value, isLoading, routerValue, emailValue } = this.state;
 
 	const errorH = startCase(formatMessage(i18n.errorCannotCreateTicketH));
 	const errorB = formatMessage(i18n.errorCannotCreateTicketB, {url: 'support.telldus.com.'});
@@ -124,8 +143,16 @@ contactSupport() {
 		NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
 			const { type, effectiveType } = connectionInfo;
 
-			const failedTests = navigation.getParam('failedTests', '');
-			actions.createSupportTicketLCT(id, value, failedTests, routerValue, type, effectiveType).then((ticketNum: number) => {
+			const failedTests = navigation.getParam('failedTests', 'null');
+			const ticketData = {
+				message: value,
+				failedTests,
+				router: routerValue,
+				email: emailValue,
+				connectionType: type,
+				connectionEffectiveType: effectiveType,
+			};
+			actions.createSupportTicketLCT(id, ticketData).then((ticketNum: number) => {
 				if (ticketNum && typeof ticketNum === 'number') {
 					this.showDialogue(startCase(formatMessage(i18n.labelSupportTicketCreated)), formatMessage(i18n.messageSupportTicket, {ticketNum}));
 				} else {
@@ -157,6 +184,7 @@ showDialogue(header: string, text: string) {
 		closeOnPressPositive: true,
 		onPressPositive: this.onPressPositive,
 		capitalizeHeader: false,
+		timeoutToCallPositive: 200,
 	};
 	toggleDialogueBox(dialogueData);
 }
@@ -183,6 +211,8 @@ render(testData: Object): Object {
 	} = this.props;
 	const {
 		value,
+		routerValue,
+		emailValue,
 	} = this.state;
 	const {
 		container,
@@ -198,30 +228,53 @@ render(testData: Object): Object {
 	return (
 			<>
 				<View style={container}>
-					<KeyboardAvoidingView
-						behavior="padding">
-						<Text style={title}>
-							{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
-						</Text>
-						<Text style={body}>
-							{formatMessage(i18n.messageCreateSupportTicket)}
-						</Text>
-						<Text style={label}>
-							{formatMessage(i18n.labelMessage)}
-						</Text>
-						<TextInput
-							value={value}
-							style={textField}
-							onChangeText={this.onChangeText}
-							onSubmitEditing={this.onSubmitEditing}
-							autoCapitalize="sentences"
-							autoCorrect={false}
-							autoFocus={true}
-							underlineColorAndroid={brandSecondary}
-							returnKeyType={'done'}
-							multiline={true}
-						/>
-					</KeyboardAvoidingView>
+					<Text style={title}>
+						{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
+					</Text>
+					<Text style={body}>
+						{formatMessage(i18n.messageCreateSupportTicket)}
+					</Text>
+					<Text style={label}>
+						{formatMessage(i18n.labelMessage)}
+					</Text>
+					<TextInput
+						value={value}
+						style={textField}
+						onChangeText={this.onChangeText}
+						onSubmitEditing={this.onSubmitEditing}
+						autoCapitalize="sentences"
+						autoCorrect={false}
+						autoFocus={true}
+						underlineColorAndroid={brandSecondary}
+						returnKeyType={'done'}
+						multiline={true}
+					/>
+					<Text style={label}>
+						{`${formatMessage(i18n.labelInternetRouter)} (${formatMessage(i18n.labelBrandAndModel)})`}
+					</Text>
+					<TextInput
+						value={routerValue}
+						style={textField}
+						onChangeText={this.onChangeTextRouter}
+						autoCapitalize="sentences"
+						autoCorrect={false}
+						autoFocus={false}
+						underlineColorAndroid={brandSecondary}
+						returnKeyType={'done'}
+					/>
+					<Text style={label}>
+						{formatMessage(i18n.emailAddress)}
+					</Text>
+					<TextInput
+						value={emailValue}
+						style={textField}
+						onChangeText={this.onChangeTextEmail}
+						autoCapitalize="none"
+						autoCorrect={false}
+						autoFocus={false}
+						underlineColorAndroid={brandSecondary}
+						returnKeyType={'done'}
+					/>
 				</View>
 				<TouchableButton text={i18n.labelSend} style={button} onPress={this.contactSupport}/>
 			</>

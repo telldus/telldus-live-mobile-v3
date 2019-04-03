@@ -22,7 +22,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, TicketData } from './Types';
 
 import DeviceInfo from 'react-native-device-info';
 
@@ -40,11 +40,11 @@ const url = __DEV__ ? 'http://stage.telldus.se/osticket/api/tickets.json' : 'htt
 import { actions } from 'live-shared-data';
 const { App } = actions;
 
-function createSupportTicketLCT(gatewayId: number, message: string, error: string, router: string, connectionType: string, connectionEffectiveType: string): ThunkAction {
+function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
 		const { user, gateways: {byId} } = getState();
 		const { userProfile = {} } = user;
-		const { email, firstname, lastname } = userProfile;
+		const { firstname, lastname } = userProfile;
 
 		const gateway = byId[gatewayId];
 		const { localKey = {}, online, uuid } = gateway || {};
@@ -57,11 +57,8 @@ function createSupportTicketLCT(gatewayId: number, message: string, error: strin
 		return DeviceInfo.getIPAddress().then((ip: string): any => {
 			let data = JSON.stringify({
 				'alert': false,
-				'message': message,
-				'failedTests': error,
 				'subject': 'Local control does not work',
 				'name': `${firstname} ${lastname}`,
-				'email': email,
 				'source': 'API',
 				'autorespond': true,
 				'topicId': topicId,
@@ -71,11 +68,9 @@ function createSupportTicketLCT(gatewayId: number, message: string, error: strin
 				'phoneIP': ip === null ? 'null' : ip,
 				'gatewayIP': address === null ? 'null' : address,
 				'macAddress': macAddress === null ? 'null' : macAddress,
-				'connectionType': connectionType,
-				'connectionEffectiveType': connectionEffectiveType,
 				'deviceName': DeviceInfo.getDeviceName(),
 				'deviceUniqueID': deviceUniqueID,
-				'router': router,
+				...ticketData,
 			});
 			return dispatch(createSupportTicket(data));
 		  });
