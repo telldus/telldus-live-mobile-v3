@@ -208,7 +208,6 @@ class SettingsTab extends View {
 					isMarking: false,
 				});
 				if (!isFailed) {
-
 					const dialogueData = {
 						show: true,
 						showPositive: true,
@@ -218,6 +217,26 @@ class SettingsTab extends View {
 						showHeader: true,
 						closeOnPressPositive: true,
 						capitalizeHeader: false,
+					};
+					screenProps.toggleDialogueBox(dialogueData);
+				} else {
+					const dialogueData = {
+						show: true,
+						showPositive: true,
+						positiveText: formatMessage(i18n.remove).toUpperCase(),
+						onPressPositive: this.onPressRemoveFailedNode,
+						showNegative: true,
+						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
+						onPressNegative: this.onPressReplaceFailedNode,
+						header: formatMessage(i18n.messageMarkedFailedH),
+						imageHeader: true,
+						text: formatMessage(i18n.messageMarkedFailedB),
+						showHeader: true,
+						closeOnPressPositive: true,
+						capitalizeHeader: false,
+						negTextColor: Theme.Core.brandSecondary,
+						showIconOnHeader: true,
+						timeoutToCallPositive: 400,
 					};
 					screenProps.toggleDialogueBox(dialogueData);
 				}
