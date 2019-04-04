@@ -26,7 +26,7 @@ import React, { PureComponent } from 'react';
 import { Animated } from 'react-native';
 import { intlShape } from 'react-intl';
 
-import { Text, Image } from '../../../../BaseComponents';
+import { Text } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
 import Theme from '../../../Theme';
@@ -62,22 +62,16 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.labelAddZWaveDevices);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription39);
-
-		this.titleWTwo = formatMessage(i18n.wizardTwoTitle39);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription39);
-
-		this.titleWThree = formatMessage(i18n.wizardThreeTitle39);
-		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription39);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader310);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription310);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
-		const { brandSecondary, brandPrimary } = Theme.Core;
+		const { brandSecondary } = Theme.Core;
 		const {
 			iconStyle,
-			iconTwoStyle,
-			iconThreeStyle,
+			// iconTwoStyle,
+			// iconThreeStyle,
 			iconSize,
 		} = styles;
 
@@ -94,29 +88,28 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 1:
 				return {
 					...screenData,
-					icon: 'zwave',
+					icon: 'buttononoff',
 					iconSize: iconSize * 1.2,
-					iconColor: brandPrimary,
 					title: this.titleWOne,
 					description: this.descriptionWOne,
 				};
 
-			case 2:
-				return {
-					...screenData,
-					icon: <Image source={{uri: 'icon_plus'}} style={iconTwoStyle} resizeMode={'cover'}/>,
-					title: this.titleWTwo,
-					description: this.descriptionWTwo,
-				};
+				// case 2:
+				// 	return {
+				// 		...screenData,
+				// 		icon: <Image source={{uri: 'icon_plus'}} style={iconTwoStyle} resizeMode={'cover'}/>,
+				// 		title: this.titleWTwo,
+				// 		description: this.descriptionWTwo,
+				// 	};
 
-			case 3:
-				return {
-					...screenData,
-					icon: 'push',
-					iconStyle: iconThreeStyle,
-					title: this.titleWThree,
-					description: this.descriptionWThree,
-				};
+				// case 3:
+				// 	return {
+				// 		...screenData,
+				// 		icon: 'push',
+				// 		iconStyle: iconThreeStyle,
+				// 		title: this.titleWThree,
+				// 		description: this.descriptionWThree,
+				// 	};
 
 			default:
 				return screenData;
@@ -149,7 +142,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { brandSecondary, shadow, brandPrimary } = Theme.Core;
+		const { brandSecondary, shadow } = Theme.Core;
 		const titleFontSize = Math.floor(deviceWidth * 0.052);
 		const iconSize = Math.floor(deviceWidth * 0.315);
 
@@ -166,7 +159,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 				marginVertical: 10,
 			},
 			iconStyle: {
-				color: brandPrimary,
+				color: brandSecondary,
 				textAlign: 'center',
 			},
 			iconTwoStyle: {

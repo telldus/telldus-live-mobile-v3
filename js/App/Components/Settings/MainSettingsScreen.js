@@ -25,6 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
+import Platform from 'Platform';
 
 import {
 	Text,
@@ -245,9 +246,11 @@ render(): Object {
 				value={version}
 				fontSize={styles.fontSize}
 			/>
-			<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
-				{this.labelWhatsNew}
-			</Text>
+			{Platform.OS === 'android' && (// 3.10 has new feature only for Android
+				<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
+					{this.labelWhatsNew}
+				</Text>
+			)}
 			<TitledInfoBlock
 				title={this.titlePush}
 				label={labelPush}
