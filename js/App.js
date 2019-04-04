@@ -78,6 +78,7 @@ class App extends React.Component<Props, State> {
 	closeDialogue: (?() => void, ?number) => void;
 	onPressDialoguePositive: () => void;
 	onPressDialogueNegative: () => void;
+	onPressHeader: () => void;
 
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
@@ -110,6 +111,7 @@ class App extends React.Component<Props, State> {
 		this.closeDialogue = this.closeDialogue.bind(this);
 		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
 		this.onPressDialogueNegative = this.onPressDialogueNegative.bind(this);
+		this.onPressHeader = this.onPressHeader.bind(this);
 
 		this._keyboardDidShow = this._keyboardDidShow.bind(this);
 		this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -257,6 +259,15 @@ class App extends React.Component<Props, State> {
 		}
 	}
 
+	onPressHeader() {
+		const { onPressHeader, closeOnPressHeader = false } = this.state.dialogueData;
+		if (closeOnPressHeader) {
+			this.closeDialogue(onPressHeader, 0);
+		} else if (onPressHeader) {
+			onPressHeader();
+		}
+	}
+
 	render(): Object {
 		let { prevChangeLogVersion, accessToken, isTokenValid, forceShowChangeLog } = this.props;
 
@@ -290,6 +301,7 @@ class App extends React.Component<Props, State> {
 					imageHeader={imageHeader}
 					onPressNegative={this.onPressDialogueNegative}
 					onPressPositive={this.onPressDialoguePositive}
+					onPressHeader={this.onPressHeader}
 				/>
 			</SafeAreaView>
 		);
