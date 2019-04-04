@@ -1035,8 +1035,8 @@ public class NewAppWidget extends AppWidgetProvider {
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
-                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                WidgetsUpdater wUpdater = new WidgetsUpdater();
+                wUpdater.updateAllWidgets(context);
             }
             @Override
             public void onError(ANError error) {
