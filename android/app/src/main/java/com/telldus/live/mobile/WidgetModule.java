@@ -25,6 +25,7 @@ import com.facebook.react.bridge.ReactMethod;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 
 import java.lang.String;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import java.util.Iterator;
 
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.WidgetsUpdater;
 
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Database.MyDBHandler;
@@ -48,6 +50,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   private static String ACTION_LOGIN = "ACTION_LOGIN";
 
+  WidgetsUpdater wUpdater = new WidgetsUpdater();
+
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
   }
@@ -59,28 +63,29 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void configureWidgetAuthData(String accessToken, String refreshToken, String expiresIn, String clientId, String clientSecret, String userId, Integer pro) {
-    prefManager = new PrefManager(getReactApplicationContext());
+    Context context = getReactApplicationContext();
+    prefManager = new PrefManager(context);
 
     prefManager.setAccessDetails(accessToken, expiresIn, clientId, clientSecret, refreshToken);
     prefManager.setUserId(userId, pro);
-    int widgetIdsSensor[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewSensorWidget.class));
+    int widgetIdsSensor[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewSensorWidget.class));
     for (int widgetId : widgetIdsSensor) {
-      updateUIWidgetSensor(widgetId);
+      wUpdater.updateUIWidgetSensor(widgetId, context);
     }
-    int widgetIdsDevice2By1[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewOnOffWidget.class));
+    int widgetIdsDevice2By1[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewOnOffWidget.class));
     for (int widgetId : widgetIdsDevice2By1) {
-      updateUIWidgetDevice2By1(widgetId);
+      wUpdater.updateUIWidgetDevice2By1(widgetId, context);
     }
-    int widgetIdsDevice3By1[] = AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewAppWidget.class));
+    int widgetIdsDevice3By1[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewAppWidget.class));
     for (int widgetId : widgetIdsDevice3By1) {
-      updateUIWidgetDevice3By1(widgetId);
+      wUpdater.updateUIWidgetDevice3By1(widgetId, context);
     }
   }
 
   @ReactMethod
   public void disableWidget(Integer id, String widgetType) {
-
-    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
+    Context context = getReactApplicationContext();
+    MyDBHandler db = new MyDBHandler(context);
     if (String.valueOf(widgetType).equals("SENSOR")) {
       ArrayList<SensorInfo> list = new ArrayList<SensorInfo>();
       list = db.getAllWidgetsWithSensorId(id);
@@ -91,8 +96,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         if (wId != null) {
           db.updateSensorIdSensorWidget(-1, wId);
 
-          AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
-          NewSensorWidget.updateAppWidget(getReactApplicationContext(), widgetManager, wId);
+          AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+          NewSensorWidget.updateAppWidget(context, widgetManager, wId);
         }
       }
     }
@@ -106,9 +111,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         if (wId != null) {
           db.updateDeviceIdDeviceWidget(-1, wId);
 
-          AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
-          NewOnOffWidget.updateAppWidget(getReactApplicationContext(), widgetManager, wId);
-          NewAppWidget.updateAppWidget(getReactApplicationContext(), widgetManager, wId);
+          AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+          NewOnOffWidget.updateAppWidget(context, widgetManager, wId);
+          NewAppWidget.updateAppWidget(context, widgetManager, wId);
         }
       }
     }
@@ -116,14 +121,15 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void disableAllWidgets() {
-    prefManager = new PrefManager(getReactApplicationContext());
+    Context context = getReactApplicationContext();
+    prefManager = new PrefManager(context);
     prefManager.setUserId("null", -1);
 
-    int widgetIdsS[] = getAllWidgetsSensor();
+    int widgetIdsS[] = wUpdater.getAllWidgetsSensor(context);
     disableWidgetsOnLogout(widgetIdsS, widgetSensor);
-    int widgetIdsD2[] = getAllWidgetsDevice2By1();
+    int widgetIdsD2[] = wUpdater.getAllWidgetsDevice2By1(context);
     disableWidgetsOnLogout(widgetIdsD2, widgetDevice2By1);
-    int widgetIdsD3[] = getAllWidgetsDevice3By1();
+    int widgetIdsD3[] = wUpdater.getAllWidgetsDevice3By1(context);
     disableWidgetsOnLogout(widgetIdsD3, widgetDevice3By1);
 
     // Clear token and other credentials from shared preference
@@ -131,16 +137,17 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   public void disableWidgetsOnLogout (int[] widgetIds, String widgetType) {
+    Context context = getReactApplicationContext();
     for (int widgetId : widgetIds) {
 
       if (widgetType.equals(widgetSensor)) {
-        updateUIWidgetSensor(widgetId);
+        wUpdater.updateUIWidgetSensor(widgetId, context);
       }
       if (widgetType.equals(widgetDevice2By1)) {
-        updateUIWidgetDevice2By1(widgetId);
+        wUpdater.updateUIWidgetDevice2By1(widgetId, context);
       }
       if (widgetType.equals(widgetDevice3By1)) {
-        updateUIWidgetDevice3By1(widgetId);
+        wUpdater.updateUIWidgetDevice3By1(widgetId, context);
       }
     }
   }
@@ -152,18 +159,21 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   }
 
   public void refreshWidgetsDevices2By1(ReadableArray deviceIds, ReadableMap devicesData) {
-    int widgetIds[] = getAllWidgetsDevice2By1();
+    Context context = getReactApplicationContext();
+    int widgetIds[] = wUpdater.getAllWidgetsDevice2By1(context);
     refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDevice2By1);
   }
 
   public void refreshWidgetsDevices3By1(ReadableArray deviceIds, ReadableMap devicesData) {
-    int widgetIds[] = getAllWidgetsDevice3By1();
+    Context context = getReactApplicationContext();
+    int widgetIds[] = wUpdater.getAllWidgetsDevice3By1(context);
     refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDevice3By1);
   }
 
   public void refreshWidgetsDevicesCommon(int[] widgetIds, ReadableArray deviceIds, ReadableMap devicesData, String widgetType) {
-    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
-    prefManager = new PrefManager(getReactApplicationContext());
+    Context context = getReactApplicationContext();
+    MyDBHandler db = new MyDBHandler(context);
+    prefManager = new PrefManager(context);
     String currentUserId = prefManager.getUserId();
 
     ReadableMap deviceData = null;
@@ -201,10 +211,10 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         if (deviceIdCurrent.intValue() != -1) {// If not already nullified
           db.setDeviceIdDeviceWidget(widgetId, -1);
           if (widgetType.equals(widgetDevice2By1)) {
-            updateUIWidgetDevice2By1(widgetId);
+            wUpdater.updateUIWidgetDevice2By1(widgetId, context);
           }
           if (widgetType.equals(widgetDevice3By1)) {
-            updateUIWidgetDevice3By1(widgetId);
+            wUpdater.updateUIWidgetDevice3By1(widgetId, context);
           }
         }
       }
@@ -214,10 +224,10 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         if (newName != null && !newName.equals(currentName) && deviceIdCurrent.intValue() != -1) {
           db.updateDeviceName(newName, deviceIdCurrent);
           if (widgetType.equals(widgetDevice2By1)) {
-            updateUIWidgetDevice2By1(widgetId);
+            wUpdater.updateUIWidgetDevice2By1(widgetId, context);
           }
           if (widgetType.equals(widgetDevice3By1)) {
-            updateUIWidgetDevice3By1(widgetId);
+            wUpdater.updateUIWidgetDevice3By1(widgetId, context);
           }
         }
       }
@@ -226,14 +236,15 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void refreshWidgetsSensors(ReadableArray sensorIds, ReadableMap sensorsData) {
-    MyDBHandler db = new MyDBHandler(getReactApplicationContext());
-    prefManager = new PrefManager(getReactApplicationContext());
+    Context context = getReactApplicationContext();
+    MyDBHandler db = new MyDBHandler(context);
+    prefManager = new PrefManager(context);
     String currentUserId = prefManager.getUserId();
 
     ReadableMap sensorData = null;
     String currentName = null;
 
-    int widgetIds[] = getAllWidgetsSensor();
+    int widgetIds[] = wUpdater.getAllWidgetsSensor(context);
     for (int widgetId : widgetIds) {
       Boolean isInList = false;
       String userId = "";
@@ -265,7 +276,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       if (!isInList && isSameAccount) {
         if (sensorIdCurrent.intValue() != -1) {// If not already nullified
           db.setSensorIdSensorWidget(widgetId, -1);
-          updateUIWidgetSensor(widgetId);
+          wUpdater.updateUIWidgetSensor(widgetId, context);
         }
       }
 
@@ -273,36 +284,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         String newName = sensorData.getString("name");
         if (newName != null && !newName.equals(currentName) && sensorIdCurrent.intValue() != -1) {
           db.updateSensorName(newName, sensorIdCurrent);
-          updateUIWidgetSensor(widgetId);
+          wUpdater.updateUIWidgetSensor(widgetId, context);
         }
       }
     }
-  }
-
-  public void updateUIWidgetSensor(int widgetId) {
-    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
-    NewSensorWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
-  }
-
-  public void updateUIWidgetDevice2By1(int widgetId) {
-    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
-    NewOnOffWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
-  }
-
-  public void updateUIWidgetDevice3By1(int widgetId) {
-    AppWidgetManager widgetManager = AppWidgetManager.getInstance(getReactApplicationContext());
-    NewAppWidget.updateAppWidget(getReactApplicationContext(), widgetManager, widgetId);
-  }
-
-  public int[] getAllWidgetsSensor() {
-    return AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewSensorWidget.class));
-  }
-
-  public int[] getAllWidgetsDevice2By1() {
-    return AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewOnOffWidget.class));
-  }
-
-  public int[] getAllWidgetsDevice3By1() {
-    return AppWidgetManager.getInstance(getReactApplicationContext()).getAppWidgetIds(new ComponentName(getReactApplicationContext(), NewAppWidget.class));
   }
 }
