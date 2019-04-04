@@ -147,18 +147,15 @@ public class NewOnOffWidget extends AppWidgetProvider {
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
 
-        if (!isBasicUser) {
-            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
-            views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
-        }
+        views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
+        views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
             views.setViewVisibility(R.id.offCover, View.GONE);
 
             views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);

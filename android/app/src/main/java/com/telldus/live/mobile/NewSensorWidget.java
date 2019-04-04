@@ -158,9 +158,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
         }
 
-        if (!isBasicUser) {
-            view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
-        }
+        view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
 
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,

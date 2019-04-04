@@ -189,9 +189,8 @@ public class NewAppWidget extends AppWidgetProvider {
                 95,
                 65,
                 context));
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
@@ -250,9 +249,8 @@ public class NewAppWidget extends AppWidgetProvider {
                 95,
                 65,
                 context));
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
@@ -311,9 +309,8 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
@@ -372,9 +369,8 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
@@ -433,9 +429,8 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
@@ -503,9 +498,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     65,
                     context));
                 views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
-                if (!isBasicUser) {
-                    views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
-                }
+
+                views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
+
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
@@ -576,9 +571,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     65,
                     context));
                 views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
-                if (!isBasicUser) {
-                    views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
-                }
+
+                views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
+
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
                     views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
@@ -644,9 +639,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     65,
                     context));
                 views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
-                if (!isBasicUser) {
-                    views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
-                }
+
+                views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
+
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
                     views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
@@ -716,9 +711,8 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
-            }
+
+            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
             if (renderedButtonsCount == 0) {
@@ -779,9 +773,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
-            if (!isBasicUser) {
-                views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
-            }
+            views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
         }
 
         transparent = DeviceWidgetInfo.getTransparent();
