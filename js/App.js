@@ -75,8 +75,9 @@ class App extends React.Component<Props, State> {
 	setCalendarLocale: () => void;
 
 	toggleDialogueBox: (Object) => null;
-	closeDialogue: (?() => void) => void;
+	closeDialogue: (?() => void, ?number) => void;
 	onPressDialoguePositive: () => void;
+	onPressDialogueNegative: () => void;
 
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
@@ -85,7 +86,7 @@ class App extends React.Component<Props, State> {
 
 	onTokenRefreshListener: null | Function;
 
-	timeoutToCallPositive: any;
+	timeoutToCallCallback: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -108,6 +109,7 @@ class App extends React.Component<Props, State> {
 		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
 		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
+		this.onPressDialogueNegative = this.onPressDialogueNegative.bind(this);
 
 		this._keyboardDidShow = this._keyboardDidShow.bind(this);
 		this._keyboardDidHide = this._keyboardDidHide.bind(this);
@@ -116,7 +118,7 @@ class App extends React.Component<Props, State> {
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 		this.onTokenRefreshListener = null;
 
-		this.timeoutToCallPositive = null;
+		this.timeoutToCallCallback = null;
 	}
 
 	componentDidMount() {
@@ -181,7 +183,7 @@ class App extends React.Component<Props, State> {
 			this.onTokenRefreshListener();
 			this.onTokenRefreshListener = null;
 		}
-		clearTimeout(this.timeoutToCallPositive);
+		clearTimeout(this.timeoutToCallCallback);
 	}
 
 	_keyboardDidShow() {
@@ -220,7 +222,7 @@ class App extends React.Component<Props, State> {
 		});
 	}
 
-	closeDialogue(postClose?: () => void = (): void => undefined) {
+	closeDialogue(postClose?: () => void = (): void => undefined, timeout?: number = 0) {
 		const { dialogueData } = this.state;
 		this.setState({
 			dialogueData: {
@@ -228,19 +230,30 @@ class App extends React.Component<Props, State> {
 				show: false,
 			},
 		}, () => {
-			const { timeoutToCallPositive = 0 } = dialogueData;
-			this.timeoutToCallPositive = setTimeout(() => {
+			if (this.timeoutToCallCallback) {
+				clearTimeout(this.timeoutToCallCallback);
+			}
+			this.timeoutToCallCallback = setTimeout(() => {
 				postClose();
-			}, timeoutToCallPositive);
+			}, timeout);
 		});
 	}
 
 	onPressDialoguePositive() {
-		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false } = this.state.dialogueData;
+		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false, timeoutToCallPositive = 0 } = this.state.dialogueData;
 		if (closeOnPressPositive) {
-			this.closeDialogue(onPressPositive);
+			this.closeDialogue(onPressPositive, timeoutToCallPositive);
 		} else if (onPressPositive) {
 			onPressPositive();
+		}
+	}
+
+	onPressDialogueNegative() {
+		const { onPressNegative = this.closeDialogue, closeOnPressNegative = false, timeoutToCallNegative = 0 } = this.state.dialogueData;
+		if (closeOnPressNegative) {
+			this.closeDialogue(onPressNegative, timeoutToCallNegative);
+		} else if (onPressNegative) {
+			onPressNegative();
 		}
 	}
 
@@ -255,7 +268,6 @@ class App extends React.Component<Props, State> {
 			show = false,
 			showHeader = false,
 			imageHeader = false,
-			onPressNegative = this.closeDialogue,
 			...others
 		} = this.state.dialogueData;
 
@@ -276,7 +288,7 @@ class App extends React.Component<Props, State> {
 					showDialogue={show}
 					showHeader={showHeader}
 					imageHeader={imageHeader}
-					onPressNegative={onPressNegative}
+					onPressNegative={this.onPressDialogueNegative}
 					onPressPositive={this.onPressDialoguePositive}
 				/>
 			</SafeAreaView>

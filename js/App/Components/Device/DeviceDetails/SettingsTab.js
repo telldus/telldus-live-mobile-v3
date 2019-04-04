@@ -234,6 +234,7 @@ class SettingsTab extends View {
 						showNegative: true,
 						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
 						onPressNegative: this.onPressReplaceFailedNode,
+						closeOnPressNegative: true,
 						header: formatMessage(i18n.messageMarkedFailedH),
 						imageHeader: true,
 						text: formatMessage(i18n.messageMarkedFailedB),
@@ -243,6 +244,7 @@ class SettingsTab extends View {
 						negTextColor: Theme.Core.brandSecondary,
 						showIconOnHeader: true,
 						timeoutToCallPositive: 400,
+						timeoutToCallNegative: 200,
 					};
 					screenProps.toggleDialogueBox(dialogueData);
 				}
