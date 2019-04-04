@@ -97,4 +97,6 @@
 
 	<string name="euro" translatable="false">&#8364;</string>
 
+	<string name="reserved_widget_android_premium_required_info">Premium required. Click to upgrade.</string>
+
 </resources>
