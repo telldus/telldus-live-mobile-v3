@@ -303,6 +303,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (isBasicUser) {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+        } else {
+            views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);

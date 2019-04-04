@@ -186,6 +186,11 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (isBasicUser) {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+        } else {
+            view.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
+
+            int updateInterval = sensorWidgetInfo.getUpdateInterval();
+            sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval);
         }
 
         // Instruct the widget manager to update the widget
