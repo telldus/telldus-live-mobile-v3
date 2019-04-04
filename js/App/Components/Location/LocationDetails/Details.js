@@ -148,6 +148,8 @@ class Details extends View<Props, State> {
 
 		this.onConfirmRemoveLocation = this.onConfirmRemoveLocation.bind(this);
 		this.onRemoveLocationError = `${formatMessage(i18n.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+
+		this.localControlNotSupportedTellSticks = ['TellStick Net', 'TelldusCenter'];
 	}
 
 	componentDidMount() {
@@ -347,6 +349,8 @@ class Details extends View<Props, State> {
 
 		const timezoneLabel = timezoneAutodetected ? `${this.labelTimeZone}\n(${this.labelAutoDetected})` : this.labelTimeZone;
 
+		const supportLocalControl = this.localControlNotSupportedTellSticks.indexOf(type) === -1;
+
 		return (
 			<ScrollView style={{
 				flex: 1,
@@ -423,11 +427,13 @@ class Details extends View<Props, State> {
 						</View>
 						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 					</TouchableOpacity>
-					<TouchableButton text={i18n.labelTestLocalControl} style={{
-						marginTop: padding,
-						minWidth: minWidthButton,
-						backgroundColor: Theme.Core.brandSecondary,
-					}} onPress={this.onPressTestLocalControl}/>
+					{supportLocalControl && (
+						<TouchableButton text={i18n.labelTestLocalControl} style={{
+							marginTop: padding,
+							minWidth: minWidthButton,
+							backgroundColor: Theme.Core.brandSecondary,
+						}} onPress={this.onPressTestLocalControl}/>
+					)}
 					<View style={styles.buttonCover}>
 						<TouchableButton text={this.labelDelete} style={[styles.button, {
 							minWidth: minWidthButton,
