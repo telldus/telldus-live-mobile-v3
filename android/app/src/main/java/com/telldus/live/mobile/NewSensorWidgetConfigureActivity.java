@@ -299,6 +299,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 searchObject = new JSONObject();
                                 SensorsUtilities sc = new SensorsUtilities();
 
+                                Object unit = "";
+                                Map<String, Object> info = new HashMap<String, Object>();
                                 for (int i = 0; i < JsonsensorList.length(); i++) {
                                     try {
                                         JSONObject currObject = JsonsensorList.getJSONObject(i);
@@ -314,9 +316,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                                 scale = currData.optString("scale");
                                                 value = currData.optString("value");
 
-                                                Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                                info = sc.getSensorInfo(name, scale, value, getApplicationContext());
                                                 Object label = info.get("label").toString();
-                                                Object unit = info.get("unit").toString();
+                                                unit = info.get("unit").toString();
                                                 String labelUnit = label+"("+unit+")";
                                                 sensorValue.add(labelUnit);
                                                 sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
@@ -325,6 +327,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                     }
                                     catch (Exception e) {
                                     }
+                                }
+                                if (sensorValue.size() == 1) {
+                                    selectedSensorValueIndex = 0;
+                                    sensorDataName.setText(sensorDataList[0]);
+
+                                    senIcon = info.get("icon").toString();
+                                    senValue = info.get("value").toString();
+                                    senUnit = String.valueOf(unit);
+
+                                    imgSensorTypeEdit.setVisibility(View.GONE);
+                                    imgSensorType.setText(senIcon);
+                                    imgSensorType.setVisibility(View.VISIBLE);
                                 }
                                 ad.dismiss();
                             }
