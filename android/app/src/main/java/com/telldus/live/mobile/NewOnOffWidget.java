@@ -37,6 +37,7 @@ import com.androidnetworking.error.ANError;
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.Date;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -142,8 +143,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
 
-        views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
-        views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+
+        if (!isBasicUser) {
+            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
+            views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
+        }
 
         String onActionIcon = actionIconSet.get("TURNON");
         String offActionIcon = actionIconSet.get("TURNOFF");
@@ -290,6 +297,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
         transparent = DeviceWidgetInfo.getTransparent();
         if (transparent.equals("true")) {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
+        }
+
+        if (isBasicUser) {
+            views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);

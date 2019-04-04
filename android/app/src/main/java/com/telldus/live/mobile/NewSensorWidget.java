@@ -28,6 +28,7 @@ import android.graphics.Color;
 import android.widget.RemoteViews;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import com.androidnetworking.error.ANError;
 
@@ -120,6 +121,10 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
         widgetText = sensorWidgetInfo.getSensorName();
@@ -153,7 +158,9 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
         }
 
-        view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
+        if (!isBasicUser) {
+            view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
+        }
 
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
@@ -174,6 +181,11 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.white));
         } else {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.brightRed));
+        }
+
+        if (isBasicUser) {
+            view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
         }
 
         // Instruct the widget manager to update the widget
