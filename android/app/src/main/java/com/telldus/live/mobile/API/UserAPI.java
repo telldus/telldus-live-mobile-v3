@@ -64,7 +64,7 @@ public class UserAPI {
                         int pro = prefManager.getPro();
 
                         if (pro != proNew) {
-                            prefManager.setUserId(email, pro);
+                            prefManager.setUserId(email, proNew);
                         }
                         callBack.onSuccess(response);
                     }
