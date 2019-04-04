@@ -46,6 +46,7 @@ import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
+import com.telldus.live.mobile.API.UserAPI;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 /**
@@ -832,6 +833,7 @@ public class NewAppWidget extends AppWidgetProvider {
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
         if (isBasicUser) {
+            updateUserProfile(widgetId, context);
             return;
         }
 
@@ -1026,5 +1028,19 @@ public class NewAppWidget extends AppWidgetProvider {
         if (handlerResetDeviceStateToNull != null && runnableResetDeviceStateToNull != null) {
             handlerResetDeviceStateToNull.removeCallbacks(runnableResetDeviceStateToNull);
         }
+    }
+
+    public void updateUserProfile(final int widgetId, final Context context) {
+        UserAPI userAPI = new UserAPI();
+        userAPI.getUserProfile(context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+            @Override
+            public void onError(ANError error) {
+            }
+        });
     }
 }

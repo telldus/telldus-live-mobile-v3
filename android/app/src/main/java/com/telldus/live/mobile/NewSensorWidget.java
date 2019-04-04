@@ -45,6 +45,7 @@ import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 import com.telldus.live.mobile.Utility.CommonUtilities;
+import com.telldus.live.mobile.API.UserAPI;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -254,6 +255,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
         if (isBasicUser) {
+            updateUserProfile(widgetId, context);
             return;
         }
 
@@ -355,5 +357,19 @@ public class NewSensorWidget extends AppWidgetProvider {
             "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
             ""));
         return formattedDate;
+    }
+
+    public void updateUserProfile(final int widgetId, final Context context) {
+        UserAPI userAPI = new UserAPI();
+        userAPI.getUserProfile(context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+            @Override
+            public void onError(ANError error) {
+            }
+        });
     }
 }
