@@ -55,7 +55,6 @@ import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
-import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
@@ -252,9 +251,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     database.addWidgetSensor(mSensorInfo);
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);
-
-                    SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(getApplicationContext());
-                    sensorUpdateAlarmManager.startAlarm(appWidgetId, selectInterval);
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.
