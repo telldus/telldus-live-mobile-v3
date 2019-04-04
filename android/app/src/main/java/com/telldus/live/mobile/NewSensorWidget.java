@@ -246,6 +246,14 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        PrefManager prefManager = new PrefManager(context);
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+        if (isBasicUser) {
+            return;
+        }
+
         if (ACTION_SENSOR_UPDATE.equals(intent.getAction())) {
             createSensorApi(sensorId, widgetId, db, context);
         }

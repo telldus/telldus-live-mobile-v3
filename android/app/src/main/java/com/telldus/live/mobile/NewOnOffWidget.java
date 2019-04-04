@@ -156,7 +156,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
-            views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            if (!isBasicUser) {
+                views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
+            }
             views.setViewVisibility(R.id.offCover, View.GONE);
 
             views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
@@ -360,6 +362,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
         if (widgetInfo == null) {
+            return;
+        }
+
+        PrefManager prefManager = new PrefManager(context);
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+        if (isBasicUser) {
             return;
         }
 
