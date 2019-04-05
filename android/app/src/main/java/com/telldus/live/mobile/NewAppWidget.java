@@ -691,9 +691,6 @@ public class NewAppWidget extends AppWidgetProvider {
                                 95,
                                 65,
                                 context));
-                            views.setTextViewText(R.id.iconCheck75, "statusx");
-                            views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetRed));
-                            views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
                         }
                     }
                 }
