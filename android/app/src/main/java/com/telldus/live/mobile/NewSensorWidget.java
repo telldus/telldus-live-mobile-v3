@@ -164,9 +164,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
                 ContextCompat.getColor(context, R.color.white),
-                50,
+                62,
                 90,
-                60,
+                58,
                 context));
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
