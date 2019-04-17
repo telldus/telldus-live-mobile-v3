@@ -206,28 +206,30 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         }
       }
 
-      Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
-      if (!isInList && isSameAccount) {
-        if (deviceIdCurrent.intValue() != -1) {// If not already nullified
-          db.setDeviceIdDeviceWidget(widgetId, -1);
-          if (widgetType.equals(widgetDevice2By1)) {
-            wUpdater.updateUIWidgetDevice2By1(widgetId, context);
-          }
-          if (widgetType.equals(widgetDevice3By1)) {
-            wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+      if (userId != null && currentUserId != null) {
+        Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
+        if (!isInList && isSameAccount) {
+          if (deviceIdCurrent.intValue() != -1) {// If not already nullified
+            db.setDeviceIdDeviceWidget(widgetId, -1);
+            if (widgetType.equals(widgetDevice2By1)) {
+              wUpdater.updateUIWidgetDevice2By1(widgetId, context);
+            }
+            if (widgetType.equals(widgetDevice3By1)) {
+              wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+            }
           }
         }
-      }
 
-      if (isInList && isSameAccount && deviceData != null && deviceData.hasKey("name")) {
-        String newName = deviceData.getString("name");
-        if (newName != null && !newName.equals(currentName) && deviceIdCurrent.intValue() != -1) {
-          db.updateDeviceName(newName, deviceIdCurrent);
-          if (widgetType.equals(widgetDevice2By1)) {
-            wUpdater.updateUIWidgetDevice2By1(widgetId, context);
-          }
-          if (widgetType.equals(widgetDevice3By1)) {
-            wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+        if (isInList && isSameAccount && deviceData != null && deviceData.hasKey("name")) {
+          String newName = deviceData.getString("name");
+          if (newName != null && !newName.equals(currentName) && deviceIdCurrent.intValue() != -1) {
+            db.updateDeviceName(newName, deviceIdCurrent);
+            if (widgetType.equals(widgetDevice2By1)) {
+              wUpdater.updateUIWidgetDevice2By1(widgetId, context);
+            }
+            if (widgetType.equals(widgetDevice3By1)) {
+              wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+            }
           }
         }
       }
@@ -272,19 +274,21 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         }
       }
 
-      Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
-      if (!isInList && isSameAccount) {
-        if (sensorIdCurrent.intValue() != -1) {// If not already nullified
-          db.setSensorIdSensorWidget(widgetId, -1);
-          wUpdater.updateUIWidgetSensor(widgetId, context);
+      if (userId != null && currentUserId != null) {
+        Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
+        if (!isInList && isSameAccount) {
+          if (sensorIdCurrent.intValue() != -1) {// If not already nullified
+            db.setSensorIdSensorWidget(widgetId, -1);
+            wUpdater.updateUIWidgetSensor(widgetId, context);
+          }
         }
-      }
 
-      if (isInList && isSameAccount && sensorData != null && sensorData.hasKey("name")) {
-        String newName = sensorData.getString("name");
-        if (newName != null && !newName.equals(currentName) && sensorIdCurrent.intValue() != -1) {
-          db.updateSensorName(newName, sensorIdCurrent);
-          wUpdater.updateUIWidgetSensor(widgetId, context);
+        if (isInList && isSameAccount && sensorData != null && sensorData.hasKey("name")) {
+          String newName = sensorData.getString("name");
+          if (newName != null && !newName.equals(currentName) && sensorIdCurrent.intValue() != -1) {
+            db.updateSensorName(newName, sensorIdCurrent);
+            wUpdater.updateUIWidgetSensor(widgetId, context);
+          }
         }
       }
     }
