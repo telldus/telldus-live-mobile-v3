@@ -135,6 +135,7 @@ public class SensorsUtilities {
         Map<String, String> sensorUnits = getSensorUnits(sensorType, context);
         unit = sensorUnits.get(scale);
 
+        unit = unit == null ? "" : unit;
         info.put("unit", unit);
 
         if (name.equals("humidity")) {
