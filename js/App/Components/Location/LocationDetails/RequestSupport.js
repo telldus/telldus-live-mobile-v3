@@ -145,6 +145,7 @@ contactSupport() {
 			const { type, effectiveType } = connectionInfo;
 
 			const failedTests = navigation.getParam('failedTests', 'null');
+			const testCount = navigation.getParam('testCount', 1);
 			const ticketData = {
 				message: value,
 				failedTests,
@@ -152,6 +153,7 @@ contactSupport() {
 				email: emailValue,
 				connectionType: type,
 				connectionEffectiveType: effectiveType,
+				testCount,
 			};
 			actions.createSupportTicketLCT(id, ticketData).then((ticketNum: number) => {
 				if (ticketNum && typeof ticketNum === 'number') {

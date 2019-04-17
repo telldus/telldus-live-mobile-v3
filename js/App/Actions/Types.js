@@ -144,4 +144,5 @@ export type TicketData = {
 	router: string,
 	connectionType: string,
 	connectionEffectiveType: string,
+	testCount: number,
 };

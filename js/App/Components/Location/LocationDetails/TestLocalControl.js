@@ -58,6 +58,7 @@ type Props = {
 type State = {
 	currentRunningTest: Object,
 	showSupportScreen: boolean,
+	testCount: number,
 };
 
 class TestLocalControl extends View<Props, State> {
@@ -66,6 +67,7 @@ state: State = {
 	currentRunningTest: {
 	},
 	showSupportScreen: false,
+	testCount: 1,
 };
 
 onPressReRunTest: () => void;
@@ -365,13 +367,18 @@ onPressReRunTest() {
 	this.TESTS_TO_RUN.map((test: Object) => {
 		test.status = null;
 	});
-	this.updateTest(undefined, undefined, 0, () => {
-		this.validateAndRunTests();
+	this.setState({
+		testCount: this.state.testCount + 1,
+	}, () => {
+		this.updateTest(undefined, undefined, 0, () => {
+			this.validateAndRunTests();
+		});
 	});
 }
 
 onPressRequestSupport() {
 	const { location, navigation } = this.props;
+	const { testCount } = this.state;
 
 	let failedTests = '';
 	this.TESTS_TO_RUN.map((test: Object, index: number) => {
@@ -380,13 +387,13 @@ onPressRequestSupport() {
 			failedTests = failedTests ? `${failedTests}, ${test.name}` : test.name;
 		}
 	});
-
 	navigation.navigate({
 		routeName: 'RequestSupport',
 		key: 'RequestSupport',
 		params: {
 			location,
 			failedTests: failedTests ? `${failedTests}` : 'null',
+			testCount,
 		},
 	});
 }
