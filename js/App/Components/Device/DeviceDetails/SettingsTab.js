@@ -35,8 +35,10 @@ import {
 
 import { LearnButton } from '../../TabViews/SubViews';
 import { ExcludeDevice } from '../Common';
+import { ReplaceFailedNode } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';
+import { requestNodeInfo } from '../../../Actions/Websockets';
 import {
 	addToDashboard,
 	removeFromDashboard,
@@ -70,6 +72,8 @@ type Props = {
 type State = {
 	isHidden: boolean,
 	excludeActive: boolean,
+	isMarking: boolean,
+	isReplacing: boolean,
 };
 
 
@@ -82,6 +86,13 @@ class SettingsTab extends View {
 	onPressExcludeDevice: () => void;
 	goBack: () => void;
 	onPressCancelExclude: () => void;
+
+	onPressMarkAsFailed: () => void;
+	onPressReplaceFailedNode: () => void;
+	onPressRemoveFailedNode: () => void;
+	onDoneReplaceFailedNode: () => void;
+
+	onConfirmRemoveFailedNode: () => void;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
@@ -107,6 +118,8 @@ class SettingsTab extends View {
 		this.state = {
 			isHidden: props.device.ignored,
 			excludeActive: false,
+			isMarking: false,
+			isReplacing: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -117,6 +130,16 @@ class SettingsTab extends View {
 		this.onPressExcludeDevice = this.onPressExcludeDevice.bind(this);
 		this.goBack = this.goBack.bind(this);
 		this.onPressCancelExclude = this.onPressCancelExclude.bind(this);
+
+		this.onPressMarkAsFailed = this.onPressMarkAsFailed.bind(this);
+		this.onPressReplaceFailedNode = this.onPressReplaceFailedNode.bind(this);
+		this.onPressRemoveFailedNode = this.onPressRemoveFailedNode.bind(this);
+		this.onDoneReplaceFailedNode = this.onDoneReplaceFailedNode.bind(this);
+
+		this.markAsFailedTimeoutOne = null;
+		this.markAsFailedTimeoutTwo = null;
+
+		this.onConfirmRemoveFailedNode = this.onConfirmRemoveFailedNode.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -143,6 +166,18 @@ class SettingsTab extends View {
 		return false;
 	}
 
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		const { device, navigation } = this.props;
+		if ((prevProps.device && prevProps.device.id) && (!device || !device.id)) {
+			navigation.popToTop();
+		}
+	}
+
+	componentWillUnmount() {
+		clearTimeout(this.markAsFailedTimeoutOne);
+		clearTimeout(this.markAsFailedTimeoutTwo);
+	}
+
 	onPressExcludeDevice() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
@@ -154,6 +189,116 @@ class SettingsTab extends View {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			excludeActive: false,
+		});
+	}
+
+	onPressMarkAsFailed() {
+		const { screenProps, device } = this.props;
+		const { formatMessage } = screenProps.intl;
+		const { clientId, clientDeviceId } = device;
+		this.setState({
+			isMarking: true,
+		});
+		this.sendSocketMessage(clientId, 'markNodeAsFailed', clientDeviceId);
+
+		const that = this;
+		this.markAsFailedTimeoutOne = setTimeout(() => {
+			// Request for latest node info
+			that.sendSocketMessage(clientId, 'nodeInfo', clientDeviceId);
+
+			// Can take some time to receive, so the second timeout
+			that.markAsFailedTimeoutTwo = setTimeout(() => {
+				const { nodeInfo = {} } = that.props.device;
+				const { isFailed = false } = nodeInfo;
+				this.setState({
+					isMarking: false,
+				});
+				if (!isFailed) {
+					const dialogueData = {
+						show: true,
+						showPositive: true,
+						header: formatMessage(i18n.messageCouldNotMarkFailedH),
+						imageHeader: true,
+						text: formatMessage(i18n.messageCouldNotMarkFailedB),
+						showHeader: true,
+						closeOnPressPositive: true,
+						capitalizeHeader: false,
+					};
+					screenProps.toggleDialogueBox(dialogueData);
+				} else {
+					const dialogueData = {
+						show: true,
+						showPositive: true,
+						positiveText: formatMessage(i18n.remove).toUpperCase(),
+						onPressPositive: this.onPressRemoveFailedNode,
+						closeOnPressPositive: true,
+						showNegative: true,
+						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
+						onPressNegative: this.onPressReplaceFailedNode,
+						closeOnPressNegative: true,
+						negTextColor: Theme.Core.brandSecondary,
+						showHeader: true,
+						header: formatMessage(i18n.messageMarkedFailedH),
+						imageHeader: true,
+						showIconOnHeader: true,
+						closeOnPressHeader: true,
+						capitalizeHeader: false,
+						text: formatMessage(i18n.messageMarkedFailedB),
+						timeoutToCallPositive: 400,
+						timeoutToCallNegative: 200,
+					};
+					screenProps.toggleDialogueBox(dialogueData);
+				}
+			}, 1000);
+		}, 8000);
+	}
+
+	onPressReplaceFailedNode() {
+		this.setState({
+			isReplacing: true,
+		});
+	}
+
+	onDoneReplaceFailedNode() {
+		const { dispatch, device } = this.props;
+		const { clientId, clientDeviceId } = device;
+		dispatch(requestNodeInfo(clientId, clientDeviceId));
+		this.setState({
+			isReplacing: false,
+		});
+	}
+
+	onPressRemoveFailedNode() {
+		const { toggleDialogueBox, intl } = this.props.screenProps;
+		const { formatMessage } = intl;
+
+		const dialogueData = {
+			show: true,
+			showPositive: true,
+			positiveText: formatMessage(i18n.remove).toUpperCase(),
+			showNegative: true,
+			header: `${formatMessage(i18n.labelRemoveFailed)}?`,
+			imageHeader: true,
+			text: formatMessage(i18n.messageOnRemoveFailedNode),
+			showHeader: true,
+			closeOnPressPositive: true,
+			onPressPositive: this.onConfirmRemoveFailedNode,
+			capitalizeHeader: false,
+		};
+		toggleDialogueBox(dialogueData);
+	}
+
+	onConfirmRemoveFailedNode() {
+		const { clientId, clientDeviceId } = this.props.device;
+		this.sendSocketMessage(clientId, 'removeFailedNode', clientDeviceId);
+	}
+
+	sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
+		const { sendSocketMessage: SSM } = this.props;
+		SSM(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': action,
+			'device': clientDeviceId,
 		});
 	}
 
@@ -193,11 +338,11 @@ class SettingsTab extends View {
 	}
 
 	render(): Object | null {
-		const { isHidden, excludeActive } = this.state;
+		const { isHidden, excludeActive, isMarking, isReplacing } = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
-		const { supportedMethods = {}, id, clientId, transport } = device;
+		const { supportedMethods = {}, id, clientId, transport, nodeInfo = {} } = device;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -219,12 +364,14 @@ class SettingsTab extends View {
 			learnButton = <LearnButton id={id} style={learn} />;
 		}
 
-		const canExclude = transport === 'zwave';
+		const isZWave = transport === 'zwave';
+		const { isFailed = false } = nodeInfo;
 
 		return (
 			<ScrollView style={{
 				backgroundColor: Theme.Core.appBackground,
-			}}>{excludeActive ?
+			}}>
+				{excludeActive ?
 
 					<ExcludeDevice
 						clientId={clientId}
@@ -238,28 +385,76 @@ class SettingsTab extends View {
 						onPressCancelExclude={this.onPressCancelExclude}/>
 					:
 					<View style={container}>
-						<SettingsRow
-							label={formatMessage(i18n.showOnDashborad)}
-							onValueChange={this.onValueChange}
-							value={inDashboard}
-							appLayout={appLayout}
-						/>
-						<SettingsRow
-							label={formatMessage(i18n.hideFromListD)}
-							onValueChange={this.setIgnoreDevice}
-							value={isHidden}
-							appLayout={appLayout}
-						/>
-						{learnButton}
-						{canExclude && (
-							<TouchableButton
-								text={formatMessage(i18n.headerExclude).toUpperCase()}
-								onPress={this.onPressExcludeDevice}
-								disabled={!isGatewayReachable}
-								style={[excludeButtonStyle, {
-									backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-								}]}/>
-						)}
+						{isReplacing ?
+							<ReplaceFailedNode
+								intl={intl}
+								appLayout={appLayout}
+								device={device}
+								processWebsocketMessage={this.props.processWebsocketMessage}
+								sendSocketMessage={this.props.sendSocketMessage}
+								getSocketObject={this.props.getSocketObject}
+								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}/>
+							:
+							<>
+								<SettingsRow
+									label={formatMessage(i18n.showOnDashborad)}
+									onValueChange={this.onValueChange}
+									value={inDashboard}
+									appLayout={appLayout}
+								/>
+								<SettingsRow
+									label={formatMessage(i18n.hideFromListD)}
+									onValueChange={this.setIgnoreDevice}
+									value={isHidden}
+									appLayout={appLayout}
+								/>
+								{learnButton}
+								{isZWave && (
+									<>
+										{isFailed ?
+											<>
+												{!isReplacing &&
+													<>
+														<TouchableButton
+															text={i18n.labelRemoveFailed}
+															onPress={this.onPressRemoveFailedNode}
+															disabled={!isGatewayReachable}
+															style={[excludeButtonStyle, {
+																backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+															}]}/>
+														<TouchableButton
+															text={i18n.labelReplaceFailed}
+															onPress={this.onPressReplaceFailedNode}
+															disabled={!isGatewayReachable}
+															style={[excludeButtonStyle, {
+																backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+															}]}/>
+													</>
+												}
+											</>
+											:
+											<>
+												<TouchableButton
+													text={i18n.labelMarkAsFailed}
+													onPress={this.onPressMarkAsFailed}
+													disabled={!isGatewayReachable || isMarking}
+													style={[excludeButtonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}
+													showThrobber={isMarking}/>
+												<TouchableButton
+													text={formatMessage(i18n.headerExclude).toUpperCase()}
+													onPress={this.onPressExcludeDevice}
+													disabled={!isGatewayReachable}
+													style={[excludeButtonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}/>
+											</>
+										}
+									</>
+								)}
+							</>
+						}
 					</View>
 				}
 			</ScrollView>
@@ -290,6 +485,7 @@ class SettingsTab extends View {
 			},
 			excludeButtonStyle: {
 				marginTop: padding * 2,
+				minWidth: Math.floor(deviceWidth * 0.6),
 			},
 		};
 	}

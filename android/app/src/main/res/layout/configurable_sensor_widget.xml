@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <LinearLayout
         android:id="@+id/iconWidgetSensor"
         android:layout_width="match_parent"
@@ -32,7 +31,6 @@
                 android:layout_centerInParent="true"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/linear_background"
             android:layout_width="match_parent"
@@ -99,7 +97,6 @@
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
-
     </LinearLayout>
-
-</LinearLayout>
+    <include layout="@layout/premium_required_info"/>
+</FrameLayout>

@@ -99,10 +99,16 @@ class DevicesTab extends View {
 
 	onPressDeviceAction: () => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => ({
-		title: screenProps.intl.formatMessage(i18n.devices),
-		tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
-	});
+	static navigationOptions = ({navigation, screenProps}: Object): Object => {
+		const { intl, currentScreen } = screenProps;
+		const { formatMessage } = intl;
+		const postScript = currentScreen === 'Devices' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		return {
+			title: formatMessage(i18n.devices),
+			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
+			tabBarAccessibilityLabel: `${formatMessage(i18n.devicesTab)}, ${postScript}`,
+		};
+	};
 
 	constructor(props: Props) {
 		super(props);

@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.9.4",
+  "version": "3.10.0",
   "private": true,
   "scripts": {
     "lint": "eslint js",
@@ -21,7 +21,7 @@
     "external-editor": "~3.0.3",
     "global": "~4.3.2",
     "intl": "~1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#224-RGB-Device-API",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#142dea9d36ebecb21bc2b0864dbb3ff5cdb9ce46",
     "lodash": "~4.17.11",
     "moment": "~2.22.2",
     "moment-timezone": "~0.5.23",

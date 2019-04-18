@@ -20,22 +20,13 @@
 package com.telldus.live.mobile;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -47,17 +38,13 @@ import android.widget.Toast;
 import android.view.Gravity;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,11 +52,9 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
-import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 public class NewSensorWidgetConfigureActivity extends Activity {
 
@@ -127,6 +112,17 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             getApplicationContext().startActivity(launchActivity);
             return;
         }
+
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        if (pro == -1 || pro < now) {
+            Intent basicActivity = new Intent(getApplicationContext(), BasicUserActivity.class);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getApplicationContext().startActivity(basicActivity);
+            return;
+        }
+
         createSensorsApi();
 
         setResult(RESULT_CANCELED);
@@ -256,9 +252,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);
 
-                    SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(getApplicationContext());
-                    sensorUpdateAlarmManager.startAlarm(appWidgetId, selectInterval);
-
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.
                     resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -302,6 +295,8 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                 searchObject = new JSONObject();
                                 SensorsUtilities sc = new SensorsUtilities();
 
+                                Object unit = "";
+                                Map<String, Object> info = new HashMap<String, Object>();
                                 for (int i = 0; i < JsonsensorList.length(); i++) {
                                     try {
                                         JSONObject currObject = JsonsensorList.getJSONObject(i);
@@ -317,9 +312,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                                 scale = currData.optString("scale");
                                                 value = currData.optString("value");
 
-                                                Map<String, Object> info = sc.getSensorInfo(name, scale, value, getApplicationContext());
+                                                info = sc.getSensorInfo(name, scale, value, getApplicationContext());
                                                 Object label = info.get("label").toString();
-                                                Object unit = info.get("unit").toString();
+                                                unit = info.get("unit").toString();
                                                 String labelUnit = label+"("+unit+")";
                                                 sensorValue.add(labelUnit);
                                                 sensorDataList = sensorValue.toArray(new CharSequence[sensorValue.size()]);
@@ -328,6 +323,18 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                                     }
                                     catch (Exception e) {
                                     }
+                                }
+                                if (sensorValue.size() == 1) {
+                                    selectedSensorValueIndex = 0;
+                                    sensorDataName.setText(sensorDataList[0]);
+
+                                    senIcon = info.get("icon").toString();
+                                    senValue = info.get("value").toString();
+                                    senUnit = String.valueOf(unit);
+
+                                    imgSensorTypeEdit.setVisibility(View.GONE);
+                                    imgSensorType.setText(senIcon);
+                                    imgSensorType.setVisibility(View.VISIBLE);
                                 }
                                 ad.dismiss();
                             }

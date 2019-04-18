@@ -23,6 +23,7 @@
 'use strict';
 
 import React from 'react';
+import { Easing, Animated } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 import LocationDetailsContainer from './LocationDetailsContainer';
@@ -32,6 +33,8 @@ import EditName from './EditName';
 import EditTimeZoneContinent from './EditTimeZoneContinent';
 import EditTimeZoneCity from './EditTimeZoneCity';
 import EditGeoPosition from './EditGeoPosition';
+import TestLocalControl from './TestLocalControl';
+import RequestSupport from './RequestSupport';
 
 const initialRouteName = 'Details';
 
@@ -59,6 +62,12 @@ const RouteConfigs = {
 	EditGeoPosition: {
 		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition, 'EditGeoPosition'),
 	},
+	TestLocalControl: {
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(TestLocalControl, 'TestLocalControl'),
+	},
+	RequestSupport: {
+		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(RequestSupport, 'RequestSupport'),
+	},
 };
 
 const StackNavigatorConfig = {
@@ -70,6 +79,44 @@ const StackNavigatorConfig = {
 		shadowOpacity: 0,
 		elevation: 0,
 	},
+	transitionConfig: (): Object => ({
+		transitionSpec: {
+		  duration: 600,
+		  easing: Easing.out(Easing.poly(4)),
+		  timing: Animated.timing,
+		  useNativeDriver: true,
+		},
+		screenInterpolator: (sceneProps: Object): Object => {
+			const { layout, position, scene } = sceneProps;
+			const { index, route } = scene;
+			if (route.routeName === 'TestLocalControl' || route.routeName === 'RequestSupport') {
+				const height = layout.initHeight;
+				const translateY = position.interpolate({
+					inputRange: [index - 1, index, index + 1],
+					outputRange: [height, 0, 0],
+				});
+
+				const opacity = position.interpolate({
+					inputRange: [index - 1, index - 0.99, index],
+					outputRange: [0, 1, 1],
+				});
+
+				return { opacity, transform: [{ translateY }] };
+			}
+			const width = layout.initWidth;
+			const translateX = position.interpolate({
+				inputRange: [index - 1, index, index + 1],
+				outputRange: [width, 0, 0],
+			});
+
+			const opacity = position.interpolate({
+				inputRange: [index - 1, index - 0.99, index],
+				outputRange: [0, 1, 1],
+			});
+
+			return { opacity, transform: [{ translateX }] };
+		},
+	  }),
 };
 
 const LocationDetailsNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);

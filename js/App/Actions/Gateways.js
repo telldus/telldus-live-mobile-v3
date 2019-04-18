@@ -207,6 +207,16 @@ const resetLocalControlAddress = (gatewayId: number, address: string): Action =>
 	};
 };
 
+const toggleSupportLocal = (gatewayId: number, supportLocal: boolean): Action => {
+	return {
+		type: 'TOGGLE_SUPPORT_LOCAL',
+		gatewayId,
+		payload: {
+			supportLocal,
+		},
+	};
+};
+
 module.exports = {
 	...Gateways,
 	autoDetectLocalTellStick,
@@ -214,4 +224,5 @@ module.exports = {
 	closeUDPSocket,
 	validateLocalControlSupport,
 	resetLocalControlAddress,
+	toggleSupportLocal,
 };

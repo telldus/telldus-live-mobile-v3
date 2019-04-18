@@ -75,6 +75,9 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".BasicUserActivity" android:noHistory="true">
+        </activity>
+
         <receiver
             android:name=".NewAppWidget"
             android:label="@string/reserved_widget_android_widget_info_device_3">
@@ -87,7 +90,7 @@
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
 
-        <activity android:name=".NewAppWidgetConfigureActivity">
+        <activity android:name=".NewAppWidgetConfigureActivity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -105,7 +108,7 @@
                 android:resource="@xml/new_sensor_widget_info" />
         </receiver>
 
-        <activity android:name=".NewSensorWidgetConfigureActivity">
+        <activity android:name=".NewSensorWidgetConfigureActivity" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -124,7 +127,7 @@
             android:resource="@xml/new_on_off_widget_info" />
         </receiver>
 
-        <activity android:name=".NewOnOffWidgetConfigureActivity">
+        <activity android:name=".NewOnOffWidgetConfigureActivity" android:noHistory="true">
           <intent-filter>
             <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
           </intent-filter>

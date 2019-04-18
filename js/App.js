@@ -47,7 +47,7 @@ import {
 } from './App/Lib';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.9';
+const changeLogVersion = '3.10';
 
 type Props = {
 	dispatch: Function,
@@ -75,13 +75,19 @@ class App extends React.Component<Props, State> {
 	setCalendarLocale: () => void;
 
 	toggleDialogueBox: (Object) => null;
-	closeDialogue: (?() => void) => void;
+	closeDialogue: (?() => void, ?number) => void;
 	onPressDialoguePositive: () => void;
+	onPressDialogueNegative: () => void;
+	onPressHeader: () => void;
 
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 	keyboardDidShowListener: Object;
 	keyboardDidHideListener: Object;
+
+	onTokenRefreshListener: null | Function;
+
+	timeoutToCallCallback: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -104,18 +110,25 @@ class App extends React.Component<Props, State> {
 		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
 		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
+		this.onPressDialogueNegative = this.onPressDialogueNegative.bind(this);
+		this.onPressHeader = this.onPressHeader.bind(this);
 
 		this._keyboardDidShow = this._keyboardDidShow.bind(this);
 		this._keyboardDidHide = this._keyboardDidHide.bind(this);
 
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+		this.onTokenRefreshListener = null;
+
+		this.timeoutToCallCallback = null;
 	}
 
 	componentDidMount() {
-		let { dispatch } = this.props;
+		let { dispatch, accessToken } = this.props;
 
-		this.pushConf();
+		if (accessToken) {
+			this.pushConf();
+		}
 		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -168,6 +181,11 @@ class App extends React.Component<Props, State> {
 		}
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
+		if (this.onTokenRefreshListener) {
+			this.onTokenRefreshListener();
+			this.onTokenRefreshListener = null;
+		}
+		clearTimeout(this.timeoutToCallCallback);
 	}
 
 	_keyboardDidShow() {
@@ -189,6 +207,9 @@ class App extends React.Component<Props, State> {
 	pushConf() {
 		const { dispatch, ...otherProps } = this.props;
 		dispatch(Push.configure(otherProps));
+		if (!this.onTokenRefreshListener) {
+			this.onTokenRefreshListener = dispatch(Push.refreshTokenListener(otherProps));
+		}
 	}
 
 	onLayout(ev: Object) {
@@ -203,7 +224,7 @@ class App extends React.Component<Props, State> {
 		});
 	}
 
-	closeDialogue(postClose?: () => void = (): void => undefined) {
+	closeDialogue(postClose?: () => void = (): void => undefined, timeout?: number = 0) {
 		const { dialogueData } = this.state;
 		this.setState({
 			dialogueData: {
@@ -211,16 +232,39 @@ class App extends React.Component<Props, State> {
 				show: false,
 			},
 		}, () => {
-			postClose();
+			if (this.timeoutToCallCallback) {
+				clearTimeout(this.timeoutToCallCallback);
+			}
+			this.timeoutToCallCallback = setTimeout(() => {
+				postClose();
+			}, timeout);
 		});
 	}
 
 	onPressDialoguePositive() {
-		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false } = this.state.dialogueData;
+		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false, timeoutToCallPositive = 0 } = this.state.dialogueData;
 		if (closeOnPressPositive) {
-			this.closeDialogue(onPressPositive);
+			this.closeDialogue(onPressPositive, timeoutToCallPositive);
 		} else if (onPressPositive) {
 			onPressPositive();
+		}
+	}
+
+	onPressDialogueNegative() {
+		const { onPressNegative = this.closeDialogue, closeOnPressNegative = false, timeoutToCallNegative = 0 } = this.state.dialogueData;
+		if (closeOnPressNegative) {
+			this.closeDialogue(onPressNegative, timeoutToCallNegative);
+		} else if (onPressNegative) {
+			onPressNegative();
+		}
+	}
+
+	onPressHeader() {
+		const { onPressHeader, closeOnPressHeader = false } = this.state.dialogueData;
+		if (closeOnPressHeader) {
+			this.closeDialogue(onPressHeader, 0);
+		} else if (onPressHeader) {
+			onPressHeader();
 		}
 	}
 
@@ -235,7 +279,6 @@ class App extends React.Component<Props, State> {
 			show = false,
 			showHeader = false,
 			imageHeader = false,
-			onPressNegative = this.closeDialogue,
 			...others
 		} = this.state.dialogueData;
 
@@ -246,18 +289,21 @@ class App extends React.Component<Props, State> {
 					:
 					<PostLoginNavigatorCommon {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
 				}
-				<ChangeLogNavigator
-					changeLogVersion={changeLogVersion}
-					showChangeLog={showChangeLog}
-					forceShowChangeLog={forceShowChangeLog}
-					onLayout={this.onLayout}/>
+				{Platform.OS === 'android' && (// 3.10 has new feature only for Android
+					<ChangeLogNavigator
+						changeLogVersion={changeLogVersion}
+						showChangeLog={showChangeLog}
+						forceShowChangeLog={forceShowChangeLog}
+						onLayout={this.onLayout}/>
+				)}
 				<DialogueBox
 					{...others}
 					showDialogue={show}
 					showHeader={showHeader}
 					imageHeader={imageHeader}
-					onPressNegative={onPressNegative}
+					onPressNegative={this.onPressDialogueNegative}
 					onPressPositive={this.onPressDialoguePositive}
+					onPressHeader={this.onPressHeader}
 				/>
 			</SafeAreaView>
 		);

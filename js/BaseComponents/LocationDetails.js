@@ -118,6 +118,7 @@ class LocationDetails extends Component<Props, null> {
 					<View style={locationImageContainer}>
 						<CachedImage
 							resizeMode={'contain'}
+							useQueryParamsInCacheKey={true}
 							source={{
 								uri: image,
 								isStatic,

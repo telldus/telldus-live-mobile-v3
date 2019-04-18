@@ -21,28 +21,23 @@ package com.telldus.live.mobile;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.content.Context;
 import android.content.Intent;
 import android.appwidget.AppWidgetManager;
-import android.util.Log;
 import android.support.v4.content.ContextCompat;
-import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 
 import org.json.JSONObject;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import java.util.Map;
 

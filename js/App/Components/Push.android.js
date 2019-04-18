@@ -55,8 +55,11 @@ const Push = {
 									return dispatch(Push.getToken(params));
 								}
 							})
-							.catch(() => {
-							// User has rejected permissions
+							.catch((): any => {
+								// User has rejected permissions
+								if (!pushToken || !pushTokenRegistered) {
+									return dispatch(Push.getToken(params));
+								}
 							});
 					}
 				});
@@ -117,6 +120,17 @@ const Push = {
 			.catch((err: any) => {
 				reportException(err);
 			});
+	},
+	refreshTokenListener: ({ deviceId }: Object): ThunkAction => {
+		return (dispatch: Function, getState: Object): Function => {
+			return firebase.messaging().onTokenRefresh((token: string) => {
+				if (token) {
+					const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+					dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+					dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
+				}
+			});
+		};
 	},
 };
 

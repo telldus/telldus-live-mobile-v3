@@ -56,10 +56,12 @@ type Props = {
 	location: Object,
 	dispatch: Function,
 	screenProps: Object,
+	pushToken: boolean | string,
 };
 
 type State = {
 	isLoading: boolean,
+	showTestLocalControl: boolean,
 };
 
 class Details extends View<Props, State> {
@@ -89,6 +91,8 @@ class Details extends View<Props, State> {
 
 	onConfirmRemoveLocation: () => void;
 
+	onPressTestLocalControl: () => void;
+
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (
 			<TabBar
@@ -110,6 +114,7 @@ class Details extends View<Props, State> {
 
 		this.state = {
 			isLoading: false,
+			showTestLocalControl: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -137,10 +142,14 @@ class Details extends View<Props, State> {
 		this.infoPressCount = 0;
 		this.timeoutInfoPress = null;
 
+		this.onPressTestLocalControl = this.onPressTestLocalControl.bind(this);
+
 		this.labelModalheaderOnDel = `${formatMessage(i18n.delete)} ${formatMessage(i18n.location)}?`;
 
 		this.onConfirmRemoveLocation = this.onConfirmRemoveLocation.bind(this);
 		this.onRemoveLocationError = `${formatMessage(i18n.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
+
+		this.localControlNotSupportedTellSticks = ['TellStick Net', 'TelldusCenter'];
 	}
 
 	componentDidMount() {
@@ -250,7 +259,7 @@ class Details extends View<Props, State> {
 		clearTimeout(this.timeoutInfoPress);
 		this.infoPressCount++;
 		if (this.infoPressCount >= 5) {
-			const { location = {} } = this.props;
+			const { location = {}, pushToken } = this.props;
 			const { online, websocketOnline, localKey = {} } = location;
 			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
 				this.infoPressCount = 0;
@@ -268,6 +277,7 @@ class Details extends View<Props, State> {
 					connectionEffectiveType: effectiveType,
 					deviceName,
 					deviceUniqueID,
+					pushToken,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
@@ -275,6 +285,17 @@ class Details extends View<Props, State> {
 		this.timeoutInfoPress = setTimeout(() => {
 			this.infoPressCount = 0;
 		}, 3000);
+	}
+
+	onPressTestLocalControl() {
+		const { location, navigation } = this.props;
+		navigation.navigate({
+			routeName: 'TestLocalControl',
+			key: 'TestLocalControl',
+			params: {
+				location,
+			},
+		});
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -321,11 +342,14 @@ class Details extends View<Props, State> {
 			padding,
 			container,
 			throbberContainer,
+			minWidthButton,
 		} = this.getStyles(appLayout);
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
 
 		const timezoneLabel = timezoneAutodetected ? `${this.labelTimeZone}\n(${this.labelAutoDetected})` : this.labelTimeZone;
+
+		const supportLocalControl = this.localControlNotSupportedTellSticks.indexOf(type) === -1;
 
 		return (
 			<ScrollView style={{
@@ -403,8 +427,17 @@ class Details extends View<Props, State> {
 						</View>
 						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 					</TouchableOpacity>
+					{supportLocalControl && (
+						<TouchableButton text={i18n.labelTestLocalControl} style={{
+							marginTop: padding,
+							minWidth: minWidthButton,
+							backgroundColor: Theme.Core.brandSecondary,
+						}} onPress={this.onPressTestLocalControl}/>
+					)}
 					<View style={styles.buttonCover}>
-						<TouchableButton text={this.labelDelete} style={styles.button} onPress={isLoading ? null : this.onPressRemoveLocation}/>
+						<TouchableButton text={this.labelDelete} style={[styles.button, {
+							minWidth: minWidthButton,
+						}]} onPress={isLoading ? null : this.onPressRemoveLocation}/>
 						{isLoading &&
 					(
 						<Throbber
@@ -426,6 +459,7 @@ class Details extends View<Props, State> {
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const minWidthButton = Math.floor(deviceWidth * 0.6);
 
 		return {
 			container: {
@@ -465,6 +499,7 @@ class Details extends View<Props, State> {
 				right: (deviceWidth * 0.12),
 			},
 			padding,
+			minWidthButton,
 		};
 	}
 }
@@ -502,8 +537,10 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	let { id } = ownProps.navigation.getParam('location', {id: null});
+	const { pushToken } = store.user;
 	return {
 		location: store.gateways.byId[id],
+		pushToken,
 	};
 }
 

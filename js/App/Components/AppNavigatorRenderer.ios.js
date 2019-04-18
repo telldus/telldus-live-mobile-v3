@@ -97,11 +97,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.addNewDevice = this.addNewDevice.bind(this);
 
-		const { appLayout } = this.props;
+		const { appLayout, intl } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
 		const size = Math.floor(deviceHeight * 0.03);
+
+		const { formatMessage } = intl;
 
 		let fontSize = size < 20 ? 20 : size;
 		this.settingsButton = {
@@ -110,6 +112,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				color: '#fff',
 			}}/>,
 			onPress: this.onOpenSetting,
+			accessibilityLabel: `${formatMessage(i18n.settingsHeader)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 		};
 
 		this.AddButton = {
@@ -180,11 +183,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	makeRightButton(CS: string): Object | null {
+		const { intl } = this.props;
+		const { formatMessage } = intl;
 		switch (CS) {
 			case 'Devices':
 				return {
 					...this.AddButton,
 					onPress: this.addNewDevice,
+					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Gateways':
 				if (this.props.addingNewLocation) {
@@ -195,11 +201,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 				return {
 					...this.AddButton,
 					onPress: this.props.addNewLocation,
+					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Scheduler':
 				return {
 					...this.AddButton,
 					onPress: this.newSchedule,
+					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			default:
 				return null;

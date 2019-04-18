@@ -117,6 +117,7 @@ export type Action =
 	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string, payload: Object }
 	| { type: typeof REHYDRATE }
 	| { type: 'persist/REHYDRATE', payload: Object }
+	| { type: 'TOGGLE_SUPPORT_LOCAL', gatewayId: string, payload: Object }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }
@@ -135,3 +136,13 @@ export type ThunkAction = (dispatch: Dispatch, getState: GetState) => any;
 export type PromiseAction = Promise<Action>;
 
 export type GrantType = 'password' | 'google' | 'refresh_token';
+
+export type TicketData = {
+	email: string,
+	message: string,
+	failedTests: string,
+	router: string,
+	connectionType: string,
+	connectionEffectiveType: string,
+	testCount: number,
+};

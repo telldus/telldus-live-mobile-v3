@@ -19,55 +19,38 @@
 
 package com.telldus.live.mobile;
 
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.os.SystemClock;
-import android.text.format.DateUtils;
 import android.widget.RemoteViews;
-import android.widget.Toast;
-import android.util.Log;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Bundle;
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.text.NumberFormat;
 import java.text.DateFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
-import com.telldus.live.mobile.Database.PrefManager;
-import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 import com.telldus.live.mobile.Utility.CommonUtilities;
+import com.telldus.live.mobile.API.UserAPI;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -139,6 +122,10 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
         widgetText = sensorWidgetInfo.getSensorName();
@@ -177,9 +164,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
                 ContextCompat.getColor(context, R.color.white),
-                50,
+                62,
                 90,
-                60,
+                58,
                 context));
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
@@ -193,6 +180,16 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.white));
         } else {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.brightRed));
+        }
+
+        if (isBasicUser) {
+            view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+        } else {
+            view.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
+
+            int updateInterval = sensorWidgetInfo.getUpdateInterval();
+            sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval);
         }
 
         // Instruct the widget manager to update the widget
@@ -250,6 +247,15 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         Integer sensorId = widgetInfo.getSensorId();
         if (sensorId.intValue() == -1) {
+            return;
+        }
+
+        PrefManager prefManager = new PrefManager(context);
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+        if (isBasicUser) {
+            updateUserProfile(widgetId, context);
             return;
         }
 
@@ -351,5 +357,19 @@ public class NewSensorWidget extends AppWidgetProvider {
             "([^\\p{Alpha}']|('[\\p{Alpha}]+'))*y+([^\\p{Alpha}']|('[\\p{Alpha}]+'))*",
             ""));
         return formattedDate;
+    }
+
+    public void updateUserProfile(final int widgetId, final Context context) {
+        UserAPI userAPI = new UserAPI();
+        userAPI.getUserProfile(context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                WidgetsUpdater wUpdater = new WidgetsUpdater();
+                wUpdater.updateAllWidgets(context);
+            }
+            @Override
+            public void onError(ANError error) {
+            }
+        });
     }
 }

@@ -11,7 +11,7 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginBottom="10dp"
-    android:padding="5dp"
+    android:padding="10dp"
     android:elevation="2dp">
     <com.google.android.flexbox.FlexboxLayout
         android:layout_width="match_parent"
@@ -32,12 +32,11 @@
                 android:id="@+id/validityInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:gravity="left"
-                android:textColor="@color/black"
-                android:layout_marginLeft="5dp"
+                android:textColor="@color/blackLight"
+                android:layout_marginLeft="8dp"
                 android:textAllCaps="true"/>
         </com.google.android.flexbox.FlexboxLayout>
         <com.google.android.flexbox.FlexboxLayout
@@ -56,7 +55,8 @@
                 android:layout_gravity="center"
                 android:layout_centerInParent="true"
                 android:textColor="@color/twine"
-                android:fontFamily="@font/telldusicons"/>
+                android:fontFamily="@font/telldusicons"
+                android:layout_marginTop="2dp"/>
             <TextView
                 android:id="@+id/smsCreditText"
                 android:layout_width="wrap_content"
@@ -82,18 +82,24 @@
         android:layout_height="wrap_content"
         app:flexDirection="row"
         app:justifyContent="space_around"
-        android:background="@drawable/shape_low_radius_gray">
+        app:alignItems="center"
+        android:background="@drawable/shape_low_radius_gray"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:flexDirection="column">
+            app:flexDirection="column"
+            app:justifyContent="center"
+            app:alignContent="center"
+            app:alignItems="center">
             <TextView
                 android:id="@+id/priceInfoOne"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                android:gravity="center"
+                android:gravity="bottom"
                 android:textColor="@color/brandSecondary"/>
             <TextView
                 android:id="@+id/priceInfoTwo"
@@ -101,27 +107,22 @@
                 android:layout_height="wrap_content"
                 android:textSize="8sp"
                 android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/black"
+                android:gravity="top"
+                android:textColor="@color/gray"
                 android:textAllCaps="true"/>
         </com.google.android.flexbox.FlexboxLayout>
         <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/saveInfoCover"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:flexDirection="column">
+            app:flexDirection="column"
+            android:visibility="gone"
+            app:justifyContent="center"
+            app:alignItems="center">
             <com.google.android.flexbox.FlexboxLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:flexDirection="row">
-                <TextView
-                    android:id="@+id/saveInfoStrikeOneIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="s1"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textColor="@color/black"/>
                 <TextView
                     android:id="@+id/saveInfoStrikeOne"
                     android:layout_width="wrap_content"
@@ -130,50 +131,56 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:textColor="@color/black"/>
-                <TextView
-                    android:id="@+id/saveInfoOneIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="s1"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:gravity="center"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/red"
+                    android:foreground="@drawable/strike_through"/>
                 <TextView
                     android:id="@+id/saveInfoOne"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="s1"
+                    android:layout_marginLeft="2dp"
                     android:textSize="14sp"
-                    android:textStyle="bold"
                     android:gravity="center"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/gray"/>
+                <TextView
+                    android:id="@+id/saveInfoThree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:textColor="@color/gray"
+                    android:textAllCaps="false"/>
             </com.google.android.flexbox.FlexboxLayout>
             <TextView
                 android:id="@+id/saveInfoTwo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="s2"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:textColor="@color/black"/>
+                android:textSize="8sp"
+                android:gravity="center|center"
+                android:layout_gravity="center|center"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_medium_radius_red"
+                android:textAllCaps="true"/>
         </com.google.android.flexbox.FlexboxLayout>
     </com.google.android.flexbox.FlexboxLayout>
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/buttonBuy3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_alignSelf="center"
         android:background="@drawable/orangebutton"
-        android:padding="5dp">
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
         <TextView
             android:id="@+id/buttonBuyIcon3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
+            android:textSize="24sp"
             android:gravity="center"
             android:text="cart"
             android:textColor="@color/white"
@@ -182,10 +189,11 @@
             android:id="@+id/buttonBuyText3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:text="bt3"
             android:textSize="14sp"
-            android:textStyle="bold"
             android:gravity="center"
-            android:textColor="@color/black"/>
+            android:textColor="@color/white"
+            android:textAllCaps="true"/>
     </com.google.android.flexbox.FlexboxLayout>
 </com.google.android.flexbox.FlexboxLayout>

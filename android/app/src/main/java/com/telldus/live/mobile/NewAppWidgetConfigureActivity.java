@@ -20,15 +20,11 @@
 package com.telldus.live.mobile;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -43,17 +39,13 @@ import android.widget.Toast;
 import android.view.Gravity;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +53,6 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.MainActivity;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -124,6 +115,17 @@ public class NewAppWidgetConfigureActivity extends Activity {
             getApplicationContext().startActivity(launchActivity);
             return;
         }
+
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        if (pro == -1 || pro < now) {
+            Intent basicActivity = new Intent(getApplicationContext(), BasicUserActivity.class);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            basicActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getApplicationContext().startActivity(basicActivity);
+            return;
+        }
+
         createDeviceApi();
 
         setResult(RESULT_CANCELED);

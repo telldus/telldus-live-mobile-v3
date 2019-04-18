@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { BackHandler, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -33,6 +32,11 @@ import { View, DialogueBox, NavigationHeaderPoster } from '../../../../BaseCompo
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 import * as appDataActions from '../../../Actions/AppData';
+import { createSupportTicketLCT, showToast } from '../../../Actions/App';
+
+import {
+	getTokenForLocalControl,
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -41,6 +45,8 @@ type Props = {
 	screenProps: Object,
 	showModal: boolean,
 	validationMessage: any,
+	location: Object,
+	email: string,
 
 	navigation: Object,
 	children: Object,
@@ -58,15 +64,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress: () => void;
 	closeModal: () => void;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		actions: PropTypes.objectOf(PropTypes.func),
-		screenProps: PropTypes.object,
-		showModal: PropTypes.bool,
-		validationMessage: PropTypes.any,
-	};
 
 	state = {
 		h1: '',
@@ -143,6 +140,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			validationMessage,
 			modalExtras,
 			navigation,
+			location,
+			email,
 		} = this.props;
 		const {
 			appLayout,
@@ -151,7 +150,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
 		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
-		const location = navigation.getParam('location', {});
 
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;
@@ -175,6 +173,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 				h1,
 				h2,
 				align: 'right',
+				leftIcon: currentScreen === 'TestLocalControl' || currentScreen === 'RequestSupport' ? 'close' : undefined,
 			};
 
 		return (
@@ -199,6 +198,8 @@ class LocationDetailsContainer extends View<null, Props, State> {
 									navigation,
 									dialogueOpen: showModal,
 									containerWidth: width - (2 * paddingHorizontal),
+									location,
+									email,
 								},
 							)}
 						</View>
@@ -263,18 +264,32 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	}
 }
 
-const mapStateToProps = (store: Object): Object => (
-	{
+const mapStateToProps = (store: Object, ownProps: Object): Object => {
+	let { id } = ownProps.navigation.getParam('location', {id: null});
+
+	const { userProfile = {} } = store.user;
+	const { email } = userProfile;
+
+	return {
+		location: store.gateways.byId[id],
 		showModal: store.modal.openModal,
 		validationMessage: store.modal.data,
 		modalExtras: store.modal.extras,
-	}
-);
+		email,
+	};
+};
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions, ...gatewayActions, ...appDataActions}, dispatch),
+			...bindActionCreators({
+				...modalActions,
+				...gatewayActions,
+				...appDataActions,
+				getTokenForLocalControl,
+				createSupportTicketLCT,
+				showToast,
+			}, dispatch),
 		},
 	}
 );

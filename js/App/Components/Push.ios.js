@@ -61,6 +61,11 @@ const Push = {
 		// 	// We use normal alert instead
 		Alert.alert('Telldus Live!', notification.getMessage());
 	},
+	refreshTokenListener: ({ deviceId }: Object): ThunkAction => {
+		return (dispatch: Function, getState: Object): Function => {
+			return () => {};
+		};
+	},
 };
 
 module.exports = Push;

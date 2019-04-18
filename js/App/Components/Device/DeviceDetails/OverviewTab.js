@@ -29,6 +29,7 @@ const isEqual = require('react-fast-compare');
 import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
 
 import { getDeviceManufacturerInfo, deviceZWaveInfo } from '../../../Actions/Devices';
+import { requestNodeInfo } from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import {
@@ -76,7 +77,7 @@ class OverviewTab extends View<Props, null> {
 
 	componentDidMount() {
 		const { dispatch, device } = this.props;
-		const { nodeInfo, id } = device;
+		const { nodeInfo, id, clientId, clientDeviceId } = device;
 		if (nodeInfo) {
 			const {
 				manufacturerId,
@@ -97,6 +98,7 @@ class OverviewTab extends View<Props, null> {
 					}
 				});
 		}
+		dispatch(requestNodeInfo(clientId, clientDeviceId));
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

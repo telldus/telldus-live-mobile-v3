@@ -176,7 +176,7 @@ public class DevicesUtilities {
             case "00000001-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "alarmtriggered");
                 actionsIconSet.put("TURNOFF", "alarmtriggered");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "alarm");
                     actionsIconSet.put("TURNOFF", "alarm");
                 }
@@ -192,7 +192,7 @@ public class DevicesUtilities {
             case "00000004-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "dooropen");
                 actionsIconSet.put("TURNOFF", "dooropen");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "doorclosed");
                     actionsIconSet.put("TURNOFF", "doorclosed");
                 }
@@ -208,7 +208,7 @@ public class DevicesUtilities {
             case "00000006-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "locked");
                 actionsIconSet.put("TURNOFF", "locked");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "unlocked");
                     actionsIconSet.put("TURNOFF", "unlocked");
                 }
@@ -224,7 +224,7 @@ public class DevicesUtilities {
             case "00000009-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "motion-triggered");
                 actionsIconSet.put("TURNOFF", "motion-triggered");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "motion");
                     actionsIconSet.put("TURNOFF", "motion");
                 }
@@ -240,7 +240,7 @@ public class DevicesUtilities {
             case "0000000B-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "userhome");
                 actionsIconSet.put("TURNOFF", "userhome");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "useraway");
                     actionsIconSet.put("TURNOFF", "useraway");
                 }
@@ -256,7 +256,7 @@ public class DevicesUtilities {
             case "0000000E-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "fire");
                 actionsIconSet.put("TURNOFF", "fire");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "off");
                     actionsIconSet.put("TURNOFF", "off");
                 }
@@ -272,7 +272,7 @@ public class DevicesUtilities {
             case "00000007-0001-1000-2005-ACCA54000000":
                 actionsIconSet.put("TURNON", "play");
                 actionsIconSet.put("TURNOFF", "play");
-                if (state.equals("2")) {
+                if (state != null && state.equals("2")) {
                     actionsIconSet.put("TURNON", "pause");
                     actionsIconSet.put("TURNOFF", "pause");
                 }

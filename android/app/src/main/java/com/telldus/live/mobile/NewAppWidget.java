@@ -27,24 +27,17 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Handler;
 import android.os.Looper;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
 import java.util.Map;
+import java.util.Date;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -53,6 +46,7 @@ import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
+import com.telldus.live.mobile.API.UserAPI;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 /**
@@ -177,6 +171,10 @@ public class NewAppWidget extends AppWidgetProvider {
         }
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
+
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
 
         int renderedButtonsCount = 0;
         int maxButtonsOnWidget = 5;
@@ -312,6 +310,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
+
             views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
@@ -371,6 +370,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 65,
                 context));
 
+
             views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
             Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
@@ -429,6 +429,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 95,
                 65,
                 context));
+
 
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
@@ -498,7 +499,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     65,
                     context));
                 views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
+
                 views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
+
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (renderedButtonsCount == 0) {
                     views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
@@ -569,7 +572,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     65,
                     context));
                 views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
+
                 views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
+
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
                     views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
@@ -635,7 +640,9 @@ public class NewAppWidget extends AppWidgetProvider {
                     65,
                     context));
                 views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
+
                 views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
+
                 Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
                 if (isLastButton) {
                     views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
@@ -684,9 +691,6 @@ public class NewAppWidget extends AppWidgetProvider {
                                 95,
                                 65,
                                 context));
-                            views.setTextViewText(R.id.iconCheck75, "statusx");
-                            views.setTextColor(R.id.iconCheck75, ContextCompat.getColor(context, R.color.widgetRed));
-                            views.setTextViewTextSize(R.id.iconCheck75, COMPLEX_UNIT_SP, Float.parseFloat("22"));
                         }
                     }
                 }
@@ -704,6 +708,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 95,
                 65,
                 context));
+
 
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
@@ -774,6 +779,12 @@ public class NewAppWidget extends AppWidgetProvider {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
         }
 
+        if (isBasicUser) {
+            views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+        } else {
+            views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
+        }
+
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -811,6 +822,15 @@ public class NewAppWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
         if (widgetInfo == null) {
+            return;
+        }
+
+        PrefManager prefManager = new PrefManager(context);
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+        if (isBasicUser) {
+            updateUserProfile(widgetId, context);
             return;
         }
 
@@ -1005,5 +1025,19 @@ public class NewAppWidget extends AppWidgetProvider {
         if (handlerResetDeviceStateToNull != null && runnableResetDeviceStateToNull != null) {
             handlerResetDeviceStateToNull.removeCallbacks(runnableResetDeviceStateToNull);
         }
+    }
+
+    public void updateUserProfile(final int widgetId, final Context context) {
+        UserAPI userAPI = new UserAPI();
+        userAPI.getUserProfile(context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                WidgetsUpdater wUpdater = new WidgetsUpdater();
+                wUpdater.updateAllWidgets(context);
+            }
+            @Override
+            public void onError(ANError error) {
+            }
+        });
     }
 }

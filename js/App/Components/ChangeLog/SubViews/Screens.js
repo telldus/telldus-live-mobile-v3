@@ -21,5 +21,5 @@
 // @flow
 
 // Set the number of screens here.
-const Screens = [1, 2, 3];
+const Screens = [1];
 export default Screens;

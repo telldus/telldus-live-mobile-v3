@@ -24,25 +24,20 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
-import android.widget.Toast;
-import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
 
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 
 import org.json.JSONObject;
 
 import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.Date;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -50,6 +45,7 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
+import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
@@ -148,6 +144,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
 
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+
         views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
         views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
@@ -155,6 +155,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String offActionIcon = actionIconSet.get("TURNOFF");
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
+
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
             views.setViewVisibility(R.id.offCover, View.GONE);
 
@@ -298,6 +299,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
         }
 
+        if (isBasicUser) {
+            views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+        } else {
+            views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
+        }
+
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -355,6 +362,15 @@ public class NewOnOffWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
         if (widgetInfo == null) {
+            return;
+        }
+
+        PrefManager prefManager = new PrefManager(context);
+        int pro = prefManager.getPro();
+        long now = new Date().getTime() / 1000;
+        Boolean isBasicUser = pro == -1 || pro < now;
+        if (isBasicUser) {
+            updateUserProfile(widgetId, context);
             return;
         }
 
@@ -445,5 +461,19 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (handlerResetDeviceStateToNull != null && runnableResetDeviceStateToNull != null) {
             handlerResetDeviceStateToNull.removeCallbacks(runnableResetDeviceStateToNull);
         }
+    }
+
+    public void updateUserProfile(final int widgetId, final Context context) {
+        UserAPI userAPI = new UserAPI();
+        userAPI.getUserProfile(context, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                WidgetsUpdater wUpdater = new WidgetsUpdater();
+                wUpdater.updateAllWidgets(context);
+            }
+            @Override
+            public void onError(ANError error) {
+            }
+        });
     }
 }
