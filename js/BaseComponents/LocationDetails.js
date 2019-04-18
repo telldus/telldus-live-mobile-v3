@@ -22,13 +22,13 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import {
 	CachedImage,
 } from 'react-native-cached-image';
 
-
+import IconTelldus from './IconTelldus';
 import Text from './Text';
 import View from './View';
 import Theme from '../App/Theme';
@@ -52,7 +52,11 @@ type DefaultProps = {
 };
 
 
-class LocationDetails extends Component<Props, null> {
+type State = {
+	errorShowImage: boolean,
+};
+
+class LocationDetails extends Component<Props, State> {
 	props: Props;
 
 	onPress: () => void;
@@ -61,10 +65,17 @@ class LocationDetails extends Component<Props, null> {
 		isStatic: true,
 	};
 
+	state: State = {
+		errorShowImage: false,
+	}
+
 	constructor(props: Props) {
 		super(props);
 
 		this.onPress = this.onPress.bind(this);
+
+		this.onError = this.onError.bind(this);
+		this.renderImage = this.renderImage.bind(this);
 	}
 
 	onPress() {
@@ -78,8 +89,28 @@ class LocationDetails extends Component<Props, null> {
 		}
 	}
 
+	renderImage({ style, source, resizeMode }: Object): Object | null {
+		if (!source || !source.uri) {
+			return null;
+		}
+		return (
+			<Image
+				style={style}
+				source={{uri: source.uri}}
+				resizeMode={resizeMode}
+				onError={this.onError}/>
+		);
+	}
+
+	onError() {
+		this.setState({
+			errorShowImage: true,
+		});
+	}
+
 	render(): Object {
 
+		const { errorShowImage } = this.state;
 		const {
 			title,
 			H1,
@@ -91,7 +122,6 @@ class LocationDetails extends Component<Props, null> {
 			info,
 			onPress,
 			infoContainerStyle,
-			isStatic,
 		} = this.props;
 
 		const {
@@ -101,6 +131,7 @@ class LocationDetails extends Component<Props, null> {
 			locationImage,
 			textHSH,
 			textLocation,
+			locationIcon,
 		} = this.getStyle(appLayout);
 
 		return (
@@ -116,14 +147,16 @@ class LocationDetails extends Component<Props, null> {
 				}
 				<View style={styles.imageHeaderContainer}>
 					<View style={locationImageContainer}>
-						<CachedImage
-							resizeMode={'contain'}
-							useQueryParamsInCacheKey={true}
-							source={{
-								uri: image,
-								isStatic,
-							}}
-							style={locationImage}/>
+						{errorShowImage ?
+							<IconTelldus icon={'zwave'} style={locationIcon}/>
+							:
+							<CachedImage
+								resizeMode={'contain'}
+								useQueryParamsInCacheKey={true}
+								source={{uri: image}}
+								style={locationImage}
+								renderImage={this.renderImage}/>
+						}
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
 						<Text numberOfLines={1} style={textHSH}>
@@ -174,6 +207,7 @@ class LocationDetails extends Component<Props, null> {
 				width: isPortrait ? width * 0.22 : height * 0.22,
 				height: isPortrait ? height * 0.12 : width * 0.12,
 				alignSelf: 'flex-start',
+				marginRight: 10,
 			},
 			textLocation: {
 				color: '#A59F9A',
@@ -182,6 +216,11 @@ class LocationDetails extends Component<Props, null> {
 			textHSH: {
 				color: '#F06F0C',
 				fontSize: textHSHSize,
+			},
+			locationIcon: {
+				color: Theme.Core.brandPrimary,
+				fontSize: isPortrait ? width * 0.22 : height * 0.22,
+				marginRight: 10,
 			},
 		};
 	}
