@@ -79,6 +79,7 @@
 		DC98AE9FD1CA4A448FC5C87D /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 93967CC4C9724316AFF74B50 /* Foundation.ttf */; };
 		DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */; };
 		E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */; };
+		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		F833995608B34A6AA1968135 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DFA88390E0247E68C113126 /* Entypo.ttf */; };
 		FF46E161818E9B5BE09583C2 /* libPods-TelldusLiveApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E4E10C72947027C61D0AB0E /* libPods-TelldusLiveApp.a */; };
 /* End PBXBuildFile section */
@@ -476,13 +477,6 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		8DD844722242382B005E847D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F113F3F0F88F4EB286931905 /* RNGestureHandler.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
-			remoteInfo = "RNGestureHandler-tvOS";
-		};
 		8DD844822242382B005E847D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C50B677FB3FB44D2B1AEE2EE /* RNGetPixel.xcodeproj */;
@@ -600,6 +594,7 @@
 		DB8C12D469844F34ABBA0A64 /* telldusicons.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = telldusicons.svg; path = ../assets/fonts/telldusicons.svg; sourceTree = "<group>"; };
 		DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
 		E3C5F7C8FDE3C261C5988FCF /* Pods-TelldusLiveApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.release.xcconfig"; sourceTree = "<group>"; };
+		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F113F3F0F88F4EB286931905 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		F455C17D479C4210A202688C /* SFNS Display.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFNS Display.ttf"; path = "../assets/fonts/SFNS Display.ttf"; sourceTree = "<group>"; };
 		FA333255669B4DD3BCDDDE90 /* libRNPixelColor.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNPixelColor.a; sourceTree = "<group>"; };
@@ -611,6 +606,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				26591AF421E899F300B1AF0F /* libRNGoogleSignin.a in Frameworks */,
 				26D4DC5F21424DCC0060DC8E /* libz.tbd in Frameworks */,
 				26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */,
@@ -650,6 +646,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				26EDB6D222266DC9003EF9E3 /* libReact.a in Frameworks */,
 				26EDB68222266AD0003EF9E3 /* NotificationCenter.framework in Frameworks */,
 				26EDB6D622266E36003EF9E3 /* libRCTGeolocation.a in Frameworks */,
@@ -801,7 +798,6 @@
 			isa = PBXGroup;
 			children = (
 				265C72D921AD38660003B41D /* libRNGestureHandler.a */,
-				8DD844732242382B005E847D /* libRNGestureHandler-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -879,6 +875,7 @@
 				5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */,
 				3D81ECCBA2B14DAB9C26E714 /* libRNGestureHandler.a */,
 				FA333255669B4DD3BCDDDE90 /* libRNPixelColor.a */,
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -944,6 +941,8 @@
 		781835ED9F715997196DD9BD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */,
 				26D4DC5E21424DCB0060DC8E /* libz.tbd */,
 				26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */,
@@ -1672,13 +1671,6 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		8DD844732242382B005E847D /* libRNGestureHandler-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRNGestureHandler-tvOS.a";
-			remoteRef = 8DD844722242382B005E847D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		8DD844832242382B005E847D /* libRNPixelColor.a */ = {
