@@ -69,6 +69,9 @@ class LocationDetails extends Component<Props, State> {
 		errorShowImage: false,
 	}
 
+	onError: () => void;
+	renderImage: (Object) => Object | null;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -185,6 +188,8 @@ class LocationDetails extends Component<Props, State> {
 		let textLocationSize = Math.floor(deviceWidth * 0.045);
 		textLocationSize = textLocationSize > 29 ? 29 : textLocationSize;
 
+		const widthImage = isPortrait ? width * 0.22 : height * 0.22;
+
 		return {
 			container: {
 				flexDirection: 'column',
@@ -195,6 +200,7 @@ class LocationDetails extends Component<Props, State> {
 			locationImageContainer: {
 				justifyContent: 'center',
 				alignItems: 'flex-start',
+				minWidth: widthImage + 15,
 			},
 			locationTextContainer: {
 				width: width * 0.58,
@@ -204,10 +210,10 @@ class LocationDetails extends Component<Props, State> {
 				marginTop: 10,
 			},
 			locationImage: {
-				width: isPortrait ? width * 0.22 : height * 0.22,
+				width: widthImage,
 				height: isPortrait ? height * 0.12 : width * 0.12,
 				alignSelf: 'flex-start',
-				marginRight: 10,
+				maxWidth: widthImage,
 			},
 			textLocation: {
 				color: '#A59F9A',
@@ -219,8 +225,7 @@ class LocationDetails extends Component<Props, State> {
 			},
 			locationIcon: {
 				color: Theme.Core.brandPrimary,
-				fontSize: isPortrait ? width * 0.22 : height * 0.22,
-				marginRight: 10,
+				fontSize: widthImage,
 			},
 		};
 	}
