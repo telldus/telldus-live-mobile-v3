@@ -57,7 +57,7 @@
     "react-native-simple-toast": "~0.0.8",
     "react-native-slider": "~0.11.0",
     "react-native-sqlite-storage": "~3.3.8",
-    "react-native-svg": "~8.0.8",
+    "react-native-svg": "~9.4.0",
     "react-native-swipe-list-view": "https://github.com/rimzici/react-native-swipe-list-view.git",
     "react-native-swiper": "~1.5.14",
     "react-native-udp": "~2.3.1",
@@ -73,7 +73,7 @@
     "svgs": "^4.0.0",
     "url": "~0.11.0",
     "uuid": "~3.3.1",
-    "victory-native": "~31.0.0"
+    "victory-native": "~32.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
