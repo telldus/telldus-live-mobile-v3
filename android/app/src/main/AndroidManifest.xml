@@ -138,6 +138,9 @@
           android:noHistory="true"
           android:theme="@style/CustomDialogStyle"/>
 
+        <activity
+          android:name="com.telldus.live.mobile.TransactionWebView"/>
+
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
     </application>
 
