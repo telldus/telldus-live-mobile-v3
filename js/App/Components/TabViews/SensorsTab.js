@@ -348,6 +348,7 @@ class SensorsTab extends View {
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
+				accessible={screenProps.currentScreen === 'Sensors'}
 			/>
 		);
 	}
@@ -361,7 +362,7 @@ class SensorsTab extends View {
 
 		if (buttonRow) {
 			return (
-				<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
+				<View importantForAccessibility={screenProps.currentScreen === 'Sensors' ? 'no' : 'no-hide-descendants'}>
 					{this.toggleHiddenListButton()}
 				</View>
 			);

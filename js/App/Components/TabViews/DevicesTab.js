@@ -545,6 +545,7 @@ class DevicesTab extends View {
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
+				accessible={screenProps.currentScreen === 'Devices'}
 			/>
 		);
 	}
