@@ -208,7 +208,8 @@ render(): React$Element<any> {
 				onPressIconLabelRight={this.onPressRetriesInfo}
 				onPressIconValueRight={inLineEditActive === 1 ? this.onDoneEdit : this.onPressRetriesEdit}
 				onChangeText={this.onChangeRetries}
-				onSubmitEditing={this.onDoneEdit}/>
+				onSubmitEditing={this.onDoneEdit}
+				intl={intl}/>
 			<SettingsRow
 				type={'text'}
 				edit={false}
@@ -224,7 +225,8 @@ render(): React$Element<any> {
 				onPressIconLabelRight={this.onPressIntervalInfo}
 				onPressIconValueRight={inLineEditActive === 2 ? this.onDoneEdit : this.onPressIntervalEdit}
 				onChangeText={this.onChangeInterval}
-				onSubmitEditing={this.onDoneEdit}/>
+				onSubmitEditing={this.onDoneEdit}
+				intl={intl}/>
 			<SettingsRow
 				type={'text'}
 				edit={false}
@@ -240,7 +242,8 @@ render(): React$Element<any> {
 				onPressIconValueRight={inLineEditActive === 3 ? this.onDoneEdit : this.onPressRepeatsEdit}
 				onChangeText={this.onChangeRepeat}
 				onSubmitEditing={this.onDoneEdit}
-				style={{marginBottom: 5}}/>
+				style={{marginBottom: 5}}
+				intl={intl}/>
 		</View>
 	);
 }
