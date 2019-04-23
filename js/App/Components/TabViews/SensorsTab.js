@@ -43,7 +43,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	navigation: Object,
 	dispatch: Function,
-	sensors: array<any>,
+	sensors: Array<any>,
 	sensorsDidFetch: boolean,
 };
 
