@@ -338,10 +338,13 @@ class SensorsTab extends View {
 			return null;
 		}
 
+		const { screenProps } = this.props;
+
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.header}
-				appLayout={this.props.screenProps.appLayout}
+				appLayout={screenProps.appLayout}
+				intl={screenProps.intl}
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
