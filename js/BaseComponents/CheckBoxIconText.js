@@ -30,6 +30,7 @@ import Text from './Text';
 import IconTelldus from './IconTelldus';
 
 import Theme from '../App/Theme';
+import i18n from '../App/Translations/common';
 
 type Props = {
     style?: Array<any> | Object | number,
@@ -38,7 +39,8 @@ type Props = {
     onToggleCheckBox: (boolean) => void,
     isChecked: boolean,
     text?: string,
-    appLayout: Object,
+	appLayout: Object,
+	intl: Object,
 };
 
 type DefaultProps = {
@@ -73,6 +75,7 @@ render(): Object {
 		text,
 		isChecked,
 		appLayout,
+		intl,
 	} = this.props;
 
 	const {
@@ -85,10 +88,16 @@ render(): Object {
 
 	const checkIconStyle = isChecked ? checkIconStyleActive : checkIconStyleInactive;
 
+	const { formatMessage } = intl;
+	const labelOne = formatMessage(i18n.labelCheckbox);
+	const labelTwo = isChecked ? formatMessage(i18n.labelCheckboxChecked) : formatMessage(i18n.labelCheckboxUnchecked);
+	const accessibilityLabel = `${labelOne} ${text}, ${labelTwo}, ${formatMessage(i18n.labelHintChangeTimeZone)}`;
+
 	return (
 		<TouchableOpacity
 			style={[style, container]}
-			onPress={this.onToggleCheckBox}>
+			onPress={this.onToggleCheckBox}
+			accessibilityLabel={accessibilityLabel}>
 			<IconTelldus icon={'checkmark'} style={{ ...checkIconCommon, ...checkIconStyle, ...iconStyle }}/>
 			{!!text && (
 				<Text style={[textDefaultStyle, textStyle]}>
