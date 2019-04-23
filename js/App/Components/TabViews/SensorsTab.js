@@ -71,6 +71,7 @@ class SensorsTab extends View {
 
 	setRef: (any) => void;
 	listView: any;
+	defaultDescriptionButton: string;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => {
 		const { intl, currentScreen } = screenProps;
@@ -112,6 +113,7 @@ class SensorsTab extends View {
 
 		this.addedToHiddenList = formatMessage(i18n.sensorAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.sensorRemovedFromHiddenList);
+		this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 
 		let hiddenSensors = formatMessage(i18n.hiddenSensors).toLowerCase();
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenSensors}`;
@@ -236,16 +238,21 @@ class SensorsTab extends View {
 		const accessible = screenProps.currentScreen === 'Sensors';
 		const style = this.getStyles(screenProps.appLayout);
 
+		const { showHiddenList } = this.state;
+		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
+		const accessibilityLabel = `${accessibilityLabelOne}, ${this.defaultDescriptionButton}`;
+
 		return (
 			<TouchableOpacity
 				style={style.toggleHiddenListButton}
 				onPress={this.toggleHiddenList}
 				accessible={accessible}
+				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
 					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={accessible}>
-					{this.state.showHiddenList ?
+				<Text style={style.toggleHiddenListText} accessible={false}>
+					{showHiddenList ?
 						this.hideHidden
 						:
 						this.showHidden
