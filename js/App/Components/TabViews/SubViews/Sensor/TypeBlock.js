@@ -54,12 +54,14 @@ const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, 
 			onLayout={onLayout}
 			style={style}
 			importantForAccessibility="no-hide-descendants"
+			accessibilityElementsHidden={true}
 			rippleColor={rippleColor}
 			rippleOpacity={rippleOpacity}
 			rippleDuration={rippleDuration}>
 			<View
 				style={valueCoverStyle}
-				importantForAccessibility="no-hide-descendants">
+				importantForAccessibility="no-hide-descendants"
+				accessibilityElementsHidden={true}>
 				{defaultSensor}
 				{totalTypes.length > 1 && (
 					<View style={dotCoverStyle}>
