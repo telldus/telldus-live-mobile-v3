@@ -85,8 +85,6 @@ class SensorRow extends View<Props, State> {
 	width: number;
 	offline: string;
 	sensorTypes: Object;
-	helpViewHiddenRow: string;
-	helpCloseHiddenRow: string;
 
 	LayoutLinear: Object;
 	onRowOpen: () => void;
@@ -127,9 +125,6 @@ class SensorRow extends View<Props, State> {
 		this.labelTimeAgo = formatMessage(i18n.labelTimeAgo);
 
 		this.offline = formatMessage(i18n.offline);
-
-		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
-		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
 		this.onSetIgnoreSensor = this.onSetIgnoreSensor.bind(this);
 
@@ -421,7 +416,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { sensor = {}, currentScreen, isGatewayActive, intl } = this.props;
+		const { sensor = {}, currentScreen, isGatewayActive, intl, screenReaderEnabled } = this.props;
 		const styles = this.getStyles();
 		const {
 			data = {},
@@ -439,7 +434,7 @@ class SensorRow extends View<Props, State> {
 		let sensorName = name ? name : intl.formatMessage(i18n.noName);
 		let accessibilityLabelPhraseOne = `${this.labelSensor}, ${sensorName}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 		let accessible = currentScreen === 'Sensors';
-		let accessibilityLabelPhraseTwo = isOpen ? this.helpCloseHiddenRow : this.helpViewHiddenRow;
+		let accessibilityLabelPhraseTwo = intl.formatMessage(i18n.accessibilityLabelViewSD);
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 
 		const interpolatedScale = this.animatedScaleX.interpolate({
@@ -454,6 +449,7 @@ class SensorRow extends View<Props, State> {
 				ref="SwipeRow"
 				rightOpenValue={-Theme.Core.buttonWidth * 2}
 				disableRightSwipe={true}
+				disableLeftSwipe={screenReaderEnabled}
 				onRowOpen={this.onRowOpen}
 				onRowClose={this.onRowClose}
 				swipeToOpenPercent={20}
