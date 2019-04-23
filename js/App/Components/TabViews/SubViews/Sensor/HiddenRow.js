@@ -117,9 +117,12 @@ class SensorHiddenRow extends View {
 		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
 
 		let accessibilityLabelSettings = isOpen ? this.labelGearButtonAccessibilityLabel : '';
+		let accessibilityElementsHidden = true;
 
 		return (
-			<View style={style} importantForAccessibility={importantForAccessibility}>
+			<View style={style}
+				importantForAccessibility={importantForAccessibility}
+				accessibilityElementsHidden={accessibilityElementsHidden}>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onSetIgnoreSensor}

@@ -99,6 +99,7 @@ class DevicesTab extends View {
 
 	onPressDeviceAction: () => void;
 
+	defaultDescriptionButton: string;
 	static navigationOptions = ({navigation, screenProps}: Object): Object => {
 		const { intl, currentScreen } = screenProps;
 		const { formatMessage } = intl;
@@ -165,6 +166,7 @@ class DevicesTab extends View {
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelDevice });
 		this.messageOnHide = formatMessage(i18n.messageOnHide, { type: labelDevice });
 		this.labelHide = formatMessage(i18n.hide).toUpperCase();
+		this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
 
 		this.showDimInfo = this.showDimInfo.bind(this);
 		this.handleAddDeviceAttentionCapture = this.handleAddDeviceAttentionCapture.bind(this);
@@ -507,19 +509,24 @@ class DevicesTab extends View {
 
 	toggleHiddenListButton(): Object {
 		const { screenProps } = this.props;
-		const accessible = screenProps.currentScreen === 'Sensors';
+		const accessible = screenProps.currentScreen === 'Devices';
 		const style = this.getStyles(screenProps.appLayout);
+
+		const { showHiddenList } = this.state;
+		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
+		const accessibilityLabel = `${accessibilityLabelOne}, ${this.defaultDescriptionButton}`;
 
 		return (
 			<TouchableOpacity
 				style={style.toggleHiddenListButton}
 				onPress={this.toggleHiddenList}
 				accessible={accessible}
-				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
+				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
+				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
 					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={accessible}>
-					{this.state.showHiddenList ?
+				<Text style={style.toggleHiddenListText} accessible={false}>
+					{showHiddenList ?
 						this.hideHidden
 						:
 						this.showHidden
@@ -535,13 +542,17 @@ class DevicesTab extends View {
 			return null;
 		}
 
+		const { screenProps } = this.props;
+
 		return (
 			<DeviceHeader
 				gateway={sectionData.section.header}
-				appLayout={this.props.screenProps.appLayout}
+				appLayout={screenProps.appLayout}
+				intl={screenProps.intl}
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
+				accessible={screenProps.currentScreen === 'Devices'}
 			/>
 		);
 	}

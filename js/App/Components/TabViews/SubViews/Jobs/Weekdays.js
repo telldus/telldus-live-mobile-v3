@@ -31,7 +31,10 @@ type Props = {
     day: Object,
     i: number,
     animation: any,
-    onLayout: (number, number, string) => void,
+	onLayout: (number, number, string) => void,
+	accessibilityElementsHidden: boolean,
+	accessible: boolean,
+	accessibilityLabel: string,
 };
 
 export default class Weekdays extends View<Props, null> {
@@ -49,15 +52,30 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	let { day, i, animation } = this.props;
+	let {
+		day,
+		i,
+		animation,
+		accessible,
+		accessibilityElementsHidden,
+		accessibilityLabel,
+	} = this.props;
 	return (
 		<Animated.View
 			style={animation.container}
 			key={`${day.day}${i}`}
 			onLayout={this.onLayout}
 			pointerEvents={'none'}
+			accessibilityElementsHidden={accessibilityElementsHidden}
+			accessible={accessible}
+			accessibilityLabel={accessibilityLabel}
 		>
-			<Animated.Text style={animation.text} numberOfLines={1} pointerEvents={'none'} allowFontScaling={false}>
+			<Animated.Text
+				style={animation.text}
+				numberOfLines={1}
+				pointerEvents={'none'}
+				allowFontScaling={false}
+				accessible={false}>
 				{capitalize(day.day)}
 			</Animated.Text>
 		</Animated.View>

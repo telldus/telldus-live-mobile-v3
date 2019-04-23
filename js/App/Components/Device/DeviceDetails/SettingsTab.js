@@ -401,12 +401,14 @@ class SettingsTab extends View {
 									onValueChange={this.onValueChange}
 									value={inDashboard}
 									appLayout={appLayout}
+									intl={intl}
 								/>
 								<SettingsRow
 									label={formatMessage(i18n.hideFromListD)}
 									onValueChange={this.setIgnoreDevice}
 									value={isHidden}
 									appLayout={appLayout}
+									intl={intl}
 								/>
 								{learnButton}
 								{isZWave && (

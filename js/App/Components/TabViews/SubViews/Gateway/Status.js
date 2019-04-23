@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, IconTelldus } from '../../../../../BaseComponents';
-import { hasTokenExpired, getControlIconColor } from '../../../../Lib';
+import { hasTokenExpired, getControlIconColorLabel } from '../../../../Lib';
 
 import i18n from '../../../../Translations/common';
 
@@ -56,7 +56,7 @@ constructor(props: Props) {
 }
 
 render(): Object {
-	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}} = this.props;
+	let { online, websocketOnline, textStyle, appLayout, statusInfoStyle, localKey = {}, intl} = this.props;
 	let { address, key, ttl, supportLocal } = localKey;
 	let tokenExpired = hasTokenExpired(ttl);
 	let supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
@@ -65,7 +65,7 @@ render(): Object {
 		statusText,
 		statusInfo,
 	} = this.getStyles(appLayout, supportLocalControl);
-	const controlIconColor = getControlIconColor(online, websocketOnline, supportLocalControl);
+	const {color: controlIconColor} = getControlIconColorLabel(online, websocketOnline, supportLocalControl, intl.formatMessage);
 
 	if (!online) {
 		return (

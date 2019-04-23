@@ -118,9 +118,12 @@ class DeviceHiddenRow extends View {
 		let accessibilityLabelSetIgnore = ignored ? this.labelUnHide : this.labelHide;
 
 		let importantForAccessibility = isOpen ? 'yes' : 'no-hide-descendants';
+		let accessibilityElementsHidden = true;
 
 		return (
-			<View style={style} importantForAccessibility={importantForAccessibility}>
+			<View style={style}
+				importantForAccessibility={importantForAccessibility}
+				accessibilityElementsHidden={accessibilityElementsHidden}>
 				<TouchableOpacity
 					style={Theme.Styles.hiddenRowItem}
 					onPress={this.onSetIgnoreDevice}
