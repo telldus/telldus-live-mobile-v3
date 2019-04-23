@@ -76,6 +76,7 @@ type Props = {
 	onPressDimButton: (device: Object) => void,
 	onNewlyAddedDidMount: (number, string) => void,
 	onPressDeviceAction: () => void,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
