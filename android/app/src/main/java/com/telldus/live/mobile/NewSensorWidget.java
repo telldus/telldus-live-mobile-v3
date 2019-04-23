@@ -57,6 +57,7 @@ import java.util.Map;
 public class NewSensorWidget extends AppWidgetProvider {
     private static final String ACTION_SENSOR_UPDATE = "ACTION_SENSOR_UPDATE";
     public static final String ACTION_AUTO_UPDATE = "com.telldus.live.mobile.AUTO_UPDATE";
+    private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
     private PendingIntent pendingIntent;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -184,6 +185,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         if (isBasicUser) {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+            view.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
         } else {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
@@ -255,6 +257,12 @@ public class NewSensorWidget extends AppWidgetProvider {
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
         if (isBasicUser) {
+            if (ACTION_PURCHASE_PRO.equals(intent.getAction())) {
+                Intent basicUserActivity = new Intent(context, BasicUserActivity.class);
+                context.startActivity(basicUserActivity);
+                return;
+            }
+
             updateUserProfile(widgetId, context);
             return;
         }
