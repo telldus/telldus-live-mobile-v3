@@ -31,6 +31,7 @@ import View from './View';
 import Switch from './Switch';
 import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
+import i18n from '../App/Translations/common';
 
 type Props = {
     value: any,
@@ -52,6 +53,7 @@ type Props = {
 	onSubmitEditing?: () => void,
 	keyboardTypeInLineEdit?: string,
 	style?: Object | Array<any> | number,
+	intl: Object,
 };
 
 type DefaultProps = {
@@ -147,6 +149,7 @@ class SettingsRow extends Component<Props, null> {
 			keyboardTypeInLineEdit,
 			valuePostfix,
 			style,
+			intl,
 		} = this.props;
 
 		const {
@@ -180,8 +183,14 @@ class SettingsRow extends Component<Props, null> {
 			};
 		}
 
+		const { formatMessage } = intl;
+
+		let accessible = type !== 'switch';
+		let accessibilityLabelTwo = onPress ? formatMessage(i18n.activateEdit) : '';
+		let accessibilityLabel = `${label}, ${value ? value : ''} ${valuePostfix ? valuePostfix : ''}, ${accessibilityLabelTwo}`;
+
 		return (
-			<View style={[ShowOnDashCover, style]} accessible={true} importantForAccessibility={'yes'}>
+			<View style={[ShowOnDashCover, style]} accessible={accessible} accessibilityLabel={accessibilityLabel} importantForAccessibility={'yes'}>
 				{type === 'switch' ?
 					<View
 						style={touchableStyle}>

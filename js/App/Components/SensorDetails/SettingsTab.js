@@ -521,24 +521,28 @@ class SettingsTab extends View {
 						label={formatMessage(i18n.name)}
 						value={name}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<SettingsRow
 						label={formatMessage(i18n.showOnDashborad)}
 						onValueChange={this.onValueChange}
 						value={inDashboard}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<SettingsRow
 						label={formatMessage(i18n.hideFromListS)}
 						onValueChange={this.setIgnoreSensor}
 						value={isHidden}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<SettingsRow
 						label={formatMessage(i18n.labelStoreHistory)}
 						onValueChange={this.setKeepHistory}
 						value={keepHistory}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<TouchableButton
 						text={formatMessage(i18n.clearHistory).toUpperCase()}
@@ -566,18 +570,21 @@ class SettingsTab extends View {
 						label={formatMessage(i18n.labelProtocol)}
 						value={this.formatProtocol(protocol)}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<SettingsRow
 						type={'text'}
 						label={formatMessage(i18n.labelModel)}
 						value={model}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 					<SettingsRow
 						type={'text'}
 						label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
 						value={sensorId}
 						appLayout={appLayout}
+						intl={intl}
 					/>
 				</View>
 				<DialogueBox

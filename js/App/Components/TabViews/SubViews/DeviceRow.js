@@ -79,6 +79,7 @@ type Props = {
 	onPressDimButton: (device: Object) => void,
 	onNewlyAddedDidMount: (number, string) => void,
 	onPressDeviceAction: () => void,
+	screenReaderEnabled: boolean,
 };
 
 type State = {
@@ -94,9 +95,6 @@ type State = {
 class DeviceRow extends View<Props, State> {
 	props: Props;
 	state: State;
-
-	helpViewHiddenRow: string;
-	helpCloseHiddenRow: string;
 
 	onSettingsSelected: Object => void;
 	onSlideActive: () => void;
@@ -133,11 +131,6 @@ class DeviceRow extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-
-		let { formatMessage } = props.intl;
-
-		this.helpViewHiddenRow = formatMessage(i18n.helpViewHiddenRow);
-		this.helpCloseHiddenRow = formatMessage(i18n.helpCloseHiddenRow);
 
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.onSlideActive = this.onSlideActive.bind(this);
@@ -395,6 +388,7 @@ class DeviceRow extends View<Props, State> {
 			powerConsumed,
 			onPressDimButton,
 			onPressDeviceAction,
+			screenReaderEnabled,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -496,8 +490,7 @@ class DeviceRow extends View<Props, State> {
 		});
 
 		let accessible = currentScreen === 'Devices';
-		let accessibilityLabel = isOpen ? `${getLabelDevice(intl.formatMessage, device)}. ${this.helpCloseHiddenRow}` :
-			`${getLabelDevice(intl.formatMessage, device)}. ${this.helpViewHiddenRow}`;
+		let accessibilityLabel = `${getLabelDevice(intl.formatMessage, device)}, ${intl.formatMessage(i18n.accessibilityLabelViewDD)}`;
 
 		const nameInfo = this.getNameInfo(device, deviceName, powerConsumed, styles);
 
@@ -506,7 +499,7 @@ class DeviceRow extends View<Props, State> {
 				<SwipeRow
 					ref="SwipeRow"
 					rightOpenValue={-Theme.Core.buttonWidth * 2}
-					disableLeftSwipe={this.state.disableSwipe}
+					disableLeftSwipe={this.state.disableSwipe || screenReaderEnabled}
 					disableRightSwipe={true}
 					onRowOpen={this.onRowOpen}
 					onRowClose={this.onRowClose}

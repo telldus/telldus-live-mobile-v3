@@ -141,8 +141,9 @@ export default class MainTabsAndroid extends Component<Props, State> {
 	}
 
 	render(): Object {
-		const { tab, currentScreen, appLayout } = this.props;
-		const {label, accessibilityLabel} = this.getLabel(tab.routeName);
+		const { tab, currentScreen, appLayout, intl } = this.props;
+		const { formatMessage } = intl;
+		let {label, accessibilityLabel} = this.getLabel(tab.routeName);
 
 		const {
 			tabBarStyle,
@@ -150,6 +151,9 @@ export default class MainTabsAndroid extends Component<Props, State> {
 			indicatorActiveStyle,
 			indicatorPassiveStyle,
 		} = this.getStyles(appLayout);
+
+		const postScript = currentScreen === tab.routeName ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		accessibilityLabel = `${accessibilityLabel}, ${postScript}`;
 
 		return (
 			<TouchableOpacity

@@ -107,6 +107,9 @@ export default class JobsPoster extends View<null, Props, State> {
 			onPanResponderTerminate: this.onPanResponderTerminateHandler.bind(this),
 			onShouldBlockNativeResponder: this.onShouldBlockNativeResponderHandler.bind(this),
 		});
+
+		this.defaultDescriptionButton = formatMessage(i18n.defaultDescriptionButton);
+		this.labelActive = formatMessage(i18n.labelActive);
 	}
 
 	onStartShouldSetPanResponderHandler(event: Object, gestureState: Object): boolean {
@@ -308,6 +311,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
+		const { intl } = this.props;
 		const { showLeftButton, showRightButton, showInactive } = this.state;
 		const {
 			container,
@@ -337,6 +341,7 @@ export default class JobsPoster extends View<null, Props, State> {
 						onToggleCheckBox={this.onToggleVisibilty}
 						isChecked={showInactive}
 						text={this.checkBoxText}
+						intl={intl}
 					/>
 					{showLeftButton && (
 						<Ripple
@@ -344,7 +349,8 @@ export default class JobsPoster extends View<null, Props, State> {
 							rippleOpacity={rippleOpacity}
 							rippleDuration={400}
 							style={arrowContainer}
-							onPress={this._scrollToYesterday}>
+							onPress={this._scrollToYesterday}
+							accessible={false}>
 							<Image source={{uri: 'left_arrow_key'}} style={arrow}/>
 						</Ripple>
 					)}
@@ -354,7 +360,8 @@ export default class JobsPoster extends View<null, Props, State> {
 							rippleOpacity={rippleOpacity}
 							rippleDuration={400}
 							style={[arrowContainer, arrowContainerRight]}
-							onPress={this._scrollToTomorrow}>
+							onPress={this._scrollToTomorrow}
+							accessible={false}>
 							<Image source={{uri: 'left_arrow_key'}} style={[arrow, {
 								transform: [{rotateZ: '180deg'}],
 							}]}/>
@@ -367,8 +374,14 @@ export default class JobsPoster extends View<null, Props, State> {
 
 	_renderDays = (): React$Element<Animated.View>[] => {
 
+		const { todayIndex } = this.state;
+
 		return this.props.days.map((day: Object, i: number): React$Element<Animated.View> => {
 			const animation = this._getDayAnimation(i, day.day);
+
+			const accessible = i === todayIndex || i === todayIndex - 1 || i === todayIndex + 1;
+			const two = i === todayIndex ? this.labelActive : this.defaultDescriptionButton;
+			const accessibilityLabel = `${day.day}, ${two}`;
 
 			return (
 				<Weekdays
@@ -376,17 +389,28 @@ export default class JobsPoster extends View<null, Props, State> {
 					i={i}
 					day={day}
 					animation={animation}
-					onLayout={this.onLayout}/>
+					onLayout={this.onLayout}
+					accessibilityElementsHidden={!accessible}
+					accessible={accessible}
+					accessibilityLabel={accessibilityLabel}/>
 			);
 		});
 	};
 
 	_renderDate = (): React$Element<Animated.Text>[] => {
+		const { todayIndex } = this.state;
 		return this.props.days.map((day: Object, i: number): React$Element<Animated.Text> => {
 			const animation = this._getDateAnimation(i);
 
+			const accessible = i === todayIndex;
+
 			return (
-				<Animated.Text style={animation} key={day.date} allowFontScaling={false}>
+				<Animated.Text
+					style={animation}
+					key={day.date}
+					allowFontScaling={false}
+					accessibilityElementsHidden={!accessible}
+					accessible={accessible}>
 					{day.date}
 				</Animated.Text>
 			);

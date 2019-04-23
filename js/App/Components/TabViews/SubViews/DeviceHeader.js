@@ -24,8 +24,11 @@
 import React from 'react';
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
-import { getControlIconColor } from '../../../Lib/gatewayUtils';
+import { getControlIconColorLabel } from '../../../Lib/gatewayUtils';
+import { shouldUpdate } from '../../../Lib';
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 type Props = {
 	gateway: Object,
@@ -33,6 +36,8 @@ type Props = {
 	supportLocalControl: boolean,
 	isOnline: boolean,
 	websocketOnline: boolean,
+	accessible: boolean,
+	intl: Object,
 };
 
 export default class DeviceHeader extends View<Props, null> {
@@ -41,10 +46,13 @@ export default class DeviceHeader extends View<Props, null> {
 		super(props);
 	}
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { appLayout, supportLocalControl, isOnline, websocketOnline } = this.props;
-
-		return appLayout.width !== nextProps.appLayout.width || supportLocalControl !== nextProps.supportLocalControl ||
-		isOnline !== nextProps.isOnline || websocketOnline !== nextProps.websocketOnline;
+		return shouldUpdate(nextProps, this.props, [
+			'appLayout',
+			'supportLocalControl',
+			'isOnline',
+			'websocketOnline',
+			'accessible',
+		]);
 	}
 
 	render(): Object {
@@ -54,6 +62,8 @@ export default class DeviceHeader extends View<Props, null> {
 			supportLocalControl,
 			isOnline,
 			websocketOnline,
+			accessible,
+			intl,
 		} = this.props;
 
 		const icon = supportLocalControl ? 'localcontrol' : 'cloudcontrol';
@@ -62,10 +72,20 @@ export default class DeviceHeader extends View<Props, null> {
 			nameFontSize,
 			sectionHeader,
 		} = this.getStyles(appLayout, supportLocalControl);
-		const controlIconColor = getControlIconColor(isOnline, websocketOnline, supportLocalControl);
+		const {color: controlIconColor, label} = getControlIconColorLabel(isOnline, websocketOnline, supportLocalControl, intl.formatMessage);
+
+		const control = supportLocalControl ? intl.formatMessage(i18n.labelLocal) : intl.formatMessage(i18n.labelCloud);
+		const accessibilityLabel = intl.formatMessage(i18n.accessibilityLabelListHeader, {
+			gatewayName: gateway,
+			status: label,
+			control,
+		});
 
 		return (
-			<View style={sectionHeader}>
+			<View
+				style={sectionHeader}
+				accessible={accessible}
+				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={icon} style={{...statusInfo, color: controlIconColor}}/>
 				<Text style={[Theme.Styles.sectionHeaderText, { fontSize: nameFontSize }]}>
 					{gateway}

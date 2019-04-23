@@ -22,29 +22,48 @@
 
 'use strict';
 import Theme from '../Theme';
+import i18n from '../Translations/common';
 
-function getControlIconColor(isOnline: boolean, websocketOnline: boolean, supportLocalControl: boolean): string {
+function getControlIconColorLabel(isOnline: boolean, websocketOnline: boolean, supportLocalControl: boolean, formatMessage: Function): Object {
 	const { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
 
 	if (isOnline && websocketOnline) {
-		return locationOnline;
+		return {
+			color: locationOnline,
+			label: formatMessage(i18n.online),
+		};
 	}
 	if (supportLocalControl && (!isOnline || !websocketOnline)) {
-		return locationNoLiveUpdates;
+		return {
+			color: locationNoLiveUpdates,
+			label: formatMessage(i18n.noLiveUpdates),
+		};
 	}
 	if (!supportLocalControl && isOnline && !websocketOnline) {
-		return locationNoLiveUpdates;
+		return {
+			color: locationNoLiveUpdates,
+			label: formatMessage(i18n.noLiveUpdates),
+		};
 	}
 
 	if (!supportLocalControl && !isOnline && websocketOnline) {
-		return locationOffline;
+		return {
+			color: locationOffline,
+			label: formatMessage(i18n.offline),
+		};
 	}
 	if (!supportLocalControl && !isOnline && !websocketOnline) {
-		return locationOffline;
+		return {
+			color: locationOffline,
+			label: formatMessage(i18n.offline),
+		};
 	}
-	return locationOffline;
+	return {
+		color: locationOffline,
+		label: formatMessage(i18n.offline),
+	};
 }
 
 module.exports = {
-	getControlIconColor,
+	getControlIconColorLabel,
 };
