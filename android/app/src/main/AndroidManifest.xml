@@ -141,6 +141,18 @@
         <activity
           android:name="com.telldus.live.mobile.TransactionWebView"/>
 
+        <activity
+          android:name="com.telldus.live.mobile.PurchaseCompleteActivity"
+          android:launchMode="singleTop"
+          android:noHistory="true">
+          <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="telldus-live-mobile" android:host="purchase-complete" />
+          </intent-filter>
+        </activity>
+
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
     </application>
 
