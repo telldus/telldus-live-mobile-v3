@@ -33,15 +33,18 @@ public class TransactionWebView extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transaction_webview);
-        webview = (WebView) findViewById(R.id.transaction_webview);
-        webview.setWebViewClient(new CustomWebViewClient(getApplicationContext()));
-        webview.getSettings().setJavaScriptEnabled(true);
-        openURL();
-    }
 
-    private void openURL() {
         Bundle extras = getIntent().getExtras();
         String url = extras.getString("URL");
+        String pack = extras.getString("pack");
+
+        webview = (WebView) findViewById(R.id.transaction_webview);
+        webview.setWebViewClient(new CustomWebViewClient(getApplicationContext(), pack));
+        webview.getSettings().setJavaScriptEnabled(true);
+        openURL(url);
+    }
+
+    private void openURL(String url) {
         webview.loadUrl(url);
         webview.requestFocus();
     }

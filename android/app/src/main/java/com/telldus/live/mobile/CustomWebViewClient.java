@@ -31,8 +31,10 @@ import android.content.Context;
 
 public class CustomWebViewClient extends WebViewClient {
     public Context context;
-    public CustomWebViewClient(Context context) {
+    public String pack;
+    public CustomWebViewClient(Context context, String pack) {
         this.context = context;
+        this.pack = pack;
     }
 
     @Override
@@ -49,6 +51,7 @@ public class CustomWebViewClient extends WebViewClient {
     public void showPurchaseSuccess() {
         Intent puchaseCompleteActivity = new Intent(context, PurchaseCompleteActivity.class);
         puchaseCompleteActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        puchaseCompleteActivity.putExtra("pack", pack);
         context.startActivity(puchaseCompleteActivity);
     }
 }

@@ -106,7 +106,7 @@ public class BasicUserActivity extends Activity {
                     new OnAPITaskComplete() {
                         @Override
                         public void onSuccess(JSONObject response) {
-                            handleSuccess(response);
+                            handleSuccess(response, "proyear");
                         }
                         @Override
                         public void onError(ANError error) {
@@ -157,7 +157,7 @@ public class BasicUserActivity extends Activity {
                     new OnAPITaskComplete() {
                         @Override
                         public void onSuccess(JSONObject response) {
-                            handleSuccess(response);
+                            handleSuccess(response, "prohalfyear");
                         }
                         @Override
                         public void onError(ANError error) {
@@ -196,7 +196,7 @@ public class BasicUserActivity extends Activity {
                     new OnAPITaskComplete() {
                         @Override
                         public void onSuccess(JSONObject response) {
-                            handleSuccess(response);
+                            handleSuccess(response, "promonth");
                         }
                         @Override
                         public void onError(ANError error) {
@@ -207,7 +207,7 @@ public class BasicUserActivity extends Activity {
         });
     }
 
-    public void handleSuccess(JSONObject response) {
+    public void handleSuccess(JSONObject response, String pack) {
         try {
             String error = response.optString("error");
             if (!error.isEmpty() && error != null) {
@@ -216,6 +216,7 @@ public class BasicUserActivity extends Activity {
                 if (url != null) {
                     Intent transactionActivity = new Intent(getApplicationContext(), TransactionWebView.class);
                     transactionActivity.putExtra("URL", url);
+                    transactionActivity.putExtra("pack", pack);
                     getApplicationContext().startActivity(transactionActivity);
                 }
             }

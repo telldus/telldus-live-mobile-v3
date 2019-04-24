@@ -99,4 +99,19 @@
 
 	<string name="reserved_widget_android_premium_required_info">Premium required. Click to upgrade.</string>
 
+	<string name="reserved_widget_android_purchase_complete">Purchase complete</string>
+	<string name="reserved_widget_android_thank_purchase">Thank you for your purchase</string>
+	<string name="reserved_widget_android_payment_complete_info">Your payment has been accepted and your purchase is now completed. Your account has been upgraded 
+	with the following</string>
+
+	<string name="reserved_widget_android_25_sms_c">25 SMS Credits</string>
+	<string name="reserved_widget_android_12_sms_c">12 SMS Credits</string>
+	<string name="reserved_widget_android_3_sms_c">3 SMS Credits</string>
+
+	<string name="reserved_widget_android_12_months_pa">12 Months premium access</string>
+	<string name="reserved_widget_android_6_months_pa">6 Months premium access</string>
+	<string name="reserved_widget_android_1_month_pa">1 Month premium access</string>
+
+	<string name="reserved_widget_android_button_success_continue">Continue</string>
+
 </resources>
