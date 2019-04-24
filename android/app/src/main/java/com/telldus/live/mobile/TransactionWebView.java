@@ -23,17 +23,10 @@ import android.app.Activity;
 import android.webkit.WebViewClient;
 import android.webkit.WebView;
 import android.os.Bundle;
+import android.content.Intent;
 import android.util.Log;
 
 public class TransactionWebView extends Activity {
-
-    private class MyWebViewClient extends WebViewClient {
-          @Override
-          public boolean shouldOverrideUrlLoading(WebView view, String url) {
-              view.loadUrl(url);
-              return true;
-          }
-    }
 
     WebView webview;
     @Override
@@ -41,7 +34,8 @@ public class TransactionWebView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.transaction_webview);
         webview = (WebView) findViewById(R.id.transaction_webview);
-        webview.setWebViewClient(new MyWebViewClient());
+        webview.setWebViewClient(new CustomWebViewClient(getApplicationContext()));
+        webview.getSettings().setJavaScriptEnabled(true);
         openURL();
     }
 
