@@ -29,6 +29,8 @@ import android.graphics.Bitmap;
 import android.content.Intent;
 import android.content.Context;
 
+import com.telldus.live.mobile.Utility.Constants;
+
 public class CustomWebViewClient extends WebViewClient {
     public Context context;
     public String pack;
@@ -40,13 +42,20 @@ public class CustomWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest webResourceRequest) {
         Uri url = webResourceRequest.getUrl();
-        if (String.valueOf(url).equals("telldus-live-mobile://purchase-complete")) {
+        if (String.valueOf(url).equals(Constants.PURCHASE_SUCCESS_URL+"?status=success")) {
             showPurchaseSuccess();
             return false;
         }
         view.loadUrl(String.valueOf(url));
         return true;
     }
+
+    // public void onPageStarted (WebView view, String url, Bitmap favicon) {
+    //     Log.d("TEST onPageStarted", url);
+    //     if (url != null && url.equals(Constants.PURCHASE_SUCCESS_URL+"?status=success")) {
+    //         showPurchaseSuccess();
+    //     }
+    // }
 
     public void showPurchaseSuccess() {
         Intent puchaseCompleteActivity = new Intent(context, PurchaseCompleteActivity.class);
