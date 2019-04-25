@@ -45,22 +45,25 @@ public class CustomWebViewClient extends WebViewClient {
         if (String.valueOf(url).equals(Constants.PURCHASE_SUCCESS_URL+"?status=success")) {
             showPurchaseSuccess();
             return false;
+        } else if (String.valueOf(url).equals(Constants.PURCHASE_SUCCESS_URL+"?status=error")) {
+            showPurchaseError();
+            return false;
         }
         view.loadUrl(String.valueOf(url));
         return true;
     }
-
-    // public void onPageStarted (WebView view, String url, Bitmap favicon) {
-    //     Log.d("TEST onPageStarted", url);
-    //     if (url != null && url.equals(Constants.PURCHASE_SUCCESS_URL+"?status=success")) {
-    //         showPurchaseSuccess();
-    //     }
-    // }
 
     public void showPurchaseSuccess() {
         Intent puchaseCompleteActivity = new Intent(context, PurchaseCompleteActivity.class);
         puchaseCompleteActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         puchaseCompleteActivity.putExtra("pack", pack);
         context.startActivity(puchaseCompleteActivity);
+    }
+
+    public void showPurchaseError() {
+        Intent purchaseErrorActivity = new Intent(context, PurchaseErrorActivity.class);
+        purchaseErrorActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        purchaseErrorActivity.putExtra("pack", pack);
+        context.startActivity(purchaseErrorActivity);
     }
 }
