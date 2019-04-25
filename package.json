@@ -15,6 +15,7 @@
     "dgram": "react-native-udp"
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^2.0.4",
     "axios": "~0.18.0",
     "blueimp-md5": "~2.10.0",
     "color": "~3.1.0",

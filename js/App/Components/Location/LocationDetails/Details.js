@@ -28,9 +28,9 @@ import {
 	TouchableOpacity,
 	TouchableWithoutFeedback,
 	Alert,
-	NetInfo,
 	ScrollView,
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 

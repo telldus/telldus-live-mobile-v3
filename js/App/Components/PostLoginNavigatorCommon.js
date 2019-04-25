@@ -22,11 +22,11 @@
 'use strict';
 
 import React from 'react';
-import { NetInfo } from 'react-native';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
+import NetInfo from '@react-native-community/netinfo';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';

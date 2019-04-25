@@ -1,4 +1,6 @@
 rootProject.name = 'TelldusLiveApp'
+include ':@react-native-community_netinfo'
+project(':@react-native-community_netinfo').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/netinfo/android')
 include ':react-native-get-pixel'
 project(':react-native-get-pixel').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-get-pixel/android')
 include ':react-native-fetch-blob'
