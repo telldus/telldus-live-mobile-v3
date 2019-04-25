@@ -114,4 +114,11 @@
 
 	<string name="reserved_widget_android_button_success_continue">Continue</string>
 
+	<string name="reserved_widget_android_error_tryAgain">try again</string>
+
+	<string name="reserved_widget_android_purchase_error">Payment failed</string>
+	<string name="reserved_widget_android_purchase_aborted">Purchase has been aborted</string>
+
+	<string name="reserved_widget_android_purchase_error_info">Your payment was not accepted and the purchase has been aborted. No transaction has been made. Please check your payment information and click below if you wish to try again.</string>
+
 </resources>
