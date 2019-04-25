@@ -24,11 +24,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.util.Log;
+import android.content.Intent;
+
+import com.androidnetworking.error.ANError;
 
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
 import com.google.android.flexbox.FlexboxLayout;
+
+import com.telldus.live.mobile.API.UserAPI;
+import com.telldus.live.mobile.API.OnAPITaskComplete;
+
+import org.json.JSONObject;
 
 public class BasicUserActivity extends Activity {
 
@@ -50,6 +59,8 @@ public class BasicUserActivity extends Activity {
     }
 
     public void updateUIBasic() {
+        final UserAPI userAPI = new UserAPI();
+
         DecimalFormat df = new DecimalFormat("#.00");
         String euro = getResources().getString(R.string.euro);
         String pm = getResources().getString(R.string.reserved_widget_android_per_month);
@@ -84,6 +95,27 @@ public class BasicUserActivity extends Activity {
         TextView buttonBuyText1 = (TextView) p_p_1.findViewById(R.id.buttonBuyText3);
         buttonBuyText1.setText(getResources().getString(R.string.reserved_widget_android_buy_12_months));
 
+        buttonBuyText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userAPI.createTransaction(
+                    "proyear",
+                    "1",
+                    "app://com.telldus.mobile/purchase/success",
+                    getApplicationContext(),
+                    new OnAPITaskComplete() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            handleSuccess(response, "proyear");
+                        }
+                        @Override
+                        public void onError(ANError error) {
+                        }
+                    }
+                );
+            }
+        });
+
 
         // Block 2
         FlexboxLayout p_p_2 = (FlexboxLayout) findViewById(R.id.p_p_2);
@@ -114,6 +146,27 @@ public class BasicUserActivity extends Activity {
         TextView buttonBuyText2 = (TextView) p_p_2.findViewById(R.id.buttonBuyText3);
         buttonBuyText2.setText(getResources().getString(R.string.reserved_widget_android_buy_6_months));
 
+        buttonBuyText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userAPI.createTransaction(
+                    "prohalfyear",
+                    "1",
+                    "app://com.telldus.mobile/purchase/success",
+                    getApplicationContext(),
+                    new OnAPITaskComplete() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            handleSuccess(response, "prohalfyear");
+                        }
+                        @Override
+                        public void onError(ANError error) {
+                        }
+                    }
+                );
+            }
+        });
+
 
         // Block 3
         FlexboxLayout p_p_3 = (FlexboxLayout) findViewById(R.id.p_p_3);
@@ -131,5 +184,43 @@ public class BasicUserActivity extends Activity {
 
         TextView buttonBuyText3 = (TextView) p_p_3.findViewById(R.id.buttonBuyText3);
         buttonBuyText3.setText(getResources().getString(R.string.reserved_widget_android_buy_1_month));
+
+        buttonBuyText3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userAPI.createTransaction(
+                    "promonth",
+                    "1",
+                    "app://com.telldus.mobile/purchase/success",
+                    getApplicationContext(),
+                    new OnAPITaskComplete() {
+                        @Override
+                        public void onSuccess(JSONObject response) {
+                            handleSuccess(response, "promonth");
+                        }
+                        @Override
+                        public void onError(ANError error) {
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    public void handleSuccess(JSONObject response, String pack) {
+        try {
+            String error = response.optString("error");
+            if (!error.isEmpty() && error != null) {
+            } else {
+                String url = response.optString("url");
+                if (url != null) {
+                    Intent transactionActivity = new Intent(getApplicationContext(), TransactionWebView.class);
+                    transactionActivity.putExtra("URL", url);
+                    transactionActivity.putExtra("pack", pack);
+                    getApplicationContext().startActivity(transactionActivity);
+                }
+            }
+        } catch (Exception e) {
+        };
     }
 }

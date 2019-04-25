@@ -1878,6 +1878,7 @@
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-get-pixel/ios/PNGetPixel",
+					"$(SRCROOT)/../node_modules/react-native-google-signin/ios",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1929,6 +1930,7 @@
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-get-pixel/ios/PNGetPixel",
+					"$(SRCROOT)/../node_modules/react-native-google-signin/ios",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

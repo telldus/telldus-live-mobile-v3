@@ -29,6 +29,7 @@ import {
 	TouchableWithoutFeedback,
 	Alert,
 	ScrollView,
+	BackHandler,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { connect } from 'react-redux';
@@ -109,6 +110,8 @@ class Details extends View<Props, State> {
 		},
 	});
 
+	handleBackPress: () => void;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -150,6 +153,8 @@ class Details extends View<Props, State> {
 		this.onRemoveLocationError = `${formatMessage(i18n.failureRemoveLocation)}, ${formatMessage(i18n.please).toLowerCase()} ${formatMessage(i18n.tryAgain)}.`;
 
 		this.localControlNotSupportedTellSticks = ['TellStick Net', 'TelldusCenter'];
+
+		this.handleBackPress = this.handleBackPress.bind(this);
 	}
 
 	componentDidMount() {
@@ -163,6 +168,7 @@ class Details extends View<Props, State> {
 				navigation.setParams(newParams);
 			});
 		}
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -172,6 +178,17 @@ class Details extends View<Props, State> {
 	componentWillUnmount() {
 		this.infoPressCount = 0;
 		clearTimeout(this.timeoutInfoPress);
+
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	handleBackPress(): boolean {
+		let { navigation, screenProps } = this.props;
+		if (screenProps.currentScreen === 'LOverview') {
+			navigation.pop();
+			return true;
+		}
+		return false;
 	}
 
 	onEditName() {
