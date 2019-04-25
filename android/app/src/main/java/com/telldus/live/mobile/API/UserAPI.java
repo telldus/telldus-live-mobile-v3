@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
@@ -37,6 +38,7 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.NewOnOffWidget;
 import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.R;
+import com.telldus.live.mobile.TransactionWebView;
 
 import java.util.concurrent.Callable;
 import java.util.HashMap;
@@ -71,6 +73,21 @@ public class UserAPI {
                 } catch (Exception e) {
                     callBack.onSuccess(response);
                 };
+            }
+            @Override
+            public void onError(ANError error) {
+                callBack.onError(error);
+            }
+        });
+    }
+
+    public void createTransaction(String product, String quantity, String returnURL, final Context context, final OnAPITaskComplete callBack) {
+        String params = "/user/createTransaction?product="+product+"&quantity="+quantity+"&returnURL="+returnURL;
+        API endPoints = new API();
+        endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+                callBack.onSuccess(response);
             }
             @Override
             public void onError(ANError error) {

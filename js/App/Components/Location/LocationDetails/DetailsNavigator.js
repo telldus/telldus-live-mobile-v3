@@ -47,6 +47,7 @@ const DetailsNavigator = createMaterialTopTabNavigator(
 		swipeEnabled: false,
 		lazy: true,
 		animationEnabled: true,
+		backBehavior: 'history',
 		tabBarComponent: ({ style, tabStyle, labelStyle, indicatorStyle, ...rest }: Object): Object => {
 			let { screenProps, navigation } = rest, tabHeight,
 				tabWidth = 0, fontSize = 0, paddingVertical = 0;

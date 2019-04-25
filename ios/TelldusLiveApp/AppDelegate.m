@@ -23,7 +23,7 @@
 #import "React/RCTBundleURLProvider.h"
 #import "React/RCTRootView.h"
 #import "React/RCTPushNotificationManager.h"
-#import "RNGoogleSignin.h"
+#import <RNGoogleSignin/RNGoogleSignin.h>
 
 #import "Orientation.h"
 

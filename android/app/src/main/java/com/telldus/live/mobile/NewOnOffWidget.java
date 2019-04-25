@@ -58,6 +58,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF = "ACTION_OFF";
     private static final String ACTION_BELL = "ACTION_BELL";
+    private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
 
     private static final String METHOD_ON = "1";
     private static final String METHOD_OFF = "2";
@@ -301,6 +302,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (isBasicUser) {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
+            views.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
         } else {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
         }
@@ -370,6 +372,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
         if (isBasicUser) {
+            if (ACTION_PURCHASE_PRO.equals(intent.getAction())) {
+                Intent basicUserActivity = new Intent(context, BasicUserActivity.class);
+                context.startActivity(basicUserActivity);
+                return;
+            }
+
             updateUserProfile(widgetId, context);
             return;
         }
