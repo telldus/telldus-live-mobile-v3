@@ -23,7 +23,7 @@
 'use strict';
 
 import { persistCombineReducers } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { localStorageKey } from '../../Config';
 
 import { migrations } from '../Store';
