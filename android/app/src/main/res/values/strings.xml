@@ -121,4 +121,28 @@
 
 	<string name="reserved_widget_android_purchase_error_info">Your payment was not accepted and the purchase has been aborted. No transaction has been made. Please check your payment information and click below if you wish to try again.</string>
 
+
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelHumidity">Humidity</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelTemperature">Temperature</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelRainRate">Rain Rate</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelRainTotal">Rain Total</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelWindGust">Wind Gust</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelWindAverage">Wind Average</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelWindDirection">Wind Direction</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelUVIndex">UV Index</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_energy">Energy</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_Accumulated">Accumulated</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelWatt">Power</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_pulse">Pulse</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_voltage">Voltage</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_current">Current</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_powerFactor">Power Factor</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelLuminance">Luminance</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelDewPoint">Dew Point</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelBarometricPressure">Barometric Pressure</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelGenericMeter">Generic Meter</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelVolume">Volume</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelLoudness">Loudness</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelWeight">Weight</string>
+	<string name="reserved_widget_android_accessibilityLabel_sensors_labelMoisture">Moisture</string>
 </resources>
