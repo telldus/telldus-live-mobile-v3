@@ -24,8 +24,8 @@ import React from 'react';
 import {
 	TextInput,
 	Keyboard,
-	NetInfo,
 } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 const isEqual = require('react-fast-compare');
 import startCase from 'lodash/startCase';
 
