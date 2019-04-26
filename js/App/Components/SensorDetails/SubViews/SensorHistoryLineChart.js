@@ -92,6 +92,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 	_orientationDidChange: (string) => void;
 	onRequestClose: () => void;
 
+	onShow: () => void;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -113,6 +115,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 		this.onPressToggleView = this.onPressToggleView.bind(this);
 		this.onPressResetChartView = this.onPressResetChartView.bind(this);
 		Orientation.addOrientationListener(this._orientationDidChange);
+
+		this.onShow = this.onShow.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -226,7 +230,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { fullscreen, isLoading, orientation } = this.state;
+		const { fullscreen, isLoading } = this.state;
 		const { show, force } = fullscreen;
 		const { appLayout, showCalendar } = this.props;
 		const { width, height } = appLayout;
@@ -239,21 +243,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 			}
 			if (Platform.OS === 'android' && show && isLoading) {
 				this.setFullscreenState(show, force, false);
-			}
-		}
-
-		// Modal property 'supportedOrientations' is not supported in Android.
-		// So, forcing landscape on show fullscreen and unlock on hide.
-		// [IOS cannot be handled this way because it has issue when unlocking all orientation]
-		if (Platform.OS === 'android' && show && !prevState.fullscreen.show && isLoading) {
-			if (orientation === 'PORTRAIT') {
-				Orientation.lockToLandscapeLeft();
-			}
-			if (orientation === 'LANDSCAPE-RIGHT') {
-				Orientation.lockToLandscapeRight();
-			}
-			if (orientation === 'LANDSCAPE-LEFT') {
-				Orientation.lockToLandscapeLeft();
 			}
 		}
 
@@ -414,6 +403,25 @@ class SensorHistoryLineChart extends View<Props, State> {
 		);
 	}
 
+	onShow() {
+		const { fullscreen, orientation, isLoading } = this.state;
+		const { show } = fullscreen;
+		// Modal property 'supportedOrientations' is not supported in Android.
+		// So, forcing landscape on show fullscreen and unlock on hide.
+		// [IOS cannot be handled this way because it has issue when unlocking all orientation]
+		if (Platform.OS === 'android' && show && isLoading) {
+			if (orientation === 'PORTRAIT') {
+				Orientation.lockToLandscapeLeft();
+			}
+			if (orientation === 'LANDSCAPE-RIGHT') {
+				Orientation.lockToLandscapeRight();
+			}
+			if (orientation === 'LANDSCAPE-LEFT') {
+				Orientation.lockToLandscapeLeft();
+			}
+		}
+	}
+
 	render(): any {
 		const { fullscreen, orientation } = this.state;
 		const { show } = fullscreen;
@@ -435,7 +443,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
 				supportedOrientations={[supportedOrientations]}
-				hardwareAccelerated={true}>
+				hardwareAccelerated={true}
+				onShow={this.onShow}>
 				<View style={{
 					flex: 1,
 					alignItems: 'center',
