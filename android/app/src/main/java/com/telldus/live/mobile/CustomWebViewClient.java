@@ -29,6 +29,8 @@ import android.graphics.Bitmap;
 import android.content.Intent;
 import android.content.Context;
 
+import com.telldus.live.mobile.Utility.Constants;
+
 public class CustomWebViewClient extends WebViewClient {
     public Context context;
     public String pack;
@@ -40,8 +42,11 @@ public class CustomWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest webResourceRequest) {
         Uri url = webResourceRequest.getUrl();
-        if (String.valueOf(url).equals("telldus-live-mobile://purchase-complete")) {
+        if (String.valueOf(url).equals(Constants.PURCHASE_SUCCESS_URL+"?status=success")) {
             showPurchaseSuccess();
+            return false;
+        } else if (String.valueOf(url).equals(Constants.PURCHASE_SUCCESS_URL+"?status=error")) {
+            showPurchaseError();
             return false;
         }
         view.loadUrl(String.valueOf(url));
@@ -53,5 +58,12 @@ public class CustomWebViewClient extends WebViewClient {
         puchaseCompleteActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         puchaseCompleteActivity.putExtra("pack", pack);
         context.startActivity(puchaseCompleteActivity);
+    }
+
+    public void showPurchaseError() {
+        Intent purchaseErrorActivity = new Intent(context, PurchaseErrorActivity.class);
+        purchaseErrorActivity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        purchaseErrorActivity.putExtra("pack", pack);
+        context.startActivity(purchaseErrorActivity);
     }
 }

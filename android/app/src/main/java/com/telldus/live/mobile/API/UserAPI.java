@@ -82,7 +82,7 @@ public class UserAPI {
     }
 
     public void createTransaction(String product, String quantity, String returnURL, final Context context, final OnAPITaskComplete callBack) {
-        String params = "/user/createTransaction?product="+product+"&quantity="+quantity+"&returnURL="+returnURL;
+        String params = "/user/createTransaction?product="+product+"&quantity="+quantity+"&returnUrl="+returnURL;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
             @Override

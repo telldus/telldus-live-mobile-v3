@@ -36,6 +36,7 @@ import com.google.android.flexbox.FlexboxLayout;
 
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.Constants;
 
 import org.json.JSONObject;
 
@@ -101,7 +102,7 @@ public class BasicUserActivity extends Activity {
                 userAPI.createTransaction(
                     "proyear",
                     "1",
-                    "app://com.telldus.mobile/purchase/success",
+                    Constants.PURCHASE_SUCCESS_URL,
                     getApplicationContext(),
                     new OnAPITaskComplete() {
                         @Override
@@ -152,7 +153,7 @@ public class BasicUserActivity extends Activity {
                 userAPI.createTransaction(
                     "prohalfyear",
                     "1",
-                    "app://com.telldus.mobile/purchase/success",
+                    Constants.PURCHASE_SUCCESS_URL,
                     getApplicationContext(),
                     new OnAPITaskComplete() {
                         @Override
@@ -191,7 +192,7 @@ public class BasicUserActivity extends Activity {
                 userAPI.createTransaction(
                     "promonth",
                     "1",
-                    "app://com.telldus.mobile/purchase/success",
+                    Constants.PURCHASE_SUCCESS_URL,
                     getApplicationContext(),
                     new OnAPITaskComplete() {
                         @Override
