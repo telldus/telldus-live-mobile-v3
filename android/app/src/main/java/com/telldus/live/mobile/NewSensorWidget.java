@@ -53,6 +53,8 @@ import org.json.JSONException;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 public class NewSensorWidget extends AppWidgetProvider {
     private static final String ACTION_SENSOR_UPDATE = "ACTION_SENSOR_UPDATE";
@@ -351,6 +353,12 @@ public class NewSensorWidget extends AppWidgetProvider {
 
     public static String formatValue(CharSequence sensorValue) {
         String value = String.valueOf(sensorValue);
+
+        List<String> list = Arrays.asList(SensorsUtilities.WIND_DIR);
+        if (list.contains(value)) { // Check for wind direction values
+            return value;
+        }
+
         Double valueAsDouble = Double.valueOf(value);
         DecimalFormat df = new DecimalFormat("#.#");
         Boolean hasDecimal = (valueAsDouble - valueAsDouble.intValue()) != 0;

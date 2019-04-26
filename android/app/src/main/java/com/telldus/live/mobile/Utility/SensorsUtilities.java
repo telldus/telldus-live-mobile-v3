@@ -38,6 +38,27 @@ import org.json.JSONArray;
 import com.telldus.live.mobile.R;
 
 public class SensorsUtilities {
+
+    public static String[] WIND_DIR = new String[]{
+        "N",
+        "NNE",
+        "NE",
+        "ENE",
+        "E",
+        "ESE",
+        "SE",
+        "SSE",
+        "S",
+        "SSW",
+        "SW",
+        "WSW",
+        "W",
+        "WNW",
+        "NW",
+        "NNW",
+        "N",
+    };
+
     public String getConstants(Context context) {
         String json = null;
         try {
@@ -266,29 +287,9 @@ public class SensorsUtilities {
     }
 
     public String getWindDirection(String value) {
-        String[] list = new String[]{
-            "N",
-            "NNE",
-            "NE",
-            "ENE",
-            "E",
-            "ESE",
-            "SE",
-            "SSE",
-            "S",
-            "SSW",
-            "SW",
-            "WSW",
-            "W",
-            "WNW",
-            "NW",
-            "NNW",
-            "N",
-        };
-
         Double index = Math.floor(Float.parseFloat(value) / 22.5);
-        if (index.intValue() <= list.length - 1) {
-            return list[index.intValue()];
+        if (index.intValue() <= WIND_DIR.length - 1) {
+            return WIND_DIR[index.intValue()];
         }
         return "";
     }
