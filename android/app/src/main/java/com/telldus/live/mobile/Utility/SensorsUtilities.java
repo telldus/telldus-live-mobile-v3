@@ -160,26 +160,32 @@ public class SensorsUtilities {
         info.put("unit", unit);
 
         if (name.equals("humidity")) {
-            info.put("label", "Humidity");
+            info.put("label", context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelHumidity));
             info.put("icon", "humidity");
             return info;
         }
         if (name.equals("temp")) {
-            info.put("label", "Temperature");
+            info.put("label", context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelTemperature));
             info.put("icon", "temperature");
             return info;
         }
         if (name.equals("rrate") || name.equals("rtot")) {
-            String label = name.equals("rrate") ? "Rain Rate" : "Rain Total";
+            String label = name.equals("rrate") ?
+            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelRainRate)
+            :
+            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelRainTotal);
             info.put("label", label);
             info.put("icon", "rain");
             return info;
         }
         if (name.equals("wgust") || name.equals("wavg") || name.equals("wdir")) {
-            String label = name.equals("wgust") ? "Wind Gust" : "Wind Average";
+            String label = name.equals("wgust") ?
+            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindGust)
+            :
+            context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindAverage);
             info.put("icon", "wind");
             if (name.equals("wdir")) {
-                label = "Wind Direction";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWindDirection);
                 String direction = getWindDirection(value);
                 info.put("value", direction);
             }
@@ -187,55 +193,57 @@ public class SensorsUtilities {
             return info;
         }
         if (name.equals("uv")) {
-            String label = "UV";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelUVIndex);
             info.put("label", label);
             info.put("icon", "uv");
             return info;
         }
         if (name.equals("watt")) {
-            String label = "Energy";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_energy);
             if (scale.equals("0")) {
-                label = "Accumulated Power";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_Accumulated)
+                +" "+
+                context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWatt);
             }
             if (scale.equals("2")) {
-                label = "Watt";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWatt);
             }
             if (scale.equals("3")) {
-                label = "Pulse";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_pulse);
             }
             if (scale.equals("4")) {
-                label = "Voltage";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_voltage);
             }
             if (scale.equals("5")) {
-                label = "Current";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_current);
             }
             if (scale.equals("6")) {
-                label = "Power Factor";
+                label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_powerFactor);
             }
             info.put("label", label);
             info.put("icon", "watt");
             return info;
         }
         if (name.equals("lum")) {
-            String label = "Luminance";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelLuminance);
             info.put("label", label);
             info.put("icon", "luminance");
             return info;
         }
         if (name.equals("dewp")) {
-            String label = "Dew Point";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelDewPoint);
             info.put("label", label);
             info.put("icon", "humidity");
             return info;
         }
         if (name .equals("barpress")) {
-            String label = "Barometric Pressure";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelBarometricPressure);
             info.put("label", label);
             info.put("icon", "gauge");
             return info;
         }
         if (name.equals("genmeter")) {
-            String label = "Generic Meter";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelGenericMeter);
             info.put("label", label);
             info.put("icon", "sensor");
             return info;
@@ -247,14 +255,14 @@ public class SensorsUtilities {
             return info;
         }
         if (name.equals("volume")) {
-            String label = "Volume";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelVolume);
             String icon = scale.equals("0") ? "volumeliquid" : "volume3d";
             info.put("label", label);
             info.put("icon", icon);
             return info;
         }
         if (name.equals("loudness")) {
-            String label = "Loudness";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelLoudness);
             info.put("label", label);
             info.put("icon", "speaker");
             return info;
@@ -272,13 +280,13 @@ public class SensorsUtilities {
             return info;
         }
         if (name.equals("weight")) {
-            String label = "Weight";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelWeight);
             info.put("label", label);
             info.put("icon", "weight");
             return info;
         }
         if (name.equals("moisture")) {
-            String label = "Moisture";
+            String label = context.getResources().getString(R.string.reserved_widget_android_accessibilityLabel_sensors_labelMoisture);
             info.put("label", label);
             info.put("icon", "humidity");
             return info;
