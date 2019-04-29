@@ -44,4 +44,17 @@ declare module 'react-native-google-signin' {
 declare module 'react-native-color-wheel' {
 	declare module.exports: any;
 }
+
+declare module 'react-native-vector-icons/FontAwesome' {
+	declare module.exports: any;
+}
+declare module 'react-native-vector-icons/MaterialIcons' {
+	declare module.exports: any;
+}
+declare module 'react-native-vector-icons/MaterialCommunityIcons' {
+	declare module.exports: any;
+}
+declare module 'react-navigation-tabs' {
+	declare module.exports: any;
+}
 declare var console: any;
