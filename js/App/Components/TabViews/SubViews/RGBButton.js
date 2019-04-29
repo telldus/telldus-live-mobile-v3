@@ -200,12 +200,12 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onPressDimButton() {
-		const { openRGBModel, device, onPressDeviceAction } = this.props;
+		const { openRGBModel, onPressDeviceAction } = this.props;
 		if (onPressDeviceAction) {
 			onPressDeviceAction();
 		}
 		if (openRGBModel && typeof openRGBModel === 'function') {
-			openRGBModel(device);
+			openRGBModel();
 		}
 	}
 
