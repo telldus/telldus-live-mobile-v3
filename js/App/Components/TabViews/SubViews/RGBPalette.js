@@ -23,42 +23,38 @@
 
 import React from 'react';
 
-import { View, IconTelldus } from '../../../../BaseComponents';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
-// Relative import
+import { View, IconTelldus } from '../../../../BaseComponents';
+
 import Theme from '../../../Theme';
 
 type Props = {
-	openRGBModel: () => void,
-	device: Object,
+	displayedValue: string,
 	isGatewayActive: boolean,
+	rgb: string,
 };
 
 class RGBPalette extends View {
 	props: Props;
 
-	onPalette: () => void;
-
 	constructor(props: Props) {
 		super(props);
 	}
 
-	onPalette = () => {
-		const { openRGBModel } = this.props;
-		openRGBModel();
-	}
-
 	render(): Object {
-		let { device, isGatewayActive } = this.props;
-		let { value } = device;
-		let iconColor = !isGatewayActive ? Theme.Core.brandRGB : '#FFF';
+		const { displayedValue, rgb } = this.props;
+
+		const mainColor = `#${parseInt(rgb, 10).toString(16)}`;
+		const iconColor = '#FFF';
 
 		return (
-			<TouchableOpacity onPress={this.onPalette} style={[styles.palette]}>
+			<View style={[styles.palette, {
+				backgroundColor: mainColor,
+			}]}>
 				<IconTelldus icon="palette" size={26} color={iconColor} />
-				<Text style={[styles.lbl, { color: iconColor }]}>{`${value}%`}</Text>
-			</TouchableOpacity>
+				<Text style={[styles.lbl, { color: iconColor }]}>{`${displayedValue}%`}</Text>
+			</View>
 		);
 	}
 }
@@ -70,7 +66,6 @@ const styles = StyleSheet.create({
 		width: Theme.Core.buttonWidth,
 		height: Theme.Core.rowHeight,
 		borderLeftWidth: 1,
-		backgroundColor: Theme.Core.brandRGB,
 		borderLeftColor: '#ddd',
 	},
 	lbl: {

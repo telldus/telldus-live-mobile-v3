@@ -390,7 +390,7 @@ class DeviceRow extends View<Props, State> {
 			onPressDeviceAction,
 			screenReaderEnabled,
 		} = this.props;
-		const { isInState, name, deviceType, supportedMethods = {} } = device;
+		const { isInState, name, deviceType, supportedMethods = {}, stateValues } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(appLayout.width) >= 750;
@@ -419,17 +419,28 @@ class DeviceRow extends View<Props, State> {
 		};
 		const icon = getDeviceIcons(deviceType);
 
+		const { RGB: rgbValue } = stateValues;
+		let colorDeviceIconBack = styles.iconContainerStyle.backgroundColor;
+		if (typeof rgbValue !== 'undefined') {
+			colorDeviceIconBack = `#${parseInt(rgbValue, 10).toString(16)}`;
+		}
+
 		// NOTE: the prop "key" serves two purpose.
 		// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
 		// 2. The same prop is used/accessed inside "TabViews/SubViews/Device/MultiActionModal.js" to override the style
 		// in the case of device groups.
-		if ((TURNOFF || TURNON) && RGB && DIM) {
+		if (RGB) {
 			button.unshift(
 				<RGBButton
 					{...sharedProps}
 					openRGBModel={this.openRGBModel}
-					style={styles.toggle}
+					setScrollEnabled={this.props.setScrollEnabled}
+					showSlider={!BELL && !UP && !DOWN && !STOP}
+					onSlideActive={this.onSlideActive}
+					onSlideComplete={this.onSlideComplete}
 					key={8}
+					offButtonColor={isInState === 'TURNOFF' ? colorDeviceIconBack : undefined}
+					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 				/>
 			);
 		}
@@ -524,7 +535,12 @@ class DeviceRow extends View<Props, State> {
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
-								{showDeviceIcon && <BlockIcon icon={icon} style={styles.deviceIcon} containerStyle={styles.iconContainerStyle}/>}
+								{showDeviceIcon && <BlockIcon
+									icon={icon}
+									style={styles.deviceIcon}
+									containerStyle={[styles.iconContainerStyle, {
+										backgroundColor: colorDeviceIconBack,
+									}]}/>}
 								{nameInfo}
 							</TouchableOpacity>
 							<Animated.View style={[styles.buttonsCover, {

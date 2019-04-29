@@ -43,6 +43,7 @@ type Props = {
 	onPress: () => void,
 	intl: Object,
 	local: boolean,
+	onButtonColor?: string,
 };
 
 type State = {
@@ -76,7 +77,7 @@ class DimmerOnButton extends View {
 			return true;
 		}
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local',
+			'isInState', 'methodRequested', 'name', 'isGatewayActive', 'enabled', 'local', 'onButtonColor',
 		]);
 		if (propsChange) {
 			return true;
@@ -93,10 +94,12 @@ class DimmerOnButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, style, methodRequested, name, isGatewayActive, iconStyle, local } = this.props;
+		let { isInState, style, methodRequested, name, isGatewayActive, iconStyle, local, onButtonColor } = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
-			(isInState === 'TURNON' ? styles.offline : styles.disabled) : (isInState === 'TURNON' ? styles.enabled : styles.disabled);
+			(isInState === 'TURNON' ? styles.offline : styles.disabled) :
+			onButtonColor ? { backgroundColor: onButtonColor } :
+				(isInState === 'TURNON' ? styles.enabled : styles.disabled);
 		let iconColor = !isGatewayActive ?
 			(isInState === 'TURNON' ? '#fff' : '#a2a2a2') : (isInState === 'TURNON' ? '#fff' : Theme.Core.brandSecondary);
 		let dotColor = isInState === methodRequested ? '#fff' : local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
