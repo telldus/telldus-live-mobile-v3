@@ -66,7 +66,7 @@ type DefaultProps = {
 
 class AddLocationContainer extends View<null, Props, State> {
 
-	handleBackPress: () => void;
+	handleBackPress: () => boolean;
 
 	static propTypes = {
 		navigation: PropTypes.object.isRequired,

@@ -43,7 +43,7 @@ class WelcomeScreen extends View {
 
 	props: Props;
 
-	onPressOK: (string) => void;
+	onPressOK: () => void;
 
 	constructor(props: Props) {
 		super(props);

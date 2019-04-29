@@ -60,10 +60,10 @@ class SensorsTab extends View {
 	props: Props;
 	state: State;
 
-	renderSectionHeader: (sectionData: Object, sectionId: number) => Object;
+	renderSectionHeader: (sectionData: Object) => Object | null;
 	renderRow: (Object) => Object;
 	onRefresh: (Object) => void;
-	keyExtractor: (Object) => number;
+	keyExtractor: (Object) => string;
 	toggleHiddenList: () => void;
 	setIgnoreSensor: (Object) => void;
 	closeVisibleRows: (string) => void;

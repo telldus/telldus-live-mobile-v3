@@ -79,7 +79,7 @@ deviceProdInfo: Object;
 gatewayId: number;
 
 handleErrorEnterLearnMode: () => void;
-runInclusionTimer: (number) => void;
+runInclusionTimer: (?number) => void;
 constructor(props: Props) {
 	super(props);
 

@@ -79,7 +79,7 @@ onPressOkay: () => void;
 handleErrorEnterLearnMode: () => void;
 startRemoveDevice: () => void;
 onPressTryAgain: () => void;
-runExclusionTimer: (number) => void;
+runExclusionTimer: (?number) => void;
 constructor(props: Props) {
 	super(props);
 

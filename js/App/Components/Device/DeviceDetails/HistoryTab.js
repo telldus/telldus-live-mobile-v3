@@ -56,8 +56,8 @@ class HistoryTab extends View {
 	state: State;
 
 	refreshHistoryData: () => void;
-	renderSectionHeader: (Object, string) => void;
-	renderRow: (Object, string) => void;
+	renderSectionHeader: (Object) => Object;
+	renderRow: (Object) => Object;
 	closeHistoryDetailsModal: () => void;
 	_onRefresh: () => void;
 	getHistoryDataFromAPI: (Object, number | null) => void;

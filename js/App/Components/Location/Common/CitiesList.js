@@ -44,7 +44,7 @@ class CitiesList extends View {
 
 	renderRow: (string) => void;
 	onCityChoose: () => void;
-	keyExtractor: (Object) => number;
+	keyExtractor: (string) => string;
 
 	constructor(props: Props) {
 		super(props);

@@ -81,7 +81,7 @@ class SettingsTab extends View {
 	props: Props;
 	state: State;
 
-	onValueChange: number => void;
+	onValueChange: (boolean) => void;
 	setIgnoreDevice: (boolean) => void;
 	onPressExcludeDevice: () => void;
 	goBack: () => void;

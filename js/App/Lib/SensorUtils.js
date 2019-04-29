@@ -76,7 +76,7 @@ function checkIfLarge(value: string): boolean {
 /**
  *
  * @param {string} name : name/type of sensor received from API/socket(say, 'temp')
- * @param {number} scale : the integer value received from API/socket
+ * @param {string} scale : the string value received from API/socket
  * @param {number} value : the sensor value[Used only to prepare the 'sensorInfo'/accessibility label] pass value 0 if 'sensorInfo' is not required, but others
  * @param {boolean} isLarge : if value is large in length or not, formatting option is based on this property.
  * @param {Function} formatMessage: method from 'intl'
@@ -84,7 +84,7 @@ function checkIfLarge(value: string): boolean {
  * 'formatMessage' has a dummy method as default value, so it can be omitted if label is not required
  * and other properties can be accessed.
  */
-function getSensorInfo(name: string, scale: number, value: number = 0, isLarge: boolean = false, formatMessage?: Function = (translatable: Object): null => null): Object {
+function getSensorInfo(name: string, scale: string, value: number = 0, isLarge: boolean = false, formatMessage?: Function = (translatable: Object): null => null): Object {
 	let sensorTypes = getSensorTypes();
 	let sensorType = sensorTypes[name];
 	let sensorUnits = getSensorUnits(sensorType);

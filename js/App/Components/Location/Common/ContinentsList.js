@@ -41,7 +41,7 @@ type Props = {
 class ContinentsList extends View {
 	props: Props;
 
-	keyExtractor: (Object) => number;
+	keyExtractor: (string) => string;
 	renderRow: (string) => void;
 	onContinentChoose: (string) => void;
 

@@ -53,7 +53,7 @@ type Props = {
 class UpButton extends View {
 	props: Props;
 
-	onUp: (number) => void;
+	onUp: () => void;
 
 	constructor(props: Props) {
 		super(props);

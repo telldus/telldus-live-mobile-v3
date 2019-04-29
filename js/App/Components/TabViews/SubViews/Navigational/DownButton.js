@@ -53,7 +53,7 @@ type Props = {
 class DownButton extends View {
 	props: Props;
 
-	onDown: (number) => void;
+	onDown: () => void;
 
 	constructor(props: Props) {
 		super(props);

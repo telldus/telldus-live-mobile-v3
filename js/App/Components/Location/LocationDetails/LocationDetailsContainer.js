@@ -62,7 +62,7 @@ type State = {
 
 class LocationDetailsContainer extends View<null, Props, State> {
 
-	handleBackPress: () => void;
+	handleBackPress: () => boolean;
 	closeModal: () => void;
 
 	state = {

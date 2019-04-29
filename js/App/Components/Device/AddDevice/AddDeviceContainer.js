@@ -68,7 +68,7 @@ type State = {
 
 class AddDeviceContainer extends View<Props, State> {
 
-	handleBackPress: () => void;
+	handleBackPress: () => boolean;
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 

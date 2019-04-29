@@ -54,7 +54,7 @@ type Props = {
 class StopButton extends View {
 	props: Props;
 
-	onStop: (number) => void;
+	onStop: () => void;
 
 	constructor(props: Props) {
 		super(props);

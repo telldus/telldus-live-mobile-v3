@@ -60,7 +60,7 @@ class DeviceName extends View<Props, State> {
 props: Props;
 state: State;
 
-submitName: (number) => void;
+submitName: () => void;
 onChangeName: (string, number) => void;
 setRef: (ref: any, id: number) => void;
 

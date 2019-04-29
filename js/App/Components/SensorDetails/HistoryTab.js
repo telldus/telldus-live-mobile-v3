@@ -107,7 +107,7 @@ class HistoryTab extends View {
 	onValueChangeSmoothing: (string, number, Array<Object>) => void;
 	onValueChangeGraphView: (string, number, Array<Object>) => void;
 
-	refreshHistoryDataAfterLiveUpdate: () => void;
+	refreshHistoryDataAfterLiveUpdate: () => Promise<any>;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (

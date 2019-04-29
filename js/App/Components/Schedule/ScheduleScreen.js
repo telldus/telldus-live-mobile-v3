@@ -70,7 +70,7 @@ export interface ScheduleProps {
 
 class ScheduleScreen extends View<null, Props, State> {
 
-	handleBackPress: () => void;
+	handleBackPress: () => boolean;
 
 	state = {
 		h1: '',

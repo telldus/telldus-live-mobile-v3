@@ -69,7 +69,7 @@ onSubmitEditing: () => void;
 onChangeText: (string) => void;
 onPressDeleteToken: () => void;
 onSubmitDeviceName: (string) => void;
-onConfirmDeleteToken: (string) => void;
+onConfirmDeleteToken: () => void;
 
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { editNameAcive, isPushSubmitLoading, name } = state;

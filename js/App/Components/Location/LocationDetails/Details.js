@@ -110,7 +110,7 @@ class Details extends View<Props, State> {
 		},
 	});
 
-	handleBackPress: () => void;
+	handleBackPress: () => boolean;
 
 	constructor(props: Props) {
 		super(props);

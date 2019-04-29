@@ -57,7 +57,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	onLayout: (number, number, string) => void;
 	_panResponder: Object;
 	distMoved: number;
-	onToggleVisibilty: (boolean) => void;
+	onToggleVisibilty: () => void;
 
 	static propTypes = {
 		days: PropTypes.arrayOf(PropTypes.object).isRequired,

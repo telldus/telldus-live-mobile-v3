@@ -89,7 +89,7 @@ class SettingsTab extends View {
 	props: Props;
 	state: State;
 
-	onValueChange: number => void;
+	onValueChange: boolean => void;
 	setIgnoreSensor: (boolean) => void;
 	setKeepHistory: (boolean) => void;
 
@@ -104,7 +104,7 @@ class SettingsTab extends View {
 	clearHistoryCache: () => void;
 	onConfirmClearHistoryCache: () => void;
 
-	handleBackPress: () => void;
+	handleBackPress: () => boolean;
 
 	static navigationOptions = ({ navigation }: Object): Object => ({
 		tabBarLabel: ({ tintColor }: Object): Object => (

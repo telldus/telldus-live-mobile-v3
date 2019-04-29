@@ -63,7 +63,7 @@ class LoginForm extends View {
 
 	onChangeUsername: (username: string) => void;
 	onChangePassword: (password: string) => void;
-	onFormSubmit: (username: string, password: string) => void;
+	onFormSubmit: () => void;
 	postSubmit: () => void;
 	signIn: () => any;
 	signOutGoogle: () => any;

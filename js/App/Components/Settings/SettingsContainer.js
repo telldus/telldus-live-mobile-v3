@@ -80,9 +80,9 @@ state: State = {
 	isDialogueOpen: false,
 };
 
-handleBackPress: () => void;
+handleBackPress: () => boolean;
 onChildDidMount: (string, string, ?string) => void;
-submitPushToken: (string) => void;
+submitPushToken: () => void;
 onSubmitDeviceName: (string, string) => Promise<any>;
 constructor(props: Props) {
 	super(props);
