@@ -37,7 +37,7 @@ describe('<GatewaysTab />', () => {
 	});
 
 	it(' render the connected(GatewaysTab) component', () => {
-		const Tab = wrapper.props().children.type.displayName;
+		const Tab = wrapper.props().children.props.children.type.displayName;
 		expect(Tab).toEqual('Connect(GatewaysTab)');
 	});
 

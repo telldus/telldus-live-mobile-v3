@@ -30,7 +30,7 @@ describe('<MainSettingsScreen />', () => {
 
 	it('should shallow MainSettingsScreen', () => {
 		expect(wrapper.find(MainSettingsScreen).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(MainSettingsScreen)');
 	});
 

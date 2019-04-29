@@ -25,7 +25,7 @@ describe('<SettingsTab />', () => {
 
 	it('should shallow SettingsTab', () => {
 		expect(wrapper.find(SettingsTab).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(SettingsTab)');
 	});
 
@@ -70,7 +70,7 @@ describe('LearnButton', () => {
 
 	it('should shallow LearnButton', () => {
 		expect(wrapper.find(LearnButton).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(LearnButton)');
 	});
 

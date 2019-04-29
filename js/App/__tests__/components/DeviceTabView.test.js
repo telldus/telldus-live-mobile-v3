@@ -21,7 +21,7 @@ describe('<DevicesTab />', () => {
 	});
 
 	it(' render the connected(DevicesTab) component', () => {
-		const Tab = wrapper.props().children.type.displayName;
+		const Tab = wrapper.props().children.props.children.type.displayName;
 		expect(Tab).toEqual('Connect(DevicesTab)');
 	});
 });

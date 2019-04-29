@@ -18,7 +18,7 @@ describe('<ForgotPasswordScreen />', () => {
 		);
 		expect(wrapper).toBeTruthy();
 		expect(wrapper.find(ForgotPasswordScreen).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(InjectIntl(ForgotPasswordScreen))');
 	});
 

@@ -22,7 +22,7 @@ describe('<OverviewTab />', () => {
 
 	it('should shallow OverviewTab', () => {
 		expect(wrapper.find(OverviewTab).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(OverviewTab)');
 	});
 

@@ -36,7 +36,7 @@ describe('<SchedulerTab />', () => {
 	});
 
 	it(' render the connected(SchedulerTab) component', () => {
-		const Tab = wrapper.props().children.type.displayName;
+		const Tab = wrapper.props().children.props.children.type.displayName;
 		expect(Tab).toEqual('Connect(SchedulerTab)');
 	});
 

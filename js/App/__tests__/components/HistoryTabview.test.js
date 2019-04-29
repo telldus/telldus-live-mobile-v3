@@ -26,7 +26,7 @@ describe('<HistoryTab />', () => {
 
 	it('should shallow HistoryTab', () => {
 		expect(wrapper.find(HistoryTab).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(HistoryTab)');
 	});
 
@@ -61,7 +61,7 @@ describe('DeviceHistoryDetails', () => {
 
 	it('should shallow DeviceHistoryDetails', () => {
 		expect(wrapper.find(DeviceHistoryDetails).length).toBe(1);
-		const screen = wrapper.props().children.type.displayName;
+		const screen = wrapper.props().children.props.children.type.displayName;
 		expect(screen).toEqual('Connect(DeviceHistoryDetails)');
 	});
 

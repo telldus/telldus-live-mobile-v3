@@ -23,7 +23,7 @@ describe('<SensorsTab />', () => {
 
 	it(' render the connected(SensorsTab) component', () => {
 		expect(wrapper.find(SensorsTab).length).toEqual(1);
-		const Tab = wrapper.props().children.type.displayName;
+		const Tab = wrapper.props().children.props.children.type.displayName;
 		expect(Tab).toEqual('Connect(SensorsTab)');
 	});
 });
