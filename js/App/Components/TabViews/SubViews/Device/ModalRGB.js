@@ -26,6 +26,7 @@ import {
 	PanResponder,
 	TouchableWithoutFeedback,
 	ImageBackground,
+	ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { getPixelRGBA } from 'react-native-get-pixel';
@@ -58,6 +59,7 @@ type Props = {
 type State = {
 	sliderValue: number,
 	PixelColor: string,
+	scrollEnabled: boolean,
 };
 
 class ModalRGB extends View<Props, State> {
@@ -67,6 +69,7 @@ class ModalRGB extends View<Props, State> {
 	state = {
 		sliderValue: 10,
 		pixelColor: [255, 73, 51],
+		scrollEnabled: true,
 	};
 
 	animations = {
@@ -86,7 +89,10 @@ class ModalRGB extends View<Props, State> {
 			onPanResponderMove: (e: Object, gestureState: Object) => {
 				getPixelRGBA('rgbpicker', e.nativeEvent.pageX, e.nativeEvent.pageY)
 					.then((color: Array<number>) => {
-						this.setState({ pixelColor: color });
+						this.setState({
+							pixelColor: color,
+							scrollEnabled: false,
+						});
 				 });
 				 this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
 			},
@@ -100,6 +106,9 @@ class ModalRGB extends View<Props, State> {
 		this.animations.handlePosition.flattenOffset();
 		const { pixelColor } = this.state;
 		const { device } = this.props;
+		this.setState({
+			scrollEnabled: true,
+		});
 		this.props.deviceSetStateRGB(device.id, pixelColor[0], pixelColor[1], pixelColor[2]);
 	}
 
@@ -190,6 +199,7 @@ class ModalRGB extends View<Props, State> {
 
 	render(): Object {
 		const { isModelRGB } = this.props;
+		const { scrollEnabled } = this.state;
 		return (
 			<Modal
 				animationType="slide"
@@ -197,12 +207,17 @@ class ModalRGB extends View<Props, State> {
 				supportedOrientations={['portrait', 'landscape']}
 				onRequestClose={this.handleBackButtonClick}>
 				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
-					<NavigationHeader leftIcon="close" isFromModal={true} onClose={this.handleBackButtonClick} />
-					{this.renderBanner()}
-					<View style={{ height: 300 }}>
-						{this.renderColorPicker()}
-					</View>
-					{this.renderSlider()}
+					<ScrollView
+						scrollEnabled={scrollEnabled}
+						style={{flex: 1}}
+						contentContainerStyle={{flexGrow: 1}}>
+						<NavigationHeader leftIcon="close" isFromModal={true} onClose={this.handleBackButtonClick} />
+						{this.renderBanner()}
+						<View style={{ height: 300 }}>
+							{this.renderColorPicker()}
+						</View>
+						{this.renderSlider()}
+					</ScrollView>
 				</SafeAreaView>
 			</Modal>
 		);
