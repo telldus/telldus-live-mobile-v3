@@ -20,24 +20,20 @@
 // @flow
 import React from 'react';
 import {
-	BackHandler,
-	Animated,
-	PanResponder,
-	TouchableWithoutFeedback,
-	ImageBackground,
 	ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { getPixelRGBA } from 'react-native-get-pixel';
-
-import { deviceSetStateRGB } from '../../Actions/Devices';
-
-import SliderDetails from '../Device/DeviceDetails/SubViews/SliderDetails';
+import { ColorWheel } from 'react-native-color-wheel';
+const colorsys = require('colorsys');
 
 import {
 	NavigationHeaderPoster,
 	View,
 } from '../../../BaseComponents';
+import SliderDetails from '../Device/DeviceDetails/SubViews/SliderDetails';
+
+import { deviceSetStateRGB } from '../../Actions/Devices';
+import { getMainColorRGB } from '../../Lib/rgbUtils';
 
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
@@ -55,7 +51,6 @@ type Props = {
 
 type State = {
 	sliderValue: number,
-	PixelColor: string,
 	scrollEnabled: boolean,
 	x1: number,
 	x2: number,
@@ -69,131 +64,46 @@ class RGBControlScreen extends View<Props, State> {
 
 	state = {
 		sliderValue: 10,
-		pixelColor: [255, 73, 51],
 		scrollEnabled: true,
 		x1: 0,
 		x2: 0,
 		y1: 0,
 		y2: 0,
 	};
-
-	onLayout: (Object) => void;
+	onColorChangeComplete: string => void;
 
 	constructor(props: Props) {
 		super(props);
-		this.onLayout = this.onLayout.bind(this);
-	}
-
-	animations = {
-		handlePosition: new Animated.ValueXY({ x: 0, y: 0 }),
-	}
-
-	panResponders = {
-		handle: PanResponder.create({
-			onMoveShouldSetResponderCapture: (): boolean => true,
-			onStartShouldSetPanResponder: (e: Object, gestureState: Object): boolean => true,
-			onMoveShouldSetPanResponderCapture: (): boolean => true,
-			onResponderTerminationRequest: (): boolean => false,
-			onPanResponderGrant: (e: Object, gestureState: Object) => {
-				this.setState({
-					scrollEnabled: false,
-				});
-				this.animations.handlePosition.setOffset({ x: this.lastHandlePosition.x, y: this.lastHandlePosition.y });
-				this.animations.handlePosition.setValue({ x: 0, y: 0 });
-			},
-			onPanResponderMove: (e: Object, gestureState: Object) => {
-				const { x1, x2, y1, y2 } = this.state;
-				const { pageX, pageY } = e.nativeEvent;
-				const { dx, dy } = gestureState;
-				if (pageX > x1 && pageX < x2 && pageY > y1 && pageY < y2) {
-					getPixelRGBA('rgbpicker', pageX, pageY)
-						.then((color: Array<number>) => {
-							this.animations.handlePosition.setValue({
-								x: dx,
-								y: dy,
-							});
-							this.setState({
-								pixelColor: color,
-								scrollEnabled: false,
-							});
-						}).catch(() => {
-						});
-				}
-			},
-			onPanResponderRelease: () => {
-				this.onRelease();
-			},
-		}),
-	}
-
-	onRelease = () => {
-		this.animations.handlePosition.flattenOffset();
-		const { pixelColor } = this.state;
-		const { device } = this.props;
-		this.setState({
-			scrollEnabled: true,
-		});
-		this.props.deviceSetStateRGB(device.id, pixelColor[0], pixelColor[1], pixelColor[2]);
-	}
-
-	lastHandlePosition = {
-		x: 0,
-		y: 0,
-	}
-
-	componentWillMount() {
-		this.animations.handlePosition.x.addListener(({ value }: { value: number }) => {
-			this.lastHandlePosition.x = value;
-		});
-		this.animations.handlePosition.y.addListener(({ value }: { value: number }) => {
-			this.lastHandlePosition.y = value;
-		});
-		BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+		this.onColorChangeComplete = this.onColorChangeComplete.bind(this);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return true;
+		return nextProps.currentScreen === 'RGBControl';
 	}
 
-	componentWillUnmount() {
-		BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-	}
-
-	handleBackButtonClick = () => {
-		const { openModal } = this.props;
-		openModal();
-	}
-
-	onLayout(ev: Object) {
-		const {nativeEvent: { layout: {x, y, width, height}}} = ev;
-		this.setState({
-			x1: x,
-			x2: x + width,
-			y1: y,
-			y2: y + height,
-		});
+	onColorChangeComplete(color: string) {
+		if (!color) {
+			return;
+		}
+		const { device } = this.props;
+		const rgb = colorsys.hsvToRgb(color);
+		const { r, g, b } = rgb;
+		this.props.deviceSetStateRGB(device.id, r, g, b);
 	}
 
 	renderColorPicker(styles: Object): Object {
-		const { pixelColor } = this.state;
+		const { device } = this.props;
+		const { RGB: rgbValue } = device.stateValues;
+		let mainColorRGB = getMainColorRGB(rgbValue);
+
 		return (
-			<Animated.View style={[styles.shadowCard]} onLayout={this.onLayout}>
-				<TouchableWithoutFeedback>
-					<ImageBackground
-						imageStyle={{ borderRadius: 2 }}
-						style={{ height: '100%', width: '100%' }}
-						source={require('../TabViews/img/rgbpicker.png')}>
-						<Animated.View
-							{...this.panResponders.handle.panHandlers}
-							// $FlowFixMe
-							style={[styles.handle, {
-								transform: this.animations.handlePosition.getTranslateTransform(),
-								backgroundColor: `rgb(${pixelColor})`,
-							}]}
-						/>
-					</ImageBackground>
-				</TouchableWithoutFeedback>
-			</Animated.View>
+			<ColorWheel
+				initialColor={mainColorRGB}
+				onColorChangeComplete={this.onColorChangeComplete}
+				style={styles.colorWheel}
+				thumbStyle={{ height: 30, width: 30, borderRadius: 30}}
+				thumbSize={15}
+			/>
 		);
 	}
 
@@ -237,7 +147,6 @@ class RGBControlScreen extends View<Props, State> {
 					h2={deviceName}
 					align={'center'}
 					leftIcon="close"
-					onClose={this.handleBackButtonClick}
 					intl={intl}
 					appLayout={appLayout}
 					navigation={navigation}/>
@@ -258,7 +167,7 @@ class RGBControlScreen extends View<Props, State> {
 		const padding = deviceWidth * paddingFactor;
 
 		return {
-			shadowCard: {
+			colorWheel: {
 				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
