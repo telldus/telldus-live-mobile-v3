@@ -35,7 +35,6 @@ import BellButton from './BellButton';
 import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
 import HiddenRow from './Device/HiddenRow';
-import ModalRGB from './Device/ModalRGB';
 import ShowMoreButton from './Device/ShowMoreButton';
 import MultiActionModal from './Device/MultiActionModal';
 
@@ -83,6 +82,7 @@ type Props = {
 	onNewlyAddedDidMount: (number, string) => void,
 	onPressDeviceAction: () => void,
 	screenReaderEnabled: boolean,
+	openRGBModel: (number) => void,
 };
 
 type State = {
@@ -128,7 +128,6 @@ class DeviceRow extends View<Props, State> {
 		coverMaxWidth: 0,
 		coverOccupiedWidth: 0,
 		buttonsWidth: undefined,
-		isModelRGB: false,
 		sliderValue: 10,
 	};
 
@@ -375,13 +374,13 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	openRGBModel = () => {
-		const { isModelRGB } = this.state;
-		this.setState({ isModelRGB: !isModelRGB });
+		const { openRGBModel, device } = this.props;
+		openRGBModel(device.id);
 	}
 
 	render(): Object {
 		let button = [];
-		let { isOpen, showMoreActions, isModelRGB } = this.state;
+		let { isOpen, showMoreActions } = this.state;
 		const {
 			device,
 			intl,
@@ -580,9 +579,6 @@ class DeviceRow extends View<Props, State> {
 							closeModal={this.closeMoreActions}
 						/>
 					)}
-				{!!RGB &&
-					<ModalRGB isModelRGB={isModelRGB} openModal={this.openRGBModel} deviceName={deviceName} {...sharedProps} />
-				}
 			</View>
 		);
 	}

@@ -20,7 +20,6 @@
 // @flow
 import React from 'react';
 import {
-	Modal,
 	BackHandler,
 	Animated,
 	PanResponder,
@@ -31,29 +30,27 @@ import {
 import { connect } from 'react-redux';
 import { getPixelRGBA } from 'react-native-get-pixel';
 
-import { deviceSetStateRGB } from '../../../../Actions/Devices';
+import { deviceSetStateRGB } from '../../Actions/Devices';
 
-import SliderDetails from '../../../Device/DeviceDetails/SubViews/SliderDetails';
+import SliderDetails from '../Device/DeviceDetails/SubViews/SliderDetails';
 
 import {
-	NavigationHeader,
-	IconTelldus,
-	Poster,
+	NavigationHeaderPoster,
 	View,
-	SafeAreaView,
-	Text,
-} from '../../../../../BaseComponents';
-import Theme from '../../../../Theme';
+} from '../../../BaseComponents';
+
+import i18n from '../../Translations/common';
+import Theme from '../../Theme';
 
 type Props = {
-	isModelRGB?: boolean,
 	openModal: () => void,
 	device: Object,
 	deviceName: string,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
 	intl: Object,
     isGatewayActive: boolean,
-	appLayout: Object,
+    appLayout: Object,
+    navigation: Object,
 };
 
 type State = {
@@ -62,7 +59,7 @@ type State = {
 	scrollEnabled: boolean,
 };
 
-class ModalRGB extends View<Props, State> {
+class RGBControlScreen extends View<Props, State> {
 	props: Props;
 	state: State;
 
@@ -83,6 +80,9 @@ class ModalRGB extends View<Props, State> {
 			onMoveShouldSetPanResponderCapture: (): boolean => true,
 			onResponderTerminationRequest: (): boolean => false,
 			onPanResponderGrant: (e: Object, gestureState: Object) => {
+				this.setState({
+					scrollEnabled: false,
+				});
 				this.animations.handlePosition.setOffset({ x: this.lastHandlePosition.x, y: this.lastHandlePosition.y });
 				this.animations.handlePosition.setValue({ x: 0, y: 0 });
 			},
@@ -128,13 +128,7 @@ class ModalRGB extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.isModelRGB) {
-			return true;
-		}
-		if (nextProps.isModelRGB !== this.props.isModelRGB) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	componentWillUnmount() {
@@ -146,32 +140,15 @@ class ModalRGB extends View<Props, State> {
 		openModal();
 	}
 
-	renderBanner(): Object {
-		const { circle, txtLbl } = styles;
-		const { deviceName } = this.props;
-		return (
-			<Poster>
-				<View style={{ position: 'absolute', alignSelf: 'center', top: 10 }}>
-					<View style={circle}>
-						<IconTelldus icon="device-alt" size={40} color={Theme.Core.brandSecondary} />
-					</View>
-					<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-						<Text style={txtLbl}>{deviceName}</Text>
-					</View>
-				</View>
-			</Poster>
-		);
-	}
-
-	renderColorPicker(): Object {
+	renderColorPicker(styles: Object): Object {
 		const { pixelColor } = this.state;
 		return (
-			<Animated.View style={[styles.shadowCard, { flex: 1, alignItems: 'center' }]} >
+			<Animated.View style={[styles.shadowCard]} >
 				<TouchableWithoutFeedback>
 					<ImageBackground
 						imageStyle={{ borderRadius: 2 }}
 						style={{ height: '100%', width: '100%' }}
-						source={require('../../img/rgbpicker.png')}>
+						source={require('../TabViews/img/rgbpicker.png')}>
 						<Animated.View
 							{...this.panResponders.handle.panHandlers}
 							// $FlowFixMe
@@ -183,11 +160,11 @@ class ModalRGB extends View<Props, State> {
 		);
 	}
 
-	renderSlider(): Object {
+	renderSlider(styles: Object): Object {
 		const { device, intl, isGatewayActive, appLayout } = this.props;
 
 		return (
-			<View style={[styles.shadowCard2, { padding: 12 }]}>
+			<View style={styles.shadowCard2}>
 				<SliderDetails
 					device={device}
 					intl={intl}
@@ -197,72 +174,81 @@ class ModalRGB extends View<Props, State> {
 		);
 	}
 
-	render(): Object {
-		const { isModelRGB } = this.props;
+	render(): Object | null {
+		const { intl, appLayout, navigation, device } = this.props;
 		const { scrollEnabled } = this.state;
+
+		if (!device || !device.id) {
+			return null;
+		}
+
+		const { name } = device;
+
+		const styles = this.getStyles();
+		const cPicker = this.renderColorPicker(styles);
+		const slider = this.renderSlider(styles);
+
+		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+
 		return (
-			<Modal
-				animationType="slide"
-				visible={isModelRGB}
-				supportedOrientations={['portrait', 'landscape']}
-				onRequestClose={this.handleBackButtonClick}>
-				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
-					<ScrollView
-						scrollEnabled={scrollEnabled}
-						style={{flex: 1}}
-						contentContainerStyle={{flexGrow: 1}}>
-						<NavigationHeader leftIcon="close" isFromModal={true} onClose={this.handleBackButtonClick} />
-						{this.renderBanner()}
-						<View style={{ height: 300 }}>
-							{this.renderColorPicker()}
-						</View>
-						{this.renderSlider()}
-					</ScrollView>
-				</SafeAreaView>
-			</Modal>
+			<ScrollView
+				scrollEnabled={scrollEnabled}
+				style={{flex: 1}}
+				contentContainerStyle={{flexGrow: 1}}>
+				<NavigationHeaderPoster
+					icon={'device-alt'}
+					h2={deviceName}
+					align={'center'}
+					leftIcon="close"
+					onClose={this.handleBackButtonClick}
+					intl={intl}
+					appLayout={appLayout}
+					navigation={navigation}/>
+				{cPicker}
+				{slider}
+			</ScrollView>
 		);
 	}
-}
 
-const styles = {
-	circle: {
-		height: 80,
-		width: 80,
-		borderRadius: 40,
-		backgroundColor: 'white',
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	txtLbl: {
-		color: 'white',
-		fontSize: 14,
-		marginTop: 10,
-		textAlign: 'center',
-	},
-	shadowCard: {
-		backgroundColor: '#fff',
-		...Theme.Core.shadow,
-		borderRadius: 2,
-		marginHorizontal: 12,
-		marginTop: 8,
-	},
-	shadowCard2: {
-		flex: 1,
-		backgroundColor: '#fff',
-		...Theme.Core.shadow,
-		borderRadius: 2,
-		marginHorizontal: 12,
-		marginTop: 8,
-		maxHeight: 100,
-	},
-	handle: {
-		borderRadius: 28,
-		borderWidth: 4,
-		borderColor: Theme.Core.brandSecondary,
-		height: 28,
-		width: 28,
-	},
-};
+	getStyles(): Object {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const { paddingFactor } = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
+
+		return {
+			shadowCard: {
+				backgroundColor: '#fff',
+				...Theme.Core.shadow,
+				borderRadius: 2,
+				margin: padding,
+				width: deviceWidth - (padding * 2),
+				height: '50%',
+				alignItems: 'center',
+			},
+			shadowCard2: {
+				backgroundColor: '#fff',
+				...Theme.Core.shadow,
+				borderRadius: 2,
+				marginHorizontal: padding,
+				marginTop: -(padding / 2),
+				width: deviceWidth - (padding * 2),
+				padding: padding,
+			},
+			handle: {
+				borderRadius: 28,
+				borderWidth: 4,
+				borderColor: Theme.Core.brandSecondary,
+				height: 28,
+				width: 28,
+			},
+		};
+	}
+}
 
 
 function mapDispatchToProps(dispatch: Function): Object {
@@ -273,4 +259,20 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-export default connect(null, mapDispatchToProps)(ModalRGB);
+function mapStateToProps(store: Object, ownProps: Object): Object {
+	const { screenProps, navigation } = ownProps;
+	const id = navigation.getParam('id', null);
+	const device = store.devices.byId[id];
+
+	const { clientId } = device ? device : {};
+	const gateway = store.gateways.byId[clientId];
+	const { online: isGatewayActive } = gateway ? gateway : {};
+
+	return {
+		...screenProps,
+		device: device ? device : {},
+		isGatewayActive,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RGBControlScreen);

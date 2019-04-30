@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 		borderLeftColor: '#ddd',
 	},
 	lbl: {
-		fontSize: 12,
+		fontSize: 9,
 		marginTop: 3,
 	},
 });

@@ -100,6 +100,9 @@ class DevicesTab extends View {
 	onPressDeviceAction: () => void;
 
 	defaultDescriptionButton: string;
+
+	openRGBModel: (number) => void;
+
 	static navigationOptions = ({navigation, screenProps}: Object): Object => {
 		const { intl, currentScreen } = screenProps;
 		const { formatMessage } = intl;
@@ -181,6 +184,8 @@ class DevicesTab extends View {
 
 		this.hideAttentionCaptureTimeout = null;
 		this.attentionCapture = false;
+
+		this.openRGBModel = this.openRGBModel.bind(this);
 	}
 
 	componentDidMount() {
@@ -413,6 +418,17 @@ class DevicesTab extends View {
 		return false;
 	}
 
+	openRGBModel = (id: number) => {
+		const { navigation } = this.props;
+		navigation.navigate({
+			routeName: 'RGBControl',
+			key: 'RGBControl',
+			params: {
+				id,
+			},
+		});
+	}
+
 	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
 		const { show, action, device } = this.state.dialogueBoxConf;
 		let data = {
@@ -597,6 +613,7 @@ class DevicesTab extends View {
 				gatewayName={section.header}
 				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 				onPressDeviceAction={this.onPressDeviceAction}
+				openRGBModel={this.openRGBModel}
 				isLast={isLast}
 			/>
 		);

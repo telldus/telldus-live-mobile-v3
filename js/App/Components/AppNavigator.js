@@ -33,6 +33,7 @@ import DeviceDetailsNavigator from './Device/DeviceDetails/DeviceDetailsNavigato
 import AddLocationNavigator from './Location/AddLocation/AddLocationNavigator';
 import LocationDetailsNavigator from './Location/LocationDetails/LocationDetailsNavigator';
 import TabsView from './TabViews/TabsView';
+import RGBControlScreen from './RGBControl/RGBControlScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -123,6 +124,17 @@ const RouteConfigs = {
 	},
 	AddDevice: {
 		screen: AddDeviceNavigator,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	RGBControl: {
+		screen: RGBControlScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
