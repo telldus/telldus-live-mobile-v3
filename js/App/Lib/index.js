@@ -48,6 +48,7 @@ import * as UserUtils from './UserUtils';
 import * as LocalControl from './LocalControl';
 import * as appUtils from './appUtils';
 import * as gatewayUtils from './gatewayUtils';
+import * as rgbUtils from './rgbUtils';
 
 
 module.exports = {
@@ -79,4 +80,5 @@ module.exports = {
 	...LocalControl,
 	...appUtils,
 	...gatewayUtils,
+	...rgbUtils,
 };
