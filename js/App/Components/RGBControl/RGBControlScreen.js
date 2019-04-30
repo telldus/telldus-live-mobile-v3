@@ -57,6 +57,10 @@ type State = {
 	sliderValue: number,
 	PixelColor: string,
 	scrollEnabled: boolean,
+	x1: number,
+	x2: number,
+	y1: number,
+	y2: number,
 };
 
 class RGBControlScreen extends View<Props, State> {
@@ -67,7 +71,18 @@ class RGBControlScreen extends View<Props, State> {
 		sliderValue: 10,
 		pixelColor: [255, 73, 51],
 		scrollEnabled: true,
+		x1: 0,
+		x2: 0,
+		y1: 0,
+		y2: 0,
 	};
+
+	onLayout: (Object) => void;
+
+	constructor(props: Props) {
+		super(props);
+		this.onLayout = this.onLayout.bind(this);
+	}
 
 	animations = {
 		handlePosition: new Animated.ValueXY({ x: 0, y: 0 }),
@@ -87,14 +102,23 @@ class RGBControlScreen extends View<Props, State> {
 				this.animations.handlePosition.setValue({ x: 0, y: 0 });
 			},
 			onPanResponderMove: (e: Object, gestureState: Object) => {
-				getPixelRGBA('rgbpicker', e.nativeEvent.pageX, e.nativeEvent.pageY)
-					.then((color: Array<number>) => {
-						this.setState({
-							pixelColor: color,
-							scrollEnabled: false,
+				const { x1, x2, y1, y2 } = this.state;
+				const { pageX, pageY } = e.nativeEvent;
+				const { dx, dy } = gestureState;
+				if (pageX > x1 && pageX < x2 && pageY > y1 && pageY < y2) {
+					getPixelRGBA('rgbpicker', pageX, pageY)
+						.then((color: Array<number>) => {
+							this.animations.handlePosition.setValue({
+								x: dx,
+								y: dy,
+							});
+							this.setState({
+								pixelColor: color,
+								scrollEnabled: false,
+							});
+						}).catch(() => {
 						});
-				 });
-				 this.animations.handlePosition.setValue({ x: gestureState.dx, y: gestureState.dy });
+				}
 			},
 			onPanResponderRelease: () => {
 				this.onRelease();
@@ -140,10 +164,20 @@ class RGBControlScreen extends View<Props, State> {
 		openModal();
 	}
 
+	onLayout(ev: Object) {
+		const {nativeEvent: { layout: {x, y, width, height}}} = ev;
+		this.setState({
+			x1: x,
+			x2: x + width,
+			y1: y,
+			y2: y + height,
+		});
+	}
+
 	renderColorPicker(styles: Object): Object {
 		const { pixelColor } = this.state;
 		return (
-			<Animated.View style={[styles.shadowCard]} >
+			<Animated.View style={[styles.shadowCard]} onLayout={this.onLayout}>
 				<TouchableWithoutFeedback>
 					<ImageBackground
 						imageStyle={{ borderRadius: 2 }}
@@ -152,7 +186,10 @@ class RGBControlScreen extends View<Props, State> {
 						<Animated.View
 							{...this.panResponders.handle.panHandlers}
 							// $FlowFixMe
-							style={[styles.handle, { transform: this.animations.handlePosition.getTranslateTransform(), backgroundColor: `rgb(${pixelColor})` }]}
+							style={[styles.handle, {
+								transform: this.animations.handlePosition.getTranslateTransform(),
+								backgroundColor: `rgb(${pixelColor})`,
+							}]}
 						/>
 					</ImageBackground>
 				</TouchableWithoutFeedback>
