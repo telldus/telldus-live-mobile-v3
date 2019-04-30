@@ -27,12 +27,17 @@ import { StyleSheet, Text } from 'react-native';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
 
+import {
+	getMainColorRGB,
+	prepareMainColor,
+} from '../../../Lib/rgbUtils';
 import Theme from '../../../Theme';
 
 type Props = {
 	displayedValue: string,
 	isGatewayActive: boolean,
 	rgb: string,
+	isInState: string,
 };
 
 class RGBPalette extends View {
@@ -43,10 +48,12 @@ class RGBPalette extends View {
 	}
 
 	render(): Object {
-		const { displayedValue, rgb } = this.props;
+		const { displayedValue, rgb, isInState } = this.props;
 
-		const mainColor = `#${parseInt(rgb, 10).toString(16)}`;
-		const iconColor = '#FFF';
+		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? getMainColorRGB(rgb, 10) : '#eeeeee';
+		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : getMainColorRGB(rgb, 10);
+
+		mainColor = prepareMainColor(mainColor);
 
 		return (
 			<View style={[styles.palette, {

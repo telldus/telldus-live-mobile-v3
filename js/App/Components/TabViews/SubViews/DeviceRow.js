@@ -45,6 +45,9 @@ import {
 	getPowerConsumed,
 	getDeviceIcons,
 	getDeviceActionIcon,
+	getOffColorRGB,
+	getMainColorRGB,
+	prepareMainColor,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
@@ -419,10 +422,15 @@ class DeviceRow extends View<Props, State> {
 		};
 		const icon = getDeviceIcons(deviceType);
 
-		const { RGB: rgbValue } = stateValues;
+		let { RGB: rgbValue } = stateValues;
 		let colorDeviceIconBack = styles.iconContainerStyle.backgroundColor;
+		let offColorRGB;
 		if (typeof rgbValue !== 'undefined') {
-			colorDeviceIconBack = `#${parseInt(rgbValue, 10).toString(16)}`;
+			let mainColorRGB = getMainColorRGB(rgbValue);
+			offColorRGB = getOffColorRGB(mainColorRGB);
+			colorDeviceIconBack = isInState === 'TURNOFF' ? offColorRGB : mainColorRGB;
+
+			colorDeviceIconBack = prepareMainColor(colorDeviceIconBack);
 		}
 
 		// NOTE: the prop "key" serves two purpose.
