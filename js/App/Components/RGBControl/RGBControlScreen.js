@@ -94,7 +94,7 @@ class RGBControlScreen extends View<Props, State> {
 	renderColorPicker(styles: Object): Object {
 		const { device } = this.props;
 		const { RGB: rgbValue } = device.stateValues;
-		let mainColorRGB = getMainColorRGB(rgbValue);
+		const mainColorRGB = getMainColorRGB(rgbValue);
 
 		return (
 			<ColorWheel
@@ -111,7 +111,7 @@ class RGBControlScreen extends View<Props, State> {
 		const { device, intl, isGatewayActive, appLayout } = this.props;
 
 		return (
-			<View style={styles.shadowCard2}>
+			<View style={styles.sliderCover}>
 				<SliderDetails
 					device={device}
 					intl={intl}
@@ -138,10 +138,7 @@ class RGBControlScreen extends View<Props, State> {
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
 		return (
-			<ScrollView
-				scrollEnabled={scrollEnabled}
-				style={{flex: 1}}
-				contentContainerStyle={{flexGrow: 1}}>
+			<View style={{flex: 1}}>
 				<NavigationHeaderPoster
 					icon={'device-alt'}
 					h2={deviceName}
@@ -150,9 +147,14 @@ class RGBControlScreen extends View<Props, State> {
 					intl={intl}
 					appLayout={appLayout}
 					navigation={navigation}/>
-				{cPicker}
-				{slider}
-			</ScrollView>
+				<ScrollView
+					scrollEnabled={scrollEnabled}
+					style={{flex: 1}}
+					contentContainerStyle={{flexGrow: 1}}>
+					{cPicker}
+					{slider}
+				</ScrollView>
+			</View>
 		);
 	}
 
@@ -176,12 +178,13 @@ class RGBControlScreen extends View<Props, State> {
 				height: '50%',
 				alignItems: 'center',
 			},
-			shadowCard2: {
+			sliderCover: {
 				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				marginHorizontal: padding,
 				marginTop: -(padding / 2),
+				marginBottom: padding,
 				width: deviceWidth - (padding * 2),
 				padding: padding,
 			},
