@@ -75,7 +75,7 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDimButton: (device: Object) => void,
 	onPressDeviceAction?: () => void,
-	openRGBModel: () => void,
+	openRGBControl: () => void,
 };
 
 type DefaultProps = {
@@ -200,12 +200,12 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onPressDimButton() {
-		const { openRGBModel, onPressDeviceAction } = this.props;
+		const { openRGBControl, onPressDeviceAction } = this.props;
 		if (onPressDeviceAction) {
 			onPressDeviceAction();
 		}
-		if (openRGBModel && typeof openRGBModel === 'function') {
-			openRGBModel();
+		if (openRGBControl && typeof openRGBControl === 'function') {
+			openRGBControl();
 		}
 	}
 

@@ -82,7 +82,7 @@ type Props = {
 	onNewlyAddedDidMount: (number, string) => void,
 	onPressDeviceAction: () => void,
 	screenReaderEnabled: boolean,
-	openRGBModel: (number) => void,
+	openRGBControl: (number) => void,
 };
 
 type State = {
@@ -373,9 +373,9 @@ class DeviceRow extends View<Props, State> {
 		this.refs.SwipeRow.closeRow();
 	}
 
-	openRGBModel = () => {
-		const { openRGBModel, device } = this.props;
-		openRGBModel(device.id);
+	openRGBControl = () => {
+		const { openRGBControl, device } = this.props;
+		openRGBControl(device.id);
 	}
 
 	render(): Object {
@@ -440,7 +440,7 @@ class DeviceRow extends View<Props, State> {
 			button.unshift(
 				<RGBButton
 					{...sharedProps}
-					openRGBModel={this.openRGBModel}
+					openRGBControl={this.openRGBControl}
 					setScrollEnabled={this.props.setScrollEnabled}
 					showSlider={!BELL && !UP && !DOWN && !STOP}
 					onSlideActive={this.onSlideActive}
