@@ -32,8 +32,18 @@ import DimmerDashboardTile from './DimmerDashboardTile';
 import NavigationalDashboardTile from './NavigationalDashboardTile';
 import BellDashboardTile from './BellDashboardTile';
 import ToggleDashboardTile from './ToggleDashboardTile';
+import RGBDashboardTile from './RGBDashboardTile';
 
-import { getLabelDevice, getPowerConsumed, shouldUpdate, getDeviceIcons, getDeviceActionIcon } from '../../../Lib';
+import {
+	getLabelDevice,
+	getPowerConsumed,
+	shouldUpdate,
+	getDeviceIcons,
+	getDeviceActionIcon,
+	getOffColorRGB,
+	getMainColorRGB,
+	prepareMainColor,
+} from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -46,6 +56,7 @@ type Props = {
     style: Object,
 	setScrollEnabled: (boolean) => void,
 	onPressDimButton: (Object) => void,
+	openRGBControl: (number) => void,
 };
 
 type State = {
@@ -92,8 +103,13 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
+openRGBControl = () => {
+	const { openRGBControl, item } = this.props;
+	openRGBControl(item.id);
+}
+
 getButtonsInfo(item: Object, styles: Object): Object {
-	let { supportedMethods = {}, isInState, isOnline, deviceType } = item, buttons = [], buttonsInfo = [];
+	let { supportedMethods = {}, isInState, isOnline, deviceType, stateValues } = item, buttons = [], buttonsInfo = [];
 	let { tileWidth, setScrollEnabled, onPressDimButton } = this.props;
 	const {
 		TURNON,
@@ -103,6 +119,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		UP,
 		DOWN,
 		STOP,
+		RGB,
 	} = supportedMethods;
 	const iconsName = getDeviceIcons(deviceType);
 
@@ -111,10 +128,48 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	// if these type of devices has any chance of having state other than 'TURNON || TURNOFF', pass it to required button component.(also handle the logic)
 	const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 
+	let { RGB: rgbValue } = stateValues;
+	let colorDeviceIconBack = styles.itemIconContainerOn.backgroundColor;
+	let offColorRGB;
+	if (typeof rgbValue !== 'undefined') {
+		let mainColorRGB = getMainColorRGB(rgbValue);
+		offColorRGB = getOffColorRGB(mainColorRGB);
+		colorDeviceIconBack = isInState === 'TURNOFF' ? offColorRGB : mainColorRGB;
+
+		colorDeviceIconBack = prepareMainColor(colorDeviceIconBack);
+	}
+
 	// NOTE: the prop "key" serves two purpose.
 	// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
 	// 2. The same prop is used/accessed inside "TabViews/SubViews/Device/MultiActionModal.js" to override the style
 	// in the case of device groups.
+
+	if (RGB) {
+		const width = tileWidth;
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : {
+			backgroundColor: colorDeviceIconBack,
+		};
+
+		buttons.unshift(
+			<RGBDashboardTile
+				{...this.props}
+				device={item}
+				openRGBControl={this.openRGBControl}
+				setScrollEnabled={setScrollEnabled}
+				showSlider={!BELL && !UP && !DOWN && !STOP}
+				onSlideActive={this.onSlideActive}
+				onSlideComplete={this.onSlideComplete}
+				key={8}
+				offButtonColor={isInState === 'TURNOFF' ? colorDeviceIconBack : undefined}
+				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
+				containerStyle={[styles.buttonsContainerStyle, {width}]}
+			/>);
+		buttonsInfo.unshift({
+			iconContainerStyle: iconContainerStyle,
+			iconsName,
+		});
+	}
+
 	if (BELL) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 
@@ -139,7 +194,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		});
 	}
 
-	if (DIM) {
+	if (DIM && !RGB) {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :

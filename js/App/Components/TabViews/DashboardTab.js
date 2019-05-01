@@ -97,6 +97,8 @@ class DashboardTab extends View {
 
 	showDimInfo: (Object) => void;
 
+	openRGBControl: (number) => void;
+
 	static navigationOptions = ({navigation, screenProps}: Object): Object => {
 		const { intl, currentScreen } = screenProps;
 		const { formatMessage } = intl;
@@ -142,6 +144,8 @@ class DashboardTab extends View {
 
 		this.showDimInfo = this.showDimInfo.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
+
+		this.openRGBControl = this.openRGBControl.bind(this);
 	}
 
 	startSensorTimer() {
@@ -288,6 +292,17 @@ class DashboardTab extends View {
 				show: true,
 				action: 'dim_info',
 				device,
+			},
+		});
+	}
+
+	openRGBControl = (id: number) => {
+		const { navigation } = this.props;
+		navigation.navigate({
+			routeName: 'RGBControl',
+			key: 'RGBControl',
+			params: {
+				id,
 			},
 		});
 	}
@@ -463,6 +478,7 @@ class DashboardTab extends View {
 			intl={screenProps.intl}
 			setScrollEnabled={this.setScrollEnabled}
 			onPressDimButton={this.showDimInfo}
+			openRGBControl={this.openRGBControl}
 		/>;
 	}
 

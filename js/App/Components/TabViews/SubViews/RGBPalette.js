@@ -31,24 +31,35 @@ import {
 	getMainColorRGB,
 	prepareMainColor,
 } from '../../../Lib/rgbUtils';
-import Theme from '../../../Theme';
 
 type Props = {
 	displayedValue: string,
 	isGatewayActive: boolean,
 	rgb: string,
 	isInState: string,
+	fontSize?: number,
+	fontSizeIcon?: number,
 };
 
-class RGBPalette extends View {
+type DefaultProps = {
+	fontSize: number,
+	fontSizeIcon: number,
+};
+
+class RGBPalette extends View<Props, null> {
 	props: Props;
+
+	static defaultProps: DefaultProps = {
+		fontSize: 9,
+		fontSizeIcon: 26,
+	}
 
 	constructor(props: Props) {
 		super(props);
 	}
 
 	render(): Object {
-		const { displayedValue, rgb, isInState } = this.props;
+		const { displayedValue, rgb, isInState, fontSize, fontSizeIcon } = this.props;
 
 		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? getMainColorRGB(rgb, 10) : '#eeeeee';
 		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : getMainColorRGB(rgb, 10);
@@ -59,8 +70,8 @@ class RGBPalette extends View {
 			<View style={[styles.palette, {
 				backgroundColor: mainColor,
 			}]}>
-				<IconTelldus icon="palette" size={26} color={iconColor} />
-				<Text style={[styles.lbl, { color: iconColor }]}>{`${displayedValue}%`}</Text>
+				<IconTelldus icon="palette" size={fontSizeIcon} color={iconColor} />
+				<Text style={[styles.lbl, { fontSize: fontSize, color: iconColor }]}>{`${displayedValue}%`}</Text>
 			</View>
 		);
 	}
@@ -68,15 +79,11 @@ class RGBPalette extends View {
 
 const styles = StyleSheet.create({
 	palette: {
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: Theme.Core.buttonWidth,
-		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
 	},
 	lbl: {
-		fontSize: 9,
 		marginTop: 3,
 	},
 });

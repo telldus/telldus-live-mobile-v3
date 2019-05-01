@@ -56,14 +56,13 @@ type Props = {
 	sensitive: number,
 	offButtonColor?: string,
 	onButtonColor?: string,
+	tileWidth: number,
 
 
 	intl: Object,
 	isGatewayActive: boolean,
-	onSlideActive: () => void,
-	onSlideComplete: () => void,
 	showDimmerStep: (number) => void,
-	style?: number | Object | Array<any>,
+	containerStyle?: number | Object | Array<any>,
 	offButtonStyle?: number | Object | Array<any>,
 	onButtonStyle?: number | Object | Array<any>,
 	sliderStyle?: number | Object | Array<any>,
@@ -126,15 +125,20 @@ class DimmerButton extends View<Props, null> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-		const { isOpen, setScrollEnabled, ...others } = this.props;
-		const { isOpen: isOpenN, setScrollEnabled: setScrollEnabledN, ...othersN } = nextProps;
-		if (isOpen !== isOpenN || setScrollEnabled !== setScrollEnabledN) {
+		const { setScrollEnabled, ...others } = this.props;
+		const {setScrollEnabled: setScrollEnabledN, ...othersN } = nextProps;
+		if (setScrollEnabled !== setScrollEnabledN) {
 			return true;
 		}
 
 		const propsChange = shouldUpdate(others, othersN, [
-			'device', 'showSlider', 'screenReaderEnabled', 'sensitive',
-			'onButtonColor', 'offButtonColor',
+			'device',
+			'showSlider',
+			'screenReaderEnabled',
+			'sensitive',
+			'onButtonColor',
+			'offButtonColor',
+			'tileWidth',
 		]);
 		if (propsChange) {
 			return true;
@@ -151,7 +155,6 @@ class DimmerButton extends View<Props, null> {
 		const { stateValues, isInState, id, value } = this.props.device;
 		const stateValue = stateValues ? stateValues.DIM : value;
 
-		this.props.onSlideActive();
 		this.props.saveDimmerInitialState(id, stateValue, isInState);
 		this.props.showDimmerPopup(name, toDimmerValue(sliderValue));
 	}
@@ -159,7 +162,6 @@ class DimmerButton extends View<Props, null> {
 	onSlidingComplete(sliderValue: number) {
 		let { device, commandON, commandOFF, commandDIM } = this.props;
 		let command = commandDIM;
-		this.props.onSlideComplete();
 		if (sliderValue === 100) {
 			command = commandON;
 		}
@@ -216,7 +218,6 @@ class DimmerButton extends View<Props, null> {
 			isGatewayActive,
 			screenReaderEnabled,
 			showSlider,
-			style,
 			onButtonStyle,
 			offButtonStyle,
 			sliderStyle,
@@ -226,6 +227,8 @@ class DimmerButton extends View<Props, null> {
 			sensitive,
 			onButtonColor,
 			offButtonColor,
+			containerStyle,
+			tileWidth,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -269,9 +272,11 @@ class DimmerButton extends View<Props, null> {
 				<DimmerOnButton
 					ref={'onButton'}
 					style={[styles.buttonStyle]}
+					iconStyle={styles.iconStyle}
 					onPress={this.onTurnOn}
 					onButtonColor={onButtonColor}
 					{...sharedProps}
+					fontSize={Math.floor(tileWidth / 8)}
 				/>
 			</HVSliderContainer>
 		);
@@ -283,26 +288,30 @@ class DimmerButton extends View<Props, null> {
 				<DimmerOffButton
 					ref={'offButton'}
 					style={[styles.buttonStyle]}
+					iconStyle={styles.iconStyle}
 					onPress={this.onTurnOff}
 					offButtonColor={offButtonColor}
 					{...sharedProps}
+					fontSize={Math.floor(tileWidth / 8)}
 				/>
 			</HVSliderContainer>
 		);
 		const rgbPalette = DIM ? (
 			<HVSliderContainer
 				{...sliderProps}
-				style={[sliderStyle, styles.slider]}
+				style={[styles.sliderContainer, sliderStyle]}
 				onPress={isOpen ? closeSwipeRow : this.onPressDimButton}
 			>
 				<RGBPalette
 					{...sharedProps}
-					rgb={stateValues.RGB}/>
+					rgb={stateValues.RGB}
+					fontSize={7}
+					fontSizeIcon={22}/>
 			</HVSliderContainer>
 		) : null;
 
 		return (
-			<View style={[styles.container, style]}>
+			<View style={containerStyle}>
 				{ offButton }
 				{!!showSlider && rgbPalette }
 				{ onButton }
@@ -312,18 +321,12 @@ class DimmerButton extends View<Props, null> {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 0,
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: Theme.Core.rowHeight,
-	},
-	slider: {
+	sliderContainer: {
+		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'stretch',
-		width: Theme.Core.buttonWidth,
-		height: Theme.Core.rowHeight,
+		borderRightWidth: 1,
+		borderRightColor: '#ddd',
 		borderLeftWidth: 1,
 		borderLeftColor: '#ddd',
 	},
@@ -333,10 +336,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 	},
 	buttonContainerStyle: {
-		width: Theme.Core.buttonWidth,
-		height: Theme.Core.rowHeight,
-		borderLeftWidth: 1,
-		borderLeftColor: '#ddd',
+		flex: 1,
+		alignItems: 'stretch',
+		justifyContent: 'center',
+		borderBottomLeftRadius: 2,
+	},
+	iconStyle: {
+		fontSize: 22,
 	},
 });
 
