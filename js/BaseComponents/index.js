@@ -86,6 +86,7 @@ import DropDown from './DropDown';
 import MainTabBarAndroid from './MainTabBarAndroid';
 import MainTabsAndroid from './MainTabsAndroid';
 import AttentionCatcher from './AttentionCatcher';
+import Swatches from './Swatches';
 
 import {
 	AppState,
@@ -163,6 +164,7 @@ module.exports = {
 	MainTabBarAndroid,
 	MainTabsAndroid,
 	AttentionCatcher,
+	Swatches,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
