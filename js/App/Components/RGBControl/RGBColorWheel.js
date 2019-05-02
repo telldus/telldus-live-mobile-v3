@@ -25,6 +25,7 @@ const colorsys = require('colorsys');
 
 import {
 	View,
+	Swatches,
 } from '../../../BaseComponents';
 
 import { deviceSetStateRGB } from '../../Actions/Devices';
@@ -37,6 +38,9 @@ type Props = {
 
     style?: Array<any> | Object | number,
     thumStyle?: Array<any> | Object | number,
+    swatchesCover?: Array<any> | Object | number,
+    colorWheelCover?: Array<any> | Object | number,
+    swatchWheelCover?: Array<any> | Object | number,
     thumbSize?: number,
 };
 
@@ -50,48 +54,105 @@ static defaultProps: DefaultProps = {
 	thumbSize: 15,
 };
 
-	onColorChangeComplete: string => void;
+onColorChangeComplete: string => void;
+onChooseColor: (string) => void;
 
-	constructor(props: Props) {
-		super(props);
-		this.onColorChangeComplete = this.onColorChangeComplete.bind(this);
+constructor(props: Props) {
+	super(props);
+	this.onColorChangeComplete = this.onColorChangeComplete.bind(this);
+
+	this.COLOR_SWATCHES = [
+		'#FF3300',
+		'#FF0066',
+		'#CC0099',
+		'#6600FF',
+		'#0066FF',
+		'#00CC99',
+		'#00CC00',
+		'#CCCC00',
+		'#FF9900',
+		'#FFFFFF',
+	];
+
+	this.onChooseColor = this.onChooseColor.bind(this);
+}
+
+onColorChangeComplete(color: string) {
+	if (!color) {
+		return;
 	}
+	const { device } = this.props;
+	const rgb = colorsys.hsvToRgb(color);
+	const { r, g, b } = rgb;
+	this.props.deviceSetStateRGB(device.id, r, g, b);
+}
 
-	onColorChangeComplete(color: string) {
-		if (!color) {
-			return;
-		}
-		const { device } = this.props;
-		const rgb = colorsys.hsvToRgb(color);
-		const { r, g, b } = rgb;
-		this.props.deviceSetStateRGB(device.id, r, g, b);
+getSwatches(color: string, key: number): Object {
+	const {
+		swatchStyle,
+	} = this.props;
+	return (
+		<Swatches
+			key={key}
+			style={[
+				swatchStyle,
+				{
+					backgroundColor: color,
+				}]}
+			onPress={this.onChooseColor}
+			swatch={color}/>
+	);
+}
+
+onChooseColor(item: string) {
+	if (!item) {
+		return;
 	}
+	const { device } = this.props;
+	const rgb = colorsys.hexToRgb(item);
+	const { r, g, b } = rgb;
+	this.props.deviceSetStateRGB(device.id, r, g, b);
+}
 
-	render(): Object {
-		const {
-			device,
-			thumStyle,
-			colorWheel,
-			thumbSize,
-		} = this.props;
-		const { RGB: rgbValue } = device.stateValues;
-		const mainColorRGB = getMainColorRGB(rgbValue);
+render(): Object {
+	const {
+		device,
+		thumStyle,
+		colorWheel,
+		thumbSize,
+		swatchesCover,
+		colorWheelCover,
+		swatchWheelCover,
+	} = this.props;
+	const { RGB: rgbValue } = device.stateValues;
+	const mainColorRGB = getMainColorRGB(rgbValue);
 
-		return (
-			<ColorWheel
-				initialColor={mainColorRGB}
-				onColorChangeComplete={this.onColorChangeComplete}
-				style={colorWheel}
-				thumbStyle={thumStyle}
-				thumbSize={thumbSize}
-			/>
-		);
-	}
+	const colorSwatches = this.COLOR_SWATCHES.map((color: string, i: number): any => {
+		return this.getSwatches(color, i);
+	});
 
-	getStyles(): Object {
-		return {
-		};
-	}
+	return (
+		<View style={swatchWheelCover}>
+			<View style={colorWheelCover}>
+				<ColorWheel
+					initialColor={mainColorRGB}
+					onColorChangeComplete={this.onColorChangeComplete}
+					style={colorWheel}
+					thumbStyle={thumStyle}
+					thumbSize={thumbSize}
+				/>
+			</View>
+			<View style={swatchesCover}>
+				{colorSwatches}
+			</View>
+		</View>
+	);
+}
+
+getStyles(): Object {
+	return {
+	};
+}
 }
 
 function mapDispatchToProps(dispatch: Function): Object {

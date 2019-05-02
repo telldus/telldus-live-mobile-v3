@@ -71,12 +71,18 @@ class RGBControlScreen extends View<Props, State> {
 		const { device, appLayout } = this.props;
 
 		return (
-			<RGBColorWheel
-				device={device}
-				appLayout={appLayout}
-				style={styles.colorWheel}
-				thumStyle={styles.thumStyle}
-				thumbSize={15}/>
+			<View style={styles.wheelCover}>
+				<RGBColorWheel
+					device={device}
+					appLayout={appLayout}
+					style={styles.colorWheel}
+					thumStyle={styles.thumStyle}
+					swatchStyle={styles.swatchStyle}
+					swatchesCover={styles.swatchesCover}
+					colorWheelCover={styles.colorWheelCover}
+					swatchWheelCover={styles.swatchWheelCover}
+					thumbSize={15}/>
+			</View>
 		);
 	}
 
@@ -141,6 +147,14 @@ class RGBControlScreen extends View<Props, State> {
 
 		const padding = deviceWidth * paddingFactor;
 
+		const swatchMaxSize = 100;
+		const numOfItemsPerRow = 5;
+		const itemsBorder = numOfItemsPerRow * 4;
+		const outerPadding = padding * 2;
+		const itemsPadding = Math.ceil(numOfItemsPerRow * padding * 2);
+		let swatchSize = Math.floor((deviceWidth - (itemsPadding + outerPadding + itemsBorder)) / numOfItemsPerRow);
+		swatchSize = swatchSize > swatchMaxSize ? swatchMaxSize : swatchSize;
+
 		return {
 			colorWheel: {
 				backgroundColor: '#fff',
@@ -156,6 +170,32 @@ class RGBControlScreen extends View<Props, State> {
 				width: 30,
 				borderRadius: 30,
 			},
+			swatchWheelCover: {
+				flex: 1,
+			},
+			swatchesCover: {
+				width: '100%',
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				...Theme.Core.shadow,
+				backgroundColor: '#fff',
+				borderRadius: 2,
+				paddingHorizontal: padding,
+				paddingTop: padding / 2,
+				paddingBottom: padding,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			swatchStyle: {
+				height: swatchSize,
+				width: swatchSize,
+				borderRadius: swatchSize / 2,
+				marginHorizontal: padding,
+				marginTop: padding,
+			},
+			colorWheelCover: {
+				flex: 1,
+			},
 			sliderCover: {
 				backgroundColor: '#fff',
 				...Theme.Core.shadow,
@@ -165,6 +205,11 @@ class RGBControlScreen extends View<Props, State> {
 				marginBottom: padding,
 				width: deviceWidth - (padding * 2),
 				padding: padding,
+			},
+			wheelCover: {
+				flex: 1,
+				marginHorizontal: padding,
+				marginBottom: padding,
 			},
 			handle: {
 				borderRadius: 28,

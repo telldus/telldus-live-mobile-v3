@@ -75,6 +75,10 @@ class DeviceActionDetails extends View {
 			buttonsContainer,
 			colorWheel,
 			thumStyle,
+			swatchStyle,
+			swatchesCover,
+			colorWheelCover,
+			swatchWheelCover,
 		} = this.getStyles(appLayout);
 		const sharedProps = {
 			...device,
@@ -147,14 +151,16 @@ class DeviceActionDetails extends View {
 		return (
 			<View style={[container, containerStyle]}>
 				{!!RGB &&
-					<View style={colorWheel}>
-						<RGBColorWheel
-							device={device}
-							appLayout={appLayout}
-							style={colorWheel}
-							thumStyle={thumStyle}
-							thumbSize={15}/>
-					</View>
+					<RGBColorWheel
+						device={device}
+						appLayout={appLayout}
+						style={colorWheel}
+						thumStyle={thumStyle}
+						swatchStyle={swatchStyle}
+						swatchesCover={swatchesCover}
+						colorWheelCover={colorWheelCover}
+						swatchWheelCover={swatchWheelCover}
+						thumbSize={15}/>
 				}
 				{!!DIM && (
 					<SliderDetails
@@ -187,6 +193,15 @@ class DeviceActionDetails extends View {
 		const buttonPadding = 10;
 		const bodyPadding = buttonPadding * 1.5;
 
+		const padding = deviceWidth * Theme.Core.paddingFactor;
+
+		const swatchMaxSize = 80;
+		const numOfItemsPerRow = 5;
+		const itemsBorder = numOfItemsPerRow * 4;
+		const itemsPadding = Math.ceil(numOfItemsPerRow * padding * 2);
+		let swatchSize = Math.floor((deviceWidth - (itemsPadding + outerPadding + itemsBorder)) / numOfItemsPerRow);
+		swatchSize = swatchSize > swatchMaxSize ? swatchMaxSize : swatchSize;
+
 		return {
 			container: {
 				flex: 1,
@@ -218,6 +233,10 @@ class DeviceActionDetails extends View {
 				borderRadius: 2,
 				overflow: 'hidden',
 			},
+			colorWheelCover: {
+				width: deviceWidth - (bodyPadding),
+				height: deviceWidth * 0.7,
+			},
 			colorWheel: {
 				width: deviceWidth - (bodyPadding),
 				height: deviceWidth * 0.7,
@@ -226,6 +245,27 @@ class DeviceActionDetails extends View {
 				height: 30,
 				width: 30,
 				borderRadius: 30,
+			},
+			swatchWheelCover: {
+				flex: 1,
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
+			swatchesCover: {
+				flex: 1,
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				alignItems: 'center',
+				justifyContent: 'center',
+				alignSelf: 'center',
+				marginRight: -(padding / 2),
+			},
+			swatchStyle: {
+				height: swatchSize,
+				width: swatchSize,
+				borderRadius: swatchSize / 2,
+				marginHorizontal: padding,
+				marginTop: padding,
 			},
 		};
 	}
