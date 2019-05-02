@@ -61,10 +61,8 @@ class RGBPalette extends View<Props, null> {
 	render(): Object {
 		const { displayedValue, rgb, isInState, fontSize, fontSizeIcon } = this.props;
 
-		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? getMainColorRGB(rgb, 10) : '#eeeeee';
-		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : getMainColorRGB(rgb, 10);
-
-		mainColor = prepareMainColor(mainColor);
+		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb)) : '#eeeeee';
+		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : prepareMainColor(getMainColorRGB(rgb));
 
 		return (
 			<View style={[styles.palette, {

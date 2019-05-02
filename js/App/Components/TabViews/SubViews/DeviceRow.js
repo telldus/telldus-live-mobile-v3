@@ -423,13 +423,15 @@ class DeviceRow extends View<Props, State> {
 
 		let { RGB: rgbValue } = stateValues;
 		let colorDeviceIconBack = styles.iconContainerStyle.backgroundColor;
-		let offColorRGB;
+		let offColorRGB, iconOffColor, iconOnColor;
 		if (typeof rgbValue !== 'undefined') {
 			let mainColorRGB = getMainColorRGB(rgbValue);
-			offColorRGB = getOffColorRGB(mainColorRGB);
-			colorDeviceIconBack = isInState === 'TURNOFF' ? offColorRGB : mainColorRGB;
 
-			colorDeviceIconBack = prepareMainColor(colorDeviceIconBack);
+			offColorRGB = getOffColorRGB(mainColorRGB);
+			iconOffColor = offColorRGB;
+
+			colorDeviceIconBack = prepareMainColor(mainColorRGB);
+			iconOnColor = colorDeviceIconBack;
 		}
 
 		// NOTE: the prop "key" serves two purpose.
@@ -446,8 +448,10 @@ class DeviceRow extends View<Props, State> {
 					onSlideActive={this.onSlideActive}
 					onSlideComplete={this.onSlideComplete}
 					key={8}
-					offButtonColor={isInState === 'TURNOFF' ? colorDeviceIconBack : undefined}
+					offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
 					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
+					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
+					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
 				/>
 			);
 		}
@@ -542,11 +546,11 @@ class DeviceRow extends View<Props, State> {
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
-								{showDeviceIcon && <BlockIcon
+								{<BlockIcon
 									icon={icon}
 									style={styles.deviceIcon}
 									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: colorDeviceIconBack,
+										backgroundColor: isInState === 'TURNOFF' ? offColorRGB : colorDeviceIconBack,
 									}]}/>}
 								{nameInfo}
 							</TouchableOpacity>

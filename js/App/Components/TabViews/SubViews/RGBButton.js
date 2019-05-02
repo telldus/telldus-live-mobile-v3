@@ -56,6 +56,8 @@ type Props = {
 	sensitive: number,
 	offButtonColor?: string,
 	onButtonColor?: string,
+	iconOnColor?: string,
+	iconOffColor?: string,
 
 
 	intl: Object,
@@ -133,8 +135,14 @@ class DimmerButton extends View<Props, null> {
 		}
 
 		const propsChange = shouldUpdate(others, othersN, [
-			'device', 'showSlider', 'screenReaderEnabled', 'sensitive',
-			'onButtonColor', 'offButtonColor',
+			'device',
+			'showSlider',
+			'screenReaderEnabled',
+			'sensitive',
+			'onButtonColor',
+			'offButtonColor',
+			'iconOffColor',
+			'iconOnColor',
 		]);
 		if (propsChange) {
 			return true;
@@ -226,6 +234,8 @@ class DimmerButton extends View<Props, null> {
 			sensitive,
 			onButtonColor,
 			offButtonColor,
+			iconOnColor,
+			iconOffColor,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -271,6 +281,7 @@ class DimmerButton extends View<Props, null> {
 					style={[styles.buttonStyle]}
 					onPress={this.onTurnOn}
 					onButtonColor={onButtonColor}
+					iconOnColor={iconOnColor}
 					{...sharedProps}
 				/>
 			</HVSliderContainer>
@@ -285,6 +296,7 @@ class DimmerButton extends View<Props, null> {
 					style={[styles.buttonStyle]}
 					onPress={this.onTurnOff}
 					offButtonColor={offButtonColor}
+					iconOffColor={iconOffColor}
 					{...sharedProps}
 				/>
 			</HVSliderContainer>

@@ -56,6 +56,8 @@ type Props = {
 	offButtonColor?: string,
 	onButtonColor?: string,
 	tileWidth: number,
+	iconOnColor?: string,
+	iconOffColor?: string,
 
 
 	intl: Object,
@@ -138,6 +140,8 @@ class DimmerButton extends View<Props, null> {
 			'onButtonColor',
 			'offButtonColor',
 			'tileWidth',
+			'iconOffColor',
+			'iconOnColor',
 		]);
 		if (propsChange) {
 			return true;
@@ -228,6 +232,8 @@ class DimmerButton extends View<Props, null> {
 			offButtonColor,
 			containerStyle,
 			tileWidth,
+			iconOnColor,
+			iconOffColor,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -274,6 +280,7 @@ class DimmerButton extends View<Props, null> {
 					iconStyle={styles.iconStyle}
 					onPress={this.onTurnOn}
 					onButtonColor={onButtonColor}
+					iconOnColor={iconOnColor}
 					{...sharedProps}
 					fontSize={Math.floor(tileWidth / 8)}
 				/>
@@ -290,6 +297,7 @@ class DimmerButton extends View<Props, null> {
 					iconStyle={styles.iconStyle}
 					onPress={this.onTurnOff}
 					offButtonColor={offButtonColor}
+					iconOffColor={iconOffColor}
 					{...sharedProps}
 					fontSize={Math.floor(tileWidth / 8)}
 				/>
