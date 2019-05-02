@@ -546,7 +546,7 @@ class DeviceRow extends View<Props, State> {
 								accessible={accessible}
 								importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 								accessibilityLabel={accessibilityLabel}>
-								{<BlockIcon
+								{showDeviceIcon && <BlockIcon
 									icon={icon}
 									style={styles.deviceIcon}
 									containerStyle={[styles.iconContainerStyle, {

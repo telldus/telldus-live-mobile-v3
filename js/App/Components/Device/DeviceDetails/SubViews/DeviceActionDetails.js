@@ -34,6 +34,7 @@ import SliderDetails from './SliderDetails';
 import UpButton from '../../../TabViews/SubViews/Navigational/UpButton';
 import DownButton from '../../../TabViews/SubViews/Navigational/DownButton';
 import StopButton from '../../../TabViews/SubViews/Navigational/StopButton';
+import RGBColorWheel from '../../../RGBControl/RGBColorWheel';
 
 import { getDeviceActionIcon } from '../../../../Lib/DeviceUtils';
 
@@ -65,9 +66,16 @@ class DeviceActionDetails extends View {
 			UP,
 			DOWN,
 			STOP,
+			RGB,
 		} = supportedMethods;
 		const buttons = [];
-		const { container, shadow, buttonStyle, buttonsContainer } = this.getStyles(appLayout);
+		const {
+			container,
+			buttonStyle,
+			buttonsContainer,
+			colorWheel,
+			thumStyle,
+		} = this.getStyles(appLayout);
 		const sharedProps = {
 			...device,
 			isGatewayActive,
@@ -137,7 +145,17 @@ class DeviceActionDetails extends View {
 		const newButtonStyle = buttons.length > 4 ? buttonStyle : {...buttonStyle, flex: 1};
 
 		return (
-			<View style={[container, shadow, containerStyle]}>
+			<View style={[container, containerStyle]}>
+				{!!RGB &&
+					<View style={colorWheel}>
+						<RGBColorWheel
+							device={device}
+							appLayout={appLayout}
+							style={colorWheel}
+							thumStyle={thumStyle}
+							thumbSize={15}/>
+					</View>
+				}
 				{!!DIM && (
 					<SliderDetails
 						device={device}
@@ -179,8 +197,6 @@ class DeviceActionDetails extends View {
 				paddingBottom: bodyPadding,
 				paddingLeft: bodyPadding - buttonPadding,
 				paddingRight: bodyPadding,
-			},
-			shadow: {
 				borderRadius: 2,
 				...Theme.Core.shadow,
 			},
@@ -201,6 +217,15 @@ class DeviceActionDetails extends View {
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				overflow: 'hidden',
+			},
+			colorWheel: {
+				width: deviceWidth - (bodyPadding),
+				height: deviceWidth * 0.7,
+			},
+			thumStyle: {
+				height: 30,
+				width: 30,
+				borderRadius: 30,
 			},
 		};
 	}
