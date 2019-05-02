@@ -36,25 +36,25 @@ type Props = {
 export default class Swatches extends Base {
     props: Props;
 
-props: () => void;
-constructor(props: Props) {
-	super(props);
-	this.onPress = this.onPress.bind(this);
-}
-
-onPress() {
-	const { onPress, swatch } = this.props;
-	if (onPress) {
-		onPress(swatch);
+	onPress: () => void;
+	constructor(props: Props) {
+		super(props);
+		this.onPress = this.onPress.bind(this);
 	}
-}
 
-render(): React$Element<any> {
-	const { style } = this.props;
-	return (
-		<TouchableOpacity style={[styles.defStyle, style]} onPress={this.onPress}/>
-	);
-}
+	onPress() {
+		const { onPress, swatch } = this.props;
+		if (onPress) {
+			onPress(swatch);
+		}
+	}
+
+	render(): React$Element<any> {
+		const { style } = this.props;
+		return (
+			<TouchableOpacity style={[styles.defStyle, style]} onPress={this.onPress}/>
+		);
+	}
 }
 
 const styles = StyleSheet.create({

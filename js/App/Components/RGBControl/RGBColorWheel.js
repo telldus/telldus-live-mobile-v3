@@ -37,7 +37,9 @@ type Props = {
     appLayout: Object,
 
     style?: Array<any> | Object | number,
-    thumStyle?: Array<any> | Object | number,
+	thumStyle?: Array<any> | Object | number,
+	swatchesCover?: Array<any> | Object | number,
+	swatchStyle?: Array<any> | Object | number,
     swatchesCover?: Array<any> | Object | number,
     colorWheelCover?: Array<any> | Object | number,
     swatchWheelCover?: Array<any> | Object | number,
@@ -118,7 +120,7 @@ render(): Object {
 	const {
 		device,
 		thumStyle,
-		colorWheel,
+		style,
 		thumbSize,
 		swatchesCover,
 		colorWheelCover,
@@ -137,7 +139,7 @@ render(): Object {
 				<ColorWheel
 					initialColor={mainColorRGB}
 					onColorChangeComplete={this.onColorChangeComplete}
-					style={colorWheel}
+					style={style}
 					thumbStyle={thumStyle}
 					thumbSize={thumbSize}
 				/>
