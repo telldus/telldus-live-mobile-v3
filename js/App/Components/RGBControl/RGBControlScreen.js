@@ -160,7 +160,7 @@ class RGBControlScreen extends View<Props, State> {
 				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
-				margin: padding,
+				marginVertical: padding,
 				width: deviceWidth - (padding * 2),
 				height: '50%',
 				alignItems: 'center',
