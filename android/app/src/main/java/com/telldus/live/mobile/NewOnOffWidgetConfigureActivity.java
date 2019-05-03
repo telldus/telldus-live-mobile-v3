@@ -34,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -85,10 +86,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, settingText;
+    TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, themeText;
     ImageView deviceState;
     private AppWidgetManager widgetManager;
-    Switch switch_background;
 
     private String accessToken;
     private String expiresIn;
@@ -106,6 +106,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private ImageView backDevice;
     private RelativeLayout mBackLayout;
     TextView tvIcon1;
+
+    RadioButton radio_def;
+    RadioButton radio_dark;
+    RadioButton radio_light;
 
     public static final String ROOT = "fonts/",
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
@@ -187,7 +191,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceHint = (TextView) findViewById(R.id.txtDeviceHint);
             backDevice = (ImageView)findViewById(R.id.backdevice);
             deviceText = (TextView)findViewById(R.id.deviceText);
-            settingText = (TextView)findViewById(R.id.settingText);
+            themeText = (TextView)findViewById(R.id.themeText);
 
             btnCan = (Button)findViewById(R.id.btn_cancel);
             btnCan.setOnClickListener(new View.OnClickListener() {
@@ -197,22 +201,16 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 }
             });
 
-            switch_background = (Switch)findViewById(R.id.switch_background);
+            radio_def = (RadioButton)findViewById(R.id.radio_def);
+            radio_dark = (RadioButton)findViewById(R.id.radio_dark);
+            radio_light = (RadioButton)findViewById(R.id.radio_light);
+
+            radio_def.setChecked(true);
+            View def_cover = (View)findViewById(R.id.def_cover);
+            def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
 
             tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
             tvIcon1.setText("device-alt");
-
-            switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    // do something, the isChecked will be
-                    // true if the switch is in the On position
-                    if (isChecked)  {
-                        switchStatus = "true";
-                    } else {
-                        switchStatus = "false";
-                    }
-                }
-            });
 
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
@@ -301,11 +299,54 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceHint.setTypeface(subtitleFont);
             deviceText.setTypeface(subtitleFont);
             deviceText.setText(getResources().getString(R.string.reserved_widget_android_labelDevice)+":");
-            settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
-            settingText.setTypeface(subtitleFont);
+            themeText.setText(getResources().getString(R.string.reserved_widget_android_theme)+":");
+            themeText.setTypeface(subtitleFont);
             btAdd.setTypeface(subtitleFont);
             btnCan.setTypeface(subtitleFont);
-            switch_background.setTypeface(subtitleFont);
+        }
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        View def_cover = (View)findViewById(R.id.def_cover);
+        View dark_cover = (View)findViewById(R.id.dark_cover);
+        View light_cover = (View)findViewById(R.id.light_cover);
+
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_def:
+                if (checked) {
+                    radio_dark.setChecked(false);
+                    radio_light.setChecked(false);
+
+                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+                }
+                break;
+            case R.id.radio_dark:
+                if (checked) {
+                    radio_def.setChecked(false);
+                    radio_light.setChecked(false);
+
+                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+                }
+                break;
+            case R.id.radio_light:
+                if (checked) {
+                    radio_dark.setChecked(false);
+                    radio_def.setChecked(false);
+
+                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec_fill_prim));
+                }
+                break;
         }
     }
 
