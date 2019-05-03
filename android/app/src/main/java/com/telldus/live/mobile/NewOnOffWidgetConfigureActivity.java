@@ -102,7 +102,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private String sesID;
     MyDBHandler database = new MyDBHandler(this);
     private PrefManager prefManager;
-    private String switchStatus = "false";
     private ImageView backDevice;
     private RelativeLayout mBackLayout;
     TextView tvIcon1;
@@ -236,6 +235,14 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         return;
                     }
 
+                    String trans = "default";
+                    if (radio_dark.isChecked()) {
+                        trans = "dark";
+                    }
+                    if (radio_light.isChecked()) {
+                        trans = "light";
+                    }
+
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
                     String deviceCurrentState = null;
@@ -247,7 +254,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         deviceSupportedMethods,
                         deviceTypeCurrent,
                         "", // As of now deviceStateValue does matters for only DIM devices.
-                        switchStatus,
+                        trans,
                         currentUserId,
                         methodRequested,
                         0);
