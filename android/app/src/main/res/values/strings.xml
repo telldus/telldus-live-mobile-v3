@@ -145,4 +145,12 @@
 	<string name="reserved_widget_android_accessibilityLabel_sensors_labelLoudness">Loudness</string>
 	<string name="reserved_widget_android_accessibilityLabel_sensors_labelWeight">Weight</string>
 	<string name="reserved_widget_android_accessibilityLabel_sensors_labelMoisture">Moisture</string>
+
+	<string name="reserved_widget_android_theme">Theme</string>
+
+	<string name="reserved_widget_android_default">Default</string>
+	<string name="reserved_widget_android_theme_trans_dark">Transparent Dark</string>
+	<string name="reserved_widget_android_theme_trans_light">Transparent Light</string>
+
+	<string name="reserved_widget_android_light_switch">Light Switch</string>
 </resources>
