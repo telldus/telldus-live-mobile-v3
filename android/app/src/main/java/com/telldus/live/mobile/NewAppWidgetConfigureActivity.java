@@ -112,6 +112,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
         accessToken = prefManager.getAccessToken();
         if (accessToken == "") {
             Intent launchActivity = new Intent(getApplicationContext(), MainActivity.class);
+            launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             getApplicationContext().startActivity(launchActivity);
             return;
         }
