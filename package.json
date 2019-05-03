@@ -24,7 +24,7 @@
     "external-editor": "~3.0.3",
     "global": "~4.3.2",
     "intl": "~1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#7ab7f3c0cad9348839871d04fab6c049191f5654",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#333fc34c3e17c4a87027560efa72ff6df87196da",
     "lodash": "~4.17.11",
     "moment": "~2.24.0",
     "moment-timezone": "~0.5.23",
@@ -104,6 +104,9 @@
     "react-test-renderer": "^16.8.6",
     "redux-mock-store": "^1.5.3",
     "redux-thunk": "^2.3.0"
+  },
+  "resolutions": {
+    "stacktrace-parser": "0.1.6"
   },
   "engines": {
     "node": ">=9.10.0",
