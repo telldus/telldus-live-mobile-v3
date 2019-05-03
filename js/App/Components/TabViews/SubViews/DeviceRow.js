@@ -375,7 +375,16 @@ class DeviceRow extends View<Props, State> {
 
 	openRGBControl = () => {
 		const { openRGBControl, device } = this.props;
-		openRGBControl(device.id);
+		const { showMoreActions } = this.state;
+		if (showMoreActions) {
+			this.setState({
+				showMoreActions: false,
+			}, () => {
+				openRGBControl(device.id);
+			});
+		} else {
+			openRGBControl(device.id);
+		}
 	}
 
 	render(): Object {
@@ -438,23 +447,6 @@ class DeviceRow extends View<Props, State> {
 		// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
 		// 2. The same prop is used/accessed inside "TabViews/SubViews/Device/MultiActionModal.js" to override the style
 		// in the case of device groups.
-		if (RGB) {
-			button.unshift(
-				<RGBButton
-					{...sharedProps}
-					openRGBControl={this.openRGBControl}
-					setScrollEnabled={this.props.setScrollEnabled}
-					showSlider={!BELL && !UP && !DOWN && !STOP}
-					onSlideActive={this.onSlideActive}
-					onSlideComplete={this.onSlideComplete}
-					key={8}
-					offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
-					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
-					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
-					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
-				/>
-			);
-		}
 		if (BELL) {
 			button.unshift(
 				<BellButton
@@ -487,7 +479,7 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-		if ((TURNON || TURNOFF) && !DIM) {
+		if ((TURNON || TURNOFF) && !DIM && !RGB) {
 			button.unshift(
 				<ToggleButton
 					{...sharedProps}
@@ -496,7 +488,24 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
+		if (RGB) {
+			button.unshift(
+				<RGBButton
+					{...sharedProps}
+					openRGBControl={this.openRGBControl}
+					setScrollEnabled={this.props.setScrollEnabled}
+					showSlider={!BELL && !UP && !DOWN && !STOP}
+					onSlideActive={this.onSlideActive}
+					onSlideComplete={this.onSlideComplete}
+					key={6}
+					offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
+					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
+					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
+					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+				/>
+			);
+		}
+		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB) {
 			button.unshift(
 				<ToggleButton
 					{...sharedProps}

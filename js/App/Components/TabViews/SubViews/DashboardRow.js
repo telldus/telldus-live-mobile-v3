@@ -105,7 +105,16 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 openRGBControl = () => {
 	const { openRGBControl, item } = this.props;
-	openRGBControl(item.id);
+	const { showMoreActions } = this.state;
+	if (showMoreActions) {
+		this.setState({
+			showMoreActions: false,
+		}, () => {
+			openRGBControl(item.id);
+		});
+	} else {
+		openRGBControl(item.id);
+	}
 }
 
 getButtonsInfo(item: Object, styles: Object): Object {
@@ -146,34 +155,6 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	// 2. The same prop is used/accessed inside "TabViews/SubViews/Device/MultiActionModal.js" to override the style
 	// in the case of device groups.
 
-	if (RGB) {
-		const width = tileWidth;
-		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : {
-			backgroundColor: isInState === 'TURNOFF' ? offColorRGB : colorDeviceIconBack,
-		};
-
-		buttons.unshift(
-			<RGBDashboardTile
-				{...this.props}
-				device={item}
-				openRGBControl={this.openRGBControl}
-				setScrollEnabled={setScrollEnabled}
-				showSlider={!BELL && !UP && !DOWN && !STOP}
-				onSlideActive={this.onSlideActive}
-				onSlideComplete={this.onSlideComplete}
-				key={8}
-				offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
-				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
-				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
-				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
-				containerStyle={[styles.buttonsContainerStyle, {width}]}
-			/>);
-		buttonsInfo.unshift({
-			iconContainerStyle: iconContainerStyle,
-			iconsName,
-		});
-	}
-
 	if (BELL) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 
@@ -212,7 +193,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		});
 	}
 
-	if ((TURNON || TURNOFF) && !DIM) {
+	if ((TURNON || TURNOFF) && !DIM && !RGB) {
 		const showMoreButtons = BELL || UP || DOWN || STOP;
 		const width = !showMoreButtons ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
@@ -225,7 +206,36 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		});
 	}
 
-	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
+	if (RGB) {
+		const showSlider = !BELL && !UP && !DOWN && !STOP;
+		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : {
+			backgroundColor: isInState === 'TURNOFF' ? offColorRGB : colorDeviceIconBack,
+		};
+
+		buttons.unshift(
+			<RGBDashboardTile
+				{...this.props}
+				device={item}
+				openRGBControl={this.openRGBControl}
+				setScrollEnabled={setScrollEnabled}
+				showSlider={showSlider}
+				onSlideActive={this.onSlideActive}
+				onSlideComplete={this.onSlideComplete}
+				key={6}
+				offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
+				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
+				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
+				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+				containerStyle={[styles.buttonsContainerStyle, {width}]}
+			/>);
+		buttonsInfo.unshift({
+			iconContainerStyle: iconContainerStyle,
+			iconsName,
+		});
+	}
+
+	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 

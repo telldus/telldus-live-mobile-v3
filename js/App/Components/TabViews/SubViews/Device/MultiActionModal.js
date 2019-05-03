@@ -125,6 +125,17 @@ render(): Object {
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
 							let newStyle = {}, newProps = {}, { newButtonStyle, containerStyle } = styles;
+							if (child.key === '6') {
+								newStyle = {
+									onButtonStyle: newButtonStyle,
+									offButtonStyle: newButtonStyle,
+									sliderStyle: newButtonStyle,
+									containerStyle,
+								};
+								newProps = {
+									showSlider: true,
+								};
+							}
 							if (child.key === '4') {
 								newStyle = {
 									bellButtonStyle: [newButtonStyle, {width: Theme.Core.buttonWidth * 2}],
