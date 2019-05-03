@@ -4,7 +4,9 @@
     <stroke
         android:width="2dp"
         android:color="@color/themeDark"/>
+    <solid
+        android:color="@color/themeDark"/>
     <corners
-        android:bottomLeftRadius="5dp"
-        android:topLeftRadius="5dp"/>
+        android:bottomRightRadius="5dp"
+        android:topRightRadius="5dp"/>
 </shape>
