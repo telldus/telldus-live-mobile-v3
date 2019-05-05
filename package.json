@@ -99,7 +99,7 @@
     "redux-thunk": "^2.3.0"
   },
   "resolutions": {
-    "stacktrace-parser": "0.1.6"
+    "stacktrace-parser": "0.1.4"
   },
   "engines": {
     "node": ">=9.10.0",
