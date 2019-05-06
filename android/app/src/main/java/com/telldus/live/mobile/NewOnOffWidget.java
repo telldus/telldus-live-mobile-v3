@@ -241,16 +241,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             int colorIdle = ContextCompat.getColor(context, R.color.brandSecondary);
             if (transparent.equals("dark")) {
-                views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_border_right_round_black);
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_black);
                 colorIdle = ContextCompat.getColor(context, R.color.themeDark);
-                views.setViewPadding(R.id.onCover, -2, 0, 0, 0);
             } else if (transparent.equals("light")) {
-                views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_border_right_round_white);
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white);
                 colorIdle = ContextCompat.getColor(context, R.color.white);
-                views.setViewPadding(R.id.onCover, -2, 0, 0, 0);
             } else {
-                views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-                views.setViewPadding(R.id.onCover, 1, 0, 0, 0);
+                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
             }
 
             views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
@@ -264,16 +261,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("1")) {
                 int colorOnAction = ContextCompat.getColor(context, R.color.white);
                 if (transparent.equals("dark")) {
-                    views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_border_right_round_black_fill);
+                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_black_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.white);
-                    views.setViewPadding(R.id.onCover, -2, 0, 0, 0);
                 } else if (transparent.equals("light")) {
-                    views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
+                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
-                    views.setViewPadding(R.id.onCover, -2, 0, 0, 0);
                 } else {
-                    views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                    views.setViewPadding(R.id.onCover, 1, 0, 0, 0);
+                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
                 }
                 views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                     onActionIcon,
@@ -303,13 +297,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         context));
                 }
                 if (transparent.equals("dark")) {
-                    views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_border_right_round_black_fill);
-                    views.setViewPadding(R.id.onCover, -2, 0, 0, 0);
+                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_black_fill);
                 } else if (transparent.equals("light")) {
-                    views.setInt(R.id.onInnerCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
-                    views.setViewPadding(R.id.onCover, -2, 0, 0, 0);
+                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
                 } else {
-                    views.setViewPadding(R.id.onCover, 1, 0, 0, 0);
                 }
             }
         }
@@ -322,10 +313,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
             int colorIdle = ContextCompat.getColor(context, R.color.brandPrimary);
             if (transparent.equals("dark")) {
-                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_border_left_round_black);
+                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_black_round);
                 colorIdle = ContextCompat.getColor(context, R.color.themeDark);
             } else if (transparent.equals("light")) {
-                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_border_left_round_white);
+                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round);
                 colorIdle = ContextCompat.getColor(context, R.color.white);
             } else {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
@@ -342,10 +333,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("2")) {
                 int colorOnAction = ContextCompat.getColor(context, R.color.white);
                 if (transparent.equals("dark")) {
-                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_border_left_round_black_fill);
+                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_black_round_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.white);
                 } else if (transparent.equals("light")) {
-                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_border_left_round_white_fill);
+                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
                 } else {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
@@ -378,9 +369,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         context));
                 }
                 if (transparent.equals("dark")) {
-                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_border_left_round_black_fill);
+                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_black_round_fill);
                 } else if (transparent.equals("light")) {
-                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_border_left_round_white_fill);
+                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round_fill);
                 }
             }
         }

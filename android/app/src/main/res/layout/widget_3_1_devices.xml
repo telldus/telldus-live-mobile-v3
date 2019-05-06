@@ -20,7 +20,6 @@
     <include layout="@layout/button_on"/>
     <LinearLayout
         android:id="@+id/moreActionsCover"
-        android:layout_marginLeft="1dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="5dp"
         android:elevation="5dp"

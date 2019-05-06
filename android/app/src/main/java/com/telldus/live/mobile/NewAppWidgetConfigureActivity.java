@@ -103,7 +103,6 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private String sesID;
     MyDBHandler database = new MyDBHandler(this);
     private PrefManager prefManager;
-    private String switchStatus = "false";
     private RelativeLayout mBackLayout;
 
     RadioButton radio_def;
@@ -228,6 +227,15 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
                     String deviceCurrentState = null;
+
+                    String trans = "default";
+                    if (radio_dark.isChecked()) {
+                        trans = "dark";
+                    }
+                    if (radio_light.isChecked()) {
+                        trans = "light";
+                    }
+
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -236,7 +244,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         deviceSupportedMethods,
                         deviceTypeCurrent,
                         deviceStateValueCurrent,
-                        switchStatus,
+                        trans,
                         currentUserId,
                         methodRequested,
                         0);

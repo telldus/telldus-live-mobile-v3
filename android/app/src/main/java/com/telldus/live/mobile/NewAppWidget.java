@@ -38,6 +38,8 @@ import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.Date;
+import java.util.Arrays;
+import java.util.List;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -138,7 +140,6 @@ public class NewAppWidget extends AppWidgetProvider {
             return;
         }
 
-        String transparent;
         CharSequence widgetText = DeviceWidgetInfo.getDeviceName();
         String state = DeviceWidgetInfo.getState();
         String deviceType = DeviceWidgetInfo.getDeviceType();
@@ -146,6 +147,7 @@ public class NewAppWidget extends AppWidgetProvider {
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String transparent = DeviceWidgetInfo.getTransparent();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -181,12 +183,28 @@ public class NewAppWidget extends AppWidgetProvider {
         int maxButtonsOnWidget = 5;
         Boolean showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
 
+        transparent = transparent == null ? "" : transparent;
+        if (transparent.equals("dark") || transparent.equals("light")) {
+            views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
+        }
+
         views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
         if (hasBell && !showMoreActions) {
             views.setViewVisibility(R.id.bellCover,View.VISIBLE);
+
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+            int colorIdle = handleBackgroundWhenIdleOne(
+                                "BELL",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.bellCover,
+                                views,
+                                context
+                            );
             views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
                 "bell",
-                ContextCompat.getColor(context, R.color.brandSecondary),
+                colorIdle,
                 80,
                 95,
                 65,
@@ -194,25 +212,19 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.bellCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
 
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            } else if (isLastButton) {
-                views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            } else {
-                views.setInt(R.id.bellCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_BELL)) {
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
-                } else if (isLastButton) {
-                    views.setInt(R.id.bellCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                } else {
-                    views.setInt(R.id.bellCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                }
+                int colorOnAction = handleBackgroundOnActionOne(
+                                        "BELL",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.bellCover,
+                                        views,
+                                        context
+                                    );
                 views.setImageViewBitmap(R.id.bell, CommonUtilities.buildTelldusIcon(
                     "bell",
-                    ContextCompat.getColor(context, R.color.white),
+                    colorOnAction,
                     80,
                     95,
                     65,
@@ -236,6 +248,15 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                handleBackgroundPostActionOne(
+                    "BELL",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.bellCover,
+                    views,
+                    context
+                );
             }
 
             renderedButtonsCount++;
@@ -244,9 +265,20 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasUp && !showMoreActions) {
             views.setViewVisibility(R.id.upCover, View.VISIBLE);
+
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+            int colorIdle = handleBackgroundWhenIdleOne(
+                                "UP",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.upCover,
+                                views,
+                                context
+                            );
             views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
                 "up",
-                ContextCompat.getColor(context, R.color.brandSecondary),
+                colorIdle,
                 80,
                 95,
                 65,
@@ -254,25 +286,19 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.upCover, getPendingSelf(context, ACTION_UP, appWidgetId));
 
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            } else if (isLastButton && methodRequested == null) {
-                views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            } else {
-                views.setInt(R.id.upCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_UP)) {
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
-                } else if (isLastButton) {
-                    views.setInt(R.id.upCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                } else {
-                    views.setInt(R.id.upCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                }
+                int colorOnAction = handleBackgroundOnActionOne(
+                                        "UP",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.upCover,
+                                        views,
+                                        context
+                                    );
                 views.setImageViewBitmap(R.id.uparrow, CommonUtilities.buildTelldusIcon(
                     "up",
-                    ContextCompat.getColor(context, R.color.white),
+                    colorOnAction,
                     80,
                     95,
                     65,
@@ -296,6 +322,15 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                handleBackgroundPostActionOne(
+                    "UP",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.upCover,
+                    views,
+                    context
+                );
             }
             renderedButtonsCount++;
         }
@@ -303,36 +338,40 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasDown && !showMoreActions) {
             views.setViewVisibility(R.id.downCover, View.VISIBLE);
+
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+            int colorIdle = handleBackgroundWhenIdleOne(
+                                "DOWN",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.downCover,
+                                views,
+                                context
+                            );
             views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
                 "down",
-                ContextCompat.getColor(context, R.color.brandSecondary),
+                colorIdle,
                 80,
                 95,
                 65,
                 context));
 
-
             views.setOnClickPendingIntent(R.id.downCover, getPendingSelf(context, ACTION_DOWN, appWidgetId));
 
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            } else if (isLastButton) {
-                views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            } else {
-                views.setInt(R.id.downCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DOWN)) {
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
-                } else if (isLastButton) {
-                    views.setInt(R.id.downCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                } else {
-                    views.setInt(R.id.downCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                }
+                int colorOnAction = handleBackgroundOnActionOne(
+                                        "DOWN",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.downCover,
+                                        views,
+                                        context
+                                    );
                 views.setImageViewBitmap(R.id.downarrow, CommonUtilities.buildTelldusIcon(
                     "down",
-                    ContextCompat.getColor(context, R.color.white),
+                    colorOnAction,
                     80,
                     95,
                     65,
@@ -356,6 +395,15 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                handleBackgroundPostActionOne(
+                    "DOWN",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.downCover,
+                    views,
+                    context
+                );
             }
             renderedButtonsCount++;
         }
@@ -363,9 +411,20 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasStop && !showMoreActions) {
             views.setViewVisibility(R.id.stopCover, View.VISIBLE);
+
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+            int colorIdle = handleBackgroundWhenIdleOne(
+                                "STOP",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.stopCover,
+                                views,
+                                context
+                            );
             views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
                 "stop",
-                ContextCompat.getColor(context, R.color.brandPrimary),
+                colorIdle,
                 80,
                 95,
                 65,
@@ -374,25 +433,19 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.stopCover, getPendingSelf(context, ACTION_STOP, appWidgetId));
 
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            } else if (isLastButton) {
-                views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            } else {
-                views.setInt(R.id.stopCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_STOP)) {
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
-                } else if (isLastButton) {
-                    views.setInt(R.id.stopCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_primary_fill);
-                } else {
-                    views.setInt(R.id.stopCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandPrimary));
-                }
+                int colorOnAction = handleBackgroundOnActionOne(
+                                        "STOP",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.stopCover,
+                                        views,
+                                        context
+                                    );
                 views.setImageViewBitmap(R.id.stopicon, CommonUtilities.buildTelldusIcon(
                     "stop",
-                    ContextCompat.getColor(context, R.color.white),
+                    colorOnAction,
                     80,
                     95,
                     65,
@@ -416,6 +469,15 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                handleBackgroundPostActionOne(
+                    "STOP",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.stopCover,
+                    views,
+                    context
+                );
             }
             renderedButtonsCount++;
         }
@@ -423,9 +485,20 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasOff && !showMoreActions) {
             views.setViewVisibility(R.id.offCover, View.VISIBLE);
+
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+            int colorIdle = handleBackgroundWhenIdleOne(
+                                "OFF",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.offCover,
+                                views,
+                                context
+                            );
             views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                 offActionIcon,
-                ContextCompat.getColor(context, R.color.brandPrimary),
+                colorIdle,
                 80,
                 95,
                 65,
@@ -434,25 +507,21 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.offCover, getPendingSelf(context, ACTION_OFF, appWidgetId));
 
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            } else if (isLastButton) {
-                views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            } else {
-                views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            }
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_OFF)) {
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
-                } else if (isLastButton) {
-                    views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
-                } else {
-                    views.setInt(R.id.offCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandPrimary));
-                }
+
+                int colorOnAction = handleBackgroundOnActionOne(
+                                        "OFF",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.offCover,
+                                        views,
+                                        context
+                                    );
+
                 views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                     offActionIcon,
-                    ContextCompat.getColor(context, R.color.white),
+                    colorOnAction,
                     80,
                     95,
                     65,
@@ -476,6 +545,16 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+
+                handleBackgroundPostActionOne(
+                    "OFF",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.offCover,
+                    views,
+                    context
+                );
             }
             renderedButtonsCount++;
         }
@@ -492,41 +571,46 @@ public class NewAppWidget extends AppWidgetProvider {
             showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer25Cover, View.VISIBLE);
+
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+                int colorIdle = handleBackgroundWhenIdleOne(
+                                "DIM25",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.dimmer25Cover,
+                                views,
+                                context
+                            );
                 views.setImageViewBitmap(R.id.dimmer25, CommonUtilities.buildTelldusIcon(
                     "dim25",
-                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    colorIdle,
                     80,
                     35,
                     65,
                     context));
-                views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setTextColor(R.id.txtDimmer25, colorIdle);
 
                 views.setOnClickPendingIntent(R.id.dimmer25Cover, getPendingSelf(context, DIMMER_25, appWidgetId));
 
-                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-                } else if (isLastButton) {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-                } else {
-                    views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-                }
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
-                    if (renderedButtonsCount == 0) {
-                        views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
-                    } else if (isLastButton) {
-                        views.setInt(R.id.dimmer25Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                    } else {
-                        views.setInt(R.id.dimmer25Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                    }
+                    int colorOnAction = handleBackgroundOnActionOne(
+                                            "DIM25",
+                                            transparent,
+                                            renderedButtonsCount,
+                                            isLastButton,
+                                            R.id.dimmer25Cover,
+                                            views,
+                                            context
+                                        );
                     views.setImageViewBitmap(R.id.dimmer25, CommonUtilities.buildTelldusIcon(
                         "dim25",
-                        ContextCompat.getColor(context, R.color.white),
+                        colorOnAction,
                         80,
                         35,
                         65,
                         context));
-                    views.setTextColor(R.id.txtDimmer25, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer25, colorOnAction);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -557,6 +641,15 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
+                        handleBackgroundPostActionOne(
+                            "DIM25",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.dimmer25Cover,
+                            views,
+                            context
+                        );
                     }
                 }
                 renderedButtonsCount++;
@@ -565,37 +658,46 @@ public class NewAppWidget extends AppWidgetProvider {
             showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer50Cover, View.VISIBLE);
+
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+                int colorIdle = handleBackgroundWhenIdleOne(
+                                    "DIM50",
+                                    transparent,
+                                    renderedButtonsCount,
+                                    isLastButton,
+                                    R.id.dimmer50Cover,
+                                    views,
+                                    context
+                                );
                 views.setImageViewBitmap(R.id.dimmer50, CommonUtilities.buildTelldusIcon(
                     "dim",
-                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    colorIdle,
                     80,
                     35,
                     65,
                     context));
-                views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setTextColor(R.id.txtDimmer50, colorIdle);
 
                 views.setOnClickPendingIntent(R.id.dimmer50Cover, getPendingSelf(context, DIMMER_50, appWidgetId));
 
-                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                if (isLastButton) {
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-                } else {
-                    views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-                }
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
-                    if (isLastButton) {
-                        views.setInt(R.id.dimmer50Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                    } else {
-                        views.setInt(R.id.dimmer50Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                    }
+                    int colorOnAction = handleBackgroundOnActionOne(
+                                            "DIM50",
+                                            transparent,
+                                            renderedButtonsCount,
+                                            isLastButton,
+                                            R.id.dimmer50Cover,
+                                            views,
+                                            context
+                                        );
                     views.setImageViewBitmap(R.id.dimmer50, CommonUtilities.buildTelldusIcon(
                         "dim",
-                        ContextCompat.getColor(context, R.color.white),
+                        colorOnAction,
                         80,
                         35,
                         65,
                         context));
-                    views.setTextColor(R.id.txtDimmer50, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer50, colorOnAction);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -625,6 +727,15 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
+                        handleBackgroundPostActionOne(
+                            "DIM50",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.dimmer50Cover,
+                            views,
+                            context
+                        );
                     }
                 }
                 renderedButtonsCount++;
@@ -633,37 +744,46 @@ public class NewAppWidget extends AppWidgetProvider {
             showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
             if (!showMoreActions) {
                 views.setViewVisibility(R.id.dimmer75Cover, View.VISIBLE);
+
+                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+                int colorIdle = handleBackgroundWhenIdleOne(
+                                    "DIM75",
+                                    transparent,
+                                    renderedButtonsCount,
+                                    isLastButton,
+                                    R.id.dimmer75Cover,
+                                    views,
+                                    context
+                                );
                 views.setImageViewBitmap(R.id.dimmer75, CommonUtilities.buildTelldusIcon(
                     "dim75",
-                    ContextCompat.getColor(context, R.color.brandSecondary),
+                    colorIdle,
                     80,
                     35,
                     65,
                     context));
-                views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.brandSecondary));
+                views.setTextColor(R.id.txtDimmer75, colorIdle);
 
                 views.setOnClickPendingIntent(R.id.dimmer75Cover, getPendingSelf(context, DIMMER_75, appWidgetId));
 
-                Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-                if (isLastButton) {
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-                } else {
-                    views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-                }
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
-                    if (isLastButton) {
-                        views.setInt(R.id.dimmer75Cover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                    } else {
-                        views.setInt(R.id.dimmer75Cover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                    }
+                    int colorOnAction = handleBackgroundOnActionOne(
+                                            "DIM75",
+                                            transparent,
+                                            renderedButtonsCount,
+                                            isLastButton,
+                                            R.id.dimmer75Cover,
+                                            views,
+                                            context
+                                        );
                     views.setImageViewBitmap(R.id.dimmer75, CommonUtilities.buildTelldusIcon(
                         "dim75",
-                        ContextCompat.getColor(context, R.color.white),
+                        colorOnAction,
                         80,
                         35,
                         65,
                         context));
-                    views.setTextColor(R.id.txtDimmer75, ContextCompat.getColor(context, R.color.white));
+                    views.setTextColor(R.id.txtDimmer75, colorOnAction);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -693,6 +813,15 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
+                        handleBackgroundPostActionOne(
+                            "DIM75",
+                            transparent,
+                            renderedButtonsCount,
+                            isLastButton,
+                            R.id.dimmer75Cover,
+                            views,
+                            context
+                        );
                     }
                 }
                 renderedButtonsCount++;
@@ -702,9 +831,20 @@ public class NewAppWidget extends AppWidgetProvider {
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasOn && !showMoreActions) {
             views.setViewVisibility(R.id.onCover, View.VISIBLE);
+
+            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
+            int colorIdle = handleBackgroundWhenIdleOne(
+                                "ON",
+                                transparent,
+                                renderedButtonsCount,
+                                isLastButton,
+                                R.id.onCover,
+                                views,
+                                context
+                            );
             views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                 onActionIcon,
-                ContextCompat.getColor(context, R.color.brandSecondary),
+                colorIdle,
                 80,
                 95,
                 65,
@@ -713,26 +853,19 @@ public class NewAppWidget extends AppWidgetProvider {
 
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_ON, appWidgetId));
 
-            Boolean isLastButton = (renderedButtonsCount == (buttonsCount - 1)) || (renderedButtonsCount == (maxButtonsOnWidget - 1));
-            if (renderedButtonsCount == 0) {
-                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner);
-            } else if (isLastButton) {
-                views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
-            } else {
-                views.setInt(R.id.onCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.lightGray));
-            }
-
             if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_ON)) {
-                if (renderedButtonsCount == 0) {
-                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_secondary_fill);
-                } else if (isLastButton) {
-                    views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
-                } else {
-                    views.setInt(R.id.onCover, "setBackgroundColor", ContextCompat.getColor(context, R.color.brandSecondary));
-                }
+                int colorOnAction = handleBackgroundOnActionOne(
+                                        "ON",
+                                        transparent,
+                                        renderedButtonsCount,
+                                        isLastButton,
+                                        R.id.onCover,
+                                        views,
+                                        context
+                                    );
                 views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                     onActionIcon,
-                    ContextCompat.getColor(context, R.color.white),
+                    colorOnAction,
                     80,
                     95,
                     65,
@@ -756,6 +889,15 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                handleBackgroundPostActionOne(
+                    "ON",
+                    transparent,
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.id.onCover,
+                    views,
+                    context
+                );
             }
             renderedButtonsCount++;
         }
@@ -763,21 +905,27 @@ public class NewAppWidget extends AppWidgetProvider {
         // More actions button
         if (renderedButtonsCount == 4 && buttonsCount > 5) {
             views.setViewVisibility(R.id.moreActionsCover, View.VISIBLE);
-            views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+
+            int colorIcon = ContextCompat.getColor(context, R.color.brandSecondary);
+            if (transparent.equals("dark")) {
+                views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_border_right_round_black);
+                colorIcon = ContextCompat.getColor(context, R.color.themeDark);
+            } else if (transparent.equals("light")) {
+                views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_border_right_round_white);
+                colorIcon = ContextCompat.getColor(context, R.color.white);
+            } else {
+                views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner);
+            }
+
             views.setImageViewBitmap(R.id.moreActions, CommonUtilities.buildTelldusIcon(
                 "overflow",
-                ContextCompat.getColor(context, R.color.brandSecondary),
+                colorIcon,
                 80,
                 95,
                 65,
                 context));
 
             views.setOnClickPendingIntent(R.id.moreActionsCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
-        }
-
-        transparent = DeviceWidgetInfo.getTransparent();
-        if (transparent.equals("true")) {
-            views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
         }
 
         if (isBasicUser) {
@@ -788,8 +936,179 @@ public class NewAppWidget extends AppWidgetProvider {
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
+        if (transparent.equals("dark")) {
+            views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
+        } else if (transparent.equals("light")) {
+            views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.white));
+        } else {
+            views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.white));
+        }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    public static Boolean isPrimaryShade(String button) {
+        String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
+
+        List<String> list = Arrays.asList(primaryShadedButtons);
+
+        return list.contains(button);
+
+    }
+
+    public static int handleBackgroundWhenIdleOne(
+        String button, String transparent,
+        int renderedButtonsCount, Boolean isLastButton,
+        int viewId, RemoteViews views, Context context) {
+
+            if (transparent.equals("dark")) {
+                setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_black_round,
+                    R.drawable.shape_border_right_round_black,
+                    R.drawable.shape_left_black,
+                    viewId,
+                    views,
+                    context
+                );
+                if (renderedButtonsCount != 0) {
+                }
+                return ContextCompat.getColor(context, R.color.themeDark);
+            } else if (transparent.equals("light")) {
+                setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_white_round,
+                    R.drawable.shape_border_right_round_white,
+                    R.drawable.shape_left_white,
+                    viewId,
+                    views,
+                    context
+                );
+                if (renderedButtonsCount != 0) {
+                }
+                return ContextCompat.getColor(context, R.color.white);
+            } else {
+                setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_rounded_corner,
+                    R.drawable.shape_right_rounded_corner,
+                    R.drawable.button_background_no_bordradi,
+                    viewId,
+                    views,
+                    context
+                );
+                if (isPrimaryShade(button)) {
+                    return ContextCompat.getColor(context, R.color.brandPrimary);
+                }
+                return ContextCompat.getColor(context, R.color.brandSecondary);
+            }
+    }
+
+    public static int handleBackgroundOnActionOne(
+        String button, String transparent,
+        int renderedButtonsCount, Boolean isLastButton,
+        int viewId, RemoteViews views, Context context) {
+
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                renderedButtonsCount,
+                isLastButton,
+                R.drawable.shape_left_black_round_fill,
+                R.drawable.shape_border_right_round_black_fill,
+                R.drawable.shape_left_black_fill,
+                viewId,
+                views,
+                context
+            );
+            if (renderedButtonsCount != 0) {
+            }
+            return ContextCompat.getColor(context, R.color.white);
+        } else if (transparent.equals("light")) {
+            setCoverBackground(
+                renderedButtonsCount,
+                isLastButton,
+                R.drawable.shape_left_white_round_fill,
+                R.drawable.shape_border_right_round_white_fill,
+                R.drawable.shape_left_white_fill,
+                viewId,
+                views,
+                context
+            );
+            if (renderedButtonsCount != 0) {
+            }
+            return ContextCompat.getColor(context, R.color.themeDark);
+        } else {
+            if (isPrimaryShade(button)) {
+                setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_rounded_corner_primary_fill,
+                    R.drawable.shape_right_rounded_corner_primary_fill,
+                    R.drawable.button_background_no_bordradi_primary_fill,
+                    viewId,
+                    views,
+                    context
+                );
+            } else {
+                setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_rounded_corner_secondary_fill,
+                    R.drawable.shape_right_rounded_corner_secondary_fill,
+                    R.drawable.button_background_no_bordradi_secondary_fill,
+                    viewId,
+                    views,
+                    context
+                );
+            }
+            return ContextCompat.getColor(context, R.color.white);
+        }
+    }
+
+    public static void handleBackgroundPostActionOne(
+        String button, String transparent,
+        int renderedButtonsCount, Boolean isLastButton,
+        int viewId, RemoteViews views, Context context) {
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                renderedButtonsCount,
+                isLastButton,
+                R.drawable.shape_border_left_round_black_fill,
+                R.drawable.shape_border_right_round_black_fill,
+                R.drawable.shape_left_black_fill,
+                viewId,
+                views,
+                context
+            );
+        } else if (transparent.equals("light")) {
+            setCoverBackground(
+                renderedButtonsCount,
+                isLastButton,
+                R.drawable.shape_border_left_round_white_fill,
+                R.drawable.shape_border_right_round_white_fill,
+                R.drawable.shape_left_white_fill,
+                viewId,
+                views,
+                context
+            );
+        }
+    }
+
+    public static void setCoverBackground(
+        int renderedButtonsCount, Boolean isLastButton,
+        int drawableWhenFirst, int drawableWhenLast, int drawableWhenInMiddle,
+        int viewId, RemoteViews views, Context context
+        ) {
+        if (renderedButtonsCount == 0) {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenFirst);
+        } else if (isLastButton) {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenLast);
+        } else {
+            views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
+        }
     }
 
     @Override
