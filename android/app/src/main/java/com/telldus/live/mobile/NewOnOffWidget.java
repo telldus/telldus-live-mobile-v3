@@ -182,9 +182,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                 "bell",
                 colorIdle,
-                160,
-                85,
-                85,
+                80,
+                60,
+                40,
                 context));
 
             if (methodRequested != null && isShowingStatus != 1 && state == null && methodRequested.equals("4")) {
@@ -201,9 +201,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                     "bell",
                     colorOnAction,
-                    160,
-                    85,
-                    85,
+                    80,
+                    60,
+                    40,
                     context));
             }
 
@@ -212,17 +212,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                         "statusx",
                         ContextCompat.getColor(context, R.color.widgetRed),
-                        160,
-                        85,
-                        85,
+                        80,
+                        60,
+                        40,
                         context));
                 } else {
                     views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                         "statuscheck",
                         ContextCompat.getColor(context, R.color.widgetGreen),
-                        160,
-                        85,
-                        85,
+                        80,
+                        60,
+                        40,
                         context));
                 }
                 if (transparent.equals("dark")) {
