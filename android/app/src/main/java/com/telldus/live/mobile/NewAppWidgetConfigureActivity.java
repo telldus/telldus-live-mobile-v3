@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 import android.widget.RadioButton;
+import android.support.v4.content.ContextCompat;
 
 import com.androidnetworking.error.ANError;
 
@@ -108,6 +109,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
     RadioButton radio_def;
     RadioButton radio_dark;
     RadioButton radio_light;
+
+    TextView text_default;
+    TextView text_trans_dark;
+    TextView text_trans_light;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -187,9 +192,15 @@ public class NewAppWidgetConfigureActivity extends Activity {
             radio_dark = (RadioButton)findViewById(R.id.radio_dark);
             radio_light = (RadioButton)findViewById(R.id.radio_light);
 
+            text_default = (TextView)findViewById(R.id.text_default);
+            text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
+            text_trans_light = (TextView)findViewById(R.id.text_trans_light);
+
             radio_def.setChecked(true);
             View def_cover = (View)findViewById(R.id.def_cover);
             def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+
 
             Intent intent = getIntent();
             Bundle extras = intent.getExtras();
@@ -296,6 +307,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
                     dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
                 break;
             case R.id.radio_dark:
@@ -306,6 +321,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
                     light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
                 break;
             case R.id.radio_light:
@@ -316,6 +335,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                     def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
                 }
                 break;
         }

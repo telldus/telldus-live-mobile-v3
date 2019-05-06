@@ -40,6 +40,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
+import android.support.v4.content.ContextCompat;
 
 import com.androidnetworking.error.ANError;
 
@@ -109,6 +110,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     RadioButton radio_def;
     RadioButton radio_dark;
     RadioButton radio_light;
+
+    TextView text_default;
+    TextView text_trans_dark;
+    TextView text_trans_light;
 
     public static final String ROOT = "fonts/",
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
@@ -194,6 +199,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceText = (TextView)findViewById(R.id.deviceText);
             themeText = (TextView)findViewById(R.id.themeText);
 
+            text_default = (TextView)findViewById(R.id.text_default);
+            text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
+            text_trans_light = (TextView)findViewById(R.id.text_trans_light);
+
             btnCan = (Button)findViewById(R.id.btn_cancel);
             btnCan.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -209,6 +218,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             radio_def.setChecked(true);
             View def_cover = (View)findViewById(R.id.def_cover);
             def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
 
             tvIcon1 = (TextView) findViewById(R.id.tvIcon1);
             tvIcon1.setText("device-alt");
@@ -334,6 +344,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
                     dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
                 break;
             case R.id.radio_dark:
@@ -344,6 +358,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
                     light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
                 }
                 break;
             case R.id.radio_light:
@@ -354,6 +372,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
                     light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
                 }
                 break;
         }
