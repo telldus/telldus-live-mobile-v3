@@ -13,7 +13,7 @@
 
 	<string name="app_name" translatable="false">Telldus Live! Mobile</string>
 
-	<string name="reserved_widget_android_confirm">Confirm &amp; Save</string>
+	<string name="reserved_widget_android_label_save">Save</string>
 	<string name="reserved_widget_android_dialogueBox_defaultNegativeText">Cancel</string>
 
 	<string name="reserved_widget_android_unknown">Unknown</string>

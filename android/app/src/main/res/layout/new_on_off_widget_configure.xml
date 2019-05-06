@@ -61,7 +61,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_centerVertical="true">
+                    android:layout_centerVertical="true"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:paddingRight="20dp">
 
                     <TextView
                         android:id="@+id/testText"
@@ -69,8 +72,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/reserved_widget_android_device_configure_header_one"
                         android:textSize="33sp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="27sp"
+                        android:layout_gravity="right"
                         android:textColor="@color/white"/>
 
                     <TextView
@@ -81,8 +83,7 @@
                         android:text="@string/reserved_widget_android_configure_header_two"
                         android:textSize="22sp"
                         android:textColor="@color/white"
-                        android:layout_gravity="center"
-                        android:paddingLeft="15sp"/>
+                        android:layout_gravity="right"/>
                 </LinearLayout>
             </RelativeLayout>
 
@@ -224,7 +225,7 @@
                             android:paddingBottom="10dp"
                             android:textColor="@color/white"
                             android:background="@drawable/orangebutton"
-                            android:text="@string/reserved_widget_android_confirm"/>
+                            android:text="@string/reserved_widget_android_label_save"/>
 
                         <Button
                             android:id="@+id/btn_cancel"

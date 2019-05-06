@@ -27,7 +27,6 @@ import {
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 const isEqual = require('react-fast-compare');
-import startCase from 'lodash/startCase';
 
 import {
 	View,
@@ -133,7 +132,7 @@ contactSupport() {
 	const { id } = location;
 	const { value, isLoading, routerValue, emailValue } = this.state;
 
-	const errorH = startCase(formatMessage(i18n.errorCannotCreateTicketH));
+	const errorH = formatMessage(i18n.errorCannotCreateTicketH);
 	const errorB = formatMessage(i18n.errorCannotCreateTicketB, {url: 'support.telldus.com.'});
 
 	Keyboard.dismiss();
@@ -157,7 +156,7 @@ contactSupport() {
 			};
 			actions.createSupportTicketLCT(id, ticketData).then((ticketNum: number) => {
 				if (ticketNum && typeof ticketNum === 'number') {
-					this.showDialogue(startCase(formatMessage(i18n.labelSupportTicketCreated)), formatMessage(i18n.messageSupportTicket, {ticketNum}));
+					this.showDialogue(formatMessage(i18n.labelSupportTicketCreated), formatMessage(i18n.messageSupportTicket, {ticketNum}));
 				} else {
 					this.showDialogue(errorH, errorB);
 				}
