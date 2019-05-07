@@ -66,7 +66,7 @@
           android:value="${pushSenderId}"/>
         <receiver android:name=".DeviceWidget"/>
 
-        <receiver android:name=".BroadcastReceiver.BootCompleteReceiver">
+        <receiver android:name=".BroadcastReceiver.BootCompleteReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
