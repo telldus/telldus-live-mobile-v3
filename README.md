@@ -16,7 +16,7 @@ All commands are assumed to be ran from project root.
 
 ### General
 
-- install [nodejs > 8](https://nodejs.org/en/)
+- install [nodejs >= 10](https://nodejs.org/en/)
 - install [yarn](https://yarnpkg.com/en/)
 - install local deps: `yarn install`
 - install global deps: `npm install -g react-native-cli`
