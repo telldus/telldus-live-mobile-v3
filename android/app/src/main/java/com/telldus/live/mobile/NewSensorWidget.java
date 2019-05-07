@@ -162,11 +162,13 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (transparent.equals("dark")) {
             view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
             view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
+            view.setViewPadding(R.id.linear_background, 5, 0, 0, 0);
             color = ContextCompat.getColor(context, R.color.themeDark);
         } else if (transparent.equals("light")) {
             view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
             view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white);
             color = ContextCompat.getColor(context, R.color.white);
+            view.setViewPadding(R.id.linear_background, 5, 0, 0, 0);
         }
 
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
