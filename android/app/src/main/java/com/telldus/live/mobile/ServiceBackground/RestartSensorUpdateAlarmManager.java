@@ -67,6 +67,7 @@ public class RestartSensorUpdateAlarmManager extends Service {
             SensorInfo widgetInfo = db.findWidgetInfoSensor(widgetId);
             if (widgetInfo != null) {
                 Integer updateInterval = widgetInfo.getUpdateInterval();
+                sensorUpdateAlarmManager.stopAlarm(widgetId);
                 sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval);
             }
         }

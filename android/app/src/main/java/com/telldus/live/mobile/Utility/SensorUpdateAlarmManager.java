@@ -51,7 +51,7 @@ public class SensorUpdateAlarmManager {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), updateInterval, pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
         }
     }
 

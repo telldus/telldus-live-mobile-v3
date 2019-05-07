@@ -274,6 +274,12 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
+            SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
+            sensorUpdateAlarmManager.stopAlarm(widgetId);
+
+            int updateInterval = widgetInfo.getUpdateInterval();
+            sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval);
+
             createSensorApi(sensorId, widgetId, db, context);
         }
     }
