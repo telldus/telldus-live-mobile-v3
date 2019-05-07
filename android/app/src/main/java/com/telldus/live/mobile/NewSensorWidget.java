@@ -157,20 +157,32 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         String formattedDT = formattedDate + " " + formattedTime;
 
-        if (transparent.equals("true")) {
+        transparent = transparent == null ? "" : transparent;
+        int color = ContextCompat.getColor(context, R.color.white);
+        if (transparent.equals("dark")) {
             view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
-            view.setInt(R.id.linear_background,"setBackgroundColor", Color.TRANSPARENT);
+            view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
+            color = ContextCompat.getColor(context, R.color.themeDark);
+        } else if (transparent.equals("light")) {
+            view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+            view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white);
+            color = ContextCompat.getColor(context, R.color.white);
         }
 
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
 
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
-                ContextCompat.getColor(context, R.color.white),
+                color,
                 62,
                 90,
                 58,
                 context));
+        view.setTextColor(R.id.txtSensorType, color);
+        view.setTextColor(R.id.txtHistoryInfo, color);
+        view.setTextColor(R.id.txtSensorValue, color);
+        view.setTextColor(R.id.txtSensorUnit, color);
+
         view.setTextViewText(R.id.txtSensorType, widgetText);
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
         view.setTextViewText(R.id.txtSensorValue, formattedValue);
@@ -179,9 +191,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         long currentTime = new Date().getTime();
         long timeAgo = currentTime - time;
         int limit = (24 * 3600 * 1000);
-        if (timeAgo < limit) {
+        if (timeAgo < limit && !transparent.equals("light") && !transparent.equals("dark")) {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.white));
-        } else {
+        } else if (timeAgo >= limit) {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.brightRed));
         }
 
