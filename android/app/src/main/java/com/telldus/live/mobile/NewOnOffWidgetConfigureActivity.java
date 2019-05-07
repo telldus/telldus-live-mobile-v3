@@ -199,10 +199,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             deviceText = (TextView)findViewById(R.id.deviceText);
             themeText = (TextView)findViewById(R.id.themeText);
 
-            text_default = (TextView)findViewById(R.id.text_default);
-            text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
-            text_trans_light = (TextView)findViewById(R.id.text_trans_light);
-
             btnCan = (Button)findViewById(R.id.btn_cancel);
             btnCan.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -210,6 +206,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     finish();
                 }
             });
+
+            text_default = (TextView)findViewById(R.id.text_default);
+            text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
+            text_trans_light = (TextView)findViewById(R.id.text_trans_light);
 
             radio_def = (RadioButton)findViewById(R.id.radio_def);
             radio_dark = (RadioButton)findViewById(R.id.radio_dark);

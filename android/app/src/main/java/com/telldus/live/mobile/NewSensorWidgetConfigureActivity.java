@@ -36,6 +36,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
+import android.widget.RadioButton;
+import android.support.v4.content.ContextCompat;
 
 import com.androidnetworking.error.ANError;
 
@@ -66,7 +68,6 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private AppWidgetManager widgetManager;
     private ProgressDialog pDialog;
     private PrefManager prefManager;
-    private String transparent = "false";
     Switch switch_background;
     ImageView backSensor;
     private RelativeLayout mSensorBack;
@@ -99,6 +100,14 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String client_secret;
 
     public int selectedSensorIndex = -1, selectedSensorValueIndex = -1, selectedIntervalOptionsIndex = 0;
+
+    RadioButton radio_def;
+    RadioButton radio_dark;
+    RadioButton radio_light;
+
+    TextView text_default;
+    TextView text_trans_dark;
+    TextView text_trans_light;
 
 
     @Override
@@ -177,12 +186,24 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
             btAdd = (Button) findViewById(R.id.btAdd);
             button_cancel = (Button) findViewById(R.id.button_cancel);
-            switch_background = (Switch) findViewById(R.id.switch_background);
             chooseSettingSensor = (TextView) findViewById(R.id.chooseSettingSensor);
             testText = (TextView) findViewById(R.id.testTextSensor);
             settingText = (TextView) findViewById(R.id.settingText);
             valueText = (TextView) findViewById(R.id.valueText);
             sensorText = (TextView) findViewById(R.id.sensorText);
+
+            text_default = (TextView)findViewById(R.id.text_default);
+            text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
+            text_trans_light = (TextView)findViewById(R.id.text_trans_light);
+
+            radio_def = (RadioButton)findViewById(R.id.radio_def);
+            radio_dark = (RadioButton)findViewById(R.id.radio_dark);
+            radio_light = (RadioButton)findViewById(R.id.radio_light);
+
+            radio_def.setChecked(true);
+            View def_cover = (View)findViewById(R.id.def_cover);
+            def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+            text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
 
             Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
             Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
@@ -200,24 +221,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             sensorText.setText(getResources().getString(R.string.reserved_widget_android_labelSensor)+":");
             btAdd.setTypeface(subtitleFont);
             button_cancel.setTypeface(subtitleFont);
-            switch_background.setTypeface(subtitleFont);
 
             button_cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
-                }
-            });
-
-            switch_background.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    // do something, the isChecked will be
-                    // true if the switch is in the On position
-                    if (isChecked) {
-                        transparent="true";
-                    } else {
-                        transparent="false";
-                    }
                 }
             });
 
@@ -238,6 +246,15 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     }
 
                     String currentUserId = prefManager.getUserId();
+
+                    String trans = "default";
+                    if (radio_dark.isChecked()) {
+                        trans = "dark";
+                    }
+                    if (radio_light.isChecked()) {
+                        trans = "light";
+                    }
+
                     SensorInfo mSensorInfo = new SensorInfo(
                         appWidgetId,
                         sensorName.getText().toString(),
@@ -247,7 +264,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         senUnit,
                         senIcon,
                         lastUp,
-                        transparent,
+                        trans,
                         currentUserId,
                         selectInterval);
                     database.addWidgetSensor(mSensorInfo);
@@ -425,6 +442,63 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
         }
     }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        View def_cover = (View)findViewById(R.id.def_cover);
+        View dark_cover = (View)findViewById(R.id.dark_cover);
+        View light_cover = (View)findViewById(R.id.light_cover);
+
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_def:
+                if (checked) {
+                    radio_dark.setChecked(false);
+                    radio_light.setChecked(false);
+
+                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                }
+                break;
+            case R.id.radio_dark:
+                if (checked) {
+                    radio_def.setChecked(false);
+                    radio_light.setChecked(false);
+
+                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                }
+                break;
+            case R.id.radio_light:
+                if (checked) {
+                    radio_dark.setChecked(false);
+                    radio_def.setChecked(false);
+
+                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec_fill_prim));
+
+                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                }
+                break;
+        }
+    }
+
     void createSensorsApi() {
 
         String params = "/sensors/list?includeValues=1&includeScale=1";
