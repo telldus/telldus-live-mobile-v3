@@ -105,6 +105,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
     private PrefManager prefManager;
     private RelativeLayout mBackLayout;
 
+    View def_cover;
+    View dark_cover;
+    View light_cover;
+
     RadioButton radio_def;
     RadioButton radio_dark;
     RadioButton radio_light;
@@ -187,6 +191,10 @@ public class NewAppWidgetConfigureActivity extends Activity {
                 }
             });
 
+            def_cover = (View)findViewById(R.id.def_cover);
+            dark_cover = (View)findViewById(R.id.dark_cover);
+            light_cover = (View)findViewById(R.id.light_cover);
+
             radio_def = (RadioButton)findViewById(R.id.radio_def);
             radio_dark = (RadioButton)findViewById(R.id.radio_dark);
             radio_light = (RadioButton)findViewById(R.id.radio_light);
@@ -199,6 +207,28 @@ public class NewAppWidgetConfigureActivity extends Activity {
             View def_cover = (View)findViewById(R.id.def_cover);
             def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
             text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+
+            def_cover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    radio_def.setChecked(true);
+                    onPressDefault();
+                }
+            });
+            dark_cover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    radio_dark.setChecked(true);
+                    onPressDark();
+                }
+            });
+            light_cover.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    radio_light.setChecked(true);
+                    onPressLight();
+                }
+            });
 
 
             Intent intent = getIntent();
@@ -296,60 +326,67 @@ public class NewAppWidgetConfigureActivity extends Activity {
         }
     }
 
-     public void onRadioButtonClicked(View view) {
+    public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
-
-        View def_cover = (View)findViewById(R.id.def_cover);
-        View dark_cover = (View)findViewById(R.id.dark_cover);
-        View light_cover = (View)findViewById(R.id.light_cover);
-
 
         // Check which radio button was clicked
         switch(view.getId()) {
             case R.id.radio_def:
                 if (checked) {
-                    radio_dark.setChecked(false);
-                    radio_light.setChecked(false);
-
-                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
-                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
-                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
-
-                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
-                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    onPressDefault();
                 }
                 break;
             case R.id.radio_dark:
                 if (checked) {
-                    radio_def.setChecked(false);
-                    radio_light.setChecked(false);
-
-                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
-                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
-                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
-
-                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
-                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+                    onPressDark();
                 }
                 break;
             case R.id.radio_light:
                 if (checked) {
-                    radio_dark.setChecked(false);
-                    radio_def.setChecked(false);
-
-                    def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
-                    dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
-                    light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec_fill_prim));
-
-                    text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                    text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
-                    text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+                    onPressLight();
                 }
                 break;
         }
+    }
+
+    public void onPressLight() {
+        radio_dark.setChecked(false);
+        radio_def.setChecked(false);
+
+        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+        light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec_fill_prim));
+
+        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+    }
+
+    public void onPressDark() {
+        radio_def.setChecked(false);
+        radio_light.setChecked(false);
+
+        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+        light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+    }
+
+    public void onPressDefault() {
+        radio_dark.setChecked(false);
+        radio_light.setChecked(false);
+
+        def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
+        dark_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray));
+        light_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_gray_fill_prim));
+
+        text_default.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.brandSecondary));
+        text_trans_dark.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
+        text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
     }
 
     void createDeviceApi() {
