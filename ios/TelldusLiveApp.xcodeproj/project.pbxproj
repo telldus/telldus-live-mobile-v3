@@ -378,13 +378,6 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNFirebase;
 		};
-		26EDB68B22266AD1003EF9E3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 26EDB67F22266ACF003EF9E3;
-			remoteInfo = Widget;
-		};
 		26F1F820209B276400ADBBC0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B4B40A8A593241268FE52652 /* RNRSA.xcodeproj */;
@@ -1090,7 +1083,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				26EDB68C22266AD1003EF9E3 /* PBXTargetDependency */,
 			);
 			name = TelldusLiveApp;
 			productName = "Hello World";
@@ -1832,14 +1824,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		26EDB68C22266AD1003EF9E3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 26EDB67F22266ACF003EF9E3 /* Widget */;
-			targetProxy = 26EDB68B22266AD1003EF9E3 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
