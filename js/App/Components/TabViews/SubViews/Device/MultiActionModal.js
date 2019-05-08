@@ -125,7 +125,7 @@ render(): Object {
 					{React.Children.map(buttons, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
 							let newStyle = {}, newProps = {}, { newButtonStyle, containerStyle } = styles;
-							if (child.key === '6') {
+							if (child.key === '7') {
 								newStyle = {
 									onButtonStyle: newButtonStyle,
 									offButtonStyle: newButtonStyle,

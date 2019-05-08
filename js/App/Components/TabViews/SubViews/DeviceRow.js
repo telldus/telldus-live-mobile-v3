@@ -497,7 +497,7 @@ class DeviceRow extends View<Props, State> {
 					showSlider={!BELL && !UP && !DOWN && !STOP}
 					onSlideActive={this.onSlideActive}
 					onSlideComplete={this.onSlideComplete}
-					key={6}
+					key={7}
 					offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
 					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
