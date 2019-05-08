@@ -43,22 +43,20 @@ public class SensorUpdateAlarmManager {
         calendar.add(Calendar.MILLISECOND, updateInterval);
 
         boolean alreadyRunning = checkIfAlarmAlreadyRunning(widgetId);
+        Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
+        alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
+        alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (!alreadyRunning) {
-            Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
-            alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
-            alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-        }
+        AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
     }
 
     public void stopAlarm(int widgetId) {
         Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
         alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);

@@ -29,6 +29,7 @@ import android.widget.RemoteViews;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -193,7 +194,10 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
 
             int updateInterval = sensorWidgetInfo.getUpdateInterval();
-            sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval);
+            boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId);
+            if (!alreadyRunning) {
+                sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval);
+            }
         }
 
         // Instruct the widget manager to update the widget
@@ -274,10 +278,8 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
-            SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
-            sensorUpdateAlarmManager.stopAlarm(widgetId);
-
             int updateInterval = widgetInfo.getUpdateInterval();
+            SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
             sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval);
 
             createSensorApi(sensorId, widgetId, db, context);
