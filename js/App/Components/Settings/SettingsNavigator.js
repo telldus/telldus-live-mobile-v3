@@ -32,7 +32,7 @@ import PushSettings from './PushSettings';
 
 const initialRouteName = 'MainSettingsScreen';
 
-const renderScheduleScreen = (navigation, screenProps) => (Component, ScreenName) => (
+const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
 	<SettingsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</SettingsContainer>
@@ -40,10 +40,10 @@ const renderScheduleScreen = (navigation, screenProps) => (Component, ScreenName
 
 const RouteConfigs = {
 	MainSettingsScreen: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(MainSettingsScreen, 'MainSettingsScreen'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(MainSettingsScreen, 'MainSettingsScreen'),
 	},
 	PushSettings: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(PushSettings, 'PushSettings'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(PushSettings, 'PushSettings'),
 	},
 };
 
