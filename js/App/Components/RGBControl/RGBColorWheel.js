@@ -28,7 +28,7 @@ import {
 	Swatches,
 } from '../../../BaseComponents';
 
-import { deviceSetStateRGB } from '../../Actions/Devices';
+import { deviceSetStateRGB, requestDeviceAction } from '../../Actions/Devices';
 import { getMainColorRGB } from '../../Lib/rgbUtils';
 
 type Props = {
@@ -160,6 +160,7 @@ getStyles(): Object {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetStateRGB: (id: number, r: number, g: number, b: number) => {
+			dispatch(requestDeviceAction(id, 1024, false));
 			dispatch(deviceSetStateRGB(id, r, g, b));
 		},
 	};
