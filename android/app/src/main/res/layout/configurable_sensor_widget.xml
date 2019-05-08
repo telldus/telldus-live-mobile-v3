@@ -8,10 +8,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center|center"
-        android:gravity="center"
+        android:gravity="center|center"
         android:background="@drawable/shape_widget"
         android:paddingRight="5dp"
-        android:paddingLeft="4dp"
+        android:paddingLeft="5dp"
         android:paddingTop="4dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,24 +32,27 @@
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/linear_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/shape_blue"
             android:orientation="horizontal"
-            android:layout_gravity="center|center_vertical"
-            android:elevation="5dp"
-            android:layout_marginLeft="1dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="5dp">
-            <FrameLayout
-                android:layout_width="110dp"
+            android:layout_gravity="center|center"
+            android:gravity="center|center">
+            <LinearLayout
+                android:id="@+id/linear_background"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center|center"
+                android:gravity="center|center"
+                android:elevation="5dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="5dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_gravity="center|center"
+                    android:gravity="center|center">
                     <ImageView
                         android:id="@+id/iconSensor"
                         android:layout_width="wrap_content"
@@ -58,6 +61,7 @@
                         android:gravity="center|center"/>
                     <LinearLayout
                         android:layout_gravity="left|center"
+                        android:gravity="left|center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -66,12 +70,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_gravity="start|center_vertical">
+                            android:layout_gravity="left|center"
+                            android:gravity="left|center">
                             <TextView
                                 android:id="@+id/txtSensorValue"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="16sp"
+                                android:textSize="18sp"
                                 android:maxLines="1"
                                 android:layout_gravity="bottom"
                                 android:textStyle="bold"
@@ -95,7 +100,7 @@
                             android:textSize="9sp"/>
                     </LinearLayout>
                 </LinearLayout>
-            </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
     <include layout="@layout/premium_required_info"/>
