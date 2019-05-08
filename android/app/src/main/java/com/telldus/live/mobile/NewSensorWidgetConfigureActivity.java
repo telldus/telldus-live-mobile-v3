@@ -296,7 +296,9 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         lastUp,
                         trans,
                         currentUserId,
-                        selectInterval);
+                        selectInterval,
+                        "false"
+                        );
                     database.addWidgetSensor(mSensorInfo);
 
                     NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);

@@ -31,9 +31,10 @@ public class SensorInfo {
     String transparent;
     String userId;
     Integer updateInterval;
+    String sensorIsUpdating;
 
     public SensorInfo(int widgetId, String sensorName, String sensorDisplayType, int sensorId, String sensorValue, String sensorUnit,
-    String sensorIcon, String sensorUpdate, String transparent, String userId, Integer updateInterval) {
+    String sensorIcon, String sensorUpdate, String transparent, String userId, Integer updateInterval, String sensorIsUpdating) {
         this.widgetId = widgetId;
         this.sensorName = sensorName;
         this.sensorDisplayType = sensorDisplayType;
@@ -45,6 +46,7 @@ public class SensorInfo {
         this.transparent = transparent;
         this.userId = userId;
         this.updateInterval = updateInterval;
+        this.sensorIsUpdating = sensorIsUpdating;
     }
 
     public SensorInfo() {
@@ -137,5 +139,13 @@ public class SensorInfo {
 
     public void setUpdateInterval(Integer updateInterval) {
         this.updateInterval = updateInterval;
+    }
+
+    public String getIsUpdating() {
+        return sensorIsUpdating;
+    }
+
+    public void setIsUpdating(String sensorIsUpdating) {
+        this.sensorIsUpdating = sensorIsUpdating;
     }
 }

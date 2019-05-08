@@ -34,7 +34,7 @@ import com.telldus.live.mobile.Model.SensorInfo;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "Telldus.db";
 
     private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
@@ -61,6 +61,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String SENSOR_UNIT = "sensorUnit";
     public static final String SENSOR_ICON = "sensorIcon";
     public static final String SENSOR_UPDATE_INTERVAL = "sensorUpdateInterval";
+    public static final String SENSOR_IS_UPDATING = "sensorIsUpdating";
 
     public MyDBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -84,11 +85,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WIDGET_INFO_DEVICE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WIDGET_INFO_SENSOR);
-        onCreate(db);
+        if (oldVersion == 1 && newVersion == 2) {
+            // A new column introduced into the table "TABLE_WIDGET_INFO_SENSOR"
+            addColumnIsUpdatingToSensorsTable(db);
+        }
+    }
+
+    public void addColumnIsUpdatingToSensorsTable(SQLiteDatabase db) {
+        String ALTER_TABLE_SENSOR = "ALTER TABLE " + TABLE_WIDGET_INFO_SENSOR + " ADD COLUMN " + SENSOR_IS_UPDATING + " TEXT";
+        db.execSQL(ALTER_TABLE_SENSOR);
     }
 
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
@@ -127,6 +135,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(TRANSPARENT, mSensorInfo.getTransparent());
         values.put(WIDGET_SENSOR_USER_ID, mSensorInfo.getUserId());
         values.put(SENSOR_UPDATE_INTERVAL, mSensorInfo.getUpdateInterval());
+        values.put(SENSOR_IS_UPDATING, mSensorInfo.getIsUpdating());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_SENSOR, null, values);
@@ -182,6 +191,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setTransparent(cursor.getString(8));
             r.setUserId(cursor.getString(9));
             r.setUpdateInterval(cursor.getInt(10));
+            r.setIsUpdating(cursor.getString(11));
 
             cursor.close();
         } else {
@@ -494,6 +504,17 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SENSOR_ID, sensorId);
+
+        String[] whereArgs = {val};
+        int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
+        return true;
+    }
+
+    public boolean updateSensorIsUpdating(Integer widgetId, String isUpdating) {
+        String val = String.valueOf(widgetId);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SENSOR_IS_UPDATING, isUpdating);
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );

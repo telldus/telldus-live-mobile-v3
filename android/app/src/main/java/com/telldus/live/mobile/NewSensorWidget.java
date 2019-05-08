@@ -140,6 +140,8 @@ public class NewSensorWidget extends AppWidgetProvider {
         widgetType = sensorWidgetInfo.getSensorDisplayType();
         transparent = sensorWidgetInfo.getTransparent();
 
+        String isUpdating = sensorWidgetInfo.getIsUpdating();
+
         String formattedValue = formatValue(sensorValue);
 
         long time = Long.parseLong(sensorLastUpdated);
@@ -160,17 +162,60 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         transparent = transparent == null ? "" : transparent;
         int color = ContextCompat.getColor(context, R.color.white);
+        int colorTitle = ContextCompat.getColor(context, R.color.white);
         view.setViewPadding(R.id.linear_background, 2, 2, 2, 2);
-        if (transparent.equals("dark")) {
-            view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
-            view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
-            color = ContextCompat.getColor(context, R.color.themeDark);
-        } else if (transparent.equals("light")) {
-            view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
-            view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white);
-            color = ContextCompat.getColor(context, R.color.white);
-        } else {
-            view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_blue);
+
+        if (isUpdating != null && isUpdating.equals("true")) {
+            if (transparent.equals("dark")) {
+                showFlashIndicator(
+                    view,
+                    R.id.flash_view_sensor,
+                    R.id.flashing_indicator_sensor,
+                    R.drawable.shape_circle_white_fill
+                );
+
+                view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black_fill);
+                color = ContextCompat.getColor(context, R.color.white);
+                colorTitle = ContextCompat.getColor(context, R.color.themeDark);
+            } else if (transparent.equals("light")) {
+                showFlashIndicator(
+                    view,
+                    R.id.flash_view_sensor,
+                    R.id.flashing_indicator_sensor,
+                    R.drawable.shape_circle_black_fill
+                );
+
+                view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
+                color = ContextCompat.getColor(context, R.color.themeDark);
+                colorTitle = ContextCompat.getColor(context, R.color.white);
+            } else {
+                showFlashIndicator(
+                    view,
+                    R.id.flash_view_sensor,
+                    R.id.flashing_indicator_sensor,
+                    R.drawable.shape_circle_white_fill
+                );
+
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_blue);
+            }
+        }
+        if (isUpdating == null || isUpdating.equals("false")) {
+            hideFlashIndicator(view, R.id.flashing_indicator_sensor);
+            if (transparent.equals("dark")) {
+                view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
+                color = ContextCompat.getColor(context, R.color.themeDark);
+                colorTitle = ContextCompat.getColor(context, R.color.themeDark);
+            } else if (transparent.equals("light")) {
+                view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white);
+                color = ContextCompat.getColor(context, R.color.white);
+                colorTitle = ContextCompat.getColor(context, R.color.white);
+            } else {
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_blue);
+            }
         }
 
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
@@ -182,7 +227,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                 90,
                 58,
                 context));
-        view.setTextColor(R.id.txtSensorType, color);
+        view.setTextColor(R.id.txtSensorType, colorTitle);
         view.setTextColor(R.id.txtHistoryInfo, color);
         view.setTextColor(R.id.txtSensorValue, color);
         view.setTextColor(R.id.txtSensorUnit, color);
@@ -217,6 +262,15 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, view);
+    }
+
+    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
+    public static void hideFlashIndicator(RemoteViews views, int flashId) {
+        views.setViewVisibility(flashId, View.GONE);
     }
 
     @Override
@@ -289,6 +343,10 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         if (ACTION_SENSOR_UPDATE.equals(intent.getAction())) {
+            db.updateSensorIsUpdating(widgetId, "true");
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            updateAppWidget(context, widgetManager, widgetId);
+
             createSensorApi(sensorId, widgetId, db, context);
         }
 
@@ -358,18 +416,25 @@ public class NewSensorWidget extends AppWidgetProvider {
                             String widgetLabelUnit = sensorWidgetInfo.getSensorDisplayType();
                             if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
                                 database.updateSensorInfo(sensorName, value, Long.parseLong(lastUp), widgetId);
-
-                                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                updateAppWidget(context, widgetManager, widgetId);
                             }
                         }
                     }
+                    database.updateSensorIsUpdating(widgetId, "false");
+
+                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                    updateAppWidget(context, widgetManager, widgetId);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    database.updateSensorIsUpdating(widgetId, "false");
+                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                    updateAppWidget(context, widgetManager, widgetId);
                 }
             }
             @Override
             public void onError(ANError error) {
+                database.updateSensorIsUpdating(widgetId, "false");
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
             }
         });
     }
