@@ -37,7 +37,7 @@ import Edit from './Edit';
 
 const initialRouteName = 'InitialScreen';
 
-const renderScheduleScreen = (navigation, screenProps) => (Component, ScreenName) => (
+const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
 	<ScheduleScreen navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</ScheduleScreen>
@@ -45,26 +45,26 @@ const renderScheduleScreen = (navigation, screenProps) => (Component, ScreenName
 
 const RouteConfigs = {
 	InitialScreen: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(
 			navigation.getParam('editMode', false) ?
 				Edit
 				:
 				Device, 'InitialScreen'),
 	},
 	Action: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Action, 'Action'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Action, 'Action'),
 	},
 	ActionDim: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(ActionDim, 'ActionDim'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionDim, 'ActionDim'),
 	},
 	Time: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Time, 'Time'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Time, 'Time'),
 	},
 	Days: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Days, 'Days'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Days, 'Days'),
 	},
 	Summary: {
-		screen: ({ navigation, screenProps }) => renderScheduleScreen(navigation, screenProps)(Summary, 'Summary'),
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Summary, 'Summary'),
 	},
 };
 
