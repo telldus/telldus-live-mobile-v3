@@ -218,6 +218,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                         transparent,
                                         renderedButtonsCount,
                                         isLastButton,
+                                        R.id.flash_view_bell,
+                                        R.id.flashing_indicator_bell,
                                         R.id.bellCover,
                                         views,
                                         context
@@ -248,6 +250,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                hideFlashIndicator(views, R.id.flashing_indicator_bell);
                 handleBackgroundPostActionOne(
                     "BELL",
                     transparent,
@@ -292,6 +295,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                         transparent,
                                         renderedButtonsCount,
                                         isLastButton,
+                                        R.id.flash_view_up,
+                                        R.id.flashing_indicator_up,
                                         R.id.upCover,
                                         views,
                                         context
@@ -322,6 +327,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                hideFlashIndicator(views, R.id.flashing_indicator_up);
                 handleBackgroundPostActionOne(
                     "UP",
                     transparent,
@@ -365,6 +371,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                         transparent,
                                         renderedButtonsCount,
                                         isLastButton,
+                                        R.id.flash_view_down,
+                                        R.id.flashing_indicator_down,
                                         R.id.downCover,
                                         views,
                                         context
@@ -395,6 +403,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                hideFlashIndicator(views, R.id.flashing_indicator_down);
                 handleBackgroundPostActionOne(
                     "DOWN",
                     transparent,
@@ -439,6 +448,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                         transparent,
                                         renderedButtonsCount,
                                         isLastButton,
+                                        R.id.flash_view_stop,
+                                        R.id.flashing_indicator_stop,
                                         R.id.stopCover,
                                         views,
                                         context
@@ -469,6 +480,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                hideFlashIndicator(views, R.id.flashing_indicator_stop);
                 handleBackgroundPostActionOne(
                     "STOP",
                     transparent,
@@ -514,6 +526,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                         transparent,
                                         renderedButtonsCount,
                                         isLastButton,
+                                        R.id.flash_view_off,
+                                        R.id.flashing_indicator_off,
                                         R.id.offCover,
                                         views,
                                         context
@@ -545,7 +559,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
-
+                hideFlashIndicator(views, R.id.flashing_indicator_off);
                 handleBackgroundPostActionOne(
                     "OFF",
                     transparent,
@@ -599,6 +613,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                             transparent,
                                             renderedButtonsCount,
                                             isLastButton,
+                                            R.id.flash_view_dim25,
+                                            R.id.flashing_indicator_dim25,
                                             R.id.dimmer25Cover,
                                             views,
                                             context
@@ -641,6 +657,7 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
+                        hideFlashIndicator(views, R.id.flashing_indicator_dim25);
                         handleBackgroundPostActionOne(
                             "DIM25",
                             transparent,
@@ -686,6 +703,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                             transparent,
                                             renderedButtonsCount,
                                             isLastButton,
+                                            R.id.flash_view_dim50,
+                                            R.id.flashing_indicator_dim50,
                                             R.id.dimmer50Cover,
                                             views,
                                             context
@@ -727,6 +746,7 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
+                        hideFlashIndicator(views, R.id.flashing_indicator_dim50);
                         handleBackgroundPostActionOne(
                             "DIM50",
                             transparent,
@@ -772,6 +792,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                             transparent,
                                             renderedButtonsCount,
                                             isLastButton,
+                                            R.id.flash_view_dim75,
+                                            R.id.flashing_indicator_dim75,
                                             R.id.dimmer75Cover,
                                             views,
                                             context
@@ -813,6 +835,7 @@ public class NewAppWidget extends AppWidgetProvider {
                                 65,
                                 context));
                         }
+                        hideFlashIndicator(views, R.id.flashing_indicator_dim75);
                         handleBackgroundPostActionOne(
                             "DIM75",
                             transparent,
@@ -859,6 +882,8 @@ public class NewAppWidget extends AppWidgetProvider {
                                         transparent,
                                         renderedButtonsCount,
                                         isLastButton,
+                                        R.id.flash_view_on,
+                                        R.id.flashing_indicator_on,
                                         R.id.onCover,
                                         views,
                                         context
@@ -889,6 +914,7 @@ public class NewAppWidget extends AppWidgetProvider {
                         65,
                         context));
                 }
+                hideFlashIndicator(views, R.id.flashing_indicator_on);
                 handleBackgroundPostActionOne(
                     "ON",
                     transparent,
@@ -947,13 +973,44 @@ public class NewAppWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
+    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+        hideAllFlashIndicators(views);
+
+        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
+    public static void hideFlashIndicator(RemoteViews views, int flashId) {
+        views.setViewVisibility(flashId, View.GONE);
+    }
+
+    public static void hideAllFlashIndicators(RemoteViews views) {
+        Integer[] primaryShadedButtons = new Integer[]{
+            R.id.flashing_indicator_on,
+            R.id.flashing_indicator_off,
+            R.id.flashing_indicator_bell,
+            R.id.flashing_indicator_up,
+            R.id.flashing_indicator_down,
+            R.id.flashing_indicator_stop,
+            R.id.flashing_indicator_dim25,
+            R.id.flashing_indicator_dim50,
+            R.id.flashing_indicator_dim75,
+            };
+
+        List<Integer> list = Arrays.asList(primaryShadedButtons);
+
+        for (int i = 0; i < list.size(); i++) {
+            int id = list.get(i);
+            views.setViewVisibility(id, View.GONE);
+        }
+    }
+
     public static Boolean isPrimaryShade(String button) {
         String[] primaryShadedButtons = new String[]{"OFF", "STOP"};
 
         List<String> list = Arrays.asList(primaryShadedButtons);
 
         return list.contains(button);
-
     }
 
     public static int handleBackgroundWhenIdleOne(
@@ -972,8 +1029,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views,
                     context
                 );
-                if (renderedButtonsCount != 0) {
-                }
                 return ContextCompat.getColor(context, R.color.themeDark);
             } else if (transparent.equals("light")) {
                 setCoverBackground(
@@ -986,8 +1041,6 @@ public class NewAppWidget extends AppWidgetProvider {
                     views,
                     context
                 );
-                if (renderedButtonsCount != 0) {
-                }
                 return ContextCompat.getColor(context, R.color.white);
             } else {
                 setCoverBackground(
@@ -1010,6 +1063,7 @@ public class NewAppWidget extends AppWidgetProvider {
     public static int handleBackgroundOnActionOne(
         String button, String transparent,
         int renderedButtonsCount, Boolean isLastButton,
+        int flashViewId, int flashCoverId,
         int viewId, RemoteViews views, Context context) {
 
         if (transparent.equals("dark")) {
@@ -1023,8 +1077,12 @@ public class NewAppWidget extends AppWidgetProvider {
                 views,
                 context
             );
-            if (renderedButtonsCount != 0) {
-            }
+            showFlashIndicator(
+                views,
+                flashViewId,
+                flashCoverId,
+                R.drawable.shape_circle_white_fill
+            );
             return ContextCompat.getColor(context, R.color.white);
         } else if (transparent.equals("light")) {
             setCoverBackground(
@@ -1037,8 +1095,12 @@ public class NewAppWidget extends AppWidgetProvider {
                 views,
                 context
             );
-            if (renderedButtonsCount != 0) {
-            }
+            showFlashIndicator(
+                views,
+                flashViewId,
+                flashCoverId,
+                R.drawable.shape_circle_black_fill
+            );
             return ContextCompat.getColor(context, R.color.themeDark);
         } else {
             if (isPrimaryShade(button)) {
@@ -1064,6 +1126,12 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
             }
+            showFlashIndicator(
+                views,
+                flashViewId,
+                flashCoverId,
+                R.drawable.shape_circle_white_fill
+            );
             return ContextCompat.getColor(context, R.color.white);
         }
     }

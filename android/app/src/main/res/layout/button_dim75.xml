@@ -13,6 +13,31 @@
     android:elevation="5dp"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="5dp">
+    <FrameLayout
+        android:id="@+id/flashing_indicator_dim75"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:gravity="left|top"
+        android:layout_gravity="left|top"
+        android:visibility="gone">
+        <ViewFlipper
+            android:measureAllChildren="true"
+            android:flipInterval="800"
+            android:autoStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:id="@+id/flash_view_dim75"/>
+            <LinearLayout
+                android:layout_width="7dp"
+                android:layout_height="7dp"
+                android:background="@android:color/transparent"/>
+        </ViewFlipper>
+    </FrameLayout>
     <ImageView
         android:id="@+id/iconCheck75"
         android:layout_width="match_parent"

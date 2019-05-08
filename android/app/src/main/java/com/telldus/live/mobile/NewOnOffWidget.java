@@ -38,6 +38,8 @@ import org.json.JSONObject;
 
 import java.util.Map;
 import java.util.Date;
+import java.util.List;
+import java.util.Arrays;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -192,11 +194,32 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_black_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.white);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.drawable.shape_circle_white_fill
+                    );
                 } else if (transparent.equals("light")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.drawable.shape_circle_black_fill
+                    );
                 } else {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.button_background_secondary_fill);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.drawable.shape_circle_white_fill
+                    );
                 }
                 views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                     "bell",
@@ -208,6 +231,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
+                hideFlashIndicator(views, R.id.flashing_indicator_on);
                 if (state == null || !state.equals("4")) {
                     views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                         "statusx",
@@ -263,11 +287,31 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_black_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.white);
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.drawable.shape_circle_white_fill
+                    );
                 } else if (transparent.equals("light")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.drawable.shape_circle_black_fill
+                    );
                 } else {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_right_rounded_corner_secondary_fill);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_on,
+                        R.id.flashing_indicator_on,
+                        R.drawable.shape_circle_white_fill
+                    );
                 }
                 views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                     onActionIcon,
@@ -279,6 +323,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
+                hideFlashIndicator(views, R.id.flashing_indicator_on);
                 if (state == null || !state.equals("1")) {
                     views.setImageViewBitmap(R.id.iconOn, CommonUtilities.buildTelldusIcon(
                         "statusx",
@@ -335,11 +380,32 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_black_round_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.white);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_off,
+                        R.id.flashing_indicator_off,
+                        R.drawable.shape_circle_white_fill
+                    );
                 } else if (transparent.equals("light")) {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_off,
+                        R.id.flashing_indicator_off,
+                        R.drawable.shape_circle_black_fill
+                    );
                 } else {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_rounded_corner_primary_fill);
+
+                    showFlashIndicator(
+                        views,
+                        R.id.flash_view_off,
+                        R.id.flashing_indicator_off,
+                        R.drawable.shape_circle_white_fill
+                    );
                 }
                 views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                     offActionIcon,
@@ -351,6 +417,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
+                hideFlashIndicator(views, R.id.flashing_indicator_off);
                 if (state == null || !state.equals("2")) {
                     views.setImageViewBitmap(R.id.iconOff, CommonUtilities.buildTelldusIcon(
                         "statusx",
@@ -393,6 +460,28 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+        hideAllFlashIndicators(views);
+
+        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
+    public static void hideFlashIndicator(RemoteViews views, int flashId) {
+        views.setViewVisibility(flashId, View.GONE);
+    }
+
+    public static void hideAllFlashIndicators(RemoteViews views) {
+        Integer[] primaryShadedButtons = new Integer[]{R.id.flashing_indicator_on, R.id.flashing_indicator_off};
+
+        List<Integer> list = Arrays.asList(primaryShadedButtons);
+
+        for (int i = 0; i < list.size(); i++) {
+            int id = list.get(i);
+            views.setViewVisibility(id, View.GONE);
+        }
     }
 
     private static PendingIntent getPendingSelf(Context context, String action, int id) {
