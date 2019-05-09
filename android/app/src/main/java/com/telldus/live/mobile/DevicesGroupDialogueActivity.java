@@ -40,6 +40,8 @@ import org.json.JSONObject;
 import com.androidnetworking.error.ANError;
 
 import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
@@ -208,6 +210,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                     95,
                     95,
                     context));
+
+                showFlashIndicator(R.id.flash_view_bell, R.id.flashing_indicator_bell, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("4")) {
                 if (state == null || !state.equals("4")) {
@@ -227,6 +231,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                 }
+                hideFlashIndicator(R.id.flashing_indicator_bell);
             }
 
             renderedButtonsCount++;
@@ -276,6 +281,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                     95,
                     95,
                     context));
+
+                showFlashIndicator(R.id.flash_view_up, R.id.flashing_indicator_up, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("128")) {
                 if (state != null && state.equals("128")) {
@@ -295,6 +302,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                 }
+                hideFlashIndicator(R.id.flashing_indicator_up);
             }
 
             renderedButtonsCount++;
@@ -344,6 +352,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                     95,
                     95,
                     context));
+
+                showFlashIndicator(R.id.flash_view_down, R.id.flashing_indicator_down, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("256")) {
                 if (state != null && state.equals("256")) {
@@ -363,6 +373,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                 }
+                hideFlashIndicator(R.id.flashing_indicator_down);
             }
 
             renderedButtonsCount++;
@@ -412,6 +423,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                     95,
                     95,
                     context));
+
+                showFlashIndicator(R.id.flash_view_stop, R.id.flashing_indicator_stop, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("512")) {
                 if (state != null && state.equals("512")) {
@@ -431,6 +444,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                 }
+                hideFlashIndicator(R.id.flashing_indicator_stop);
             }
 
             renderedButtonsCount++;
@@ -480,6 +494,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                     95,
                     95,
                     context));
+
+                showFlashIndicator(R.id.flash_view_off, R.id.flashing_indicator_off, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("2")) {
                 if (state != null && state.equals("2")) {
@@ -499,6 +515,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                 }
+                hideFlashIndicator(R.id.flashing_indicator_off);
             }
 
             renderedButtonsCount++;
@@ -567,6 +584,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                     txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
+
+                    showFlashIndicator(R.id.flash_view_dim25, R.id.flashing_indicator_dim25, R.drawable.shape_circle_white_fill);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -597,6 +616,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 95,
                                 context));
                         }
+                        hideFlashIndicator(R.id.flashing_indicator_dim25);
                     }
                 }
                 renderedButtonsCount++;
@@ -648,6 +668,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                     txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
+
+                    showFlashIndicator(R.id.flash_view_dim50, R.id.flashing_indicator_dim50, R.drawable.shape_circle_white_fill);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -677,6 +699,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 95,
                                 context));
                         }
+                        hideFlashIndicator(R.id.flashing_indicator_dim50);
                     }
                 }
                 renderedButtonsCount++;
@@ -728,6 +751,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                     txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
+
+                    showFlashIndicator(R.id.flash_view_dim75, R.id.flashing_indicator_dim75, R.drawable.shape_circle_white_fill);
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
@@ -757,6 +782,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 95,
                                 context));;
                         }
+                        hideFlashIndicator(R.id.flashing_indicator_dim75);
                     }
                 }
                 renderedButtonsCount++;
@@ -807,6 +833,8 @@ public class DevicesGroupDialogueActivity extends Activity {
                     95,
                     95,
                     context));
+
+                showFlashIndicator(R.id.flash_view_on, R.id.flashing_indicator_on, R.drawable.shape_circle_white_fill);
             }
             if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals("1")) {
                 if (state != null && state.equals("1")) {
@@ -826,8 +854,41 @@ public class DevicesGroupDialogueActivity extends Activity {
                         95,
                         context));
                 }
+                hideFlashIndicator(R.id.flashing_indicator_on);
             }
             renderedButtonsCount++;
+        }
+    }
+
+    public void showFlashIndicator(int visibleFlashId, int flashId, int drawable) {
+        hideAllFlashIndicators();
+
+        findViewById(visibleFlashId).setBackgroundResource(drawable);
+        findViewById(flashId).setVisibility(View.VISIBLE);
+    }
+
+    public void hideFlashIndicator(int flashId) {
+        findViewById(flashId).setVisibility(View.GONE);
+    }
+
+    public void hideAllFlashIndicators() {
+        Integer[] primaryShadedButtons = new Integer[]{
+            R.id.flashing_indicator_on,
+            R.id.flashing_indicator_off,
+            R.id.flashing_indicator_bell,
+            R.id.flashing_indicator_up,
+            R.id.flashing_indicator_down,
+            R.id.flashing_indicator_stop,
+            R.id.flashing_indicator_dim25,
+            R.id.flashing_indicator_dim50,
+            R.id.flashing_indicator_dim75,
+            };
+
+        List<Integer> list = Arrays.asList(primaryShadedButtons);
+
+        for (int i = 0; i < list.size(); i++) {
+            int id = list.get(i);
+            findViewById(id).setVisibility(View.GONE);
         }
     }
 
