@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
@@ -546,6 +547,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (isBasicUser) {
             if (ACTION_PURCHASE_PRO.equals(intent.getAction())) {
                 Intent basicUserActivity = new Intent(context, BasicUserActivity.class);
+                basicUserActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(basicUserActivity);
                 return;
             }

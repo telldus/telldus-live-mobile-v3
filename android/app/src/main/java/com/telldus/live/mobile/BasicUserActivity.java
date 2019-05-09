@@ -22,6 +22,8 @@ package com.telldus.live.mobile;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.util.Log;
@@ -99,6 +101,8 @@ public class BasicUserActivity extends Activity {
         buttonBuyText1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView throbber = (TextView) p_p_1.findViewById(R.id.throbber);
+                showThrobber(throbber);
                 userAPI.createTransaction(
                     "proyear",
                     "1",
@@ -107,10 +111,12 @@ public class BasicUserActivity extends Activity {
                     new OnAPITaskComplete() {
                         @Override
                         public void onSuccess(JSONObject response) {
+                            hideThrobber(throbber);
                             handleSuccess(response, "proyear");
                         }
                         @Override
                         public void onError(ANError error) {
+                            hideThrobber(throbber);
                         }
                     }
                 );
@@ -150,6 +156,8 @@ public class BasicUserActivity extends Activity {
         buttonBuyText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView throbber = (TextView) p_p_2.findViewById(R.id.throbber);
+                showThrobber(throbber);
                 userAPI.createTransaction(
                     "prohalfyear",
                     "1",
@@ -158,10 +166,12 @@ public class BasicUserActivity extends Activity {
                     new OnAPITaskComplete() {
                         @Override
                         public void onSuccess(JSONObject response) {
+                            hideThrobber(throbber);
                             handleSuccess(response, "prohalfyear");
                         }
                         @Override
                         public void onError(ANError error) {
+                            hideThrobber(throbber);
                         }
                     }
                 );
@@ -189,6 +199,8 @@ public class BasicUserActivity extends Activity {
         buttonBuyText3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TextView throbber = (TextView) p_p_3.findViewById(R.id.throbber);
+                showThrobber(throbber);
                 userAPI.createTransaction(
                     "promonth",
                     "1",
@@ -197,10 +209,12 @@ public class BasicUserActivity extends Activity {
                     new OnAPITaskComplete() {
                         @Override
                         public void onSuccess(JSONObject response) {
+                            hideThrobber(throbber);
                             handleSuccess(response, "promonth");
                         }
                         @Override
                         public void onError(ANError error) {
+                            hideThrobber(throbber);
                         }
                     }
                 );
@@ -218,10 +232,22 @@ public class BasicUserActivity extends Activity {
                     Intent transactionActivity = new Intent(getApplicationContext(), TransactionWebView.class);
                     transactionActivity.putExtra("URL", url);
                     transactionActivity.putExtra("pack", pack);
+                    transactionActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     getApplicationContext().startActivity(transactionActivity);
                 }
             }
         } catch (Exception e) {
         };
+    }
+
+    public void showThrobber(TextView throbber) {
+        Animation rotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
+        rotation.setFillAfter(true);
+        throbber.setVisibility(View.VISIBLE);
+        throbber.startAnimation(rotation);
+    }
+
+    public void hideThrobber(TextView throbber) {
+        throbber.setVisibility(View.GONE);
     }
 }

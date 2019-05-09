@@ -334,6 +334,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (isBasicUser) {
             if (ACTION_PURCHASE_PRO.equals(intent.getAction())) {
                 Intent basicUserActivity = new Intent(context, BasicUserActivity.class);
+                basicUserActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(basicUserActivity);
                 return;
             }

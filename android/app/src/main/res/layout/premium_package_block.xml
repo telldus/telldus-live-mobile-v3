@@ -195,5 +195,16 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textAllCaps="true"/>
+        <TextView
+            android:id="@+id/throbber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="loading"
+            android:textSize="16sp"
+            android:gravity="center|center"
+            android:textColor="@color/white"
+            android:fontFamily="@font/telldusicons"
+            android:visibility="gone"/>
     </com.google.android.flexbox.FlexboxLayout>
 </com.google.android.flexbox.FlexboxLayout>
