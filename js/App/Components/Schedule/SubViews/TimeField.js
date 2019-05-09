@@ -123,7 +123,7 @@ render(): Object {
 				onChangeText={this.onEdit}
 				autoCapitalize="none"
 				autoCorrect={false}
-				keyboardType="numeric"
+				keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'numeric'}
 				ref={this.setRef}/>
 		</View>
 	);
