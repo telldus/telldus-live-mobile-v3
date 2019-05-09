@@ -171,24 +171,24 @@ public class NewSensorWidget extends AppWidgetProvider {
                     view,
                     R.id.flash_view_sensor,
                     R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_white_fill
+                    R.drawable.shape_circle_black_fill
                 );
 
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
-                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black_fill);
-                color = ContextCompat.getColor(context, R.color.white);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
+                color = ContextCompat.getColor(context, R.color.themeDark);
                 colorTitle = ContextCompat.getColor(context, R.color.themeDark);
             } else if (transparent.equals("light")) {
                 showFlashIndicator(
                     view,
                     R.id.flash_view_sensor,
                     R.id.flashing_indicator_sensor,
-                    R.drawable.shape_circle_black_fill
+                    R.drawable.shape_circle_white_fill
                 );
 
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
-                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
-                color = ContextCompat.getColor(context, R.color.themeDark);
+                view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white);
+                color = ContextCompat.getColor(context, R.color.white);
                 colorTitle = ContextCompat.getColor(context, R.color.white);
             } else {
                 showFlashIndicator(
@@ -223,9 +223,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
                 color,
-                62,
-                90,
-                58,
+                70,
+                100,
+                70,
                 context));
         view.setTextColor(R.id.txtSensorType, colorTitle);
         view.setTextColor(R.id.txtHistoryInfo, color);
