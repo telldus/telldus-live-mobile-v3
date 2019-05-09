@@ -80,7 +80,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
                 + " INTEGER," + SENSOR_NAME + " TEXT," + SENSOR_VALUE_TYPE + " TEXT," + SENSOR_UPDATE
                 + " TEXT,"+ SENSOR_VALUE + " TEXT," +  SENSOR_UNIT + " TEXT," +  SENSOR_ICON + " TEXT," + TRANSPARENT
-                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT," + SENSOR_UPDATE_INTERVAL + " INTEGER)";
+                + " TEXT," + WIDGET_SENSOR_USER_ID + " TEXT," + SENSOR_UPDATE_INTERVAL + " INTEGER," + SENSOR_IS_UPDATING + " TEXT)";
 
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_SENSOR_TABLE);
