@@ -149,6 +149,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		colorDeviceIconBack = prepareMainColor(mainColorRGB);
 		iconOnColor = colorDeviceIconBack;
 	}
+	colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
 
 	// NOTE: the prop "key" serves two purpose.
 	// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
@@ -210,7 +211,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : {
-			backgroundColor: isInState === 'TURNOFF' ? offColorRGB : colorDeviceIconBack,
+			backgroundColor: isInState === 'TURNOFF' && offColorRGB ? offColorRGB : colorDeviceIconBack,
 		};
 
 		buttons.unshift(

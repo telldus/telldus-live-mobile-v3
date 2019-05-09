@@ -442,6 +442,7 @@ class DeviceRow extends View<Props, State> {
 			colorDeviceIconBack = prepareMainColor(mainColorRGB);
 			iconOnColor = colorDeviceIconBack;
 		}
+		colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
 
 		// NOTE: the prop "key" serves two purpose.
 		// 1. The common and strict rule, when rendering array of items key(unique) prop is required.
@@ -559,7 +560,7 @@ class DeviceRow extends View<Props, State> {
 									icon={icon}
 									style={styles.deviceIcon}
 									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: isInState === 'TURNOFF' ? offColorRGB : colorDeviceIconBack,
+										backgroundColor: (isInState === 'TURNOFF' && offColorRGB) ? offColorRGB : colorDeviceIconBack,
 									}]}/>}
 								{nameInfo}
 							</TouchableOpacity>
