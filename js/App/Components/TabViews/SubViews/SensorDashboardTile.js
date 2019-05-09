@@ -206,6 +206,7 @@ class SensorDashboardTile extends View<Props, null> {
 					onPress={onPress}
 					id={item.id}
 					lastUpdated={lastUpdated}
+					tileWidth={tileWidth}
 					style={[styles.body, {
 						width: tileWidth,
 						height: tileWidth * 0.4,
