@@ -29,9 +29,12 @@ import {
 } from '../../../../../BaseComponents';
 import TypeBlock from './TypeBlock';
 
+import { shouldUpdate } from '../../../../Lib';
+
 type Props = {
 	defaultType?: string,
 	lastUpdated: number,
+	tileWidth: number,
 
     style: Array<any> | number | Object,
 	valueCoverStyle: Array<any> | number | Object,
@@ -53,13 +56,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object): boolean {
-	// The component needs to update when default type change or when sensor value change.
-	// 'lastUpdated' is used to check if value changed or not.
-	const { defaultType, lastUpdated } = this.props;
-	const typeChanged = defaultType !== nextProps.defaultType;
-
-	const newUpdate = lastUpdated !== nextProps.lastUpdated;
-	return typeChanged || newUpdate;
+	return shouldUpdate(this.props, nextProps, ['defaultType', 'lastUpdated', 'tileWidth']);
 }
 
 changeDisplayType() {
