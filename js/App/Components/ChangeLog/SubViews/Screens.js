@@ -19,7 +19,8 @@
  */
 
 // @flow
+import Platform from 'Platform';
 
 // Set the number of screens here.
-const Screens = [1];
+const Screens = [Platform.OS !== 'android' ? 1 : 1, 2];
 export default Screens;

@@ -62,8 +62,11 @@ export default class WizardOne extends PureComponent<Props, null> {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader310);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription310);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader311);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription311);
+
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader311);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription311);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
@@ -88,19 +91,19 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 1:
 				return {
 					...screenData,
-					icon: 'buttononoff',
+					icon: 'palette',
 					iconSize: iconSize * 1.2,
 					title: this.titleWOne,
 					description: this.descriptionWOne,
 				};
 
-				// case 2:
-				// 	return {
-				// 		...screenData,
-				// 		icon: <Image source={{uri: 'icon_plus'}} style={iconTwoStyle} resizeMode={'cover'}/>,
-				// 		title: this.titleWTwo,
-				// 		description: this.descriptionWTwo,
-				// 	};
+			case 2:
+				return {
+					...screenData,
+					icon: 'buttononoff',
+					title: this.titleWTwo,
+					description: this.descriptionWTwo,
+				};
 
 				// case 3:
 				// 	return {
