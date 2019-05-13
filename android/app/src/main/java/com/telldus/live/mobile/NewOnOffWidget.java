@@ -159,7 +159,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String offActionIcon = actionIconSet.get("TURNOFF");
 
         transparent = transparent == null ? "" : transparent;
-        if (transparent.equals("dark") || transparent.equals("light")) {
+        if (transparent.equals("dark") || transparent.equals("light") || transparent.equals("true")) {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
         }
 
@@ -176,7 +176,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (transparent.equals("dark")) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_black);
                 colorIdle = ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_white);
                 colorIdle = ContextCompat.getColor(context, R.color.white);
             } else {
@@ -202,7 +202,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         R.id.flashing_indicator_on,
                         R.drawable.shape_circle_white_fill
                     );
-                } else if (transparent.equals("light")) {
+                } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
 
@@ -252,7 +252,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_black_fill);
-                } else if (transparent.equals("light")) {
+                } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
                 }
             }
@@ -268,7 +268,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (transparent.equals("dark")) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_black);
                 colorIdle = ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white);
                 colorIdle = ContextCompat.getColor(context, R.color.white);
             } else {
@@ -294,7 +294,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         R.id.flashing_indicator_on,
                         R.drawable.shape_circle_white_fill
                     );
-                } else if (transparent.equals("light")) {
+                } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
 
@@ -344,7 +344,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_black_fill);
-                } else if (transparent.equals("light")) {
+                } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_right_round_white_fill);
                 } else {
                 }
@@ -361,7 +361,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (transparent.equals("dark")) {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_black_round);
                 colorIdle = ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round);
                 colorIdle = ContextCompat.getColor(context, R.color.white);
             } else {
@@ -388,7 +388,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         R.id.flashing_indicator_off,
                         R.drawable.shape_circle_white_fill
                     );
-                } else if (transparent.equals("light")) {
+                } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
 
@@ -438,7 +438,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_black_round_fill);
-                } else if (transparent.equals("light")) {
+                } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.offCover, "setBackgroundResource", R.drawable.shape_left_white_round_fill);
                 }
             }
@@ -454,7 +454,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
         if (transparent.equals("dark")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
-        } else if (transparent.equals("light")) {
+        } else if (transparent.equals("light") || transparent.equals("true")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.white));
         } else {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.white));

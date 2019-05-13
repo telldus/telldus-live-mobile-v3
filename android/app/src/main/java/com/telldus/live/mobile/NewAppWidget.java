@@ -184,7 +184,7 @@ public class NewAppWidget extends AppWidgetProvider {
         Boolean showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
 
         transparent = transparent == null ? "" : transparent;
-        if (transparent.equals("dark") || transparent.equals("light")) {
+        if (transparent.equals("dark") || transparent.equals("light") || transparent.equals("true")) {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
         }
 
@@ -936,7 +936,7 @@ public class NewAppWidget extends AppWidgetProvider {
             if (transparent.equals("dark")) {
                 views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_border_right_round_black);
                 colorIcon = ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 views.setInt(R.id.moreActionsCover, "setBackgroundResource", R.drawable.shape_border_right_round_white);
                 colorIcon = ContextCompat.getColor(context, R.color.white);
             } else {
@@ -964,7 +964,7 @@ public class NewAppWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
         if (transparent.equals("dark")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
-        } else if (transparent.equals("light")) {
+        } else if (transparent.equals("light") || transparent.equals("true")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.white));
         } else {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.white));
@@ -1030,7 +1030,7 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
                 return ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 setCoverBackground(
                     renderedButtonsCount,
                     isLastButton,
@@ -1084,7 +1084,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 R.drawable.shape_circle_white_fill
             );
             return ContextCompat.getColor(context, R.color.white);
-        } else if (transparent.equals("light")) {
+        } else if (transparent.equals("light") || transparent.equals("true")) {
             setCoverBackground(
                 renderedButtonsCount,
                 isLastButton,
@@ -1151,7 +1151,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 views,
                 context
             );
-        } else if (transparent.equals("light")) {
+        } else if (transparent.equals("light") || transparent.equals("true")) {
             setCoverBackground(
                 renderedButtonsCount,
                 isLastButton,

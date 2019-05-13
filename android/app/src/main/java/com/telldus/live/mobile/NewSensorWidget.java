@@ -178,7 +178,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                 view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
                 color = ContextCompat.getColor(context, R.color.themeDark);
                 colorTitle = ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 showFlashIndicator(
                     view,
                     R.id.flash_view_sensor,
@@ -208,7 +208,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                 view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_black);
                 color = ContextCompat.getColor(context, R.color.themeDark);
                 colorTitle = ContextCompat.getColor(context, R.color.themeDark);
-            } else if (transparent.equals("light")) {
+            } else if (transparent.equals("light") || transparent.equals("true")) {
                 view.setInt(R.id.iconWidgetSensor,"setBackgroundColor", Color.TRANSPARENT);
                 view.setInt(R.id.linear_background, "setBackgroundResource", R.drawable.shape_border_round_white);
                 color = ContextCompat.getColor(context, R.color.white);
@@ -240,7 +240,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         long currentTime = new Date().getTime();
         long timeAgo = currentTime - time;
         int limit = (24 * 3600 * 1000);
-        if (timeAgo < limit && !transparent.equals("light") && !transparent.equals("dark")) {
+        if (timeAgo < limit && !transparent.equals("light") && !transparent.equals("dark") && !transparent.equals("true")) {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.white));
         } else if (timeAgo >= limit) {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.brightRed));
