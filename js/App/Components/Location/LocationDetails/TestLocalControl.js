@@ -439,12 +439,14 @@ render(): Object | null {
 		button,
 	} = this.getStyles(appLayout);
 
+	let gotFailedTest = false;
 	const tests = this.TESTS_TO_RUN.map((test: Object, i: number): Object => {
 		if (i === index) {
 			test.status = status;
 		}
 		if (test.status === 'fail') {
 			test = { ...test, h2: intl.formatMessage(i18n.failed)};
+			gotFailedTest = true;
 		}
 		if (test.status === 'ok') {
 			test = { ...test, h2: intl.formatMessage(i18n.defaultPositiveText)};
@@ -463,7 +465,7 @@ render(): Object | null {
 				{showButtons &&
 					<>
 					<TouchableButton text={i18n.labelButtonRunTestsAgain} style={button} onPress={this.onPressReRunTest}/>
-					<TouchableButton text={i18n.labelButtonRequestSupport} style={button} onPress={this.onPressRequestSupport}/>
+					{gotFailedTest && <TouchableButton text={i18n.labelButtonRequestSupport} style={button} onPress={this.onPressRequestSupport}/>}
 					</>
 				}
 			</>
