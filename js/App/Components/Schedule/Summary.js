@@ -106,11 +106,23 @@ class Summary extends View<null, Props, State> {
 				isLoading: false,
 			});
 			let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
-			this.props.actions.showModal(message, {
-				showPositive: true,
+			this.openDialogueBox({
+				text: message,
 			});
 		});
 	};
+
+	openDialogueBox(otherDialogueConfs?: Object = {}) {
+		const { toggleDialogueBox } = this.props;
+		const dialogueData = {
+			...otherDialogueConfs,
+			show: true,
+			showHeader: true,
+			showPositive: true,
+			closeOnPressPositive: true,
+		};
+		toggleDialogueBox(dialogueData);
+	}
 
 	resetNavigation = () => {
 		const { navigation } = this.props;
@@ -134,7 +146,7 @@ class Summary extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { schedule, paddingRight, appLayout, intl, actions } = this.props;
+		const { schedule, paddingRight, appLayout, intl, actions, toggleDialogueBox } = this.props;
 		const { formatDate } = intl;
 		const { method, methodValue, weekdays } = schedule;
 		const {
@@ -179,7 +191,7 @@ class Summary extends View<null, Props, State> {
 					<AdvancedSettingsBlock
 						appLayout={appLayout}
 						intl={intl}
-						onPressInfo={actions.showModal}
+						onPressInfo={toggleDialogueBox}
 						onDoneEditAdvanced={actions.setAdvancedSettings}
 						retries={retries}
 						retryInterval={retryInterval}

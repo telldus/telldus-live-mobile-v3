@@ -27,7 +27,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
-import { FullPageActivityIndicator, View, DialogueBox, NavigationHeaderPoster } from '../../../BaseComponents';
+import { FullPageActivityIndicator, View, NavigationHeaderPoster } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
 import * as scheduleActions from '../../Actions/Schedule';
@@ -120,7 +120,7 @@ class ScheduleScreen extends View<null, Props, State> {
 			if (screenProps.currentScreen !== screenPropsN.currentScreen) {
 				return true;
 			}
-			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule', 'showModal']);
+			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule']);
 			if (propsChange) {
 				return true;
 			}
@@ -146,35 +146,12 @@ class ScheduleScreen extends View<null, Props, State> {
 	};
 
 	closeModal = () => {
-		this.props.actions.hideModal();
-	};
-
-	getRelativeData = (): Object => {
-		const { modalExtras } = this.props;
-		const {
-			dialogueHeader = false,
-			showPositive = true,
-			showNegative = false,
-			positiveText = null,
-			onPressPositive = this.closeModal,
-			onPressNegative = this.closeModal,
-			imageHeader = false,
-			showIconOnHeader = false,
-			onPressHeader = this.closeModal,
-			onPressHeaderIcon = this.closeModal,
-		} = modalExtras;
-		return {
-			dialogueHeader,
-			showPositive,
-			showNegative,
-			positiveText,
-			onPressPositive,
-			onPressNegative,
-			imageHeader,
-			showIconOnHeader,
-			onPressHeader,
-			onPressHeaderIcon,
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: false,
 		};
+		toggleDialogueBox(dialogueData);
 	};
 
 	render(): React$Element<any> {
@@ -192,18 +169,6 @@ class ScheduleScreen extends View<null, Props, State> {
 		} = screenProps;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style } = this._getStyle(appLayout);
-		const {
-			dialogueHeader,
-			showPositive,
-			showNegative,
-			positiveText,
-			onPressPositive,
-			onPressNegative,
-			imageHeader,
-			showIconOnHeader,
-			onPressHeader,
-			onPressHeaderIcon,
-		} = this.getRelativeData();
 
 		return (
 			<View style={{
@@ -247,19 +212,6 @@ class ScheduleScreen extends View<null, Props, State> {
 							)}
 						</View>
 					</KeyboardAvoidingView>
-					<DialogueBox
-						showDialogue={this.props.showModal}
-						header={dialogueHeader}
-						text={this.props.validationMessage}
-						showPositive={showPositive}
-						showNegative={showNegative}
-						positiveText={positiveText}
-						onPressPositive={onPressPositive}
-						onPressNegative={onPressNegative}
-						imageHeader={imageHeader}
-						showIconOnHeader={showIconOnHeader}
-						onPressHeader={onPressHeader}
-						onPressHeaderIcon={onPressHeaderIcon}/>
 				</View>
 			</View>
 		);
@@ -304,9 +256,6 @@ const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateTo
 		schedule,
 		devices,
 		gateways,
-		validationMessage: modal.data,
-		showModal: modal.openModal,
-		modalExtras: modal.extras,
 	}
 );
 

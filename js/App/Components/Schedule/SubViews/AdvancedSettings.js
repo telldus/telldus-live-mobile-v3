@@ -41,7 +41,7 @@ type Props = {
     appLayout: Object,
 
     intl: intlShape.isRequired,
-	onPressInfo: (string, any) => void,
+	onPressInfo: (Object) => void,
 	onDoneEditAdvanced: (Object) => void,
 };
 
@@ -96,41 +96,53 @@ constructor(props: Props) {
 
 onPressRetriesInfo() {
 	const { formatMessage } = this.props.intl;
+	const message = `${formatMessage(i18n.retriesInfoPhraseOne)}.\n\n${formatMessage(i18n.retriesInfoPhraseTwo)}.`;
 	const extras = {
-		dialogueHeader: formatMessage(i18n.labelNumberOfRetries),
+		show: true,
+		showHeader: true,
+		header: formatMessage(i18n.labelNumberOfRetries),
+		text: message,
 		showPositive: false,
 		showNegative: false,
 		imageHeader: true,
 		showIconOnHeader: true,
+		closeOnPressHeader: true,
 	};
-	const message = `${formatMessage(i18n.retriesInfoPhraseOne)}.\n\n${formatMessage(i18n.retriesInfoPhraseTwo)}.`;
-	this.props.onPressInfo(message, extras);
+	this.props.onPressInfo(extras);
 }
 
 onPressIntervalInfo() {
 	const { formatMessage } = this.props.intl;
+	const message = `${formatMessage(i18n.intervalInfoPhraseOne)}.\n\n${formatMessage(i18n.intervalInfoPhraseTwo)}.`;
 	const extras = {
-		dialogueHeader: formatMessage(i18n.labelRetryInterval),
+		show: true,
+		showHeader: true,
+		header: formatMessage(i18n.labelRetryInterval),
+		text: message,
 		showPositive: false,
 		showNegative: false,
 		imageHeader: true,
 		showIconOnHeader: true,
+		closeOnPressHeader: true,
 	};
-	const message = `${formatMessage(i18n.intervalInfoPhraseOne)}.\n\n${formatMessage(i18n.intervalInfoPhraseTwo)}.`;
-	this.props.onPressInfo(message, extras);
+	this.props.onPressInfo(extras);
 }
 
 onPressRepeatsInfo() {
 	const { formatMessage } = this.props.intl;
+	const message = `${formatMessage(i18n.repeatInfoPhraseOne)}.\n\n${formatMessage(i18n.repeatInfoPhraseTwo)}.`;
 	const extras = {
-		dialogueHeader: formatMessage(i18n.labelRepeats),
+		show: true,
+		showHeader: true,
+		header: formatMessage(i18n.labelRepeats),
+		text: message,
 		showPositive: false,
 		showNegative: false,
 		imageHeader: true,
 		showIconOnHeader: true,
+		closeOnPressHeader: true,
 	};
-	const message = `${formatMessage(i18n.repeatInfoPhraseOne)}.\n\n${formatMessage(i18n.repeatInfoPhraseTwo)}.`;
-	this.props.onPressInfo(message, extras);
+	this.props.onPressInfo(extras);
 }
 
 animate() {
