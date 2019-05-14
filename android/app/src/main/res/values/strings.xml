@@ -43,6 +43,7 @@
 	<string name="reserved_widget_android_labelDevice">Device</string>
 	<string name="reserved_widget_android_settings">Settings</string>
 	<string name="reserved_widget_android_label_transparent">Transparent Background</string>
+	<string name="reserved_widget_android_label_update_interval_0">Update every 5 minutes</string>
 	<string name="reserved_widget_android_label_update_interval_1">Update every 10 minutes</string>
 	<string name="reserved_widget_android_label_update_interval_2">Update every 30 minutes</string>
 	<string name="reserved_widget_android_label_update_interval_3">Update every 1 hour</string>

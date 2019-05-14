@@ -76,7 +76,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     CharSequence[] sensorNameList = null;
     CharSequence[] sensorIdList = null;
     CharSequence[] intervalOptionsValues = {
-        "10", "30", "60",
+        "5", "10", "30", "60",
     };
     int multiplierMilli = 60000;
 
@@ -444,6 +444,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
             });
 
             final CharSequence[] intervalOptions = {
+                getResources().getString(R.string.reserved_widget_android_label_update_interval_0),
                 getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
                 getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
                 getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
