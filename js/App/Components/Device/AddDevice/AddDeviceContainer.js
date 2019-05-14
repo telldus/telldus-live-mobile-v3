@@ -29,7 +29,6 @@ const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	DialogueBox,
 	NavigationHeaderPoster,
 } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
@@ -52,8 +51,6 @@ type Props = {
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
-	showModal: boolean,
-	validationMessage: any,
 	ScreenName: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
 };
@@ -87,9 +84,7 @@ class AddDeviceContainer extends View<Props, State> {
 			onPress: this.goBack,
 		};
 
-		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
-		this.getRelativeData = this.getRelativeData.bind(this);
 		this._keyboardDidShow = this._keyboardDidShow.bind(this);
 		this._keyboardDidHide = this._keyboardDidHide.bind(this);
 	}
@@ -157,25 +152,11 @@ class AddDeviceContainer extends View<Props, State> {
 		});
 	};
 
-	closeModal = () => {
-		this.props.actions.hideModal();
-	};
-
-	getRelativeData = (): Object => {
-		let {validationMessage} = this.props;
-		return {
-			dialogueHeader: false,
-			validationMessage: validationMessage,
-			positiveText: false,
-		};
-	};
-
 	render(): Object {
 		const {
 			children,
 			actions,
 			screenProps,
-			showModal,
 			navigation,
 			addDevice,
 		} = this.props;
@@ -187,7 +168,6 @@ class AddDeviceContainer extends View<Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
-		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData();
 
 		const showLeftIcon = !this.disAllowBackNavigation();
 
@@ -217,32 +197,19 @@ class AddDeviceContainer extends View<Props, State> {
 							actions,
 							...screenProps,
 							navigation,
-							dialogueOpen: showModal,
 							paddingHorizontal: padding,
 							addDevice,
 							processWebsocketMessage: this.props.processWebsocketMessage,
 						},
 					)}
 				</KeyboardAvoidingView>
-				<DialogueBox
-					dialogueContainerStyle={{elevation: 0}}
-					header={dialogueHeader}
-					showDialogue={showModal}
-					text={validationMessage}
-					showPositive={true}
-					positiveText={positiveText}
-					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
 }
 
 const mapStateToProps = (store: Object): Object => {
-	const { openModal, data, extras } = store.modal;
 	return {
-		showModal: openModal,
-		validationMessage: data,
-		modalExtras: extras,
 		addDevice: store.addDevice,
 	};
 };
