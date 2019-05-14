@@ -26,19 +26,17 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
+import { FormattedMessage, View } from '../../../BaseComponents';
 import { LoginForm, SessionLocked } from './SubViews';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 
 type Props = {
-	dispatch: Function,
 	screenProps: Object,
 	navigation: Object,
 	loginToTelldus: Function,
 	validationMessage: string,
-	showModal: boolean,
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	styles: Object,
@@ -49,6 +47,7 @@ type Props = {
 type State = {
 	notificationText?: string,
 	onPressLogout: boolean,
+	showModal: boolean,
 };
 
 class LoginScreen extends View {
@@ -67,6 +66,7 @@ class LoginScreen extends View {
 		this.state = this.state || {
 			notificationText: false,
 			onPressLogout: false,
+			showModal: false,
 		};
 
 		this.onForgotPassword = this.onForgotPassword.bind(this);
@@ -88,8 +88,15 @@ class LoginScreen extends View {
 	}
 
 	closeModal() {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_CLOSE',
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: false,
+		};
+		this.setState({
+			showModal: false,
+		}, () => {
+			toggleDialogueBox(dialogueData);
 		});
 	}
 
@@ -134,13 +141,42 @@ class LoginScreen extends View {
 		};
 	}
 
+	openDialogueBox = (body: string, header?: Object) => {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		let {
+			notificationHeader,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
+			showPositive,
+			showNegative,
+		} = this.getRelativeData();
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			header: notificationHeader,
+			text: body,
+			positiveText,
+			onPressPositive,
+			onPressNegative,
+			showPositive,
+			showNegative,
+		};
+		this.setState({
+			showModal: true,
+		}, () => {
+			toggleDialogueBox(dialogueData);
+		});
+	}
+
 	render(): Object {
 		let { appLayout, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		let {
-			headerText, notificationHeader, positiveText,
-			onPressPositive, onPressNegative, showPositive, showNegative} = this.getRelativeData();
+			headerText,
+		} = this.getRelativeData();
 		return (
 			<View style={{
 				flex: 1,
@@ -149,16 +185,18 @@ class LoginScreen extends View {
 				{this.props.accessToken && !this.props.isTokenValid ?
 					<SessionLocked
 						onPressLogout={this.state.onPressLogout}
-						dialogueOpen={this.props.showModal}
+						dialogueOpen={this.state.showModal}
 						headerText={headerText}
 						toggleOnPressLogout={this.toggleOnPressLogout}
-						styles={commonStyles}/>
+						styles={commonStyles}
+						openDialogueBox={this.openDialogueBox}/>
 					:
 					<LoginForm
 						appLayout={appLayout}
-						dialogueOpen={this.props.showModal}
+						dialogueOpen={this.state.showModal}
 						headerText={headerText}
-						styles={commonStyles}/>
+						styles={commonStyles}
+						openDialogueBox={this.openDialogueBox}/>
 				}
 				{this.props.accessToken && !this.props.isTokenValid ?
 					null
@@ -177,15 +215,6 @@ class LoginScreen extends View {
 						<View style={{ height: 10 }}/>
 					</View>
 				}
-				<DialogueBox
-					showDialogue={this.props.showModal}
-					header={notificationHeader}
-					text={this.props.validationMessage}
-					showPositive={showPositive}
-					showNegative={showNegative}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					onPressNegative={onPressNegative}/>
 			</View>
 		);
 	}
@@ -237,15 +266,7 @@ function mapStateToProps(store: Object): Object {
 		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
 		isTokenValid: store.user.isTokenValid,
-		validationMessage: store.modal.data,
-		showModal: store.modal.openModal,
 	};
 }
 
-function dispatchToProps(dispatch: Function): Object {
-	return {
-		dispatch,
-	};
-}
-
-module.exports = connect(mapStateToProps, dispatchToProps)(injectIntl(LoginScreen));
+module.exports = connect(mapStateToProps, null)(injectIntl(LoginScreen));

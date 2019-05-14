@@ -71,6 +71,7 @@ const StackNavigatorConfig = {
 const Navigator = createAppContainer(createStackNavigator(RouteConfigs, StackNavigatorConfig));
 
 type Props = {
+	toggleDialogueBox: (Object) => null,
 };
 
 type State = {
@@ -124,7 +125,10 @@ class PreLoginNavigator extends View {
 	}
 
 	render(): React$Element<any> {
-		let screenProps = {currentScreen: this.state.currentScreen};
+		let screenProps = {
+			currentScreen: this.state.currentScreen,
+			toggleDialogueBox: this.props.toggleDialogueBox,
+		};
 		return (
 			<Navigator
 				onNavigationStateChange={this.onNavigationStateChange}

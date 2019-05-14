@@ -22,23 +22,20 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 
 import {
 	FormattedMessage,
 	View,
-	DialogueBox,
 } from '../../../BaseComponents';
 import { ForgotPasswordForm } from './SubViews';
-
-import { hideModal } from '../../Actions/Modal';
 
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 import { intlShape, injectIntl } from 'react-intl';
 
 type Props = {
+	screenProps: Object,
 	navigation: Object,
 	intl: intlShape.isRequired,
 	appLayout: Object,
@@ -46,7 +43,6 @@ type Props = {
 	validationMessage?: string,
 	validationMessageHeader?: string,
 	showModal: boolean,
-	dispatch: Function,
 };
 
 class ForgotPasswordScreen extends View<Props, null> {
@@ -54,13 +50,11 @@ class ForgotPasswordScreen extends View<Props, null> {
 	props: Props;
 
 	goBackToLogin: () => void;
-	closeModal: () => void;
 
 	constructor(props: Props) {
 		super(props);
 
 		this.goBackToLogin = this.goBackToLogin.bind(this);
-		this.closeModal = this.closeModal.bind(this);
 
 		let { formatMessage } = props.intl;
 
@@ -79,12 +73,23 @@ class ForgotPasswordScreen extends View<Props, null> {
 		});
 	}
 
-	closeModal() {
-		this.props.dispatch(hideModal());
+	openDialogueBox = (body: string, header?: Object) => {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			header: header,
+			text: body,
+			showPositive: true,
+			showNegative: false,
+			closeOnPressPositive: true,
+		};
+		toggleDialogueBox(dialogueData);
 	}
 
 	render(): Object {
-		let { showModal, validationMessage, validationMessageHeader, appLayout, intl, styles: commonStyles } = this.props;
+		let { appLayout, intl, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
@@ -92,7 +97,8 @@ class ForgotPasswordScreen extends View<Props, null> {
 				<ForgotPasswordForm
 					appLayout={appLayout}
 					headerText={intl.formatMessage(i18n.forgotPassword)}
-					styles={commonStyles}/>
+					styles={commonStyles}
+					openDialogueBox={this.openDialogueBox}/>
 				<View style={{ height: 10 }}/>
 				<TouchableOpacity
 					onPress={this.goBackToLogin}
@@ -102,13 +108,6 @@ class ForgotPasswordScreen extends View<Props, null> {
 					}}>
 					<FormattedMessage {...i18n.backToLogin} style={styles.accountExist} />
 				</TouchableOpacity>
-				<DialogueBox
-					showDialogue={showModal}
-					text={validationMessage}
-					header={validationMessageHeader}
-					showPositive={true}
-					showNegative={false}
-					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
@@ -133,18 +132,4 @@ class ForgotPasswordScreen extends View<Props, null> {
 	}
 }
 
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		dispatch,
-	};
-}
-
-function mapStateToProps(store: Object): Object {
-	return {
-		validationMessage: store.modal.data,
-		validationMessageHeader: store.modal.extras,
-		showModal: store.modal.openModal,
-	};
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ForgotPasswordScreen));
+export default injectIntl(ForgotPasswordScreen);
