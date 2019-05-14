@@ -35,7 +35,7 @@ import {
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import { TimeBlock, TimeSlider } from './SubViews';
-import { getHoursAndMinutes, LayoutAnimations } from '../../Lib';
+import { LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -76,9 +76,6 @@ export default class Time extends View<null, Props, State> {
 
 		this.h1 = isEditMode() ? formatMessage(i18n.time) : formatMessage(i18n.time);
 		this.h2 = formatMessage(i18n.posterChooseTime);
-		this.labelSliderInterval = formatMessage(i18n.descriptionSliderInterval, {startValue: getHoursAndMinutes(1), endValue: getHoursAndMinutes(1440)});
-		this.labelSliderOffset = formatMessage(i18n.descriptionSliderOffset, {startValue: getHoursAndMinutes(-1439), endValue: getHoursAndMinutes(1439)});
-
 		this.labelSliderIntervalEdit = formatMessage(i18n.descriptionSliderInterval, {startValue: '0min', endValue: '1440min'});
 		this.labelSliderOffsetEdit = formatMessage(i18n.descriptionSliderOffset, {startValue: '-1439min', endValue: '1439min'});
 
@@ -198,7 +195,7 @@ export default class Time extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { appLayout, intl } = this.props;
-		const { selectedType, randomInterval, intervalEdit } = this.state;
+		const { selectedType, randomInterval } = this.state;
 		const { container, row, marginBottom, type } = this._getStyle(appLayout);
 
 		const shouldRender = !!selectedType;
@@ -214,7 +211,7 @@ export default class Time extends View<null, Props, State> {
 						{shouldRender && (
 							<Row containerStyle={row}>
 								<TimeSlider
-									description={intervalEdit ? this.labelSliderIntervalEdit : this.labelSliderInterval}
+									description={this.labelSliderIntervalEdit}
 									icon="random"
 									minimumValue={0}
 									maximumValue={1440}
@@ -224,6 +221,7 @@ export default class Time extends View<null, Props, State> {
 									intl={intl}
 									type="INTERVAL"
 									toggleEdit={this.toggleEdit}
+									autoFocus={false}
 								/>
 							</Row>
 						)}
@@ -248,7 +246,7 @@ export default class Time extends View<null, Props, State> {
 			return null;
 		}
 
-		const { date, offsetEdit } = this.state;
+		const { date } = this.state;
 		const {
 			row,
 			iosTimeContainer,
@@ -311,7 +309,7 @@ export default class Time extends View<null, Props, State> {
 
 		const timeSlider = (
 			<TimeSlider
-				description={offsetEdit ? this.labelSliderOffsetEdit : this.labelSliderOffset}
+				description={this.labelSliderOffsetEdit}
 				icon="offset"
 				minimumValue={-1439}
 				maximumValue={1439}
@@ -321,6 +319,7 @@ export default class Time extends View<null, Props, State> {
 				intl={intl}
 				type="OFFSET"
 				toggleEdit={this.toggleEdit}
+				autoFocus={false}
 			/>
 		);
 

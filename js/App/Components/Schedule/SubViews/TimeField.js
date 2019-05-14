@@ -34,6 +34,11 @@ type Props = {
 	onValueChange: (number) => void,
 	max: number,
 	min: number,
+	autoFocus?: boolean,
+
+	onFocus: () => void,
+	setRef: (any) => void,
+	onSubmitEditing: () => void,
 };
 
 type State = {
@@ -44,6 +49,7 @@ export default class TimeField extends View<Props, State> {
 props: Props
 onEdit: (string) => void;
 setRef: (any) => void;
+onFocus: () => void;
 
 constructor(props: Props) {
 	super(props);
@@ -57,11 +63,13 @@ constructor(props: Props) {
 	this.onEdit = this.onEdit.bind(this);
 	this.setRef = this.setRef.bind(this);
 	this.input = null;
+
+	this.onFocus = this.onFocus.bind(this);
 }
 
 componentDidMount() {
 	InteractionManager.runAfterInteractions(() => {
-		if (this.input) {
+		if (this.input && this.props.autoFocus) {
 			this.input.focus();
 		}
 	});
@@ -69,6 +77,10 @@ componentDidMount() {
 
 setRef(ref: any) {
 	this.input = ref;
+	const { setRef } = this.props;
+	if (setRef) {
+		setRef(ref);
+	}
 }
 
 onEdit(value: string) {
@@ -98,6 +110,20 @@ onEdit(value: string) {
 	}
 }
 
+onFocus = () => {
+	const { onFocus } = this.props;
+	if (onFocus) {
+		onFocus();
+	}
+}
+
+onSubmitEditing = () => {
+	const { onSubmitEditing } = this.props;
+	if (onSubmitEditing) {
+		onSubmitEditing();
+	}
+}
+
 render(): Object {
 	const { appLayout, icon } = this.props;
 	const { value } = this.state;
@@ -124,7 +150,10 @@ render(): Object {
 				autoCapitalize="none"
 				autoCorrect={false}
 				keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'numeric'}
-				ref={this.setRef}/>
+				ref={this.setRef}
+				onFocus={this.onFocus}
+				blurOnSubmit={true}
+				onSubmitEditing={this.onSubmitEditing}/>
 		</View>
 	);
 }

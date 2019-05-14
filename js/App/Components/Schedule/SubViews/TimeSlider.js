@@ -25,8 +25,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { IconTelldus, Slider, View } from '../../../../BaseComponents';
-import { getHoursAndMinutes } from '../../../Lib';
+import { IconTelldus, View } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import Description from './Description';
 import TimeField from './TimeField';
@@ -43,6 +42,7 @@ type Props = {
 	intl: Object,
 	toggleEdit?: (string) => void,
 	type?: string,
+	autoFocus?: boolean,
 };
 
 type State = {
@@ -63,6 +63,11 @@ export default class TimeSlider extends View<null, Props, State> {
 
 	onEdit: () => void;
 	onEndEdit: () => void;
+	onFocus: () => void;
+
+	input: any;
+
+	setRef: (any) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -88,6 +93,11 @@ export default class TimeSlider extends View<null, Props, State> {
 
 		this.onEdit = this.onEdit.bind(this);
 		this.onEndEdit = this.onEndEdit.bind(this);
+		this.onFocus = this.onFocus.bind(this);
+
+		this.input = null;
+
+		this.setRef = this.setRef.bind(this);
 	}
 
 	onEdit() {
@@ -97,6 +107,9 @@ export default class TimeSlider extends View<null, Props, State> {
 		});
 		if (toggleEdit && type) {
 			toggleEdit(type);
+		}
+		if (this.input) {
+			this.input.focus();
 		}
 	}
 
@@ -108,6 +121,9 @@ export default class TimeSlider extends View<null, Props, State> {
 		if (toggleEdit && type) {
 			toggleEdit(type);
 		}
+		if (this.input) {
+			this.input.blur();
+		}
 	}
 
 	onValueChange = (value: number) => {
@@ -115,13 +131,28 @@ export default class TimeSlider extends View<null, Props, State> {
 		this.props.onValueChange(value);
 	};
 
+	onFocus = () => {
+		this.setState({
+			isEditing: true,
+		});
+	}
+
+	setRef = (ref: any) => {
+		this.input = ref;
+	}
+
+	onSubmitEditing = () => {
+		this.setState({
+			isEditing: false,
+		});
+	}
+
 	render(): React$Element<any> {
-		const { description, icon, appLayout, intl, minimumValue, maximumValue } = this.props;
+		const { description, icon, appLayout, intl, minimumValue, maximumValue, autoFocus } = this.props;
 		const { value, isEditing } = this.state;
 		const {
 			container,
 			row,
-			slider,
 			icon: iconStyle,
 			description: descriptionStyle,
 			marginBottom,
@@ -153,25 +184,18 @@ export default class TimeSlider extends View<null, Props, State> {
 					}
 				</View>
 				<View style={[row, { justifyContent: 'center' }]}>
-					{isEditing ?
-						<TimeField
-							appLayout={appLayout}
-							value={value.toString()}
-							intl={intl}
-							icon={icon}
-							min={minimumValue}
-							max={maximumValue}
-							onValueChange={this.onValueChange}/>
-						:
-						<Slider
-							{...this.sliderConfig}
-							value={value}
-							valueStyle={{width: undefined}}
-							methodFormatDisplayValue={getHoursAndMinutes}
-							trackStyle={slider.track}
-							thumbStyle={slider.thumb}
-						/>
-					}
+					<TimeField
+						appLayout={appLayout}
+						value={value.toString()}
+						intl={intl}
+						icon={icon}
+						min={minimumValue}
+						max={maximumValue}
+						onValueChange={this.onValueChange}
+						onFocus={this.onFocus}
+						autoFocus={autoFocus}
+						setRef={this.setRef}
+						onSubmitEditing={this.onSubmitEditing}/>
 				</View>
 			</View>
 		);
