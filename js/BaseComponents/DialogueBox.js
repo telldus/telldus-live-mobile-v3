@@ -188,14 +188,10 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	renderHeader(styles: Object): any {
-		let { header, capitalizeHeader, showIconOnHeader, imageHeader, onPressHeader, onPressHeaderIcon } = this.props;
-		const { notificationModalHeader, dialogueHeaderStyle, notificationModalHeaderText } = styles;
+		let { header, capitalizeHeader, showIconOnHeader, onPressHeader, onPressHeaderIcon } = this.props;
+		const { dialogueHeaderStyle, notificationModalHeaderText } = styles;
 
-		if (imageHeader) {
-			return this.dialogueImageHeader({
-				showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon,
-				dialogueHeaderStyle, notificationModalHeaderText});
-		} else if (header && typeof header === 'object') {
+		if (header && typeof header === 'object') {
 			return (
 				header
 			);
@@ -203,14 +199,9 @@ class DialogueBox extends Component<Props, null> {
 			header = this.defaultHeader;
 		}
 
-		header = typeof header === 'string' && capitalizeHeader ? capitalize(header) : header;
-		return (
-			<View style={notificationModalHeader}>
-				<Text style={notificationModalHeaderText}>
-					{header}
-				</Text>
-			</View>
-		);
+		return this.dialogueImageHeader({
+			showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon,
+			dialogueHeaderStyle, notificationModalHeaderText});
 	}
 
 	renderBody(styles: Object): any {
@@ -332,6 +323,9 @@ class DialogueBox extends Component<Props, null> {
 		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
 		const fontSize = Math.floor(deviceWidth * 0.042);
 
+		const headerWidth = deviceWidth * 0.75;
+		const borderRadi = headerWidth * 0.04;
+
 		return {
 			modal: {
 				flex: 1,
@@ -342,6 +336,8 @@ class DialogueBox extends Component<Props, null> {
 				backgroundColor: '#fff',
 				alignItems: 'center',
 				justifyContent: 'center',
+				borderRadius: borderRadi,
+				overflow: 'hidden',
 			},
 			notificationModalHeader: {
 				justifyContent: 'center',
@@ -354,7 +350,9 @@ class DialogueBox extends Component<Props, null> {
 			dialogueHeaderStyle: {
 				paddingVertical: fontSize,
 				paddingHorizontal: 5 + fontSize,
-				width: deviceWidth * 0.75,
+				width: headerWidth,
+				borderRadiusTopLeft: borderRadi,
+				borderRadiusTopRight: borderRadi,
 			},
 			notificationModalHeaderText: {
 				color: '#ffffff',
