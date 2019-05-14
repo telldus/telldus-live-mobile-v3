@@ -112,7 +112,7 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
-		let { dispatch, intl, validationMessage, onFormSubmit, openDialogueBox } = this.props;
+		let { intl, validationMessage, onFormSubmit, openDialogueBox } = this.props;
 		let { formatMessage } = intl;
 
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
