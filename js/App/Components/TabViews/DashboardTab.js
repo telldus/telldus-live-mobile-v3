@@ -32,7 +32,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 	Text,
 	View,
-	DialogueBox,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import { getDevices, getSensors, getGateways } from '../../Actions';
@@ -123,7 +122,6 @@ class DashboardTab extends View {
 			scrollEnabled: true,
 			showRefresh: true,
 			dialogueBoxConf: {
-				show: false,
 				action: '',
 				device: {},
 			},
@@ -277,22 +275,19 @@ class DashboardTab extends View {
 	}
 
 	onDismissDialogueHide() {
-		const { dialogueBoxConf } = this.state;
-		this.setState({
-			dialogueBoxConf: {
-				...dialogueBoxConf,
-				show: false,
-			},
-		});
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		toggleDialogueBox({show: false});
 	}
 
 	showDimInfo(device: Object) {
 		this.setState({
 			dialogueBoxConf: {
-				show: true,
 				action: 'dim_info',
 				device,
 			},
+		}, () => {
+			this.openDialogueBox('dim_info', device);
 		});
 	}
 
@@ -307,10 +302,20 @@ class DashboardTab extends View {
 		});
 	}
 
-	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
-		const { show, action, device } = this.state.dialogueBoxConf;
+	openDialogueBox(action: string, device: Object) {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = this.getDialogueBoxData(action, device);
+		toggleDialogueBox(dialogueData);
+	}
+
+	getDialogueBoxData(action: string, device: Object): Object {
+		const { screenProps } = this.props;
+		const { appLayout, intl } = screenProps;
+		const style = this.getStyles(appLayout);
+
 		let data = {
-			showDialogue: show,
+			show: true,
 		};
 		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
@@ -335,6 +340,7 @@ class DashboardTab extends View {
 				/>,
 				dialogueBoxStyle: style.dialogueBoxStyle,
 				backdropOpacity: 0,
+				closeOnPressPositive: true,
 			};
 		}
 		return data;
@@ -342,7 +348,7 @@ class DashboardTab extends View {
 
 	render(): Object {
 		const { screenProps, isDBEmpty, rows } = this.props;
-		const { appLayout, intl } = screenProps;
+		const { appLayout } = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles(appLayout);
@@ -355,20 +361,6 @@ class DashboardTab extends View {
 			propOne: tileWidth,
 			propTwo: appLayout,
 		};
-
-		const {
-			showDialogue,
-			header,
-			text,
-			showNegative,
-			onPressNegative,
-			showPositive,
-			positiveText,
-			onPressPositive,
-			dialogueBoxStyle,
-			backdropOpacity,
-			showHeader,
-		} = this.getDialogueBoxData(style, appLayout, intl);
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
@@ -393,19 +385,6 @@ class DashboardTab extends View {
 					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-				/>
-				<DialogueBox
-					showDialogue={showDialogue}
-					showHeader={showHeader}
-					header={header}
-					text={text}
-					style={dialogueBoxStyle}
-					showNegative={showNegative}
-					onPressNegative={onPressNegative}
-					showPositive={showPositive}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					backdropOpacity={backdropOpacity}
 				/>
 			</View>
 		);

@@ -302,16 +302,9 @@ class DevicesTab extends View {
 	}
 
 	onDismissDialogueHide() {
-		const { dialogueBoxConf } = this.state;
-		this.setState({
-			dialogueBoxConf: {
-				...dialogueBoxConf,
-			},
-		}, () => {
-			const { screenProps } = this.props;
-			const { toggleDialogueBox } = screenProps;
-			toggleDialogueBox({show: false});
-		});
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		toggleDialogueBox({show: false});
 	}
 
 	closeVisibleRows(deviceId: string) {
