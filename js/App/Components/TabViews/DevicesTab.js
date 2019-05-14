@@ -32,8 +32,6 @@ import {
 	View,
 	TouchableButton,
 	IconTelldus,
-	DialogueBox,
-	DialogueHeader,
 } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 import { DimmerControlInfo } from './SubViews/Device';
@@ -86,7 +84,7 @@ class DevicesTab extends View {
 	setIgnoreDevice: (Object) => void;
 	closeVisibleRows: (string) => void;
 	onDismissDialogueHide: () => void;
-	onConfirmDialogueHide: () => void;
+	onConfirmDialogueHide: (?Object) => void;
 
 	addNewDevice: () => void;
 	showDimInfo: (Object) => void;
@@ -129,7 +127,6 @@ class DevicesTab extends View {
 			scrollEnabled: true,
 			showRefresh: true,
 			dialogueBoxConf: {
-				show: false,
 				action: '',
 				device: {},
 			},
@@ -262,19 +259,38 @@ class DevicesTab extends View {
 	}
 
 	setIgnoreDevice(device: Object) {
-		let ignore = device.ignored ? 0 : 1;
-		const { show } = this.state.dialogueBoxConf;
-		if (!device.ignored && !show) {
+		if (!device.ignored) {
 			this.setState({
 				dialogueBoxConf: {
-					show: true,
 					action: 'set_ignore',
 					device,
 				},
+			}, () => {
+				this.openDialogueBox('set_ignore', device);
 			});
 		} else {
-			this.props.dispatch(setIgnoreDevice(device.id, ignore)).then((res: Object) => {
-				let message = device.ignored ?
+			this.onConfirmDialogueHide(device);
+		}
+	}
+
+	openDialogueBox(action: string, device: Object) {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = this.getDialogueBoxData(action, device);
+		toggleDialogueBox(dialogueData);
+	}
+
+	onConfirmDialogueHide(device?: Object) {
+		const { dialogueBoxConf } = this.state;
+		this.setState({
+			dialogueBoxConf: {
+				...dialogueBoxConf,
+			},
+		}, () => {
+			let deviceC = device ? device : this.state.dialogueBoxConf.device;
+			let ignore = deviceC.ignored ? 0 : 1;
+			this.props.dispatch(setIgnoreDevice(deviceC.id, ignore)).then((res: Object) => {
+				let message = deviceC.ignored ?
 					this.removedFromHiddenList : this.addedToHiddenList;
 				this.props.dispatch(showToast(message));
 				this.props.dispatch(getDevices());
@@ -282,17 +298,6 @@ class DevicesTab extends View {
 				let message = err.message ? err.message : null;
 				this.props.dispatch(showToast(message));
 			});
-		}
-	}
-
-	onConfirmDialogueHide() {
-		this.setIgnoreDevice(this.state.dialogueBoxConf.device);
-		const { dialogueBoxConf } = this.state;
-		this.setState({
-			dialogueBoxConf: {
-				...dialogueBoxConf,
-				show: false,
-			},
 		});
 	}
 
@@ -301,8 +306,11 @@ class DevicesTab extends View {
 		this.setState({
 			dialogueBoxConf: {
 				...dialogueBoxConf,
-				show: false,
 			},
+		}, () => {
+			const { screenProps } = this.props;
+			const { toggleDialogueBox } = screenProps;
+			toggleDialogueBox({show: false});
 		});
 	}
 
@@ -407,10 +415,11 @@ class DevicesTab extends View {
 	showDimInfo(device: Object) {
 		this.setState({
 			dialogueBoxConf: {
-				show: true,
 				action: 'dim_info',
 				device,
 			},
+		}, () => {
+			this.openDialogueBox('dim_info', device);
 		});
 	}
 
@@ -429,10 +438,14 @@ class DevicesTab extends View {
 		});
 	}
 
-	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
-		const { show, action, device } = this.state.dialogueBoxConf;
+	getDialogueBoxData(action: string, device: Object): Object {
+		const { screenProps } = this.props;
+		const { appLayout, intl } = screenProps;
+		const style = this.getStyles(appLayout);
+
 		let data = {
-			showDialogue: show,
+			show: true,
+			closeOnPressPositive: true,
 		};
 		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
@@ -463,21 +476,15 @@ class DevicesTab extends View {
 		if (action === 'set_ignore') {
 			return {
 				...data,
-				header: <DialogueHeader
-					headerText={this.headerOnHide}
-					showIcon={false}
-					headerStyle={style.dialogueHeaderStyle}
-					textStyle={style.dialogueHeaderTextStyle}/>,
-				text: <View style={style.dialogueBodyStyle}>
-					<Text style={style.dialogueBodyTextStyle}>
-						{this.messageOnHide}
-					</Text>
-				</View>,
+				header: this.headerOnHide,
+				text: this.messageOnHide,
 				showNegative: true,
+				showHeader: true,
 				onPressNegative: this.onDismissDialogueHide,
 				showPositive: true,
 				positiveText: this.labelHide,
 				onPressPositive: this.onConfirmDialogueHide,
+				closeOnPressNegative: true,
 			};
 		}
 		return data;
@@ -707,7 +714,7 @@ class DevicesTab extends View {
 			screenProps,
 			screenReaderEnabled,
 		} = this.props;
-		const { appLayout, intl } = screenProps;
+		const { appLayout } = screenProps;
 		const {
 			isRefreshing,
 			addGateway,
@@ -735,19 +742,6 @@ class DevicesTab extends View {
 			appLayout,
 			propsSwipeRow,
 		};
-		const {
-			showDialogue,
-			header,
-			text,
-			showNegative,
-			onPressNegative,
-			showPositive,
-			positiveText,
-			onPressPositive,
-			dialogueBoxStyle,
-			backdropOpacity,
-			showHeader,
-		} = this.getDialogueBoxData(style, appLayout, intl);
 		const listData = this.prepareFinalListData(rowsAndSections);
 
 		return (
@@ -769,19 +763,6 @@ class DevicesTab extends View {
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 					ref={this.setRef}
-				/>
-				<DialogueBox
-					showDialogue={showDialogue}
-					showHeader={showHeader}
-					header={header}
-					text={text}
-					style={dialogueBoxStyle}
-					showNegative={showNegative}
-					onPressNegative={onPressNegative}
-					showPositive={showPositive}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					backdropOpacity={backdropOpacity}
 				/>
 			</View>
 		);
