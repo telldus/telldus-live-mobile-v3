@@ -289,13 +289,11 @@ class App extends React.Component<Props, State> {
 					:
 					<PostLoginNavigatorCommon {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
 				}
-				{Platform.OS === 'android' && (// 3.10 has new feature only for Android
-					<ChangeLogNavigator
-						changeLogVersion={changeLogVersion}
-						showChangeLog={showChangeLog}
-						forceShowChangeLog={forceShowChangeLog}
-						onLayout={this.onLayout}/>
-				)}
+				<ChangeLogNavigator
+					changeLogVersion={changeLogVersion}
+					showChangeLog={showChangeLog}
+					forceShowChangeLog={forceShowChangeLog}
+					onLayout={this.onLayout}/>
 				<DialogueBox
 					{...others}
 					showDialogue={show}
