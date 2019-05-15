@@ -24,7 +24,7 @@
 import type { Action } from '../Actions/Types';
 import { createSelector } from 'reselect';
 
-import { setUserIdentifier } from '../Lib/Analytics';
+import { setUserIdentifier, setUserProperty } from '../Lib/Analytics';
 
 export type State = {
 	accessToken: any,
@@ -124,8 +124,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
 		setUserIdentifier(action.payload.email);
-		// TODO: Enable once the method is supported.
-		// firebase.crashlytics().setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
+		setUserProperty('username', `${action.payload.firstname} ${action.payload.lastname}`);
 		return {
 			...state,
 			userProfile: action.payload,
