@@ -97,6 +97,7 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
+		crash;
 		let { navigation, actions, intl } = this.props;
 		if (locationName !== '') {
 			this.setState({

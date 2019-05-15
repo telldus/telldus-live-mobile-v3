@@ -90,6 +90,7 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
+		crash;
 		const { navigation, intl, actions } = this.props;
 		if (locationName !== '') {
 			Keyboard.dismiss();
