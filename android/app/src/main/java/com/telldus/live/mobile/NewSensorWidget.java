@@ -219,12 +219,12 @@ public class NewSensorWidget extends AppWidgetProvider {
 
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
-        // When the user deletes the widget, delete the preference associated with it.
-        PrefManager prefManager = new PrefManager(context);
+        // When the user deletes the widget, delete the data associated with it and stop auto-update alarm.
         MyDBHandler db = new MyDBHandler(context);
         SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
         for (int appWidgetId : appWidgetIds) {
             sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+            boolean b = db.deleteWidgetInfoSensor(appWidgetId);
         }
     }
 
