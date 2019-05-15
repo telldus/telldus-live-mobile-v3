@@ -35,7 +35,7 @@ import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 
 public class RestartSensorUpdateAlarmManager extends Service {
-    int startMode;
+    int startMode = Service.START_NOT_STICKY;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -70,5 +70,6 @@ public class RestartSensorUpdateAlarmManager extends Service {
                 sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval);
             }
         }
+        this.stopSelf();
     }
 }
