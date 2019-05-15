@@ -26,7 +26,6 @@ module.exports = {
 EOF
 
 cat > gradle.properties <<EOF
-android.enableAapt2=false
 TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE=../android-signing/telldus.keystore
 TELLDUS_REACT_NATIVE_LOCAL_KEY_ALIAS=telldus
 TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD=${ANDROID_STORE_PASSWORD}
