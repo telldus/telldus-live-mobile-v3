@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 /**
  * Copyright 2016-present Telldus Technologies AB.
  *
@@ -90,7 +92,7 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
-		crash;
+		crash;// $FlowFixMe
 		const { navigation, intl, actions } = this.props;
 		if (locationName !== '') {
 			Keyboard.dismiss();
