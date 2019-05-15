@@ -39,7 +39,7 @@ import { forceLocale } from './Config';
 import {
 	setUserIdentifier,
 	enableCrashlyticsCollection,
-	setUserProperty,
+	setUserName,
 } from './App/Lib/Analytics';
 
 function Bootstrap(): Object {
@@ -79,7 +79,7 @@ function Bootstrap(): Object {
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
 				setUserIdentifier(state.user.userProfile.email);
-				setUserProperty('username', `${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
+				setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
 			}
 		}
 

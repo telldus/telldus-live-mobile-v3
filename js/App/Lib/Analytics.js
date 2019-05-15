@@ -60,9 +60,9 @@ export function enableCrashlyticsCollection() {
 	}
 }
 
-export function setUserProperty(name: string, value: string) {
-	// TODO: Enable once the method is supported.
+export function setUserName(uname: string) {
+	// TODO: Enable once the method is supported. rn-firebase v6
 	// if (!__DEV__) {
-	// 	firebase.crashlytics().setUserProperty(name, value);
+	// 	firebase.crashlytics().setUserName(uname);
 	// }
 }

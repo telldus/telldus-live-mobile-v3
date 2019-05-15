@@ -24,7 +24,7 @@
 import type { Action } from '../Actions/Types';
 import { createSelector } from 'reselect';
 
-import { setUserIdentifier, setUserProperty } from '../Lib/Analytics';
+import { setUserIdentifier, setUserName } from '../Lib/Analytics';
 
 export type State = {
 	accessToken: any,
@@ -124,7 +124,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
 		setUserIdentifier(action.payload.email);
-		setUserProperty('username', `${action.payload.firstname} ${action.payload.lastname}`);
+		setUserName(`${action.payload.firstname} ${action.payload.lastname}`);
 		return {
 			...state,
 			userProfile: action.payload,
