@@ -123,7 +123,6 @@ class Edit extends View<null, Props, State> {
 	};
 
 	onSaveSchedule = () => {
-		crash;
 		if (!this.state.isDeleting && !this.state.choseDelete) {
 			this.setState({
 				isSaving: true,
