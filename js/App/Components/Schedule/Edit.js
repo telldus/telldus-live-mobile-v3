@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-undef */
 /**
  * Copyright 2016-present Telldus Technologies AB.
  *
@@ -125,7 +123,7 @@ class Edit extends View<null, Props, State> {
 	};
 
 	onSaveSchedule = () => {
-		crash;// $FlowFixMe
+		crash;
 		if (!this.state.isDeleting && !this.state.choseDelete) {
 			this.setState({
 				isSaving: true,
