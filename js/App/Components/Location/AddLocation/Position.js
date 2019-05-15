@@ -24,10 +24,11 @@
 'use strict';
 
 import React from 'react';
+import { ImageBackground } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View } from '../../../../BaseComponents';
+import { View, Text, RoundedInfoButton } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
 import i18n from '../../../Translations/common';
@@ -41,6 +42,8 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
@@ -73,6 +76,12 @@ class Position extends View {
 
 		this.onSubmit = this.onSubmit.bind(this);
 
+		this.dlogPOne = `${formatMessage(i18n.dialogueBodyParaOne)}.`;
+		this.dlogPTwo = `${formatMessage(i18n.dialogueBodyParaTwo)}.`;
+		this.dlogPThree = `${formatMessage(i18n.dialogueBodyParaThree)}.`;
+
+		this.dialogueHeader = formatMessage(i18n.dialogueHeader);
+
 	}
 
 	componentDidMount() {
@@ -94,7 +103,41 @@ class Position extends View {
 	}
 
 	onInfoPress() {
-		this.props.actions.showModal(null, {source: 'Position'});
+		const { intl } = this.props;
+		const header = this.renderCustomDialogueHeader();
+		this.openDialogueBox({
+			header,
+			text: `${this.dlogPOne}\n\n${this.dlogPTwo}\n\n${this.dlogPThree}`,
+			positiveText: intl.formatMessage(i18n.dialoguePositiveText).toUpperCase(),
+		});
+	}
+
+	renderCustomDialogueHeader(): Object {
+		const styles = this.getStyle();
+		let buttonProps = {
+			infoButtonContainerStyle: styles.infoButtonContainer,
+		};
+		return (
+			<ImageBackground style={styles.dialogueHeader} source={{uri: 'telldus_geometric_bg'}}>
+				<RoundedInfoButton buttonProps={buttonProps}/>
+				<Text style={styles.dialogueHeaderText}>
+					{this.dialogueHeader}
+				</Text>
+			</ImageBackground>
+		);
+	}
+
+	openDialogueBox(otherConfs: Object = {}) {
+		const { toggleDialogueBox } = this.props;
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			closeOnPressPositive: true,
+			dialogueContainerStyle: {elevation: 0},
+			showPositive: true,
+			...otherConfs,
+		};
+		toggleDialogueBox(dialogueData);
 	}
 
 	onSubmit(latitude: number, longitude: number) {
@@ -117,7 +160,9 @@ class Position extends View {
 			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message) :
 					error.error ? error.error : this.unknownError;
-				actions.showModal(message);
+				this.openDialogueBox({
+					text: message,
+				});
 				this.setState({
 					isLoading: false,
 				});
@@ -132,6 +177,35 @@ class Position extends View {
 				onSubmit={this.onSubmit}
 			/>
 		);
+	}
+
+	getStyle(): Object {
+		const { appLayout } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+
+		return {
+			dialogueHeader: {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
+				alignItems: 'center',
+				paddingLeft: 20,
+				height: isPortrait ? height * 0.08 : width * 0.08,
+				width: isPortrait ? width * 0.75 : height * 0.75,
+			},
+			infoButtonContainer: {
+				position: 'relative',
+				right: 0,
+				bottom: 0,
+			},
+			dialogueHeaderText: {
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				color: '#fff',
+				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
+				paddingLeft: 10,
+			},
+		};
 	}
 }
 
