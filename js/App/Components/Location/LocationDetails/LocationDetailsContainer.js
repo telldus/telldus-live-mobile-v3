@@ -61,7 +61,6 @@ type State = {
 class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress: () => boolean;
-	closeModal: () => void;
 
 	state = {
 		h1: '',
@@ -77,7 +76,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			onPress: this.goBack,
 		};
 
-		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 	}
 
