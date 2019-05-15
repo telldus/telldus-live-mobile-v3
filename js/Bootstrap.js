@@ -36,7 +36,11 @@ import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
 import * as Translations from './App/Translations';
 import { forceLocale } from './Config';
-import { setUserIdentifier, enableCrashlyticsCollection } from './App/Lib/Analytics';
+import {
+	setUserIdentifier,
+	enableCrashlyticsCollection,
+	setUserProperty,
+} from './App/Lib/Analytics';
 
 function Bootstrap(): Object {
 
@@ -75,8 +79,7 @@ function Bootstrap(): Object {
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
 				setUserIdentifier(state.user.userProfile.email);
-				// TODO: Enable once the method is supported.
-				// firebase.crashlytics().setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
+				setUserProperty('username', `${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
 			}
 		}
 

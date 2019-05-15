@@ -59,3 +59,10 @@ export function enableCrashlyticsCollection() {
 		firebase.crashlytics().enableCrashlyticsCollection();
 	}
 }
+
+export function setUserProperty(name: string, value: string) {
+	// TODO: Enable once the method is supported.
+	// if (!__DEV__) {
+	// 	firebase.crashlytics().setUserProperty(name, value);
+	// }
+}
