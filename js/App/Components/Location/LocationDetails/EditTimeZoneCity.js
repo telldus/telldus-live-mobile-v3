@@ -41,6 +41,8 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+
+	toggleDialogueBox: (Object) => void,
 };
 
 class EditTimeZoneCity extends View {
@@ -86,7 +88,7 @@ class EditTimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		const { navigation, actions } = this.props;
+		const { navigation, actions, toggleDialogueBox } = this.props;
 		const id = navigation.getParam('id', null);
 		const continent = navigation.getParam('continent', null);
 		const timezone = `${continent}/${city}`;
@@ -94,7 +96,15 @@ class EditTimeZoneCity extends View {
 			actions.getGateways();
 			navigation.popToTop();
 		}).catch(() => {
-			actions.showModal(this.onSetTimezoneError);
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				text: this.onSetTimezoneError,
+				dialogueContainerStyle: {elevation: 0},
+				showPositive: true,
+				showNegative: false,
+				closeOnPressPositive: true,
+			});
 		});
 	}
 

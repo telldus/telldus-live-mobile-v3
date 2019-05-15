@@ -41,7 +41,8 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-	dialogueOpen: boolean,
+
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
@@ -97,7 +98,7 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
-		let { navigation, actions, intl } = this.props;
+		let { navigation, actions, intl, toggleDialogueBox } = this.props;
 		if (locationName !== '') {
 			this.setState({
 				isLoading: true,
@@ -114,11 +115,27 @@ class LocationName extends View {
 				this.setState({
 					isLoading: false,
 				});
-				actions.showModal(this.onSetNameError);
+				toggleDialogueBox({
+					show: true,
+					showHeader: true,
+					text: this.onSetNameError,
+					dialogueContainerStyle: {elevation: 0},
+					showPositive: true,
+					showNegative: false,
+					closeOnPressPositive: true,
+				});
 			});
 		} else {
 			let message = intl.formatMessage(i18n.invalidLocationName);
-			actions.showModal(message);
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				text: message,
+				dialogueContainerStyle: {elevation: 0},
+				showPositive: true,
+				showNegative: false,
+				closeOnPressPositive: true,
+			});
 		}
 	}
 

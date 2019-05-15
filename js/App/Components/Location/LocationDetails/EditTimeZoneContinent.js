@@ -43,6 +43,8 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+
+	toggleDialogueBox: (Object) => void,
 };
 
 class EditTimeZoneContinent extends View {
@@ -97,14 +99,22 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, toggleDialogueBox } = this.props;
 		const id = navigation.getParam('id', null);
 		if (continent === 'UTC') {
 			actions.setTimezone(id, continent).then(() => {
 				actions.getGateways();
 				navigation.goBack();
 			}).catch(() => {
-				actions.showModal(this.onSetTimezoneError);
+				toggleDialogueBox({
+					show: true,
+					showHeader: true,
+					text: this.onSetTimezoneError,
+					dialogueContainerStyle: {elevation: 0},
+					showPositive: true,
+					showNegative: false,
+					closeOnPressPositive: true,
+				});
 			});
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
@@ -122,25 +132,41 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onPressAutodetect() {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, toggleDialogueBox } = this.props;
 		const id = navigation.getParam('id', null);
 		actions.setTimezone(id, '').then(() => {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
-			actions.showModal(this.onSetTimezoneError);
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				text: this.onSetTimezoneError,
+				dialogueContainerStyle: {elevation: 0},
+				showPositive: true,
+				showNegative: false,
+				closeOnPressPositive: true,
+			});
 		});
 	}
 
 	onPressAutodetected() {
-		const { actions, navigation } = this.props;
+		const { actions, navigation, toggleDialogueBox } = this.props;
 		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
 		const id = navigation.getParam('id', null);
 		actions.setTimezone(id, autodetectedTimezone).then(() => {
 			actions.getGateways();
 			navigation.goBack();
 		}).catch(() => {
-			actions.showModal(this.onSetTimezoneError);
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				text: this.onSetTimezoneError,
+				dialogueContainerStyle: {elevation: 0},
+				showPositive: true,
+				showNegative: false,
+				closeOnPressPositive: true,
+			});
 		});
 	}
 
