@@ -307,6 +307,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 deviceStateValueCurrent = info.get("stateValue").toString();
+                                deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
                                 tvIcon1.setText(deviceIcon);
 

@@ -121,6 +121,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         String state = DeviceWidgetInfo.getState();
         String deviceType = DeviceWidgetInfo.getDeviceType();
         String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
+        deviceStateValue = deviceStateValue == "null" ? "" : deviceStateValue;
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
