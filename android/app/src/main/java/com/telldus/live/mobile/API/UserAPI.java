@@ -51,7 +51,7 @@ public class UserAPI {
     public void getUserProfile(final Context context, final OnAPITaskComplete callBack) {
         String params = "/user/profile";
         API endPoints = new API();
-        endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
+        endPoints.callEndPoint(context, params, "UserProfile", new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
                 try {
@@ -84,7 +84,7 @@ public class UserAPI {
     public void createTransaction(String product, String quantity, String returnURL, final Context context, final OnAPITaskComplete callBack) {
         String params = "/user/createTransaction?product="+product+"&quantity="+quantity+"&returnUrl="+returnURL;
         API endPoints = new API();
-        endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
+        endPoints.callEndPoint(context, params, "CreateTransaction", new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
                 callBack.onSuccess(response);

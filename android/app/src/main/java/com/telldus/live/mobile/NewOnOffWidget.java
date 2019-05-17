@@ -67,6 +67,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String METHOD_OFF = "2";
     private static final String METHOD_BELL = "4";
 
+    private static final String API_TAG = "SetState1";
+
     DevicesAPI deviceAPI = new DevicesAPI();
 
     Handler handlerResetDeviceStateToNull;
@@ -595,7 +597,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String  accessToken = prefManager.getAccessToken();
 
         String params = "/device/command?id="+deviceId+"&method="+method+"&value=null";
-        deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, new OnAPITaskComplete() {
+        deviceAPI.setDeviceState(deviceId, method, 0, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
                 String error = response.optString("error");

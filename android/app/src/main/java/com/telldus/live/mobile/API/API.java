@@ -39,12 +39,13 @@ import org.json.JSONException;
 public class API {
     private static String API_SERVER = BuildConfig.TELLDUS_API_SERVER;
 
-    public void callEndPoint(final Context context, final String params, final OnAPITaskComplete callBack) {
+    public void callEndPoint(final Context context, final String params, String tag, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
 
         String Url = API_SERVER+"/oauth2"+params;
         AndroidNetworking.get(Url)
+                .setTag(tag)
                 .addHeaders("Content-Type", "application/json")
                 .addHeaders("Accept", "application/json")
                 .addHeaders("Authorization", "Bearer " + accessToken)
@@ -65,7 +66,7 @@ public class API {
                                         if (!error.isEmpty() && error != null) {
                                             callBack.onSuccess(response);
                                         } else {
-                                            callEndPoint(context, params, callBack);
+                                            callEndPoint(context, params, tag, callBack);
                                         }
                                     }
                                     @Override
@@ -96,7 +97,7 @@ public class API {
                                             if (!errorRefreshToken.isEmpty() && errorRefreshToken != null) {
                                                 callBack.onError(error);
                                             } else {
-                                                callEndPoint(context, params, callBack);
+                                                callEndPoint(context, params, tag, callBack);
                                             }
                                         }
                                         @Override

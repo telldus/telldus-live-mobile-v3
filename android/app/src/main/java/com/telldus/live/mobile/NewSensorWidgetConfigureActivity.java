@@ -543,7 +543,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
 
         String params = "/sensors/list?includeValues=1&includeScale=1";
         API endPoints = new API();
-        endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
+        endPoints.callEndPoint(getApplicationContext(), params, "SensorsApi", new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);

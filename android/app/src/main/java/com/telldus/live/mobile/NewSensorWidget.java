@@ -48,6 +48,8 @@ import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.UserAPI;
 
+import com.androidnetworking.AndroidNetworking;
+
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +64,8 @@ public class NewSensorWidget extends AppWidgetProvider {
     public static final String ACTION_AUTO_UPDATE = "com.telldus.live.mobile.AUTO_UPDATE";
     private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
     private PendingIntent pendingIntent;
+
+    private static final String API_TAG = "SensorApi";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -344,8 +348,16 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
 
         if (ACTION_SENSOR_UPDATE.equals(intent.getAction())) {
-            db.updateSensorIsUpdating(widgetId, "true");
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+
+            String isUpdating = widgetInfo.getIsUpdating();
+            if (isUpdating != null && isUpdating.equals("true")) {
+                AndroidNetworking.cancel(API_TAG);
+                db.updateSensorIsUpdating(widgetId, "false");
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+
+            db.updateSensorIsUpdating(widgetId, "true");
             updateAppWidget(context, widgetManager, widgetId);
 
             createSensorApi(sensorId, widgetId, db, context);
@@ -371,7 +383,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         String params = "/sensor/info?id="+sensorId;
         API endPoints = new API();
-        endPoints.callEndPoint(context, params, new OnAPITaskComplete() {
+        endPoints.callEndPoint(context, params, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
                 try {
