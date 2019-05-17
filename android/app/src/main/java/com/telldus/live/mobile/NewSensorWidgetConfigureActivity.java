@@ -99,7 +99,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     private String client_ID;
     private String client_secret;
 
-    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1, selectedIntervalOptionsIndex = 0;
+    public int selectedSensorIndex = -1, selectedSensorValueIndex = -1, selectedIntervalOptionsIndex = 1;
 
     View def_cover;
     View dark_cover;
