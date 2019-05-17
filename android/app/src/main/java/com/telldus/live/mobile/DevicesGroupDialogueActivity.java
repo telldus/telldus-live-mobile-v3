@@ -65,6 +65,8 @@ public class DevicesGroupDialogueActivity extends Activity {
     private static final String METHOD_DIMMER_50 = "16_50";
     private static final String METHOD_DIMMER_75 = "16_75";
 
+    private static final String API_TAG = "SetState2";
+
     DevicesAPI deviceAPI = new DevicesAPI();
 
 
@@ -121,6 +123,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         String state = DeviceWidgetInfo.getState();
         String deviceType = DeviceWidgetInfo.getDeviceType();
         String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
+        deviceStateValue = deviceStateValue == "null" ? "" : deviceStateValue;
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
@@ -916,7 +919,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         String  accessToken = prefManager.getAccessToken();
         final MyDBHandler db = new MyDBHandler(context);
         String params = "/device/command?id="+deviceId+"&method="+method+"&value="+value;
-        deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, new OnAPITaskComplete() {
+        deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
                 String error = response.optString("error");

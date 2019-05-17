@@ -307,6 +307,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 deviceStateValueCurrent = info.get("stateValue").toString();
+                                deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
                                 tvIcon1.setText(deviceIcon);
 
@@ -392,7 +393,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     void createDeviceApi() {
         String params = "/devices/list?supportedMethods=951&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
-        endPoints.callEndPoint(getApplicationContext(), params, new OnAPITaskComplete() {
+        endPoints.callEndPoint(getApplicationContext(), params, "DeviceApi1", new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
