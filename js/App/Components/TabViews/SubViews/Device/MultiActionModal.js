@@ -28,6 +28,9 @@ import { View, StyleSheet, DialogueHeader } from '../../../../../BaseComponents'
 import { shouldUpdate } from '../../../../Lib';
 import Theme from '../../../../Theme';
 
+const buttonPadding = 10;
+const bodyPadding = buttonPadding * 1.5;
+
 type Props = {
 	showModal: boolean,
 	item: Object,
@@ -114,9 +117,8 @@ render(): Object {
 				<DialogueHeader
 					headerText={name}
 					showIcon={true}
-					headerStyle={{
-						paddingHorizontal: 10,
-					}}
+					textStyle={{left: (bodyPadding / 2) + 10}}
+					iconStyle={{right: (bodyPadding / 2) + 10}}
 					headerWidth={width}
 					headerHeight={20 + (width * 0.08)}
 					onPressIcon={this.closeModal}
@@ -187,8 +189,6 @@ render(): Object {
 }
 }
 
-const buttonPadding = 10;
-const bodyPadding = buttonPadding * 1.5;
 const styles = StyleSheet.create({
 	modal: {
 		flex: 1,

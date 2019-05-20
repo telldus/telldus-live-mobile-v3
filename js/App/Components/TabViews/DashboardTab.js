@@ -320,7 +320,6 @@ class DashboardTab extends View {
 		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
 			const styles = {
-				dialogueHeaderStyle: style.dialogueHeaderStyle,
 				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
 				dialogueBodyStyle: style.dialogueBodyStyle,
 				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
@@ -501,14 +500,11 @@ class DashboardTab extends View {
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
-			dialogueHeaderStyle: {
-				paddingVertical: 10,
-				paddingHorizontal: 20,
-			},
 			headerWidth: deviceWidth * 0.75,
 			headerHeight: deviceWidth * 0.1,
 			dialogueHeaderTextStyle: {
 				fontSize: 13,
+				left: 20,
 			},
 			dialogueBodyStyle: {
 				paddingHorizontal: 20,

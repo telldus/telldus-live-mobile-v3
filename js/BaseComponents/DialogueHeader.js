@@ -24,7 +24,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import View from './View';
 import Text from './Text';
 import Icon from './Icon';
 import capitalize from '../App/Lib/capitalize';
@@ -33,8 +32,8 @@ import GeometricHeader from './GeometricHeader';
 
 type Props = {
     headerText: string,
-    headerStyle: number | Object | Array<Object>,
-    textStyle: number | Object | Array<Object>,
+	textStyle: number | Object | Array<Object>,
+	iconStyle?: number | Object | Array<Object>,
 	onPressIcon?: () => void,
 	onPressHeader?: () => void,
     showIcon?: boolean,
@@ -95,7 +94,6 @@ onPressHeader() {
 render(): Object {
 	let {
 		headerText,
-		headerStyle,
 		textStyle,
 		showIcon,
 		iconName,
@@ -105,49 +103,32 @@ render(): Object {
 		onPressHeader,
 		headerHeight,
 		headerWidth,
+		iconStyle,
 	} = this.props;
 	headerText = typeof headerText === 'string' && shouldCapitalize ? capitalize(headerText) : headerText;
 
 	return (
-		<View style={{
+		<TouchableOpacity style={[{
 			height: headerHeight,
 			width: headerWidth,
-			overflow: 'hidden',
-			borderTopRadius: 5,
-			justifyContent: 'center',
-			alignItems: 'center',
-		}}>
+		}, styles.touchableCover]} onPress={this.onPressHeader} disabled={!onPressHeader}>
 			<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth}/>
-			<TouchableOpacity onPress={this.onPressHeader} disabled={!onPressHeader} style={[styles.touchable, headerStyle]}>
-
-				<Text style={[styles.text, textStyle]}>
-					{headerText}
-				</Text>
-				{showIcon && (
-					<Icon name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
-				)}
-
-			</TouchableOpacity>
-		</View>
+			<Text style={[styles.text, textStyle]}>
+				{headerText}
+			</Text>
+			{showIcon && (
+				<Icon style={[styles.iconStyle, iconStyle]} name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
+			)}
+		</TouchableOpacity>
 	);
 }
 }
 
 const styles = StyleSheet.create({
-	touchable: {
-		flex: 1,
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		flexDirection: 'row',
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
-	},
-	image: {
-		height: undefined,
-		width: undefined,
+	touchableCover: {
+		overflow: 'hidden',
+		borderTopLeftRadius: 5,
+		borderTopRightRadius: 5,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'stretch',
@@ -155,5 +136,13 @@ const styles = StyleSheet.create({
 	text: {
 		color: '#fff',
 		fontSize: 12,
+		position: 'absolute',
+		alignSelf: 'center',
+		left: 5,
+	},
+	iconStyle: {
+		position: 'absolute',
+		right: 5,
+		alignSelf: 'center',
 	},
 });

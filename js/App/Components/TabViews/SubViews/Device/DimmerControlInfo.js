@@ -86,7 +86,6 @@ class DimmerControlInfo extends View<Props, null> {
 					headerText={`${intl.formatMessage(i18n.dim)} ${name}`}
 					shouldCapitalize={false}
 					showIcon={false}
-					headerStyle={style.dialogueHeaderStyle}
 					textStyle={style.dialogueHeaderTextStyle}
 					headerWidth={style.headerWidth}
 					headerHeight={style.headerHeight}/>

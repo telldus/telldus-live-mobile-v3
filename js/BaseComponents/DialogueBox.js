@@ -187,9 +187,9 @@ class DialogueBox extends Component<Props, null> {
 				headerText={typeof header === 'string' && capitalizeHeader ? capitalize(header) : header}
 				showIcon={showIconOnHeader}
 				onPressHeader={onPressHeader}
-				headerStyle={styles.dialogueHeaderStyle}
 				onPressIcon={onPressHeaderIcon}
 				textStyle={styles.notificationModalHeaderText}
+				iconStyle={styles.notificationModalHeaderIcon}
 				shouldCapitalize={capitalizeHeader}
 				headerHeight={styles.headerHeight}
 				headerWidth={styles.headerWidth}/>
@@ -360,17 +360,17 @@ class DialogueBox extends Component<Props, null> {
 				width: deviceWidth * 0.75,
 				backgroundColor: '#e26901',
 			},
-			dialogueHeaderStyle: {
-				paddingVertical: fontSize,
-				paddingHorizontal: 5 + fontSize,
-				borderRadiusTopLeft: borderRadi,
-				borderRadiusTopRight: borderRadi,
-			},
 			headerWidth,
 			headerHeight: deviceWidth * 0.1,
 			notificationModalHeaderText: {
 				color: '#ffffff',
 				fontSize: fontSizeHeader,
+				left: 5 + fontSize,
+			},
+			notificationModalHeaderIcon: {
+				color: '#ffffff',
+				fontSize: fontSizeHeader,
+				right: 5 + fontSize,
 			},
 			notificationModalBody: {
 				justifyContent: 'center',

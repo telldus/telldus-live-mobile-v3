@@ -443,7 +443,6 @@ class DevicesTab extends View {
 		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
 			const styles = {
-				dialogueHeaderStyle: style.dialogueHeaderStyle,
 				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
 				dialogueBodyStyle: style.dialogueBodyStyle,
 				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
@@ -841,14 +840,11 @@ class DevicesTab extends View {
 				textAlign: 'center',
 				color: Theme.Core.rowTextColor,
 			},
-			dialogueHeaderStyle: {
-				paddingVertical: 10,
-				paddingHorizontal: 20,
-			},
 			headerWidth: deviceWidth * 0.75,
 			headerHeight: deviceWidth * 0.1,
 			dialogueHeaderTextStyle: {
 				fontSize: 13,
+				left: 20,
 			},
 			dialogueBodyStyle: {
 				paddingHorizontal: 20,
