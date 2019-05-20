@@ -126,10 +126,12 @@ class Position extends View {
 				alignItems: 'center',
 			}}>
 				<GeometricHeader headerHeight={styles.headerHeight} headerWidth={styles.headerWidth}/>
-				<RoundedInfoButton buttonProps={buttonProps}/>
-				<Text style={styles.dialogueHeaderText}>
-					{this.dialogueHeader}
-				</Text>
+				<View style={styles.dialogueHeader}>
+					<RoundedInfoButton buttonProps={buttonProps}/>
+					<Text style={styles.dialogueHeaderText}>
+						{this.dialogueHeader}
+					</Text>
+				</View>
 			</View>
 		);
 	}
@@ -193,10 +195,16 @@ class Position extends View {
 
 		return {
 			dialogueHeader: {
-				flexDirection: 'row',
+				paddingLeft: 20,
+				flex: 1,
 				justifyContent: 'flex-start',
 				alignItems: 'center',
-				paddingLeft: 20,
+				flexDirection: 'row',
+				position: 'absolute',
+				top: 0,
+				bottom: 0,
+				left: 0,
+				right: 0,
 			},
 			headerHeight: isPortrait ? height * 0.08 : width * 0.08,
 			headerWidth: isPortrait ? width * 0.75 : height * 0.75,
