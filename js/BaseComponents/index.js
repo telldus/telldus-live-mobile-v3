@@ -87,6 +87,7 @@ import MainTabBarAndroid from './MainTabBarAndroid';
 import MainTabsAndroid from './MainTabsAndroid';
 import AttentionCatcher from './AttentionCatcher';
 import Swatches from './Swatches';
+import GeometricHeader from './GeometricHeader';
 
 import {
 	AppState,
@@ -165,6 +166,7 @@ module.exports = {
 	MainTabsAndroid,
 	AttentionCatcher,
 	Swatches,
+	GeometricHeader,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

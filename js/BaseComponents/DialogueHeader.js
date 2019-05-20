@@ -22,17 +22,19 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
+import View from './View';
 import Text from './Text';
 import Icon from './Icon';
 import capitalize from '../App/Lib/capitalize';
+
+import GeometricHeader from './GeometricHeader';
 
 type Props = {
     headerText: string,
     headerStyle: number | Object | Array<Object>,
     textStyle: number | Object | Array<Object>,
-    source: Object | number,
 	onPressIcon?: () => void,
 	onPressHeader?: () => void,
     showIcon?: boolean,
@@ -40,26 +42,30 @@ type Props = {
     iconSize?: number,
 	iconColor?: string,
 	shouldCapitalize?: boolean,
+	headerHeight: number,
+	headerWidth: number,
 };
 
 type defaultProps = {
-    source: Object | number,
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
 	iconColor?: string,
 	shouldCapitalize: boolean,
+	headerHeight: number,
+	headerWidth: number,
 };
 
 export default class DialogueHeader extends Component<Props, null> {
 props: Props;
 static defaultProps: defaultProps = {
-	source: {uri: 'telldus_geometric_bg'},
 	showIcon: false,
 	iconName: 'times-circle',
 	iconSize: 12,
 	iconColor: '#fff',
 	shouldCapitalize: true,
+	headerHeight: 20,
+	headerWidth: 100,
 }
 
 onPressIcon: () => void;
@@ -97,12 +103,22 @@ render(): Object {
 		iconColor,
 		shouldCapitalize,
 		onPressHeader,
+		headerHeight,
+		headerWidth,
 	} = this.props;
 	headerText = typeof headerText === 'string' && shouldCapitalize ? capitalize(headerText) : headerText;
 
 	return (
-		<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
-			<TouchableOpacity onPress={this.onPressHeader} disabled={!onPressHeader} style={styles.touchable}>
+		<View style={{
+			height: headerHeight,
+			width: headerWidth,
+			overflow: 'hidden',
+			borderTopRadius: 5,
+			justifyContent: 'center',
+			alignItems: 'center',
+		}}>
+			<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth}/>
+			<TouchableOpacity onPress={this.onPressHeader} disabled={!onPressHeader} style={[styles.touchable, headerStyle]}>
 
 				<Text style={[styles.text, textStyle]}>
 					{headerText}
@@ -112,7 +128,7 @@ render(): Object {
 				)}
 
 			</TouchableOpacity>
-		</ImageBackground>
+		</View>
 	);
 }
 }
@@ -121,8 +137,13 @@ const styles = StyleSheet.create({
 	touchable: {
 		flex: 1,
 		justifyContent: 'space-between',
-		alignItems: 'stretch',
+		alignItems: 'center',
 		flexDirection: 'row',
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
 	},
 	image: {
 		height: undefined,

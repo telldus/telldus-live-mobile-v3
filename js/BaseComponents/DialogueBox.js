@@ -174,22 +174,30 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
-	dialogueImageHeader({ showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon, dialogueHeaderStyle, notificationModalHeaderText }: Object): Object {
+	dialogueImageHeader({
+		showIconOnHeader,
+		header,
+		capitalizeHeader,
+		onPressHeader,
+		onPressHeaderIcon,
+		styles,
+	}: Object): Object {
 		return (
 			<DialogueHeader
 				headerText={typeof header === 'string' && capitalizeHeader ? capitalize(header) : header}
 				showIcon={showIconOnHeader}
 				onPressHeader={onPressHeader}
-				headerStyle={dialogueHeaderStyle}
+				headerStyle={styles.dialogueHeaderStyle}
 				onPressIcon={onPressHeaderIcon}
-				textStyle={notificationModalHeaderText}
-				shouldCapitalize={capitalizeHeader}/>
+				textStyle={styles.notificationModalHeaderText}
+				shouldCapitalize={capitalizeHeader}
+				headerHeight={styles.headerHeight}
+				headerWidth={styles.headerWidth}/>
 		);
 	}
 
 	renderHeader(styles: Object): any {
 		let { header, capitalizeHeader, showIconOnHeader, onPressHeader, onPressHeaderIcon } = this.props;
-		const { dialogueHeaderStyle, notificationModalHeaderText } = styles;
 
 		if (header && typeof header === 'object') {
 			return (
@@ -200,8 +208,13 @@ class DialogueBox extends Component<Props, null> {
 		}
 
 		return this.dialogueImageHeader({
-			showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon,
-			dialogueHeaderStyle, notificationModalHeaderText});
+			showIconOnHeader,
+			header,
+			capitalizeHeader,
+			onPressHeader,
+			onPressHeaderIcon,
+			styles,
+		});
 	}
 
 	renderBody(styles: Object): any {
@@ -324,7 +337,7 @@ class DialogueBox extends Component<Props, null> {
 		const fontSize = Math.floor(deviceWidth * 0.042);
 
 		const headerWidth = deviceWidth * 0.75;
-		const borderRadi = headerWidth * 0.04;
+		const borderRadi = 5;
 
 		return {
 			modal: {
@@ -350,10 +363,11 @@ class DialogueBox extends Component<Props, null> {
 			dialogueHeaderStyle: {
 				paddingVertical: fontSize,
 				paddingHorizontal: 5 + fontSize,
-				width: headerWidth,
 				borderRadiusTopLeft: borderRadi,
 				borderRadiusTopRight: borderRadi,
 			},
+			headerWidth,
+			headerHeight: deviceWidth * 0.1,
 			notificationModalHeaderText: {
 				color: '#ffffff',
 				fontSize: fontSizeHeader,

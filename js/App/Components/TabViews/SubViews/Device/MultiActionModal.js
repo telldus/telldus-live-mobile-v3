@@ -37,7 +37,7 @@ type Props = {
 };
 
 type State = {
-	width?: number,
+	width: number,
 };
 
 export default class MultiActionModal extends View<Props, State> {
@@ -47,7 +47,7 @@ closeModal: () => void;
 onLayoutBody: (Object) => void;
 
 state: State = {
-	width: undefined,
+	width: 0,
 };
 
 constructor(props: Props) {
@@ -115,10 +115,10 @@ render(): Object {
 					headerText={name}
 					showIcon={true}
 					headerStyle={{
-						width,
-						paddingVertical: 10,
 						paddingHorizontal: 10,
 					}}
+					headerWidth={width}
+					headerHeight={20 + (width * 0.08)}
 					onPressIcon={this.closeModal}
 					onPressHeader={this.closeModal}/>
 				<View style={styles.body} onLayout={this.onLayoutBody}>
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
 		alignItems: 'flex-start',
 		justifyContent: 'center',
 		backgroundColor: '#fff',
-		borderRadius: 2,
+		borderRadius: 5,
 		overflow: 'hidden',
 	},
 	body: {

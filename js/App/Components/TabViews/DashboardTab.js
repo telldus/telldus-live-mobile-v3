@@ -324,6 +324,8 @@ class DashboardTab extends View {
 				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
 				dialogueBodyStyle: style.dialogueBodyStyle,
 				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
+				headerWidth: style.headerWidth,
+				headerHeight: style.headerHeight,
 			};
 
 			return {
@@ -502,8 +504,9 @@ class DashboardTab extends View {
 			dialogueHeaderStyle: {
 				paddingVertical: 10,
 				paddingHorizontal: 20,
-				width: deviceWidth * 0.75,
 			},
+			headerWidth: deviceWidth * 0.75,
+			headerHeight: deviceWidth * 0.1,
 			dialogueHeaderTextStyle: {
 				fontSize: 13,
 			},

@@ -41,7 +41,6 @@ type Props = {
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
-	source: Object | number,
 	ScreenName: string,
 };
 
@@ -52,17 +51,9 @@ type State = {
 	loading: boolean,
 };
 
-type DefaultProps = {
-	source: Object | number,
-};
-
 class AddLocationContainer extends View<null, Props, State> {
 
 	handleBackPress: () => boolean;
-
-	static defaultProps: DefaultProps = {
-		source: {uri: 'telldus_geometric_bg'},
-	};
 
 	state = {
 		h1: '',
