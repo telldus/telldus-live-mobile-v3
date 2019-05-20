@@ -52,6 +52,7 @@ flowdefs.js
 
 [options]
 emoji=true
+module.name_mapper.extension='svg' -> '<PROJECT_ROOT>/SVGModule.js.flow'
 
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
