@@ -44,6 +44,11 @@ static defaultProps: defaultProps = {
 	headerWidth: 100,
 }
 
+ORIGINAL_SIZE: {
+	width: number,
+	height: number,
+};
+
 constructor(props: Props) {
 	super();
 
