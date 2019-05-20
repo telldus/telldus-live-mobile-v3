@@ -24,11 +24,10 @@
 'use strict';
 
 import React from 'react';
-import { ImageBackground } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import { View, Text, RoundedInfoButton } from '../../../../BaseComponents';
+import { View, Text, RoundedInfoButton, GeometricHeader } from '../../../../BaseComponents';
 import GeoPosition from '../Common/GeoPosition';
 
 import i18n from '../../../Translations/common';
@@ -118,12 +117,20 @@ class Position extends View {
 			infoButtonContainerStyle: styles.infoButtonContainer,
 		};
 		return (
-			<ImageBackground style={styles.dialogueHeader} source={{uri: 'telldus_geometric_bg'}}>
+			<View style={{
+				height: styles.headerHeight,
+				width: styles.headerWidth,
+				overflow: 'hidden',
+				borderTopRadius: 5,
+				justifyContent: 'center',
+				alignItems: 'center',
+			}}>
+				<GeometricHeader headerHeight={styles.headerHeight} headerWidth={styles.headerWidth}/>
 				<RoundedInfoButton buttonProps={buttonProps}/>
 				<Text style={styles.dialogueHeaderText}>
 					{this.dialogueHeader}
 				</Text>
-			</ImageBackground>
+			</View>
 		);
 	}
 
@@ -190,9 +197,9 @@ class Position extends View {
 				justifyContent: 'flex-start',
 				alignItems: 'center',
 				paddingLeft: 20,
-				height: isPortrait ? height * 0.08 : width * 0.08,
-				width: isPortrait ? width * 0.75 : height * 0.75,
 			},
+			headerHeight: isPortrait ? height * 0.08 : width * 0.08,
+			headerWidth: isPortrait ? width * 0.75 : height * 0.75,
 			infoButtonContainer: {
 				position: 'relative',
 				right: 0,
