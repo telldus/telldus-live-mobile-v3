@@ -88,6 +88,7 @@ import MainTabsAndroid from './MainTabsAndroid';
 import AttentionCatcher from './AttentionCatcher';
 import Swatches from './Swatches';
 import GeometricHeader from './GeometricHeader';
+import PosterWithText from './PosterWithText';
 
 import {
 	AppState,
@@ -167,6 +168,7 @@ module.exports = {
 	AttentionCatcher,
 	Swatches,
 	GeometricHeader,
+	PosterWithText,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
