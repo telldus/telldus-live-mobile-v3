@@ -37,6 +37,7 @@ type Props = {
 	device: Object,
 	isOpen: boolean,
 
+	command: number,
 	isGatewayActive: boolean,
 	intl: Object,
 	style: Object,

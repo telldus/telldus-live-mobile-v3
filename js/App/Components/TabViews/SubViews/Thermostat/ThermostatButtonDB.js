@@ -43,6 +43,7 @@ type Props = {
 	controlButtonStyle?: number | Object | Array<any>,
 	infoBlockStyle?: number | Object | Array<any>,
 	moreActionsStyle?: number | Object | Array<any>,
+	openThermostatControl: (number) => void,
 };
 
 type DefaultProps = {
@@ -77,8 +78,17 @@ class ThermostatButtonDB extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { item, intl, isGatewayActive, containerStyle, controlButtonStyle,
-			infoBlockStyle, moreActionsStyle, showStopButton } = this.props;
+		const {
+			item,
+			intl,
+			isGatewayActive,
+			containerStyle,
+			controlButtonStyle,
+			infoBlockStyle,
+			moreActionsStyle,
+			showStopButton,
+			openThermostatControl,
+		} = this.props;
 
 		const upButton = <ControlHeatBlock
 			isEnabled={true}
@@ -100,7 +110,8 @@ class ThermostatButtonDB extends View<Props, null> {
 			device={item}
 			iconSize={16}
 			isGatewayActive={isGatewayActive}
-			intl={intl}/>;
+			intl={intl}
+			onPressMoreButtons={openThermostatControl}/>;
 
 		return (
 			<View style={containerStyle}>

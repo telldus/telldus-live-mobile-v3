@@ -53,7 +53,6 @@ type Props = {
 	isDBEmpty: boolean,
 	screenProps: Object,
 	navigation: Object,
-	navigation: Object,
 	changeSensorDisplayTypeDB: () => void,
 	dispatch: Function,
 	onTurnOn: (number) => void,
@@ -97,6 +96,7 @@ class DashboardTab extends View {
 	showDimInfo: (Object) => void;
 
 	openRGBControl: (number) => void;
+	openThermostatControl: (number) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => {
 		const { intl, currentScreen } = screenProps;
@@ -144,6 +144,7 @@ class DashboardTab extends View {
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 
 		this.openRGBControl = this.openRGBControl.bind(this);
+		this.openThermostatControl = this.openThermostatControl.bind(this);
 	}
 
 	startSensorTimer() {
@@ -309,6 +310,17 @@ class DashboardTab extends View {
 		toggleDialogueBox(dialogueData);
 	}
 
+	openThermostatControl = (id: number) => {
+		const { navigation } = this.props;
+		navigation.navigate({
+			routeName: 'ThermostatControl',
+			key: 'ThermostatControl',
+			params: {
+				id,
+			},
+		});
+	}
+
 	getDialogueBoxData(action: string, device: Object): Object {
 		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
@@ -459,6 +471,7 @@ class DashboardTab extends View {
 			setScrollEnabled={this.setScrollEnabled}
 			onPressDimButton={this.showDimInfo}
 			openRGBControl={this.openRGBControl}
+			openThermostatControl={this.openThermostatControl}
 		/>;
 	}
 

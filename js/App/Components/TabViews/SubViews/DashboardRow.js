@@ -58,6 +58,7 @@ type Props = {
 	setScrollEnabled: (boolean) => void,
 	onPressDimButton: (Object) => void,
 	openRGBControl: (number) => void,
+	openThermostatControl: (number) => void,
 };
 
 type State = {
