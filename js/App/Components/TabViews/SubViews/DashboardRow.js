@@ -33,6 +33,7 @@ import NavigationalDashboardTile from './NavigationalDashboardTile';
 import BellDashboardTile from './BellDashboardTile';
 import ToggleDashboardTile from './ToggleDashboardTile';
 import RGBDashboardTile from './RGBDashboardTile';
+import ThermostatButtonDB from './Thermostat/ThermostatButtonDB';
 
 import {
 	getLabelDevice,
@@ -129,6 +130,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		DOWN,
 		STOP,
 		RGB,
+		THERMOSTAT,
 	} = supportedMethods;
 	const iconsName = getDeviceIcons(deviceType);
 
@@ -236,7 +238,24 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		});
 	}
 
-	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB) {
+	if (THERMOSTAT) {
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
+
+		buttons.unshift(<ThermostatButtonDB
+			key={8} {...this.props}
+			containerStyle={[
+				styles.buttonsContainerStyle,
+				{
+					width: tileWidth,
+				},
+			]}/>);
+		buttonsInfo.unshift({
+			iconContainerStyle: iconContainerStyle,
+			iconsName,
+		});
+	}
+
+	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB && !THERMOSTAT) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
@@ -251,12 +270,12 @@ getButtonsInfo(item: Object, styles: Object): Object {
 }
 
 render(): Object {
-	const { item, tileWidth, intl, powerConsumed, appLayout } = this.props;
+	const { item, tileWidth, intl, appLayout } = this.props;
 	const { showMoreActions } = this.state;
 	const { name, isInState } = item;
 	const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
-	const info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
+	const info = this.getInfo();
 	const styles = this.getStyles(appLayout, tileWidth);
 	const { buttons, buttonsInfo } = this.getButtonsInfo(item, styles);
 	const { iconContainerStyle, iconsName } = buttonsInfo[0];
@@ -309,6 +328,17 @@ render(): Object {
 				)}
 		</DashboardShadowTile>
 	);
+}
+
+getInfo(): null | string {
+	const { item, intl, powerConsumed } = this.props;
+	const { supportedMethods = {}} = item;
+	const { THERMOSTAT } = supportedMethods;
+	let info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
+	if (THERMOSTAT) {
+		info = 'Currently 23.3°C'; // TODO: pass the formatted string and value.
+	}
+	return info;
 }
 
 onPressMore() {
