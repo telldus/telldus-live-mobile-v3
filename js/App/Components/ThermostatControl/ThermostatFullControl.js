@@ -62,11 +62,20 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-render(): Object {
+render(): Object | null {
 	const {
 		navigation,
 		appLayout,
+		device,
 	} = this.props;
+
+	if (!device || !device.id) {
+		return null;
+	}
+
+	const {
+		name,
+	} = device;
 
 	return (
 		<View style={{
@@ -87,7 +96,7 @@ render(): Object {
 					appLayout={appLayout}
 					align={'center'}
 					icon={'thermostat'}
-					h2={'Thermostat'}/>
+					h2={name}/>
 				<HeatControlWheel appLayout={appLayout}/>
 			</ScrollView>
 		</View>
