@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -37,10 +38,13 @@ type Props = {
     label: string,
     edit: boolean,
     icon: string,
-    value: number,
+    value?: number,
     scale: string,
     unit: string,
-    active: boolean,
+	active: boolean,
+	type: string,
+
+	onPressRow: (string) => void,
 };
 
 type State = {
@@ -50,12 +54,22 @@ class ModeBlock extends View<Props, State> {
 props: Props;
 state: State;
 
+onPressRow: () => void;
 constructor(props: Props) {
 	super(props);
+
+	this.onPressRow = this.onPressRow.bind(this);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return true;
+}
+
+onPressRow = () => {
+	const { onPressRow, type } = this.props;
+	if (onPressRow) {
+		onPressRow(type);
+	}
 }
 
 render(): Object {
@@ -67,6 +81,7 @@ render(): Object {
 		unit,
 		icon,
 		active,
+		type,
 	} = this.props;
 
 	const {
@@ -89,40 +104,53 @@ render(): Object {
 		controlIconSize,
 	} = this.getStyles();
 
-	const iconBGColor = active ? brandSecondary : appBackground;
-	const iconColor = active ? '#fff' : brandSecondary;
-	const textColor = active ? brandSecondary : rowTextColor;
+	let iconBGColor = active ? brandSecondary : appBackground;
+	let iconColor = active ? '#fff' : brandSecondary;
+	let textColor = active ? brandSecondary : rowTextColor;
+	if (type === 'off') {
+		iconBGColor = active ? brandPrimary : appBackground;
+		iconColor = active ? '#fff' : brandPrimary;
+		textColor = rowTextColor;
+	}
 
 	return (
 		<View style={cover}>
 			<View style={leftBlock}>
-				<Text style={[labelStyle, { color: textColor }]}>
-					{label.toUpperCase()}
-				</Text>
-				<View style={controlBlockStyle}>
-					<View style={{flex: 0}}>
-						<IconTelldus icon="up" size={controlIconSize} color={brandSecondary}/>
-						<IconTelldus icon="down" size={controlIconSize} color={brandPrimary}/>
-					</View>
-					<View style={textCoverStyle}>
-						<Text style={[scaleStyle, { color: textColor }]}>
-							{scale}
-						</Text>
-						<Text>
-							<Text style={[valueStyle, { color: textColor }]}>
-								{value}
+				<TouchableOpacity style={{
+					flex: 1,
+					alignItems: 'flex-start',
+					justifyContent: 'center',
+				}} onPress={this.onPressRow}>
+					<Text style={[labelStyle, { color: textColor }]}>
+						{label.toUpperCase()}
+					</Text>
+				</TouchableOpacity>
+				{!!value && (
+					<View style={controlBlockStyle}>
+						<View style={{flex: 0}}>
+							<IconTelldus icon="up" size={controlIconSize} color={brandSecondary}/>
+							<IconTelldus icon="down" size={controlIconSize} color={brandPrimary}/>
+						</View>
+						<View style={textCoverStyle}>
+							<Text style={[scaleStyle, { color: textColor }]}>
+								{scale}
 							</Text>
-							<Text style={[unitStyle, { color: textColor }]}>
-								{unit}
+							<Text>
+								<Text style={[valueStyle, { color: textColor }]}>
+									{value}
+								</Text>
+								<Text style={[unitStyle, { color: textColor }]}>
+									{unit}
+								</Text>
 							</Text>
-						</Text>
+						</View>
+						<Icon name="edit" size={editIconSize} color={brandSecondary} style={editIconStyle}/>
 					</View>
-					<Icon name="edit" size={editIconSize} color={brandSecondary} style={editIconStyle}/>
-				</View>
+				)}
 			</View>
-			<View style={[iconBlockStyle, {backgroundColor: iconBGColor}]}>
+			<TouchableOpacity style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPress={this.onPressRow}>
 				<IconTelldus icon={icon} size={iconSize} color={iconColor}/>
-			</View>
+			</TouchableOpacity>
 		</View>
 	);
 }
@@ -153,6 +181,7 @@ getStyles(): Object {
 			backgroundColor: appBackground,
 			marginTop: padding,
 			marginHorizontal: padding,
+			minHeight: deviceWidth * 0.16,
 		},
 		leftBlock: {
 			flex: 1,
@@ -166,6 +195,7 @@ getStyles(): Object {
 		labelStyle: {
 			color: rowTextColor,
 			fontSize: deviceWidth * 0.05,
+			textAlignVertical: 'center',
 			flex: 1,
 		},
 		brandSecondary,

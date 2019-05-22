@@ -41,7 +41,7 @@ type State = {
     angleLength: number,
 	startAngle: number,
 	currentValue: number,
-	controlSelection: 'heat' | 'cool',
+	controlSelection: 'heat' | 'cool' | 'heat-cool' | 'off',
 };
 
 class HeatControlWheel extends View<Props, State> {
@@ -49,6 +49,7 @@ props: Props;
 state: State;
 
 onUpdate: (Object) => void;
+onPressRow: (string) => void;
 
 constructor(props: Props) {
 	super(props);
@@ -67,6 +68,7 @@ constructor(props: Props) {
 		currentValue: temp,
 		controlSelection: 'heat',
 	};
+	this.onPressRow = this.onPressRow.bind(this);
 
 	this.modes = [
 		{
@@ -76,7 +78,11 @@ constructor(props: Props) {
 			value: 23.3,
 			scale: 'Temperature',
 			unit: '°C',
-			active: true,
+			startColor: '#FFB741',
+			endColor: '#E26901',
+			maxVal: 50,
+			minVal: 10,
+			type: 'heat',
 		},
 		{
 			label: 'Cool',
@@ -85,7 +91,37 @@ constructor(props: Props) {
 			value: 21.2,
 			scale: 'Temperature',
 			unit: '°C',
-			active: false,
+			startColor: '#23C4FA',
+			endColor: '#015095',
+			maxVal: 30,
+			minVal: 0,
+			type: 'cool',
+		},
+		{
+			label: 'Heat-cool',
+			edit: true,
+			icon: 'fire',
+			value: 23.3,
+			scale: 'Temperature',
+			unit: '°C',
+			startColor: '#004D92',
+			endColor: '#e26901',
+			maxVal: 50,
+			minVal: 0,
+			type: 'heat-cool',
+		},
+		{
+			label: 'Off',
+			edit: false,
+			icon: 'fire',
+			value: null,
+			scale: null,
+			unit: null,
+			startColor: '#cccccc',
+			endColor: '#999999',
+			maxVal: 50,
+			minVal: 0,
+			type: 'off',
 		},
 	];
 }
@@ -117,6 +153,12 @@ onUpdate = (data: Object) => {
 	});
 }
 
+onPressRow = (controlType: string) => {
+	this.setState({
+		controlSelection: controlType,
+	});
+}
+
 render(): Object {
 
 	const {
@@ -129,8 +171,6 @@ render(): Object {
 		InfoCover,
 		modeHeaderStyle,
 		modesCover,
-		brandSecondary,
-		brandPrimary,
 		infoTitleStyle,
 		selectedInfoCoverStyle,
 		sValueStyle,
@@ -150,15 +190,19 @@ render(): Object {
 	} = this.state;
 
 	const modes = this.modes.map((mode: Object, i: number): Object => {
-		const {
+		let {
 			label,
 			icon,
 			edit,
 			value,
 			scale,
 			unit,
-			active,
+			type,
 		} = mode;
+		let active = false;
+		if (controlSelection === type) {
+			active = true;
+		}
 		return (
 			<ModeBlock
 				appLayout={appLayout}
@@ -168,13 +212,31 @@ render(): Object {
 				value={value}
 				scale={scale}
 				unit={unit}
-				active={active}/>
+				active={active}
+				onPressRow={this.onPressRow}
+				type={type}/>
 		);
 	});
 
-	let baseColor = brandSecondary;
+	let baseColor = this.modes[0].endColor;
+	let gradientColorFrom = this.modes[0].startColor;
+	let gradientColorTo = this.modes[0].endColor;
+	let title = this.modes[0].label;
 	if (controlSelection === 'cool') {
-		baseColor = brandPrimary;
+		baseColor = this.modes[1].endColor;
+		gradientColorFrom = this.modes[1].startColor;
+		gradientColorTo = this.modes[1].endColor;
+		title = this.modes[1].label;
+	} else if (controlSelection === 'heat-cool') {
+		baseColor = this.modes[2].endColor;
+		gradientColorFrom = this.modes[2].startColor;
+		gradientColorTo = this.modes[2].endColor;
+		title = this.modes[2].label;
+	} else if (controlSelection === 'off') {
+		baseColor = this.modes[3].endColor;
+		gradientColorFrom = this.modes[3].startColor;
+		gradientColorTo = this.modes[3].endColor;
+		title = this.modes[3].label;
 	}
 
 	return (
@@ -187,8 +249,8 @@ render(): Object {
 					segments={15}
 					strokeWidth={20}
 					radius={radius}
-					gradientColorFrom="#ffcf00"
-					gradientColorTo="#ff9800"
+					gradientColorFrom={gradientColorFrom}
+					gradientColorTo={gradientColorTo}
 					bgCircleColor="#fff"
 					startKnobStrokeColor="#fff"
 					startKnobFillColor="transparent"
@@ -202,7 +264,7 @@ render(): Object {
 					<Text style={[infoTitleStyle, {
 						color: baseColor,
 					}]}>
-				HEAT
+						{title.toUpperCase()}
 					</Text>
 					<View style={selectedInfoCoverStyle}>
 						<IconTelldus icon="temperature" size={iconSize} color={baseColor}/>
@@ -223,18 +285,18 @@ render(): Object {
 						</Text>
 					</View>
 					<Text style={cLabelStyle}>
-				Current temperature
+						Current temperature
 					</Text>
 					<Text>
 						<Text style={cValueStyle}>
-					23.3
+							23.3
 						</Text>
 						<Text style={cUnitStyle}>
-					°C
+							°C
 						</Text>
 					</Text>
 					<Text style={lastUpdatedInfoStyle}>
-				Last updated info
+						Last updated info
 					</Text>
 				</View>
 			</View>
