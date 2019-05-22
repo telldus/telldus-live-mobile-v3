@@ -42,8 +42,9 @@ class HeatControlWheel extends View<Props, State> {
 props: Props;
 
 state: State = {
-	startAngle: 3.758784045130155,
-	angleLength: 4.993323363832153,
+	startAngle: Math.PI * 1.25,
+	angleLength: Math.PI * 1.5,
+	currentColor: '#ff9800',
 };
 
 onUpdate: (Object) => void;
@@ -73,20 +74,31 @@ render(): Object {
 		radius,
 	} = this.getStyles();
 
+	const {
+		currentColor,
+		startAngle,
+		angleLength,
+	} = this.state;
+
 	return (
 		<View style={cover}>
 			<CircularSlider
-				startAngle={this.state.startAngle}
-				angleLength={this.state.angleLength}
+				startAngle={startAngle}
+				angleLength={angleLength}
 				onUpdate={this.onUpdate}
-				segments={5}
+				segments={15}
 				strokeWidth={20}
 				radius={radius}
 				gradientColorFrom="#ffcf00"
 				gradientColorTo="#ff9800"
 				bgCircleColor="#fff"
-				keepArcVisible={true}
+				startKnobStrokeColor="#fff"
+				startKnobFillColor={currentColor}
+				keepArcVisible
 				showStopKnob={false}
+				roundedEnds
+				allowKnobBeyondLimits={false}
+				knobRadius={10}
 			/>
 		</View>
 	);
