@@ -30,7 +30,7 @@ import {
 	NavigationHeader,
 	PosterWithText,
 } from '../../../BaseComponents';
-import HeatControlWheel from './HeatControlWheel';
+import HeatControlWheelModes from './HeatControlWheelModes';
 import { deviceSetState } from '../../Actions/Devices';
 
 import { shouldUpdate } from '../../Lib';
@@ -50,6 +50,61 @@ props: Props;
 
 constructor(props: Props) {
 	super(props);
+
+	this.modes = [
+		{
+			label: 'Heat',
+			edit: true,
+			icon: 'fire',
+			value: 23.3,
+			scale: 'Temperature',
+			unit: '°C',
+			startColor: '#FFB741',
+			endColor: '#E26901',
+			maxVal: 50,
+			minVal: 10,
+			type: 'heat',
+		},
+		{
+			label: 'Cool',
+			edit: true,
+			icon: 'fire',
+			value: 21.2,
+			scale: 'Temperature',
+			unit: '°C',
+			startColor: '#23C4FA',
+			endColor: '#015095',
+			maxVal: 30,
+			minVal: 0,
+			type: 'cool',
+		},
+		{
+			label: 'Heat-cool',
+			edit: true,
+			icon: 'fire',
+			value: 23.3,
+			scale: 'Temperature',
+			unit: '°C',
+			startColor: '#004D92',
+			endColor: '#e26901',
+			maxVal: 50,
+			minVal: 0,
+			type: 'heat-cool',
+		},
+		{
+			label: 'Off',
+			edit: false,
+			icon: 'fire',
+			value: null,
+			scale: null,
+			unit: null,
+			startColor: '#cccccc',
+			endColor: '#999999',
+			maxVal: 50,
+			minVal: 0,
+			type: 'off',
+		},
+	];
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -97,7 +152,9 @@ render(): Object | null {
 					align={'center'}
 					icon={'thermostat'}
 					h2={name}/>
-				<HeatControlWheel appLayout={appLayout}/>
+				<HeatControlWheelModes
+					appLayout={appLayout}
+					modes={this.modes}/>
 			</ScrollView>
 		</View>
 	);
