@@ -9,7 +9,8 @@
     "release": "babel-node js/Utils/release.js",
     "sourcemap": "babel-node js/Utils/sourcemap.js",
     "test": "jest",
-    "manage:translations-widget-android": "node node_modules/live-shared-data/lib/manageStringsWidgetAndroid.js"
+    "manage:translations-widget-android": "node node_modules/live-shared-data/lib/manageStringsWidgetAndroid.js",
+    "start": "yarn react-native start --config packager/config.js"
   },
   "browser": {
     "dgram": "react-native-udp"
