@@ -183,7 +183,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		});
 	}
 
-	if (DIM && !RGB) {
+	if (DIM && !RGB && !THERMOSTAT) {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
@@ -197,7 +197,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		});
 	}
 
-	if ((TURNON || TURNOFF) && !DIM && !RGB) {
+	if ((TURNON || TURNOFF) && !DIM && !RGB && !THERMOSTAT) {
 		const showMoreButtons = BELL || UP || DOWN || STOP;
 		const width = !showMoreButtons ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
