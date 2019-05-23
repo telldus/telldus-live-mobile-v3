@@ -261,12 +261,13 @@ render(): Object {
 					gradientColorTo={gradientColorTo}
 					bgCircleColor="#fff"
 					startKnobStrokeColor="#fff"
-					startKnobFillColor="transparent"
+					startKnobFillColor={gradientColorTo}
 					keepArcVisible
 					showStopKnob={false}
 					roundedEnds
 					allowKnobBeyondLimits={false}
-					knobRadius={10}
+					knobRadius={18}
+					knobStrokeWidth={3}
 				/>
 				<View style={InfoCover}>
 					<Text style={[infoTitleStyle, {
