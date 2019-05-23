@@ -50,25 +50,17 @@ state: State;
 
 onUpdate: (Object) => void;
 onPressRow: (string) => void;
+getValueFromAngle: (number, string) => Object;
 
 constructor(props: Props) {
 	super(props);
 
 	this.onUpdate = this.onUpdate.bind(this);
-
-	this.maxTemp = 50;
-	this.minTemp = 10;
+	this.onPressRow = this.onPressRow.bind(this);
+	this.getValueFromAngle = this.getValueFromAngle.bind(this);
 
 	this.maxALength = Math.PI * 1.5;
 	this.minALength = 0;
-	const { temp } = this.getTempFromAngle(this.maxALength);
-	this.state = {
-		startAngle: Math.PI * 1.25,
-		angleLength: this.maxALength,
-		currentValue: temp,
-		controlSelection: 'heat',
-	};
-	this.onPressRow = this.onPressRow.bind(this);
 
 	this.modes = [
 		{
@@ -124,18 +116,34 @@ constructor(props: Props) {
 			type: 'off',
 		},
 	];
+
+	const { temp } = this.getValueFromAngle(this.maxALength, this.modes[0].type);
+	this.state = {
+		startAngle: Math.PI * 1.25,
+		angleLength: this.maxALength,
+		currentValue: temp,
+		controlSelection: this.modes[0].type,
+	};
 }
 
-getTempFromAngle(angleLength: number): Object {
+getValueFromAngle = (angleLength: number, type: string): Object => {
 	const angleRange = this.maxALength - this.minALength;
 	const relativeCurrentAngleLen = angleLength - this.minALength;
 	const percentageCurrentAngleLen = relativeCurrentAngleLen * 100 / angleRange;
 
-	const tempRange = this.maxTemp - this.minTemp;
-	const relativeTemp = tempRange * percentageCurrentAngleLen / 100;
+	let cMode = {};
+	this.modes.map((mode: Object) => {
+		if (mode.type === type) {
+			cMode = mode;
+		}
+	});
+	const { maxVal, minVal } = cMode;
 
-	// When knob is at start/Zero we have max angle length, So that doing "this.maxTemp - relativeTemp", else "this.minTemp + relativeTemp" would be the way to go.
-	return {temp: Math.round(this.maxTemp - relativeTemp)};
+	const valueRange = maxVal - minVal;
+	const relativeValue = valueRange * percentageCurrentAngleLen / 100;
+
+	// When knob is at start/Zero we have max angle length, So that doing "maxVal - relativeValue", else "minVal + relativeValue" would be the way to go.
+	return {temp: Math.round(maxVal - relativeValue)};
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -144,7 +152,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 onUpdate = (data: Object) => {
 	const {startAngle, angleLength} = data;
-	const { temp } = this.getTempFromAngle(angleLength);
+	const { temp } = this.getValueFromAngle(angleLength, this.state.controlSelection);
 
 	this.setState({
 		angleLength,
