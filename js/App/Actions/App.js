@@ -69,6 +69,7 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				'gatewayIP': address === null ? 'null' : address,
 				'macAddress': macAddress === null ? 'null' : macAddress,
 				'deviceName': DeviceInfo.getDeviceName(),
+				'appVersion': DeviceInfo.getReadableVersion(),
 				'deviceUniqueID': deviceUniqueID,
 				'liveAccount': email,
 				...ticketData,
