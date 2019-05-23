@@ -126,6 +126,9 @@ if (process.env.NODE_ENV !== 'production') {
 			if (args[0].indexOf('[React Intl] Missing message:') === 0) {
 				return;
 			}
+			if (args[0].indexOf('[React Intl] Error formatting date.') === 0) {
+				return;
+			}
 			originalConsoleError.call(console, ...args);
 		};
 	}
