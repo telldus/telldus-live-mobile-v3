@@ -90,6 +90,7 @@ render(): Object {
 		}
 		return (
 			<ModeBlock
+				key={i}
 				appLayout={appLayout}
 				label={label}
 				edit={edit}
