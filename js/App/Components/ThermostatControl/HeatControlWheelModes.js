@@ -61,14 +61,16 @@ constructor(props: Props) {
 
 	this.maxALength = Math.PI * 1.5;
 	this.minALength = 0;
+	this.initialAngle = Math.PI * 1.25;
 
 	const { modes } = this.props;
 
-	const { temp } = this.getValueFromAngle(this.maxALength, modes[0].type);
+	const currentValue = modes[0].value;
+	const initialAngleLength = this.getAngleLengthToInitiate(modes[0].type, currentValue);
 	this.state = {
-		startAngle: Math.PI * 1.25,
-		angleLength: this.maxALength,
-		currentValue: temp,
+		startAngle: this.initialAngle,
+		angleLength: initialAngleLength,
+		currentValue,
 		controlSelection: modes[0].type,
 	};
 }
@@ -89,8 +91,27 @@ getValueFromAngle = (angleLength: number, type: string): Object => {
 	const valueRange = maxVal - minVal;
 	const relativeValue = valueRange * percentageCurrentAngleLen / 100;
 
-	// When knob is at start/Zero we have max angle length, So that doing "maxVal - relativeValue", else "minVal + relativeValue" would be the way to go.
-	return {temp: Math.round(maxVal - relativeValue)};
+	return {temp: Math.round(minVal + relativeValue)};
+}
+
+getAngleLengthToInitiate(type: string, currentValue: number): number {
+	let cMode = {};
+	this.props.modes.map((mode: Object) => {
+		if (mode.type === type) {
+			cMode = mode;
+		}
+	});
+	const { maxVal, minVal } = cMode;
+	const valueRange = maxVal - minVal;
+	const relativeValue = currentValue - minVal;
+	const percentageRelativeValue = relativeValue * 100 / valueRange;
+
+	const angleLenRange = this.maxALength - this.minALength;
+	const relativeAngle = angleLenRange * percentageRelativeValue / 100;
+
+	const currentAngleLen = this.minALength + relativeAngle;
+
+	return	currentAngleLen;
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -109,8 +130,18 @@ onUpdate = (data: Object) => {
 }
 
 onPressRow = (controlType: string) => {
+	let cMode = {};
+	this.props.modes.map((mode: Object) => {
+		if (mode.type === controlType) {
+			cMode = mode;
+		}
+	});
+	const { type, value } = cMode;
+	const initialAngleLength = this.getAngleLengthToInitiate(type, value);
 	this.setState({
 		controlSelection: controlType,
+		angleLength: initialAngleLength,
+		currentValue: value,
 	});
 }
 
@@ -159,6 +190,7 @@ render(): Object {
 			<View style={cover}>
 				<CircularSlider
 					startAngle={startAngle}
+					maxAngleLength={this.maxALength}
 					angleLength={angleLength}
 					onUpdate={this.onUpdate}
 					segments={15}
@@ -167,10 +199,10 @@ render(): Object {
 					gradientColorFrom={gradientColorFrom}
 					gradientColorTo={gradientColorTo}
 					bgCircleColor="#fff"
-					startKnobStrokeColor="#fff"
-					startKnobFillColor={gradientColorTo}
+					knobStrokeColor="#fff"
+					knobFillColor={gradientColorTo}
 					keepArcVisible
-					showStopKnob={false}
+					showStartKnob={false}
 					roundedEnds
 					allowKnobBeyondLimits={false}
 					knobRadius={18}
