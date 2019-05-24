@@ -146,7 +146,8 @@ render(): Object | null {
 				contentContainerStyle={{
 					flexGrow: 1,
 					alignItems: 'stretch',
-				}}>
+				}}
+				keyboardShouldPersistTaps={'always'}>
 				<PosterWithText
 					appLayout={appLayout}
 					align={'center'}

@@ -22,14 +22,17 @@
 'use strict';
 
 import React from 'react';
+import { TouchableOpacity, LayoutAnimation } from 'react-native';
 
 import {
 	View,
 	Text,
-	IconTelldus,
+	EditBox,
 } from '../../../BaseComponents';
 
+import { LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
+import IconTelldus from '../../../BaseComponents/IconTelldus';
 
 type Props = {
 	baseColor: string,
@@ -38,15 +41,46 @@ type Props = {
     appLayout: Object,
 };
 
-class ControlInfoBlock extends View<Props, null> {
+type State = {
+	editValue: boolean,
+	editBoxValue: string,
+};
+
+class ControlInfoBlock extends View<Props, State> {
 props: Props;
+state: State;
 
 constructor(props: Props) {
 	super(props);
+
+	this.state = {
+		editValue: false,
+		editBoxValue: props.currentValue.toString(),
+	};
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return true;
+}
+
+onPressEdit = () => {
+	this.setState({
+		editValue: true,
+	});
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+}
+
+onChangeText = (value: string) => {
+	this.setState({
+		editBoxValue: value,
+	});
+}
+
+onSubmitEditing = (value: string) => {
+	this.setState({
+		editValue: false,
+	});
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
 
 render(): Object {
@@ -55,7 +89,13 @@ render(): Object {
 		baseColor,
 		title,
 		currentValue,
+		appLayout,
 	} = this.props;
+
+	const {
+		editValue,
+		editBoxValue,
+	} = this.state;
 
 	const {
 		InfoCover,
@@ -67,7 +107,12 @@ render(): Object {
 		cValueStyle,
 		lastUpdatedInfoStyle,
 		cUnitStyle,
-		iconSize,
+		editBoxStyle,
+		textStyle,
+		leftIconStyle,
+		labelStyle,
+		doneIconStyle,
+		doneIconCoverStyle,
 	} = this.getStyles();
 
 	return (
@@ -78,22 +123,40 @@ render(): Object {
 				{title.toUpperCase()}
 			</Text>
 			<View style={selectedInfoCoverStyle}>
-				<IconTelldus icon="temperature" size={iconSize} color={baseColor}/>
-				<Text style={{ textAlignVertical: 'center' }}>
-					<Text style={[sValueStyle, {
-						color: baseColor,
-					}]}>
-						{currentValue}
-					</Text>
-					<Text style={Theme.Styles.hiddenText}>
+				{editValue ?
+					<>
+					<EditBox
+						value={editBoxValue}
+						appLayout={appLayout}
+						containerStyle={editBoxStyle}
+						textStyle={textStyle}
+						labelStyle={labelStyle}
+						iconStyle={leftIconStyle}
+						icon="temperature"
+						label="Temperature"
+						onChangeText={this.onChangeText}
+						onSubmitEditing={this.onSubmitEditing}/>
+						<TouchableOpacity style={doneIconCoverStyle} onPress={this.onSubmitEditing}>
+							<IconTelldus icon={'checkmark'} style={doneIconStyle}/>
+						</TouchableOpacity>
+					</>
+					:
+					<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
+						<Text style={[sValueStyle, {
+							color: baseColor,
+						}]}>
+							{currentValue}
+						</Text>
+						<Text style={Theme.Styles.hiddenText}>
 								!
-					</Text>
-					<Text style={[sUnitStyle, {
-						color: baseColor,
-					}]}>
+						</Text>
+						<Text style={[sUnitStyle, {
+							color: baseColor,
+						}]}>
 								°C
+						</Text>
 					</Text>
-				</Text>
+				}
 			</View>
 			<Text style={cLabelStyle}>
 						Current temperature
@@ -121,6 +184,7 @@ getStyles(): Object {
 
 	const {
 		rowTextColor,
+		brandSecondary,
 	} = Theme.Core;
 
 	return {
@@ -135,24 +199,23 @@ getStyles(): Object {
 		},
 		infoTitleStyle: {
 			fontSize: deviceWidth * 0.045,
+			marginTop: 10,
 		},
 		selectedInfoCoverStyle: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center',
-			left: -(deviceWidth * 0.025),
 		},
 		sValueStyle: {
 			fontSize: deviceWidth * 0.15,
-			left: -(deviceWidth * 0.025),
 		},
 		sUnitStyle: {
 			fontSize: deviceWidth * 0.08,
 		},
 		cLabelStyle: {
-			fontSize: deviceWidth * 0.04,
+			fontSize: deviceWidth * 0.032,
 			color: rowTextColor,
-			marginTop: 10,
+			marginTop: 5,
 		},
 		cValueStyle: {
 			fontSize: deviceWidth * 0.06,
@@ -167,6 +230,42 @@ getStyles(): Object {
 			color: rowTextColor,
 		},
 		iconSize: deviceWidth * 0.14,
+		editBoxStyle: {
+			width: deviceWidth * 0.36,
+			height: deviceWidth * 0.23,
+			elevation: 0,
+			shadowColor: 'transparent',
+			shadowRadius: 0,
+			shadowOpacity: 0,
+			shadowOffset: {
+				width: 0,
+				height: 0,
+			},
+			padding: deviceWidth * 0.02,
+		},
+		textStyle: {
+			fontSize: deviceWidth * 0.054,
+			color: rowTextColor,
+		},
+		leftIconStyle: {
+			fontSize: deviceWidth * 0.1,
+			left: -8,
+		},
+		labelStyle: {
+			fontSize: deviceWidth * 0.04,
+		},
+		doneIconStyle: {
+			fontSize: deviceWidth * 0.055,
+			color: brandSecondary,
+			textAlign: 'center',
+			textVerticalAlign: 'center',
+			marginTop: deviceWidth * 0.02,
+			padding: 3,
+		},
+		doneIconCoverStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
 	};
 }
 }
