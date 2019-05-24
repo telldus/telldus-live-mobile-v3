@@ -298,7 +298,8 @@ render(): Object {
 }
 
 testCrash = () => {
-	d;
+	// $FlowFixMe
+	d;// eslint-disable-line
 }
 
 getStyles(appLayout: Object): Object {
