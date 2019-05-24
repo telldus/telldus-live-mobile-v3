@@ -124,22 +124,33 @@ render(): Object {
 			</Text>
 			<View style={selectedInfoCoverStyle}>
 				{editValue ?
-					<>
-					<EditBox
-						value={editBoxValue}
-						appLayout={appLayout}
-						containerStyle={editBoxStyle}
-						textStyle={textStyle}
-						labelStyle={labelStyle}
-						iconStyle={leftIconStyle}
-						icon="temperature"
-						label="Temperature"
-						onChangeText={this.onChangeText}
-						onSubmitEditing={this.onSubmitEditing}/>
-						<TouchableOpacity style={doneIconCoverStyle} onPress={this.onSubmitEditing}>
-							<IconTelldus icon={'checkmark'} style={doneIconStyle}/>
-						</TouchableOpacity>
-					</>
+					<View style={{
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						<Text style={labelStyle}>
+							Temperature
+						</Text>
+						<View style={{
+							flexDirection: 'row',
+							alignItems: 'center',
+							justifyContent: 'center',
+						}}>
+							<EditBox
+								value={editBoxValue}
+								appLayout={appLayout}
+								containerStyle={editBoxStyle}
+								textStyle={textStyle}
+								iconStyle={leftIconStyle}
+								icon="temperature"
+								onChangeText={this.onChangeText}
+								onSubmitEditing={this.onSubmitEditing}
+								keyboardType={'phone-pad'}/>
+							<TouchableOpacity style={doneIconCoverStyle} onPress={this.onSubmitEditing}>
+								<IconTelldus icon={'checkmark'} style={doneIconStyle}/>
+							</TouchableOpacity>
+						</View>
+					</View>
 					:
 					<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
 						<Text style={[sValueStyle, {
@@ -232,7 +243,7 @@ getStyles(): Object {
 		iconSize: deviceWidth * 0.14,
 		editBoxStyle: {
 			width: deviceWidth * 0.36,
-			height: deviceWidth * 0.23,
+			height: deviceWidth * 0.12,
 			elevation: 0,
 			backgroundColor: 'transparent',
 			shadowColor: 'transparent',
@@ -242,7 +253,7 @@ getStyles(): Object {
 				width: 0,
 				height: 0,
 			},
-			padding: deviceWidth * 0.02,
+			padding: 0,
 		},
 		textStyle: {
 			fontSize: deviceWidth * 0.054,
@@ -250,10 +261,13 @@ getStyles(): Object {
 		},
 		leftIconStyle: {
 			fontSize: deviceWidth * 0.1,
-			left: -8,
 		},
 		labelStyle: {
 			fontSize: deviceWidth * 0.04,
+			textAlign: 'center',
+			textVerticalAlign: 'bottom',
+			color: brandSecondary,
+			marginTop: 5,
 		},
 		doneIconStyle: {
 			fontSize: deviceWidth * 0.055,
