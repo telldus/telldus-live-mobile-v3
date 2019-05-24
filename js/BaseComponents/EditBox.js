@@ -40,7 +40,10 @@ type Props = {
 	placeholder?: string,
 	placeholderTextColor?: string,
     onChangeText: (string) => void,
-    containerStyle: number | Object | Array<any>,
+	containerStyle: number | Object | Array<any>,
+	textStyle: number | Object | Array<any>,
+	iconStyle: number | Object | Array<any>,
+	labelStyle: number | Object | Array<any>,
     label?: string,
 	icon?: string,
 	header?: Object,
@@ -105,24 +108,37 @@ setRef(ref: any) {
 }
 
 render(): Object {
-	const { value, containerStyle, label, icon, appLayout, header, placeholder, placeholderTextColor, autoFocus } = this.props;
+	const {
+		value,
+		containerStyle,
+		label,
+		icon,
+		appLayout,
+		header,
+		placeholder,
+		placeholderTextColor,
+		autoFocus,
+		textStyle,
+		iconStyle,
+		labelStyle,
+	} = this.props;
 	const styles = this.getStyle(appLayout);
 
 	return (
 		<View style={[styles.container, containerStyle]}>
 			{!!header && header}
 			{!!label && (
-				<Text style={styles.label}>
+				<Text style={[styles.label, labelStyle]}>
 					{label}
 				</Text>
 			)}
 			<View style={styles.inputCover}>
 				{!!icon && (
-					<IconTelldus icon={icon} size={styles.iconSize} color={'#A59F9A'} style={styles.icon}/>
+					<IconTelldus icon={icon} style={[styles.icon, iconStyle]}/>
 				)}
 				<TextInput
 					value={value}
-					style={styles.textField}
+					style={[styles.textField, textStyle]}
 					onChangeText={this.onChangeText}
 					onSubmitEditing={this.onSubmitEditing}
 					autoCapitalize="sentences"
@@ -172,10 +188,11 @@ getStyle(appLayout: Object): Object {
 			color: brandSecondary,
 			fontSize,
 		},
-		iconSize,
 		icon: {
 			position: 'absolute',
 			textAlign: 'left',
+			fontSize: iconSize,
+			color: '#A59F9A',
 		},
 		textField: {
 			width: '100%',
