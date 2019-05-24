@@ -26,6 +26,7 @@ import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
 import Platform from 'Platform';
+import firebase from 'react-native-firebase';
 
 import {
 	Text,
@@ -298,8 +299,7 @@ render(): Object {
 }
 
 testCrash = () => {
-	// $FlowFixMe
-	d;// eslint-disable-line
+	firebase.crashlytics().crash();
 }
 
 getStyles(appLayout: Object): Object {
