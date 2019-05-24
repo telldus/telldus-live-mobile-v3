@@ -281,6 +281,7 @@ render(): Object {
 				label={this.labelLoggedUser}
 				value={email}
 				fontSize={styles.fontSize}
+				onPress={email === 'developer@telldus.com' ? this.testCrash : null}
 			/>
 			<TouchableButton
 				onPress={isLogoutLoading ? null : this.logout}
@@ -294,6 +295,10 @@ render(): Object {
 			/>
 		</View>
 	);
+}
+
+testCrash = () => {
+	d;
 }
 
 getStyles(appLayout: Object): Object {
