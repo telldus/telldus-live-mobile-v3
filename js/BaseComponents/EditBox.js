@@ -51,12 +51,14 @@ type Props = {
 	onChangeText: (string) => void,
 	autoFocus?: boolean,
 	setRef: (any) => void,
+	keyboardType?: string,
 };
 
 type DefaultProps = {
 	value: string,
 	placeholderTextColor: string,
 	autoFocus: boolean,
+	keyboardType: string,
 };
 
 class EditBox extends Component<Props, null> {
@@ -71,6 +73,7 @@ static defaultProps: DefaultProps = {
 	placeholder: '',
 	placeholderTextColor: Theme.Core.offlineColor,
 	autoFocus: true,
+	keyboardType: 'default',
 };
 
 constructor(props: Props) {
@@ -121,6 +124,7 @@ render(): Object {
 		textStyle,
 		iconStyle,
 		labelStyle,
+		keyboardType,
 	} = this.props;
 	const styles = this.getStyle(appLayout);
 
@@ -149,6 +153,7 @@ render(): Object {
 					placeholder={placeholder}
 					placeholderTextColor={placeholderTextColor}
 					ref={this.setRef}
+					keyboardType={keyboardType}
 				/>
 			</View>
 		</View>
