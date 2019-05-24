@@ -234,6 +234,7 @@ getStyles(): Object {
 			width: deviceWidth * 0.36,
 			height: deviceWidth * 0.23,
 			elevation: 0,
+			backgroundColor: 'transparent',
 			shadowColor: 'transparent',
 			shadowRadius: 0,
 			shadowOpacity: 0,
