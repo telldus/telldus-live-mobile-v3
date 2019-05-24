@@ -63,6 +63,8 @@ constructor(props: Props) {
 	this.minALength = 0;
 	this.initialAngle = Math.PI * 1.25;
 
+	this.step = 0.5;
+
 	const { modes } = this.props;
 
 	const currentValue = modes[0].value;
@@ -91,7 +93,19 @@ getValueFromAngle = (angleLength: number, type: string): Object => {
 	const valueRange = maxVal - minVal;
 	const relativeValue = valueRange * percentageCurrentAngleLen / 100;
 
-	return {temp: Math.round(minVal + relativeValue)};
+	const t = minVal + relativeValue;
+	const temp1 = Math.round(t);
+	const temp2 = temp1 + this.step;
+
+	const d1 = Math.abs(temp1 - t);
+	const d2 = Math.abs(temp2 - t);
+
+	const nearest = Math.min(d1, d2);
+	let temp = temp1;
+	if (nearest === d2) {
+		temp = temp2;
+	}
+	return {temp: temp};
 }
 
 getAngleLengthToInitiate(type: string, currentValue: number): number {
