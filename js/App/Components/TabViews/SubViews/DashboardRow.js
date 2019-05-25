@@ -333,11 +333,14 @@ render(): Object {
 
 getInfo(): null | string {
 	const { item, intl, powerConsumed } = this.props;
-	const { supportedMethods = {}} = item;
+	const { supportedMethods = {}, stateValues = {}} = item;
 	const { THERMOSTAT } = supportedMethods;
 	let info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 	if (THERMOSTAT) {
-		info = 'Currently 23.3°C'; // TODO: pass the formatted string and value.
+		const { THERMOSTAT: {setpoint = {}}} = stateValues;
+		const { heat = 0 } = setpoint;
+		let value = `${intl.formatNumber(heat)}°C`;
+		info = intl.formatMessage(i18n.labelCurrentlyValue, {value});
 	}
 	return info;
 }
