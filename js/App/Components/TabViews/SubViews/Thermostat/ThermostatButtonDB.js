@@ -20,14 +20,15 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, LayoutAnimation } from 'react-native';
+const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../../BaseComponents';
 import MoreButtonsBlock from './MoreButtonsBlock';
-import ControlHeatBlock from './ControlHeatBlock';
+import ChangeModesBlock from './ChangeModesBlock';
 import HeatInfoBlock from './HeatInfoBlock';
 
-import { shouldUpdate } from '../../../../Lib';
+import { shouldUpdate, LayoutAnimations } from '../../../../Lib';
 
 import Theme from '../../../../Theme';
 
@@ -50,7 +51,11 @@ type DefaultProps = {
 	showStopButton: boolean,
 };
 
-class ThermostatButtonDB extends View<Props, null> {
+type State = {
+	currentModeIndex: number,
+};
+
+class ThermostatButtonDB extends View<Props, State> {
 	props: Props;
 
 	static defaultProps: DefaultProps = {
@@ -59,9 +64,16 @@ class ThermostatButtonDB extends View<Props, null> {
 
 	constructor(props: Props) {
 		super(props);
+
+		this.state = {
+			currentModeIndex: 0,
+		};
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		if (!isEqual(this.state, nextState)) {
+			return true;
+		}
 
 		const { showStopButton, ...others } = this.props;
 		const { showStopButton: showStopButtonN, ...othersN } = nextProps;
@@ -77,7 +89,24 @@ class ThermostatButtonDB extends View<Props, null> {
 		return false;
 	}
 
+	onPressChangeMode = (i: number) => {
+		const nextMode = this.state.currentModeIndex + i;
+
+		const { item } = this.props;
+		const { stateValues = {} } = item;
+		const { THERMOSTAT: { setpoint = {}} } = stateValues;
+		const numOfModes = Object.keys(setpoint);
+		if (nextMode >= numOfModes.length || nextMode < 0) {
+			return;
+		}
+		this.setState({
+			currentModeIndex: nextMode,
+		});
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	}
+
 	render(): Object {
+		const { currentModeIndex } = this.state;
 		const {
 			item,
 			intl,
@@ -90,21 +119,35 @@ class ThermostatButtonDB extends View<Props, null> {
 			openThermostatControl,
 		} = this.props;
 
-		const upButton = <ControlHeatBlock
+		const { stateValues = {} } = item;
+		const { THERMOSTAT: { setpoint = {}} } = stateValues;
+		const numOfModes = Object.keys(setpoint);
+		const modes = numOfModes.map((mode: Object, i: number): Object => {
+			return (
+				<HeatInfoBlock
+					key={i}
+					isEnabled={true}
+					style={[styles.navigationButton, infoBlockStyle]}
+					device={item}
+					iconSize={30}
+					isGatewayActive={isGatewayActive}
+					intl={intl}
+					currentValue={setpoint[mode]}
+					currentMode={mode}/>
+			);
+		});
+
+
+		const buttonOne = <ChangeModesBlock
 			isEnabled={true}
 			style={[styles.navigationButton, {borderLeftWidth: 0}, controlButtonStyle]}
 			device={item}
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
-			intl={intl}/>;
-		const downButton = <HeatInfoBlock
-			isEnabled={true}
-			style={[styles.navigationButton, infoBlockStyle]}
-			device={item}
-			iconSize={30}
-			isGatewayActive={isGatewayActive}
-			intl={intl}/>;
-		const stopButton = <MoreButtonsBlock
+			intl={intl}
+			onPressChangeMode={this.onPressChangeMode}/>;
+		const buttonTwo = modes[currentModeIndex];
+		const buttonThree = <MoreButtonsBlock
 			isEnabled={true}
 			style={[styles.navigationButton, moreActionsStyle]}
 			device={item}
@@ -115,9 +158,15 @@ class ThermostatButtonDB extends View<Props, null> {
 
 		return (
 			<View style={containerStyle}>
-				{ upButton }
-				{ downButton }
-				{!!showStopButton && stopButton }
+				{ buttonOne }
+				{ !!buttonTwo && <View style={{
+					flex: 1,
+					backgroundColor: Theme.Core.brandSecondary,
+				}}>
+					{buttonTwo}
+				</View>
+				}
+				{!!showStopButton && buttonThree }
 			</View>
 		);
 	}

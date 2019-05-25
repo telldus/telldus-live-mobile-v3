@@ -36,6 +36,8 @@ type Props = {
 
 	device: Object,
 	isOpen: boolean,
+	currentMode: string,
+	currentValue: string,
 
 	isGatewayActive: boolean,
 	intl: Object,
@@ -64,7 +66,7 @@ class HeatInfoBlock extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device']);
+		const propsChange = shouldUpdate(others, othersN, ['device', 'currentMode', 'currentValue']);
 		if (propsChange) {
 			return true;
 		}
@@ -73,7 +75,7 @@ class HeatInfoBlock extends View {
 	}
 
 	render(): Object {
-		let { device, heatInfoBlockStyle } = this.props;
+		let { device, heatInfoBlockStyle, intl, currentMode, currentValue } = this.props;
 		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
@@ -82,11 +84,11 @@ class HeatInfoBlock extends View {
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle]} accessibilityLabel={accessibilityLabel}>
 				<View style={{justifyContent: 'flex-start'}}>
 					<Text>
-						<Text style={{textAlign: 'left', fontSize: 13, color: '#fff'}}>23</Text>
+						<Text style={{textAlign: 'left', fontSize: 13, color: '#fff'}}>{intl.formatNumber(currentValue)}</Text>
 						<Text style={{fontSize: 8, color: '#fff'}}>°C</Text>
 					</Text>
 					<Text style={{textAlign: 'left', fontSize: 8, color: '#fff'}}>
-                HEAT
+						{currentMode.toUpperCase()}
 					</Text>
 				</View>
 				{
