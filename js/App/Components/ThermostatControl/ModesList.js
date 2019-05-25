@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { injectIntl, intlShape } from 'react-intl';
 
 import {
 	View,
@@ -30,6 +31,7 @@ import {
 import ModeBlock from './ModeBlock';
 
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 type Props = {
     appLayout: Object,
@@ -37,6 +39,7 @@ type Props = {
 	modes: Array<Object>,
 
 	onPressRow: (string) => void,
+	intl: intlShape,
 };
 
 class ModesList extends View<Props, null> {
@@ -67,6 +70,7 @@ render(): Object {
 		appLayout,
 		controlSelection,
 		modes,
+		intl,
 	} = this.props;
 
 	const {
@@ -107,7 +111,7 @@ render(): Object {
 	return (
 		<View style={modesCover}>
 			<Text style={modeHeaderStyle}>
-					Modes
+				{intl.formatMessage(i18n.labelModes)}
 			</Text>
 			{modesL}
 		</View>
@@ -140,4 +144,4 @@ getStyles(): Object {
 }
 }
 
-module.exports = ModesList;
+module.exports = injectIntl(ModesList);
