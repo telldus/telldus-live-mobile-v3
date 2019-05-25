@@ -33,12 +33,17 @@ import {
 import HeatControlWheelModes from './HeatControlWheelModes';
 import { deviceSetState } from '../../Actions/Devices';
 
-import { shouldUpdate } from '../../Lib';
+import {
+	shouldUpdate,
+	getKnowModes,
+	getLastUpdated,
+} from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
 	device: Object,
 	appLayout: Object,
+	lastUpdated: number,
 
 	navigation: Object,
 	intl: Object,
@@ -50,66 +55,11 @@ props: Props;
 
 constructor(props: Props) {
 	super(props);
-
-	this.modes = [
-		{
-			label: 'Heat',
-			edit: true,
-			icon: 'fire',
-			value: 23.3,
-			scale: 'Temperature',
-			unit: '°C',
-			startColor: '#FFB741',
-			endColor: '#E26901',
-			maxVal: 50,
-			minVal: 10,
-			type: 'heat',
-		},
-		{
-			label: 'Cool',
-			edit: true,
-			icon: 'fire',
-			value: 21.2,
-			scale: 'Temperature',
-			unit: '°C',
-			startColor: '#23C4FA',
-			endColor: '#015095',
-			maxVal: 30,
-			minVal: 0,
-			type: 'cool',
-		},
-		{
-			label: 'Heat-cool',
-			edit: true,
-			icon: 'fire',
-			value: 23.3,
-			scale: 'Temperature',
-			unit: '°C',
-			startColor: '#004D92',
-			endColor: '#e26901',
-			maxVal: 50,
-			minVal: 0,
-			type: 'heat-cool',
-		},
-		{
-			label: 'Off',
-			edit: false,
-			icon: 'fire',
-			value: null,
-			scale: null,
-			unit: null,
-			startColor: '#cccccc',
-			endColor: '#999999',
-			maxVal: 50,
-			minVal: 0,
-			type: 'off',
-		},
-	];
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-	const propsChange = shouldUpdate(this.props, nextProps, ['device']);
+	const propsChange = shouldUpdate(this.props, nextProps, ['device', 'appLayout', 'lastUpdated']);
 	if (propsChange) {
 		return true;
 	}
@@ -122,6 +72,8 @@ render(): Object | null {
 		navigation,
 		appLayout,
 		device,
+		lastUpdated,
+		intl,
 	} = this.props;
 
 	if (!device || !device.id) {
@@ -130,7 +82,23 @@ render(): Object | null {
 
 	const {
 		name,
+		parameter,
 	} = device;
+
+	let modes = [];
+	parameter.map((param: Object) => {
+		if (param.name && param.name === 'thermostat') {
+			modes = param.value.modes;
+		}
+	});
+
+	let supportedModes = [];
+	getKnowModes(intl.formatMessage).map((mode: Object) => {
+		const { type } = mode;
+		if (modes.indexOf(type) !== -1) {
+			supportedModes.push(mode);
+		}
+	});
 
 	return (
 		<View style={{
@@ -155,7 +123,9 @@ render(): Object | null {
 					h2={name}/>
 				<HeatControlWheelModes
 					appLayout={appLayout}
-					modes={this.modes}/>
+					modes={supportedModes}
+					device={device}
+					lastUpdated={lastUpdated}/>
 			</ScrollView>
 		</View>
 	);
@@ -173,11 +143,15 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { screenProps, navigation } = ownProps;
 	const id = navigation.getParam('id', null);
+
 	const device = store.devices.byId[id];
+	const { clientDeviceId, clientId } = device ? device : {};
+
 
 	return {
 		...screenProps,
 		device,
+		lastUpdated: getLastUpdated(store.sensors.byId, clientDeviceId, clientId),
 	};
 }
 

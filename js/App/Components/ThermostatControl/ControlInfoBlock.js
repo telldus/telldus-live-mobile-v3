@@ -23,27 +23,33 @@
 
 import React from 'react';
 import { TouchableOpacity, LayoutAnimation } from 'react-native';
+import moment from 'moment';
+import { injectIntl, intlShape } from 'react-intl';
 
 import {
 	View,
 	Text,
 	EditBox,
+	FormattedRelative,
+	IconTelldus,
 } from '../../../BaseComponents';
 
-import { LayoutAnimations } from '../../Lib';
+import { LayoutAnimations, formatSensorLastUpdate } from '../../Lib';
 import Theme from '../../Theme';
-import IconTelldus from '../../../BaseComponents/IconTelldus';
+import i18n from '../../Translations/common';
 
 type Props = {
 	baseColor: string,
     title: string,
     currentValue: string,
-    appLayout: Object,
+	appLayout: Object,
+	lastUpdated: number,
+	intl: intlShape,
 };
 
 type State = {
 	editValue: boolean,
-	editBoxValue: string,
+	editBoxValue: string | null,
 };
 
 class ControlInfoBlock extends View<Props, State> {
@@ -53,9 +59,10 @@ state: State;
 constructor(props: Props) {
 	super(props);
 
+	const { currentValue } = props;
 	this.state = {
 		editValue: false,
-		editBoxValue: props.currentValue.toString(),
+		editBoxValue: currentValue ? currentValue.toString() : null,
 	};
 }
 
@@ -83,6 +90,10 @@ onSubmitEditing = (value: string) => {
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
 
+formatSensorLastUpdate = (time: string): string => {
+	return formatSensorLastUpdate(time, this.props.intl);
+}
+
 render(): Object {
 
 	const {
@@ -90,6 +101,8 @@ render(): Object {
 		title,
 		currentValue,
 		appLayout,
+		lastUpdated,
+		intl,
 	} = this.props;
 
 	const {
@@ -117,11 +130,11 @@ render(): Object {
 
 	return (
 		<View style={InfoCover}>
-			<Text style={[infoTitleStyle, {
+			{!!title && <Text style={[infoTitleStyle, {
 				color: baseColor,
 			}]}>
 				{title.toUpperCase()}
-			</Text>
+			</Text>}
 			<View style={selectedInfoCoverStyle}>
 				{editValue ?
 					<View style={{
@@ -170,7 +183,7 @@ render(): Object {
 				}
 			</View>
 			<Text style={cLabelStyle}>
-						Current temperature
+				{intl.formatMessage(i18n.labelCurrentTemperature)}
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
@@ -181,7 +194,11 @@ render(): Object {
 				</Text>
 			</Text>
 			<Text style={lastUpdatedInfoStyle}>
-						Last updated info
+				{`${intl.formatMessage(i18n.labelLastUpdated)}: `}
+				<FormattedRelative
+					value={moment.unix(lastUpdated)}
+					formatterFunction={this.formatSensorLastUpdate}
+					textStyle={lastUpdatedInfoStyle}/>
 			</Text>
 		</View>
 	);
@@ -237,7 +254,7 @@ getStyles(): Object {
 			color: rowTextColor,
 		},
 		lastUpdatedInfoStyle: {
-			fontSize: deviceWidth * 0.03,
+			fontSize: deviceWidth * 0.027,
 			color: rowTextColor,
 		},
 		iconSize: deviceWidth * 0.14,
@@ -285,4 +302,4 @@ getStyles(): Object {
 }
 }
 
-module.exports = ControlInfoBlock;
+module.exports = injectIntl(ControlInfoBlock);

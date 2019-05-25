@@ -45,54 +45,49 @@ type Props = {
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,
+	onPressChangeMode: (number) => void,
 };
 
 type DefaultProps = {
     command: number,
 };
 
-class ControlHeatBlock extends View<Props, null> {
+class ChangeModesBlock extends View<Props, null> {
 props: Props;
 static defaultProps: DefaultProps = {
 	command: 2048,
 };
 
-	onPressHeatControl: () => void;
+constructor(props: Props) {
+	super(props);
+	// TODO: update accessibility label.
+	this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
+}
 
-	constructor(props: Props) {
-		super(props);
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-		this.onPressHeatControl = this.onPressHeatControl.bind(this);
-		// TODO: update accessibility label.
-		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
+	const { isOpen, ...others } = this.props;
+	const { isOpenN, ...othersN } = nextProps;
+	if (isOpen !== isOpenN) {
+		return true;
 	}
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-
-		const { isOpen, ...others } = this.props;
-		const { isOpenN, ...othersN } = nextProps;
-		if (isOpen !== isOpenN) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(others, othersN, ['device']);
-		if (propsChange) {
-			return true;
-		}
-
-		return false;
+	const propsChange = shouldUpdate(others, othersN, ['device']);
+	if (propsChange) {
+		return true;
 	}
 
-	onPressHeatControl() {
-		const { command, device, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
-		if (isOpen && closeSwipeRow) {
-			closeSwipeRow();
-			return;
-		}
-		if (onPressDeviceAction) {
-			onPressDeviceAction();
-		}
-		this.props.deviceSetState(device.id, command);
+	return false;
+}
+
+	onPressUp = () => {
+		const { onPressChangeMode } = this.props;
+		onPressChangeMode(1);
+	}
+
+	onPressDown = () => {
+		const { onPressChangeMode } = this.props;
+		onPressChangeMode(-1);
 	}
 
 	render(): Object {
@@ -103,9 +98,13 @@ static defaultProps: DefaultProps = {
 		let dotColor = local ? Theme.Core.brandPrimary : '#fff';
 
 		return (
-			<TouchableOpacity onPress={this.onPressHeatControl} style={[styles.button, this.props.style, controlHeatBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="up" size={18} color={'#fff'} style={styles.upIconStyle}/>
-				<IconTelldus icon="down" size={18} color={'#fff'} style={styles.downIconStyle}/>
+			<View style={[styles.button, this.props.style, controlHeatBlockStyle]} accessibilityLabel={accessibilityLabel}>
+				<TouchableOpacity onPress={this.onPressUp} >
+					<IconTelldus icon="up" size={18} color={'#fff'} style={styles.upIconStyle}/>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={this.onPressDown} >
+					<IconTelldus icon="down" size={18} color={'#fff'} style={styles.downIconStyle}/>
+				</TouchableOpacity>
 
 				{
 					methodRequested === 'THERMOSTAT' ?
@@ -113,7 +112,7 @@ static defaultProps: DefaultProps = {
 						:
 						null
 				}
-			</TouchableOpacity>
+			</View>
 		);
 	}
 }
@@ -145,4 +144,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(ControlHeatBlock);
+module.exports = connect(null, mapDispatchToProps)(ChangeModesBlock);

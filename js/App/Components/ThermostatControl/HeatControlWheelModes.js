@@ -35,6 +35,8 @@ import Theme from '../../Theme';
 type Props = {
 	appLayout: Object,
 	modes: Array<Object>,
+	device: Object,
+	lastUpdated: number,
 };
 
 type State = {
@@ -42,6 +44,10 @@ type State = {
 	startAngle: number,
 	currentValue: number,
 	controlSelection: 'heat' | 'cool' | 'heat-cool' | 'off',
+	baseColor: string,
+	gradientColorFrom: string,
+	gradientColorTo: string,
+	title: string,
 };
 
 class HeatControlWheelModes extends View<Props, State> {
@@ -74,6 +80,10 @@ constructor(props: Props) {
 		angleLength: initialAngleLength,
 		currentValue,
 		controlSelection: modes[0].type,
+		baseColor: modes[0].endColor,
+		gradientColorFrom: modes[0].startColor,
+		gradientColorTo: modes[0].endColor,
+		title: modes[0].label,
 	};
 }
 
@@ -150,12 +160,16 @@ onPressRow = (controlType: string) => {
 			cMode = mode;
 		}
 	});
-	const { type, value } = cMode;
+	const { type, value, endColor, startColor, label } = cMode;
 	const initialAngleLength = this.getAngleLengthToInitiate(type, value);
 	this.setState({
 		controlSelection: controlType,
 		angleLength: initialAngleLength,
 		currentValue: value,
+		baseColor: endColor,
+		gradientColorFrom: startColor,
+		gradientColorTo: endColor,
+		title: label,
 	});
 }
 
@@ -164,6 +178,7 @@ render(): Object {
 	const {
 		appLayout,
 		modes,
+		lastUpdated,
 	} = this.props;
 
 	const {
@@ -176,28 +191,11 @@ render(): Object {
 		angleLength,
 		currentValue,
 		controlSelection,
+		baseColor,
+		gradientColorFrom,
+		gradientColorTo,
+		title,
 	} = this.state;
-
-	let baseColor = modes[0].endColor;
-	let gradientColorFrom = modes[0].startColor;
-	let gradientColorTo = modes[0].endColor;
-	let title = modes[0].label;
-	if (controlSelection === 'cool') {
-		baseColor = modes[1].endColor;
-		gradientColorFrom = modes[1].startColor;
-		gradientColorTo = modes[1].endColor;
-		title = modes[1].label;
-	} else if (controlSelection === 'heat-cool') {
-		baseColor = modes[2].endColor;
-		gradientColorFrom = modes[2].startColor;
-		gradientColorTo = modes[2].endColor;
-		title = modes[2].label;
-	} else if (controlSelection === 'off') {
-		baseColor = modes[3].endColor;
-		gradientColorFrom = modes[3].startColor;
-		gradientColorTo = modes[3].endColor;
-		title = modes[3].label;
-	}
 
 	return (
 		<>
@@ -227,6 +225,7 @@ render(): Object {
 					baseColor={baseColor}
 					currentValue={currentValue}
 					title={title}
+					lastUpdated={lastUpdated}
 				/>
 			</View>
 			<ModesList
