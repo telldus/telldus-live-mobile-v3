@@ -96,7 +96,7 @@ class MoreButtonsBlock extends View {
 
 		return (
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="settings" size={22} color={'#fff'} />
+				<IconTelldus icon="settings" size={22} color={'#fff'} style={{marginRight: 3}}/>
 			</TouchableOpacity>
 		);
 	}

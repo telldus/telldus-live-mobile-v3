@@ -25,7 +25,6 @@ const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../../BaseComponents';
 import MoreButtonsBlock from './MoreButtonsBlock';
-import ChangeModesBlock from './ChangeModesBlock';
 import HeatInfoBlock from './HeatInfoBlock';
 
 import { shouldUpdate, LayoutAnimations } from '../../../../Lib';
@@ -106,50 +105,34 @@ class ThermostatButtonDB extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { currentModeIndex } = this.state;
 		const {
 			item,
 			intl,
 			isGatewayActive,
 			containerStyle,
-			controlButtonStyle,
 			infoBlockStyle,
 			moreActionsStyle,
-			showStopButton,
 			openThermostatControl,
 		} = this.props;
 
 		const { stateValues = {} } = item;
-		const { THERMOSTAT: { setpoint = {}} } = stateValues;
-		const numOfModes = Object.keys(setpoint);
-		const modes = numOfModes.map((mode: Object, i: number): Object => {
-			return (
-				<HeatInfoBlock
-					key={i}
-					isEnabled={true}
-					style={[styles.navigationButton, infoBlockStyle]}
-					device={item}
-					iconSize={30}
-					isGatewayActive={isGatewayActive}
-					intl={intl}
-					currentValue={setpoint[mode]}
-					currentMode={mode}/>
-			);
-		});
+		const { THERMOSTAT: { setpoint = {} } } = stateValues;
 
+		const { heat } = setpoint;
+		const heatValue = heat ? heat : -100.0;
 
-		const buttonOne = <ChangeModesBlock
+		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
-			style={[styles.navigationButton, {borderLeftWidth: 0}, controlButtonStyle]}
+			style={[styles.navigationButton, infoBlockStyle, {justifyContent: 'flex-start'}]}
 			device={item}
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
-			onPressChangeMode={this.onPressChangeMode}/>;
-		const buttonTwo = modes[currentModeIndex];
+			currentValue={heatValue}
+			currentMode={'heat'}/>;
 		const buttonThree = <MoreButtonsBlock
 			isEnabled={true}
-			style={[styles.navigationButton, moreActionsStyle]}
+			style={[styles.navigationButton, moreActionsStyle, {flex: 0}]}
 			device={item}
 			iconSize={16}
 			isGatewayActive={isGatewayActive}
@@ -158,15 +141,15 @@ class ThermostatButtonDB extends View<Props, State> {
 
 		return (
 			<View style={containerStyle}>
-				{ buttonOne }
-				{ !!buttonTwo && <View style={{
+				<View style={{
 					flex: 1,
+					flexDirection: 'row',
 					backgroundColor: Theme.Core.brandSecondary,
+					paddingHorizontal: 3,
 				}}>
 					{buttonTwo}
+					{buttonThree}
 				</View>
-				}
-				{!!showStopButton && buttonThree }
 			</View>
 		);
 	}

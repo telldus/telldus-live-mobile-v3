@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import { View, Text } from '../../../../../BaseComponents';
+import { View, Text, IconTelldus, FormattedNumber } from '../../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 
@@ -74,17 +74,31 @@ class HeatInfoBlock extends View {
 		return false;
 	}
 
+	formatterFunction = (value: number): string | number => {
+		if (value.toString().includes('-100')) {
+			const str = value.toString();
+			const newStr = str.slice((str.length - 4), str.length);
+			return newStr.replace(/0/g, '-');
+		}
+		return value;
+	}
+
 	render(): Object {
-		let { device, heatInfoBlockStyle, intl, currentMode, currentValue } = this.props;
+		let { device, heatInfoBlockStyle, currentMode, currentValue } = this.props;
 		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<View style={{justifyContent: 'flex-start'}}>
+				<IconTelldus icon="temperature" size={26} color={'#fff'} />
+				<View style={{justifyContent: 'flex-start', marginLeft: 2}}>
 					<Text>
-						<Text style={{textAlign: 'left', fontSize: 13, color: '#fff'}}>{intl.formatNumber(currentValue)}</Text>
+						<FormattedNumber
+							formatterFunction={this.formatterFunction}
+							style={{textAlign: 'left', fontSize: 13, color: '#fff'}}
+							value={currentValue}
+							minimumFractionDigits={1}/>
 						<Text style={{fontSize: 8, color: '#fff'}}>°C</Text>
 					</Text>
 					<Text style={{textAlign: 'left', fontSize: 8, color: '#fff'}}>
@@ -104,9 +118,10 @@ class HeatInfoBlock extends View {
 
 const styles = StyleSheet.create({
 	button: {
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		alignItems: 'center',
 		backgroundColor: Theme.Core.brandSecondary,
+		flexDirection: 'row',
 	},
 	dot: {
 		position: 'absolute',
