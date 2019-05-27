@@ -26,7 +26,7 @@ import Text from './Text';
 import * as Intl from 'react-intl';
 
 const FormattedNumberComponent = (props: Object): React$Element<any> => {
-	const { style, suffix = null, suffixStyle = {} } = props;
+	const { style, suffix = null, suffixStyle = {}, formatterFunction } = props;
 
 	const formatOptions = {
 		localeMatcher: props.localeMatcher,
@@ -44,7 +44,7 @@ const FormattedNumberComponent = (props: Object): React$Element<any> => {
 
 	return (
 		<Intl.FormattedNumber {...formatOptions}>
-			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{localized}
+			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{formatterFunction ? formatterFunction(localized) : localized}
 				{!!suffix && (
 					[<Text style={styles.space} key={'1'}>
 						{' '}
@@ -73,6 +73,7 @@ FormattedNumberComponent.propTypes = {
 	value: PropTypes.any,
 	prefix: PropTypes.any,
 	suffix: PropTypes.any,
+	formatterFunction: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
