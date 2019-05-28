@@ -284,7 +284,7 @@ getStyles(): Object {
 		labelStyle: {
 			fontSize: deviceWidth * 0.04,
 			textAlign: 'center',
-			textVerticalAlign: 'bottom',
+			textAlignVertical: 'bottom',
 			color: brandSecondary,
 			marginTop: 5,
 		},
@@ -292,7 +292,7 @@ getStyles(): Object {
 			fontSize: deviceWidth * 0.055,
 			color: brandSecondary,
 			textAlign: 'center',
-			textVerticalAlign: 'center',
+			textAlignVertical: 'center',
 			marginTop: deviceWidth * 0.02,
 			padding: 3,
 		},
