@@ -25,7 +25,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
-import Platform from 'Platform';
+import firebase from 'react-native-firebase';
 
 import {
 	Text,
@@ -246,11 +246,9 @@ render(): Object {
 				value={version}
 				fontSize={styles.fontSize}
 			/>
-			{Platform.OS === 'android' && (// 3.10 has new feature only for Android
-				<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
-					{this.labelWhatsNew}
-				</Text>
-			)}
+			<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
+				{this.labelWhatsNew}
+			</Text>
 			<TitledInfoBlock
 				title={this.titlePush}
 				label={labelPush}
@@ -281,6 +279,7 @@ render(): Object {
 				label={this.labelLoggedUser}
 				value={email}
 				fontSize={styles.fontSize}
+				onPress={email === 'developer@telldus.com' ? this.testCrash : null}
 			/>
 			<TouchableButton
 				onPress={isLogoutLoading ? null : this.logout}
@@ -294,6 +293,10 @@ render(): Object {
 			/>
 		</View>
 	);
+}
+
+testCrash = () => {
+	firebase.crashlytics().crash();
 }
 
 getStyles(appLayout: Object): Object {
