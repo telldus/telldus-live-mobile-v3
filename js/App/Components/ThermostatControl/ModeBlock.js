@@ -22,16 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, TextInput, LayoutAnimation } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
 	Text,
+	IconTelldus,
 } from '../../../BaseComponents';
 
 import Theme from '../../Theme';
-import IconTelldus from '../../../BaseComponents/IconTelldus';
+import { LayoutAnimations } from '../../Lib';
 
 type Props = {
     appLayout: Object,
@@ -43,11 +44,16 @@ type Props = {
     unit: string,
 	active: boolean,
 	mode: string,
+	maxVal: number,
+	minVal: number,
 
 	onPressRow: (string) => void,
+	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
 };
 
 type State = {
+	editBoxValue: string | null,
+	editValue: boolean,
 };
 
 class ModeBlock extends View<Props, State> {
@@ -57,6 +63,11 @@ state: State;
 onPressRow: () => void;
 constructor(props: Props) {
 	super(props);
+
+	this.state = {
+		editBoxValue: props.value ? props.value.toString() : null,
+		editValue: false,
+	};
 
 	this.onPressRow = this.onPressRow.bind(this);
 }
@@ -70,6 +81,39 @@ onPressRow = () => {
 	if (onPressRow) {
 		onPressRow(mode);
 	}
+}
+
+onChangeText = (value: string) => {
+	const { maxVal, minVal } = this.props;
+	if (value > maxVal || value < minVal) {
+		return;
+	}
+	this.setState({
+		editBoxValue: value,
+	});
+}
+
+onSubmitEditing = () => {
+	this.setState({
+		editValue: false,
+	});
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+
+	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
+	const { maxVal, minVal, mode } = this.props;
+	if (value > maxVal || value < minVal) {
+		return;
+	}
+
+	this.props.onControlThermostat(mode, value, mode === 'off' ? 2 : 1);
+}
+
+onPressEdit = () => {
+	this.setState({
+		editValue: true,
+	});
+	this.onPressRow();
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
 
 render(): Object {
@@ -100,8 +144,10 @@ render(): Object {
 		textCoverStyle,
 		rowTextColor,
 		editIconSize,
+		editIconSizeDone,
 		iconSize,
 		controlIconSize,
+		textStyle,
 	} = this.getStyles();
 
 	let iconBGColor = active ? brandSecondary : appBackground;
@@ -112,6 +158,8 @@ render(): Object {
 		iconColor = active ? '#fff' : brandPrimary;
 		textColor = rowTextColor;
 	}
+
+	const { editValue, editBoxValue } = this.state;
 
 	return (
 		<View style={cover}>
@@ -135,16 +183,34 @@ render(): Object {
 							<Text style={[scaleStyle, { color: textColor }]}>
 								{scale}
 							</Text>
-							<Text>
-								<Text style={[valueStyle, { color: textColor }]}>
-									{value}
+							{editValue ? <TextInput
+								value={editBoxValue}
+								style={textStyle}
+								onChangeText={this.onChangeText}
+								onSubmitEditing={this.onSubmitEditing}
+								autoCapitalize="sentences"
+								autoCorrect={false}
+								autoFocus={false}
+								underlineColorAndroid={Theme.Core.brandSecondary}
+								returnKeyType={'done'}
+								keyboardType={'phone-pad'}
+							/>
+								:
+								<Text>
+									<Text style={[valueStyle, { color: textColor }]}>
+										{value}
+									</Text>
+									<Text style={[unitStyle, { color: textColor }]}>
+										{unit}
+									</Text>
 								</Text>
-								<Text style={[unitStyle, { color: textColor }]}>
-									{unit}
-								</Text>
-							</Text>
+							}
 						</View>
-						<Icon name="edit" size={editIconSize} color={brandSecondary} style={editIconStyle}/>
+						<Icon name={editValue ? 'done' : 'edit'}
+							size={editValue ? editIconSizeDone : editIconSize}
+							color={brandSecondary}
+							style={editIconStyle}
+							onPress={editValue ? this.onSubmitEditing : this.onPressEdit}/>
 					</View>
 				)}
 			</View>
@@ -235,8 +301,13 @@ getStyles(): Object {
 			marginLeft: 5,
 		},
 		editIconSize: deviceWidth * 0.045,
+		editIconSizeDone: deviceWidth * 0.055,
 		iconSize: deviceWidth * 0.08,
 		controlIconSize: deviceWidth * 0.06,
+		textStyle: {
+			color: rowTextColor,
+			fontSize: deviceWidth * 0.055,
+		},
 	};
 }
 }

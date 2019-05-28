@@ -279,13 +279,16 @@ render(): Object {
 					showSlider={showSlider}
 					onControlThermostat={this.onControlThermostat}
 					controllingMode={controllingMode}
+					minVal={minVal}
+					maxVal={maxVal}
 				/>
 			</View>
 			<ModesList
 				appLayout={appLayout}
 				onPressRow={this.onPressRow}
 				controllingMode={controllingMode}
-				modes={modes}/>
+				modes={modes}
+				onControlThermostat={this.onControlThermostat}/>
 		</>
 	);
 }

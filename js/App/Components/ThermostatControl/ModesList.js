@@ -40,6 +40,7 @@ type Props = {
 
 	onPressRow: (string) => void,
 	intl: intlShape,
+	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
 };
 
 class ModesList extends View<Props, null> {
@@ -87,6 +88,8 @@ render(): Object {
 			scale,
 			unit,
 			mode,
+			minVal,
+			maxVal,
 		} = modeInfo;
 		let active = false;
 		if (controllingMode === mode) {
@@ -104,7 +107,10 @@ render(): Object {
 				unit={unit}
 				active={active}
 				onPressRow={this.onPressRow}
-				mode={mode}/>
+				mode={mode}
+				minVal={minVal}
+				maxVal={maxVal}
+				onControlThermostat={this.props.onControlThermostat}/>
 		);
 	});
 
