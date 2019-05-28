@@ -46,6 +46,8 @@ type Props = {
 	lastUpdated: number,
 	showSlider: boolean,
 	controllingMode: string,
+	maxVal: number,
+	minVal: number,
 
 	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
 	intl: intlShape,
@@ -94,6 +96,10 @@ onPressEdit = () => {
 }
 
 onChangeText = (value: string) => {
+	const { maxVal, minVal } = this.props;
+	if (value > maxVal || value < minVal) {
+		return;
+	}
 	this.setState({
 		editBoxValue: value,
 	});
@@ -106,7 +112,12 @@ onSubmitEditing = () => {
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 
 	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
-	this.props.onControlThermostat(this.props.controllingMode, value, 1);
+	const { maxVal, minVal, controllingMode } = this.props;
+	if (value > maxVal || value < minVal) {
+		return;
+	}
+
+	this.props.onControlThermostat(controllingMode, value, 1);
 }
 
 formatSensorLastUpdate = (time: string): string => {
