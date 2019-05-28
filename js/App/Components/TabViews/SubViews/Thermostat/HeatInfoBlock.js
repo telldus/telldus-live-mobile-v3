@@ -27,7 +27,7 @@ import { View, Text, IconTelldus, FormattedNumber } from '../../../../../BaseCom
 import { StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 
-import { shouldUpdate } from '../../../../Lib';
+import { shouldUpdate, formatModeValue } from '../../../../Lib';
 import i18n from '../../../../Translations/common';
 import Theme from '../../../../Theme';
 
@@ -75,12 +75,7 @@ class HeatInfoBlock extends View {
 	}
 
 	formatterFunction = (value: number): string | number => {
-		if (value.toString().includes('-100')) {
-			const str = value.toString();
-			const newStr = str.slice((str.length - 4), str.length);
-			return newStr.replace(/0/g, '-');
-		}
-		return value;
+		return formatModeValue(value);
 	}
 
 	render(): Object {

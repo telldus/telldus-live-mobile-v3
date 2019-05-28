@@ -210,6 +210,16 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 	];
 };
 
+const formatModeValue = (value: number): number | string => {
+	if (value.toString().includes('-100')) {
+		const str = value.toString();
+		const newStr = str.slice((str.length - 4), str.length);
+		return newStr.replace(/0/g, '-');
+	}
+	return value;
+};
+
 module.exports = {
 	getKnowModes,
+	formatModeValue,
 };

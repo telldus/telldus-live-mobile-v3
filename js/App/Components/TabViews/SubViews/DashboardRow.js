@@ -44,6 +44,7 @@ import {
 	getOffColorRGB,
 	getMainColorRGB,
 	prepareMainColor,
+	formatModeValue,
 } from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
@@ -337,9 +338,12 @@ getInfo(): null | string {
 	const { THERMOSTAT } = supportedMethods;
 	let info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 	if (THERMOSTAT) {
-		const { THERMOSTAT: {setpoint = {}}} = stateValues;
-		const { heat = 0 } = setpoint;
-		let value = `${intl.formatNumber(heat)}°C`;
+		const { THERMOSTAT: {setpoint = {}, mode}} = stateValues;
+		let currentModeValue = setpoint[mode];
+		currentModeValue = currentModeValue ? currentModeValue : -100.0;
+
+		let value = `${intl.formatNumber(currentModeValue)}°C`;
+		value = formatModeValue(value);
 		info = intl.formatMessage(i18n.labelCurrentlyValue, {value});
 	}
 	return info;
