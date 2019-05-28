@@ -340,10 +340,11 @@ getInfo(): null | string {
 	if (THERMOSTAT) {
 		const { THERMOSTAT: {setpoint = {}, mode}} = stateValues;
 		let currentModeValue = setpoint[mode];
-		currentModeValue = currentModeValue ? currentModeValue : -100.0;
+		currentModeValue = typeof currentModeValue === 'undefined' ? -100.0 : currentModeValue;
 
-		let value = `${intl.formatNumber(currentModeValue)}°C`;
+		let value = intl.formatNumber(currentModeValue, {minimumFractionDigits: 1});
 		value = formatModeValue(value);
+		value = `${value}°C`;
 		info = intl.formatMessage(i18n.labelCurrentlyValue, {value});
 	}
 	return info;

@@ -119,7 +119,7 @@ class ThermostatButtonDB extends View<Props, State> {
 		const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 
 		let currentModeValue = setpoint[mode];
-		currentModeValue = currentModeValue ? currentModeValue : -100.0;
+		currentModeValue = typeof currentModeValue === 'undefined' ? -100.0 : currentModeValue;
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
@@ -129,7 +129,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			isGatewayActive={isGatewayActive}
 			intl={intl}
 			currentValue={currentModeValue}
-			currentMode={'heat'}/>;
+			currentMode={mode}/>;
 		const buttonThree = <MoreButtonsBlock
 			isEnabled={true}
 			style={[styles.navigationButton, moreActionsStyle, {flex: 0}]}
