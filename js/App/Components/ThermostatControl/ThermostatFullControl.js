@@ -31,7 +31,7 @@ import {
 	PosterWithText,
 } from '../../../BaseComponents';
 import HeatControlWheelModes from './HeatControlWheelModes';
-import { deviceSetStateThermostat } from '../../Actions/Devices';
+import { deviceSetStateThermostat, requestDeviceAction } from '../../Actions/Devices';
 
 import {
 	shouldUpdate,
@@ -155,6 +155,7 @@ render(): Object | null {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) =>{
+			dispatch(requestDeviceAction(deviceId, 2048, false));
 			dispatch(deviceSetStateThermostat(deviceId, mode, temperature, scale, changeMode, requestedState));
 		},
 	};
