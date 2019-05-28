@@ -85,7 +85,7 @@ onPressRow = () => {
 
 onChangeText = (value: string) => {
 	const { maxVal, minVal } = this.props;
-	if (value > maxVal || value < minVal) {
+	if (typeof minVal === 'number' && typeof maxVal === 'number' && (parseFloat(value) > maxVal || parseFloat(value) < minVal)) {
 		return;
 	}
 	this.setState({
@@ -101,7 +101,7 @@ onSubmitEditing = () => {
 
 	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
 	const { maxVal, minVal, mode } = this.props;
-	if (value > maxVal || value < minVal) {
+	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
 		return;
 	}
 
@@ -114,6 +114,26 @@ onPressEdit = () => {
 	});
 	this.onPressRow();
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+}
+
+onPressUp = () => {
+	const { maxVal, mode, value } = this.props;
+	let nextValue = parseFloat(value) + 1;
+	this.onPressRow();
+	if (typeof nextValue === 'number' && typeof maxVal === 'number' && (nextValue > maxVal)) {
+		return;
+	}
+	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
+}
+
+onPressDown = () => {
+	const { minVal, mode, value } = this.props;
+	let nextValue = parseFloat(value) - 1;
+	this.onPressRow();
+	if (typeof nextValue === 'number' && typeof minVal === 'number' && (nextValue < minVal)) {
+		return;
+	}
+	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
 render(): Object {
@@ -166,8 +186,9 @@ render(): Object {
 			<View style={leftBlock}>
 				<TouchableOpacity style={{
 					flex: 1,
-					alignItems: 'flex-start',
-					justifyContent: 'center',
+					flexDirection: 'row',
+					alignItems: 'center',
+					justifyContent: 'flex-start',
 				}} onPress={this.onPressRow}>
 					<Text style={[labelStyle, { color: textColor }]}>
 						{label.toUpperCase()}
@@ -176,8 +197,12 @@ render(): Object {
 				{!!value && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
-							<IconTelldus icon="up" size={controlIconSize} color={brandSecondary}/>
-							<IconTelldus icon="down" size={controlIconSize} color={brandPrimary}/>
+							<TouchableOpacity onPress={this.onPressUp}>
+								<IconTelldus icon="up" size={controlIconSize} color={brandSecondary}/>
+							</TouchableOpacity>
+							<TouchableOpacity onPress={this.onPressDown}>
+								<IconTelldus icon="down" size={controlIconSize} color={brandPrimary}/>
+							</TouchableOpacity>
 						</View>
 						<View style={textCoverStyle}>
 							<Text style={[scaleStyle, { color: textColor }]}>

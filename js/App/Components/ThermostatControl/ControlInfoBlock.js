@@ -97,7 +97,7 @@ onPressEdit = () => {
 
 onChangeText = (value: string) => {
 	const { maxVal, minVal } = this.props;
-	if (value > maxVal || value < minVal) {
+	if (parseFloat(value) > maxVal || parseFloat(value) < minVal) {
 		return;
 	}
 	this.setState({
@@ -113,7 +113,7 @@ onSubmitEditing = () => {
 
 	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
-	if (value > maxVal || value < minVal) {
+	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
 		return;
 	}
 
