@@ -31,7 +31,7 @@ import {
 	PosterWithText,
 } from '../../../BaseComponents';
 import HeatControlWheelModes from './HeatControlWheelModes';
-import { deviceSetState } from '../../Actions/Devices';
+import { deviceSetStateThermostat } from '../../Actions/Devices';
 
 import {
 	shouldUpdate,
@@ -47,7 +47,7 @@ type Props = {
 
 	navigation: Object,
 	intl: Object,
-	deviceSetState: (id: number, command: number, value?: number) => void,
+	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 
 class ThermostatFullControl extends View<Props, null> {
@@ -144,7 +144,8 @@ render(): Object | null {
 					appLayout={appLayout}
 					modes={supportedModes}
 					device={device}
-					lastUpdated={lastUpdated}/>
+					lastUpdated={lastUpdated}
+					deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
 			</ScrollView>
 		</View>
 	);
@@ -153,8 +154,8 @@ render(): Object | null {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		deviceSetState: (id: number, command: number, value?: number) =>{
-			dispatch(deviceSetState(id, command, value));
+		deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) =>{
+			dispatch(deviceSetStateThermostat(deviceId, mode, temperature, scale, changeMode, requestedState));
 		},
 	};
 }

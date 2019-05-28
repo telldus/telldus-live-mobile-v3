@@ -34,7 +34,7 @@ import {
 	IconTelldus,
 } from '../../../BaseComponents';
 
-import { LayoutAnimations, formatSensorLastUpdate } from '../../Lib';
+import { LayoutAnimations, formatSensorLastUpdate, formatModeValue } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -45,18 +45,31 @@ type Props = {
 	appLayout: Object,
 	lastUpdated: number,
 	showSlider: boolean,
+	controllingMode: string,
 
+	onControlThermostat: (mode: string, temperature?: number, requestedState: number) => void,
 	intl: intlShape,
 };
 
 type State = {
 	editValue: boolean,
 	editBoxValue: string | null,
+	currentValue: number,
 };
 
 class ControlInfoBlock extends View<Props, State> {
 props: Props;
 state: State;
+
+static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+	if (props.currentValue !== state.currentValue) {
+		return {
+			editBoxValue: props.currentValue ? props.currentValue.toString() : null,
+			currentValue: props.currentValue,
+		};
+	}
+	return null;
+}
 
 constructor(props: Props) {
 	super(props);
@@ -65,6 +78,7 @@ constructor(props: Props) {
 	this.state = {
 		editValue: false,
 		editBoxValue: currentValue ? currentValue.toString() : null,
+		currentValue,
 	};
 }
 
@@ -90,10 +104,16 @@ onSubmitEditing = (value: string) => {
 		editValue: false,
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	this.props.onControlThermostat(this.props.controllingMode, this.state.editBoxValue, 1);
 }
 
 formatSensorLastUpdate = (time: string): string => {
 	return formatSensorLastUpdate(time, this.props.intl);
+}
+
+formatModeValue = (modeValue: number): () => string | number => {
+	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
+	return formatModeValue(val);
 }
 
 render(): Object {
@@ -130,6 +150,7 @@ render(): Object {
 		doneIconCoverStyle,
 	} = this.getStyles();
 
+	const cModevalue = this.formatModeValue(currentValue);
 	return (
 		<View style={InfoCover}>
 			{!!title && <Text style={[infoTitleStyle, {
@@ -171,7 +192,7 @@ render(): Object {
 						<Text style={[sValueStyle, {
 							color: baseColor,
 						}]}>
-							{currentValue}
+							{cModevalue}
 						</Text>
 						<Text style={Theme.Styles.hiddenText}>
 								!
@@ -189,7 +210,7 @@ render(): Object {
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
-							23.3
+					{cModevalue}
 				</Text>
 				<Text style={cUnitStyle}>
 							°C

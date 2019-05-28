@@ -40,13 +40,15 @@ type Props = {
 	modes: Array<Object>,
 	device: Object,
 	lastUpdated: number,
+
+	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 
 type State = {
     angleLength: number,
 	startAngle: number,
 	currentValue: number,
-	controlSelection: 'heat' | 'cool' | 'heat-cool' | 'off',
+	controllingMode: string,
 	baseColor: string,
 	gradientColorFrom: string,
 	gradientColorTo: string,
@@ -63,6 +65,23 @@ onUpdate: (Object) => void;
 onPressRow: (string) => void;
 getValueFromAngle: (number, string) => Object;
 
+
+static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+	const { controllingMode } = state;
+	let newValue;
+	props.modes.map((modeInfo: Object) => {
+		if (modeInfo.mode === controllingMode) {
+			newValue = modeInfo.value;
+		}
+	});
+	if (state.currentValue !== newValue) {
+		return {
+			currentValue: newValue,
+		};
+	}
+	return null;
+}
+
 constructor(props: Props) {
 	super(props);
 
@@ -76,21 +95,30 @@ constructor(props: Props) {
 
 	this.step = 0.5;
 
-	const { modes } = this.props;
+	const { modes, device } = this.props;
+	const { stateValues: {THERMOSTAT = {}}} = device;
+	const { mode } = THERMOSTAT;
 
-	const currentValue = modes[0].value;
-	const minVal = modes[0].minVal;
-	const maxVal = modes[0].maxVal;
-	const initialAngleLength = this.getAngleLengthToInitiate(modes[0].mode, currentValue);
+	let cModeInfo = modes[0];
+	modes.map((modeInfo: Object) => {
+		if (modeInfo.mode === mode) {
+			cModeInfo = modeInfo;
+		}
+	});
+
+	const currentValue = cModeInfo.value;
+	const minVal = cModeInfo.minVal;
+	const maxVal = cModeInfo.maxVal;
+	const initialAngleLength = this.getAngleLengthToInitiate(cModeInfo.mode, currentValue);
 	this.state = {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
 		currentValue,
-		controlSelection: modes[0].mode,
-		baseColor: modes[0].endColor,
-		gradientColorFrom: modes[0].startColor,
-		gradientColorTo: modes[0].endColor,
-		title: modes[0].label,
+		controllingMode: cModeInfo.mode,
+		baseColor: cModeInfo.endColor,
+		gradientColorFrom: cModeInfo.startColor,
+		gradientColorTo: cModeInfo.endColor,
+		title: cModeInfo.label,
 		minVal,
 		maxVal,
 	};
@@ -147,19 +175,22 @@ getAngleLengthToInitiate(currMode: string, currentValue: number): number {
 	return	currentAngleLen;
 }
 
-shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return true;
-}
-
 onUpdate = (data: Object) => {
 	const {startAngle, angleLength} = data;
-	const { temp } = this.getValueFromAngle(angleLength, this.state.controlSelection);
+	const { temp } = this.getValueFromAngle(angleLength, this.state.controllingMode);
 
 	this.setState({
 		angleLength,
 		startAngle,
 		currentValue: temp,
 	});
+}
+
+onControlThermostat = (mode: string, temp: number, requestedState: number) => {
+	const { device, deviceSetStateThermostat } = this.props;
+
+	const changeMode = mode !== device.stateValues.THERMOSTAT.mode ? 1 : 0;
+	deviceSetStateThermostat(device.id, mode, temp, 0, changeMode, requestedState);
 }
 
 onPressRow = (controlType: string) => {
@@ -172,7 +203,7 @@ onPressRow = (controlType: string) => {
 	const { mode, value, endColor, startColor, label, minVal, maxVal } = cMode;
 	const initialAngleLength = this.getAngleLengthToInitiate(mode, value);
 	this.setState({
-		controlSelection: controlType,
+		controllingMode: controlType,
 		angleLength: initialAngleLength,
 		currentValue: value,
 		baseColor: endColor,
@@ -202,7 +233,7 @@ render(): Object {
 		startAngle,
 		angleLength,
 		currentValue,
-		controlSelection,
+		controllingMode,
 		baseColor,
 		gradientColorFrom,
 		gradientColorTo,
@@ -246,12 +277,14 @@ render(): Object {
 					title={title}
 					lastUpdated={lastUpdated}
 					showSlider={showSlider}
+					onControlThermostat={this.onControlThermostat}
+					controllingMode={controllingMode}
 				/>
 			</View>
 			<ModesList
 				appLayout={appLayout}
 				onPressRow={this.onPressRow}
-				controlSelection={controlSelection}
+				controllingMode={controllingMode}
 				modes={modes}/>
 		</>
 	);

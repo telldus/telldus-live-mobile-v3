@@ -35,7 +35,7 @@ import i18n from '../../Translations/common';
 
 type Props = {
     appLayout: Object,
-	controlSelection: 'heat' | 'cool' | 'heat-cool' | 'off',
+	controllingMode: 'heat' | 'cool' | 'heat-cool' | 'off',
 	modes: Array<Object>,
 
 	onPressRow: (string) => void,
@@ -68,7 +68,7 @@ render(): Object {
 
 	const {
 		appLayout,
-		controlSelection,
+		controllingMode,
 		modes,
 		intl,
 	} = this.props;
@@ -89,7 +89,7 @@ render(): Object {
 			mode,
 		} = modeInfo;
 		let active = false;
-		if (controlSelection === mode) {
+		if (controllingMode === mode) {
 			active = true;
 		}
 		return (
