@@ -106,16 +106,16 @@ render(): Object | null {
 	});
 
 	let supportedModes = [];
-	getKnowModes(intl.formatMessage).map((mode: Object) => {
-		const { type } = mode;
-		if (modes[type]) {
-			mode = {
-				...mode,
-				value: setpoint[type],
-				minVal: modes[type].min,
-				maxVal: modes[type].max,
+	getKnowModes(intl.formatMessage).map((modeInfo: Object) => {
+		const { mode } = modeInfo;
+		if (modes[mode]) {
+			modeInfo = {
+				...modeInfo,
+				value: setpoint[mode],
+				minVal: modes[mode].min,
+				maxVal: modes[mode].max,
 			};
-			supportedModes.push(mode);
+			supportedModes.push(modeInfo);
 		}
 	});
 

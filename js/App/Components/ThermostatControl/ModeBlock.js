@@ -42,7 +42,7 @@ type Props = {
     scale: string,
     unit: string,
 	active: boolean,
-	type: string,
+	mode: string,
 
 	onPressRow: (string) => void,
 };
@@ -66,9 +66,9 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onPressRow = () => {
-	const { onPressRow, type } = this.props;
+	const { onPressRow, mode } = this.props;
 	if (onPressRow) {
-		onPressRow(type);
+		onPressRow(mode);
 	}
 }
 
@@ -81,7 +81,7 @@ render(): Object {
 		unit,
 		icon,
 		active,
-		type,
+		mode,
 	} = this.props;
 
 	const {
@@ -107,7 +107,7 @@ render(): Object {
 	let iconBGColor = active ? brandSecondary : appBackground;
 	let iconColor = active ? '#fff' : brandSecondary;
 	let textColor = active ? brandSecondary : rowTextColor;
-	if (type === 'off') {
+	if (mode === 'off') {
 		iconBGColor = active ? brandPrimary : appBackground;
 		iconColor = active ? '#fff' : brandPrimary;
 		textColor = rowTextColor;

@@ -78,7 +78,7 @@ render(): Object {
 		modesCover,
 	} = this.getStyles();
 
-	const modesL = modes.map((mode: Object, i: number): Object => {
+	const modesL = modes.map((modeInfo: Object, i: number): Object => {
 		let {
 			label,
 			icon,
@@ -86,10 +86,10 @@ render(): Object {
 			value,
 			scale,
 			unit,
-			type,
-		} = mode;
+			mode,
+		} = modeInfo;
 		let active = false;
-		if (controlSelection === type) {
+		if (controlSelection === mode) {
 			active = true;
 		}
 		return (
@@ -104,7 +104,7 @@ render(): Object {
 				unit={unit}
 				active={active}
 				onPressRow={this.onPressRow}
-				type={type}/>
+				mode={mode}/>
 		);
 	});
 

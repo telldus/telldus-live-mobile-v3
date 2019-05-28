@@ -81,12 +81,12 @@ constructor(props: Props) {
 	const currentValue = modes[0].value;
 	const minVal = modes[0].minVal;
 	const maxVal = modes[0].maxVal;
-	const initialAngleLength = this.getAngleLengthToInitiate(modes[0].type, currentValue);
+	const initialAngleLength = this.getAngleLengthToInitiate(modes[0].mode, currentValue);
 	this.state = {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
 		currentValue,
-		controlSelection: modes[0].type,
+		controlSelection: modes[0].mode,
 		baseColor: modes[0].endColor,
 		gradientColorFrom: modes[0].startColor,
 		gradientColorTo: modes[0].endColor,
@@ -96,14 +96,14 @@ constructor(props: Props) {
 	};
 }
 
-getValueFromAngle = (angleLength: number, type: string): Object => {
+getValueFromAngle = (angleLength: number, currMode: string): Object => {
 	const angleRange = this.maxALength - this.minALength;
 	const relativeCurrentAngleLen = angleLength - this.minALength;
 	const percentageCurrentAngleLen = relativeCurrentAngleLen * 100 / angleRange;
 
 	let cMode = {};
 	this.props.modes.map((mode: Object) => {
-		if (mode.type === type) {
+		if (mode.mode === currMode) {
 			cMode = mode;
 		}
 	});
@@ -127,10 +127,10 @@ getValueFromAngle = (angleLength: number, type: string): Object => {
 	return {temp: temp};
 }
 
-getAngleLengthToInitiate(type: string, currentValue: number): number {
+getAngleLengthToInitiate(currMode: string, currentValue: number): number {
 	let cMode = {};
 	this.props.modes.map((mode: Object) => {
-		if (mode.type === type) {
+		if (mode.mode === currMode) {
 			cMode = mode;
 		}
 	});
@@ -165,12 +165,12 @@ onUpdate = (data: Object) => {
 onPressRow = (controlType: string) => {
 	let cMode = {};
 	this.props.modes.map((mode: Object) => {
-		if (mode.type === controlType) {
+		if (mode.mode === controlType) {
 			cMode = mode;
 		}
 	});
-	const { type, value, endColor, startColor, label, minVal, maxVal } = cMode;
-	const initialAngleLength = this.getAngleLengthToInitiate(type, value);
+	const { mode, value, endColor, startColor, label, minVal, maxVal } = cMode;
+	const initialAngleLength = this.getAngleLengthToInitiate(mode, value);
 	this.setState({
 		controlSelection: controlType,
 		angleLength: initialAngleLength,

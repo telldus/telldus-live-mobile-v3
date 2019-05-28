@@ -33,7 +33,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: '°C',
 			startColor: '#23C4FA',
 			endColor: '#015095',
-			type: 'auto',
+			mode: 'auto',
 		},
 		{
 			label: 'Heat',
@@ -43,7 +43,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: '°C',
 			startColor: '#FFB741',
 			endColor: '#E26901',
-			type: 'heat',
+			mode: 'heat',
 		},
 		{
 			label: 'Cool',
@@ -53,7 +53,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: '°C',
 			startColor: '#23C4FA',
 			endColor: '#015095',
-			type: 'cool',
+			mode: 'cool',
 		},
 		{
 			label: 'Eco Heat',
@@ -63,7 +63,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: '°C',
 			startColor: '#FFB741',
 			endColor: '#E26901',
-			type: 'eco-heat',
+			mode: 'eco-heat',
 		},
 		{
 			label: 'Eco Cool',
@@ -73,7 +73,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: '°C',
 			startColor: '#23C4FA',
 			endColor: '#015095',
-			type: 'eco-cool',
+			mode: 'eco-cool',
 		},
 		{
 			label: 'Heat-cool',
@@ -83,7 +83,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: '°C',
 			startColor: '#004D92',
 			endColor: '#e26901',
-			type: 'heat-cool',
+			mode: 'heat-cool',
 		},
 		{
 			label: 'Manual',
@@ -93,7 +93,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: null,
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'manual',
+			mode: 'manual',
 		},
 		{
 			label: 'Program',
@@ -103,7 +103,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: null,
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'program',
+			mode: 'program',
 		},
 		{
 			label: 'Dry',
@@ -113,7 +113,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: null,
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'dry',
+			mode: 'dry',
 		},
 		{
 			label: 'Away',
@@ -123,7 +123,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: null,
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'away',
+			mode: 'away',
 		},
 		{
 			label: 'HG',
@@ -133,7 +133,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: null,
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'hg',
+			mode: 'hg',
 		},
 		{
 			label: 'Max',
@@ -143,7 +143,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			unit: null,
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'max',
+			mode: 'max',
 		},
 		{
 			label: 'Off',
@@ -151,7 +151,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			icon: 'off',
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'off',
+			mode: 'off',
 		},
 		{
 			label: 'Fan',
@@ -159,7 +159,7 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			icon: 'fire',
 			startColor: '#cccccc',
 			endColor: '#999999',
-			type: 'fan',
+			mode: 'fan',
 		},
 	];
 };
