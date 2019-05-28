@@ -83,19 +83,38 @@ render(): Object | null {
 	const {
 		name,
 		parameter,
+		stateValues,
 	} = device;
 
-	let modes = [];
+	const { THERMOSTAT: { setpoint = {} } } = stateValues;
+
+	let modes = {};
 	parameter.map((param: Object) => {
 		if (param.name && param.name === 'thermostat') {
-			modes = param.value.modes;
+			const { modes: MODES, setpoints = {} } = param.value;
+			MODES.map((mode: string) => {
+				const minMax = setpoints[mode];
+				if (minMax) {
+					modes[mode] = {
+						...minMax,
+					};
+				} else {
+					modes[mode] = {};
+				}
+			});
 		}
 	});
 
 	let supportedModes = [];
 	getKnowModes(intl.formatMessage).map((mode: Object) => {
 		const { type } = mode;
-		if (modes.indexOf(type) !== -1) {
+		if (modes[type]) {
+			mode = {
+				...mode,
+				value: setpoint[type],
+				minVal: modes[type].min,
+				maxVal: modes[type].max,
+			};
 			supportedModes.push(mode);
 		}
 	});

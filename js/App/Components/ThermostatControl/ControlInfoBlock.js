@@ -44,6 +44,8 @@ type Props = {
     currentValue: string,
 	appLayout: Object,
 	lastUpdated: number,
+	showSlider: boolean,
+
 	intl: intlShape,
 };
 
@@ -205,7 +207,7 @@ render(): Object {
 }
 
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, showSlider } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -217,7 +219,7 @@ getStyles(): Object {
 
 	return {
 		InfoCover: {
-			position: 'absolute',
+			position: showSlider ? 'absolute' : 'relative',
 			top: 0,
 			left: 0,
 			bottom: 0,

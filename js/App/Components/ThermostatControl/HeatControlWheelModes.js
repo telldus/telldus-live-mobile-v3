@@ -22,6 +22,7 @@
 'use strict';
 
 import React from 'react';
+import { LayoutAnimation } from 'react-native';
 import CircularSlider from 'react-native-circular-slider';
 
 import {
@@ -29,6 +30,8 @@ import {
 } from '../../../BaseComponents';
 import ModesList from './ModesList';
 import ControlInfoBlock from './ControlInfoBlock';
+
+import { LayoutAnimations } from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -48,6 +51,8 @@ type State = {
 	gradientColorFrom: string,
 	gradientColorTo: string,
 	title: string,
+	maxVal: number,
+	minVal: number,
 };
 
 class HeatControlWheelModes extends View<Props, State> {
@@ -74,6 +79,8 @@ constructor(props: Props) {
 	const { modes } = this.props;
 
 	const currentValue = modes[0].value;
+	const minVal = modes[0].minVal;
+	const maxVal = modes[0].maxVal;
 	const initialAngleLength = this.getAngleLengthToInitiate(modes[0].type, currentValue);
 	this.state = {
 		startAngle: this.initialAngle,
@@ -84,6 +91,8 @@ constructor(props: Props) {
 		gradientColorFrom: modes[0].startColor,
 		gradientColorTo: modes[0].endColor,
 		title: modes[0].label,
+		minVal,
+		maxVal,
 	};
 }
 
@@ -160,7 +169,7 @@ onPressRow = (controlType: string) => {
 			cMode = mode;
 		}
 	});
-	const { type, value, endColor, startColor, label } = cMode;
+	const { type, value, endColor, startColor, label, minVal, maxVal } = cMode;
 	const initialAngleLength = this.getAngleLengthToInitiate(type, value);
 	this.setState({
 		controlSelection: controlType,
@@ -170,7 +179,10 @@ onPressRow = (controlType: string) => {
 		gradientColorFrom: startColor,
 		gradientColorTo: endColor,
 		title: label,
+		minVal,
+		maxVal,
 	});
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
 
 render(): Object {
@@ -195,12 +207,16 @@ render(): Object {
 		gradientColorFrom,
 		gradientColorTo,
 		title,
+		minVal,
+		maxVal,
 	} = this.state;
+
+	const showSlider = typeof minVal === 'number' && typeof maxVal === 'number';
 
 	return (
 		<>
 			<View style={cover}>
-				<CircularSlider
+				{showSlider ? <CircularSlider
 					startAngle={startAngle}
 					maxAngleLength={this.maxALength}
 					angleLength={angleLength}
@@ -220,12 +236,16 @@ render(): Object {
 					knobRadius={18}
 					knobStrokeWidth={3}
 				/>
+					:
+					null
+				}
 				<ControlInfoBlock
 					appLayout={appLayout}
 					baseColor={baseColor}
 					currentValue={currentValue}
 					title={title}
 					lastUpdated={lastUpdated}
+					showSlider={showSlider}
 				/>
 			</View>
 			<ModesList
