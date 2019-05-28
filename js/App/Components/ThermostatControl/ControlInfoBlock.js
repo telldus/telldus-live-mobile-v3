@@ -41,13 +41,13 @@ import i18n from '../../Translations/common';
 type Props = {
 	baseColor: string,
     title: string,
-    currentValue: string,
+    currentValue: number,
 	appLayout: Object,
 	lastUpdated: number,
 	showSlider: boolean,
 	controllingMode: string,
 
-	onControlThermostat: (mode: string, temperature?: number, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
 	intl: intlShape,
 };
 
@@ -99,12 +99,14 @@ onChangeText = (value: string) => {
 	});
 }
 
-onSubmitEditing = (value: string) => {
+onSubmitEditing = () => {
 	this.setState({
 		editValue: false,
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-	this.props.onControlThermostat(this.props.controllingMode, this.state.editBoxValue, 1);
+
+	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
+	this.props.onControlThermostat(this.props.controllingMode, value, 1);
 }
 
 formatSensorLastUpdate = (time: string): string => {
