@@ -57,6 +57,7 @@ type State = {
 	editValue: boolean,
 	editBoxValue: string | null,
 	currentValue: number,
+	currentValueInScreen: number,
 };
 
 class ControlInfoBlock extends View<Props, State> {
@@ -68,6 +69,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		return {
 			editBoxValue: props.currentValue ? props.currentValue.toString() : null,
 			currentValue: props.currentValue,
+			currentValueInScreen: props.currentValue,
 		};
 	}
 	return null;
@@ -81,6 +83,7 @@ constructor(props: Props) {
 		editValue: false,
 		editBoxValue: currentValue ? currentValue.toString() : null,
 		currentValue,
+		currentValueInScreen: currentValue,
 	};
 }
 
@@ -102,6 +105,7 @@ onChangeText = (value: string) => {
 	}
 	this.setState({
 		editBoxValue: value,
+		currentValueInScreen: parseFloat(value),
 	});
 }
 
@@ -134,15 +138,16 @@ render(): Object {
 	const {
 		baseColor,
 		title,
-		currentValue,
 		appLayout,
 		lastUpdated,
 		intl,
+		currentValue,
 	} = this.props;
 
 	const {
 		editValue,
 		editBoxValue,
+		currentValueInScreen,
 	} = this.state;
 
 	const {
@@ -163,7 +168,8 @@ render(): Object {
 		doneIconCoverStyle,
 	} = this.getStyles();
 
-	const cModevalue = this.formatModeValue(currentValue);
+	const cModevalue = this.formatModeValue(currentValueInScreen);
+	const currModevalue = this.formatModeValue(currentValue);
 	return (
 		<View style={InfoCover}>
 			{!!title && <Text style={[infoTitleStyle, {
@@ -223,7 +229,7 @@ render(): Object {
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
-					{cModevalue}
+					{currModevalue}
 				</Text>
 				<Text style={cUnitStyle}>
 							°C
