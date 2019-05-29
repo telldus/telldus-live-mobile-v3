@@ -115,6 +115,14 @@ onSubmitEditing = () => {
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 
+	if (!this.state.editBoxValue || this.state.editBoxValue === '') {
+		this.setState({
+			editBoxValue: this.props.currentValue ? this.props.currentValue.toString() : null,
+			currentValueInScreen: this.props.currentValue,
+		});
+		return;
+	}
+
 	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue).toFixed(1) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
