@@ -62,6 +62,17 @@ props: Props;
 state: State;
 
 onPressRow: () => void;
+
+static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+	if (props.value !== state.value) {
+		return {
+			editBoxValue: props.value ? props.value.toString() : null,
+			currentValue: props.value,
+		};
+	}
+	return null;
+}
+
 constructor(props: Props) {
 	super(props);
 
