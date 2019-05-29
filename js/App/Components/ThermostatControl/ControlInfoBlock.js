@@ -120,7 +120,7 @@ formatSensorLastUpdate = (time: string): string => {
 	return formatSensorLastUpdate(time, this.props.intl);
 }
 
-formatModeValue = (modeValue: number): () => string | number => {
+formatModeValue = (modeValue: number): string | number => {
 	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
 	return isNaN(formatModeValue(val)) ? '' : formatModeValue(val);
 }

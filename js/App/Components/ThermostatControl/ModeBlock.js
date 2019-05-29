@@ -46,6 +46,7 @@ type Props = {
 	mode: string,
 	maxVal: number,
 	minVal: number,
+	currentValue: number,
 
 	onPressRow: (string) => void,
 	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
@@ -99,7 +100,7 @@ onSubmitEditing = () => {
 	});
 
 	if (!this.props.value || this.props.value === '') {
-		this.props.updateCurrentValueInScreen(this.props.value);
+		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
@@ -151,7 +152,7 @@ onPressDown = () => {
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
-formatModeValue = (modeValue?: number): () => string | number => {
+formatModeValue = (modeValue?: number): string | number => {
 	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
 	return isNaN(formatModeValue(val)) ? '' : formatModeValue(val);
 }

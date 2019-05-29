@@ -37,6 +37,8 @@ type Props = {
     appLayout: Object,
 	controllingMode: 'heat' | 'cool' | 'heat-cool' | 'off',
 	modes: Array<Object>,
+	currentValue: number,
+	currentValueInScreen: number,
 
 	onPressRow: (string) => void,
 	intl: intlShape,

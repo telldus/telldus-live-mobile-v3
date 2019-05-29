@@ -92,7 +92,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { controllingMode } = state;
 	const { device: { methodRequested } } = props;
 
-	let newValue;
+	let newValue = 0;
 	props.modes.map((modeInfo: Object) => {
 		if (modeInfo.mode === controllingMode) {
 			newValue = modeInfo.value;
@@ -340,6 +340,7 @@ render(): Object {
 				modes={modes}
 				onControlThermostat={this.onControlThermostat}
 				onEditSubmitValue={this.onEditSubmitValue}
+				currentValue={currentValue}
 				currentValueInScreen={currentValueInScreen}
 				updateCurrentValueInScreen={this.updateCurrentValueInScreen}/>
 		</>
