@@ -53,13 +53,12 @@ type Props = {
 	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
 	intl: intlShape,
 	onEditSubmitValue: (number) => void,
+	updateCurrentValueInScreen: (string) => void,
 };
 
 type State = {
 	editValue: boolean,
-	editBoxValue: string | null,
 	currentValue: number,
-	currentValueInScreen: number,
 };
 
 class ControlInfoBlock extends View<Props, State> {
@@ -69,14 +68,7 @@ state: State;
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (props.currentValue !== state.currentValue) {
 		return {
-			editBoxValue: props.currentValue ? props.currentValue.toString() : null,
 			currentValue: props.currentValue,
-			currentValueInScreen: props.currentValue,
-		};
-	}
-	if (props.currentValueInScreen !== state.currentValueInScreen) {
-		return {
-			currentValueInScreen: props.currentValueInScreen,
 		};
 	}
 	return null;
@@ -88,9 +80,7 @@ constructor(props: Props) {
 	const { currentValue } = props;
 	this.state = {
 		editValue: false,
-		editBoxValue: currentValue ? currentValue.toString() : null,
 		currentValue,
-		currentValueInScreen: currentValue,
 	};
 }
 
@@ -110,10 +100,7 @@ onChangeText = (value: string) => {
 	if (parseFloat(value) > maxVal || parseFloat(value) < minVal) {
 		return;
 	}
-	this.setState({
-		editBoxValue: value,
-		currentValueInScreen: (value),
-	});
+	this.props.updateCurrentValueInScreen(value);
 }
 
 onSubmitEditing = () => {
@@ -121,23 +108,20 @@ onSubmitEditing = () => {
 		editValue: false,
 	});
 
-	if (!this.state.editBoxValue || this.state.editBoxValue === '') {
-		this.setState({
-			editBoxValue: this.props.currentValue ? this.props.currentValue.toString() : null,
-			currentValueInScreen: this.props.currentValue,
-		});
+	if (!this.props.currentValueInScreen || this.props.currentValueInScreen === '') {
+		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
-	const value = this.state.editBoxValue ? parseFloat(parseFloat(this.state.editBoxValue).toFixed(1)) : null;
+	const value = this.props.currentValueInScreen ? parseFloat(parseFloat(this.props.currentValueInScreen).toFixed(1)) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
-	if (value) {
+	if (value !== null) {
 		this.props.onEditSubmitValue(value);
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
@@ -162,12 +146,11 @@ render(): Object {
 		lastUpdated,
 		intl,
 		currentValue,
+		currentValueInScreen,
 	} = this.props;
 
 	const {
 		editValue,
-		editBoxValue,
-		currentValueInScreen,
 	} = this.state;
 
 	const {
@@ -212,7 +195,7 @@ render(): Object {
 							justifyContent: 'center',
 						}}>
 							<EditBox
-								value={editBoxValue}
+								value={currentValueInScreen ? currentValueInScreen.toString() : ''}
 								appLayout={appLayout}
 								containerStyle={editBoxStyle}
 								textStyle={textStyle}

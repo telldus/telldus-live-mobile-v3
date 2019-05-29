@@ -133,7 +133,7 @@ onSubmitEditing = () => {
 		return;
 	}
 
-	if (value) {
+	if (value !== null) {
 		this.props.onEditSubmitValue(value);
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
@@ -160,6 +160,7 @@ onPressUp = () => {
 		editBoxValue: nextValue.toString(),
 		currentValueInScreen: nextValue,
 	});
+	this.props.onEditSubmitValue(parseFloat(nextValue));
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
@@ -174,6 +175,7 @@ onPressDown = () => {
 		editBoxValue: nextValue.toString(),
 		currentValueInScreen: nextValue,
 	});
+	this.props.onEditSubmitValue(parseFloat(nextValue));
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 

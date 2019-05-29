@@ -178,6 +178,12 @@ getAngleLengthToInitiate(currMode: string, currentValueInScreen: number): number
 	return	currentAngleLen;
 }
 
+updateCurrentValueInScreen = (currentValueInScreen: string) => {
+	this.setState({
+		currentValueInScreen: parseFloat(currentValueInScreen),
+	});
+}
+
 onUpdate = (data: Object) => {
 	const {startAngle, angleLength} = data;
 	const { temp } = this.getValueFromAngle(angleLength, this.state.controllingMode);
@@ -188,11 +194,12 @@ onUpdate = (data: Object) => {
 	});
 }
 
-onEditSubmitValue = (newValue: any) => {
+onEditSubmitValue = (newValue: number) => {
 	const { controllingMode } = this.state;
 	const angleLength = this.getAngleLengthToInitiate(controllingMode, newValue);
 	this.setState({
 		angleLength,
+		currentValueInScreen: newValue,
 	});
 }
 
@@ -294,6 +301,7 @@ render(): Object {
 					minVal={minVal}
 					maxVal={maxVal}
 					onEditSubmitValue={this.onEditSubmitValue}
+					updateCurrentValueInScreen={this.updateCurrentValueInScreen}
 				/>
 			</View>
 			<ModesList
