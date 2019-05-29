@@ -97,7 +97,7 @@ class HeatInfoBlock extends View {
 						<Text style={{fontSize: 8, color: '#fff'}}>°C</Text>
 					</Text>
 					<Text style={{textAlign: 'left', fontSize: 8, color: '#fff'}}>
-						{currentMode.toUpperCase()}
+						{!!currentMode && currentMode.toUpperCase()}
 					</Text>
 				</View>
 				{

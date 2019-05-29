@@ -59,6 +59,26 @@ type State = {
 	methodRequested: string,
 };
 
+function getAngleLengthToInitiate(currMode: string, currentValueInScreen: number, modes: Array<Object>): number {
+	let cMode = {};
+	modes.map((mode: Object) => {
+		if (mode.mode === currMode) {
+			cMode = mode;
+		}
+	});
+	const { maxVal, minVal } = cMode;
+	const valueRange = maxVal - minVal;
+	const relativeValue = currentValueInScreen - minVal;
+	const percentageRelativeValue = relativeValue * 100 / valueRange;
+
+	const angleLenRange = HeatControlWheelModes.maxALength - HeatControlWheelModes.minALength;
+	const relativeAngle = angleLenRange * percentageRelativeValue / 100;
+
+	const currentAngleLen = HeatControlWheelModes.minALength + relativeAngle;
+
+	return	currentAngleLen;
+}
+
 class HeatControlWheelModes extends View<Props, State> {
 props: Props;
 state: State;
@@ -81,15 +101,17 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (newValue !== state.currentValue) {
 		return {
 			currentValue: newValue,
-			currentValueInScreen: newValue,
+			currentValueInScreen: parseFloat(newValue),
 			methodRequested,
+			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
 		};
 	}
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
 		return {
 			currentValue: newValue,
-			currentValueInScreen: newValue,
+			currentValueInScreen: parseFloat(newValue),
 			methodRequested,
+			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
 		};
 	}
 	if (methodRequested !== '' && state.methodRequested === '') {
@@ -100,6 +122,10 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	return null;
 }
 
+static maxALength = Math.PI * 1.5;
+static minALength = 0;
+static step = 0.5;
+
 constructor(props: Props) {
 	super(props);
 
@@ -107,11 +133,7 @@ constructor(props: Props) {
 	this.onPressRow = this.onPressRow.bind(this);
 	this.getValueFromAngle = this.getValueFromAngle.bind(this);
 
-	this.maxALength = Math.PI * 1.5;
-	this.minALength = 0;
 	this.initialAngle = Math.PI * 1.25;
-
-	this.step = 0.5;
 
 	const { modes, device } = this.props;
 	const { stateValues: {THERMOSTAT = {}}, methodRequested } = device;
@@ -127,7 +149,7 @@ constructor(props: Props) {
 	const currentValue = cModeInfo.value;
 	const minVal = cModeInfo.minVal;
 	const maxVal = cModeInfo.maxVal;
-	const initialAngleLength = this.getAngleLengthToInitiate(cModeInfo.mode, currentValue);
+	const initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
 	this.state = {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
@@ -145,8 +167,8 @@ constructor(props: Props) {
 }
 
 getValueFromAngle = (angleLength: number, currMode: string): Object => {
-	const angleRange = this.maxALength - this.minALength;
-	const relativeCurrentAngleLen = angleLength - this.minALength;
+	const angleRange = HeatControlWheelModes.maxALength - HeatControlWheelModes.minALength;
+	const relativeCurrentAngleLen = angleLength - HeatControlWheelModes.minALength;
 	const percentageCurrentAngleLen = relativeCurrentAngleLen * 100 / angleRange;
 
 	let cMode = {};
@@ -162,7 +184,7 @@ getValueFromAngle = (angleLength: number, currMode: string): Object => {
 
 	const t = minVal + relativeValue;
 	const temp1 = Math.round(t);
-	const temp2 = temp1 + this.step;
+	const temp2 = temp1 + HeatControlWheelModes.step;
 
 	const d1 = Math.abs(temp1 - t);
 	const d2 = Math.abs(temp2 - t);
@@ -173,26 +195,6 @@ getValueFromAngle = (angleLength: number, currMode: string): Object => {
 		temp = temp2;
 	}
 	return {temp: temp};
-}
-
-getAngleLengthToInitiate(currMode: string, currentValueInScreen: number): number {
-	let cMode = {};
-	this.props.modes.map((mode: Object) => {
-		if (mode.mode === currMode) {
-			cMode = mode;
-		}
-	});
-	const { maxVal, minVal } = cMode;
-	const valueRange = maxVal - minVal;
-	const relativeValue = currentValueInScreen - minVal;
-	const percentageRelativeValue = relativeValue * 100 / valueRange;
-
-	const angleLenRange = this.maxALength - this.minALength;
-	const relativeAngle = angleLenRange * percentageRelativeValue / 100;
-
-	const currentAngleLen = this.minALength + relativeAngle;
-
-	return	currentAngleLen;
 }
 
 updateCurrentValueInScreen = (currentValueInScreen: string) => {
@@ -207,16 +209,16 @@ onUpdate = (data: Object) => {
 	this.setState({
 		angleLength,
 		startAngle,
-		currentValueInScreen: temp,
+		currentValueInScreen: parseFloat(temp),
 	});
 }
 
 onEditSubmitValue = (newValue: number) => {
 	const { controllingMode } = this.state;
-	const angleLength = this.getAngleLengthToInitiate(controllingMode, newValue);
+	const angleLength = getAngleLengthToInitiate(controllingMode, newValue, this.props.modes);
 	this.setState({
 		angleLength,
-		currentValueInScreen: newValue,
+		currentValueInScreen: parseFloat(newValue),
 	});
 }
 
@@ -235,11 +237,11 @@ onPressRow = (controlType: string) => {
 		}
 	});
 	const { mode, value, endColor, startColor, label, minVal, maxVal } = cMode;
-	const initialAngleLength = this.getAngleLengthToInitiate(mode, value);
+	const initialAngleLength = getAngleLengthToInitiate(mode, value, this.props.modes);
 	this.setState({
 		controllingMode: controlType,
 		angleLength: initialAngleLength,
-		currentValueInScreen: value,
+		currentValueInScreen: parseFloat(value),
 		baseColor: endColor,
 		gradientColorFrom: startColor,
 		gradientColorTo: endColor,
@@ -248,6 +250,14 @@ onPressRow = (controlType: string) => {
 		maxVal,
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+}
+
+onEndSlide = () => {
+	const {
+		controllingMode,
+		currentValueInScreen,
+	} = this.state;
+	this.onControlThermostat(controllingMode, currentValueInScreen, controllingMode === 'off' ? 2 : 1);
 }
 
 render(): Object {
@@ -284,7 +294,7 @@ render(): Object {
 			<View style={cover}>
 				{showSlider ? <CircularSlider
 					startAngle={startAngle}
-					maxAngleLength={this.maxALength}
+					maxAngleLength={HeatControlWheelModes.maxALength}
 					angleLength={angleLength}
 					onUpdate={this.onUpdate}
 					segments={15}
@@ -301,6 +311,8 @@ render(): Object {
 					allowKnobBeyondLimits={false}
 					knobRadius={18}
 					knobStrokeWidth={3}
+					onReleaseStopKnob={this.onEndSlide}
+					onPressOutSliderPath={this.onEndSlide}
 				/>
 					:
 					null
