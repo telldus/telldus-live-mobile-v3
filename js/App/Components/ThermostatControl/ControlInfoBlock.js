@@ -192,7 +192,7 @@ render(): Object {
 						justifyContent: 'center',
 					}}>
 						<Text style={labelStyle}>
-							Temperature
+							{intl.formatMessage(i18n.labelTemperature)}
 						</Text>
 						<View style={{
 							flexDirection: 'row',
