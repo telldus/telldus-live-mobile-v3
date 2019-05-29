@@ -55,6 +55,8 @@ type Props = {
 type State = {
 	editBoxValue: string | null,
 	editValue: boolean,
+	currentValue: number,
+	currentValueInScreen: number,
 };
 
 class ModeBlock extends View<Props, State> {
@@ -67,7 +69,8 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (props.value !== state.value) {
 		return {
 			editBoxValue: props.value ? props.value.toString() : null,
-			currentValue: props.value,
+			value: props.value,
+			currentValueInScreen: props.value,
 		};
 	}
 	return null;
@@ -80,6 +83,7 @@ constructor(props: Props) {
 		editBoxValue: props.value ? props.value.toString() : null,
 		editValue: false,
 		value: props.value,
+		currentValueInScreen: props.value,
 	};
 
 	this.onPressRow = this.onPressRow.bind(this);
@@ -103,6 +107,7 @@ onChangeText = (value: string) => {
 	}
 	this.setState({
 		editBoxValue: value,
+		currentValueInScreen: parseFloat(value),
 	});
 }
 
@@ -111,6 +116,14 @@ onSubmitEditing = () => {
 		editValue: false,
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+
+	if (!this.state.editBoxValue || this.state.editBoxValue === '') {
+		this.setState({
+			editBoxValue: this.props.value ? this.props.value.toString() : null,
+			currentValueInScreen: this.props.value,
+		});
+		return;
+	}
 
 	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue).toFixed(1) : null;
 	const { maxVal, minVal, mode } = this.props;
@@ -136,16 +149,24 @@ onPressUp = () => {
 	if (typeof nextValue === 'number' && typeof maxVal === 'number' && (nextValue > maxVal)) {
 		return;
 	}
+	this.setState({
+		editBoxValue: nextValue.toString(),
+		currentValueInScreen: nextValue,
+	});
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
 onPressDown = () => {
 	const { minVal, mode, value } = this.props;
-	let nextValue = (parseFloat(value) - parseFloat(1)).toFixed(1);
+	let nextValue = (parseFloat(value) + parseFloat(-1)).toFixed(1);
 	this.onPressRow();
 	if (typeof nextValue === 'number' && typeof minVal === 'number' && (nextValue < minVal)) {
 		return;
 	}
+	this.setState({
+		editBoxValue: nextValue.toString(),
+		currentValueInScreen: nextValue,
+	});
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
@@ -197,9 +218,9 @@ render(): Object {
 		textColor = rowTextColor;
 	}
 
-	const { editValue, editBoxValue } = this.state;
+	const { editValue, editBoxValue, currentValueInScreen } = this.state;
 
-	const cModevalue = this.formatModeValue(value);
+	const cModevalue = this.formatModeValue(currentValueInScreen);
 
 	return (
 		<View style={cover}>
