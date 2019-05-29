@@ -110,7 +110,8 @@ render(): Object {
 				mode={mode}
 				minVal={minVal}
 				maxVal={maxVal}
-				onControlThermostat={this.props.onControlThermostat}/>
+				onControlThermostat={this.props.onControlThermostat}
+				intl={intl}/>
 		);
 	});
 

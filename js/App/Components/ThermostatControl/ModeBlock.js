@@ -32,7 +32,7 @@ import {
 } from '../../../BaseComponents';
 
 import Theme from '../../Theme';
-import { LayoutAnimations } from '../../Lib';
+import { LayoutAnimations, formatModeValue } from '../../Lib';
 
 type Props = {
     appLayout: Object,
@@ -49,6 +49,7 @@ type Props = {
 
 	onPressRow: (string) => void,
 	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
+	intl: Object,
 };
 
 type State = {
@@ -67,6 +68,7 @@ constructor(props: Props) {
 	this.state = {
 		editBoxValue: props.value ? props.value.toString() : null,
 		editValue: false,
+		value: props.value,
 	};
 
 	this.onPressRow = this.onPressRow.bind(this);
@@ -136,6 +138,11 @@ onPressDown = () => {
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
+formatModeValue = (modeValue: number): () => string | number => {
+	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
+	return formatModeValue(val);
+}
+
 render(): Object {
 
 	const {
@@ -181,6 +188,8 @@ render(): Object {
 
 	const { editValue, editBoxValue } = this.state;
 
+	const cModevalue = this.formatModeValue(value);
+
 	return (
 		<View style={cover}>
 			<View style={leftBlock}>
@@ -223,7 +232,7 @@ render(): Object {
 								:
 								<Text>
 									<Text style={[valueStyle, { color: textColor }]}>
-										{value}
+										{cModevalue}
 									</Text>
 									<Text style={[unitStyle, { color: textColor }]}>
 										{unit}
