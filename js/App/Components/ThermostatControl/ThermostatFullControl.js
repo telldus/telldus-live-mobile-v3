@@ -92,16 +92,29 @@ render(): Object | null {
 	parameter.map((param: Object) => {
 		if (param.name && param.name === 'thermostat') {
 			const { modes: MODES, setpoints = {} } = param.value;
-			MODES.map((mode: string) => {
-				const minMax = setpoints[mode];
-				if (minMax) {
-					modes[mode] = {
-						...minMax,
-					};
-				} else {
-					modes[mode] = {};
-				}
-			});
+			if (!MODES && Object.keys(setpoints).length > 0) {
+				Object.keys(setpoints).map((key: string) => {
+					const minMax = setpoints[key];
+					if (minMax) {
+						modes[key] = {
+							...minMax,
+						};
+					} else {
+						modes[key] = {};
+					}
+				});
+			} else {
+				MODES.map((mode: string) => {
+					const minMax = setpoints[mode];
+					if (minMax) {
+						modes[mode] = {
+							...minMax,
+						};
+					} else {
+						modes[mode] = {};
+					}
+				});
+			}
 		}
 	});
 
