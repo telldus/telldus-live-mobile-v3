@@ -55,6 +55,7 @@ type State = {
 	title: string,
 	maxVal: number,
 	minVal: number,
+	currentValueInScreen: number,
 };
 
 class HeatControlWheelModes extends View<Props, State> {
@@ -77,6 +78,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (state.currentValue !== newValue) {
 		return {
 			currentValue: newValue,
+			currentValueInScreen: newValue,
 		};
 	}
 	return null;
@@ -114,6 +116,7 @@ constructor(props: Props) {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
 		currentValue,
+		currentValueInScreen: currentValue,
 		controllingMode: cModeInfo.mode,
 		baseColor: cModeInfo.endColor,
 		gradientColorFrom: cModeInfo.startColor,
@@ -155,7 +158,7 @@ getValueFromAngle = (angleLength: number, currMode: string): Object => {
 	return {temp: temp};
 }
 
-getAngleLengthToInitiate(currMode: string, currentValue: number): number {
+getAngleLengthToInitiate(currMode: string, currentValueInScreen: number): number {
 	let cMode = {};
 	this.props.modes.map((mode: Object) => {
 		if (mode.mode === currMode) {
@@ -164,7 +167,7 @@ getAngleLengthToInitiate(currMode: string, currentValue: number): number {
 	});
 	const { maxVal, minVal } = cMode;
 	const valueRange = maxVal - minVal;
-	const relativeValue = currentValue - minVal;
+	const relativeValue = currentValueInScreen - minVal;
 	const percentageRelativeValue = relativeValue * 100 / valueRange;
 
 	const angleLenRange = this.maxALength - this.minALength;
@@ -178,11 +181,18 @@ getAngleLengthToInitiate(currMode: string, currentValue: number): number {
 onUpdate = (data: Object) => {
 	const {startAngle, angleLength} = data;
 	const { temp } = this.getValueFromAngle(angleLength, this.state.controllingMode);
-
 	this.setState({
 		angleLength,
 		startAngle,
-		currentValue: temp,
+		currentValueInScreen: temp,
+	});
+}
+
+onEditSubmitValue = (newValue: any) => {
+	const { controllingMode } = this.state;
+	const angleLength = this.getAngleLengthToInitiate(controllingMode, newValue);
+	this.setState({
+		angleLength,
 	});
 }
 
@@ -205,7 +215,7 @@ onPressRow = (controlType: string) => {
 	this.setState({
 		controllingMode: controlType,
 		angleLength: initialAngleLength,
-		currentValue: value,
+		currentValueInScreen: value,
 		baseColor: endColor,
 		gradientColorFrom: startColor,
 		gradientColorTo: endColor,
@@ -232,7 +242,7 @@ render(): Object {
 	const {
 		startAngle,
 		angleLength,
-		currentValue,
+		currentValueInScreen,
 		controllingMode,
 		baseColor,
 		gradientColorFrom,
@@ -240,6 +250,7 @@ render(): Object {
 		title,
 		minVal,
 		maxVal,
+		currentValue,
 	} = this.state;
 
 	const showSlider = typeof minVal === 'number' && typeof maxVal === 'number';
@@ -274,6 +285,7 @@ render(): Object {
 					appLayout={appLayout}
 					baseColor={baseColor}
 					currentValue={currentValue}
+					currentValueInScreen={currentValueInScreen}
 					title={title}
 					lastUpdated={lastUpdated}
 					showSlider={showSlider}
@@ -281,6 +293,7 @@ render(): Object {
 					controllingMode={controllingMode}
 					minVal={minVal}
 					maxVal={maxVal}
+					onEditSubmitValue={this.onEditSubmitValue}
 				/>
 			</View>
 			<ModesList
@@ -288,7 +301,8 @@ render(): Object {
 				onPressRow={this.onPressRow}
 				controllingMode={controllingMode}
 				modes={modes}
-				onControlThermostat={this.onControlThermostat}/>
+				onControlThermostat={this.onControlThermostat}
+				onEditSubmitValue={this.onEditSubmitValue}/>
 		</>
 	);
 }

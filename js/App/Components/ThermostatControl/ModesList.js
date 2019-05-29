@@ -41,6 +41,7 @@ type Props = {
 	onPressRow: (string) => void,
 	intl: intlShape,
 	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
+	onEditSubmitValue: (number) => void,
 };
 
 class ModesList extends View<Props, null> {
@@ -111,7 +112,8 @@ render(): Object {
 				minVal={minVal}
 				maxVal={maxVal}
 				onControlThermostat={this.props.onControlThermostat}
-				intl={intl}/>
+				intl={intl}
+				onEditSubmitValue={this.props.onEditSubmitValue}/>
 		);
 	});
 

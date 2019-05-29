@@ -50,6 +50,7 @@ type Props = {
 	onPressRow: (string) => void,
 	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
 	intl: Object,
+	onEditSubmitValue: (number) => void,
 };
 
 type State = {
@@ -115,23 +116,29 @@ onSubmitEditing = () => {
 	this.setState({
 		editValue: false,
 	});
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 
 	if (!this.state.editBoxValue || this.state.editBoxValue === '') {
 		this.setState({
 			editBoxValue: this.props.value ? this.props.value.toString() : null,
 			currentValueInScreen: this.props.value,
 		});
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
-	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue).toFixed(1) : null;
+	const value = this.state.editBoxValue ? parseFloat(parseFloat(this.state.editBoxValue).toFixed(1)) : null;
 	const { maxVal, minVal, mode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
+	if (value) {
+		this.props.onEditSubmitValue(value);
+	}
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 	this.props.onControlThermostat(mode, value, mode === 'off' ? 2 : 1);
+
 }
 
 onPressEdit = () => {

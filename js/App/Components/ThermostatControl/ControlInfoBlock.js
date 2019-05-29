@@ -48,9 +48,11 @@ type Props = {
 	controllingMode: string,
 	maxVal: number,
 	minVal: number,
+	currentValueInScreen: number,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
 	intl: intlShape,
+	onEditSubmitValue: (number) => void,
 };
 
 type State = {
@@ -70,6 +72,11 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 			editBoxValue: props.currentValue ? props.currentValue.toString() : null,
 			currentValue: props.currentValue,
 			currentValueInScreen: props.currentValue,
+		};
+	}
+	if (props.currentValueInScreen !== state.currentValueInScreen) {
+		return {
+			currentValueInScreen: props.currentValueInScreen,
 		};
 	}
 	return null;
@@ -105,7 +112,7 @@ onChangeText = (value: string) => {
 	}
 	this.setState({
 		editBoxValue: value,
-		currentValueInScreen: parseFloat(value),
+		currentValueInScreen: (value),
 	});
 }
 
@@ -113,22 +120,27 @@ onSubmitEditing = () => {
 	this.setState({
 		editValue: false,
 	});
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 
 	if (!this.state.editBoxValue || this.state.editBoxValue === '') {
 		this.setState({
 			editBoxValue: this.props.currentValue ? this.props.currentValue.toString() : null,
 			currentValueInScreen: this.props.currentValue,
 		});
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
-	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue).toFixed(1) : null;
+	const value = this.state.editBoxValue ? parseFloat(parseFloat(this.state.editBoxValue).toFixed(1)) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
+	if (value) {
+		this.props.onEditSubmitValue(value);
+	}
+	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 	this.props.onControlThermostat(controllingMode, value, 1);
 }
 
