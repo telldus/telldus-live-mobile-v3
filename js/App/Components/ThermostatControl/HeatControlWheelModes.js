@@ -56,6 +56,7 @@ type State = {
 	maxVal: number,
 	minVal: number,
 	currentValueInScreen: number,
+	methodRequested: string,
 };
 
 class HeatControlWheelModes extends View<Props, State> {
@@ -69,16 +70,31 @@ getValueFromAngle: (number, string) => Object;
 
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { controllingMode } = state;
+	const { device: { methodRequested } } = props;
+
 	let newValue;
 	props.modes.map((modeInfo: Object) => {
 		if (modeInfo.mode === controllingMode) {
 			newValue = modeInfo.value;
 		}
 	});
-	if (state.currentValue !== newValue) {
+	if (newValue !== state.currentValue) {
 		return {
 			currentValue: newValue,
 			currentValueInScreen: newValue,
+			methodRequested,
+		};
+	}
+	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
+		return {
+			currentValue: newValue,
+			currentValueInScreen: newValue,
+			methodRequested,
+		};
+	}
+	if (methodRequested !== '' && state.methodRequested === '') {
+		return {
+			methodRequested,
 		};
 	}
 	return null;
@@ -98,7 +114,7 @@ constructor(props: Props) {
 	this.step = 0.5;
 
 	const { modes, device } = this.props;
-	const { stateValues: {THERMOSTAT = {}}} = device;
+	const { stateValues: {THERMOSTAT = {}}, methodRequested } = device;
 	const { mode } = THERMOSTAT;
 
 	let cModeInfo = modes[0];
@@ -116,7 +132,7 @@ constructor(props: Props) {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
 		currentValue,
-		currentValueInScreen: currentValue,
+		currentValueInScreen: parseFloat(currentValue),
 		controllingMode: cModeInfo.mode,
 		baseColor: cModeInfo.endColor,
 		gradientColorFrom: cModeInfo.startColor,
@@ -124,6 +140,7 @@ constructor(props: Props) {
 		title: cModeInfo.label,
 		minVal,
 		maxVal,
+		methodRequested,
 	};
 }
 

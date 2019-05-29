@@ -58,29 +58,17 @@ type Props = {
 
 type State = {
 	editValue: boolean,
-	currentValue: number,
 };
 
 class ControlInfoBlock extends View<Props, State> {
 props: Props;
 state: State;
 
-static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-	if (props.currentValue !== state.currentValue) {
-		return {
-			currentValue: props.currentValue,
-		};
-	}
-	return null;
-}
-
 constructor(props: Props) {
 	super(props);
 
-	const { currentValue } = props;
 	this.state = {
 		editValue: false,
-		currentValue,
 	};
 }
 
@@ -195,7 +183,7 @@ render(): Object {
 							justifyContent: 'center',
 						}}>
 							<EditBox
-								value={currentValueInScreen ? currentValueInScreen.toString() : ''}
+								value={currentValueInScreen ? currentValueInScreen.toFixed(1).toString() : ''}
 								appLayout={appLayout}
 								containerStyle={editBoxStyle}
 								textStyle={textStyle}
