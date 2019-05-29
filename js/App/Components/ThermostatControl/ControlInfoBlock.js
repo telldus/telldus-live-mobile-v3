@@ -49,7 +49,7 @@ type Props = {
 	maxVal: number,
 	minVal: number,
 
-	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
 	intl: intlShape,
 };
 

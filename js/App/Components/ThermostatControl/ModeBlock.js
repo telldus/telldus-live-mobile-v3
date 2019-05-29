@@ -48,15 +48,15 @@ type Props = {
 	minVal: number,
 
 	onPressRow: (string) => void,
-	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
 	intl: Object,
 };
 
 type State = {
 	editBoxValue: string | null,
 	editValue: boolean,
-	currentValue: number,
-	currentValueInScreen: number,
+	value?: number,
+	currentValueInScreen?: number,
 };
 
 class ModeBlock extends View<Props, State> {
@@ -170,7 +170,7 @@ onPressDown = () => {
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
-formatModeValue = (modeValue: number): () => string | number => {
+formatModeValue = (modeValue?: number): () => string | number => {
 	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
 	return formatModeValue(val);
 }
