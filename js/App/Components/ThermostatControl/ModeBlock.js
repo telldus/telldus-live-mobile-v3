@@ -99,7 +99,7 @@ onSubmitEditing = () => {
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 
-	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
+	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue).toFixed(1) : null;
 	const { maxVal, minVal, mode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
 		return;
@@ -118,7 +118,7 @@ onPressEdit = () => {
 
 onPressUp = () => {
 	const { maxVal, mode, value } = this.props;
-	let nextValue = parseFloat(value) + 1;
+	let nextValue = parseFloat(value).toFixed(1) + 1;
 	this.onPressRow();
 	if (typeof nextValue === 'number' && typeof maxVal === 'number' && (nextValue > maxVal)) {
 		return;
@@ -128,7 +128,7 @@ onPressUp = () => {
 
 onPressDown = () => {
 	const { minVal, mode, value } = this.props;
-	let nextValue = parseFloat(value) - 1;
+	let nextValue = parseFloat(value).toFixed(1) - 1;
 	this.onPressRow();
 	if (typeof nextValue === 'number' && typeof minVal === 'number' && (nextValue < minVal)) {
 		return;

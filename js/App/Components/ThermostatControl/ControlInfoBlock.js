@@ -111,7 +111,7 @@ onSubmitEditing = () => {
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 
-	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue) : null;
+	const value = this.state.editBoxValue ? parseFloat(this.state.editBoxValue).toFixed(1) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
 		return;
