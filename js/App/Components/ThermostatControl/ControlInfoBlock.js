@@ -122,7 +122,7 @@ formatSensorLastUpdate = (time: string): string => {
 
 formatModeValue = (modeValue: number): () => string | number => {
 	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
-	return formatModeValue(val);
+	return isNaN(formatModeValue(val)) ? '' : formatModeValue(val);
 }
 
 render(): Object {
@@ -183,7 +183,7 @@ render(): Object {
 							justifyContent: 'center',
 						}}>
 							<EditBox
-								value={currentValueInScreen ? currentValueInScreen.toFixed(1).toString() : ''}
+								value={currentValueInScreen ? currentValueInScreen.toString() : ''}
 								appLayout={appLayout}
 								containerStyle={editBoxStyle}
 								textStyle={textStyle}

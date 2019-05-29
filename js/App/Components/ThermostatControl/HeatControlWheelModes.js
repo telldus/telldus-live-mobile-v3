@@ -339,7 +339,9 @@ render(): Object {
 				controllingMode={controllingMode}
 				modes={modes}
 				onControlThermostat={this.onControlThermostat}
-				onEditSubmitValue={this.onEditSubmitValue}/>
+				onEditSubmitValue={this.onEditSubmitValue}
+				currentValueInScreen={currentValueInScreen}
+				updateCurrentValueInScreen={this.updateCurrentValueInScreen}/>
 		</>
 	);
 }

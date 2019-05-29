@@ -42,6 +42,7 @@ type Props = {
 	intl: intlShape,
 	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
 	onEditSubmitValue: (number) => void,
+	updateCurrentValueInScreen: (string) => void,
 };
 
 class ModesList extends View<Props, null> {
@@ -73,6 +74,7 @@ render(): Object {
 		controllingMode,
 		modes,
 		intl,
+		currentValueInScreen,
 	} = this.props;
 
 	const {
@@ -103,7 +105,7 @@ render(): Object {
 				label={label}
 				edit={edit}
 				icon={icon}
-				value={value}
+				value={controllingMode === mode ? currentValueInScreen : value}
 				scale={scale}
 				unit={unit}
 				active={active}
@@ -113,7 +115,8 @@ render(): Object {
 				maxVal={maxVal}
 				onControlThermostat={this.props.onControlThermostat}
 				intl={intl}
-				onEditSubmitValue={this.props.onEditSubmitValue}/>
+				onEditSubmitValue={this.props.onEditSubmitValue}
+				updateCurrentValueInScreen={this.props.updateCurrentValueInScreen}/>
 		);
 	});
 

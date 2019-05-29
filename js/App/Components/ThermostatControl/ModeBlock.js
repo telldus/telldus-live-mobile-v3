@@ -51,13 +51,11 @@ type Props = {
 	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
 	intl: Object,
 	onEditSubmitValue: (number) => void,
+	updateCurrentValueInScreen: (string) => void,
 };
 
 type State = {
-	editBoxValue: string | null,
 	editValue: boolean,
-	value?: number,
-	currentValueInScreen?: number,
 };
 
 class ModeBlock extends View<Props, State> {
@@ -66,25 +64,11 @@ state: State;
 
 onPressRow: () => void;
 
-static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-	if (props.value !== state.value) {
-		return {
-			editBoxValue: props.value ? props.value.toString() : null,
-			value: props.value,
-			currentValueInScreen: props.value,
-		};
-	}
-	return null;
-}
-
 constructor(props: Props) {
 	super(props);
 
 	this.state = {
-		editBoxValue: props.value ? props.value.toString() : null,
 		editValue: false,
-		value: props.value,
-		currentValueInScreen: props.value,
 	};
 
 	this.onPressRow = this.onPressRow.bind(this);
@@ -106,10 +90,7 @@ onChangeText = (value: string) => {
 	if (typeof minVal === 'number' && typeof maxVal === 'number' && (parseFloat(value) > maxVal || parseFloat(value) < minVal)) {
 		return;
 	}
-	this.setState({
-		editBoxValue: value,
-		currentValueInScreen: parseFloat(value),
-	});
+	this.props.updateCurrentValueInScreen(value);
 }
 
 onSubmitEditing = () => {
@@ -117,16 +98,13 @@ onSubmitEditing = () => {
 		editValue: false,
 	});
 
-	if (!this.state.editBoxValue || this.state.editBoxValue === '') {
-		this.setState({
-			editBoxValue: this.props.value ? this.props.value.toString() : null,
-			currentValueInScreen: this.props.value,
-		});
+	if (!this.props.value || this.props.value === '') {
+		this.props.updateCurrentValueInScreen(this.props.value);
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
-	const value = this.state.editBoxValue ? parseFloat(parseFloat(this.state.editBoxValue).toFixed(1)) : null;
+	const value = this.props.value ? parseFloat(parseFloat(this.props.value).toFixed(1)) : null;
 	const { maxVal, minVal, mode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
@@ -156,10 +134,7 @@ onPressUp = () => {
 	if (typeof nextValue === 'number' && typeof maxVal === 'number' && (nextValue > maxVal)) {
 		return;
 	}
-	this.setState({
-		editBoxValue: nextValue.toString(),
-		currentValueInScreen: nextValue,
-	});
+	this.props.updateCurrentValueInScreen(nextValue);
 	this.props.onEditSubmitValue(parseFloat(nextValue));
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
@@ -171,17 +146,14 @@ onPressDown = () => {
 	if (typeof nextValue === 'number' && typeof minVal === 'number' && (nextValue < minVal)) {
 		return;
 	}
-	this.setState({
-		editBoxValue: nextValue.toString(),
-		currentValueInScreen: nextValue,
-	});
+	this.props.updateCurrentValueInScreen(nextValue);
 	this.props.onEditSubmitValue(parseFloat(nextValue));
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
 formatModeValue = (modeValue?: number): () => string | number => {
 	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
-	return formatModeValue(val);
+	return isNaN(formatModeValue(val)) ? '' : formatModeValue(val);
 }
 
 render(): Object {
@@ -227,9 +199,9 @@ render(): Object {
 		textColor = rowTextColor;
 	}
 
-	const { editValue, editBoxValue, currentValueInScreen } = this.state;
+	const { editValue } = this.state;
 
-	const cModevalue = this.formatModeValue(currentValueInScreen);
+	const cModevalue = this.formatModeValue(value);
 
 	return (
 		<View style={cover}>
@@ -244,7 +216,7 @@ render(): Object {
 						{label.toUpperCase()}
 					</Text>
 				</TouchableOpacity>
-				{!!value && (
+				{(value !== null && typeof value !== 'undefined') && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
 							<TouchableOpacity onPress={this.onPressUp}>
@@ -259,7 +231,7 @@ render(): Object {
 								{scale}
 							</Text>
 							{editValue ? <TextInput
-								value={editBoxValue}
+								value={value ? value.toString() : ''}
 								style={textStyle}
 								onChangeText={this.onChangeText}
 								onSubmitEditing={this.onSubmitEditing}
