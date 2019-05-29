@@ -131,7 +131,7 @@ onPressEdit = () => {
 
 onPressUp = () => {
 	const { maxVal, mode, value } = this.props;
-	let nextValue = parseFloat(value).toFixed(1) + 1;
+	let nextValue = (parseFloat(value) + parseFloat(1)).toFixed(1);
 	this.onPressRow();
 	if (typeof nextValue === 'number' && typeof maxVal === 'number' && (nextValue > maxVal)) {
 		return;
@@ -141,7 +141,7 @@ onPressUp = () => {
 
 onPressDown = () => {
 	const { minVal, mode, value } = this.props;
-	let nextValue = parseFloat(value).toFixed(1) - 1;
+	let nextValue = (parseFloat(value) - parseFloat(1)).toFixed(1);
 	this.onPressRow();
 	if (typeof nextValue === 'number' && typeof minVal === 'number' && (nextValue < minVal)) {
 		return;
