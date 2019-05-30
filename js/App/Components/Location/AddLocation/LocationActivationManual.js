@@ -43,8 +43,9 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
-	dialogueOpen: boolean,
 	currentScreen: string,
+
+	toggleDialogueBox: (Object) => void,
 };
 
 class LocationActivationManual extends View {
@@ -153,9 +154,13 @@ class LocationActivationManual extends View {
 						params: {clientInfo},
 					});
 				} else if (response && response.activated === true) {
-					this.props.actions.showModal(this.messageAlreadyActivated, 'ERROR');
+					this.openDialogueBox({
+						text: this.messageAlreadyActivated,
+					});
 				} else {
-					this.props.actions.showModal(response, 'ERROR');
+					this.openDialogueBox({
+						text: response,
+					});
 				}
 				this.setState({
 					isLoading: false,
@@ -163,21 +168,38 @@ class LocationActivationManual extends View {
 			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Invalid activation code' ? this.invalidActivationCode : error.message) :
 					error.error ? error.error : 'Unknown Error';
-				this.props.actions.showModal(message, 'ERROR');
+				this.openDialogueBox({
+					text: message,
+				});
 				this.setState({
 					isLoading: false,
 				});
 			});
 		} else {
-			this.props.actions.showModal(this.invalidActivationCode, 'ERROR');
+			this.openDialogueBox({
+				text: this.invalidActivationCode,
+			});
 		}
 	}
 
+	openDialogueBox(otherConfs: Object = {}) {
+		const { toggleDialogueBox } = this.props;
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			closeOnPressPositive: true,
+			dialogueContainerStyle: {elevation: 0},
+			showPositive: true,
+			...otherConfs,
+		};
+		toggleDialogueBox(dialogueData);
+	}
+
 	render(): Object {
-		let { appLayout, dialogueOpen, currentScreen } = this.props;
+		let { appLayout, currentScreen } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		let importantForAccessibility = !dialogueOpen && currentScreen === 'LocationActivationManual' ? 'no' : 'no-hide-descendants';
+		let importantForAccessibility = currentScreen === 'LocationActivationManual' ? 'no' : 'no-hide-descendants';
 
 		return (
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>

@@ -32,7 +32,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 	Text,
 	View,
-	DialogueBox,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import { getDevices, getSensors, getGateways } from '../../Actions';
@@ -53,7 +52,6 @@ type Props = {
 	rows: Array<Object>,
 	isDBEmpty: boolean,
 	screenProps: Object,
-	navigation: Object,
 	navigation: Object,
 	changeSensorDisplayTypeDB: () => void,
 	dispatch: Function,
@@ -98,6 +96,7 @@ class DashboardTab extends View {
 	showDimInfo: (Object) => void;
 
 	openRGBControl: (number) => void;
+	openThermostatControl: (number) => void;
 
 	static navigationOptions = ({navigation, screenProps}: Object): Object => {
 		const { intl, currentScreen } = screenProps;
@@ -123,7 +122,6 @@ class DashboardTab extends View {
 			scrollEnabled: true,
 			showRefresh: true,
 			dialogueBoxConf: {
-				show: false,
 				action: '',
 				device: {},
 			},
@@ -146,6 +144,7 @@ class DashboardTab extends View {
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 
 		this.openRGBControl = this.openRGBControl.bind(this);
+		this.openThermostatControl = this.openThermostatControl.bind(this);
 	}
 
 	startSensorTimer() {
@@ -277,22 +276,19 @@ class DashboardTab extends View {
 	}
 
 	onDismissDialogueHide() {
-		const { dialogueBoxConf } = this.state;
-		this.setState({
-			dialogueBoxConf: {
-				...dialogueBoxConf,
-				show: false,
-			},
-		});
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		toggleDialogueBox({show: false});
 	}
 
 	showDimInfo(device: Object) {
 		this.setState({
 			dialogueBoxConf: {
-				show: true,
 				action: 'dim_info',
 				device,
 			},
+		}, () => {
+			this.openDialogueBox('dim_info', device);
 		});
 	}
 
@@ -307,18 +303,40 @@ class DashboardTab extends View {
 		});
 	}
 
-	getDialogueBoxData(style: Object, appLayout: Object, intl: Object): Object {
-		const { show, action, device } = this.state.dialogueBoxConf;
+	openDialogueBox(action: string, device: Object) {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = this.getDialogueBoxData(action, device);
+		toggleDialogueBox(dialogueData);
+	}
+
+	openThermostatControl = (id: number) => {
+		const { navigation } = this.props;
+		navigation.navigate({
+			routeName: 'ThermostatControl',
+			key: 'ThermostatControl',
+			params: {
+				id,
+			},
+		});
+	}
+
+	getDialogueBoxData(action: string, device: Object): Object {
+		const { screenProps } = this.props;
+		const { appLayout, intl } = screenProps;
+		const style = this.getStyles(appLayout);
+
 		let data = {
-			showDialogue: show,
+			show: true,
 		};
 		if (action === 'dim_info') {
 			const { isOnline, name, id } = device;
 			const styles = {
-				dialogueHeaderStyle: style.dialogueHeaderStyle,
 				dialogueHeaderTextStyle: style.dialogueHeaderTextStyle,
 				dialogueBodyStyle: style.dialogueBodyStyle,
 				dialogueBodyTextStyle: style.dialogueBodyTextStyle,
+				headerWidth: style.headerWidth,
+				headerHeight: style.headerHeight,
 			};
 
 			return {
@@ -335,6 +353,7 @@ class DashboardTab extends View {
 				/>,
 				dialogueBoxStyle: style.dialogueBoxStyle,
 				backdropOpacity: 0,
+				closeOnPressPositive: true,
 			};
 		}
 		return data;
@@ -342,7 +361,7 @@ class DashboardTab extends View {
 
 	render(): Object {
 		const { screenProps, isDBEmpty, rows } = this.props;
-		const { appLayout, intl } = screenProps;
+		const { appLayout } = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles(appLayout);
@@ -355,20 +374,6 @@ class DashboardTab extends View {
 			propOne: tileWidth,
 			propTwo: appLayout,
 		};
-
-		const {
-			showDialogue,
-			header,
-			text,
-			showNegative,
-			onPressNegative,
-			showPositive,
-			positiveText,
-			onPressPositive,
-			dialogueBoxStyle,
-			backdropOpacity,
-			showHeader,
-		} = this.getDialogueBoxData(style, appLayout, intl);
 
 		return (
 			<View onLayout={this._onLayout} style={style.container}>
@@ -393,19 +398,6 @@ class DashboardTab extends View {
 					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
-				/>
-				<DialogueBox
-					showDialogue={showDialogue}
-					showHeader={showHeader}
-					header={header}
-					text={text}
-					style={dialogueBoxStyle}
-					showNegative={showNegative}
-					onPressNegative={onPressNegative}
-					showPositive={showPositive}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					backdropOpacity={backdropOpacity}
 				/>
 			</View>
 		);
@@ -479,6 +471,7 @@ class DashboardTab extends View {
 			setScrollEnabled={this.setScrollEnabled}
 			onPressDimButton={this.showDimInfo}
 			openRGBControl={this.openRGBControl}
+			openThermostatControl={this.openThermostatControl}
 		/>;
 	}
 
@@ -520,13 +513,11 @@ class DashboardTab extends View {
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
-			dialogueHeaderStyle: {
-				paddingVertical: 10,
-				paddingHorizontal: 20,
-				width: deviceWidth * 0.75,
-			},
+			headerWidth: deviceWidth * 0.75,
+			headerHeight: deviceWidth * 0.1,
 			dialogueHeaderTextStyle: {
 				fontSize: 13,
+				left: 20,
 			},
 			dialogueBodyStyle: {
 				paddingHorizontal: 20,

@@ -31,7 +31,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
 import { registerUser } from '../../../Actions/User';
-import { showModal } from '../../../Actions/Modal';
 import { validateEmail } from '../../../Lib/UserUtils';
 
 import i18n from '../../../Translations/common';
@@ -40,13 +39,12 @@ type Props = {
 	dispatch: Function,
 	onFormSubmit: Function,
 	validationMessage: string,
-	showModal: boolean,
 	intl: intlShape.isRequired,
-	validationMessageHeader: string,
 	appLayout: Object,
 	dialogueOpen: boolean,
 	styles: Object,
 	headerText: string,
+	openDialogueBox: (string, ?string) => void,
 };
 
 class RegisterForm extends View {
@@ -114,7 +112,7 @@ class RegisterForm extends View {
 	}
 
 	onFormSubmit() {
-		let { dispatch, intl, validationMessage, onFormSubmit } = this.props;
+		let { intl, validationMessage, onFormSubmit, openDialogueBox } = this.props;
 		let { formatMessage } = intl;
 
 		let fn = this.state.firstName, ln = this.state.lastName, em = this.state.email, cem = this.state.confirmEmail;
@@ -137,12 +135,12 @@ class RegisterForm extends View {
 				} else {
 					let message = formatMessage(i18n.emailAddressNotMatchBody);
 					let header = formatMessage(i18n.emailAddressNotMatchHeader);
-					dispatch(showModal(message, header));
+					openDialogueBox(message, header);
 				}
 			} else {
 				let message = formatMessage(i18n.emailNotValidBody);
 				let header = formatMessage(i18n.emailNotValidHeader);
-				dispatch(showModal(message, header));
+				openDialogueBox(message, header);
 			}
 		} else {
 			let postF = formatMessage(i18n.fieldEmptyPostfix);
@@ -151,16 +149,16 @@ class RegisterForm extends View {
 					: em === '' ? `${formatMessage(i18n.emailAddress)} ${postF}`
 						: cem === '' ? `${formatMessage(i18n.confirmEmailAddress)} ${postF}`
 							: validationMessage;
-			dispatch(showModal(message));
+			openDialogueBox(message);
 		}
 	}
 
 	handleRegisterError(error: Object) {
-		let { dispatch } = this.props;
+		let { openDialogueBox } = this.props;
 		let data = !error.error_description && error.message === 'Network request failed' ?
 			this.networkFailed : error.error_description ?
 				error.error_description : error.error ? error.error : this.unknownError;
-		dispatch(showModal(data));
+		openDialogueBox(data);
 	}
 
 	render(): Object {
@@ -188,7 +186,7 @@ class RegisterForm extends View {
 									autoCorrect={false}
 									placeholderTextColor="#ffffff80"
 									underlineColorAndroid="#ffffff80"
-									editable={!this.props.showModal}
+									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.firstName}
 								/>
 							</View>
@@ -204,7 +202,7 @@ class RegisterForm extends View {
 									autoCorrect={false}
 									placeholderTextColor="#ffffff80"
 									underlineColorAndroid="#ffffff80"
-									editable={!this.props.showModal}
+									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.lastName}
 								/>
 							</View>
@@ -223,7 +221,7 @@ class RegisterForm extends View {
 									autoCorrect={false}
 									placeholderTextColor="#ffffff80"
 									underlineColorAndroid="#ffffff80"
-									editable={!this.props.showModal}
+									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.email}
 								/>
 							</View>
@@ -240,7 +238,7 @@ class RegisterForm extends View {
 									autoCorrect={false}
 									placeholderTextColor="#ffffff80"
 									underlineColorAndroid="#ffffff80"
-									editable={!this.props.showModal}
+									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.confirmEmail}
 								/>
 							</View>
@@ -248,7 +246,7 @@ class RegisterForm extends View {
 					</View>
 				</View>
 				<TouchableButton
-					onPress={this.props.showModal ? null : this.onFormSubmit}
+					onPress={this.props.dialogueOpen ? null : this.onFormSubmit}
 					text={this.state.isLoading ? i18n.registering : i18n.register}
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
@@ -270,8 +268,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(store: Object): Object {
 	return {
 		validationMessage: store.modal.data,
-		validationMessageHeader: store.modal.extras,
-		showModal: store.modal.openModal,
 	};
 }
 

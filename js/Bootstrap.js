@@ -36,7 +36,11 @@ import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
 import * as Translations from './App/Translations';
 import { forceLocale } from './Config';
-import { setUserIdentifier, enableCrashlyticsCollection } from './App/Lib/Analytics';
+import {
+	setUserIdentifier,
+	enableCrashlyticsCollection,
+	setUserName,
+} from './App/Lib/Analytics';
 
 function Bootstrap(): Object {
 
@@ -75,8 +79,7 @@ function Bootstrap(): Object {
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
 				setUserIdentifier(state.user.userProfile.email);
-				// TODO: Enable once the method is supported.
-				// firebase.crashlytics().setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
+				setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
 			}
 		}
 
@@ -121,6 +124,9 @@ if (process.env.NODE_ENV !== 'production') {
 	if (console.error === originalConsoleError) {
 		console.error = (...args: Array<any>) => {
 			if (args[0].indexOf('[React Intl] Missing message:') === 0) {
+				return;
+			}
+			if (args[0].indexOf('[React Intl] Error formatting date.') === 0) {
 				return;
 			}
 			originalConsoleError.call(console, ...args);

@@ -37,8 +37,6 @@ import {
 	SettingsRow,
 	TouchableButton,
 	EditBox,
-	DialogueBox,
-	DialogueHeader,
 } from '../../../BaseComponents';
 
 import {
@@ -74,10 +72,6 @@ type State = {
 	keepHistory: boolean,
 	editName: boolean,
 	sensorName: string,
-	dialogueConfig: {
-		show: boolean,
-		action: string | null,
-	},
 	switchConf: {
 		transition: boolean,
 		source: string,
@@ -151,10 +145,6 @@ class SettingsTab extends View {
 			keepHistory: props.sensor.keepHistory,
 			editName: false,
 			sensorName: props.sensor.name,
-			dialogueConfig: {
-				show: false,
-				action: null,
-			},
 			switchConf: {
 				transition: false,
 				source: '',
@@ -266,12 +256,7 @@ class SettingsTab extends View {
 	}
 
 	clearHistoryCache() {
-		this.setState({
-			dialogueConfig: {
-				show: true,
-				action: 'clearHistoryCache',
-			},
-		});
+		this.openDialogueBox('clearHistoryCache');
 	}
 
 	onConfirmClearHistoryCache() {
@@ -288,12 +273,7 @@ class SettingsTab extends View {
 	}
 
 	clearHistory() {
-		this.setState({
-			dialogueConfig: {
-				show: true,
-				action: 'clearHistory',
-			},
-		});
+		this.openDialogueBox('clearHistory');
 	}
 
 	onConfirmClearHistory() {
@@ -312,22 +292,14 @@ class SettingsTab extends View {
 	}
 
 	resetMaxMin() {
-		this.setState({
-			dialogueConfig: {
-				show: true,
-				action: 'resetMaxMin',
-			},
-		});
+		this.openDialogueBox('resetMaxMin');
 	}
 
 	closeModal() {
-		const { dialogueConfig } = this.state;
-		this.setState({
-			dialogueConfig: {
-				show: false,
-				action: dialogueConfig.action,
-			},
-		});
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {show: false};
+		toggleDialogueBox(dialogueData);
 	}
 
 	onConfirmResetMaxMin() {
@@ -416,47 +388,56 @@ class SettingsTab extends View {
 		}
 	}
 
-	dialogueHeader({ dialogueHeader, dialogueHeaderStyle, dialogueHeaderTextStyle }: Object): Object {
-		return (
-			<DialogueHeader
-				headerText={dialogueHeader}
-				showIcon={false}
-				headerStyle={dialogueHeaderStyle}
-				dialogueHeaderTextStyle={dialogueHeaderTextStyle}/>
-		);
+	openDialogueBox(action: string) {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = this.prepareDialogueConfig(action);
+		toggleDialogueBox(dialogueData);
 	}
 
-	prepareDialogueConfig({ show, action }: Object): Object {
+	prepareDialogueConfig(action: string): Object {
 		const { formatMessage } = this.props.screenProps.intl;
+		const data = {
+			showPositive: true,
+			showNegative: true,
+			dialogueContainerStyle: { elevation: 0 },
+			onPressNegative: this.closeModal,
+		};
 		if (action === 'clearHistory') {
 			return {
-				showDialogue: show,
-				dialogueHeader: `${formatMessage(i18n.clearHistory).toUpperCase()}?`,
-				message: formatMessage(i18n.messageClearHistory),
+				...data,
+				show: true,
+				showHeader: true,
+				header: `${formatMessage(i18n.clearHistory).toUpperCase()}?`,
+				text: formatMessage(i18n.messageClearHistory),
 				positiveText: formatMessage(i18n.labelClearHistory).toUpperCase(),
 				onPressPositive: this.onConfirmClearHistory,
 			};
 		}
 		if (action === 'clearHistoryCache') {
 			return {
-				showDialogue: show,
-				dialogueHeader: `${formatMessage(i18n.clearHistoryCache).toUpperCase()}?`,
-				message: formatMessage(i18n.messageClearCache),
+				...data,
+				show: true,
+				showHeader: true,
+				header: `${formatMessage(i18n.clearHistoryCache).toUpperCase()}?`,
+				text: formatMessage(i18n.messageClearCache),
 				positiveText: formatMessage(i18n.labelClearCache).toUpperCase(),
 				onPressPositive: this.onConfirmClearHistoryCache,
 			};
 		}
 		return {
-			showDialogue: show,
-			dialogueHeader: `${formatMessage(i18n.resetMaxMin).toUpperCase()}?`,
-			message: formatMessage(i18n.messageResetMaxMin),
+			...data,
+			show: true,
+			showHeader: true,
+			header: `${formatMessage(i18n.resetMaxMin).toUpperCase()}?`,
+			text: formatMessage(i18n.messageResetMaxMin),
 			positiveText: formatMessage(i18n.labelResetMaxMin).toUpperCase(),
 			onPressPositive: this.onConfirmResetMaxMin,
 		};
 	}
 
 	render(): Object | null {
-		const { keepHistory, isHidden, editName, sensorName, dialogueConfig } = this.state;
+		const { keepHistory, isHidden, editName, sensorName } = this.state;
 		const { inDashboard, sensor } = this.props;
 
 		if (!sensor.sensorId) {
@@ -472,8 +453,6 @@ class SettingsTab extends View {
 			infoHeaderText,
 			buttonStyle,
 			editBoxStyle,
-			dialogueHeaderStyle,
-			dialogueHeaderTextStyle,
 			clearCacheHintStyle,
 		} = this.getStyle(appLayout);
 
@@ -492,19 +471,6 @@ class SettingsTab extends View {
 				</View>
 			);
 		}
-
-		const {
-			showDialogue,
-			dialogueHeader,
-			message,
-			positiveText,
-			onPressPositive,
-		} = this.prepareDialogueConfig(dialogueConfig);
-		const dialogueHeaderProps = {
-			dialogueHeader,
-			dialogueHeaderStyle,
-			dialogueHeaderTextStyle,
-		};
 
 		return (
 			<ScrollView
@@ -587,16 +553,6 @@ class SettingsTab extends View {
 						intl={intl}
 					/>
 				</View>
-				<DialogueBox
-					dialogueContainerStyle={{elevation: 0}}
-					header={this.dialogueHeader(dialogueHeaderProps)}
-					showDialogue={showDialogue}
-					text={message}
-					showPositive={true}
-					showNegative={true}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					onPressNegative={this.closeModal}/>
 			</ScrollView>
 		);
 	}

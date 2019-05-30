@@ -211,7 +211,8 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 - we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
 - when releasing a new app, always update the version
 - Run the release script: `npm run release`. This will prompt for the new version number.
-- Check that the new commit and tag made by the release script is ok before pushing
+- Check that the new commit and tag made by the release script is ok before pushing.
+- We have enabled "inlineRequires" and RAM bundle format. So please follow the step mentioned [here](https://facebook.github.io/react-native/docs/performance#investigating-the-loaded-modules).
 
 ### Android
 
@@ -328,7 +329,7 @@ THERMOSTAT = 2048  #: Device flag for devices supporting thermostat methods.
 The following methods aren't in use in the moment: `TOGGLE`, `EXECUTE`, `RGBW`, `THERMOSTAT`
 
 You can add up these methods to a single digit that denotes a group of methods, e.g. `3 = 1 + 2 = TURNON, TURNOFF`.
-Currently, the app supports `951 = 1 + 2 + 4 + 16 + 32 + 128 + 256 + 512`.
+Currently, the app supports `4023 = 1 + 2 + 4 + 16 + 32 + 128 + 256 + 512 + 1024 + 2048`.
 
 When for example, `devices/list` is called, we can provide `supportedMethods`. If this parameter is not set, in the response `methods` and `state` will always report `0` for each device.
 

@@ -51,6 +51,8 @@ type Props = {
 	headerText: string,
 	toggleOnPressLogout: (boolean) => void,
 	accessToken: Object,
+
+	openDialogueBox: (string, ?string) => void,
 };
 
 type State = {
@@ -95,12 +97,8 @@ class SessionLocked extends View {
 	}
 
 	onPressLogout() {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_OPEN',
-			payload: {
-				data: this.confirmMessage,
-			},
-		});
+		const { openDialogueBox } = this.props;
+		openDialogueBox(this.confirmMessage);
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {

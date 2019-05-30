@@ -174,28 +174,32 @@ class DialogueBox extends Component<Props, null> {
 		}
 	}
 
-	dialogueImageHeader({ showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon, dialogueHeaderStyle, notificationModalHeaderText }: Object): Object {
+	dialogueImageHeader({
+		showIconOnHeader,
+		header,
+		capitalizeHeader,
+		onPressHeader,
+		onPressHeaderIcon,
+		styles,
+	}: Object): Object {
 		return (
 			<DialogueHeader
 				headerText={typeof header === 'string' && capitalizeHeader ? capitalize(header) : header}
 				showIcon={showIconOnHeader}
 				onPressHeader={onPressHeader}
-				headerStyle={dialogueHeaderStyle}
 				onPressIcon={onPressHeaderIcon}
-				textStyle={notificationModalHeaderText}
-				shouldCapitalize={capitalizeHeader}/>
+				textStyle={styles.notificationModalHeaderText}
+				iconStyle={styles.notificationModalHeaderIcon}
+				shouldCapitalize={capitalizeHeader}
+				headerHeight={styles.headerHeight}
+				headerWidth={styles.headerWidth}/>
 		);
 	}
 
 	renderHeader(styles: Object): any {
-		let { header, capitalizeHeader, showIconOnHeader, imageHeader, onPressHeader, onPressHeaderIcon } = this.props;
-		const { notificationModalHeader, dialogueHeaderStyle, notificationModalHeaderText } = styles;
+		let { header, capitalizeHeader, showIconOnHeader, onPressHeader, onPressHeaderIcon } = this.props;
 
-		if (imageHeader) {
-			return this.dialogueImageHeader({
-				showIconOnHeader, header, capitalizeHeader, onPressHeader, onPressHeaderIcon,
-				dialogueHeaderStyle, notificationModalHeaderText});
-		} else if (header && typeof header === 'object') {
+		if (header && typeof header === 'object') {
 			return (
 				header
 			);
@@ -203,14 +207,14 @@ class DialogueBox extends Component<Props, null> {
 			header = this.defaultHeader;
 		}
 
-		header = typeof header === 'string' && capitalizeHeader ? capitalize(header) : header;
-		return (
-			<View style={notificationModalHeader}>
-				<Text style={notificationModalHeaderText}>
-					{header}
-				</Text>
-			</View>
-		);
+		return this.dialogueImageHeader({
+			showIconOnHeader,
+			header,
+			capitalizeHeader,
+			onPressHeader,
+			onPressHeaderIcon,
+			styles,
+		});
 	}
 
 	renderBody(styles: Object): any {
@@ -332,6 +336,9 @@ class DialogueBox extends Component<Props, null> {
 		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
 		const fontSize = Math.floor(deviceWidth * 0.042);
 
+		const headerWidth = deviceWidth * 0.75;
+		const borderRadi = 5;
+
 		return {
 			modal: {
 				flex: 1,
@@ -342,6 +349,8 @@ class DialogueBox extends Component<Props, null> {
 				backgroundColor: '#fff',
 				alignItems: 'center',
 				justifyContent: 'center',
+				borderRadius: borderRadi,
+				overflow: 'hidden',
 			},
 			notificationModalHeader: {
 				justifyContent: 'center',
@@ -351,14 +360,17 @@ class DialogueBox extends Component<Props, null> {
 				width: deviceWidth * 0.75,
 				backgroundColor: '#e26901',
 			},
-			dialogueHeaderStyle: {
-				paddingVertical: fontSize,
-				paddingHorizontal: 5 + fontSize,
-				width: deviceWidth * 0.75,
-			},
+			headerWidth,
+			headerHeight: deviceWidth * 0.1,
 			notificationModalHeaderText: {
 				color: '#ffffff',
 				fontSize: fontSizeHeader,
+				left: 5 + fontSize,
+			},
+			notificationModalHeaderIcon: {
+				color: '#ffffff',
+				fontSize: fontSizeHeader,
+				right: 5 + fontSize,
 			},
 			notificationModalBody: {
 				justifyContent: 'center',

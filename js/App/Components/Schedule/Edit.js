@@ -36,6 +36,8 @@ import i18n from '../../Translations/common';
 interface Props extends ScheduleProps {
 	devices: Object,
 	intl: intlShape.isRequired,
+
+	toggleDialogueBox: (Object) => void,
 }
 
 type State = {
@@ -140,8 +142,10 @@ class Edit extends View<null, Props, State> {
 					isSaving: false,
 				});
 				let message = error.message ? error.message : this.messageOnUpdateFail;
-				this.props.actions.showModal(message, {
+				this.openDialogueBox({
+					text: message,
 					showPositive: true,
+					closeOnPressPositive: true,
 				});
 			});
 		}
@@ -152,14 +156,14 @@ class Edit extends View<null, Props, State> {
 	}
 
 	onDeleteCancel = () => {
-		this.props.actions.hideModal();
+		this.closeModal();
 		this.setState({
 			choseDelete: false,
 		});
 	}
 
 	onDeleteConfirm = () => {
-		this.props.actions.hideModal();
+		this.closeModal();
 		this.setState({
 			isDeleting: true,
 		});
@@ -177,10 +181,30 @@ class Edit extends View<null, Props, State> {
 				choseDelete: false,
 			});
 			let message = error.message ? error.message : this.messageOnDeleteFail;
-			this.props.actions.showModal(message, {
+			this.openDialogueBox({
+				text: message,
 				showPositive: true,
+				closeOnPressPositive: true,
 			});
 		});
+	}
+
+	closeModal = () => {
+		const { toggleDialogueBox } = this.props;
+		const dialogueData = {
+			show: false,
+		};
+		toggleDialogueBox(dialogueData);
+	}
+
+	openDialogueBox(otherDialogueConfs?: Object = {}) {
+		const { toggleDialogueBox } = this.props;
+		const dialogueData = {
+			...otherDialogueConfs,
+			show: true,
+			showHeader: true,
+		};
+		toggleDialogueBox(dialogueData);
 	}
 
 	onDeleteSchedule = () => {
@@ -190,7 +214,7 @@ class Edit extends View<null, Props, State> {
 			});
 			const { formatMessage } = this.props.intl;
 			const modalExtras = {
-				dialogueHeader: this.deleteScheduleDialogueHeader,
+				header: this.deleteScheduleDialogueHeader,
 				showPositive: true,
 				showNegative: true,
 				positiveText: formatMessage(i18n.delete).toUpperCase(),
@@ -198,7 +222,10 @@ class Edit extends View<null, Props, State> {
 				onPressNegative: this.onDeleteCancel,
 				showBackground: true,
 			};
-			this.props.actions.showModal(this.deleteScheduleDialogue, modalExtras);
+			this.openDialogueBox({
+				...modalExtras,
+				text: this.deleteScheduleDialogue,
+			});
 		}
 	}
 
@@ -213,7 +240,7 @@ class Edit extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { appLayout, schedule, intl, actions } = this.props;
+		const { appLayout, schedule, intl, actions, toggleDialogueBox } = this.props;
 		const { formatMessage, formatDate } = intl;
 		const { active, method, methodValue, weekdays, retries = 0, retryInterval = 0, reps = 0 } = schedule;
 		const {
@@ -267,7 +294,7 @@ class Edit extends View<null, Props, State> {
 					<AdvancedSettingsBlock
 						appLayout={appLayout}
 						intl={intl}
-						onPressInfo={actions.showModal}
+						onPressInfo={toggleDialogueBox}
 						onDoneEditAdvanced={actions.setAdvancedSettings}
 						retries={retries}
 						retryInterval={retryInterval}

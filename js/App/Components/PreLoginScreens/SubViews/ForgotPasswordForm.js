@@ -32,7 +32,6 @@ import { View, TouchableButton, H1 } from '../../../../BaseComponents';
 
 import { forgotPassword } from '../../../Actions/User';
 import { validateEmail } from '../../../Lib/UserUtils';
-import { showModal } from '../../../Actions/Modal';
 
 import i18n from '../../../Translations/common';
 
@@ -43,6 +42,8 @@ type Props = {
 	headerText: string,
 	forgotPassword: (string) => Promise<any>,
 	dispatch: Function,
+
+	openDialogueBox: (string, ?string) => void,
 };
 
 type State = {
@@ -82,7 +83,7 @@ class ForgotPasswordForm extends View<Props, State> {
 
 	onFormSubmit() {
 		const { email } = this.state;
-		const { dispatch, intl } = this.props;
+		const { intl, openDialogueBox } = this.props;
 		const { formatMessage } = intl;
 
 		if (email !== '') {
@@ -96,9 +97,9 @@ class ForgotPasswordForm extends View<Props, State> {
 					if (status && status === 'success') {
 						const message = formatMessage(i18n.successBody, {email});
 						const header = formatMessage(i18n.successHeader);
-						dispatch(showModal(message, header));
+						openDialogueBox(message, header);
 					} else {
-						dispatch(showModal(this.unknownError));
+						openDialogueBox(this.unknownError);
 					}
 					this.setState({
 						isLoading: false,
@@ -107,12 +108,12 @@ class ForgotPasswordForm extends View<Props, State> {
 					if (error.error && error.error === 'User not found') {
 						const message = formatMessage(i18n.failureBody);
 						const header = formatMessage(i18n.failureHeader);
-						dispatch(showModal(message, header));
+						openDialogueBox(message, header);
 					} else {
 						const message = !error.error_description && error.message === 'Network request failed' ?
 							this.networkFailed : error.error_description ?
 								error.error_description : error.error ? error.error : this.unknownError;
-						dispatch(showModal(message));
+						openDialogueBox(message);
 					}
 					this.setState({
 						isLoading: false,
@@ -121,11 +122,11 @@ class ForgotPasswordForm extends View<Props, State> {
 			} else {
 				const message = formatMessage(i18n.emailNotValidBody);
 				const header = formatMessage(i18n.emailNotValidHeader);
-				dispatch(showModal(message, header));
+				openDialogueBox(message, header);
 			}
 		} else {
 			const message = formatMessage(i18n.emailEmptyBody);
-			dispatch(showModal(message));
+			openDialogueBox(message);
 		}
 	}
 

@@ -27,7 +27,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
 
-import { View, IconTelldus, DialogueBox, DialogueHeader, Text } from '../../../BaseComponents';
+import { View, IconTelldus, Text } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
 
 import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actions';
@@ -51,7 +51,6 @@ type State = {
 	isRefreshing: boolean,
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
-	showConfirmDialogue: boolean,
 	sensorToHide: Object,
 };
 
@@ -99,7 +98,6 @@ class SensorsTab extends View {
 				idToKeepOpen: null,
 				forceClose: false,
 			},
-			showConfirmDialogue: false,
 			sensorToHide: {},
 		};
 
@@ -201,23 +199,48 @@ class SensorsTab extends View {
 	}
 
 	setIgnoreSensor(sensor: Object) {
-		let ignore = sensor.ignored ? 0 : 1;
-		if (!sensor.ignored && !this.state.showConfirmDialogue) {
+		if (!sensor.ignored) {
 			this.setState({
-				showConfirmDialogue: true,
 				sensorToHide: sensor,
+			}, () => {
+				this.openDialogueBox('set_ignore', sensor);
 			});
 		} else {
-			this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
-				let message = sensor.ignored ?
-					this.removedFromHiddenList : this.addedToHiddenList;
-				this.props.dispatch(showToast(message));
-				this.props.dispatch(getSensors());
-			}).catch((err: Object) => {
-				let message = err.message ? err.message : null;
-				this.props.dispatch(showToast(message));
-			});
+			this.confirmSetIgnoreSensor(sensor);
 		}
+	}
+
+	confirmSetIgnoreSensor(sensor: Object) {
+		let { sensorToHide } = this.state;
+		sensor = sensor ? sensor : sensorToHide;
+		let ignore = sensor.ignored ? 0 : 1;
+		this.props.dispatch(setIgnoreSensor(sensor.id, ignore)).then((res: Object) => {
+			let message = sensor.ignored ?
+				this.removedFromHiddenList : this.addedToHiddenList;
+			this.props.dispatch(showToast(message));
+			this.props.dispatch(getSensors());
+		}).catch((err: Object) => {
+			let message = err.message ? err.message : null;
+			this.props.dispatch(showToast(message));
+		});
+	}
+
+	openDialogueBox(action: string, sensor: Object) {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			header: this.headerOnHide,
+			text: this.messageOnHide,
+			showNegative: true,
+			onPressNegative: this.onDismissDialogueHide,
+			showPositive: true,
+			positiveText: this.labelHide,
+			onPressPositive: this.onConfirmDialogueHide,
+			closeOnPressPositive: true,
+		};
+		toggleDialogueBox(dialogueData);
 	}
 
 	openSensorDetail(sensor: Object) {
@@ -229,16 +252,13 @@ class SensorsTab extends View {
 	}
 
 	onConfirmDialogueHide() {
-		this.setIgnoreSensor(this.state.sensorToHide);
-		this.setState({
-			showConfirmDialogue: false,
-		});
+		this.confirmSetIgnoreSensor();
 	}
 
 	onDismissDialogueHide() {
-		this.setState({
-			showConfirmDialogue: false,
-		});
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		toggleDialogueBox({show: false});
 	}
 
 	toggleHiddenListButton(): Object {
@@ -307,7 +327,6 @@ class SensorsTab extends View {
 		const {
 			isRefreshing,
 			propsSwipeRow,
-			showConfirmDialogue,
 		} = this.state;
 
 		const style = this.getStyles(appLayout);
@@ -344,28 +363,6 @@ class SensorsTab extends View {
 							onRefresh={this.onRefresh}
 						/>}
 					ref={this.setRef}
-				/>
-				<DialogueBox
-					showDialogue={showConfirmDialogue}
-					header={
-						<DialogueHeader
-							headerText={this.headerOnHide}
-							showIcon={false}
-							headerStyle={style.dialogueHeaderStyle}
-							textStyle={style.dialogueHeaderTextStyle}/>
-					}
-					text={
-						<View style={style.dialogueBodyStyle}>
-							<Text style={style.dialogueBodyTextStyle}>
-								{this.messageOnHide}
-							</Text>
-						</View>
-					}
-					showNegative={true}
-					onPressNegative={this.onDismissDialogueHide}
-					showPositive={true}
-					positiveText={this.labelHide}
-					onPressPositive={this.onConfirmDialogueHide}
 				/>
 			</View>
 		);

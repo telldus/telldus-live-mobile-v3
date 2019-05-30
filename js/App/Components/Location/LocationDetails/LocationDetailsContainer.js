@@ -27,7 +27,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import { View, DialogueBox, NavigationHeaderPoster } from '../../../../BaseComponents';
+import { View, NavigationHeaderPoster } from '../../../../BaseComponents';
 
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
@@ -43,8 +43,6 @@ import Theme from '../../../Theme';
 type Props = {
 	ScreenName: string,
 	screenProps: Object,
-	showModal: boolean,
-	validationMessage: any,
 	location: Object,
 	email: string,
 
@@ -63,7 +61,6 @@ type State = {
 class LocationDetailsContainer extends View<null, Props, State> {
 
 	handleBackPress: () => boolean;
-	closeModal: () => void;
 
 	state = {
 		h1: '',
@@ -79,7 +76,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			onPress: this.goBack,
 		};
 
-		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
 	}
 
@@ -117,28 +113,11 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		});
 	};
 
-	closeModal = () => {
-		this.props.actions.hideModal();
-	};
-
-	getModalData(extras: any): Object {
-		return {
-			modalHeader: null,
-			positiveText: null,
-			showNegative: false,
-			onPressPositive: this.closeModal,
-			onPressNegative: null,
-		};
-	}
-
 	render(): Object {
 		const {
 			children,
 			actions,
 			screenProps,
-			showModal,
-			validationMessage,
-			modalExtras,
 			navigation,
 			location,
 			email,
@@ -149,8 +128,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		} = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
-		const { modalHeader, positiveText, showNegative, onPressPositive, onPressNegative } = this.getModalData(modalExtras);
-
 		let { width, height } = appLayout;
 		let deviceWidth = height > width ? width : height;
 		let padding = currentScreen === 'Details' ? width * Theme.Core.paddingFactor : deviceWidth * Theme.Core.paddingFactor;
@@ -196,7 +173,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 									actions,
 									...screenProps,
 									navigation,
-									dialogueOpen: showModal,
 									containerWidth: width - (2 * paddingHorizontal),
 									location,
 									email,
@@ -205,16 +181,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 						</View>
 					</ScrollView>
 				</KeyboardAvoidingView>
-				<DialogueBox
-					dialogueContainerStyle={{elevation: 0}}
-					header={modalHeader}
-					showDialogue={showModal}
-					text={validationMessage}
-					showPositive={true}
-					showNegative={showNegative}
-					positiveText={positiveText}
-					onPressPositive={onPressPositive}
-					onPressNegative={onPressNegative}/>
 			</View>
 		);
 	}
@@ -272,9 +238,6 @@ const mapStateToProps = (store: Object, ownProps: Object): Object => {
 
 	return {
 		location: store.gateways.byId[id],
-		showModal: store.modal.openModal,
-		validationMessage: store.modal.data,
-		modalExtras: store.modal.extras,
 		email,
 	};
 };

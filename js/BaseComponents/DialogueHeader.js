@@ -22,17 +22,18 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import Text from './Text';
 import Icon from './Icon';
 import capitalize from '../App/Lib/capitalize';
 
+import GeometricHeader from './GeometricHeader';
+
 type Props = {
     headerText: string,
-    headerStyle: number | Object | Array<Object>,
-    textStyle: number | Object | Array<Object>,
-    source: Object | number,
+	textStyle: number | Object | Array<Object>,
+	iconStyle?: number | Object | Array<Object>,
 	onPressIcon?: () => void,
 	onPressHeader?: () => void,
     showIcon?: boolean,
@@ -40,26 +41,30 @@ type Props = {
     iconSize?: number,
 	iconColor?: string,
 	shouldCapitalize?: boolean,
+	headerHeight: number,
+	headerWidth: number,
 };
 
 type defaultProps = {
-    source: Object | number,
     showIcon?: boolean,
     iconName?: string,
     iconSize?: number,
 	iconColor?: string,
 	shouldCapitalize: boolean,
+	headerHeight: number,
+	headerWidth: number,
 };
 
 export default class DialogueHeader extends Component<Props, null> {
 props: Props;
 static defaultProps: defaultProps = {
-	source: {uri: 'telldus_geometric_bg'},
 	showIcon: false,
 	iconName: 'times-circle',
 	iconSize: 12,
 	iconColor: '#fff',
 	shouldCapitalize: true,
+	headerHeight: 20,
+	headerWidth: 100,
 }
 
 onPressIcon: () => void;
@@ -89,7 +94,6 @@ onPressHeader() {
 render(): Object {
 	let {
 		headerText,
-		headerStyle,
 		textStyle,
 		showIcon,
 		iconName,
@@ -97,36 +101,34 @@ render(): Object {
 		iconColor,
 		shouldCapitalize,
 		onPressHeader,
+		headerHeight,
+		headerWidth,
+		iconStyle,
 	} = this.props;
 	headerText = typeof headerText === 'string' && shouldCapitalize ? capitalize(headerText) : headerText;
 
 	return (
-		<ImageBackground style={[styles.image, headerStyle]} source={this.props.source}>
-			<TouchableOpacity onPress={this.onPressHeader} disabled={!onPressHeader} style={styles.touchable}>
-
-				<Text style={[styles.text, textStyle]}>
-					{headerText}
-				</Text>
-				{showIcon && (
-					<Icon name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
-				)}
-
-			</TouchableOpacity>
-		</ImageBackground>
+		<TouchableOpacity style={[{
+			height: headerHeight,
+			width: headerWidth,
+		}, styles.touchableCover]} onPress={this.onPressHeader} disabled={!onPressHeader}>
+			<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth}/>
+			<Text style={[styles.text, textStyle]}>
+				{headerText}
+			</Text>
+			{showIcon && (
+				<Icon style={[styles.iconStyle, iconStyle]} name={iconName} size={iconSize} color={iconColor} onPress={this.onPressIcon}/>
+			)}
+		</TouchableOpacity>
 	);
 }
 }
 
 const styles = StyleSheet.create({
-	touchable: {
-		flex: 1,
-		justifyContent: 'space-between',
-		alignItems: 'stretch',
-		flexDirection: 'row',
-	},
-	image: {
-		height: undefined,
-		width: undefined,
+	touchableCover: {
+		overflow: 'hidden',
+		borderTopLeftRadius: 5,
+		borderTopRightRadius: 5,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'stretch',
@@ -134,5 +136,13 @@ const styles = StyleSheet.create({
 	text: {
 		color: '#fff',
 		fontSize: 12,
+		position: 'absolute',
+		alignSelf: 'center',
+		left: 5,
+	},
+	iconStyle: {
+		position: 'absolute',
+		right: 5,
+		alignSelf: 'center',
 	},
 });

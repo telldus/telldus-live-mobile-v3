@@ -26,7 +26,7 @@ import { TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
-import { FormattedMessage, View, DialogueBox } from '../../../BaseComponents';
+import { FormattedMessage, View } from '../../../BaseComponents';
 import { RegisterForm } from './SubViews';
 
 import Theme from './../../Theme';
@@ -36,7 +36,6 @@ type Props = {
 	navigation: Object,
 	dispatch: Function,
 	validationMessage: string,
-	showModal: boolean,
 	registeredCredential: any,
 	intl: intlShape.isRequired,
 	validationMessageHeader: string,
@@ -45,12 +44,20 @@ type Props = {
 	screenProps: Object,
 };
 
-class RegisterScreen extends View {
+type State = {
+	showModal: boolean,
+};
+
+class RegisterScreen extends View<Props, State> {
 
 	props: Props;
 
 	goBackToLogin: () => void;
 	closeModal: () => void;
+
+	state: State = {
+		showModal: false,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -79,8 +86,15 @@ class RegisterScreen extends View {
 	}
 
 	closeModal() {
-		this.props.dispatch({
-			type: 'REQUEST_MODAL_CLOSE',
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: false,
+		};
+		this.setState({
+			showModal: false,
+		}, () => {
+			toggleDialogueBox(dialogueData);
 		});
 	}
 
@@ -92,6 +106,26 @@ class RegisterScreen extends View {
 		});
 	}
 
+	openDialogueBox = (body: string, header?: Object) => {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+		const dialogueData = {
+			show: true,
+			showHeader: true,
+			header: header,
+			text: body,
+			onPressNegative: this.closeModal,
+			onPressPositive: this.closeModal,
+			showPositive: true,
+			showNegative: false,
+		};
+		this.setState({
+			showModal: true,
+		}, () => {
+			toggleDialogueBox(dialogueData);
+		});
+	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
 			return false;
@@ -100,7 +134,7 @@ class RegisterScreen extends View {
 	}
 
 	render(): Object {
-		let { showModal, validationMessage, validationMessageHeader, appLayout, intl, styles: commonStyles } = this.props;
+		let { appLayout, intl, styles: commonStyles } = this.props;
 		let styles = this.getStyles(appLayout);
 
 		return (
@@ -110,9 +144,10 @@ class RegisterScreen extends View {
 			}}>
 				<RegisterForm
 					appLayout={appLayout}
-					dialogueOpen={this.props.showModal}
+					dialogueOpen={this.state.showModal}
 					headerText={intl.formatMessage(i18n.createAccount)}
-					styles={commonStyles}/>
+					styles={commonStyles}
+					openDialogueBox={this.openDialogueBox}/>
 				<TouchableOpacity
 					onPress={this.goBackToLogin}
 					accessibilityLabel={this.labelAlreadyHaveAccount}
@@ -121,13 +156,6 @@ class RegisterScreen extends View {
 					}}>
 					<FormattedMessage {...i18n.alreadyHaveAccount} style={styles.accountExist}/>
 				</TouchableOpacity>
-				<DialogueBox
-					showDialogue={showModal}
-					text={validationMessage}
-					header={validationMessageHeader}
-					showPositive={true}
-					showNegative={false}
-					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
@@ -160,9 +188,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		validationMessage: store.modal.data,
-		validationMessageHeader: store.modal.extras,
-		showModal: store.modal.openModal,
 		registeredCredential: store.user.registeredCredential,
 	};
 }

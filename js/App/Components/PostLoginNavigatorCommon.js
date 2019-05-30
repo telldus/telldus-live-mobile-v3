@@ -83,7 +83,7 @@ type Props = {
     dispatch: Function,
 	addNewLocation: () => any,
 	locale: string,
-	toggleDialogueBox: (boolean) => null,
+	toggleDialogueBox: (Object) => null,
 };
 
 type State = {

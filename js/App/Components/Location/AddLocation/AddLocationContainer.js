@@ -22,17 +22,13 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { BackHandler, ImageBackground, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { BackHandler, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	DialogueBox,
-	Text,
-	RoundedInfoButton,
 	NavigationHeaderPoster,
 } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
@@ -40,16 +36,11 @@ import Theme from '../../../Theme';
 import * as modalActions from '../../../Actions/Modal';
 import * as gatewayActions from '../../../Actions/Gateways';
 
-import i18n from '../../../Translations/common';
-
 type Props = {
 	navigation: Object,
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
-	showModal: boolean,
-	validationMessage: any,
-	source: Object | number,
 	ScreenName: string,
 };
 
@@ -60,27 +51,9 @@ type State = {
 	loading: boolean,
 };
 
-type DefaultProps = {
-	source: Object | number,
-};
-
 class AddLocationContainer extends View<null, Props, State> {
 
 	handleBackPress: () => boolean;
-
-	static propTypes = {
-		navigation: PropTypes.object.isRequired,
-		children: PropTypes.object.isRequired,
-		actions: PropTypes.objectOf(PropTypes.func),
-		screenProps: PropTypes.object,
-		showModal: PropTypes.bool,
-		validationMessage: PropTypes.any,
-		source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-	};
-
-	static defaultProps: DefaultProps = {
-		source: {uri: 'telldus_geometric_bg'},
-	};
 
 	state = {
 		h1: '',
@@ -95,17 +68,8 @@ class AddLocationContainer extends View<null, Props, State> {
 			back: true,
 			onPress: this.goBack,
 		};
-		const { formatMessage } = props.screenProps.intl;
 
-		this.dlogPOne = `${formatMessage(i18n.dialogueBodyParaOne)}.`;
-		this.dlogPTwo = `${formatMessage(i18n.dialogueBodyParaTwo)}.`;
-		this.dlogPThree = `${formatMessage(i18n.dialogueBodyParaThree)}.`;
-
-		this.dialogueHeader = formatMessage(i18n.dialogueHeader);
-
-		this.closeModal = this.closeModal.bind(this);
 		this.handleBackPress = this.handleBackPress.bind(this);
-		this.getRelativeData = this.getRelativeData.bind(this);
 	}
 
 	componentDidMount() {
@@ -149,63 +113,11 @@ class AddLocationContainer extends View<null, Props, State> {
 		});
 	};
 
-	closeModal = () => {
-		this.props.actions.hideModal();
-	};
-
-	renderCustomDialogueHeader(styles: Object): Object {
-		let buttonProps = {
-			infoButtonContainerStyle: styles.infoButtonContainer,
-		};
-		return (
-			<ImageBackground style={styles.dialogueHeader} source={this.props.source}>
-				<RoundedInfoButton buttonProps={buttonProps}/>
-				<Text style={styles.dialogueHeaderText}>
-					{this.dialogueHeader}
-				</Text>
-			</ImageBackground>
-		);
-	}
-
-	renderCustomBody(styles: Object): Object {
-		return (
-			<View style={styles.dialogueBody}>
-				<Text style={styles.dialogueBodyText}>
-					{'\n'}{this.dlogPOne}{'\n'}
-				</Text>
-				<Text style={styles.dialogueBodyText}>
-					{this.dlogPTwo}{'\n'}
-				</Text>
-				<Text style={styles.dialogueBodyText}>
-					{this.dlogPThree}
-				</Text>
-			</View>
-		);
-	}
-
-	getRelativeData = (styles: Object): Object => {
-		let {modalExtras, validationMessage, screenProps} = this.props;
-		const { formatMessage } = screenProps.intl;
-		if (modalExtras.source && modalExtras.source === 'Position') {
-			return {
-				dialogueHeader: this.renderCustomDialogueHeader(styles),
-				validationMessage: this.renderCustomBody(styles),
-				positiveText: formatMessage(i18n.dialoguePositiveText).toUpperCase(),
-			};
-		}
-		return {
-			dialogueHeader: false,
-			validationMessage: validationMessage,
-			positiveText: false,
-		};
-	};
-
 	render(): Object {
 		const {
 			children,
 			actions,
 			screenProps,
-			showModal,
 			navigation,
 		} = this.props;
 		const { currentScreen, appLayout } = screenProps;
@@ -219,7 +131,6 @@ class AddLocationContainer extends View<null, Props, State> {
 
 		let padding = currentScreen === 'TimeZoneCity'
 			|| currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * Theme.Core.paddingFactor);
-		const { dialogueHeader, validationMessage, positiveText } = this.getRelativeData(styles);
 
 		return (
 			<View style={{
@@ -250,76 +161,25 @@ class AddLocationContainer extends View<null, Props, State> {
 									actions,
 									...screenProps,
 									navigation,
-									dialogueOpen: showModal,
 									paddingHorizontal: padding,
 								},
 							)}
 						</View>
 					</ScrollView>
 				</KeyboardAvoidingView>
-				<DialogueBox
-					dialogueContainerStyle={{elevation: 0}}
-					header={dialogueHeader}
-					showDialogue={showModal}
-					text={validationMessage}
-					showPositive={true}
-					positiveText={positiveText}
-					onPressPositive={this.closeModal}/>
 			</View>
 		);
 	}
 
 	getStyle(appLayout: Object): Object {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
 
 		return {
 			style: {
 				flex: 1,
 			},
-			dialogueHeader: {
-				flexDirection: 'row',
-				justifyContent: 'flex-start',
-				alignItems: 'center',
-				paddingLeft: 20,
-				height: isPortrait ? height * 0.08 : width * 0.08,
-				width: isPortrait ? width * 0.75 : height * 0.75,
-			},
-			infoButtonContainer: {
-				position: 'relative',
-				right: 0,
-				bottom: 0,
-			},
-			dialogueHeaderText: {
-				textAlign: 'center',
-				textAlignVertical: 'center',
-				color: '#fff',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
-				paddingLeft: 10,
-			},
-			dialogueBody: {
-				justifyContent: 'center',
-				alignItems: 'flex-start',
-				paddingLeft: 20,
-				paddingRight: 10,
-				width: isPortrait ? width * 0.75 : height * 0.75,
-			},
-			dialogueBodyText: {
-				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.042) : Math.floor(height * 0.042),
-				textAlign: 'left',
-			},
 		};
 	}
 }
-
-const mapStateToProps = (store: Object): Object => (
-	{
-		showModal: store.modal.openModal,
-		validationMessage: store.modal.data,
-		modalExtras: store.modal.extras,
-	}
-);
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
@@ -329,4 +189,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddLocationContainer);
+export default connect(null, mapDispatchToProps)(AddLocationContainer);

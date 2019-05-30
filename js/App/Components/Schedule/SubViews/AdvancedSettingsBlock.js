@@ -43,7 +43,7 @@ type Props = {
     appLayout: Object,
 
     intl: intlShape.isRequired,
-	onPressInfo: (string, any) => void,
+	onPressInfo: (Object) => void,
     onDoneEditAdvanced: (Object) => void,
     onToggleAdvanced: (boolean) => void,
 };

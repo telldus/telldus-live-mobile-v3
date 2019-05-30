@@ -117,7 +117,10 @@ class RGBControlScreen extends View<Props, State> {
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 
 		return (
-			<View style={{flex: 1}}>
+			<View style={{
+				flex: 1,
+				backgroundColor: Theme.Core.appBackground,
+			}}>
 				<NavigationHeaderPoster
 					icon={'device-alt'}
 					h2={deviceName}

@@ -59,3 +59,10 @@ export function enableCrashlyticsCollection() {
 		firebase.crashlytics().enableCrashlyticsCollection();
 	}
 }
+
+export function setUserName(uname: string) {
+	// TODO: Enable once the method is supported. rn-firebase v6
+	// if (!__DEV__) {
+	// 	firebase.crashlytics().setUserName(uname);
+	// }
+}

@@ -24,20 +24,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Image } from 'react-native';
 import View from './View';
+import GeometricHeader from './GeometricHeader';
+
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 type Props = {
 	children?: any,
-	source?: number | Object,
 	appLayout: Object,
 	posterWidth?: number,
 	posterHeight?: number,
-};
-
-type DefaultProps = {
-	source: number | Object,
 };
 
 class Poster extends Component<Props, null> {
@@ -45,11 +41,6 @@ class Poster extends Component<Props, null> {
 
 	static propTypes = {
 		children: PropTypes.any,
-		source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-	};
-
-	static defaultProps: DefaultProps = {
-		source: { uri: 'telldus_geometric_bg'},
 	};
 
 	constructor(props: Props) {
@@ -57,12 +48,12 @@ class Poster extends Component<Props, null> {
 	}
 
 	render(): Object {
-		const { children, appLayout, source } = this.props;
+		const { children, appLayout } = this.props;
 
-		const { image, mask } = this._getStyle(appLayout);
+		const { mask, headerHeight, headerWidth } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<Image source={source} style={image}/>
+				<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth}/>
 				{!!children && children}
 			</View>
 		);
@@ -79,10 +70,10 @@ class Poster extends Component<Props, null> {
 
 		return {
 			image: {
-				height: posterHeight,
-				...ifIphoneX({width: '100%'}, {width: posterWidth}),
 				resizeMode: 'cover',
 			},
+			headerHeight: posterHeight,
+			headerWidth: ifIphoneX(width, posterWidth),
 			mask: {
 				borderWidth: 0,
 				height: posterHeight,

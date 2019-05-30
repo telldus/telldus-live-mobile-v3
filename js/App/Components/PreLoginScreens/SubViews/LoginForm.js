@@ -29,7 +29,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 
 import { TouchableButton, View, H1 } from '../../../../BaseComponents';
-import { loginToTelldus, showModal } from '../../../Actions';
+import { loginToTelldus } from '../../../Actions';
 import {
 	testUsername,
 	testPassword,
@@ -40,21 +40,23 @@ import {
 import i18n from '../../../Translations/common';
 
 type Props = {
-		dispatch: Function,
-		screenProps: Object,
-		loginToTelldus: Function,
-		intl: intlShape.isRequired,
-		appLayout: Object,
-		dialogueOpen: Object,
-		styles: Object,
-		headerText: string,
+	dispatch: Function,
+	screenProps: Object,
+	loginToTelldus: Function,
+	intl: intlShape.isRequired,
+	appLayout: Object,
+	dialogueOpen: Object,
+	styles: Object,
+	headerText: string,
+
+	openDialogueBox: (string, ?string) => void,
 };
 
 type State = {
-		isLoading: boolean,
-		username: string,
-		password: string,
-		isSigninInProgress: boolean,
+	isLoading: boolean,
+	username: string,
+	password: string,
+	isSigninInProgress: boolean,
 };
 
 class LoginForm extends View {
@@ -188,7 +190,7 @@ class LoginForm extends View {
 	}
 
 	async signIn(): any {
-		const { dispatch } = this.props;
+		const { openDialogueBox } = this.props;
 		this.setState({ isSigninInProgress: true });
 		try {
 			await GoogleSignin.hasPlayServices();
@@ -209,7 +211,7 @@ class LoginForm extends View {
 						});
 				});
 			} else {
-				dispatch(showModal(this.unknownError));
+				openDialogueBox(this.unknownError);
 			}
 		  } catch (error) {
 			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -218,10 +220,10 @@ class LoginForm extends View {
 			  // operation (f.e. sign in) is in progress already
 			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
 			  // play services not available or outdated
-			  dispatch(showModal('Please make sure you have the latest version of google play services installed.'));// TODO : Confirm and translate the message string
+			  openDialogueBox('Please make sure you have the latest version of google play services installed.');// TODO : Confirm and translate the message string
 			} else {
 			  // some other error happened
-			  dispatch(showModal(this.unknownError));
+			  openDialogueBox(this.unknownError);
 			}
 			this.setState({ isSigninInProgress: false });
 		  }
@@ -242,7 +244,7 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
-		const { intl, dispatch } = this.props;
+		const { intl, openDialogueBox } = this.props;
 		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
@@ -260,12 +262,12 @@ class LoginForm extends View {
 			});
 		} else {
 			let message = intl.formatMessage(i18n.fieldEmpty);
-			dispatch(showModal(message));
+			openDialogueBox(message);
 		}
 	}
 
 	handleLoginError(error: Object) {
-		let { dispatch } = this.props;
+		let { openDialogueBox } = this.props;
 		if (error.response) {
 			const { data = {} } = error.response;
 			let errorMessage = data.error_description ?
@@ -274,12 +276,12 @@ class LoginForm extends View {
 			if (data.error === 'invalid_grant') {
 				errorMessage = this.invalidGrant;
 			}
-			dispatch(showModal(errorMessage));
+			openDialogueBox(errorMessage);
 		} else if (error.request) {
 			let errorMessage = !error.status && error.request._timedOut ? this.timedOut : this.networkFailed;
-			dispatch(showModal(errorMessage));
+			openDialogueBox(errorMessage);
 		} else {
-			dispatch(showModal(error.message));
+			openDialogueBox(error.message);
 		}
 	}
 

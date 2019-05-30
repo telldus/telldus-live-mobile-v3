@@ -9,7 +9,8 @@
     "release": "babel-node js/Utils/release.js",
     "sourcemap": "babel-node js/Utils/sourcemap.js",
     "test": "jest",
-    "manage:translations-widget-android": "node node_modules/live-shared-data/lib/manageStringsWidgetAndroid.js"
+    "manage:translations-widget-android": "node node_modules/live-shared-data/lib/manageStringsWidgetAndroid.js",
+    "start": "yarn react-native start --config packager/config.js"
   },
   "browser": {
     "dgram": "react-native-udp"
@@ -24,7 +25,7 @@
     "external-editor": "~3.0.3",
     "global": "~4.3.2",
     "intl": "~1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#live-app-3.11",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#thermostat",
     "lodash": "~4.17.11",
     "moment": "~2.24.0",
     "moment-timezone": "~0.5.23",
@@ -37,6 +38,7 @@
     "react-native-accessibility": "~1.0.7",
     "react-native-cached-image": "^1.4.3",
     "react-native-calendars": "~1.60.0",
+    "react-native-circular-slider": "git+https://github.com/telldus/react-native-circular-slider.git",
     "react-native-color-wheel": "git+https://github.com/netbeast/react-native-color-wheel.git#8cf9b24e0e9d7806b7f77ada22568ff20c461bd5",
     "react-native-device-info": "~1.5.1",
     "react-native-easy-grid": "~0.2.1",

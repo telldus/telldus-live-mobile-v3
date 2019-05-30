@@ -49,6 +49,7 @@ import * as LocalControl from './LocalControl';
 import * as appUtils from './appUtils';
 import * as gatewayUtils from './gatewayUtils';
 import * as rgbUtils from './rgbUtils';
+import * as thermostatUtils from './thermostatUtils';
 
 
 module.exports = {
@@ -81,4 +82,5 @@ module.exports = {
 	...appUtils,
 	...gatewayUtils,
 	...rgbUtils,
+	...thermostatUtils,
 };

@@ -19,7 +19,7 @@
  */
 
 module.exports = {
-	supportedMethods: 1975,
+	supportedMethods: 4023,
 	methods: {
 		1: 'TURNON',
 		2: 'TURNOFF',
