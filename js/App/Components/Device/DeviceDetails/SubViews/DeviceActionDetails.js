@@ -234,12 +234,15 @@ class DeviceActionDetails extends View {
 				overflow: 'hidden',
 			},
 			colorWheelCover: {
-				width: deviceWidth - (bodyPadding),
-				height: deviceWidth * 0.7,
+				width: width - (padding * 2),
+				height: deviceWidth * 0.52,
+				alignItems: 'center',
 			},
 			colorWheel: {
-				width: deviceWidth - (bodyPadding),
-				height: deviceWidth * 0.7,
+				width: deviceWidth * 0.5,
+				height: deviceWidth * 0.5,
+				alignItems: 'center',
+				borderRadius: deviceWidth * 0.25,
 			},
 			thumStyle: {
 				height: 30,
