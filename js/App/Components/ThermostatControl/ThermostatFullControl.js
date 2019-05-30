@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { ScrollView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView } from 'react-native';
 
 import {
 	View,
@@ -141,25 +141,31 @@ render(): Object | null {
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}/>
-			<ScrollView
+			<KeyboardAvoidingView
+				behavior="padding"
 				style={{flex: 1}}
-				contentContainerStyle={{
-					flexGrow: 1,
-					alignItems: 'stretch',
-				}}
-				keyboardShouldPersistTaps={'always'}>
-				<PosterWithText
-					appLayout={appLayout}
-					align={'center'}
-					icon={'thermostat'}
-					h2={name}/>
-				<HeatControlWheelModes
-					appLayout={appLayout}
-					modes={supportedModes}
-					device={device}
-					lastUpdated={lastUpdated}
-					deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
-			</ScrollView>
+				contentContainerStyle={{ justifyContent: 'center'}}
+				enabled>
+				<ScrollView
+					style={{flex: 1}}
+					contentContainerStyle={{
+						flexGrow: 1,
+						alignItems: 'stretch',
+					}}
+					keyboardShouldPersistTaps={'always'}>
+					<PosterWithText
+						appLayout={appLayout}
+						align={'center'}
+						icon={'thermostat'}
+						h2={name}/>
+					<HeatControlWheelModes
+						appLayout={appLayout}
+						modes={supportedModes}
+						device={device}
+						lastUpdated={lastUpdated}
+						deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
+				</ScrollView>
+			</KeyboardAvoidingView>
 		</View>
 	);
 }
