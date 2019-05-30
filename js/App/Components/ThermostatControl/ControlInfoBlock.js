@@ -162,7 +162,7 @@ render(): Object {
 	const cModevalue = this.formatModeValue(currentValueInScreen);
 	const currModevalue = this.formatModeValue(currentValue);
 	return (
-		<View style={InfoCover}>
+		<View style={InfoCover} pointerEvents="box-none">
 			{!!title && <Text style={[infoTitleStyle, {
 				color: baseColor,
 			}]}>
