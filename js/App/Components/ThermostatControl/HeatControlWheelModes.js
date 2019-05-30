@@ -260,6 +260,18 @@ onEndSlide = () => {
 	this.onControlThermostat(controllingMode, currentValueInScreen, controllingMode === 'off' ? 2 : 1);
 }
 
+onPressOutSliderPath = (data: Object) => {
+	const {startAngle, angleLength} = data;
+	const { temp } = this.getValueFromAngle(angleLength, this.state.controllingMode);
+	this.setState({
+		angleLength,
+		startAngle,
+		currentValueInScreen: parseFloat(temp),
+	}, () => {
+		this.onEndSlide();
+	});
+}
+
 render(): Object {
 
 	const {
@@ -312,7 +324,7 @@ render(): Object {
 					knobRadius={18}
 					knobStrokeWidth={3}
 					onReleaseStopKnob={this.onEndSlide}
-					onPressOutSliderPath={this.onEndSlide}
+					onPressOutSliderPath={this.onPressOutSliderPath}
 				/>
 					:
 					null
