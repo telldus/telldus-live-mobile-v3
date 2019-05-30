@@ -160,13 +160,10 @@ class RGBControlScreen extends View<Props, State> {
 
 		return {
 			colorWheel: {
-				backgroundColor: '#fff',
-				...Theme.Core.shadow,
-				borderRadius: 2,
-				marginVertical: padding,
-				width: deviceWidth - (padding * 2),
-				height: '50%',
+				width: deviceWidth * 0.5,
+				height: deviceWidth * 0.5,
 				alignItems: 'center',
+				borderRadius: deviceWidth * 0.25,
 			},
 			thumStyle: {
 				height: 30,
@@ -197,7 +194,13 @@ class RGBControlScreen extends View<Props, State> {
 				marginTop: padding,
 			},
 			colorWheelCover: {
-				flex: 1,
+				backgroundColor: '#fff',
+				...Theme.Core.shadow,
+				borderRadius: 2,
+				marginVertical: padding,
+				width: width - (padding * 2),
+				height: deviceWidth * 0.52,
+				alignItems: 'center',
 			},
 			sliderCover: {
 				backgroundColor: '#fff',
@@ -206,7 +209,7 @@ class RGBControlScreen extends View<Props, State> {
 				marginHorizontal: padding,
 				marginTop: -(padding / 2),
 				marginBottom: padding,
-				width: deviceWidth - (padding * 2),
+				width: width - (padding * 2),
 				padding: padding,
 			},
 			wheelCover: {
