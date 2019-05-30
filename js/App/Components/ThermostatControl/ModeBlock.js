@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { TouchableOpacity, TextInput, LayoutAnimation } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
@@ -53,6 +53,8 @@ type Props = {
 	intl: Object,
 	onEditSubmitValue: (number) => void,
 	updateCurrentValueInScreen: (string) => void,
+	IconActive: Object,
+	Icon: Object,
 };
 
 type State = {
@@ -164,9 +166,10 @@ render(): Object {
 		value,
 		scale,
 		unit,
-		icon,
 		active,
 		mode,
+		IconActive,
+		Icon,
 	} = this.props;
 
 	const {
@@ -254,7 +257,7 @@ render(): Object {
 								</Text>
 							}
 						</View>
-						<Icon name={editValue ? 'done' : 'edit'}
+						<MaterialIcon name={editValue ? 'done' : 'edit'}
 							size={editValue ? editIconSizeDone : editIconSize}
 							color={brandSecondary}
 							style={editIconStyle}
@@ -263,7 +266,14 @@ render(): Object {
 				)}
 			</View>
 			<TouchableOpacity style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPress={this.onPressRow}>
-				<IconTelldus icon={icon} size={iconSize} color={iconColor}/>
+				{mode !== 'off' ?
+					active ?
+						<IconActive height={iconSize} width={iconSize}/>
+						:
+						<Icon height={iconSize} width={iconSize}/>
+					:
+					<IconTelldus icon={'off'} size={iconSize} color={iconColor}/>
+				}
 			</TouchableOpacity>
 		</View>
 	);
@@ -318,7 +328,8 @@ getStyles(): Object {
 		rowTextColor,
 		controlBlockStyle: {
 			flexDirection: 'row',
-			width: deviceWidth * 0.25,
+			width: deviceWidth * 0.3,
+			height: '100%',
 			alignItems: 'center',
 			justifyContent: 'center',
 			marginRight: 10,

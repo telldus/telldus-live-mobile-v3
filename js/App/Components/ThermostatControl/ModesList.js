@@ -95,6 +95,8 @@ render(): Object {
 			mode,
 			minVal,
 			maxVal,
+			Icon,
+			IconActive,
 		} = modeInfo;
 		let active = false;
 		if (controllingMode === mode) {
@@ -115,6 +117,8 @@ render(): Object {
 				mode={mode}
 				minVal={minVal}
 				maxVal={maxVal}
+				Icon={Icon}
+				IconActive={IconActive}
 				onControlThermostat={this.props.onControlThermostat}
 				intl={intl}
 				onEditSubmitValue={this.props.onEditSubmitValue}

@@ -23,6 +23,39 @@
 
 import i18n from '../Translations/common';
 
+import IconThermostatAutoColor from '../Components/TabViews/img/thermostat/icon_thermostat-auto-color.svg';
+import IconThermostatAuto from '../Components/TabViews/img/thermostat/icon_thermostat-auto.svg';
+
+import IconThermostatAwayColor from '../Components/TabViews/img/thermostat/icon_thermostat-away-color.svg';
+import IconThermostatAway from '../Components/TabViews/img/thermostat/icon_thermostat-away.svg';
+
+import IconThermostatCoolColor from '../Components/TabViews/img/thermostat/icon_thermostat-cool-color.svg';
+import IconThermostatCool from '../Components/TabViews/img/thermostat/icon_thermostat-cool.svg';
+
+import IconThermostatDryColor from '../Components/TabViews/img/thermostat/icon_thermostat-dry-color.svg';
+import IconThermostatDry from '../Components/TabViews/img/thermostat/icon_thermostat-dry.svg';
+
+// import IconThermostatEcoColor from '../Components/TabViews/img/thermostat/icon_thermostat-eco-color.svg';
+import IconThermostatEco from '../Components/TabViews/img/thermostat/icon_thermostat-eco.svg';
+
+import IconThermostatEcoCoolColor from '../Components/TabViews/img/thermostat/icon_thermostat-eco-cool-color.svg';
+import IconThermostatEcoHeatColor from '../Components/TabViews/img/thermostat/icon_thermostat-eco-heat-color.svg';
+
+import IconThermostatFanColor from '../Components/TabViews/img/thermostat/icon_thermostat-fan-color.svg';
+import IconThermostatFan from '../Components/TabViews/img/thermostat/icon_thermostat-fan.svg';
+
+import IconThermostatHeatColor from '../Components/TabViews/img/thermostat/icon_thermostat-heat-color.svg';
+import IconThermostatHeat from '../Components/TabViews/img/thermostat/icon_thermostat-heat.svg';
+
+import IconThermostatHeatCoolColor from '../Components/TabViews/img/thermostat/icon_thermostat-heat-cool-color.svg';
+import IconThermostatHeatCool from '../Components/TabViews/img/thermostat/icon_thermostat-heat-cool.svg';
+
+import IconThermostatHGColor from '../Components/TabViews/img/thermostat/icon_thermostat-hg-color.svg';
+import IconThermostatHG from '../Components/TabViews/img/thermostat/icon_thermostat-hg.svg';
+
+import IconThermostatProgramColor from '../Components/TabViews/img/thermostat/icon_thermostat-program-color.svg';
+import IconThermostatProgram from '../Components/TabViews/img/thermostat/icon_thermostat-program.svg';
+
 const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 	return [
 		{
@@ -34,6 +67,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#23C4FA',
 			endColor: '#015095',
 			mode: 'auto',
+			Icon: IconThermostatAutoColor,
+			IconActive: IconThermostatAuto,
 		},
 		{
 			label: 'Heat',
@@ -44,6 +79,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#FFB741',
 			endColor: '#E26901',
 			mode: 'heat',
+			Icon: IconThermostatHeatColor,
+			IconActive: IconThermostatHeat,
 		},
 		{
 			label: 'Cool',
@@ -54,6 +91,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#23C4FA',
 			endColor: '#015095',
 			mode: 'cool',
+			Icon: IconThermostatCoolColor,
+			IconActive: IconThermostatCool,
 		},
 		{
 			label: 'Eco Heat',
@@ -64,6 +103,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#FFB741',
 			endColor: '#E26901',
 			mode: 'eco-heat',
+			Icon: IconThermostatEcoHeatColor,
+			IconActive: IconThermostatEco,
 		},
 		{
 			label: 'Eco Cool',
@@ -74,6 +115,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#23C4FA',
 			endColor: '#015095',
 			mode: 'eco-cool',
+			Icon: IconThermostatEcoCoolColor,
+			IconActive: IconThermostatEco,
 		},
 		{
 			label: 'Heat-cool',
@@ -84,6 +127,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#004D92',
 			endColor: '#e26901',
 			mode: 'heat-cool',
+			Icon: IconThermostatHeatCoolColor,
+			IconActive: IconThermostatHeatCool,
 		},
 		{
 			label: 'Manual',
@@ -94,6 +139,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'manual',
+			Icon: IconThermostatAutoColor,
+			IconActive: IconThermostatAuto,
 		},
 		{
 			label: 'Program',
@@ -104,6 +151,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'program',
+			Icon: IconThermostatProgramColor,
+			IconActive: IconThermostatProgram,
 		},
 		{
 			label: 'Dry',
@@ -114,6 +163,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'dry',
+			Icon: IconThermostatDryColor,
+			IconActive: IconThermostatDry,
 		},
 		{
 			label: 'Away',
@@ -124,6 +175,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'away',
+			Icon: IconThermostatAwayColor,
+			IconActive: IconThermostatAway,
 		},
 		{
 			label: 'HG',
@@ -134,6 +187,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'hg',
+			Icon: IconThermostatHGColor,
+			IconActive: IconThermostatHG,
 		},
 		{
 			label: 'Max',
@@ -144,6 +199,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'max',
+			Icon: IconThermostatHeatColor,
+			IconActive: IconThermostatHeat,
 		},
 		{
 			label: 'Off',
@@ -160,6 +217,8 @@ const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
 			startColor: '#cccccc',
 			endColor: '#999999',
 			mode: 'fan',
+			Icon: IconThermostatFanColor,
+			IconActive: IconThermostatFan,
 		},
 	];
 };
