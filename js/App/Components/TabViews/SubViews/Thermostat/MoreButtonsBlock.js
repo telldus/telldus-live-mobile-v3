@@ -28,7 +28,6 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 
 import { shouldUpdate } from '../../../../Lib';
 import i18n from '../../../../Translations/common';
-import Theme from '../../../../Theme';
 
 type Props = {
 	command: number,
