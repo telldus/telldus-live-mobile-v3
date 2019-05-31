@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 
 import {
 	View,
@@ -103,7 +103,8 @@ render(): Object | null {
 				behavior="padding"
 				style={{flex: 1}}
 				contentContainerStyle={{ justifyContent: 'center'}}
-				enabled>
+				enabled
+				keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
 				<ScrollView
 					style={{flex: 1}}
 					contentContainerStyle={{
