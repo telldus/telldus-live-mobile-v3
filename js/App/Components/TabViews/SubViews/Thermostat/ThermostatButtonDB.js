@@ -20,14 +20,14 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, LayoutAnimation } from 'react-native';
+import { StyleSheet } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../../BaseComponents';
 import MoreButtonsBlock from './MoreButtonsBlock';
 import HeatInfoBlock from './HeatInfoBlock';
 
-import { shouldUpdate, LayoutAnimations } from '../../../../Lib';
+import { shouldUpdate } from '../../../../Lib';
 
 import Theme from '../../../../Theme';
 
@@ -86,22 +86,6 @@ class ThermostatButtonDB extends View<Props, State> {
 		}
 
 		return false;
-	}
-
-	onPressChangeMode = (i: number) => {
-		const nextMode = this.state.currentModeIndex + i;
-
-		const { item } = this.props;
-		const { stateValues = {} } = item;
-		const { THERMOSTAT: { setpoint = {}} } = stateValues;
-		const numOfModes = Object.keys(setpoint);
-		if (nextMode >= numOfModes.length || nextMode < 0) {
-			return;
-		}
-		this.setState({
-			currentModeIndex: nextMode,
-		});
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 	}
 
 	render(): Object {
