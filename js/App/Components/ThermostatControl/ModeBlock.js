@@ -152,7 +152,7 @@ onPressDown = () => {
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
-formatModeValue = (modeValue?: number): string | number => {
+formatModeValue = (modeValue?: number | string): string | number => {
 	if (modeValue === '-') {
 		return modeValue;
 	}

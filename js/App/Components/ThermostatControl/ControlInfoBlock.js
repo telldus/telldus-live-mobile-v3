@@ -117,7 +117,7 @@ formatSensorLastUpdate = (time: string): string => {
 	return formatSensorLastUpdate(time, this.props.intl);
 }
 
-formatModeValue = (modeValue: number): string | number => {
+formatModeValue = (modeValue: number | string): string | number => {
 	if (modeValue === '-') {
 		return modeValue;
 	}
