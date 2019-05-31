@@ -163,8 +163,6 @@ render(): Object {
 		doneIconCoverStyle,
 	} = this.getStyles();
 
-	console.log("TEST currentValueInScreen", currentValueInScreen);
-	console.log("TEST currentValue", currentValue);
 	const cModevalue = this.formatModeValue(currentValueInScreen);
 	const currModevalue = this.formatModeValue(currentValue);
 
