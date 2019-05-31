@@ -107,30 +107,32 @@ class ThermostatButtonDB extends View<Props, State> {
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
-			style={[styles.navigationButton, infoBlockStyle, {justifyContent: 'flex-start'}]}
+			style={[styles.buttonCommon, infoBlockStyle, {justifyContent: 'flex-start'}]}
 			device={item}
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
 			currentValue={currentModeValue}
-			currentMode={mode}/>;
+			currentMode={mode}
+			iconStyle={styles.iconStyle}
+			textOneStyle={styles.textOneStyle}
+			textTwoStyle={styles.textTwoStyle}
+			textThreeStyle={styles.textThreeStyle}/>;
 		const buttonThree = <MoreButtonsBlock
 			isEnabled={true}
-			style={[styles.navigationButton, moreActionsStyle, {flex: 0}]}
+			style={[styles.buttonCommon, moreActionsStyle, {flex: 0}]}
 			device={item}
 			iconSize={16}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
-			onPressMoreButtons={openThermostatControl}/>;
+			onPressMoreButtons={openThermostatControl}
+			iconStyle={styles.actionIconStyle}/>;
+
+		const bGColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.gatewayInactive;
 
 		return (
 			<View style={containerStyle}>
-				<View style={{
-					flex: 1,
-					flexDirection: 'row',
-					backgroundColor: Theme.Core.brandSecondary,
-					paddingHorizontal: 3,
-				}}>
+				<View style={[styles.buttonsCover, {backgroundColor: bGColor }]}>
 					{buttonTwo}
 					{buttonThree}
 				</View>
@@ -140,10 +142,38 @@ class ThermostatButtonDB extends View<Props, State> {
 }
 
 const styles = StyleSheet.create({
-	navigationButton: {
+	buttonsCover: {
+		flex: 1,
+		flexDirection: 'row',
+		paddingHorizontal: 3,
+	},
+	buttonCommon: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	iconStyle: {
+		fontSize: 24,
+		color: '#fff',
+	},
+	textOneStyle: {
+		textAlign: 'left',
+		fontSize: 13,
+		color: '#fff',
+	},
+	textTwoStyle: {
+		fontSize: 8,
+		color: '#fff',
+	},
+	textThreeStyle: {
+		textAlign: 'left',
+		fontSize: 7,
+		color: '#fff',
+	},
+	actionIconStyle: {
+		fontSize: 22,
+		color: '#fff',
+		paddingLeft: 3,
 	},
 	itemIconContainerOn: {
 		backgroundColor: Theme.Core.brandSecondary,

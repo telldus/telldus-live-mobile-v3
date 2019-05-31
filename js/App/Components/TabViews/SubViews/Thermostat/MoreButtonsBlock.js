@@ -43,6 +43,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	onPressMoreButtons: (id: number) => void,
 	onPressDeviceAction?: () => void,
+	iconStyle: number | Object,
 };
 
 class MoreButtonsBlock extends View {
@@ -89,14 +90,13 @@ class MoreButtonsBlock extends View {
 	}
 
 	render(): Object {
-		let { device, moreButtonsBlockStyle } = this.props;
+		let { device, moreButtonsBlockStyle, iconStyle } = this.props;
 		let { name } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
-		// let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="thermostatheat" size={22} color={'#fff'} style={{marginRight: 3}}/>
+				<IconTelldus icon="thermostatheat" style={iconStyle}/>
 			</TouchableOpacity>
 		);
 	}
@@ -106,7 +106,6 @@ const styles = StyleSheet.create({
 	button: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: Theme.Core.brandSecondary,
 	},
 	dot: {
 		position: 'absolute',

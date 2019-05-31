@@ -43,6 +43,10 @@ type Props = {
 	intl: Object,
 	style: Object,
 	heatInfoBlockStyle: number | Object,
+	iconStyle: number | Object,
+	textOneStyle: number | Object,
+	textTwoStyle: number | Object,
+	textThreeStyle: number | Object,
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,
@@ -79,24 +83,33 @@ class HeatInfoBlock extends View {
 	}
 
 	render(): Object {
-		let { device, heatInfoBlockStyle, currentMode, currentValue } = this.props;
+		let {
+			device,
+			heatInfoBlockStyle,
+			currentMode,
+			currentValue,
+			iconStyle,
+			textOneStyle,
+			textTwoStyle,
+			textThreeStyle,
+		} = this.props;
 		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="temperature" size={26} color={'#fff'} />
+				<IconTelldus icon="temperature" style={iconStyle}/>
 				<View style={{justifyContent: 'flex-start', marginLeft: 2}}>
-					<Text>
+					<Text style={{textAlign: 'left'}}>
 						<FormattedNumber
 							formatterFunction={this.formatterFunction}
-							style={{textAlign: 'left', fontSize: 13, color: '#fff'}}
+							style={textOneStyle}
 							value={currentValue}
 							minimumFractionDigits={1}/>
-						<Text style={{fontSize: 8, color: '#fff'}}>°C</Text>
+						<Text style={textTwoStyle}>°C</Text>
 					</Text>
-					<Text style={{textAlign: 'left', fontSize: 8, color: '#fff'}}>
+					<Text style={textThreeStyle}>
 						{!!currentMode && currentMode.toUpperCase()}
 					</Text>
 				</View>
@@ -115,7 +128,6 @@ const styles = StyleSheet.create({
 	button: {
 		justifyContent: 'flex-start',
 		alignItems: 'center',
-		backgroundColor: Theme.Core.brandSecondary,
 		flexDirection: 'row',
 	},
 	dot: {
