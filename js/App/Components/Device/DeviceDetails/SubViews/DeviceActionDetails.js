@@ -91,6 +91,7 @@ class DeviceActionDetails extends View {
 			swatchesCover,
 			colorWheelCover,
 			swatchWheelCover,
+			modesCoverStyle,
 		} = this.getStyles(appLayout);
 		const sharedProps = {
 			...device,
@@ -174,7 +175,8 @@ class DeviceActionDetails extends View {
 						modes={supportedModes}
 						device={device}
 						lastUpdated={lastUpdated}
-						deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
+						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
+						modesCoverStyle={modesCoverStyle}/>
 			}
 			{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>
@@ -299,6 +301,11 @@ class DeviceActionDetails extends View {
 				borderRadius: swatchSize / 2,
 				marginHorizontal: padding,
 				marginTop: padding,
+			},
+			modesCoverStyle: {
+				marginVertical: 0,
+				marginTop: padding,
+				marginBottom: padding / 2,
 			},
 		};
 	}

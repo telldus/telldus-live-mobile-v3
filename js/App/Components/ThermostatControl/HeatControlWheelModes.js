@@ -41,6 +41,7 @@ type Props = {
 	device: Object,
 	lastUpdated: number,
 
+	modesCoverStyle: number | Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 
@@ -278,6 +279,7 @@ render(): Object {
 		appLayout,
 		modes,
 		lastUpdated,
+		modesCoverStyle,
 	} = this.props;
 
 	const {
@@ -354,7 +356,8 @@ render(): Object {
 				onEditSubmitValue={this.onEditSubmitValue}
 				currentValue={currentValue}
 				currentValueInScreen={currentValueInScreen}
-				updateCurrentValueInScreen={this.updateCurrentValueInScreen}/>
+				updateCurrentValueInScreen={this.updateCurrentValueInScreen}
+				modesCoverStyle={modesCoverStyle}/>
 		</>
 	);
 }

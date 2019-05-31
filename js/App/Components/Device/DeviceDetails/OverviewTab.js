@@ -197,7 +197,7 @@ class OverviewTab extends View<Props, null> {
 					deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
 				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
 				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
-					marginBottom: styles.padding,
+					marginBottom: styles.padding * 2,
 				}]}/>
 			</ScrollView>
 		);

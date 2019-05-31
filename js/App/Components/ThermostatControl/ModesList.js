@@ -40,6 +40,7 @@ type Props = {
 	currentValue: number,
 	currentValueInScreen: number,
 
+	modesCoverStyle: number | Array<any> | Object,
 	onPressRow: (string) => void,
 	intl: intlShape,
 	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
@@ -78,6 +79,7 @@ render(): Object {
 		intl,
 		currentValueInScreen,
 		currentValue,
+		modesCoverStyle,
 	} = this.props;
 
 	const {
@@ -130,7 +132,7 @@ render(): Object {
 	});
 
 	return (
-		<View style={modesCover}>
+		<View style={[modesCover, modesCoverStyle]}>
 			<Text style={modeHeaderStyle}>
 				{intl.formatMessage(i18n.labelModes)}
 			</Text>
