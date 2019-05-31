@@ -100,7 +100,7 @@ class HeatInfoBlock extends View {
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle]} accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="temperature" style={iconStyle}/>
-				<View style={{justifyContent: 'flex-start', marginLeft: 2}}>
+				<View style={{alignItems: 'flex-start', marginLeft: 2}}>
 					<Text style={{textAlign: 'left'}}>
 						<FormattedNumber
 							formatterFunction={this.formatterFunction}
