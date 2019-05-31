@@ -431,6 +431,17 @@ class DevicesTab extends View {
 		});
 	}
 
+	openThermostatControl = (id: number) => {
+		const { navigation } = this.props;
+		navigation.navigate({
+			routeName: 'ThermostatControl',
+			key: 'ThermostatControl',
+			params: {
+				id,
+			},
+		});
+	}
+
 	getDialogueBoxData(action: string, device: Object): Object {
 		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
@@ -616,6 +627,7 @@ class DevicesTab extends View {
 				onPressDeviceAction={this.onPressDeviceAction}
 				openRGBControl={this.openRGBControl}
 				isLast={isLast}
+				openThermostatControl={this.openThermostatControl}
 			/>
 		);
 	}

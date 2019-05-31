@@ -36,6 +36,7 @@ import NavigationalButton from './NavigationalButton';
 import DimmerButton from './DimmerButton';
 import HiddenRow from './Device/HiddenRow';
 import ShowMoreButton from './Device/ShowMoreButton';
+import ThermostatButton from './Thermostat/ThermostatButton';
 import MultiActionModal from './Device/MultiActionModal';
 
 import {
@@ -83,6 +84,7 @@ type Props = {
 	onPressDeviceAction: () => void,
 	screenReaderEnabled: boolean,
 	openRGBControl: (number) => void,
+	openThermostatControl: (number) => void,
 };
 
 type State = {
@@ -415,6 +417,7 @@ class DeviceRow extends View<Props, State> {
 			DOWN,
 			STOP,
 			RGB,
+			THERMOSTAT,
 		} = supportedMethods;
 
 		const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
@@ -467,7 +470,7 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-		if (DIM && !RGB) {
+		if (DIM && !RGB && !THERMOSTAT) {
 			button.unshift(
 				<DimmerButton
 					{...sharedProps}
@@ -480,7 +483,7 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-		if ((TURNON || TURNOFF) && !DIM && !RGB) {
+		if ((TURNON || TURNOFF) && !DIM && !RGB && !THERMOSTAT) {
 			button.unshift(
 				<ToggleButton
 					{...sharedProps}
@@ -503,6 +506,16 @@ class DeviceRow extends View<Props, State> {
 					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+				/>
+			);
+		}
+		if (THERMOSTAT) {
+			button.unshift(
+				<ThermostatButton
+					{...sharedProps}
+					key={8}
+					style={styles.toggle}
+					openThermostatControl={this.props.openThermostatControl}
 				/>
 			);
 		}
