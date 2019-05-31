@@ -98,7 +98,7 @@ onSubmitEditing = () => {
 		return;
 	}
 
-	const value = this.props.currentValueInScreen ? parseFloat(parseFloat(this.props.currentValueInScreen).toFixed(1)) : null;
+	const value = parseFloat(parseFloat(this.props.currentValueInScreen).toFixed(1));
 	const { maxVal, minVal, controllingMode } = this.props;
 	if (value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
@@ -159,7 +159,7 @@ render(): Object {
 	const cModevalue = this.formatModeValue(currentValueInScreen);
 	const currModevalue = this.formatModeValue(currentValue);
 
-	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined' && !isNaN(currentValueInScreen);
+	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
 			{!!title && <Text style={[infoTitleStyle, {

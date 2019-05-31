@@ -101,7 +101,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (newValue !== state.currentValue) {
 		return {
 			currentValue: newValue,
-			currentValueInScreen: parseFloat(newValue),
+			currentValueInScreen: newValue,
 			methodRequested,
 			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
 		};
@@ -109,7 +109,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
 		return {
 			currentValue: newValue,
-			currentValueInScreen: parseFloat(newValue),
+			currentValueInScreen: newValue,
 			methodRequested,
 			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
 		};
@@ -154,7 +154,7 @@ constructor(props: Props) {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
 		currentValue,
-		currentValueInScreen: parseFloat(currentValue),
+		currentValueInScreen: currentValue,
 		controllingMode: cModeInfo.mode,
 		baseColor: cModeInfo.endColor,
 		gradientColorFrom: cModeInfo.startColor,
@@ -199,7 +199,7 @@ getValueFromAngle = (angleLength: number, currMode: string): Object => {
 
 updateCurrentValueInScreen = (currentValueInScreen: string) => {
 	this.setState({
-		currentValueInScreen: parseFloat(currentValueInScreen),
+		currentValueInScreen: currentValueInScreen,
 	});
 }
 
@@ -209,7 +209,7 @@ onUpdate = (data: Object) => {
 	this.setState({
 		angleLength,
 		startAngle,
-		currentValueInScreen: parseFloat(temp),
+		currentValueInScreen: temp,
 	});
 }
 
@@ -218,7 +218,7 @@ onEditSubmitValue = (newValue: number) => {
 	const angleLength = getAngleLengthToInitiate(controllingMode, newValue, this.props.modes);
 	this.setState({
 		angleLength,
-		currentValueInScreen: parseFloat(newValue),
+		currentValueInScreen: newValue,
 	});
 }
 
@@ -241,7 +241,7 @@ onPressRow = (controlType: string) => {
 	this.setState({
 		controllingMode: controlType,
 		angleLength: initialAngleLength,
-		currentValueInScreen: parseFloat(value),
+		currentValueInScreen: value,
 		baseColor: endColor,
 		gradientColorFrom: startColor,
 		gradientColorTo: endColor,
@@ -266,7 +266,7 @@ onPressOutSliderPath = (data: Object) => {
 	this.setState({
 		angleLength,
 		startAngle,
-		currentValueInScreen: parseFloat(temp),
+		currentValueInScreen: temp,
 	}, () => {
 		this.onEndSlide();
 	});

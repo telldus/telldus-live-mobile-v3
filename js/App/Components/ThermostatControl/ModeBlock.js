@@ -104,7 +104,7 @@ onSubmitEditing = () => {
 		return;
 	}
 
-	const value = this.props.value ? parseFloat(parseFloat(this.props.value).toFixed(1)) : null;
+	const value = parseFloat(parseFloat(this.props.value).toFixed(1));
 	const { maxVal, minVal, mode } = this.props;
 	if (value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
