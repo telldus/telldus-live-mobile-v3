@@ -519,7 +519,7 @@ class DeviceRow extends View<Props, State> {
 				/>
 			);
 		}
-		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB) {
+		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB && !THERMOSTAT) {
 			button.unshift(
 				<ToggleButton
 					{...sharedProps}
