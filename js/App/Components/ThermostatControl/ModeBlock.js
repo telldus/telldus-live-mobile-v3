@@ -106,7 +106,7 @@ onSubmitEditing = () => {
 
 	const value = parseFloat(parseFloat(this.props.value).toFixed(1));
 	const { maxVal, minVal, mode } = this.props;
-	if (value > parseFloat(maxVal) || value < parseFloat(minVal)) {
+	if (isNaN(value) || value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
@@ -153,8 +153,15 @@ onPressDown = () => {
 }
 
 formatModeValue = (modeValue?: number): string | number => {
-	const val = this.props.intl.formatNumber(typeof modeValue === 'undefined' ? -100.0 : modeValue, {minimumFractionDigits: 1});
-	return isNaN(formatModeValue(val)) ? '' : formatModeValue(val);
+	if (modeValue === '-') {
+		return modeValue;
+	}
+	const valToFormat = (typeof modeValue === 'undefined' || modeValue === '' || modeValue === null) ? -100.0 : modeValue;
+	let val = this.props.intl.formatNumber(valToFormat, {minimumFractionDigits: 1});
+	if (isNaN(val)) {
+		val = this.props.intl.formatNumber(-100.0, {minimumFractionDigits: 1});
+	}
+	return formatModeValue(val);
 }
 
 render(): Object {
