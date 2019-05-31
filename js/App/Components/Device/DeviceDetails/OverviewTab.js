@@ -28,10 +28,16 @@ const isEqual = require('react-fast-compare');
 
 import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
 
-import { getDeviceManufacturerInfo, deviceZWaveInfo } from '../../../Actions/Devices';
+import {
+	getDeviceManufacturerInfo,
+	deviceZWaveInfo,
+	requestDeviceAction,
+	deviceSetStateThermostat,
+} from '../../../Actions/Devices';
 import { requestNodeInfo } from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
+import { getLastUpdated } from '../../../Lib/SensorUtils';
 import {
 	DeviceActionDetails,
 } from './SubViews';
@@ -45,9 +51,11 @@ type Props = {
 	gatewayName: string,
 	isGatewayActive: boolean,
 	zwaveInfo: Object,
+	lastUpdated?: number,
 
 	screenProps: Object,
 	dispatch: Function,
+	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 
 class OverviewTab extends View<Props, null> {
@@ -102,12 +110,21 @@ class OverviewTab extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, gatewayName: gatewayNameN, isGatewayActive: isGatewayActiveN, device: deviceN } = nextProps;
+		const {
+			screenProps: screenPropsN,
+			gatewayName: gatewayNameN,
+			isGatewayActive: isGatewayActiveN,
+			device: deviceN,
+			lastUpdated: lastUpdatedN,
+		} = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
 		if (currentScreen === 'Overview') {
 
-			const { screenProps, gatewayName, isGatewayActive, device } = this.props;
-			if ((screenProps.appLayout.width !== appLayout.width) || (gatewayName !== gatewayNameN) || (isGatewayActive !== isGatewayActiveN)) {
+			const { screenProps, gatewayName, isGatewayActive, device, lastUpdated } = this.props;
+			if ((screenProps.appLayout.width !== appLayout.width) ||
+			(gatewayName !== gatewayNameN) ||
+			(isGatewayActive !== isGatewayActiveN) ||
+			(lastUpdated !== lastUpdatedN)) {
 				return true;
 			}
 
@@ -135,7 +152,7 @@ class OverviewTab extends View<Props, null> {
 	}
 
 	render(): Object | null {
-		const { device, screenProps, gatewayName, gatewayType, isGatewayActive } = this.props;
+		const { device, screenProps, gatewayName, gatewayType, isGatewayActive, lastUpdated } = this.props;
 		const { appLayout, intl } = screenProps;
 
 		if (!device || !device.id) {
@@ -175,7 +192,9 @@ class OverviewTab extends View<Props, null> {
 					intl={intl}
 					appLayout={appLayout}
 					isGatewayActive={isGatewayActive}
-					containerStyle={styles.actionDetails}/>
+					containerStyle={styles.actionDetails}
+					lastUpdated={lastUpdated}
+					deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
 				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
 				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
 					marginBottom: styles.padding,
@@ -214,13 +233,17 @@ class OverviewTab extends View<Props, null> {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
+		deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) =>{
+			dispatch(requestDeviceAction(deviceId, 2048, false));
+			dispatch(deviceSetStateThermostat(deviceId, mode, temperature, scale, changeMode, requestedState));
+		},
 	};
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const device = state.devices.byId[id];
-	const { clientId } = device ? device : {};
+	const { clientId, clientDeviceId } = device ? device : {};
 
 	const gateway = state.gateways.byId[clientId];
 	const { name: gatewayName, type: gatewayType, online: isGatewayActive } = gateway ? gateway : {};
@@ -230,6 +253,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gatewayType,
 		gatewayName,
 		isGatewayActive,
+		lastUpdated: getLastUpdated(state.sensors.byId, clientDeviceId, clientId),
 	};
 }
 

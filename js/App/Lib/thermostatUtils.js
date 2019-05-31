@@ -232,7 +232,55 @@ const formatModeValue = (value: number): number | string => {
 	return value;
 };
 
+const getSupportedModes = (parameter: Array<Object>, setpoint: Object, intl: Object): Array<Object> => {
+	let modes = {};
+	parameter.map((param: Object) => {
+		if (param.name && param.name === 'thermostat') {
+			const { modes: MODES, setpoints = {} } = param.value;
+			if (!MODES && Object.keys(setpoints).length > 0) {
+				Object.keys(setpoints).map((key: string) => {
+					const minMax = setpoints[key];
+					if (minMax) {
+						modes[key] = {
+							...minMax,
+						};
+					} else {
+						modes[key] = {};
+					}
+				});
+			} else {
+				MODES.map((mode: string) => {
+					const minMax = setpoints[mode];
+					if (minMax) {
+						modes[mode] = {
+							...minMax,
+						};
+					} else {
+						modes[mode] = {};
+					}
+				});
+			}
+		}
+	});
+
+	let supportedModes = [];
+	getKnownModes(intl.formatMessage).map((modeInfo: Object) => {
+		const { mode } = modeInfo;
+		if (modes[mode]) {
+			modeInfo = {
+				...modeInfo,
+				value: setpoint[mode],
+				minVal: modes[mode].min,
+				maxVal: modes[mode].max,
+			};
+			supportedModes.push(modeInfo);
+		}
+	});
+	return supportedModes;
+};
+
 module.exports = {
 	getKnownModes,
 	formatModeValue,
+	getSupportedModes,
 };

@@ -35,8 +35,10 @@ import UpButton from '../../../TabViews/SubViews/Navigational/UpButton';
 import DownButton from '../../../TabViews/SubViews/Navigational/DownButton';
 import StopButton from '../../../TabViews/SubViews/Navigational/StopButton';
 import RGBColorWheel from '../../../RGBControl/RGBColorWheel';
+import HeatControlWheelModes from '../../../ThermostatControl/HeatControlWheelModes';
 
 import { getDeviceActionIcon } from '../../../../Lib/DeviceUtils';
+import { getSupportedModes } from '../../../../Lib/thermostatUtils';
 
 import Theme from '../../../../Theme';
 
@@ -45,7 +47,10 @@ type Props = {
 	intl: Object,
     isGatewayActive: boolean,
 	appLayout: Object,
+	lastUpdated?: number,
+
 	containerStyle?: Object | Array<any> | number,
+	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 
 class DeviceActionDetails extends View {
@@ -56,8 +61,14 @@ class DeviceActionDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, appLayout, containerStyle } = this.props;
-		const { supportedMethods = {}, deviceType, isInState } = device;
+		const { device, intl, isGatewayActive, appLayout, containerStyle, lastUpdated } = this.props;
+		const {
+			supportedMethods = {},
+			deviceType,
+			isInState,
+			stateValues = {},
+			parameter,
+		} = device;
 		const {
 			TURNON,
 			TURNOFF,
@@ -67,6 +78,7 @@ class DeviceActionDetails extends View {
 			DOWN,
 			STOP,
 			RGB,
+			THERMOSTAT,
 		} = supportedMethods;
 		const buttons = [];
 		const {
@@ -86,28 +98,28 @@ class DeviceActionDetails extends View {
 			intl,
 		};
 
-		if (UP) {
+		if (UP && !THERMOSTAT) {
 			buttons.push(
 				<UpButton {...sharedProps}
 					iconSize={45} supportedMethod={UP}/>
 			);
 		}
 
-		if (DOWN) {
+		if (DOWN && !THERMOSTAT) {
 			buttons.push(
 				<DownButton {...sharedProps}
 					iconSize={45} supportedMethod={DOWN}/>
 			);
 		}
 
-		if (STOP) {
+		if (STOP && !THERMOSTAT) {
 			buttons.push(
 				<StopButton {...sharedProps}
 					iconSize={20} supportedMethod={STOP}/>
 			);
 		}
 
-		if (TURNOFF) {
+		if (TURNOFF && !THERMOSTAT) {
 			const { TURNOFF: actionIcon } = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 			buttons.push(
 				<OffButton
@@ -116,7 +128,7 @@ class DeviceActionDetails extends View {
 			);
 		}
 
-		if (TURNON) {
+		if (TURNON && !THERMOSTAT) {
 			const { TURNON: actionIcon } = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 			buttons.push(
 				<OnButton
@@ -126,13 +138,13 @@ class DeviceActionDetails extends View {
 			);
 		}
 
-		if (BELL) {
+		if (BELL && !THERMOSTAT) {
 			buttons.push(
 				<BellButton device={device} {...sharedProps}/>
 			);
 		}
 
-		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP) {
+		if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !THERMOSTAT) {
 			const { TURNOFF: actionIcon } = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 			buttons.push(
 				isInState === 'TURNOFF' ?
@@ -148,9 +160,25 @@ class DeviceActionDetails extends View {
 
 		const newButtonStyle = buttons.length > 4 ? buttonStyle : {...buttonStyle, flex: 1};
 
+		let supportedModes = [];
+		if (THERMOSTAT) {
+			const { THERMOSTAT: { setpoint = {} } } = stateValues;
+			supportedModes = getSupportedModes(parameter, setpoint, intl);
+		}
+
 		return (
-			<View style={[container, containerStyle]}>
-				{!!RGB &&
+			<>
+			{!!THERMOSTAT &&
+					<HeatControlWheelModes
+						appLayout={appLayout}
+						modes={supportedModes}
+						device={device}
+						lastUpdated={lastUpdated}
+						deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
+			}
+			{buttons.length > 0 &&
+				<View style={[container, containerStyle]}>
+					{!!RGB &&
 					<RGBColorWheel
 						device={device}
 						appLayout={appLayout}
@@ -161,27 +189,29 @@ class DeviceActionDetails extends View {
 						colorWheelCover={colorWheelCover}
 						swatchWheelCover={swatchWheelCover}
 						thumbSize={15}/>
-				}
-				{!!DIM && (
-					<SliderDetails
-						device={device}
-						intl={intl}
-						isGatewayActive={isGatewayActive}
-						appLayout={appLayout}/>
-				)}
-				<View style={{flex: 1, alignItems: 'stretch'}}>
-					<View style={buttonsContainer}>
-						{
-							React.Children.map(buttons, (button: Object): Object | null => {
-								if (React.isValidElement(button)) {
-									return React.cloneElement(button, {style: newButtonStyle});
-								}
-								return null;
-							})
-						}
+					}
+					{!!DIM && !THERMOSTAT && (
+						<SliderDetails
+							device={device}
+							intl={intl}
+							isGatewayActive={isGatewayActive}
+							appLayout={appLayout}/>
+					)}
+					<View style={{flex: 1, alignItems: 'stretch'}}>
+						<View style={buttonsContainer}>
+							{
+								React.Children.map(buttons, (button: Object): Object | null => {
+									if (React.isValidElement(button)) {
+										return React.cloneElement(button, {style: newButtonStyle});
+									}
+									return null;
+								})
+							}
+						</View>
 					</View>
 				</View>
-			</View>
+			}
+			</>
 		);
 	}
 
