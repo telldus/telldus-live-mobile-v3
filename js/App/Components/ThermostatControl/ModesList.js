@@ -124,7 +124,8 @@ render(): Object {
 				intl={intl}
 				onEditSubmitValue={this.props.onEditSubmitValue}
 				updateCurrentValueInScreen={this.props.updateCurrentValueInScreen}
-				currentValue={currentValue}/>
+				currentValue={currentValue}
+				initialValue={value}/>
 		);
 	});
 

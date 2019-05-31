@@ -39,7 +39,7 @@ type Props = {
     label: string,
     edit: boolean,
     icon: string,
-    value?: number,
+    value: number,
     scale: string,
     unit: string,
 	active: boolean,
@@ -47,6 +47,7 @@ type Props = {
 	maxVal: number,
 	minVal: number,
 	currentValue: number,
+	initialValue?: number,
 
 	onPressRow: (string) => void,
 	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
@@ -167,6 +168,7 @@ render(): Object {
 		mode,
 		IconActive,
 		Icon,
+		initialValue,
 	} = this.props;
 
 	const {
@@ -206,6 +208,8 @@ render(): Object {
 
 	const isEditBoxValueValid = value !== null && typeof value !== 'undefined' && !isNaN(value);
 
+	const hasInitialValue = initialValue !== null && typeof initialValue !== 'undefined' && !isNaN(initialValue);
+
 	return (
 		<View style={cover}>
 			<View style={leftBlock}>
@@ -219,7 +223,7 @@ render(): Object {
 						{label.toUpperCase()}
 					</Text>
 				</TouchableOpacity>
-				{(value !== null && typeof value !== 'undefined') && (
+				{hasInitialValue && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
 							<TouchableOpacity onPress={this.onPressUp}>
