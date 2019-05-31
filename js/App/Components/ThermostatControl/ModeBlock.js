@@ -106,7 +106,7 @@ onSubmitEditing = () => {
 
 	const value = this.props.value ? parseFloat(parseFloat(this.props.value).toFixed(1)) : null;
 	const { maxVal, minVal, mode } = this.props;
-	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
+	if (value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
@@ -130,24 +130,24 @@ onPressEdit = () => {
 
 onPressUp = () => {
 	const { maxVal, mode, value } = this.props;
-	let nextValue = (parseFloat(value) + parseFloat(1)).toFixed(1);
+	let nextValue = parseFloat((parseFloat(value) + parseFloat(1)).toFixed(1));
 	this.onPressRow();
-	if (typeof nextValue === 'number' && typeof maxVal === 'number' && (nextValue > maxVal)) {
+	if (nextValue > parseFloat(maxVal)) {
 		return;
 	}
-	this.props.updateCurrentValueInScreen(nextValue);
+	this.props.updateCurrentValueInScreen(nextValue.toString());
 	this.props.onEditSubmitValue(parseFloat(nextValue));
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }
 
 onPressDown = () => {
 	const { minVal, mode, value } = this.props;
-	let nextValue = (parseFloat(value) + parseFloat(-1)).toFixed(1);
+	let nextValue = parseFloat((parseFloat(value) + parseFloat(-1)).toFixed(1));
 	this.onPressRow();
-	if (typeof nextValue === 'number' && typeof minVal === 'number' && (nextValue < minVal)) {
+	if (nextValue < parseFloat(minVal)) {
 		return;
 	}
-	this.props.updateCurrentValueInScreen(nextValue);
+	this.props.updateCurrentValueInScreen(nextValue.toString());
 	this.props.onEditSubmitValue(parseFloat(nextValue));
 	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
 }

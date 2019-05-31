@@ -100,7 +100,7 @@ onSubmitEditing = () => {
 
 	const value = this.props.currentValueInScreen ? parseFloat(parseFloat(this.props.currentValueInScreen).toFixed(1)) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
-	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
+	if (value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
