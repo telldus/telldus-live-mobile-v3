@@ -66,6 +66,7 @@ export default {
 	rowTextColor: '#8e8e93',
 	eulaContentColor: '#555555',
 	inactiveTintColor: '#A59F9A',
+	gatewayInactive: '#a2a2a2',
 
 	rippleColor: '#efefef',
 	rippleOpacity: 0.9,
