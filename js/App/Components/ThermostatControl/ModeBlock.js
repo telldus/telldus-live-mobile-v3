@@ -89,10 +89,6 @@ onPressRow = () => {
 }
 
 onChangeText = (value: string) => {
-	const { maxVal, minVal } = this.props;
-	if (typeof minVal === 'number' && typeof maxVal === 'number' && (parseFloat(value) > maxVal || parseFloat(value) < minVal)) {
-		return;
-	}
 	this.props.updateCurrentValueInScreen(value);
 }
 
@@ -110,6 +106,7 @@ onSubmitEditing = () => {
 	const value = this.props.value ? parseFloat(parseFloat(this.props.value).toFixed(1)) : null;
 	const { maxVal, minVal, mode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
+		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
@@ -207,6 +204,8 @@ render(): Object {
 
 	const cModevalue = this.formatModeValue(value);
 
+	const isEditBoxValueValid = value !== null && typeof value !== 'undefined' && !isNaN(value);
+
 	return (
 		<View style={cover}>
 			<View style={leftBlock}>
@@ -235,7 +234,7 @@ render(): Object {
 								{scale}
 							</Text>
 							{editValue ? <TextInput
-								value={value ? value.toString() : ''}
+								value={isEditBoxValueValid ? value.toString() : ''}
 								style={textStyle}
 								onChangeText={this.onChangeText}
 								onSubmitEditing={this.onSubmitEditing}

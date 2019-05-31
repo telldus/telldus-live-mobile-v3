@@ -84,10 +84,6 @@ onPressEdit = () => {
 }
 
 onChangeText = (value: string) => {
-	const { maxVal, minVal } = this.props;
-	if (parseFloat(value) > maxVal || parseFloat(value) < minVal) {
-		return;
-	}
 	this.props.updateCurrentValueInScreen(value);
 }
 
@@ -105,6 +101,7 @@ onSubmitEditing = () => {
 	const value = this.props.currentValueInScreen ? parseFloat(parseFloat(this.props.currentValueInScreen).toFixed(1)) : null;
 	const { maxVal, minVal, controllingMode } = this.props;
 	if (typeof value === 'number' && typeof minVal === 'number' && typeof maxVal === 'number' && (value > maxVal || value < minVal)) {
+		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
@@ -161,6 +158,8 @@ render(): Object {
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
 	const currModevalue = this.formatModeValue(currentValue);
+
+	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined' && !isNaN(currentValueInScreen);
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
 			{!!title && <Text style={[infoTitleStyle, {
@@ -183,7 +182,7 @@ render(): Object {
 							justifyContent: 'center',
 						}}>
 							<EditBox
-								value={currentValueInScreen ? currentValueInScreen.toString() : ''}
+								value={isEditBoxValueValid ? currentValueInScreen.toString() : ''}
 								appLayout={appLayout}
 								containerStyle={editBoxStyle}
 								textStyle={textStyle}

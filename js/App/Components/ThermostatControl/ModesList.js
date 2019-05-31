@@ -77,6 +77,7 @@ render(): Object {
 		modes,
 		intl,
 		currentValueInScreen,
+		currentValue,
 	} = this.props;
 
 	const {
@@ -122,7 +123,8 @@ render(): Object {
 				onControlThermostat={this.props.onControlThermostat}
 				intl={intl}
 				onEditSubmitValue={this.props.onEditSubmitValue}
-				updateCurrentValueInScreen={this.props.updateCurrentValueInScreen}/>
+				updateCurrentValueInScreen={this.props.updateCurrentValueInScreen}
+				currentValue={currentValue}/>
 		);
 	});
 
