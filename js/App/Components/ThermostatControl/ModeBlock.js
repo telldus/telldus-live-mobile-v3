@@ -206,7 +206,7 @@ render(): Object {
 
 	const cModevalue = this.formatModeValue(value);
 
-	const isEditBoxValueValid = value !== null && typeof value !== 'undefined' && !isNaN(value);
+	const isEditBoxValueValid = value !== null && typeof value !== 'undefined';
 
 	const hasInitialValue = initialValue !== null && typeof initialValue !== 'undefined' && !isNaN(initialValue);
 
