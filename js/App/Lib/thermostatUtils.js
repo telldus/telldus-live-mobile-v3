@@ -56,7 +56,7 @@ import IconThermostatHG from '../Components/TabViews/img/thermostat/icon_thermos
 import IconThermostatProgramColor from '../Components/TabViews/img/thermostat/icon_thermostat-program-color.svg';
 import IconThermostatProgram from '../Components/TabViews/img/thermostat/icon_thermostat-program.svg';
 
-const getKnowModes = (formatMessage: (Object) => string): Array<Object> => {
+const getKnownModes = (formatMessage: (Object) => string): Array<Object> => {
 	return [
 		{
 			label: 'Auto',
@@ -233,6 +233,6 @@ const formatModeValue = (value: number): number | string => {
 };
 
 module.exports = {
-	getKnowModes,
+	getKnownModes,
 	formatModeValue,
 };

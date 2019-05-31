@@ -35,7 +35,7 @@ import { deviceSetStateThermostat, requestDeviceAction } from '../../Actions/Dev
 
 import {
 	shouldUpdate,
-	getKnowModes,
+	getKnownModes,
 	getLastUpdated,
 } from '../../Lib';
 import Theme from '../../Theme';
@@ -119,7 +119,7 @@ render(): Object | null {
 	});
 
 	let supportedModes = [];
-	getKnowModes(intl.formatMessage).map((modeInfo: Object) => {
+	getKnownModes(intl.formatMessage).map((modeInfo: Object) => {
 		const { mode } = modeInfo;
 		if (modes[mode]) {
 			modeInfo = {
