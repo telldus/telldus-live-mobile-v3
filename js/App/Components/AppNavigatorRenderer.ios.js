@@ -244,32 +244,24 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
 
-		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
-			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
-
+		const { land } = Theme.Core.headerHeightFactor;
+		const rightButton = this.makeRightButton(CS);
+		const showAttentionCapture = this.showAttentionCapture() && rightButton;
 		let screenProps = {
 			currentScreen: CS,
 			intl,
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
+			leftButton: this.settingsButton,
+			rightButton,
+			hideHeader: false,
+			style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
+			toggleAttentionCapture: this.toggleAttentionCapture,
+			showAttentionCapture,
+			showAttentionCaptureAddDevice,
+			attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
 		};
-		if (showHeader) {
-			const { land } = Theme.Core.headerHeightFactor;
-			const rightButton = this.makeRightButton(CS);
-			const showAttentionCapture = this.showAttentionCapture() && rightButton;
-			screenProps = {
-				...screenProps,
-				leftButton: this.settingsButton,
-				rightButton,
-				hideHeader: false,
-				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
-				toggleAttentionCapture: this.toggleAttentionCapture,
-				showAttentionCapture,
-				showAttentionCaptureAddDevice,
-				attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
-			};
-		}
 
 		return (
 			<Navigator

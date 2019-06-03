@@ -316,6 +316,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
+		const showAttentionCapture = this.showAttentionCapture();
 		let screenProps = {
 			currentScreen: CS,
 			intl,
@@ -323,22 +324,16 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
+			leftButton,
+			rightButton,
+			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
+			style: styles.header,
+			logoStyle: styles.logoStyle,
+			toggleAttentionCapture: this.toggleAttentionCapture,
+			showAttentionCapture,
+			showAttentionCaptureAddDevice,
+			attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
 		};
-		const showAttentionCapture = this.showAttentionCapture();
-		if (showHeader) {
-			screenProps = {
-				...screenProps,
-				leftButton,
-				rightButton,
-				hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
-				style: styles.header,
-				logoStyle: styles.logoStyle,
-				toggleAttentionCapture: this.toggleAttentionCapture,
-				showAttentionCapture,
-				showAttentionCaptureAddDevice,
-				attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
-			};
-		}
 
 		return (
 			<DrawerLayoutAndroid
