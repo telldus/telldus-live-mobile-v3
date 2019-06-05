@@ -40,11 +40,6 @@ android: &android-ubuntu
       - android/gradle
   artifacts:
     paths:
-      - android/app/build/outputs/apk/release/app-universal-release.apk
-      - android/app/build/outputs/apk/release/app-arm64-v8a-release.apk
-      - android/app/build/outputs/apk/release/app-armeabi-v7a-release.apk
-      - android/app/build/outputs/apk/release/app-x86_64-release.apk
-      - android/app/build/outputs/apk/release/app-x86-release.apk
       - android/app/build/outputs/apk/release/app-release.apk
       - android/sourcemap.js
     expire_in: '1 mos'
