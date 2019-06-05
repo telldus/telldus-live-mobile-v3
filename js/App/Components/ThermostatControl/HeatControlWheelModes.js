@@ -136,10 +136,11 @@ constructor(props: Props) {
 
 	this.initialAngle = Math.PI * 1.25;
 
-	const { modes, device } = this.props;
+	let { modes, device } = this.props;
 	const { stateValues: {THERMOSTAT = {}}, methodRequested } = device;
 	const { mode } = THERMOSTAT;
 
+	modes = modes && modes.length > 0 ? modes : [{}];
 	let cModeInfo = modes[0];
 	modes.map((modeInfo: Object) => {
 		if (modeInfo.mode === mode) {
@@ -150,7 +151,10 @@ constructor(props: Props) {
 	const currentValue = cModeInfo.value;
 	const minVal = cModeInfo.minVal;
 	const maxVal = cModeInfo.maxVal;
-	const initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
+	let initialAngleLength = 0;
+	if (modes && modes.length > 0) {
+		initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
+	}
 	this.state = {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
@@ -273,7 +277,7 @@ onPressOutSliderPath = (data: Object) => {
 	});
 }
 
-render(): Object {
+render(): Object | null {
 
 	const {
 		appLayout,
@@ -281,6 +285,10 @@ render(): Object {
 		lastUpdated,
 		modesCoverStyle,
 	} = this.props;
+
+	if (!modes || modes.length === 0) {
+		return null;
+	}
 
 	const {
 		cover,
