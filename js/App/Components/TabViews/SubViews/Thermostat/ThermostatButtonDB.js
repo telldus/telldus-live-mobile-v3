@@ -103,7 +103,7 @@ class ThermostatButtonDB extends View<Props, State> {
 		const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 
 		let currentModeValue = setpoint[mode];
-		currentModeValue = typeof currentModeValue === 'undefined' ? -100.0 : currentModeValue;
+		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}

@@ -340,7 +340,7 @@ getInfo(): null | string {
 	if (THERMOSTAT) {
 		const { THERMOSTAT: {setpoint = {}, mode}} = stateValues;
 		let currentModeValue = setpoint[mode];
-		currentModeValue = typeof currentModeValue === 'undefined' ? -100.0 : currentModeValue;
+		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
 
 		let value = intl.formatNumber(currentModeValue, {minimumFractionDigits: 1});
 		value = formatModeValue(value, intl.formatNumber);

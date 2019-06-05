@@ -121,11 +121,8 @@ formatModeValue = (modeValue: number | string): string | number => {
 	if (modeValue === '-') {
 		return modeValue;
 	}
-	const valToFormat = (typeof modeValue === 'undefined' || modeValue === '' || modeValue === null) ? -100.0 : modeValue;
+	const valToFormat = isNaN(modeValue) ? -100.0 : modeValue;
 	let val = this.props.intl.formatNumber(valToFormat, {minimumFractionDigits: 1});
-	if (isNaN(val)) {
-		val = this.props.intl.formatNumber(-100.0, {minimumFractionDigits: 1});
-	}
 	return formatModeValue(val, this.props.intl.formatNumber);
 }
 
