@@ -232,13 +232,14 @@ render(): Object {
 							°C
 				</Text>
 			</Text>
-			<Text style={lastUpdatedInfoStyle}>
+			{!!lastUpdated && <Text style={lastUpdatedInfoStyle}>
 				{`${intl.formatMessage(i18n.labelLastUpdated)}: `}
 				<FormattedRelative
 					value={moment.unix(lastUpdated)}
 					formatterFunction={this.formatSensorLastUpdate}
 					textStyle={lastUpdatedInfoStyle}/>
 			</Text>
+			}
 		</View>
 	);
 }
