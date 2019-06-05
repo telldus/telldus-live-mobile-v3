@@ -223,8 +223,8 @@ const getKnownModes = (formatMessage: (Object) => string): Array<Object> => {
 	];
 };
 
-const formatModeValue = (value: number): number | string => {
-	if (value.toString().includes('-100')) {
+const formatModeValue = (value: number, formatNumber: (number) => number): number | string => {
+	if (value === formatNumber(-100.0, {minimumFractionDigits: 1})) {
 		const str = value.toString();
 		const newStr = str.slice((str.length - 4), str.length);
 		return newStr.replace(/0/g, '-');

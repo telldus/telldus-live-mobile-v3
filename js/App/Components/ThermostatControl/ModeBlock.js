@@ -161,7 +161,7 @@ formatModeValue = (modeValue?: number | string): string | number => {
 	if (isNaN(val)) {
 		val = this.props.intl.formatNumber(-100.0, {minimumFractionDigits: 1});
 	}
-	return formatModeValue(val);
+	return formatModeValue(val, this.props.intl.formatNumber);
 }
 
 render(): Object {

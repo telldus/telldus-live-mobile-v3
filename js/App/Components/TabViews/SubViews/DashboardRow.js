@@ -343,7 +343,7 @@ getInfo(): null | string {
 		currentModeValue = typeof currentModeValue === 'undefined' ? -100.0 : currentModeValue;
 
 		let value = intl.formatNumber(currentModeValue, {minimumFractionDigits: 1});
-		value = formatModeValue(value);
+		value = formatModeValue(value, intl.formatNumber);
 		value = `${value}°C`;
 		info = intl.formatMessage(i18n.labelCurrentlyValue, {value});
 	}

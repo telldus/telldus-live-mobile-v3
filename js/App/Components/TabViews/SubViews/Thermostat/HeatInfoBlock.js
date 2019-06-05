@@ -79,7 +79,7 @@ class HeatInfoBlock extends View {
 	}
 
 	formatterFunction = (value: number): string | number => {
-		return formatModeValue(value);
+		return formatModeValue(value, this.props.intl.formatNumber);
 	}
 
 	render(): Object {
