@@ -211,8 +211,7 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 - we use semver (major.minor.path) and the Android version is derived from that (`3.2.10` => `30210`)
 - when releasing a new app, always update the version
 - Run the release script: `npm run release`. This will prompt for the new version number.
-- Check that the new commit and tag made by the release script is ok before pushing.
-- We have enabled "inlineRequires" and RAM bundle format. So please follow the step mentioned [here](https://facebook.github.io/react-native/docs/performance#investigating-the-loaded-modules).
+- Check that the new commit and tag made by the release script is ok before pushing
 
 ### Android
 
