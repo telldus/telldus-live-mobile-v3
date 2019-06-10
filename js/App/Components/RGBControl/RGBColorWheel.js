@@ -44,7 +44,8 @@ type Props = {
     swatchesCover?: Array<any> | Object | number,
     colorWheelCover?: Array<any> | Object | number,
     swatchWheelCover?: Array<any> | Object | number,
-    thumbSize?: number,
+	thumbSize?: number,
+	setScrollEnabled?: (boolean) => void,
 };
 
 type DefaultProps = {
@@ -117,6 +118,7 @@ constructor(props: Props) {
 }
 
 onColorChangeComplete(color: string) {
+	this.props.setScrollEnabled(true);
 	if (!color) {
 		return;
 	}
@@ -130,6 +132,10 @@ onColorChangeComplete(color: string) {
 		const { r, g, b } = rgb;
 		this.props.deviceSetStateRGB(device.id, r, g, b);
 	});
+}
+
+onColorChange = () => {
+	this.props.setScrollEnabled(false);
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -222,6 +228,7 @@ render(): Object {
 						initialColor={mainColorRGB}
 						onColorChangeComplete={this.onColorChangeComplete}
 						style={style}
+						onColorChange={this.onColorChange}
 						thumbStyle={thumStyle}
 						thumbSize={thumbSize}
 					/>

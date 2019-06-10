@@ -102,6 +102,12 @@ class RGBControlScreen extends View<Props, State> {
 		return nextProps.currentScreen === 'RGBControl';
 	}
 
+	setScrollEnabled = (scrollEnabled: boolean) => {
+		this.setState({
+			scrollEnabled,
+		});
+	}
+
 	renderColorPicker(styles: Object): Object {
 		const { device, appLayout } = this.props;
 
@@ -116,7 +122,8 @@ class RGBControlScreen extends View<Props, State> {
 					swatchesCover={styles.swatchesCover}
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
-					thumbSize={15}/>
+					thumbSize={15}
+					setScrollEnabled={this.setScrollEnabled}/>
 			</View>
 		);
 	}
