@@ -77,7 +77,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 			methodRequested,
 		};
 	}
-	if (methodRequested !== state.methodRequested) {
+	if (methodRequested !== state.methodRequested && (methodRequested !== 'DIM' && methodRequested !== 'TURNON' && methodRequested !== 'TURNOFF')) {
 		return {
 			methodRequested,
 			isLoading: true,
@@ -141,12 +141,12 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			mainColorRGB: mainColorRGBN,
 			isLoading: false,
 		});
-	} else if (isLoading && methodRequested !== '' && prevState.methodRequested === '') {
+	} else if (isLoading && methodRequested === 'RGB' && prevState.methodRequested === '') {
 		this.setState({
 			mainColorRGB,
 			isLoading: false,
 		});
-	} else if (isLoading && methodRequested === '' && prevState.methodRequested !== '') {
+	} else if (isLoading && methodRequested === '' && prevState.methodRequested === 'RGB') {
 		const mainColorRGBN = getMainColorRGB(rgbValue);
 		this.setState({
 			mainColorRGB: mainColorRGBN,
