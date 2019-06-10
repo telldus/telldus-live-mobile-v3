@@ -26,11 +26,13 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 
 import { FormattedMessage, Text, View, ListRow, IconTelldus } from '../../../../../BaseComponents';
-import { getDeviceStateMethod, getDeviceActionIcon } from '../../../../Lib';
-import i18n from '../../../../Translations/common';
 import {
+	getDeviceStateMethod,
+	getDeviceActionIcon,
+	getMainColorRGB,
 	toSliderValue,
 } from '../../../../Lib';
+import i18n from '../../../../Translations/common';
 
 import Theme from '../../../../Theme';
 
@@ -110,6 +112,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				return 'stop';
 			case 'LEARN':
 				return 'learn';
+			case 'RGB':
+				return 'palette';
 			default:
 				return '';
 		}
@@ -191,6 +195,9 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		if (!icon) {
 			icon = this.getIcon(deviceState);
 		}
+		if (deviceState === 'RGB') {
+			icon = 'palette';
+		}
 		let originText = '', originInfo = '';
 		let origin = this.props.item.origin;
 		if (origin === 'Scheduler') {
@@ -217,7 +224,9 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
 
-		let bGColor = this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0) ? '#1b365d' : '#F06F0C';
+		let bGColor = deviceState === 'RGB' ? getMainColorRGB(this.props.item.stateValue) :
+			this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0)
+				? '#1b365d' : '#F06F0C';
 		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
 
 		return (
