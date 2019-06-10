@@ -19,6 +19,7 @@
 
 // @flow
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { ColorWheel } from 'react-native-color-wheel';
 const colorsys = require('colorsys');
@@ -50,7 +51,14 @@ type DefaultProps = {
     thumbSize: number,
 };
 
-class RGBColorWheel extends View<Props, null> {
+type State = {
+	rgbValue: string,
+	isLoading: boolean,
+	mainColorRGB: string,
+	methodRequested: string,
+};
+
+class RGBColorWheel extends View<Props, State> {
 props: Props;
 static defaultProps: DefaultProps = {
 	thumbSize: 15,
@@ -58,6 +66,25 @@ static defaultProps: DefaultProps = {
 
 onColorChangeComplete: string => void;
 onChooseColor: (string) => void;
+
+static getDerivedStateFromProps(props: Object, state: Object): Object | null {
+	const { stateValues, methodRequested } = props.device;
+	const { RGB: rgbValue } = stateValues;
+	if (state.rgbValue !== rgbValue) {
+		return {
+			rgbValue,
+			isLoading: true,
+			methodRequested,
+		};
+	}
+	if (methodRequested !== state.methodRequested) {
+		return {
+			methodRequested,
+			isLoading: true,
+		};
+	}
+	return null;
+}
 
 constructor(props: Props) {
 	super(props);
@@ -75,6 +102,16 @@ constructor(props: Props) {
 		'#FF9900',
 		'#FFFFFF',
 	];
+	const { stateValues, methodRequested } = props.device;
+	const { RGB: rgbValue } = stateValues;
+	const mainColorRGB = getMainColorRGB(rgbValue);
+
+	this.state = {
+		isLoading: false,
+		mainColorRGB,
+		rgbValue,
+		methodRequested,
+	};
 
 	this.onChooseColor = this.onChooseColor.bind(this);
 }
@@ -84,9 +121,43 @@ onColorChangeComplete(color: string) {
 		return;
 	}
 	const { device } = this.props;
-	const rgb = colorsys.hsvToRgb(color);
-	const { r, g, b } = rgb;
-	this.props.deviceSetStateRGB(device.id, r, g, b);
+
+	const hex = colorsys.hsvToHex(color);
+	this.setState({
+		mainColorRGB: hex,
+	}, () => {
+		const rgb = colorsys.hsvToRgb(color);
+		const { r, g, b } = rgb;
+		this.props.deviceSetStateRGB(device.id, r, g, b);
+	});
+}
+
+componentDidUpdate(prevProps: Object, prevState: Object) {
+	const { rgbValue, isLoading, methodRequested, mainColorRGB } = this.state;
+	const { rgbValue: rgbValuePrev } = prevState;
+	if (rgbValue !== rgbValuePrev && isLoading) {// device set state
+		const mainColorRGBN = getMainColorRGB(rgbValue);
+		this.setState({
+			mainColorRGB: mainColorRGBN,
+			isLoading: false,
+		});
+	} else if (isLoading && methodRequested !== '' && prevState.methodRequested === '') {
+		this.setState({
+			mainColorRGB,
+			isLoading: false,
+		});
+	} else if (isLoading && methodRequested === '' && prevState.methodRequested !== '') {
+		const mainColorRGBN = getMainColorRGB(rgbValue);
+		this.setState({
+			mainColorRGB: mainColorRGBN,
+			isLoading: false,
+		});
+	} else if (isLoading) {
+		this.setState({
+			mainColorRGB,
+			isLoading: false,
+		});
+	}
 }
 
 getSwatches(color: string, key: number): Object {
@@ -113,12 +184,17 @@ onChooseColor(item: string) {
 	const { device } = this.props;
 	const rgb = colorsys.hexToRgb(item);
 	const { r, g, b } = rgb;
-	this.props.deviceSetStateRGB(device.id, r, g, b);
+	this.setState({
+		mainColorRGB: item,
+		isLoading: true,
+	}, () => {
+		this.props.deviceSetStateRGB(device.id, r, g, b);
+	});
 }
 
 render(): Object {
+	const { isLoading, mainColorRGB } = this.state;
 	const {
-		device,
 		thumStyle,
 		style,
 		thumbSize,
@@ -126,8 +202,6 @@ render(): Object {
 		colorWheelCover,
 		swatchWheelCover,
 	} = this.props;
-	const { RGB: rgbValue } = device.stateValues;
-	const mainColorRGB = getMainColorRGB(rgbValue);
 
 	const colorSwatches = this.COLOR_SWATCHES.map((color: string, i: number): any => {
 		return this.getSwatches(color, i);
@@ -136,13 +210,23 @@ render(): Object {
 	return (
 		<View style={swatchWheelCover}>
 			<View style={colorWheelCover}>
-				<ColorWheel
-					initialColor={mainColorRGB}
-					onColorChangeComplete={this.onColorChangeComplete}
-					style={style}
-					thumbStyle={thumStyle}
-					thumbSize={thumbSize}
-				/>
+				{isLoading ?
+					<View style={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+						<ActivityIndicator animating={true} color={'#eee'} size={'small'}/>
+					</View>
+					:
+					<ColorWheel
+						initialColor={mainColorRGB}
+						onColorChangeComplete={this.onColorChangeComplete}
+						style={style}
+						thumbStyle={thumStyle}
+						thumbSize={thumbSize}
+					/>
+				}
 			</View>
 			<View style={swatchesCover}>
 				{colorSwatches}
