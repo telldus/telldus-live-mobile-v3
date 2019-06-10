@@ -432,8 +432,8 @@ class DeviceRow extends View<Props, State> {
 
 		let { RGB: rgbValue } = stateValues;
 		let colorDeviceIconBack = styles.iconContainerStyle.backgroundColor;
-		let offColorRGB, iconOffColor, iconOnColor;
-		if (typeof rgbValue !== 'undefined') {
+		let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor;
+		if (typeof rgbValue !== 'undefined' && isGatewayActive) {
 			let mainColorRGB = getMainColorRGB(rgbValue);
 
 			offColorRGB = getOffColorRGB(mainColorRGB);
@@ -441,6 +441,9 @@ class DeviceRow extends View<Props, State> {
 
 			colorDeviceIconBack = prepareMainColor(mainColorRGB);
 			iconOnColor = colorDeviceIconBack;
+			iconOnBGColor = colorDeviceIconBack;
+
+			colorDeviceIconBack = isInState === 'TURNOFF' ? Theme.Core.brandPrimary : colorDeviceIconBack;
 		}
 		colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
 
@@ -499,8 +502,8 @@ class DeviceRow extends View<Props, State> {
 					onSlideActive={this.onSlideActive}
 					onSlideComplete={this.onSlideComplete}
 					key={7}
-					offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
-					onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
+					offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
+					onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
 				/>
@@ -560,7 +563,7 @@ class DeviceRow extends View<Props, State> {
 									icon={icon}
 									style={styles.deviceIcon}
 									containerStyle={[styles.iconContainerStyle, {
-										backgroundColor: (isInState === 'TURNOFF' && offColorRGB) ? offColorRGB : colorDeviceIconBack,
+										backgroundColor: colorDeviceIconBack,
 									}]}/>}
 								{nameInfo}
 							</TouchableOpacity>

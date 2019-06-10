@@ -131,7 +131,6 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		RGB,
 	} = supportedMethods;
 	const iconsName = getDeviceIcons(deviceType);
-
 	// Some device type, mostly with single button, the action(mostly inactive) icon will change wrt. it's state
 	// For now this value is passed(and logic handled) only to 'ToggleDashboardTile'(as those device's state seem to be 'TURNON || TURNOFF')
 	// if these type of devices has any chance of having state other than 'TURNON || TURNOFF', pass it to required button component.(also handle the logic)
@@ -140,7 +139,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	let { RGB: rgbValue } = stateValues;
 	let colorDeviceIconBack = styles.itemIconContainerOn.backgroundColor;
 	let offColorRGB, iconOffColor, iconOnColor;
-	if (typeof rgbValue !== 'undefined') {
+	if (typeof rgbValue !== 'undefined' && isOnline) {
 		let mainColorRGB = getMainColorRGB(rgbValue);
 
 		offColorRGB = getOffColorRGB(mainColorRGB);
@@ -211,7 +210,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : {
-			backgroundColor: isInState === 'TURNOFF' && offColorRGB ? offColorRGB : colorDeviceIconBack,
+			backgroundColor: isInState === 'TURNOFF' ? Theme.Core.brandPrimary : colorDeviceIconBack,
 		};
 
 		buttons.unshift(
@@ -224,7 +223,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 				onSlideActive={this.onSlideActive}
 				onSlideComplete={this.onSlideComplete}
 				key={7}
-				offButtonColor={isInState === 'TURNOFF' ? offColorRGB : undefined}
+				offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
 				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
