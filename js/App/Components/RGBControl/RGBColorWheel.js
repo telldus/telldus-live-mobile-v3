@@ -80,7 +80,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (methodRequested !== state.methodRequested && (methodRequested !== 'DIM' && methodRequested !== 'TURNON' && methodRequested !== 'TURNOFF')) {
 		return {
 			methodRequested,
-			isLoading: true,
+			isLoading: methodRequested === '' && state.methodRequested === 'RGB',
 		};
 	}
 	return null;
@@ -186,7 +186,6 @@ onChooseColor(item: string) {
 	const { r, g, b } = rgb;
 	this.setState({
 		mainColorRGB: item,
-		isLoading: true,
 	}, () => {
 		this.props.deviceSetStateRGB(device.id, r, g, b);
 	});
@@ -216,7 +215,7 @@ render(): Object {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-						<ActivityIndicator animating={true} color={'#eee'} size={'small'}/>
+						<ActivityIndicator animating={true} color={'#cccccc'} size={'small'}/>
 					</View>
 					:
 					<ColorWheel
