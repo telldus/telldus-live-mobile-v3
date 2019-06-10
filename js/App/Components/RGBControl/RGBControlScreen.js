@@ -27,21 +27,30 @@ import { connect } from 'react-redux';
 import {
 	NavigationHeaderPoster,
 	View,
+	LocationDetails,
 } from '../../../BaseComponents';
 import SliderDetails from '../Device/DeviceDetails/SubViews/SliderDetails';
 import RGBColorWheel from './RGBColorWheel';
+
+import { getDeviceManufacturerInfo, deviceZWaveInfo } from '../../Actions/Devices';
+import { requestNodeInfo } from '../../Actions/Websockets';
+import getLocationImageUrl from '../../Lib/getLocationImageUrl';
 
 import i18n from '../../Translations/common';
 import Theme from '../../Theme';
 
 type Props = {
-	openModal: () => void,
+	gatewayType: string,
+	gatewayName: string,
 	device: Object,
 	deviceName: string,
+	isGatewayActive: boolean,
+    appLayout: Object,
+
+	openModal: () => void,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
 	intl: Object,
-    isGatewayActive: boolean,
-    appLayout: Object,
+	dispatch: Function,
     navigation: Object,
 };
 
@@ -61,6 +70,32 @@ class RGBControlScreen extends View<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
+	}
+
+	componentDidMount() {
+		const { dispatch, device } = this.props;
+		const { nodeInfo, id, clientId, clientDeviceId } = device;
+		if (nodeInfo) {
+			const {
+				manufacturerId,
+				productId,
+				productTypeId,
+			} = nodeInfo;
+			dispatch(getDeviceManufacturerInfo(manufacturerId, productTypeId, productId))
+				.then((res: Object) => {
+					if (res && res.Name) {
+						const { Image, Name, Brand } = res;
+						const payload = {
+							Image,
+							Name,
+							Brand,
+							deviceId: id,
+						};
+						dispatch(deviceZWaveInfo(payload));
+					}
+				});
+		}
+		dispatch(requestNodeInfo(clientId, clientDeviceId));
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -100,21 +135,52 @@ class RGBControlScreen extends View<Props, State> {
 		);
 	}
 
+	renderDetails(locationData: Object, locationDataZWave: Object, styles: Object): Object {
+		return (
+			<>
+				{!!locationDataZWave.H1 && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
+				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
+					marginBottom: styles.outerPadding,
+				}]}/>
+			</>
+		);
+	}
+
 	render(): Object | null {
-		const { intl, appLayout, navigation, device } = this.props;
+		const { intl, appLayout, navigation, device, gatewayName, gatewayType } = this.props;
 		const { scrollEnabled } = this.state;
 
 		if (!device || !device.id) {
 			return null;
 		}
 
-		const { name } = device;
+		const { name, zwaveInfo = {} } = device;
 
 		const styles = this.getStyles();
 		const cPicker = this.renderColorPicker(styles);
 		const slider = this.renderSlider(styles);
 
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
+
+		const locationImageUrl = getLocationImageUrl(gatewayType);
+		const locationData = {
+			title: this.boxTitle,
+			image: locationImageUrl,
+			H1: gatewayName,
+			H2: gatewayType,
+		};
+		const {
+			Image,
+			Name,
+			Brand,
+		} = zwaveInfo;
+		const locationDataZWave = {
+			image: Image,
+			H1: Name,
+			H2: Brand,
+		};
+
+		const details = this.renderDetails(locationData, locationDataZWave, styles);
 
 		return (
 			<View style={{
@@ -135,6 +201,7 @@ class RGBControlScreen extends View<Props, State> {
 					contentContainerStyle={{flexGrow: 1}}>
 					{cPicker}
 					{slider}
+					{details}
 				</ScrollView>
 			</View>
 		);
@@ -224,8 +291,20 @@ class RGBControlScreen extends View<Props, State> {
 				height: 28,
 				width: 28,
 			},
+			outerPadding,
+			LocationDetail: {
+				flex: 0,
+				marginTop: (padding / 2),
+				marginHorizontal: padding,
+			},
 		};
 	}
+}
+
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
@@ -235,13 +314,15 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 
 	const { clientId } = device ? device : {};
 	const gateway = store.gateways.byId[clientId];
-	const { online: isGatewayActive } = gateway ? gateway : {};
+	const { online: isGatewayActive, name: gatewayName, type: gatewayType } = gateway ? gateway : {};
 
 	return {
 		...screenProps,
 		device: device ? device : {},
 		isGatewayActive,
+		gatewayName,
+		gatewayType,
 	};
 }
 
-export default connect(mapStateToProps, null)(RGBControlScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(RGBControlScreen);
