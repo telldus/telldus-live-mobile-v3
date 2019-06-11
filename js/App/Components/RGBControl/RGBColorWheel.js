@@ -92,16 +92,16 @@ constructor(props: Props) {
 	this.onColorChangeComplete = this.onColorChangeComplete.bind(this);
 
 	this.COLOR_SWATCHES = [
-		'#FF3300',
+		'#FF0000',
 		'#FF0066',
-		'#CC0099',
-		'#6600FF',
-		'#0066FF',
-		'#00CC99',
-		'#00CC00',
-		'#CCCC00',
-		'#FF9900',
+		'#0000FF',
+		'#00FFFF',
+		'#00FF00',
+		'#FFFF00',
+		'#FF3200',
+		'#9696FF',
 		'#FFFFFF',
+		'#FFFF96',
 	];
 	const { stateValues, methodRequested } = props.device;
 	const { RGB: rgbValue } = stateValues;
