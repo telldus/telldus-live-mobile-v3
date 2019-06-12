@@ -38,7 +38,7 @@
     "react-native-cached-image": "^1.4.3",
     "react-native-calendars": "~1.60.0",
     "react-native-circular-slider": "git+https://github.com/telldus/react-native-circular-slider.git",
-    "react-native-color-wheel": "git+https://github.com/netbeast/react-native-color-wheel.git#8cf9b24e0e9d7806b7f77ada22568ff20c461bd5",
+    "react-native-color-wheel": "https://github.com/telldus/react-native-color-wheel.git",
     "react-native-device-info": "~1.5.1",
     "react-native-easy-grid": "~0.2.1",
     "react-native-extra-dimensions-android": "~1.2.5",
