@@ -229,14 +229,12 @@ class RGBControlScreen extends View<Props, State> {
 		let swatchSize = Math.floor((deviceWidth - (itemsPadding + outerPadding + itemsBorder)) / numOfItemsPerRow);
 		swatchSize = swatchSize > swatchMaxSize ? swatchMaxSize : swatchSize;
 
+		const colorWheelSize = deviceWidth * 0.6;
+
 		return {
 			colorWheel: {
-				backgroundColor: '#fff',
-				...Theme.Core.shadow,
-				borderRadius: 2,
-				marginVertical: padding,
-				width: deviceWidth - (padding * 2),
-				height: deviceWidth - (padding * 8),
+				width: colorWheelSize,
+				height: colorWheelSize,
 				alignItems: 'center',
 			},
 			thumStyle: {
@@ -268,7 +266,13 @@ class RGBControlScreen extends View<Props, State> {
 				marginTop: padding,
 			},
 			colorWheelCover: {
-				flex: 1,
+				backgroundColor: '#fff',
+				...Theme.Core.shadow,
+				borderRadius: 2,
+				marginVertical: padding,
+				width: width - (padding * 2),
+				height: colorWheelSize * 1.1,
+				alignItems: 'center',
 			},
 			sliderCover: {
 				backgroundColor: '#fff',
