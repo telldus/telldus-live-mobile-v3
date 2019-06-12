@@ -118,11 +118,13 @@ constructor(props: Props) {
 }
 
 onColorChangeComplete(color: string) {
-	this.props.setScrollEnabled(true);
+	const { setScrollEnabled, device } = this.props;
+	if (setScrollEnabled) {
+		setScrollEnabled(true);
+	}
 	if (!color) {
 		return;
 	}
-	const { device } = this.props;
 
 	const hex = colorsys.hsvToHex(color);
 	this.setState({
@@ -135,7 +137,10 @@ onColorChangeComplete(color: string) {
 }
 
 onColorChange = () => {
-	this.props.setScrollEnabled(false);
+	const { setScrollEnabled } = this.props;
+	if (setScrollEnabled) {
+		setScrollEnabled(false);
+	}
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
