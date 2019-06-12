@@ -232,10 +232,12 @@ class RGBControlScreen extends View<Props, State> {
 		let swatchSize = Math.floor((deviceWidth - (itemsPadding + outerPadding + itemsBorder)) / numOfItemsPerRow);
 		swatchSize = swatchSize > swatchMaxSize ? swatchMaxSize : swatchSize;
 
+		const colorWheelSize = deviceWidth * 0.6;
+
 		return {
 			colorWheel: {
-				width: deviceWidth * 0.5,
-				height: deviceWidth * 0.5,
+				width: colorWheelSize,
+				height: colorWheelSize,
 				alignItems: 'center',
 				borderRadius: deviceWidth * 0.25,
 			},
@@ -273,7 +275,7 @@ class RGBControlScreen extends View<Props, State> {
 				borderRadius: 2,
 				marginVertical: padding,
 				width: width - (padding * 2),
-				height: deviceWidth * 0.52,
+				height: colorWheelSize * 1.1,
 				alignItems: 'center',
 			},
 			sliderCover: {
