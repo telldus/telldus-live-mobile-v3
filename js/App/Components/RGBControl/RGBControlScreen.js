@@ -122,8 +122,7 @@ class RGBControlScreen extends View<Props, State> {
 					swatchesCover={styles.swatchesCover}
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
-					thumbSize={15}
-					setScrollEnabled={this.setScrollEnabled}/>
+					thumbSize={15}/>
 			</View>
 		);
 	}
