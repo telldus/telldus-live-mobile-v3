@@ -11,7 +11,8 @@ def readVersion() {
 def readVersionCode() {
     def version = readVersion()
     def (major, minor, patch) = version.tokenize('.')
-    return (major.toInteger() * 10000) + (minor.toInteger() * 100) + (patch.toInteger())
+    def additive = 3145728;
+    return (major.toInteger() * 10000) + (minor.toInteger() * 100) + (patch.toInteger()) + additive
 }
 
 /**
