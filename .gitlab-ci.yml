@@ -94,7 +94,7 @@ google_play:
   script:
     - echo ${GOOGLE_KEY} > play_key.json
     - bundle install
-    - fastlane android alpha
+    - fastlane android alpha --verbose
 
 testflight:
   stage: release
@@ -108,7 +108,7 @@ testflight:
   only:
     - tags
   script:
-    - fastlane ios beta
+    - fastlane ios beta --verbose
 
 s3:
   image: cgswong/aws:latest
