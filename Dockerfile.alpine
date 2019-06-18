@@ -1,5 +1,7 @@
 FROM runmymind/docker-android-sdk:alpine-standalone
 
+ENV BUNDLETOOL_VERSION 0.10.0
+
 # Needed by several third party libraries. Such as react-native-device-info, react-native-push-notification
 # and react-native-fabric
 RUN /opt/android-sdk-linux/tools/bin/sdkmanager "platforms;android-23"
@@ -18,3 +20,8 @@ RUN /opt/android-sdk-linux/tools/bin/sdkmanager "platforms;android-27" "build-to
 RUN apk add --no-cache bash nodejs-current npm openssh-client yarn
 RUN npm install react-native-cli -g
 RUN npm install rnpm -g
+
+# Install bundletool
+ADD https://github.com/google/bundletool/releases/download/${BUNDLETOOL_VERSION}/bundletool-all-${BUNDLETOOL_VERSION}.jar /usr/bin/bundletool.jar
+RUN echo -e "#!/bin/sh\nDIR=\$(dirname \$0)\njava -jar \$DIR/bundletool.jar \$@" > /usr/bin/bundletool && \
+    chmod +x /usr/bin/bundletool
