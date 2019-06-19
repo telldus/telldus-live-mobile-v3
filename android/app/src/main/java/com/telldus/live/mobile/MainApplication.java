@@ -71,7 +71,7 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
-				new NetInfoPackage(),
+            	new RNPixelColorPackage(),
 				new RNFetchBlobPackage(),
 				new RNGestureHandlerPackage(),
 				new RNGoogleSigninPackage(),
