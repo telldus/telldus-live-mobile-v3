@@ -30,9 +30,8 @@ target 'TelldusLiveApp' do
   pod 'GoogleAppMeasurement', '~> 5.8.0'
   pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
-  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
-
   platform :ios, '9.0'
+
 end
 
 post_install do |installer|

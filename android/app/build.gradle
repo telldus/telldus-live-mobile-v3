@@ -185,7 +185,6 @@ android {
 }
 
 dependencies {
-    implementation project(':@react-native-community_async-storage')
     implementation project(':@react-native-community_netinfo')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-gesture-handler')
