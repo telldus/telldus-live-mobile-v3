@@ -220,7 +220,7 @@ dependencies {
     }
     implementation project(':react-native-sqlite-storage')
     implementation 'com.android.support:multidex:1.0.2'
-    implementation ("com.google.android.gms:play-services-base:16.1.0") {
+    implementation ("com.google.android.gms:play-services-base:16.0.1") {
         force = true;
     }
     implementation ("com.google.android.gms:play-services-maps:16.0.0") {
@@ -229,10 +229,10 @@ dependencies {
     implementation ("com.google.android.gms:play-services-gcm:16.0.0") {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-core:16.0.8') {
+    implementation ('com.google.firebase:firebase-core:16.0.6') {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-messaging:17.5.0') {
+    implementation ('com.google.firebase:firebase-messaging:17.3.4') {
         force = true;
     }
     implementation(project(":react-native-google-signin")){
