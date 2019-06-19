@@ -33,7 +33,6 @@ import com.telldus.live.mobile.MainActivity;
 import java.util.Arrays;
 import java.util.List;
 
-import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -71,7 +70,6 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
-            	new RNPixelColorPackage(),
 				new RNFetchBlobPackage(),
 				new RNGestureHandlerPackage(),
 				new RNGoogleSigninPackage(),

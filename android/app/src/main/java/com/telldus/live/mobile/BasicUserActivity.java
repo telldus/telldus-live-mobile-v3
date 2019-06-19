@@ -70,7 +70,7 @@ public class BasicUserActivity extends Activity {
         String total = getResources().getString(R.string.reserved_widget_android_total).toLowerCase();
 
         // Block 1
-        FlexboxLayout p_p_1 = (FlexboxLayout) findViewById(R.id.p_p_1);
+        final FlexboxLayout p_p_1 = (FlexboxLayout) findViewById(R.id.p_p_1);
 
         TextView validityInfoText1 = (TextView) p_p_1.findViewById(R.id.validityInfoText);
         validityInfoText1.setText(getResources().getString(R.string.reserved_widget_android_12_months));
@@ -101,7 +101,7 @@ public class BasicUserActivity extends Activity {
         buttonBuyText1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView throbber = (TextView) p_p_1.findViewById(R.id.throbber);
+                final TextView throbber = (TextView) p_p_1.findViewById(R.id.throbber);
                 showThrobber(throbber);
                 userAPI.createTransaction(
                     "proyear",
@@ -125,7 +125,7 @@ public class BasicUserActivity extends Activity {
 
 
         // Block 2
-        FlexboxLayout p_p_2 = (FlexboxLayout) findViewById(R.id.p_p_2);
+        final FlexboxLayout p_p_2 = (FlexboxLayout) findViewById(R.id.p_p_2);
 
         TextView validityInfoText2 = (TextView) p_p_2.findViewById(R.id.validityInfoText);
         validityInfoText2.setText(getResources().getString(R.string.reserved_widget_android_6_months));
@@ -156,7 +156,7 @@ public class BasicUserActivity extends Activity {
         buttonBuyText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView throbber = (TextView) p_p_2.findViewById(R.id.throbber);
+                final TextView throbber = (TextView) p_p_2.findViewById(R.id.throbber);
                 showThrobber(throbber);
                 userAPI.createTransaction(
                     "prohalfyear",
@@ -180,7 +180,7 @@ public class BasicUserActivity extends Activity {
 
 
         // Block 3
-        FlexboxLayout p_p_3 = (FlexboxLayout) findViewById(R.id.p_p_3);
+        final FlexboxLayout p_p_3 = (FlexboxLayout) findViewById(R.id.p_p_3);
 
         TextView validityInfoText3 = (TextView) p_p_3.findViewById(R.id.validityInfoText);
         validityInfoText3.setText(getResources().getString(R.string.reserved_widget_android_1_month));
@@ -199,7 +199,7 @@ public class BasicUserActivity extends Activity {
         buttonBuyText3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView throbber = (TextView) p_p_3.findViewById(R.id.throbber);
+                final TextView throbber = (TextView) p_p_3.findViewById(R.id.throbber);
                 showThrobber(throbber);
                 userAPI.createTransaction(
                     "promonth",
