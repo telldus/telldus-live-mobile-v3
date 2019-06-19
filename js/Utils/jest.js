@@ -19,8 +19,6 @@
 
 import { NativeModules } from 'react-native';
 
-import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
-
 jest.mock('react-native-orientation-locker', () => {
 	return {
 		addEventListener: jest.fn(),
@@ -70,5 +68,3 @@ NativeModules.AndroidWidget = {
 	configureWidgetAuthData: jest.fn(),
 	disableAllWidgets: jest.fn(),
 };
-
-jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
