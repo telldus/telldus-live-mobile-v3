@@ -23,7 +23,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -34,7 +33,6 @@ import com.telldus.live.mobile.MainActivity;
 import java.util.Arrays;
 import java.util.List;
 
-import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.horcrux.svg.SvgPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -72,8 +70,6 @@ public class MainApplication extends Application implements ReactApplication {
 				new VectorIconsPackage(),
 				new ExtraDimensionsPackage(),
 				new MainReactPackage(),
-				new AsyncStoragePackage(),
-				new NetInfoPackage(),
 				new RNFetchBlobPackage(),
 				new RNGestureHandlerPackage(),
 				new RNGoogleSigninPackage(),

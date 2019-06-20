@@ -22,8 +22,7 @@
 
 'use strict';
 
-import { Platform } from 'react-native';
-import NetInfo from '@react-native-community/netinfo';
+import { Platform, NetInfo } from 'react-native';
 
 import { reportException } from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';

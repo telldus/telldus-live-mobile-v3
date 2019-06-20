@@ -123,10 +123,7 @@ android {
         exclude 'META-INF/LGPL2.1'
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.telldus.live.mobile"
@@ -135,6 +132,9 @@ android {
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
         manifestPlaceholders = [googleMapsAPIKey: GOOGLE_MAPS_API_KEY, pushSenderId: PUSH_SENDER_ID]
     }
     signingConfigs {
@@ -150,7 +150,7 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            include "armeabi-v7a", "x86"
         }
     }
     buildTypes {
@@ -171,7 +171,7 @@ android {
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
             // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
+            def versionCodes = ["armeabi-v7a":1, "x86":2]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -185,8 +185,6 @@ android {
 }
 
 dependencies {
-    implementation project(':@react-native-community_async-storage')
-    implementation project(':@react-native-community_netinfo')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-orientation-locker')
@@ -213,7 +211,7 @@ dependencies {
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
-    implementation ("com.facebook.react:react-native:0.59.5")
+    implementation ("com.facebook.react:react-native:0.57.7")
     {
         force = true
     }
@@ -222,7 +220,7 @@ dependencies {
     }
     implementation project(':react-native-sqlite-storage')
     implementation 'com.android.support:multidex:1.0.2'
-    implementation ("com.google.android.gms:play-services-base:16.1.0") {
+    implementation ("com.google.android.gms:play-services-base:16.0.1") {
         force = true;
     }
     implementation ("com.google.android.gms:play-services-maps:16.0.0") {
@@ -231,10 +229,10 @@ dependencies {
     implementation ("com.google.android.gms:play-services-gcm:16.0.0") {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-core:16.0.8') {
+    implementation ('com.google.firebase:firebase-core:16.0.6') {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-messaging:17.5.0') {
+    implementation ('com.google.firebase:firebase-messaging:17.3.4') {
         force = true;
     }
     implementation(project(":react-native-google-signin")){

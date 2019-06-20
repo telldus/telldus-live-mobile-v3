@@ -39,7 +39,7 @@ import org.json.JSONException;
 public class API {
     private static String API_SERVER = BuildConfig.TELLDUS_API_SERVER;
 
-    public void callEndPoint(final Context context, final String params, String tag, final OnAPITaskComplete callBack) {
+    public void callEndPoint(final Context context, final String params, final String tag, final OnAPITaskComplete callBack) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
 
