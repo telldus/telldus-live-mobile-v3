@@ -28,6 +28,10 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import android.os.Build;
+import android.app.NotificationManager;
+import android.support.v4.app.NotificationCompat;
+import android.app.NotificationChannel;
 
 import com.telldus.live.mobile.NewSensorWidget;
 import com.telldus.live.mobile.Database.MyDBHandler;
@@ -37,6 +41,9 @@ import com.telldus.live.mobile.Model.SensorInfo;
 public class RestartSensorUpdateAlarmManager extends Service {
     int startMode = Service.START_NOT_STICKY;
 
+    public static final String CHANNEL_ID = "com.telldus.live.mobile.ServiceBackground";
+    public static final String CHANNEL_NAME = "RESTART SENSOR UPDATE ALARM MANAGER";
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -45,7 +52,24 @@ public class RestartSensorUpdateAlarmManager extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        startForeground(1, new Notification());
+
+        // Create the Foreground Service
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder notificationBuilder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
+            CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(notificationChannel);
+            notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        } else {
+            notificationBuilder = new NotificationCompat.Builder(this);
+        }
+
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .build();
+
+        startForeground(1, notification);
     }
 
     @Override
