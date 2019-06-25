@@ -522,6 +522,7 @@ class SettingsTab extends View {
 						value={name}
 						appLayout={appLayout}
 						intl={intl}
+						keyboardTypeInLineEdit={'default'}
 					/>
 					<SettingsRow
 						label={formatMessage(i18n.showOnDashborad)}
