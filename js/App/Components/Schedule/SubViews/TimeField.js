@@ -149,7 +149,7 @@ render(): Object {
 				onChangeText={this.onEdit}
 				autoCapitalize="none"
 				autoCorrect={false}
-				keyboardType={Platform.OS === 'ios' ? 'phone-pad' : 'numeric'}
+				keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'numeric'}
 				ref={this.setRef}
 				onFocus={this.onFocus}
 				blurOnSubmit={true}
