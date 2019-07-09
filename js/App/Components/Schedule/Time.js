@@ -179,6 +179,7 @@ export default class Time extends View<null, Props, State> {
 		} else {
 			time.hour = date.getHours();
 			time.minute = date.getMinutes();
+			time.offset = 0;
 		}
 
 		actions.selectTime(selectedType, time);
