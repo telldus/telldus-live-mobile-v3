@@ -24,12 +24,9 @@
 
 import type { Action } from './Types';
 
-// type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
-type Tab = 'Dashboard' | 'Devices' | 'Sensors' | 'Scheduler' | 'Gateways';
-
 module.exports = {
-	switchTab: (tab: Tab): Action => ({
-		type: 'SWITCH_TAB',
-		tab,
+	screenChange: (screen: string): Action => ({
+		type: 'CHANGE_SCREEN',
+		screen,
 	}),
 };

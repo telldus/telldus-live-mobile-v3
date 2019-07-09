@@ -62,7 +62,6 @@ type Props = {
 	appLayout: Object,
 	isGatewayActive: boolean,
 	isLast: boolean,
-	tab: string,
 	isNew: boolean,
 	gatewayName: string,
 	powerConsumed: string | null,

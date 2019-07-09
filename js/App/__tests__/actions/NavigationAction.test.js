@@ -1,12 +1,12 @@
 import * as actions from '../../Actions/Navigation.js';
 
-describe('(Navigation) switchTab ', () => {
-	it('should return  SWITCH_TAB', () => {
-		const Tab = 'sensorsTab';
+describe('(Navigation) screenChange ', () => {
+	it('should return  CHANGE_SCREEN', () => {
+		const screen = 'sensorsTab';
 		const expectedAction = {
-			type: 'SWITCH_TAB',
-			tab: Tab,
+			type: 'CHANGE_SCREEN',
+			screen,
 		};
-		expect(actions.switchTab(Tab)).toEqual(expectedAction);
+		expect(actions.screenChange(screen)).toEqual(expectedAction);
 	});
 });

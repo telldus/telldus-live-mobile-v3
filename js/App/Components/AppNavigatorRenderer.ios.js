@@ -33,7 +33,7 @@ import Navigator from './AppNavigator';
 
 import {
 	syncWithServer,
-	switchTab,
+	screenChange,
 	resetSchedule,
 } from '../Actions';
 import {
@@ -286,9 +286,9 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onNavigationStateChange: (tab: string) => {
-			dispatch(syncWithServer(tab));
-			dispatch(switchTab(tab));
+		onNavigationStateChange: (screen: string) => {
+			dispatch(syncWithServer(screen));
+			dispatch(screenChange(screen));
 		},
 		dispatch,
 	};

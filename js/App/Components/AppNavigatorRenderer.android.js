@@ -36,7 +36,7 @@ import Drawer from './Drawer/Drawer';
 
 import {
 	syncWithServer,
-	switchTab,
+	screenChange,
 	resetSchedule,
 } from '../Actions';
 import {
@@ -450,9 +450,9 @@ function mapDispatchToProps(dispatch: Function): Object {
 		syncGateways: () => {
 			dispatch(syncWithServer('gatewaysTab'));
 		},
-		onNavigationStateChange: (tab: string) => {
-			dispatch(syncWithServer(tab));
-			dispatch(switchTab(tab));
+		onNavigationStateChange: (screen: string) => {
+			dispatch(syncWithServer(screen));
+			dispatch(screenChange(screen));
 		},
 	};
 }

@@ -3,7 +3,7 @@ jest.useFakeTimers();
 
 
 const initialState = {
-	tab: 'Dashboard',
+	screen: 'Dashboard',
 };
 
 
@@ -13,11 +13,11 @@ describe('Test Navigation reducers', ()=>{
 		expect(reducer(undefined, {})).toEqual(initialState);
 	});
 
-	it('check navigation reducers after switching tab', () => {
-		const State = { tab: 'Sensors' };
+	it('check navigation reducers after switching screen', () => {
+		const State = { screen: 'Sensors' };
 		const action = {
-			type: 'SWITCH_TAB',
-			tab: 'Sensors',
+			type: 'CHANGE_SCREEN',
+			screen: 'Sensors',
 		};
 		expect(reducer( {}, action )).toEqual(State);
 	});

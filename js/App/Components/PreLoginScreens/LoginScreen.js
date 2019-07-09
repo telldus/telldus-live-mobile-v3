@@ -263,7 +263,6 @@ class LoginScreen extends View {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		tab: store.navigation.tab,
 		accessToken: store.user.accessToken,
 		isTokenValid: store.user.isTokenValid,
 	};

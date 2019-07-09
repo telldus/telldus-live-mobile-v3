@@ -36,7 +36,7 @@ export type Action =
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
 
-	| { type: 'SWITCH_TAB', tab: 'Dashboard' | 'Devices' | 'Sensors' | 'Scheduler' | 'Gateways' }
+	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
 	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }

@@ -22,22 +22,20 @@
 'use strict';
 
 import type { Action } from '../Actions/Types';
-// export type Tab = 'dashboardTab' | 'devicesTab' | 'sensorsTab' | 'schedulerTab' | 'locationsTab';
-export type Tab = 'Dashboard' | 'Devices' | 'Sensors' | 'Scheduler' | 'Gateways';
 
 type State = {
-	tab: Tab,
+	screen: string,
 };
 
 const initialState: State = {
-	tab: 'Dashboard',
+	screen: 'Dashboard',
 };
 
 function navigation(state: State = initialState, action: Action): State {
-	if (action.type === 'SWITCH_TAB') {
+	if (action.type === 'CHANGE_SCREEN') {
 		return {
 			...state,
-			tab: action.tab,
+			screen: action.screen,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {

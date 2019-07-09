@@ -194,7 +194,6 @@ class SessionLocked extends View {
 
 function mapStateToProps(store: Object): Object {
 	return {
-		tab: store.navigation.tab,
 		pushToken: store.user.pushToken,
 		isTokenValid: store.user.isTokenValid,
 		appLayout: store.app.layout,
