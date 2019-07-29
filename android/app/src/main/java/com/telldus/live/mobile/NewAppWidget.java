@@ -633,7 +633,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
-                    if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                    if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
                         int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
                         checkpoint = getClosestCheckPoint(slidervalue);
                     }
@@ -723,7 +723,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
-                    if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                    if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
                         int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
                         checkpoint = getClosestCheckPoint(slidervalue);
                     }
@@ -812,7 +812,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 if (methodRequested != null && isShowingStatus == 1) {
                     int checkpoint = 0;
-                    if (deviceStateValue != null && !deviceStateValue.equals("")) {
+                    if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
                         int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
                         checkpoint = getClosestCheckPoint(slidervalue);
                     }
