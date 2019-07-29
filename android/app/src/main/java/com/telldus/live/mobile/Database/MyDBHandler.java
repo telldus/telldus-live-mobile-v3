@@ -232,6 +232,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);
+        db.close();
         return true;
     }
 
@@ -243,6 +244,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);
+        db.close();
         return true;
     }
 
@@ -254,6 +256,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);
+        db.close();
         return true;
     }
 
@@ -268,6 +271,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);
+        db.close();
         return true;
     }
 
@@ -279,6 +283,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, DEVICE_ID+" = ?", whereArgs);
+        db.close();
         return true;
     }
 
@@ -293,6 +298,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         contentValues.put(SENSOR_UPDATE, time1);
         String[] whereArgs = {id};
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
+        db.close();
         return count;
     }
 
@@ -304,6 +310,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, SENSOR_ID+" = ?", whereArgs);
+        db.close();
         return true;
     }
 
@@ -312,6 +319,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String[] whereArgs = {widget};
 
+        db.close();
         return  db.delete(TABLE_WIDGET_INFO_DEVICE, WIDGET_ID_DEVICE+" = ?", whereArgs) > 0;
     }
 
@@ -320,6 +328,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String[] whereArgs = {widget};
 
+        db.close();
         return  db.delete(TABLE_WIDGET_INFO_SENSOR, WIDGET_ID_SENSOR+" = ?", whereArgs) > 0;
     }
 
@@ -330,6 +339,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
 
+        db.close();
         return icount;
     }
 
@@ -428,6 +438,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs );
+        db.close();
         return true;
     }
 
@@ -439,6 +450,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
+        db.close();
         return true;
     }
 
@@ -496,6 +508,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs );
+        db.close();
         return true;
     }
 
@@ -507,6 +520,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
+        db.close();
         return true;
     }
 
@@ -518,6 +532,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_SENSOR, contentValues, WIDGET_ID_SENSOR+" = ?", whereArgs );
+        db.close();
         return true;
     }
 }
