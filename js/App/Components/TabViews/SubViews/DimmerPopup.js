@@ -62,7 +62,7 @@ class DimmerPopup extends Component<Props, State> {
 	props: Props;
 	state: State;
 	handleLayout: Object => void;
-	setRefs: (any) => mixed;
+	setRefs: (any) => any;
 	contentRef: Object;
 
 	static defaultProps: DefaultProps;

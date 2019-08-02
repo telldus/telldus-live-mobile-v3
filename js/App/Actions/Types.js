@@ -19,7 +19,6 @@
  */
 // @flow
 'use strict';
-import { REHYDRATE } from 'redux-persist';
 
 export type Action =
 	  { type: 'LOGGED_IN' }
@@ -46,7 +45,7 @@ export type Action =
 	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE', id: number, displayType: string }
 	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE_DB', id: number, displayTypeDB: string }
 
-	| { type: 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS', id: number, newSettings: Object }
+	| { type: 'CHANGE_SENSOR_DEFAULT_HISTORY_SETTINGS', id: number, historySettings: Object }
 	| { type: 'SHOW_DIMMER_POPUP', name: string, value: number }
 	| { type: 'HIDE_DIMMER_POPUP' }
 	| { type: 'SET_DIMMER_VALUE', payload: Object }
@@ -114,10 +113,9 @@ export type Action =
 	| { type: 'GATEWAY_AUTO_DETECT_LOCAL_SUCCESS', payload: Object }
 	| { type: 'GATEWAY_RESET_LOCAL_CONTROL_SUPPORT' }
 	| { type: 'VALIDATE_LOCAL_CONTROL_SUPPORT', payload: Object }
-	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: string, payload: Object }
-	| { type: typeof REHYDRATE }
+	| { type: 'RESET_LOCAL_CONTROL_ADDRESS', gatewayId: number, payload: Object }
 	| { type: 'persist/REHYDRATE', payload: Object }
-	| { type: 'TOGGLE_SUPPORT_LOCAL', gatewayId: string, payload: Object }
+	| { type: 'TOGGLE_SUPPORT_LOCAL', gatewayId: number, payload: Object }
 
 	| { type: 'ACCEPT_EULA_SUCCESS', version: number }
 	| { type: 'ACCEPT_EULA_ERROR' }

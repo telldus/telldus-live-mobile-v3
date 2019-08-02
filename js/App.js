@@ -74,7 +74,7 @@ class App extends React.Component<Props, State> {
 	onNotification: Function | null;
 	setCalendarLocale: () => void;
 
-	toggleDialogueBox: (Object) => null;
+	toggleDialogueBox: Function;
 	closeDialogue: (?() => void, ?number) => void;
 	onPressDialoguePositive: () => void;
 	onPressDialogueNegative: () => void;

@@ -87,7 +87,7 @@ class GeoPosition extends View {
 	state: State;
 
 	onAddressChange: () => void;
-	_refs: (Object | any) => mixed;
+	_refs: (Object | any) => any;
 	onSubmit: () => void;
 	onDragEnd: (Object) => void;
 	onInfoPress: () => void;
