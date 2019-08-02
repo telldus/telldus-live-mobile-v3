@@ -23,38 +23,25 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.telldus.live.mobile.MainActivity;
+import com.facebook.react.PackageList;
+import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
+import com.facebook.react.bridge.JavaScriptExecutorFactory;
 
-import java.util.Arrays;
 import java.util.List;
 
-import com.reactnativecommunity.netinfo.NetInfoPackage;
-import com.horcrux.svg.SvgPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.oblador.vectoricons.VectorIconsPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 import org.pgsqlite.SQLitePluginPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
-import com.RNRSA.RNRSAPackage;
-import com.tradle.react.UdpSocketsModule;
-import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
-import com.reactlibrary.RNReactNativeAccessibilityPackage;
-import com.airbnb.android.react.maps.MapsPackage;
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.telldus.live.mobile.WidgetPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import org.wonday.orientation.OrientationPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -66,31 +53,20 @@ public class MainApplication extends Application implements ReactApplication {
 
 		@Override
 		protected List<ReactPackage> getPackages() {
-			return Arrays.<ReactPackage>asList(
-				new SQLitePluginPackage(),
-				new RNDeviceInfo(),
-				new VectorIconsPackage(),
-				new ExtraDimensionsPackage(),
-				new MainReactPackage(),
-				new AsyncStoragePackage(),
-				new NetInfoPackage(),
-				new RNFetchBlobPackage(),
-				new RNGestureHandlerPackage(),
-				new RNGoogleSigninPackage(),
-				new OrientationPackage(),
-				new SvgPackage(),
-				new RNFirebasePackage(),
-				new RNFirebaseMessagingPackage(),
-				new RNFirebaseNotificationsPackage(),
-				new RNFirebaseCrashlyticsPackage(),
-				new RNRSAPackage(),
-				new UdpSocketsModule(),
-				new RNSensitiveInfoPackage(),
-				new RNReactNativeAccessibilityPackage(),
-				new MapsPackage(),
-				new RNI18nPackage(),
-				new WidgetPackage()
-			);
+			@SuppressWarnings("UnnecessaryLocalVariable")
+			List<ReactPackage> packages = new PackageList(this).getPackages();
+			// Packages that cannot be autolinked yet can be added manually here, for example:
+			// packages.add(new MyReactNativePackage());
+
+			packages.add(new SQLitePluginPackage());
+			packages.add(new ExtraDimensionsPackage());
+			packages.add(new RNFetchBlobPackage());
+			packages.add(new RNFirebasePackage());
+			packages.add(new RNFirebaseMessagingPackage());
+			packages.add(new RNFirebaseNotificationsPackage());
+			packages.add(new RNFirebaseCrashlyticsPackage());
+			packages.add(new WidgetPackage());
+			return packages;
 		}
 
 		@Override

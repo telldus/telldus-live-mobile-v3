@@ -30,7 +30,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.os.Build;
 import android.app.NotificationManager;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.app.NotificationChannel;
 
 import com.telldus.live.mobile.NewSensorWidget;

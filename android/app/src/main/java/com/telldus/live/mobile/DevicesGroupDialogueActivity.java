@@ -31,7 +31,7 @@ import android.widget.ImageView;
 import android.content.Context;
 import android.content.Intent;
 import android.appwidget.AppWidgetManager;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.os.Handler;
 import android.os.Looper;
 

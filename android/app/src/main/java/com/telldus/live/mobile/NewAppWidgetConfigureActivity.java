@@ -38,7 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
 import android.widget.RadioButton;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import com.androidnetworking.error.ANError;
 

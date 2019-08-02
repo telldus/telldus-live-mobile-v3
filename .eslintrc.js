@@ -1,4 +1,5 @@
-{
+module.exports = {
+  "root": true,
   "parser": "babel-eslint",
 
   "env": {
@@ -327,4 +328,5 @@
 	"flowtype/use-flow-type": 1,
 	"flowtype/valid-syntax": 1
   }
-}
+};
+

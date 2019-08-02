@@ -31,6 +31,9 @@ def readVersionCode() {
  *   // the entry file for bundle generation
  *   entryFile: "index.android.js",
  *
+ *   // https://facebook.github.io/react-native/docs/performance#enable-the-ram-format
+ *   bundleCommand: "ram-bundle",
+ *
  *   // whether to bundle JS and assets in debug mode
  *   bundleInDebug: false,
  *
@@ -88,10 +91,13 @@ def readVersionCode() {
 
 project.ext.react = [
     entryFile: "index.js",
-    extraPackagerArgs: ["--sourcemap-output", file("$buildDir/../../sourcemap.js")]
+    extraPackagerArgs: ["--sourcemap-output", file("$buildDir/../../sourcemap.js")],
+    enableHermes: false,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -107,6 +113,27 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = false
+
+/**
+ * The preferred build flavor of JavaScriptCore.
+ *
+ * For example, to use the international variant, you can use:
+ * `def jscFlavor = 'org.webkit:android-jsc-intl:+'`
+ *
+ * The international variant includes ICU i18n library and necessary data
+ * allowing to use e.g. `Date.toLocaleString` and `String.localeCompare` that
+ * give correct results when using with locales other than en-US.  Note that
+ * this variant is about 6MiB larger per architecture than default.
+ */
+def jscFlavor = 'org.webkit:android-jsc:+'
+/**
+ * Whether to enable the Hermes VM.
+ *
+ * This should be set on project.ext.react and mirrored here.  If it is not set
+ * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
+ * and the benefits of using Hermes will therefore be sharply reduced.
+ */
+def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
 
@@ -138,6 +165,12 @@ android {
         manifestPlaceholders = [googleMapsAPIKey: GOOGLE_MAPS_API_KEY, pushSenderId: PUSH_SENDER_ID]
     }
     signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
         release {
             storeFile file(TELLDUS_REACT_NATIVE_LOCAL_STORE_FILE)
             storePassword TELLDUS_REACT_NATIVE_LOCAL_STORE_PASSWORD
@@ -157,8 +190,11 @@ android {
         debug {
             applicationIdSuffix ""
             buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
+            signingConfig signingConfigs.debug
         }
         release {
+            // Caution! In production, you need to generate your own keystore file.
+            // see https://facebook.github.io/react-native/docs/signed-apk-android.
             applicationIdSuffix ""
             minifyEnabled enableProguardInReleaseBuilds
             signingConfig signingConfigs.release
@@ -170,8 +206,8 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             // For each separate APK per architecture, set a unique version code as described here:
-            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
-            def versionCodes = ["armeabi-v7a":1, "x86":2, "arm64-v8a": 3, "x86_64": 4]
+           // https://developer.android.com/studio/build/configure-apk-splits.html
+            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride =
@@ -182,40 +218,38 @@ android {
     lintOptions{
         disable 'MissingTranslation'
     }
+    packagingOptions {
+        pickFirst '**/armeabi-v7a/libc++_shared.so'
+        pickFirst '**/x86/libc++_shared.so'
+        pickFirst '**/arm64-v8a/libc++_shared.so'
+        pickFirst '**/x86_64/libc++_shared.so'
+        pickFirst '**/x86/libjsc.so'
+        pickFirst '**/armeabi-v7a/libjsc.so'
+    }
 }
 
 dependencies {
-    implementation project(':@react-native-community_async-storage')
-    implementation project(':@react-native-community_netinfo')
     implementation project(':react-native-fetch-blob')
-    implementation project(':react-native-gesture-handler')
-    implementation project(':react-native-orientation-locker')
-    implementation project(':react-native-svg')
     implementation(project(':react-native-firebase')) {
         exclude group: "com.google.firebase"
     }
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
-    implementation(project(':react-native-maps')){
-        exclude group: 'com.google.android.gms'
-    }
     implementation (project(':react-native-device-info')){
         exclude group: "com.google.android.gms"
     }
-    implementation project(':react-native-rsa-native')
-    implementation project(':react-native-udp')
-    implementation project(':react-native-sensitive-info')
-    implementation project(':react-native-accessibility')
-    implementation project(':react-native-i18n')
     implementation project(':react-native-extra-dimensions-android')
-    implementation project(':react-native-vector-icons')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
     // https://github.com/facebook/react-native/issues/19259#issuecomment-389064401
     // will need to update here too on upgrading RN.
-    implementation ("com.facebook.react:react-native:0.59.5")
-    {
-        force = true
+    implementation ("com.facebook.react:react-native:+")
+    if (enableHermes) {
+      def hermesPath = "../../node_modules/hermesvm/android/";
+      debugImplementation files(hermesPath + "hermes-debug.aar")
+      releaseImplementation files(hermesPath + "hermes-release.aar")
+    } else {
+      implementation jscFlavor
     }
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.6') {
       transitive = true;
@@ -237,9 +271,6 @@ dependencies {
     implementation ('com.google.firebase:firebase-messaging:17.5.0') {
         force = true;
     }
-    implementation(project(":react-native-google-signin")){
-        exclude group: "com.google.android.gms"
-    }
     implementation ('com.google.android.gms:play-services-auth:16.0.0') {
         force = true;
     }
@@ -255,4 +286,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 apply plugin: 'com.google.gms.google-services'

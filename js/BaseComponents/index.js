@@ -33,7 +33,6 @@ import FormattedDate from './FormattedDate';
 import FormattedNumber from './FormattedNumber';
 import FormattedTime from './FormattedTime';
 import Switch from './Switch';
-import List from './List';
 import ListItem from './ListItem';
 import CardItem from './CardItem';
 import H1 from './H1';
@@ -97,7 +96,6 @@ import {
 	StatusBar,
 	StyleSheet,
 	TabBarIOS,
-	ListView,
 	Image,
 } from 'react-native';
 
@@ -115,7 +113,6 @@ module.exports = {
 	FormattedTime: FormattedTime,
 	Text: Text,
 	Switch: Switch,
-	List: List,
 	ListItem: ListItem,
 	CardItem: CardItem,
 	H1: H1,
@@ -177,7 +174,6 @@ module.exports = {
 	StyleSheet: StyleSheet,
 	TabBarIOS: TabBarIOS,
 	Gravatar: Gravatar,
-	ListDataSource: ListView.DataSource,
 	Image: Image,
 	I18n: I18n,
 };
