@@ -72,3 +72,7 @@ NativeModules.AndroidWidget = {
 };
 
 jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+
+jest.mock('@react-native-community/netinfo', () => {
+	return {};
+});
