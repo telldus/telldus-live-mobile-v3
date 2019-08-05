@@ -34,7 +34,6 @@ import com.facebook.react.bridge.JavaScriptExecutorFactory;
 
 import java.util.List;
 
-import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
@@ -56,7 +55,6 @@ public class MainApplication extends Application implements ReactApplication {
 			// Packages that cannot be autolinked yet can be added manually here, for example:
 			// packages.add(new MyReactNativePackage());
 
-			packages.add(new ExtraDimensionsPackage());
 			packages.add(new RNFetchBlobPackage());
 			packages.add(new RNFirebaseMessagingPackage());
 			packages.add(new RNFirebaseNotificationsPackage());

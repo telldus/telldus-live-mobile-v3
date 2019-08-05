@@ -7,11 +7,5 @@ module.exports = {
 				ios: null,
 			},
 		},
-		'react-native-extra-dimensions-android': {
-			platforms: {
-				android: null,
-				ios: null,
-			},
-		},
 	},
 };

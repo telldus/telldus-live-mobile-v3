@@ -231,7 +231,6 @@ android {
 dependencies {
     implementation project(':react-native-fetch-blob')
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
-    implementation project(':react-native-extra-dimensions-android')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     // Specifying and forcing exact RN version used in package.json . This is to fix issue of RN mismatch 
