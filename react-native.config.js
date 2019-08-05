@@ -13,12 +13,6 @@ module.exports = {
 				ios: null,
 			},
 		},
-		'react-native-firebase': {
-			platforms: {
-				android: null,
-				ios: null,
-			},
-		},
 		'react-native-extra-dimensions-android': {
 			platforms: {
 				android: null,

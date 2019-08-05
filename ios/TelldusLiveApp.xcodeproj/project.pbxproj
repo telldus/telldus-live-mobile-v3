@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -26,7 +25,6 @@
 		59F114B4AC654FA7AAF457B4 /* SFNS Display.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F455C17D479C4210A202688C /* SFNS Display.ttf */; };
 		68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */ = {isa = PBXBuildFile; fileRef = DB8C12D469844F34ABBA0A64 /* telldusicons.svg */; };
 		695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 882834547CB84ED98886796F /* Roboto-Medium.ttf */; };
-		77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */; };
 		794DAA9AEBAE4A7291C53EB5 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */; };
 		AD9B7A84CF90483DA832A7FB /* telldusicons.woff in Resources */ = {isa = PBXBuildFile; fileRef = FED4ABDECE1A45289BE59CD1 /* telldusicons.woff */; };
 		DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */; };
@@ -36,13 +34,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		26D4DDD8214263A80060DC8E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNFirebase;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,7 +51,6 @@
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* TelldusLiveApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelldusLiveApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = TelldusLiveApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = TelldusLiveApp/AppDelegate.m; sourceTree = "<group>"; };
@@ -91,7 +81,6 @@
 		409837E21F6140AE005E56A9 /* TelldusLiveApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TelldusLiveApp.entitlements; path = TelldusLiveApp/TelldusLiveApp.entitlements; sourceTree = "<group>"; };
 		40D7C7691F73AB9C0078E086 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = TelldusLiveApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5E2F044E48EA427F9C4A967C /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		5F9C6F2CB19749988ABB6BA2 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
 		882834547CB84ED98886796F /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		9E4E10C72947027C61D0AB0E /* libPods-TelldusLiveApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TelldusLiveApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6CE961F3EE90A0E326684E5 /* Pods-TelldusLiveApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TelldusLiveApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TelldusLiveApp/Pods-TelldusLiveApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -115,7 +104,6 @@
 				26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */,
 				26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */,
 				FF46E161818E9B5BE09583C2 /* libPods-TelldusLiveApp.a in Frameworks */,
-				77C8DB73263B46C3B3FB785A /* libRNFirebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,14 +133,6 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = TelldusLiveApp;
-			sourceTree = "<group>";
-		};
-		26D4DDD5214263A70060DC8E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				26D4DDD9214263A80060DC8E /* libRNFirebase.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		26DA5FD12045A238003FCA91 /* Recovered References */ = {
@@ -204,7 +184,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -347,10 +326,6 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = 26D4DDD5214263A70060DC8E /* Products */;
-					ProjectRef = 099B9E1E4A774ADBB29E1124 /* RNFirebase.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -361,13 +336,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		26D4DDD9214263A80060DC8E /* libRNFirebase.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNFirebase.a;
-			remoteRef = 26D4DDD8214263A80060DC8E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -583,7 +551,6 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo/**",
 					"$(SRCROOT)/../node_modules/react-native-rsa-native/ios",
-					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
@@ -623,7 +590,6 @@
 					"$(SRCROOT)/../node_modules/react-native-i18n/RNI18n",
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo/**",
 					"$(SRCROOT)/../node_modules/react-native-rsa-native/ios",
-					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
 					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
