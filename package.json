@@ -60,7 +60,7 @@
     "react-native-sensitive-info": "https://github.com/telldus/react-native-sensitive-info.git",
     "react-native-simple-toast": "^0.1.1",
     "react-native-slider": "~0.11.0",
-    "react-native-sqlite-storage": "~3.3.10",
+    "react-native-sqlite-storage": "^3.3.11",
     "react-native-svg": "~9.4.0",
     "react-native-swipe-list-view": "https://github.com/rimzici/react-native-swipe-list-view.git",
     "react-native-swiper": "~1.5.14",
