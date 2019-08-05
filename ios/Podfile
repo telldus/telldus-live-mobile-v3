@@ -34,7 +34,6 @@ target 'TelldusLiveApp' do
   pod 'Crashlytics', '~> 3.12.0'
   pod 'GoogleSignIn', '~> 4.4.0'
   pod 'GoogleAppMeasurement', '~> 5.8.0'
-  pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
 
   use_native_modules!
 end
