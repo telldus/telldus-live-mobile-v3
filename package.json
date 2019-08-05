@@ -36,7 +36,7 @@
     "react-intl": "~2.8.0",
     "react-native": "0.60.4",
     "react-native-accessibility": "^1.0.9",
-    "react-native-cached-image": "^1.4.3",
+    "react-native-cached-image": "https://github.com/telldus/react-native-cached-image.git",
     "react-native-calendars": "~1.60.0",
     "react-native-circular-slider": "git+https://github.com/telldus/react-native-circular-slider.git",
     "react-native-color-wheel": "https://github.com/telldus/react-native-color-wheel.git",
