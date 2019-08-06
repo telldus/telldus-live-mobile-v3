@@ -30,6 +30,7 @@ import React from 'react';
 import { Text } from './BaseComponents';
 import { Provider } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import SplashScreen from 'react-native-splash-screen';
 
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -72,6 +73,7 @@ function Bootstrap(): Object {
 
 		_configureStoreCompleted() {
 			this.setState({ isLoading: false });
+			SplashScreen.hide();
 			let state = this.state.store.getState();
 			if (state.user && state.user.userProfile) {
 				setUserIdentifier(state.user.userProfile.email);

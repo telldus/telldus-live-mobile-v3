@@ -186,6 +186,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-splash-screen')
     implementation "org.webkit:android-jsc:r245459"
     implementation project(':@react-native-community_async-storage')
     implementation project(':@react-native-community_netinfo')
