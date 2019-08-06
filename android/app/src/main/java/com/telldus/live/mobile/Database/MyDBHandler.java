@@ -319,8 +319,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String[] whereArgs = {widget};
 
+        int flag = db.delete(TABLE_WIDGET_INFO_DEVICE, WIDGET_ID_DEVICE+" = ?", whereArgs);
         db.close();
-        return  db.delete(TABLE_WIDGET_INFO_DEVICE, WIDGET_ID_DEVICE+" = ?", whereArgs) > 0;
+        return flag > 0;
     }
 
     public boolean deleteWidgetInfoSensor(int id) {
@@ -328,8 +329,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String[] whereArgs = {widget};
 
+        int flag = db.delete(TABLE_WIDGET_INFO_SENSOR, WIDGET_ID_SENSOR+" = ?", whereArgs);
         db.close();
-        return  db.delete(TABLE_WIDGET_INFO_SENSOR, WIDGET_ID_SENSOR+" = ?", whereArgs) > 0;
+        return flag > 0;
     }
 
     public int countWidgetSensorTableValues() {
