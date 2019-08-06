@@ -428,7 +428,8 @@ public class NewSensorWidget extends AppWidgetProvider {
 
                             String widgetLabelUnit = sensorWidgetInfo.getSensorDisplayType();
                             if (widgetLabelUnit.equalsIgnoreCase(labelUnit)) {
-                                database.updateSensorInfo(sensorName, value, Long.parseLong(lastUp), widgetId);
+                                String senValue = info.get("value").toString();
+                                database.updateSensorInfo(sensorName, senValue, Long.parseLong(lastUp), widgetId);
                             }
                         }
                     }

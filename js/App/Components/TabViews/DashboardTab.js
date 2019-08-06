@@ -395,6 +395,7 @@ class DashboardTab extends View {
 					contentContainerStyle={{
 						flexGrow: 1,
 						paddingVertical: style.padding,
+						paddingHorizontal: isDBEmpty ? 30 : style.padding,
 					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
@@ -486,7 +487,6 @@ class DashboardTab extends View {
 	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const { isDBEmpty } = this.props;
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = this.getPadding();
@@ -496,7 +496,6 @@ class DashboardTab extends View {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				paddingHorizontal: isDBEmpty ? 30 : padding,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
 				backgroundColor: Theme.Core.appBackground,
 			},
