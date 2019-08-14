@@ -1,0 +1,3 @@
+- Crashfix when removing widget
+- Bugfix Sensor Widget wind direction
+
