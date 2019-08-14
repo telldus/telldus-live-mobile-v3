@@ -15,7 +15,7 @@
     "dgram": "react-native-udp"
   },
   "dependencies": {
-    "@kudo-ci/jsc-android": "^245459.9000.0",
+    "@kudo-ci/jsc-android": "245459.9000.0",
     "@react-native-community/async-storage": "~1.3.3",
     "@react-native-community/netinfo": "~2.0.4",
     "axios": "~0.19.0",
