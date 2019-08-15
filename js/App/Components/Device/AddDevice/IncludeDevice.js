@@ -749,7 +749,10 @@ render(): Object {
 	const timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
 
 	return (
-		<ScrollView>
+		<ScrollView style={{
+			flex: 1,
+		}}
+		contentContainerStyle={{flexGrow: 1}}>
 			<ZWaveIncludeExcludeUI
 				progress={progress}
 				percent={percent}

@@ -137,6 +137,8 @@ render(): Object {
 
 	const { formatMessage } = intl;
 
+	const showInfo = this.isInclude && !!infoText;
+
 	return (
 		<View style={container}>
 			<View style={progressContainer}>
@@ -190,13 +192,13 @@ render(): Object {
 						unfilledColor={Theme.Core.inactiveSwitchBackground} />
 				</View>
 			</View>
-			{this.isInclude && !!infoText && (<View style={infoContainer}>
+			{showInfo && (<View style={infoContainer}>
 				<View style={blockLeft}>
 					<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
 				</View>
 				<View style={{
 					flex: 1,
-					flexDirection: 'column',
+					flexDirection: 'row',
 					flexWrap: 'wrap',
 				}}>
 					<Text style={textStyle}>
@@ -231,12 +233,12 @@ getStyles(): Object {
 	return {
 		innerPadding: contPadding,
 		container: {
-			flex: 1,
 			paddingTop: padding,
 			paddingBottom: padding / 2,
 			marginHorizontal: padding,
 		},
 		progressContainer: {
+			flex: 1,
 			flexDirection: 'row',
 			marginBottom: padding / 2,
 			backgroundColor: '#fff',
@@ -245,6 +247,7 @@ getStyles(): Object {
 			...shadow,
 		},
 		infoContainer: {
+			flex: 1,
 			flexDirection: 'row',
 			marginBottom: padding / 2,
 			backgroundColor: '#fff',
@@ -276,7 +279,6 @@ getStyles(): Object {
 		infoOneContainer: {
 			flex: 1,
 			flexDirection: 'column',
-			flexWrap: 'wrap',
 			paddingTop: contOneTop,
 		},
 		headerTextStyle: {
@@ -291,6 +293,7 @@ getStyles(): Object {
 		textStyle: {
 			fontSize: fontSizeText,
 			color: rowTextColor,
+			flexWrap: 'wrap'
 		},
 		infoIconStyle: {
 			fontSize: blockIconContainerSize / 2,
