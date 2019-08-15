@@ -124,7 +124,6 @@ render(): Object {
 						flexDirection: 'column',
 						flexWrap: 'wrap',
 					}}>
-
 						<Text>
 							{(id === 2) && (
 								<Text>
@@ -138,9 +137,15 @@ render(): Object {
 								{h1}
 							</Text>
 						</Text>
-						<Text style={h2Style}>
-							{h2}
-						</Text>
+						<View style={{
+							flex: 1,
+							flexDirection: 'row',
+							flexWrap: 'wrap',
+						}}>
+							<Text style={h2Style}>
+								{h2}
+							</Text>
+						</View>
 					</View>
 				</View>
 				<View style={arrowCover} pointerEvents={'none'}>
