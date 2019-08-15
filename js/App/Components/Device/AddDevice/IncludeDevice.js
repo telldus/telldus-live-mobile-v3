@@ -306,7 +306,7 @@ setSocketListeners() {
 					const { addDevice } = that.props;
 					const alreadyIncluded = addDevice.nodeList[that.zwaveId];
 					if (!alreadyIncluded) {
-						that.navigateToNext({}, 'IncludeFailed');
+						return that.navigateToNext({}, 'IncludeFailed');
 					}
 				}
 
