@@ -94,7 +94,7 @@
     "child-process-promise": "^2.2.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
-    "eslint": "^6.1.0",
+    "eslint": "^5.16.0",
     "eslint-plugin-flowtype": "^3.10.3",
     "eslint-plugin-react": "^7.12.4",
     "fetch-mock": "^7.3.1",
