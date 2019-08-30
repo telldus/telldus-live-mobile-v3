@@ -20,7 +20,9 @@
 
 'use strict';
 import PushSettingsRow from './PushSettingsRow';
+import WhatsNewLink from './WhatsNewLink';
 
 module.exports = {
 	PushSettingsRow,
+	WhatsNewLink,
 };

@@ -34,9 +34,13 @@ import {
 	TitledInfoBlock,
 	DropDown,
 } from '../../../BaseComponents';
+import {
+	WhatsNewLink,
+} from './SubViews';
+
 import { logoutFromTelldus, changeSortingDB } from '../../Actions';
 
-import { unregisterPushToken, showChangeLog } from '../../Actions/User';
+import { unregisterPushToken } from '../../Actions/User';
 import { shouldUpdate } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -74,7 +78,6 @@ state: State;
 logout: () => void;
 submitPushToken: () => void;
 onConfirmLogout: () => void;
-onPressWhatsNew: () => void;
 
 handleBackPress: () => boolean;
 
@@ -90,7 +93,6 @@ constructor(props: Props) {
 
 	this.logout = this.logout.bind(this);
 	this.onConfirmLogout = this.onConfirmLogout.bind(this);
-	this.onPressWhatsNew = this.onPressWhatsNew.bind(this);
 
 	const { formatMessage } = this.props.intl;
 
@@ -109,7 +111,6 @@ constructor(props: Props) {
 
 	this.headerOne = formatMessage(i18n.settingsHeader);
 	this.headerTwo = formatMessage(i18n.headerTwoSettings);
-	this.labelWhatsNew = formatMessage(i18n.labelWhatsNew);
 
 	this.handleBackPress = this.handleBackPress.bind(this);
 
@@ -192,10 +193,6 @@ onConfirmLogout() {
 	});
 }
 
-onPressWhatsNew() {
-	this.props.dispatch(showChangeLog());
-}
-
 handleBackPress(): boolean {
 	this.props.navigation.goBack();
 	return true;
@@ -246,9 +243,7 @@ render(): Object {
 				value={version}
 				fontSize={styles.fontSize}
 			/>
-			<Text onPress={this.onPressWhatsNew} style={styles.buttonResubmit}>
-				{this.labelWhatsNew}
-			</Text>
+			<WhatsNewLink/>
 			<TitledInfoBlock
 				title={this.titlePush}
 				label={labelPush}
