@@ -45,7 +45,7 @@ ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="user"
 			tintColor={tintColor}
-			label={'Profile'}
+			label={'Profile'} // TODO: translate
 			accessibilityLabel={'profile settings tab'}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {

@@ -77,7 +77,7 @@ class ProfileHeaderPoster extends View<Props, null> {
 		const { appLayout, intl } = screenProps;
 
 		return (
-			<NavigationHeaderPoster
+			<NavigationHeaderPoster // TODO: translate
 				h1={'Profile & Settings'}
 				h2={'User and app settings'}
 				appLayout={appLayout}

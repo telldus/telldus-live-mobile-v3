@@ -45,7 +45,7 @@ AppTab.navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="phone"
 			tintColor={tintColor}
-			label={'App'}
+			label={'App'} // TODO: translate
 			accessibilityLabel={'app settings tab'}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {

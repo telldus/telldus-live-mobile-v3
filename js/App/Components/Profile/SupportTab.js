@@ -45,7 +45,7 @@ SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="help"
 			tintColor={tintColor}
-			label={'Support'}
+			label={'Support'} // TODO: translate
 			accessibilityLabel={'customer support tab'}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
