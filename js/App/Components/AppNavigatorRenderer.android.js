@@ -30,7 +30,7 @@ const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
 import { NavigationActions } from 'react-navigation';
 
-import { View, Header, Image } from '../../BaseComponents';
+import { View, Header, Image, IconTelldus } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
@@ -248,9 +248,20 @@ class AppNavigatorRenderer extends View<Props, State> {
 					onPress: this.newSchedule,
 					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
+			case 'Dashboard':
+				return {
+					component: <IconTelldus icon="campaign" style={styles.campaingIconStyle}/>,
+					style: styles.rightButtonStyle,
+					onPress: this.navigateToProfile, // TODO: translate
+					accessibilityLabel: `campaign icon, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
 			default:
 				return null;
 		}
+	}
+
+	navigateToProfile = () => {
+		navigate('Profile', null, 'Profile');
 	}
 
 	setNavigatorRef(navigatorRef: any) {
@@ -428,6 +439,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 				top: deviceHeight * 0.0400,
 			},
 			isPortrait,
+			campaingIconStyle: {
+				fontSize: fontSizeIcon,
+				color: '#fff',
+			},
 		};
 	}
 }

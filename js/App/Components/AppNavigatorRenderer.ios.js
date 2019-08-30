@@ -182,7 +182,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeRightButton(CS: string): Object | null {
+	makeRightButton(CS: string, styles: Object): Object | null {
 		const { intl } = this.props;
 		const { formatMessage } = intl;
 		switch (CS) {
@@ -209,9 +209,20 @@ class AppNavigatorRenderer extends View<Props, State> {
 					onPress: this.newSchedule,
 					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
+			case 'Dashboard':
+				return {
+					component: <IconTelldus icon="campaign" style={styles.campaingIconStyle}/>,
+					style: styles.rightButtonStyle,
+					onPress: this.navigateToProfile, // TODO: translate
+					accessibilityLabel: `campaign icon, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
 			default:
 				return null;
 		}
+	}
+
+	navigateToProfile = () => {
+		navigate('Profile', null, 'Profile');
 	}
 
 	toggleAttentionCapture(value: boolean) {
@@ -245,7 +256,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 
 		const { land } = Theme.Core.headerHeightFactor;
-		const rightButton = this.makeRightButton(CS);
+		const rightButton = this.makeRightButton(CS, this.getStyles(appLayout));
 		const showAttentionCapture = this.showAttentionCapture() && rightButton;
 		let screenProps = {
 			currentScreen: CS,
@@ -269,6 +280,26 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onNavigationStateChange={this.onNavigationStateChange}
 				screenProps={screenProps} />
 		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+
+		const size = Math.floor(deviceHeight * 0.025);
+		const fontSizeIcon = size < 20 ? 20 : size;
+
+		return {
+			addIconStyle: {
+				height: fontSizeIcon,
+				width: fontSizeIcon,
+			},
+			campaingIconStyle: {
+				fontSize: fontSizeIcon,
+				color: '#fff',
+			},
+		};
 	}
 }
 
