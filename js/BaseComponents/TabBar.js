@@ -47,7 +47,7 @@ class TabBar extends Component<Props, null> {
 
 	render(): Object {
 		let { icon, tintColor, label = '', intl, accessibilityLabel, appLayout } = this.props;
-		accessibilityLabel = intl.formatMessage(accessibilityLabel);
+		accessibilityLabel = typeof accessibilityLabel === 'string' ? accessibilityLabel : intl.formatMessage(accessibilityLabel);
 
 		const {
 			iconSize,

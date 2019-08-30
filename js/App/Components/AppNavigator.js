@@ -35,6 +35,7 @@ import LocationDetailsNavigator from './Location/LocationDetails/LocationDetails
 import TabsView from './TabViews/TabsView';
 import RGBControlScreen from './RGBControl/RGBControlScreen';
 import ThermostatControl from './ThermostatControl/ThermostatFullControl';
+import ProfileNavigator from './Profile/ProfileNavigator';
 
 const RouteConfigs = {
 	Tabs: {
@@ -147,6 +148,17 @@ const RouteConfigs = {
 	},
 	ThermostatControl: {
 		screen: ThermostatControl,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	Profile: {
+		screen: ProfileNavigator,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
