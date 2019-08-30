@@ -293,7 +293,7 @@ getStyles(): Object {
 		textStyle: {
 			fontSize: fontSizeText,
 			color: rowTextColor,
-			flexWrap: 'wrap'
+			flexWrap: 'wrap',
 		},
 		infoIconStyle: {
 			fontSize: blockIconContainerSize / 2,
