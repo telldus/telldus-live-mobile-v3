@@ -28,9 +28,11 @@ import { useSelector } from 'react-redux';
 
 import {
 	View,
-	Text,
 	TabBar,
 } from '../../../BaseComponents';
+import {
+	UserInfoBlock,
+} from '../Settings/SubViews';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {
@@ -44,9 +46,7 @@ const ProfileTab = (props: Object): Object => {
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
-				<Text>
-                Profile Tab
-				</Text>
+				<UserInfoBlock/>
 			</View>
 		</ScrollView>
 	);
