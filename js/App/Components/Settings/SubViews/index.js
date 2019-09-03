@@ -25,6 +25,7 @@ import AppVersionBlock from './AppVersionBlock';
 import PushInfoBlock from './PushInfoBlock';
 import DBSortControlBlock from './DBSortControlBlock';
 import UserInfoBlock from './UserInfoBlock';
+import LanguageControlBlock from './LanguageControlBlock';
 
 module.exports = {
 	PushSettingsRow,
@@ -33,4 +34,5 @@ module.exports = {
 	PushInfoBlock,
 	DBSortControlBlock,
 	UserInfoBlock,
+	LanguageControlBlock,
 };
