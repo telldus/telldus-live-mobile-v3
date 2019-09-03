@@ -46,6 +46,7 @@ import {
 	WhatsNewLink,
 	PushInfoBlock,
 	DBSortControlBlock,
+	LanguageControlBlock,
 } from '../Settings/SubViews';
 import { LayoutAnimations } from '../../Lib';
 import {
@@ -168,6 +169,7 @@ const AppTab = (props: Object): Object => {
 					submitPushToken={submitPushToken}
 				/>
 				<DBSortControlBlock/>
+				<LanguageControlBlock/>
 			</View>
 		</ScrollView>
 	);
