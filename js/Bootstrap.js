@@ -29,19 +29,25 @@ import 'intl/locale-data/jsonp/sv';
 import React from 'react';
 import { Text } from './BaseComponents';
 import { Provider } from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
 import SplashScreen from 'react-native-splash-screen';
+import { useDispatch, useSelector } from 'react-redux';
 
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
 import * as Translations from './App/Translations';
-import { forceLocale } from './Config';
 import {
 	setUserIdentifier,
 	enableCrashlyticsCollection,
 	setUserName,
 } from './App/Lib/Analytics';
+import {
+	getLocale,
+	getLanguageNameFromLangCode,
+} from './App/Lib/appUtils';
+import {
+	setAppLanguage,
+} from './App/Actions/App';
 
 function Bootstrap(): Object {
 
@@ -62,15 +68,8 @@ function Bootstrap(): Object {
 
 			enableCrashlyticsCollection();
 
-			let locale = this.getLocale();
-			let messages = Translations.en;
-			if (Translations[locale]) {
-				messages = Translations[locale];
-			}
 			this.state = {
 				isLoading: true,
-				locale: locale,
-				messages: messages,
 				store: configureStore(this._configureStoreCompleted.bind(this)),
 			};
 		}
@@ -85,27 +84,13 @@ function Bootstrap(): Object {
 			}
 		}
 
-		getLocale(): string {
-			if (forceLocale) {
-				return forceLocale;
-			}
-			let localeIdentifier = DeviceInfo.getDeviceLocale();
-			let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
-			if (parts.length === 0) {
-				return 'en';
-			}
-			return parts[0];
-		}
-
 		render(): Provider {
 			if (this.state.isLoading) {
 				return null;
 			}
 			return (
 				<Provider store={this.state.store}>
-					<IntlProvider locale={this.state.locale} messages={this.state.messages} textComponent={Text}>
-						<App locale={this.state.locale}/>
-					</IntlProvider>
+					<WithIntlProvider/>
 				</Provider>
 			);
 		}
@@ -113,6 +98,30 @@ function Bootstrap(): Object {
 
 	return Root;
 }
+
+const WithIntlProvider = (props: Object): Object => {
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	let { language = {} } = defaultSettings;
+
+	let locale = language.key;
+	const dispatch = useDispatch();
+	if (!locale) {
+		const code = getLocale(false);
+		const value = getLanguageNameFromLangCode(code);
+		dispatch(setAppLanguage({code, value: `${value}(Device Language)`, key: `${code}-device`}));
+		locale = getLocale();
+	}
+
+	let messages = Translations.en;
+	if (Translations[locale]) {
+		messages = Translations[locale];
+	}
+	return (
+		<IntlProvider locale={locale} messages={messages} textComponent={Text}>
+			<App locale={locale}/>
+		</IntlProvider>
+	);
+};
 
 global.LOG = (...args: any): Array<any> => {
 	console.log('/------------------------------\\');
