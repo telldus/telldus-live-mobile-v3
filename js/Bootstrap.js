@@ -55,8 +55,6 @@ function Bootstrap(): Object {
 
 	type State = {
 		isLoading: boolean,
-		locale: string,
-		messages: string,
 		store: Object,
 	};
 
