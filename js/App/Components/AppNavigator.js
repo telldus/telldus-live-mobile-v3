@@ -37,6 +37,9 @@ import RGBControlScreen from './RGBControl/RGBControlScreen';
 import ThermostatControl from './ThermostatControl/ThermostatFullControl';
 import ProfileNavigator from './Profile/ProfileNavigator';
 
+import SettingsContainer from './Settings/SettingsContainer';
+import PushSettings from './PushSettings/PushSettings';
+
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
@@ -168,7 +171,24 @@ const RouteConfigs = {
 			header: null,
 		},
 	},
+	PushSettings: {
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(PushSettings, 'PushSettings'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
 };
+
+const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
+	<SettingsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
+		<Component/>
+	</SettingsContainer>
+);
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',

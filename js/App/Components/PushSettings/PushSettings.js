@@ -28,7 +28,7 @@ import {
 	View,
 	TouchableButton,
 } from '../../../BaseComponents';
-import { PushSettingsRow } from './SubViews';
+import { PushSettingsRow } from '../Settings/SubViews';
 
 import { shouldUpdate } from '../../Lib';
 

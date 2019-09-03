@@ -19,8 +19,6 @@
  */
 
 'use strict';
-import PushSettings from './PushSettings';
 
 module.exports = {
-	PushSettings,
 };

@@ -28,7 +28,6 @@ import { createStackNavigator } from 'react-navigation';
 import SettingsContainer from './SettingsContainer';
 
 import MainSettingsScreen from './MainSettingsScreen';
-import PushSettings from './PushSettings';
 
 const initialRouteName = 'MainSettingsScreen';
 
@@ -41,9 +40,6 @@ const renderScheduleScreen = (navigation: Object, screenProps: Object): Function
 const RouteConfigs = {
 	MainSettingsScreen: {
 		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(MainSettingsScreen, 'MainSettingsScreen'),
-	},
-	PushSettings: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(PushSettings, 'PushSettings'),
 	},
 };
 
