@@ -104,10 +104,10 @@ const WithIntlProvider = (props: Object): Object => {
 	let locale = language.key;
 	const dispatch = useDispatch();
 	if (!locale) {
-		const code = getLocale(false);
+		const code = getLocale();
 		const value = getLanguageNameFromLangCode(code);
 		dispatch(setAppLanguage({code, value: `${value}(Device Language)`, key: `${code}-device`}));
-		locale = getLocale();
+		locale = code;
 	}
 
 	let messages = Translations.en;

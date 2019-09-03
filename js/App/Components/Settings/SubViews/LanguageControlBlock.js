@@ -62,7 +62,7 @@ const LanguageControlBlock = (props: Object): Object => {
 	// TODO: update when any new language is supported.
 	const LANGUAGES = getSupportedLanguages();
 	let {value} = languageProp;
-	const codeDevice = getLocale(false);
+	const codeDevice = getLocale();
 	let valueDevice = `${getLanguageNameFromLangCode(codeDevice)}(Device Language)`;// TODO : translate
 	let keyDevice = `${codeDevice}-device`;
 	const deviceLang = {code: codeDevice, value: valueDevice, key: keyDevice};
