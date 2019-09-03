@@ -23,38 +23,32 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
-import firebase from 'react-native-firebase';
 
 import {
-	Text,
 	View,
 	TouchableButton,
-	TitledInfoBlock,
-	DropDown,
 } from '../../../BaseComponents';
 import {
 	WhatsNewLink,
+	AppVersionBlock,
+	PushInfoBlock,
+	DBSortControlBlock,
+	UserInfoBlock,
 } from './SubViews';
 
-import { logoutFromTelldus, changeSortingDB } from '../../Actions';
+import { logoutFromTelldus } from '../../Actions';
 
 import { unregisterPushToken } from '../../Actions/User';
 import { shouldUpdate } from '../../Lib';
-
-import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
 type Props = {
 	pushToken: string,
-	email: string,
-	sortingDB: string,
 	currentScreen: string,
 	appLayout: Object,
 	isPushSubmitLoading: boolean,
-	phonesList: Object,
 
 	navigation: Object,
 	dispatch: Function,
@@ -81,8 +75,6 @@ onConfirmLogout: () => void;
 
 handleBackPress: () => boolean;
 
-saveSortingDB: (string, number, Array<any>) => void;
-
 onPressPushSettings: () => void;
 
 constructor(props: Props) {
@@ -101,11 +93,6 @@ constructor(props: Props) {
 	this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 	this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
 
-	this.titleAppInfo = formatMessage(i18n.titleAppInfo);
-	this.titlePush = formatMessage(i18n.titlePush);
-	this.titleUserInfo = `${formatMessage(i18n.titleUserInfo)}:`;
-	this.labelVersion = formatMessage(i18n.version);
-	this.labelLoggedUser = formatMessage(i18n.labelLoggedUser);
 	this.valueYes = formatMessage(i18n.yes);
 	this.valueNo = formatMessage(i18n.no);
 
@@ -113,17 +100,6 @@ constructor(props: Props) {
 	this.headerTwo = formatMessage(i18n.headerTwoSettings);
 
 	this.handleBackPress = this.handleBackPress.bind(this);
-
-	this.onPressPushSettings = this.onPressPushSettings.bind(this);
-
-	this.saveSortingDB = this.saveSortingDB.bind(this);
-	this.labelSortingDB = formatMessage(i18n.labelSortingDb);
-	this.labelAlpha = formatMessage(i18n.labelAlphabetical);
-	this.labelChrono = formatMessage(i18n.labelChronological);
-	this.DDOptions = [
-		{key: 'Alphabetical', value: this.labelAlpha},
-		{key: 'Chronological', value: this.labelChrono},
-	];
 }
 
 componentDidMount() {
@@ -145,7 +121,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['isPushSubmitLoading', 'sortingDB', 'pushToken', 'email', 'phonesList']);
+		const propsChange = shouldUpdate(others, othersN, ['isPushSubmitLoading', 'pushToken']);
 		if (propsChange) {
 			return true;
 		}
@@ -198,84 +174,33 @@ handleBackPress(): boolean {
 	return true;
 }
 
-saveSortingDB(value: string, itemIndex: number, data: Array<any>) {
-	const { dispatch } = this.props;
-	const { key: sortingDB } = data[itemIndex];
-	const settings = { sortingDB };
-	dispatch(changeSortingDB(settings));
-}
-
-onPressPushSettings() {
-	this.props.navigation.navigate({
-		routeName: 'PushSettings',
-		key: 'PushSettings',
-	});
-}
-
 render(): Object {
 	const {
-		email,
 		appLayout,
-		sortingDB = 'Chronological',
 		intl,
 		isPushSubmitLoading,
-		phonesList = {},
+		navigation,
+		submitPushToken,
 	} = this.props;
 	const { isLogoutLoading } = this.state;
 	const styles = this.getStyles(appLayout);
 
 	const buttonAccessible = !isLogoutLoading && !isPushSubmitLoading;
 
-	const version = DeviceInfo.getVersion();
-
 	const { formatMessage } = intl;
-	const submitButText = isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.pushReRegisterPush);
 	const logoutButText = isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
-
-	const phones = Object.keys(phonesList).length;
-	const labelPush = formatMessage(i18n.labelPushRegistered, {value: phones});
 
 	return (
 		<View style={styles.container}>
-			<TitledInfoBlock
-				title={this.titleAppInfo}
-				label={this.labelVersion}
-				value={version}
-				fontSize={styles.fontSize}
-			/>
+			<AppVersionBlock/>
 			<WhatsNewLink/>
-			<TitledInfoBlock
-				title={this.titlePush}
-				label={labelPush}
-				icon={'angle-right'}
-				iconStyle={styles.iconStyle}
-				fontSize={styles.fontSize}
-				onPress={this.onPressPushSettings}
+			<PushInfoBlock
+				navigation={navigation}
+				isPushSubmitLoading={isPushSubmitLoading}
+				submitPushToken={submitPushToken}
 			/>
-			{!(phones > 0) && (
-				<Text onPress={this.props.submitPushToken} style={styles.buttonResubmit}>
-					{submitButText}
-				</Text>
-			)}
-			<DropDown
-				items={this.DDOptions}
-				value={sortingDB === this.labelAlpha ? this.labelAlpha : this.labelChrono}
-				label={this.labelSortingDB}
-				onValueChange={this.saveSortingDB}
-				appLayout={appLayout}
-				dropDownContainerStyle={styles.dropDownContainerStyle}
-				dropDownHeaderStyle={styles.dropDownHeaderStyle}
-				baseColor={'#000'}
-				fontSize={styles.fontSize}
-				accessibilityLabelPrefix={this.labelSortingDB}
-			/>
-			<TitledInfoBlock
-				title={this.titleUserInfo}
-				label={this.labelLoggedUser}
-				value={email}
-				fontSize={styles.fontSize}
-				onPress={email === 'developer@telldus.com' ? this.testCrash : null}
-			/>
+			<DBSortControlBlock/>
+			<UserInfoBlock/>
 			<TouchableButton
 				onPress={isLogoutLoading ? null : this.logout}
 				text={logoutButText}
@@ -288,10 +213,6 @@ render(): Object {
 			/>
 		</View>
 	);
-}
-
-testCrash = () => {
-	firebase.crashlytics().crash();
 }
 
 getStyles(appLayout: Object): Object {
@@ -322,43 +243,14 @@ getStyles(appLayout: Object): Object {
 		h2: {
 			fontSize: Math.floor(deviceWidth * 0.053333333),
 		},
-		buttonResubmit: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.brandSecondary,
-			alignSelf: 'center',
-			paddingVertical: 5,
-			marginBottom: fontSize / 2,
-		},
 		body: {
 			flex: 1,
 			justifyContent: 'flex-start',
 			alignItems: 'stretch',
 			backgroundColor: 'transparent',
 		},
-		dropDownContainerStyle: {
-			marginBottom: fontSize / 2,
-		},
-		dropDownHeaderStyle: {
-			fontSize: Math.floor(deviceWidth * 0.045),
-			color: '#b5b5b5',
-		},
-		iconStyle: {
-			color: '#8e8e93',
-		},
 	};
 }
-}
-
-function mapStateToProps(store: Object): Object {
-	const { userProfile } = store.user;
-	const { defaultSettings = {} } = store.app;
-	const { sortingDB } = defaultSettings;
-	const { email } = userProfile;
-
-	return {
-		email,
-		sortingDB,
-	};
 }
 
 function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
@@ -370,4 +262,4 @@ function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(MainSettingsScreen);
+module.exports = connect(null, mapDispatchToProps)(MainSettingsScreen);
