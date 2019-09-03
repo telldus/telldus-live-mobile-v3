@@ -82,6 +82,7 @@ const AppTab = (props: Object): Object => {
 		dispatch(getPhonesList());
 	}, []);
 
+	// TODO: Refactor using a hook, handle code repeat(repeat of methods in SettingsContainer).
 	function submitPushToken() {
 		if (Platform.OS === 'android') {
 			confirmTokenSubmit();
