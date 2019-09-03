@@ -25,6 +25,6 @@ describe('<LoginScreen />', () => {
 	it('should shallow LoginScreen', () => {
 		expect(wrapper.find(LoginScreen).length).toBe(1);
 		const screen = wrapper.props().children.props.children.type.displayName;
-		expect(screen).toEqual('Connect(InjectIntl(LoginScreen))');
+		expect(screen).toEqual('Connect(injectIntl(LoginScreen))');
 	});
 });

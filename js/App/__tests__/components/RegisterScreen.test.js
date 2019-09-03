@@ -24,7 +24,7 @@ describe('<RegisterScreen />', () => {
 	it('should shallow RegisterScreen', () => {
 		expect(wrapper.find(RegisterScreen).length).toBe(1);
 		const screen = wrapper.props().children.props.children.type.displayName;
-		expect(screen).toEqual('Connect(InjectIntl(RegisterScreen))');
+		expect(screen).toEqual('Connect(injectIntl(RegisterScreen))');
 	});
 
 	it(' check changeSensorDisplayType action on dispatching ', () => {
