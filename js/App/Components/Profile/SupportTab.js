@@ -23,21 +23,51 @@
 'use strict';
 
 import React from 'react';
+import { ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import {
 	View,
 	Text,
 	TabBar,
 } from '../../../BaseComponents';
+import Theme from '../../Theme';
 
 const SupportTab = (props: Object): Object => {
+	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const {
+		container,
+		body,
+	} = getStyles(layout);
+
 	return (
-		<View>
-			<Text>
+		<ScrollView style={container}>
+			<View style={body}>
+				<Text>
                 Support Tab
-			</Text>
-		</View>
+				</Text>
+			</View>
+		</ScrollView>
 	);
+};
+
+const getStyles = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	return {
+		container: {
+			flex: 1,
+			backgroundColor: Theme.Core.appBackground,
+		},
+		body: {
+			flex: 1,
+			padding,
+		},
+	};
 };
 
 SupportTab.navigationOptions = ({ navigation }: Object): Object => ({

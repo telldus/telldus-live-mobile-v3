@@ -22,22 +22,172 @@
 
 'use strict';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+	ScrollView,
+	Platform,
+	PushNotificationIOS,
+	LayoutAnimation,
+} from 'react-native';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
+import { useIntl } from 'react-intl';
+import DeviceInfo from 'react-native-device-info';
+import { pushServiceId } from '../../../Config';
 
 import {
 	View,
-	Text,
 	TabBar,
 } from '../../../BaseComponents';
+import {
+	AppVersionBlock,
+	WhatsNewLink,
+	PushInfoBlock,
+	DBSortControlBlock,
+} from '../Settings/SubViews';
+import { LayoutAnimations } from '../../Lib';
+import {
+	getPhonesList,
+	registerPushToken,
+} from '../../Actions/User';
+import {
+	showToast,
+} from '../../Actions/App';
+
+import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 const AppTab = (props: Object): Object => {
+	const { screenProps, navigation } = props;
+	const { formatMessage } = useIntl();
+	const [ isPushSubmitLoading, setIsPushSubmitLoading ] = useState(false);
+
+	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		phonesList = {},
+		pushToken,
+		deviceName,
+		deviceId,
+	} = useSelector((state: Object): Object => state.user);
+
+	const {
+		container,
+		body,
+	} = getStyles(layout);
+
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(getPhonesList());
+	}, []);
+
+	function submitPushToken() {
+		if (Platform.OS === 'android') {
+			confirmTokenSubmit();
+		} else {
+			PushNotificationIOS.checkPermissions((permissions: Object) => {
+				const { alert, badge, sound } = permissions;
+				if (alert || badge || sound) {
+					confirmTokenSubmit();
+				} else {
+					const { toggleDialogueBox } = screenProps;
+					const message = formatMessage(i18n.pushPermissionContent);
+
+					toggleDialogueBox({
+						show: true,
+						showHeader: true,
+						text: message,
+						notificationHeader: formatMessage(i18n.pushPermissionHeader),
+						showPositive: true,
+						positiveText: null,
+						showNegative: false,
+					});
+				}
+			});
+		}
+	}
+
+	function confirmTokenSubmit() {
+		setIsPushSubmitLoading(true);
+
+		let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+		for (let key in phonesList) {
+			let { deviceId: idInList, token: tokenInList } = phonesList[key];
+			// UUID/deviceId already found among push registered devices list
+			// - If pushToken in the store matches with token in the list, it
+			// must be the same device that is already registered[NO WORRIES THERE]
+			// - But if tokens does not match then most probably, two different devices
+			// seem to give same UUID/DeviceInfo.getUniqueID().
+			// In that case modify deviceId before re-register.
+			if (idInList === uniqueId && tokenInList !== pushToken) {
+				uniqueId = `${uniqueId}-anomaly`;
+			}
+		}
+		if (pushToken) {
+			let dName = deviceName ? deviceName : DeviceInfo.getDeviceName();
+			dispatch(registerPushToken(pushToken, dName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), uniqueId, pushServiceId)).then((response: Object) => {
+				let message = formatMessage(i18n.pushRegisterSuccess);
+				dispatch(showToast(message));
+				dispatch(getPhonesList()).then(() => {
+					setIsPushSubmitLoading(false);
+					LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+				}).catch(() => {
+					setIsPushSubmitLoading(false);
+					LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+				});
+			}).catch((error: Object) => {
+				let errorCode = !error.error_description && error.message === 'Network request failed' ?
+					`${formatMessage(i18n.networkFailed)}.` : error.message ?
+						error.message : error.error_description ?
+							error.error_description : error.error ?
+								error.error : `${formatMessage(i18n.unknownError)}.`;
+				showPushRegFailedToast(errorCode);
+			});
+		} else {
+			showPushRegFailedToast('Push token missing, please try restarting the app.');
+		}
+	}
+
+	function showPushRegFailedToast(errorCode: string) {
+		let message = formatMessage(i18n.pushRegisterFailed);
+		message = `${message}.\nError code: ${errorCode}`;
+		dispatch(showToast(message));
+		setIsPushSubmitLoading(false);
+	}
+
 	return (
-		<View>
-			<Text>
-                App Tab
-			</Text>
-		</View>
+		<ScrollView style={container}>
+			<View style={body}>
+				<AppVersionBlock/>
+				<WhatsNewLink/>
+				<PushInfoBlock
+					navigation={navigation}
+					isPushSubmitLoading={isPushSubmitLoading}
+					submitPushToken={submitPushToken}
+				/>
+				<DBSortControlBlock/>
+			</View>
+		</ScrollView>
 	);
+};
+
+const getStyles = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	return {
+		container: {
+			flex: 1,
+			backgroundColor: Theme.Core.appBackground,
+		},
+		body: {
+			flex: 1,
+			padding,
+		},
+	};
 };
 
 AppTab.navigationOptions = ({ navigation }: Object): Object => ({
