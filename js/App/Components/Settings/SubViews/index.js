@@ -21,8 +21,16 @@
 'use strict';
 import PushSettingsRow from './PushSettingsRow';
 import WhatsNewLink from './WhatsNewLink';
+import AppVersionBlock from './AppVersionBlock';
+import PushInfoBlock from './PushInfoBlock';
+import DBSortControlBlock from './DBSortControlBlock';
+import UserInfoBlock from './UserInfoBlock';
 
 module.exports = {
 	PushSettingsRow,
 	WhatsNewLink,
+	AppVersionBlock,
+	PushInfoBlock,
+	DBSortControlBlock,
+	UserInfoBlock,
 };
