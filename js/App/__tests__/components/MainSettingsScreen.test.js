@@ -19,19 +19,15 @@ describe('<MainSettingsScreen />', () => {
 			},
 		});
 		wrapper = shallow(
-			<Provider store={store}>
-				<IntlProvider>
-					<MainSettingsScreen />
-				</IntlProvider>
-			</Provider>
+			<IntlProvider>
+				<MainSettingsScreen />
+			</IntlProvider>
 		);
 		expect(wrapper).toBeTruthy();
 	});
 
 	it('should shallow MainSettingsScreen', () => {
 		expect(wrapper.find(MainSettingsScreen).length).toBe(1);
-		const screen = wrapper.props().children.props.children.type.displayName;
-		expect(screen).toEqual('Connect(MainSettingsScreen)');
 	});
 
 	it(' check logoutFromTelldus action on dispatching ', () => {
