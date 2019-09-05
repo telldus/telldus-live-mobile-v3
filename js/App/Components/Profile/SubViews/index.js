@@ -24,8 +24,10 @@
 
 import EditNameBlock from './EditNameBlock';
 import UpdatePasswordBlock from './UpdatePasswordBlock';
+import ViewPremiumBenefitsButton from './ViewPremiumBenefitsButton';
 
 module.exports = {
 	EditNameBlock,
 	UpdatePasswordBlock,
+	ViewPremiumBenefitsButton,
 };
