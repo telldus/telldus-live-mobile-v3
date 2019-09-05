@@ -35,11 +35,8 @@ import {
 	PushInfoBlock,
 	DBSortControlBlock,
 	UserInfoBlock,
+	LogoutButton,
 } from './SubViews';
-
-import { logoutFromTelldus } from '../../Actions';
-
-import { unregisterPushToken } from '../../Actions/User';
 import { shouldUpdate } from '../../Lib';
 
 import i18n from '../../Translations/common';
@@ -51,8 +48,6 @@ type Props = {
 	isPushSubmitLoading: boolean,
 
 	navigation: Object,
-	dispatch: Function,
-	onLogout: (string) => Promise<any>,
 	intl: Object,
 	onDidMount: (string, string, ?string) => void,
 	submitPushToken: () => void,
@@ -62,16 +57,13 @@ type Props = {
 
 
 type State = {
-	isLogoutLoading: boolean,
 };
 
 class MainSettingsScreen extends View {
 props: Props;
 state: State;
 
-logout: () => void;
 submitPushToken: () => void;
-onConfirmLogout: () => void;
 
 handleBackPress: () => boolean;
 
@@ -80,21 +72,9 @@ onPressPushSettings: () => void;
 constructor(props: Props) {
 	super(props);
 	this.state = {
-		isLogoutLoading: false,
 	};
 
-	this.logout = this.logout.bind(this);
-	this.onConfirmLogout = this.onConfirmLogout.bind(this);
-
 	const { formatMessage } = this.props.intl;
-
-	this.confirmMessage = formatMessage(i18n.contentLogoutConfirm);
-	this.labelButton = formatMessage(i18n.button);
-	this.labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
-	this.labelLogOut = `${formatMessage(i18n.labelLogOut)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
-
-	this.valueYes = formatMessage(i18n.yes);
-	this.valueNo = formatMessage(i18n.no);
 
 	this.headerOne = formatMessage(i18n.settingsHeader);
 	this.headerTwo = formatMessage(i18n.headerTwoSettings);
@@ -130,45 +110,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-logout() {
-	const {
-		intl,
-		toggleDialogueBox,
-	} = this.props;
-	const { formatMessage } = intl;
-	toggleDialogueBox({
-		show: true,
-		showHeader: true,
-		notificationHeader: `${formatMessage(i18n.logout)}?`,
-		text: this.confirmMessage,
-		showPositive: true,
-		showNegative: true,
-		positiveText: formatMessage(i18n.logout).toUpperCase(),
-		onPressPositive: this.onConfirmLogout,
-		closeOnPressPositive: true,
-	});
-}
-
-onConfirmLogout() {
-	this.setState({
-		isLogoutLoading: true,
-	});
-	const { onLogout, dispatch } = this.props;
-	onLogout(this.props.pushToken).then(() => {
-		this.setState({
-			isLogoutLoading: false,
-		}, () => {
-			dispatch(logoutFromTelldus());
-		});
-	}).catch(() => {
-		this.setState({
-			isLogoutLoading: false,
-		}, () => {
-			dispatch(logoutFromTelldus());
-		});
-	});
-}
-
 handleBackPress(): boolean {
 	this.props.navigation.goBack();
 	return true;
@@ -177,18 +118,14 @@ handleBackPress(): boolean {
 render(): Object {
 	const {
 		appLayout,
-		intl,
 		isPushSubmitLoading,
 		navigation,
 		submitPushToken,
+		toggleDialogueBox,
 	} = this.props;
-	const { isLogoutLoading } = this.state;
 	const styles = this.getStyles(appLayout);
 
-	const buttonAccessible = !isLogoutLoading && !isPushSubmitLoading;
-
-	const { formatMessage } = intl;
-	const logoutButText = isLogoutLoading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
+	const buttonAccessible = !isPushSubmitLoading;
 
 	return (
 		<View style={styles.container}>
@@ -201,15 +138,9 @@ render(): Object {
 			/>
 			<DBSortControlBlock/>
 			<UserInfoBlock/>
-			<TouchableButton
-				onPress={isLogoutLoading ? null : this.logout}
-				text={logoutButText}
-				postScript={isLogoutLoading ? '...' : null}
-				accessibilityLabel={this.labelLogOut}
-				accessible={buttonAccessible}
-				style={{
-					marginTop: styles.fontSize / 2,
-				}}
+			<LogoutButton
+				buttonAccessibleProp={buttonAccessible}
+				toggleDialogueBox={toggleDialogueBox}
 			/>
 		</View>
 	);
@@ -253,13 +184,4 @@ getStyles(appLayout: Object): Object {
 }
 }
 
-function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
-	return {
-		onLogout: (token: string): Promise<any> => {
-			return dispatch(unregisterPushToken(token));
-		},
-		dispatch,
-	};
-}
-
-module.exports = connect(null, mapDispatchToProps)(MainSettingsScreen);
+module.exports = MainSettingsScreen;

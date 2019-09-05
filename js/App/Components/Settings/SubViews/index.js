@@ -26,6 +26,7 @@ import PushInfoBlock from './PushInfoBlock';
 import DBSortControlBlock from './DBSortControlBlock';
 import UserInfoBlock from './UserInfoBlock';
 import LanguageControlBlock from './LanguageControlBlock';
+import LogoutButton from './LogoutButton';
 
 module.exports = {
 	PushSettingsRow,
@@ -35,4 +36,5 @@ module.exports = {
 	DBSortControlBlock,
 	UserInfoBlock,
 	LanguageControlBlock,
+	LogoutButton,
 };
