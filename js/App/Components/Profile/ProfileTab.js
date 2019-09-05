@@ -34,11 +34,14 @@ import {
 	UserInfoBlock,
 	LogoutButton,
 } from '../Settings/SubViews';
-import EditNameBlock from './SubViews/EditNameBlock';
+import {
+	EditNameBlock,
+	UpdatePasswordBlock,
+} from './SubViews';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {
-	const { screenProps: {toggleDialogueBox} } = props;
+	const { screenProps: {toggleDialogueBox}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
@@ -48,6 +51,7 @@ const ProfileTab = (props: Object): Object => {
 		valueCoverStyleENB,
 		textFieldStyleENB,
 		labelTextStyleENB,
+		style,
 	} = getStyles(layout);
 
 	return (
@@ -62,7 +66,10 @@ const ProfileTab = (props: Object): Object => {
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
 					toggleDialogueBox={toggleDialogueBox}
+					style={style}
 				/>
+				<UpdatePasswordBlock
+					navigation={navigation}/>
 				<LogoutButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
@@ -82,6 +89,9 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
+		style: {
+			marginBottom: padding / 2,
+		},
 		contentCoverStyleENB: {
 			padding: paddingEditNameBlock,
 		},
