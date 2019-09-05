@@ -34,6 +34,7 @@ import {
 	UserInfoBlock,
 	LogoutButton,
 } from '../Settings/SubViews';
+import EditNameBlock from './SubViews/EditNameBlock';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {
@@ -43,12 +44,25 @@ const ProfileTab = (props: Object): Object => {
 	const {
 		container,
 		body,
+		contentCoverStyleENB,
+		valueCoverStyleENB,
+		textFieldStyleENB,
+		labelTextStyleENB,
 	} = getStyles(layout);
 
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
-				<UserInfoBlock/>
+				<UserInfoBlock blockContainerStyle={{
+					marginBottom: 0,
+				}}/>
+				<EditNameBlock
+					contentCoverStyle={contentCoverStyleENB}
+					valueCoverStyle={valueCoverStyleENB}
+					textFieldStyle={textFieldStyleENB}
+					labelTextStyle={labelTextStyleENB}
+					toggleDialogueBox={toggleDialogueBox}
+				/>
 				<LogoutButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
@@ -63,8 +77,23 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const paddingEditNameBlock = Math.floor(deviceWidth * 0.045);
+
+	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
+		contentCoverStyleENB: {
+			padding: paddingEditNameBlock,
+		},
+		valueCoverStyleENB: {
+			paddingVertical: 0,
+		},
+		textFieldStyleENB: {
+			fontSize: fontSize,
+		},
+		labelTextStyleENB: {
+			fontSize: fontSize,
+		},
 		container: {
 			flex: 1,
 			backgroundColor: Theme.Core.appBackground,
