@@ -37,6 +37,7 @@ import {
 import {
 	EditNameBlock,
 	UpdatePasswordBlock,
+	ViewPremiumBenefitsButton,
 } from './SubViews';
 import Theme from '../../Theme';
 
@@ -74,6 +75,7 @@ const ProfileTab = (props: Object): Object => {
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
 				/>
+				<ViewPremiumBenefitsButton navigation={navigation}/>
 			</View>
 		</ScrollView>
 	);

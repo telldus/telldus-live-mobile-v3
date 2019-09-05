@@ -41,6 +41,7 @@ import SettingsContainer from './Settings/SettingsContainer';
 import PushSettings from './PushSettings/PushSettings';
 
 import UpdatePasswordScreen from './AccountSettings/UpdatePasswordScreen';
+import PremiumBenefitsScreen from './Premium/PremiumBenefitsScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -186,6 +187,17 @@ const RouteConfigs = {
 	},
 	UpdatePasswordScreen: {
 		screen: UpdatePasswordScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	PremiumBenefitsScreen: {
+		screen: PremiumBenefitsScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
