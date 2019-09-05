@@ -45,6 +45,7 @@ import i18n from '../../../Translations/common';
 
 const EditNameBlock = (props: Object): Object => {
 	const {
+		style,
 		contentCoverStyle,
 		valueCoverStyle,
 		textFieldStyle,
@@ -82,6 +83,7 @@ const EditNameBlock = (props: Object): Object => {
 				showPositive: true,
 				closeOnPressPositive: true,
 			});
+			return;
 		}
 		let [fn, ln] = nameEditValue.split(' ');
 		dispatch(setUserName(fn, ln)).then(() => {
@@ -117,10 +119,12 @@ const EditNameBlock = (props: Object): Object => {
 			onChangeText={onChangeText}
 			onSubmitEditing={onDoneEdit}
 			intl={intl}
+			style={style}
 			contentCoverStyle={contentCoverStyle}
 			valueCoverStyle={valueCoverStyle}
 			textFieldStyle={textFieldStyle}
-			labelTextStyle={labelTextStyle}/>
+			labelTextStyle={labelTextStyle}
+			keyboardTypeInLineEdit={'default'}/>
 	);
 };
 
