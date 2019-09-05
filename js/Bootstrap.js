@@ -43,7 +43,7 @@ import {
 } from './App/Lib/Analytics';
 import {
 	getLocale,
-	getLanguageNameFromLangCode,
+	getLanguageInfoFromLangCode,
 } from './App/Lib/appUtils';
 import {
 	setAppLanguage,
@@ -105,8 +105,8 @@ const WithIntlProvider = (props: Object): Object => {
 	const dispatch = useDispatch();
 	if (!locale) {
 		const code = getLocale();
-		const value = getLanguageNameFromLangCode(code);
-		dispatch(setAppLanguage({code, value: `${value}(Device Language)`, key: `${code}-device`}));
+		let { nativeName, name } = getLanguageInfoFromLangCode(code) || {};
+		dispatch(setAppLanguage({code, value: `${nativeName}(Device Language)`, key: `${code}-device`, name}));
 		locale = code;
 	}
 

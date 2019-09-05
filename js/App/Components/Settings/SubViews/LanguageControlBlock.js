@@ -34,7 +34,7 @@ import { setAppLanguage } from '../../../Actions/App';
 import {
 	getLocale,
 	getSupportedLanguages,
-	getLanguageNameFromLangCode,
+	getLanguageInfoFromLangCode,
 } from '../../../Lib/appUtils';
 
 import i18n from '../../../Translations/common';
@@ -63,9 +63,9 @@ const LanguageControlBlock = (props: Object): Object => {
 	const LANGUAGES = getSupportedLanguages();
 	let {value} = languageProp;
 	const codeDevice = getLocale();
-	let valueDevice = `${getLanguageNameFromLangCode(codeDevice)}(Device Language)`;// TODO : translate
-	let keyDevice = `${codeDevice}-device`;
-	const deviceLang = {code: codeDevice, value: valueDevice, key: keyDevice};
+	let { nativeName } = getLanguageInfoFromLangCode(codeDevice) || {};
+	let keyDevice = `${codeDevice}-device`;// TODO : translate
+	const deviceLang = {code: codeDevice, value: `${nativeName}(Device Language)`, key: keyDevice};
 	LANGUAGES.push(deviceLang);
 	if (!languageProp.value) {
 		dispatch(setAppLanguage(deviceLang));
