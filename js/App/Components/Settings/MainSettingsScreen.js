@@ -22,12 +22,10 @@
 'use strict';
 
 import React from 'react';
-import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	TouchableButton,
 } from '../../../BaseComponents';
 import {
 	WhatsNewLink,
