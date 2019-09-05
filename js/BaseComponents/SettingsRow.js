@@ -54,6 +54,10 @@ type Props = {
 	keyboardTypeInLineEdit?: string,
 	style?: Object | Array<any> | number,
 	intl: Object,
+	contentCoverStyle?: Object | Array<any> | number,
+	valueCoverStyle?: Object | Array<any> | number,
+	textFieldStyle?: Object | Array<any> | number,
+	labelTextStyle?: Object | Array<any> | number,
 };
 
 type DefaultProps = {
@@ -150,6 +154,10 @@ class SettingsRow extends Component<Props, null> {
 			valuePostfix,
 			style,
 			intl,
+			contentCoverStyle,
+			valueCoverStyle,
+			textFieldStyle,
+			labelTextStyle,
 		} = this.props;
 
 		const {
@@ -178,7 +186,7 @@ class SettingsRow extends Component<Props, null> {
 				rippleColor: rippleColor,
 				rippleOpacity: rippleOpacity,
 				rippleDuration: rippleDuration,
-				style: touchableStyle,
+				style: [touchableStyle, contentCoverStyle],
 				onPress: this.onPress,
 			};
 		}
@@ -208,7 +216,7 @@ class SettingsRow extends Component<Props, null> {
 					:
 					<Parent {...parentProps}>
 						<View style={textShowOnDashCover}>
-							<Text style={textShowOnDash}>
+							<Text style={[textShowOnDash, labelTextStyle]}>
 								{label}
 							</Text>
 							{!!iconLabelRight && (
@@ -217,11 +225,11 @@ class SettingsRow extends Component<Props, null> {
 								</TouchableOpacity>
 							)}
 						</View>
-						<View style={valueCover}>
+						<View style={[valueCover, valueCoverStyle]}>
 							{inLineEditActive ?
 								<TextInput
 									value={value.toString()}
-									style={textField}
+									style={[textField, textFieldStyle]}
 									onChangeText={this.onChangeText}
 									onSubmitEditing={this.onSubmitEditing}
 									autoCorrect={false}
