@@ -32,10 +32,12 @@ import {
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
+	LogoutButton,
 } from '../Settings/SubViews';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {
+	const { screenProps: {toggleDialogueBox} } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
@@ -47,6 +49,10 @@ const ProfileTab = (props: Object): Object => {
 		<ScrollView style={container}>
 			<View style={body}>
 				<UserInfoBlock/>
+				<LogoutButton
+					buttonAccessibleProp={true}
+					toggleDialogueBox={toggleDialogueBox}
+				/>
 			</View>
 		</ScrollView>
 	);
