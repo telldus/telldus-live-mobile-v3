@@ -40,6 +40,8 @@ import ProfileNavigator from './Profile/ProfileNavigator';
 import SettingsContainer from './Settings/SettingsContainer';
 import PushSettings from './PushSettings/PushSettings';
 
+import UpdatePasswordScreen from './AccountSettings/UpdatePasswordScreen';
+
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
@@ -173,6 +175,17 @@ const RouteConfigs = {
 	},
 	PushSettings: {
 		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(PushSettings, 'PushSettings'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	UpdatePasswordScreen: {
+		screen: UpdatePasswordScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
