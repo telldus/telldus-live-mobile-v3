@@ -1,5 +1,4 @@
 import React from 'react';
-import { Provider } from 'react-redux';
 import { IntlProvider } from 'react-intl';
 import { shallow, mockStore } from '../../../Utils/TelldusTestSuite';
 
