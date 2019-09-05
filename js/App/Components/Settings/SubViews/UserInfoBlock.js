@@ -34,6 +34,7 @@ import {
 import i18n from '../../../Translations/common';
 
 const UserInfoBlock = (props: Object): Object => {
+	const { blockContainerStyle } = props;
 	const { formatMessage } = useIntl();
 
 	const { app: {layout}, user: {userProfile: {email}} } = useSelector((state: Object): Object => state);
@@ -56,6 +57,7 @@ const UserInfoBlock = (props: Object): Object => {
 			value={email}
 			fontSize={fontSize}
 			onPress={email === 'developer@telldus.com' ? testCrash : null}
+			blockContainerStyle={blockContainerStyle}
 		/>
 	);
 };
