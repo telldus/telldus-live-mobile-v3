@@ -10,6 +10,7 @@
     "release": "babel-node js/Utils/release.js",
     "sourcemap": "babel-node js/Utils/sourcemap.js",
     "test": "jest",
+    "postinstall": "npx jetify",
     "manage:translations-widget-android": "node node_modules/live-shared-data/lib/manageStringsWidgetAndroid.js"
   },
   "browser": {
