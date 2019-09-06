@@ -29,13 +29,15 @@ import {
 	TouchableButton,
 } from '../../../../BaseComponents';
 
+import Theme from '../../../Theme';
+
 const ViewPremiumBenefitsButton = (props: Object): Object => {
 	const { buttonAccessibleProp = true, navigation } = props;
 
 	const { app: { layout } } = useSelector((state: Object): Object => state);
 
 	const {
-		fontSize,
+		buttonStyle,
 	} = getStyles(layout);
 	function onPress() {
 		navigation.navigate({
@@ -50,9 +52,7 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 			text={'View premium benefits'}
 			accessibilityLabel={'View premium benefits'}
 			accessible={buttonAccessibleProp}
-			style={{
-				marginTop: fontSize / 2,
-			}}
+			style={buttonStyle}
 		/>
 	);
 };
@@ -62,9 +62,15 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
+	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	return {
-		fontSize,
+		buttonStyle: {
+			marginVertical: fontSize / 2,
+			paddingHorizontal: 10,
+			width: deviceWidth * 0.7,
+			maxWidth: width - (padding * 2),
+		},
 	};
 };
 

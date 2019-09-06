@@ -37,8 +37,10 @@ import {
 import {
 	EditNameBlock,
 	UpdatePasswordBlock,
-	ViewPremiumBenefitsButton,
 } from './SubViews';
+import {
+	ViewPremiumBenefitsButton,
+} from '../Premium/SubViews';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {

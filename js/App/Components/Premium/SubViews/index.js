@@ -23,7 +23,9 @@
 'use strict';
 
 import UpgradePremiumButton from './UpgradePremiumButton';
+import ViewPremiumBenefitsButton from './ViewPremiumBenefitsButton';
 
 module.exports = {
 	UpgradePremiumButton,
+	ViewPremiumBenefitsButton,
 };
