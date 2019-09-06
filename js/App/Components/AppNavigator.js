@@ -43,6 +43,7 @@ import PushSettings from './PushSettings/PushSettings';
 import UpdatePasswordScreen from './AccountSettings/UpdatePasswordScreen';
 import PremiumBenefitsScreen from './Premium/PremiumBenefitsScreen';
 import PremiumUpgradeScreen from './Premium/PremiumUpgradeScreen';
+import RedeemGiftScreen from './Premium/RedeemGiftScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -210,6 +211,17 @@ const RouteConfigs = {
 	},
 	PremiumUpgradeScreen: {
 		screen: PremiumUpgradeScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	RedeemGiftScreen: {
+		screen: RedeemGiftScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
