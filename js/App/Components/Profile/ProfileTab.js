@@ -23,12 +23,14 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import {
 	View,
 	TabBar,
+	IconTelldus,
+	Text,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -40,12 +42,22 @@ import {
 } from './SubViews';
 import {
 	ViewPremiumBenefitsButton,
+	UpgradePremiumButton,
+	SubscriptionStatusBlock,
+	PremiumInfoContent,
 } from '../Premium/SubViews';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {
 	const { screenProps: {toggleDialogueBox}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
+
+	function onPressRedeemGift() {
+		navigation.navigate({
+			routeName: 'RedeemGiftScreen',
+			key: 'RedeemGiftScreen',
+		});
+	}
 
 	const {
 		container,
@@ -55,6 +67,9 @@ const ProfileTab = (props: Object): Object => {
 		textFieldStyleENB,
 		labelTextStyleENB,
 		style,
+		redeemCoverStyle,
+		redeemIconStyle,
+		redeemTextSyle,
 	} = getStyles(layout);
 
 	return (
@@ -77,7 +92,27 @@ const ProfileTab = (props: Object): Object => {
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
 				/>
-				<ViewPremiumBenefitsButton navigation={navigation}/>
+				<SubscriptionStatusBlock
+					navigation={navigation}
+					contentCoverStyle={contentCoverStyleENB}
+					valueCoverStyle={valueCoverStyleENB}
+					textFieldStyle={textFieldStyleENB}
+					labelTextStyle={labelTextStyleENB}
+					style={style}
+				/>
+				<PremiumInfoContent/>
+				<UpgradePremiumButton
+					navigation={navigation}/>
+				<TouchableOpacity onPress={onPressRedeemGift}>
+					<View style={redeemCoverStyle}>
+						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
+						<Text style={redeemTextSyle}>
+							Redeem gift card
+						</Text>
+					</View>
+				</TouchableOpacity>
+				<ViewPremiumBenefitsButton
+					navigation={navigation}/>
 			</View>
 		</ScrollView>
 	);
@@ -115,6 +150,22 @@ const getStyles = (appLayout: Object): Object => {
 		body: {
 			flex: 1,
 			padding,
+		},
+		redeemCoverStyle: {
+			marginVertical: padding,
+			alignSelf: 'center',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		redeemTextSyle: {
+			fontSize: fontSize * 0.9,
+			color: Theme.Core.brandSecondary,
+		},
+		redeemIconStyle: {
+			fontSize: fontSize,
+			color: Theme.Core.brandSecondary,
+			marginRight: 5,
 		},
 	};
 };
