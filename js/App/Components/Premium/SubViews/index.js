@@ -24,8 +24,12 @@
 
 import UpgradePremiumButton from './UpgradePremiumButton';
 import ViewPremiumBenefitsButton from './ViewPremiumBenefitsButton';
+import SubscriptionStatusBlock from './SubscriptionStatusBlock';
+import PremiumInfoContent from './PremiumInfoContent';
 
 module.exports = {
 	UpgradePremiumButton,
 	ViewPremiumBenefitsButton,
+	SubscriptionStatusBlock,
+	PremiumInfoContent,
 };

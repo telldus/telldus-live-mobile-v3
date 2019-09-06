@@ -1,0 +1,96 @@
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+// @flow
+
+'use strict';
+
+import React from 'react';
+import { useSelector } from 'react-redux';
+
+import {
+	IconTelldus,
+	Text,
+	View,
+} from '../../../../BaseComponents';
+
+import Theme from '../../../Theme';
+
+const PremiumInfoContent = (props: Object): Object => {
+
+	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		coverStyle,
+		contentStyle,
+		titleSyle,
+		iconStyle,
+	} = getStyle(layout);
+
+
+	return (
+		<View style={coverStyle}>
+			<IconTelldus icon={'premium'} style={iconStyle}/>
+			<Text style={titleSyle}>
+            Get more with Premium Access
+			</Text>
+			<Text style={contentStyle}>
+            With Premium Access you get even more smart features, extended
+            statistics and information. This includes extended sensor history,
+            increased flexibility to create automated events and the ability
+            to send automatic e-mails and SMS.
+			</Text>
+		</View>
+	);
+};
+
+const getStyle = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	return {
+		coverStyle: {
+			marginTop: padding,
+			alignSelf: 'center',
+			alignItems: 'center',
+			justifyContent: 'center',
+			marginBottom: padding,
+		},
+		titleSyle: {
+			color: Theme.Core.eulaContentColor,
+			fontSize: deviceWidth * 0.06,
+			fontWeight: 'bold',
+		},
+		contentStyle: {
+			textAlign: 'center',
+			color: Theme.Core.rowTextColor,
+			fontSize: Math.floor(deviceWidth * 0.04),
+			marginTop: 10,
+		},
+		iconStyle: {
+			textAlign: 'center',
+			color: Theme.Core.twine,
+			fontSize: Math.floor(deviceWidth * 0.2),
+		},
+	};
+};
+
+export default PremiumInfoContent;
