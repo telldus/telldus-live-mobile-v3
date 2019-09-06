@@ -245,7 +245,7 @@ class SettingsRow extends Component<Props, null> {
 							}
 							{!!iconValueRight && (
 								<TouchableOpacity onPress={this.onPressIconValueRight} style={iconValueRightCover}>
-									<Icon name={iconValueRight} size={iconValueRightSize} color={Theme.Core.brandSecondary}/>
+									{typeof iconValueRight === 'string' ? <Icon name={iconValueRight} size={iconValueRightSize} color={Theme.Core.brandSecondary}/> : iconValueRight}
 								</TouchableOpacity>
 							)}
 						</View>
