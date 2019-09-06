@@ -34,6 +34,7 @@ export default {
 	brandRGB: '#21A296',
 	iPhoneXbg: '#eae7f0',
 	iconFamily: 'Ionicons',
+	twine: '#C4A362',
 	get fonts() {
 		return {
 			telldusIconFont: 'telldusicons',
