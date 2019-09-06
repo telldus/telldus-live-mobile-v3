@@ -61,6 +61,7 @@ type Props = {
 	addNewLocation: () => any,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
+	navigateToCampaign: () => void,
 };
 
 type State = {
@@ -203,7 +204,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	onOpenSetting() {
 		this.closeDrawer();
-		navigate('Settings', {}, 'Settings');
+		navigate('Profile', {}, 'Profile');
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -252,16 +253,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 				return {
 					component: <IconTelldus icon="campaign" style={styles.campaingIconStyle}/>,
 					style: styles.rightButtonStyle,
-					onPress: this.navigateToProfile, // TODO: translate
+					onPress: this.props.navigateToCampaign, // TODO: translate
 					accessibilityLabel: `campaign icon, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			default:
 				return null;
 		}
-	}
-
-	navigateToProfile = () => {
-		navigate('Profile', null, 'Profile');
 	}
 
 	setNavigatorRef(navigatorRef: any) {

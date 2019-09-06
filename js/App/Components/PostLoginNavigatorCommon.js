@@ -24,6 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
+import { Linking } from 'react-native';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
@@ -287,6 +288,32 @@ autoDetectLocalTellStick() {
 	}, 15000);
 }
 
+navigateToCampaign = () => {
+	let url = 'https://live.telldus.com/profile/campaigns';
+	const defaultMessage = 'Sorry, could not open the campaigns page. Please try again later.';// TODO: translate
+	Linking.canOpenURL(url)
+		.then((supported: boolean): any => {
+			if (!supported) {
+				this.showDialogue(defaultMessage);
+			} else {
+				return Linking.openURL(url);
+			}
+		})
+		.catch((err: any) => {
+			const message = err.message || defaultMessage;
+			this.showDialogue(message);
+		});
+}
+
+showDialogue(message: string) {
+	this.props.toggleDialogueBox({
+		show: true,
+		showHeader: true,
+		text: message,
+		showPositive: true,
+	});
+}
+
 onLayout(ev: Object) {
 	this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
 }
@@ -313,7 +340,8 @@ render(): Object {
 					{...this.props}
 					addNewLocation={this.addNewLocation}
 					addingNewLocation={this.state.addingNewLocation}
-					addNewDevice={this.addNewDevice}/>
+					addNewDevice={this.addNewDevice}
+					navigateToCampaign={this.navigateToCampaign}/>
 			</View>
 
 			<DimmerPopup
