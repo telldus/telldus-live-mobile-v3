@@ -120,7 +120,9 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 
 	const screenLabels = benefits.map((screen: Object, i: number): Object => {
 		function onChangeSelection() {
-			swiperRef.current.scrollBy(i - selectedIndex);
+			if (swiperRef.current) {
+				swiperRef.current.scrollBy(i - selectedIndex);
+			}
 		}
 
 		const color = selectedIndex === i ? Theme.Core.brandSecondary : Theme.Core.rowTextColor;
