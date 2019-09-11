@@ -44,6 +44,7 @@ import UpdatePasswordScreen from './AccountSettings/UpdatePasswordScreen';
 import PremiumBenefitsScreen from './Premium/PremiumBenefitsScreen';
 import PremiumUpgradeScreen from './Premium/PremiumUpgradeScreen';
 import RedeemGiftScreen from './Premium/RedeemGiftScreen';
+import ManageSubscriptionScreen from './Premium/ManageSubscriptionScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -222,6 +223,17 @@ const RouteConfigs = {
 	},
 	RedeemGiftScreen: {
 		screen: RedeemGiftScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	ManageSubscriptionScreen: {
+		screen: ManageSubscriptionScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
