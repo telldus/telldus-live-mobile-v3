@@ -20,7 +20,7 @@
 // @flow
 
 import React from 'react';
-import { FormattedRelative } from 'react-intl';
+import { FormattedRelativeTime } from 'react-intl';
 
 import Text from './Text';
 
@@ -29,10 +29,10 @@ const FormattedRelativeComponent = (props: Object): React$Element<any> => {
 	const formatterAvailable = formatterFunction && (typeof formatterFunction === 'function');
 	return (
 		<Text style={textStyle}>
-			<FormattedRelative {...others}>{(time: string): string => {
+			<FormattedRelativeTime {...others}>{(time: string): string => {
 				return formatterAvailable ? formatterFunction(time) : time;
 			}}
-			</FormattedRelative>
+			</FormattedRelativeTime>
 		</Text>
 	);
 };
