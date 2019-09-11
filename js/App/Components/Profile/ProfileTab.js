@@ -45,12 +45,15 @@ import {
 	UpgradePremiumButton,
 	SubscriptionStatusBlock,
 	PremiumInfoContent,
+	AutoRenewalBlock,
 } from '../Premium/SubViews';
 import Theme from '../../Theme';
 
 const ProfileTab = (props: Object): Object => {
 	const { screenProps: {toggleDialogueBox}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
+	const { locale } = userProfile;
 
 	function onPressRedeemGift() {
 		navigation.navigate({
@@ -71,6 +74,8 @@ const ProfileTab = (props: Object): Object => {
 		redeemIconStyle,
 		redeemTextSyle,
 	} = getStyles(layout);
+
+	const showAuto = locale === 'auto';
 
 	return (
 		<ScrollView style={container}>
@@ -98,8 +103,16 @@ const ProfileTab = (props: Object): Object => {
 					valueCoverStyle={valueCoverStyleENB}
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
-					style={style}
+					style={showAuto ? undefined : style}
 				/>
+				{showAuto && (<AutoRenewalBlock
+					navigation={navigation}
+					contentCoverStyle={contentCoverStyleENB}
+					valueCoverStyle={valueCoverStyleENB}
+					textFieldStyle={textFieldStyleENB}
+					labelTextStyle={labelTextStyleENB}
+					style={style}
+				/>)}
 				<PremiumInfoContent/>
 				<UpgradePremiumButton
 					navigation={navigation}/>
