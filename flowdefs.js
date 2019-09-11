@@ -60,4 +60,8 @@ declare module 'react-navigation-tabs' {
 declare module 'redux-persist' {
 	declare module.exports: any;
 }
+
+declare module 'live-shared-data' {
+	declare module.exports: any;
+}
 declare var console: any;

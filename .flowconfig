@@ -49,6 +49,7 @@ node_modules/warning/.*
 .*/node_modules/react-native-vector-icons/.*
 .*/node_modules/react-navigation-tabs/.*
 .*/node_modules/redux-persist/.*
+.*/node_modules/live-shared-data/.*
 [include]
 
 [libs]
