@@ -203,9 +203,14 @@ class SettingsRow extends Component<Props, null> {
 					<View
 						style={touchableStyle}>
 						<View style={textShowOnDashCover}>
-							<Text style={textShowOnDash}>
-								{label}
-							</Text>
+							{!!label && (
+								typeof label === 'string' ?
+									<Text style={textShowOnDash}>
+										{label}
+									</Text>
+									:
+									label
+							)}
 						</View>
 						<Switch
 							onValueChange={onValueChange}
@@ -216,9 +221,13 @@ class SettingsRow extends Component<Props, null> {
 					:
 					<Parent {...parentProps}>
 						<View style={textShowOnDashCover}>
-							<Text style={[textShowOnDash, labelTextStyle]}>
-								{label}
-							</Text>
+							{!!label && (
+								typeof label === 'string' ? <Text style={[textShowOnDash, labelTextStyle]}>
+									{label}
+								</Text>
+									:
+									label
+							)}
 							{!!iconLabelRight && (
 								<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
 									<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
@@ -239,9 +248,16 @@ class SettingsRow extends Component<Props, null> {
 									keyboardType={keyboardTypeInLineEdit}
 								/>
 								:
-								<Text style={valueText}>
-									{value} {valuePostfix}
-								</Text>
+								<>
+								{!!value && (
+									typeof value === 'string' ?
+										<Text style={valueText}>
+											{value} {valuePostfix}
+										</Text>
+										:
+										value
+								)}
+								</>
 							}
 							{!!iconValueRight && (
 								<TouchableOpacity onPress={this.onPressIconValueRight} style={iconValueRightCover}>
