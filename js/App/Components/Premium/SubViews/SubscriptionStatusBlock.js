@@ -32,6 +32,7 @@ import {
 	SettingsRow,
 	Text,
 	View,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -50,8 +51,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
-	const { pro } = userProfile;
-	const accStatus = moment().unix() > pro ? 'Basic' : 'Premium';
+	const { pro, locale } = userProfile;
 
 	function onPressUpgrade() {
 		navigation.navigate({
@@ -64,7 +64,16 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		upgradeSyle,
 		labelStyle,
 		coverStyle,
+		valueText,
+		premIconStyle,
+		valueCompCoverStyle,
 	} = getStyle(layout);
+
+	const accStatus = moment().unix() > pro ? 'Basic' :
+		<View style={valueCompCoverStyle}>
+			<IconTelldus icon={'premium'} style={premIconStyle}/>
+			<Text style={valueText}>Premium Access</Text>
+		</View>;
 
 	return (
 		<View style={coverStyle}>
@@ -76,9 +85,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				label={'Subscription'}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={<Text style={upgradeSyle}> Upgrade </Text>}
+				iconValueRight={locale === 'auto' ? null : <Text style={upgradeSyle}> Upgrade </Text>}
 				onPress={false}
-				onPressIconValueRight={onPressUpgrade}
+				onPressIconValueRight={locale === 'auto' ? null : onPressUpgrade}
 				intl={intl}
 				style={style}
 				contentCoverStyle={contentCoverStyle}
@@ -94,6 +103,7 @@ const getStyle = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const fontSize = deviceWidth * 0.04;
 
 	return {
 		coverStyle: {
@@ -106,6 +116,25 @@ const getStyle = (appLayout: Object): Object => {
 		labelStyle: {
 			color: '#b5b5b5',
 			fontSize: Math.floor(deviceWidth * 0.045),
+		},
+		valueText: {
+			fontSize,
+			color: Theme.Core.inactiveTintColor,
+			textAlign: 'right',
+			marginLeft: 5,
+			textAlignVertical: 'center',
+		},
+		premIconStyle: {
+			fontSize: fontSize * 1.3,
+			color: Theme.Core.twine,
+			textAlignVertical: 'center',
+			textAlign: 'right',
+		},
+		valueCompCoverStyle: {
+			flex: 0,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-end',
 		},
 	};
 };
