@@ -157,6 +157,7 @@ const getStyles = (appLayout: Object): Object => {
 		titleStyleTwo: {
 			fontSize: fontSize * 1.2,
 			color: '#000',
+			fontWeight: 'bold',
 		},
 		iconStyle: {
 			fontSize: fontSize * 1.8,

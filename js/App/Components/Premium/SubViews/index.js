@@ -26,10 +26,12 @@ import UpgradePremiumButton from './UpgradePremiumButton';
 import ViewPremiumBenefitsButton from './ViewPremiumBenefitsButton';
 import SubscriptionStatusBlock from './SubscriptionStatusBlock';
 import PremiumInfoContent from './PremiumInfoContent';
+import AutoRenewalBlock from './AutoRenewalBlock';
 
 module.exports = {
 	UpgradePremiumButton,
 	ViewPremiumBenefitsButton,
 	SubscriptionStatusBlock,
 	PremiumInfoContent,
+	AutoRenewalBlock,
 };
