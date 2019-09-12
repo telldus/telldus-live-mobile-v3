@@ -27,17 +27,24 @@ import { useSelector } from 'react-redux';
 
 import {
 	TouchableButton,
+	Text,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 
 const ViewPremiumBenefitsButton = (props: Object): Object => {
-	const { buttonAccessibleProp = true, navigation } = props;
+	const {
+		buttonAccessibleProp = true,
+		navigation,
+		linkTextStyle,
+		button = true,
+	} = props;
 
 	const { app: { layout } } = useSelector((state: Object): Object => state);
 
 	const {
 		buttonStyle,
+		textStyle,
 	} = getStyles(layout);
 	function onPress() {
 		navigation.navigate({
@@ -47,13 +54,20 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 	}
 
 	return (
-		<TouchableButton
+		<>
+		{ button ? <TouchableButton
 			onPress={onPress}
 			text={'View benefits of premium'}
 			accessibilityLabel={'View benefits of premium'}
 			accessible={buttonAccessibleProp}
 			style={buttonStyle}
 		/>
+			:
+			<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
+			View Premium features & benefits
+			</Text>
+		}
+		</>
 	);
 };
 
@@ -70,6 +84,13 @@ const getStyles = (appLayout: Object): Object => {
 			paddingHorizontal: 10,
 			width: deviceWidth * 0.7,
 			maxWidth: width - (padding * 2),
+		},
+		textStyle: {
+			fontSize,
+			color: Theme.Core.brandSecondary,
+			padding: 5,
+			alignSelf: 'center',
+			textAlign: 'center',
 		},
 	};
 };
