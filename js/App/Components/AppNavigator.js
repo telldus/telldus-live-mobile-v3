@@ -45,6 +45,7 @@ import PremiumBenefitsScreen from './Premium/PremiumBenefitsScreen';
 import PremiumUpgradeScreen from './Premium/PremiumUpgradeScreen';
 import RedeemGiftScreen from './Premium/RedeemGiftScreen';
 import ManageSubscriptionScreen from './Premium/ManageSubscriptionScreen';
+import AdditionalPlansPaymentsScreen from './Premium/AdditionalPlansPaymentsScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -234,6 +235,17 @@ const RouteConfigs = {
 	},
 	ManageSubscriptionScreen: {
 		screen: ManageSubscriptionScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	AdditionalPlansPaymentsScreen: {
+		screen: AdditionalPlansPaymentsScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
