@@ -75,10 +75,18 @@ const ProfileTab = (props: Object): Object => {
 		redeemCoverStyle,
 		redeemIconStyle,
 		redeemTextSyle,
+		pHistoryCStyle,
 	} = getStyles(layout);
 
 	const showAuto = locale === 'auto';
 	const isBasic = moment().unix() > pro;
+
+	function onPressViewPurchaseHistory() {
+		navigation.navigate({
+			routeName: 'PurchaseHistoryScreen',
+			key: 'PurchaseHistoryScreen',
+		});
+	}
 
 	return (
 		<ScrollView style={container}>
@@ -115,6 +123,11 @@ const ProfileTab = (props: Object): Object => {
 				{isBasic && <PremiumInfoContent/>}
 				{isBasic && <UpgradePremiumButton
 					navigation={navigation}/>}
+				<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
+					<Text style={redeemTextSyle}>
+							View purchase history
+					</Text>
+				</TouchableOpacity>
 				<TouchableOpacity onPress={onPressRedeemGift}>
 					<View style={redeemCoverStyle}>
 						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
@@ -173,6 +186,12 @@ const getStyles = (appLayout: Object): Object => {
 		body: {
 			flex: 1,
 			padding,
+		},
+		pHistoryCStyle: {
+			marginTop: padding,
+			alignSelf: 'center',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		redeemCoverStyle: {
 			marginVertical: padding,
