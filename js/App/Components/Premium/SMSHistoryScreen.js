@@ -22,17 +22,39 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionList } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import groupBy from 'lodash/groupBy';
+import reduce from 'lodash/reduce';
+import { useIntl } from 'react-intl';
+import moment from 'moment';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
 	NavigationHeaderPoster,
 	Text,
 } from '../../../BaseComponents';
+import {
+	getUserSMSHistory,
+} from '../../Actions/User';
 
 import Theme from '../../Theme';
+
+const prepareListData = (history: Array<Object>): Array<Object> => {
+	let result = groupBy(history, (items: Object): any => {
+		let date = new Date(items.date * 1000).toDateString();
+		return date;
+	});
+	return reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
+		acc.push({
+			key: index,
+			data: next,
+		});
+		return acc;
+	}, []);
+};
 
 const SMSHistoryScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
@@ -47,12 +69,39 @@ const SMSHistoryScreen = (props: Object): Object => {
 		sectionTextStyle,
 		contentContainerStyle,
 		toBlock,
+		emptyInfo,
+		toIconSize,
 	} = getStyles(layout);
 
-	// const dispatch = useDispatch();
+	const { formatTime } = useIntl();
+
+	const dispatch = useDispatch();
+	const [ screenData, setScreenData ] = useState({
+		isLoading: true,
+		listData: [],
+	});
+	const { isLoading, listData } = screenData;
 	useEffect(() => {
-		// dispatch();
+		getData();
 	}, []);
+
+	function getData() {
+		setScreenData({
+			isLoading: true,
+			listData,
+		});
+		dispatch(getUserSMSHistory()).then((history: Array<Object>) => {
+			setScreenData({
+				isLoading: false,
+				listData: prepareListData(history),
+			});
+		}).catch(() => {
+			setScreenData({
+				isLoading: false,
+				listData,
+			});
+		});
+	}
 
 	function getStatus(n: number): Object {
 		switch (n) {
@@ -60,42 +109,47 @@ const SMSHistoryScreen = (props: Object): Object => {
 				return {
 					t: 'Pending',
 					c: Theme.Core.brandSecondary,
+					icon: 'arrow-forward',
 				}
 				;
 			case 1:
 				return {
 					t: 'Delivered',
 					c: Theme.Core.brandSuccess,
+					icon: 'arrow-forward',
 				};
 			case 2:
 				return {
 					t: 'Failed',
 					c: Theme.Core.brandDanger,
+					icon: 'close',
 				};
 			default:
 				return {
 					t: 'Pending',
 					c: Theme.Core.brandSecondary,
+					icon: 'arrow-forward',
 				};
 		}
 	}
 
 	function renderItem({item, index, section}: Object): Object {
-		const { t, c } = getStatus(item.status);
+		const { t, c, icon } = getStatus(item.status);
 		return (
 			<View style={rowStyle}>
-				<Text key={index} style={rowTextStyle1}>{item.date}</Text>
+				<Text key={index} style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
 				<View style={toBlock}>
+					<Icon name={icon} size={toIconSize} color={c}/>
 					<Text key={index} style={rowTextStyle2}>{item.to}</Text>
 				</View>
 				<Text key={index} style={[rowTextStyle3, {color: c}]}>{t}</Text>
 			</View>);
 	}
 
-	function renderSectionHeader({section: {title}}: Object): Object {
+	function renderSectionHeader({section: {key}}: Object): Object {
 		return (
 			<View style={sectionStyle}>
-				<Text style={sectionTextStyle}>{title}</Text>
+				<Text style={sectionTextStyle}>{key}</Text>
 			</View>
 		);
 	}
@@ -113,16 +167,21 @@ const SMSHistoryScreen = (props: Object): Object => {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}/>
-			<SectionList
-				renderItem={renderItem}
-				renderSectionHeader={renderSectionHeader}
-				sections={[
-					{title: 'Title1f', data: [{date: 'item1', to: '1237346383', status: 1}, {date: 'item1', to: '123', status: 1}], key: '1'},
-					{title: 'Title22', data: [{date: 'item1', to: '1231423144', status: 2}, {date: 'item1', to: '123', status: 1}], key: '2'},
-					{title: 'Title333', data: [{date: 'item144', to: '123', status: 0}, {date: 'item1', to: '000123', status: 0}], key: '3'},
-				]}
-				keyExtractor={keyExtractor}
-				contentContainerStyle={contentContainerStyle}/>
+			{(!isLoading && listData.length === 0 ) ?
+				<View style={rowStyle}>
+					<Text style={emptyInfo}>No history data found.</Text>
+				</View>
+				:
+				<SectionList
+					renderItem={renderItem}
+					renderSectionHeader={renderSectionHeader}
+					sections={listData}
+					keyExtractor={keyExtractor}
+					contentContainerStyle={contentContainerStyle}
+					refreshing={isLoading}
+					onRefresh={getData}
+				/>
+			}
 		</View>
 	);
 };
@@ -137,6 +196,7 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSizeSection = Math.floor(deviceWidth * 0.045);
 
 	return {
+		toIconSize: fontSizeRow * 1.2,
 		container: {
 			flex: 1,
 			backgroundColor: Theme.Core.appBackground,
@@ -150,6 +210,10 @@ const getStyles = (appLayout: Object): Object => {
 			padding: 10,
 			marginBottom: padding / 2,
 		},
+		emptyInfo: {
+			fontSize: fontSizeRow,
+			color: Theme.Core.brandSecondary,
+		},
 		sectionStyle: {
 			paddingHorizontal: padding,
 			backgroundColor: '#fff',
@@ -161,15 +225,19 @@ const getStyles = (appLayout: Object): Object => {
 		rowTextStyle1: {
 			fontSize: fontSizeRow,
 			color: '#000',
-			width: '30%',
+			width: '25%',
 			textAlign: 'left',
 		},
 		toBlock: {
-			width: '40%',
+			width: '45%',
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 		rowTextStyle2: {
 			fontSize: fontSizeRow,
 			color: '#000',
+			marginLeft: 3,
 		},
 		rowTextStyle3: {
 			fontSize: fontSizeRow,
