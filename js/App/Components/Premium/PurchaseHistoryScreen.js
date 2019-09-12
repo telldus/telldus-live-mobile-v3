@@ -29,7 +29,6 @@ import groupBy from 'lodash/groupBy';
 import reduce from 'lodash/reduce';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
