@@ -49,8 +49,8 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 	return (
 		<TouchableButton
 			onPress={onPress}
-			text={'View premium benefits'}
-			accessibilityLabel={'View premium benefits'}
+			text={'View benefits of premium'}
+			accessibilityLabel={'View benefits of premium'}
 			accessible={buttonAccessibleProp}
 			style={buttonStyle}
 		/>
