@@ -140,7 +140,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Premium access'} h2={'Get more features & benefits'}
+				h1={'Premium Access'} h2={'Get more features & benefits'}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

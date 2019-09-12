@@ -125,10 +125,12 @@ class TouchableButton extends Component<Props, void> {
 				disabled={disabled}
 				onPress={this.onPress}>
 				<View style={cover}>
+					{(typeof preScript === 'object' ||
+					typeof preScript === 'function') && preScript}
 					<Text style={[buttonLabel, labelStyle]}
 						accessible={accessible}
 						importantForAccessibility={importantForAccessibility}>
-						{preScript}{label.toUpperCase()}{postScript}
+						{typeof preScript === 'string' && preScript}{label.toUpperCase()}{postScript}
 					</Text>
 					{!!showThrobber &&
 					(
