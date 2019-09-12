@@ -25,6 +25,7 @@
 import React from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import {
 	View,
@@ -46,6 +47,7 @@ import {
 	SubscriptionStatusBlock,
 	PremiumInfoContent,
 	AutoRenewalBlock,
+	SMSBlock,
 } from '../Premium/SubViews';
 import Theme from '../../Theme';
 
@@ -53,7 +55,7 @@ const ProfileTab = (props: Object): Object => {
 	const { screenProps: {toggleDialogueBox}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
-	const { locale } = userProfile;
+	const { locale, pro } = userProfile;
 
 	function onPressRedeemGift() {
 		navigation.navigate({
@@ -76,6 +78,7 @@ const ProfileTab = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const showAuto = locale === 'auto';
+	const isBasic = moment().unix() > pro;
 
 	return (
 		<ScrollView style={container}>
@@ -93,10 +96,6 @@ const ProfileTab = (props: Object): Object => {
 				/>
 				<UpdatePasswordBlock
 					navigation={navigation}/>
-				<LogoutButton
-					buttonAccessibleProp={true}
-					toggleDialogueBox={toggleDialogueBox}
-				/>
 				<SubscriptionStatusBlock
 					navigation={navigation}
 					contentCoverStyle={contentCoverStyleENB}
@@ -113,9 +112,9 @@ const ProfileTab = (props: Object): Object => {
 					labelTextStyle={labelTextStyleENB}
 					style={style}
 				/>)}
-				<PremiumInfoContent/>
-				<UpgradePremiumButton
-					navigation={navigation}/>
+				{isBasic && <PremiumInfoContent/>}
+				{isBasic && <UpgradePremiumButton
+					navigation={navigation}/>}
 				<TouchableOpacity onPress={onPressRedeemGift}>
 					<View style={redeemCoverStyle}>
 						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
@@ -124,8 +123,19 @@ const ProfileTab = (props: Object): Object => {
 						</Text>
 					</View>
 				</TouchableOpacity>
-				<ViewPremiumBenefitsButton
-					navigation={navigation}/>
+				<SMSBlock
+					navigation={navigation}
+					contentCoverStyle={contentCoverStyleENB}
+					valueCoverStyle={valueCoverStyleENB}
+					textFieldStyle={textFieldStyleENB}
+					labelTextStyle={labelTextStyleENB}
+					style={style}/>
+				{isBasic && <ViewPremiumBenefitsButton
+					navigation={navigation}/>}
+				<LogoutButton
+					buttonAccessibleProp={true}
+					toggleDialogueBox={toggleDialogueBox}
+				/>
 			</View>
 		</ScrollView>
 	);
