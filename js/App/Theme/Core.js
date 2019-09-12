@@ -98,6 +98,8 @@ export default {
 	locationOnline: '#9CCC65',
 	locationOffline: '#F44336',
 	locationNoLiveUpdates: '#FF9800',
+	darkRed: '#990000',
+	red: '#D32F2E',
 
 	get fontSizeH1() {
 		return this.fontSizeBase * 1.8;
