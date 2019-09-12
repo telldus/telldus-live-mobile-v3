@@ -136,26 +136,26 @@ const SMSHistoryScreen = (props: Object): Object => {
 	function renderItem({item, index, section}: Object): Object {
 		const { t, c, icon } = getStatus(item.status);
 		return (
-			<View style={rowStyle}>
-				<Text key={index} style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
+			<View style={rowStyle} key={index}>
+				<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
 				<View style={toBlock}>
 					<Icon name={icon} size={toIconSize} color={c}/>
-					<Text key={index} style={rowTextStyle2}>{item.to}</Text>
+					<Text style={rowTextStyle2}>{item.to}</Text>
 				</View>
-				<Text key={index} style={[rowTextStyle3, {color: c}]}>{t}</Text>
+				<Text style={[rowTextStyle3, {color: c}]}>{t}</Text>
 			</View>);
 	}
 
 	function renderSectionHeader({section: {key}}: Object): Object {
 		return (
-			<View style={sectionStyle}>
+			<View style={sectionStyle} key={key}>
 				<Text style={sectionTextStyle}>{key}</Text>
 			</View>
 		);
 	}
 
 	function keyExtractor(item: any, index: any): string {
-		return item + index;
+		return item.id + index;
 	}
 
 	return (
@@ -192,8 +192,8 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
-	const fontSizeRow = Math.floor(deviceWidth * 0.049);
-	const fontSizeSection = Math.floor(deviceWidth * 0.045);
+	const fontSizeRow = Math.floor(deviceWidth * 0.043);
+	const fontSizeSection = Math.floor(deviceWidth * 0.039);
 
 	return {
 		toIconSize: fontSizeRow * 1.2,
@@ -204,6 +204,7 @@ const getStyles = (appLayout: Object): Object => {
 		rowStyle: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
+			alignItems: 'center',
 			marginHorizontal: padding,
 			backgroundColor: '#fff',
 			...Theme.Core.shadow,
@@ -238,6 +239,7 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSizeRow,
 			color: '#000',
 			marginLeft: 3,
+			textAlign: 'left',
 		},
 		rowTextStyle3: {
 			fontSize: fontSizeRow,
