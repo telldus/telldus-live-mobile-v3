@@ -29,6 +29,7 @@ import PremiumInfoContent from './PremiumInfoContent';
 import AutoRenewalBlock from './AutoRenewalBlock';
 import AdditionalPlansPayments from './AdditionalPlansPayments';
 import PaymentProvidersBlock from './PaymentProvidersBlock';
+import SMSBlock from './SMSBlock';
 
 module.exports = {
 	UpgradePremiumButton,
@@ -38,4 +39,5 @@ module.exports = {
 	AutoRenewalBlock,
 	AdditionalPlansPayments,
 	PaymentProvidersBlock,
+	SMSBlock,
 };
