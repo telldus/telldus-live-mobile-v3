@@ -36,6 +36,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	ViewPremiumBenefitsButton,
+	AdditionalPlansPayments,
 } from './SubViews';
 
 import {
@@ -65,6 +66,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		smsIconStyle,
 		buttonStyle,
 		cartIconStyle,
+		linkTextStyle,
 	} = getStyles(layout);
 
 	const {
@@ -113,7 +115,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					</View>
 					<Text style={pMonthTextStyle}>
 						{`€${formatNumber(cPerMonth, {
-							minimumFractionDigits: 2,
+							minimumFractionDigits: cPerMonth === 3 ? 0 : 2,
 						})}/${formatMessage(i18n.month)}`}
 					</Text>
 					<Text style={annualChargeTextStyle}>
@@ -148,9 +150,14 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					accessible={true}
 					style={buttonStyle}
 				/>
+				<AdditionalPlansPayments
+					navigation={navigation}
+					button={false}
+					linkTextStyle={linkTextStyle}/>
 				<ViewPremiumBenefitsButton
 					navigation={navigation}
-					button={false}/>
+					button={false}
+					linkTextStyle={linkTextStyle}/>
 			</ScrollView>
 		</View>
 	);
@@ -252,13 +259,16 @@ const getStyles = (appLayout: Object): Object => {
 			marginRight: 3,
 		},
 		buttonStyle: {
-			marginVertical: fontSize / 2,
+			marginTop: padding,
 			paddingHorizontal: 10,
 		},
 		cartIconStyle: {
 			fontSize: fontSize * 2.2,
 			color: '#fff',
 			marginRight: 7,
+		},
+		linkTextStyle: {
+			marginTop: padding,
 		},
 	};
 };
