@@ -69,32 +69,24 @@ const RedeemGiftScreen = (props: Object): Object => {
 
 	const dispatch = useDispatch();
 	function onPress() {
-		navigation.navigate({
-			routeName: 'PurchaseSuccessScreen',
-			key: 'PurchaseSuccessScreen',
-			params: {
-				...{},
-				voucher: true,
-			},
+		dispatch(activateCoupon(code)).then((response: Object) => {
+			if (response && response.status === 'success') {
+				navigation.navigate({
+					routeName: 'PurchaseSuccessScreen',
+					key: 'PurchaseSuccessScreen',
+					params: {
+						...response,
+						voucher: true,
+					},
+				});
+			} else {
+				dispatch(showToast('Sorry something went wrong. Please try later.'));
+				dispatch(getUserProfile());
+			}
+		}).catch((err: Object) => {
+			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
+			dispatch(getUserProfile());
 		});
-		// dispatch(activateCoupon(code)).then((response: Object) => {
-		// 	if (response && response.status === 'success') {
-		// 		navigation.navigate({
-		// 			routeName: 'PurchaseSuccessScreen',
-		// 			key: 'PurchaseSuccessScreen',
-		// 			params: {
-		// 				...response,
-		// 				voucher: true,
-		// 			},
-		// 		});
-		// 	} else {
-		// 		dispatch(showToast('Sorry something went wrong. Please try later.'));
-		// 		dispatch(getUserProfile());
-		// 	}
-		// }).catch((err: Object) => {
-		// 	dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
-		// 	dispatch(getUserProfile());
-		// });
 	}
 
 	return (
