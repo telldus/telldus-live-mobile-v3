@@ -49,6 +49,7 @@ import AdditionalPlansPaymentsScreen from './Premium/AdditionalPlansPaymentsScre
 import SMSHistoryScreen from './Premium/SMSHistoryScreen';
 import PurchaseHistoryScreen from './Premium/PurchaseHistoryScreen';
 import PurchaseSuccessScreen from './Premium/PurchaseSuccessScreen';
+import TransactionWebview from './Premium/TransactionWebview';
 
 const RouteConfigs = {
 	Tabs: {
@@ -282,6 +283,17 @@ const RouteConfigs = {
 	},
 	PurchaseSuccessScreen: {
 		screen: PurchaseSuccessScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	TransactionWebview: {
+		screen: TransactionWebview,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
