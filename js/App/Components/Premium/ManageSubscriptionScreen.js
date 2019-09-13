@@ -24,7 +24,7 @@
 
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	View,
@@ -34,10 +34,21 @@ import {
 	TouchableButton,
 } from '../../../BaseComponents';
 
+import {
+	cancelSubscription,
+} from '../../Actions/User';
+import {
+	showToast,
+} from '../../Actions/App';
+import {
+	getUserProfile,
+} from '../../Actions/Login';
+
 import Theme from '../../Theme';
 
 const ManageSubscriptionScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
+	const { toggleDialogueBox } = screenProps;
 	const {layout} = useSelector((state: Object): Object => state.app);
 	const { userProfile = {}} = useSelector((state: Object): Object => state.user);
 	const { credits } = userProfile;
@@ -53,8 +64,47 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 		contentTwo,
 	} = getStyles(layout);
 
-	function onPress() {
+	const dispatch = useDispatch();
+	function onConfirm() {
+		dispatch(cancelSubscription('premium')).then((response: Object) => {
+			if (response && response.status === 'success') {
+				dispatch(getUserProfile());
+				navigation.goBack();
+			} else {
+				dispatch(showToast('Sorry something went wrong. Please try again later'));
+				dispatch(getUserProfile());
+			}
+		}).catch((err: Object) => {
+			if (err.message === 'b9e1223e-4ea4-4cdf-97f7-0e23292ef40e') {
+				dispatch(showToast('User is not subscripbed to any recurring payment'));
+			} else if (err.message === '91dedfc0-809d-4335-a1c6-2b5da68d0ad8') {
+				dispatch(showToast('Sorry, the subscription is not cancelable'));
+			} else {
+				dispatch(showToast(err.message || 'Sorry something went wrong. Please try again later'));
+			}
+			dispatch(getUserProfile());
+		});
+	}
 
+	function onPress() {
+		const header = 'Cancel automatic renewal?';
+		const text = 'If you cancel automatic renewal of your Premium ' +
+		'subscription you will still have Premium Access for the remaining period ' +
+		'that you have paid for. However, you will have to renew manually before that ' +
+		'period runs out to avoid losing functionality and sensor history. Please confirm ' +
+		'if you still want to cancel.';
+		toggleDialogueBox({
+			show: true,
+			showHeader: true,
+			header,
+			text, // TODO: translate
+			showPositive: true,
+			showNegative: true,
+			positiveText: 'CONFIRM',
+			closeOnPressPositive: true,
+			closeOnPressNegative: true,
+			onPressPositive: onConfirm,
+		});
 	}
 
 	return (
