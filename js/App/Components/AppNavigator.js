@@ -48,6 +48,7 @@ import ManageSubscriptionScreen from './Premium/ManageSubscriptionScreen';
 import AdditionalPlansPaymentsScreen from './Premium/AdditionalPlansPaymentsScreen';
 import SMSHistoryScreen from './Premium/SMSHistoryScreen';
 import PurchaseHistoryScreen from './Premium/PurchaseHistoryScreen';
+import PurchaseSuccessScreen from './Premium/PurchaseSuccessScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -270,6 +271,17 @@ const RouteConfigs = {
 	},
 	PurchaseHistoryScreen: {
 		screen: PurchaseHistoryScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	PurchaseSuccessScreen: {
+		screen: PurchaseSuccessScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
