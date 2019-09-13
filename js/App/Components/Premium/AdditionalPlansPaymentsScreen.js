@@ -161,16 +161,13 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 
 	function onSelect(index: number, provider: string) {
 		setPaymentProviderIndex(index);
-		if (!getPaymentOptions()[index].supportAutoRenew) {
-			setRecurring(false);
-		}
 	}
 
 	function onPress() {
 		const options = {
 			product: getSubscriptionPlans()[selectedIndex].product,
 			quantity: 1,
-			subscription: recurring ? 1 : 0,
+			subscription: recurring && supportAutoRenew ? 1 : 0,
 			paymentProvider,
 			returnUrl: 'telldus-live-mobile-common',
 		};
