@@ -28,7 +28,7 @@ import {
 	StyleSheet,
 	TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
 import {
@@ -37,6 +37,7 @@ import {
 	Text,
 	IconTelldus,
 	TouchableButton,
+	CheckBoxIconText,
 } from '../../../BaseComponents';
 import {
 	PaymentProvidersBlock,
@@ -44,12 +45,22 @@ import {
 
 import {
 	getSubscriptionPlans,
+	getPaymentOptions,
 } from '../../Lib/appUtils';
+import {
+	createTransaction,
+} from '../../Actions/User';
+import {
+	showToast,
+} from '../../Actions/App';
+import {
+	getUserProfile,
+} from '../../Actions/Login';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-const PremiumUpgradeScreen = (props: Object): Object => {
+const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	const { app: {layout} } = useSelector((state: Object): Object => state);
 	const {
@@ -67,14 +78,28 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		labelStyle,
 		premiumIconStyle,
 		validityTextStyle,
+		checkButtonStyle,
+		textStyle,
+		backLinkStyle,
+		infoContainer,
+		infoTextStyle,
+		statusIconStyle,
 	} = getStyles(layout);
-
+	const intl = useIntl();
 	const {
 		formatMessage,
 		formatNumber,
-	} = useIntl();
+	} = intl;
 
+	const dispatch = useDispatch();
+
+	const [ recurring, setRecurring ] = useState(true);
 	const [ selectedIndex, setSeletedIndex ] = useState(0);
+	const [ paymentProviderIndex, setPaymentProviderIndex ] = useState(0);
+
+	function onChangeRecurring() {
+		setRecurring(!recurring);
+	}
 
 	const plans = getSubscriptionPlans().map((item: Object, index: number): Object => {
 		const {
@@ -129,13 +154,50 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		);
 	});
 
+	const {
+		name: paymentProvider,
+		supportAutoRenew,
+	} = getPaymentOptions()[paymentProviderIndex];
+
+	function onSelect(index: number, provider: string) {
+		setPaymentProviderIndex(index);
+		if (!getPaymentOptions()[index].supportAutoRenew) {
+			setRecurring(false);
+		}
+	}
+
 	function onPress() {
-
+		const options = {
+			product: getSubscriptionPlans()[selectedIndex].product,
+			quantity: 1,
+			subscription: recurring ? 1 : 0,
+			paymentProvider,
+			returnUrl: 'telldus-live-mobile-common',
+		};
+		dispatch(createTransaction(options, true)).then((response: Object) => {
+			if (response && response.id && response.url) {
+				navigation.navigate({
+					routeName: 'TransactionWebview',
+					key: 'TransactionWebview',
+					params: {
+						uri: response.url,
+					},
+				});
+			} else {
+				dispatch(showToast('Sorry something went wrong. Please try later.'));
+				dispatch(getUserProfile());
+			}
+		}).catch((err: Object) => {
+			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
+			dispatch(getUserProfile());
+		});
 	}
 
-	function onSelect(type: string) {
-
+	function onGoBack() {
+		navigation.goBack();
 	}
+
+	const showInfo = !recurring || !supportAutoRenew;
 
 	return (
 		<View style={container}>
@@ -150,6 +212,40 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				<Text style={labelStyle}>Select subscription plan</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
+				{supportAutoRenew && <CheckBoxIconText
+					style={checkButtonStyle}
+					onToggleCheckBox={onChangeRecurring}
+					isChecked={recurring}
+					text={'Renew subscription automatically'}
+					intl={intl}
+					textStyle={textStyle}
+					iconStyle={recurring ?
+						{
+							color: '#fff',
+							backgroundColor: Theme.Core.brandSecondary,
+							borderColor: Theme.Core.brandSecondary,
+						}
+						:
+						{
+							color: 'transparent',
+							backgroundColor: 'transparent',
+							borderColor: Theme.Core.brandSecondary,
+						}
+					}
+				/>
+				}
+				{showInfo && <View style={infoContainer}>
+					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<Text style={infoTextStyle}>
+						{!supportAutoRenew ?
+							'Currently automatic renewal is not possible when paying with PayPal.'
+							:
+							'With automatic renewal disabled you have to manually renew the subscription ' +
+							'to avoid losing functionality and sensor history.'
+						}
+					</Text>
+				</View>
+				}
 				<TouchableButton
 					onPress={onPress}
 					preScript={<IconTelldus icon={'cart'} style={cartIconStyle}/>}
@@ -158,6 +254,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					accessible={true}
 					style={buttonStyle}
 				/>
+				<Text style={backLinkStyle} onPress={onGoBack}>Back</Text>
 			</ScrollView>
 		</View>
 	);
@@ -263,7 +360,45 @@ const getStyles = (appLayout: Object): Object => {
 			color: '#fff',
 			marginRight: 7,
 		},
+		textStyle: {
+			fontSize: Math.floor(deviceWidth * 0.045),
+			color: Theme.Core.brandSecondary,
+		},
+		checkButtonStyle: {
+			marginVertical: padding,
+		},
+		backLinkStyle: {
+			fontSize: Math.floor(deviceWidth * 0.045),
+			alignSelf: 'center',
+			color: Theme.Core.brandSecondary,
+			padding: 10,
+			marginVertical: padding,
+		},
+		infoContainer: {
+			flex: 1,
+			flexDirection: 'row',
+			marginTop: padding / 2,
+			marginHorizontal: padding,
+			marginBottom: padding,
+			padding,
+			backgroundColor: '#fff',
+			...Theme.Core.shadow,
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			borderRadius: 2,
+		},
+		statusIconStyle: {
+			fontSize: deviceWidth * 0.16,
+			color: Theme.Core.brandSecondary,
+		},
+		infoTextStyle: {
+			flex: 1,
+			fontSize: Theme.Core.infoTextFontSize,
+			color: Theme.Core.eulaContentColor,
+			flexWrap: 'wrap',
+			marginLeft: padding,
+		},
 	};
 };
 
-export default PremiumUpgradeScreen;
+export default AdditionalPlansPaymentsScreen;
