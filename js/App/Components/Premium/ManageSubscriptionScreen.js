@@ -76,7 +76,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			}
 		}).catch((err: Object) => {
 			if (err.message === 'b9e1223e-4ea4-4cdf-97f7-0e23292ef40e') {
-				dispatch(showToast('User is not subscripbed to any recurring payment'));
+				dispatch(showToast('You are currently not subscribed to any recurring payment'));
 			} else if (err.message === '91dedfc0-809d-4335-a1c6-2b5da68d0ad8') {
 				dispatch(showToast('Sorry, the subscription is not cancelable'));
 			} else {
