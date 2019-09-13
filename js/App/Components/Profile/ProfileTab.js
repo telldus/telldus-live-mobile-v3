@@ -112,7 +112,7 @@ const ProfileTab = (props: Object): Object => {
 					labelTextStyle={labelTextStyleENB}
 					style={showAuto ? undefined : style}
 				/>
-				{showAuto && (<AutoRenewalBlock
+				{!isBasic && (<AutoRenewalBlock
 					navigation={navigation}
 					contentCoverStyle={contentCoverStyleENB}
 					valueCoverStyle={valueCoverStyleENB}

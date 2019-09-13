@@ -45,8 +45,11 @@ const AutoRenewalBlock = (props: Object): Object => {
 	} = props;
 
 	const intl = useIntl();
+	const { formatDate } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
+	const { locale, pro } = userProfile;
 
 	function onPressManageSubscription() {
 		navigation.navigate({
@@ -55,8 +58,11 @@ const AutoRenewalBlock = (props: Object): Object => {
 		});
 	}
 
+	const value = locale === 'auto' ? 'Active' : formatDate(new Date(pro * 1000));
+
 	const {
 		upgradeSyle,
+		cartIconStyle,
 	} = getStyle(layout);
 
 	return (
@@ -64,12 +70,20 @@ const AutoRenewalBlock = (props: Object): Object => {
 			type={'text'}
 			edit={false}
 			inLineEditActive={false}
-			label={'Automatic renewal'}
-			value={'Active'}
+			label={locale === 'auto' ? 'Automatic renewal' : 'Valid until'}
+			value={value}
 			appLayout={layout}
-			iconValueRight={<IconTelldus icon={'settings'} style={upgradeSyle}/>}
+			iconValueRight={locale === 'auto' ?
+				<IconTelldus icon={'settings'} style={upgradeSyle}/>
+				:
+				<IconTelldus icon="cart" style={cartIconStyle}/>
+			}
 			onPress={false}
-			onPressIconValueRight={onPressManageSubscription}
+			onPressIconValueRight={locale === 'auto' ?
+				onPressManageSubscription
+				:
+				null
+			}
 			intl={intl}
 			style={style}
 			contentCoverStyle={contentCoverStyle}
@@ -88,6 +102,10 @@ const getStyle = (appLayout: Object): Object => {
 		upgradeSyle: {
 			color: Theme.Core.brandSecondary,
 			fontSize: deviceWidth * 0.04,
+		},
+		cartIconStyle: {
+			fontSize: Math.floor(deviceWidth * 0.045) * 1.3,
+			color: Theme.Core.brandSecondary,
 		},
 	};
 };
