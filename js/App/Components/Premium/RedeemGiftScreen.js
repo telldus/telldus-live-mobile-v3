@@ -71,11 +71,18 @@ const RedeemGiftScreen = (props: Object): Object => {
 	function onPress() {
 		dispatch(activateCoupon(code)).then((response: Object) => {
 			if (response && response.status === 'success') {
-				dispatch(showToast('Gift card is redeemed.')); // TODO: translate
+				navigation.navigate({
+					routeName: 'PurchaseSuccessScreen',
+					key: 'PurchaseSuccessScreen',
+					params: {
+						...response,
+						voucher: true,
+					},
+				});
 			} else {
 				dispatch(showToast('Sorry something went wrong. Please try later.'));
+				dispatch(getUserProfile());
 			}
-			dispatch(getUserProfile());
 		}).catch((err: Object) => {
 			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
 			dispatch(getUserProfile());
