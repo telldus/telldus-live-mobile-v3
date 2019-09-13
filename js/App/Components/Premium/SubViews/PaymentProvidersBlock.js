@@ -63,7 +63,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 
 		function onSelectOption() {
 			setSeletedIndex(key);
-			onSelect(name);
+			onSelect(key, name);
 		}
 
 		return (
@@ -113,7 +113,6 @@ const getStyle = (appLayout: Object): Object => {
 			alignSelf: 'center',
 			alignItems: 'flex-start',
 			justifyContent: 'center',
-			marginBottom: padding,
 		},
 		innerCoverStyle: {
 			width: '100%',
