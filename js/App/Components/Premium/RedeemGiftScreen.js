@@ -24,7 +24,7 @@
 
 import React, { useState } from 'react';
 import { ScrollView, TextInput } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	View,
@@ -33,6 +33,16 @@ import {
 	IconTelldus,
 	TouchableButton,
 } from '../../../BaseComponents';
+
+import {
+	activateCoupon,
+} from '../../Actions/User';
+import {
+	showToast,
+} from '../../Actions/App';
+import {
+	getUserProfile,
+} from '../../Actions/Login';
 
 import Theme from '../../Theme';
 
@@ -57,8 +67,19 @@ const RedeemGiftScreen = (props: Object): Object => {
 		setCode(text);
 	}
 
-
+	const dispatch = useDispatch();
 	function onPress() {
+		dispatch(activateCoupon(code)).then((response: Object) => {
+			if (response && response.status === 'success') {
+				dispatch(showToast('Gift card is redeemed.')); // TODO: translate
+			} else {
+				dispatch(showToast('Sorry something went wrong. Please try later.'));
+			}
+			dispatch(getUserProfile());
+		}).catch((err: Object) => {
+			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
+			dispatch(getUserProfile());
+		});
 	}
 
 	return (
