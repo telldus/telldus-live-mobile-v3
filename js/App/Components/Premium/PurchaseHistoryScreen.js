@@ -34,6 +34,7 @@ import {
 	View,
 	NavigationHeaderPoster,
 	Text,
+	IconTelldus,
 } from '../../../BaseComponents';
 import {
 	getUserTransactions,
@@ -70,6 +71,8 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 		contentContainerStyle,
 		toBlock,
 		emptyInfo,
+		emptyCover,
+		statusIconStyle,
 	} = getStyles(layout);
 
 	const { formatTime, formatMessage } = useIntl();
@@ -182,7 +185,8 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			{(!isLoading && listData.length === 0 ) ?
-				<View style={rowStyle}>
+				<View style={emptyCover}>
+					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={emptyInfo}>No history data found.</Text>
 				</View>
 				:
@@ -225,9 +229,26 @@ const getStyles = (appLayout: Object): Object => {
 			padding: 10,
 			marginBottom: padding / 2,
 		},
+		emptyCover: {
+			flexDirection: 'row',
+			marginTop: padding,
+			marginHorizontal: padding,
+			backgroundColor: '#fff',
+			...Theme.Core.shadow,
+			padding: padding * 2,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 		emptyInfo: {
 			fontSize: fontSizeRow,
 			color: Theme.Core.brandSecondary,
+			alignSelf: 'center',
+			textAlign: 'center',
+		},
+		statusIconStyle: {
+			fontSize: fontSizeRow * 1.7,
+			color: Theme.Core.brandSecondary,
+			marginRight: 5,
 		},
 		sectionStyle: {
 			paddingHorizontal: padding,
