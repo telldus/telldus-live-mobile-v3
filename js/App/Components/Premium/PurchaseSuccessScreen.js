@@ -26,6 +26,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
+import { StackActions } from 'react-navigation';
 
 import {
 	View,
@@ -54,7 +55,7 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 	} = getStyles(layout);
 
 	function onPress() {
-		navigation.goBack();
+		goBack();
 	}
 
 	const { formatMessage } = useIntl();
@@ -89,6 +90,13 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 		}
 	}
 
+	function goBack() {
+		const popAction = StackActions.pop({
+			n: 2,
+		});
+		navigation.dispatch(popAction);
+	}
+
 	const voucher = navigation.getParam('voucher', false);
 	const product = navigation.getParam('product', null);
 	const quantity = navigation.getParam('quantity', 0);
@@ -108,7 +116,9 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
-				{...screenProps}/>
+				{...screenProps}
+				handleBackPress={goBack}
+				goBack={goBack}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
 				<View style={body} >
 					<IconTelldus icon={'premium'} style={iconStyle}/>
