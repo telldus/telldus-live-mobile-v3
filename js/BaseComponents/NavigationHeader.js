@@ -47,6 +47,7 @@ type Props = {
 	leftIcon?: string,
 	isFromModal?: boolean,
 	onClose: () => void,
+	goBack: () => void,
 };
 
 type DefaultProps = {
@@ -84,7 +85,11 @@ class NavigationHeader extends PureComponent<Props, null> {
 	}
 
 	goBack() {
-		const { isFromModal, onClose } = this.props;
+		const { isFromModal, onClose, goBack } = this.props;
+		if (goBack) {
+			goBack();
+			return;
+		}
 		if (isFromModal) {
 			onClose();
 		} else {

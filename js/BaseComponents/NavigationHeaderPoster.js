@@ -63,6 +63,7 @@ type Props = {
     handleBackPress: () => boolean,
     intl: Object,
 	posterCoverStyle?: Array<any> | Object | number,
+	goBack: () => void,
 };
 
 type DefaultProps = {
@@ -203,6 +204,7 @@ render(): Object {
 		infoButton,
 		showLeftIcon,
 		leftIcon,
+		goBack,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -221,7 +223,11 @@ render(): Object {
 
 	return (
 		<View style={styles.container}>
-			<NavigationHeader navigation={navigation} showLeftIcon={showLeftIcon} leftIcon={leftIcon}/>
+			<NavigationHeader
+				navigation={navigation}
+				showLeftIcon={showLeftIcon}
+				leftIcon={leftIcon}
+				goBack={goBack}/>
 			<Poster posterHeight={posterHeight}>
 				<View style={[posterCover, posterCoverStyle]}>
 					<View style={posterItemsContainer}>
