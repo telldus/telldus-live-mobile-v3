@@ -50,6 +50,7 @@ import SMSHistoryScreen from './Premium/SMSHistoryScreen';
 import PurchaseHistoryScreen from './Premium/PurchaseHistoryScreen';
 import PurchaseSuccessScreen from './Premium/PurchaseSuccessScreen';
 import TransactionWebview from './Premium/TransactionWebview';
+import RequestSupportScreen from './CustomerSupport/RequestSupportScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -303,6 +304,17 @@ const RouteConfigs = {
 			header: null,
 		},
 	},
+	RequestSupportScreen: {
+		screen: RequestSupportScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	}
 };
 
 const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
