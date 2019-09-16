@@ -187,12 +187,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-_handleOpenURL = (event: Object) => {
-	// console.log('TEST event', event.url);
-}
-
 componentDidUpdate(prevProps: Object, prevState: Object) {
-	Linking.addEventListener('url', this._handleOpenURL);
 	const {
 		showToast: showToastBool,
 		messageToast,
@@ -214,7 +209,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 }
 
 componentWillUnmount() {
-	Linking.removeEventListener('url', this._handleOpenURL);
 	clearTimeout(this.timeOutConfigureLocalControl);
 	NetInfo.removeEventListener(
 		'connectionChange',
