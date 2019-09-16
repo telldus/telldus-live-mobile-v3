@@ -22,31 +22,158 @@
 
 'use strict';
 
-import React from 'react';
-import { ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, Linking, TouchableOpacity } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
 	Text,
+	TouchableButton,
 	TabBar,
+	IconTelldus,
 } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
+import {
+	getSupportTweets,
+} from '../../Actions/App';
+
+const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
+	let newData = [];
+	data.map((tweet: Object) => {
+		// const daysDiff = moment().diff(moment(tweet.created_at), 'days');
+		// if (daysDiff <= 2) {
+		newData.push({
+			created_at: moment(tweet.created_at),
+			text: tweet.text,
+			link: `https://twitter.com/telldus_status/status/${tweet.id}`,
+		});
+		// }
+	});
+	return newData.slice(0, 2);
+};
+
 const SupportTab = (props: Object): Object => {
+	const { navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const {
+		formatDate,
+		formatTime,
+	} = useIntl();
 
 	const {
 		container,
 		body,
+		buttonStyle,
+		tweetCoverStyle,
+		tweetTextCover,
+		statusIconStyle,
+		tweetDateStyle,
+		tweetTextStyle,
+		padding,
 	} = getStyles(layout);
+
+	const [listInfo, setListInfo] = useState({
+		isLoading: true,
+		listData: [],
+	});
+	const {
+		listData,
+	} = listInfo;
+
+	const dispatch = useDispatch();
+	useEffect(() => {
+		setListInfo({
+			listData,
+			isLoading: true,
+		});
+		const keySecret = 'MmRyT2szdFNrT3VHQVVaSGlnQ2JhdmFCajp2dU55WlpCSlVBcVZzS0tPNXpBMDJXcjZpa2dVREtoOUZrekZ2YnR1RElORW5XUlEycw==';
+		dispatch(getSupportTweets(keySecret)).then((response: Object) => {
+			setListInfo({
+				listData: prepareTweetsForList(response),
+				isLoading: false,
+			});
+		}).catch(() => {
+			setListInfo({
+				listData,
+				isLoading: false,
+			});
+		});
+	}, []);
+
+	function onPress() {
+		navigation.navigate({
+			routeName: 'RequestSupportScreen',
+			key: 'RequestSupportScreen',
+		});
+	}
+
+	function openLink(url: string) {
+		Linking.canOpenURL(url).then((supported: boolean): any => {
+			if (!supported) {
+			  console.log(`Can't handle url: ${url}`);
+			} else {
+			  return Linking.openURL(url);
+			}
+		  }).catch((err: Object) => {
+			  console.error('An error occurred', err);
+		  });
+	}
+
+	const tweets = listData.map((item: Object, i: number): Object => {
+		const { created_at, text, link } = item;
+
+		function onPressTweet() {
+			openLink(link);
+		}
+
+		return (
+			<TouchableOpacity onPress={onPressTweet} key={`${i}`}>
+				<View style={[tweetCoverStyle, {
+					marginTop: i === 0 ? padding : padding / 2,
+				}]}>
+					<IconTelldus icon={text.includes('#ok') ? 'checkmark' : 'info'} style={[
+						statusIconStyle, {
+							color: text.includes('#ok') ? Theme.Core.brandSuccess : Theme.Core.brandDanger,
+						}]}/>
+					<View style={tweetTextCover}>
+						<Text>
+							<Text style={tweetDateStyle}>
+								{formatDate(created_at)}
+							</Text>
+							<Text style={Theme.Styles.hiddenText}>
+								{'.'}
+							</Text>
+							<Text style={tweetDateStyle}>
+								{formatTime(created_at)}
+							</Text>
+						</Text>
+						<Text style={tweetTextStyle}>
+							{text}
+						</Text>
+					</View>
+				</View>
+			</TouchableOpacity>
+		);
+	});
 
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
-				<Text>
-                Support Tab
-				</Text>
+				{
+					tweets
+				}
+				<TouchableButton
+					onPress={onPress}
+					text={'Contact suppport'}
+					accessibilityLabel={'Contact suppport'}
+					accessible={true}
+					style={buttonStyle}
+				/>
 			</View>
 		</ScrollView>
 	);
@@ -58,7 +185,10 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
+	const fontSize = Math.floor(deviceWidth * 0.045);
+
 	return {
+		padding,
 		container: {
 			flex: 1,
 			backgroundColor: Theme.Core.appBackground,
@@ -66,6 +196,37 @@ const getStyles = (appLayout: Object): Object => {
 		body: {
 			flex: 1,
 			padding,
+		},
+		buttonStyle: {
+			marginVertical: padding,
+			paddingHorizontal: 10,
+			width: deviceWidth * 0.7,
+			maxWidth: width - (padding * 2),
+		},
+		tweetCoverStyle: {
+			flexDirection: 'row',
+			backgroundColor: '#fff',
+			...Theme.Core.shadow,
+			padding: padding * 2,
+			justifyContent: 'space-between',
+			alignItems: 'center',
+		},
+		statusIconStyle: {
+			fontSize: fontSize * 3,
+			justifyContent: 'center',
+			alignItems: 'center',
+			marginRight: padding * 2,
+		},
+		tweetTextStyle: {
+			color: Theme.Core.rowTextColor,
+			fontSize: fontSize * 0.8,
+		},
+		tweetTextCover: {
+			flex: 1,
+		},
+		tweetDateStyle: {
+			fontSize: fontSize * 0.9,
+			color: Theme.Core.brandSecondary,
 		},
 	};
 };
