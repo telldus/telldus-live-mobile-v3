@@ -38,7 +38,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	twitterAuth,
-} from '../../../../config.local';
+} from '../../../Config';
 import Theme from '../../Theme';
 import LayoutAnimations from '../../Lib/LayoutAnimations';
 
