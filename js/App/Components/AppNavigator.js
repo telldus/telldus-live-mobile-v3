@@ -314,7 +314,7 @@ const RouteConfigs = {
 			},
 			header: null,
 		},
-	}
+	},
 };
 
 const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
