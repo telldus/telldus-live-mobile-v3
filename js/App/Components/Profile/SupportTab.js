@@ -27,6 +27,7 @@ import { ScrollView, Linking, TouchableOpacity } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
+const forge = require('node-forge');
 
 import {
 	View,
@@ -35,6 +36,9 @@ import {
 	TabBar,
 	IconTelldus,
 } from '../../../BaseComponents';
+import {
+	twitterAuth,
+} from '../../../../config.local';
 import Theme from '../../Theme';
 
 import {
@@ -91,7 +95,8 @@ const SupportTab = (props: Object): Object => {
 			listData,
 			isLoading: true,
 		});
-		const keySecret = 'MmRyT2szdFNrT3VHQVVaSGlnQ2JhdmFCajp2dU55WlpCSlVBcVZzS0tPNXpBMDJXcjZpa2dVREtoOUZrekZ2YnR1RElORW5XUlEycw==';
+		const { consumer_key, consumer_secret } = twitterAuth;
+		const keySecret = forge.util.encode64(`${consumer_key}:${consumer_secret}`);
 		dispatch(getSupportTweets(keySecret)).then((response: Object) => {
 			setListInfo({
 				listData: prepareTweetsForList(response),
