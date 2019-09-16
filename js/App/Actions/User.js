@@ -22,6 +22,7 @@
 
 'use strict';
 import { format } from 'url';
+import axios from 'axios';
 
 // User actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -256,6 +257,41 @@ const receivedPhonesList = (payload: Array<Object> = []): Action => {
 	};
 };
 
+type OPTIONS = {
+	product: string,
+	quantity: number,
+	subscription: 0 | 1,
+	paymentProvider: string,
+	returnUrl: string,
+};
+// See https://ca-api.telldus.com/explore/user/createTransaction
+function createTransaction(options: OPTIONS, isMobile?: boolean = false): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		let formData = new FormData();
+		Object.keys(options).map((key: string) => {
+			formData.append(key, options[key]);
+		});
+		const { user: { accessToken } } = getState();
+		return axios({
+			method: 'post',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken.access_token}`,
+			},
+			url: `${apiServer}/oauth2/user/createTransaction`,
+			data: formData,
+		}).then((response: Object): Object => {
+			if (response.data && response.data.id) {
+				return response.data;
+			}
+			throw response;
+		}).catch((err: Object): Object => {
+			throw err;
+		});
+	};
+}
+
 
 module.exports = {
 	...User,
@@ -267,4 +303,5 @@ module.exports = {
 	forgotPassword,
 	getPhonesList,
 	deletePushToken,
+	createTransaction,
 };
