@@ -65,6 +65,7 @@ type State = {
 	routerValue: string,
 	isLoading: boolean,
 	emailValue: string,
+	gatewayId: string,
 };
 
 class RequestSupportScreen extends View<Props, State> {
@@ -75,6 +76,7 @@ state: State = {
 	isLoading: false,
 	routerValue: '',
 	emailValue: this.props.email,
+	gatewayId: '',
 };
 
 onChangeText: (string) => void;
