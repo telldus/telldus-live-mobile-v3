@@ -164,9 +164,12 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	}
 
 	function onPress() {
+		const product = getSubscriptionPlans()[selectedIndex].product;
+		const credits = getSubscriptionPlans()[selectedIndex].smsCredit;
+		const quantity = 1;
 		const options = {
-			product: getSubscriptionPlans()[selectedIndex].product,
-			quantity: 1,
+			product,
+			quantity,
 			subscription: recurring && supportAutoRenew ? 1 : 0,
 			paymentProvider,
 			returnUrl: 'telldus-live-mobile-common',
@@ -178,6 +181,10 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					key: 'TransactionWebview',
 					params: {
 						uri: response.url,
+						product,
+						credits,
+						quantity,
+						voucher: false,
 					},
 				});
 			} else {
