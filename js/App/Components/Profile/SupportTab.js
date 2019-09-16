@@ -23,7 +23,7 @@
 'use strict';
 
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Linking, TouchableOpacity } from 'react-native';
+import { ScrollView, Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useIntl } from 'react-intl';
@@ -40,6 +40,7 @@ import {
 	twitterAuth,
 } from '../../../../config.local';
 import Theme from '../../Theme';
+import LayoutAnimations from '../../Lib/LayoutAnimations';
 
 import {
 	getSupportTweets,
@@ -98,6 +99,7 @@ const SupportTab = (props: Object): Object => {
 		const { consumer_key, consumer_secret } = twitterAuth; // TODO: RFC 1738 encode both key and secret(right now with/without it is same)
 		const keySecret = forge.util.encode64(`${consumer_key}:${consumer_secret}`);
 		dispatch(getSupportTweets(keySecret)).then((response: Object) => {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			setListInfo({
 				listData: prepareTweetsForList(response),
 				isLoading: false,
