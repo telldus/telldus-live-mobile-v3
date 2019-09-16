@@ -99,7 +99,7 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 
 	const voucher = navigation.getParam('voucher', false);
 	const product = navigation.getParam('product', null);
-	const quantity = navigation.getParam('quantity', 0);
+	const quantity = navigation.getParam('quantity', 1);
 	const credits = navigation.getParam('credits', false);
 
 	const bodyText = voucher ?
@@ -113,8 +113,7 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 			<NavigationHeaderPoster
 				h1={voucher ? 'Redeem Gift Card' : 'Premium Access'} h2={voucher ? 'Code Accepted' : 'Get more features & benefits'}
 				align={'right'}
-				showLeftIcon={true}
-				leftIcon={'close'}
+				showLeftIcon={false}
 				navigation={navigation}
 				{...screenProps}
 				handleBackPress={goBack}
