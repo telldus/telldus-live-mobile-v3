@@ -26,6 +26,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
 
 import {
 	View,
@@ -41,7 +42,17 @@ import {
 
 import {
 	getSubscriptionPlans,
+	getPaymentOptions,
 } from '../../Lib/appUtils';
+import {
+	createTransaction,
+} from '../../Actions/User';
+import {
+	showToast,
+} from '../../Actions/App';
+import {
+	getUserProfile,
+} from '../../Actions/Login';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -83,8 +94,40 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		newTotal,
 	} = getSubscriptionPlans()[index];
 
+	const dispatch = useDispatch();
 	function onPress() {
-
+		const product = getSubscriptionPlans()[index].product;
+		const credits = getSubscriptionPlans()[index].smsCredit;
+		const { name: paymentProvider } = getPaymentOptions()[index];
+		const quantity = 1;
+		const options = {
+			product,
+			quantity,
+			subscription: 1,
+			paymentProvider,
+			returnUrl: 'telldus-live-mobile-common',
+		};
+		dispatch(createTransaction(options, true)).then((response: Object) => {
+			if (response && response.id && response.url) {
+				navigation.navigate({
+					routeName: 'TransactionWebview',
+					key: 'TransactionWebview',
+					params: {
+						uri: response.url,
+						product,
+						credits,
+						quantity,
+						voucher: false,
+					},
+				});
+			} else {
+				dispatch(showToast('Sorry something went wrong. Please try later.'));
+				dispatch(getUserProfile());
+			}
+		}).catch((err: Object) => {
+			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
+			dispatch(getUserProfile());
+		});
 	}
 
 	return (
