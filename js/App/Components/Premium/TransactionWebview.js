@@ -25,11 +25,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { WebView } from 'react-native-webview';
+import { useDispatch } from 'react-redux';
 
 import {
 	View,
 	NavigationHeader,
 } from '../../../BaseComponents';
+
+import {
+	showToast,
+} from '../../Actions/App';
 
 import Theme from '../../Theme';
 
@@ -42,6 +47,25 @@ const TransactionWebview = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const uri = navigation.getParam('uri', '');
+
+	const dispatch = useDispatch();
+	function onShouldStartLoadWithRequest(request: Object): boolean {
+		if (request.url.includes('telldus-live-mobile-common')) {
+			if (request.url.includes('status=success')) {
+				const { params } = navigation.state;
+				navigation.navigate({
+					routeName: 'PurchaseSuccessScreen',
+					key: 'PurchaseSuccessScreen',
+					params,
+				});
+			} else {
+				dispatch(showToast('Sorry something went wrong. Please try later.'));
+			}
+			return false;
+		}
+		return true;
+	}
+
 	return (
 		<View style={container}>
 			<NavigationHeader
@@ -49,6 +73,7 @@ const TransactionWebview = (props: Object): Object => {
 				showLeftIcon={true}/>
 			<WebView
 				source={{ uri }}
+				onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
 			/>
 		</View>
 	);
