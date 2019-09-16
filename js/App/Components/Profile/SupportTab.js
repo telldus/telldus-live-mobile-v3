@@ -95,7 +95,7 @@ const SupportTab = (props: Object): Object => {
 			listData,
 			isLoading: true,
 		});
-		const { consumer_key, consumer_secret } = twitterAuth;
+		const { consumer_key, consumer_secret } = twitterAuth; // TODO: RFC 1738 encode both key and secret(right now with/without it is same)
 		const keySecret = forge.util.encode64(`${consumer_key}:${consumer_secret}`);
 		dispatch(getSupportTweets(keySecret)).then((response: Object) => {
 			setListInfo({
