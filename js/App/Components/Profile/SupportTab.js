@@ -37,6 +37,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	HelpAndSupportBlock,
+	ContactSupportBlock,
 } from './SubViews';
 import {
 	twitterAuth,
@@ -177,6 +178,7 @@ const SupportTab = (props: Object): Object => {
 					tweets
 				}
 				<HelpAndSupportBlock/>
+				<ContactSupportBlock/>
 				<TouchableButton
 					onPress={onPress}
 					text={'Contact suppport'}
@@ -208,7 +210,8 @@ const getStyles = (appLayout: Object): Object => {
 			padding,
 		},
 		buttonStyle: {
-			marginVertical: padding,
+			marginTop: padding * 2,
+			marginBottom: padding,
 			paddingHorizontal: 10,
 			width: deviceWidth * 0.7,
 			maxWidth: width - (padding * 2),
