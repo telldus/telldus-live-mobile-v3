@@ -23,20 +23,19 @@
 'use strict';
 
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { WebView } from 'react-native-webview';
-import { useDispatch } from 'react-redux';
 
 import {
 	View,
 	NavigationHeader,
 } from '../../../BaseComponents';
 
-import {
-	showToast,
-} from '../../Actions/App';
-
 import Theme from '../../Theme';
+
+import {
+	getUserProfile,
+} from '../../Actions/Login';
 
 const TransactionWebview = (props: Object): Object => {
 	const { navigation } = props;
@@ -51,16 +50,16 @@ const TransactionWebview = (props: Object): Object => {
 	const dispatch = useDispatch();
 	function onShouldStartLoadWithRequest(request: Object): boolean {
 		if (request.url.includes('telldus-live-mobile-common')) {
-			if (request.url.includes('status=success')) {
-				const { params } = navigation.state;
-				navigation.navigate({
-					routeName: 'PurchaseSuccessScreen',
-					key: 'PurchaseSuccessScreen',
-					params,
-				});
-			} else {
-				dispatch(showToast('Sorry something went wrong. Please try later.'));
-			}
+			const { params } = navigation.state;
+			navigation.navigate({
+				routeName: 'PostPurchaseScreen',
+				key: 'PostPurchaseScreen',
+				params: {
+					...params,
+					success: false,
+				},
+			});
+			dispatch(getUserProfile());
 			return false;
 		}
 		return true;

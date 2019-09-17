@@ -48,7 +48,7 @@ import ManageSubscriptionScreen from './Premium/ManageSubscriptionScreen';
 import AdditionalPlansPaymentsScreen from './Premium/AdditionalPlansPaymentsScreen';
 import SMSHistoryScreen from './Premium/SMSHistoryScreen';
 import PurchaseHistoryScreen from './Premium/PurchaseHistoryScreen';
-import PurchaseSuccessScreen from './Premium/PurchaseSuccessScreen';
+import PostPurchaseScreen from './Premium/PostPurchaseScreen';
 import TransactionWebview from './Premium/TransactionWebview';
 import RequestSupportScreen from './CustomerSupport/RequestSupportScreen';
 
@@ -282,8 +282,8 @@ const RouteConfigs = {
 			header: null,
 		},
 	},
-	PurchaseSuccessScreen: {
-		screen: PurchaseSuccessScreen,
+	PostPurchaseScreen: {
+		screen: PostPurchaseScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,

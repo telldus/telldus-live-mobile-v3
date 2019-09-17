@@ -185,6 +185,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 						credits,
 						quantity,
 						voucher: false,
+						screensToPop: 4,
 					},
 				});
 			} else {

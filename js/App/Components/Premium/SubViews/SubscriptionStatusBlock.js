@@ -85,9 +85,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				label={'Subscription'}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={locale === 'auto' ? null : <Text style={upgradeSyle}>{pro ? 'Renew' : 'Upgrade'}</Text>}
+				iconValueRight={<Text style={upgradeSyle}>{pro ? 'Renew' : 'Upgrade'}</Text>}
 				onPress={false}
-				onPressIconValueRight={locale === 'auto' ? null : onPressUpgrade}
+				onPressIconValueRight={locale === 'auto' ? onPressUpgrade : onPressUpgrade}
 				intl={intl}
 				style={style}
 				contentCoverStyle={contentCoverStyle}

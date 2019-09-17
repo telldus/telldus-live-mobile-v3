@@ -39,7 +39,7 @@ import {
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-const PurchaseSuccessScreen = (props: Object): Object => {
+const PostPurchaseScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	const { app: {layout} } = useSelector((state: Object): Object => state);
 	const {
@@ -90,9 +90,25 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 		}
 	}
 
+	const screensToPop = navigation.getParam('screensToPop', 2);
+
 	function goBack() {
 		const popAction = StackActions.pop({
+			n: screensToPop,
+		});
+		navigation.dispatch(popAction);
+	}
+
+	function onPressTryAgain() {
+		const popAction = StackActions.pop({
 			n: 2,
+		});
+		navigation.dispatch(popAction);
+	}
+
+	function onPressCancel() {
+		const popAction = StackActions.pop({
+			n: screensToPop,
 		});
 		navigation.dispatch(popAction);
 	}
@@ -101,35 +117,46 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 	const product = navigation.getParam('product', null);
 	const quantity = navigation.getParam('quantity', 1);
 	const credits = navigation.getParam('credits', false);
+	const success = navigation.getParam('success', false);
 
-	const bodyText = voucher ?
-		'Your voucher code has been accepted and your account has been upgraded with the following:'
+	const bodyText = !success ?
+		'Your payment was not accepted and the purchase has been aborted. No transaction has been made. Please try again and make sure that you have entered the correct payment information.'
 		:
-		'Your payment has been accepted and your purchase is now completed. Your account has been upgraded with the following:'
-    ;
+		voucher ?
+			'Your voucher code has been accepted and your account has been upgraded with the following:'
+			:
+			'Your payment has been accepted and your purchase is now completed. Your account has been upgraded with the following:'
+	;
+
+	const title = !success ? 'Could not complete purchase' :
+		voucher ? 'Thank you!'
+			:
+			'Thank you for your purchase!';
 
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
 				h1={voucher ? 'Redeem Gift Card' : 'Premium Access'} h2={voucher ? 'Code Accepted' : 'Get more features & benefits'}
 				align={'right'}
-				showLeftIcon={false}
+				showLeftIcon={!success}
+				leftIcon={success ? undefined : 'close'}
 				navigation={navigation}
 				{...screenProps}
 				handleBackPress={goBack}
 				goBack={goBack}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<View style={body} >
-					<IconTelldus icon={'premium'} style={iconStyle}/>
+				<View style={body}>
+					<IconTelldus icon={success ? 'premium' : 'info'} style={[iconStyle,
+						 success ? { color: Theme.Core.twine } : { color: Theme.Core.brandDanger },
+					]}/>
 					<Text style={titleStyleOne}>
-						{voucher ? 'Thank you!'
-							:
-							'Thank you for your purchase!'
-						}
+						{title}
 					</Text>
 					<Text style={bodyStyle}>
 						{bodyText}
 					</Text>
+					{success &&
+					<>
 					<View style={purchaseInfoCover}>
 						<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
 						<Text style={purchaseInfoText}>
@@ -143,14 +170,34 @@ const PurchaseSuccessScreen = (props: Object): Object => {
 						</Text>
 					</View>
 					}
+					</>
+					}
 				</View>
-				<TouchableButton
+				{success ? <TouchableButton
 					onPress={onPress}
 					text={'ok'}
 					accessibilityLabel={'ok'}
 					accessible={true}
 					style={buttonStyle}
 				/>
+					:
+				<>
+				<TouchableButton
+					onPress={onPressTryAgain}
+					text={'Try again'}
+					accessibilityLabel={'Try again'}
+					accessible={true}
+					style={buttonStyle}
+				/>
+				<TouchableButton
+					onPress={onPressCancel}
+					text={'Cancel'}
+					accessibilityLabel={'Cancel'}
+					accessible={true}
+					style={buttonStyle}
+				/>
+				</>
+				}
 			</ScrollView>
 		</View>
 	);
@@ -192,7 +239,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		iconStyle: {
 			fontSize: fontSize * 3.3,
-			color: Theme.Core.twine,
 		},
 		buttonStyle: {
 			marginVertical: fontSize / 2,
@@ -217,4 +263,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default PurchaseSuccessScreen;
+export default PostPurchaseScreen;

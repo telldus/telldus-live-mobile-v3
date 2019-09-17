@@ -118,6 +118,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						credits,
 						quantity,
 						voucher: false,
+						screensToPop: 3,
 					},
 				});
 			} else {
