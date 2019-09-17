@@ -56,7 +56,7 @@ const TransactionWebview = (props: Object): Object => {
 				key: 'PostPurchaseScreen',
 				params: {
 					...params,
-					success: false,
+					success: request.url.includes('status=success'),
 				},
 			});
 			dispatch(getUserProfile());
