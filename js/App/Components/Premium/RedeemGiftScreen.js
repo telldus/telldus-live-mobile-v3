@@ -25,6 +25,7 @@
 import React, { useState } from 'react';
 import { ScrollView, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -44,6 +45,8 @@ import {
 	getUserProfile,
 } from '../../Actions/Login';
 
+import i18n from '../../Translations/common';
+
 import Theme from '../../Theme';
 
 const RedeemGiftScreen = (props: Object): Object => {
@@ -61,6 +64,10 @@ const RedeemGiftScreen = (props: Object): Object => {
 		titleStyleTwo,
 		buttonStyle,
 	} = getStyles(layout);
+
+	const {
+		formatMessage,
+	} = useIntl();
 
 	const [ code, setCode ] = useState('');
 	function onChangeText(text: string) {
@@ -94,7 +101,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Redeem Gift Card'} h2={'Apply voucher code'}
+				h1={formatMessage(i18n.redeemCard)} h2={formatMessage(i18n.applyVoucherCode)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -105,17 +112,17 @@ const RedeemGiftScreen = (props: Object): Object => {
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
 						<Text style={titleStyleOne}>
-							{'Enter'.toUpperCase()}
+							{formatMessage(i18n.enter).toUpperCase()}
 						</Text>
 						<Text style={titleStyleTwo}>
-							{' redeem code'.toUpperCase()}
+							{` ${formatMessage(i18n.labelRedeemCode).toUpperCase()}`}
 						</Text>
 					</View>
 					<Text style={bodyStyle}>
-                   Enter the code on your gift card/voucher below to redeem it:
+						{formatMessage(i18n.infoVoucherCode)}
 					</Text>
 					<Text style={labelStyle}>
-                   Voucher code
+						{formatMessage(i18n.labelVoucherCode)}
 					</Text>
 					<TextInput
 						value={code}
@@ -129,8 +136,8 @@ const RedeemGiftScreen = (props: Object): Object => {
 				</View>
 				<TouchableButton
 					onPress={onPress}
-					text={'Redeem'}
-					accessibilityLabel={'redeem'}
+					text={formatMessage(i18n.labelRedeem)}
+					accessibilityLabel={formatMessage(i18n.labelRedeem)}
 					accessible={true}
 					style={buttonStyle}
 				/>
