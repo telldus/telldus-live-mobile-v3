@@ -33,6 +33,12 @@ import {
 	Text,
 	View,
 } from '../../../../BaseComponents';
+import CARD from '../../TabViews/img/payment/payment-provider-card.svg';
+import PAYPAL from '../../TabViews/img/payment/payment-provider-paypal.svg';
+const PAYMENT_IMAGES = {
+	CARD,
+	PAYPAL,
+};
 
 import {
 	getPaymentOptions,
@@ -52,6 +58,8 @@ const PaymentProvidersBlock = (props: Object): Object => {
 		padding,
 		innerCoverStyle,
 		nameCoverStyle,
+		imageWidth,
+		imageHeight,
 	} = getStyle(layout);
 
 	const [ selectedIndex, setSeletedIndex ] = useState(0);
@@ -59,12 +67,15 @@ const PaymentProvidersBlock = (props: Object): Object => {
 	const options = getPaymentOptions().map((option: Object, key: number): Object => {
 		const {
 			name,
+			image,
 		} = option;
 
 		function onSelectOption() {
 			setSeletedIndex(key);
 			onSelect(key, name);
 		}
+
+		const IMAGE = PAYMENT_IMAGES[image];
 
 		return (
 			<TouchableOpacity key={`${key}`} style={[contentCoverStyle, {
@@ -80,6 +91,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 							{name.toUpperCase()}
 						</Text>
 					</View>
+					<IMAGE width={imageWidth} height={imageHeight}/>
 				</View>
 			</TouchableOpacity>
 		);
@@ -104,6 +116,9 @@ const getStyle = (appLayout: Object): Object => {
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.04);
+
+	const coverWidth = Math.floor((width - ((padding * 2) + (padding / 2))) / 2);
+	const imageWidth = (coverWidth - (padding * 2)) * 0.7;
 
 	return {
 		padding,
@@ -136,7 +151,7 @@ const getStyle = (appLayout: Object): Object => {
 			paddingHorizontal: padding,
 		},
 		contentCoverStyle: {
-			width: Math.floor((width - ((padding * 2) + (padding / 2))) / 2),
+			width: coverWidth,
 			alignItems: 'center',
 			justifyContent: 'center',
 			backgroundColor: '#fff',
@@ -174,6 +189,8 @@ const getStyle = (appLayout: Object): Object => {
 			textAlign: 'center',
 			fontWeight: 'bold',
 		},
+		imageWidth,
+		imageHeight: imageWidth * 0.43,
 	};
 };
 
