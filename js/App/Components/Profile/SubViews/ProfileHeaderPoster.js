@@ -48,10 +48,6 @@ class ProfileHeaderPoster extends View<Props, null> {
 	constructor(props: Props) {
 		super(props);
 		this.handleBackPress = this.handleBackPress.bind(this);
-
-		let { formatMessage } = props.screenProps.intl;
-
-		this.noName = formatMessage(i18n.noName);
 	}
 
 	goBack() {
@@ -78,8 +74,8 @@ class ProfileHeaderPoster extends View<Props, null> {
 
 		return (
 			<NavigationHeaderPoster // TODO: translate
-				h1={'Profile & Settings'}
-				h2={'User and app settings'}
+				h1={intl.formatMessage(i18n.headerOneProfileAndSettings)}
+				h2={intl.formatMessage(i18n.headerTwoProfileAndSettings)}
 				appLayout={appLayout}
 				intl={intl}
 				navigation={navigation}

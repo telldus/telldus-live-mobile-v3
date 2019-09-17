@@ -28,6 +28,7 @@ import {
 	Linking,
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -35,6 +36,7 @@ import {
 	IconTelldus,
 } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 const HelpAndSupportBlock = (props: Object): Object => {
 
@@ -51,20 +53,24 @@ const HelpAndSupportBlock = (props: Object): Object => {
 		blocksCoverStyle,
 	} = getStyles(layout);
 
+	const {
+		formatMessage,
+	} = useIntl();
+
 	const BLOCKS = [
 		{
 			icon: 'faq',
-			text: 'FAQ',
+			text: formatMessage(i18n.labelFAQ),
 			url: 'http://support.telldus.com/kb/index.php',
 		},
 		{
 			icon: 'guide',
-			text: 'Guides',
+			text: formatMessage(i18n.hyperLintText),
 			url: 'https://live.telldus.com/help/guides',
 		},
 		{
 			icon: 'manual',
-			text: 'Manuals',
+			text: formatMessage(i18n.manuals),
 			url: 'https://live.telldus.com/help/manuals',
 		},
 	];
@@ -105,11 +111,10 @@ const HelpAndSupportBlock = (props: Object): Object => {
 		<View>
 			<View style={coverOneStyle}>
 				<Text style={titleStyle}>
-                Help & Support
+					{formatMessage(i18n.labelHelpAndSupport)}
 				</Text>
 				<Text style={bodyStyle}>
-                To help you manage your smart home we provide some assistance in our FAQ, user guides,
-                and product manuals. If you still can't find what you are looking for we are here to help.
+					{formatMessage(i18n.contentHelpAndSupport)}
 				</Text>
 			</View>
 			<View style={blocksCoverStyle}>

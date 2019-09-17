@@ -49,6 +49,8 @@ import {
 	getSupportTweets,
 } from '../../Actions/App';
 
+import i18n from '../../Translations/common';
+
 const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 	let newData = [];
 	data.map((tweet: Object) => {
@@ -181,8 +183,8 @@ const SupportTab = (props: Object): Object => {
 				<ContactSupportBlock/>
 				<TouchableButton
 					onPress={onPress}
-					text={'Contact suppport'}
-					accessibilityLabel={'Contact suppport'}
+					text={i18n.labelContactSupport}
+					accessibilityLabel={i18n.labelContactSupport}
 					accessible={true}
 					style={buttonStyle}
 				/>
@@ -249,8 +251,8 @@ SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="faq"
 			tintColor={tintColor}
-			label={'Support'} // TODO: translate
-			accessibilityLabel={'customer support tab'}/>
+			label={i18n.labelSupport}
+			accessibilityLabel={i18n.labelAccessibleSupportTab}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 		navigation.navigate({

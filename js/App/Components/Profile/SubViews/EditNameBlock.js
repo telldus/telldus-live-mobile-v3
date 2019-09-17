@@ -89,8 +89,8 @@ const EditNameBlock = (props: Object): Object => {
 		dispatch(setUserName(fn, ln)).then(() => {
 			dispatch(showToast('Name has been updated.')); // TODO: translate
 			dispatch(getUserProfile());
-		}).catch(() => {
-			dispatch(showToast('Sorry something went wrong while updating the name. Please try later.')); // TODO: translate
+		}).catch((error: Object) => {
+			dispatch(showToast(error.message || 'Sorry something went wrong while updating the name. Please try later.')); // TODO: translate
 			dispatch(getUserProfile());
 		});
 	}

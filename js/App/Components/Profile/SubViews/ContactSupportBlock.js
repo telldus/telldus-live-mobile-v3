@@ -24,12 +24,15 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 const ContactSupportBlock = (props: Object): Object => {
 
@@ -42,18 +45,21 @@ const ContactSupportBlock = (props: Object): Object => {
 		labelStyle,
 	} = getStyles(layout);
 
+	const {
+		formatMessage,
+	} = useIntl();
+
 	return (
 		<View>
 			<Text style={labelStyle}>
-                Contact Support
+				{formatMessage(i18n.labelContactSupport)}
 			</Text>
 			<View style={coverOneStyle}>
 				<Text style={titleStyle}>
-               Didn't find what you were looking for?
+					{formatMessage(i18n.titleContactSupportBlock)}
 				</Text>
 				<Text style={bodyStyle}>
-					Don't worry! Our support staff is here to help. If you are stuck and can't find
-					the answers you seek you can contact our support directly here from the app.
+					{formatMessage(i18n.contentContactSupportBlock)}
 				</Text>
 			</View>
 		</View>

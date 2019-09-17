@@ -51,6 +51,8 @@ import {
 } from '../Premium/SubViews';
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
+
 const ProfileTab = (props: Object): Object => {
 	const { screenProps: {toggleDialogueBox}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -219,8 +221,8 @@ ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="user"
 			tintColor={tintColor}
-			label={'Profile'} // TODO: translate
-			accessibilityLabel={'profile settings tab'}/>
+			label={i18n.labelProfile}
+			accessibilityLabel={i18n.labelAccessibleProfileTab}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
 		navigation.navigate({
