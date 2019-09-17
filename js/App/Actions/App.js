@@ -21,7 +21,6 @@
 // @flow
 
 'use strict';
-import axios from 'axios';
 
 import type { ThunkAction, TicketData } from './Types';
 
@@ -138,79 +137,10 @@ function createSupportTicket(data: string): ThunkAction {
 	};
 }
 
-function authorizeAppForTwitter(base64EncodedKeySecret: string): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
-		const formData = new FormData();
-		formData.append('grant_type', 'client_credentials');
-		return axios({
-			method: 'post',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Authorization': `Basic ${base64EncodedKeySecret}`,
-			},
-			url: 'https://api.twitter.com/oauth2/token',
-			data: formData,
-		}).then((response: Object): Object => {
-			if (response.data && response.data.access_token) {
-				return response.data;
-			}
-			throw response;
-		}).catch((error: Object) => {
-			if (error.response) {
-				console.log(error.response.data);
-				console.log(error.response.status);
-				console.log(error.response.headers);
-			  } else if (error.request) {
-				console.log(error.request);
-			  } else {
-				console.log('Error', error.message);
-			  }
-			  console.log(error.config);
-		});
-	};
-}
-
-function getSupportTweets(base64EncodedKeySecret: string, count?: number = 10): ThunkAction {
-	return async (dispatch: Function, getState: Function): Promise<any> => {
-		try {
-			const { access_token } = await dispatch(authorizeAppForTwitter(base64EncodedKeySecret));
-			return axios({
-				method: 'get',
-				headers: {
-					'Accept-Encoding': 'gzip',
-					'Authorization': `Bearer ${access_token}`,
-				},
-				url: `https://api.twitter.com/1.1/statuses/user_timeline.json?count=${count}&screen_name=telldus_status&exclude_replies=true&trim_user=true`,
-			}).then((response: Object): Object => {
-				if (response.data && response.data) {
-					return response.data;
-				}
-				throw response;
-			}).catch((error: Object) => {
-				if (error.response) {
-					console.log(error.response.data);
-					console.log(error.response.status);
-					console.log(error.response.headers);
-			  } else if (error.request) {
-					console.log(error.request);
-			  } else {
-					console.log('Error', error.message);
-			  }
-			  console.log(error.config);
-			});
-		} catch (error) {
-			console.log(error);
-		}
-	};
-}
-
 module.exports = {
 	...App,
 	createSupportTicket,
 	createSupportTicketLCT,
 	createSupportTicketGlobal,
-	authorizeAppForTwitter,
-	getSupportTweets,
 };
 
