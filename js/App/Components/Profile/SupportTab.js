@@ -25,7 +25,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 import { useIntl } from 'react-intl';
 const forge = require('node-forge');
 
@@ -36,6 +35,9 @@ import {
 	TabBar,
 	IconTelldus,
 } from '../../../BaseComponents';
+import {
+	HelpAndSupportBlock,
+} from './SubViews';
 import {
 	twitterAuth,
 } from '../../../Config';
@@ -174,6 +176,7 @@ const SupportTab = (props: Object): Object => {
 				{
 					tweets
 				}
+				<HelpAndSupportBlock/>
 				<TouchableButton
 					onPress={onPress}
 					text={'Contact suppport'}
@@ -241,7 +244,7 @@ const getStyles = (appLayout: Object): Object => {
 SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
 	tabBarLabel: ({ tintColor }: Object): Object => (
 		<TabBar
-			icon="help"
+			icon="faq"
 			tintColor={tintColor}
 			label={'Support'} // TODO: translate
 			accessibilityLabel={'customer support tab'}/>
