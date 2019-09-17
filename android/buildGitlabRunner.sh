@@ -22,7 +22,7 @@ module.exports = {
     googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}',
     webClientId: '${GOOGLE_WEB_CLIENT_ID}',
     osTicketKey: '${OSTICKET_KEY}',
-    twitterAuth: '${TWITTER_AUTH}'
+    twitterAuth: ${TWITTER_AUTH}
 };
 EOF
 

@@ -18,7 +18,7 @@ module.exports = {
 	iosReversedClientId: '${GOOGLE_IOS_REVERSED_CLIENT_ID}',
     googleMapsAPIKey: '${GOOGLE_MAPS_API_KEY}',
     osTicketKey: '${OSTICKET_KEY}',
-    twitterAuth: '${TWITTER_AUTH}'
+    twitterAuth: ${TWITTER_AUTH}
 };
 EOF
 
