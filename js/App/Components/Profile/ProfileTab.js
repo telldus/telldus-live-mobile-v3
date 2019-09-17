@@ -185,7 +185,9 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		body: {
 			flex: 1,
-			padding,
+			paddingHorizontal: padding,
+			paddingBottom: padding,
+			paddingTop: padding * 1.5,
 		},
 		pHistoryCStyle: {
 			marginTop: padding,
