@@ -474,7 +474,7 @@ class DevicesTab extends View {
 					appLayout={appLayout}
 					intl={intl}
 				/>,
-				dialogueBoxStyle: style.dialogueBoxStyle,
+				style: style.dialogueBoxStyle,
 				backdropOpacity: 0,
 			};
 		}
@@ -878,6 +878,7 @@ class DevicesTab extends View {
 					height: 1,
 				},
 				backgroundColor: '#fff',
+				overflow: 'visible',
 			},
 		};
 	}
