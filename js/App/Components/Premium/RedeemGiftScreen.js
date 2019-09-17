@@ -172,6 +172,7 @@ const getStyles = (appLayout: Object): Object => {
 			width: '100%',
 			fontSize: fontSize * 1.4,
 			marginTop: 5,
+			color: '#A59F9A',
 		},
 		bodyStyle: {
 			fontSize,
