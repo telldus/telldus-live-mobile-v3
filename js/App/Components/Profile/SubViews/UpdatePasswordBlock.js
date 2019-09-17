@@ -24,15 +24,20 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	TitledInfoBlock,
 } from '../../../../BaseComponents';
 
+import i18n from '../../../Translations/common';
+
 const UpdatePasswordBlock = (props: Object): Object => {
 	const { navigation } = props;
 
-	const { app: {layout}} = useSelector((state: Object): Object => state);
+	const {layout} = useSelector((state: Object): Object => state.app);
+
+	const { formatMessage } = useIntl();
 
 	const {
 		fontSize,
@@ -48,7 +53,7 @@ const UpdatePasswordBlock = (props: Object): Object => {
 
 	return (
 		<TitledInfoBlock
-			label={'Change Password'}
+			label={formatMessage(i18n.changePassword)}
 			fontSize={fontSize}
 			icon={'angle-right'}
 			onPress={onPress}
