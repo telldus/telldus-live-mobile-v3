@@ -59,13 +59,12 @@ const LanguageControlBlock = (props: Object): Object => {
 
 	const labelLanguage = formatMessage(i18n.labelLanguage);
 
-	// TODO: update when any new language is supported.
 	const LANGUAGES = getSupportedLanguages();
 	let {value} = languageProp;
 	const codeDevice = getLocale();
 	let { nativeName } = getLanguageInfoFromLangCode(codeDevice) || {};
-	let keyDevice = `${codeDevice}-device`;// TODO : translate
-	const deviceLang = {code: codeDevice, value: `${nativeName}(Device Language)`, key: keyDevice};
+	let keyDevice = `${codeDevice}-device`;
+	const deviceLang = {code: codeDevice, value: `${nativeName}(${formatMessage(i18n.labelDevicelanguage)})`, key: keyDevice};
 	LANGUAGES.push(deviceLang);
 	if (!languageProp.value) {
 		dispatch(setAppLanguage(deviceLang));
