@@ -49,10 +49,10 @@ import {
 const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 	let newData = [];
 	data.map((tweet: Object) => {
-		// const daysDiff = moment().diff(moment(tweet.created_at), 'days');
+		// const daysDiff = moment().diff(new Date(tweet.created_at), 'days');
 		// if (daysDiff <= 2) {
 		newData.push({
-			created_at: moment(tweet.created_at),
+			created_at: new Date(tweet.created_at),
 			text: tweet.text,
 			link: `https://twitter.com/telldus_status/status/${tweet.id}`,
 		});
@@ -98,7 +98,7 @@ const SupportTab = (props: Object): Object => {
 		});
 		const { consumer_key, consumer_secret } = twitterAuth; // TODO: RFC 1738 encode both key and secret(right now with/without it is same)
 		const keySecret = forge.util.encode64(`${consumer_key}:${consumer_secret}`);
-		dispatch(getSupportTweets(keySecret)).then((response: Object) => {
+		dispatch(getSupportTweets(keySecret, 10)).then((response: Object) => {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			setListInfo({
 				listData: prepareTweetsForList(response),
