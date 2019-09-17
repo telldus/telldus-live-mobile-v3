@@ -42,6 +42,7 @@ import {
 } from '../../Actions/User';
 
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 const prepareListData = (history: Array<Object>): Array<Object> => {
 	let result = groupBy(history, (items: Object): any => {
@@ -76,7 +77,10 @@ const SMSHistoryScreen = (props: Object): Object => {
 		statusIconStyle,
 	} = getStyles(layout);
 
-	const { formatTime } = useIntl();
+	const {
+		formatTime,
+		formatMessage,
+	} = useIntl();
 
 	const dispatch = useDispatch();
 	const [ screenData, setScreenData ] = useState({
@@ -110,26 +114,26 @@ const SMSHistoryScreen = (props: Object): Object => {
 		switch (n) {
 			case 0:
 				return {
-					t: 'Pending',
+					t: formatMessage(i18n.statusPending),
 					c: Theme.Core.brandSecondary,
 					icon: 'arrow-forward',
 				}
 				;
 			case 1:
 				return {
-					t: 'Delivered',
+					t: formatMessage(i18n.statusDelivered),
 					c: Theme.Core.brandSuccess,
 					icon: 'arrow-forward',
 				};
 			case 2:
 				return {
-					t: 'Failed',
+					t: formatMessage(i18n.failed),
 					c: Theme.Core.brandDanger,
 					icon: 'close',
 				};
 			default:
 				return {
-					t: 'Pending',
+					t: formatMessage(i18n.statusPending),
 					c: Theme.Core.brandSecondary,
 					icon: 'arrow-forward',
 				};
@@ -164,7 +168,7 @@ const SMSHistoryScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'SMS History'} h2={'Sent SMS Messages'}
+				h1={formatMessage(i18n.smsHistory)} h2={formatMessage(i18n.labelSentSMS)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
