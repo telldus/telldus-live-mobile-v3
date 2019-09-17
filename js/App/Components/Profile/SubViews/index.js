@@ -25,9 +25,11 @@
 import EditNameBlock from './EditNameBlock';
 import UpdatePasswordBlock from './UpdatePasswordBlock';
 import HelpAndSupportBlock from './HelpAndSupportBlock';
+import ContactSupportBlock from './ContactSupportBlock';
 
 module.exports = {
 	EditNameBlock,
 	UpdatePasswordBlock,
 	HelpAndSupportBlock,
+	ContactSupportBlock,
 };
