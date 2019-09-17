@@ -57,7 +57,7 @@ const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 		newData.push({
 			created_at: new Date(tweet.created_at),
 			text: tweet.text,
-			link: `https://twitter.com/telldus_status/status/${tweet.id}`,
+			link: `https://twitter.com/telldus_status/status/${tweet.id_str}`,
 		});
 		// }
 	});
