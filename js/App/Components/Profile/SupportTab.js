@@ -73,6 +73,7 @@ const SupportTab = (props: Object): Object => {
 	const {
 		formatDate,
 		formatTime,
+		formatMessage,
 	} = useIntl();
 
 	const {
@@ -184,7 +185,7 @@ const SupportTab = (props: Object): Object => {
 				<TouchableButton
 					onPress={onPress}
 					text={i18n.labelContactSupport}
-					accessibilityLabel={i18n.labelContactSupport}
+					accessibilityLabel={formatMessage(i18n.labelContactSupport)}
 					accessible={true}
 					style={buttonStyle}
 				/>
