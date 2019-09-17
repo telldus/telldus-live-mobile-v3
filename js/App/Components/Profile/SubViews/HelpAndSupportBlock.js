@@ -48,6 +48,7 @@ const HelpAndSupportBlock = (props: Object): Object => {
 		iconStyle,
 		textStyle,
 		padding,
+		blocksCoverStyle,
 	} = getStyles(layout);
 
 	const BLOCKS = [
@@ -89,7 +90,7 @@ const HelpAndSupportBlock = (props: Object): Object => {
 		return (
 			<TouchableOpacity onPress={onPress} key={`${i}`}>
 				<View style={[coverTwoStyle, {
-					marginLeft: padding,
+					marginLeft: i === 0 ? 0 : padding / 2,
 				}]}>
 					<IconTelldus icon={icon} style={iconStyle}/>
 					<Text style={textStyle}>
@@ -111,7 +112,9 @@ const HelpAndSupportBlock = (props: Object): Object => {
                 and product manuals. If you still can't find what you are looking for we are here to help.
 				</Text>
 			</View>
-			{blocks}
+			<View style={blocksCoverStyle}>
+				{blocks}
+			</View>
 		</View>
 	);
 };
@@ -148,18 +151,29 @@ const getStyles = (appLayout: Object): Object => {
 			color: Theme.Core.rowTextColor,
 			marginTop: 10,
 		},
+		blocksCoverStyle: {
+			flexDirection: 'row',
+		},
 		coverTwoStyle: {
 			width: blockWidth,
+			backgroundColor: '#fff',
+			...Theme.Core.shadow,
+			justifyContent: 'center',
+			alignItems: 'center',
+			marginTop: padding / 2,
+			paddingVertical: padding * 2,
 		},
 		iconStyle: {
-			fontSize: fontSize * 1.4,
+			fontSize: fontSize * 3.4,
 			color: Theme.Core.brandSecondary,
 			textAlign: 'center',
 		},
 		textStyle: {
-			fontSize: fontSize * 1.4,
+			fontSize,
 			color: Theme.Core.brandSecondary,
 			textAlign: 'center',
+			fontWeight: 'bold',
+			marginTop: 5,
 		},
 	};
 };
