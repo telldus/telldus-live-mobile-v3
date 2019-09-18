@@ -40,6 +40,9 @@ import {
 	getUserTransactions,
 } from '../../Actions/User';
 
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../Lib/appUtils';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -75,7 +78,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 		statusIconStyle,
 	} = getStyles(layout);
 
-	const { formatTime, formatMessage } = useIntl();
+	const { formatTime, formatMessage, formatNumber } = useIntl();
 
 	const dispatch = useDispatch();
 	const [ screenData, setScreenData ] = useState({
@@ -106,7 +109,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	}
 
 	function getTypeAndMonth({type, quantity}: Object): Object {
-		const preS = 'Premium Access, ';
+		const preS = `${formatMessage(i18n.premiumAccess)}, `;
 		switch (type) {
 			case 'pro': {// TODO: check with Johannes
 				const months = 1 * quantity;
@@ -159,7 +162,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				<View style={toBlock}>
 					<Text style={rowTextStyle2}>{typeInfo}</Text>
 				</View>
-				<Text style={[rowTextStyle3, {color}]}>€{item.price}</Text>
+				<Text style={[rowTextStyle3, {color}]}>€{formatNumber(item.price)}</Text>
 			</View>);
 	}
 
@@ -178,7 +181,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Purchase History'} h2={'Your transactions'}
+				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
