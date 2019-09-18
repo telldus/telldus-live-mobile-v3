@@ -163,6 +163,8 @@ render(): Object {
 	const cModevalue = this.formatModeValue(currentValueInScreen);
 	const currModevalue = this.formatModeValue(currentValue);
 
+	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated), 10);
+
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
@@ -232,7 +234,9 @@ render(): Object {
 			{!!lastUpdated && <Text style={lastUpdatedInfoStyle}>
 				{`${intl.formatMessage(i18n.labelLastUpdated)}: `}
 				<FormattedRelative
-					value={moment.unix(lastUpdated)}
+					value={-seconds}
+					numeric="auto"
+					updateIntervalInSeconds={60}
 					formatterFunction={this.formatSensorLastUpdate}
 					textStyle={lastUpdatedInfoStyle}/>
 			</Text>

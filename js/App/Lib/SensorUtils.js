@@ -311,19 +311,20 @@ const formatSensorLastUpdate = (time: string, intl: Object): string => {
 
 	const { formatRelativeTime, formatMessage } = intl;
 	const now = moment().unix();
-
 	// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
 	// This prevent from showing 'in 1 second' which is illogic!
 	let futureTimes = [];
 	for (let i = 1; i < 5; i++) {
-		futureTimes.push(formatRelativeTime(moment.unix(now).add(i, 'seconds')).replace(/[0-9]/g, '').trim());// As a CAUTION
+		const secs = moment.unix(now).add(i, 'seconds').unix() - moment().unix();
+		futureTimes.push(formatRelativeTime(secs, undefined, {numeric: 'auto'}).replace(/[0-9]/g, '').trim());// As a CAUTION
 	}
 
-	const relNow = formatRelativeTime(moment.unix(now)).replace(/[0-9]/g, '').trim();
+	const relNow = formatRelativeTime(0, undefined, {numeric: 'auto'}).replace(/[0-9]/g, '').trim();
 
 	let pastSeconds = [];
 	for (let i = 1; i < 4; i++) {
-		pastSeconds.push(formatRelativeTime(moment.unix(now).subtract(i, 'seconds')).replace(/[0-9]/g, '').trim());
+		const secs = moment().unix() - moment.unix(now).subtract(i, 'seconds').unix();
+		pastSeconds.push(formatRelativeTime(-secs).replace(/[0-9]/g, '').trim());
 	}
 
 	if (timeAgo === relNow || (futureTimes.indexOf(timeAgo) !== -1) || (pastSeconds.indexOf(timeAgo) !== -1)) {

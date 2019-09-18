@@ -483,6 +483,9 @@ class SensorRow extends View<Props, State> {
 			coverStyle = nameTablet;
 			textInfoStyle = timeTablet;
 		}
+
+		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdatedValue), 10);
+
 		return (
 			<View style={coverStyle} onLayout={this.onLayoutCover}>
 				<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
@@ -493,7 +496,9 @@ class SensorRow extends View<Props, State> {
 				</Text>
 				{isGatewayActive ?
 					<FormattedRelative
-						value={moment.unix(lastUpdatedValue)}
+						value={-seconds}
+						numeric="auto"
+						updateIntervalInSeconds={60}
 						formatterFunction={this.formatSensorLastUpdate}
 						textStyle={[
 							textInfoStyle, {
