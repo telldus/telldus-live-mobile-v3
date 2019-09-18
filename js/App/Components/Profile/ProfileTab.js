@@ -138,13 +138,14 @@ const ProfileTab = (props: Object): Object => {
 						</Text>
 					</View>
 				</TouchableOpacity>
-				<SMSBlock
+				{!isBasic && (<SMSBlock
 					navigation={navigation}
 					contentCoverStyle={contentCoverStyleENB}
 					valueCoverStyle={valueCoverStyleENB}
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
 					style={style}/>
+				)}
 				{isBasic && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
 				<LogoutButton
