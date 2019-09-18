@@ -161,12 +161,13 @@ const PostPurchaseScreen = (props: Object): Object => {
 					</Text>
 					{success &&
 					<>
-					<View style={purchaseInfoCover}>
+					{product !== 'credits' && <View style={purchaseInfoCover}>
 						<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
 						<Text style={purchaseInfoText}>
 							{getInfo({product, quantity}).toUpperCase()}
 						</Text>
 					</View>
+					}
 					{!!credits && <View style={purchaseInfoCover}>
 						<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
 						<Text style={purchaseInfoText}>
