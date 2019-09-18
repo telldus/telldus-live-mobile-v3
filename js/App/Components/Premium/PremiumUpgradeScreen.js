@@ -43,6 +43,7 @@ import {
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
+	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import {
 	createTransaction,
@@ -131,10 +132,27 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		});
 	}
 
+	const headerArray = formatMessage(i18n.getMoreWithPremium).split(' ');
+	const header = headerArray.map((word: string): Object => {
+		if (word.includes('%')) {
+			return (
+				<Text style={titleStyleTwo}>
+					{` ${word.replace(/%/g, '').toUpperCase()}`}
+				</Text>
+			);
+		}
+		return (
+			<Text style={titleStyleOne}>
+				{word.toUpperCase()}
+			</Text>
+		);
+	});
+
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Premium Access'} h2={'Get more features & benefits'}
+				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -144,18 +162,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				<View style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
-						<Text style={titleStyleOne}>
-							{'Get'.toUpperCase()}
-						</Text>
-						<Text style={titleStyleTwo}>
-							{' more'.toUpperCase()}
-						</Text>
-						<Text style={titleStyleOne}>
-							{'with'.toUpperCase()}
-						</Text>
-						<Text style={titleStyleTwo}>
-							{' premium access!'.toUpperCase()}
-						</Text>
+						{header}
 					</View>
 					<Text style={pMonthTextStyle}>
 						{`€${formatNumber(cPerMonth, {
@@ -163,34 +170,38 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						})}/${formatMessage(i18n.month)}`}
 					</Text>
 					<Text style={annualChargeTextStyle}>
-						{`(€${newTotal} billed annually)`}
+						{formatMessage(i18n.billedAnnually, {
+							value: `€${formatNumber(newTotal)}`,
+						})}
 					</Text>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
 						<Text style={smsCreditTextStyle}>
-							{`Including ${smsCredit} SMS Credits per year`}
+							{formatMessage(i18n.includingSMS, {
+								value: smsCredit,
+							})}
 						</Text>
 					</View>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
-							{`€${prevTotal}`}
+							{`€${formatNumber(prevTotal)}`}
 						</Text>}
 						<Text style={newChargeTextStyle}>
-							{`€${newTotal} total`}
+							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
 					</View>
 					{!!save && <Text style={saveTextStyle}>
-						{`${'save'.toUpperCase()} ${save}%`}
+						{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
 					</Text>}
 					<Text style={autoRenewInfoStyle}>
-						Your subscription will be automatically renewed annually.
+						{formatMessage(i18n.automaticallyRenew)}
 					</Text>
 				</View>
 				<TouchableButton
 					onPress={onPress}
 					preScript={<IconTelldus icon={'cart'} style={cartIconStyle}/>}
-					text={'Upgrade now'}
-					accessibilityLabel={'Upgrade now'}
+					text={formatMessage(i18n.upgradeNow)}
+					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
 				/>
