@@ -25,6 +25,26 @@
 import 'intl';
 import 'intl/locale-data/jsonp/en';
 import 'intl/locale-data/jsonp/sv';
+import 'intl/locale-data/jsonp/cs';
+import 'intl/locale-data/jsonp/fr';
+import 'intl/locale-data/jsonp/nb';
+import 'intl/locale-data/jsonp/de';
+
+require('@formatjs/intl-pluralrules/polyfill');
+require('@formatjs/intl-pluralrules/dist/locale-data/en');
+require('@formatjs/intl-pluralrules/dist/locale-data/sv');
+require('@formatjs/intl-pluralrules/dist/locale-data/cs');
+require('@formatjs/intl-pluralrules/dist/locale-data/fr');
+require('@formatjs/intl-pluralrules/dist/locale-data/nb');
+require('@formatjs/intl-pluralrules/dist/locale-data/de');
+
+require('@formatjs/intl-relativetimeformat/polyfill');
+require('@formatjs/intl-relativetimeformat/dist/locale-data/en');
+require('@formatjs/intl-relativetimeformat/dist/locale-data/sv');
+require('@formatjs/intl-relativetimeformat/dist/locale-data/cs');
+require('@formatjs/intl-relativetimeformat/dist/locale-data/fr');
+require('@formatjs/intl-relativetimeformat/dist/locale-data/nb');
+require('@formatjs/intl-relativetimeformat/dist/locale-data/de');
 
 import React from 'react';
 import { Text } from './BaseComponents';

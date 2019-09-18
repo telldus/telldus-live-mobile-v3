@@ -17,6 +17,8 @@
     "dgram": "react-native-udp"
   },
   "dependencies": {
+    "@formatjs/intl-pluralrules": "^1.1.5",
+    "@formatjs/intl-relativetimeformat": "^4.0.1",
     "@react-native-community/netinfo": "^4.1.3",
     "axios": "~0.19.0",
     "blueimp-md5": "~2.10.0",
