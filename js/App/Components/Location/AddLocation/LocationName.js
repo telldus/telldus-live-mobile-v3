@@ -61,7 +61,6 @@ class LocationName extends View {
 		this.h1 = formatMessage(i18n.name);
 		this.h2 = formatMessage(i18n.LNheaderTwo);
 
-		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
