@@ -26,6 +26,7 @@ import React, { useState } from 'react';
 import Swiper from 'react-native-swiper';
 import { ScrollView, Image, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -37,14 +38,19 @@ import {
 	UpgradePremiumButton,
 } from './SubViews';
 
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../Lib/appUtils';
+
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 const PremiumBenefitsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	let swiperRef = React.createRef();
 
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
-	const { app: {layout} } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 		body,
@@ -63,44 +69,40 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		moreText,
 	} = getStyles(layout);
 
+	const {
+		formatMessage,
+	} = useIntl();
+
 	const benefits = [
 		{
-			title: 'Sensor History',
+			title: formatMessage(i18n.labelSensorHistory),
 			icon: 'sensorhistory',
-			body: 'Get access to exteded sensor history with Telldus Live! Premium.' +
-			' Track your historical data in charts to see trends in temperature, energy ' +
-			'consumption and more!',
+			body: formatMessage(i18n.sensorHistoryDescription),
 		},
 		{
-			title: 'SMS Notifications',
+			title: formatMessage(i18n.labelSMSNotif),
 			icon: 'sms',
-			body: 'Send automated SMS and emails when something triggers in your Telldus Live! account.' +
-			' Maybe a safety system for the fridge temperature or a reminder to water your plants?',
+			body: formatMessage(i18n.smsNotifDescription),
 		},
 		{
-			title: 'Exclusive offers',
+			title: formatMessage(i18n.labelExclusiveOffers),
 			icon: 'campaign',
-			body: 'Get access to Premium exclusive offers and campaigns! As a premium user you get the chance ' +
-			'to expand your smart home with new things at awesome prices. This way you can actually save money ' +
-			'from your Premium subscription!',
+			body: formatMessage(i18n.exclusiveOffersDescription),
 		},
 		{
-			title: 'Android widgets',
+			title: formatMessage(i18n.labelAndroidWidgets),
 			icon: 'buttononoff',
-			body: 'Get access to your most used devices and sensors directly on your home screen! Works with all sensors ' +
-			'On/Off devices, dimmable devices and even groups. Available for all Premium users with Android devices to enjoy.',
+			body: formatMessage(i18n.androidWidgetsDescription),
 		},
 		{
-			title: 'If this then that',
+			title: formatMessage(i18n.labelIFTTTFull),
 			icon: 'ifttt',
-			body: 'IFTTT is a service where you can connect your Telldus Live! account to a lot of other things. You can for example ' +
-			'use the location in your phone to automatically turn off the lights when you leave your home. The possibilities are endless!',
+			body: formatMessage(i18n.ifttDescription),
 		},
 		{
-			title: 'Early access',
+			title: formatMessage(i18n.labelEarlyAccess),
 			icon: 'bulb',
-			body: 'Be first with the newest cool features! As a Premium user you get early access to new features which means you can try it out ' +
-			' before everyone else.',
+			body: formatMessage(i18n.earlyAccessDescription2),
 		},
 	];
 
@@ -140,7 +142,8 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Premium Access'} h2={'Get more features & benefits'}
+				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -167,7 +170,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 					<View style={labelsContainer}>
 						{screenLabels}
 					</View>
-					<Text style={moreText}>...and much more!</Text>
+					<Text style={moreText}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton
 					navigation={navigation}/>
@@ -235,6 +238,7 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			color: Theme.Core.eulaContentColor,
 			marginTop: 10,
+			textAlign: 'center',
 		},
 		labelsContainer: {
 			alignSelf: 'center',
