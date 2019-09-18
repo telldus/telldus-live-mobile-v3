@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { TouchableOpacity, LayoutAnimation } from 'react-native';
-import moment from 'moment';
 import { injectIntl, intlShape } from 'react-intl';
 
 import {

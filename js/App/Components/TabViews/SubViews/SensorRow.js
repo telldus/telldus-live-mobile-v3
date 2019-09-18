@@ -26,7 +26,6 @@ import { TouchableOpacity, Animated, Easing } from 'react-native';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
-import moment from 'moment';
 
 import {
 	ListItem,
