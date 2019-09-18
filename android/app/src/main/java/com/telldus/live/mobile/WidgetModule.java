@@ -19,6 +19,7 @@
 
 package com.telldus.live.mobile;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -51,6 +52,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   private static String ACTION_LOGIN = "ACTION_LOGIN";
 
   WidgetsUpdater wUpdater = new WidgetsUpdater();
+
+  static boolean openPurchase = false;
 
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -292,5 +295,15 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         }
       }
     }
+  }
+
+  @ReactMethod
+  public static void setOpenPurchase(boolean value) {
+    openPurchase = value;
+  }
+
+  @ReactMethod
+  public void checkIfOpenPurchase(Promise promise) {
+    promise.resolve(openPurchase);
   }
 }
