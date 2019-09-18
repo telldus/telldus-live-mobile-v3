@@ -35,6 +35,12 @@ import {
 	IconTelldus,
 } from '../../../../BaseComponents';
 
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../../Lib/appUtils';
+
+import i18n from '../../../Translations/common';
+
 import Theme from '../../../Theme';
 
 const SubscriptionStatusBlock = (props: Object): Object => {
@@ -48,6 +54,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	} = props;
 
 	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
@@ -72,20 +81,20 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	const accStatus = moment().unix() > pro ? 'Basic' :
 		<View style={valueCompCoverStyle}>
 			<IconTelldus icon={'premium'} style={premIconStyle}/>
-			<Text style={valueText}>Premium Access</Text>
+			<Text style={valueText}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}</Text>
 		</View>;
 
 	return (
 		<View style={coverStyle}>
-			<Text style={labelStyle}> Subscription </Text>
+			<Text style={labelStyle}> {formatMessage(i18n.subscription)} </Text>
 			<SettingsRow
 				type={'text'}
 				edit={false}
 				inLineEditActive={false}
-				label={'Subscription'}
+				label={formatMessage(i18n.subscription)}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={locale === 'auto' ? null : <Text style={upgradeSyle}>{pro ? 'Renew' : 'Upgrade'}</Text>}
+				iconValueRight={locale === 'auto' ? null : <Text style={upgradeSyle}>{pro ? formatMessage(i18n.renew) : formatMessage(i18n.upgrade)}</Text>}
 				onPress={false}
 				onPressIconValueRight={locale === 'auto' ? null : onPressUpgrade}
 				intl={intl}

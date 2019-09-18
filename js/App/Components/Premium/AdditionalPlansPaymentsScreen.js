@@ -46,6 +46,7 @@ import {
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
+	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import {
 	createTransaction,
@@ -135,18 +136,20 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
 						<Text style={smsCreditTextStyle}>
-							{`Including ${smsCredit} SMS Credits`}
+							{formatMessage(i18n.includingSMS, {
+								value: smsCredit,
+							})}
 						</Text>
 					</View>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
 						{!!save && <Text style={saveTextStyle}>
-							{`${'save'.toUpperCase()} ${save}%`}
+							{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
 						</Text>}
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
-							{`€${prevTotal}`}
+							{`€${formatNumber(prevTotal)}`}
 						</Text>}
 						<Text style={newChargeTextStyle}>
-							{`€${newTotal} total`}
+							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
 					</View>
 				</View>
@@ -207,21 +210,22 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Premium Access'} h2={'Get more features & benefits'}
+				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<Text style={labelStyle}>Select subscription plan</Text>
+				<Text style={labelStyle}>{formatMessage(i18n.selectSubscriptionPlan)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
 				{supportAutoRenew && <CheckBoxIconText
 					style={checkButtonStyle}
 					onToggleCheckBox={onChangeRecurring}
 					isChecked={recurring}
-					text={'Renew subscription automatically'}
+					text={formatMessage(i18n.renewAnnually)}
 					intl={intl}
 					textStyle={textStyle}
 					iconStyle={recurring ?
@@ -243,10 +247,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{!supportAutoRenew ?
-							'Currently automatic renewal is not possible when paying with PayPal.'
+							formatMessage(i18n.autoRenewNotSupportedDescription)
 							:
-							'With automatic renewal disabled you have to manually renew the subscription ' +
-							'to avoid losing functionality and sensor history.'
+							formatMessage(i18n.autoRenewDisabledDescription)
 						}
 					</Text>
 				</View>
@@ -254,8 +257,8 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				<TouchableButton
 					onPress={onPress}
 					preScript={<IconTelldus icon={'cart'} style={cartIconStyle}/>}
-					text={'Upgrade now'}
-					accessibilityLabel={'Upgrade now'}
+					text={formatMessage(i18n.upgradeNow)}
+					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
 				/>

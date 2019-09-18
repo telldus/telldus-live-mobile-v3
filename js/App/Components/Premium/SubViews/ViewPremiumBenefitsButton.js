@@ -24,6 +24,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	TouchableButton,
@@ -31,6 +32,8 @@ import {
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 const ViewPremiumBenefitsButton = (props: Object): Object => {
 	const {
@@ -40,7 +43,12 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 		button = true,
 	} = props;
 
-	const { app: { layout } } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		buttonStyle,
@@ -57,14 +65,14 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 		<>
 		{ button ? <TouchableButton
 			onPress={onPress}
-			text={'View benefits of premium'}
-			accessibilityLabel={'View benefits of premium'}
+			text={formatMessage(i18n.viewBenefitsPremium)}
+			accessibilityLabel={formatMessage(i18n.viewBenefitsPremium)}
 			accessible={buttonAccessibleProp}
 			style={buttonStyle}
 		/>
 			:
 			<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
-			View Premium features & benefits
+				{formatMessage(i18n.viewBenefitsPremiumTwo)}
 			</Text>
 		}
 		</>

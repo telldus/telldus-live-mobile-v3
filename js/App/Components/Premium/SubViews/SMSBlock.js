@@ -36,6 +36,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const SMSBlock = (props: Object): Object => {
 	const {
 		style,
@@ -47,6 +49,9 @@ const SMSBlock = (props: Object): Object => {
 	} = props;
 
 	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
@@ -72,7 +77,7 @@ const SMSBlock = (props: Object): Object => {
 				type={'text'}
 				edit={false}
 				inLineEditActive={false}
-				label={'SMS Credits'}
+				label={formatMessage(i18n.smsCredits)}
 				value={`${credits}`}
 				appLayout={layout}
 				iconValueRight={<IconTelldus icon="cart" style={iconStyle}/>}
@@ -84,7 +89,7 @@ const SMSBlock = (props: Object): Object => {
 				textFieldStyle={textFieldStyle}
 				labelTextStyle={labelTextStyle}/>
 		</View>
-        <Text style={linkTextStyle} onPress={onPressViewHistory}> View SMS history </Text>
+        <Text style={linkTextStyle} onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
         </>
 	);
 };

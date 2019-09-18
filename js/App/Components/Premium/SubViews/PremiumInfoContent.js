@@ -24,6 +24,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	IconTelldus,
@@ -32,6 +33,8 @@ import {
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 const PremiumInfoContent = (props: Object): Object => {
 
@@ -43,18 +46,19 @@ const PremiumInfoContent = (props: Object): Object => {
 		iconStyle,
 	} = getStyle(layout);
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	return (
 		<View style={coverStyle}>
 			<IconTelldus icon={'premium'} style={iconStyle}/>
 			<Text style={titleSyle}>
-            Get more with Premium Access
+				{formatMessage(i18n.premiumInfoTitle)}
 			</Text>
 			<Text style={contentStyle}>
-            With Premium Access you get even more smart features, extended
-            statistics and information. This includes extended sensor history,
-            increased flexibility to create automated events and the ability
-            to send automatic e-mails and SMS.
+				{formatMessage(i18n.premiumInfoDescription)}
 			</Text>
 		</View>
 	);

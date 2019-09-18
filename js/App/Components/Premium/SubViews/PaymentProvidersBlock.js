@@ -28,6 +28,7 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	Text,
@@ -46,6 +47,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const PaymentProvidersBlock = (props: Object): Object => {
 	const { style, onSelect } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -61,6 +64,11 @@ const PaymentProvidersBlock = (props: Object): Object => {
 		imageWidth,
 		imageHeight,
 	} = getStyle(layout);
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const [ selectedIndex, setSeletedIndex ] = useState(0);
 
@@ -100,7 +108,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 	return (
 		<View style={[coverStyle, style]}>
 			<Text style={labelStyle}>
-            Select payment provider
+				{formatMessage(i18n.selectPaymentProvider)}
 			</Text>
 			<View style={optionsCoverStyle}>
 				{options}

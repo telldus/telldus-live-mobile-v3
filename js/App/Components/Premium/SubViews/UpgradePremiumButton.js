@@ -24,6 +24,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	TouchableButton,
@@ -31,10 +32,17 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const UpgradePremiumButton = (props: Object): Object => {
 	const { buttonAccessibleProp = true, navigation } = props;
 
-	const { app: { layout } } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		buttonStyle,
@@ -49,8 +57,8 @@ const UpgradePremiumButton = (props: Object): Object => {
 	return (
 		<TouchableButton
 			onPress={onPress}
-			text={'Upgrade to premium'}
-			accessibilityLabel={'Upgrade to premium'}
+			text={formatMessage(i18n.upgradeToPremium)}
+			accessibilityLabel={formatMessage(i18n.upgradeToPremium)}
 			accessible={buttonAccessibleProp}
 			style={buttonStyle}
 		/>

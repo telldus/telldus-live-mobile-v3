@@ -34,6 +34,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const AutoRenewalBlock = (props: Object): Object => {
 	const {
 		style,
@@ -45,7 +47,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 	} = props;
 
 	const intl = useIntl();
-	const { formatDate } = intl;
+	const { formatDate, formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
@@ -58,7 +60,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 		});
 	}
 
-	const value = locale === 'auto' ? 'Active' : formatDate(new Date(pro * 1000));
+	const value = locale === 'auto' ? formatMessage(i18n.labelActive) : formatDate(new Date(pro * 1000));
 
 	const {
 		upgradeSyle,
@@ -70,7 +72,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 			type={'text'}
 			edit={false}
 			inLineEditActive={false}
-			label={locale === 'auto' ? 'Automatic renewal' : 'Valid until'}
+			label={locale === 'auto' ? formatMessage(i18n.automaticRenewal) : formatMessage(i18n.validUntil)}
 			value={value}
 			appLayout={layout}
 			iconValueRight={locale === 'auto' ?

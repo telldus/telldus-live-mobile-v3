@@ -25,6 +25,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -43,8 +44,12 @@ import {
 import {
 	getUserProfile,
 } from '../../Actions/Login';
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../Lib/appUtils';
 
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 const ManageSubscriptionScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
@@ -64,6 +69,10 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 		contentTwo,
 	} = getStyles(layout);
 
+	const {
+		formatMessage,
+	} = useIntl();
+
 	const dispatch = useDispatch();
 	function onConfirm() {
 		dispatch(cancelSubscription('premium')).then((response: Object) => {
@@ -76,9 +85,9 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			}
 		}).catch((err: Object) => {
 			if (err.message === 'b9e1223e-4ea4-4cdf-97f7-0e23292ef40e') {
-				dispatch(showToast('You are currently not subscribed to any recurring payment'));
+				dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorOne)));
 			} else if (err.message === '91dedfc0-809d-4335-a1c6-2b5da68d0ad8') {
-				dispatch(showToast('Sorry, the subscription is not cancelable'));
+				dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorTwo)));
 			} else {
 				dispatch(showToast(err.message || 'Sorry something went wrong. Please try again later'));
 			}
@@ -87,30 +96,43 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	}
 
 	function onPress() {
-		const header = 'Cancel automatic renewal?';
-		const text = 'If you cancel automatic renewal of your Premium ' +
-		'subscription you will still have Premium Access for the remaining period ' +
-		'that you have paid for. However, you will have to renew manually before that ' +
-		'period runs out to avoid losing functionality and sensor history. Please confirm ' +
-		'if you still want to cancel.';
+		const header = `${formatMessage(i18n.cancelAutoRenew)}?`;
+		const text = formatMessage(i18n.cancelAutoRenewDescription);
 		toggleDialogueBox({
 			show: true,
 			showHeader: true,
 			header,
-			text, // TODO: translate
+			text,
 			showPositive: true,
 			showNegative: true,
-			positiveText: 'CONFIRM',
+			positiveText: formatMessage(i18n.confirm),
 			closeOnPressPositive: true,
 			closeOnPressNegative: true,
 			onPressPositive: onConfirm,
 		});
 	}
 
+	const headerArray = formatMessage(i18n.premiumSubscription).split(' ');
+	const header = headerArray.map((word: string): Object => {
+		if (word.includes('%')) {
+			return (
+				<Text style={titleStyleOne}>
+					{` ${word.replace(/%/g, '').toUpperCase()}`}
+				</Text>
+			);
+		}
+		return (
+			<Text style={titleStyleTwo}>
+				{word.toUpperCase()}
+			</Text>
+		);
+	});
+
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={'Premium Access'} h2={'Manage Subscription'}
+				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h2={formatMessage(i18n.manageSubscription)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
@@ -120,24 +142,19 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 				<View style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
-						<Text style={titleStyleOne}>
-							{'Premium'.toUpperCase()}
-						</Text>
-						<Text style={titleStyleTwo}>
-							{' Subscription'.toUpperCase()}
-						</Text>
+						{header}
 					</View>
 					<Text style={contentOne}>
-						You have an automatically renewed Premium subscription and {credits} SMS credits.
+						{formatMessage(i18n.manageSubscriptionDescription, {credits})}
 					</Text>
 					<Text style={contentTwo}>
-						Your subscription is automatically renewed annually.
+						{formatMessage(i18n.autoRenewDescription)}
 					</Text>
 				</View>
 				<TouchableButton
 					onPress={onPress}
-					text={'Cancel automatic renewal'}
-					accessibilityLabel={'Cancel automatic renewal'}
+					text={formatMessage(i18n.cancelAutoRenew)}
+					accessibilityLabel={formatMessage(i18n.cancelAutoRenew)}
 					accessible={true}
 					style={buttonStyle}
 				/>

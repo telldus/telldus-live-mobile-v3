@@ -24,6 +24,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	TouchableButton,
@@ -32,6 +33,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const AdditionalPlansPayments = (props: Object): Object => {
 	const {
 		buttonAccessibleProp = true,
@@ -39,6 +42,9 @@ const AdditionalPlansPayments = (props: Object): Object => {
 		linkTextStyle,
 		button = true,
 	} = props;
+
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { app: { layout } } = useSelector((state: Object): Object => state);
 
@@ -57,14 +63,14 @@ const AdditionalPlansPayments = (props: Object): Object => {
 		<>
 		{ button ? <TouchableButton
 			onPress={onPress}
-			text={'Additional payment options'}
-			accessibilityLabel={'Additional payment options'}
+			text={formatMessage(i18n.additionalPaymentOptions)}
+			accessibilityLabel={formatMessage(i18n.additionalPaymentOptions)}
 			accessible={buttonAccessibleProp}
 			style={buttonStyle}
 		/>
 			:
 			<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
-			Additional payment options
+				{formatMessage(i18n.additionalPaymentOptions)}
 			</Text>
 		}
 		</>
