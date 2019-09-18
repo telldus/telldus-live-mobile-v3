@@ -36,6 +36,10 @@ import {
 	TouchableButton,
 } from '../../../BaseComponents';
 
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../Lib/appUtils';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -60,7 +64,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 
 	const { formatMessage } = useIntl();
 	function getInfo({product, quantity}: Object): Object {
-		const postS = ' Premium Access';
+		const postS = ` ${formatMessage(i18n.premiumAccess)}`;
 		switch (product) {
 			case 'pro': {// TODO: check with Johannes
 				const months = 1 * quantity;
@@ -120,23 +124,23 @@ const PostPurchaseScreen = (props: Object): Object => {
 	const success = navigation.getParam('success', false);
 
 	const bodyText = !success ?
-		'Your payment was not accepted and the purchase has been aborted. No transaction has been made. Please try again and make sure that you have entered the correct payment information.'
+		formatMessage(i18n.paymentFailDescription)
 		:
 		voucher ?
-			'Your voucher code has been accepted and your account has been upgraded with the following:'
+			formatMessage(i18n.codeSuccessDescription)
 			:
-			'Your payment has been accepted and your purchase is now completed. Your account has been upgraded with the following:'
-	;
+			formatMessage(i18n.paymentSuccessDescription);
 
-	const title = !success ? 'Could not complete purchase' :
-		voucher ? 'Thank you!'
+	const title = !success ? formatMessage(i18n.couldNotCompletePurchase) :
+		voucher ? formatMessage(i18n.thankYou)
 			:
-			'Thank you for your purchase!';
+			formatMessage(i18n.purchaseThanks);
 
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={voucher ? 'Redeem Gift Card' : 'Premium Access'} h2={voucher ? 'Code Accepted' : 'Get more features & benefits'}
+				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={!success}
 				leftIcon={success ? undefined : 'close'}
@@ -166,7 +170,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 					{!!credits && <View style={purchaseInfoCover}>
 						<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
 						<Text style={purchaseInfoText}>
-							{`${credits} `}{'sms credits'.toUpperCase()}
+							{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
 						</Text>
 					</View>
 					}
@@ -175,8 +179,8 @@ const PostPurchaseScreen = (props: Object): Object => {
 				</View>
 				{success ? <TouchableButton
 					onPress={onPress}
-					text={'ok'}
-					accessibilityLabel={'ok'}
+					text={formatMessage(i18n.defaultPositiveText)}
+					accessibilityLabel={formatMessage(i18n.defaultPositiveText)}
 					accessible={true}
 					style={buttonStyle}
 				/>
@@ -184,15 +188,15 @@ const PostPurchaseScreen = (props: Object): Object => {
 				<>
 				<TouchableButton
 					onPress={onPressTryAgain}
-					text={'Try again'}
-					accessibilityLabel={'Try again'}
+					text={formatMessage(i18n.tryAgain)}
+					accessibilityLabel={formatMessage(i18n.tryAgain)}
 					accessible={true}
 					style={buttonStyle}
 				/>
 				<TouchableButton
 					onPress={onPressCancel}
-					text={'Cancel'}
-					accessibilityLabel={'Cancel'}
+					text={formatMessage(i18n.defaultNegativeText)}
+					accessibilityLabel={formatMessage(i18n.defaultNegativeText)}
 					accessible={true}
 					style={buttonStyle}
 				/>
