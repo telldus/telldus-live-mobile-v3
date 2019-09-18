@@ -160,7 +160,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const {
 		name: paymentProvider,
 		supportAutoRenew,
-	} = getPaymentOptions()[paymentProviderIndex];
+	} = getPaymentOptions(formatMessage)[paymentProviderIndex];
 
 	function onSelect(index: number, provider: string) {
 		setPaymentProviderIndex(index);
@@ -262,7 +262,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					accessible={true}
 					style={buttonStyle}
 				/>
-				<Text style={backLinkStyle} onPress={onGoBack}>Back</Text>
+				<Text style={backLinkStyle} onPress={onGoBack}>{formatMessage(i18n.backLabel)}</Text>
 			</ScrollView>
 		</View>
 	);

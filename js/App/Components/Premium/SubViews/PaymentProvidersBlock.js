@@ -72,7 +72,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 
 	const [ selectedIndex, setSeletedIndex ] = useState(0);
 
-	const options = getPaymentOptions().map((option: Object, key: number): Object => {
+	const options = getPaymentOptions(formatMessage).map((option: Object, key: number): Object => {
 		const {
 			name,
 			image,

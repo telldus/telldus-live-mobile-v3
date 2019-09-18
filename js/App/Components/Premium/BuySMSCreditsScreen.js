@@ -129,7 +129,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 
 	const {
 		name: paymentProvider,
-	} = getPaymentOptions()[paymentProviderIndex];
+	} = getPaymentOptions(formatMessage)[paymentProviderIndex];
 
 	function onSelect(index: number, provider: string) {
 		setPaymentProviderIndex(index);

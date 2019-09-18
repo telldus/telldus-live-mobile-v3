@@ -99,7 +99,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	function onPress() {
 		const product = getSubscriptionPlans()[index].product;
 		const credits = getSubscriptionPlans()[index].smsCredit;
-		const { name: paymentProvider } = getPaymentOptions()[index];
+		const { name: paymentProvider } = getPaymentOptions(formatMessage)[index];
 		const quantity = 1;
 		const options = {
 			product,
