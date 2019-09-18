@@ -163,7 +163,7 @@ render(): Object {
 	const cModevalue = this.formatModeValue(currentValueInScreen);
 	const currModevalue = this.formatModeValue(currentValue);
 
-	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated), 10);
+	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
 
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	return (

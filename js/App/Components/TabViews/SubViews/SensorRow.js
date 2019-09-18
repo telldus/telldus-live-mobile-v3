@@ -484,7 +484,7 @@ class SensorRow extends View<Props, State> {
 			textInfoStyle = timeTablet;
 		}
 
-		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdatedValue), 10);
+		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdatedValue));
 
 		return (
 			<View style={coverStyle} onLayout={this.onLayoutCover}>
