@@ -26,13 +26,15 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
-
 import {
 	SettingsRow,
 	Text,
 	View,
-	IconTelldus,
 } from '../../../../BaseComponents';
+
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../../Lib/appUtils';
 
 import Theme from '../../../Theme';
 
@@ -64,10 +66,17 @@ const SMSBlock = (props: Object): Object => {
 		});
 	}
 
+	function onPressBuyCredits() {
+		navigation.navigate({
+			routeName: 'BuySMSCreditsScreen',
+			key: 'BuySMSCreditsScreen',
+		});
+	}
+
 	const {
 		coverStyle,
 		linkTextStyle,
-		iconStyle,
+		buyCreditsStyle,
 	} = getStyle(layout);
 
 	return (
@@ -80,7 +89,8 @@ const SMSBlock = (props: Object): Object => {
 				label={formatMessage(i18n.smsCredits)}
 				value={`${credits}`}
 				appLayout={layout}
-				iconValueRight={<IconTelldus icon="cart" style={iconStyle}/>}
+				iconValueRight={<Text style={buyCreditsStyle}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}</Text>}
+				onPressIconValueRight={onPressBuyCredits}
 				onPress={false}
 				intl={intl}
 				style={style}
@@ -105,10 +115,6 @@ const getStyle = (appLayout: Object): Object => {
 		coverStyle: {
 			marginTop: padding,
 		},
-		iconStyle: {
-			color: Theme.Core.brandSecondary,
-			fontSize: Math.floor(deviceWidth * 0.045) * 1.3,
-		},
 		linkTextStyle: {
 			marginTop: padding / 2,
 			alignSelf: 'center',
@@ -117,6 +123,10 @@ const getStyle = (appLayout: Object): Object => {
 			textAlignVertical: 'center',
 			textAlign: 'center',
 			padding: 5,
+		},
+		buyCreditsStyle: {
+			color: Theme.Core.brandSecondary,
+			fontSize: deviceWidth * 0.04,
 		},
 	};
 };
