@@ -88,7 +88,7 @@ export default class TelldusWebsocket {
 
 	close(): any {
 		if (!this.websocket) {
-			return console.error('there is no websocket to close');
+			return console.log('there is no websocket to close');
 		}
 		if (this.websocket.readyState === this.websocket.CLOSE) {
 			return console.log('socket already closed');
