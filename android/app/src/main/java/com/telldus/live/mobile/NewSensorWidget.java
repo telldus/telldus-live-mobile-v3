@@ -337,9 +337,11 @@ public class NewSensorWidget extends AppWidgetProvider {
         Boolean isBasicUser = pro == -1 || pro < now;
         if (isBasicUser) {
             if (ACTION_PURCHASE_PRO.equals(intent.getAction())) {
-                Intent basicUserActivity = new Intent(context, BasicUserActivity.class);
-                basicUserActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(basicUserActivity);
+                Intent mainActivity = new Intent(context, MainActivity.class);
+                mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(mainActivity);
+                WidgetModule.setOpenPurchase(true);
                 return;
             }
 

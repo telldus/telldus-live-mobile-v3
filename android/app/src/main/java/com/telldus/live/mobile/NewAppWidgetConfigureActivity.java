@@ -133,10 +133,11 @@ public class NewAppWidgetConfigureActivity extends Activity {
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         if (pro == -1 || pro < now) {
-            Intent basicActivity = new Intent(getApplicationContext(), BasicUserActivity.class);
-            basicActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            basicActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            getApplicationContext().startActivity(basicActivity);
+           Intent mainActivity = new Intent(getApplicationContext(), MainActivity.class);
+            mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mainActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            getApplicationContext().startActivity(mainActivity);
+            WidgetModule.setOpenPurchase(true);
             return;
         }
 

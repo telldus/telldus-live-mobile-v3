@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import { Linking } from 'react-native';
+import { Linking, NativeModules, Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
@@ -34,6 +34,8 @@ import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
+
+const { AndroidWidget } = NativeModules;
 
 import {
 	setAppLayout,
@@ -154,6 +156,8 @@ componentDidMount() {
 		this.autoDetectLocalTellStick();
 	});
 
+	this.checkIfOpenPurchase();
+
 	NetInfo.addEventListener(
 		'connectionChange',
 		this.handleConnectivityChange,
@@ -162,6 +166,17 @@ componentDidMount() {
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
 		this.addNewLocation();
+	}
+}
+
+checkIfOpenPurchase = async () => {
+	// TODO: Remove check once iOS support widgets.
+	if (Platform.OS === 'android') {
+		const openPurchase = await AndroidWidget.checkIfOpenPurchase();
+		if (openPurchase) {
+			AndroidWidget.setOpenPurchase(false);
+			navigate('AdditionalPlansPaymentsScreen', {}, 'AdditionalPlansPaymentsScreen');
+		}
 	}
 }
 
