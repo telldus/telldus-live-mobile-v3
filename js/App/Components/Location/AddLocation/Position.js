@@ -67,6 +67,8 @@ class Position extends View {
 		this.h1 = formatMessage(i18n.headerOnePosition);
 		this.h2 = formatMessage(i18n.headerTwoPosition);
 
+		this.unknownError = `${formatMessage(i18n.unknownError)}.`;
+
 		this.labelMessageToAnnounce = `${formatMessage(i18n.screen)} ${this.h1}. ${this.h2}`;
 
 		this.infoButton = {
