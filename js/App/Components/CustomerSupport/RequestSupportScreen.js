@@ -250,7 +250,7 @@ render(testData: Object): Object {
 			backgroundColor: Theme.Core.appBackground,
 		}}>
 			<NavigationHeaderPoster
-				h1={'Help & Support'} h2={'We can help you!'}
+				h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}

@@ -39,6 +39,9 @@ import {
 import {
 	showToast,
 } from '../../Actions/App';
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../Lib/appUtils';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -79,19 +82,20 @@ const UpdatePasswordScreen = (props: Object): Object => {
 	const dispatch = useDispatch();
 	function onSubmit() {
 		if (currentPas.trim() === '' || newPass.trim() === '' || newPassConf.trim() === '') {
-			let postScript = 'confirm password';
+			let postF = formatMessage(i18n.fieldEmptyPostfix);
+			let preS = formatMessage(i18n.newPasswordConfirm);
 			if (newPass.trim() === '') {
-				postScript = 'new password';
+				preS = formatMessage(i18n.newPassword);
 			}
 			if (currentPas.trim() === '') {
-				postScript = 'current password';
+				preS = formatMessage(i18n.currentPassword);
 			}
-			const message = `${postScript} ${formatMessage(i18n.fieldEmptyPostfix)}`;
+			const message = `${preS} ${postF}`;
 			showDialogue(message);
 			return;
 		}
 		if (newPass !== newPassConf) {
-			showDialogue('confirm password does not match the new password.');
+			showDialogue('confirm password does not match the new password.'); // TODO: translate
 			return;
 		}
 		setLoadingAndChangePassStatus({
@@ -117,7 +121,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		toggleDialogueBox({
 			show: true,
 			showHeader: true,
-			text: message, // TODO: translate
+			text: message,
 			showPositive: true,
 			closeOnPressPositive: true,
 		});
@@ -138,7 +142,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 	return (
 <>
 <NavigationHeaderPoster
-	h1={'Change password'} h2={'Enter new password below'}
+	h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))} h2={formatMessage(i18n.enterNewPassBelow)}
 	align={'right'}
 	showLeftIcon={true}
 	leftIcon={'close'}
@@ -147,13 +151,13 @@ const UpdatePasswordScreen = (props: Object): Object => {
 <ScrollView style={container}>
 	<View style={body}>
 		<Text style={titleStyle}>
-            Change Password
+			{capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))}
 		</Text>
 		<Text style={bodyStyle}>
-            Please confirm your current password below and enter the new password that you would like to change to.
+			{formatMessage(i18n.changePassDescription)}
 		</Text>
 		<Text style={currentLabelStyle}>
-           Current password
+			{formatMessage(i18n.currentPassword)}
 		</Text>
 		<TextInput
 			value={currentPas}
@@ -173,7 +177,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 			autoFocus={false}
 			underlineColorAndroid={Theme.Core.inactiveGray}
 			returnKeyType={'done'}
-			placeholder={'New password'}
+			placeholder={formatMessage(i18n.newPassword)}
 			placeholderTextColor={Theme.Core.inactiveGray}
 			secureTextEntry={true}
 		/>
@@ -185,14 +189,14 @@ const UpdatePasswordScreen = (props: Object): Object => {
 			autoFocus={false}
 			underlineColorAndroid={Theme.Core.inactiveGray}
 			returnKeyType={'done'}
-			placeholder={'Confirm new password'}
+			placeholder={formatMessage(i18n.newPasswordConfirm)}
 			placeholderTextColor={Theme.Core.inactiveGray}
 			secureTextEntry={true}
 		/>
 	</View>
 	<TouchableButton
 		onPress={onSubmit}
-		text={isLoading ? 'Sending...' : 'Change password'}
+		text={isLoading ? `${formatMessage(i18n.labelSending)}...` : formatMessage(i18n.changePassword)}
 		postScript={isLoading ? '...' : null}
 		accessible={true}
 		style={buttonStyle}
