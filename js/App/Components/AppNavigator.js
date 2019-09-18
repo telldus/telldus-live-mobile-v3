@@ -51,6 +51,7 @@ import PurchaseHistoryScreen from './Premium/PurchaseHistoryScreen';
 import PostPurchaseScreen from './Premium/PostPurchaseScreen';
 import TransactionWebview from './Premium/TransactionWebview';
 import RequestSupportScreen from './CustomerSupport/RequestSupportScreen';
+import BuySMSCreditsScreen from './Premium/BuySMSCreditsScreen';
 
 const RouteConfigs = {
 	Tabs: {
@@ -306,6 +307,17 @@ const RouteConfigs = {
 	},
 	RequestSupportScreen: {
 		screen: RequestSupportScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	BuySMSCreditsScreen: {
+		screen: BuySMSCreditsScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
