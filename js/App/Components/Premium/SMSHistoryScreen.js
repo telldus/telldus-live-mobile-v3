@@ -60,7 +60,7 @@ const prepareListData = (history: Array<Object>): Array<Object> => {
 
 const SMSHistoryScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { app: {layout} } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 		rowStyle,

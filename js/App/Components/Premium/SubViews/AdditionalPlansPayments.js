@@ -46,7 +46,7 @@ const AdditionalPlansPayments = (props: Object): Object => {
 	const intl = useIntl();
 	const { formatMessage } = intl;
 
-	const { app: { layout } } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
 		buttonStyle,

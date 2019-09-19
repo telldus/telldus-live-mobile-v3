@@ -51,7 +51,7 @@ import Theme from '../../Theme';
 
 const RedeemGiftScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { app: {layout} } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 		body,

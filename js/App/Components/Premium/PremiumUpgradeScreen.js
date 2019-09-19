@@ -60,7 +60,7 @@ import i18n from '../../Translations/common';
 
 const PremiumUpgradeScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { app: {layout} } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 		body,

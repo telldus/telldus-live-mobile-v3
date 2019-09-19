@@ -57,7 +57,8 @@ const EditNameBlock = (props: Object): Object => {
 	const intl = useIntl();
 	const { formatMessage } = intl;
 
-	const { app: {layout}, user: {userProfile} } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
+	const { userProfile } = useSelector((state: Object): Object => state.user);
 	const { firstname = '', lastname = '' } = userProfile || {};
 	const FN = `${firstname} ${lastname}`;
 

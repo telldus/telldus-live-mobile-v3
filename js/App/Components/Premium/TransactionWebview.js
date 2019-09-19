@@ -40,7 +40,7 @@ import {
 const TransactionWebview = (props: Object): Object => {
 	const { navigation } = props;
 
-	const { app: {layout} } = useSelector((state: Object): Object => state);
+	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 	} = getStyles(layout);
