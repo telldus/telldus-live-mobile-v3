@@ -126,6 +126,8 @@ export type Action =
 	| { type: 'TOGGLE_INACTIVE_VISIBILITY', payload: Object }
 
 	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
+
+	| { type: 'RECEIVED_USER_SUBSCRIPTIONS', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
