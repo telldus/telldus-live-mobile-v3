@@ -56,8 +56,8 @@ import i18n from '../../Translations/common';
 const ProfileTab = (props: Object): Object => {
 	const { screenProps: {toggleDialogueBox}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
-	const { locale, pro } = userProfile;
+	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
+	const { pro } = userProfile;
 
 	function onPressRedeemGift() {
 		navigation.navigate({
@@ -80,7 +80,14 @@ const ProfileTab = (props: Object): Object => {
 		pHistoryCStyle,
 	} = getStyles(layout);
 
-	const showAuto = locale === 'auto';
+	let showAuto = false;
+	Object.keys(subscriptions).map((key: string) => {
+		const {
+			product,
+			status,
+		} = subscriptions[key];
+		showAuto = product === 'premium' && status === 'active';
+	});
 	const isBasic = moment().unix() > pro;
 
 	function onPressViewPurchaseHistory() {

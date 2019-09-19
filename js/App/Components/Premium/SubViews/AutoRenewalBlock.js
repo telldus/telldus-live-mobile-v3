@@ -50,8 +50,8 @@ const AutoRenewalBlock = (props: Object): Object => {
 	const { formatDate, formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
-	const { locale, pro } = userProfile;
+	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
+	const { pro } = userProfile;
 
 	function onPressManageSubscription() {
 		navigation.navigate({
@@ -60,7 +60,16 @@ const AutoRenewalBlock = (props: Object): Object => {
 		});
 	}
 
-	const value = locale === 'auto' ? formatMessage(i18n.labelActive) : formatDate(new Date(pro * 1000));
+	let isAutoRenew = false;
+	Object.keys(subscriptions).map((key: string) => {
+		const {
+			product,
+			status,
+		} = subscriptions[key];
+		isAutoRenew = product === 'premium' && status === 'active';
+	});
+
+	const value = isAutoRenew ? formatMessage(i18n.labelActive) : formatDate(new Date(pro * 1000));
 
 	const {
 		upgradeSyle,
@@ -72,16 +81,16 @@ const AutoRenewalBlock = (props: Object): Object => {
 			type={'text'}
 			edit={false}
 			inLineEditActive={false}
-			label={locale === 'auto' ? formatMessage(i18n.automaticRenewal) : formatMessage(i18n.validUntil)}
+			label={isAutoRenew ? formatMessage(i18n.automaticRenewal) : formatMessage(i18n.validUntil)}
 			value={value}
 			appLayout={layout}
-			iconValueRight={locale === 'auto' ?
+			iconValueRight={isAutoRenew ?
 				<IconTelldus icon={'settings'} style={upgradeSyle}/>
 				:
 				<IconTelldus icon="cart" style={cartIconStyle}/>
 			}
 			onPress={false}
-			onPressIconValueRight={locale === 'auto' ?
+			onPressIconValueRight={isAutoRenew ?
 				onPressManageSubscription
 				:
 				null

@@ -40,6 +40,7 @@ export type State = {
 	deviceName: string,
 	deviceModel: string,
 	phonesList: Object,
+	subscriptions: Object,
 };
 
 export const initialState = {
@@ -56,6 +57,7 @@ export const initialState = {
 	deviceName: '',
 	deviceModel: '',
 	phonesList: {}, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
+	subscriptions: {}, // Included in v3.12, and not in migrations, make sure to supply default value while using this prop.
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {

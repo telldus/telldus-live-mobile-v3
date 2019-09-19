@@ -59,8 +59,8 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	} = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
-	const { pro, locale } = userProfile;
+	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
+	const { pro } = userProfile;
 
 	function onPressUpgrade() {
 		navigation.navigate({
@@ -68,6 +68,15 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 			key: 'PremiumUpgradeScreen',
 		});
 	}
+
+	let isAutoRenew = false;
+	Object.keys(subscriptions).map((key: string) => {
+		const {
+			product,
+			status,
+		} = subscriptions[key];
+		isAutoRenew = product === 'premium' && status === 'active';
+	});
 
 	const {
 		upgradeSyle,
@@ -94,9 +103,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				label={formatMessage(i18n.subscription)}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={locale === 'auto' ? null : <Text style={upgradeSyle}>{pro ? formatMessage(i18n.renew) : formatMessage(i18n.upgrade)}</Text>}
+				iconValueRight={isAutoRenew ? null : <Text style={upgradeSyle}>{pro ? formatMessage(i18n.renew) : formatMessage(i18n.upgrade)}</Text>}
 				onPress={false}
-				onPressIconValueRight={locale === 'auto' ? null : onPressUpgrade}
+				onPressIconValueRight={isAutoRenew ? null : onPressUpgrade}
 				intl={intl}
 				style={style}
 				contentCoverStyle={contentCoverStyle}
