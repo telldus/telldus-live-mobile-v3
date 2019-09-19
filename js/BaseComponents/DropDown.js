@@ -35,7 +35,6 @@ import shouldUpdate from '../App/Lib/shouldUpdate';
 import Theme from '../App/Theme';
 
 import i18n from '../App/Translations/common';
-import { string } from 'prop-types';
 
 type DDMargin = {
 	min: number,
