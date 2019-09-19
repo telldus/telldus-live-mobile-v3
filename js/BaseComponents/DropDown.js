@@ -35,6 +35,7 @@ import shouldUpdate from '../App/Lib/shouldUpdate';
 import Theme from '../App/Theme';
 
 import i18n from '../App/Translations/common';
+import { string } from 'prop-types';
 
 type DDMargin = {
 	min: number,
@@ -65,7 +66,8 @@ type Props = {
 	pickerStyle?: Array<any> | number | Object,
 	overlayStyle?: Array<any> | number | Object,
 	dropdownMargins?: DDMargin,
-	pickerBaseCoverStyle: Array<any> | number | Object,
+	pickerBaseCoverStyle?: Array<any> | number | Object,
+	textColor?: string,
 };
 
 type DefaultProps = {
