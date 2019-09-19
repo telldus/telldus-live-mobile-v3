@@ -65,6 +65,7 @@ type Props = {
 	pickerStyle?: Array<any> | number | Object,
 	overlayStyle?: Array<any> | number | Object,
 	dropdownMargins?: DDMargin,
+	pickerBaseCoverStyle: Array<any> | number | Object,
 };
 
 type DefaultProps = {
@@ -127,10 +128,10 @@ static defaultProps: DefaultProps = {
 
 	renderBase(items: Object): Object {
 		const { title } = items;
-		const { appLayout, baseLeftIcon, baseColor } = this.props;
+		const { appLayout, baseLeftIcon, baseColor, pickerBaseCoverStyle } = this.props;
 
 		const {
-			pickerBaseCoverStyle,
+			pickerBaseCoverStyleDef,
 			pickerBaseTextStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
@@ -142,7 +143,7 @@ static defaultProps: DefaultProps = {
 				rippleColor={rippleColor}
 				rippleOpacity={rippleOpacity}
 				rippleDuration={250}
-				style={pickerBaseCoverStyle}
+				style={[pickerBaseCoverStyleDef, pickerBaseCoverStyle]}
 				onPress={this.onPressPicker}
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}>
@@ -174,6 +175,7 @@ static defaultProps: DefaultProps = {
 			pickerStyle,
 			overlayStyle,
 			dropdownMargins,
+			textColor,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -215,6 +217,7 @@ static defaultProps: DefaultProps = {
 							left: 0,
 						}}
 						dropdownMargins={dropdownMargins}
+						textColor={textColor}
 					/>
 				</View>
 			</View>
@@ -255,7 +258,7 @@ static defaultProps: DefaultProps = {
 				marginBottom: padding / 2,
 				backgroundColor: '#fff',
 			},
-			pickerBaseCoverStyle: {
+			pickerBaseCoverStyleDef: {
 				flex: 1,
 				flexDirection: 'row',
 				justifyContent: 'flex-start',
