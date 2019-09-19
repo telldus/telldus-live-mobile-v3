@@ -55,6 +55,7 @@ type Props = {
 	navigation: Object,
 	screenReaderEnabled: boolean,
 	addNewLocation: Function,
+	gatewaysById: Object,
 };
 
 type State = {
@@ -570,11 +571,13 @@ class DevicesTab extends View {
 			return null;
 		}
 
-		const { screenProps } = this.props;
+		const { screenProps, gatewaysById } = this.props;
+
+		const { name } = gatewaysById[sectionData.section.header] || {};
 
 		return (
 			<DeviceHeader
-				gateway={sectionData.section.header}
+				gateway={name}
 				appLayout={screenProps.appLayout}
 				intl={screenProps.intl}
 				supportLocalControl={supportLocalControl}
@@ -622,7 +625,7 @@ class DevicesTab extends View {
 				propsSwipeRow={propsSwipeRow}
 				screenReaderEnabled={screenReaderEnabled}
 				isNew={!!newDevices[id]}
-				gatewayName={section.header}
+				gatewayId={section.header}
 				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 				onPressDeviceAction={this.onPressDeviceAction}
 				openRGBControl={this.openRGBControl}
@@ -662,23 +665,28 @@ class DevicesTab extends View {
 		}
 	}
 
-	onNewlyAddedDidMount(id: number, clientName: string) {
+	onNewlyAddedDidMount(id: number, clientId: string) {
 		const { rowsAndSections, navigation } = this.props;
 		const { visibleList } = rowsAndSections;
 		const newDevices = navigation.getParam('newDevices', {});
 		let section, row;
 		let item = newDevices[id];
 		if (item && item.mainNode) {
-			visibleList.map((list: Object, index: number) => {
-				if (list.header === clientName) {
-					section = index;
-					list.data.map((l: Object, i: number) => {
-						if (l.id === id) {
-							row = i;
+			for (let i = 0; i < visibleList.length; i++) {
+				const list = visibleList[i];
+				if (list.header === clientId) {
+					section = i;
+					for (let j = 0; j < list.data.length; j++) {
+						if (list.data[j].id === id) {
+							row = j;
+							break;
 						}
-					});
+					}
+					if (row) {
+						break;
+					}
 				}
-			});
+			}
 			if (this.listView) {
 				this.listView.scrollToLocation({
 					animated: true,
@@ -901,6 +909,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		devices: state.devices.allIds,
 		devicesDidFetch: state.devices.didFetch,
 		gateways: state.gateways.allIds,
+		gatewaysById: state.gateways.byId,
 		screenReaderEnabled,
 	};
 }

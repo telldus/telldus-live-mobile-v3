@@ -48,7 +48,7 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 	});
 	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];
-		return gateway && gateway.name;
+		return gateway && gateway.id;
 	});
 	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
 		acc.push({
@@ -58,9 +58,8 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 		return acc;
 	}, []);
 	return orderBy(result, [(item: Object): any => {
-		let { header = '' } = item;
-		header = typeof header !== 'string' ? '' : header;
-		return header.toLowerCase();
+		const { name = '' } = gateways[item.header] || {};
+		return name.toLowerCase();
 	}], ['asc']);
 }
 

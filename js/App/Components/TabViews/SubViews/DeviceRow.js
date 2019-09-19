@@ -63,7 +63,7 @@ type Props = {
 	isGatewayActive: boolean,
 	isLast: boolean,
 	isNew: boolean,
-	gatewayName: string,
+	gatewayId: string,
 	powerConsumed: string | null,
 	propsSwipeRow: Object,
 	onBell: (number) => void,
@@ -179,7 +179,7 @@ class DeviceRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed', 'isNew', 'gatewayName', 'isLast',
+				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed', 'isNew', 'gatewayId', 'isLast',
 			]);
 			if (propsChange) {
 				return true;
@@ -197,9 +197,9 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	componentDidMount() {
-		const { onNewlyAddedDidMount, device, isNew, gatewayName } = this.props;
+		const { onNewlyAddedDidMount, device, isNew, gatewayId } = this.props;
 		if (onNewlyAddedDidMount && isNew) {
-			onNewlyAddedDidMount(device.id, gatewayName);
+			onNewlyAddedDidMount(device.id, gatewayId);
 		}
 	}
 

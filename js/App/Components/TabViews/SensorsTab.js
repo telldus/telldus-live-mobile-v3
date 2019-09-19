@@ -45,6 +45,7 @@ type Props = {
 	dispatch: Function,
 	sensors: Array<any>,
 	sensorsDidFetch: boolean,
+	gatewaysById: Object,
 };
 
 type State = {
@@ -375,11 +376,13 @@ class SensorsTab extends View {
 			return null;
 		}
 
-		const { screenProps } = this.props;
+		const { screenProps, gatewaysById } = this.props;
+
+		const { name } = gatewaysById[sectionData.section.header] || {};
 
 		return (
 			<DeviceHeader
-				gateway={sectionData.section.header}
+				gateway={name}
 				appLayout={screenProps.appLayout}
 				intl={screenProps.intl}
 				supportLocalControl={supportLocalControl}
@@ -530,6 +533,7 @@ function mapStateToProps(store: Object): Object {
 		screenReaderEnabled,
 		sensors: store.sensors.allIds,
 		sensorsDidFetch: store.sensors.didFetch,
+		gatewaysById: store.gateways.byId,
 	};
 }
 
