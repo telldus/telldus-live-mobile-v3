@@ -95,7 +95,7 @@ const UpdatePasswordScreen = (props: Object): Object => {
 			return;
 		}
 		if (newPass !== newPassConf) {
-			showDialogue('confirm password does not match the new password.'); // TODO: translate
+			showDialogue(formatMessage(i18n.errorPassWordNotSame));
 			return;
 		}
 		setLoadingAndChangePassStatus({
@@ -103,12 +103,10 @@ const UpdatePasswordScreen = (props: Object): Object => {
 			changePassWordSuccess: false,
 		});
 		dispatch(changePassword(currentPas, newPass)).then(() => {
-			// TODO: translate
-			dispatch(showToast('Password has been changed successfully.'));
+			dispatch(showToast(formatMessage(i18n.successPassUpdate)));
 			props.navigation.goBack();
 		}).catch((err: any) => {
-			// TODO: translate
-			const defaultMessage = 'Sorry something went wrong while changing the password. Please try later.';
+			const defaultMessage = formatMessage(i18n.errorPassUpdate);
 			dispatch(showToast(err.message || defaultMessage));
 			setLoadingAndChangePassStatus({
 				isLoading: false,

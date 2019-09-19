@@ -80,7 +80,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 				dispatch(getUserProfile());
 				navigation.goBack();
 			} else {
-				dispatch(showToast('Sorry something went wrong. Please try again later'));
+				dispatch(showToast(formatMessage(i18n.unknownError)));
 				dispatch(getUserProfile());
 			}
 		}).catch((err: Object) => {
@@ -89,7 +89,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			} else if (err.message === '91dedfc0-809d-4335-a1c6-2b5da68d0ad8') {
 				dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorTwo)));
 			} else {
-				dispatch(showToast(err.message || 'Sorry something went wrong. Please try again later'));
+				dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 			}
 			dispatch(getUserProfile());
 		});

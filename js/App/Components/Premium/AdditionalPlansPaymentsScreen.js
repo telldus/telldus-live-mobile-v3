@@ -192,11 +192,11 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					},
 				});
 			} else {
-				dispatch(showToast('Sorry something went wrong. Please try later.'));
+				dispatch(showToast(formatMessage(i18n.unknownError)));
 				dispatch(getUserProfile());
 			}
 		}).catch((err: Object) => {
-			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
+			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 			dispatch(getUserProfile());
 		});
 	}

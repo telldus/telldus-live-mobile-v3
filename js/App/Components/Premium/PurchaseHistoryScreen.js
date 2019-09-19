@@ -190,7 +190,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 			{(!isLoading && listData.length === 0 ) ?
 				<View style={emptyCover}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={emptyInfo}>No history data found.</Text>
+					<Text style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
 				</View>
 				:
 				<SectionList

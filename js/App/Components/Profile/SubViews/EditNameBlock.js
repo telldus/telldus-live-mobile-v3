@@ -55,6 +55,7 @@ const EditNameBlock = (props: Object): Object => {
 	const [ inLineEditActive, setInLineEditActive ] = useState(false);
 
 	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { app: {layout}, user: {userProfile} } = useSelector((state: Object): Object => state);
 	const { firstname = '', lastname = '' } = userProfile || {};
@@ -79,7 +80,7 @@ const EditNameBlock = (props: Object): Object => {
 			toggleDialogueBox({
 				show: true,
 				showHeader: true,
-				text: 'name cannot be empty.', // TODO: translate
+				text: formatMessage(i18n.errorNameFieldEmpty),
 				showPositive: true,
 				closeOnPressPositive: true,
 			});
@@ -87,10 +88,10 @@ const EditNameBlock = (props: Object): Object => {
 		}
 		let [fn, ln] = nameEditValue.split(' ');
 		dispatch(setUserName(fn, ln)).then(() => {
-			dispatch(showToast('Name has been updated.')); // TODO: translate
+			dispatch(showToast(formatMessage(i18n.successEditName)));
 			dispatch(getUserProfile());
 		}).catch((error: Object) => {
-			dispatch(showToast(error.message || 'Sorry something went wrong while updating the name. Please try later.')); // TODO: translate
+			dispatch(showToast(error.message || formatMessage(i18n.updateFailed)));
 			dispatch(getUserProfile());
 		});
 	}
@@ -109,7 +110,7 @@ const EditNameBlock = (props: Object): Object => {
 			type={'text'}
 			edit={false}
 			inLineEditActive={inLineEditActive}
-			label={intl.formatMessage(i18n.name)}
+			label={formatMessage(i18n.name)}
 			value={nameEditValue}
 			appLayout={layout}
 			iconValueRight={inLineEditActive ? 'done' : 'edit'}

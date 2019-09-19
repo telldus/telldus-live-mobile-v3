@@ -76,6 +76,16 @@ const RedeemGiftScreen = (props: Object): Object => {
 
 	const dispatch = useDispatch();
 	function onPress() {
+		if (!code || code.trim() === '') {
+			screenProps.toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				text: formatMessage(i18n.errorInvalidCode),
+				showPositive: true,
+				closeOnPressPositive: true,
+			});
+			return;
+		}
 		dispatch(activateCoupon(code)).then((response: Object) => {
 			if (response && response.status === 'success') {
 				navigation.navigate({
@@ -89,11 +99,11 @@ const RedeemGiftScreen = (props: Object): Object => {
 					},
 				});
 			} else {
-				dispatch(showToast('Sorry something went wrong. Please try later.'));
+				dispatch(showToast(formatMessage(i18n.errorRedeemFailed)));
 				dispatch(getUserProfile());
 			}
 		}).catch((err: Object) => {
-			dispatch(showToast(err.message || 'Sorry something went wrong. Please try later.'));
+			dispatch(showToast(err.message || formatMessage(i18n.errorRedeemFailed)));
 			dispatch(getUserProfile());
 		});
 	}
