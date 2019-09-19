@@ -73,7 +73,7 @@
     "react-native-webview": "^7.0.5",
     "react-navigation": "~3.8.1",
     "react-redux": "~7.1.1",
-    "reconnecting-websocket": "git+https://github.com/pladaria/reconnecting-websocket.git#c64d32fbeaf70199e7b82817476f4d9f3e35ef39",
+    "reconnecting-websocket": "git+https://github.com/pladaria/reconnecting-websocket.git#94557aefa42f1b4dd5472832536a245931cc8253",
     "redux": "~4.0.1",
     "redux-logger": "~3.0.6",
     "redux-persist": "~5.10.0",
