@@ -65,7 +65,6 @@ type Props = {
 
 type State = {
 	value: string,
-	routerValue: string,
 	isLoading: boolean,
 	emailValue: string,
 	gatewayId?: string,
@@ -77,7 +76,6 @@ props: Props;
 state: State = {
 	value: '',
 	isLoading: false,
-	routerValue: '',
 	emailValue: this.props.email,
 	gatewayId: undefined,
 };
@@ -88,7 +86,6 @@ onSubmitEditing: () => void;
 contactSupport: () => void;
 onPressPositive: () => void;
 
-onChangeTextRouter: (string) => void;
 onChangeTextEmail: (string) => void;
 
 constructor(props: Props) {
@@ -105,7 +102,6 @@ constructor(props: Props) {
 	this.h1 = formatMessage(i18n.labelLocalControl);
 	this.h2 = formatMessage(i18n.labelContactSupport);
 
-	this.onChangeTextRouter = this.onChangeTextRouter.bind(this);
 	this.onChangeTextEmail = this.onChangeTextEmail.bind(this);
 }
 
@@ -129,12 +125,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-onChangeTextRouter(routerValue: string) {
-	this.setState({
-		routerValue,
-	});
-}
-
 onChangeTextEmail(emailValue: string) {
 	this.setState({
 		emailValue,
@@ -145,7 +135,7 @@ contactSupport() {
 	const { actions, screenProps } = this.props;
 	const { intl } = screenProps;
 	const { formatMessage } = intl;
-	const { value, isLoading, routerValue, emailValue, gatewayId } = this.state;
+	const { value, isLoading, emailValue, gatewayId } = this.state;
 
 	const errorH = formatMessage(i18n.errorCannotCreateTicketH);
 	const errorB = formatMessage(i18n.errorCannotCreateTicketB, {url: 'support.telldus.com.'});
@@ -163,7 +153,6 @@ contactSupport() {
 			const ticketData = {
 				message: value,
 				failedTests,
-				router: routerValue,
 				email: emailValue,
 				connectionType: type,
 				connectionEffectiveType: effectiveType,
