@@ -21,7 +21,6 @@
 
 'use strict';
 import React from 'react';
-import DeviceInfo from 'react-native-device-info';
 
 import {
 	View,
@@ -207,6 +206,23 @@ autoDetectLocalTellStickTS() {
 	}, 5000);
 }
 
+getUUIDForLocalControlTS = () => {
+	const { actions, location } = this.props;
+	actions.getTokenForLocalControl(location.id);
+	this.retryTSTimeout = setTimeout(() => {
+		let { status } = this.validateTest(1);
+		if (status) {
+			this.updateTest(1, 'ok', 0, () => {
+				this.validateAndRunTests();
+			});
+		} else {
+			this.updateTest(1, 'fail', 0, () => {
+				this.validateAndRunTests();
+			});
+		}
+	}, 5000);
+}
+
 getTokenForLocalControlTS() {
 	const { actions, location } = this.props;
 	actions.getTokenForLocalControl(location.id);
@@ -265,7 +281,7 @@ supportLocalTS() {
 validateTest(i: number): Object {
 	const { location } = this.props;
 	const { localKey = {} } = location;
-	const { address, key, ttl, supportLocal } = localKey;
+	const { address, key, ttl, supportLocal, uuid } = localKey;
 
 	const respSuccess = {
 		status: true,
@@ -283,12 +299,12 @@ validateTest(i: number): Object {
 				timeout: 0,
 			};
 		case 1:
-			const deviceUniqueID = DeviceInfo.getUniqueID();
-			if (deviceUniqueID) {
+			if (uuid) {
 				return respSuccess;
 			}
 			return {
 				status: false,
+				troubleShootCallback: this.getUUIDForLocalControlTS,
 				timeout: 0,
 			};
 		case 2:
