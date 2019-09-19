@@ -190,6 +190,14 @@ export default function reduceUser(state: State = initialState, action: Action):
 			phonesList,
 		};
 	}
+	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS') {
+		return {
+			...state,
+			subscriptions: {
+				...action.payload,
+			},
+		};
+	}
 	return state;
 }
 
