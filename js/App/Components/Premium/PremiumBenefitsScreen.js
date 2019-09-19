@@ -122,7 +122,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 
 	const screenLabels = benefits.map((screen: Object, i: number): Object => {
 		function onChangeSelection() {
-			if (swiperRef.current) {
+			if (swiperRef.current && i !== selectedIndex) {
 				swiperRef.current.scrollBy(i - selectedIndex);
 			}
 		}
