@@ -24,6 +24,7 @@ import React from 'react';
 import {
 	TextInput,
 	Keyboard,
+	ScrollView,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 const isEqual = require('react-fast-compare');
@@ -35,9 +36,11 @@ import {
 	Text,
 	TouchableButton,
 	NavigationHeaderPoster,
+	DropDown,
 } from '../../../BaseComponents';
 
 import shouldUpdate from '../../Lib/shouldUpdate';
+import capitalize from '../../Lib/capitalize';
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
@@ -65,7 +68,7 @@ type State = {
 	routerValue: string,
 	isLoading: boolean,
 	emailValue: string,
-	gatewayId: string,
+	gatewayId?: string,
 };
 
 class RequestSupportScreen extends View<Props, State> {
@@ -76,7 +79,7 @@ state: State = {
 	isLoading: false,
 	routerValue: '',
 	emailValue: this.props.email,
-	gatewayId: '',
+	gatewayId: undefined,
 };
 
 onChangeText: (string) => void;
@@ -218,10 +221,18 @@ onSubmitEditing() {
 	Keyboard.dismiss();
 }
 
+onChoosegateway = (value: string, itemIndex: number, data: Array<any>) => {
+	const { key: gatewayId } = data[itemIndex];
+	this.setState({
+		gatewayId,
+	});
+}
+
 render(testData: Object): Object {
 	const {
 		screenProps,
 		navigation,
+		byId,
 	} = this.props;
 	const {
 		intl,
@@ -229,9 +240,9 @@ render(testData: Object): Object {
 	} = screenProps;
 	const {
 		value,
-		routerValue,
 		emailValue,
 		isLoading,
+		gatewayId,
 	} = this.state;
 	const {
 		container,
@@ -241,14 +252,33 @@ render(testData: Object): Object {
 		textField,
 		brandSecondary,
 		button,
+		fontSizeText,
+		rowTextColor,
+		dropDownContainerStyle,
+		pickerContainerStyle,
+		scrollView,
+		pickerBaseCoverStyle,
 	} = this.getStyles(appLayout);
 	const { formatMessage } = intl;
 
+	let LIST = Object.keys(byId).map((gId: string): Object => {
+		const { id, name } = byId[gId];
+		return {
+			key: id,
+			value: name,
+		};
+	});
+	const v = formatMessage(i18n.noSpecificGateway);
+	const k = 'frank8';
+	LIST.push({
+		key: k,
+		value: v,
+	});
+
+	const valueDD = gatewayId && gatewayId !== k ? byId[gatewayId].name : v;
+
 	return (
-		<View style={{
-			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
-		}}>
+		<ScrollView style={scrollView}>
 			<NavigationHeaderPoster
 				h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
 				align={'right'}
@@ -261,8 +291,37 @@ render(testData: Object): Object {
 					{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
 				</Text>
 				<Text style={body}>
-					{formatMessage(i18n.messageCreateSupportTicket)}
+					{formatMessage(i18n.contactSupportDescription)}
 				</Text>
+				<Text style={label}>
+					{formatMessage(i18n.emailAddress)}
+				</Text>
+				<TextInput
+					value={emailValue}
+					style={textField}
+					onChangeText={this.onChangeTextEmail}
+					autoCapitalize="none"
+					autoCorrect={false}
+					autoFocus={false}
+					underlineColorAndroid={brandSecondary}
+					returnKeyType={'done'}
+				/>
+				<Text style={label}>
+					{`${capitalize(formatMessage(i18n.gateway))}`}
+				</Text>
+				<DropDown
+					items={LIST}
+					value={valueDD}
+					onValueChange={this.onChoosegateway}
+					appLayout={appLayout}
+					dropDownContainerStyle={dropDownContainerStyle}
+					pickerContainerStyle={pickerContainerStyle}
+					baseColor={rowTextColor}
+					fontSize={fontSizeText}
+					accessibilityLabelPrefix={formatMessage(i18n.gateway)}
+					textColor={rowTextColor}
+					pickerBaseCoverStyle={pickerBaseCoverStyle}
+				/>
 				<Text style={label}>
 					{formatMessage(i18n.labelMessage)}
 				</Text>
@@ -278,32 +337,6 @@ render(testData: Object): Object {
 					returnKeyType={'done'}
 					multiline={true}
 				/>
-				<Text style={label}>
-					{`${formatMessage(i18n.labelInternetRouter)} (${formatMessage(i18n.labelBrandAndModel)})`}
-				</Text>
-				<TextInput
-					value={routerValue}
-					style={textField}
-					onChangeText={this.onChangeTextRouter}
-					autoCapitalize="sentences"
-					autoCorrect={false}
-					autoFocus={false}
-					underlineColorAndroid={brandSecondary}
-					returnKeyType={'done'}
-				/>
-				<Text style={label}>
-					{formatMessage(i18n.emailAddress)}
-				</Text>
-				<TextInput
-					value={emailValue}
-					style={textField}
-					onChangeText={this.onChangeTextEmail}
-					autoCapitalize="none"
-					autoCorrect={false}
-					autoFocus={false}
-					underlineColorAndroid={brandSecondary}
-					returnKeyType={'done'}
-				/>
 			</View>
 			<TouchableButton
 				text={i18n.labelSend}
@@ -311,7 +344,7 @@ render(testData: Object): Object {
 				onPress={this.contactSupport}
 				disabled={isLoading}
 				showThrobber={isLoading}/>
-		</View>
+		</ScrollView>
 	);
 }
 
@@ -331,6 +364,11 @@ getStyles(appLayout: Object): Object {
 
 	return {
 		brandSecondary,
+		rowTextColor,
+		scrollView: {
+			flex: 1,
+			backgroundColor: Theme.Core.appBackground,
+		},
 		container: {
 			backgroundColor: '#fff',
 			...shadow,
@@ -364,6 +402,27 @@ getStyles(appLayout: Object): Object {
 		button: {
 			marginVertical: padding * 1.5,
 		},
+		dropDownContainerStyle: {
+			marginTop: 8,
+			marginBottom: fontSizeText / 2,
+		},
+		pickerBaseCoverStyle: {
+			padding: 0,
+			paddingVertical: 8,
+		},
+		pickerContainerStyle: {
+			elevation: 0,
+			shadowColor: 'transparent',
+			shadowRadius: 0,
+			shadowOpacity: 0,
+			shadowOffset: {
+				width: 0,
+				height: 0,
+			},
+			marginBottom: 0,
+			backgroundColor: '#fff',
+		},
+		fontSizeText,
 	};
 }
 }
