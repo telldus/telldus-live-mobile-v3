@@ -397,7 +397,6 @@ getStyles(appLayout: Object): Object {
 		},
 		pickerBaseCoverStyle: {
 			padding: 0,
-			paddingVertical: 8,
 		},
 		pickerContainerStyle: {
 			elevation: 0,
