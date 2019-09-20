@@ -58,6 +58,7 @@ import {
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { widgetAndroidConfigure, widgetAndroidRefresh, widgetiOSConfigure } from '../Actions/Widget';
+import Push from './Push';
 
 import {
 	getRSAKey,
@@ -76,6 +77,8 @@ type Props = {
     screenReaderEnabled: boolean,
 	gateways: Object,
 	pushTokenRegistered: boolean,
+	deviceId: string,
+	pushToken: string,
 
     showToast: boolean,
 	messageToast: string,
@@ -132,6 +135,11 @@ constructor(props: Props) {
 
 	this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 	this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
+
+	this.onTokenRefreshListener = null;
+
+	// sets push notification listeners and returns a method that clears all listeners.
+	this.onNotification = Push.onNotification();
 }
 
 componentDidMount() {
@@ -150,6 +158,8 @@ componentDidMount() {
 			dispatch(widgetAndroidRefresh());
 		});
 		dispatch(getPhonesList()).then((phonesList: Object) => {
+			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
+			this.pushConf(register);
 			if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
 				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
 			}
@@ -173,6 +183,29 @@ componentDidMount() {
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
 		this.addNewLocation();
+	}
+}
+
+/*
+	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
+	 * remote push notifications.
+	 */
+pushConf(register: boolean) {
+	const {
+		dispatch,
+		deviceId,
+		pushTokenRegistered,
+		pushToken,
+	} = this.props;
+	const data = {
+		deviceId,
+		pushTokenRegistered,
+		pushToken,
+		register,
+	};
+	dispatch(Push.configure(data));
+	if (!this.onTokenRefreshListener) {
+		this.onTokenRefreshListener = dispatch(Push.refreshTokenListener({deviceId, register}));
 	}
 }
 
@@ -201,7 +234,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(this.props, nextProps, ['pushTokenRegistered']);
+	const propsChange = shouldUpdate(this.props, nextProps, ['pushTokenRegistered', 'pushToken', 'deviceId']);
 	if (propsChange) {
 		return true;
 	}
@@ -242,6 +275,15 @@ componentWillUnmount() {
 		this.handleConnectivityChange,
 	);
 	closeUDPSocket();
+
+	if (this.onNotification && typeof this.onNotification === 'function') {
+		// Remove Push notification listener.
+		this.onNotification();
+	}
+	if (this.onTokenRefreshListener) {
+		this.onTokenRefreshListener();
+		this.onTokenRefreshListener = null;
+	}
 }
 
 addNewLocation() {
@@ -402,6 +444,12 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { allIds = [], toActivate } = state.gateways;
 	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
 
+	let {
+		pushToken,
+		pushTokenRegistered,
+		deviceId = null,
+	} = state.user;
+
 	return {
 		messageToast,
 		durationToast,
@@ -415,7 +463,9 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		dimmer: state.dimmer,
 		screenReaderEnabled,
 
-		pushTokenRegistered: state.user.pushTokenRegistered,
+		pushTokenRegistered,
+		pushToken,
+		deviceId,
 	};
 }
 

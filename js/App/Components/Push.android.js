@@ -76,13 +76,15 @@ const Push = {
 
 		firebase.notifications().android.createChannel(channel);
 	},
-	getToken: ({ pushToken, pushTokenRegistered, deviceId }: Object): ThunkAction => {
+	getToken: ({ pushToken, pushTokenRegistered, deviceId, register }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
 					if (token && pushToken !== token) {
-						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+						if (register) {
+							const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+							dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+						}
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 					}
 					return token;
@@ -121,12 +123,14 @@ const Push = {
 				reportException(err);
 			});
 	},
-	refreshTokenListener: ({ deviceId }: Object): ThunkAction => {
+	refreshTokenListener: ({ deviceId, register }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Function => {
 			return firebase.messaging().onTokenRefresh((token: string) => {
 				if (token) {
-					const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-					dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+					if (register) {
+						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+					}
 					dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 				}
 			});

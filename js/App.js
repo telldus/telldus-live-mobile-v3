@@ -31,7 +31,6 @@ import { injectIntl } from 'react-intl';
 import {
 	PreLoginNavigator,
 	PostLoginNavigatorCommon,
-	Push,
 } from './App/Components';
 import ChangeLogNavigator from './App/Components/ChangeLog/ChangeLog';
 import { SafeAreaView, DialogueBox } from './BaseComponents';
@@ -105,7 +104,6 @@ class App extends React.Component<Props, State> {
 		if (Platform.OS === 'android') {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		}
-		this.onNotification = null;
 
 		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
@@ -118,17 +116,12 @@ class App extends React.Component<Props, State> {
 
 		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-		this.onTokenRefreshListener = null;
 
 		this.timeoutToCallCallback = null;
 	}
 
 	componentDidMount() {
-		let { dispatch, accessToken } = this.props;
-
-		if (accessToken) {
-			this.pushConf();
-		}
+		let { dispatch } = this.props;
 		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -139,9 +132,6 @@ class App extends React.Component<Props, State> {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
-
-		// sets push notification listeners and returns a method that clears all listeners.
-		this.onNotification = Push.onNotification();
 	}
 
 	setCalendarLocale() {
@@ -160,7 +150,6 @@ class App extends React.Component<Props, State> {
 		const { dispatch, accessToken } = this.props;
 		const { accessToken: accessTokenPrev = {} } = prevProps;
 		if (accessToken) {
-			this.pushConf();
 			// Update accesstoken at the widget side, when ever it is refreshed at the App.
 			if (accessTokenPrev.access_token !== accessToken.access_token) {
 				dispatch(widgetAndroidConfigure());// Android.
@@ -174,17 +163,8 @@ class App extends React.Component<Props, State> {
 		  'change',
 		  setAccessibilityInfo
 		);
-
-		if (this.onNotification && typeof this.onNotification === 'function') {
-			// Remove Push notification listener.
-			this.onNotification();
-		}
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
-		if (this.onTokenRefreshListener) {
-			this.onTokenRefreshListener();
-			this.onTokenRefreshListener = null;
-		}
 		clearTimeout(this.timeoutToCallCallback);
 	}
 
@@ -194,22 +174,10 @@ class App extends React.Component<Props, State> {
 		});
 	  }
 
-	  _keyboardDidHide() {
+	_keyboardDidHide() {
 		this.setState({
 			keyboard: false,
 		});
-	  }
-
-	/*
-	 * calls the push configuration methods, for logged in users, which will generate push token and listen for local and
-	 * remote push notifications.
-	 */
-	pushConf() {
-		const { dispatch, ...otherProps } = this.props;
-		dispatch(Push.configure(otherProps));
-		if (!this.onTokenRefreshListener) {
-			this.onTokenRefreshListener = dispatch(Push.refreshTokenListener(otherProps));
-		}
 	}
 
 	onLayout(ev: Object) {
