@@ -46,7 +46,7 @@ import {
 } from './App/Lib';
 
 import Theme from './App/Theme';
-const changeLogVersion = '3.11';
+const changeLogVersion = '3.12';
 
 type Props = {
 	dispatch: Function,

@@ -29,6 +29,10 @@ import { intlShape } from 'react-intl';
 import { Text } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../../Lib/appUtils';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -55,18 +59,21 @@ export default class WizardOne extends PureComponent<Props, null> {
 	titleWFour: string;
 	descriptionWFour: string;
 
-	titleWFive: string;
-	descriptionWFive: string;
-
 	constructor(props: Props) {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader311);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription311);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader312);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription312);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoHeader311);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription311);
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader312);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription312);
+
+		this.titleWThree = formatMessage(i18n.wizardThreeHeader312);
+		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription312);
+
+		this.titleWFour = capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess));
+		this.descriptionWFour = formatMessage(i18n.wizardFourDescription312);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
@@ -91,7 +98,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 1:
 				return {
 					...screenData,
-					icon: 'palette',
+					icon: 'thermostat',
 					iconSize: iconSize * 1.2,
 					title: this.titleWOne,
 					description: this.descriptionWOne,
@@ -100,19 +107,26 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 2:
 				return {
 					...screenData,
-					icon: 'buttononoff',
+					icon: 'user',
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
 				};
 
-				// case 3:
-				// 	return {
-				// 		...screenData,
-				// 		icon: 'push',
-				// 		iconStyle: iconThreeStyle,
-				// 		title: this.titleWThree,
-				// 		description: this.descriptionWThree,
-				// 	};
+			case 3:
+				return {
+					...screenData,
+					icon: 'faq',
+					title: this.titleWThree,
+					description: this.descriptionWThree,
+				};
+
+			case 4:
+				return {
+					...screenData,
+					icon: 'premium',
+					title: this.titleWFour,
+					description: this.descriptionWFour,
+				};
 
 			default:
 				return screenData;
@@ -145,9 +159,16 @@ export default class WizardOne extends PureComponent<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { brandSecondary, shadow } = Theme.Core;
+		const {
+			brandSecondary,
+			shadow,
+			paddingFactor,
+			eulaContentColor,
+		} = Theme.Core;
 		const titleFontSize = Math.floor(deviceWidth * 0.052);
 		const iconSize = Math.floor(deviceWidth * 0.315);
+
+		const padding = deviceWidth * paddingFactor;
 
 		return {
 			iconSize,
@@ -156,10 +177,9 @@ export default class WizardOne extends PureComponent<Props, null> {
 				backgroundColor: '#fff',
 				justifyContent: 'center',
 				alignItems: 'center',
-				paddingHorizontal: titleFontSize,
-				paddingVertical: titleFontSize,
-				marginHorizontal: 10,
-				marginVertical: 10,
+				padding: padding * 2,
+				marginHorizontal: padding,
+				marginVertical: padding * 2,
 			},
 			iconStyle: {
 				color: brandSecondary,
@@ -178,7 +198,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			},
 			titleStyle: {
 				fontSize: titleFontSize,
-				color: '#00000090',
+				color: eulaContentColor,
 				textAlign: 'center',
 				marginVertical: 10,
 			},
@@ -186,6 +206,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 				fontSize: Math.floor(deviceWidth * 0.042),
 				color: '#00000080',
 				textAlign: 'left',
+				marginBottom: 10,
 			},
 		};
 	}
