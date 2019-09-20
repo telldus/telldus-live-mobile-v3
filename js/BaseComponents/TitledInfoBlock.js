@@ -86,12 +86,20 @@ render(): Object {
 				</Text>
 			)}
 			<TouchableOpacity style={styles.infoCover} onPress={this.onPress} disabled={!onPress}>
-				<Text style={[styles.infoLabel, labelTextStyle]}>
+				<Text style={[styles.infoLabel, labelTextStyle]} numberOfLines={1}>
 					{label}
 				</Text>
-				<Text style={[ styles.infoValue, valueTextStyle]}>
-					{value}
-				</Text>
+				<View style={{
+					flex: 1,
+					flexDirection: 'row',
+					flexWrap: 'wrap',
+					alignItems: 'center',
+					justifyContent: 'flex-end',
+				}}>
+					<Text style={[ styles.infoValue, valueTextStyle]} numberOfLines={1}>
+						{value}
+					</Text>
+				</View>
 				{!!icon && (
 					<Icon name={icon} size={iconSize} color={iconColor} style={[styles.nextIcon, iconStyle]}/>
 				)}
@@ -134,6 +142,7 @@ getStyles(appLayout: Object): Object {
 		infoValue: {
 			color: '#8e8e93',
 			fontSize,
+			flexWrap: 'wrap',
 		},
 		nextIcon: {
 			position: 'absolute',
