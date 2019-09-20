@@ -200,8 +200,8 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		const { isDBEmpty, navigation } = this.props;
-		if (isDBEmpty) {
+		const { isDBEmpty, navigation, screenProps } = this.props;
+		if (isDBEmpty && (screenProps.currentScreen === 'Dashboard' || screenProps.currentScreen === 'Tabs')) {
 			navigation.navigate({
 				routeName: 'Devices',
 				key: 'Devices',
