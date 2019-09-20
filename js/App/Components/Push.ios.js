@@ -20,12 +20,9 @@
 // @flow
 'use strict';
 
-import DeviceInfo from 'react-native-device-info';
 import { Alert, PushNotificationIOS } from 'react-native';
 
 import type { ThunkAction } from '../Actions/Types';
-import { pushServiceId } from '../../Config';
-import { registerPushToken } from '../Actions/User';
 
 const Push = {
 	configure: (params: any): ThunkAction => {
@@ -38,11 +35,8 @@ const Push = {
 	},
 	onRegister: (token: string, params: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): any => {
-			const { pushToken, pushTokenRegistered, deviceId } = params;
+			const { pushToken, pushTokenRegistered } = params;
 			if (token && (!pushToken) || (pushToken !== token) || (!pushTokenRegistered)) {
-				const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-				// stores fcm token in the server
-				dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 				dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 			}
 		};

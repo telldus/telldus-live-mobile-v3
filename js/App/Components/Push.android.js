@@ -24,11 +24,9 @@
 
 import firebase from 'react-native-firebase';
 import type { Notification } from 'react-native-firebase';
-import DeviceInfo from 'react-native-device-info';
 
 import type { ThunkAction } from '../Actions/Types';
-import { pushSenderId, pushServiceId } from '../../Config';
-import { registerPushToken } from '../Actions/User';
+import { pushSenderId } from '../../Config';
 import { reportException } from '../Lib/Analytics';
 
 const Push = {
@@ -81,8 +79,6 @@ const Push = {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
 					if (token && pushToken !== token) {
-						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 					}
 					return token;
@@ -125,8 +121,6 @@ const Push = {
 		return (dispatch: Function, getState: Object): Function => {
 			return firebase.messaging().onTokenRefresh((token: string) => {
 				if (token) {
-					const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-					dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 					dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 				}
 			});
