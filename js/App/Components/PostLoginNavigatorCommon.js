@@ -74,7 +74,8 @@ type Props = {
     showEULA: boolean,
     dimmer: Object,
     screenReaderEnabled: boolean,
-    gateways: Object,
+	gateways: Object,
+	pushTokenRegistered: boolean,
 
     showToast: boolean,
 	messageToast: string,
@@ -134,12 +135,12 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	this.props.dispatch(appStart());
-	this.props.dispatch(appState());
+	const { dispatch, addNewGatewayBool, pushTokenRegistered } = this.props;
+	dispatch(appStart());
+	dispatch(appState());
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 	// and results in generating multiple tokens.
-	const { dispatch, addNewGatewayBool } = this.props;
 	dispatch(getUserProfile()).then(() => {
 		dispatch(widgetAndroidConfigure());
 		dispatch(widgetiOSConfigure());
@@ -148,7 +149,11 @@ componentDidMount() {
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
-		dispatch(getPhonesList());
+		dispatch(getPhonesList()).then((phonesList: Object) => {
+			if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
+				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
+			}
+		});
 		dispatch(getUserSubscriptions());
 
 		// test gateway local control end-point on app restart.
@@ -193,6 +198,11 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 	const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
 	if (dimmerPropsChange) {
+		return true;
+	}
+
+	const propsChange = shouldUpdate(this.props, nextProps, ['pushTokenRegistered']);
+	if (propsChange) {
 		return true;
 	}
 
@@ -404,6 +414,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showEULA: !getUserProfileSelector(state).eula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
+
+		pushTokenRegistered: state.user.pushTokenRegistered,
 	};
 }
 
