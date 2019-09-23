@@ -33,7 +33,6 @@ import {
 	IconTelldus,
 	RippleButton,
 } from '../../../../../BaseComponents';
-import Device_433 from '../../../TabViews/img/device/device_433.svg';
 
 import Theme from '../../../../Theme';
 
@@ -48,6 +47,7 @@ type Props = {
 	id: number,
 	enabled: boolean,
 	image?: string,
+	secure?: boolean,
 };
 
 type State = {
@@ -65,31 +65,18 @@ constructor(props: Props) {
 }
 
 onPress() {
-	const { onPress, module, action, id } = this.props;
+	const { onPress, module, action, secure } = this.props;
 	if (onPress) {
 		onPress({
 			module,
 			action,
-			secure: id === 2,
+			secure,
 		});
 	}
 }
 
-getImageSVG(image: string): any {
-	switch (image) {
-		case 'device_433':
-			return Device_433;
-		default:
-			return null;
-	}
-}
-
 render(): Object {
-	const { h1, h2, icon, id, enabled, image } = this.props;
-	let ImageComponent;
-	if (image) {
-		ImageComponent = this.getImageSVG(image);
-	}
+	const { h1, h2, icon, enabled, image: ImageSVG, secure } = this.props;
 	const {
 		arrowCover,
 		arrow,
@@ -111,7 +98,7 @@ render(): Object {
 			<View style={container}>
 				<View style={itemsCover}>
 					{!!icon && <IconTelldus icon={icon} style={imageType}/>}
-					{!!ImageComponent && <ImageComponent
+					{!!ImageSVG && <ImageSVG
 						height={imageComponentHeight}
 						width={imageComponentWidth}
 						style={imageComponentStyle}/>}
@@ -121,7 +108,7 @@ render(): Object {
 						flexWrap: 'wrap',
 					}}>
 						<Text>
-							{(id === 2) && (
+							{!!secure && (
 								<Text>
 									<IconTelldus icon={'security'} style={iconSecurity}/>
 									<Text style={Theme.Styles.hiddenText}>
