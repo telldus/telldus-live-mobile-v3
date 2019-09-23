@@ -88,6 +88,7 @@ import AttentionCatcher from './AttentionCatcher';
 import Swatches from './Swatches';
 import GeometricHeader from './GeometricHeader';
 import PosterWithText from './PosterWithText';
+import RippleButton from './RippleButton';
 
 import {
 	AppState,
@@ -166,6 +167,7 @@ module.exports = {
 	Swatches,
 	GeometricHeader,
 	PosterWithText,
+	RippleButton,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
