@@ -73,7 +73,6 @@ const AutoRenewalBlock = (props: Object): Object => {
 
 	const {
 		upgradeSyle,
-		cartIconStyle,
 	} = getStyle(layout);
 
 	return (
@@ -87,7 +86,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 			iconValueRight={isAutoRenew ?
 				<IconTelldus icon={'settings'} style={upgradeSyle}/>
 				:
-				<IconTelldus icon="cart" style={cartIconStyle}/>
+				null
 			}
 			onPress={false}
 			onPressIconValueRight={isAutoRenew ?
