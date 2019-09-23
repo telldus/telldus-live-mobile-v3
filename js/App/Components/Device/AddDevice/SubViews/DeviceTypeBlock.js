@@ -26,12 +26,12 @@ import React from 'react';
 import {
 	Image,
 } from 'react-native';
-import Ripple from 'react-native-material-ripple';
 
 import {
 	View,
 	Text,
 	IconTelldus,
+	RippleButton,
 } from '../../../../../BaseComponents';
 import Device_433 from '../../../TabViews/img/device/device_433.svg';
 
@@ -104,12 +104,8 @@ render(): Object {
 		imageComponentHeight,
 		imageComponentWidth,
 	} = this.getStyles();
-	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 	return (
-		<Ripple
-			rippleColor={rippleColor}
-			rippleOpacity={rippleOpacity}
-			rippleDuration={rippleDuration}
+		<RippleButton
 			onPress={this.onPress}
 			disabled={!enabled}>
 			<View style={container}>
@@ -156,7 +152,7 @@ render(): Object {
 					}
 				</View>
 			</View>
-		</Ripple>
+		</RippleButton>
 	);
 }
 getStyles(): Object {

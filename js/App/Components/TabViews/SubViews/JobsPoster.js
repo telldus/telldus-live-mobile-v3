@@ -25,9 +25,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Image, PanResponder } from 'react-native';
 import Platform from 'Platform';
-import Ripple from 'react-native-material-ripple';
 
-import { Poster, View, CheckBoxIconText } from '../../../../BaseComponents';
+import {
+	Poster,
+	View,
+	CheckBoxIconText,
+	RippleButton,
+} from '../../../../BaseComponents';
 import Weekdays from './Jobs/Weekdays';
 import Theme from '../../../Theme';
 
@@ -323,7 +327,6 @@ export default class JobsPoster extends View<null, Props, State> {
 			checkButtonStyle,
 		} = this._getStyle();
 		const posterWidth = this.getPosterWidth();
-		const { rippleColor, rippleOpacity } = Theme.Core;
 
 		return (
 			<Poster posterWidth={posterWidth}>
@@ -344,20 +347,16 @@ export default class JobsPoster extends View<null, Props, State> {
 						intl={intl}
 					/>
 					{showLeftButton && (
-						<Ripple
-							rippleColor={rippleColor}
-							rippleOpacity={rippleOpacity}
+						<RippleButton
 							rippleDuration={400}
 							style={arrowContainer}
 							onPress={this._scrollToYesterday}
 							accessible={false}>
 							<Image source={{uri: 'left_arrow_key'}} style={arrow}/>
-						</Ripple>
+						</RippleButton>
 					)}
 					{showRightButton && (
-						<Ripple
-							rippleColor={rippleColor}
-							rippleOpacity={rippleOpacity}
+						<RippleButton
 							rippleDuration={400}
 							style={[arrowContainer, arrowContainerRight]}
 							onPress={this._scrollToTomorrow}
@@ -365,7 +364,7 @@ export default class JobsPoster extends View<null, Props, State> {
 							<Image source={{uri: 'left_arrow_key'}} style={[arrow, {
 								transform: [{rotateZ: '180deg'}],
 							}]}/>
-						</Ripple>
+						</RippleButton>
 					)}
 				</View>
 			</Poster>

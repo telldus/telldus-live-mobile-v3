@@ -23,12 +23,12 @@
 
 import React, { Component } from 'react';
 import { Image, Platform, TouchableOpacity, TextInput } from 'react-native';
-import Ripple from 'react-native-material-ripple';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Text from './Text';
 import View from './View';
 import Switch from './Switch';
+import RippleButton from './RippleButton';
 import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
@@ -175,17 +175,13 @@ class SettingsRow extends Component<Props, null> {
 			textField,
 			valueCover,
 		} = this.getStyle();
-		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 		let Parent = View, parentProps = {
 			style: touchableStyle,
 		};
 		if (onPress) {
-			Parent = Ripple;
+			Parent = RippleButton;
 			parentProps = {
-				rippleColor: rippleColor,
-				rippleOpacity: rippleOpacity,
-				rippleDuration: rippleDuration,
 				style: [touchableStyle, contentCoverStyle],
 				onPress: this.onPress,
 			};
@@ -250,12 +246,15 @@ class SettingsRow extends Component<Props, null> {
 								:
 								<>
 								{!!value && (
-									typeof value === 'string' ?
+									(typeof value === 'string') || (typeof value === 'number') ?
 										<Text style={valueText}>
 											{value} {valuePostfix}
 										</Text>
 										:
-										value
+										(typeof value === 'object') ?
+											value
+											:
+											null
 								)}
 								</>
 							}

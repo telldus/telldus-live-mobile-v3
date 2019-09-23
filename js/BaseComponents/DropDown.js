@@ -23,12 +23,12 @@
 
 import React, { Component } from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
-import Ripple from 'react-native-material-ripple';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
+import RippleButton from './RippleButton';
 
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
@@ -136,13 +136,10 @@ static defaultProps: DefaultProps = {
 			pickerBaseTextStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleOpacity } = Theme.Core;
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
-			<Ripple
-				rippleColor={rippleColor}
-				rippleOpacity={rippleOpacity}
+			<RippleButton
 				rippleDuration={250}
 				style={[pickerBaseCoverStyleDef, pickerBaseCoverStyle]}
 				onPress={this.onPressPicker}
@@ -152,7 +149,7 @@ static defaultProps: DefaultProps = {
 					{title}
 				</Text>
 				<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
-			</Ripple>
+			</RippleButton>
 		);
 	}
 

@@ -22,13 +22,13 @@
 'use strict';
 
 import React from 'react';
-import Ripple from 'react-native-material-ripple';
 const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
 
 import {
 	View,
 	Text,
+	RippleButton,
 } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
@@ -66,7 +66,6 @@ onDayPress() {
 }
 
 render(): Object {
-	const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 	const { date, appLayout } = this.props;
 	const { day } = date;
 
@@ -77,10 +76,7 @@ render(): Object {
 		dayText,
 	} = this.getStyle(appLayout);
 	return (
-		<Ripple
-			rippleColor={rippleColor}
-			rippleOpacity={rippleOpacity}
-			rippleDuration={rippleDuration}
+		<RippleButton
 			style={container}
 			onPress={this.onDayPress}>
 			<View style={periodCover}>
@@ -90,7 +86,7 @@ render(): Object {
 					</Text>
 				</View>
 			</View>
-		</Ripple>
+		</RippleButton>
 	);
 }
 

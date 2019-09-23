@@ -22,24 +22,28 @@
 
 'use strict';
 import React from 'react';
-import Ripple from 'react-native-material-ripple';
 
-import { FormattedMessage, Text, View, Icon, Image, IconTelldus } from '../../../BaseComponents';
+import {
+	FormattedMessage,
+	Text,
+	View,
+	Icon,
+	Image,
+	IconTelldus,
+	RippleButton,
+} from '../../../BaseComponents';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
 const AddLocation = ({onPress, styles}: Object): Object => {
 	return (
-		<Ripple
-			rippleColor={Theme.Core.rippleColor}
-			rippleOpacity={Theme.Core.rippleOpacity}
-			rippleDuration={Theme.Core.rippleDuration}
+		<RippleButton
 			style={styles.addNewLocationContainer}
 			onPress={onPress}>
 			<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
 			<FormattedMessage {...i18n.addNewLocation} style={styles.addNewLocationText}/>
-		</Ripple>
+		</RippleButton>
 	);
 };
 
@@ -72,15 +76,12 @@ const ConnectedLocations = ({styles}: Object): Object => (
 );
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
-	<Ripple
-		rippleColor={Theme.Core.rippleColor}
-		rippleOpacity={Theme.Core.rippleOpacity}
-		rippleDuration={Theme.Core.rippleDuration}
+	<RippleButton
 		style={styles.settingsCover}
 		onPress={onPress}>
 		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
 		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
-	</Ripple>
+	</RippleButton>
 );
 
 module.exports = {

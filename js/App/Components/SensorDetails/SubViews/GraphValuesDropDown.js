@@ -23,9 +23,14 @@
 
 import React from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
-import Ripple from 'react-native-material-ripple';
 
-import { View, Text, IconTelldus, FormattedMessage } from '../../../../BaseComponents';
+import {
+	View,
+	Text,
+	IconTelldus,
+	FormattedMessage,
+	RippleButton,
+} from '../../../../BaseComponents';
 
 import shouldUpdate from '../../../Lib/shouldUpdate';
 
@@ -101,7 +106,6 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleOpacity } = Theme.Core;
 		const result = data.find((item: Object): boolean => {
 			return item.scale === scale && item.type === type;
 		});
@@ -110,9 +114,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
-			<Ripple
-				rippleColor={rippleColor}
-				rippleOpacity={rippleOpacity}
+			<RippleButton
 				rippleDuration={250}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPickerOne}
@@ -123,7 +125,7 @@ class GraphValuesDropDown extends View<Props, State> {
 					{title}
 				</Text>
 				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
-			</Ripple>
+			</RippleButton>
 		);
 	}
 
@@ -192,7 +194,6 @@ class GraphValuesDropDown extends View<Props, State> {
 			leftIconStyle,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
-		const { rippleColor, rippleOpacity } = Theme.Core;
 		const result = data.find((item: Object): boolean => {
 			return item.scale === scale && item.type === type;
 		});
@@ -201,9 +202,7 @@ class GraphValuesDropDown extends View<Props, State> {
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
 
 		return (
-			<Ripple
-				rippleColor={rippleColor}
-				rippleOpacity={rippleOpacity}
+			<RippleButton
 				rippleDuration={250}
 				style={pickerBaseCoverStyle}
 				onPress={this.onPressPickerTwo}
@@ -214,7 +213,7 @@ class GraphValuesDropDown extends View<Props, State> {
 					{title}
 				</Text>
 				<IconTelldus icon={'down'} style={rightIconStyle} accessible={false}/>
-			</Ripple>
+			</RippleButton>
 		);
 	}
 

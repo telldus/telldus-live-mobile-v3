@@ -57,7 +57,8 @@ const TypeBlock = ({ style, valueCoverStyle, dotStyle, dotCoverStyle, onLayout, 
 			accessibilityElementsHidden={true}
 			rippleColor={rippleColor}
 			rippleOpacity={rippleOpacity}
-			rippleDuration={rippleDuration}>
+			rippleDuration={rippleDuration}
+			rippleCentered={true}>
 			<View
 				style={valueCoverStyle}
 				importantForAccessibility="no-hide-descendants"

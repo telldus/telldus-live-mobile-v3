@@ -24,13 +24,15 @@
 
 import React, { PureComponent } from 'react';
 import { intlShape, injectIntl } from 'react-intl';
-import Ripple from 'react-native-material-ripple';
 
-import { IconTelldus, View } from '../../../BaseComponents';
+import {
+	IconTelldus,
+	View,
+	RippleButton,
+} from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
-import Theme from '../../Theme';
 
 type Props = {
 	gateway: Object,
@@ -80,7 +82,6 @@ class Gateway extends PureComponent<Props, null> {
 			iconSize,
 			statusInfoStyle,
 		} = this.getStyles(drawerWidth);
-		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
 		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle, localKey);
 		const locationImageUrl = getLocationImageUrl(type);
@@ -92,10 +93,7 @@ class Gateway extends PureComponent<Props, null> {
 		};
 
 		return (
-			<Ripple
-				rippleColor={rippleColor}
-				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
+			<RippleButton
 				style={gatewayContainer}
 				onPress={this.onPress}>
 				<LocationDetails {...locationData}
@@ -107,7 +105,7 @@ class Gateway extends PureComponent<Props, null> {
 				<View style={iconSettingsContainer}>
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
-			</Ripple>
+			</RippleButton>
 		);
 	}
 	getStyles(drawerWidth: number): Object {

@@ -23,10 +23,14 @@
 'use strict';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import Ripple from 'react-native-material-ripple';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { View, Text, IconTelldus } from '../../../../BaseComponents';
+import {
+	View,
+	Text,
+	IconTelldus,
+	RippleButton,
+} from '../../../../BaseComponents';
 
 import shouldUpdate from '../../../Lib/shouldUpdate';
 
@@ -58,7 +62,7 @@ export default class ChartLegend extends View<Props, null> {
 
 	render(): Object | null {
 		const { legendData, appLayout, onPressToggleView, onPressResetChartView, fullscreen } = this.props;
-		const { rowTextColor, rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
+		const { rowTextColor } = Theme.Core;
 		const {
 			containerStyle,
 			labelContainerStyle,
@@ -78,18 +82,15 @@ export default class ChartLegend extends View<Props, null> {
 							return null;
 						}
 						return (
-							<Ripple
+							<RippleButton
 								key={index}
-								rippleColor={rippleColor}
-								rippleOpacity={rippleOpacity}
-								rippleDuration={rippleDuration}
 								style={labelContainerStyle}
 								onPress={onPress}>
 								<IconTelldus icon={icon} style={{ ...iconStyle, color }} />
 								<Text style={[labelStyle, { color }]} numberOfLines={1}>
 									{value}
 								</Text>
-							</Ripple>
+							</RippleButton>
 						);
 					})
 					}

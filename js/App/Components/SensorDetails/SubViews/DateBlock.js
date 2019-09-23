@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import Ripple from 'react-native-material-ripple';
 import moment from 'moment';
 
 import {
@@ -30,6 +29,7 @@ import {
 	Icon,
 	FormattedDate,
 	Text,
+	RippleButton,
 } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 
@@ -85,13 +85,9 @@ render(): Object {
 		labelStyle,
 		dateStyle,
 	} = this.getStyle(appLayout, align);
-	const { rippleColor, rippleDuration, rippleOpacity } = Theme.Core;
 
 	return (
-		<Ripple
-			rippleColor={rippleColor}
-			rippleOpacity={rippleOpacity}
-			rippleDuration={rippleDuration}
+		<RippleButton
 			style={blockContainerStyle}
 			onPress={this.onPress}>
 			{align === 'left' && (<View style={iconContainerStyle}>
@@ -106,7 +102,7 @@ render(): Object {
 			{align === 'right' && (<View style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
-		</Ripple>
+		</RippleButton>
 	);
 }
 
