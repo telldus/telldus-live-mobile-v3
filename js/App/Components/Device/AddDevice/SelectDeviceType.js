@@ -138,10 +138,11 @@ render(): Object {
 
 	const {
 		container,
+		contentContainerStyle,
 	} = this.getStyles();
 
 	return (
-		<ScrollView style={container}>
+		<ScrollView style={container} contentContainerStyle={contentContainerStyle}>
 			{typesToRender}
 		</ScrollView>
 	);
@@ -156,8 +157,12 @@ getStyles(): Object {
 
 	return {
 		container: {
+			flex: 1,
 			paddingTop: padding,
-			paddingBottom: padding / 2,
+		},
+		contentContainerStyle: {
+			flexGrow: 1,
+			paddingBottom: padding * 2,
 		},
 	};
 }
