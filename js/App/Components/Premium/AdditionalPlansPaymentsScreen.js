@@ -262,7 +262,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					accessible={true}
 					style={buttonStyle}
 				/>
-				<Text style={backLinkStyle} onPress={onGoBack}>{formatMessage(i18n.backLabel)}</Text>
+				<Text style={backLinkStyle} onPress={onGoBack}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.backLabel))}</Text>
 			</ScrollView>
 		</View>
 	);
