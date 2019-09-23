@@ -171,6 +171,7 @@ getStyles(): Object {
 			justifyContent: 'center',
 			borderRadius: 2,
 			marginHorizontal: padding,
+			height: imageComponentHeight + (padding * 3),
 		},
 		arrowCover: {
 			flex: 0,
@@ -212,7 +213,7 @@ getStyles(): Object {
 			color: '#bdbdbd',
 		},
 		imageComponentStyle: {
-			marginHorizontal: padding * 2,
+			marginHorizontal: padding,
 			color: colorIcon,
 		},
 		imageComponentHeight,
