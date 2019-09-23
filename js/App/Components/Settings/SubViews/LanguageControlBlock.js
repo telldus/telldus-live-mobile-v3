@@ -64,7 +64,7 @@ const LanguageControlBlock = (props: Object): Object => {
 	const codeDevice = getLocale();
 	let { nativeName } = getLanguageInfoFromLangCode(codeDevice) || {};
 	let keyDevice = `${codeDevice}-device`;
-	const deviceLang = {code: codeDevice, value: `${nativeName}(${formatMessage(i18n.labelDevicelanguage)})`, key: keyDevice};
+	const deviceLang = {code: codeDevice, value: `${nativeName} (${formatMessage(i18n.labelDevicelanguage)})`, key: keyDevice};
 	LANGUAGES.push(deviceLang);
 	if (!languageProp.value) {
 		dispatch(setAppLanguage(deviceLang));
