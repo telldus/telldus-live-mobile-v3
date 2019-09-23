@@ -57,9 +57,6 @@ class HeatInfoBlock extends View {
 
 	constructor(props: Props) {
 		super(props);
-
-		// TODO: update accessibility label.
-		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -92,9 +89,13 @@ class HeatInfoBlock extends View {
 			textOneStyle,
 			textTwoStyle,
 			textThreeStyle,
+			intl,
 		} = this.props;
+		const { formatMessage } = intl;
 		let { methodRequested, name, local } = device;
-		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
+		const labelValue = currentValue ? `${formatMessage(i18n.currentValue)} ${currentValue} °C` : '';
+		const labelCMode = currentMode ? `${formatMessage(i18n.currentMode)} ${currentMode}` : '';
+		let accessibilityLabel = `${formatMessage(i18n.thermostat)} ${name}, ${labelCMode}, ${labelValue}`;
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (

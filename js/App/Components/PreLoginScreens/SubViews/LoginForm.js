@@ -190,7 +190,7 @@ class LoginForm extends View {
 	}
 
 	async signIn(): any {
-		const { openDialogueBox } = this.props;
+		const { openDialogueBox, intl } = this.props;
 		this.setState({ isSigninInProgress: true });
 		try {
 			await GoogleSignin.hasPlayServices();
@@ -220,7 +220,7 @@ class LoginForm extends View {
 			  // operation (f.e. sign in) is in progress already
 			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
 			  // play services not available or outdated
-			  openDialogueBox('Please make sure you have the latest version of google play services installed.');// TODO : Confirm and translate the message string
+			  openDialogueBox(intl.formatMessage(i18n.emailAddress));
 			} else {
 			  // some other error happened
 			  openDialogueBox(this.unknownError);

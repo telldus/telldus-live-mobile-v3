@@ -54,8 +54,7 @@ class MoreButtonsBlock extends View {
 		super(props);
 
 		this.onPressMoreButtons = this.onPressMoreButtons.bind(this);
-		// TODO: update accessibility label.
-		this.labelBellButton = `${props.intl.formatMessage(i18n.bell)} ${props.intl.formatMessage(i18n.button)}`;
+		this.thermostatMoreActions = props.intl.formatMessage(i18n.thermostatMoreActions);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -91,7 +90,7 @@ class MoreButtonsBlock extends View {
 	render(): Object {
 		let { device, moreButtonsBlockStyle, iconStyle } = this.props;
 		let { name } = device;
-		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
+		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
 
 		return (
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>

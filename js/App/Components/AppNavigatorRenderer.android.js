@@ -253,8 +253,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 				return {
 					component: <IconTelldus icon="campaign" style={styles.campaingIconStyle}/>,
 					style: styles.rightButtonStyle,
-					onPress: this.props.navigateToCampaign, // TODO: translate
-					accessibilityLabel: `campaign icon, ${formatMessage(i18n.defaultDescriptionButton)}`,
+					onPress: this.props.navigateToCampaign,
+					accessibilityLabel: `${formatMessage(i18n.linkToCampaigns)}`,
 				};
 			default:
 				return null;
