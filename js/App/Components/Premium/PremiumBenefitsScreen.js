@@ -24,7 +24,7 @@
 
 import React, { useState } from 'react';
 import Swiper from 'react-native-swiper';
-import { ScrollView, Image, TouchableOpacity } from 'react-native';
+import { ScrollView, Image, TouchableOpacity, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -67,6 +67,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		labelText,
 		labelsContainer,
 		moreText,
+		swiperStyle,
 	} = getStyles(layout);
 
 	const {
@@ -112,7 +113,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 
 	const screens = benefits.map((screen: Object): Object => {
 		return (
-			<View style={cover}>
+			<View style={cover} pointerEvents="box-none">
 				<IconTelldus icon={screen.icon} style={iconStyle}/>
 				<Text style={title}>{screen.title}</Text>
 				<Text style={bodyText}>{screen.body}</Text>
@@ -154,6 +155,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 					<Swiper
 						ref={swiperRef}
 						containerStyle={containerStyle}
+						style={Platform.OS === 'android' ? swiperStyle : {}}
 						showsButtons={true}
 						loop={false}
 						loadMinimal={true}
@@ -204,11 +206,17 @@ const getStyles = (appLayout: Object): Object => {
 			paddingBottom: padding * 2,
 		},
 		containerStyle: {
+			width: '100%',
 			height: deviceWidth * 0.72,
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
+		swiperStyle: {
+			width: '100%',
+			height: '100%',
+		},
 		cover: {
+			flex: 1,
 			padding: padding * 2,
 			alignItems: 'center',
 			justifyContent: 'center',
@@ -220,11 +228,13 @@ const getStyles = (appLayout: Object): Object => {
 			height: fontSize * 1.6,
 			width: fontSize * 1.2,
 			tintColor: Theme.Core.rowTextColor,
+			margin: 10,
 		},
 		buttonStyleN: {
 			height: fontSize * 1.6,
 			width: fontSize * 1.2,
 			tintColor: Theme.Core.rowTextColor,
+			margin: 10,
 		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
