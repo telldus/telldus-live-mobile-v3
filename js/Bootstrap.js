@@ -127,8 +127,8 @@ const WithIntlProvider = (props: Object): Object => {
 	const dispatch = useDispatch();
 	if (!locale) {
 		const code = getLocale();
-		let { nativeName, name } = getLanguageInfoFromLangCode(code) || {};
-		dispatch(setAppLanguage({code, value: `${nativeName}(Device Language)`, key: `${code}-device`, name}));
+		let { name } = getLanguageInfoFromLangCode(code) || {};
+		dispatch(setAppLanguage({code, key: `${code}-device`, name}));
 		locale = code;
 	}
 
