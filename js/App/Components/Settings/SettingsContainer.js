@@ -54,6 +54,7 @@ type Props = {
 	pushToken: string,
 	deviceName: string,
 	deviceId: string,
+	openModal: boolean,
 
 	actions?: Object,
 	navigation: Object,
@@ -67,7 +68,6 @@ type State = {
 	h2: string,
 	infoButton: null | Object,
 	isPushSubmitLoading: boolean,
-	isDialogueOpen: boolean,
 };
 
 class SettingsContainer extends View<Props, State> {
@@ -77,7 +77,6 @@ state: State = {
 	h2: '',
 	infoButton: null,
 	isPushSubmitLoading: false,
-	isDialogueOpen: false,
 };
 
 handleBackPress: () => boolean;
@@ -122,7 +121,7 @@ shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, otherN, ['pushToken', 'phonesList', 'deviceName', 'deviceId']);
+		const propsChange = shouldUpdate(others, otherN, ['pushToken', 'phonesList', 'deviceName', 'deviceId', 'openModal']);
 		if (propsChange) {
 			return true;
 		}
@@ -241,6 +240,7 @@ render(): Object {
 		children,
 		phonesList,
 		pushToken,
+		openModal,
 	} = this.props;
 	const {
 		appLayout,
@@ -253,8 +253,7 @@ render(): Object {
 		body,
 	} = this.getStyles(appLayout);
 
-	const importantForAccessibility = this.state.isDialogueOpen ? 'no-hide-descendants' : 'yes';// TODO: isDialogueOpen is not handled yet
-
+	const importantForAccessibility = openModal ? 'no-hide-descendants' : 'yes';
 	return (
 
 		<View style={container}>
@@ -311,13 +310,15 @@ getStyles(appLayout: Object): Object {
 
 }
 
-const mapStateToProps = ({user}: Object): Object => {
+const mapStateToProps = ({user, modal}: Object): Object => {
 	const { phonesList = {}, pushToken, deviceName, deviceId } = user;
+	const { openModal } = modal;
 	return {
 		phonesList,
 		pushToken,
 		deviceName,
 		deviceId,
+		openModal,
 	};
 };
 
