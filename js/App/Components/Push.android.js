@@ -142,12 +142,12 @@ const Push = {
 	},
 	onNotificationOpened: (): any => {
 		return firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
-			if (Push.checkIfPremiumExpireHeadsup(notificationOpen)) {
+			if (Push.isPremiumExpireHeadsup(notificationOpen)) {
 				Push.navigateToPurchasePremium();
 			}
 		});
 	},
-	checkIfPremiumExpireHeadsup: (notification: Object): boolean => {
+	isPremiumExpireHeadsup: (notification: Object): boolean => {
 		if (notification && notification.action) {
 			const action = notification.action;
 			return action === 'SHOW_PREMIUM_PURCHASE_SCREEN';
