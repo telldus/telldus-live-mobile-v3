@@ -76,14 +76,14 @@ const Push = {
 				'My Alert Msg',
 				[
 				    {
-						text: 'Take me to purchase screen',
+						text: 'Take me to purchase screen', // TODO: translate
 						onPress: () => {
 							Push.navigateToPurchasePremium();
 						},
 						style: 'default',
 					},
 				    {
-						text: 'Cancel',
+						text: 'Cancel', // TODO: translate
 						onPress: {
 						},
 						style: 'cancel',
