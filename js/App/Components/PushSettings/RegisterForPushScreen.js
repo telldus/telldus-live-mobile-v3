@@ -23,7 +23,12 @@
 'use strict';
 
 import React, { useState } from 'react';
-import { ScrollView, LayoutAnimation, Platform, PushNotificationIOS } from 'react-native';
+import {
+	ScrollView,
+	LayoutAnimation,
+	Platform,
+	PushNotificationIOS,
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
@@ -35,6 +40,7 @@ import {
 	IconTelldus,
 	TitledInfoBlock,
 	TouchableButton,
+	Throbber,
 } from '../../../BaseComponents';
 
 import {
@@ -70,11 +76,21 @@ const RegisterForPushScreen = (props: Object): Object => {
 		valueTextStyle,
 		blockContainerStyle,
 		touchableButtonStyle,
+		throbberStyle,
+		throbberContainerStyle,
+		loadingInfoCover,
+		loadingTextStyle,
 	} = getStyles(layout);
 
 	const { formatMessage } = useIntl();
 	const [isPushSubmitLoading, setIsPushSubmitLoading] = useState(false);
-	const [isDeleteTokenLoading, setIsDeleteTokenLoading] = useState(false);
+	const [{
+		isDeleteTokenLoading,
+		deletingToken,
+	}, setIsDeleteTokenLoading] = useState({
+		isDeleteTokenLoading: false,
+		deletingToken: null,
+	});
 
 	const dispatch = useDispatch();
 
@@ -156,43 +172,81 @@ const RegisterForPushScreen = (props: Object): Object => {
 	}
 
 	function onConfirmDeleteToken(token: string) {
-		setIsDeleteTokenLoading(true);
+		setIsDeleteTokenLoading({
+			isDeleteTokenLoading: true,
+			deletingToken: token,
+		});
+		LayoutAnimation.configureNext(linearCUD(300));
 		dispatch(deletePushToken(token)).then(() => {
-			setIsDeleteTokenLoading(false);
+			setIsDeleteTokenLoading({
+				isDeleteTokenLoading: false,
+				deletingToken: null,
+			});
 			dispatch(getPhonesList()).then(() => {
 				LayoutAnimation.configureNext(linearCUD(300));
 			});
 			submitPushToken();
 		}).catch(() => {
-			setIsDeleteTokenLoading(false);
-			dispatch(showToast());
+			setTimeout(() => {
+				setIsDeleteTokenLoading({
+					isDeleteTokenLoading: false,
+					deletingToken: null,
+				});
+				LayoutAnimation.configureNext(linearCUD(300));
+				dispatch(showToast());
+			}, 5000);
 		});
 	}
 
-	const phones = Object.keys(phonesList).map((key: string, i: number): Object => {
+	const isLoading = isPushSubmitLoading || isDeleteTokenLoading;
+
+	let phones = [];
+	Object.keys(phonesList).map((key: string, i: number): Object => {
 		let { token, name} = phonesList[key];
 
 		function onPressPushSettings() {
 			onConfirmDeleteToken(token);
 		}
 
-		return (
-			<TitledInfoBlock
-				key={`${i}`}
-				label={i === 0 ?
-					formatMessage(i18n.myPhone) : i === 1 ?
-						formatMessage(i18n.otherPhone)
-						:
-						formatMessage(i18n.yetAnotherPhone)}
-				icon={'angle-right'}
-				iconStyle={iconStyle}
-				fontSize={fontSize}
-				valueTextStyle={valueTextStyle}
-				blockContainerStyle={blockContainerStyle}
-				value={name}
-				onPress={isDeleteTokenLoading ? null : onPressPushSettings}
-			/>
-		);
+		if (deletingToken) {
+			if (deletingToken === token) {
+				phones.push(
+					<TitledInfoBlock
+						key={`${i}`}
+						label={i === 0 ?
+							formatMessage(i18n.myPhone) : i === 1 ?
+								formatMessage(i18n.otherPhone)
+								:
+								formatMessage(i18n.yetAnotherPhone)}
+						icon={'angle-right'}
+						iconStyle={iconStyle}
+						fontSize={fontSize}
+						valueTextStyle={valueTextStyle}
+						blockContainerStyle={blockContainerStyle}
+						value={name}
+						onPress={isLoading ? null : onPressPushSettings}
+					/>
+				);
+			}
+		} else {
+			phones.push(
+				<TitledInfoBlock
+					key={`${i}`}
+					label={i === 0 ?
+						formatMessage(i18n.myPhone) : i === 1 ?
+							formatMessage(i18n.otherPhone)
+							:
+							formatMessage(i18n.yetAnotherPhone)}
+					icon={'angle-right'}
+					iconStyle={iconStyle}
+					fontSize={fontSize}
+					valueTextStyle={valueTextStyle}
+					blockContainerStyle={blockContainerStyle}
+					value={name}
+					onPress={isLoading ? null : onPressPushSettings}
+				/>
+			);
+		}
 	});
 
 	return (
@@ -217,10 +271,18 @@ const RegisterForPushScreen = (props: Object): Object => {
 					</Text>
 				</View>
 				{phones}
-				<TouchableButton
+				{isDeleteTokenLoading && <View style={loadingInfoCover}>
+					<Throbber throbberContainerStyle={throbberContainerStyle} throbberStyle={throbberStyle}/>
+					<Text style={loadingTextStyle}>
+						{formatMessage(i18n.registeringDeviceForPush)}...
+					</Text>
+				</View>
+				}
+				{!isDeleteTokenLoading && <TouchableButton
 					text={isPushSubmitLoading ? `${formatMessage(i18n.registering)}...` : formatMessage(i18n.noAddThisAsANewDevice)}
-					onPress={isPushSubmitLoading ? null : submitPushToken}
+					onPress={isLoading ? null : submitPushToken}
 					style={touchableButtonStyle}/>
+				}
 			</ScrollView>
 		</View>
 
@@ -281,6 +343,24 @@ const getStyles = (appLayout: Object): Object => {
 		touchableButtonStyle: {
 			marginVertical: padding,
 			width: deviceWidth - (padding * 6),
+		},
+		loadingInfoCover: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		throbberContainerStyle: {
+			marginVertical: padding,
+			position: 'relative',
+			marginRight: 10,
+		},
+		throbberStyle: {
+			fontSize: fontSize * 1.6,
+			color: Theme.Core.eulaContentColor,
+		},
+		loadingTextStyle: {
+			fontSize,
+			color: Theme.Core.eulaContentColor,
 		},
 	};
 };
