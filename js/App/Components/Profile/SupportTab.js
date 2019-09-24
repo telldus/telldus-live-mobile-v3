@@ -27,6 +27,7 @@ import { ScrollView, Linking, TouchableOpacity, LayoutAnimation } from 'react-na
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 const forge = require('node-forge');
+import moment from 'moment';
 
 import {
 	View,
@@ -54,16 +55,16 @@ import i18n from '../../Translations/common';
 const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 	let newData = [];
 	data.map((tweet: Object) => {
-		// const daysDiff = moment().diff(new Date(tweet.created_at), 'days');
-		// if (daysDiff <= 2) {
-		newData.push({
-			created_at: new Date(tweet.created_at),
-			text: tweet.text,
-			link: `https://twitter.com/telldus_status/status/${tweet.id_str}`,
-		});
-		// }
+		const daysDiff = moment().diff(new Date(tweet.created_at), 'days');
+		if (daysDiff <= 2) {
+			newData.push({
+				created_at: new Date(tweet.created_at),
+				text: tweet.text,
+				link: `https://twitter.com/telldus_status/status/${tweet.id_str}`,
+			});
+		}
 	});
-	return newData.slice(0, 2);
+	return newData;
 };
 
 const SupportTab = (props: Object): Object => {
