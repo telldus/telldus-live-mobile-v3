@@ -140,6 +140,7 @@ constructor(props: Props) {
 
 	// sets push notification listeners and returns a method that clears all listeners.
 	this.onNotification = Push.onNotification();
+	this.onNotificationOpened = Push.onNotificationOpened();
 }
 
 componentDidMount() {
@@ -279,6 +280,10 @@ componentWillUnmount() {
 	if (this.onNotification && typeof this.onNotification === 'function') {
 		// Remove Push notification listener.
 		this.onNotification();
+	}
+	if (this.onNotificationOpened && typeof this.onNotificationOpened === 'function') {
+		// Remove Push notification opened listener.
+		this.onNotificationOpened();
 	}
 	if (this.onTokenRefreshListener) {
 		this.onTokenRefreshListener();

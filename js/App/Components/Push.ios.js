@@ -27,6 +27,9 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import type { ThunkAction } from '../Actions/Types';
 import { pushServiceId } from '../../Config';
 import { registerPushToken } from '../Actions/User';
+import {
+	navigate,
+} from '../Lib';
 
 const Push = {
 	configure: (params: any): ThunkAction => {
@@ -34,6 +37,11 @@ const Push = {
 			PushNotificationIOS.requestPermissions();
 			PushNotificationIOS.addEventListener('register', (token: string): any => {
 				return dispatch(Push.onRegister(token, params));
+			});
+			PushNotificationIOS.getInitialNotification().then((notification: Object) => {
+				if (Push.isPremiumExpireHeadsup(notification)) {
+					Push.navigateToPurchasePremium();
+				}
 			});
 		};
 	},
@@ -60,14 +68,50 @@ const Push = {
 		PushNotificationIOS.removeEventListener('register');
 	},
 	createLocalNotification: (notification: Object) => {
-		// 	// On iOS, if the app is in foreground the local notification is not shown.
-		// 	// We use normal alert instead
-		Alert.alert('Telldus Live!', notification.getMessage());
+		// On iOS, if the app is in foreground the local notification is not shown.
+		// We use normal alert instead
+		if (Push.isPremiumExpireHeadsup(notification)) {
+			Alert.alert(
+				'Alert Title',
+				'My Alert Msg',
+				[
+				    {
+						text: 'Take me to purchase screen',
+						onPress: () => {
+							Push.navigateToPurchasePremium();
+						},
+						style: 'default',
+					},
+				    {
+						text: 'Cancel',
+						onPress: {
+						},
+						style: 'cancel',
+					},
+				],
+				{cancelable: true},
+			  );
+		} else {
+			Alert.alert('Telldus Live!', notification.getMessage());
+		}
 	},
-	refreshTokenListener: ({ deviceId }: Object): ThunkAction => {
+	refreshTokenListener: ({ deviceId }: Object): ThunkAction => {// dummy to match android
 		return (dispatch: Function, getState: Object): Function => {
 			return () => {};
 		};
+	},
+	onNotificationOpened: (): any => {// dummy to match android
+		return () => {};
+	},
+	isPremiumExpireHeadsup: (notification: Object): boolean => {
+		if (notification) {
+			const category = notification.getCategory();
+			return category === 'PREMIUM_EXPIRE_HEADSUP';
+		}
+		return false;
+	},
+	navigateToPurchasePremium: () => {
+		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	},
 };
 

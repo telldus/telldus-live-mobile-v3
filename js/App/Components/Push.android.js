@@ -23,13 +23,17 @@
 'use strict';
 
 import firebase from 'react-native-firebase';
-import type { Notification } from 'react-native-firebase';
+import type { Notification, NotificationOpen } from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
 
 import type { ThunkAction } from '../Actions/Types';
 import { pushSenderId, pushServiceId } from '../../Config';
 import { registerPushToken } from '../Actions/User';
 import { reportException } from '../Lib/Analytics';
+
+import {
+	navigate,
+} from '../Lib';
 
 const Push = {
 	configure: (params: Object): ThunkAction => {
@@ -135,6 +139,23 @@ const Push = {
 				}
 			});
 		};
+	},
+	onNotificationOpened: (): any => {
+		return firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
+			if (Push.checkIfPremiumExpireHeadsup(notificationOpen)) {
+				Push.navigateToPurchasePremium();
+			}
+		});
+	},
+	checkIfPremiumExpireHeadsup: (notification: Object): boolean => {
+		if (notification && notification.action) {
+			const action = notification.action;
+			return action === 'SHOW_PREMIUM_PURCHASE_SCREEN';
+		}
+		return false;
+	},
+	navigateToPurchasePremium: () => {
+		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	},
 };
 
