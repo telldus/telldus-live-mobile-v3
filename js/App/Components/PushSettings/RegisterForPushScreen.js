@@ -27,8 +27,8 @@ import {
 	ScrollView,
 	LayoutAnimation,
 	Platform,
-	PushNotificationIOS,
 } from 'react-native';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';

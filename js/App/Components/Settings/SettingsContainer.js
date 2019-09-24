@@ -22,11 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { BackHandler, ScrollView, Platform, PushNotificationIOS, KeyboardAvoidingView, LayoutAnimation } from 'react-native';
+import { BackHandler, ScrollView, Platform, KeyboardAvoidingView, LayoutAnimation } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 import DeviceInfo from 'react-native-device-info';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import {
 	View,

@@ -21,7 +21,8 @@
 'use strict';
 
 import DeviceInfo from 'react-native-device-info';
-import { Alert, PushNotificationIOS } from 'react-native';
+import { Alert } from 'react-native';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import type { ThunkAction } from '../Actions/Types';
 import { pushServiceId } from '../../Config';

@@ -26,9 +26,9 @@ import React, { useEffect, useState } from 'react';
 import {
 	ScrollView,
 	Platform,
-	PushNotificationIOS,
 	LayoutAnimation,
 } from 'react-native';
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {
 	useSelector,
 	useDispatch,
