@@ -80,6 +80,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 		throbberContainerStyle,
 		loadingInfoCover,
 		loadingTextStyle,
+		labelTextStyle,
 	} = getStyles(layout);
 
 	const { formatMessage } = useIntl();
@@ -211,6 +212,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 				iconStyle={iconStyle}
 				fontSize={fontSize}
 				valueTextStyle={valueTextStyle}
+				labelTextStyle={labelTextStyle}
 				blockContainerStyle={blockContainerStyle}
 				value={name}
 				onPress={isLoading ? null : onPressPushSettings}
@@ -352,12 +354,15 @@ const getStyles = (appLayout: Object): Object => {
 		contentTitleStyle: {
 			fontSize: fontSize * 1.2,
 			textAlign: 'center',
-			color: '#000',
+			color: Theme.Core.eulaContentColor,
 			marginVertical: 10,
 		},
 		phoneIconStyle: {
 			fontSize: fontSize * 4,
 			color: Theme.Core.brandSecondary,
+		},
+		labelTextStyle: {
+			color: Theme.Core.eulaContentColor,
 		},
 		valueTextStyle: {
 			marginRight: 15,
