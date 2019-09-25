@@ -198,56 +198,84 @@ const RegisterForPushScreen = (props: Object): Object => {
 		});
 	}
 
-	const isLoading = isPushSubmitLoading || isDeleteTokenLoading;
-
-	let phones = [];
-	Object.keys(phonesList).map((key: string, i: number): Object => {
-		let { token, name} = phonesList[key];
-
+	function renderBlock({token, name, key, label}: Object): Object {
 		function onPressPushSettings() {
 			onConfirmDeleteToken(token);
 		}
 
+		return (
+			<TitledInfoBlock
+				key={key}
+				label={label}
+				icon={'angle-right'}
+				iconStyle={iconStyle}
+				fontSize={fontSize}
+				valueTextStyle={valueTextStyle}
+				blockContainerStyle={blockContainerStyle}
+				value={name}
+				onPress={isLoading ? null : onPressPushSettings}
+			/>
+		);
+	}
+
+	const isLoading = isPushSubmitLoading || isDeleteTokenLoading;
+
+	let phones = [];
+	let myPhone;
+	const deviceUniqueId = DeviceInfo.getUniqueID();
+
+	let isMine = false;
+	let nextLabel = formatMessage(i18n.otherPhone);
+	Object.keys(phonesList).map((key: string, i: number): Object => {
+		let { token, name, deviceId: uniqueDeviceId } = phonesList[key];
+		isMine = false;
+		if (deviceUniqueId === uniqueDeviceId) {
+			isMine = true;
+		}
+
 		if (deletingToken) {
 			if (deletingToken === token) {
-				phones.push(
-					<TitledInfoBlock
-						key={`${i}`}
-						label={i === 0 ?
-							formatMessage(i18n.myPhone) : i === 1 ?
-								formatMessage(i18n.otherPhone)
-								:
-								formatMessage(i18n.yetAnotherPhone)}
-						icon={'angle-right'}
-						iconStyle={iconStyle}
-						fontSize={fontSize}
-						valueTextStyle={valueTextStyle}
-						blockContainerStyle={blockContainerStyle}
-						value={name}
-						onPress={isLoading ? null : onPressPushSettings}
-					/>
-				);
+				if (isMine) {
+					myPhone = renderBlock({
+						token,
+						name,
+						key,
+						label: formatMessage(i18n.myPhone),
+					});
+					nextLabel = i === 0 ? formatMessage(i18n.otherPhone) : formatMessage(i18n.yetAnotherPhone);
+				} else {
+					phones.push(renderBlock({
+						token,
+						name,
+						key,
+						label: nextLabel,
+					}));
+					nextLabel = formatMessage(i18n.yetAnotherPhone);
+				}
+			} else {
+				nextLabel = formatMessage(i18n.yetAnotherPhone);
 			}
+		} else if (isMine) {
+			myPhone = renderBlock({
+				token,
+				name,
+				key,
+				label: formatMessage(i18n.myPhone),
+			});
+			nextLabel = i === 0 ? formatMessage(i18n.otherPhone) : formatMessage(i18n.yetAnotherPhone);
 		} else {
-			phones.push(
-				<TitledInfoBlock
-					key={`${i}`}
-					label={i === 0 ?
-						formatMessage(i18n.myPhone) : i === 1 ?
-							formatMessage(i18n.otherPhone)
-							:
-							formatMessage(i18n.yetAnotherPhone)}
-					icon={'angle-right'}
-					iconStyle={iconStyle}
-					fontSize={fontSize}
-					valueTextStyle={valueTextStyle}
-					blockContainerStyle={blockContainerStyle}
-					value={name}
-					onPress={isLoading ? null : onPressPushSettings}
-				/>
-			);
+			phones.push(renderBlock({
+				token,
+				name,
+				key,
+				label: nextLabel,
+			}));
+			nextLabel = formatMessage(i18n.yetAnotherPhone);
 		}
 	});
+	if (myPhone) {
+		phones.unshift(myPhone);
+	}
 
 	return (
 		<View style={container}>
