@@ -109,6 +109,22 @@ const RedeemGiftScreen = (props: Object): Object => {
 		});
 	}
 
+	const headerArray = formatMessage(i18n.enterRedeemCode).split(' ');
+	const header = headerArray.map((word: string): Object => {
+		if (word.includes('%')) {
+			return (
+				<Text style={titleStyleTwo}>
+					{` ${word.replace(/%/g, '').toUpperCase()}`}
+				</Text>
+			);
+		}
+		return (
+			<Text style={titleStyleOne}>
+				{word.toUpperCase()}
+			</Text>
+		);
+	});
+
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
@@ -122,12 +138,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 				<View style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
-						<Text style={titleStyleOne}>
-							{formatMessage(i18n.enter).toUpperCase()}
-						</Text>
-						<Text style={titleStyleTwo}>
-							{` ${formatMessage(i18n.labelRedeemCode).toUpperCase()}`}
-						</Text>
+						{header}
 					</View>
 					<Text style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
