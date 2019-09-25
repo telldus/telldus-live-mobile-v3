@@ -143,6 +143,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 						autoFocus={true}
 						underlineColorAndroid={Theme.Core.brandSecondary}
 						returnKeyType={'done'}
+						autoCapitalize={'characters'}
 					/>
 				</View>
 				<TouchableButton
