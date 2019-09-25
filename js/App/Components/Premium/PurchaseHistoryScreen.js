@@ -109,7 +109,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	}
 
 	function getTypeAndMonth({type, quantity}: Object): Object {
-		const preS = `${formatMessage(i18n.premiumAccess)}, `;
+		const preS = `${'Premium access'}, `;
 		switch (type) {
 			case 'pro': {// TODO: check with Johannes
 				const months = 1 * quantity;

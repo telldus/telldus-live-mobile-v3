@@ -83,7 +83,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	const accStatus = isBasic ? 'Basic' :
 		<View style={valueCompCoverStyle}>
 			<IconTelldus icon={'premium'} style={premIconStyle}/>
-			<Text style={valueText}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}</Text>
+			<Text style={valueText}>{capitalizeFirstLetterOfEachWord('Premium access')}</Text>
 		</View>;
 
 	return (

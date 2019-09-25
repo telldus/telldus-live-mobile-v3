@@ -64,7 +64,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 
 	const { formatMessage } = useIntl();
 	function getInfo({product, quantity}: Object): Object {
-		const postS = ` ${formatMessage(i18n.premiumAccess)}`;
+		const postS = ` ${'Premium access'}`;
 		switch (product) {
 			case 'pro': {// TODO: check with Johannes
 				const months = 1 * quantity;
@@ -139,7 +139,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={!success}

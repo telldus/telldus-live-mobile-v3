@@ -131,7 +131,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.manageSubscription)}
 				align={'right'}
 				showLeftIcon={true}

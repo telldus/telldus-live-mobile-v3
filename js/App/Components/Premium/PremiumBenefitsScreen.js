@@ -96,7 +96,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 			body: formatMessage(i18n.androidWidgetsDescription),
 		},
 		{
-			title: formatMessage(i18n.labelIFTTTFull),
+			title: 'If this then that',
 			icon: 'ifttt',
 			body: formatMessage(i18n.ifttDescription),
 		},
@@ -143,7 +143,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
 				align={'right'}
 				showLeftIcon={true}

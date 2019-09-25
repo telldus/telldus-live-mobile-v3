@@ -174,7 +174,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
-				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}
+				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.purchaseSMSCredits)}
 				align={'right'}
 				showLeftIcon={true}

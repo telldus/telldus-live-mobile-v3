@@ -72,7 +72,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 		this.titleWThree = formatMessage(i18n.wizardThreeHeader312);
 		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription312);
 
-		this.titleWFour = capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess));
+		this.titleWFour = capitalizeFirstLetterOfEachWord('Premium access');
 		this.descriptionWFour = formatMessage(i18n.wizardFourDescription312);
 	}
 
