@@ -26,6 +26,7 @@ import {
 	View,
 	LocationDetails,
 	TouchableButton,
+	Text,
 } from '../../../../BaseComponents';
 import {
 	TestRow,
@@ -36,6 +37,7 @@ import {
 	getLocationImageUrl,
 	getRSAKey,
 	hasTokenExpired,
+	supportRSA,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -427,6 +429,64 @@ renderTestRow(testData: Object, index: number): Object {
 	);
 }
 
+getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Object> {
+
+	const {
+		location,
+		intl,
+	} = this.props;
+	let {
+		localKey = {},
+		online,
+		websocketOnline,
+	} = location;
+	let { address, key, uuid } = localKey;
+
+	const messages = [];
+	failedTestsIndex.map((failedIndex: number, i: number) => {
+		if (failedIndex === 3 && !supportRSA()) {
+			messages.push(
+				<View style={style.troubleShootItemStyle} key={`${i}`}>
+					<Text style={style.bulletinStyle}>*</Text>
+					<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailOne)}</Text>
+				</View>
+			);
+		} else if (supportRSA()) {
+			if (failedIndex === 0) {
+				if (!address) {
+					messages.push(
+						<View style={style.troubleShootItemStyle} key={`${i}`}>
+							<Text style={style.bulletinStyle}>*</Text>
+							<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailFour)}</Text>
+						</View>
+					);
+				}
+			}
+			if (failedIndex === 2) {
+				if (uuid && !key) {
+					if (!online) {
+						messages.push(
+							<View style={style.troubleShootItemStyle} key={`${i}`}>
+								<Text style={style.bulletinStyle}>*</Text>
+								<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailTwo)}</Text>
+							</View>
+						);
+					}
+					if (!websocketOnline) {
+						messages.push(
+							<View style={style.troubleShootItemStyle} key={`${i}`}>
+								<Text style={style.bulletinStyle}>*</Text>
+								<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailThree)}</Text>
+							</View>
+						);
+					}
+				}
+			}
+		}
+	});
+	return messages;
+}
+
 render(): Object | null {
 
 	const {
@@ -444,6 +504,7 @@ render(): Object | null {
 		name,
 		type,
 	} = location;
+
 	const locationImageUrl = getLocationImageUrl(type);
 	const locationData = {
 		image: locationImageUrl,
@@ -455,14 +516,18 @@ render(): Object | null {
 		LocationDetail,
 		testsCover,
 		button,
+		troubleShootHintsCover,
+		...others
 	} = this.getStyles(appLayout);
 
 	let gotFailedTest = false;
+	let failedTestsIndex = [];
 	const tests = this.TESTS_TO_RUN.map((test: Object, i: number): Object => {
 		if (i === index) {
 			test.status = status;
 		}
 		if (test.status === 'fail') {
+			failedTestsIndex.push(i);
 			test = { ...test, h2: intl.formatMessage(i18n.failed)};
 			gotFailedTest = true;
 		}
@@ -474,16 +539,27 @@ render(): Object | null {
 
 	const showButtons = (index === (this.TESTS_TO_RUN.length - 1)) && (status === 'ok' || status === 'fail');
 
+	let troubleShootHints;
+	if (showButtons) {
+		troubleShootHints = this.getTroubleShootInfo(failedTestsIndex, others);
+	}
+
+	const showContactSupport = gotFailedTest && supportRSA();
+
 	return (
 			<>
 				<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
 				<View style={testsCover}>
 					{tests}
 				</View>
+				{!!troubleShootHints && (troubleShootHints.length > 0) && <View style={troubleShootHintsCover}>
+					{troubleShootHints}
+				</View>
+				}
 				{showButtons &&
 					<>
 					<TouchableButton text={i18n.labelButtonRunTestsAgain} style={button} onPress={this.onPressReRunTest}/>
-					{gotFailedTest && <TouchableButton text={i18n.labelButtonRequestSupport} style={button} onPress={this.onPressRequestSupport}/>}
+					{showContactSupport && <TouchableButton text={i18n.labelButtonRequestSupport} style={button} onPress={this.onPressRequestSupport}/>}
 					</>
 				}
 			</>
@@ -495,9 +571,16 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		eulaContentColor,
+		brandDanger,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+
+	const fSize = Math.floor(deviceWidth * 0.035);
 
 	return {
 		LocationDetail: {
@@ -519,6 +602,36 @@ getStyles(appLayout: Object): Object {
 			marginTop: padding / 2,
 			marginBottom: padding,
 			minWidth: Math.floor(deviceWidth * 0.6),
+		},
+		troubleShootHintsCover: {
+			flex: 0,
+			flexDirection: 'column',
+			marginTop: -(padding / 2),
+			marginBottom: padding,
+			padding: 10,
+			backgroundColor: '#fff',
+			...shadow,
+			justifyContent: 'center',
+		},
+		troubleShootItemStyle: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'flex-start',
+		},
+		troubleShootTextStyle: {
+			fontSize: fSize,
+			color: eulaContentColor,
+			marginLeft: 10,
+			textAlignVertical: 'center',
+		},
+		bulletinStyle: {
+			paddingTop: fSize * 0.5,
+			fontSize: fSize * 2,
+			color: brandDanger,
+			textAlignVertical: 'center',
+			alignItems: 'center',
+			justifyContent: 'center',
+			textAlign: 'center',
 		},
 	};
 }
