@@ -59,7 +59,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	} = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
+	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
 	function onPressUpgrade() {
@@ -68,15 +68,6 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 			key: 'PremiumUpgradeScreen',
 		});
 	}
-
-	let isAutoRenew = false;
-	Object.keys(subscriptions).map((key: string) => {
-		const {
-			product,
-			status,
-		} = subscriptions[key];
-		isAutoRenew = product === 'premium' && status === 'active';
-	});
 
 	const {
 		upgradeSyle,
@@ -87,7 +78,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		valueCompCoverStyle,
 	} = getStyle(layout);
 
-	const accStatus = moment().unix() > pro ? 'Basic' :
+	const isBasic = moment().unix() > pro;
+
+	const accStatus = isBasic ? 'Basic' :
 		<View style={valueCompCoverStyle}>
 			<IconTelldus icon={'premium'} style={premIconStyle}/>
 			<Text style={valueText}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.premiumAccess))}</Text>
@@ -103,9 +96,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				label={formatMessage(i18n.subscription)}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={isAutoRenew ? null : <Text style={upgradeSyle}>{pro ? formatMessage(i18n.renew) : formatMessage(i18n.upgrade)}</Text>}
+				iconValueRight={isBasic ? <Text style={upgradeSyle}>{formatMessage(i18n.upgrade)}</Text> : null}
 				onPress={false}
-				onPressIconValueRight={isAutoRenew ? null : onPressUpgrade}
+				onPressIconValueRight={isBasic ? onPressUpgrade : null}
 				intl={intl}
 				style={style}
 				contentCoverStyle={contentCoverStyle}

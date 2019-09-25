@@ -30,6 +30,7 @@ import { useIntl } from 'react-intl';
 import {
 	SettingsRow,
 	IconTelldus,
+	Text,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -60,6 +61,13 @@ const AutoRenewalBlock = (props: Object): Object => {
 		});
 	}
 
+	function onPressUpgrade() {
+		navigation.navigate({
+			routeName: 'PremiumUpgradeScreen',
+			key: 'PremiumUpgradeScreen',
+		});
+	}
+
 	let isAutoRenew = false;
 	Object.keys(subscriptions).map((key: string) => {
 		const {
@@ -86,13 +94,13 @@ const AutoRenewalBlock = (props: Object): Object => {
 			iconValueRight={isAutoRenew ?
 				<IconTelldus icon={'settings'} style={upgradeSyle}/>
 				:
-				null
+				<Text style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
 			}
 			onPress={false}
 			onPressIconValueRight={isAutoRenew ?
 				onPressManageSubscription
 				:
-				null
+				onPressUpgrade
 			}
 			intl={intl}
 			style={style}
