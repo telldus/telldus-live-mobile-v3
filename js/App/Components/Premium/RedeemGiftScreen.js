@@ -88,6 +88,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 		}
 		dispatch(activateCoupon(code)).then((response: Object) => {
 			if (response && response.status === 'success') {
+				dispatch(getUserProfile());
 				navigation.navigate({
 					routeName: 'PostPurchaseScreen',
 					key: 'PostPurchaseScreen',
