@@ -31,7 +31,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 		let data = {};
 		if (gateway) {
-			const { localKey, online, websocketOnline } = gateway;
+			const { localKey = {}, online, websocketOnline } = gateway;
 			const {
 				address,
 				key,
@@ -59,7 +59,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 		let data = {};
 		if (gateway) {
-			const { localKey, online, websocketOnline } = gateway;
+			const { localKey = {}, online, websocketOnline } = gateway;
 			const {
 				address,
 				key,

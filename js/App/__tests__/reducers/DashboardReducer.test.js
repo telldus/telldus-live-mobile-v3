@@ -10,12 +10,16 @@ describe('Test Dashboard reducers', ()=>{
 			id: 3,
 			isOnline: true,
 			name: 'a',
+			websocketOnline: true,
+			supportLocalControl: false,
 		}};
 		const sensor = { 2: {
 			clientId: 1,
 			id: 2,
 			isOnline: true,
 			name: 'b',
+			websocketOnline: true,
+			supportLocalControl: false,
 		}};
 
 		const dashboard = {
@@ -33,6 +37,8 @@ describe('Test Dashboard reducers', ()=>{
 			byId: { 1: {
 				id: 1,
 				online: true,
+				localKey: {},
+				websocketOnline: true,
 			}},
 		};
 
