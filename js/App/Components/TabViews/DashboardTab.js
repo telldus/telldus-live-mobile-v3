@@ -429,6 +429,11 @@ class DashboardTab extends View {
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;
 		const { data, objectType } = row.item;
+		const {
+			supportLocalControl,
+			id,
+			isOnline,
+		} = data || {};
 		const tileMargin = this.getPadding() / 4;
 		tileWidth -= (2 * tileMargin);
 
@@ -444,17 +449,17 @@ class DashboardTab extends View {
 		};
 
 		if (objectType !== 'sensor' && objectType !== 'device') {
-			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 		if (!data) {
-			return this.renderUnknown(data.id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 
 		if (objectType === 'sensor') {
 			return <SensorDashboardTile
-				key={data.id}
+				key={id}
 				item={data}
-				isGatewayActive={data.isOnline}
+				isGatewayActive={isOnline || supportLocalControl}
 				style={tileStyle}
 				tileWidth={tileWidth}
 				intl={screenProps.intl}
@@ -463,9 +468,9 @@ class DashboardTab extends View {
 		}
 
 		return <DashboardRow
-			key={data.id}
+			key={id}
 			item={data}
-			isGatewayActive={data.isOnline}
+			isGatewayActive={isOnline || supportLocalControl}
 			style={tileStyle}
 			tileWidth={tileWidth}
 			intl={screenProps.intl}

@@ -21,13 +21,29 @@
 
 'use strict';
 import orderBy from 'lodash/orderBy';
+import { hasTokenExpired } from '../Lib/LocalControl';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}): Array<Object> {
 	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
 		let device = devices.byId[deviceId] || {};
 		let { clientId } = device;
 		let gateway = gateways.byId[clientId];
-		let data = gateway ? { ...device, isOnline: gateway.online } : { ...device, isOnline: false };
+
+		let data = {};
+		if (gateway) {
+			const { localKey, online, websocketOnline } = gateway;
+			const {
+				address,
+				key,
+				ttl,
+				supportLocal,
+			} = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+			data = { ...device, isOnline: online, supportLocalControl, websocketOnline };
+		} else {
+			data = { ...device, isOnline: false, websocketOnline: false, supportLocalControl: false };
+		}
 
 		return {
 			objectType: 'device',
@@ -40,7 +56,22 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		let sensor = sensors.byId[sensorId] || {};
 		let { clientId } = sensor;
 		let gateway = gateways.byId[clientId];
-		let data = gateway ? { ...sensor, isOnline: gateway.online } : { ...sensor, isOnline: false };
+
+		let data = {};
+		if (gateway) {
+			const { localKey, online, websocketOnline } = gateway;
+			const {
+				address,
+				key,
+				ttl,
+				supportLocal,
+			} = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+			data = { ...sensor, isOnline: online, supportLocalControl, websocketOnline };
+		} else {
+			data = { ...sensor, isOnline: false, websocketOnline: false, supportLocalControl: false };
+		}
 
 		return {
 			objectType: 'sensor',
