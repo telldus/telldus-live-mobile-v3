@@ -49,7 +49,7 @@ type Props = {
 	minVal: number,
 	currentValueInScreen: number,
 
-	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
 	onEditSubmitValue: (number) => void,
 	updateCurrentValueInScreen: (string) => void,
@@ -109,7 +109,7 @@ onSubmitEditing = () => {
 		this.props.onEditSubmitValue(value);
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-	this.props.onControlThermostat(controllingMode, value, 1);
+	this.props.onControlThermostat(controllingMode, value, 1, 1);
 }
 
 formatSensorLastUpdate = (time: string): string => {

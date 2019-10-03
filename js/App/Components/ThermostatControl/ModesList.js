@@ -43,7 +43,7 @@ type Props = {
 	modesCoverStyle: number | Array<any> | Object,
 	onPressRow: (string) => void,
 	intl: intlShape,
-	onControlThermostat: (mode: string, temperature?: number | null, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | null, changeMode: 1 | 0, requestedState: number) => void,
 	onEditSubmitValue: (number) => void,
 	updateCurrentValueInScreen: (string) => void,
 };
@@ -113,6 +113,7 @@ render(): Object {
 				edit={edit}
 				icon={icon}
 				value={controllingMode === mode ? currentValueInScreen : value}
+				controllingMode={controllingMode}
 				scale={scale}
 				unit={unit}
 				active={active}

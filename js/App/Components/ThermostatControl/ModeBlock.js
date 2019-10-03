@@ -53,9 +53,10 @@ type Props = {
 	minVal: number,
 	currentValue: number,
 	initialValue?: number,
+	controllingMode: string,
 
 	onPressRow: (string) => void,
-	onControlThermostat: (mode: string, temperature?: number | string | null, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: Object,
 	onEditSubmitValue: (number) => void,
 	updateCurrentValueInScreen: (string) => void,
@@ -112,7 +113,7 @@ onSubmitEditing = () => {
 	}
 
 	const value = parseFloat(parseFloat(this.props.value).toFixed(1));
-	const { maxVal, minVal, mode } = this.props;
+	const { maxVal, minVal, mode, controllingMode } = this.props;
 	if (isNaN(value) || value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
@@ -123,7 +124,7 @@ onSubmitEditing = () => {
 		this.props.onEditSubmitValue(value);
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-	this.props.onControlThermostat(mode, value, mode === 'off' ? 2 : 1);
+	this.props.onControlThermostat(mode, value, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
 
 }
 
@@ -142,7 +143,7 @@ onPressEdit = () => {
 }
 
 onPressUp = () => {
-	const { maxVal, mode, value } = this.props;
+	const { maxVal, mode, value, controllingMode } = this.props;
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(1)).toFixed(1));
 	this.onPressRow();
 	if (nextValue > parseFloat(maxVal)) {
@@ -150,11 +151,11 @@ onPressUp = () => {
 	}
 	this.props.updateCurrentValueInScreen(nextValue.toString());
 	this.props.onEditSubmitValue(parseFloat(nextValue));
-	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
+	this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
 }
 
 onPressDown = () => {
-	const { minVal, mode, value } = this.props;
+	const { minVal, mode, value, controllingMode } = this.props;
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(-1)).toFixed(1));
 	this.onPressRow();
 	if (nextValue < parseFloat(minVal)) {
@@ -162,7 +163,7 @@ onPressDown = () => {
 	}
 	this.props.updateCurrentValueInScreen(nextValue.toString());
 	this.props.onEditSubmitValue(parseFloat(nextValue));
-	this.props.onControlThermostat(mode, nextValue, mode === 'off' ? 2 : 1);
+	this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
 }
 
 formatModeValue = (modeValue?: number | string): string | number => {

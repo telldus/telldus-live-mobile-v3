@@ -227,10 +227,8 @@ onEditSubmitValue = (newValue: number) => {
 	});
 }
 
-onControlThermostat = (mode: string, temp: number, requestedState: number) => {
+onControlThermostat = (mode: string, temp: number, changeMode: 1 | 0, requestedState: number) => {
 	const { device, deviceSetStateThermostat } = this.props;
-
-	const changeMode = mode !== device.stateValues.THERMOSTAT.mode ? 1 : 0;
 	deviceSetStateThermostat(device.id, mode, temp, 0, changeMode, requestedState);
 }
 
@@ -262,7 +260,7 @@ onEndSlide = () => {
 		controllingMode,
 		currentValueInScreen,
 	} = this.state;
-	this.onControlThermostat(controllingMode, currentValueInScreen, controllingMode === 'off' ? 2 : 1);
+	this.onControlThermostat(controllingMode, currentValueInScreen, 1, controllingMode === 'off' ? 2 : 1);
 }
 
 onPressOutSliderPath = (data: Object) => {
