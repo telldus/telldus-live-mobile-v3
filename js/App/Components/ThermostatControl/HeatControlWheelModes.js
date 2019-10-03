@@ -63,6 +63,9 @@ type State = {
 	activeModeLocal: string,
 	setpointMode: string,
 	setpointValue: string,
+	editState: Object,
+	setpointValueLocal: string,
+	preventReset: boolean,
 };
 
 function getAngleLengthToInitiate(currMode: string, currentValueInScreen: number, modes: Array<Object>): number {
@@ -95,31 +98,61 @@ getValueFromAngle: (number, string) => Object;
 
 
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
-	const { controllingMode } = state;
+	const { controllingMode, setpointMode, editState, preventReset } = state;
 	const { device: { methodRequested }, activeMode } = props;
 
-	let newValue = 0;
+	let newValue = 0, newSetPointValue, isEditingSP = false, isEditingCV = false;
 	props.modes.map((modeInfo: Object) => {
 		if (modeInfo.mode === controllingMode) {
 			newValue = modeInfo.value;
+			if (editState[modeInfo.mode]) {
+				isEditingCV = true;
+			}
+		}
+		if (modeInfo.mode === setpointMode) {
+			newSetPointValue = modeInfo.value;
+			if (editState[modeInfo.mode]) {
+				isEditingSP = true;
+			}
 		}
 	});
-	if (newValue !== state.currentValue) {
-		return {
+	let newState = {};
+	if (newValue !== state.currentValue && !isEditingCV) {
+		newState = {
+			...newState,
 			currentValue: newValue,
 			currentValueInScreen: newValue,
 			methodRequested,
 			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
 		};
 	}
-	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
-		return {
+	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue) && !isEditingCV) {
+		newState = {
+			...newState,
 			currentValue: newValue,
 			currentValueInScreen: newValue,
 			methodRequested,
 			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
 		};
 	}
+
+	// if (newSetPointValue !== state.setpointValueLocal && !isEditingSP && !preventReset) {
+	// 	newState = {
+	// 		...newState,
+	// 		setpointValueLocal: newSetPointValue,
+	// 		setpointValue: newSetPointValue,
+	// 		methodRequested,
+	// 	};
+	// }
+	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.setpointValue) !== parseFloat(newSetPointValue) && !isEditingSP && !preventReset) {
+		return {
+			...newState,
+			setpointValueLocal: newSetPointValue,
+			setpointValue: newSetPointValue,
+			methodRequested,
+		};
+	}
+
 	if (activeMode !== state.activeModeLocal) {
 		props.modes.map((modeInfo: Object) => {
 			if (modeInfo.mode === activeMode) {
@@ -201,6 +234,9 @@ constructor(props: Props) {
 		activeModeLocal: cModeInfo.mode,
 		setpointMode: cModeInfo.mode,
 		setpointValue: currentValue,
+		setpointValueLocal: currentValue,
+		editState: {},
+		preventReset: false,
 	};
 }
 
@@ -235,11 +271,11 @@ getValueFromAngle = (angleLength: number, currMode: string): Object => {
 	return {temp: temp};
 }
 
-updateCurrentValueInScreen = (currentValueInScreen: string) => {
+updateCurrentValueInScreen = (currentValueInScreen: string, setpointValue?: string) => {
 	const { changeMode } = this.state;
 	this.setState({
 		currentValueInScreen: changeMode ? currentValueInScreen : this.state.currentValueInScreen,
-		setpointValue: currentValueInScreen,
+		setpointValue: typeof setpointValue === 'undefined' ? this.state.setpointValue : setpointValue,
 	});
 }
 
@@ -253,19 +289,19 @@ onUpdate = (data: Object) => {
 	});
 }
 
-onEditSubmitValue = (newValue: number) => {
+onEditSubmitValue = (newValue: number, setpointValue?: string) => {
 	const { controllingMode, changeMode } = this.state;
 	const angleLength = getAngleLengthToInitiate(controllingMode, newValue, this.props.modes);
 	this.setState({
 		angleLength: changeMode ? angleLength : this.state.angleLength,
 		currentValueInScreen: changeMode ? newValue : this.state.currentValueInScreen,
-		setpointValue: newValue,
+		setpointValue: typeof setpointValue === 'undefined' ? this.state.setpointValue : setpointValue,
 	});
 }
 
-onControlThermostat = (mode: string, temp: number, changeMode: 1 | 0, requestedState: number) => {
+onControlThermostat = (mode: string, temp: number, changeMode: 1 | 0, requestedState: number): Promise<any> => {
 	const { device, deviceSetStateThermostat } = this.props;
-	deviceSetStateThermostat(device.id, mode, temp, 0, changeMode, requestedState);
+	return deviceSetStateThermostat(device.id, mode, temp, 0, changeMode, requestedState);
 }
 
 onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
@@ -324,6 +360,13 @@ onPressOutSliderPath = (data: Object) => {
 	});
 }
 
+toggleStateEditing = (editState: Object, preventReset: boolean) => {
+	this.setState({
+		editState,
+		preventReset,
+	});
+}
+
 render(): Object | null {
 
 	const {
@@ -357,6 +400,7 @@ render(): Object | null {
 		changeMode,
 		setpointMode,
 		setpointValue,
+		editState,
 	} = this.state;
 
 	const showSlider = typeof minVal === 'number' && typeof maxVal === 'number';
@@ -419,7 +463,9 @@ render(): Object | null {
 				modesCoverStyle={modesCoverStyle}
 				changeMode={changeMode}
 				setpointMode={setpointMode}
-				setpointValue={setpointValue}/>
+				setpointValue={setpointValue}
+				toggleStateEditing={this.toggleStateEditing}
+				editState={editState}/>
 		</>
 	);
 }

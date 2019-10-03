@@ -41,13 +41,15 @@ type Props = {
 	currentValueInScreen: number,
 	setpointMode: string,
 	setpointValue: string,
+	editState: Object,
 
 	modesCoverStyle: number | Array<any> | Object,
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
 	intl: intlShape,
 	onControlThermostat: (mode: string, temperature?: number | null, changeMode: 1 | 0, requestedState: number) => void,
 	onEditSubmitValue: (number) => void,
-	updateCurrentValueInScreen: (string) => void,
+	updateCurrentValueInScreen: (string, ?string) => void,
+	toggleStateEditing: (Object, boolean) => void,
 };
 
 class ModesList extends View<Props, null> {
@@ -75,6 +77,7 @@ render(): Object {
 		currentValue,
 		modesCoverStyle,
 		setpointMode,
+		editState,
 	} = this.props;
 
 	const {
@@ -97,6 +100,7 @@ render(): Object {
 			IconActive,
 		} = modeInfo;
 		let active = false;
+
 		if (controllingMode === mode) {
 			active = true;
 		}
@@ -123,7 +127,10 @@ render(): Object {
 				onEditSubmitValue={this.props.onEditSubmitValue}
 				updateCurrentValueInScreen={this.props.updateCurrentValueInScreen}
 				currentValue={currentValue}
-				initialValue={value}/>
+				initialValue={value}
+				setpointMode={setpointMode}
+				toggleStateEditing={this.props.toggleStateEditing}
+				editState={editState}/>
 		);
 	});
 

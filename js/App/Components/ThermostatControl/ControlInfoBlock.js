@@ -52,7 +52,7 @@ type Props = {
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
 	onEditSubmitValue: (number) => void,
-	updateCurrentValueInScreen: (string) => void,
+	updateCurrentValueInScreen: (string, ?string) => void,
 };
 
 type State = {

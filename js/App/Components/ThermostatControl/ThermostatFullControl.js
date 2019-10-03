@@ -133,9 +133,9 @@ render(): Object | null {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) =>{
+		deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number): Promise<any> =>{
 			dispatch(requestDeviceAction(deviceId, 2048, false));
-			dispatch(deviceSetStateThermostat(deviceId, mode, temperature, scale, changeMode, requestedState));
+			return dispatch(deviceSetStateThermostat(deviceId, mode, temperature, scale, changeMode, requestedState));
 		},
 	};
 }

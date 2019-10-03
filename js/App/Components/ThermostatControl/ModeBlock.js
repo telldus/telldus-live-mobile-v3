@@ -58,14 +58,17 @@ type Props = {
 	currentValue: number,
 	initialValue?: number,
 	controllingMode: string,
+	setpointMode: string,
+	editState: Object,
 
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
-	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
+	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => Promise<any>,
 	intl: Object,
-	onEditSubmitValue: (number) => void,
-	updateCurrentValueInScreen: (string) => void,
+	onEditSubmitValue: (number, ?number) => void,
+	updateCurrentValueInScreen: (string, ?string) => void,
 	IconActive: Object,
 	Icon: Object,
+	toggleStateEditing: (Object, boolean) => void,
 };
 
 type State = {
@@ -102,7 +105,7 @@ onPressRow = (changeMode: 0 | 1, callback: Function) => {
 }
 
 onChangeText = (value: string) => {
-	this.props.updateCurrentValueInScreen(value);
+	this.props.updateCurrentValueInScreen(value, value);
 }
 
 onSubmitEditing = () => {
@@ -128,11 +131,43 @@ onSubmitEditing = () => {
 		this.props.onEditSubmitValue(value);
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-	this.props.onControlThermostat(mode, value, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
+	this.props.onControlThermostat(mode, value, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1).then(() => {
+		this.props.toggleStateEditing({
+			[this.props.mode]: false,
+		}, false);
+	}).catch(() => {
+		this.props.toggleStateEditing({
+			[this.props.mode]: false,
+		}, false);
+	});
+}
 
+componentDidUpdate(prevProps: Object, prevState: Object) {
+	const { mode, editState } = this.props;
+	const { editValue } = this.state;
+	const k = Object.keys(editState);
+	if (editValue && k[0] && editState[k[0]] && k[0] !== mode) {
+		this.onSubmitEditing();
+	}
 }
 
 onPressEdit = () => {
+	const {
+		mode,
+		controllingMode,
+		toggleStateEditing,
+		editState,
+	} = this.props;
+	const k = Object.keys(editState);
+	if (k[0] && editState[k[0]] && k[0] !== mode) {
+		toggleStateEditing({
+			[mode]: true,
+		}, true);
+		return;
+	}
+	toggleStateEditing({
+		[mode]: true,
+	}, false);
 	this.setState({
 		editValue: true,
 	}, () => {
@@ -142,33 +177,40 @@ onPressEdit = () => {
 			});
 		}
 	});
-	const { mode, controllingMode } = this.props;
 	this.onPressRow(controllingMode === mode ? 1 : 0);
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
 
 onPressUp = () => {
+	if (this.state.editValue) {
+		this.onSubmitEditing();
+		return;
+	}
 	const { maxVal, mode, value, controllingMode } = this.props;
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(1)).toFixed(1));
 	if (nextValue > parseFloat(maxVal)) {
 		return;
 	}
 	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
-		this.props.updateCurrentValueInScreen(nextValue.toString());
-		this.props.onEditSubmitValue(parseFloat(nextValue));
+		this.props.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
+		this.props.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
 		this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
 	});
 }
 
 onPressDown = () => {
+	if (this.state.editValue) {
+		this.onSubmitEditing();
+		return;
+	}
 	const { minVal, mode, value, controllingMode } = this.props;
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(-1)).toFixed(1));
 	if (nextValue < parseFloat(minVal)) {
 		return;
 	}
 	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
-		this.props.updateCurrentValueInScreen(nextValue.toString());
-		this.props.onEditSubmitValue(parseFloat(nextValue));
+		this.props.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
+		this.props.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
 		this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
 	});
 }
