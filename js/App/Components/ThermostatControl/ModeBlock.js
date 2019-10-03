@@ -22,7 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, TextInput, LayoutAnimation } from 'react-native';
+import {
+	TouchableOpacity,
+	TextInput,
+	LayoutAnimation,
+	InteractionManager,
+} from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -76,6 +81,8 @@ constructor(props: Props) {
 	};
 
 	this.onPressRow = this.onPressRow.bind(this);
+
+	this.textInput = null;
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -123,6 +130,12 @@ onSubmitEditing = () => {
 onPressEdit = () => {
 	this.setState({
 		editValue: true,
+	}, () => {
+		if (this.textInput) {
+			InteractionManager.runAfterInteractions(() => {
+				this.textInput.focus();
+			});
+		}
 	});
 	this.onPressRow();
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
@@ -159,6 +172,10 @@ formatModeValue = (modeValue?: number | string): string | number => {
 	const valToFormat = isNaN(modeValue) ? -100.0 : modeValue;
 	let val = this.props.intl.formatNumber(valToFormat, {minimumFractionDigits: 1});
 	return formatModeValue(val, this.props.intl.formatNumber);
+}
+
+setRef = (ref: any) => {
+	this.textInput = ref;
 }
 
 render(): Object {
@@ -242,6 +259,7 @@ render(): Object {
 								{scale}
 							</Text>
 							{editValue ? <TextInput
+								ref={this.setRef}
 								value={isEditBoxValueValid ? value.toString() : ''}
 								style={textStyle}
 								onChangeText={this.onChangeText}
