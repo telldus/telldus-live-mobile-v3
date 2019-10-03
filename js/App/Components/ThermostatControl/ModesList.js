@@ -39,9 +39,11 @@ type Props = {
 	modes: Array<Object>,
 	currentValue: number,
 	currentValueInScreen: number,
+	setpointMode: string,
+	setpointValue: string,
 
 	modesCoverStyle: number | Array<any> | Object,
-	onPressRow: (string) => void,
+	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
 	intl: intlShape,
 	onControlThermostat: (mode: string, temperature?: number | null, changeMode: 1 | 0, requestedState: number) => void,
 	onEditSubmitValue: (number) => void,
@@ -51,12 +53,8 @@ type Props = {
 class ModesList extends View<Props, null> {
 props: Props;
 
-onPressRow: (string) => void;
-
 constructor(props: Props) {
 	super(props);
-
-	this.onPressRow = this.onPressRow.bind(this);
 
 	this.maxALength = Math.PI * 1.5;
 	this.minALength = 0;
@@ -66,10 +64,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return true;
 }
 
-onPressRow = (controlType: string) => {
-	this.props.onPressRow(controlType);
-}
-
 render(): Object {
 
 	const {
@@ -77,9 +71,10 @@ render(): Object {
 		controllingMode,
 		modes,
 		intl,
-		currentValueInScreen,
+		setpointValue,
 		currentValue,
 		modesCoverStyle,
+		setpointMode,
 	} = this.props;
 
 	const {
@@ -112,12 +107,12 @@ render(): Object {
 				label={label}
 				edit={edit}
 				icon={icon}
-				value={controllingMode === mode ? currentValueInScreen : value}
+				value={setpointMode === mode ? setpointValue : value}
 				controllingMode={controllingMode}
 				scale={scale}
 				unit={unit}
 				active={active}
-				onPressRow={this.onPressRow}
+				onPressRow={this.props.onPressRow}
 				mode={mode}
 				minVal={minVal}
 				maxVal={maxVal}

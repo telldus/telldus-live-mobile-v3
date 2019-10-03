@@ -40,6 +40,7 @@ type Props = {
 	modes: Array<Object>,
 	device: Object,
 	lastUpdated: number,
+	mode: string,
 
 	modesCoverStyle: number | Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
@@ -58,6 +59,10 @@ type State = {
 	minVal: number,
 	currentValueInScreen: number,
 	methodRequested: string,
+	changeMode: 0 | 1,
+	activeModeLocal: string,
+	setpointMode: string,
+	setpointValue: string,
 };
 
 function getAngleLengthToInitiate(currMode: string, currentValueInScreen: number, modes: Array<Object>): number {
@@ -85,13 +90,13 @@ props: Props;
 state: State;
 
 onUpdate: (Object) => void;
-onPressRow: (string) => void;
+onPressRow: (string, 0 | 1) => void;
 getValueFromAngle: (number, string) => Object;
 
 
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { controllingMode } = state;
-	const { device: { methodRequested } } = props;
+	const { device: { methodRequested }, activeMode } = props;
 
 	let newValue = 0;
 	props.modes.map((modeInfo: Object) => {
@@ -113,6 +118,30 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 			currentValueInScreen: newValue,
 			methodRequested,
 			angleLength: getAngleLengthToInitiate(state.controllingMode, newValue, props.modes),
+		};
+	}
+	if (activeMode !== state.activeModeLocal) {
+		props.modes.map((modeInfo: Object) => {
+			if (modeInfo.mode === activeMode) {
+				newValue = modeInfo.value;
+			}
+		});
+		return {
+			activeModeLocal: activeMode,
+			controllingMode: activeMode,
+			methodRequested,
+		};
+	}
+	if (methodRequested === '' && state.methodRequested !== '' && state.controllingMode !== activeMode) {
+		props.modes.map((modeInfo: Object) => {
+			if (modeInfo.mode === activeMode) {
+				newValue = modeInfo.value;
+			}
+		});
+		return {
+			activeModeLocal: activeMode,
+			controllingMode: activeMode,
+			methodRequested,
 		};
 	}
 	if (methodRequested !== '' && state.methodRequested === '') {
@@ -168,6 +197,10 @@ constructor(props: Props) {
 		minVal,
 		maxVal,
 		methodRequested,
+		changeMode: 1,
+		activeModeLocal: cModeInfo.mode,
+		setpointMode: cModeInfo.mode,
+		setpointValue: currentValue,
 	};
 }
 
@@ -203,8 +236,10 @@ getValueFromAngle = (angleLength: number, currMode: string): Object => {
 }
 
 updateCurrentValueInScreen = (currentValueInScreen: string) => {
+	const { changeMode } = this.state;
 	this.setState({
-		currentValueInScreen: currentValueInScreen,
+		currentValueInScreen: changeMode ? currentValueInScreen : this.state.currentValueInScreen,
+		setpointValue: currentValueInScreen,
 	});
 }
 
@@ -219,11 +254,12 @@ onUpdate = (data: Object) => {
 }
 
 onEditSubmitValue = (newValue: number) => {
-	const { controllingMode } = this.state;
+	const { controllingMode, changeMode } = this.state;
 	const angleLength = getAngleLengthToInitiate(controllingMode, newValue, this.props.modes);
 	this.setState({
-		angleLength,
-		currentValueInScreen: newValue,
+		angleLength: changeMode ? angleLength : this.state.angleLength,
+		currentValueInScreen: changeMode ? newValue : this.state.currentValueInScreen,
+		setpointValue: newValue,
 	});
 }
 
@@ -232,17 +268,23 @@ onControlThermostat = (mode: string, temp: number, changeMode: 1 | 0, requestedS
 	deviceSetStateThermostat(device.id, mode, temp, 0, changeMode, requestedState);
 }
 
-onPressRow = (controlType: string) => {
-	let cMode = {};
-	this.props.modes.map((mode: Object) => {
-		if (mode.mode === controlType) {
+onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
+	let cMode = {}, sPointValue;
+	const { modes } = this.props;
+	let controllingMode = changeMode ? controlType : this.state.activeModeLocal;
+	modes.map((mode: Object) => {
+		if (mode.mode === controllingMode) {
 			cMode = mode;
+		}
+		if (mode.mode === controlType) {
+			sPointValue = mode.value;
 		}
 	});
 	const { mode, value, endColor, startColor, label, minVal, maxVal } = cMode;
-	const initialAngleLength = getAngleLengthToInitiate(mode, value, this.props.modes);
+	const initialAngleLength = getAngleLengthToInitiate(mode, value, modes);
+
 	this.setState({
-		controllingMode: controlType,
+		controllingMode,
 		angleLength: initialAngleLength,
 		currentValueInScreen: value,
 		baseColor: endColor,
@@ -251,6 +293,13 @@ onPressRow = (controlType: string) => {
 		title: label,
 		minVal,
 		maxVal,
+		changeMode,
+		setpointMode: controlType,
+		setpointValue: sPointValue,
+	}, () => {
+		if (callback) {
+			callback();
+		}
 	});
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
@@ -305,6 +354,9 @@ render(): Object | null {
 		minVal,
 		maxVal,
 		currentValue,
+		changeMode,
+		setpointMode,
+		setpointValue,
 	} = this.state;
 
 	const showSlider = typeof minVal === 'number' && typeof maxVal === 'number';
@@ -351,6 +403,7 @@ render(): Object | null {
 					maxVal={maxVal}
 					onEditSubmitValue={this.onEditSubmitValue}
 					updateCurrentValueInScreen={this.updateCurrentValueInScreen}
+					changeMode={changeMode}
 				/>
 			</View>
 			<ModesList
@@ -363,7 +416,10 @@ render(): Object | null {
 				currentValue={currentValue}
 				currentValueInScreen={currentValueInScreen}
 				updateCurrentValueInScreen={this.updateCurrentValueInScreen}
-				modesCoverStyle={modesCoverStyle}/>
+				modesCoverStyle={modesCoverStyle}
+				changeMode={changeMode}
+				setpointMode={setpointMode}
+				setpointValue={setpointValue}/>
 		</>
 	);
 }

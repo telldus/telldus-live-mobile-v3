@@ -35,6 +35,10 @@ import {
 	Text,
 	IconTelldus,
 } from '../../../BaseComponents';
+import {
+	LabelBlock,
+	ModeIconBlock,
+} from './SubViews';
 
 import Theme from '../../Theme';
 import { LayoutAnimations, formatModeValue } from '../../Lib';
@@ -55,7 +59,7 @@ type Props = {
 	initialValue?: number,
 	controllingMode: string,
 
-	onPressRow: (string) => void,
+	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: Object,
 	onEditSubmitValue: (number) => void,
@@ -72,7 +76,7 @@ class ModeBlock extends View<Props, State> {
 props: Props;
 state: State;
 
-onPressRow: () => void;
+onPressRow: (changeMode: 0 | 1, callback: Function) => void;
 
 constructor(props: Props) {
 	super(props);
@@ -90,10 +94,10 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return true;
 }
 
-onPressRow = () => {
+onPressRow = (changeMode: 0 | 1, callback: Function) => {
 	const { onPressRow, mode } = this.props;
 	if (onPressRow) {
-		onPressRow(mode);
+		onPressRow(mode, changeMode, callback);
 	}
 }
 
@@ -138,32 +142,35 @@ onPressEdit = () => {
 			});
 		}
 	});
-	this.onPressRow();
+	const { mode, controllingMode } = this.props;
+	this.onPressRow(controllingMode === mode ? 1 : 0);
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 }
 
 onPressUp = () => {
 	const { maxVal, mode, value, controllingMode } = this.props;
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(1)).toFixed(1));
-	this.onPressRow();
 	if (nextValue > parseFloat(maxVal)) {
 		return;
 	}
-	this.props.updateCurrentValueInScreen(nextValue.toString());
-	this.props.onEditSubmitValue(parseFloat(nextValue));
-	this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
+	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
+		this.props.updateCurrentValueInScreen(nextValue.toString());
+		this.props.onEditSubmitValue(parseFloat(nextValue));
+		this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
+	});
 }
 
 onPressDown = () => {
 	const { minVal, mode, value, controllingMode } = this.props;
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(-1)).toFixed(1));
-	this.onPressRow();
 	if (nextValue < parseFloat(minVal)) {
 		return;
 	}
-	this.props.updateCurrentValueInScreen(nextValue.toString());
-	this.props.onEditSubmitValue(parseFloat(nextValue));
-	this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
+	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
+		this.props.updateCurrentValueInScreen(nextValue.toString());
+		this.props.onEditSubmitValue(parseFloat(nextValue));
+		this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
+	});
 }
 
 formatModeValue = (modeValue?: number | string): string | number => {
@@ -235,16 +242,10 @@ render(): Object {
 	return (
 		<View style={cover}>
 			<View style={leftBlock}>
-				<TouchableOpacity style={{
-					flex: 1,
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'flex-start',
-				}} onPress={this.onPressRow}>
-					<Text style={[labelStyle, { color: textColor }]}>
-						{label.toUpperCase()}
-					</Text>
-				</TouchableOpacity>
+				<LabelBlock
+					textStyle={[labelStyle, { color: textColor }]}
+					label={label.toUpperCase()}
+					onPressRow={this.onPressRow}/>
 				{hasInitialValue && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
@@ -291,7 +292,7 @@ render(): Object {
 					</View>
 				)}
 			</View>
-			<TouchableOpacity style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPress={this.onPressRow}>
+			<ModeIconBlock style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPress={this.onPressRow}>
 				{mode !== 'off' ?
 					active ?
 						<IconActive height={iconSize} width={iconSize}/>
@@ -300,7 +301,7 @@ render(): Object {
 					:
 					<IconTelldus icon={'off'} size={iconSize} color={iconColor}/>
 				}
-			</TouchableOpacity>
+			</ModeIconBlock>
 		</View>
 	);
 }

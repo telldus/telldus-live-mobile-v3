@@ -86,7 +86,7 @@ render(): Object | null {
 		stateValues,
 	} = device;
 
-	const { THERMOSTAT: { setpoint = {} } } = stateValues;
+	const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 
 	const supportedModes = getSupportedModes(parameter, setpoint, intl);
 
@@ -121,6 +121,7 @@ render(): Object | null {
 						appLayout={appLayout}
 						modes={supportedModes}
 						device={device}
+						activeMode={mode}
 						lastUpdated={lastUpdated}
 						deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
 				</ScrollView>
