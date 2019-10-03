@@ -42,6 +42,7 @@ type Props = {
 	setpointMode: string,
 	setpointValue: string,
 	editState: Object,
+	setpointValueLocal: string,
 
 	modesCoverStyle: number | Array<any> | Object,
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
