@@ -136,14 +136,14 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		};
 	}
 
-	// if (newSetPointValue !== state.setpointValueLocal && !isEditingSP && !preventReset) {
-	// 	newState = {
-	// 		...newState,
-	// 		setpointValueLocal: newSetPointValue,
-	// 		setpointValue: newSetPointValue,
-	// 		methodRequested,
-	// 	};
-	// }
+	if (newSetPointValue !== state.setpointValueLocal && !isEditingSP && !preventReset) {
+		newState = {
+			...newState,
+			setpointValueLocal: newSetPointValue,
+			setpointValue: newSetPointValue,
+			methodRequested,
+		};
+	}
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.setpointValue) !== parseFloat(newSetPointValue) && !isEditingSP && !preventReset) {
 		return {
 			...newState,
@@ -154,11 +154,6 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	}
 
 	if (activeMode !== state.activeModeLocal) {
-		props.modes.map((modeInfo: Object) => {
-			if (modeInfo.mode === activeMode) {
-				newValue = modeInfo.value;
-			}
-		});
 		return {
 			activeModeLocal: activeMode,
 			controllingMode: activeMode,
@@ -166,11 +161,6 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		};
 	}
 	if (methodRequested === '' && state.methodRequested !== '' && state.controllingMode !== activeMode) {
-		props.modes.map((modeInfo: Object) => {
-			if (modeInfo.mode === activeMode) {
-				newValue = modeInfo.value;
-			}
-		});
 		return {
 			activeModeLocal: activeMode,
 			controllingMode: activeMode,
@@ -332,6 +322,7 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 		changeMode,
 		setpointMode: controlType,
 		setpointValue: sPointValue,
+		setpointValueLocal: sPointValue,
 	}, () => {
 		if (callback) {
 			callback();
@@ -401,6 +392,7 @@ render(): Object | null {
 		setpointMode,
 		setpointValue,
 		editState,
+		setpointValueLocal,
 	} = this.state;
 
 	const showSlider = typeof minVal === 'number' && typeof maxVal === 'number';
@@ -464,6 +456,7 @@ render(): Object | null {
 				changeMode={changeMode}
 				setpointMode={setpointMode}
 				setpointValue={setpointValue}
+				setpointValueLocal={setpointValueLocal}
 				toggleStateEditing={this.toggleStateEditing}
 				editState={editState}/>
 		</>

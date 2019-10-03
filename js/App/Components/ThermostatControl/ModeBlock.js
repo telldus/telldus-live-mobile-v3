@@ -60,6 +60,7 @@ type Props = {
 	controllingMode: string,
 	setpointMode: string,
 	editState: Object,
+	setpointValueLocal: string,
 
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => Promise<any>,
@@ -114,7 +115,7 @@ onSubmitEditing = () => {
 	});
 
 	if (!this.props.value || this.props.value === '') {
-		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
+		this.props.updateCurrentValueInScreen(this.props.setpointValueLocal.toString(), this.props.setpointValueLocal.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
@@ -122,7 +123,7 @@ onSubmitEditing = () => {
 	const value = parseFloat(parseFloat(this.props.value).toFixed(1));
 	const { maxVal, minVal, mode, controllingMode } = this.props;
 	if (isNaN(value) || value > parseFloat(maxVal) || value < parseFloat(minVal)) {
-		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
+		this.props.updateCurrentValueInScreen(this.props.setpointValueLocal.toString());
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
@@ -186,7 +187,21 @@ onPressUp = () => {
 		this.onSubmitEditing();
 		return;
 	}
-	const { maxVal, mode, value, controllingMode } = this.props;
+	const {
+		maxVal,
+		mode,
+		value,
+		controllingMode,
+		editState,
+		toggleStateEditing,
+	} = this.props;
+	const k = Object.keys(editState);
+	if (k[0] && editState[k[0]] && k[0] !== mode) {
+		toggleStateEditing({
+			[mode]: true,
+		}, true);
+		return;
+	}
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(1)).toFixed(1));
 	if (nextValue > parseFloat(maxVal)) {
 		return;
@@ -203,7 +218,21 @@ onPressDown = () => {
 		this.onSubmitEditing();
 		return;
 	}
-	const { minVal, mode, value, controllingMode } = this.props;
+	const {
+		minVal,
+		mode,
+		value,
+		controllingMode,
+		editState,
+		toggleStateEditing,
+	} = this.props;
+	const k = Object.keys(editState);
+	if (k[0] && editState[k[0]] && k[0] !== mode) {
+		toggleStateEditing({
+			[mode]: true,
+		}, true);
+		return;
+	}
 	let nextValue = parseFloat((parseFloat(value) + parseFloat(-1)).toFixed(1));
 	if (nextValue < parseFloat(minVal)) {
 		return;

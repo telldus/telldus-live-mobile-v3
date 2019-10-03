@@ -78,6 +78,7 @@ render(): Object {
 		modesCoverStyle,
 		setpointMode,
 		editState,
+		setpointValueLocal,
 	} = this.props;
 
 	const {
@@ -130,7 +131,8 @@ render(): Object {
 				initialValue={value}
 				setpointMode={setpointMode}
 				toggleStateEditing={this.props.toggleStateEditing}
-				editState={editState}/>
+				editState={editState}
+				setpointValueLocal={setpointValueLocal}/>
 		);
 	});
 
