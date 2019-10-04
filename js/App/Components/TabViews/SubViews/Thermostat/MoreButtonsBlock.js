@@ -35,7 +35,7 @@ type Props = {
 	device: Object,
 	currentMode: string,
 
-	isGatewayActive: boolean,
+	iconSize: number,
 	intl: Object,
 	style: Object,
 	moreButtonsBlockStyle: number | Object,
