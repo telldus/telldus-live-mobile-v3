@@ -54,7 +54,7 @@ class MoreButtonsBlock extends View {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-		const propsChange = shouldUpdate(this.props, nextProps, ['device']);
+		const propsChange = shouldUpdate(this.props, nextProps, ['device', 'currentMode']);
 		if (propsChange) {
 			return true;
 		}
