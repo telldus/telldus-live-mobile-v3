@@ -24,7 +24,7 @@
 import React from 'react';
 
 import { View, IconTelldus } from '../../../../../BaseComponents';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { shouldUpdate } from '../../../../Lib';
 import i18n from '../../../../Translations/common';
@@ -33,58 +33,32 @@ type Props = {
 	command: number,
 
 	device: Object,
-	isOpen: boolean,
 
 	isGatewayActive: boolean,
 	intl: Object,
 	style: Object,
 	moreButtonsBlockStyle: number | Object,
-	closeSwipeRow: () => void,
-	onPressMoreButtons: (id: number) => void,
-	onPressDeviceAction?: () => void,
+
 	iconStyle: number | Object,
 };
 
 class MoreButtonsBlock extends View {
 	props: Props;
 
-	onPressMoreButtons: () => void;
-
 	constructor(props: Props) {
 		super(props);
 
-		this.onPressMoreButtons = this.onPressMoreButtons.bind(this);
 		this.thermostatMoreActions = props.intl.formatMessage(i18n.thermostatMoreActions);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-		const { isOpen, ...others } = this.props;
-		const { isOpenN, ...othersN } = nextProps;
-		if (isOpen !== isOpenN) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(others, othersN, ['device']);
+		const propsChange = shouldUpdate(this.props, nextProps, ['device']);
 		if (propsChange) {
 			return true;
 		}
 
 		return false;
-	}
-
-	onPressMoreButtons() {
-		const { device, isOpen, closeSwipeRow, onPressDeviceAction, onPressMoreButtons } = this.props;
-		if (isOpen && closeSwipeRow) {
-			closeSwipeRow();
-			return;
-		}
-		if (onPressDeviceAction) {
-			onPressDeviceAction();
-		}
-		if (onPressMoreButtons) {
-			onPressMoreButtons(device.id);
-		}
 	}
 
 	render(): Object {
@@ -93,9 +67,9 @@ class MoreButtonsBlock extends View {
 		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
 
 		return (
-			<TouchableOpacity onPress={this.onPressMoreButtons} style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>
+			<View style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="thermostatheat" style={iconStyle}/>
-			</TouchableOpacity>
+			</View>
 		);
 	}
 }

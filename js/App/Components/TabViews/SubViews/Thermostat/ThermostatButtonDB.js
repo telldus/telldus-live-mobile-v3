@@ -20,7 +20,7 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../../BaseComponents';
@@ -35,6 +35,7 @@ type Props = {
 	item: Object,
 	tileWidth: number,
 	showStopButton?: boolean,
+	isOpen?: boolean,
 
 	style: Object,
 	intl: Object,
@@ -44,6 +45,8 @@ type Props = {
 	infoBlockStyle?: number | Object | Array<any>,
 	moreActionsStyle?: number | Object | Array<any>,
 	openThermostatControl: (number) => void,
+	closeSwipeRow: () => void,
+	onPressDeviceAction?: () => void,
 };
 
 type DefaultProps = {
@@ -80,12 +83,26 @@ class ThermostatButtonDB extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth', 'isOpen']);
 		if (propsChange) {
 			return true;
 		}
 
 		return false;
+	}
+
+	onPressMoreButtons = () => {
+		const { item, isOpen, closeSwipeRow, onPressDeviceAction, openThermostatControl } = this.props;
+		if (isOpen && closeSwipeRow) {
+			closeSwipeRow();
+			return;
+		}
+		if (onPressDeviceAction) {
+			onPressDeviceAction();
+		}
+		if (openThermostatControl) {
+			openThermostatControl(item.id);
+		}
 	}
 
 	render(): Object {
@@ -96,7 +113,6 @@ class ThermostatButtonDB extends View<Props, State> {
 			containerStyle,
 			infoBlockStyle,
 			moreActionsStyle,
-			openThermostatControl,
 		} = this.props;
 
 		const { stateValues = {} } = item;
@@ -125,18 +141,17 @@ class ThermostatButtonDB extends View<Props, State> {
 			iconSize={16}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
-			onPressMoreButtons={openThermostatControl}
 			iconStyle={styles.actionIconStyle}/>;
 
 		const bGColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.gatewayInactive;
 
 		return (
-			<View style={containerStyle}>
+			<TouchableOpacity onPress={this.onPressMoreButtons} style={containerStyle}>
 				<View style={[styles.buttonsCover, {backgroundColor: bGColor }]}>
 					{buttonTwo}
 					{buttonThree}
 				</View>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 }
