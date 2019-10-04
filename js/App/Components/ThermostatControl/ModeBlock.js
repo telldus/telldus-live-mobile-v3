@@ -363,7 +363,7 @@ render(): Object {
 					</View>
 				)}
 			</View>
-			<ModeIconBlock style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPress={this.onPressRow}>
+			<ModeIconBlock style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPressRow={this.onPressRow}>
 				{mode !== 'off' ?
 					active ?
 						<IconActive height={iconSize} width={iconSize}/>
