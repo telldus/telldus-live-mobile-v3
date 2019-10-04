@@ -439,22 +439,30 @@ render(): Object | null {
 		setpointValueLocal,
 	} = this.state;
 
-	const showSlider = typeof minVal === 'number' && typeof maxVal === 'number';
+	let startAngleF = this.initialAngle, angleLengthF = 100;
+	const hasValidMinMax = typeof minVal === 'number' && typeof maxVal === 'number';
+	if (hasValidMinMax) {
+		startAngleF = startAngle;
+		angleLengthF = angleLength;
+	}
+
+	const showControlIcons = controllingMode !== 'off';
 
 	return (
 		<>
 			<View style={cover}>
-				<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
+				{showControlIcons && <TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
 					<MaterialIcons
 						name="remove"
 						color={Theme.Core.brandPrimary}
 						size={iconSize}/>
 				</TouchableOpacity>
-				{showSlider ? <CircularSlider
-					startAngle={startAngle}
+				}
+				<CircularSlider
+					startAngle={startAngleF}
 					maxAngleLength={HeatControlWheelModes.maxALength}
-					angleLength={angleLength}
-					onUpdate={this.onUpdate}
+					angleLength={angleLengthF}
+					onUpdate={hasValidMinMax ? this.onUpdate : null}
 					segments={15}
 					strokeWidth={20}
 					radius={radius}
@@ -465,22 +473,21 @@ render(): Object | null {
 					knobFillColor={gradientColorTo}
 					keepArcVisible
 					showStartKnob={false}
+					showStopKnob={hasValidMinMax}
 					roundedEnds
 					allowKnobBeyondLimits={false}
 					knobRadius={18}
 					knobStrokeWidth={3}
-					onReleaseStopKnob={this.onEndSlide}
-					onPressOutSliderPath={this.onPressOutSliderPath}
+					onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
+					onPressOutSliderPath={hasValidMinMax ? this.onPressOutSliderPath : null}
 				/>
-					:
-					null
-				}
-				<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
+				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
 					<MaterialIcons
 						name="add"
 						color={Theme.Core.brandSecondary}
 						size={iconSize}/>
 				</TouchableOpacity>
+				}
 				<ControlInfoBlock
 					appLayout={appLayout}
 					baseColor={baseColor}
@@ -488,7 +495,6 @@ render(): Object | null {
 					currentValueInScreen={currentValueInScreen}
 					title={title}
 					lastUpdated={lastUpdated}
-					showSlider={showSlider}
 					onControlThermostat={this.onControlThermostat}
 					controllingMode={controllingMode}
 					minVal={minVal}

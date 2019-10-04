@@ -43,7 +43,6 @@ type Props = {
     currentValue: number,
 	appLayout: Object,
 	lastUpdated: number,
-	showSlider: boolean,
 	controllingMode: string,
 	maxVal: number,
 	minVal: number,
@@ -245,7 +244,7 @@ render(): Object {
 }
 
 getStyles(): Object {
-	const { appLayout, showSlider } = this.props;
+	const { appLayout } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -257,7 +256,7 @@ getStyles(): Object {
 
 	return {
 		InfoCover: {
-			position: showSlider ? 'absolute' : 'relative',
+			position: 'absolute',
 			top: 0,
 			left: 0,
 			bottom: 0,
