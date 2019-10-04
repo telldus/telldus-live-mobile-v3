@@ -209,12 +209,12 @@ onPressUp = () => {
 		}, true);
 		return;
 	}
-	let v = parseFloat(value).toFixed(1).split('.')[1];
+	let v = parseInt(parseFloat(value).toFixed(1).split('.')[1], 10);
 	let nextValue;
 	if (v > 0 && v < 5) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(`0.${5 - v}`)).toFixed(1));
+		nextValue = parseFloat((parseFloat(value) + parseFloat((5 - v) / 10)).toFixed(1));
 	} else if (v > 5 && v <= 9) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat((`0.${10 - v}`))).toFixed(1));
+		nextValue = parseFloat((parseFloat(value) + parseFloat((10 - v) / 10)).toFixed(1));
 	} else {
 		nextValue = parseFloat((parseFloat(value) + parseFloat(0.5)).toFixed(1));
 	}
@@ -248,12 +248,12 @@ onPressDown = () => {
 		}, true);
 		return;
 	}
-	let v = parseFloat(value).toFixed(1).split('.')[1];
+	let v = parseInt(parseFloat(value).toFixed(1).split('.')[1], 10);
 	let nextValue;
 	if (v > 0 && v < 5) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(-`0.${v}`)).toFixed(1));
+		nextValue = parseFloat((parseFloat(value) + parseFloat(-v / 10)).toFixed(1));
 	} else if (v > 5 && v <= 9) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(-(`0.${v - 5}`))).toFixed(1));
+		nextValue = parseFloat((parseFloat(value) + parseFloat(-(v - 5) / 10)).toFixed(1));
 	} else {
 		nextValue = parseFloat((parseFloat(value) + parseFloat(-0.5)).toFixed(1));
 	}
