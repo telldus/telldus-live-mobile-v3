@@ -138,7 +138,7 @@ class ThermostatButton extends View<Props, State> {
 			isEnabled={true}
 			style={[styles.buttonCommon, moreActionsStyle, {flex: 0}]}
 			device={device}
-			iconSize={16}
+			iconSize={25}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
 			currentMode={mode}

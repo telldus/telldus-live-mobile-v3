@@ -26,7 +26,7 @@ import React from 'react';
 import { View, IconTelldus } from '../../../../../BaseComponents';
 import { StyleSheet } from 'react-native';
 
-import { shouldUpdate } from '../../../../Lib';
+import { shouldUpdate, getKnownModes } from '../../../../Lib';
 import i18n from '../../../../Translations/common';
 
 type Props = {
@@ -63,15 +63,25 @@ class MoreButtonsBlock extends View {
 	}
 
 	render(): Object {
-		let { device, moreButtonsBlockStyle, iconStyle, currentMode } = this.props;
+		let { device, moreButtonsBlockStyle, iconStyle, currentMode, intl, iconSize } = this.props;
 		let { name } = device;
 		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
 
-		const icon = currentMode === 'off' ? 'off' : currentMode === 'fan' ? 'thermostatfan' : 'thermostatheat';
-
+		const knownModes = getKnownModes(intl.formatMessage);
+		let IconActive, icon;
+		knownModes.map((item: Object) => {
+			if (currentMode === item.mode) {
+				IconActive = item.IconActive;
+				icon = item.icon;
+			}
+		});
 		return (
 			<View style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon={icon} style={iconStyle}/>
+				{IconActive ?
+					<IconActive height={iconSize} width={iconSize}/>
+					:
+					<IconTelldus icon={icon} style={iconStyle}/>
+				}
 			</View>
 		);
 	}
