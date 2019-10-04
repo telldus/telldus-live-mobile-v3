@@ -22,8 +22,9 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, TouchableOpacity } from 'react-native';
 import CircularSlider from 'react-native-circular-slider';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
@@ -31,7 +32,10 @@ import {
 import ModesList from './ModesList';
 import ControlInfoBlock from './ControlInfoBlock';
 
-import { LayoutAnimations } from '../../Lib';
+import {
+	LayoutAnimations,
+	getNextSetPoint,
+} from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -359,6 +363,40 @@ toggleStateEditing = (editState: Object, preventReset: boolean) => {
 	});
 }
 
+onMinus = () => {
+	const {
+		currentValueInScreen,
+		minVal,
+		controllingMode,
+	} = this.state;
+	const nextValue = getNextSetPoint({
+		value: currentValueInScreen,
+		minVal,
+	}, 'decrease');
+	this.onPressRow(controllingMode, 1, () => {
+		this.updateCurrentValueInScreen(nextValue.toString());
+		this.onEditSubmitValue(parseFloat(nextValue));
+		this.onControlThermostat(controllingMode, nextValue, 1, controllingMode === 'off' ? 2 : 1);
+	});
+}
+
+onAdd = () => {
+	const {
+		currentValueInScreen,
+		maxVal,
+		controllingMode,
+	} = this.state;
+	const nextValue = getNextSetPoint({
+		value: currentValueInScreen,
+		maxVal,
+	}, 'increase');
+	this.onPressRow(controllingMode, 1, () => {
+		this.updateCurrentValueInScreen(nextValue.toString());
+		this.onEditSubmitValue(parseFloat(nextValue));
+		this.onControlThermostat(controllingMode, nextValue, 1, controllingMode === 'off' ? 2 : 1);
+	});
+}
+
 render(): Object | null {
 
 	const {
@@ -376,6 +414,10 @@ render(): Object | null {
 	const {
 		cover,
 		radius,
+		addStyle,
+		removeStyle,
+		iconSize,
+		iconCommon,
 	} = this.getStyles();
 
 	const {
@@ -402,6 +444,12 @@ render(): Object | null {
 	return (
 		<>
 			<View style={cover}>
+				<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
+					<MaterialIcons
+						name="remove"
+						color={Theme.Core.brandPrimary}
+						size={iconSize}/>
+				</TouchableOpacity>
 				{showSlider ? <CircularSlider
 					startAngle={startAngle}
 					maxAngleLength={HeatControlWheelModes.maxALength}
@@ -427,6 +475,12 @@ render(): Object | null {
 					:
 					null
 				}
+				<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
+					<MaterialIcons
+						name="add"
+						color={Theme.Core.brandSecondary}
+						size={iconSize}/>
+				</TouchableOpacity>
 				<ControlInfoBlock
 					appLayout={appLayout}
 					baseColor={baseColor}
@@ -475,9 +529,14 @@ getStyles(): Object {
 	const {
 		paddingFactor,
 		shadow,
+		appBackground,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+	const iconSpace = padding;
+	const iconSize = deviceWidth * 0.065;
+	const iconCoverSize = iconSize * 1.2;
+	const iconBorderRadi = iconCoverSize / 2;
 
 	return {
 		cover: {
@@ -491,6 +550,22 @@ getStyles(): Object {
 			padding: padding * 2,
 		},
 		radius: deviceWidth * 0.3,
+		iconCommon: {
+			backgroundColor: appBackground,
+			height: iconCoverSize,
+			width: iconCoverSize,
+			borderRadius: iconBorderRadi,
+			alignItems: 'center',
+			justifyContent: 'center',
+			position: 'absolute',
+		},
+		removeStyle: {
+			left: iconSpace,
+		},
+		addStyle: {
+			right: iconSpace,
+		},
+		iconSize,
 	};
 }
 }
