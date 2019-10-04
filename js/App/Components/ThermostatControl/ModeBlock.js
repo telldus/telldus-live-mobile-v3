@@ -98,11 +98,18 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return true;
 }
 
-onPressRow = (changeMode: 0 | 1, callback: Function) => {
+onPressRow = (changeMode: 0 | 1, callback?: Function) => {
 	const { onPressRow, mode } = this.props;
 	if (onPressRow) {
 		onPressRow(mode, changeMode, callback);
 	}
+}
+
+onPressChangeMode = (changeMode: 0 | 1, callback?: Function) => {
+	this.onPressRow(changeMode, callback);
+	const { mode, value } = this.props;
+	const val = parseFloat(parseFloat(value).toFixed(1));
+	this.props.onControlThermostat(mode, val, 1, mode === 'off' ? 2 : 1);
 }
 
 onChangeText = (value: string) => {
@@ -316,7 +323,7 @@ render(): Object {
 				<LabelBlock
 					textStyle={[labelStyle, { color: textColor }]}
 					label={label.toUpperCase()}
-					onPressRow={this.onPressRow}/>
+					onPressRow={this.onPressChangeMode}/>
 				{hasInitialValue && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
@@ -363,7 +370,7 @@ render(): Object {
 					</View>
 				)}
 			</View>
-			<ModeIconBlock style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPressRow={this.onPressRow}>
+			<ModeIconBlock style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPressRow={this.onPressChangeMode}>
 				{mode !== 'off' ?
 					active ?
 						<IconActive height={iconSize} width={iconSize}/>
