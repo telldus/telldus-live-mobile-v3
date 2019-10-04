@@ -165,6 +165,8 @@ render(): Object {
 		offInfoText,
 		playIconStyle,
 		offContentCover,
+		brandSecondary,
+		fanIconStyle,
 	} = this.getStyles();
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
@@ -175,7 +177,7 @@ render(): Object {
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
 			{!!title && <Text style={[infoTitleStyle, {
-				color: baseColor,
+				color: controllingMode === 'fan' ? brandSecondary : baseColor,
 			}]}>
 				{title.toUpperCase()}
 			</Text>}
@@ -220,21 +222,26 @@ render(): Object {
 							</View>
 						</TouchableOpacity>
 						:
-						<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
-							<Text style={[sValueStyle, {
-								color: baseColor,
-							}]}>
-								{cModevalue}
-							</Text>
-							<Text style={Theme.Styles.hiddenText}>
+						controllingMode === 'fan' ?
+							<View style={offContentCover}>
+								<IconTelldus icon="thermostatfan" style={fanIconStyle}/>
+							</View>
+							:
+							<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
+								<Text style={[sValueStyle, {
+									color: baseColor,
+								}]}>
+									{cModevalue}
+								</Text>
+								<Text style={Theme.Styles.hiddenText}>
 								!
-							</Text>
-							<Text style={[sUnitStyle, {
-								color: baseColor,
-							}]}>
+								</Text>
+								<Text style={[sUnitStyle, {
+									color: baseColor,
+								}]}>
 								°C
+								</Text>
 							</Text>
-						</Text>
 					}
 					</>
 				}
@@ -276,6 +283,7 @@ getStyles(): Object {
 	} = Theme.Core;
 
 	return {
+		brandSecondary,
 		InfoCover: {
 			position: 'absolute',
 			top: 0,
@@ -372,6 +380,11 @@ getStyles(): Object {
 			color: brandSecondary,
 			fontSize: deviceWidth * 0.04,
 			textAlign: 'center',
+			marginTop: 5,
+		},
+		fanIconStyle: {
+			color: '#999999',
+			fontSize: deviceWidth * 0.13,
 			marginTop: 5,
 		},
 	};

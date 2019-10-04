@@ -446,7 +446,7 @@ render(): Object | null {
 		angleLengthF = angleLength;
 	}
 
-	const showControlIcons = controllingMode !== 'off';
+	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan';
 
 	return (
 		<>
