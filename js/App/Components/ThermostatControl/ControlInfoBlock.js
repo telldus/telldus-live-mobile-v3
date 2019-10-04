@@ -125,6 +125,10 @@ formatModeValue = (modeValue: number | string): string | number => {
 	return formatModeValue(val, this.props.intl.formatNumber);
 }
 
+onPressResume = () => {
+
+}
+
 render(): Object {
 
 	const {
@@ -135,6 +139,7 @@ render(): Object {
 		intl,
 		currentValueInScreen,
 		currentTemp,
+		controllingMode,
 	} = this.props;
 
 	const {
@@ -157,6 +162,9 @@ render(): Object {
 		labelStyle,
 		doneIconStyle,
 		doneIconCoverStyle,
+		offInfoText,
+		playIconStyle,
+		offContentCover,
 	} = this.getStyles();
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
@@ -201,21 +209,34 @@ render(): Object {
 						</View>
 					</View>
 					:
-					<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
-						<Text style={[sValueStyle, {
-							color: baseColor,
-						}]}>
-							{cModevalue}
-						</Text>
-						<Text style={Theme.Styles.hiddenText}>
+					<>
+					{controllingMode === 'off' ?
+						<TouchableOpacity onPress={this.onPressResume}>
+							<View style={offContentCover}>
+								<IconTelldus icon="play" style={playIconStyle}/>
+								<Text style={offInfoText}>
+									{intl.formatMessage(i18n.clickToResume)}
+								</Text>
+							</View>
+						</TouchableOpacity>
+						:
+						<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
+							<Text style={[sValueStyle, {
+								color: baseColor,
+							}]}>
+								{cModevalue}
+							</Text>
+							<Text style={Theme.Styles.hiddenText}>
 								!
-						</Text>
-						<Text style={[sUnitStyle, {
-							color: baseColor,
-						}]}>
+							</Text>
+							<Text style={[sUnitStyle, {
+								color: baseColor,
+							}]}>
 								°C
+							</Text>
 						</Text>
-					</Text>
+					}
+					</>
 				}
 			</View>
 			<Text style={cLabelStyle}>
@@ -336,6 +357,22 @@ getStyles(): Object {
 		doneIconCoverStyle: {
 			alignItems: 'center',
 			justifyContent: 'center',
+		},
+		offContentCover: {
+			marginVertical: 5,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		playIconStyle: {
+			color: brandSecondary,
+			fontSize: deviceWidth * 0.07,
+			marginTop: 5,
+		},
+		offInfoText: {
+			color: brandSecondary,
+			fontSize: deviceWidth * 0.04,
+			textAlign: 'center',
+			marginTop: 5,
 		},
 	};
 }
