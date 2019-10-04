@@ -98,11 +98,13 @@ class HeatInfoBlock extends View {
 		let accessibilityLabel = `${formatMessage(i18n.thermostat)} ${name}, ${labelCMode}, ${labelValue}`;
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
+		const showValue = currentMode !== 'off' && currentMode !== 'fan';
+
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle]} accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="temperature" style={iconStyle}/>
 				<View style={{alignItems: 'flex-start', marginLeft: 2}}>
-					<Text style={{textAlign: 'left'}}>
+					{showValue && <Text style={{textAlign: 'left'}}>
 						<FormattedNumber
 							formatterFunction={this.formatterFunction}
 							style={textOneStyle}
@@ -110,6 +112,7 @@ class HeatInfoBlock extends View {
 							minimumFractionDigits={1}/>
 						<Text style={textTwoStyle}>°C</Text>
 					</Text>
+					}
 					<Text style={textThreeStyle}>
 						{!!currentMode && currentMode.toUpperCase()}
 					</Text>

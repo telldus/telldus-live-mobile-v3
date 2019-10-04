@@ -123,7 +123,7 @@ class ThermostatButton extends View<Props, State> {
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
-			style={[styles.buttonCommon, infoBlockStyle, {flex: 1}]}
+			style={[styles.buttonCommon, infoBlockStyle, {flex: 1, justifyContent: 'flex-start'}]}
 			device={device}
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
@@ -141,9 +141,11 @@ class ThermostatButton extends View<Props, State> {
 			iconSize={16}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
+			currentMode={mode}
 			iconStyle={styles.actionIconStyle}/>;
 
-		const bGColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.gatewayInactive;
+		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
+			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<View style={style}>
@@ -163,6 +165,7 @@ const styles = StyleSheet.create({
 		width: Theme.Core.buttonWidth * 2,
 		padding: 3,
 		flexDirection: 'row',
+		justifyContent: 'flex-start',
 		backgroundColor: Theme.Core.brandSecondary,
 	},
 	buttonCommon: {

@@ -516,7 +516,7 @@ class DeviceRow extends View<Props, State> {
 				<ThermostatButton
 					{...sharedProps}
 					key={8}
-					style={styles.toggle}
+					style={styles.thermostat}
 					openThermostatControl={this.props.openThermostatControl}
 				/>
 			);
@@ -760,6 +760,11 @@ class DeviceRow extends View<Props, State> {
 			toggle: {
 				flexDirection: 'row',
 				justifyContent: 'center',
+				alignItems: 'center',
+			},
+			thermostat: {
+				flexDirection: 'row',
+				justifyContent: 'flex-start',
 				alignItems: 'center',
 			},
 			bell: {

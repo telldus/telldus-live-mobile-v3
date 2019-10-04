@@ -141,9 +141,11 @@ class ThermostatButtonDB extends View<Props, State> {
 			iconSize={16}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
+			currentMode={mode}
 			iconStyle={styles.actionIconStyle}/>;
 
-		const bGColor = isGatewayActive ? Theme.Core.brandSecondary : Theme.Core.gatewayInactive;
+		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
+			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
 		return (
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={containerStyle}>

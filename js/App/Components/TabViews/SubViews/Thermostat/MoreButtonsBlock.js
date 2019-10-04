@@ -33,6 +33,7 @@ type Props = {
 	command: number,
 
 	device: Object,
+	currentMode: string,
 
 	isGatewayActive: boolean,
 	intl: Object,
@@ -62,13 +63,15 @@ class MoreButtonsBlock extends View {
 	}
 
 	render(): Object {
-		let { device, moreButtonsBlockStyle, iconStyle } = this.props;
+		let { device, moreButtonsBlockStyle, iconStyle, currentMode } = this.props;
 		let { name } = device;
 		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
 
+		const icon = currentMode === 'off' ? 'off' : currentMode === 'fan' ? 'thermostatfan' : 'thermostatheat';
+
 		return (
 			<View style={[styles.button, this.props.style, moreButtonsBlockStyle]} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="thermostatheat" style={iconStyle}/>
+				<IconTelldus icon={icon} style={iconStyle}/>
 			</View>
 		);
 	}
