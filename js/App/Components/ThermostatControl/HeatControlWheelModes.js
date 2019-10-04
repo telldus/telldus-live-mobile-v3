@@ -41,6 +41,7 @@ type Props = {
 	device: Object,
 	lastUpdated: number,
 	mode: string,
+	currentTemp: string,
 
 	modesCoverStyle: number | Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
@@ -365,6 +366,7 @@ render(): Object | null {
 		modes,
 		lastUpdated,
 		modesCoverStyle,
+		currentTemp,
 	} = this.props;
 
 	if (!modes || modes.length === 0) {
@@ -440,6 +442,7 @@ render(): Object | null {
 					onEditSubmitValue={this.onEditSubmitValue}
 					updateCurrentValueInScreen={this.updateCurrentValueInScreen}
 					changeMode={changeMode}
+					currentTemp={currentTemp}
 				/>
 			</View>
 			<ModesList

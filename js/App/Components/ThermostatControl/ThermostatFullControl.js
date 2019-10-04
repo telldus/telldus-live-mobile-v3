@@ -37,6 +37,7 @@ import {
 	shouldUpdate,
 	getSupportedModes,
 	getLastUpdated,
+	getThermostatValue,
 } from '../../Lib';
 import Theme from '../../Theme';
 
@@ -44,6 +45,7 @@ type Props = {
 	device: Object,
 	appLayout: Object,
 	lastUpdated: number,
+	currentTemp: string,
 
 	navigation: Object,
 	intl: Object,
@@ -59,7 +61,7 @@ constructor(props: Props) {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-	const propsChange = shouldUpdate(this.props, nextProps, ['device', 'appLayout', 'lastUpdated']);
+	const propsChange = shouldUpdate(this.props, nextProps, ['device', 'appLayout', 'lastUpdated', 'currentTemp']);
 	if (propsChange) {
 		return true;
 	}
@@ -74,6 +76,7 @@ render(): Object | null {
 		device,
 		lastUpdated,
 		intl,
+		currentTemp,
 	} = this.props;
 
 	if (!device || !device.id) {
@@ -123,6 +126,7 @@ render(): Object | null {
 						device={device}
 						activeMode={mode}
 						lastUpdated={lastUpdated}
+						currentTemp={currentTemp}
 						deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
@@ -152,6 +156,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		...screenProps,
 		device,
 		lastUpdated: getLastUpdated(store.sensors.byId, clientDeviceId, clientId),
+		currentTemp: getThermostatValue(store.sensors.byId, clientDeviceId, clientId),
 	};
 }
 

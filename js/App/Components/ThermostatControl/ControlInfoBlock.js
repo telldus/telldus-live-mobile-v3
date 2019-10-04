@@ -48,6 +48,7 @@ type Props = {
 	maxVal: number,
 	minVal: number,
 	currentValueInScreen: number,
+	currentTemp: string,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
@@ -133,8 +134,8 @@ render(): Object {
 		appLayout,
 		lastUpdated,
 		intl,
-		currentValue,
 		currentValueInScreen,
+		currentTemp,
 	} = this.props;
 
 	const {
@@ -160,7 +161,6 @@ render(): Object {
 	} = this.getStyles();
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
-	const currModevalue = this.formatModeValue(currentValue);
 
 	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
 
@@ -224,7 +224,7 @@ render(): Object {
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
-					{currModevalue}
+					{currentTemp}
 				</Text>
 				<Text style={cUnitStyle}>
 							°C
