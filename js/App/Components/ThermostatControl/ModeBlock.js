@@ -41,7 +41,11 @@ import {
 } from './SubViews';
 
 import Theme from '../../Theme';
-import { LayoutAnimations, formatModeValue } from '../../Lib';
+import {
+	LayoutAnimations,
+	formatModeValue,
+	getNextSetPoint,
+} from '../../Lib';
 
 type Props = {
     appLayout: Object,
@@ -209,18 +213,10 @@ onPressUp = () => {
 		}, true);
 		return;
 	}
-	let v = parseInt(parseFloat(value).toFixed(1).split('.')[1], 10);
-	let nextValue;
-	if (v > 0 && v < 5) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat((5 - v) / 10)).toFixed(1));
-	} else if (v > 5 && v <= 9) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat((10 - v) / 10)).toFixed(1));
-	} else {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(0.5)).toFixed(1));
-	}
-	if (nextValue > parseFloat(maxVal)) {
-		return;
-	}
+	const nextValue = getNextSetPoint({
+		value,
+		maxVal,
+	}, 'increase');
 	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
 		this.props.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
 		this.props.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
@@ -248,18 +244,10 @@ onPressDown = () => {
 		}, true);
 		return;
 	}
-	let v = parseInt(parseFloat(value).toFixed(1).split('.')[1], 10);
-	let nextValue;
-	if (v > 0 && v < 5) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(-v / 10)).toFixed(1));
-	} else if (v > 5 && v <= 9) {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(-(v - 5) / 10)).toFixed(1));
-	} else {
-		nextValue = parseFloat((parseFloat(value) + parseFloat(-0.5)).toFixed(1));
-	}
-	if (nextValue < parseFloat(minVal)) {
-		return;
-	}
+	const nextValue = getNextSetPoint({
+		value,
+		minVal,
+	}, 'decrease');
 	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
 		this.props.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
 		this.props.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
