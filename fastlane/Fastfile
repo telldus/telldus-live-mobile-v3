@@ -52,7 +52,7 @@ platform :ios do
   lane :build do
     increment_version_number(version_number: ENV["APP_VERSION"], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
     increment_build_number(build_number: ENV['CI_BUILD_ID'], xcodeproj: "ios/TelldusLiveApp.xcodeproj")
-    cocoapods(podfile: "ios/Podfile")
+    cocoapods(podfile: "ios/Podfile", repo_update: true)
     match(type: "appstore")
     disable_automatic_code_signing(path: "ios/TelldusLiveApp.xcodeproj")
     gym(
