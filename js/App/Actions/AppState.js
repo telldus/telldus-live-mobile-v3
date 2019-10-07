@@ -55,7 +55,7 @@ module.exports = {
 				dispatch(initiateGatewayLocalTest());
 				dispatch(autoDetectLocalTellStick());
 			}
-			if (appState === 'background') {
+			if (appState === 'background') {// background state is not persisted by redux-persist. Follow: https://github.com/rt2zz/redux-persist/issues/1097
 				dispatch({
 					type: 'APP_BACKGROUND',
 				});
