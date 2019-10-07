@@ -83,14 +83,8 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 }
 
 // method to respond to the google auth URL scheme
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-	sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-
-	return [RNGoogleSignin application:application
-                         openURL:url
-               sourceApplication:sourceApplication
-                      annotation:annotation
-	];
+- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
+    return [RNGoogleSignin application:application openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
