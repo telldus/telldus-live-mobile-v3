@@ -36,6 +36,17 @@ module.exports = {
 		type: 'APP_START',
 	}),
 	appState: (): ThunkAction => (dispatch: Function) => {
+		const initialAppState = AppState.currentState;
+		if (initialAppState === 'active') {
+			dispatch({
+				type: 'APP_FOREGROUND',
+			});
+		}
+		if (initialAppState === 'background') {
+			dispatch({
+				type: 'APP_BACKGROUND',
+			});
+		}
 		AppState.addEventListener('change', (appState: string) => {
 			if (appState === 'active') {
 				dispatch({
@@ -53,6 +64,7 @@ module.exports = {
 			}
 		});
 	},
+
 	appOrientation: (initialOrientation: string): ThunkAction => (dispatch: Function): Object => {
 		Orientation.addOrientationListener((orientation: string): Object => {
 			return dispatch({
