@@ -32,7 +32,7 @@ jest.mock('react-native-orientation-locker', () => {
 	};
 });
 
-jest.mock('react-native-google-signin', () => {
+jest.mock('@react-native-community/google-signin', () => {
 	return {
 		statusCodes: {
 			SIGN_IN_CANCELLED: '',

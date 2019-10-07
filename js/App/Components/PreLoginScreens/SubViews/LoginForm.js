@@ -26,7 +26,7 @@ import { TextInput, Platform, Keyboard, InteractionManager } from 'react-native'
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 
 import { TouchableButton, View, H1 } from '../../../../BaseComponents';
 import { loginToTelldus } from '../../../Actions';
@@ -105,7 +105,7 @@ class LoginForm extends View {
 		GoogleSignin.configure({
 			webClientId: webClientId,
 			offlineAccess: true,
-			iosClientId: Platform.OS === 'ios' ? iosClientId : null,
+			iosClientId: Platform.OS === 'ios' ? iosClientId : undefined,
 		});
 	  }
 
