@@ -419,6 +419,7 @@ render(): Object | null {
 		removeStyle,
 		iconSize,
 		iconCommon,
+		coverStyle,
 	} = this.getStyles();
 
 	const {
@@ -460,6 +461,7 @@ render(): Object | null {
 				</TouchableOpacity>
 				}
 				<CircularSlider
+					coverStyle={coverStyle}
 					startAngle={startAngleF}
 					maxAngleLength={HeatControlWheelModes.maxALength}
 					angleLength={angleLengthF}
@@ -469,7 +471,7 @@ render(): Object | null {
 					radius={radius}
 					gradientColorFrom={gradientColorFrom}
 					gradientColorTo={gradientColorTo}
-					bgCircleColor="#fff"
+					bgCircleColor="transparent"
 					knobStrokeColor="#fff"
 					knobFillColor={gradientColorTo}
 					keepArcVisible
@@ -545,6 +547,10 @@ getStyles(): Object {
 	const iconCoverSize = iconSize * 1.2;
 	const iconBorderRadi = iconCoverSize / 2;
 
+	const radius = deviceWidth * 0.3;
+
+	const padConst = 5;
+
 	return {
 		cover: {
 			...shadow,
@@ -555,8 +561,12 @@ getStyles(): Object {
 			marginTop: padding,
 			marginHorizontal: padding,
 			paddingHorizontal: padding * 2,
+			paddingTop: padConst,
 		},
-		radius: deviceWidth * 0.3,
+		coverStyle: {
+			marginBottom: -(radius * 0.25) + padConst,
+		},
+		radius,
 		iconCommon: {
 			backgroundColor: appBackground,
 			height: iconCoverSize,
