@@ -449,6 +449,7 @@ render(): Object | null {
 				</TouchableOpacity>
 				}
 				<CircularSlider
+					key={`${hasValidMinMax}`}
 					coverStyle={coverStyle}
 					startAngle={startAngleF}
 					maxAngleLength={HeatControlWheelModes.maxALength}
