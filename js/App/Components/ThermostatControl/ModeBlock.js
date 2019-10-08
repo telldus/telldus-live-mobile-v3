@@ -24,11 +24,8 @@
 import React from 'react';
 import {
 	TouchableOpacity,
-	TextInput,
-	LayoutAnimation,
-	InteractionManager,
 } from 'react-native';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
@@ -42,7 +39,6 @@ import {
 
 import Theme from '../../Theme';
 import {
-	LayoutAnimations,
 	formatModeValue,
 	getNextSetPoint,
 } from '../../Lib';
@@ -76,11 +72,7 @@ type Props = {
 	toggleStateEditing: (Object, boolean) => void,
 };
 
-type State = {
-	editValue: boolean,
-};
-
-class ModeBlock extends View<Props, State> {
+class ModeBlock extends View<Props, null> {
 props: Props;
 state: State;
 
@@ -89,13 +81,7 @@ onPressRow: (changeMode: 0 | 1, callback: Function) => void;
 constructor(props: Props) {
 	super(props);
 
-	this.state = {
-		editValue: false,
-	};
-
 	this.onPressRow = this.onPressRow.bind(this);
-
-	this.textInput = null;
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -116,88 +102,7 @@ onPressChangeMode = (changeMode: 0 | 1, callback?: Function) => {
 	this.props.onControlThermostat(mode, val, 1, mode === 'off' ? 2 : 1);
 }
 
-onChangeText = (value: string) => {
-	this.props.updateCurrentValueInScreen(value, value);
-}
-
-onSubmitEditing = () => {
-	this.setState({
-		editValue: false,
-	});
-
-	if (!this.props.value || this.props.value === '') {
-		this.props.updateCurrentValueInScreen(this.props.setpointValueLocal.toString(), this.props.setpointValueLocal.toString());
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-		return;
-	}
-
-	const value = parseFloat(parseFloat(this.props.value).toFixed(1));
-	const { maxVal, minVal, mode, controllingMode } = this.props;
-	if (isNaN(value) || value > parseFloat(maxVal) || value < parseFloat(minVal)) {
-		this.props.updateCurrentValueInScreen(this.props.setpointValueLocal.toString());
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-		return;
-	}
-
-	if (value !== null) {
-		this.props.onEditSubmitValue(value);
-	}
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-	this.props.onControlThermostat(mode, value, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1).then(() => {
-		this.props.toggleStateEditing({
-			[this.props.mode]: false,
-		}, false);
-	}).catch(() => {
-		this.props.toggleStateEditing({
-			[this.props.mode]: false,
-		}, false);
-	});
-}
-
-componentDidUpdate(prevProps: Object, prevState: Object) {
-	const { mode, editState } = this.props;
-	const { editValue } = this.state;
-	const k = Object.keys(editState);
-	if (editValue && k[0] && editState[k[0]] && k[0] !== mode) {
-		this.onSubmitEditing();
-	}
-}
-
-onPressEdit = () => {
-	const {
-		mode,
-		controllingMode,
-		toggleStateEditing,
-		editState,
-	} = this.props;
-	const k = Object.keys(editState);
-	if (k[0] && editState[k[0]] && k[0] !== mode) {
-		toggleStateEditing({
-			[mode]: true,
-		}, true);
-		return;
-	}
-	toggleStateEditing({
-		[mode]: true,
-	}, false);
-	this.setState({
-		editValue: true,
-	}, () => {
-		if (this.textInput) {
-			InteractionManager.runAfterInteractions(() => {
-				this.textInput.focus();
-			});
-		}
-	});
-	this.onPressRow(controllingMode === mode ? 1 : 0);
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
-}
-
 onPressUp = () => {
-	if (this.state.editValue) {
-		this.onSubmitEditing();
-		return;
-	}
 	const {
 		maxVal,
 		mode,
@@ -225,10 +130,6 @@ onPressUp = () => {
 }
 
 onPressDown = () => {
-	if (this.state.editValue) {
-		this.onSubmitEditing();
-		return;
-	}
 	const {
 		minVal,
 		mode,
@@ -264,16 +165,11 @@ formatModeValue = (modeValue?: number | string): string | number => {
 	return formatModeValue(val, this.props.intl.formatNumber);
 }
 
-setRef = (ref: any) => {
-	this.textInput = ref;
-}
-
 render(): Object {
 
 	const {
 		label,
 		value,
-		scale,
 		unit,
 		active,
 		mode,
@@ -289,19 +185,15 @@ render(): Object {
 		brandSecondary,
 		brandPrimary,
 		controlBlockStyle,
-		scaleStyle,
 		valueStyle,
 		unitStyle,
 		iconBlockStyle,
 		appBackground,
-		editIconStyle,
 		textCoverStyle,
 		rowTextColor,
-		editIconSize,
-		editIconSizeDone,
 		iconSize,
-		controlIconSize,
-		textStyle,
+		iconSizeAddRemove,
+		addRemoveIconCover,
 	} = this.getStyles();
 
 	let iconBGColor = active ? brandSecondary : appBackground;
@@ -313,11 +205,7 @@ render(): Object {
 		textColor = rowTextColor;
 	}
 
-	const { editValue } = this.state;
-
 	const cModevalue = this.formatModeValue(value);
-
-	const isEditBoxValueValid = value !== null && typeof value !== 'undefined';
 
 	const hasInitialValue = initialValue !== null && typeof initialValue !== 'undefined' && !isNaN(initialValue);
 
@@ -331,46 +219,31 @@ render(): Object {
 				{hasInitialValue && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
-							<TouchableOpacity onPress={this.onPressUp}>
-								<IconTelldus icon="up" size={controlIconSize} color={brandSecondary}/>
-							</TouchableOpacity>
-							<TouchableOpacity onPress={this.onPressDown}>
-								<IconTelldus icon="down" size={controlIconSize} color={brandPrimary}/>
+							<TouchableOpacity onPress={this.onPressUp} style={addRemoveIconCover}>
+								<MaterialIcons
+									name="remove"
+									color={Theme.Core.brandPrimary}
+									size={iconSizeAddRemove}/>
 							</TouchableOpacity>
 						</View>
 						<View style={textCoverStyle}>
-							<Text style={[scaleStyle, { color: textColor }]}>
-								{scale}
-							</Text>
-							{editValue ? <TextInput
-								ref={this.setRef}
-								value={isEditBoxValueValid ? value.toString() : ''}
-								style={textStyle}
-								onChangeText={this.onChangeText}
-								onSubmitEditing={this.onSubmitEditing}
-								autoCapitalize="sentences"
-								autoCorrect={false}
-								autoFocus={false}
-								underlineColorAndroid={Theme.Core.brandSecondary}
-								returnKeyType={'done'}
-								keyboardType={'phone-pad'}
-							/>
-								:
-								<Text>
-									<Text style={[valueStyle, { color: textColor }]}>
-										{cModevalue}
-									</Text>
-									<Text style={[unitStyle, { color: textColor }]}>
-										{unit}
-									</Text>
+							<Text>
+								<Text style={[valueStyle, { color: textColor }]}>
+									{cModevalue}
 								</Text>
-							}
+								<Text style={[unitStyle, { color: textColor }]}>
+									{unit}
+								</Text>
+							</Text>
 						</View>
-						<MaterialIcon name={editValue ? 'done' : 'edit'}
-							size={editValue ? editIconSizeDone : editIconSize}
-							color={brandSecondary}
-							style={editIconStyle}
-							onPress={editValue ? this.onSubmitEditing : this.onPressEdit}/>
+						<View style={{flex: 0}}>
+							<TouchableOpacity onPress={this.onPressUp} style={addRemoveIconCover}>
+								<MaterialIcons
+									name="add"
+									color={Theme.Core.brandSecondary}
+									size={iconSizeAddRemove}/>
+							</TouchableOpacity>
+						</View>
 					</View>
 				)}
 			</View>
@@ -405,7 +278,12 @@ getStyles(): Object {
 
 	const padding = deviceWidth * paddingFactor;
 
+	const iconSizeAddRemove = deviceWidth * 0.05;
+	const iconCoverSize = iconSizeAddRemove * 1.4;
+	const iconBorderRadi = iconCoverSize / 2;
+
 	return {
+		iconSizeAddRemove,
 		cover: {
 			...shadow,
 			flexDirection: 'row',
@@ -444,11 +322,7 @@ getStyles(): Object {
 			marginRight: 10,
 		},
 		textCoverStyle: {
-			marginLeft: 5,
-		},
-		scaleStyle: {
-			color: rowTextColor,
-			fontSize: deviceWidth * 0.03,
+			marginHorizontal: 7,
 		},
 		valueStyle: {
 			color: rowTextColor,
@@ -465,16 +339,14 @@ getStyles(): Object {
 			marginLeft: 1,
 			...shadow,
 		},
-		editIconStyle: {
-			marginLeft: 5,
-		},
-		editIconSize: deviceWidth * 0.045,
-		editIconSizeDone: deviceWidth * 0.055,
 		iconSize: deviceWidth * 0.08,
-		controlIconSize: deviceWidth * 0.06,
-		textStyle: {
-			color: rowTextColor,
-			fontSize: deviceWidth * 0.055,
+		addRemoveIconCover: {
+			backgroundColor: appBackground,
+			height: iconCoverSize,
+			width: iconCoverSize,
+			borderRadius: iconBorderRadi,
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 	};
 }
