@@ -101,7 +101,9 @@ class HeatInfoBlock extends View {
 		const showValue = currentMode !== 'off' && currentMode !== 'fan';
 
 		return (
-			<View style={[styles.button, this.props.style, heatInfoBlockStyle]} accessibilityLabel={accessibilityLabel}>
+			<View style={[styles.button, this.props.style, heatInfoBlockStyle, {
+				paddingLeft: showValue ? 0 : 3,
+			}]} accessibilityLabel={accessibilityLabel}>
 				{showValue && <IconTelldus icon="temperature" style={iconStyle}/>}
 				<View style={{alignItems: 'flex-start', marginLeft: 2}}>
 					{showValue && <Text style={{textAlign: 'left'}}>
