@@ -344,13 +344,14 @@ onEndSlide = () => {
 	this.onControlThermostat(controllingMode, currentValueInScreen, 1, controllingMode === 'off' ? 2 : 1);
 }
 
-onPressOutSliderPath = (data: Object) => {
+onPressSliderPath = (data: Object) => {
 	const {startAngle, angleLength} = data;
 	const { temp } = this.getValueFromAngle(angleLength, this.state.controllingMode);
 	this.setState({
 		angleLength,
 		startAngle,
 		currentValueInScreen: temp,
+		setpointValue: temp,
 	}, () => {
 		this.onEndSlide();
 	});
@@ -479,7 +480,7 @@ render(): Object | null {
 					knobRadius={18}
 					knobStrokeWidth={3}
 					onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
-					onPressOutSliderPath={hasValidMinMax ? this.onPressOutSliderPath : null}
+					onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
 				/>
 				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
 					<MaterialIcons
