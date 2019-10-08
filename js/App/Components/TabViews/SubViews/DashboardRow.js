@@ -240,7 +240,10 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	}
 
 	if (THERMOSTAT) {
-		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
+		const { THERMOSTAT: { mode } } = stateValues;
+
+		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
+			mode === 'off' ? styles.itemIconContainerOff : styles.itemIconContainerOn;
 
 		buttons.unshift(<ThermostatButtonDB
 			key={8} {...this.props}
