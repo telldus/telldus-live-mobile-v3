@@ -246,6 +246,8 @@ render(): Object {
 					</>
 				}
 			</View>
+			{currentTemp &&
+			<>
 			<Text style={cLabelStyle}>
 				{intl.formatMessage(i18n.labelCurrentTemperature)}
 			</Text>
@@ -257,15 +259,15 @@ render(): Object {
 							°C
 				</Text>
 			</Text>
-			{!!lastUpdated && <Text style={lastUpdatedInfoStyle}>
-				{`${intl.formatMessage(i18n.labelLastUpdated)}: `}
+			</>
+			}
+			{!!lastUpdated &&
 				<FormattedRelative
 					value={-seconds}
 					numeric="auto"
 					updateIntervalInSeconds={60}
 					formatterFunction={this.formatSensorLastUpdate}
 					textStyle={lastUpdatedInfoStyle}/>
-			</Text>
 			}
 		</View>
 	);
