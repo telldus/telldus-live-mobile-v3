@@ -59,7 +59,6 @@ type Props = {
 	initialValue?: number,
 	controllingMode: string,
 	setpointMode: string,
-	editState: Object,
 	setpointValueLocal: string,
 
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
@@ -69,7 +68,6 @@ type Props = {
 	updateCurrentValueInScreen: (string, ?string) => void,
 	IconActive: Object,
 	Icon: Object,
-	toggleStateEditing: (Object, boolean) => void,
 };
 
 class ModeBlock extends View<Props, null> {
@@ -108,16 +106,7 @@ onPressUp = () => {
 		mode,
 		value,
 		controllingMode,
-		editState,
-		toggleStateEditing,
 	} = this.props;
-	const k = Object.keys(editState);
-	if (k[0] && editState[k[0]] && k[0] !== mode) {
-		toggleStateEditing({
-			[mode]: true,
-		}, true);
-		return;
-	}
 	const nextValue = getNextSetPoint({
 		value,
 		maxVal,
@@ -135,16 +124,7 @@ onPressDown = () => {
 		mode,
 		value,
 		controllingMode,
-		editState,
-		toggleStateEditing,
 	} = this.props;
-	const k = Object.keys(editState);
-	if (k[0] && editState[k[0]] && k[0] !== mode) {
-		toggleStateEditing({
-			[mode]: true,
-		}, true);
-		return;
-	}
 	const nextValue = getNextSetPoint({
 		value,
 		minVal,
