@@ -72,7 +72,6 @@ type Props = {
 
 class ModeBlock extends View<Props, null> {
 props: Props;
-state: State;
 
 onPressRow: (changeMode: 0 | 1, callback: Function) => void;
 

@@ -52,7 +52,7 @@ type Props = {
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
-	onEditSubmitValue: (number) => void,
+	onEditSubmitValue: (number, ?number) => void,
 	updateCurrentValueInScreen: (string, ?string) => void,
 };
 
@@ -107,7 +107,7 @@ onSubmitEditing = () => {
 	}
 
 	if (value !== null) {
-		this.props.onEditSubmitValue(value);
+		this.props.onEditSubmitValue(value, value);
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 	this.props.onControlThermostat(controllingMode, value, 1, 1);

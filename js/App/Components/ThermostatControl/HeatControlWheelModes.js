@@ -278,13 +278,13 @@ onUpdate = (data: Object) => {
 	});
 }
 
-onEditSubmitValue = (newValue: number, setpointValue?: string) => {
+onEditSubmitValue = (newValue: number, setpointValue?: number) => {
 	const { controllingMode, changeMode } = this.state;
 	const angleLength = getAngleLengthToInitiate(controllingMode, newValue, this.props.modes);
 	this.setState({
 		angleLength: changeMode ? angleLength : this.state.angleLength,
-		currentValueInScreen: changeMode ? newValue : this.state.currentValueInScreen,
-		setpointValue: typeof setpointValue === 'undefined' ? this.state.setpointValue : setpointValue,
+		currentValueInScreen: changeMode ? newValue.toString() : this.state.currentValueInScreen,
+		setpointValue: typeof setpointValue === 'undefined' ? this.state.setpointValue : setpointValue.toString(),
 	});
 }
 
@@ -451,7 +451,7 @@ render(): Object | null {
 				</TouchableOpacity>
 				}
 				<CircularSlider
-					key={`${hasValidMinMax}`}
+					key={`${hasValidMinMax ? '11' : '22'}`}
 					coverStyle={coverStyle}
 					startAngle={startAngleF}
 					maxAngleLength={HeatControlWheelModes.maxALength}
