@@ -81,6 +81,7 @@ const LanguageControlBlock = (props: Object): Object => {
 			dropDownHeaderStyle={dropDownHeaderStyle}
 			baseColor={'#000'}
 			fontSize={fontSize}
+			itemCount={LANGUAGES.length}
 			accessibilityLabelPrefix={labelLanguage}
 		/>
 	);
