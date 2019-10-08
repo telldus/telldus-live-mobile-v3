@@ -181,6 +181,7 @@ static defaultProps: DefaultProps = {
 			dropDownHeaderStyleDef,
 			dropDownContainerStyleDef,
 			dropDownListsContainerStyleDef,
+			pickerStyleDef,
 		} = this.getStyle(appLayout);
 		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = items.length < itemCount ? items.length : itemCount;
@@ -201,7 +202,7 @@ static defaultProps: DefaultProps = {
 						onChangeText={onValueChange}
 						renderBase={this.renderBase}
 						containerStyle={[pickerContainerStyleDef, pickerContainerStyle]}
-						pickerStyle={pickerStyle}
+						pickerStyle={[pickerStyleDef, pickerStyle]}
 						overlayStyle={overlayStyle}
 						fontSize={fontSize}
 						itemCount={iCount}
@@ -235,6 +236,10 @@ static defaultProps: DefaultProps = {
 		const fontSizeRightIcon = deviceWidth * 0.04;
 
 		return {
+			pickerStyleDef: {
+				width: width - (2 * padding),
+				left: padding,
+			},
 			dropDownContainerStyleDef: {
 				flex: 0,
 				alignItems: 'flex-start',
