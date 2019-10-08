@@ -553,7 +553,7 @@ getStyles(): Object {
 			backgroundColor: '#fff',
 			marginTop: padding,
 			marginHorizontal: padding,
-			padding: padding * 2,
+			paddingHorizontal: padding * 2,
 		},
 		radius: deviceWidth * 0.3,
 		iconCommon: {
