@@ -85,9 +85,21 @@ render(): Object | null {
 
 	const {
 		name,
-		parameter,
+		parameter = [],
 		stateValues,
 	} = device;
+
+	let supportResume = false;
+	parameter.map((param: Object) => {
+		if (param.name && param.name === 'thermostat') {
+			const { modes } = param.value;
+			modes.map((mode: string) => {
+				if (mode.toLowerCase().trim() === 'resume') {
+					supportResume = true;
+				}
+			});
+		}
+	});
 
 	const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 
@@ -127,7 +139,8 @@ render(): Object | null {
 						activeMode={mode}
 						lastUpdated={lastUpdated}
 						currentTemp={currentTemp}
-						deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
+						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
+						supportResume={supportResume}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>

@@ -48,6 +48,7 @@ type Props = {
 	minVal: number,
 	currentValueInScreen: number,
 	currentTemp: string,
+	supportResume: boolean,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
@@ -126,7 +127,7 @@ formatModeValue = (modeValue: number | string): string | number => {
 }
 
 onPressResume = () => {
-
+	this.props.onControlThermostat('resume', undefined, 1, 1);
 }
 
 render(): Object {
@@ -140,6 +141,7 @@ render(): Object {
 		currentValueInScreen,
 		currentTemp,
 		controllingMode,
+		supportResume,
 	} = this.props;
 
 	const {
@@ -213,7 +215,8 @@ render(): Object {
 					:
 					<>
 					{controllingMode === 'off' ?
-						<TouchableOpacity onPress={this.onPressResume}>
+					<>
+						{supportResume && <TouchableOpacity onPress={this.onPressResume}>
 							<View style={offContentCover}>
 								<IconTelldus icon="play" style={playIconStyle}/>
 								<Text style={offInfoText}>
@@ -221,6 +224,8 @@ render(): Object {
 								</Text>
 							</View>
 						</TouchableOpacity>
+						}
+					</>
 						:
 						controllingMode === 'fan' ?
 							<View style={offContentCover}>
