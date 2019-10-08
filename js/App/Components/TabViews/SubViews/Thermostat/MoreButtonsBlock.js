@@ -68,7 +68,7 @@ class MoreButtonsBlock extends View {
 		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
 
 		const knownModes = getKnownModes(intl.formatMessage);
-		let IconActive, icon;
+		let IconActive, icon = '';
 		knownModes.map((item: Object) => {
 			if (currentMode === item.mode) {
 				IconActive = item.IconActive;
