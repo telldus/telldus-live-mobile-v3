@@ -68,6 +68,7 @@ type Props = {
 	updateCurrentValueInScreen: (string, ?string) => void,
 	IconActive: Object,
 	Icon: Object,
+	handleAddMinus: (string, 0 | 1, number) => void,
 };
 
 class ModeBlock extends View<Props, null> {
@@ -105,16 +106,13 @@ onPressUp = () => {
 		mode,
 		value,
 		controllingMode,
+		handleAddMinus,
 	} = this.props;
 	const nextValue = getNextSetPoint({
 		value,
 		maxVal,
 	}, 'increase');
-	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
-		this.props.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
-		this.props.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
-		this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
-	});
+	handleAddMinus(mode, controllingMode === mode ? 1 : 0, nextValue);
 }
 
 onPressDown = () => {
@@ -123,16 +121,13 @@ onPressDown = () => {
 		mode,
 		value,
 		controllingMode,
+		handleAddMinus,
 	} = this.props;
 	const nextValue = getNextSetPoint({
 		value,
 		minVal,
 	}, 'decrease');
-	this.onPressRow(controllingMode === mode ? 1 : 0, () => {
-		this.props.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
-		this.props.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
-		this.props.onControlThermostat(mode, nextValue, controllingMode === mode ? 1 : 0, mode === 'off' ? 2 : 1);
-	});
+	handleAddMinus(mode, controllingMode === mode ? 1 : 0, nextValue);
 }
 
 formatModeValue = (modeValue?: number | string): string | number => {
@@ -198,7 +193,7 @@ render(): Object {
 				{hasInitialValue && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
-							<TouchableOpacity onPress={this.onPressUp} style={addRemoveIconCover}>
+							<TouchableOpacity onPress={this.onPressDown} style={addRemoveIconCover}>
 								<MaterialIcons
 									name="remove"
 									color={Theme.Core.brandPrimary}

@@ -226,6 +226,8 @@ constructor(props: Props) {
 		setpointValueLocal: currentValue,
 		preventReset: false,
 	};
+
+	this.submitTimeout = null;
 }
 
 getValueFromAngle = (angleLength: number, currMode: string): Object => {
@@ -361,11 +363,7 @@ onMinus = () => {
 		value: currentValueInScreen,
 		minVal,
 	}, 'decrease');
-	this.onPressRow(controllingMode, 1, () => {
-		this.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
-		this.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
-		this.onControlThermostat(controllingMode, nextValue, 1, controllingMode === 'off' ? 2 : 1);
-	});
+	this.handleAddMinus(controllingMode, 1, nextValue);
 }
 
 onAdd = () => {
@@ -378,10 +376,20 @@ onAdd = () => {
 		value: currentValueInScreen,
 		maxVal,
 	}, 'increase');
-	this.onPressRow(controllingMode, 1, () => {
+	this.handleAddMinus(controllingMode, 1, nextValue);
+}
+
+handleAddMinus = (mode: string, changeMode: 0 | 1, nextValue: number) => {
+
+	this.onPressRow(mode, changeMode, () => {
 		this.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
 		this.onEditSubmitValue(parseFloat(nextValue), parseFloat(nextValue));
-		this.onControlThermostat(controllingMode, nextValue, 1, controllingMode === 'off' ? 2 : 1);
+		if (this.submitTimeout) {
+			clearTimeout(this.submitTimeout);
+		}
+		this.submitTimeout = setTimeout(() => {
+			this.onControlThermostat(mode, nextValue, changeMode, mode === 'off' ? 2 : 1);
+		}, 2000);
 	});
 }
 
@@ -514,7 +522,8 @@ render(): Object | null {
 				changeMode={changeMode}
 				setpointMode={setpointMode}
 				setpointValue={setpointValue}
-				setpointValueLocal={setpointValueLocal}/>
+				setpointValueLocal={setpointValueLocal}
+				handleAddMinus={this.handleAddMinus}/>
 		</>
 	);
 }

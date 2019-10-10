@@ -49,6 +49,7 @@ type Props = {
 	onControlThermostat: (mode: string, temperature?: number | null, changeMode: 1 | 0, requestedState: number) => void,
 	onEditSubmitValue: (number, ?number) => void,
 	updateCurrentValueInScreen: (string, ?string) => void,
+	handleAddMinus: (string, 0 | 1, number) => void,
 };
 
 class ModesList extends View<Props, null> {
@@ -77,6 +78,7 @@ render(): Object {
 		modesCoverStyle,
 		setpointMode,
 		setpointValueLocal,
+		handleAddMinus,
 	} = this.props;
 
 	const {
@@ -128,7 +130,8 @@ render(): Object {
 				currentValue={currentValue}
 				initialValue={value}
 				setpointMode={setpointMode}
-				setpointValueLocal={setpointValueLocal}/>
+				setpointValueLocal={setpointValueLocal}
+				handleAddMinus={handleAddMinus}/>
 		);
 	});
 
