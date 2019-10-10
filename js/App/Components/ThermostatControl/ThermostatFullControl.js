@@ -92,7 +92,7 @@ render(): Object | null {
 	let supportResume = false;
 	parameter.map((param: Object) => {
 		if (param.name && param.name === 'thermostat') {
-			const { modes } = param.value;
+			const { modes = [] } = param.value;
 			modes.map((mode: string) => {
 				if (mode.toLowerCase().trim() === 'resume') {
 					supportResume = true;
