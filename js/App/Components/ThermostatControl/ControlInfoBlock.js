@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, LayoutAnimation, Platform } from 'react-native';
+import { TouchableOpacity, LayoutAnimation } from 'react-native';
 import { injectIntl, intlShape } from 'react-intl';
 
 import {
