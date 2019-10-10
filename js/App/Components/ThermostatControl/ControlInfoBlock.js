@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, LayoutAnimation } from 'react-native';
+import { TouchableOpacity, LayoutAnimation, Platform } from 'react-native';
 import { injectIntl, intlShape } from 'react-intl';
 
 import {
@@ -169,6 +169,9 @@ render(): Object {
 		offContentCover,
 		brandSecondary,
 		fanIconStyle,
+		box3,
+		box2,
+		box1,
 	} = this.getStyles();
 
 	const cModevalue = this.formatModeValue(currentValueInScreen);
@@ -178,46 +181,49 @@ render(): Object {
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
-			{!!title && <Text style={[infoTitleStyle, {
-				color: controllingMode === 'fan' ? brandSecondary : baseColor,
-			}]}>
-				{title.toUpperCase()}
-			</Text>}
-			<View style={selectedInfoCoverStyle}>
-				{editValue ?
+			{!!title &&
+			<View style={box1}>
+				<Text style={[infoTitleStyle, {
+					color: controllingMode === 'fan' ? brandSecondary : baseColor,
+				}]}>
+					{title.toUpperCase()}
+				</Text>
+			</View>
+			}
+			{editValue ?
+				<View style={[box2, {
+					alignItems: 'center',
+					justifyContent: 'center',
+				}]}>
+					<Text style={labelStyle}>
+						{intl.formatMessage(i18n.labelTemperature)}
+					</Text>
 					<View style={{
+						flexDirection: 'row',
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}>
-						<Text style={labelStyle}>
-							{intl.formatMessage(i18n.labelTemperature)}
-						</Text>
-						<View style={{
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}>
-							<EditBox
-								value={isEditBoxValueValid ? currentValueInScreen.toString() : ''}
-								appLayout={appLayout}
-								containerStyle={editBoxStyle}
-								textStyle={textStyle}
-								iconStyle={leftIconStyle}
-								icon="temperature"
-								onChangeText={this.onChangeText}
-								onSubmitEditing={this.onSubmitEditing}
-								keyboardType={'phone-pad'}/>
-							<TouchableOpacity style={doneIconCoverStyle} onPress={this.onSubmitEditing}>
-								<IconTelldus icon={'checkmark'} style={doneIconStyle}/>
-							</TouchableOpacity>
-						</View>
+						<EditBox
+							value={isEditBoxValueValid ? currentValueInScreen.toString() : ''}
+							appLayout={appLayout}
+							containerStyle={editBoxStyle}
+							textStyle={textStyle}
+							iconStyle={leftIconStyle}
+							icon="temperature"
+							onChangeText={this.onChangeText}
+							onSubmitEditing={this.onSubmitEditing}
+							keyboardType={'phone-pad'}/>
+						<TouchableOpacity style={doneIconCoverStyle} onPress={this.onSubmitEditing}>
+							<IconTelldus icon={'checkmark'} style={doneIconStyle}/>
+						</TouchableOpacity>
 					</View>
-					:
+				</View>
+				:
 					<>
 					{controllingMode === 'off' ?
 					<>
 						{supportResume && <TouchableOpacity onPress={this.onPressResume}>
-							<View style={offContentCover}>
+							<View style={[box2, offContentCover]}>
 								<IconTelldus icon="play" style={playIconStyle}/>
 								<Text style={offInfoText}>
 									{intl.formatMessage(i18n.clickToResume)}
@@ -228,33 +234,37 @@ render(): Object {
 					</>
 						:
 						controllingMode === 'fan' ?
-							<View style={offContentCover}>
+							<View style={[box2, offContentCover]}>
 								<IconTelldus icon="thermostatfan" style={fanIconStyle}/>
 							</View>
 							:
-							<Text style={{ textAlignVertical: 'center' }} onPress={this.onPressEdit}>
-								<Text style={[sValueStyle, {
-									color: baseColor,
-								}]}>
-									{cModevalue}
-								</Text>
-								<Text style={Theme.Styles.hiddenText}>
+							<View style={box2}>
+								<Text style={{
+									textAlignVertical: 'center',
+								}} onPress={this.onPressEdit}>
+									<Text style={[sValueStyle, {
+										color: baseColor,
+									}]}>
+										{cModevalue}
+									</Text>
+									<Text style={Theme.Styles.hiddenText}>
 								!
-								</Text>
-								<Text style={[sUnitStyle, {
-									color: baseColor,
-								}]}>
+									</Text>
+									<Text style={[sUnitStyle, {
+										color: baseColor,
+									}]}>
 								°C
+									</Text>
 								</Text>
-							</Text>
+							</View>
 					}
 					</>
-				}
-			</View>
-			{currentTemp &&
+			}
+			<View style={box3}>
+				{currentTemp &&
 			<>
 			<Text style={cLabelStyle}>
-				{intl.formatMessage(i18n.labelCurrentTemperature)}
+				{intl.formatMessage(i18n.current)}
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
@@ -265,15 +275,16 @@ render(): Object {
 				</Text>
 			</Text>
 			</>
-			}
-			{!!lastUpdated &&
+				}
+				{!!lastUpdated &&
 				<FormattedRelative
 					value={-seconds}
 					numeric="auto"
 					updateIntervalInSeconds={60}
 					formatterFunction={this.formatSensorLastUpdate}
 					textStyle={lastUpdatedInfoStyle}/>
-			}
+				}
+			</View>
 		</View>
 	);
 }
@@ -300,25 +311,37 @@ getStyles(): Object {
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
+		box1: {
+			justifyContent: 'flex-end',
+			height: '26%',
+		},
 		infoTitleStyle: {
 			fontSize: deviceWidth * 0.045,
-			marginTop: 10,
 		},
 		selectedInfoCoverStyle: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
+		box2: {
+			height: '25%',
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		box3: {
+			height: '30%',
+			justifyContent: 'flex-end',
+			alignItems: 'center',
+		},
 		sValueStyle: {
-			fontSize: deviceWidth * 0.15,
+			fontSize: Math.floor(deviceWidth * 0.15555),
 		},
 		sUnitStyle: {
-			fontSize: deviceWidth * 0.08,
+			fontSize: Math.floor(deviceWidth * 0.085555),
 		},
 		cLabelStyle: {
 			fontSize: deviceWidth * 0.032,
 			color: rowTextColor,
-			marginTop: 5,
 		},
 		cValueStyle: {
 			fontSize: deviceWidth * 0.06,
@@ -374,7 +397,6 @@ getStyles(): Object {
 			justifyContent: 'center',
 		},
 		offContentCover: {
-			marginVertical: 5,
 			alignItems: 'center',
 			justifyContent: 'center',
 		},

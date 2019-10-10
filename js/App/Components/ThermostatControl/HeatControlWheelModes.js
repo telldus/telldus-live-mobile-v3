@@ -206,6 +206,7 @@ constructor(props: Props) {
 	if (modes && modes.length > 0) {
 		initialAngleLength = getAngleLengthToInitiate(cModeInfo.mode, currentValue, this.props.modes);
 	}
+
 	this.state = {
 		startAngle: this.initialAngle,
 		angleLength: initialAngleLength,
@@ -419,6 +420,10 @@ render(): Object | null {
 		iconSize,
 		iconCommon,
 		coverStyle,
+		knobRadius,
+		knobStrokeWidth,
+		strokeWidth,
+		segments,
 	} = this.getStyles();
 
 	const {
@@ -465,8 +470,8 @@ render(): Object | null {
 					maxAngleLength={HeatControlWheelModes.maxALength}
 					angleLength={angleLengthF}
 					onUpdate={hasValidMinMax ? this.onUpdate : this.noOP}
-					segments={15}
-					strokeWidth={20}
+					segments={segments}
+					strokeWidth={strokeWidth}
 					radius={radius}
 					gradientColorFrom={gradientColorFrom}
 					gradientColorTo={gradientColorTo}
@@ -478,18 +483,11 @@ render(): Object | null {
 					showStopKnob={hasValidMinMax}
 					roundedEnds
 					allowKnobBeyondLimits={false}
-					knobRadius={18}
-					knobStrokeWidth={3}
+					knobRadius={knobRadius}
+					knobStrokeWidth={knobStrokeWidth}
 					onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
 					onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
 				/>
-				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
-					<MaterialIcons
-						name="add"
-						color={Theme.Core.brandSecondary}
-						size={iconSize}/>
-				</TouchableOpacity>
-				}
 				<ControlInfoBlock
 					appLayout={appLayout}
 					baseColor={baseColor}
@@ -507,6 +505,13 @@ render(): Object | null {
 					currentTemp={currentTemp}
 					supportResume={supportResume}
 				/>
+				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
+					<MaterialIcons
+						name="add"
+						color={Theme.Core.brandSecondary}
+						size={iconSize}/>
+				</TouchableOpacity>
+				}
 			</View>
 			<ModesList
 				appLayout={appLayout}
@@ -547,10 +552,18 @@ getStyles(): Object {
 	const iconBorderRadi = iconCoverSize / 2;
 
 	const radius = deviceWidth * 0.3;
+	const knobRadius = 18;
+	const knobStrokeWidth = 3;
+	const strokeWidth = 20;
+	const segments = 15;
 
-	const padConst = 5;
+	const padConst = padding / 2;
 
 	return {
+		segments,
+		knobRadius,
+		knobStrokeWidth,
+		strokeWidth,
 		cover: {
 			...shadow,
 			flex: 0,
@@ -560,10 +573,10 @@ getStyles(): Object {
 			marginTop: padding,
 			marginHorizontal: padding,
 			paddingHorizontal: padding * 2,
-			paddingTop: padConst,
+			paddingVertical: padConst,
 		},
 		coverStyle: {
-			marginBottom: -(radius * 0.25) + padConst,
+			marginBottom: -((knobRadius - (strokeWidth / 2)) + knobStrokeWidth + (deviceWidth * 0.09)) + knobRadius + knobStrokeWidth,
 		},
 		radius,
 		iconCommon: {
