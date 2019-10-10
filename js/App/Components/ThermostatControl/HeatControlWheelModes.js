@@ -93,6 +93,18 @@ function getAngleLengthToInitiate(currMode: string, currentValueInScreen: number
 	return	currentAngleLen;
 }
 
+const getModeAttributes = (cMode: Object): Object => {
+	const { endColor, startColor, label, minVal, maxVal } = cMode;
+	return {
+		baseColor: endColor,
+		gradientColorFrom: startColor,
+		gradientColorTo: endColor,
+		title: label,
+		minVal,
+		maxVal,
+	};
+};
+
 class HeatControlWheelModes extends View<Props, State> {
 props: Props;
 state: State;
@@ -101,15 +113,15 @@ onUpdate: (Object) => void;
 onPressRow: (string, 0 | 1) => void;
 getValueFromAngle: (number, string) => Object;
 
-
 static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	const { controllingMode, setpointMode, preventReset } = state;
 	const { device: { methodRequested }, activeMode } = props;
 
-	let newValue = 0, newSetPointValue;
+	let newValue = state.currentValue, newSetPointValue = state.setpointValueLocal, newModeAttributes = {};
 	props.modes.map((modeInfo: Object) => {
 		if (modeInfo.mode === controllingMode) {
 			newValue = modeInfo.value;
+			newModeAttributes = getModeAttributes(modeInfo);
 		}
 		if (modeInfo.mode === setpointMode) {
 			newSetPointValue = modeInfo.value;
@@ -119,6 +131,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (newValue !== state.currentValue) {
 		newState = {
 			...newState,
+			...newModeAttributes,
 			currentValue: newValue,
 			currentValueInScreen: newValue,
 			methodRequested,
@@ -128,6 +141,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.currentValueInScreen) !== parseFloat(newValue)) {
 		newState = {
 			...newState,
+			...newModeAttributes,
 			currentValue: newValue,
 			currentValueInScreen: newValue,
 			methodRequested,
@@ -144,7 +158,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 		};
 	}
 	if (methodRequested === '' && state.methodRequested !== '' && parseFloat(state.setpointValue) !== parseFloat(newSetPointValue) && !preventReset) {
-		return {
+		newState = {
 			...newState,
 			setpointValueLocal: newSetPointValue,
 			setpointValue: newSetPointValue,
@@ -153,16 +167,38 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	}
 
 	if (activeMode !== state.activeModeLocal) {
-		return {
+		props.modes.map((modeInfo: Object) => {
+			if (modeInfo.mode === activeMode) {
+				newValue = modeInfo.value;
+				newModeAttributes = getModeAttributes(modeInfo);
+			}
+		});
+		newState = {
+			...newState,
+			...newModeAttributes,
+			currentValue: newValue,
+			currentValueInScreen: newValue,
 			activeModeLocal: activeMode,
 			controllingMode: activeMode,
+			angleLength: getAngleLengthToInitiate(activeMode, newValue, props.modes),
 			methodRequested,
 		};
 	}
 	if (methodRequested === '' && state.methodRequested !== '' && state.controllingMode !== activeMode) {
-		return {
+		props.modes.map((modeInfo: Object) => {
+			if (modeInfo.mode === activeMode) {
+				newValue = modeInfo.value;
+				newModeAttributes = getModeAttributes(modeInfo);
+			}
+		});
+		newState = {
+			...newState,
+			...newModeAttributes,
+			currentValue: newValue,
+			currentValueInScreen: newValue,
 			activeModeLocal: activeMode,
 			controllingMode: activeMode,
+			angleLength: getAngleLengthToInitiate(activeMode, newValue, props.modes),
 			methodRequested,
 		};
 	}
@@ -171,7 +207,7 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 			methodRequested,
 		};
 	}
-	return null;
+	return Object.keys(newState).length > 0 ? newState : null;
 }
 
 static maxALength = Math.PI * 1.5;
@@ -453,6 +489,8 @@ render(): Object | null {
 
 	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan';
 
+	const key = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
+
 	return (
 		<>
 			<View style={cover}>
@@ -464,7 +502,7 @@ render(): Object | null {
 				</TouchableOpacity>
 				}
 				<CircularSlider
-					key={`${hasValidMinMax ? '11' : '22'}`}
+					key={key}
 					coverStyle={coverStyle}
 					startAngle={startAngleF}
 					maxAngleLength={HeatControlWheelModes.maxALength}
