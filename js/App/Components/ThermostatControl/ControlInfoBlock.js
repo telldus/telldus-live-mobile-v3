@@ -151,7 +151,6 @@ render(): Object {
 	const {
 		InfoCover,
 		infoTitleStyle,
-		selectedInfoCoverStyle,
 		sValueStyle,
 		sUnitStyle,
 		cLabelStyle,
@@ -317,11 +316,6 @@ getStyles(): Object {
 		},
 		infoTitleStyle: {
 			fontSize: deviceWidth * 0.045,
-		},
-		selectedInfoCoverStyle: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
 		},
 		box2: {
 			height: '25%',
