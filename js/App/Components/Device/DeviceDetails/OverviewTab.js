@@ -37,7 +37,7 @@ import {
 import { requestNodeInfo } from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
-import { getLastUpdated } from '../../../Lib/SensorUtils';
+import { getLastUpdated, getThermostatValue } from '../../../Lib/SensorUtils';
 import {
 	DeviceActionDetails,
 } from './SubViews';
@@ -52,6 +52,7 @@ type Props = {
 	isGatewayActive: boolean,
 	zwaveInfo: Object,
 	lastUpdated?: number,
+	currentTemp?: string,
 
 	screenProps: Object,
 	dispatch: Function,
@@ -116,15 +117,17 @@ class OverviewTab extends View<Props, null> {
 			isGatewayActive: isGatewayActiveN,
 			device: deviceN,
 			lastUpdated: lastUpdatedN,
+			currentTemp: currentTempN,
 		} = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
 		if (currentScreen === 'Overview') {
 
-			const { screenProps, gatewayName, isGatewayActive, device, lastUpdated } = this.props;
+			const { screenProps, gatewayName, isGatewayActive, device, lastUpdated, currentTemp } = this.props;
 			if ((screenProps.appLayout.width !== appLayout.width) ||
 			(gatewayName !== gatewayNameN) ||
 			(isGatewayActive !== isGatewayActiveN) ||
-			(lastUpdated !== lastUpdatedN)) {
+			(lastUpdated !== lastUpdatedN) ||
+			(currentTemp !== currentTempN)) {
 				return true;
 			}
 
@@ -152,7 +155,7 @@ class OverviewTab extends View<Props, null> {
 	}
 
 	render(): Object | null {
-		const { device, screenProps, gatewayName, gatewayType, isGatewayActive, lastUpdated } = this.props;
+		const { device, screenProps, gatewayName, gatewayType, isGatewayActive, lastUpdated, currentTemp } = this.props;
 		const { appLayout, intl } = screenProps;
 
 		if (!device || !device.id) {
@@ -194,7 +197,8 @@ class OverviewTab extends View<Props, null> {
 					isGatewayActive={isGatewayActive}
 					containerStyle={styles.actionDetails}
 					lastUpdated={lastUpdated}
-					deviceSetStateThermostat={this.props.deviceSetStateThermostat}/>
+					deviceSetStateThermostat={this.props.deviceSetStateThermostat}
+					currentTemp={currentTemp}/>
 				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
 				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
 					marginBottom: styles.padding * 2,
@@ -254,6 +258,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gatewayName,
 		isGatewayActive,
 		lastUpdated: getLastUpdated(state.sensors.byId, clientDeviceId, clientId),
+		currentTemp: getThermostatValue(state.sensors.byId, clientDeviceId, clientId),
 	};
 }
 

@@ -48,6 +48,7 @@ type Props = {
     isGatewayActive: boolean,
 	appLayout: Object,
 	lastUpdated?: number,
+	currentTemp?: string,
 
 	containerStyle?: Object | Array<any> | number,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
@@ -61,7 +62,7 @@ class DeviceActionDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, appLayout, containerStyle, lastUpdated } = this.props;
+		const { device, intl, isGatewayActive, appLayout, containerStyle, lastUpdated, currentTemp } = this.props;
 		const {
 			supportedMethods = {},
 			deviceType,
@@ -161,10 +162,22 @@ class DeviceActionDetails extends View {
 
 		const newButtonStyle = buttons.length > 4 ? buttonStyle : {...buttonStyle, flex: 1};
 
-		let supportedModes = [];
+		let supportedModes = [], activeMode, supportResume = false;
 		if (THERMOSTAT) {
-			const { THERMOSTAT: { setpoint = {} } } = stateValues;
+			const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
+			activeMode = mode;
 			supportedModes = getSupportedModes(parameter, setpoint, intl);
+
+			parameter.map((param: Object) => {
+				if (param.name && param.name === 'thermostat') {
+					const { modes = [] } = param.value;
+					modes.map((m: string) => {
+						if (m.toLowerCase().trim() === 'resume') {
+							supportResume = true;
+						}
+					});
+				}
+			});
 		}
 
 		return (
@@ -176,7 +189,10 @@ class DeviceActionDetails extends View {
 						device={device}
 						lastUpdated={lastUpdated}
 						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
-						modesCoverStyle={modesCoverStyle}/>
+						modesCoverStyle={modesCoverStyle}
+						activeMode={activeMode}
+						currentTemp={currentTemp}
+						supportResume={supportResume}/>
 			}
 			{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>
