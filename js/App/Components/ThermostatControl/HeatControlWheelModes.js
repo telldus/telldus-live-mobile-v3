@@ -489,7 +489,7 @@ render(): Object | null {
 
 	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan';
 
-	const key = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
+	const SVGKey = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
 
 	return (
 		<>
@@ -502,7 +502,7 @@ render(): Object | null {
 				</TouchableOpacity>
 				}
 				<CircularSlider
-					key={key}
+					SVGKey={SVGKey}
 					coverStyle={coverStyle}
 					startAngle={startAngleF}
 					maxAngleLength={HeatControlWheelModes.maxALength}
