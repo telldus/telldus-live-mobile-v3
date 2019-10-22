@@ -34,7 +34,7 @@ const { LOCAL_CONTROL_TROUBLESHOOT } = ticketTopicIds;
 const { dev, release } = LOCAL_CONTROL_TROUBLESHOOT;
 
 const topicId = __DEV__ ? dev : release;
-const url = __DEV__ ? 'http://stage.telldus.se/osticket/api/tickets.json' : 'http://support.telldus.com/api/tickets.json';
+const url = __DEV__ ? 'http://stage.telldus.se/osticket/api/tickets.json' : 'https://support.telldus.com/api/tickets.json';
 
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
