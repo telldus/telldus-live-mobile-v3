@@ -28,6 +28,9 @@ import { ScrollView } from 'react-native';
 import { FloatingButton, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import HeatControlWheelModes from '../ThermostatControl/HeatControlWheelModes';
+import {
+	ScheduleSwitch,
+} from './SubViews';
 
 import {
 	getSupportedModes,
@@ -75,8 +78,10 @@ export default class ActionThermostat extends View<null, Props, State> {
 		this.state = {
 			methodValue: {
 				mode,
+				changeMode: 1,
 			},
 		};
+		this.label = formatMessage(i18n.labelChangeMode);
 	}
 
 	componentDidMount() {
@@ -85,6 +90,9 @@ export default class ActionThermostat extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		if (shouldUpdate(this.state, nextState, ['methodValue'])) {
+			return true;
+		}
 		return nextProps.currentScreen === 'ActionThermostat' && shouldUpdate(this.props, nextProps, ['schedule', 'appLayout']);
 	}
 
@@ -104,15 +112,27 @@ export default class ActionThermostat extends View<null, Props, State> {
 		}
 	};
 
-	deviceSetStateThermostat = (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => {
-		const methodValue = {
+	deviceSetStateThermostat = (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1) => {
+		const { methodValue } = this.state;
+		const { changeMode } = methodValue;
+		const methodValueN = {
 			mode,
 			temperature,
 			scale,
 			changeMode,
 		};
 		this.setState({
-			methodValue,
+			methodValue: methodValueN,
+		});
+	}
+
+	setChangeMode = (value: boolean) => {
+		const { methodValue } = this.state;
+		this.setState({
+			methodValue: {
+				...methodValue,
+				changeMode: value ? 1 : 0,
+			},
 		});
 	}
 
@@ -121,7 +141,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			appLayout,
 			intl,
 		} = this.props;
-		const { container } = this._getStyle(appLayout);
+		const { container, switchContainerStyle } = this._getStyle(appLayout);
 
 		if (!this.device) {
 			return null;
@@ -148,6 +168,8 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		const supportedModes = getSupportedModes(parameter, setpoint, intl, true);
 
+		const { methodValue } = this.state;
+
 		return (
 			<View style={container}>
 				<ScrollView
@@ -157,6 +179,12 @@ export default class ActionThermostat extends View<null, Props, State> {
 						alignItems: 'stretch',
 					}}
 					keyboardShouldPersistTaps={'always'}>
+					<ScheduleSwitch
+						value={methodValue.changeMode === 1 ? true : false}
+						onValueChange={this.setChangeMode}
+						appLayout={appLayout}
+						label={this.label}
+						containerStyle={switchContainerStyle}/>
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={supportedModes}
@@ -185,6 +213,12 @@ export default class ActionThermostat extends View<null, Props, State> {
 			container: {
 				flex: 1,
 				paddingVertical: outerPadding - (outerPadding / 4),
+			},
+			switchContainerStyle: {
+				marginHorizontal: outerPadding,
+				width: width - (outerPadding * 2),
+				marginVertical: 0,
+				marginTop: outerPadding / 4,
 			},
 		};
 	};
