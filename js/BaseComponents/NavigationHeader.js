@@ -57,14 +57,24 @@ type DefaultProps = {
 	isFromModal: boolean,
 };
 
-class NavigationHeader extends PureComponent<Props, null> {
+type State = {
+	keyboard: boolean,
+};
+
+class NavigationHeader extends PureComponent<Props, State> {
 	props: Props;
+	state: State;
 
 	goBack: () => void;
 	isTablet: boolean;
 	isFromModal: boolean;
 	defaultDescription: string;
 	labelLeftIcon: string;
+
+	_keyboardDidShow: () => void;
+	_keyboardDidHide: () => void;
+	keyboardDidShowListener: Object;
+	keyboardDidHideListener: Object;
 
 	static defaultProps: DefaultProps = {
 		isFromModal: false,
