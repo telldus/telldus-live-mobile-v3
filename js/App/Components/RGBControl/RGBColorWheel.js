@@ -46,6 +46,7 @@ type Props = {
     swatchWheelCover?: Array<any> | Object | number,
 	thumbSize?: number,
 	setScrollEnabled?: (boolean) => void,
+	deviceSetStateRGBOverride?: (id: number, value: string) => void,
 };
 
 type DefaultProps = {
@@ -118,7 +119,7 @@ constructor(props: Props) {
 }
 
 onColorChangeComplete(color: string) {
-	const { setScrollEnabled, device } = this.props;
+	const { setScrollEnabled, device, deviceSetStateRGBOverride } = this.props;
 	if (setScrollEnabled) {
 		setScrollEnabled(true);
 	}
@@ -130,6 +131,10 @@ onColorChangeComplete(color: string) {
 	this.setState({
 		mainColorRGB: hex,
 	}, () => {
+		if (deviceSetStateRGBOverride) {
+			deviceSetStateRGBOverride(device.id, hex);
+			return;
+		}
 		const rgb = colorsys.hsvToRgb(color);
 		const { r, g, b } = rgb;
 		this.props.deviceSetStateRGB(device.id, r, g, b);
@@ -192,12 +197,16 @@ onChooseColor(item: string) {
 	if (!item) {
 		return;
 	}
-	const { device } = this.props;
+	const { device, deviceSetStateRGBOverride } = this.props;
 	const rgb = colorsys.hexToRgb(item);
 	const { r, g, b } = rgb;
 	this.setState({
 		mainColorRGB: item,
 	}, () => {
+		if (deviceSetStateRGBOverride) {
+			deviceSetStateRGBOverride(device.id, item);
+			return;
+		}
 		this.props.deviceSetStateRGB(device.id, r, g, b);
 	});
 }
