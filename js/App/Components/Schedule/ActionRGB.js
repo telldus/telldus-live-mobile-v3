@@ -30,7 +30,6 @@ import { ScheduleProps } from './ScheduleScreen';
 import RGBColorWheel from '../RGBControl/RGBColorWheel';
 
 import {
-	getSupportedModes,
 	shouldUpdate,
 } from '../../Lib';
 
