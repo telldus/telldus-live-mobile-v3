@@ -23,7 +23,7 @@
 
 'use strict';
 import React, { PureComponent } from 'react';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
@@ -80,8 +80,40 @@ class NavigationHeader extends PureComponent<Props, null> {
 
 		let { formatMessage } = props.intl;
 
+		this.state = {
+			keyboard: false,
+		};
+
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
+	}
+
+	componentDidMount() {
+		this.keyboardDidShowListener = Keyboard.addListener(
+		  'keyboardDidShow',
+		  this._keyboardDidShow,
+		);
+		this.keyboardDidHideListener = Keyboard.addListener(
+		  'keyboardDidHide',
+		  this._keyboardDidHide,
+		);
+	}
+
+	componentWillUnmount() {
+		this.keyboardDidShowListener.remove();
+		this.keyboardDidHideListener.remove();
+	}
+
+	_keyboardDidShow = () => {
+		this.setState({
+			keyboard: true,
+		});
+	}
+
+	_keyboardDidHide = () => {
+		this.setState({
+			keyboard: false,
+		});
 	}
 
 	goBack() {
@@ -93,6 +125,10 @@ class NavigationHeader extends PureComponent<Props, null> {
 		if (isFromModal) {
 			onClose();
 		} else {
+			if (this.state.keyboard) {
+				Keyboard.dismiss();
+				return;
+			}
 			this.props.navigation.pop();
 		}
 	}
