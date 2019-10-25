@@ -28,8 +28,16 @@ export default function getDeviceType(supportedMethods: Object = {}): string {
 		UP,
 		DOWN,
 		STOP,
+		RGB,
+		THERMOSTAT,
 	} = supportedMethods;
 
+	if (RGB) {
+		return 'RGB';
+	}
+	if (THERMOSTAT) {
+		return 'THERMOSTAT';
+	}
 	if (BELL) {
 		return 'BELL';
 	}
