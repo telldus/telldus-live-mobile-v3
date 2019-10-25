@@ -62,20 +62,22 @@ export default class ActionDim extends View<null, Props, State> {
 		};
 
 		this.maximumValue = 255;
-		const { methodValue } = schedule;
+		const { methodValue = 0 } = schedule;
+		let finalMethodValue = parseInt(methodValue, 10);
+		finalMethodValue = isNaN(finalMethodValue) ? 0 : finalMethodValue;
 
 		this.sliderColor = Theme.Core.brandSecondary;
 
 		this.sliderConfig = {
 			minimumValue: 0,
 			maximumValue: this.maximumValue,
-			value: methodValue ? methodValue : 0,
+			value: finalMethodValue,
 			onValueChange: this._setMethodValue,
 			minimumTrackTintColor: this.sliderColor,
 		};
 
 		this.state = {
-			methodValue: methodValue ? methodValue : 0,
+			methodValue: finalMethodValue,
 		};
 	}
 
