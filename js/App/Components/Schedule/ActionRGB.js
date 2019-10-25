@@ -80,6 +80,9 @@ export default class ActionRGB extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		if (shouldUpdate(this.state, nextState, ['methodValue'])) {
+			return true;
+		}
 		return nextProps.currentScreen === 'ActionRGB' && shouldUpdate(this.props, nextProps, ['schedule', 'appLayout']);
 	}
 
