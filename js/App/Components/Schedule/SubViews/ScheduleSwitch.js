@@ -26,13 +26,13 @@ import PropTypes from 'prop-types';
 
 import {Text, View, Switch} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
-import i18n from '../../../Translations/common';
 
 type Props = {
 	value: boolean,
 	onValueChange: Function,
 	appLayout: Object,
-	intl: Object,
+	label: string,
+	containerStyle: Array<any> | number | Object,
 };
 
 export default class ScheduleSwitch extends View<null, Props, null> {
@@ -44,19 +44,16 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 
 	constructor(props: Props) {
 		super(props);
-		let { formatMessage } = this.props.intl;
-
-		this.label = `${formatMessage(i18n.labelSchedule)} ${formatMessage(i18n.labelActive).toLowerCase()}`;
 	}
 
 	render(): React$Element<any> {
-		const { value, onValueChange, appLayout } = this.props;
+		const { value, onValueChange, appLayout, label, containerStyle } = this.props;
 		const { container, description } = this._getStyle(appLayout);
 
 		return (
-			<View style={container}>
+			<View style={[container, containerStyle]}>
 				<Text style={description}>
-					{this.label}
+					{label}
 				</Text>
 				<Switch value={value} onValueChange={onValueChange}/>
 			</View>

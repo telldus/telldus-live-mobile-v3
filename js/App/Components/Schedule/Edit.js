@@ -98,6 +98,8 @@ class Edit extends View<null, Props, State> {
 		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
 		this.setRefScroll = this.setRefScroll.bind(this);
 		this.scrollView = null;
+
+		this.label = `${formatMessage(i18n.labelSchedule)} ${formatMessage(i18n.labelActive).toLowerCase()}`;
 	}
 
 	componentDidMount() {
@@ -261,7 +263,11 @@ class Edit extends View<null, Props, State> {
 				contentContainerStyle={{flexGrow: 1}}
 				keyboardShouldPersistTaps={'always'}>
 				<View style={container}>
-					<ScheduleSwitch value={active} onValueChange={this.setScheduleActiveState} appLayout={appLayout} intl={intl}/>
+					<ScheduleSwitch
+						value={active}
+						onValueChange={this.setScheduleActiveState}
+						appLayout={appLayout}
+						label={this.label}/>
 					<ActionRow
 						method={method}
 						actionIcons={actionIcons}
