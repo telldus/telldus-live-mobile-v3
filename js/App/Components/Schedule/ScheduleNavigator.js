@@ -34,6 +34,8 @@ import Time from './Time';
 import Days from './Days';
 import Summary from './Summary';
 import Edit from './Edit';
+import ActionThermostat from './ActionThermostat';
+import ActionRGB from './ActionRGB';
 
 const initialRouteName = 'InitialScreen';
 
@@ -65,6 +67,12 @@ const RouteConfigs = {
 	},
 	Summary: {
 		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Summary, 'Summary'),
+	},
+	ActionRGB: {
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionRGB, 'ActionRGB'),
+	},
+	ActionThermostat: {
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionThermostat, 'ActionThermostat'),
 	},
 };
 
