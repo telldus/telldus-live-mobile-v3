@@ -72,6 +72,12 @@ export default class Action extends View<null, ScheduleProps, State> {
 		if (type === 'BELL') {
 			methods = [4];
 		}
+		if (type === 'RGB') {
+			methods = [1, 2, 16, 1024];
+		}
+		if (type === 'THERMOSTAT') {
+			methods = [2, 2048];
+		}
 
 		this.state = {
 			dataSource: methods,
@@ -131,6 +137,45 @@ export default class Action extends View<null, ScheduleProps, State> {
 			});
 		}
 	};
+	navigateToRgb = () => {
+		const { navigation, isEditMode } = this.props;
+
+		if (isEditMode()) {
+			navigation.navigate({
+				routeName: 'ActionRGB',
+				key: 'ActionRGB',
+				params: {
+					actionKey: navigation.state.key,
+					editMode: true,
+				},
+			});
+		} else {
+			navigation.navigate({
+				routeName: 'ActionRGB',
+				key: 'ActionRGB',
+			});
+		}
+	};
+
+	navigateToThermostat = () => {
+		const { navigation, isEditMode } = this.props;
+
+		if (isEditMode()) {
+			navigation.navigate({
+				routeName: 'ActionThermostat',
+				key: 'ActionThermostat',
+				params: {
+					actionKey: navigation.state.key,
+					editMode: true,
+				},
+			});
+		} else {
+			navigation.navigate({
+				routeName: 'ActionThermostat',
+				key: 'ActionThermostat',
+			});
+		}
+	};
 
 	getPadding(): number {
 		const { appLayout } = this.props;
@@ -183,6 +228,12 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (row.name === 'Dim') {
 			return this.navigateToDim();
+		}
+		if (row.name === 'Rgb') {
+			return this.navigateToRgb();
+		}
+		if (row.name === 'Thermostat') {
+			return this.navigateToThermostat();
 		}
 		this.selectAction(row.method);
 	};

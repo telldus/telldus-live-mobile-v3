@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { BlockIcon, Row, Text, View } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
@@ -117,11 +116,31 @@ export const ACTIONS: ActionType[] = [
 		textColor: Theme.Core.brandSecondary,
 		icon: 'stop',
 	},
+	{
+		name: 'Rgb',
+		description: 'Set rgb value',
+		label: 'rgb',
+		actionLabel: 'rgb',
+		method: 1024,
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'palette',
+	},
+	{
+		name: 'Thermostat',
+		description: 'Set thermostat mode and value',
+		label: i18n.thermostat,
+		actionLabel: i18n.thermostat,
+		method: 2048,
+		bgColor: Theme.Core.brandSecondary,
+		textColor: Theme.Core.brandSecondary,
+		icon: 'temperature',
+	},
 ];
 
 type DefaultProps = {
 	showValue: boolean,
-	methodValue: number,
+	methodValue: number | string,
 };
 
 type Props = {
@@ -130,7 +149,7 @@ type Props = {
 	onPress?: Function,
 	containerStyle?: Object,
 	showValue?: boolean,
-	methodValue?: number,
+	methodValue?: number | string,
 	appLayout: Object,
 	intl: Object,
 	labelPostScript?: string,
@@ -138,14 +157,6 @@ type Props = {
 };
 
 export default class ActionRow extends View<DefaultProps, Props, null> {
-
-	static propTypes = {
-		method: PropTypes.number.isRequired,
-		onPress: PropTypes.func,
-		containerStyle: PropTypes.object,
-		showValue: PropTypes.bool,
-		methodValue: PropTypes.number,
-	};
 
 	static defaultProps = {
 		showValue: false,
@@ -172,16 +183,24 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				accessibilityLabel={accessibilityLabel}>
 				{this._renderIcon(action)}
 				<TextRowWrapper appLayout={appLayout}>
-					<Title color={action.textColor} appLayout={appLayout}>{intl.formatMessage(action.label)}</Title>
-					<Description style={description} appLayout={appLayout}>{intl.formatMessage(action.description)}</Description>
+					<Title color={action.textColor} appLayout={appLayout}>{typeof action.label === 'string' ? action.label : intl.formatMessage(action.label)}</Title>
+					<Description style={description} appLayout={appLayout}>{typeof action.description === 'string' ? action.description : intl.formatMessage(action.description)}</Description>
 				</TextRowWrapper>
 			</Row>
 		);
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons } = this.props;
-		const { dimContainer, dimValue, icon: iconStyle, iconContainer } = this._getStyle(appLayout);
+		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons, method } = this.props;
+		const {
+			dimContainer,
+			dimValue,
+			icon: iconStyle,
+			iconContainer,
+			thermostatContainer,
+			thermostatMode,
+			thermostatTemp,
+		} = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
 			const roundVal = Math.round(methodValue / 255 * 100);
@@ -198,9 +217,40 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				</View>
 			);
 		}
+		if (showValue && method === 2048) {
+			let backgroundColor = action.bgColor;
+			const {
+				mode,
+				temperature,
+				scale,
+			} = JSON.parse(methodValue);
+			return (
+				<View style={[thermostatContainer, { backgroundColor }, iconContainerStyle]}>
+					{!!mode && <Text style={thermostatMode}>
+						{mode}
+					</Text>
+					}
+					{typeof temperature !== 'undefined' && <Text style={thermostatTemp}>
+						{temperature}{scale ? '°F' : '°C'}
+					</Text>
+					}
+				</View>
+			);
+		}
 
 		const methodString = methods[action.method];
 		let iconName = actionIcons[methodString];
+
+		if (showValue && method === 1024) {
+			return (
+				<BlockIcon
+					icon={iconName ? iconName : action.icon}
+					bgColor={action.bgColor}
+					style={[iconStyle, {color: methodValue}]}
+					containerStyle={[iconContainer, iconContainerStyle]}
+				/>
+			);
+		}
 
 		return (
 			<BlockIcon
@@ -216,7 +266,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		const { labelPostScript = '', intl } = this.props;
 		const { formatMessage } = intl;
 		const value = methodValue ? `${Math.round(methodValue / 255 * 100)}%` : '';
-		const labelAction = `${formatMessage(label)} ${value}`;
+		const labelAction = `${typeof label === 'string' ? label : formatMessage(label)} ${value}`;
 		return `${formatMessage(i18n.labelAction)}, ${labelAction}, ${labelPostScript}`;
 	}
 
@@ -251,9 +301,24 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				borderBottomLeftRadius: borderRadiusRow,
 				width: iconContainerWidth,
 			},
+			thermostatContainer: {
+				alignItems: 'center',
+				justifyContent: 'center',
+				borderTopLeftRadius: borderRadiusRow,
+				borderBottomLeftRadius: borderRadiusRow,
+				width: iconContainerWidth,
+			},
 			dimValue: {
 				color: '#fff',
 				fontSize: deviceWidth * 0.053333333,
+			},
+			thermostatMode: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.043333333,
+			},
+			thermostatTemp: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.043333333,
 			},
 		};
 	};

@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { intlShape } from 'react-intl';
 import _ from 'lodash';
@@ -56,7 +55,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	active: boolean,
 	method: number,
-	methodValue?: number,
+	methodValue?: number | number,
 	effectiveHour: string,
 	effectiveMinute: string,
 	offset: number,
@@ -75,24 +74,6 @@ type Props = {
 };
 
 class JobRow extends View<null, Props, null> {
-
-	static propTypes = {
-		id: PropTypes.number.isRequired,
-		deviceId: PropTypes.number.isRequired,
-		active: PropTypes.bool.isRequired,
-		method: PropTypes.number.isRequired,
-		methodValue: PropTypes.number,
-		hour: PropTypes.number.isRequired,
-		effectiveHour: PropTypes.string.isRequired,
-		minute: PropTypes.number.isRequired,
-		effectiveMinute: PropTypes.string.isRequired,
-		offset: PropTypes.number.isRequired,
-		randomInterval: PropTypes.number.isRequired,
-		type: PropTypes.string.isRequired,
-		weekdays: PropTypes.arrayOf(PropTypes.number).isRequired,
-		isFirst: PropTypes.bool.isRequired,
-		editJob: PropTypes.func.isRequired,
-	};
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { appLayout, intl, editJob, weekdays, currentScreen, ...others } = this.props;// eslint-disable-line
@@ -297,7 +278,7 @@ class JobRow extends View<null, Props, null> {
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
 		if (action) {
-			const { methodIconContainer, methodIcon } = this._getStyle(appLayout);
+			const { methodIconContainer, methodIcon, thermostatInfo } = this._getStyle(appLayout);
 			const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
 			const methodString = methods[action.method];
 			let iconName = actionIcons[methodString];
@@ -312,7 +293,40 @@ class JobRow extends View<null, Props, null> {
 								{value}
 							</Text>
 						</View>,
-						actionLabel: `${formatMessage(action.actionLabel)} ${value}`,
+						actionLabel: `${typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel)} ${value}`,
+					}
+				);
+			}
+			if (action.name === 'Thermostat') {
+				const {
+					mode,
+					temperature,
+					scale,
+				} = JSON.parse(methodValue);
+				return (
+					{
+						actionIcon: <View style={methodIconContainer}>
+							<Text style={thermostatInfo}>
+								{mode}
+							</Text>
+							<Text style={thermostatInfo}>
+								{temperature}{scale ? '°F' : '°C'}
+							</Text>
+						</View>,
+						actionLabel: `${typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel)} ${mode} ${temperature}`,
+					}
+				);
+			}
+			if (action.name === 'Rgb') {
+				return (
+					{
+						actionIcon: <BlockIcon
+							icon={iconName ? iconName : action.icon}
+							bgColor={expired ? '#999999' : action.bgColor}
+							containerStyle={methodIconContainer}
+							style={[methodIcon, {color: methodValue}]}
+						/>,
+						actionLabel: typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel),
 					}
 				);
 			}
@@ -324,7 +338,7 @@ class JobRow extends View<null, Props, null> {
 						containerStyle={methodIconContainer}
 						style={methodIcon}
 					/>,
-					actionLabel: formatMessage(action.actionLabel),
+					actionLabel: typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel),
 				}
 			);
 		}
@@ -411,6 +425,10 @@ class JobRow extends View<null, Props, null> {
 			methodIcon: {
 				color: '#fff',
 				fontSize: action && action.name === 'Dim' ? deviceWidth * 0.04 : deviceWidth * 0.056,
+			},
+			thermostatInfo: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.03,
 			},
 			textWrapper: {
 				flex: 1,

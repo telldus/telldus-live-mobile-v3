@@ -232,11 +232,12 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { screenProps } = this.props;
 		const { currentScreen } = screenProps;
 
-		const notEdit = currentScreen !== 'InitialScreen';
+		const screenDontPad = ['InitialScreen', 'ActionThermostat'];
+		const doPad = screenDontPad.indexOf(currentScreen) === -1;
 		return {
 			style: {
 				flex: 1,
-				paddingHorizontal: notEdit ? padding : 0,
+				paddingHorizontal: doPad ? padding : 0,
 			},
 		};
 	};
