@@ -184,11 +184,11 @@ class FormContainerComponent extends View<Props, null> {
 			},
 			iconSize: textFieldFontSize,
 			loginButtonStyleG: {
-				minWidth: 200,
 				maxWidth: 300,
-				minHeight: 50,
 				maxHeight: 80,
 				alignSelf: 'center',
+				alignItems: 'center',
+				justifyContent: 'center',
 			},
 		};
 	}
