@@ -118,7 +118,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Rgb',
-		description: 'Set rgb value',
+		description: i18n.rgbDescription,
 		label: 'RGB',
 		actionLabel: 'rgb',
 		method: 1024,
@@ -128,7 +128,7 @@ export const ACTIONS: ActionType[] = [
 	},
 	{
 		name: 'Thermostat',
-		description: 'Set thermostat mode and value',
+		description: i18n.thermostateDescription,
 		label: i18n.thermostat,
 		actionLabel: i18n.thermostat,
 		method: 2048,
