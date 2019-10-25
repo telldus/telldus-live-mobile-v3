@@ -169,7 +169,6 @@ class JobRow extends View<null, Props, null> {
 			description,
 			iconOffset,
 			iconRandom,
-			methodIconContainer,
 			roundIcon,
 			time,
 			rowContainer,
@@ -185,7 +184,7 @@ class JobRow extends View<null, Props, null> {
 		const date = `01/01/2017 ${effectiveHour}:${effectiveMinute}`;
 		const timestamp = Date.parse(date);
 
-		const { actionIcon, actionLabel } = this._renderActionIcon();
+		const { actionIcon, actionLabel, triangleColor } = this._renderActionIcon();
 
 		const { formatMessage } = intl;
 		const deviceName = dName ? dName : formatMessage(i18n.noName);
@@ -218,7 +217,7 @@ class JobRow extends View<null, Props, null> {
 						timeContainerStyle={{ opacity }}
 						rowContainerStyle={rowContainer}
 						rowWithTriangleContainerStyle={rowWithTriangleContainer}
-						triangleColor={methodIconContainer.backgroundColor}
+						triangleColor={triangleColor}
 						triangleContainerStyle={{ opacity }}
 						isFirst={isFirst}
 					>
@@ -288,6 +287,7 @@ class JobRow extends View<null, Props, null> {
 				const value = `${roundVal}%`;
 				return (
 					{
+						triangleColor: methodIconContainer.backgroundColor,
 						actionIcon: <View style={methodIconContainer}>
 							<Text style={methodIcon}>
 								{value}
@@ -305,10 +305,12 @@ class JobRow extends View<null, Props, null> {
 				} = JSON.parse(methodValue);
 				return (
 					{
+						triangleColor: methodIconContainer.backgroundColor,
 						actionIcon: <View style={methodIconContainer}>
-							<Text style={thermostatInfo}>
-								{mode}
+							{!!mode && <Text style={thermostatInfo}>
+								{mode.toUpperCase()}
 							</Text>
+							}
 							<Text style={thermostatInfo}>
 								{temperature}{scale ? '°F' : '°C'}
 							</Text>
@@ -318,13 +320,15 @@ class JobRow extends View<null, Props, null> {
 				);
 			}
 			if (action.name === 'Rgb') {
+				const color = methodValue.toLowerCase() === '#ffffff' ? Theme.Core.brandSecondary : methodValue;
 				return (
 					{
+						triangleColor: color,
 						actionIcon: <BlockIcon
 							icon={iconName ? iconName : action.icon}
 							bgColor={expired ? '#999999' : action.bgColor}
-							containerStyle={methodIconContainer}
-							style={[methodIcon, {color: methodValue}]}
+							containerStyle={[methodIconContainer, {backgroundColor: color}]}
+							style={methodIcon}
 						/>,
 						actionLabel: typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel),
 					}
@@ -332,6 +336,7 @@ class JobRow extends View<null, Props, null> {
 			}
 			return (
 				{
+					triangleColor: methodIconContainer.backgroundColor,
 					actionIcon: <BlockIcon
 						icon={iconName ? iconName : action.icon}
 						bgColor={expired ? '#999999' : action.bgColor}
@@ -428,7 +433,8 @@ class JobRow extends View<null, Props, null> {
 			},
 			thermostatInfo: {
 				color: '#fff',
-				fontSize: deviceWidth * 0.03,
+				fontSize: deviceWidth * 0.028,
+				textAlign: 'center',
 			},
 			textWrapper: {
 				flex: 1,

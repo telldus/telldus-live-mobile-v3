@@ -119,7 +119,7 @@ export const ACTIONS: ActionType[] = [
 	{
 		name: 'Rgb',
 		description: 'Set rgb value',
-		label: 'rgb',
+		label: 'RGB',
 		actionLabel: 'rgb',
 		method: 1024,
 		bgColor: Theme.Core.brandSecondary,
@@ -227,7 +227,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			return (
 				<View style={[thermostatContainer, { backgroundColor }, iconContainerStyle]}>
 					{!!mode && <Text style={thermostatMode}>
-						{mode}
+						{mode.toUpperCase()}
 					</Text>
 					}
 					{typeof temperature !== 'undefined' && <Text style={thermostatTemp}>
@@ -242,12 +242,13 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		let iconName = actionIcons[methodString];
 
 		if (showValue && method === 1024) {
+			const color = methodValue.toLowerCase() === '#ffffff' ? Theme.Core.brandSecondary : methodValue;
 			return (
 				<BlockIcon
 					icon={iconName ? iconName : action.icon}
 					bgColor={action.bgColor}
-					style={[iconStyle, {color: methodValue}]}
-					containerStyle={[iconContainer, iconContainerStyle]}
+					style={iconStyle}
+					containerStyle={[iconContainer, iconContainerStyle, {backgroundColor: color}]}
 				/>
 			);
 		}
