@@ -60,5 +60,9 @@ module.exports = {
 			dev: 15,
 			release: 21,
 		},
+		'GENERAL': {
+			dev: 17,
+			release: 24,
+		},
 	},
 };

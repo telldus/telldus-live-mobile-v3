@@ -45,7 +45,7 @@ import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import {
-	createSupportTicketGlobal,
+	createSupportTicketGeneral,
 } from '../../Actions/App';
 
 import Theme from '../../Theme';
@@ -146,19 +146,13 @@ contactSupport() {
 			isLoading: true,
 		});
 		NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
-			const { type, effectiveType } = connectionInfo;
-
-			const failedTests = 0;
-			const testCount = 0;
+			const { type } = connectionInfo;
 			const ticketData = {
 				message: value,
-				failedTests,
+				phoneConnection: type,
 				email: emailValue,
-				connectionType: type,
-				connectionEffectiveType: effectiveType,
-				testCount,
 			};
-			actions.createSupportTicketGlobal(gatewayId, ticketData).then((ticketNum: number) => {
+			actions.createSupportTicketGeneral(gatewayId, ticketData).then((ticketNum: number) => {
 				if (ticketNum && typeof ticketNum === 'number') {
 					this.showDialogue(formatMessage(i18n.labelSupportTicketCreated), formatMessage(i18n.messageSupportTicket, {ticketNum}));
 				} else {
@@ -178,7 +172,8 @@ contactSupport() {
 }
 
 showDialogue(header: string, text: string) {
-	const { toggleDialogueBox } = this.props;
+	const { screenProps } = this.props;
+	const { toggleDialogueBox } = screenProps;
 
 	const dialogueData = {
 		show: true,
@@ -430,7 +425,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
 			...bindActionCreators({
-				createSupportTicketGlobal,
+				createSupportTicketGeneral,
 			}, dispatch),
 		},
 	}

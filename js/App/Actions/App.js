@@ -30,10 +30,14 @@ import { osTicketKey } from '../../Config';
 import { hasTokenExpired } from '../Lib';
 
 import { ticketTopicIds } from '../../Constants';
-const { LOCAL_CONTROL_TROUBLESHOOT } = ticketTopicIds;
+const {
+	LOCAL_CONTROL_TROUBLESHOOT,
+	GENERAL,
+} = ticketTopicIds;
 const { dev, release } = LOCAL_CONTROL_TROUBLESHOOT;
 
 const topicId = __DEV__ ? dev : release;
+const topicIdGen = __DEV__ ? GENERAL.dev : GENERAL.release;
 const url = __DEV__ ? 'http://stage.telldus.se/osticket/api/tickets.json' : 'https://support.telldus.com/api/tickets.json';
 
 // Device actions that are shared by both Web and Mobile.
@@ -79,42 +83,36 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 	};
 }
 
-function createSupportTicketGlobal(gatewayId: number, ticketData: TicketData): ThunkAction {
+function createSupportTicketGeneral(gatewayId: number, ticketData: TicketData): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
-		const { user, gateways: {byId} } = getState();
-		const { userProfile = {} } = user;
-		const { email, firstname, lastname } = userProfile;
+		const { gateways: {byId} } = getState();
 
-		const gateway = byId[gatewayId];
-		const { localKey = {}, online, uuid } = gateway || {};
-		const { key, ttl, address, macAddress } = localKey;
-		let tokenExpired = hasTokenExpired(ttl);
-		const keyInfo = !key ? 'null' : tokenExpired ? 'expired' : true;
+		const gateway = byId[gatewayId] || {};
+		const {
+			online,
+			version = '',
+			name = '',
+			type = '',
+			websocketOnline,
+		} = gateway || {};
 
-		const deviceUniqueID = DeviceInfo.getUniqueID();
-
-		return DeviceInfo.getIPAddress().then((ip: string): any => {
-			let data = JSON.stringify({
-				'alert': false,
-				'subject': '',
-				'name': `${firstname} ${lastname}`,
-				'source': 'API',
-				'autorespond': true,
-				'topicId': topicId,
-				'online': online,
-				'key': keyInfo,
-				'uuid': uuid === null ? 'null' : uuid,
-				'phoneIP': ip === null ? 'null' : ip,
-				'gatewayIP': address === null ? 'null' : address,
-				'macAddress': macAddress === null ? 'null' : macAddress,
-				'deviceName': DeviceInfo.getDeviceName(),
-				'appVersion': DeviceInfo.getReadableVersion(),
-				'deviceUniqueID': deviceUniqueID,
-				'liveAccount': email,
-				...ticketData,
-			});
-			return dispatch(createSupportTicket(data));
-		  });
+		let data = JSON.stringify({
+			'alert': false,
+			'source': 'API',
+			'autorespond': true,
+			'subject': 'General support',
+			'appVersion': DeviceInfo.getReadableVersion(),
+			'topicId': topicIdGen,
+			'phoneModel': DeviceInfo.getModel(),
+			'osVersion': DeviceInfo.getSystemVersion(),
+			'gatewayModel': type,
+			'gatewayName': name,
+			'gatewayVersion': version,
+			'gatewayStatus': online ? 'online' : 'offline',
+			'websocketStatus': websocketOnline ? 'online' : 'offline',
+			...ticketData,
+		});
+		return dispatch(createSupportTicket(data));
 	};
 }
 
@@ -141,6 +139,6 @@ module.exports = {
 	...App,
 	createSupportTicket,
 	createSupportTicketLCT,
-	createSupportTicketGlobal,
+	createSupportTicketGeneral,
 };
 
