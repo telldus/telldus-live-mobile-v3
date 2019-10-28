@@ -22,9 +22,10 @@
 
 'use strict';
 
-import type { ThunkAction, TicketData } from './Types';
-
 import DeviceInfo from 'react-native-device-info';
+import axios from 'axios';
+
+import type { ThunkAction, TicketData } from './Types';
 
 import { osTicketKey } from '../../Config';
 import { hasTokenExpired } from '../Lib';
@@ -118,18 +119,20 @@ function createSupportTicketGeneral(gatewayId: number, ticketData: TicketData): 
 
 function createSupportTicket(data: string): ThunkAction {
 	return (dispatch: Function, getState: Object): any => {
-		return fetch(url, {
-			method: 'POST',
+		return axios({
+			method: 'post',
 			headers: {
+				'Accept': 'application/json',
 				'Content-Type': 'application/json',
 				'X-API-Key': osTicketKey,
 			},
-			body: data,
-		}).then((response: Object): any => response.json())
-			.then((responseJson: Object): any => {
-				return responseJson;
-			})
-			.catch((error: any) => {
+			timeout: 5 * 1000,
+			url,
+			data,
+		  })
+			.then((response: Object): Object => {
+				return response.data;
+			}).catch((error: any) => {
 				throw error;
 			});
 	};
