@@ -103,7 +103,6 @@ class TouchableButton extends Component<Props, void> {
 			showThrobber,
 		} = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
-		let shadow = Theme.Core.shadow;
 		accessibilityLabel = !accessible ? '' :
 			accessibilityLabel ? accessibilityLabel : `${label} ${this.labelButton}, ${this.defaultDescription}`;
 		let importantForAccessibility = !accessible ? 'no-hide-descendants' : 'yes';
@@ -121,7 +120,7 @@ class TouchableButton extends Component<Props, void> {
 				accessible={accessible}
 				importantForAccessibility={importantForAccessibility}
 				accessibilityLabel={accessibilityLabel}
-				style={[shadow, buttonContainer, style]}
+				style={[buttonContainer, style]}
 				disabled={disabled}
 				onPress={this.onPress}>
 				<View style={cover}>
@@ -146,8 +145,14 @@ class TouchableButton extends Component<Props, void> {
 	}
 
 	getStyle = (): Object => {
-		const { maxSizeTextButton, btnPrimaryBg } = Theme.Core;
-		const { appLayout } = this.props;
+		const {
+			maxSizeTextButton,
+			btnPrimaryBg,
+			inactiveSwitchBackground,
+			textDisabled,
+			shadow,
+		} = Theme.Core;
+		const { appLayout, disabled } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -160,7 +165,7 @@ class TouchableButton extends Component<Props, void> {
 
 		return {
 			buttonContainer: {
-				backgroundColor: btnPrimaryBg,
+				backgroundColor: disabled ? inactiveSwitchBackground : btnPrimaryBg,
 				paddingVertical: borderRadius / 2,
 				paddingHorizontal: borderRadius / 2,
 				maxWidth: width * 0.9,
@@ -170,6 +175,8 @@ class TouchableButton extends Component<Props, void> {
 				alignItems: 'center',
 				justifyContent: 'center',
 				flexDirection: 'row',
+				...shadow,
+				shadowOpacity: disabled ? 0.5 : 0.3,
 			},
 			cover: {
 				flex: 1,
@@ -178,7 +185,7 @@ class TouchableButton extends Component<Props, void> {
 				flexDirection: 'row',
 			},
 			buttonLabel: {
-				color: '#ffffff',
+				color: disabled ? textDisabled : '#ffffff',
 				fontSize,
 
 				textAlign: 'center',

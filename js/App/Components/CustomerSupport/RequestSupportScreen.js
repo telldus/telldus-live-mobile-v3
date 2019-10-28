@@ -36,6 +36,7 @@ import {
 	Text,
 	TouchableButton,
 	NavigationHeaderPoster,
+	IconTelldus,
 	DropDown,
 } from '../../../BaseComponents';
 
@@ -161,8 +162,12 @@ contactSupport() {
 				this.setState({
 					isLoading: false,
 				});
-			}).catch(() => {
-				this.showDialogue(errorH, errorB);
+			}).catch((error: Object) => {
+				let errMess = errorB;
+				if (error.request && error.request.responseText === 'The request timed out.') {
+					errMess = formatMessage(i18n.errorTimeoutCannotCreateTicketB, {url: 'support.telldus.com.'});
+				}
+				this.showDialogue(errorH, errMess);
 				this.setState({
 					isLoading: false,
 				});
@@ -242,6 +247,10 @@ render(testData: Object): Object {
 		pickerContainerStyle,
 		scrollView,
 		pickerBaseCoverStyle,
+		infoContainer,
+		statusIconStyle,
+		infoTextStyle,
+		textFieldMessage,
 	} = this.getStyles(appLayout);
 	const { formatMessage } = intl;
 
@@ -260,6 +269,8 @@ render(testData: Object): Object {
 	});
 
 	const valueDD = gatewayId && gatewayId !== k ? byId[gatewayId].name : v;
+
+	const descLen = value.trim().length;
 
 	return (
 		<ScrollView style={scrollView}>
@@ -311,7 +322,7 @@ render(testData: Object): Object {
 				</Text>
 				<TextInput
 					value={value}
-					style={textField}
+					style={[textField, textFieldMessage]}
 					onChangeText={this.onChangeText}
 					onSubmitEditing={this.onSubmitEditing}
 					autoCapitalize="sentences"
@@ -322,11 +333,18 @@ render(testData: Object): Object {
 					multiline={true}
 				/>
 			</View>
+			{descLen < 50 && <View style={infoContainer}>
+				<IconTelldus icon={'info'} style={statusIconStyle}/>
+				<Text style={infoTextStyle}>
+					{formatMessage(i18n.supportTicketDescriptionInfo)}
+				</Text>
+			</View>
+			}
 			<TouchableButton
 				text={i18n.labelSend}
 				style={button}
 				onPress={this.contactSupport}
-				disabled={isLoading}
+				disabled={isLoading || descLen < 50}
 				showThrobber={isLoading}/>
 		</ScrollView>
 	);
@@ -337,7 +355,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor } = Theme.Core;
+	const { shadow, paddingFactor, brandSecondary, rowTextColor, eulaContentColor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -377,6 +395,9 @@ getStyles(appLayout: Object): Object {
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
+		textFieldMessage: {
+			height: fontSizeText * 8,
+		},
 		textField: {
 			width: '100%',
 			color: '#A59F9A',
@@ -406,6 +427,29 @@ getStyles(appLayout: Object): Object {
 			backgroundColor: '#fff',
 		},
 		fontSizeText,
+		infoContainer: {
+			flex: 1,
+			flexDirection: 'row',
+			marginBottom: padding,
+			marginHorizontal: padding,
+			padding: padding,
+			backgroundColor: '#fff',
+			...shadow,
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			borderRadius: 2,
+		},
+		statusIconStyle: {
+			fontSize: deviceWidth * 0.16,
+			color: brandSecondary,
+		},
+		infoTextStyle: {
+			flex: 1,
+			fontSize: fontSizeBody,
+			color: eulaContentColor,
+			flexWrap: 'wrap',
+			marginLeft: padding,
+		},
 	};
 }
 }

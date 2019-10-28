@@ -51,6 +51,7 @@ export default {
 	inactiveGray: '#bdbdbd',
 	inactiveSwitch: '#999999',
 	inactiveSwitchBackground: '#cccccc',
+	textDisabled: '#f5f5f5',
 
 	sunriseColor: '#ffa726',
 	sunsetColor: '#ef5350',
