@@ -100,7 +100,7 @@ function createSupportTicketGeneral(gatewayId: number, ticketData: TicketData): 
 			'alert': false,
 			'source': 'API',
 			'autorespond': true,
-			'subject': 'General support',
+			'subject': 'Support from App',
 			'appVersion': DeviceInfo.getReadableVersion(),
 			'topicId': topicIdGen,
 			'phoneModel': DeviceInfo.getModel(),
