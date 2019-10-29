@@ -89,6 +89,8 @@ import Swatches from './Swatches';
 import GeometricHeader from './GeometricHeader';
 import PosterWithText from './PosterWithText';
 import RippleButton from './RippleButton';
+import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
+import CampaignIcon from './CampaignIcon';
 
 import {
 	AppState,
@@ -168,6 +170,8 @@ module.exports = {
 	GeometricHeader,
 	PosterWithText,
 	RippleButton,
+	HeaderLeftButtonsMainTab,
+	CampaignIcon,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
