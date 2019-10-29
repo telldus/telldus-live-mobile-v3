@@ -28,7 +28,13 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, IconTelldus, Throbber } from '../../BaseComponents';
+import {
+	View,
+	IconTelldus,
+	Throbber,
+	HeaderLeftButtonsMainTab,
+	CampaignIcon,
+} from '../../BaseComponents';
 import Navigator from './AppNavigator';
 
 import {
@@ -98,23 +104,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.addNewDevice = this.addNewDevice.bind(this);
 
-		const { appLayout, intl } = this.props;
+		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
 		const size = Math.floor(deviceHeight * 0.03);
 
-		const { formatMessage } = intl;
-
 		let fontSize = size < 20 ? 20 : size;
-		this.settingsButton = {
-			component: <IconTelldus icon={'settings'} style={{
-				fontSize,
-				color: '#fff',
-			}}/>,
-			onPress: this.onOpenSetting,
-			accessibilityLabel: `${formatMessage(i18n.settingsHeader)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-		};
 
 		this.AddButton = {
 			component: <Image source={{uri: 'icon_plus'}} style={{
@@ -210,13 +206,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 					onPress: this.newSchedule,
 					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
-			case 'Dashboard':
-				return {
-					component: <IconTelldus icon="campaign" style={styles.campaingIconStyle}/>,
-					style: styles.rightButtonStyle,
-					onPress: this.props.navigateToCampaign,
-					accessibilityLabel: `${formatMessage(i18n.linkToCampaigns)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
 			default:
 				return null;
 		}
@@ -244,6 +233,37 @@ class AppNavigatorRenderer extends View<Props, State> {
 		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
+	makeLeftButton(styles: Object): any {
+		const { intl } = this.props;
+
+		const buttons = [
+			{
+				style: {},
+				accessibilityLabel: `${intl.formatMessage(i18n.settingsHeader)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`,
+				onPress: this.onOpenSetting,
+				iconComponent: <IconTelldus icon={'settings'} style={{
+					fontSize: styles.fontSizeIcon,
+					color: '#fff',
+				}}/>,
+			},
+			{
+				style: {},
+				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
+				onPress: this.props.navigateToCampaign,
+				iconComponent: <CampaignIcon
+					size={styles.fontSizeIcon}
+					style={styles.campaingIconStyle}
+				/>,
+			},
+		];
+
+		const customComponent = <HeaderLeftButtonsMainTab buttons={buttons}/>;
+
+		return {
+			customComponent,
+		};
+	}
+
 	render(): Object {
 		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
 		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
@@ -252,8 +272,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceHeight = isPortrait ? height : width;
 
+		const styles = this.getStyles(appLayout);
+
 		const { land } = Theme.Core.headerHeightFactor;
-		const rightButton = this.makeRightButton(CS, this.getStyles(appLayout));
+		const rightButton = this.makeRightButton(CS, styles);
 		const showAttentionCapture = this.showAttentionCapture() && rightButton;
 		let screenProps = {
 			currentScreen: CS,
@@ -261,7 +283,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
-			leftButton: this.settingsButton,
+			leftButton: this.makeLeftButton(styles),
 			rightButton,
 			hideHeader: false,
 			style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
@@ -292,10 +314,15 @@ class AppNavigatorRenderer extends View<Props, State> {
 				height: fontSizeIcon,
 				width: fontSizeIcon,
 			},
-			campaingIconStyle: {
-				fontSize: fontSizeIcon,
-				color: '#fff',
+			campaingIconStyle: isPortrait ? {
+				marginLeft: 25,
+				padding: 2,
+			} : {
+				transform: [{rotateZ: '90deg'}],
+				marginLeft: 25,
+				padding: 2,
 			},
+			fontSizeIcon,
 		};
 	}
 }

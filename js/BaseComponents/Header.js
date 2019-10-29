@@ -383,8 +383,11 @@ export default class HeaderComponent extends Base {
 	};
 
 	renderLeftButton = (leftButton: Object): Object => {
-		let { accessibilityLabel, icon } = leftButton;
+		let { accessibilityLabel, icon, customComponent } = leftButton;
 		let style = icon ? icon.style : null;
+		if (customComponent) {
+			return customComponent;
+		}
 		return (
 			<TouchableOpacity
 				onPress={leftButton.onPress}

@@ -54,6 +54,7 @@ import {
 	hideToast,
 	getPhonesList,
 	getUserSubscriptions,
+	campaignVisited,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -370,6 +371,8 @@ navigateToCampaign = () => {
 			if (!supported) {
 				this.showDialogue(defaultMessage);
 			} else {
+				const { dispatch } = this.props;
+				dispatch(campaignVisited(true));
 				return Linking.openURL(url);
 			}
 		})

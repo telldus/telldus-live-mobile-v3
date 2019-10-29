@@ -30,7 +30,14 @@ const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
 import { NavigationActions } from 'react-navigation';
 
-import { View, Header, Image, IconTelldus } from '../../BaseComponents';
+import {
+	View,
+	Header,
+	Image,
+	HeaderLeftButtonsMainTab,
+	Icon,
+	CampaignIcon,
+} from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
@@ -128,18 +135,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.onPressGateway = this.onPressGateway.bind(this);
 
 		this.addNewDevice = this.addNewDevice.bind(this);
-
-		this.menuButton = {
-			icon: {
-				name: 'bars',
-				size: 22,
-				color: '#fff',
-				style: null,
-				iconStyle: null,
-			},
-			onPress: this.openDrawer,
-			accessibilityLabel: '',
-		};
 
 		this.newSchedule = this.newSchedule.bind(this);
 		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
@@ -249,13 +244,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 					onPress: this.newSchedule,
 					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
-			case 'Dashboard':
-				return {
-					component: <IconTelldus icon="campaign" style={styles.campaingIconStyle}/>,
-					style: styles.rightButtonStyle,
-					onPress: this.props.navigateToCampaign,
-					accessibilityLabel: `${formatMessage(i18n.linkToCampaigns)}`,
-				};
 			default:
 				return null;
 		}
@@ -297,13 +285,34 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	makeLeftButton(styles: Object): any {
 		const { drawer } = this.state;
-		const { screenReaderEnabled } = this.props;
-		this.menuButton.icon.style = styles.menuButtonStyle;
-		this.menuButton.icon.iconStyle = styles.menuIconStyle;
-		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
-		this.menuButton.accessibilityLabel = this.menuIcon;
+		const { screenReaderEnabled, intl } = this.props;
 
-		return (drawer && screenReaderEnabled) ? null : this.menuButton;
+		const buttons = [
+			{
+				style: {},
+				accessibilityLabel: this.menuIcon,
+				onPress: this.openDrawer,
+				iconComponent: <Icon
+					name="bars"
+					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
+					style={styles.menuIconStyle}
+					color={'#fff'}/>,
+			},
+			{
+				style: {},
+				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
+				onPress: this.props.navigateToCampaign,
+				iconComponent: <CampaignIcon
+					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
+					style={styles.campaingIconStyle}/>,
+			},
+		];
+
+		const customComponent = <HeaderLeftButtonsMainTab style={styles.menuButtonStyle} buttons={buttons}/>;
+
+		return (drawer && screenReaderEnabled) ? null : {
+			customComponent,
+		};
 	}
 
 	showAttentionCapture(): boolean {
@@ -384,6 +393,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const { port, land } = Theme.Core.headerHeightFactor;
 
+		const buttonSize = isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04);
+
 		return {
 			deviceWidth,
 			header: isPortrait ? {
@@ -401,7 +412,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				flex: 1,
 				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
 			},
-			buttonSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+			buttonSize,
 			menuButtonStyle: isPortrait ? null : {
 				position: 'absolute',
 				left: undefined,
@@ -436,9 +447,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 				top: deviceHeight * 0.0400,
 			},
 			isPortrait,
-			campaingIconStyle: {
-				fontSize: fontSizeIcon,
-				color: '#fff',
+			campaingIconStyle: isPortrait ? {
+				marginLeft: 30,
+				padding: 2,
+			} : {
+				transform: [{rotateZ: '90deg'}],
+				marginLeft: 30,
+				padding: 2,
 			},
 		};
 	}
