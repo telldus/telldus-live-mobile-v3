@@ -36,6 +36,7 @@ import {
 	getSupportedLanguages,
 	getLanguageInfoFromLangCode,
 	isDeviceLanguageAndHasChanged,
+	isDeviceLanguage,
 } from '../../../Lib/appUtils';
 
 import i18n from '../../../Translations/common';
@@ -54,7 +55,14 @@ const LanguageControlBlock = (props: Object): Object => {
 
 	const dispatch = useDispatch();
 	function changeDeviceLanguage(value: string, itemIndex: number, data: Array<any>) {
-		const language = data[itemIndex];
+		let language = data[itemIndex];
+		if (isDeviceLanguage(language)) {
+			const { value: cVal } = language;
+			language = {
+				...language,
+				value: cVal.split('(')[0],
+			};
+		}
 		dispatch(setAppLanguage({ ...language }));
 	}
 
@@ -69,6 +77,12 @@ const LanguageControlBlock = (props: Object): Object => {
 	LANGUAGES.push(deviceLang);
 	if (!languageProp.value || isDeviceLanguageAndHasChanged(languageProp)) {
 		dispatch(setAppLanguage(deviceLang));
+	}
+	if (isDeviceLanguage(languageProp)) {
+		const hasInfoText = value.indexOf('(') !== -1;
+		if (!hasInfoText) {
+			dispatch(setAppLanguage(deviceLang));
+		}
 	}
 
 	return (
