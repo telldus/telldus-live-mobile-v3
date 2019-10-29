@@ -397,6 +397,7 @@ getStyles(appLayout: Object): Object {
 		},
 		textFieldMessage: {
 			height: fontSizeText * 8,
+			textAlignVertical: 'top',
 		},
 		textField: {
 			width: '100%',
