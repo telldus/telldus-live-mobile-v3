@@ -128,6 +128,8 @@ export type Action =
 	| { type: 'TOGGLE_INACTIVE_VISIBILITY', payload: Object }
 
 	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
+
+	| { type: 'CAMPAIGN_VISITED', payload: boolean }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

@@ -256,6 +256,12 @@ const receivedPhonesList = (payload: Array<Object> = []): Action => {
 	};
 };
 
+function campaignVisited(value: boolean): Action {
+	return {
+		type: 'CAMPAIGN_VISITED',
+		payload: value,
+	};
+}
 
 module.exports = {
 	...User,
@@ -267,4 +273,5 @@ module.exports = {
 	forgotPassword,
 	getPhonesList,
 	deletePushToken,
+	campaignVisited,
 };

@@ -28,7 +28,13 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 
-import { View, IconTelldus, Throbber } from '../../BaseComponents';
+import {
+	View,
+	IconTelldus,
+	Throbber,
+	HeaderLeftButtonsMainTab,
+	CampaignIcon,
+} from '../../BaseComponents';
 import Navigator from './AppNavigator';
 
 import {
@@ -58,6 +64,7 @@ type Props = {
 	onNavigationStateChange: (string) => void,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
+	navigateToCampaign: () => void,
 };
 
 type State = {
@@ -236,6 +243,37 @@ class AppNavigatorRenderer extends View<Props, State> {
 		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
+	makeLeftButton(styles: Object): any {
+		const { intl } = this.props;
+
+		const buttons = [
+			{
+				style: {},
+				accessibilityLabel: `${intl.formatMessage(i18n.settingsHeader)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`,
+				onPress: this.onOpenSetting,
+				iconComponent: <IconTelldus icon={'settings'} style={{
+					fontSize: styles.fontSizeIcon,
+					color: '#fff',
+				}}/>,
+			},
+			{
+				style: {},
+				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
+				onPress: this.props.navigateToCampaign,
+				iconComponent: <CampaignIcon
+					size={styles.fontSizeIcon}
+					style={styles.campaingIconStyle}
+				/>,
+			},
+		];
+
+		const customComponent = <HeaderLeftButtonsMainTab buttons={buttons}/>;
+
+		return {
+			customComponent,
+		};
+	}
+
 	render(): Object {
 		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
 		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
@@ -246,6 +284,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
+
+		const styles = this.getStyles(appLayout);
 
 		let screenProps = {
 			currentScreen: CS,
@@ -260,7 +300,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			const showAttentionCapture = this.showAttentionCapture() && rightButton;
 			screenProps = {
 				...screenProps,
-				leftButton: this.settingsButton,
+				leftButton: this.makeLeftButton(styles),
 				rightButton,
 				hideHeader: false,
 				style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
@@ -278,6 +318,24 @@ class AppNavigatorRenderer extends View<Props, State> {
 				screenProps={screenProps} />
 		);
 	}
+
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+
+		const size = Math.floor(deviceHeight * 0.025);
+		const fontSizeIcon = size < 20 ? 20 : size;
+
+		return {
+			campaingIconStyle: {
+				marginLeft: 25,
+				padding: 2,
+			},
+			fontSizeIcon,
+		};
+	}
+
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {

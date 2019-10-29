@@ -40,6 +40,7 @@ export type State = {
 	deviceName: string,
 	deviceModel: string,
 	phonesList: Object,
+	hasVisitedCampaign: boolean,
 };
 
 export const initialState = {
@@ -56,6 +57,7 @@ export const initialState = {
 	deviceName: '',
 	deviceModel: '',
 	phonesList: {}, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
+	hasVisitedCampaign: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -189,6 +191,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			phonesList,
+		};
+	}
+	if (action.type === 'CAMPAIGN_VISITED') {
+		return {
+			...state,
+			hasVisitedCampaign: action.payload,
 		};
 	}
 	return state;

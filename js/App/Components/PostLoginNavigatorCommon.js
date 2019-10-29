@@ -27,6 +27,7 @@ import { injectIntl, intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
+import { Linking } from 'react-native';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
@@ -50,6 +51,7 @@ import {
 	showToast,
 	hideToast,
 	getPhonesList,
+	campaignVisited,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -295,6 +297,26 @@ onDoneDimming() {
 	this.props.dispatch(hideDimmerStep());
 }
 
+navigateToCampaign = () => {
+	let url = 'https://live.telldus.com/profile/campaigns';
+	const defaultMessage = this.props.intl.formatMessage(i18n.errorMessageOpenCampaign);
+	Linking.canOpenURL(url)
+		.then((supported: boolean): any => {
+			if (!supported) {
+				this.showDialogue(defaultMessage);
+			} else {
+				const { dispatch } = this.props;
+				dispatch(campaignVisited(true));
+				return Linking.openURL(url);
+			}
+		})
+		.catch((err: any) => {
+			const message = err.message || defaultMessage;
+			this.showDialogue(message);
+		});
+}
+
+
 render(): Object {
 	const {
 		showEULA,
@@ -313,7 +335,8 @@ render(): Object {
 					{...this.props}
 					addNewLocation={this.addNewLocation}
 					addingNewLocation={this.state.addingNewLocation}
-					addNewDevice={this.addNewDevice}/>
+					addNewDevice={this.addNewDevice}
+					navigateToCampaign={this.navigateToCampaign}/>
 			</View>
 
 			<DimmerPopup

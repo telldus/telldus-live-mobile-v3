@@ -87,6 +87,8 @@ import MainTabBarAndroid from './MainTabBarAndroid';
 import MainTabsAndroid from './MainTabsAndroid';
 import AttentionCatcher from './AttentionCatcher';
 import Swatches from './Swatches';
+import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
+import CampaignIcon from './CampaignIcon';
 
 import {
 	AppState,
@@ -165,6 +167,8 @@ module.exports = {
 	MainTabsAndroid,
 	AttentionCatcher,
 	Swatches,
+	HeaderLeftButtonsMainTab,
+	CampaignIcon,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

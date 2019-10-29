@@ -30,7 +30,7 @@ const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
 import { NavigationActions } from 'react-navigation';
 
-import { View, Header, Image } from '../../BaseComponents';
+import { View, Header, Image, Icon, CampaignIcon, HeaderLeftButtonsMainTab } from '../../BaseComponents';
 import Navigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
@@ -61,6 +61,7 @@ type Props = {
 	addNewLocation: () => any,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
+	navigateToCampaign: () => void,
 };
 
 type State = {
@@ -289,13 +290,35 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	makeLeftButton(styles: Object): any {
 		const { drawer } = this.state;
-		const { screenReaderEnabled } = this.props;
-		this.menuButton.icon.style = styles.menuButtonStyle;
-		this.menuButton.icon.iconStyle = styles.menuIconStyle;
-		this.menuButton.icon.size = styles.buttonSize > 22 ? styles.buttonSize : 22;
-		this.menuButton.accessibilityLabel = this.menuIcon;
+		const { screenReaderEnabled, intl } = this.props;
 
-		return (drawer && screenReaderEnabled) ? null : this.menuButton;
+		const buttons = [
+			{
+				style: {},
+				accessibilityLabel: this.menuIcon,
+				onPress: this.openDrawer,
+				iconComponent: <Icon
+					name="bars"
+					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
+					style={styles.menuIconStyle}
+					color={'#fff'}/>,
+			},
+			{
+				style: {},
+				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
+				onPress: this.props.navigateToCampaign,
+				iconComponent: <CampaignIcon
+					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
+					style={styles.campaingIconStyle}/>,
+			},
+		];
+
+		const customComponent = <HeaderLeftButtonsMainTab style={styles.menuButtonStyle} buttons={buttons}/>;
+
+		return (drawer && screenReaderEnabled) ? null : {
+			customComponent,
+		};
+
 	}
 
 	showAttentionCapture(): boolean {
@@ -433,6 +456,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 				top: deviceHeight * 0.0400,
 			},
 			isPortrait,
+			campaingIconStyle: isPortrait ? {
+				marginLeft: 30,
+				padding: 2,
+			} : {
+				transform: [{rotateZ: '90deg'}],
+				marginLeft: 30,
+				padding: 2,
+			},
 		};
 	}
 }
