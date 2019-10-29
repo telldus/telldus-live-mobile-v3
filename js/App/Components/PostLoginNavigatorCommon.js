@@ -365,7 +365,7 @@ autoDetectLocalTellStick() {
 
 navigateToCampaign = () => {
 	let url = 'https://live.telldus.com/profile/campaigns';
-	const defaultMessage = 'Sorry, could not open the campaigns page. Please try again later.';// TODO: translate
+	const defaultMessage = this.props.intl.formatMessage(i18n.errorMessageOpenCampaign);
 	Linking.canOpenURL(url)
 		.then((supported: boolean): any => {
 			if (!supported) {
