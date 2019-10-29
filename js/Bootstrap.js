@@ -66,6 +66,7 @@ import {
 import {
 	getLocale,
 	getLanguageInfoFromLangCode,
+	isDeviceLanguageAndHasChanged,
 } from './App/Lib/appUtils';
 import {
 	setAppLanguage,
@@ -125,7 +126,7 @@ const WithIntlProvider = (props: Object): Object => {
 
 	let locale = language.key;
 	const dispatch = useDispatch();
-	if (!locale) {
+	if (!locale || isDeviceLanguageAndHasChanged(language)) {
 		const code = getLocale();
 		let { name } = getLanguageInfoFromLangCode(code) || {};
 		dispatch(setAppLanguage({code, key: `${code}-device`, name}));

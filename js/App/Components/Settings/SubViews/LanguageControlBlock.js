@@ -35,6 +35,7 @@ import {
 	getLocale,
 	getSupportedLanguages,
 	getLanguageInfoFromLangCode,
+	isDeviceLanguageAndHasChanged,
 } from '../../../Lib/appUtils';
 
 import i18n from '../../../Translations/common';
@@ -66,7 +67,7 @@ const LanguageControlBlock = (props: Object): Object => {
 	let keyDevice = `${codeDevice}-device`;
 	const deviceLang = {code: codeDevice, value: `${nativeName} (${formatMessage(i18n.labelDevicelanguage)})`, key: keyDevice};
 	LANGUAGES.push(deviceLang);
-	if (!languageProp.value) {
+	if (!languageProp.value || isDeviceLanguageAndHasChanged(languageProp)) {
 		dispatch(setAppLanguage(deviceLang));
 	}
 

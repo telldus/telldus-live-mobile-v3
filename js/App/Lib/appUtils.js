@@ -57,9 +57,24 @@ function capitalizeFirstLetterOfEachWord(string: string): string {
 	return newString;
 }
 
+function isDeviceLanguageAndHasChanged(currentLanguageInfo: Object): boolean {
+	const { key } = currentLanguageInfo;
+	const [ localeC, device ] = key.split('-');
+	const isDeviceLanguage = device && device === 'device';
+	if (!isDeviceLanguage) {
+		return false;
+	}
+	const locale = getLocale();
+	if (locale.trim() !== localeC.trim()) {
+		return true;
+	}
+	return false;
+}
+
 module.exports = {
 	supportRSA,
 	getLocale,
 	capitalizeFirstLetterOfEachWord,
+	isDeviceLanguageAndHasChanged,
 	...appUtils,
 };
