@@ -314,11 +314,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 				height: fontSizeIcon,
 				width: fontSizeIcon,
 			},
-			campaingIconStyle: isPortrait ? {
-				marginLeft: 25,
-				padding: 2,
-			} : {
-				transform: [{rotateZ: '90deg'}],
+			campaingIconStyle: {
 				marginLeft: 25,
 				padding: 2,
 			},
