@@ -297,7 +297,7 @@ render(testData: Object): Object {
 					onChangeText={this.onChangeTextEmail}
 					autoCapitalize="none"
 					autoCorrect={false}
-					autoFocus={false}
+					autoFocus={true}
 					underlineColorAndroid={brandSecondary}
 					returnKeyType={'done'}
 				/>
@@ -327,7 +327,7 @@ render(testData: Object): Object {
 					onSubmitEditing={this.onSubmitEditing}
 					autoCapitalize="sentences"
 					autoCorrect={false}
-					autoFocus={true}
+					autoFocus={false}
 					underlineColorAndroid={brandSecondary}
 					returnKeyType={'done'}
 					multiline={true}
