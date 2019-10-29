@@ -128,6 +128,8 @@ export type Action =
 	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 
 	| { type: 'RECEIVED_USER_SUBSCRIPTIONS', payload: Object }
+
+	| { type: 'CAMPAIGN_VISITED', payload: boolean }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

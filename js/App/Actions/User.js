@@ -292,6 +292,12 @@ function createTransaction(options: OPTIONS, isMobile?: boolean = false): ThunkA
 	};
 }
 
+function campaignVisited(value: boolean): Action {
+	return {
+		type: 'CAMPAIGN_VISITED',
+		payload: value,
+	};
+}
 
 module.exports = {
 	...User,
@@ -304,4 +310,5 @@ module.exports = {
 	getPhonesList,
 	deletePushToken,
 	createTransaction,
+	campaignVisited,
 };
