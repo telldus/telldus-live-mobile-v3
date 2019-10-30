@@ -66,7 +66,7 @@ export const initialState = {
 
 export default function reduceUser(state: State = initialState, action: Action): State {
 	if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.user) {
-		const { visibilityExchangeOffer } = action.payload.user;
+		const visibilityExchangeOffer = action.payload.user.visibilityExchangeOffer || 'show';
 		return {
 			...state,
 			...action.payload.user,
