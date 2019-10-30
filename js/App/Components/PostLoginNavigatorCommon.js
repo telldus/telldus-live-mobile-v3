@@ -32,6 +32,7 @@ import NetInfo from '@react-native-community/netinfo';
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
+import ExchangeOffer from './ExchangeOffer/ExchangeOffer';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
 
@@ -86,7 +87,9 @@ type Props = {
 	durationToast: string,
     positionToast: string,
 
-    addNewGatewayBool: boolean,
+	addNewGatewayBool: boolean,
+
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm',
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -236,7 +239,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(this.props, nextProps, ['pushTokenRegistered', 'pushToken', 'deviceId']);
+	const propsChange = shouldUpdate(others, othersN, ['visibilityExchangeOffer', 'pushTokenRegistered', 'pushToken', 'deviceId']);
 	if (propsChange) {
 		return true;
 	}
@@ -405,10 +408,13 @@ render(): Object {
 		dimmer,
 		intl,
 		screenReaderEnabled,
+		visibilityExchangeOffer,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
+
+	const showEO = !showEULA && (!visibilityExchangeOffer || visibilityExchangeOffer === 'show');
 
 	return (
 		<View style={{flex: 1}}>
@@ -435,6 +441,7 @@ render(): Object {
 				/>
 			)}
 			<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
+			<ExchangeOffer showModal={showEO} onLayout={this.onLayout}/>
 		</View>
 	);
 }
@@ -448,6 +455,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		durationToast,
 		positionToast,
 	} = state.app;
+
+	const {
+		visibilityExchangeOffer,
+	} = state.user;
 
 	const { allIds = [], toActivate } = state.gateways;
 	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
@@ -474,6 +485,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pushTokenRegistered,
 		pushToken,
 		deviceId,
+		visibilityExchangeOffer,
 	};
 }
 
