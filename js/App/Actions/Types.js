@@ -130,6 +130,8 @@ export type Action =
 	| { type: 'RECEIVED_USER_SUBSCRIPTIONS', payload: Object }
 
 	| { type: 'CAMPAIGN_VISITED', payload: boolean }
+
+	| { type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER', payload: 'show' | 'hide_temp' | 'hide_perm' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

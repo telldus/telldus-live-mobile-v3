@@ -299,6 +299,13 @@ function campaignVisited(value: boolean): Action {
 	};
 }
 
+function toggleVisibilityExchangeOffer(value: 'show' | 'hide_temp' | 'hide_perm'): Action {
+	return {
+		type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER',
+		payload: value,
+	};
+}
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -311,4 +318,5 @@ module.exports = {
 	deletePushToken,
 	createTransaction,
 	campaignVisited,
+	toggleVisibilityExchangeOffer,
 };

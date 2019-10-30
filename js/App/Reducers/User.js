@@ -42,6 +42,7 @@ export type State = {
 	phonesList: Object,
 	subscriptions: Object,
 	hasVisitedCampaign: boolean,
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm',
 };
 
 export const initialState = {
@@ -60,14 +61,17 @@ export const initialState = {
 	phonesList: {}, // Included in v3.9, and not in migrations, make sure to supply default value while using this prop.
 	subscriptions: {}, // Included in v3.12, and not in migrations, make sure to supply default value while using this prop.
 	hasVisitedCampaign: false,
+	visibilityExchangeOffer: 'show',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
 	if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.user) {
+		const { visibilityExchangeOffer } = action.payload.user;
 		return {
 			...state,
 			...action.payload.user,
 			showChangeLog: false,
+			visibilityExchangeOffer: visibilityExchangeOffer === 'hide_temp' ? 'show' : visibilityExchangeOffer,
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -206,6 +210,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			hasVisitedCampaign: action.payload,
+		};
+	}
+	if (action.type === 'TOGGLE_VISIBILITY_EXCHANGE_OFFER') {
+		return {
+			...state,
+			visibilityExchangeOffer: action.payload,
 		};
 	}
 	return state;
