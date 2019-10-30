@@ -28,6 +28,17 @@ function supportRSA(): boolean {
 	return Platform.OS === 'android' || (Platform.OS === 'ios' && parseFloat(systemVersion) >= 10);
 }
 
+function capitalizeFirstLetterOfEachWord(string: string): string {
+	const words = string.split(' ');
+	let newString = '';
+	words.map((word: string) => {
+		newString += `${word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()} `;
+	});
+	return newString;
+}
+
+
 module.exports = {
 	supportRSA,
+	capitalizeFirstLetterOfEachWord,
 };
