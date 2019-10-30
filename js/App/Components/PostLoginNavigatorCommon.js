@@ -28,6 +28,7 @@ const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
 import { Linking } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
@@ -324,6 +325,15 @@ navigateToCampaign = () => {
 		});
 }
 
+getLocale(): string {
+	let localeIdentifier = DeviceInfo.getDeviceLocale();
+	let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
+	if (parts.length === 0) {
+		return 'en';
+	}
+	return parts[0];
+}
+
 
 render(): Object {
 	const {
@@ -337,7 +347,7 @@ render(): Object {
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEO = !showEULA && (!visibilityExchangeOffer || visibilityExchangeOffer === 'show');
+	const showEO = !showEULA && this.getLocale() === 'sv' && (!visibilityExchangeOffer || visibilityExchangeOffer === 'show');
 
 	return (
 		<View style={{flex: 1}}>
