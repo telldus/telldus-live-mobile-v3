@@ -28,7 +28,6 @@ import { Linking, NativeModules, Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
-import DeviceInfo from 'react-native-device-info';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
@@ -87,7 +86,8 @@ type Props = {
     showToast: boolean,
 	messageToast: string,
 	durationToast: string,
-    positionToast: string,
+	positionToast: string,
+	locale: string,
 
 	addNewGatewayBool: boolean,
 
@@ -241,7 +241,13 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['visibilityExchangeOffer', 'pushTokenRegistered', 'pushToken', 'deviceId']);
+	const propsChange = shouldUpdate(others, othersN, [
+		'visibilityExchangeOffer',
+		'pushTokenRegistered',
+		'pushToken',
+		'deviceId',
+		'locale',
+	]);
 	if (propsChange) {
 		return true;
 	}
@@ -404,16 +410,6 @@ onDoneDimming() {
 	this.props.dispatch(hideDimmerStep());
 }
 
-getLocale(): string {
-	let localeIdentifier = DeviceInfo.getDeviceLocale();
-	let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
-	if (parts.length === 0) {
-		return 'en';
-	}
-	return parts[0];
-}
-
-
 render(): Object {
 	const {
 		showEULA,
@@ -422,13 +418,14 @@ render(): Object {
 		screenReaderEnabled,
 		visibilityExchangeOffer,
 		gateways,
+		locale,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 	const showEO = !showEULA
-	&& this.getLocale() === 'sv'
+	&& locale === 'sv'
 	&& (!visibilityExchangeOffer || visibilityExchangeOffer === 'show')
 	&& hasTellStickNetGetOne(gateways.byId);
 
@@ -470,7 +467,11 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		messageToast,
 		durationToast,
 		positionToast,
+		defaultSettings,
 	} = state.app;
+
+	let { language = {} } = defaultSettings || {};
+	let locale = language.key;
 
 	const {
 		visibilityExchangeOffer,
@@ -490,6 +491,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		durationToast,
 		positionToast,
 		showToast: showToastBool,
+		locale,
 
 		addNewGatewayBool,
 		gateways: state.gateways,

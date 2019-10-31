@@ -69,7 +69,7 @@ const LanguageControlBlock = (props: Object): Object => {
 	const labelLanguage = formatMessage(i18n.labelLanguage);
 
 	const LANGUAGES = getSupportedLanguages();
-	let {value} = languageProp;
+	let {value = ''} = languageProp;
 	const codeDevice = getLocale();
 	let { nativeName } = getLanguageInfoFromLangCode(codeDevice) || {};
 	let keyDevice = `${codeDevice}-device`;
