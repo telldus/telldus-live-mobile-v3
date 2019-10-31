@@ -73,6 +73,7 @@ constructor(props: Props) {
 			h1: formatMessage(i18n.exchangeOfferH1),
 			body: formatMessage(i18n.exchangeOfferBody),
 			img: require('../TabViews/img/exchange/exchange_one.jpg'),
+			addTextOne: `${formatMessage(i18n.labelFreeShipping).toUpperCase()}!`,
 		},
 		{
 			h1: formatMessage(i18n.exchangeOfferOneH1),
@@ -146,14 +147,10 @@ render(): Object | null {
 			supportedOrientations={['portrait', 'landscape']}>
 			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
 				<View style={styles.modalContainer} onLayout={this.props.onLayout}>
-					<NavigationHeader showLeftIcon={false} topMargin={false}/>
+					<NavigationHeader showLeftIcon={false} topMargin={false} forceHideStatus/>
 					<ScrollView
 						style={styles.scrollView}
-						contentContainerStyle={styles.SVContentContainerStyle}
-						contentInset={{
-							top: 0,
-							bottom: styles.footerHeight + 20,
-						}}>
+						contentContainerStyle={styles.SVContentContainerStyle}>
 						<Poster>
 							<View style={styles.hContainer}>
 								<Text style={[styles.h, styles.h1]}>
@@ -208,7 +205,6 @@ getStyles(appLayout: Object): Object {
 		footerHeight,
 		modalContainer: {
 			flex: 1,
-			backgroundColor: '#fff',
 		},
 		hContainer: {
 			position: 'absolute',
@@ -230,6 +226,7 @@ getStyles(appLayout: Object): Object {
 		},
 		scrollView: {
 			flex: 1,
+			marginBottom: footerHeight > 100 ? 100 : footerHeight,
 		},
 		SVContentContainerStyle: {
 			flexGrow: 1,

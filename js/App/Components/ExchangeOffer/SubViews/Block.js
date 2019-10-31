@@ -33,6 +33,7 @@ const Block = (props: Object): Object => {
 		body,
 		img,
 		index,
+		addTextOne,
 	} = props;
 
 	const {
@@ -43,12 +44,18 @@ const Block = (props: Object): Object => {
 		imageCover,
 		textsCover,
 		padding,
-	} = getStyles(appLayout);
+		priceInfoCover,
+		priceInfoInnerCover,
+		priceInfoOne,
+		priceInfoTwo,
+		priceInfoThree,
+	} = getStyles(appLayout, index);
 
 	return (
 		<View style={[contentContainerStyle, {
 			paddingTop: index === 0 ? padding * 1.5 : 0,
 			marginTop: index === 0 ? padding * 1.5 : padding / 2,
+			marginBottom: index === 3 ? padding * 1.5 : 0,
 		}]}>
 			{!!img && <View style={imageCover}>
 				<Image source={img} style={{
@@ -58,6 +65,23 @@ const Block = (props: Object): Object => {
 				}}
 				resizeMode="contain"
 				resizeMethod="resize"/>
+				{index === 0 &&
+				(
+					<View style={priceInfoCover}>
+						<View style={priceInfoInnerCover}>
+							<Text style={priceInfoOne}>
+							799 SEK
+							</Text>
+							<Text style={priceInfoTwo}>
+							MSRP 1299 SEK
+							</Text>
+							<Text style={priceInfoThree}>
+								{addTextOne}
+							</Text>
+						</View>
+					</View>
+				)
+				}
 			</View>
 			}
 			<View style={[textsCover, {
@@ -80,7 +104,7 @@ const Block = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, index: number): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -110,7 +134,8 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		imageCover: {
 			width: widthIMG,
-			height: widthIMG * 0.5,
+			height: widthIMG * 0.4675,
+			flexDirection: 'row',
 		},
 		textsCover: {
 			paddingHorizontal: padding * 2,
@@ -133,6 +158,29 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: Math.floor(deviceWidth * 0.042),
 			color: rowTextColor,
 			marginTop: 8,
+		},
+		priceInfoCover: {
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+			width: widthIMG * 0.38,
+		},
+		priceInfoInnerCover: {
+			position: 'absolute',
+			left: -(padding * 3),
+		},
+		priceInfoOne: {
+			fontSize: Math.floor(deviceWidth * 0.068),
+			color: brandSecondary,
+			fontWeight: 'bold',
+		},
+		priceInfoTwo: {
+			marginTop: 3,
+			fontSize: Math.floor(deviceWidth * 0.042),
+			color: eulaContentColor,
+		},
+		priceInfoThree: {
+			fontSize: Math.floor(deviceWidth * 0.046),
+			color: '#000',
 		},
 	};
 };
