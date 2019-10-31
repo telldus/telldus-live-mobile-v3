@@ -120,6 +120,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 	const padding = deviceWidth * paddingFactor;
 
 	const widthIMG = width - (padding * 2);
+	const heightIMG = widthIMG / 2.1428;
 
 	return {
 		padding,
@@ -134,7 +135,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		imageCover: {
 			width: widthIMG,
-			height: widthIMG * 0.4675,
+			height: heightIMG,
 			flexDirection: 'row',
 		},
 		textsCover: {
