@@ -471,7 +471,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	} = state.app;
 
 	let { language = {} } = defaultSettings || {};
-	let locale = language.key;
+	let locale = language.code;
 
 	const {
 		visibilityExchangeOffer,

@@ -124,7 +124,7 @@ const WithIntlProvider = (props: Object): Object => {
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { language = {} } = defaultSettings;
 
-	let locale = language.key;
+	let locale = language.code;
 	const dispatch = useDispatch();
 	if (!locale || isDeviceLanguageAndHasChanged(language)) {
 		const code = getLocale();
