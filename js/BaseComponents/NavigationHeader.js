@@ -48,6 +48,7 @@ type Props = {
 	isFromModal?: boolean,
 	onClose: () => void,
 	goBack: () => void,
+	forceHideStatus?: boolean,
 };
 
 type DefaultProps = {
@@ -55,6 +56,7 @@ type DefaultProps = {
 	showLeftIcon: boolean,
 	leftIcon: string,
 	isFromModal: boolean,
+	forceHideStatus?: boolean,
 };
 
 type State = {
@@ -81,6 +83,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 		showLeftIcon: true,
 		topMargin: true,
 		leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
+		forceHideStatus: false,
 	}
 
 	constructor(props: Props) {
@@ -160,7 +163,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		let { appLayout, showLeftIcon, topMargin } = this.props;
+		let { appLayout, showLeftIcon, topMargin, forceHideStatus } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
@@ -184,6 +187,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 		const { land } = Theme.Core.headerHeightFactor;
 		return (
 			<Header
+				forceHideStatus={forceHideStatus}
 				leftButton={leftIcon}
 				appLayout={appLayout}
 				style={{
