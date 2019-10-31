@@ -84,7 +84,7 @@ class SettingsRow extends Component<Props, null> {
 		type: 'switch',
 		edit: false,
 		inLineEditActive: false,
-		keyboardTypeInLineEdit: Platform.OS === 'ios' ? 'phone-pad' : 'numeric',
+		keyboardTypeInLineEdit: Platform.OS === 'ios' ? 'phone-pad' : 'decimal-pad',
 	}
 
 	constructor(props: Props) {
