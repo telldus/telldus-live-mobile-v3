@@ -70,6 +70,7 @@ import {
 	prepareNoZWaveSupportDialogueData,
 	checkForZWaveSupport,
 	filterGatewaysWithZWaveSupport,
+	hasTellStickNetGetOne,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -420,12 +421,16 @@ render(): Object {
 		intl,
 		screenReaderEnabled,
 		visibilityExchangeOffer,
+		gateways,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEO = !showEULA && this.getLocale() === 'sv' && (!visibilityExchangeOffer || visibilityExchangeOffer === 'show');
+	const showEO = !showEULA
+	&& this.getLocale() === 'sv'
+	&& (!visibilityExchangeOffer || visibilityExchangeOffer === 'show')
+	&& hasTellStickNetGetOne(gateways.byId);
 
 	return (
 		<View style={{flex: 1}}>
