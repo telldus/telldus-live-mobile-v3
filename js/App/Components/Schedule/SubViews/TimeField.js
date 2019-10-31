@@ -147,7 +147,7 @@ render(): Object {
 				autoFocus={false}
 				value={value}
 				onChangeText={this.onEdit}
-				autoCapitalize="none"
+				autoCapitalize="characters"
 				autoCorrect={false}
 				keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'decimal-pad'}
 				ref={this.setRef}
