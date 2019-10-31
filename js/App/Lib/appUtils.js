@@ -77,6 +77,20 @@ function isDeviceLanguage(currentLanguageInfo: Object): boolean {
 	return device && device === 'device';
 }
 
+function hasTellStickNetGetOne(gatewaysById: Object): boolean {
+	const match = 'TellStick Net';
+	let flag = false;
+	for (let id in gatewaysById) {
+		const { type } = gatewaysById[id];
+		if (type && type.trim().toLowerCase() === match.trim().toLowerCase()) {
+			flag = true;
+			break;
+		}
+	}
+	return flag;
+}
+
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -84,4 +98,5 @@ module.exports = {
 	isDeviceLanguageAndHasChanged,
 	isDeviceLanguage,
 	...appUtils,
+	hasTellStickNetGetOne,
 };
