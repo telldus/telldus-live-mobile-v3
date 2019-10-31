@@ -48,10 +48,12 @@ type Props = {
 	appLayout: Object,
 	showAttentionCapture: boolean,
 	attentionCaptureText: string,
+	forceHideStatus?: boolean,
 };
 
 type DefaultProps = {
 	showAttentionCapture: boolean,
+	forceHideStatus?: boolean,
 };
 
 export default class HeaderComponent extends Base {
@@ -63,6 +65,7 @@ export default class HeaderComponent extends Base {
 
 	static defaultProps: DefaultProps = {
 		showAttentionCapture: false,
+		forceHideStatus: false,
 	};
 
 	getInitialStyle: () => Object;
@@ -410,12 +413,12 @@ export default class HeaderComponent extends Base {
 	};
 
 	render(): Object {
-		const { leftButton, rightButton, showAttentionCapture } = this.props;
+		const { leftButton, rightButton, showAttentionCapture, forceHideStatus } = this.props;
 
 		return (
 			<View style={{ flex: 0 }}>
 				{
-					Platform.OS === 'android' && hasStatusBar() ? (
+					(!forceHideStatus && Platform.OS === 'android' && hasStatusBar()) ? (
 						<View style={this.getInitialStyle().statusBar}/>
 					) : null
 				}
