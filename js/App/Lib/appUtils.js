@@ -37,8 +37,22 @@ function capitalizeFirstLetterOfEachWord(string: string): string {
 	return newString;
 }
 
+function hasTellStickNetGetOne(gatewaysById: Object): boolean {
+	const match = 'TellStick Net';
+	let flag = false;
+	for (let id in gatewaysById) {
+		const { type } = gatewaysById[id];
+		if (type && type.trim().toLowerCase() === match.trim().toLowerCase()) {
+			flag = true;
+			break;
+		}
+	}
+	return flag;
+}
+
 
 module.exports = {
 	supportRSA,
 	capitalizeFirstLetterOfEachWord,
+	hasTellStickNetGetOne,
 };
