@@ -24,7 +24,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Text, View } from '../../../../../BaseComponents';
-import { StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import Theme from '../../../../Theme';
 type Props = {
 	title?: any,
@@ -40,6 +40,7 @@ type Props = {
 	descriptionContainerStyle?: number | Object | Array<any>,
 	h1Style?: number | Object | Array<any>,
 	h2Style?: number | Object | Array<any>,
+	info2?: Object,
 };
 
 type State = {
@@ -72,7 +73,7 @@ class LocationDetails extends View {
 	render(): Object {
 
 		let { title, H1, H2, image, style, appLayout, accessible, info,
-			imageStyle, descriptionContainerStyle, h1Style, h2Style, onPress } = this.props;
+			imageStyle, descriptionContainerStyle, h1Style, h2Style, onPress, info2 } = this.props;
 
 		let {
 			locationTextContainer,
@@ -90,7 +91,7 @@ class LocationDetails extends View {
 				}
 				<View style={styles.imageHeaderContainer}>
 					<Image style={[locationImage, imageStyle]} source={{ uri: image, isStatic: true }} />
-					<TouchableWithoutFeedback disabled={!onPress} onPress={this.onPress} accessible={accessible}>
+					<TouchableOpacity disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
 							<Text numberOfLines={1} style={[textHSH, h1Style]}>
 								{!!H1 && H1}
@@ -101,8 +102,11 @@ class LocationDetails extends View {
 							{!!info && (
 								info
 							)}
+							{!!info2 && (
+								info2
+							)}
 						</View>
-					</TouchableWithoutFeedback>
+					</TouchableOpacity>
 				</View>
 			</View>
 		);
