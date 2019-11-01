@@ -37,6 +37,7 @@ TELLDUS_API_SERVER="${TELLDUS_API_SERVER}"
 
 android.useAndroidX=true
 android.enableJetifier=true
+org.gradle.jvmargs=-Xmx4608M
 EOF
 
 echo "${GOOGLE_SERVICES}" > app/google-services.json
