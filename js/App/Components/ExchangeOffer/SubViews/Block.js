@@ -34,6 +34,7 @@ const Block = (props: Object): Object => {
 		img,
 		index,
 		addTextOne,
+		addTextTwo,
 	} = props;
 
 	const {
@@ -73,10 +74,10 @@ const Block = (props: Object): Object => {
 							799 SEK
 							</Text>
 							<Text style={priceInfoTwo}>
-							MSRP 1299 SEK
+								{addTextOne}
 							</Text>
 							<Text style={priceInfoThree}>
-								{addTextOne}
+								{addTextTwo}
 							</Text>
 						</View>
 					</View>
