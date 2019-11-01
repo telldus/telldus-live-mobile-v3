@@ -92,7 +92,7 @@ type Props = {
 
 	addNewGatewayBool: boolean,
 
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm',
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
 
@@ -435,7 +435,7 @@ render(): Object {
 
 	const showEO = !showEULA
 	&& locale === 'sv'
-	&& (!visibilityExchangeOffer || visibilityExchangeOffer === 'show')
+	&& (!visibilityExchangeOffer || visibilityExchangeOffer === 'show' || visibilityExchangeOffer === 'force_show')
 	&& hasTellStickNetGetOne(gateways.byId);
 
 	return (

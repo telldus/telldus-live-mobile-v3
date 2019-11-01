@@ -299,7 +299,7 @@ function campaignVisited(value: boolean): Action {
 	};
 }
 
-function toggleVisibilityExchangeOffer(value: 'show' | 'hide_temp' | 'hide_perm'): Action {
+function toggleVisibilityExchangeOffer(value: 'show' | 'hide_temp' | 'hide_perm' | 'force_show'): Action {
 	return {
 		type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER',
 		payload: value,

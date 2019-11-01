@@ -42,7 +42,7 @@ export type State = {
 	phonesList: Object,
 	subscriptions: Object,
 	hasVisitedCampaign: boolean,
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm',
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 };
 
 export const initialState = {
@@ -67,11 +67,19 @@ export const initialState = {
 export default function reduceUser(state: State = initialState, action: Action): State {
 	if (action.type === 'persist/REHYDRATE' && action.payload && action.payload.user) {
 		const visibilityExchangeOffer = action.payload.user.visibilityExchangeOffer || 'show';
+		let nextVEOValue = 'show';
+		if (visibilityExchangeOffer === 'hide_temp') {
+			nextVEOValue = 'show';
+		} else if (visibilityExchangeOffer === 'force_show') {
+			nextVEOValue = 'hide_perm';
+		} else if (visibilityExchangeOffer === 'hide_perm') {
+			nextVEOValue = 'hide_perm';
+		}
 		return {
 			...state,
 			...action.payload.user,
 			showChangeLog: false,
-			visibilityExchangeOffer: visibilityExchangeOffer === 'hide_temp' ? 'show' : visibilityExchangeOffer,
+			visibilityExchangeOffer: nextVEOValue,
 		};
 	}
 	if (action.type === 'USER_REGISTER') {

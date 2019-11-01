@@ -48,7 +48,7 @@ type Props = {
 	intl: intlShape,
 	onLayout: (Object) => void,
 	appLayout: Object,
-	toggleVisibilityExchangeOffer: ('show' | 'hide_temp' | 'hide_perm') => void,
+	toggleVisibilityExchangeOffer: ('show' | 'hide_temp' | 'hide_perm' | 'force_show') => void,
 };
 
 class ExchangeOffer extends View<Props, null> {
