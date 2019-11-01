@@ -22,6 +22,7 @@
 'use strict';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import moment from 'moment';
 
 import { forceLocale } from '../../Config';
 
@@ -90,6 +91,25 @@ function hasTellStickNetGetOne(gatewaysById: Object): boolean {
 	return flag;
 }
 
+function premiumAboutToExpire(subscriptions: Object = {}, pro: number): boolean {
+	let auto = false;
+	Object.keys(subscriptions).map((key: string) => {
+		const {
+			product,
+			status,
+		} = subscriptions[key];
+		auto = product === 'premium' && status === 'active';
+	});
+	if (auto) {
+		return false;
+	}
+	if (moment().unix() > pro) {// Already expired
+		return false;
+	}
+	const proDate = moment.unix(pro);
+	const diff = proDate.diff(moment(), 'days');
+	return diff <= 7;
+}
 
 module.exports = {
 	supportRSA,
@@ -99,4 +119,5 @@ module.exports = {
 	isDeviceLanguage,
 	...appUtils,
 	hasTellStickNetGetOne,
+	premiumAboutToExpire,
 };
