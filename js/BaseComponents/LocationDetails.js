@@ -45,6 +45,7 @@ type Props = {
 	info?: Object,
 	infoContainerStyle?: any,
 	isStatic?: boolean,
+	info2?: Object,
 };
 
 type DefaultProps = {
@@ -125,6 +126,7 @@ class LocationDetails extends Component<Props, State> {
 			info,
 			onPress,
 			infoContainerStyle,
+			info2,
 		} = this.props;
 
 		const {
@@ -170,6 +172,9 @@ class LocationDetails extends Component<Props, State> {
 						</Text>
 						{!!info && (
 							info
+						)}
+						{!!info2 && (
+							info2
 						)}
 					</View>
 				</View>
