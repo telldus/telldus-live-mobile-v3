@@ -73,10 +73,10 @@ constructor(props: Props) {
 			h1: formatMessage(i18n.exchangeOfferH1),
 			body: formatMessage(i18n.exchangeOfferBody),
 			img: require('../TabViews/img/exchange/exchange_one.jpg'),
-			addTextOne: `${formatMessage(i18n.labelFreeShipping).toUpperCase()}!`,
-			addTextTwo: `${formatMessage(i18n.labelMsrp, {
+			addTextOne: `${formatMessage(i18n.labelMsrp, {
 				value: '1299 SEK',
 			})}`,
+			addTextTwo: `${formatMessage(i18n.labelFreeShipping).toUpperCase()}!`,
 		},
 		{
 			h1: formatMessage(i18n.exchangeOfferOneH1),

@@ -116,6 +116,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		eulaContentColor,
 		brandSecondary,
 		rowTextColor,
+		brandPrimary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -149,6 +150,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			fontSize: Math.floor(deviceWidth * 0.047),
 			color: eulaContentColor,
 			textAlign: 'center',
+			fontWeight: 'bold',
 		},
 		h2Style: {
 			fontSize: Math.floor(deviceWidth * 0.042),
@@ -183,7 +185,8 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		priceInfoThree: {
 			fontSize: Math.floor(deviceWidth * 0.042),
-			color: '#000',
+			color: brandPrimary,
+			fontWeight: 'bold',
 		},
 	};
 };
