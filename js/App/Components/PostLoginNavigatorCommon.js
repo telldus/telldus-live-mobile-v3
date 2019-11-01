@@ -70,6 +70,7 @@ import {
 	checkForZWaveSupport,
 	filterGatewaysWithZWaveSupport,
 	hasTellStickNetGetOne,
+	premiumAboutToExpire,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -92,6 +93,8 @@ type Props = {
 	addNewGatewayBool: boolean,
 
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm',
+	subscriptions: Object,
+	pro: number,
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -150,7 +153,7 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	const { dispatch, addNewGatewayBool, pushTokenRegistered } = this.props;
+	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro } = this.props;
 	dispatch(appStart());
 	dispatch(appState());
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
@@ -190,6 +193,10 @@ componentDidMount() {
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
 		this.addNewLocation();
+	}
+
+	if (premiumAboutToExpire(subscriptions, pro)) {
+		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	}
 }
 
@@ -247,6 +254,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'pushToken',
 		'deviceId',
 		'locale',
+		'subscriptions',
+		'pro',
 	]);
 	if (propsChange) {
 		return true;
@@ -475,6 +484,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	const {
 		visibilityExchangeOffer,
+		subscriptions,
+		userProfile,
 	} = state.user;
 
 	const { allIds = [], toActivate } = state.gateways;
@@ -504,6 +515,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pushToken,
 		deviceId,
 		visibilityExchangeOffer,
+		subscriptions,
+		pro: userProfile.pro,
 	};
 }
 
