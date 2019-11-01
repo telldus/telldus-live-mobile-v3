@@ -155,7 +155,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			appLayout,
 			intl,
 		} = this.props;
-		const { container, switchContainerStyle } = this._getStyle(appLayout);
+		const { container, switchContainerStyle, outerPadding } = this._getStyle(appLayout);
 
 		if (!this.device) {
 			return null;
@@ -219,7 +219,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 				<FloatingButton
 					onPress={this.selectAction}
 					imageSource={{uri: 'right_arrow_key'}}
-					paddingRight={this.props.paddingRight - 2}
+					paddingRight={outerPadding - 2}
 				/>
 			</View>
 		);
@@ -233,6 +233,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const outerPadding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
+			outerPadding,
 			container: {
 				flex: 1,
 				paddingVertical: outerPadding - (outerPadding / 4),
