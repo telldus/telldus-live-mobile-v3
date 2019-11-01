@@ -133,16 +133,16 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	}
 
 	const headerArray = formatMessage(i18n.getMoreWithPremium).split(' ');
-	const header = headerArray.map((word: string): Object => {
+	const header = headerArray.map((word: string, i: number): Object => {
 		if (word.includes('%')) {
 			return (
-				<Text style={titleStyleTwo}>
+				<Text style={titleStyleTwo} key={`${i}`}>
 					{` ${word.replace(/%/g, '').toUpperCase()}`}
 				</Text>
 			);
 		}
 		return (
-			<Text style={titleStyleOne}>
+			<Text style={titleStyleOne} key={`${i}`}>
 				{word.toUpperCase()}
 			</Text>
 		);
