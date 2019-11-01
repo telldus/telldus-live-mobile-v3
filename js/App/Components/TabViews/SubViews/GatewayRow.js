@@ -30,6 +30,13 @@ import { View, Image, LocationDetails } from '../../../../BaseComponents';
 import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
+import {
+	TellStickExchangeLink,
+} from '../../ExchangeOffer/SubViews';
+
+import {
+	toggleVisibilityExchangeOffer,
+} from '../../../Actions';
 
 import Theme from '../../../Theme';
 
@@ -37,11 +44,14 @@ import i18n from '../../../Translations/common';
 
 type Props = {
     location: Object,
-		appLayout: Object,
-		screenReaderEnabled: boolean,
-		intl: Object,
-		navigation: Object,
-		onPress: (Object) => void,
+	appLayout: Object,
+	screenReaderEnabled: boolean,
+	intl: Object,
+	navigation: Object,
+	onPress: (Object) => void,
+	dispatch: Function,
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	locale: string,
 };
 
 type State = {
@@ -84,12 +94,30 @@ class GatewayRow extends PureComponent<Props, State> {
 		);
 	}
 
+	goToExchangeScreen = () => {
+		const {
+			visibilityExchangeOffer: vo,
+			dispatch,
+		} = this.props;
+		const val = vo === 'hide_perm' ? 'force_show' : 'show';
+		dispatch(toggleVisibilityExchangeOffer(val));
+	}
 
 	render(): Object {
-		let { location, appLayout, intl, screenReaderEnabled } = this.props;
+		let {
+			location,
+			appLayout,
+			intl,
+			screenReaderEnabled,
+			locale,
+		} = this.props;
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
+
+		const showExchange = locale === 'sv' && type.trim().toLowerCase() === 'TellStick Net'.trim().toLowerCase();
+
+		let styles = this.getStyles(appLayout);
 
 		let locationImageUrl = getLocationImageUrl(type);
 		let locationData = {
@@ -97,9 +125,12 @@ class GatewayRow extends PureComponent<Props, State> {
 			H1: name,
 			H2: type,
 			info,
+			info2: showExchange ? <TellStickExchangeLink
+				appLayout={appLayout}
+				intl={intl}
+				onPress={this.goToExchangeScreen}
+				coverStyle={styles.coverStyle}/> : undefined,
 		};
-
-		let styles = this.getStyles(appLayout);
 
 		let accessibilityLabel = '';
 		if (screenReaderEnabled) {
@@ -146,7 +177,7 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const rowWidth = width - (padding * 2);
-		const rowHeight = deviceWidth * 0.27;
+		const rowHeight = deviceWidth * 0.34;
 
 		return {
 			rowItemsCover: {
@@ -170,16 +201,31 @@ class GatewayRow extends PureComponent<Props, State> {
 				height: rowHeight * 0.25,
 				width: rowHeight * 0.2,
 			},
+			coverStyle: {
+				paddingVertical: 5,
+			},
 		};
 	}
 }
 
 function mapStateToProps(state: Object, props: Object): Object {
-	const { screenReaderEnabled } = state.app;
+	const { screenReaderEnabled, defaultSettings } = state.app;
+
+	let { language = {} } = defaultSettings || {};
+	let locale = language.code;
+
 	return {
 		appLayout: state.app.layout,
 		screenReaderEnabled,
+		visibilityExchangeOffer: state.user.visibilityExchangeOffer,
+		locale,
 	};
 }
 
-export default connect(mapStateToProps, null)(GatewayRow);
+function mapDispatchToProps(dispatch: Object, props: Object): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GatewayRow);
