@@ -24,19 +24,30 @@
 
 import React, { PureComponent } from 'react';
 import { intlShape, injectIntl } from 'react-intl';
-import Ripple from 'react-native-material-ripple';
 
-import { IconTelldus, View } from '../../../BaseComponents';
+import {
+	IconTelldus,
+	View,
+} from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
+import {
+	TellStickExchangeLink,
+} from '../ExchangeOffer/SubViews';
+
+import {
+	toggleVisibilityExchangeOffer,
+} from '../../Actions';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
-import Theme from '../../Theme';
 
 type Props = {
 	gateway: Object,
 	onPressGateway: (Object) => void,
 	intl: intlShape,
 	appLayout: Object,
+	dispatch: Function,
+	showExchange: boolean,
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 };
 
 class Gateway extends PureComponent<Props, null> {
@@ -62,8 +73,17 @@ class Gateway extends PureComponent<Props, null> {
 		);
 	}
 
+	goToExchangeScreen = () => {
+		const {
+			visibilityExchangeOffer: vo,
+			dispatch,
+		} = this.props;
+		const val = vo === 'hide_perm' ? 'force_show' : 'show';
+		dispatch(toggleVisibilityExchangeOffer(val));
+	}
+
 	render(): Object {
-		const { gateway, appLayout } = this.props;
+		const { gateway, appLayout, intl, showExchange } = this.props;
 		const { name, online, websocketOnline, type, localKey = {} } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;
@@ -79,8 +99,12 @@ class Gateway extends PureComponent<Props, null> {
 			statusStyle,
 			iconSize,
 			statusInfoStyle,
+			coverStyle,
+			iconStyle,
+			textStyle,
 		} = this.getStyles(drawerWidth);
-		const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
+
+		const showExchangeLink = showExchange && type.trim().toLowerCase() === 'TellStick Net'.trim().toLowerCase();
 
 		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle, localKey);
 		const locationImageUrl = getLocationImageUrl(type);
@@ -89,25 +113,28 @@ class Gateway extends PureComponent<Props, null> {
 			H1: name,
 			H2: type,
 			info,
+			info2: showExchangeLink ? <TellStickExchangeLink
+				appLayout={appLayout}
+				intl={intl}
+				onPress={this.goToExchangeScreen}
+				coverStyle={coverStyle}
+				iconStyle={iconStyle}
+				textStyle={textStyle}/> : undefined,
 		};
 
 		return (
-			<Ripple
-				rippleColor={rippleColor}
-				rippleOpacity={rippleOpacity}
-				rippleDuration={rippleDuration}
-				style={gatewayContainer}
-				onPress={this.onPress}>
+			<View style={gatewayContainer}>
 				<LocationDetails {...locationData}
 					style={detailsContainer}
 					imageStyle={image}
 					descriptionContainerStyle={descriptionContainer}
 					h1Style={h1Style}
-					h2Style={h2Style}/>
+					h2Style={h2Style}
+					onPress={this.onPress}/>
 				<View style={iconSettingsContainer}>
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
-			</Ripple>
+			</View>
 		);
 	}
 	getStyles(drawerWidth: number): Object {
@@ -151,7 +178,7 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			descriptionContainer: {
 				flex: 1,
-				height: drawerWidth * 0.22,
+				height: drawerWidth * 0.24,
 				marginRight: 0,
 			},
 			h1Style: {
@@ -173,6 +200,15 @@ class Gateway extends PureComponent<Props, null> {
 				position: 'absolute',
 				right: 5,
 				top: drawerWidth * 0.04,
+			},
+			coverStyle: {
+				paddingVertical: 5,
+			},
+			iconStyle: {
+				fontSize: iconSize * 0.9,
+			},
+			textStyle: {
+				fontSize: fontSizeH3,
 			},
 		};
 	}

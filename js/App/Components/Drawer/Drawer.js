@@ -43,11 +43,14 @@ type Props = {
 	gateways: Object,
 	appLayout: Object,
 	isOpen: boolean,
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	locale: string,
 
 	userProfile: Function,
 	onOpenSetting: Function,
 	addNewLocation: Function,
 	onPressGateway: () => void,
+	dispatch: Function,
 };
 
 class Drawer extends View<Props, null> {
@@ -65,7 +68,7 @@ class Drawer extends View<Props, null> {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
+			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile', 'visibilityExchangeOffer', 'locale']);
 			if (propsChange) {
 				return true;
 			}
@@ -77,8 +80,20 @@ class Drawer extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { gateways, userProfile, onOpenSetting, addNewLocation, appLayout, onPressGateway } = this.props;
+		const {
+			gateways,
+			userProfile,
+			onOpenSetting,
+			addNewLocation,
+			appLayout,
+			onPressGateway,
+			dispatch,
+			visibilityExchangeOffer,
+			locale,
+		} = this.props;
 		const styles = this.getStyles(appLayout);
+
+		const exchangeCheckOne = locale === 'sv';
 
 		return (
 			<ScrollView
@@ -91,7 +106,13 @@ class Drawer extends View<Props, null> {
 				}}>
 					<ConnectedLocations styles={styles}/>
 					{gateways.allIds.map((id: number, index: number): Object => {
-						return (<Gateway gateway={gateways.byId[id]} key={index} appLayout={appLayout} onPressGateway={onPressGateway}/>);
+						return (<Gateway
+							gateway={gateways.byId[id]}
+							key={index} appLayout={appLayout}
+							onPressGateway={onPressGateway}
+							dispatch={dispatch}
+							showExchange={exchangeCheckOne}
+							visibilityExchangeOffer={visibilityExchangeOffer}/>);
 					})}
 					<AddLocation onPress={addNewLocation} styles={styles}/>
 					<SettingsButton onPress={onOpenSetting} styles={styles}/>
@@ -192,9 +213,25 @@ class Drawer extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object): Object {
+	const {
+		defaultSettings,
+	} = store.app;
+
+	let { language = {} } = defaultSettings || {};
+	let locale = language.code;
+
 	return {
 		gateways: store.gateways,
 		userProfile: getUserProfileSelector(store),
+		visibilityExchangeOffer: store.user.visibilityExchangeOffer,
+		locale,
 	};
 }
-export default connect(mapStateToProps, null)(Drawer);
+
+function mapDispatchToProps(dispatch: Object, props: Object): Object {
+	return {
+		dispatch,
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Drawer);
