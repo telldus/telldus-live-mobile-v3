@@ -146,7 +146,7 @@ const getStyles = (appLayout: Object, index: number): Object => {
 			justifyContent: 'center',
 		},
 		h1Style: {
-			fontSize: Math.floor(deviceWidth * 0.06),
+			fontSize: Math.floor(deviceWidth * 0.047),
 			color: eulaContentColor,
 			textAlign: 'center',
 		},
@@ -168,20 +168,21 @@ const getStyles = (appLayout: Object, index: number): Object => {
 		},
 		priceInfoInnerCover: {
 			position: 'absolute',
-			left: -(padding * 3),
+			left: -(padding * 4),
+			width: widthIMG * 0.5,
 		},
 		priceInfoOne: {
-			fontSize: Math.floor(deviceWidth * 0.068),
+			fontSize: Math.floor(deviceWidth * 0.066),
 			color: brandSecondary,
 			fontWeight: 'bold',
 		},
 		priceInfoTwo: {
 			marginTop: 3,
-			fontSize: Math.floor(deviceWidth * 0.042),
+			fontSize: Math.floor(deviceWidth * 0.04),
 			color: eulaContentColor,
 		},
 		priceInfoThree: {
-			fontSize: Math.floor(deviceWidth * 0.046),
+			fontSize: Math.floor(deviceWidth * 0.042),
 			color: '#000',
 		},
 	};
