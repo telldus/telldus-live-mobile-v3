@@ -75,6 +75,20 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const { stateValues = {} } = this.device || {};
 		const { THERMOSTAT: { mode } } = stateValues;
 
+		const { methodValue } = schedule;
+		this.currentMode = undefined;
+		this.currentValue = undefined;
+		try {
+			const {
+				mode: cMode,
+				temperature,
+			} = JSON.parse(methodValue);
+			this.currentMode = cMode;
+			this.currentValue = temperature;
+		} catch (err) {
+			this.currentMode = mode;
+		}
+
 		this.state = {
 			methodValue: {
 				mode,
@@ -166,7 +180,16 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 
-		const supportedModes = getSupportedModes(parameter, setpoint, intl, true);
+		let supportedModes = getSupportedModes(parameter, setpoint, intl, true);
+		supportedModes = supportedModes.map((sm: Object): Object => {
+			if (sm.mode === this.currentMode && this.currentValue) {
+				return {
+					...sm,
+					value: this.currentValue,
+				};
+			}
+			return sm;
+		});
 
 		const { methodValue } = this.state;
 
@@ -189,7 +212,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 						appLayout={appLayout}
 						modes={supportedModes}
 						device={this.device}
-						activeMode={mode}
+						activeMode={this.currentMode || mode}
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
 						supportResume={supportResume}/>
 				</ScrollView>
