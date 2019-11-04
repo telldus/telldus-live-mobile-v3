@@ -24,7 +24,13 @@
 
 import React, { useState } from 'react';
 import Swiper from 'react-native-swiper';
-import { ScrollView, Image, TouchableOpacity, Platform } from 'react-native';
+import {
+	ScrollView,
+	Image,
+	TouchableOpacity,
+	Platform,
+	Linking,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -101,9 +107,9 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 			body: formatMessage(i18n.ifttDescription),
 		},
 		{
-			title: formatMessage(i18n.labelEarlyAccess),
-			icon: 'bulb',
-			body: formatMessage(i18n.earlyAccessDescription2),
+			title: capitalizeFirstLetterOfEachWord(formatMessage(i18n.cloudBackup)),
+			icon: 'backup',
+			body: formatMessage(i18n.cloudBackupDescription),
 		},
 	];
 
@@ -139,6 +145,20 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		);
 	});
 
+	function onPressMore() {
+		let url = 'https://live.telldus.com/profile/premium';
+		Linking.canOpenURL(url)
+			.then((supported: boolean): any => {
+				if (!supported) {
+					return;
+				}
+				return Linking.openURL(url);
+			})
+			.catch((err: any) => {
+				const message = err.message;
+				this.showDialogue(message);
+			});
+	}
 
 	return (
 		<View style={container}>
@@ -172,7 +192,7 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 					<View style={labelsContainer}>
 						{screenLabels}
 					</View>
-					<Text style={moreText}>...{formatMessage(i18n.labelMuchMore)}</Text>
+					<Text style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton
 					navigation={navigation}/>
