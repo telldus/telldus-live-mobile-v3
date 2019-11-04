@@ -43,6 +43,7 @@ export type State = {
 	subscriptions: Object,
 	hasVisitedCampaign: boolean,
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 };
 
 export const initialState = {
@@ -62,6 +63,7 @@ export const initialState = {
 	subscriptions: {}, // Included in v3.12, and not in migrations, make sure to supply default value while using this prop.
 	hasVisitedCampaign: false,
 	visibilityExchangeOffer: 'show',
+	visibilityProExpireHeadsup: 'show',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -75,11 +77,23 @@ export default function reduceUser(state: State = initialState, action: Action):
 		} else if (visibilityExchangeOffer === 'hide_perm') {
 			nextVEOValue = 'hide_perm';
 		}
+
+		const visibilityProExpireHeadsup = action.payload.user.visibilityProExpireHeadsup || 'show';
+		let nextVPEValue = 'show';
+		if (visibilityProExpireHeadsup === 'hide_temp') {
+			nextVPEValue = 'show';
+		} else if (visibilityProExpireHeadsup === 'force_show') {
+			nextVPEValue = 'hide_perm';
+		} else if (visibilityProExpireHeadsup === 'hide_perm') {
+			nextVPEValue = 'hide_perm';
+		}
+
 		return {
 			...state,
 			...action.payload.user,
 			showChangeLog: false,
 			visibilityExchangeOffer: nextVEOValue,
+			visibilityProExpireHeadsup: nextVPEValue,
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -224,6 +238,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			visibilityExchangeOffer: action.payload,
+		};
+	}
+	if (action.type === 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP') {
+		return {
+			...state,
+			visibilityProExpireHeadsup: action.payload,
 		};
 	}
 	return state;

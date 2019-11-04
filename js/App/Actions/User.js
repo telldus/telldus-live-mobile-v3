@@ -306,6 +306,13 @@ function toggleVisibilityExchangeOffer(value: 'show' | 'hide_temp' | 'hide_perm'
 	};
 }
 
+function toggleVisibilityProExpireHeadsup(value: 'show' | 'hide_temp' | 'hide_perm' | 'force_show'): Action {
+	return {
+		type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP',
+		payload: value,
+	};
+}
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -319,4 +326,5 @@ module.exports = {
 	createTransaction,
 	campaignVisited,
 	toggleVisibilityExchangeOffer,
+	toggleVisibilityProExpireHeadsup,
 };
