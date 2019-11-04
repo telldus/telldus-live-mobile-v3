@@ -29,6 +29,9 @@ import { View, Image, LocationDetails } from '../../../../BaseComponents';
 
 import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
+import {
+	getLocale,
+} from '../../../Lib/appUtils';
 import Status from './Gateway/Status';
 import {
 	TellStickExchangeLink,
@@ -51,7 +54,6 @@ type Props = {
 	onPress: (Object) => void,
 	dispatch: Function,
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
-	locale: string,
 };
 
 type State = {
@@ -109,13 +111,12 @@ class GatewayRow extends PureComponent<Props, State> {
 			appLayout,
 			intl,
 			screenReaderEnabled,
-			locale,
 		} = this.props;
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
 
-		const showExchange = locale === 'sv' && type.trim().toLowerCase() === 'TellStick Net'.trim().toLowerCase();
+		const showExchange = getLocale() === 'sv' && type.trim().toLowerCase() === 'TellStick Net'.trim().toLowerCase();
 
 		let styles = this.getStyles(appLayout);
 
@@ -209,16 +210,12 @@ class GatewayRow extends PureComponent<Props, State> {
 }
 
 function mapStateToProps(state: Object, props: Object): Object {
-	const { screenReaderEnabled, defaultSettings } = state.app;
-
-	let { language = {} } = defaultSettings || {};
-	let locale = language.code;
+	const { screenReaderEnabled } = state.app;
 
 	return {
 		appLayout: state.app.layout,
 		screenReaderEnabled,
 		visibilityExchangeOffer: state.user.visibilityExchangeOffer,
-		locale,
 	};
 }
 
