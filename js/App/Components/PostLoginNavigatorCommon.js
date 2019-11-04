@@ -56,6 +56,7 @@ import {
 	getPhonesList,
 	getUserSubscriptions,
 	campaignVisited,
+	toggleVisibilityProExpireHeadsup,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -196,6 +197,7 @@ componentDidMount() {
 	}
 
 	if (premiumAboutToExpire(subscriptions, pro)) {
+		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	}
 }

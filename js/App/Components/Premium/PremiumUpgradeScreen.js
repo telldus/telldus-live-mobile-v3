@@ -38,12 +38,14 @@ import {
 import {
 	ViewPremiumBenefitsButton,
 	AdditionalPlansPayments,
+	Footer,
 } from './SubViews';
 
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
 	capitalizeFirstLetterOfEachWord,
+	premiumAboutToExpire,
 } from '../../Lib/appUtils';
 import {
 	createTransaction,
@@ -61,6 +63,13 @@ import i18n from '../../Translations/common';
 const PremiumUpgradeScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		subscriptions,
+		userProfile,
+		visibilityProExpireHeadsup,
+	} = useSelector((state: Object): Object => state.user);
+	const { pro } = userProfile;
+
 	const {
 		container,
 		body,
@@ -148,6 +157,8 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		);
 	});
 
+	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premiumAboutToExpire(subscriptions, pro);
+
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
@@ -214,6 +225,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					button={false}
 					linkTextStyle={linkTextStyle}/>
 			</ScrollView>
+			{isHeadsUp && <Footer
+				navigation={navigation}
+				onPressPurchase={onPress}/>}
 		</View>
 	);
 };
