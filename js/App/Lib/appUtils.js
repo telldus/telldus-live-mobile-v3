@@ -22,6 +22,7 @@
 'use strict';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import { forceLocale } from '../../Config';
 
 function supportRSA(): boolean {
 	const systemVersion = DeviceInfo.getSystemVersion();
@@ -50,9 +51,21 @@ function hasTellStickNetGetOne(gatewaysById: Object): boolean {
 	return flag;
 }
 
+const getLocale = (): string => {
+	if (forceLocale) {
+		return forceLocale;
+	}
+	let localeIdentifier = DeviceInfo.getDeviceLocale();
+	let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
+	if (parts.length === 0) {
+		return 'en';
+	}
+	return parts[0];
+};
 
 module.exports = {
 	supportRSA,
 	capitalizeFirstLetterOfEachWord,
 	hasTellStickNetGetOne,
+	getLocale,
 };
