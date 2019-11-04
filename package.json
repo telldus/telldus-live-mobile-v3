@@ -55,7 +55,7 @@
     "react-native-material-ripple": "~0.8.0",
     "react-native-modal": "~9.0.0",
     "react-native-orientation-locker": "~1.1.5",
-    "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git#e5816be73498493007ff71f6d1887414ce9dd51b",
+    "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git",
     "react-native-sensitive-info": "5.3.0",
     "react-native-simple-toast": "~0.0.8",
     "react-native-slider": "~0.11.0",
