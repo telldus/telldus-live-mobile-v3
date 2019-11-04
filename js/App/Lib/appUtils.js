@@ -53,7 +53,7 @@ function capitalizeFirstLetterOfEachWord(string: string): string {
 	const words = string.split(' ');
 	let newString = '';
 	words.map((word: string) => {
-		newString += `${word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()} `;
+		newString += `${word.charAt(0).toUpperCase() + word.slice(1)} `;
 	});
 	return newString;
 }
