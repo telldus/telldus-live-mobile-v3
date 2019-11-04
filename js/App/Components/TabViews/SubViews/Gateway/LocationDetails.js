@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
 	},
 	imageHeaderContainer: {
 		justifyContent: 'flex-start',
-		alignItems: 'flex-start',
+		alignItems: 'center',
 		flexDirection: 'row',
 	},
 	shadow: {
