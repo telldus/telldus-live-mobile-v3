@@ -157,7 +157,7 @@ class Gateway extends PureComponent<Props, null> {
 			detailsContainer: {
 				width: drawerWidth,
 				height: undefined,
-				justifyContent: 'flex-end',
+				justifyContent: 'center',
 				paddingHorizontal: 10,
 				paddingVertical: 0,
 				marginVertical: 0,
@@ -172,18 +172,22 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			image: {
 				width: drawerWidth * 0.22,
-				height: drawerWidth * 0.22,
+				height: drawerWidth * 0.20,
 				resizeMode: 'stretch',
 				marginRight: 10,
 			},
 			descriptionContainer: {
-				flex: 1,
-				height: drawerWidth * 0.24,
+				flex: 0,
+				height: undefined,
 				marginRight: 0,
+				alignItems: 'flex-start',
+				justifyContent: 'center',
 			},
 			h1Style: {
 				fontSize: fontSizeH1,
-				marginRight: iconContainerWidth,
+				marginRight: iconContainerWidth * 2,
+				width: drawerWidth - (iconContainerWidth + (drawerWidth * 0.22)),
+				flexWrap: 'wrap',
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
@@ -196,10 +200,11 @@ class Gateway extends PureComponent<Props, null> {
 			},
 			iconSettingsContainer: {
 				width: iconContainerWidth,
+				alignItems: 'flex-end',
 				justifyContent: 'center',
 				position: 'absolute',
 				right: 5,
-				top: drawerWidth * 0.04,
+				top: drawerWidth * 0.016,
 			},
 			coverStyle: {
 				paddingVertical: 5,
