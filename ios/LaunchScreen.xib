@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_5" orientation="landscape">
+    <device id="ipad12_9" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -13,20 +13,33 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+            <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="LaunchScreen.AspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZP-z6-Tjv">
-                    <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.AspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZP-z6-Tjv">
+                    <rect key="frame" x="-44" y="-24" width="1454" height="1082"/>
+                </imageView>
+                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" insetsLayoutMarginsFromSafeArea="NO" image="splash_logo_311" translatesAutoresizingMaskIntoConstraints="NO" id="7Z4-An-C3t">
+                    <rect key="frame" x="319.5" y="322.5" width="727" height="379"/>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="7Z4-An-C3t" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="2dd-Nd-Xdf"/>
+                <constraint firstItem="7Z4-An-C3t" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="9C1-yk-vJn"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="JZP-z6-Tjv" secondAttribute="bottom" constant="-34" id="FyH-TW-3Xv"/>
+                <constraint firstItem="7Z4-An-C3t" firstAttribute="height" secondItem="JZP-z6-Tjv" secondAttribute="height" multiplier="0.35" id="LgE-rb-2aa"/>
+                <constraint firstItem="JZP-z6-Tjv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" constant="-64" id="UHq-v6-VDS"/>
+                <constraint firstItem="7Z4-An-C3t" firstAttribute="width" secondItem="JZP-z6-Tjv" secondAttribute="width" multiplier="0.5" id="wr1-8q-BvC"/>
+                <constraint firstAttribute="trailingMargin" secondItem="JZP-z6-Tjv" secondAttribute="trailing" constant="-64" id="wyA-Ln-azv"/>
+                <constraint firstItem="JZP-z6-Tjv" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="-44" id="ydZ-Tl-G57"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <point key="canvasLocation" x="128.80434782608697" y="130.43478260869566"/>
+            <point key="canvasLocation" x="127.53623188405798" y="130.43478260869566"/>
         </view>
     </objects>
     <resources>
-        <image name="LaunchScreen.AspectFill" width="736" height="736"/>
+        <image name="LaunchScreen.AspectFill" width="1024" height="1024"/>
+        <image name="splash_logo_311" width="175" height="210"/>
     </resources>
 </document>
