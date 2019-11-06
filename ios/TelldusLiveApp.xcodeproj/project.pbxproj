@@ -23,7 +23,6 @@
 		144028A21EE6907D000945A3 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1440287A1EE69001000945A3 /* libRCTAnimation.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		1CAD91FD650E4EE489715C21 /* libUdpSockets.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BD4E8D787A68404D96264B38 /* libUdpSockets.a */; };
-		261702772371AE0000BDBAAB /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		26591AF421E899F300B1AF0F /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26591AF321E899F300B1AF0F /* libRNGoogleSignin.a */; };
 		267ABE6020F78777006CD1B5 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 267ABE5920F78730006CD1B5 /* libRNSVG.a */; };
 		269003392269BCBA00699DE0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
@@ -1686,7 +1685,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				261702772371AE0000BDBAAB /* main.jsbundle in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				D2986F407B4048AC96288B60 /* FontAwesome.ttf in Resources */,
 				26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */,
@@ -1735,7 +1733,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
 		2699DC2B21EF50C8009D8983 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
