@@ -32,7 +32,6 @@
 		26BB28B021622F8F0027C32A /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28AF21622F8F0027C32A /* Debug.xcconfig */; };
 		26BB28B2216230CA0027C32A /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 26BB28B1216230CA0027C32A /* Release.xcconfig */; };
 		26C0E620205C181700E9AD6A /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 26C0E61D205C17B700E9AD6A /* libRNI18n.a */; };
-		26C969CE2371359F003949D6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26C969CD2371359F003949D6 /* LaunchScreen.xib */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
 		26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5A21424DAC0060DC8E /* SafariServices.framework */; };
 		26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */; };
@@ -541,7 +540,6 @@
 		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		26BB28B1216230CA0027C32A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		26C0E617205C17B600E9AD6A /* RNI18n.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNI18n.xcodeproj; path = "../node_modules/react-native-i18n/ios/RNI18n.xcodeproj"; sourceTree = "<group>"; };
-		26C969CD2371359F003949D6 /* LaunchScreen.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		26D4DBCD21424C610060DC8E /* RNGoogleSignin.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGoogleSignin.xcodeproj; path = "../node_modules/react-native-google-signin/ios/RNGoogleSignin.xcodeproj"; sourceTree = "<group>"; };
 		26D4DC2221424D8A0060DC8E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		26D4DC5A21424DAC0060DC8E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
@@ -738,7 +736,6 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
-				26C969CD2371359F003949D6 /* LaunchScreen.xib */,
 			);
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
@@ -1150,7 +1147,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -1700,7 +1696,6 @@
 				30E6894E35F74445A4F6F35B /* Zocial.ttf in Resources */,
 				E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */,
 				68CC7CCADF574C7AB546E29B /* telldusicons.svg in Resources */,
-				26C969CE2371359F003949D6 /* LaunchScreen.xib in Resources */,
 				DD7823359AB84A89988A5D47 /* Roboto-Light.ttf in Resources */,
 				26BB28B2216230CA0027C32A /* Release.xcconfig in Resources */,
 				695CAC4B3F4E464D989EC4D2 /* Roboto-Medium.ttf in Resources */,
