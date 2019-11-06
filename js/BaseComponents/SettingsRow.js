@@ -58,6 +58,7 @@ type Props = {
 	valueCoverStyle?: Object | Array<any> | number,
 	textFieldStyle?: Object | Array<any> | number,
 	labelTextStyle?: Object | Array<any> | number,
+	valueTextStyle?: Object | Array<any> | number,
 };
 
 type DefaultProps = {
@@ -158,6 +159,7 @@ class SettingsRow extends Component<Props, null> {
 			valueCoverStyle,
 			textFieldStyle,
 			labelTextStyle,
+			valueTextStyle,
 		} = this.props;
 
 		const {
@@ -247,7 +249,7 @@ class SettingsRow extends Component<Props, null> {
 								<>
 								{!!value && (
 									(typeof value === 'string') || (typeof value === 'number') ?
-										<Text style={valueText}>
+										<Text style={[valueText, valueTextStyle]}>
 											{value} {valuePostfix}
 										</Text>
 										:

@@ -96,6 +96,7 @@ type Props = {
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
+	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -154,7 +155,7 @@ constructor(props: Props) {
 }
 
 componentDidMount() {
-	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro } = this.props;
+	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
 	dispatch(appStart());
 	dispatch(appState());
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
@@ -196,7 +197,7 @@ componentDidMount() {
 		this.addNewLocation();
 	}
 
-	if (premiumAboutToExpire(subscriptions, pro)) {
+	if (premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	}
@@ -258,6 +259,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'locale',
 		'subscriptions',
 		'pro',
+		'visibilityProExpireHeadsup',
 	]);
 	if (propsChange) {
 		return true;
@@ -488,6 +490,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		visibilityExchangeOffer,
 		subscriptions,
 		userProfile,
+		visibilityProExpireHeadsup,
 	} = state.user;
 
 	const { allIds = [], toActivate } = state.gateways;
@@ -519,6 +522,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		visibilityExchangeOffer,
 		subscriptions,
 		pro: userProfile.pro,
+		visibilityProExpireHeadsup,
 	};
 }
 

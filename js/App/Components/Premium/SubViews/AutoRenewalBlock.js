@@ -33,6 +33,10 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
+import {
+	premiumAboutToExpire,
+} from '../../../Lib/appUtils';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -77,11 +81,17 @@ const AutoRenewalBlock = (props: Object): Object => {
 		isAutoRenew = product === 'premium' && status === 'active';
 	});
 
+	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
 	const value = isAutoRenew ? formatMessage(i18n.labelActive) : formatDate(new Date(pro * 1000));
 
 	const {
 		upgradeSyle,
 	} = getStyle(layout);
+
+	const valueTextStyle = premAboutExpire ? {
+		color: Theme.Core.locationOffline,
+		fontWeight: 'bold',
+	} : {};
 
 	return (
 		<SettingsRow
@@ -90,6 +100,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 			inLineEditActive={false}
 			label={isAutoRenew ? formatMessage(i18n.automaticRenewal) : formatMessage(i18n.validUntil)}
 			value={value}
+			valueTextStyle={valueTextStyle}
 			appLayout={layout}
 			iconValueRight={isAutoRenew ?
 				<IconTelldus icon={'settings'} style={upgradeSyle}/>

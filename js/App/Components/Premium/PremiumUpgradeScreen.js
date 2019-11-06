@@ -27,6 +27,7 @@ import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import moment from 'moment';
 
 import {
 	View,
@@ -49,6 +50,7 @@ import {
 } from '../../Lib/appUtils';
 import {
 	createTransaction,
+	toggleVisibilityProExpireHeadsup,
 } from '../../Actions/User';
 import {
 	showToast,
@@ -70,6 +72,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
+	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
+	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
+
 	const {
 		container,
 		body,
@@ -88,11 +93,16 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		buttonStyle,
 		cartIconStyle,
 		linkTextStyle,
-	} = getStyles(layout);
+		footerHeight,
+		expireNotifCover,
+		expireNotifHeader,
+		expireNotifContent,
+	} = getStyles(layout, premAboutExpire);
 
 	const {
 		formatMessage,
 		formatNumber,
+		formatDate,
 	} = useIntl();
 
 	const index = 0;
@@ -157,7 +167,11 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		);
 	});
 
-	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premiumAboutToExpire(subscriptions, pro);
+	function onPressGoBack(): boolean {
+		dispatch(toggleVisibilityProExpireHeadsup('hide_temp'));
+		navigation.pop();
+		return true;
+	}
 
 	return (
 		<View style={container}>
@@ -167,9 +181,28 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				align={'right'}
 				showLeftIcon={true}
 				leftIcon={'close'}
+				goBack={onPressGoBack}
+				handleBackPress={onPressGoBack}
 				navigation={navigation}
 				{...screenProps}/>
-			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
+			<ScrollView style={{
+				flex: 1,
+				marginBottom: isHeadsUp ? footerHeight : 0,
+			}} contentContainerStyle={{
+				flexGrow: 1,
+				paddingBottom: 20,
+			}}>
+				{premAboutExpire && <View style={expireNotifCover}>
+					<Text style={expireNotifHeader}>
+						{formatMessage(i18n.premExpireNofifHeader)}!
+					</Text>
+					<Text style={expireNotifContent}>
+						{formatMessage(i18n.premExpireNofifContent, {
+							expDate: formatDate(moment.unix(pro)),
+						})}
+					</Text>
+				</View>
+				}
 				<View style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
@@ -232,15 +265,26 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const {
+		shadow,
+		paddingFactor,
+		brandSecondary,
+		eulaContentColor,
+	} = Theme.Core;
+	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
 
+	let footerHeight = Math.floor(deviceWidth * 0.26);
+	footerHeight = footerHeight > 100 ? 100 : footerHeight;
+
 	return {
+		footerHeight,
 		container: {
 			flex: 1,
 			backgroundColor: Theme.Core.appBackground,
@@ -250,10 +294,11 @@ const getStyles = (appLayout: Object): Object => {
 			alignItems: 'center',
 			justifyContent: 'center',
 			backgroundColor: '#fff',
-			...Theme.Core.shadow,
+			...shadow,
 			marginHorizontal: padding,
-			marginVertical: padding * 2,
+			marginTop: premAboutExpire ? padding / 2 : padding * 2,
 			padding: padding * 2,
+			borderRadius: 2,
 		},
 		headerCover: {
 			flex: 1,
@@ -263,7 +308,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyleOne: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
+			color: eulaContentColor,
 			marginLeft: 5,
 		},
 		titleStyleTwo: {
@@ -277,19 +322,19 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		pMonthTextStyle: {
 			fontSize: fontSize * 2.6,
-			color: Theme.Core.brandSecondary,
+			color: brandSecondary,
 			marginTop: 20,
 			fontWeight: 'bold',
 			textAlign: 'center',
 		},
 		annualChargeTextStyle: {
 			fontSize: fontSize * 1.3,
-			color: Theme.Core.eulaContentColor,
+			color: eulaContentColor,
 			textAlign: 'center',
 		},
 		smsCreditTextStyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.eulaContentColor,
+			color: eulaContentColor,
 			textAlign: 'center',
 		},
 		prevChargeTextStyle: {
@@ -302,7 +347,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		newChargeTextStyle: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
+			color: eulaContentColor,
 			textAlign: 'center',
 			marginLeft: 5,
 		},
@@ -318,7 +363,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		autoRenewInfoStyle: {
 			fontSize: fontSize * 0.8,
-			color: Theme.Core.eulaContentColor,
+			color: eulaContentColor,
 			marginTop: 10,
 			textAlign: 'center',
 		},
@@ -328,8 +373,8 @@ const getStyles = (appLayout: Object): Object => {
 			marginRight: 3,
 		},
 		buttonStyle: {
-			marginTop: padding,
 			paddingHorizontal: 10,
+			marginTop: padding * 3,
 		},
 		cartIconStyle: {
 			fontSize: fontSize * 2.2,
@@ -338,6 +383,27 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		linkTextStyle: {
 			marginTop: padding,
+		},
+		expireNotifCover: {
+			backgroundColor: '#fff',
+			...shadow,
+			alignItems: 'center',
+			justifyContent: 'center',
+			padding: padding * 2,
+			marginHorizontal: padding,
+			marginTop: padding * 2,
+			borderRadius: 2,
+		},
+		expireNotifHeader: {
+			fontSize: fontSize * 1.7,
+			color: brandSecondary,
+			textAlign: 'center',
+		},
+		expireNotifContent: {
+			fontSize: fontSize * 1.1,
+			color: eulaContentColor,
+			marginTop: 5,
+			textAlign: 'center',
 		},
 	};
 };

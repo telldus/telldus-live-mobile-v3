@@ -41,12 +41,14 @@ import {
 } from '../../../BaseComponents';
 import {
 	PaymentProvidersBlock,
+	Footer,
 } from './SubViews';
 
 import {
 	getSubscriptionPlans,
 	getPaymentOptions,
 	capitalizeFirstLetterOfEachWord,
+	premiumAboutToExpire,
 } from '../../Lib/appUtils';
 import {
 	createTransaction,
@@ -64,6 +66,17 @@ import i18n from '../../Translations/common';
 const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		subscriptions,
+		userProfile,
+		visibilityProExpireHeadsup,
+	} = useSelector((state: Object): Object => state.user);
+
+	const { pro } = userProfile;
+
+	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
+	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
+
 	const {
 		container,
 		contentCover,
@@ -85,6 +98,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		infoContainer,
 		infoTextStyle,
 		statusIconStyle,
+		footerHeight,
 	} = getStyles(layout);
 	const intl = useIntl();
 	const {
@@ -217,7 +231,13 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}/>
-			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
+			<ScrollView style={{
+				flex: 1,
+				marginBottom: isHeadsUp ? footerHeight : 0,
+			}} contentContainerStyle={{
+				flexGrow: 1,
+				paddingBottom: 20,
+			}}>
 				<Text style={labelStyle}>{formatMessage(i18n.selectSubscriptionPlan)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
@@ -264,6 +284,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				/>
 				<Text style={backLinkStyle} onPress={onGoBack}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.backLabel))}</Text>
 			</ScrollView>
+			{isHeadsUp && <Footer
+				navigation={navigation}
+				onPressPurchase={onPress}/>}
 		</View>
 	);
 };
@@ -276,7 +299,11 @@ const getStyles = (appLayout: Object): Object => {
 
 	const fontSize = Math.floor(deviceWidth * 0.036);
 
+	let footerHeight = Math.floor(deviceWidth * 0.26);
+	footerHeight = footerHeight > 100 ? 100 : footerHeight;
+
 	return {
+		footerHeight,
 		container: {
 			flex: 1,
 			backgroundColor: Theme.Core.appBackground,
