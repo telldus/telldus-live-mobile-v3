@@ -60,7 +60,7 @@ class FormContainerComponent extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<BackgroundImage source={{uri: 'home'}} style={styles.container}>
+			<BackgroundImage source={{uri: 'telldusliveapp_launchscreen'}} style={styles.container}>
 				{!!appLayout.width && (
 					<ScrollView
 						keyboardShouldPersistTaps={'always'}
