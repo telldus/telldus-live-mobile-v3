@@ -35,6 +35,7 @@ import Days from './Days';
 import Summary from './Summary';
 import Edit from './Edit';
 import ActionThermostat from './ActionThermostat';
+import ActionThermostatTwo from './ActionThermostatTwo';
 import ActionRGB from './ActionRGB';
 
 const initialRouteName = 'InitialScreen';
@@ -73,6 +74,9 @@ const RouteConfigs = {
 	},
 	ActionThermostat: {
 		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionThermostat, 'ActionThermostat'),
+	},
+	ActionThermostatTwo: {
+		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionThermostatTwo, 'ActionThermostatTwo'),
 	},
 };
 
