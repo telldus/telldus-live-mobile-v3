@@ -76,7 +76,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 			methods = [1, 2, 16, 1024];
 		}
 		if (type === 'THERMOSTAT') {
-			methods = [2, 2048];
+			methods = [2048];
 		}
 
 		this.state = {

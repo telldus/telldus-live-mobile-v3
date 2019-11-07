@@ -232,7 +232,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { screenProps } = this.props;
 		const { currentScreen } = screenProps;
 
-		const screenDontPad = ['InitialScreen', 'ActionThermostat'];
+		const screenDontPad = ['InitialScreen', 'ActionThermostat', 'ActionThermostatTwo'];
 		const doPad = screenDontPad.indexOf(currentScreen) === -1;
 		return {
 			style: {

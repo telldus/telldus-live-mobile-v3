@@ -277,7 +277,7 @@ class JobRow extends View<null, Props, null> {
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
 		if (action) {
-			const { methodIconContainer, methodIcon, thermostatInfo } = this._getStyle(appLayout);
+			const { methodIconContainer, methodIcon, thermostatInfo, thermostateModeControlIcon } = this._getStyle(appLayout);
 			const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
 			const methodString = methods[action.method];
 			let iconName = actionIcons[methodString];
@@ -302,18 +302,22 @@ class JobRow extends View<null, Props, null> {
 					mode,
 					temperature,
 					scale,
+					changeMode,
 				} = JSON.parse(methodValue);
 				return (
 					{
 						triangleColor: methodIconContainer.backgroundColor,
 						actionIcon: <View style={methodIconContainer}>
+							<IconTelldus icon={changeMode ? 'play' : 'settings'} style={thermostateModeControlIcon}/>
 							{!!mode && <Text style={thermostatInfo}>
 								{mode.toUpperCase()}
 							</Text>
 							}
-							<Text style={thermostatInfo}>
+							{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
+							&& <Text style={thermostatInfo}>
 								{temperature}{scale ? '°F' : '°C'}
 							</Text>
+							}
 						</View>,
 						actionLabel: `${typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel)} ${mode} ${temperature}`,
 					}
@@ -430,6 +434,10 @@ class JobRow extends View<null, Props, null> {
 			methodIcon: {
 				color: '#fff',
 				fontSize: action && action.name === 'Dim' ? deviceWidth * 0.04 : deviceWidth * 0.056,
+			},
+			thermostateModeControlIcon: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.04,
 			},
 			thermostatInfo: {
 				color: '#fff',

@@ -111,7 +111,8 @@ class Edit extends View<null, Props, State> {
 	}
 
 	editAction = () => {
-		this._navigate('Action');
+		const { supportedMethods } = this.device;
+		this._navigate(supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action');
 	};
 
 	editTime = () => {
@@ -349,6 +350,7 @@ class Edit extends View<null, Props, State> {
 			key: routeName,
 			params: {
 				editMode: true,
+				actionKey: routeName,
 			},
 		});
 	};

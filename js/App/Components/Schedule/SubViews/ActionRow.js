@@ -23,7 +23,7 @@
 
 import React from 'react';
 
-import { BlockIcon, Row, Text, View } from '../../../../BaseComponents';
+import { BlockIcon, Row, Text, View, IconTelldus } from '../../../../BaseComponents';
 import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 import Description from './Description';
@@ -200,6 +200,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			thermostatContainer,
 			thermostatMode,
 			thermostatTemp,
+			thermostateModeControlIcon,
 		} = this._getStyle(appLayout);
 
 		if (showValue && action.icon === 'dim') {
@@ -223,14 +224,17 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				mode,
 				temperature,
 				scale,
+				changeMode,
 			} = JSON.parse(methodValue);
 			return (
 				<View style={[thermostatContainer, { backgroundColor }, iconContainerStyle]}>
+					<IconTelldus icon={changeMode ? 'play' : 'settings'} style={thermostateModeControlIcon}/>
 					{!!mode && <Text style={thermostatMode}>
 						{mode.toUpperCase()}
 					</Text>
 					}
-					{typeof temperature !== 'undefined' && <Text style={thermostatTemp}>
+					{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
+					&& <Text style={thermostatTemp}>
 						{temperature}{scale ? '°F' : '°C'}
 					</Text>
 					}
@@ -320,6 +324,11 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			thermostatTemp: {
 				color: '#fff',
 				fontSize: deviceWidth * 0.043333333,
+			},
+			thermostateModeControlIcon: {
+				color: '#fff',
+				fontSize: deviceWidth * 0.043333333,
+				marginBottom: 3,
 			},
 		};
 	};
