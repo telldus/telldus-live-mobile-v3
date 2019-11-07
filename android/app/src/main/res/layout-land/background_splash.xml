@@ -7,4 +7,8 @@
 	<item
 		android:drawable="@drawable/logo_splash"/>
 
+	<item
+		android:gravity="center|center"
+		android:drawable="@drawable/splash_loading_icon"/>
+
 </layer-list>
