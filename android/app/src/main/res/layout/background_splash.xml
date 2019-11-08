@@ -9,6 +9,7 @@
 
 	<item
 		android:gravity="center|center"
-		android:drawable="@drawable/splash_loading_icon"/>
+		android:drawable="@drawable/splash_loading_icon"
+		android:height="50dp" android:width="50dp"/>
 
 </layer-list>
