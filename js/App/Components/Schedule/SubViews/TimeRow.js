@@ -85,11 +85,19 @@ export default class TimeRow extends View<null, Props, State> {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { loading } = this.state;
+		const { loading, time } = this.state;
 		const { schedule, device } = this.props;
 		const { type } = schedule;
 		if (loading && schedule.type !== 'time') {
 			this._getSuntime(device.clientId, type);
+		}
+		if ((time.hour !== schedule.hour) || (time.minute !== schedule.minute)) {
+			this.setState({
+				time: {
+					hour: schedule.hour,
+					minute: schedule.minute,
+				},
+			});
 		}
 	}
 
