@@ -24,13 +24,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-	DatePickerIOS,
 	Platform,
-	TimePickerAndroid,
 	TouchableWithoutFeedback,
 	ScrollView,
 	LayoutAnimation,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { FloatingButton, Row, Text, View } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
@@ -52,6 +51,7 @@ type State = {
 	date: Date,
 	offsetEdit: boolean,
 	intervalEdit: boolean,
+	shouldRenderTimePickerAndroid: boolean,
 };
 
 export default class Time extends View<null, Props, State> {
@@ -95,6 +95,7 @@ export default class Time extends View<null, Props, State> {
 			date: this._createDate(hour, minute),
 			offsetEdit: false,
 			intervalEdit: false,
+			shouldRenderTimePickerAndroid: false,
 		};
 
 		this.selectTimeAndroid = this.selectTimeAndroid.bind(this);
@@ -137,24 +138,10 @@ export default class Time extends View<null, Props, State> {
 		}
 	}
 
-	// eslint-disable-next-line flowtype/require-return-type
-	selectTimeAndroid = async () => {
-		const { date } = this.state;
-
-		try {
-			const { action, hour, minute } = await TimePickerAndroid.open({
-				hour: date.getHours(),
-				minute: date.getMinutes(),
-				is24Hour: true,
-			});
-			if (action !== TimePickerAndroid.dismissedAction) {
-				const newDate = new Date();
-				newDate.setHours(hour, minute, 0, 0);
-				this.setState({ date: newDate });
-			}
-		} catch (error) {
-			console.warn('Cannot open time picker', error.message);
-		}
+	selectTimeAndroid = () => {
+		this.setState({
+			shouldRenderTimePickerAndroid: true,
+		});
 	};
 
 	selectTime = () => {
@@ -196,7 +183,12 @@ export default class Time extends View<null, Props, State> {
 
 	render(): React$Element<any> {
 		const { appLayout, intl } = this.props;
-		const { selectedType, randomInterval } = this.state;
+		const {
+			selectedType,
+			randomInterval,
+			shouldRenderTimePickerAndroid,
+			date,
+		} = this.state;
 		const { container, row, marginBottom, type } = this._getStyle(appLayout);
 
 		const shouldRender = !!selectedType;
@@ -228,6 +220,12 @@ export default class Time extends View<null, Props, State> {
 						)}
 					</View>
 				</ScrollView>
+				{shouldRenderTimePickerAndroid && (
+					<DateTimePicker
+						mode="time"
+						value={date}
+						onChange={this._onDateChange}/>
+				)}
 				{shouldRender && (
 					<FloatingButton
 						onPress={this.selectTime}
@@ -265,11 +263,11 @@ export default class Time extends View<null, Props, State> {
 		if (Platform.OS === 'ios') {
 			timePicker = (
 				<View style={iosTimeContainer}>
-					<DatePickerIOS
-						date={date}
+					<DateTimePicker
+						value={date}
 						mode="time"
 						style={{ flex: 1 }}
-						onDateChange={this._onDateChange}
+						onChange={this._onDateChange}
 					/>
 				</View>
 			);
@@ -343,7 +341,13 @@ export default class Time extends View<null, Props, State> {
 		return resultRow;
 	};
 
-	_onDateChange = (date: Date) => {
+	_onDateChange = (event: Object, date: Date) => {
+		if (date === undefined) {
+			// dismissedAction
+			this.setState({
+				shouldRenderTimePickerAndroid: false,
+			});
+		}
 		const { date: oldDate } = this.state;
 
 		const oldHours = oldDate.getHours();
