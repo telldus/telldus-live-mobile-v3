@@ -48,6 +48,7 @@ import {
 	getOffColorRGB,
 	getMainColorRGB,
 	prepareMainColor,
+	getThermostatValue,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
@@ -65,6 +66,7 @@ type Props = {
 	isNew: boolean,
 	gatewayId: string,
 	powerConsumed: string | null,
+	currentTemp?: number,
 	propsSwipeRow: Object,
 	onBell: (number) => void,
 	onDown: (number) => void,
@@ -179,7 +181,8 @@ class DeviceRow extends View<Props, State> {
 			}
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
-				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed', 'isNew', 'gatewayId', 'isLast',
+				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
+				'isNew', 'gatewayId', 'isLast', 'currentTemp',
 			]);
 			if (propsChange) {
 				return true;
@@ -401,6 +404,7 @@ class DeviceRow extends View<Props, State> {
 			onPressDimButton,
 			onPressDeviceAction,
 			screenReaderEnabled,
+			currentTemp,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -515,6 +519,7 @@ class DeviceRow extends View<Props, State> {
 			button.unshift(
 				<ThermostatButton
 					{...sharedProps}
+					currentTemp={currentTemp}
 					key={8}
 					style={styles.thermostat}
 					openThermostatControl={this.props.openThermostatControl}
@@ -804,9 +809,11 @@ class DeviceRow extends View<Props, State> {
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { clientDeviceId, clientId } = ownProps.device;
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
 	return {
 		powerConsumed,
+		currentTemp,
 	};
 }
 

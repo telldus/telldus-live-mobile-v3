@@ -45,6 +45,7 @@ import {
 	getMainColorRGB,
 	prepareMainColor,
 	formatModeValue,
+	getThermostatValue,
 } from '../../../Lib';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
@@ -55,6 +56,8 @@ type Props = {
     intl: Object,
     powerConsumed?: number,
 	appLayout: Object,
+	currentTemp?: number,
+
     style: Object,
 	setScrollEnabled: (boolean) => void,
 	onPressDimButton: (Object) => void,
@@ -98,7 +101,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['item', 'powerConsumed']);
+	const propsChange = shouldUpdate(others, othersN, ['item', 'powerConsumed', 'currentTemp']);
 	if (propsChange) {
 		return true;
 	}
@@ -397,10 +400,12 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { clientDeviceId, clientId } = ownProps.item;
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
 	return {
 		appLayout: store.app.layout,
 		powerConsumed,
+		currentTemp,
 	};
 }
 

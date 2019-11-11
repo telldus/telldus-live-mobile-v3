@@ -36,6 +36,7 @@ type Props = {
 	tileWidth: number,
 	showStopButton?: boolean,
 	isOpen?: boolean,
+	currentTemp?: number,
 
 	style: Object,
 	intl: Object,
@@ -83,7 +84,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth', 'isOpen']);
+		const propsChange = shouldUpdate(others, othersN, ['item', 'tileWidth', 'isOpen', 'currentTemp']);
 		if (propsChange) {
 			return true;
 		}
@@ -113,13 +114,13 @@ class ThermostatButtonDB extends View<Props, State> {
 			containerStyle,
 			infoBlockStyle,
 			moreActionsStyle,
+			currentTemp,
 		} = this.props;
 
 		const { stateValues = {} } = item;
-		const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
+		const { THERMOSTAT: { mode } } = stateValues;
 
-		let currentModeValue = setpoint[mode];
-		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
+		let currentModeValue = isNaN(currentTemp) ? -100.0 : currentTemp;
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
