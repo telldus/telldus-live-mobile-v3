@@ -298,7 +298,7 @@ const getStyles = (appLayout: Object): Object => {
 			alignSelf: 'center',
 			textAlign: 'center',
 			fontSize: fontSize * 1.4,
-			color: Theme.Core.eulaContentColor,
+			color: Theme.Core.brandSecondary,
 			marginTop: padding * 2,
 		},
 	};
