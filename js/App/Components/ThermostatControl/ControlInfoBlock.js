@@ -263,7 +263,7 @@ render(): Object {
 				{currentTemp &&
 			<>
 			<Text style={cLabelStyle}>
-				{intl.formatMessage(i18n.current)}
+				{intl.formatMessage(i18n.labelCurrent)}
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
