@@ -49,6 +49,7 @@
 	[self.window makeKeyAndVisible];
 	[RNSplashScreen show];
   
+  // TODO: Remove once dark mode is properly supported by react-native-datetimepicker
 	if (@available(iOS 13, *)) {
 		self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
 	}
