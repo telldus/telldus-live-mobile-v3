@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina6_5" orientation="portrait" appearance="light"/>
+    <device id="ipad10_5" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
@@ -13,17 +13,17 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.AspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="iK7-8z-2oa">
-                                <rect key="frame" x="-44" y="0.0" width="502" height="896"/>
+                                <rect key="frame" x="-44" y="-44" width="922" height="1190"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.Logo" translatesAutoresizingMaskIntoConstraints="NO" id="sj6-WD-cxW">
-                                <rect key="frame" x="30" y="82.666666666666671" width="354" height="133.33333333333331"/>
+                                <rect key="frame" x="30" y="118.5" width="774" height="133.5"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_loading_icon" translatesAutoresizingMaskIntoConstraints="NO" id="uAO-hS-cOi">
-                                <rect key="frame" x="155" y="396" width="198" height="432"/>
+                                <rect key="frame" x="389" y="528" width="56.5" height="56.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -48,8 +48,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreen.AspectFill" width="736" height="736"/>
-        <image name="LaunchScreen.Logo" width="666.66668701171875" height="133.33332824707031"/>
-        <image name="splash_loading_icon" width="104.33333587646484" height="104.33333587646484"/>
+        <image name="LaunchScreen.AspectFill" width="1024" height="1024"/>
+        <image name="LaunchScreen.Logo" width="667" height="133.5"/>
+        <image name="splash_loading_icon" width="56.5" height="56.5"/>
     </resources>
 </document>
