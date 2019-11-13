@@ -45,7 +45,7 @@ import java.util.Map;
 import org.json.JSONObject;
 
 public class DevicesAPI {
-    private static Integer supportedMethodsAggreg = 1975;
+    private static Integer supportedMethodsAggreg = 4023;
 
     private static Map<String, Map> deviceInfoPendingCheckList = new HashMap<String, Map>();
     Runnable runnableDeviceInfoCheck;
