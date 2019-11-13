@@ -422,7 +422,9 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         if (hasLearn != null && hasLearn) {
                             sizeSuppMeth = sizeSuppMeth - 1;
                         }
-                        Boolean showDevice = sizeSuppMeth > 2;
+
+                        Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
+                        Boolean showDevice = sizeSuppMeth > 2 && !hasThermo;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");

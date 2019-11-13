@@ -143,6 +143,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
 
         Integer buttonsCount = supportedMethods.size();
+        Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
         Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
         if (hasLearn) {
             buttonsCount = buttonsCount - 1;
@@ -166,7 +167,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         // Bell
-        if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
+        if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL") && !hasThermo) {
 
             views.setOnClickPendingIntent(R.id.onCover, getPendingSelf(context, ACTION_BELL, appWidgetId));
             views.setViewVisibility(R.id.offCover, View.GONE);
@@ -264,7 +265,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
 
         // ON
-        if (hasOn) {
+        if (hasOn && !hasThermo) {
             views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
             views.setViewVisibility(R.id.onCover, View.VISIBLE);
 
@@ -364,7 +365,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         // OFF
-        if (hasOff) {
+        if (hasOff && !hasThermo) {
             views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
             views.setViewVisibility(R.id.offCover, View.VISIBLE);
 
@@ -461,6 +462,42 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     hasOn ? R.drawable.shape_left_white_round_fill : R.drawable.shape_border_round_white_fill);
                 }
             }
+        }
+
+        // Thermostat
+        if (hasThermo) {
+            views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
+            views.setViewVisibility(R.id.thermoCover, View.VISIBLE);
+            views.setViewVisibility(R.id.thermoTextCover, View.VISIBLE);
+
+            int colorIdle = ContextCompat.getColor(context, R.color.brandSecondary);
+            if (transparent.equals("dark")) {
+                views.setInt(R.id.thermoCover, "setBackgroundResource", R.drawable.shape_border_round_black);
+                colorIdle = ContextCompat.getColor(context, R.color.themeDark);
+            } else if (transparent.equals("light") || transparent.equals("true")) {
+                views.setInt(R.id.thermoCover, "setBackgroundResource", R.drawable.shape_border_round_white);
+                colorIdle = ContextCompat.getColor(context, R.color.white);
+            } else {
+                views.setInt(R.id.thermoCover, "setBackgroundResource", R.drawable.button_background);
+            }
+
+            views.setImageViewBitmap(R.id.tempicon, CommonUtilities.buildTelldusIcon(
+                "temperature",
+                colorIdle,
+                140,
+                85,
+                85,
+                context));
+            views.setTextViewText(R.id.txtValue, "12");
+            views.setTextViewText(R.id.txtUnit, "°C");
+            views.setTextViewText(R.id.txtLabel, "Heat");
+            views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
+                "temperature",
+                colorIdle,
+                140,
+                85,
+                85,
+                context));
         }
 
         if (isBasicUser) {

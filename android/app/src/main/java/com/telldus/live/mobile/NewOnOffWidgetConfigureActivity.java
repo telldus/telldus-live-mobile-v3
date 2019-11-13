@@ -53,7 +53,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.text.NumberFormat;
 import java.text.DecimalFormat;
 
 import com.telldus.live.mobile.Database.MyDBHandler;
@@ -446,7 +445,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         if (hasLearn != null && hasLearn) {
                             sizeSuppMeth = sizeSuppMeth - 1;
                         }
-                        Boolean showDevice = sizeSuppMeth <= 2 && sizeSuppMeth > 0;
+
+                        Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
+                        Boolean showDevice = (sizeSuppMeth <= 2 && sizeSuppMeth > 0) || hasThermo;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");
