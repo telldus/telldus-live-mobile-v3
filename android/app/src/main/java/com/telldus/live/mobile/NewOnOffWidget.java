@@ -484,7 +484,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setImageViewBitmap(R.id.tempicon, CommonUtilities.buildTelldusIcon(
                 "temperature",
                 colorIdle,
-                140,
+                90,
                 85,
                 85,
                 context));
@@ -494,7 +494,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
                 "temperature",
                 colorIdle,
-                140,
+                90,
                 85,
                 85,
                 context));
