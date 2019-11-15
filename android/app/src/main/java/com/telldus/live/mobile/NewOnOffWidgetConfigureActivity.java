@@ -51,10 +51,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.text.DecimalFormat;
 
+import com.telldus.live.mobile.API.SensorsAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
@@ -98,6 +100,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     private String client_secret;
 
     int stateID;
+    String deviceCurrentState = null;
 
     private String sesID;
     MyDBHandler database = new MyDBHandler(this);
@@ -117,6 +120,9 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     TextView text_default;
     TextView text_trans_dark;
     TextView text_trans_light;
+
+    private JSONArray JsonsensorList = null;
+    private String deviceStateValue = null;
 
     public static final String ROOT = "fonts/",
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
@@ -165,7 +171,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         }
 
         setResult(RESULT_CANCELED);
-        createDeviceApi();
+        getAllSensorsAndDevices();
         setContentView(R.layout.new_on_off_widget_configure);
 
         String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
@@ -287,7 +293,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
-                    String deviceCurrentState = null;
+
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -295,7 +301,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         deviceName.getText().toString(),
                         deviceSupportedMethods,
                         deviceTypeCurrent,
-                        "", // As of now deviceStateValue does matters for only DIM devices.
+                        deviceStateValue,
                         trans,
                         currentUserId,
                         methodRequested,
@@ -329,6 +335,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 Map<String, Object> info = DeviceInfoMap.get(id);
 
                                 deviceSupportedMethods = Integer.parseInt(info.get("methods").toString());
+                                deviceStateValue = info.get("deviceStateValue") == null ? null : info.get("deviceStateValue").toString();
 
                                 deviceTypeCurrent = info.get("deviceType").toString();
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
@@ -418,7 +425,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         text_trans_light.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.gray));
     }
 
-    void createDeviceApi() {
+    void getAllDevices() {
         String params = "/devices/list?supportedMethods=4023&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, "DeviceApi2", new OnAPITaskComplete() {
@@ -426,6 +433,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             public void onSuccess(final JSONObject response) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_2);
                 try {
+
+                    String deviceStateValueLocal = null;
 
                     DevicesUtilities deviceUtils = new DevicesUtilities();
 
@@ -438,6 +447,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         stateID = curObj.getInt("state");
                         Integer methods = curObj.getInt("methods");
                         String deviceType = curObj.getString("deviceType");
+                        JSONArray stateValues = curObj.getJSONArray("stateValues");
 
                         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                         Integer sizeSuppMeth = supportedMethods.size();
@@ -449,6 +459,74 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
                         Boolean showDevice = (sizeSuppMeth <= 2 && sizeSuppMeth > 0) || hasThermo;
 
+                        Integer clientDeviceId = curObj.getInt("clientDeviceId");
+                        Integer clientId = curObj.getInt("client");
+
+                        if (hasThermo) {
+                            if (JsonsensorList != null) {
+                                for (int ii = 0; ii < JsonsensorList.length(); ii++) {
+                                    try {
+                                        JSONObject currObject = JsonsensorList.getJSONObject(ii);
+
+                                        Integer sensorId = currObject.getInt("sensorId");
+                                        if (clientDeviceId == sensorId && clientId == currObject.getInt("client")) {
+                                            JSONArray SensorData = currObject.getJSONArray("data");
+                                            for (int j = 0; j < SensorData.length(); j++) {
+                                                JSONObject currData = SensorData.getJSONObject(j);
+
+                                                String nameScale = currData.optString("name");
+                                                Integer scale = currData.optInt("scale");
+                                                String value = currData.optString("value");
+
+                                                if (nameScale.equalsIgnoreCase("temp") && scale == 0) {
+                                                    deviceStateValueLocal = value;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    catch (Exception e) {
+                                    }
+                                }
+                            }
+                            if (stateValues != null && stateValues.length() > 0) {
+                                try {
+
+                                    ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(getApplicationContext());
+
+                                    for (int ii = 0; ii < stateValues.length(); ii++) {
+
+                                        JSONObject stateAndVal = stateValues.getJSONObject(ii);
+                                        String item = deviceUtils.methods.get(Integer.parseInt(stateAndVal.getString("state"), 10));
+
+                                        if (item != null && stateAndVal.getJSONObject("value") != null) {
+                                            JSONObject setpoint = stateAndVal.getJSONObject("value").getJSONObject("setpoint");
+                                            if (setpoint != null) {
+                                                for (int j = 0; j < modes.size(); j++) {
+                                                    Map m = modes.get(j);
+                                                    if (setpoint.length() == 1) {
+
+                                                        Iterator<String> setpointKeys = setpoint.keys();
+                                                        String setpointKey = setpointKeys.next();
+
+                                                        if (setpoint.optString(setpointKey).equalsIgnoreCase(m.get("mode").toString())) {
+                                                            stateID = Integer.parseInt(m.get("id").toString(), 10);
+                                                        }
+                                                    } else {
+                                                        if (stateAndVal.getJSONObject("value").getString("mode").equalsIgnoreCase(m.get("mode").toString())) {
+                                                            stateID = Integer.parseInt(m.get("id").toString(), 10);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                catch (Exception e) {
+                                }
+                            }
+                            deviceCurrentState = String.valueOf(stateID);
+                        }
+
                         if (showDevice) {
                             Integer id = curObj.getInt("id");
                             nameListItems.add(name);
@@ -459,6 +537,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                             info.put("methods", methods);
                             info.put("name", name);
                             info.put("deviceType", deviceType);
+                            info.put("deviceStateValue", deviceStateValueLocal);
                             DeviceInfoMap.put(id, info);
                         }
                     }
@@ -476,6 +555,28 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             public void onError(ANError error) {
                 String message = getResources().getString(R.string.reserved_widget_android_error_networkFailed);
                 updateUI(message);
+            }
+        });
+    }
+
+
+    void getAllSensorsAndDevices() {
+        String params = "/sensors/list?includeValues=1&includeScale=1";
+        SensorsAPI sensorsAPI = new SensorsAPI();
+        sensorsAPI.getSensorsList(params, getApplicationContext(), "SensorsApi", new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+                try {
+                    JSONObject sensorData = new JSONObject(response.toString());
+                    JsonsensorList = sensorData.getJSONArray("sensor");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                getAllDevices();
+            }
+            @Override
+            public void onError(ANError error) {
+                getAllDevices();
             }
         });
     }

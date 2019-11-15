@@ -37,6 +37,7 @@ import com.androidnetworking.error.ANError;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Date;
 import java.util.List;
@@ -137,6 +138,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String deviceType = DeviceWidgetInfo.getDeviceType();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
+        deviceStateValue = deviceStateValue == "null" ? "" : deviceStateValue;
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -488,16 +491,34 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 85,
                 85,
                 context));
-            views.setTextViewText(R.id.txtValue, "12");
-            views.setTextViewText(R.id.txtUnit, "°C");
-            views.setTextViewText(R.id.txtLabel, "Heat");
+
+            String thermoState = "", icon = "";
+            ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(context);
+
+            for (int j = 0; j < modes.size(); j++) {
+                Map m = modes.get(j);
+                if (Integer.parseInt(m.get("id").toString(), 10) == Integer.parseInt(state, 10)) {
+                    thermoState = m.get("label").toString();
+                    icon = m.get("icon").toString();
+                }
+            }
+
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
-                "temperature",
+                    icon,
                 colorIdle,
                 90,
                 85,
                 85,
                 context));
+
+            if (deviceStateValue != null && deviceStateValue != "") {
+                views.setTextViewText(R.id.txtValue, deviceStateValue);
+                views.setTextViewText(R.id.txtUnit, "°C");
+            } else {
+                views.setViewVisibility(R.id.thermoValueCover, View.GONE);
+            }
+
+            views.setTextViewText(R.id.txtLabel, thermoState);
         }
 
         if (isBasicUser) {
