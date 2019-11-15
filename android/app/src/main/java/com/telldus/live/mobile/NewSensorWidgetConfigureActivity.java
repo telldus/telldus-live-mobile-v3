@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.telldus.live.mobile.API.SensorsAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
@@ -543,11 +544,11 @@ public class NewSensorWidgetConfigureActivity extends Activity {
     void createSensorsApi() {
 
         String params = "/sensors/list?includeValues=1&includeScale=1";
-        API endPoints = new API();
-        endPoints.callEndPoint(getApplicationContext(), params, "SensorsApi", new OnAPITaskComplete() {
+        SensorsAPI sensorsAPI = new SensorsAPI();
+        sensorsAPI.getSensorsList(params, getApplicationContext(), "SensorsApi", new OnAPITaskComplete() {
             @Override
             public void onSuccess(final JSONObject response) {
-                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
+                String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_sensor);
                 try {
                     JSONObject sensorData = new JSONObject(response.toString());
                     JsonsensorList = sensorData.getJSONArray("sensor");
