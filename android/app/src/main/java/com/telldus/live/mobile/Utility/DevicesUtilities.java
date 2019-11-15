@@ -22,6 +22,8 @@ package com.telldus.live.mobile.Utility;
 import android.content.Context;
 import android.util.Log;
 
+import com.telldus.live.mobile.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +33,7 @@ import java.util.Map;
 
 public class DevicesUtilities {
 
-    Map<Integer, String> methods = new HashMap<Integer, String>() {{
+    public Map<Integer, String> methods = new HashMap<Integer, String>() {{
         put(1, "TURNON");
         put(2, "TURNOFF");
         put(4, "BELL");
@@ -295,5 +297,109 @@ public class DevicesUtilities {
 
     public int toDimmerValue (Integer sliderValue) {
         return (int) Math.round(sliderValue * 255 / 100.0);
+    }
+
+    public ArrayList<Map> getKnownModesThermostat (Context context) {
+        Map modeAuto = new HashMap();
+        modeAuto.put("label", context.getResources().getString(R.string.reserved_widget_android_label_auto));
+        modeAuto.put("icon", "thermostatauto");
+        modeAuto.put("mode", "auto");
+        modeAuto.put("id", "0");
+
+        Map modeHeat = new HashMap();
+        modeHeat.put("label", context.getResources().getString(R.string.reserved_widget_android_label_heat));
+        modeHeat.put("icon", "thermostatheat");
+        modeHeat.put("mode", "heat");
+        modeHeat.put("id", "1");
+
+        Map modeCool = new HashMap();
+        modeCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_cool));
+        modeCool.put("icon", "thermostatheatcool");
+        modeCool.put("mode", "cool");
+        modeCool.put("id", "2");
+
+        Map modeEcoHeat = new HashMap();
+        modeEcoHeat.put("label", context.getResources().getString(R.string.reserved_widget_android_label_eco_heat));
+        modeEcoHeat.put("icon", "thermostateco");
+        modeEcoHeat.put("mode", "eco-heat");
+        modeEcoHeat.put("id", "3");
+
+        Map modeEcoCool = new HashMap();
+        modeEcoCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_eco_cool));
+        modeEcoCool.put("icon", "thermostateco");
+        modeEcoCool.put("mode", "eco-cool");
+        modeEcoCool.put("id", "4");
+
+        Map modeHeatCool = new HashMap();
+        modeHeatCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_heat_cool));
+        modeHeatCool.put("icon", "thermostatheatcool");
+        modeHeatCool.put("mode", "heat-cool");
+        modeHeatCool.put("id", "5");
+
+        Map modeManual = new HashMap();
+        modeManual.put("label", context.getResources().getString(R.string.reserved_widget_android_label_manual));
+        modeManual.put("icon", "thermostatauto");
+        modeManual.put("mode", "manual");
+        modeManual.put("id", "6");
+
+        Map modeProgram = new HashMap();
+        modeProgram.put("label", context.getResources().getString(R.string.reserved_widget_android_label_program));
+        modeProgram.put("icon", "thermostatprogram");
+        modeProgram.put("mode", "program");
+        modeProgram.put("id", "7");
+
+        Map modeDry = new HashMap();
+        modeDry.put("label", context.getResources().getString(R.string.reserved_widget_android_label_dry));
+        modeDry.put("icon", "thermostatdry");
+        modeDry.put("mode", "dry");
+        modeDry.put("id", "8");
+
+        Map modeAway = new HashMap();
+        modeAway.put("label", context.getResources().getString(R.string.reserved_widget_android_label_away));
+        modeAway.put("icon", "thermostataway");
+        modeAway.put("mode", "away");
+        modeAway.put("id", "9");
+
+        Map modeHG = new HashMap();
+        modeHG.put("label", context.getResources().getString(R.string.reserved_widget_android_label_HG));
+        modeHG.put("icon", "thermostathg");
+        modeHG.put("mode", "hg");
+        modeHG.put("id", "10");
+
+        Map modeMax = new HashMap();
+        modeMax.put("label", context.getResources().getString(R.string.reserved_widget_android_label_max));
+        modeMax.put("icon", "thermostatheat");
+        modeMax.put("mode", "max");
+        modeMax.put("id", "11");
+
+        Map modeOff = new HashMap();
+        modeOff.put("label", context.getResources().getString(R.string.reserved_widget_android_label_off));
+        modeOff.put("icon", "off");
+        modeOff.put("mode", "off");
+        modeOff.put("id", "12");
+
+        Map modeFan = new HashMap();
+        modeFan.put("label", context.getResources().getString(R.string.reserved_widget_android_label_fan));
+        modeFan.put("icon", "thermostatfan");
+        modeFan.put("mode", "fan");
+        modeFan.put("id", "13");
+
+        ArrayList<Map> modesList = new ArrayList<Map>();
+        modesList.add(modeAuto);
+        modesList.add(modeHeat);
+        modesList.add(modeCool);
+        modesList.add(modeEcoHeat);
+        modesList.add(modeEcoCool);
+        modesList.add(modeHeatCool);
+        modesList.add(modeManual);
+        modesList.add(modeProgram);
+        modesList.add(modeDry);
+        modesList.add(modeAway);
+        modesList.add(modeHG);
+        modesList.add(modeMax);
+        modesList.add(modeOff);
+        modesList.add(modeFan);
+
+        return modesList;
     }
 }
