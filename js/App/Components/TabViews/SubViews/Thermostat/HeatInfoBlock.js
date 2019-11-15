@@ -98,7 +98,7 @@ class HeatInfoBlock extends View {
 		let accessibilityLabel = `${formatMessage(i18n.thermostat)} ${name}, ${labelCMode}, ${labelValue}`;
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
-		const showValue = currentMode !== 'off' && currentMode !== 'fan';
+		const showValue = currentMode !== 'off' && currentMode !== 'fan' && currentValue;
 
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle, {
@@ -112,6 +112,7 @@ class HeatInfoBlock extends View {
 							style={textOneStyle}
 							value={currentValue}
 							minimumFractionDigits={1}/>
+
 						<Text style={textTwoStyle}>°C</Text>
 					</Text>
 					}

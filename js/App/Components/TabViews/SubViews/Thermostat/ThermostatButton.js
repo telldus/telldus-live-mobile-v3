@@ -120,8 +120,6 @@ class ThermostatButton extends View<Props, State> {
 		const { stateValues = {} } = device;
 		const { THERMOSTAT: { mode } } = stateValues;
 
-		let currentModeValue = isNaN(currentTemp) ? -100.0 : currentTemp;
-
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
 			style={[styles.buttonCommon, infoBlockStyle, {flex: 1, justifyContent: 'flex-start'}]}
@@ -129,7 +127,7 @@ class ThermostatButton extends View<Props, State> {
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
-			currentValue={currentModeValue}
+			currentValue={currentTemp}
 			currentMode={mode}
 			iconStyle={styles.iconStyle}
 			textOneStyle={styles.textOneStyle}
