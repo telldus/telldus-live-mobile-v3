@@ -35,14 +35,18 @@ import android.util.Log;
 
 import com.androidnetworking.error.ANError;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Date;
 import java.util.List;
 import java.util.Arrays;
 
+import com.telldus.live.mobile.API.SensorsAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
@@ -51,6 +55,7 @@ import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -71,6 +76,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
     private static final String API_TAG = "SetState1";
 
+    public static final String ACTION_AUTO_UPDATE = "com.telldus.live.mobile.AUTO_UPDATE";
+
     DevicesAPI deviceAPI = new DevicesAPI();
 
     Handler handlerResetDeviceStateToNull;
@@ -88,6 +95,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
+        SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
+
         MyDBHandler db = new MyDBHandler(context);
 
         DeviceInfo DeviceWidgetInfo = db.findWidgetInfoDevice(appWidgetId);
@@ -103,6 +112,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
+
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewOnOffWidget.class);
 
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
             String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
@@ -129,6 +140,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 context));
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewOnOffWidget.class);
             return;
         }
 
@@ -527,8 +539,16 @@ public class NewOnOffWidget extends AppWidgetProvider {
         if (isBasicUser) {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             views.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
+
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewOnOffWidget.class);
         } else {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
+
+            int updateInterval = DeviceWidgetInfo.getUpdateInterval();
+            boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId, NewOnOffWidget.class);
+            if (!alreadyRunning) {
+                sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval, NewOnOffWidget.class);
+            }
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
@@ -585,7 +605,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
         // When the user deletes the widget, delete the preference associated with it.
         MyDBHandler db = new MyDBHandler(context);
         PrefManager prefManager = new PrefManager(context);
+
+        SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
+
         for (int appWidgetId : appWidgetIds) {
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewOnOffWidget.class);
             boolean b = db.deleteWidgetInfoDevice(appWidgetId);
         }
     }
@@ -671,11 +695,33 @@ public class NewOnOffWidget extends AppWidgetProvider {
             createDeviceActionApi(context, deviceId, 2, widgetId, db, "Off");
         }
         if (ACTION_THERMOSTAT.equals(intent.getAction()) && methods != 0) {
+            int updateInterval = widgetInfo.getUpdateInterval();
+            SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
+            boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(widgetId, NewOnOffWidget.class);
+            if (!alreadyRunning) {
+                sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewOnOffWidget.class);
+            }
+
             WidgetModule.setOpenThermostatControl(deviceId);
             Intent launchActivity = new Intent(context, MainActivity.class);
             launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(launchActivity);
+        }
+        if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
+            int updateInterval = widgetInfo.getUpdateInterval();
+            SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
+            sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewOnOffWidget.class);
+
+            String methReq = widgetInfo.getMethodRequested();
+            String state = widgetInfo.getState();
+            String stateValue = widgetInfo.getDeviceStateValue();
+
+            db.updateDeviceInfo(methReq, state, stateValue, 1, widgetId);
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            updateAppWidget(context, widgetManager, widgetId);
+
+            updateThermostat(context, deviceId, widgetId, db);
         }
     }
 
@@ -744,6 +790,135 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
+            }
+        });
+    }
+
+    void updateThermostat(final Context context, final int deviceId, final int widgetId, final MyDBHandler db) {
+
+        DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+        int clientDeviceId = widgetInfo.getClientDeviceid();
+        int clientId = widgetInfo.getClientId();
+        String methReq = widgetInfo.getMethodRequested();
+        final String state = widgetInfo.getState();
+        String stateValue = widgetInfo.getDeviceStateValue();
+
+        SensorsAPI sensorsAPI = new SensorsAPI();
+        String params = "/sensors/list?includeValues=1&includeScale=1";
+
+        sensorsAPI.getSensorsList(params, context, "SensorsApi", new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+                    DevicesAPI devicessAPI = new DevicesAPI();
+                    devicessAPI.getDeviceInfoGeneral(deviceId, context, new OnAPITaskComplete() {
+
+                        @Override
+                        public void onSuccess(JSONObject result) {
+                            try {
+
+                                String state2 = state;
+
+                                JSONObject sensorData = new JSONObject(response.toString());
+                                JSONArray JsonsensorList = sensorData.getJSONArray("sensor");
+
+                                DevicesUtilities deviceUtils = new DevicesUtilities();
+                                ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(context);
+
+                                if (JsonsensorList != null) {
+
+                                    try {
+                                        JSONArray stateValues = result.getJSONArray("statevalues");
+                                        if (stateValues != null) {
+                                            for (int ii = 0; ii < stateValues.length(); ii++) {
+                                                try {
+                                                    JSONObject stateValuesObj = stateValues.getJSONObject(ii);
+                                                    String stateC = stateValuesObj.getString("state");
+
+                                                    if (stateC.equalsIgnoreCase("2048")) {
+                                                        JSONObject valuesObj = stateValuesObj.getJSONObject("value");
+                                                        JSONObject setpointObj = valuesObj.getJSONObject("setpoint");
+                                                        String mode = valuesObj.getString("mode");
+
+                                                        for (int j = 0; j < modes.size(); j++) {
+                                                            Map m = modes.get(j);
+                                                            if (setpointObj != null && setpointObj.length() == 1 && mode == null) {
+                                                                Iterator<String> setpointKeys = setpointObj.keys();
+                                                                String setpointKey = setpointKeys.next();
+                                                                if (setpointObj.optString(setpointKey).equalsIgnoreCase(m.get("mode").toString())) {
+                                                                    state2 = m.get("id").toString();
+                                                                }
+                                                            } else {
+                                                                if (mode.equalsIgnoreCase(m.get("mode").toString())) {
+                                                                    state2 = m.get("id").toString();
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } catch (Exception e) {
+
+                                                }
+                                            }
+                                        }
+                                    } catch(Exception e) {
+
+                                    }
+
+                                    for (int ii = 0; ii < JsonsensorList.length(); ii++) {
+                                        try {
+
+                                            JSONObject currObject = JsonsensorList.getJSONObject(ii);
+                                            Integer sensorId = currObject.getInt("sensorId");
+                                            if (clientDeviceId == sensorId && clientId == currObject.getInt("client")) {
+                                                JSONArray SensorData = currObject.getJSONArray("data");
+                                                for (int j = 0; j < SensorData.length(); j++) {
+                                                    JSONObject currData = SensorData.getJSONObject(j);
+
+                                                    String nameScale = currData.optString("name");
+                                                    Integer scale = currData.optInt("scale");
+                                                    String value = currData.optString("value");
+
+                                                    if (nameScale.equalsIgnoreCase("temp") && scale == 0) {
+                                                        db.updateDeviceInfo(methReq, state2, value, 0, widgetId);
+                                                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                                        updateAppWidget(context, widgetManager, widgetId);
+                                                        return;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception e) {
+                                            db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                                            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                            updateAppWidget(context, widgetManager, widgetId);
+                                        }
+                                    }
+                                } else {
+                                    db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                    updateAppWidget(context, widgetManager, widgetId);
+                                }
+                            } catch (JSONException e) {
+                                db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                updateAppWidget(context, widgetManager, widgetId);
+
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(ANError result) {
+                            db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                            updateAppWidget(context, widgetManager, widgetId);
+                        }
+                    });
+            }
+            @Override
+            public void onError(ANError error) {
+                db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
             }
         });
     }

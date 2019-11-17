@@ -83,6 +83,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     CharSequence[] deviceIdList = null;
 
     public int selectedDeviceIndex;
+    public int selectedIntervalOptionsIndex = 1;
 
     //UI
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -126,6 +127,13 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
     public static final String ROOT = "fonts/",
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
+
+
+    CharSequence[] intervalOptionsValues = {
+            "5", "10", "30", "60",
+    };
+    int multiplierMilli = 60000;
+    private Integer selectInterval = 0;
 
     public static Typeface getTypeface(Context context, String font) {
         return Typeface.createFromAsset(context.getAssets(), font);
@@ -294,6 +302,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     String currentUserId = prefManager.getUserId();
                     String methodRequested = null;
 
+                    Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
+                    int clientDeviceId = dInfoMap.get("clientDeviceId") != null ? Integer.parseInt(dInfoMap.get("clientDeviceId").toString(), 10) : -1;
+                    int clientId = dInfoMap.get("clientId") != null ? Integer.parseInt(dInfoMap.get("clientId").toString(), 10) : -1;
+
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
                         mAppWidgetId,
@@ -305,7 +317,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         trans,
                         currentUserId,
                         methodRequested,
-                        0);
+                        0,
+                        selectInterval,
+                        clientDeviceId,
+                        clientId
+                            );
                     db.addWidgetDevice(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -317,6 +333,14 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     finish();
                 }
             });
+
+            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
+            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+
+            TextView settingText = (TextView) findViewById(R.id.settingText);
+            View btSelectPollInterval = (View)findViewById(R.id.btSelectPollInterval);
+            TextView sensorRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
+
 
             btSelectDevice = (View) findViewById(R.id.btSelectDevice);
             btSelectDevice.setOnClickListener(new View.OnClickListener() {
@@ -341,14 +365,61 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
                                 tvIcon1.setText(deviceIcon);
 
+                                deviceCurrentState = info.get("state").toString();
+
+                                Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
+                                Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
+
+                                if (hasThermo) {
+                                    settingText.setVisibility(View.VISIBLE);
+                                    btSelectPollInterval.setVisibility(View.VISIBLE);
+                                    settingText.setTypeface(subtitleFont);
+                                    settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
+
+                                    selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
+                                } else {
+                                    settingText.setVisibility(View.GONE);
+                                    btSelectPollInterval.setVisibility(View.VISIBLE);
+                                    selectInterval = 0;
+                                }
+                                
                                 ad.dismiss();
                             }
                         });
                     ad = builder.show();
                 }
             });
-            Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
-            Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
+
+            final CharSequence[] intervalOptions = {
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_0),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
+                    getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
+            };
+
+            btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
+                AlertDialog ad;
+
+                @Override
+                public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
+                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sensorRepeatIntervalLabel.setText(intervalOptions[which]);
+
+                            selectedIntervalOptionsIndex = which;
+                            String selected = intervalOptions[which].toString();
+                            Integer selectedValue = Integer.parseInt(intervalOptionsValues[which].toString());
+                            selectInterval = selectedValue * multiplierMilli;
+
+                            ad.dismiss();
+                        }
+                    });
+                    ad = builder.show();
+                }
+            });
+            
             textTest.setTypeface(titleFont);
             chooseSetting.setTypeface(titleFont);
             deviceName.setTypeface(subtitleFont);
@@ -524,7 +595,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 catch (Exception e) {
                                 }
                             }
-                            deviceCurrentState = String.valueOf(stateID);
                         }
 
                         if (showDevice) {
@@ -538,6 +608,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                             info.put("name", name);
                             info.put("deviceType", deviceType);
                             info.put("deviceStateValue", deviceStateValueLocal);
+                            info.put("clientDeviceId", clientDeviceId);
+                            info.put("clientId", clientId);
                             DeviceInfoMap.put(id, info);
                         }
                     }
