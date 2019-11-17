@@ -361,7 +361,7 @@ public class DevicesUtilities {
         modeAway.put("id", "9");
 
         Map modeHG = new HashMap();
-        modeHG.put("label", context.getResources().getString(R.string.reserved_widget_android_label_HG));
+        modeHG.put("label", context.getResources().getString(R.string.reserved_widget_android_label_hg));
         modeHG.put("icon", "thermostathg");
         modeHG.put("mode", "hg");
         modeHG.put("id", "10");
