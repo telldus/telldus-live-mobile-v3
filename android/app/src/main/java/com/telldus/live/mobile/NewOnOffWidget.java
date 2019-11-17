@@ -62,6 +62,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_ON = "ACTION_ON";
     private static final String ACTION_OFF = "ACTION_OFF";
     private static final String ACTION_BELL = "ACTION_BELL";
+    private static final String ACTION_THERMOSTAT = "ACTION_THERMOSTAT";
     private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
 
     private static final String METHOD_ON = "1";
@@ -473,6 +474,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.thermoCover, View.VISIBLE);
             views.setViewVisibility(R.id.thermoTextCover, View.VISIBLE);
 
+            views.setOnClickPendingIntent(R.id.thermoCover, getPendingSelf(context, ACTION_THERMOSTAT, appWidgetId));
+
             int colorIdle = ContextCompat.getColor(context, R.color.brandSecondary);
             if (transparent.equals("dark")) {
                 views.setInt(R.id.thermoCover, "setBackgroundResource", R.drawable.shape_border_round_black);
@@ -666,6 +669,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceActionApi(context, deviceId, 2, widgetId, db, "Off");
+        }
+        if (ACTION_THERMOSTAT.equals(intent.getAction()) && methods != 0) {
+            WidgetModule.setOpenThermostatControl(deviceId);
+            Intent launchActivity = new Intent(context, MainActivity.class);
+            launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(launchActivity);
         }
     }
 

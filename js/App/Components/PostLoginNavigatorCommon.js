@@ -186,6 +186,7 @@ componentDidMount() {
 	});
 
 	this.checkIfOpenPurchase();
+	this.checkIfOpenThermostatControl();
 
 	NetInfo.addEventListener(
 		'connectionChange',
@@ -233,6 +234,19 @@ checkIfOpenPurchase = async () => {
 		if (openPurchase) {
 			AndroidWidget.setOpenPurchase(false);
 			navigate('AdditionalPlansPaymentsScreen', {}, 'AdditionalPlansPaymentsScreen');
+		}
+	}
+}
+
+checkIfOpenThermostatControl = async () => {
+	// TODO: Remove check once iOS support widgets.
+	if (Platform.OS === 'android') {
+		const id = await AndroidWidget.checkIfOpenThermostatControl();
+		if (id && id !== -1) {
+			AndroidWidget.setOpenThermostatControl(-1);
+			navigate('ThermostatControl', {
+				id,
+			}, 'ThermostatControl');
 		}
 	}
 }

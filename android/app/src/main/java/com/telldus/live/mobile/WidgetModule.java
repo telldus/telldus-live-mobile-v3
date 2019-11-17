@@ -54,6 +54,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   WidgetsUpdater wUpdater = new WidgetsUpdater();
 
   static boolean openPurchase = false;
+  static int openThermostatControl = -1;
 
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
@@ -305,5 +306,15 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void checkIfOpenPurchase(Promise promise) {
     promise.resolve(openPurchase);
+  }
+
+  @ReactMethod
+  public static void setOpenThermostatControl(int value) {
+    openThermostatControl = value;
+  }
+
+  @ReactMethod
+  public void checkIfOpenThermostatControl(Promise promise) {
+    promise.resolve(openThermostatControl);
   }
 }
