@@ -31,12 +31,16 @@ public class DeviceInfo {
     String userId;
     String methodRequested;
     Integer isShowingStatus;
+    Integer updateInterval;
+    Integer clientDeviceId;
+    Integer clientId;
 
     public DeviceInfo() {
     }
 
     public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
-    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested, Integer isShowingStatus) {
+    String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
+                      Integer isShowingStatus, Integer updateInterval, Integer clientDeviceId, Integer clientId) {
         this.state = state;
         this.widgetId = widgetId;
         this.deviceId = deviceId;
@@ -48,6 +52,9 @@ public class DeviceInfo {
         this.userId = userId;
         this.methodRequested = methodRequested;
         this.isShowingStatus = isShowingStatus;
+        this.updateInterval = updateInterval;
+        this.clientDeviceId = clientDeviceId;
+        this.clientId = clientId;
     }
 
     public String getState() {
@@ -136,5 +143,29 @@ public class DeviceInfo {
 
     public void setIsShowingStatus(Integer isShowingStatus) {
         this.isShowingStatus = isShowingStatus;
+    }
+
+    public Integer getUpdateInterval() {
+        return updateInterval;
+    }
+
+    public void setUpdateInterval(Integer updateInterval) {
+        this.updateInterval = updateInterval;
+    }
+
+    public Integer getClientDeviceid() {
+        return clientDeviceId;
+    }
+
+    public void setClientDeviceid(Integer clientDeviceId) {
+        this.clientDeviceId = clientDeviceId;
+    }
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
     }
 }
