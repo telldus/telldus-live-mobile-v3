@@ -33,6 +33,8 @@ import android.app.NotificationManager;
 import androidx.core.app.NotificationCompat;
 import android.app.NotificationChannel;
 
+import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.NewOnOffWidget;
 import com.telldus.live.mobile.NewSensorWidget;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
@@ -91,7 +93,12 @@ public class RestartSensorUpdateAlarmManager extends Service {
             SensorInfo widgetInfo = db.findWidgetInfoSensor(widgetId);
             if (widgetInfo != null) {
                 Integer updateInterval = widgetInfo.getUpdateInterval();
-                sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval);
+                sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewSensorWidget.class);
+            }
+            DeviceInfo widgetInfoDevice = db.findWidgetInfoDevice(widgetId);
+            if (widgetInfoDevice != null) {
+                Integer updateInterval = widgetInfoDevice.getUpdateInterval();
+                sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewOnOffWidget.class);
             }
         }
         this.stopSelf();

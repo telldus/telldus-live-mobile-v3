@@ -98,7 +98,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         }
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
-            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
 
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.logged_out);
             String preScript = context.getResources().getString(R.string.reserved_widget_android_message_user_logged_out_one);
@@ -126,7 +126,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
-            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
             return;
         }
 
@@ -253,14 +253,14 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (isBasicUser) {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             view.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
-            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
         } else {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
 
             int updateInterval = sensorWidgetInfo.getUpdateInterval();
-            boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId);
+            boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId, NewSensorWidget.class);
             if (!alreadyRunning) {
-                sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval);
+                sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval, NewSensorWidget.class);
             }
         }
 
@@ -296,7 +296,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         MyDBHandler db = new MyDBHandler(context);
         SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
         for (int appWidgetId : appWidgetIds) {
-            sensorUpdateAlarmManager.stopAlarm(appWidgetId);
+            sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
             boolean b = db.deleteWidgetInfoSensor(appWidgetId);
         }
     }
@@ -368,7 +368,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
             int updateInterval = widgetInfo.getUpdateInterval();
             SensorUpdateAlarmManager sensorUpdateAlarmManager = new SensorUpdateAlarmManager(context);
-            sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval);
+            sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewSensorWidget.class);
 
             createSensorApi(sensorId, widgetId, db, context);
         }
@@ -382,7 +382,6 @@ public class NewSensorWidget extends AppWidgetProvider {
     }
 
     void createSensorApi(final Integer sensorId, final Integer widgetId, final MyDBHandler database, final Context context) {
-
         String params = "/sensor/info?id="+sensorId;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, API_TAG, new OnAPITaskComplete() {

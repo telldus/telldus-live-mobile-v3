@@ -38,12 +38,12 @@ public class SensorUpdateAlarmManager {
         mContext = context;
     }
 
-    public void startAlarm(int widgetId, int updateInterval) {
+    public void startAlarm(int widgetId, int updateInterval, Class instance) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND, updateInterval);
 
-        boolean alreadyRunning = checkIfAlarmAlreadyRunning(widgetId);
-        Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
+        boolean alreadyRunning = checkIfAlarmAlreadyRunning(widgetId, instance);
+        Intent alarmIntent = new Intent(mContext, instance);
         alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
         alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -52,8 +52,9 @@ public class SensorUpdateAlarmManager {
         alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
     }
 
-    public void stopAlarm(int widgetId) {
-        Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
+    public void stopAlarm(int widgetId, Class instance) {
+
+        Intent alarmIntent = new Intent(mContext, instance);
         alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
         alarmIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -63,8 +64,8 @@ public class SensorUpdateAlarmManager {
         pendingIntent.cancel();
     }
 
-    public boolean checkIfAlarmAlreadyRunning(int widgetId) {
-        Intent alarmIntent = new Intent(mContext, NewSensorWidget.class);
+    public boolean checkIfAlarmAlreadyRunning(int widgetId, Class instance) {
+        Intent alarmIntent = new Intent(mContext, instance);
         alarmIntent.setAction(NewSensorWidget.ACTION_AUTO_UPDATE);
         boolean isRunning = (PendingIntent.getBroadcast(mContext, widgetId, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null);
         return isRunning;
