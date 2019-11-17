@@ -186,4 +186,20 @@ public class DevicesAPI {
             }
         }
     }
+
+    public void getDeviceInfoGeneral(final Integer deviceId, final Context context, final OnAPITaskComplete callBack) {
+        String params = "/device/info?id=" + deviceId + "+&supportedMethods=" + supportedMethodsAggreg;
+        API endPoints = new API();
+        endPoints.callEndPoint(context, params, "DeviceInfo", new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                callBack.onSuccess(response);
+            }
+
+            @Override
+            public void onError(ANError error) {
+                callBack.onError(error);
+            }
+        });
+    }
 }
