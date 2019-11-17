@@ -34,7 +34,7 @@ import com.telldus.live.mobile.Model.SensorInfo;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "Telldus.db";
 
     private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
@@ -49,6 +49,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String TRANSPARENT = "transparent";
     public static final String DEVICE_METHOD_REQUESTED = "deviceMethodRequested";
     public static final String DEVICE_IS_SHOWING_STATUS = "deviceIsShowingStatus";
+
+    public static final String CLIENT_DEVICE_ID = "clientDeviceId";
+    public static final String CLIENT_ID = "clientId";
 
     public static final String TABLE_WIDGET_INFO_SENSOR = "WidgetInfoSensor";
     public static final String WIDGET_ID_SENSOR = "widgetIdSensor";
@@ -74,7 +77,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " INTEGER," + DEVICE_NAME + " TEXT," + DEVICE_STATE + " TEXT," + DEVICE_METHODS
                 + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT
                 + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT," + DEVICE_METHOD_REQUESTED
-                + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER" + ")";
+                + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
+                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
@@ -92,11 +96,40 @@ public class MyDBHandler extends SQLiteOpenHelper {
             // A new column introduced into the table "TABLE_WIDGET_INFO_SENSOR"
             addColumnIsUpdatingToSensorsTable(db);
         }
+        if (oldVersion == 2 && newVersion == 3) {
+            // A new columns introduced into the table "TABLE_WIDGET_INFO_DEVICE"
+            addUpdateIntervalToDevicesTable(db);
+            addClientDeviceIdToDevicesTable(db);
+            addClientIdToDevicesTable(db);
+        }
+        if (oldVersion == 1 && newVersion == 3) {
+            // A new column introduced into the table "TABLE_WIDGET_INFO_SENSOR"
+            // A new columns introduced into the table "TABLE_WIDGET_INFO_DEVICE"
+            addColumnIsUpdatingToSensorsTable(db);
+            addUpdateIntervalToDevicesTable(db);
+            addClientDeviceIdToDevicesTable(db);
+            addClientIdToDevicesTable(db);
+        }
     }
 
     public void addColumnIsUpdatingToSensorsTable(SQLiteDatabase db) {
         String ALTER_TABLE_SENSOR = "ALTER TABLE " + TABLE_WIDGET_INFO_SENSOR + " ADD COLUMN " + SENSOR_IS_UPDATING + " TEXT";
         db.execSQL(ALTER_TABLE_SENSOR);
+    }
+
+    public void addUpdateIntervalToDevicesTable(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + SENSOR_UPDATE_INTERVAL + " INTEGER";
+        db.execSQL(ALTER_TABLE_DEVICE);
+    }
+
+    public void addClientDeviceIdToDevicesTable(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + CLIENT_DEVICE_ID + " INTEGER";
+        db.execSQL(ALTER_TABLE_DEVICE);
+    }
+
+    public void addClientIdToDevicesTable(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + CLIENT_ID + " INTEGER";
+        db.execSQL(ALTER_TABLE_DEVICE);
     }
 
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
@@ -114,6 +147,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(WIDGET_DEVICE_USER_ID, mDeviceInfo.getUserId());
         values.put(DEVICE_METHOD_REQUESTED, mDeviceInfo.getMethodRequested());
         values.put(DEVICE_IS_SHOWING_STATUS, mDeviceInfo.getIsShowingStatus());
+        values.put(SENSOR_UPDATE_INTERVAL, mDeviceInfo.getUpdateInterval());
+        values.put(CLIENT_DEVICE_ID, mDeviceInfo.getClientDeviceid());
+        values.put(CLIENT_ID, mDeviceInfo.getClientId());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -162,6 +198,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setUserId(cursor.getString(8));
             r.setMethodRequested(cursor.getString(9));
             r.setIsShowingStatus(cursor.getInt(10));
+            r.setUpdateInterval(cursor.getInt(11));
+            r.setClientDeviceid(cursor.getInt(12));
+            r.setClientId(cursor.getInt(13));
 
             cursor.close();
         } else {
@@ -385,6 +424,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setUserId(cursor.getString(8));
                 r.setMethodRequested(cursor.getString(9));
                 r.setIsShowingStatus(cursor.getInt(10));
+                r.setUpdateInterval(cursor.getInt(11));
+                r.setClientDeviceid(cursor.getInt(12));
+                r.setClientId(cursor.getInt(13));
 
                 list.add(r);
             } while (cursor.moveToNext());
