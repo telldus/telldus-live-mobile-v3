@@ -863,7 +863,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         public void onSuccess(JSONObject result) {
                             try {
 
-                                String state2 = state;
+                                String state2 = state, stateValue2 = stateValue;
 
                                 JSONObject sensorData = new JSONObject(response.toString());
                                 JSONArray JsonsensorList = sensorData.getJSONArray("sensor");
@@ -912,7 +912,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
                                     for (int ii = 0; ii < JsonsensorList.length(); ii++) {
                                         try {
-
                                             JSONObject currObject = JsonsensorList.getJSONObject(ii);
                                             Integer sensorId = currObject.getInt("sensorId");
                                             if (clientDeviceId == sensorId && clientId == currObject.getInt("client")) {
@@ -925,10 +924,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                                     String value = currData.optString("value");
 
                                                     if (nameScale.equalsIgnoreCase("temp") && scale == 0) {
-                                                        db.updateDeviceInfo(methReq, state2, value, 0, widgetId);
-                                                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                                        updateAppWidget(context, widgetManager, widgetId);
-                                                        return;
+                                                        stateValue2 = value;
                                                     }
                                                 }
                                             }
@@ -939,6 +935,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                             updateAppWidget(context, widgetManager, widgetId);
                                         }
                                     }
+
+                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, widgetId);
+                                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                    updateAppWidget(context, widgetManager, widgetId);
                                 } else {
                                     db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
