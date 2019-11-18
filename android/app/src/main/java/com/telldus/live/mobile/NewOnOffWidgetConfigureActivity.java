@@ -381,7 +381,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                     selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
                                 } else {
                                     settingText.setVisibility(View.GONE);
-                                    btSelectPollInterval.setVisibility(View.VISIBLE);
+                                    btSelectPollInterval.setVisibility(View.GONE);
                                     selectInterval = 0;
                                 }
                                 
