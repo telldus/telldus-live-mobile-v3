@@ -508,14 +508,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
                             views,
                             R.id.flash_view_thermo,
                             R.id.flashing_indicator_thermo,
-                            R.drawable.shape_circle_white_fill
+                            R.drawable.shape_circle_black_fill
                     );
                 } else if (transparent.equals("light") || transparent.equals("true")) {
                     showFlashIndicator(
                             views,
                             R.id.flash_view_thermo,
                             R.id.flashing_indicator_thermo,
-                            R.drawable.shape_circle_black_fill
+                            R.drawable.shape_circle_white_fill
                     );
                 } else {
                     showFlashIndicator(
