@@ -338,19 +338,13 @@ render(): Object {
 }
 
 getInfo(): null | string {
-	const { item, intl, powerConsumed } = this.props;
-	const { supportedMethods = {}, stateValues = {}} = item;
+	const { item, intl, powerConsumed, currentTemp } = this.props;
+	const { supportedMethods = {}} = item;
 	const { THERMOSTAT } = supportedMethods;
 	let info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 	if (THERMOSTAT) {
-		const { THERMOSTAT: {setpoint = {}, mode}} = stateValues;
-		let currentModeValue = setpoint[mode];
-		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
-
-		let value = intl.formatNumber(currentModeValue, {minimumFractionDigits: 1});
-		value = formatModeValue(value, intl.formatNumber);
-		value = `${value}°C`;
-		info = intl.formatMessage(i18n.labelCurrentlyValue, {value});
+		let value = currentTemp ? intl.formatNumber(currentTemp, {minimumFractionDigits: 1}) : null;
+		info = currentTemp ? intl.formatMessage(i18n.labelCurrentlyValue, {value: `${value}°C`}) : null;
 	}
 	return info;
 }

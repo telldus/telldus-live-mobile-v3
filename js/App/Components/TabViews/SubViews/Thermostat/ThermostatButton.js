@@ -27,7 +27,10 @@ import { View } from '../../../../../BaseComponents';
 import MoreButtonsBlock from './MoreButtonsBlock';
 import HeatInfoBlock from './HeatInfoBlock';
 
-import { shouldUpdate } from '../../../../Lib';
+import {
+	shouldUpdate,
+	formatModeValue,
+} from '../../../../Lib';
 
 import Theme from '../../../../Theme';
 
@@ -114,11 +117,17 @@ class ThermostatButton extends View<Props, State> {
 			infoBlockStyle,
 			moreActionsStyle,
 			style,
-			currentTemp,
 		} = this.props;
 
 		const { stateValues = {} } = device;
-		const { THERMOSTAT: { mode } } = stateValues;
+		const { THERMOSTAT: { mode, setpoint = {} } } = stateValues;
+
+		let currentModeValue = setpoint[mode];
+		if (!mode && Object.keys(setpoint).length === 0) {
+			currentModeValue = setpoint[Object.keys(setpoint)[0]];
+		}
+		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
+		let value = intl.formatNumber(currentModeValue, {minimumFractionDigits: 1});
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
@@ -127,7 +136,7 @@ class ThermostatButton extends View<Props, State> {
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
-			currentValue={currentTemp}
+			currentValue={formatModeValue(value, intl.formatNumber)}
 			currentMode={mode}
 			iconStyle={styles.iconStyle}
 			textOneStyle={styles.textOneStyle}

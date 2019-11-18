@@ -618,7 +618,7 @@ class DeviceRow extends View<Props, State> {
 	}
 
 	getNameInfo(device: Object, deviceName: string, powerConsumed: string | null, styles: Object): Object {
-		let { intl } = this.props;
+		let { intl, currentTemp } = this.props;
 		let { name, nameTablet, textPowerConsumed, textPowerConsumedTablet } = styles;
 		let coverStyle = name;
 		let textPowerStyle = textPowerConsumed;
@@ -635,6 +635,11 @@ class DeviceRow extends View<Props, State> {
 				{!!powerConsumed && (
 					<Text style = {textPowerStyle}>
 						{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
+					</Text>
+				)}
+				{!!currentTemp && (
+					<Text style = {textPowerStyle}>
+						{intl.formatMessage(i18n.labelCurrentlyValue, {value: `${intl.formatNumber(currentTemp)} °C`})}
 					</Text>
 				)}
 			</View>
