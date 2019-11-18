@@ -305,6 +305,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
                     int clientDeviceId = dInfoMap.get("clientDeviceId") != null ? Integer.parseInt(dInfoMap.get("clientDeviceId").toString(), 10) : -1;
                     int clientId = dInfoMap.get("clientId") != null ? Integer.parseInt(dInfoMap.get("clientId").toString(), 10) : -1;
+                    String secondaryStateValue = dInfoMap.get("secondaryStateValue") != null ? dInfoMap.get("secondaryStateValue").toString() : null;
 
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
@@ -320,7 +321,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         0,
                         selectInterval,
                         clientDeviceId,
-                        clientId
+                        clientId,
+                        secondaryStateValue
                             );
                     db.addWidgetDevice(mInsert);
 
@@ -505,7 +507,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_2);
                 try {
 
-                    String deviceStateValueLocal = null;
+                    String deviceStateValueLocal = null, secondaryStateValue = null;
 
                     DevicesUtilities deviceUtils = new DevicesUtilities();
 
@@ -579,12 +581,14 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                                         Iterator<String> setpointKeys = setpoint.keys();
                                                         String setpointKey = setpointKeys.next();
 
-                                                        if (setpoint.optString(setpointKey).equalsIgnoreCase(m.get("mode").toString())) {
+                                                        if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
                                                             stateID = Integer.parseInt(m.get("id").toString(), 10);
+                                                            secondaryStateValue = setpoint.optString(setpointKey);
                                                         }
                                                     } else {
                                                         if (stateAndVal.getJSONObject("value").getString("mode").equalsIgnoreCase(m.get("mode").toString())) {
                                                             stateID = Integer.parseInt(m.get("id").toString(), 10);
+                                                            secondaryStateValue = setpoint.optString(stateAndVal.getJSONObject("value").getString("mode"));
                                                         }
                                                     }
                                                 }
@@ -608,6 +612,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                             info.put("name", name);
                             info.put("deviceType", deviceType);
                             info.put("deviceStateValue", deviceStateValueLocal);
+                            info.put("secondaryStateValue", secondaryStateValue);
                             info.put("clientDeviceId", clientDeviceId);
                             info.put("clientId", clientId);
                             DeviceInfoMap.put(id, info);

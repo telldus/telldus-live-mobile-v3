@@ -49,6 +49,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String TRANSPARENT = "transparent";
     public static final String DEVICE_METHOD_REQUESTED = "deviceMethodRequested";
     public static final String DEVICE_IS_SHOWING_STATUS = "deviceIsShowingStatus";
+    public static final String DEVICE_SECONDARY_STATE_VALUE = "deviceSecStateValue";
 
     public static final String CLIENT_DEVICE_ID = "clientDeviceId";
     public static final String CLIENT_ID = "clientId";
@@ -78,7 +79,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT
                 + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT," + DEVICE_METHOD_REQUESTED
                 + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
-                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER" + ")";
+                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT" +")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
@@ -101,6 +102,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             addUpdateIntervalToDevicesTable(db);
             addClientDeviceIdToDevicesTable(db);
             addClientIdToDevicesTable(db);
+            addSecondaryStateValueTable(db);
         }
         if (oldVersion == 1 && newVersion == 3) {
             // A new column introduced into the table "TABLE_WIDGET_INFO_SENSOR"
@@ -109,6 +111,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             addUpdateIntervalToDevicesTable(db);
             addClientDeviceIdToDevicesTable(db);
             addClientIdToDevicesTable(db);
+            addSecondaryStateValueTable(db);
         }
     }
 
@@ -132,6 +135,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(ALTER_TABLE_DEVICE);
     }
 
+    public void addSecondaryStateValueTable(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + DEVICE_SECONDARY_STATE_VALUE + " TEXT";
+        db.execSQL(ALTER_TABLE_DEVICE);
+    }
+
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -150,6 +158,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(SENSOR_UPDATE_INTERVAL, mDeviceInfo.getUpdateInterval());
         values.put(CLIENT_DEVICE_ID, mDeviceInfo.getClientDeviceid());
         values.put(CLIENT_ID, mDeviceInfo.getClientId());
+        values.put(DEVICE_SECONDARY_STATE_VALUE, mDeviceInfo.getSecondaryStateValue());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -201,6 +210,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setUpdateInterval(cursor.getInt(11));
             r.setClientDeviceid(cursor.getInt(12));
             r.setClientId(cursor.getInt(13));
+            r.setSecondaryStateValue(cursor.getString(14));
 
             cursor.close();
         } else {
@@ -299,7 +309,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public boolean updateDeviceInfo(String methodRequested, String deviceState, String stateValue, Integer isShowingStatus, int widgetId) {
+    public boolean updateDeviceInfo(String methodRequested, String deviceState,
+                                    String stateValue, Integer isShowingStatus,
+                                    int widgetId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -427,6 +439,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setUpdateInterval(cursor.getInt(11));
                 r.setClientDeviceid(cursor.getInt(12));
                 r.setClientId(cursor.getInt(13));
+                r.setSecondaryStateValue(cursor.getString(14));
 
                 list.add(r);
             } while (cursor.moveToNext());

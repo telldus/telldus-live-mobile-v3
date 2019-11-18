@@ -39,6 +39,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -153,6 +154,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
         String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
         deviceStateValue = deviceStateValue == "null" ? "" : deviceStateValue;
+        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
+        secondaryStateValue = secondaryStateValue == "null" ? "" : secondaryStateValue;
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -499,13 +502,32 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 views.setInt(R.id.thermoCover, "setBackgroundResource", R.drawable.button_background);
             }
 
-            views.setImageViewBitmap(R.id.tempicon, CommonUtilities.buildTelldusIcon(
-                "temperature",
-                colorIdle,
-                90,
-                85,
-                85,
-                context));
+            if (isShowingStatus == 1) {
+                if (transparent.equals("dark")) {
+                    showFlashIndicator(
+                            views,
+                            R.id.flash_view_thermo,
+                            R.id.flashing_indicator_thermo,
+                            R.drawable.shape_circle_white_fill
+                    );
+                } else if (transparent.equals("light") || transparent.equals("true")) {
+                    showFlashIndicator(
+                            views,
+                            R.id.flash_view_thermo,
+                            R.id.flashing_indicator_thermo,
+                            R.drawable.shape_circle_black_fill
+                    );
+                } else {
+                    showFlashIndicator(
+                            views,
+                            R.id.flash_view_thermo,
+                            R.id.flashing_indicator_thermo,
+                            R.drawable.shape_circle_black_fill
+                    );
+                }
+            } else {
+                hideFlashIndicator(views, R.id.flashing_indicator_thermo);
+            }
 
             String thermoState = "", icon = "";
             ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(context);
@@ -521,19 +543,44 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
                     icon,
                 colorIdle,
-                90,
+                100,
                 85,
                 85,
                 context));
 
             if (deviceStateValue != null && deviceStateValue != "") {
-                views.setTextViewText(R.id.txtValue, deviceStateValue);
+                Double valueAsDouble = Double.valueOf(deviceStateValue);
+                DecimalFormat df = new DecimalFormat("#.#");
+                String formattedDeviceStateValue = df.format(valueAsDouble);
+
+                views.setTextViewText(R.id.txtValue, formattedDeviceStateValue);
                 views.setTextViewText(R.id.txtUnit, "°C");
+
+                views.setTextColor(R.id.txtValue, colorIdle);
+                views.setTextColor(R.id.txtUnit, colorIdle);
             } else {
                 views.setViewVisibility(R.id.thermoValueCover, View.GONE);
             }
+            if (secondaryStateValue != null && secondaryStateValue != "") {
+
+                Double valueAsDouble = Double.valueOf(secondaryStateValue);
+                DecimalFormat df = new DecimalFormat("#.#");
+                String formattedSecondaryStateValue = df.format(valueAsDouble);
+
+                views.setViewVisibility(R.id.thermoCurrValueCover, View.VISIBLE);
+                views.setTextViewText(R.id.txtCurrValue, String.format(
+                        context.getString(R.string.reserved_widget_android_label_currentlyValue),
+                        formattedSecondaryStateValue));
+                views.setTextViewText(R.id.txtCurrUnit, "°C");
+
+                views.setTextColor(R.id.txtCurrValue, colorIdle);
+                views.setTextColor(R.id.txtCurrUnit, colorIdle);
+            } else {
+                views.setViewVisibility(R.id.thermoCurrValueCover, View.GONE);
+            }
 
             views.setTextViewText(R.id.txtLabel, thermoState);
+            views.setTextColor(R.id.txtLabel, colorIdle);
         }
 
         if (isBasicUser) {
@@ -702,11 +749,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewOnOffWidget.class);
             }
 
-            WidgetModule.setOpenThermostatControl(deviceId);
-            Intent launchActivity = new Intent(context, MainActivity.class);
-            launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(launchActivity);
+           WidgetModule.setOpenThermostatControl(deviceId);
+           Intent launchActivity = new Intent(context, MainActivity.class);
+           launchActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+           launchActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+           context.startActivity(launchActivity);
         }
         if (intent.getAction().equals(ACTION_AUTO_UPDATE)) {
             int updateInterval = widgetInfo.getUpdateInterval();
@@ -844,7 +891,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                                             if (setpointObj != null && setpointObj.length() == 1 && mode == null) {
                                                                 Iterator<String> setpointKeys = setpointObj.keys();
                                                                 String setpointKey = setpointKeys.next();
-                                                                if (setpointObj.optString(setpointKey).equalsIgnoreCase(m.get("mode").toString())) {
+                                                                if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
                                                                     state2 = m.get("id").toString();
                                                                 }
                                                             } else {
