@@ -29,7 +29,6 @@ import HeatInfoBlock from './HeatInfoBlock';
 
 import {
 	shouldUpdate,
-	formatModeValue,
 } from '../../../../Lib';
 
 import Theme from '../../../../Theme';
@@ -127,7 +126,6 @@ class ThermostatButtonDB extends View<Props, State> {
 			currentModeValue = setpoint[Object.keys(setpoint)[0]];
 		}
 		currentModeValue = isNaN(currentModeValue) ? -100.0 : currentModeValue;
-		let value = intl.formatNumber(currentModeValue, {minimumFractionDigits: 1});
 
 		const buttonTwo = <HeatInfoBlock
 			isEnabled={true}
@@ -136,7 +134,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			iconSize={30}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
-			currentValue={formatModeValue(value, intl.formatNumber)}
+			currentValue={currentModeValue}
 			currentMode={mode}
 			iconStyle={styles.iconStyle}
 			textOneStyle={styles.textOneStyle}
