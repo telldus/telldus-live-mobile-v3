@@ -43,12 +43,14 @@
                     android:id="@+id/txtLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
                     android:textStyle="bold"
                     android:textSize="10sp"
                     android:gravity="left"
                     android:maxLines="1"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/brandSecondary"/>
+                    android:textColor="@color/brandSecondary"
+                    android:lineSpacingExtra="0dp"/>
                 <LinearLayout
                     android:id="@+id/thermoValueCover"
                     android:layout_width="wrap_content"
@@ -65,7 +67,9 @@
                         android:gravity="center"
                         android:maxLines="1"
                         android:layout_centerInParent="true"
-                        android:textColor="@color/brandSecondary"/>
+                        android:textColor="@color/brandSecondary"
+                        android:lineSpacingExtra="0dp"
+                        android:includeFontPadding="false"/>
                     <TextView
                         android:id="@+id/txtUnit"
                         android:layout_width="wrap_content"
@@ -75,7 +79,9 @@
                         android:gravity="center"
                         android:maxLines="1"
                         android:layout_centerInParent="true"
-                        android:textColor="@color/brandSecondary"/>
+                        android:textColor="@color/brandSecondary"
+                        android:lineSpacingExtra="0dp"
+                        android:includeFontPadding="false"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/thermoCurrValueCover"
@@ -94,7 +100,9 @@
                         android:gravity="center"
                         android:maxLines="1"
                         android:layout_centerInParent="true"
-                        android:textColor="@color/brandSecondary"/>
+                        android:textColor="@color/brandSecondary"
+                        android:lineSpacingExtra="0dp"
+                        android:includeFontPadding="false"/>
                     <TextView
                         android:id="@+id/txtCurrUnit"
                         android:layout_width="wrap_content"
@@ -104,7 +112,9 @@
                         android:gravity="center"
                         android:maxLines="1"
                         android:layout_centerInParent="true"
-                        android:textColor="@color/brandSecondary"/>
+                        android:textColor="@color/brandSecondary"
+                        android:lineSpacingExtra="0dp"
+                        android:includeFontPadding="false"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
