@@ -167,9 +167,13 @@ public class NewAppWidget extends AppWidgetProvider {
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
         Boolean hasDim = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
+        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
 
         Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
         if (hasLearn) {
+            buttonsCount = buttonsCount - 1;
+        }
+        if (hasRGB) {
             buttonsCount = buttonsCount - 1;
         }
         if (hasDim) {
