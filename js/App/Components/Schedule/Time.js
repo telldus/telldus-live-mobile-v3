@@ -342,12 +342,19 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_onDateChange = (event: Object, date: Date) => {
-		if (date === undefined) {
-			// dismissedAction
+		if (Platform.OS === 'ios') {
+			if (date === undefined) {
+				// dismissedAction
+				this.setState({
+					shouldRenderTimePickerAndroid: false,
+				});
+			}
+		} else {
 			this.setState({
 				shouldRenderTimePickerAndroid: false,
 			});
 		}
+
 		const { date: oldDate } = this.state;
 
 		const oldHours = oldDate.getHours();
