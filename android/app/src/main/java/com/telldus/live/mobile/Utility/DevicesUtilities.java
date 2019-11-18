@@ -319,19 +319,19 @@ public class DevicesUtilities {
         modeCool.put("id", "2");
 
         Map modeEcoHeat = new HashMap();
-        modeEcoHeat.put("label", context.getResources().getString(R.string.reserved_widget_android_label_eco_heat));
+        modeEcoHeat.put("label", context.getResources().getString(R.string.reserved_widget_android_label_ecoHeat));
         modeEcoHeat.put("icon", "thermostateco");
         modeEcoHeat.put("mode", "eco-heat");
         modeEcoHeat.put("id", "3");
 
         Map modeEcoCool = new HashMap();
-        modeEcoCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_eco_cool));
+        modeEcoCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_ecoCool));
         modeEcoCool.put("icon", "thermostateco");
         modeEcoCool.put("mode", "eco-cool");
         modeEcoCool.put("id", "4");
 
         Map modeHeatCool = new HashMap();
-        modeHeatCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_heat_cool));
+        modeHeatCool.put("label", context.getResources().getString(R.string.reserved_widget_android_label_heatCool));
         modeHeatCool.put("icon", "thermostatheatcool");
         modeHeatCool.put("mode", "heat-cool");
         modeHeatCool.put("id", "5");
@@ -373,7 +373,7 @@ public class DevicesUtilities {
         modeMax.put("id", "11");
 
         Map modeOff = new HashMap();
-        modeOff.put("label", context.getResources().getString(R.string.reserved_widget_android_label_off));
+        modeOff.put("label", context.getResources().getString(R.string.reserved_widget_android_device_off));
         modeOff.put("icon", "off");
         modeOff.put("mode", "off");
         modeOff.put("id", "12");

@@ -156,15 +156,16 @@
 	<string name="reserved_widget_android_label_auto">Auto</string>
 	<string name="reserved_widget_android_label_heat">Heat</string>
 	<string name="reserved_widget_android_label_cool">Cool</string>
-	<string name="reserved_widget_android_label_eco_heat">Eco Heat</string>
-	<string name="reserved_widget_android_label_eco_cool">Eco Cool</string>
-	<string name="reserved_widget_android_label_heat_cool">Heat-cool</string>
+	<string name="reserved_widget_android_label_ecoHeat">Eco Heat</string>
+	<string name="reserved_widget_android_label_ecoCool">Eco Cool</string>
+	<string name="reserved_widget_android_label_heatCool">Heat-cool</string>
 	<string name="reserved_widget_android_label_manual">Manual</string>
 	<string name="reserved_widget_android_label_program">Program</string>
 	<string name="reserved_widget_android_label_dry">Dry</string>
 	<string name="reserved_widget_android_label_away">Away</string>
 	<string name="reserved_widget_android_label_hg">HG</string>
 	<string name="reserved_widget_android_label_max">Max</string>
-	<string name="reserved_widget_android_label_off">Off</string>
+	<string name="reserved_widget_android_device_off">Off</string>
 	<string name="reserved_widget_android_label_fan">Fan</string>
+	<string name="reserved_widget_android_label_currentlyValue">Currently %1$s</string>
 </resources>
