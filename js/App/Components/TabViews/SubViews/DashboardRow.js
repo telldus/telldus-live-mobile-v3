@@ -44,7 +44,6 @@ import {
 	getOffColorRGB,
 	getMainColorRGB,
 	prepareMainColor,
-	formatModeValue,
 	getThermostatValue,
 } from '../../../Lib';
 import Theme from '../../../Theme';
