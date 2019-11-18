@@ -714,7 +714,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_BELL, null, null, 0, widgetId);
+            db.updateDeviceInfo(METHOD_BELL, null, null, 0, null, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -724,7 +724,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_ON, null, null, 0, widgetId);
+            db.updateDeviceInfo(METHOD_ON, null, null, 0, null, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -733,7 +733,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             createDeviceActionApi(context, deviceId, 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
-            db.updateDeviceInfo(METHOD_OFF, null, null, 0, widgetId);
+            db.updateDeviceInfo(METHOD_OFF, null, null, 0, null, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -763,8 +763,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
             String methReq = widgetInfo.getMethodRequested();
             String state = widgetInfo.getState();
             String stateValue = widgetInfo.getDeviceStateValue();
+            String secStateValue = widgetInfo.getSecondaryStateValue();
 
-            db.updateDeviceInfo(methReq, state, stateValue, 1, widgetId);
+            db.updateDeviceInfo(methReq, state, stateValue, 1, secStateValue, widgetId);
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId);
 
@@ -812,7 +813,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, widgetId);
+                    db.updateDeviceInfo(null, null, null, 0, null, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId);
                 }
@@ -849,6 +850,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String methReq = widgetInfo.getMethodRequested();
         final String state = widgetInfo.getState();
         String stateValue = widgetInfo.getDeviceStateValue();
+        String secStateValue = widgetInfo.getSecondaryStateValue();
 
         SensorsAPI sensorsAPI = new SensorsAPI();
         String params = "/sensors/list?includeValues=1&includeScale=1";
@@ -863,7 +865,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         public void onSuccess(JSONObject result) {
                             try {
 
-                                String state2 = state, stateValue2 = stateValue;
+                                String state2 = state, stateValue2 = stateValue, secStateValue2 = secStateValue;
 
                                 JSONObject sensorData = new JSONObject(response.toString());
                                 JSONArray JsonsensorList = sensorData.getJSONArray("sensor");
@@ -893,10 +895,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                                                 String setpointKey = setpointKeys.next();
                                                                 if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
                                                                     state2 = m.get("id").toString();
+                                                                    secStateValue2 = setpointObj.optString(setpointKey);
                                                                 }
                                                             } else {
                                                                 if (mode.equalsIgnoreCase(m.get("mode").toString())) {
                                                                     state2 = m.get("id").toString();
+                                                                    secStateValue2 = setpointObj.optString(stateValuesObj.getJSONObject("value").getString("mode"));
                                                                 }
                                                             }
                                                         }
@@ -930,22 +934,22 @@ public class NewOnOffWidget extends AppWidgetProvider {
                                             }
                                         }
                                         catch (Exception e) {
-                                            db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
                                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                             updateAppWidget(context, widgetManager, widgetId);
                                         }
                                     }
 
-                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, widgetId);
+                                    db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                     updateAppWidget(context, widgetManager, widgetId);
                                 } else {
-                                    db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                                    db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                     updateAppWidget(context, widgetManager, widgetId);
                                 }
                             } catch (JSONException e) {
-                                db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateAppWidget(context, widgetManager, widgetId);
 
@@ -955,7 +959,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
                         @Override
                         public void onError(ANError result) {
-                            db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                            db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                             updateAppWidget(context, widgetManager, widgetId);
                         }
@@ -963,7 +967,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
-                db.updateDeviceInfo(methReq, state, stateValue, 0, widgetId);
+                db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId);
             }

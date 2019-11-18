@@ -193,7 +193,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             bellCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_BELL, null, null, 0, widgetId);
+                    db.updateDeviceInfo(METHOD_BELL, null, null, 0, null, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -264,7 +264,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             upCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_UP, null, null, 0, widgetId);
+                    db.updateDeviceInfo(METHOD_UP, null, null, 0, null, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -335,7 +335,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             downCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_DOWN, null, null, 0, widgetId);
+                    db.updateDeviceInfo(METHOD_DOWN, null, null, 0, null, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -406,7 +406,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             stopCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_STOP, null, null, 0, widgetId);
+                    db.updateDeviceInfo(METHOD_STOP, null, null, 0, null, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -477,7 +477,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             offCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_OFF, null, null, 0, widgetId);
+                    db.updateDeviceInfo(METHOD_OFF, null, null, 0, null, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -564,7 +564,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 dimmer25Cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        db.updateDeviceInfo(METHOD_DIMMER_25, null, null, 0, widgetId);
+                        db.updateDeviceInfo(METHOD_DIMMER_25, null, null, 0, null, widgetId);
                         removeHandlerResetDeviceStateToNull();
                         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                         updateUI(widgetId);
@@ -649,7 +649,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 dimmer50Cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        db.updateDeviceInfo(METHOD_DIMMER_50, null, null, 0, widgetId);
+                        db.updateDeviceInfo(METHOD_DIMMER_50, null, null, 0, null, widgetId);
                         removeHandlerResetDeviceStateToNull();
                         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                         updateUI(widgetId);
@@ -732,7 +732,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 dimmer75Cover.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        db.updateDeviceInfo(METHOD_DIMMER_75, null, null, 0, widgetId);
+                        db.updateDeviceInfo(METHOD_DIMMER_75, null, null, 0, null, widgetId);
                         removeHandlerResetDeviceStateToNull();
                         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                         updateUI(widgetId);
@@ -815,7 +815,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             onCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_ON, null, null, 0, widgetId);
+                    db.updateDeviceInfo(METHOD_ON, null, null, 0, null, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -954,7 +954,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, widgetId);
+                    db.updateDeviceInfo(null, null, null, 0, null, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
 
                     updateUI(widgetId);

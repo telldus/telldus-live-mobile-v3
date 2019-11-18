@@ -311,7 +311,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public boolean updateDeviceInfo(String methodRequested, String deviceState,
                                     String stateValue, Integer isShowingStatus,
-                                    int widgetId) {
+                                    String secStateValue, int widgetId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -319,6 +319,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         contentValues.put(DEVICE_STATE_VALUE, stateValue);
         contentValues.put(DEVICE_METHOD_REQUESTED, methodRequested);
         contentValues.put(DEVICE_IS_SHOWING_STATUS, isShowingStatus);
+        contentValues.put(DEVICE_SECONDARY_STATE_VALUE, secStateValue);
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);
