@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="ipad10_5" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
@@ -13,23 +13,24 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="834" height="1112"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.AspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="iK7-8z-2oa">
-                                <rect key="frame" x="-44" y="-44" width="922" height="1190"/>
+                                <rect key="frame" x="-44" y="-44" width="1112" height="1444"/>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.Logo" translatesAutoresizingMaskIntoConstraints="NO" id="sj6-WD-cxW">
-                                <rect key="frame" x="30" y="118.5" width="774" height="133.5"/>
+                                <rect key="frame" x="30" y="161" width="964" height="133.5"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_loading_icon" translatesAutoresizingMaskIntoConstraints="NO" id="uAO-hS-cOi">
-                                <rect key="frame" x="389" y="528" width="56.5" height="56.5"/>
+                                <rect key="frame" x="373" y="655" width="278" height="56.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="uAO-hS-cOi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6s2-Bg-sSn"/>
                             <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sj6-WD-cxW" secondAttribute="bottom" constant="240" id="C8T-sz-rOY"/>
+                            <constraint firstItem="uAO-hS-cOi" firstAttribute="width" secondItem="iK7-8z-2oa" secondAttribute="width" multiplier="0.25" id="CZR-8b-KxY"/>
                             <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" secondItem="iK7-8z-2oa" secondAttribute="bottom" constant="-34" id="FyH-TW-3Xv"/>
                             <constraint firstItem="sj6-WD-cxW" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" multiplier="1/2" constant="20" id="Nra-Iw-aBU"/>
                             <constraint firstItem="iK7-8z-2oa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-64" id="UHq-v6-VDS"/>
@@ -50,6 +51,6 @@
     <resources>
         <image name="LaunchScreen.AspectFill" width="1024" height="1024"/>
         <image name="LaunchScreen.Logo" width="667" height="133.5"/>
-        <image name="splash_loading_icon" width="56.5" height="56.5"/>
+        <image name="splash_loading_icon" width="188" height="56.5"/>
     </resources>
 </document>
