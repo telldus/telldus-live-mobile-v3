@@ -547,13 +547,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 85,
                 85,
                 context));
-
-            if (deviceStateValue != null && deviceStateValue != "") {
-                Double valueAsDouble = Double.valueOf(deviceStateValue);
+            if (secondaryStateValue != null && secondaryStateValue != "") {
+                Double valueAsDouble = Double.valueOf(secondaryStateValue);
                 DecimalFormat df = new DecimalFormat("#.#");
-                String formattedDeviceStateValue = df.format(valueAsDouble);
+                String formattedSecondaryStateValue = df.format(valueAsDouble);
 
-                views.setTextViewText(R.id.txtValue, formattedDeviceStateValue);
+                views.setTextViewText(R.id.txtValue, formattedSecondaryStateValue);
                 views.setTextViewText(R.id.txtUnit, "°C");
 
                 views.setTextColor(R.id.txtValue, colorIdle);
@@ -561,16 +560,16 @@ public class NewOnOffWidget extends AppWidgetProvider {
             } else {
                 views.setViewVisibility(R.id.thermoValueCover, View.GONE);
             }
-            if (secondaryStateValue != null && secondaryStateValue != "") {
 
-                Double valueAsDouble = Double.valueOf(secondaryStateValue);
+            if (deviceStateValue != null && deviceStateValue != "") {
+                Double valueAsDouble = Double.valueOf(deviceStateValue);
                 DecimalFormat df = new DecimalFormat("#.#");
-                String formattedSecondaryStateValue = df.format(valueAsDouble);
+                String formattedDeviceStateValue = df.format(valueAsDouble);
 
                 views.setViewVisibility(R.id.thermoCurrValueCover, View.VISIBLE);
                 views.setTextViewText(R.id.txtCurrValue, String.format(
                         context.getString(R.string.reserved_widget_android_label_currentlyValue),
-                        formattedSecondaryStateValue));
+                        formattedDeviceStateValue));
                 views.setTextViewText(R.id.txtCurrUnit, "°C");
 
                 views.setTextColor(R.id.txtCurrValue, colorIdle);
