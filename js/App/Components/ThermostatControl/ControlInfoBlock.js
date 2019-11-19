@@ -267,7 +267,7 @@ render(): Object {
 			</Text>
 			<Text>
 				<Text style={cValueStyle}>
-					{currentTemp}
+					{intl.formatNumber(currentTemp)}
 				</Text>
 				<Text style={cUnitStyle}>
 							°C
