@@ -25,7 +25,7 @@
 import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
 
-import type { ThunkAction, TicketData } from './Types';
+import type { ThunkAction, TicketData, Action } from './Types';
 
 import { osTicketKey } from '../../Config';
 import { hasTokenExpired } from '../Lib';
@@ -138,10 +138,18 @@ function createSupportTicket(data: string): ThunkAction {
 	};
 }
 
+const setNetworkConnectionInfo = (payload: Object): Action => {
+	return {
+		type: 'SET_NETWORK_CONNECTION_INFO',
+		payload,
+	};
+};
+
 module.exports = {
 	...App,
 	createSupportTicket,
 	createSupportTicketLCT,
 	createSupportTicketGeneral,
+	setNetworkConnectionInfo,
 };
 

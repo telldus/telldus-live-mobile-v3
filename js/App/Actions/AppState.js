@@ -27,9 +27,13 @@ import type { Action, ThunkAction } from './Types';
 import { AppState } from 'react-native';
 import Orientation from 'react-native-orientation-locker';
 import { AccessibilityInfo } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 
 import { resetLocalControlSupport, autoDetectLocalTellStick, closeUDPSocket } from './Gateways';
 import { initiateGatewayLocalTest } from './LocalTest';
+import {
+	setNetworkConnectionInfo,
+} from './App';
 
 module.exports = {
 	appStart: (): Action => ({
@@ -101,6 +105,14 @@ module.exports = {
 		return dispatch({
 			type: 'SET_CHANGELOG_VERSION',
 			payload: changeLogVersion,
+		});
+	},
+	networkConnection: (): ThunkAction => (dispatch: Function): Function => {
+		NetInfo.fetch().then((state: Object) => {
+			dispatch(setNetworkConnectionInfo(state));
+		});
+		return NetInfo.addEventListener((state: Object) => {
+			dispatch(setNetworkConnectionInfo(state));
 		});
 	},
 };

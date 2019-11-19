@@ -39,6 +39,7 @@ import {
 	setAccessibilityListener,
 	setAccessibilityInfo,
 	widgetAndroidConfigure,
+	networkConnection,
 } from './App/Actions';
 import {
 	getTranslatableDayNames,
@@ -87,6 +88,7 @@ class App extends React.Component<Props, State> {
 	onTokenRefreshListener: null | Function;
 
 	timeoutToCallCallback: any;
+	clearListenerNetWorkInfo: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -118,6 +120,8 @@ class App extends React.Component<Props, State> {
 		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 
 		this.timeoutToCallCallback = null;
+
+		this.clearListenerNetWorkInfo = null;
 	}
 
 	componentDidMount() {
@@ -132,6 +136,8 @@ class App extends React.Component<Props, State> {
 			StatusBar.setTranslucent(true);
 			StatusBar.setBackgroundColor(Theme.Core.brandPrimary);
 		}
+
+		this.clearListenerNetWorkInfo = dispatch(networkConnection());
 	}
 
 	setCalendarLocale() {
@@ -166,6 +172,9 @@ class App extends React.Component<Props, State> {
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
 		clearTimeout(this.timeoutToCallCallback);
+		if (this.clearListenerNetWorkInfo) {
+			this.clearListenerNetWorkInfo();
+		}
 	}
 
 	_keyboardDidShow() {

@@ -34,6 +34,7 @@ export type Action =
 	| { type: 'PUSH_TOKEN_DELETED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
+	| { type: 'SET_NETWORK_CONNECTION_INFO', payload: Object }
 
 	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
