@@ -336,7 +336,8 @@ class DialogueBox extends Component<Props, null> {
 		const fontSizeHeader = Math.floor(deviceWidth * 0.046);
 		const fontSize = Math.floor(deviceWidth * 0.042);
 
-		const headerWidth = deviceWidth * 0.75;
+		const headerWidth = Math.ceil(deviceWidth * 0.75);
+		const headerHeight = Math.ceil(deviceWidth * 0.1);
 		const borderRadi = 5;
 
 		return {
@@ -346,9 +347,10 @@ class DialogueBox extends Component<Props, null> {
 				justifyContent: 'center',
 			},
 			container: {
+				flex: 0,
 				backgroundColor: '#fff',
-				alignItems: 'center',
-				justifyContent: 'center',
+				alignItems: 'stretch',
+				justifyContent: 'space-between',
 				borderRadius: borderRadi,
 				overflow: 'hidden',
 			},
@@ -361,7 +363,7 @@ class DialogueBox extends Component<Props, null> {
 				backgroundColor: '#e26901',
 			},
 			headerWidth,
-			headerHeight: deviceWidth * 0.1,
+			headerHeight,
 			notificationModalHeaderText: {
 				color: '#ffffff',
 				fontSize: fontSizeHeader,
