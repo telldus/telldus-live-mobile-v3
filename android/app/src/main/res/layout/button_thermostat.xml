@@ -29,7 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center"
-                android:gravity="center|center"/>
+                android:gravity="center|center"
+                android:layout_marginLeft="-5dp"/>
             <LinearLayout
                 android:id="@+id/thermoTextCover"
                 android:layout_width="wrap_content"
@@ -38,7 +39,7 @@
                 android:layout_gravity="center|center"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:layout_marginLeft="5dp">
+                android:layout_marginLeft="0dp">
                 <TextView
                     android:id="@+id/txtLabel"
                     android:layout_width="wrap_content"
@@ -97,7 +98,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="10sp"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:maxLines="1"
                         android:layout_centerInParent="true"
                         android:textColor="@color/brandSecondary"
@@ -109,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:textSize="10sp"
-                        android:gravity="center"
+                        android:gravity="left"
                         android:maxLines="1"
                         android:layout_centerInParent="true"
                         android:textColor="@color/brandSecondary"

@@ -24,6 +24,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
@@ -540,12 +541,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
             }
 
+            int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+
+            int iconWidth = (int) (width * 0.12);
+
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
                     icon,
                 colorIdle,
-                100,
-                85,
-                85,
+                iconWidth,
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
                 context));
             if (secondaryStateValue != null && secondaryStateValue != "") {
                 Double valueAsDouble = Double.valueOf(secondaryStateValue);
@@ -567,9 +573,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 String formattedDeviceStateValue = df.format(valueAsDouble);
 
                 views.setViewVisibility(R.id.thermoCurrValueCover, View.VISIBLE);
-                views.setTextViewText(R.id.txtCurrValue, String.format(
-                        context.getString(R.string.reserved_widget_android_label_currentlyValue),
-                        formattedDeviceStateValue));
+                String currentValue = context.getResources().getString(R.string.reserved_widget_android_current_adjective)+": "+formattedDeviceStateValue;
+                views.setTextViewText(R.id.txtCurrValue, currentValue);
                 views.setTextViewText(R.id.txtCurrUnit, "°C");
 
                 views.setTextColor(R.id.txtCurrValue, colorIdle);
