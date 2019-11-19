@@ -571,7 +571,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                         JSONObject stateAndVal = stateValues.getJSONObject(ii);
                                         String item = deviceUtils.methods.get(Integer.parseInt(stateAndVal.getString("state"), 10));
 
-                                        if (item != null && stateAndVal.getJSONObject("value") != null) {
+                                        if (item != null && item.equalsIgnoreCase("THERMOSTAT") && stateAndVal.getJSONObject("value") != null) {
                                             JSONObject setpoint = stateAndVal.getJSONObject("value").getJSONObject("setpoint");
                                             if (setpoint != null) {
                                                 for (int j = 0; j < modes.size(); j++) {
@@ -580,7 +580,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
                                                         Iterator<String> setpointKeys = setpoint.keys();
                                                         String setpointKey = setpointKeys.next();
-
                                                         if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
                                                             stateID = Integer.parseInt(m.get("id").toString(), 10);
                                                             secondaryStateValue = setpoint.optString(setpointKey);

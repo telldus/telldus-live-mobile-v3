@@ -541,9 +541,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 }
             }
 
-            int height = Resources.getSystem().getDisplayMetrics().heightPixels;
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-
             int iconWidth = (int) (width * 0.12);
 
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
