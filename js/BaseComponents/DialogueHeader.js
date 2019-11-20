@@ -113,7 +113,8 @@ render(): Object {
 			width: headerWidth,
 		}, styles.touchableCover]} onPress={this.onPressHeader} disabled={!onPressHeader}>
 			<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth} style={{
-				marginTop: -2,
+				marginTop: -2, // TODO: this is a work around for a very narrow line shown on top
+				// of the image. Investigate and give a proper fix.
 			}}/>
 			<Text style={[styles.text, textStyle]}>
 				{headerText}

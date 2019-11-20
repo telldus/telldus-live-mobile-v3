@@ -128,7 +128,8 @@ class Position extends View {
 				alignItems: 'center',
 			}}>
 				<GeometricHeader headerHeight={styles.headerHeight} headerWidth={styles.headerWidth} style={{
-					marginTop: -2,
+					marginTop: -2, // TODO: this is a work around for a very narrow line shown on top
+					// of the image. Investigate and give a proper fix.
 				}}/>
 				<View style={styles.dialogueHeader}>
 					<RoundedInfoButton buttonProps={buttonProps}/>
