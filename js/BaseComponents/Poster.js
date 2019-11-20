@@ -53,7 +53,9 @@ class Poster extends Component<Props, null> {
 		const { mask, headerHeight, headerWidth } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth}/>
+				<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth} style={{
+					marginTop: -2,
+				}}/>
 				{!!children && children}
 			</View>
 		);

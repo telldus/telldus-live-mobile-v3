@@ -112,7 +112,9 @@ render(): Object {
 			height: headerHeight,
 			width: headerWidth,
 		}, styles.touchableCover]} onPress={this.onPressHeader} disabled={!onPressHeader}>
-			<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth}/>
+			<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth} style={{
+				marginTop: -2,
+			}}/>
 			<Text style={[styles.text, textStyle]}>
 				{headerText}
 			</Text>

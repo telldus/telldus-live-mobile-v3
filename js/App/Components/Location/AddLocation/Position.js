@@ -127,7 +127,9 @@ class Position extends View {
 				justifyContent: 'center',
 				alignItems: 'center',
 			}}>
-				<GeometricHeader headerHeight={styles.headerHeight} headerWidth={styles.headerWidth}/>
+				<GeometricHeader headerHeight={styles.headerHeight} headerWidth={styles.headerWidth} style={{
+					marginTop: -2,
+				}}/>
 				<View style={styles.dialogueHeader}>
 					<RoundedInfoButton buttonProps={buttonProps}/>
 					<Text style={styles.dialogueHeaderText}>
