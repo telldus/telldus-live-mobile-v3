@@ -76,7 +76,7 @@ const getStyles = (appLayout: Object): Object => {
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeBody = deviceWidth * 0.038;
+	const fontSizeBody = deviceWidth * 0.042;
 
 	return {
 		infoContainer: {
@@ -94,7 +94,7 @@ const getStyles = (appLayout: Object): Object => {
 			backgroundColor: 'transparent',
 		},
 		infoIconStyleDef: {
-			fontSize: deviceWidth * 0.16,
+			fontSize: deviceWidth * 0.14,
 			color: brandSecondary,
 		},
 		textStyle: {
