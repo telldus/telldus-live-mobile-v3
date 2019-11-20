@@ -26,7 +26,7 @@ import {
 	View,
 	LocationDetails,
 	TouchableButton,
-	Text,
+	InfoBlock,
 } from '../../../../BaseComponents';
 import {
 	TestRow,
@@ -437,6 +437,7 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 	const {
 		location,
 		intl,
+		appLayout,
 	} = this.props;
 	let {
 		localKey = {},
@@ -445,23 +446,26 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 	} = location;
 	let { address, key, uuid } = localKey;
 
+	const sharedProps = {
+		infoIconStyle: style.infoIconStyle,
+		appLayout,
+	};
+
 	const messages = [];
 	failedTestsIndex.map((failedIndex: number, i: number) => {
 		if (failedIndex === 3 && !supportRSA()) {
 			messages.push(
-				<View style={style.troubleShootItemStyle} key={`${i}`}>
-					<Text style={style.bulletinStyle}>*</Text>
-					<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailOne)}</Text>
-				</View>
+				<InfoBlock
+					text={intl.formatMessage(i18n.infoLocalTestFailOne)}
+					{...sharedProps}/>
 			);
 		} else if (supportRSA()) {
 			if (failedIndex === 0) {
 				if (!address) {
 					messages.push(
-						<View style={style.troubleShootItemStyle} key={`${i}`}>
-							<Text style={style.bulletinStyle}>*</Text>
-							<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailFour)}</Text>
-						</View>
+						<InfoBlock
+							text={intl.formatMessage(i18n.infoLocalTestFailFour)}
+							{...sharedProps}/>
 					);
 				}
 			}
@@ -469,18 +473,16 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 				if (uuid && !key) {
 					if (!online) {
 						messages.push(
-							<View style={style.troubleShootItemStyle} key={`${i}`}>
-								<Text style={style.bulletinStyle}>*</Text>
-								<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailTwo)}</Text>
-							</View>
+							<InfoBlock
+								text={intl.formatMessage(i18n.infoLocalTestFailTwo)}
+								{...sharedProps}/>
 						);
 					}
 					if (!websocketOnline) {
 						messages.push(
-							<View style={style.troubleShootItemStyle} key={`${i}`}>
-								<Text style={style.bulletinStyle}>*</Text>
-								<Text style={style.troubleShootTextStyle}>{intl.formatMessage(i18n.infoLocalTestFailThree)}</Text>
-							</View>
+							<InfoBlock
+								text={intl.formatMessage(i18n.infoLocalTestFailThree)}
+								{...sharedProps}/>
 						);
 					}
 				}
@@ -519,7 +521,6 @@ render(): Object | null {
 		LocationDetail,
 		testsCover,
 		button,
-		troubleShootHintsCover,
 		...others
 	} = this.getStyles(appLayout);
 
@@ -555,9 +556,8 @@ render(): Object | null {
 				<View style={testsCover}>
 					{tests}
 				</View>
-				{!!troubleShootHints && (troubleShootHints.length > 0) && <View style={troubleShootHintsCover}>
-					{troubleShootHints}
-				</View>
+				{!!troubleShootHints && (troubleShootHints.length > 0) &&
+					troubleShootHints
 				}
 				{showButtons &&
 					<>
@@ -611,6 +611,9 @@ getStyles(appLayout: Object): Object {
 			marginTop: padding / 2,
 			marginBottom: padding,
 			minWidth: Math.floor(deviceWidth * 0.6),
+		},
+		infoIconStyle: {
+			color: brandDanger,
 		},
 		troubleShootHintsCover: {
 			flex: 0,
