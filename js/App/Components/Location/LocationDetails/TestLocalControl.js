@@ -567,7 +567,9 @@ render(): Object | null {
 						onPress={this.onPressReRunTest}/>
 					{showContactSupport && <TouchableButton
 						text={i18n.labelButtonRequestSupport}
-						style={button}
+						style={[button, {
+							marginBottom: 20,
+						}]}
 						onPress={this.onPressRequestSupport}/>}
 					</>
 				}
@@ -601,15 +603,14 @@ getStyles(appLayout: Object): Object {
 			flex: 0,
 			flexDirection: 'column',
 			marginTop: padding / 2,
-			marginBottom: padding,
+			marginBottom: padding / 2,
 			padding: 10,
 			backgroundColor: '#fff',
 			...shadow,
 
 		},
 		button: {
-			marginTop: padding / 2,
-			marginBottom: padding,
+			marginTop: padding,
 			minWidth: Math.floor(deviceWidth * 0.6),
 		},
 		infoIconStyle: {

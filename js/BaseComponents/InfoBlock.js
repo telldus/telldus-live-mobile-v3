@@ -34,17 +34,18 @@ const InfoBlock = (props: Object): Object => {
 		text,
 		appLayout,
 		infoIconStyle,
+		infoContainer,
 	} = props;
 
 	const {
-		infoContainer,
+		infoContainerDef,
 		infoIconStyleDef,
 		textStyle,
 		blockIconContainerStyle,
 	} = getStyles(appLayout);
 
 	return (
-		<View style={infoContainer}>
+		<View style={[infoContainerDef, infoContainer]}>
 			<BlockIcon
 				icon={'info'}
 				style={[infoIconStyleDef, infoIconStyle]}
@@ -79,7 +80,7 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSizeBody = deviceWidth * 0.042;
 
 	return {
-		infoContainer: {
+		infoContainerDef: {
 			flex: 1,
 			flexDirection: 'row',
 			marginBottom: padding / 2,
