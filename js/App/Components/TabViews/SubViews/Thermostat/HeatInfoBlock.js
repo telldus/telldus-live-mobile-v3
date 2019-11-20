@@ -125,9 +125,9 @@ class HeatInfoBlock extends View {
 				justifyContent: showModelabel ? 'flex-start' : 'center',
 			}]} accessibilityLabel={accessibilityLabel}>
 				{IconActive ?
-					<IconActive height={iconSize} width={iconSize}/>
+					<IconActive height={iconSize} width={iconSize} style={iconStyle}/>
 					:
-					<IconTelldus icon={icon} style={iconStyle}/>
+					<IconTelldus icon={icon} size={iconSize} style={iconStyle}/>
 				}
 				<View style={{alignItems: 'flex-start', marginLeft: 2}}>
 					{showValue && <Text style={{textAlign: 'left'}}>

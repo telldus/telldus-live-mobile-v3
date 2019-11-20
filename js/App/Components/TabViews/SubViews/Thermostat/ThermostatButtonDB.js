@@ -114,6 +114,7 @@ class ThermostatButtonDB extends View<Props, State> {
 			isGatewayActive,
 			containerStyle,
 			infoBlockStyle,
+			tileWidth,
 		} = this.props;
 
 		const { stateValues = {} } = item;
@@ -129,15 +130,23 @@ class ThermostatButtonDB extends View<Props, State> {
 			isEnabled={true}
 			style={[styles.buttonCommon, infoBlockStyle, {justifyContent: 'flex-start'}]}
 			device={item}
-			iconSize={30}
+			iconSize={tileWidth * 0.28}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
 			currentValue={currentModeValue}
 			currentMode={mode}
 			iconStyle={styles.iconStyle}
-			textOneStyle={styles.textOneStyle}
-			textTwoStyle={styles.textTwoStyle}
-			textThreeStyle={styles.textThreeStyle}/>;
+			textOneStyle={[styles.textOneStyle, {
+				fontSize: tileWidth * 0.14,
+				height: tileWidth * 0.16,
+			}]}
+			textTwoStyle={[styles.textTwoStyle, {
+				fontSize: tileWidth * 0.09,
+			}]}
+			textThreeStyle={[styles.textThreeStyle, {
+				fontSize: tileWidth * 0.09,
+				height: tileWidth * 0.12,
+			}]}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
 			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
@@ -164,21 +173,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	iconStyle: {
-		fontSize: 24,
 		color: '#fff',
+		marginRight: 3,
 	},
 	textOneStyle: {
 		textAlign: 'left',
-		fontSize: 13,
 		color: '#fff',
 	},
 	textTwoStyle: {
-		fontSize: 8,
 		color: '#fff',
 	},
 	textThreeStyle: {
 		textAlign: 'left',
-		fontSize: 7,
 		color: '#fff',
 	},
 	actionIconStyle: {
