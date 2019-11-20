@@ -92,6 +92,7 @@ import RippleButton from './RippleButton';
 import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import TwoStepFooter from './TwoStepFooter';
+import InfoBlock from './InfoBlock';
 
 import {
 	AppState,
@@ -174,6 +175,7 @@ module.exports = {
 	HeaderLeftButtonsMainTab,
 	CampaignIcon,
 	TwoStepFooter,
+	InfoBlock,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
