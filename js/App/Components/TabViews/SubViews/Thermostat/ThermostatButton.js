@@ -24,7 +24,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../../BaseComponents';
-import MoreButtonsBlock from './MoreButtonsBlock';
 import HeatInfoBlock from './HeatInfoBlock';
 
 import {
@@ -114,7 +113,6 @@ class ThermostatButton extends View<Props, State> {
 			intl,
 			isGatewayActive,
 			infoBlockStyle,
-			moreActionsStyle,
 			style,
 		} = this.props;
 
@@ -131,7 +129,7 @@ class ThermostatButton extends View<Props, State> {
 			isEnabled={true}
 			style={[styles.buttonCommon, infoBlockStyle, {flex: 1, justifyContent: 'flex-start'}]}
 			device={device}
-			iconSize={30}
+			iconSize={35}
 			isGatewayActive={isGatewayActive}
 			intl={intl}
 			currentValue={currentModeValue}
@@ -140,15 +138,6 @@ class ThermostatButton extends View<Props, State> {
 			textOneStyle={styles.textOneStyle}
 			textTwoStyle={styles.textTwoStyle}
 			textThreeStyle={styles.textThreeStyle}/>;
-		const buttonThree = <MoreButtonsBlock
-			isEnabled={true}
-			style={[styles.buttonCommon, moreActionsStyle, {flex: 0}]}
-			device={device}
-			iconSize={25}
-			isGatewayActive={isGatewayActive}
-			intl={intl}
-			currentMode={mode}
-			iconStyle={styles.actionIconStyle}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
 			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
@@ -158,7 +147,6 @@ class ThermostatButton extends View<Props, State> {
 				<TouchableOpacity onPress={this.onPressMoreButtons}>
 					<View style={[styles.buttonsCover, {backgroundColor: bGColor }]}>
 						{buttonTwo}
-						{buttonThree}
 					</View>
 				</TouchableOpacity>
 			</View>
@@ -194,8 +182,9 @@ const styles = StyleSheet.create({
 	},
 	textOneStyle: {
 		textAlign: 'left',
-		fontSize: 18,
 		color: '#fff',
+		fontSize: Theme.Core.rowHeight * 0.33,
+		height: Theme.Core.rowHeight * 0.39,
 	},
 	actionIconStyle: {
 		fontSize: 27,
@@ -203,12 +192,13 @@ const styles = StyleSheet.create({
 		paddingLeft: 3,
 	},
 	textTwoStyle: {
-		fontSize: 11,
+		fontSize: Theme.Core.rowHeight * 0.2,
 		color: '#fff',
 	},
 	textThreeStyle: {
 		textAlign: 'left',
-		fontSize: 9,
+		fontSize: Theme.Core.rowHeight * 0.19,
+		height: Theme.Core.rowHeight * 0.3,
 		color: '#fff',
 	},
 });

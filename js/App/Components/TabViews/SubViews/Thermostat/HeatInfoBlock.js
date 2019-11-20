@@ -27,7 +27,11 @@ import { View, Text, IconTelldus, FormattedNumber } from '../../../../../BaseCom
 import { StyleSheet } from 'react-native';
 import ButtonLoadingIndicator from '../ButtonLoadingIndicator';
 
-import { shouldUpdate, formatModeValue } from '../../../../Lib';
+import {
+	shouldUpdate,
+	formatModeValue,
+	getKnownModes,
+} from '../../../../Lib';
 import i18n from '../../../../Translations/common';
 import Theme from '../../../../Theme';
 
@@ -39,6 +43,7 @@ type Props = {
 	currentMode: string,
 	currentValue: string,
 
+	iconSize: number,
 	isGatewayActive: boolean,
 	intl: Object,
 	style: Object,
@@ -57,6 +62,8 @@ class HeatInfoBlock extends View {
 
 	constructor(props: Props) {
 		super(props);
+
+		this.thermostatMoreActions = props.intl.formatMessage(i18n.thermostatMoreActions);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -90,21 +97,38 @@ class HeatInfoBlock extends View {
 			textTwoStyle,
 			textThreeStyle,
 			intl,
+			iconSize,
 		} = this.props;
-		const { formatMessage } = intl;
 		let { methodRequested, name, local } = device;
-		const labelValue = currentValue ? `${formatMessage(i18n.currentValue)} ${currentValue} °C` : '';
-		const labelCMode = currentMode ? `${formatMessage(i18n.currentMode)} ${currentMode}` : '';
-		let accessibilityLabel = `${formatMessage(i18n.thermostat)} ${name}, ${labelCMode}, ${labelValue}`;
+
 		let dotColor = local ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
 
+		let accessibilityLabel = `${this.thermostatMoreActions}, ${name}`;
+
+		const knownModes = getKnownModes(intl.formatMessage);
+		let IconActive, icon = '', currentModeLabel = '';
+		knownModes.map((item: Object) => {
+			if (currentMode === item.mode) {
+				IconActive = item.IconActive;
+				icon = item.icon;
+				currentModeLabel = item.label;
+			}
+		});
+
 		const showValue = currentMode !== 'off' && currentMode !== 'fan' && currentValue;
+
+		const showModelabel = currentMode !== 'off';
 
 		return (
 			<View style={[styles.button, this.props.style, heatInfoBlockStyle, {
 				paddingLeft: showValue ? 0 : 3,
+				justifyContent: showModelabel ? 'flex-start' : 'center',
 			}]} accessibilityLabel={accessibilityLabel}>
-				{showValue && <IconTelldus icon="temperature" style={iconStyle}/>}
+				{IconActive ?
+					<IconActive height={iconSize} width={iconSize}/>
+					:
+					<IconTelldus icon={icon} style={iconStyle}/>
+				}
 				<View style={{alignItems: 'flex-start', marginLeft: 2}}>
 					{showValue && <Text style={{textAlign: 'left'}}>
 						<FormattedNumber
@@ -116,9 +140,10 @@ class HeatInfoBlock extends View {
 						<Text style={textTwoStyle}>°C</Text>
 					</Text>
 					}
-					<Text style={textThreeStyle}>
-						{!!currentMode && currentMode.toUpperCase()}
+					{showModelabel && <Text style={textThreeStyle}>
+						{!!currentModeLabel && currentModeLabel.toUpperCase()}
 					</Text>
+					}
 				</View>
 				{
 					methodRequested === 'THERMOSTAT' ?
@@ -133,7 +158,6 @@ class HeatInfoBlock extends View {
 
 const styles = StyleSheet.create({
 	button: {
-		justifyContent: 'flex-start',
 		alignItems: 'center',
 		flexDirection: 'row',
 	},

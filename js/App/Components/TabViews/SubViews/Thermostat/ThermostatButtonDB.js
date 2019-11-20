@@ -24,7 +24,6 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../../BaseComponents';
-import MoreButtonsBlock from './MoreButtonsBlock';
 import HeatInfoBlock from './HeatInfoBlock';
 
 import {
@@ -115,7 +114,6 @@ class ThermostatButtonDB extends View<Props, State> {
 			isGatewayActive,
 			containerStyle,
 			infoBlockStyle,
-			moreActionsStyle,
 		} = this.props;
 
 		const { stateValues = {} } = item;
@@ -140,15 +138,6 @@ class ThermostatButtonDB extends View<Props, State> {
 			textOneStyle={styles.textOneStyle}
 			textTwoStyle={styles.textTwoStyle}
 			textThreeStyle={styles.textThreeStyle}/>;
-		const buttonThree = <MoreButtonsBlock
-			isEnabled={true}
-			style={[styles.buttonCommon, moreActionsStyle, {flex: 0}]}
-			device={item}
-			iconSize={20}
-			isGatewayActive={isGatewayActive}
-			intl={intl}
-			currentMode={mode}
-			iconStyle={styles.actionIconStyle}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
 			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;
@@ -157,7 +146,6 @@ class ThermostatButtonDB extends View<Props, State> {
 			<TouchableOpacity onPress={this.onPressMoreButtons} style={containerStyle}>
 				<View style={[styles.buttonsCover, {backgroundColor: bGColor }]}>
 					{buttonTwo}
-					{buttonThree}
 				</View>
 			</TouchableOpacity>
 		);
