@@ -21,7 +21,6 @@
 
 'use strict';
 import React from 'react';
-import { connect } from 'react-redux';
 
 import {
 	View,
@@ -49,7 +48,6 @@ type Props = {
 	appLayout: Object,
 	currentScreen: string,
 	location: Object,
-	networkInfo: Object,
 
 	onDidMount: Function,
 	intl: Object,
@@ -85,8 +83,6 @@ constructor(props: Props) {
 	super(props);
 
 	const { formatMessage } = this.props.intl;
-
-	this.ACCEPTABLE = ['ethernet', 'wifi', 'vpn'];
 
 	this.TESTS_TO_RUN = [
 		{
@@ -404,28 +400,8 @@ onPressRequestSupport() {
 	const {
 		location,
 		navigation,
-		networkInfo,
-		toggleDialogueBox,
-		intl,
 	} = this.props;
 	const { testCount } = this.state;
-
-	const {
-		type: netType,
-	} = networkInfo;
-	const isAcceptableNetType = this.ACCEPTABLE.indexOf(netType) !== -1;
-	if (!isAcceptableNetType) {
-		toggleDialogueBox({
-			show: true,
-			showPositive: true,
-			imageHeader: true,
-			headerText: intl.formatMessage(i18n.infoLocalTestFailNotConnectedToSameHeader),
-			text: intl.formatMessage(i18n.infoLocalTestFailNotConnectedToSame),
-			showHeader: true,
-			capitalizeHeader: false,
-		});
-		return;
-	}
 
 	let failedTests = '';
 	this.TESTS_TO_RUN.map((test: Object, index: number) => {
@@ -520,7 +496,6 @@ render(): Object | null {
 		appLayout,
 		location,
 		intl,
-		networkInfo,
 	} = this.props;
 	if (!location.id) {
 		return null;
@@ -541,20 +516,10 @@ render(): Object | null {
 	};
 
 	const {
-		type: netType,
-	} = networkInfo;
-
-	const isAcceptableNetType = this.ACCEPTABLE.indexOf(netType) !== -1;
-
-	const disableButton = !isAcceptableNetType;
-
-	const {
 		LocationDetail,
 		testsCover,
 		button,
 		troubleShootHintsCover,
-		inactiveSwitchBackground,
-		btnPrimaryBg,
 		...others
 	} = this.getStyles(appLayout);
 
@@ -602,9 +567,7 @@ render(): Object | null {
 						onPress={this.onPressReRunTest}/>
 					{showContactSupport && <TouchableButton
 						text={i18n.labelButtonRequestSupport}
-						style={[button, {
-							backgroundColor: disableButton ? inactiveSwitchBackground : btnPrimaryBg,
-						}]}
+						style={button}
 						onPress={this.onPressRequestSupport}/>}
 					</>
 				}
@@ -622,8 +585,6 @@ getStyles(appLayout: Object): Object {
 		paddingFactor,
 		eulaContentColor,
 		brandDanger,
-		inactiveSwitchBackground,
-		btnPrimaryBg,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -631,8 +592,6 @@ getStyles(appLayout: Object): Object {
 	const fSize = Math.floor(deviceWidth * 0.035);
 
 	return {
-		inactiveSwitchBackground,
-		btnPrimaryBg,
 		LocationDetail: {
 			flex: 0,
 			marginTop: padding,
@@ -690,13 +649,4 @@ noOP() {
 }
 }
 
-const mapStateToProps = (store: Object, ownProps: Object): Object => {
-
-	const { networkInfo = {} } = store.app;
-
-	return {
-		networkInfo,
-	};
-};
-
-export default connect(mapStateToProps, null)(TestLocalControl);
+export default TestLocalControl;

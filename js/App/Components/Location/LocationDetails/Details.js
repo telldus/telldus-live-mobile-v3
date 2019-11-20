@@ -58,6 +58,7 @@ type Props = {
 	dispatch: Function,
 	screenProps: Object,
 	pushToken: boolean | string,
+	networkInfo: Object,
 };
 
 type State = {
@@ -155,6 +156,8 @@ class Details extends View<Props, State> {
 		this.localControlNotSupportedTellSticks = ['TellStick Net', 'TelldusCenter'];
 
 		this.handleBackPress = this.handleBackPress.bind(this);
+
+		this.ACCEPTABLE = ['ethernet', 'wifi', 'vpn'];
 	}
 
 	componentDidMount() {
@@ -305,7 +308,34 @@ class Details extends View<Props, State> {
 	}
 
 	onPressTestLocalControl() {
-		const { location, navigation } = this.props;
+		const {
+			location,
+			navigation,
+			networkInfo,
+			screenProps,
+		} = this.props;
+		const {
+			toggleDialogueBox,
+			intl,
+		} = screenProps;
+
+		const {
+			type: netType,
+		} = networkInfo;
+		const isAcceptableNetType = this.ACCEPTABLE.indexOf(netType) !== -1;
+		if (!isAcceptableNetType) {
+			toggleDialogueBox({
+				show: true,
+				showPositive: true,
+				imageHeader: true,
+				header: intl.formatMessage(i18n.infoLocalTestFailNotConnectedToSameHeader),
+				text: intl.formatMessage(i18n.infoLocalTestFailNotConnectedToSame),
+				showHeader: true,
+				capitalizeHeader: false,
+			});
+			return;
+		}
+
 		navigation.navigate({
 			routeName: 'TestLocalControl',
 			key: 'TestLocalControl',
@@ -323,7 +353,7 @@ class Details extends View<Props, State> {
 
 	render(): Object | null {
 		const { isLoading } = this.state;
-		const { location, screenProps } = this.props;
+		const { location, screenProps, networkInfo } = this.props;
 		const { appLayout } = screenProps;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -360,6 +390,8 @@ class Details extends View<Props, State> {
 			container,
 			throbberContainer,
 			minWidthButton,
+			inactiveSwitchBackground,
+			btnPrimaryBg,
 		} = this.getStyles(appLayout);
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
@@ -367,6 +399,14 @@ class Details extends View<Props, State> {
 		const timezoneLabel = timezoneAutodetected ? `${this.labelTimeZone}\n(${this.labelAutoDetected})` : this.labelTimeZone;
 
 		const supportLocalControl = this.localControlNotSupportedTellSticks.indexOf(type) === -1;
+
+		const {
+			type: netType,
+		} = networkInfo;
+
+		const isAcceptableNetType = this.ACCEPTABLE.indexOf(netType) !== -1;
+
+		const disableButton = !isAcceptableNetType;
 
 		return (
 			<ScrollView style={{
@@ -448,8 +488,9 @@ class Details extends View<Props, State> {
 						<TouchableButton text={i18n.labelTestLocalControl} style={{
 							marginTop: padding,
 							minWidth: minWidthButton,
-							backgroundColor: Theme.Core.brandSecondary,
-						}} onPress={this.onPressTestLocalControl}/>
+							backgroundColor: disableButton ? inactiveSwitchBackground : btnPrimaryBg,
+						}}
+						onPress={this.onPressTestLocalControl}/>
 					)}
 					<View style={styles.buttonCover}>
 						<TouchableButton text={this.labelDelete} style={[styles.button, {
@@ -473,18 +514,28 @@ class Details extends View<Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 		const deviceHeight = isPortrait ? height : width;
 
+		const {
+			inactiveSwitchBackground,
+			btnPrimaryBg,
+			paddingFactor,
+			appBackground,
+			brandSecondary,
+		} = Theme.Core;
+
 		const fontSizeName = Math.floor(deviceWidth * 0.053333333);
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const padding = deviceWidth * paddingFactor;
 		const minWidthButton = Math.floor(deviceWidth * 0.6);
 
 		return {
+			inactiveSwitchBackground,
+			btnPrimaryBg,
 			container: {
 				flex: 1,
 				padding: padding,
 				alignItems: 'stretch',
 				justifyContent: 'center',
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: appBackground,
 			},
 			infoOneContainerStyle: {
 				flexDirection: 'row',
@@ -505,7 +556,7 @@ class Details extends View<Props, State> {
 				height: deviceHeight * 0.12,
 			},
 			textName: {
-				color: Theme.Core.brandSecondary,
+				color: brandSecondary,
 				fontSize: fontSizeName,
 			},
 			locationInfo: {
@@ -555,9 +606,12 @@ const styles = StyleSheet.create({
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	let { id } = ownProps.navigation.getParam('location', {id: null});
 	const { pushToken } = store.user;
+	const { networkInfo } = store.app;
+
 	return {
 		location: store.gateways.byId[id],
 		pushToken,
+		networkInfo,
 	};
 }
 
