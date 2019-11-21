@@ -258,7 +258,9 @@ class DashboardTab extends View {
 
 	noItemsMessage(style: Object): Object {
 		return (
-			<View style={style.container}>
+			<View style={[style.container, {
+				paddingHorizontal: 20,
+			}]}>
 				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
 				<Text style={style.noItemsTitle}>
 					{this.noItemsTitle}
