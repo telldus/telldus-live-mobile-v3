@@ -624,7 +624,6 @@ class DeviceRow extends View<Props, State> {
 			nameTablet,
 			textPowerConsumed,
 			textPowerConsumedTablet,
-			infoCoverStyle,
 		} = styles;
 		const {
 			THERMOSTAT,
@@ -649,13 +648,11 @@ class DeviceRow extends View<Props, State> {
 				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
 					{deviceName}
 				</Text>
-				<Text style={infoCoverStyle} numberOfLines={1}>
-					{!!info && (
-						<Text style = {textPowerStyle}>
-							{info}
-						</Text>
-					)}
-				</Text>
+				{!!info && (
+					<Text style = {textPowerStyle} numberOfLines={1}>
+						{info}
+					</Text>
+				)}
 			</View>
 		);
 	}
@@ -805,19 +802,18 @@ class DeviceRow extends View<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'center',
 			},
-			infoCoverStyle: {
-				marginLeft: 6,
-				marginTop: infoFontSize * 0.411,
-			},
 			textPowerConsumed: {
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
+				marginLeft: 6,
 			},
 			textPowerConsumedTablet: {
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
+				marginLeft: 6,
+				marginTop: infoFontSize * 0.411,
 			},
 		};
 	}
