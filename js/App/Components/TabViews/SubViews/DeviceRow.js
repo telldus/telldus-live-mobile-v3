@@ -624,7 +624,6 @@ class DeviceRow extends View<Props, State> {
 			nameTablet,
 			textPowerConsumed,
 			textPowerConsumedTablet,
-			textSeparator,
 			infoCoverStyle,
 		} = styles;
 		let coverStyle = name;
@@ -634,26 +633,23 @@ class DeviceRow extends View<Props, State> {
 			textPowerStyle = textPowerConsumedTablet;
 		}
 
+		let info = null;
+		if (typeof currentTemp === 'number' || typeof currentTemp === 'string') {
+			info = `${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)}°C`;
+		} else if (typeof powerConsumed === 'number' || typeof powerConsumed === 'string') {
+			info = `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`;
+		}
+
 		return (
 			<View style={coverStyle} onLayout={this.onLayoutCover}>
 				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
 					{deviceName}
 				</Text>
 				<Text style={infoCoverStyle} numberOfLines={1}>
-					{(typeof currentTemp === 'number' || typeof currentTemp === 'string') && (
+					{!!info && (
 						<Text style = {textPowerStyle}>
-							{`${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)}°C`}
+							{info}
 						</Text>
-					)}
-					{(typeof powerConsumed === 'number' || typeof powerConsumed === 'string') && (
-						<>
-						{(typeof currentTemp === 'number' || typeof currentTemp === 'string') && (<Text style={textSeparator}>
-							{', '}
-						</Text>)}
-						<Text style = {textPowerStyle}>
-							{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`}
-						</Text>
-						</>
 					)}
 				</Text>
 			</View>
@@ -818,10 +814,6 @@ class DeviceRow extends View<Props, State> {
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
-			},
-			textSeparator: {
-				color: rowTextColor,
-				fontSize: infoFontSize,
 			},
 		};
 	}

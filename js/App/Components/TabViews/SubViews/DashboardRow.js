@@ -341,9 +341,8 @@ getInfo(): null | string {
 
 	let info = typeof powerConsumed === 'number' || typeof powerConsumed === 'string' ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W` : null;
 	if (typeof currentTemp === 'number' || typeof currentTemp === 'string') {
-		info = info ? `, ${info}` : '';
 		let value = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? intl.formatNumber(currentTemp, {minimumFractionDigits: 1}) : '';
-		info = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? `${intl.formatMessage(i18n.labelCurrent)}: ${value}°C${info}` : null;
+		info = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? `${intl.formatMessage(i18n.labelCurrent)}: ${value}°C` : null;
 	}
 
 	return info;
