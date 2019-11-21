@@ -66,7 +66,7 @@ export default class Title extends View<DefaultProps, Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 		return {
 			color: this.props.color,
-			fontFamily: Theme.Core.fonts.sfnsDisplay,
+			fontFamily: Theme.Core.fonts.robotoRegular,
 			fontSize: deviceWidth * 0.053333333,
 			marginBottom: deviceWidth * 0.008,
 		};
