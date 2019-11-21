@@ -217,7 +217,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyleTwo: {
 			fontSize: fontSize * 1.2,
-			color: '#000',
+			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 		},
 		iconStyle: {

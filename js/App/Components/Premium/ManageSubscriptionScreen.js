@@ -194,7 +194,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyleOne: {
 			fontSize: fontSize * 1.2,
-			color: '#000',
+			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 			marginLeft: 5,
 		},
@@ -214,7 +214,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		contentOne: {
 			fontSize: fontSize * 0.8,
-			color: '#000',
+			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 			textAlign: 'center',
 			marginTop: padding * 2,
