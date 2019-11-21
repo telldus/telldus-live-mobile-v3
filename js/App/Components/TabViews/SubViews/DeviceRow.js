@@ -626,6 +626,10 @@ class DeviceRow extends View<Props, State> {
 			textPowerConsumedTablet,
 			infoCoverStyle,
 		} = styles;
+		const {
+			THERMOSTAT,
+		} = device.supportedMethods;
+
 		let coverStyle = name;
 		let textPowerStyle = textPowerConsumed;
 		if (this.isTablet) {
@@ -634,7 +638,7 @@ class DeviceRow extends View<Props, State> {
 		}
 
 		let info = null;
-		if (typeof currentTemp === 'number' || typeof currentTemp === 'string') {
+		if (THERMOSTAT && typeof currentTemp === 'number' || typeof currentTemp === 'string') {
 			info = `${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)}°C`;
 		} else if (typeof powerConsumed === 'number' || typeof powerConsumed === 'string') {
 			info = `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`;

@@ -337,10 +337,14 @@ render(): Object {
 }
 
 getInfo(): null | string {
-	const { intl, powerConsumed, currentTemp } = this.props;
+	const { intl, powerConsumed, currentTemp, item } = this.props;
+
+	const {
+		THERMOSTAT,
+	} = item.supportedMethods;
 
 	let info = typeof powerConsumed === 'number' || typeof powerConsumed === 'string' ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W` : null;
-	if (typeof currentTemp === 'number' || typeof currentTemp === 'string') {
+	if (THERMOSTAT && typeof currentTemp === 'number' || typeof currentTemp === 'string') {
 		let value = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? intl.formatNumber(currentTemp, {minimumFractionDigits: 1}) : '';
 		info = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? `${intl.formatMessage(i18n.labelCurrent)}: ${value}°C` : null;
 	}
