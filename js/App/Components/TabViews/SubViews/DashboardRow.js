@@ -343,7 +343,7 @@ getInfo(): null | string {
 	let info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
 	if (THERMOSTAT) {
 		let value = currentTemp ? intl.formatNumber(currentTemp, {minimumFractionDigits: 1}) : '';
-		info = currentTemp ? intl.formatMessage(i18n.labelCurrentlyValue, {value: `${value}°C`}) : null;
+		info = currentTemp ? `${intl.formatMessage(i18n.labelCurrent)}: ${value} °C` : null;
 	}
 	return info;
 }

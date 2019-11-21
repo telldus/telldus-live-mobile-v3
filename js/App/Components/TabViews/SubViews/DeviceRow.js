@@ -619,7 +619,14 @@ class DeviceRow extends View<Props, State> {
 
 	getNameInfo(device: Object, deviceName: string, powerConsumed: string | null, styles: Object): Object {
 		let { intl, currentTemp } = this.props;
-		let { name, nameTablet, textPowerConsumed, textPowerConsumedTablet } = styles;
+		let {
+			name,
+			nameTablet,
+			textPowerConsumed,
+			textPowerConsumedTablet,
+			textSeparator,
+			infoCoverStyle,
+		} = styles;
 		let coverStyle = name;
 		let textPowerStyle = textPowerConsumed;
 		if (this.isTablet) {
@@ -632,16 +639,23 @@ class DeviceRow extends View<Props, State> {
 				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
 					{deviceName}
 				</Text>
-				{!!powerConsumed && (
-					<Text style = {textPowerStyle}>
-						{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
-					</Text>
-				)}
-				{!!currentTemp && (
-					<Text style = {textPowerStyle}>
-						{intl.formatMessage(i18n.labelCurrentlyValue, {value: `${intl.formatNumber(currentTemp)} °C`})}
-					</Text>
-				)}
+				<Text style={infoCoverStyle} numberOfLines={1}>
+					{!!currentTemp && (
+						<Text style = {textPowerStyle}>
+							{`${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)} °C`}
+						</Text>
+					)}
+					{!!powerConsumed && (
+						<>
+						{!!currentTemp && (<Text style={textSeparator}>
+							{', '}
+						</Text>)}
+						<Text style = {textPowerStyle}>
+							{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
+						</Text>
+						</>
+					)}
+				</Text>
 			</View>
 		);
 	}
@@ -791,18 +805,23 @@ class DeviceRow extends View<Props, State> {
 				justifyContent: 'center',
 				alignItems: 'center',
 			},
-			textPowerConsumed: {
+			infoCoverStyle: {
 				marginLeft: 6,
+				marginTop: infoFontSize * 0.411,
+			},
+			textPowerConsumed: {
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},
 			textPowerConsumedTablet: {
-				marginRight: 6,
-				marginTop: infoFontSize * 0.411,
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
+			},
+			textSeparator: {
+				color: rowTextColor,
+				fontSize: infoFontSize,
 			},
 		};
 	}
