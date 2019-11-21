@@ -640,18 +640,18 @@ class DeviceRow extends View<Props, State> {
 					{deviceName}
 				</Text>
 				<Text style={infoCoverStyle} numberOfLines={1}>
-					{!!currentTemp && (
+					{(typeof currentTemp === 'number' || typeof currentTemp === 'string') && (
 						<Text style = {textPowerStyle}>
-							{`${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)} °C`}
+							{`${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)}°C`}
 						</Text>
 					)}
-					{!!powerConsumed && (
+					{(typeof powerConsumed === 'number' || typeof powerConsumed === 'string') && (
 						<>
-						{!!currentTemp && (<Text style={textSeparator}>
+						{(typeof currentTemp === 'number' || typeof currentTemp === 'string') && (<Text style={textSeparator}>
 							{', '}
 						</Text>)}
 						<Text style = {textPowerStyle}>
-							{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
+							{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`}
 						</Text>
 						</>
 					)}
