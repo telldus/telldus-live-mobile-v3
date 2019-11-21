@@ -58,6 +58,7 @@
     "react-native-markdown-renderer": "~3.2.8",
     "react-native-material-dropdown": "https://github.com/rimzici/react-native-material-dropdown.git",
     "react-native-material-ripple": "~0.8.0",
+    "react-native-material-textfield": "^0.16.1",
     "react-native-modal": "~9.0.0",
     "react-native-orientation-locker": "^1.1.6",
     "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git",
