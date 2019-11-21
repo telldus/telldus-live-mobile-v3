@@ -101,7 +101,7 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 			<TouchableOpacity onPress={onSelectPlan} key={`${index}`}>
 				<View style={[contentCover,
 					selectedIndex === index ? {
-						borderWidth: 1,
+						borderWidth: 3,
 						borderColor: Theme.Core.brandSecondary,
 					} : undefined,
 				]}>
