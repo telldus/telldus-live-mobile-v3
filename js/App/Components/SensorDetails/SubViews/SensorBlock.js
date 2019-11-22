@@ -22,11 +22,6 @@
 'use strict';
 
 import React from 'react';
-import {
-	createIntl,
-	createIntlCache,
-} from 'react-intl';
-import { useSelector } from 'react-redux';
 
 import {
 	View,
@@ -34,13 +29,14 @@ import {
 	Icon,
 	IconTelldus,
 	FormattedNumber,
-	FormattedDate,
-	FormattedTime,
 	FormattedMessage,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
+import {
+	useRelativeIntl,
+} from '../../../Hooks/App';
 
 type Props = {
 	name: string,
@@ -75,23 +71,12 @@ const SensorBlock = (props: Props): Object => {
 		maxTime,
 		minTime,
 		gatewayTimezone,
-		// gatewayTimezoneOffset,
 	} = props;
-
-	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	let { language = {} } = defaultSettings;
-	let locale = language.code;
-
-	const cache = createIntlCache();
-	const intl = createIntl({
-		locale,
-		timeZone: gatewayTimezone,
-	}, cache);
 
 	const {
 		formatDate,
 		formatTime,
-	} = intl;
+	} = useRelativeIntl(gatewayTimezone);
 
 	const { brandSecondary } = Theme.Core;
 
@@ -104,9 +89,6 @@ const SensorBlock = (props: Props): Object => {
 		updatedInfoStyle,
 		iconSize: icSize,
 	} = getStyles();
-
-	console.log('TEST formatDate(lastUpdated)', formatDate(lastUpdated));
-	console.log('TEST formatTime(lastUpdated)', formatTime(lastUpdated));
 
 	return (
 		<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
