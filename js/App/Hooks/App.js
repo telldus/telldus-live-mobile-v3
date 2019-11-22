@@ -26,19 +26,27 @@ import {
 import { useSelector } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
-const useRelativeIntl = (gatewayTimezone?: string): Object => {
+let relativeIntls = {};
+
+const useRelativeIntl = (gatewayTimezone?: string = DeviceInfo.getTimezone()): Object => {
+
+	if (relativeIntls[gatewayTimezone]) {
+		return relativeIntls[gatewayTimezone];
+	}
 
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { language = {} } = defaultSettings;
 	let locale = language.code;
 
-	gatewayTimezone = gatewayTimezone || DeviceInfo.getTimezone();
+	gatewayTimezone = gatewayTimezone;
 
 	const cache = createIntlCache();
-	return createIntl({
+	relativeIntls[gatewayTimezone] = createIntl({
 		locale,
 		timeZone: gatewayTimezone,
 	}, cache);
+
+	return relativeIntls[gatewayTimezone];
 };
 
 module.exports = {
