@@ -138,7 +138,11 @@ const WithIntlProvider = (props: Object): Object => {
 		messages = Translations[locale];
 	}
 	return (
-		<IntlProvider locale={locale} messages={messages} textComponent={Text}>
+		<IntlProvider
+			locale={locale}
+			messages={messages}
+			textComponent={Text}
+			key={locale}>
 			<App locale={locale}/>
 		</IntlProvider>
 	);
