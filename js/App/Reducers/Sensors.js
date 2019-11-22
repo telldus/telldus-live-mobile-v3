@@ -33,7 +33,7 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
 		let gateway = gateways[item.clientId];
 		if (gateway) {
-			const { localKey, online, websocketOnline } = gateway;
+			const { localKey, online, websocketOnline, timezone } = gateway;
 			const {
 				address,
 				key,
@@ -42,9 +42,20 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 			} = localKey;
 			const tokenExpired = hasTokenExpired(ttl);
 			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
-			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
+			return {
+				...item,
+				isOnline: online,
+				websocketOnline,
+				supportLocalControl,
+				gatewayTimezone: timezone,
+			};
 		}
-		return { ...item, isOnline: false, websocketOnline: false, supportLocalControl: false };
+		return {
+			...item,
+			isOnline: false,
+			websocketOnline: false,
+			supportLocalControl: false,
+		};
 	});
 	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];

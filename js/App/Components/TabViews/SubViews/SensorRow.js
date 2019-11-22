@@ -32,11 +32,11 @@ import {
 	Text,
 	View,
 	BlockIcon,
-	FormattedRelative,
 } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
 import TypeBlockList from './Sensor/TypeBlockList';
+import LastUpdatedInfo from './Sensor/LastUpdatedInfo';
 
 import i18n from '../../../Translations/common';
 
@@ -494,11 +494,11 @@ class SensorRow extends View<Props, State> {
 					{sensorName}
 				</Text>
 				{isGatewayActive ?
-					<FormattedRelative
+					<LastUpdatedInfo
 						value={-seconds}
 						numeric="auto"
 						updateIntervalInSeconds={60}
-						formatterFunction={this.formatSensorLastUpdate}
+						gatewayTimezone={sensor.gatewayTimezone}
 						textStyle={[
 							textInfoStyle, {
 								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
