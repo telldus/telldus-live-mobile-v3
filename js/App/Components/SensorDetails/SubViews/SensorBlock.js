@@ -128,13 +128,13 @@ const SensorBlock = (props: Props): Object => {
 						suffixStyle={valueStyle}/>
 				}
 				<Text style={updatedInfoStyle}>
-					<Text value={lastUpdated} style={updatedInfoStyle}>
+					<Text style={updatedInfoStyle}>
 						{formatDate(lastUpdated)}
 					</Text>
 					<Text style={Theme.Styles.hiddenText}>
 						{' '}
 					</Text>
-					<Text value={lastUpdated} style={updatedInfoStyle}>
+					<Text style={updatedInfoStyle}>
 						{formatTime(lastUpdated)}
 					</Text>
 				</Text>
@@ -146,11 +146,15 @@ const SensorBlock = (props: Props): Object => {
 						</Text>
 						<FormattedMessage {...i18n.labelMax} style={updatedInfoStyle}/>
 						{`: ${max}${unit}, `}
-						<FormattedDate value={maxTime} style={updatedInfoStyle}/>
+						<Text style={updatedInfoStyle}>
+							{formatDate(maxTime)}
+						</Text>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
 						</Text>
-						<FormattedTime value={maxTime} style={updatedInfoStyle}/>
+						<Text style={updatedInfoStyle}>
+							{formatTime(maxTime)}
+						</Text>
 					</Text>
 				)}
 				{!!min && (
@@ -161,11 +165,15 @@ const SensorBlock = (props: Props): Object => {
 						</Text>
 						<FormattedMessage {...i18n.labelMin} style={updatedInfoStyle}/>
 						{`: ${min}${unit}, `}
-						<FormattedDate value={minTime} style={updatedInfoStyle}/>
+						<Text style={updatedInfoStyle}>
+							{formatDate(minTime)}
+						</Text>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
 						</Text>
-						<FormattedTime value={minTime} style={updatedInfoStyle}/>
+						<Text style={updatedInfoStyle}>
+							{formatTime(minTime)}
+						</Text>
 					</Text>
 				)}
 			</View>
