@@ -619,7 +619,16 @@ class DeviceRow extends View<Props, State> {
 
 	getNameInfo(device: Object, deviceName: string, powerConsumed: string | null, styles: Object): Object {
 		let { intl, currentTemp } = this.props;
-		let { name, nameTablet, textPowerConsumed, textPowerConsumedTablet } = styles;
+		let {
+			name,
+			nameTablet,
+			textPowerConsumed,
+			textPowerConsumedTablet,
+		} = styles;
+		const {
+			THERMOSTAT,
+		} = device.supportedMethods;
+
 		let coverStyle = name;
 		let textPowerStyle = textPowerConsumed;
 		if (this.isTablet) {
@@ -627,19 +636,21 @@ class DeviceRow extends View<Props, State> {
 			textPowerStyle = textPowerConsumedTablet;
 		}
 
+		let info = null;
+		if (THERMOSTAT && (typeof currentTemp === 'number' || typeof currentTemp === 'string')) {
+			info = `${intl.formatMessage(i18n.labelCurrent)}: ${intl.formatNumber(currentTemp)}°C`;
+		} else if (typeof powerConsumed === 'number' || typeof powerConsumed === 'string') {
+			info = `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W`;
+		}
+
 		return (
 			<View style={coverStyle} onLayout={this.onLayoutCover}>
 				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1} onLayout={this.onLayoutDeviceName}>
 					{deviceName}
 				</Text>
-				{!!powerConsumed && (
-					<Text style = {textPowerStyle}>
-						{`${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W`}
-					</Text>
-				)}
-				{!!currentTemp && (
-					<Text style = {textPowerStyle}>
-						{intl.formatMessage(i18n.labelCurrentlyValue, {value: `${intl.formatNumber(currentTemp)} °C`})}
+				{!!info && (
+					<Text style = {textPowerStyle} numberOfLines={1}>
+						{info}
 					</Text>
 				)}
 			</View>
@@ -792,17 +803,17 @@ class DeviceRow extends View<Props, State> {
 				alignItems: 'center',
 			},
 			textPowerConsumed: {
-				marginLeft: 6,
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
+				marginLeft: 6,
 			},
 			textPowerConsumedTablet: {
-				marginRight: 6,
-				marginTop: infoFontSize * 0.411,
 				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
+				marginLeft: 6,
+				marginTop: infoFontSize * 0.411,
 			},
 		};
 	}
@@ -812,8 +823,8 @@ class DeviceRow extends View<Props, State> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { clientDeviceId, clientId } = ownProps.device;
-	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+	const { clientDeviceId, clientId, deviceType } = ownProps.device;
+	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
 	return {

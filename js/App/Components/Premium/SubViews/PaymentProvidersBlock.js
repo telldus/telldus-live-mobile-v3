@@ -89,7 +89,7 @@ const PaymentProvidersBlock = (props: Object): Object => {
 			<TouchableOpacity key={`${key}`} style={[contentCoverStyle, {
 				marginLeft: (key % 2 === 0) ? 0 : padding / 2,
 			}, selectedIndex === key ? {
-				borderWidth: 1,
+				borderWidth: 3,
 				borderColor: Theme.Core.brandSecondary,
 			} : undefined]}
 			onPress={onSelectOption}>
@@ -165,6 +165,7 @@ const getStyle = (appLayout: Object): Object => {
 			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding,
+			borderRadius: 2,
 		},
 		titleSyle: {
 			color: Theme.Core.eulaContentColor,

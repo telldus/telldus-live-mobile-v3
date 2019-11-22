@@ -23,9 +23,12 @@
 'use strict';
 
 import React, { useState } from 'react';
-import { ScrollView, TextInput } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
+import {
+	TextField,
+} from 'react-native-material-textfield';
 
 import {
 	View,
@@ -63,6 +66,8 @@ const RedeemGiftScreen = (props: Object): Object => {
 		labelStyle,
 		titleStyleTwo,
 		buttonStyle,
+		textFieldCoverStyle,
+		brandSecondary,
 	} = getStyles(layout);
 
 	const {
@@ -143,16 +148,17 @@ const RedeemGiftScreen = (props: Object): Object => {
 					<Text style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
 					</Text>
-					<Text style={labelStyle}>
-						{formatMessage(i18n.labelVoucherCode)}
-					</Text>
-					<TextInput
+					<TextField
 						value={code}
+						label={formatMessage(i18n.labelVoucherCode)}
+						labelTextStyle={labelStyle}
+						baseColor={brandSecondary}
+						tintColor={brandSecondary}
 						style={textFieldStyle}
+						containerStyle={textFieldCoverStyle}
 						onChangeText={onChangeText}
 						autoCorrect={false}
 						autoFocus={true}
-						underlineColorAndroid={Theme.Core.brandSecondary}
 						returnKeyType={'done'}
 						autoCapitalize={'characters'}
 					/>
@@ -178,6 +184,7 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
+		brandSecondary: Theme.Core.brandSecondary,
 		container: {
 			flex: 1,
 			backgroundColor: Theme.Core.appBackground,
@@ -198,10 +205,12 @@ const getStyles = (appLayout: Object): Object => {
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
-		textFieldStyle: {
+		textFieldCoverStyle: {
 			width: '100%',
-			fontSize: fontSize * 1.4,
 			marginTop: 5,
+		},
+		textFieldStyle: {
+			fontSize: fontSize * 1.4,
 			color: '#A59F9A',
 		},
 		bodyStyle: {
@@ -217,7 +226,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyleTwo: {
 			fontSize: fontSize * 1.2,
-			color: '#000',
+			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 		},
 		iconStyle: {
@@ -225,10 +234,8 @@ const getStyles = (appLayout: Object): Object => {
 			color: Theme.Core.twine,
 		},
 		labelStyle: {
-			marginTop: 15,
 			fontSize: fontSize,
 			color: Theme.Core.brandSecondary,
-			alignSelf: 'flex-start',
 		},
 		buttonStyle: {
 			marginVertical: fontSize / 2,

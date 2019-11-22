@@ -337,14 +337,18 @@ render(): Object {
 }
 
 getInfo(): null | string {
-	const { item, intl, powerConsumed, currentTemp } = this.props;
-	const { supportedMethods = {}} = item;
-	const { THERMOSTAT } = supportedMethods;
-	let info = powerConsumed ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})} W` : null;
-	if (THERMOSTAT) {
-		let value = currentTemp ? intl.formatNumber(currentTemp, {minimumFractionDigits: 1}) : '';
-		info = currentTemp ? intl.formatMessage(i18n.labelCurrentlyValue, {value: `${value}°C`}) : null;
+	const { intl, powerConsumed, currentTemp, item } = this.props;
+
+	const {
+		THERMOSTAT,
+	} = item.supportedMethods;
+
+	let info = typeof powerConsumed === 'number' || typeof powerConsumed === 'string' ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W` : null;
+	if (THERMOSTAT && (typeof currentTemp === 'number' || typeof currentTemp === 'string')) {
+		let value = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? intl.formatNumber(currentTemp, {minimumFractionDigits: 1}) : '';
+		info = typeof currentTemp === 'number' || typeof currentTemp === 'string' ? `${intl.formatMessage(i18n.labelCurrent)}: ${value}°C` : null;
 	}
+
 	return info;
 }
 
@@ -391,8 +395,8 @@ getStyles(appLayout: Object, tileWidth: number): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { clientDeviceId, clientId } = ownProps.item;
-	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+	const { clientDeviceId, clientId, deviceType } = ownProps.item;
+	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
 	return {

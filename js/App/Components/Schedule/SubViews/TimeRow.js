@@ -91,7 +91,7 @@ export default class TimeRow extends View<null, Props, State> {
 		if (loading && schedule.type !== 'time') {
 			this._getSuntime(device.clientId, type);
 		}
-		if ((time.hour !== schedule.hour) || (time.minute !== schedule.minute)) {
+		if (schedule.type === 'time' && ((time.hour !== schedule.hour) || (time.minute !== schedule.minute))) {
 			this.setState({
 				time: {
 					hour: schedule.hour,
@@ -190,20 +190,12 @@ export default class TimeRow extends View<null, Props, State> {
 	}
 
 	_getSuntime = (clientId: number, type: string) => {
-		const { hour, minute } = this.state.time;
-
 		this.props.getSuntime(clientId, type).then((time: Time) => {
 			if ((time: Time)) {
-				if (time.hour !== hour || time.minute !== minute) {
-					this.setState({
-						time,
-						loading: false,
-					});
-				} else {
-					this.setState({
-						loading: false,
-					});
-				}
+				this.setState({
+					time,
+					loading: false,
+				});
 			} else {
 				this.setState({
 					loading: false,
