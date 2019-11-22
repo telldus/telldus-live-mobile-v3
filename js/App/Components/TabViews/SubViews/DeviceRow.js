@@ -823,8 +823,8 @@ class DeviceRow extends View<Props, State> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { clientDeviceId, clientId } = ownProps.device;
-	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId);
+	const { clientDeviceId, clientId, deviceType } = ownProps.device;
+	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
 	return {
