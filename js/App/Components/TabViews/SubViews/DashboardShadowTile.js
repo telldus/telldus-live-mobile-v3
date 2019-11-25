@@ -49,18 +49,21 @@ const Title = ({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, for
 				{name ? name : formatMessage(i18n.noName)}
 			</Text>
 			{!!info &&
-			(<Text
-				ellipsizeMode="middle"
-				numberOfLines={1}
-				style={[
-					styles.name, {
-						fontSize: Math.floor(tileWidth / 12),
-						color: Theme.Core.rowTextColor,
-					},
-				]}>
-				{info}
-			</Text>
-			)}
+			typeof info === 'string' ?
+				<Text
+					ellipsizeMode="middle"
+					numberOfLines={1}
+					style={[
+						styles.name, {
+							fontSize: Math.floor(tileWidth / 12),
+							color: Theme.Core.rowTextColor,
+						},
+					]}>
+					{info}
+				</Text>
+				:
+				info
+			}
 		</View>
 	</View>
 );

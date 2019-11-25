@@ -59,7 +59,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 		let data = {};
 		if (gateway) {
-			const { localKey = {}, online, websocketOnline } = gateway;
+			const { localKey = {}, online, websocketOnline, timezone } = gateway;
 			const {
 				address,
 				key,
@@ -68,9 +68,20 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			} = localKey;
 			const tokenExpired = hasTokenExpired(ttl);
 			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
-			data = { ...sensor, isOnline: online, supportLocalControl, websocketOnline };
+			data = {
+				...sensor,
+				isOnline: online,
+				supportLocalControl,
+				websocketOnline,
+				gatewayTimezone: timezone,
+			};
 		} else {
-			data = { ...sensor, isOnline: false, websocketOnline: false, supportLocalControl: false };
+			data = {
+				...sensor,
+				isOnline: false,
+				websocketOnline: false,
+				supportLocalControl: false,
+			};
 		}
 
 		return {
