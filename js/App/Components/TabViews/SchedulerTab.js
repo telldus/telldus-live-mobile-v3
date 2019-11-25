@@ -53,6 +53,7 @@ type Props = {
 	navigation: Object,
 	screenProps: Object,
 	dispatch: Function,
+	gatewayTimezone: string,
 };
 
 type State = {
@@ -314,6 +315,7 @@ class SchedulerTab extends View<null, Props, State> {
 				showNow={showNow}
 				editJob={this.editJob}
 				isFirst={props.index === 0}
+				gatewayTimezone={item.gatewayTimezone}
 				{...screenProps}/>
 		);
 	};

@@ -53,7 +53,9 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		if (!gateway) {
 			return;
 		}
+
 		const { timezone } = gateway;
+		let gatewayTimezone = timezone;
 
 		if (job.type === 'sunrise') {
 			const { sunrise } = gateway;
@@ -70,6 +72,8 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 			tempDay.hours(job.hour);
 			tempDay.minutes(job.minute);
 		}
+
+		job.gatewayTimezone = gatewayTimezone;
 
 		job.effectiveHour = tempDay.format('HH');
 		job.effectiveMinute = tempDay.format('mm');
