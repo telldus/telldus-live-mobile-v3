@@ -41,6 +41,7 @@ type Props = {
 	screenProps: Object,
 	currentScreen: string,
 	navigation: Object,
+	gatewayTimezone: string,
 };
 
 type State = {
@@ -240,7 +241,7 @@ class HistoryTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, device } = this.props;
+		const { screenProps, device, gatewayTimezone } = this.props;
 		const { intl, currentScreen, appLayout } = screenProps;
 		const { deviceType } = device;
 		const { historyDetails } = this.state;
@@ -263,6 +264,7 @@ class HistoryTab extends View {
 				isModalOpen={historyDetails.show}
 				isLast={isLast}
 				appLayout={appLayout}
+				gatewayTimezone={gatewayTimezone}
 			/>
 		);
 	}
@@ -453,9 +455,16 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const device = state.devices.byId[id];
+	const { clientId } = device ? device : {};
+
+	const gateway = state.gateways.byId[clientId];
+	const {
+		timezone: gatewayTimezone,
+	} = gateway ? gateway : {};
 
 	return {
 		device: device ? device : {},
+		gatewayTimezone,
 	};
 }
 

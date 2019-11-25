@@ -47,6 +47,7 @@ type Props = {
 	isModalOpen: boolean,
 	currentScreen: string,
 	deviceType: string,
+	gatewayTimezone: string,
 };
 
 
@@ -168,7 +169,14 @@ class HistoryRow extends React.PureComponent<Props, null> {
 
 	render(): Object {
 
-		let { intl, isModalOpen, currentScreen, deviceType } = this.props;
+		let {
+			intl,
+			isModalOpen,
+			currentScreen,
+			deviceType,
+			appLayout,
+			gatewayTimezone,
+		} = this.props;
 
 		let {
 			locationCover,
@@ -249,6 +257,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 					triangleColor={bGColor}
 					rowWithTriangleContainerStyle={rowWithTriangleContainer}
 					isFirst={this.props.isFirst}
+					appLayout={appLayout}
+					gatewayTimezone={gatewayTimezone}
 				>
 
 					{(deviceState === 'DIM' && this.props.item.stateValue === 0) ?

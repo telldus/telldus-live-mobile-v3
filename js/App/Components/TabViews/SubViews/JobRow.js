@@ -220,7 +220,7 @@ class JobRow extends View<null, Props, null> {
 						triangleColor={triangleColor}
 						triangleContainerStyle={{ opacity }}
 						isFirst={isFirst}
-					>
+						appLayout={appLayout}
 						{actionIcon}
 						<View style={{ flex: 1, opacity }}>
 							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
