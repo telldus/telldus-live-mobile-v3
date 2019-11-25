@@ -46,7 +46,6 @@ import {
 	shouldUpdate,
 	getSensorInfo,
 	getWindDirection,
-	formatSensorLastUpdate,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -102,8 +101,6 @@ class SensorRow extends View<Props, State> {
 	animatedScaleX: any;
 	isTablet: boolean;
 
-	formatSensorLastUpdate: (string) => string;
-
 	shouldUpdateSwipeRow: (Object) => boolean;
 
 	state = {
@@ -145,7 +142,6 @@ class SensorRow extends View<Props, State> {
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
 
-		this.formatSensorLastUpdate = this.formatSensorLastUpdate.bind(this);
 		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
@@ -343,10 +339,6 @@ class SensorRow extends View<Props, State> {
 				buttonsWidth: ev.nativeEvent.layout.width,
 			});
 		}
-	}
-
-	formatSensorLastUpdate(time: string): string {
-		return formatSensorLastUpdate(time, this.props.intl);
 	}
 
 	getSensors(data: Object, styles: Object): Object {
