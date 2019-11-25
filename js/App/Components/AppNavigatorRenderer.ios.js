@@ -65,6 +65,7 @@ type Props = {
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
 	navigateToCampaign: () => void,
+	addNewSensor: () => void,
 };
 
 type State = {
@@ -87,6 +88,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	toggleAttentionCapture: (boolean) => void;
 
 	addNewDevice: () => void;
+	addNewSensor: () => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -179,6 +181,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
+	addNewSensor = () => {
+		this.setState({
+			addNewSensorPressed: true,
+		}, () => {
+			this.props.addNewSensor();
+		});
+	}
+
 	makeRightButton(CS: string, styles: Object): Object | null {
 		const { intl } = this.props;
 		const { formatMessage } = intl;
@@ -188,6 +198,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 					...this.AddButton,
 					onPress: this.addNewDevice,
 					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			case 'Sensors':
+				return {
+					...this.AddButton,
+					onPress: this.addNewSensor,
+					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Gateways':
 				if (this.props.addingNewLocation) {
