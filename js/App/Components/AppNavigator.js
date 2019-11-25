@@ -36,6 +36,7 @@ import TabsView from './TabViews/TabsView';
 import RGBControlScreen from './RGBControl/RGBControlScreen';
 import ThermostatControl from './ThermostatControl/ThermostatFullControl';
 import ProfileNavigator from './Profile/ProfileNavigator';
+import AddSensorNavigator from './Sensor/AddSensor/AddSensorNavigator';
 
 import SettingsContainer from './Settings/SettingsContainer';
 import PushSettings from './PushSettings/PushSettings';
@@ -143,6 +144,17 @@ const RouteConfigs = {
 	},
 	AddDevice: {
 		screen: AddDeviceNavigator,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	AddSensor: {
+		screen: AddSensorNavigator,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
