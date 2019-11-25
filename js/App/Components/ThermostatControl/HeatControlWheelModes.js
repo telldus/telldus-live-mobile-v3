@@ -47,6 +47,7 @@ type Props = {
 	mode: string,
 	currentTemp: string,
 	supportResume: boolean,
+	gatewayTimezone: string,
 
 	modesCoverStyle: number | Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
@@ -442,6 +443,7 @@ render(): Object | null {
 		modesCoverStyle,
 		currentTemp,
 		supportResume,
+		gatewayTimezone,
 	} = this.props;
 
 	if (!modes || modes.length === 0) {
@@ -542,6 +544,7 @@ render(): Object | null {
 					changeMode={changeMode}
 					currentTemp={currentTemp}
 					supportResume={supportResume}
+					gatewayTimezone={gatewayTimezone}
 				/>
 				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
 					<MaterialIcons
