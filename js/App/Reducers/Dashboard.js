@@ -52,43 +52,47 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		};
 	});
 
-	const sensorItems = dashboard.sensorIds.map((sensorId: number): Object => {
+	const sensorItems = [];
+	dashboard.sensorIds.map((sensorId: number) => {
 		let sensor = sensors.byId[sensorId] || {};
-		let { clientId } = sensor;
-		let gateway = gateways.byId[clientId];
+		let { clientId, name } = sensor;
 
-		let data = {};
-		if (gateway) {
-			const { localKey = {}, online, websocketOnline, timezone } = gateway;
-			const {
-				address,
-				key,
-				ttl,
-				supportLocal,
-			} = localKey;
-			const tokenExpired = hasTokenExpired(ttl);
-			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
-			data = {
-				...sensor,
-				isOnline: online,
-				supportLocalControl,
-				websocketOnline,
-				gatewayTimezone: timezone,
-			};
-		} else {
-			data = {
-				...sensor,
-				isOnline: false,
-				websocketOnline: false,
-				supportLocalControl: false,
-			};
+		if (name) {
+			let gateway = gateways.byId[clientId];
+
+			let data = {};
+			if (gateway) {
+				const { localKey = {}, online, websocketOnline, timezone } = gateway;
+				const {
+					address,
+					key,
+					ttl,
+					supportLocal,
+				} = localKey;
+				const tokenExpired = hasTokenExpired(ttl);
+				const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+				data = {
+					...sensor,
+					isOnline: online,
+					supportLocalControl,
+					websocketOnline,
+					gatewayTimezone: timezone,
+				};
+			} else {
+				data = {
+					...sensor,
+					isOnline: false,
+					websocketOnline: false,
+					supportLocalControl: false,
+				};
+			}
+
+			sensorItems.push({
+				objectType: 'sensor',
+				key: sensorId,
+				data,
+			});
 		}
-
-		return {
-			objectType: 'sensor',
-			key: sensorId,
-			data,
-		};
 	});
 	const { defaultSettings = {} } = app;
 	const { sortingDB } = defaultSettings;
