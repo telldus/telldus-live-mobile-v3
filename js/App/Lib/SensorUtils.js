@@ -26,7 +26,7 @@ import moment from 'moment';
 import { reportException } from './Analytics';
 
 import { utils } from 'live-shared-data';
-const { sensorUtils } = utils;
+const { sensorUtils, addSensorUtils } = utils;
 const { getSensorTypes, getSensorUnits, getWindDirection } = sensorUtils;
 
 import i18n from '../Translations/common';
@@ -340,4 +340,5 @@ module.exports = {
 	checkIfLarge,
 	...sensorUtils,
 	formatSensorLastUpdate,
+	...addSensorUtils,
 };
