@@ -93,6 +93,8 @@ import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import TwoStepFooter from './TwoStepFooter';
 import InfoBlock from './InfoBlock';
+import TimezoneFormattedDate from './TimezoneFormattedDate';
+import TimezoneFormattedTime from './TimezoneFormattedTime';
 
 import {
 	AppState,
@@ -176,6 +178,8 @@ module.exports = {
 	CampaignIcon,
 	TwoStepFooter,
 	InfoBlock,
+	TimezoneFormattedTime,
+	TimezoneFormattedDate,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
