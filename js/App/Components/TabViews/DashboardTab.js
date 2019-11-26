@@ -52,8 +52,10 @@ type Props = {
 	rows: Array<Object>,
 	isDBEmpty: boolean,
 	screenProps: Object,
+	dbCarousel: boolean,
+
 	navigation: Object,
-	changeSensorDisplayTypeDB: () => void,
+	changeSensorDisplayTypeDB: (id?: number) => void,
 	dispatch: Function,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
@@ -88,7 +90,7 @@ class DashboardTab extends View {
 	onValueChange: (number) => void;
 	startSensorTimer: () => void;
 	stopSensorTimer: () => void;
-	changeDisplayType: () => void;
+	changeDisplayType: (number) => void;
 	onRefresh: () => void;
 	_renderRow: (number) => Object;
 	onDismissDialogueHide: () => void;
@@ -148,10 +150,13 @@ class DashboardTab extends View {
 	}
 
 	startSensorTimer() {
-		this.timer = setInterval(() => {
-			LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
-			this.props.changeSensorDisplayTypeDB();
-		}, 5000);
+		const { dbCarousel } = this.props;
+		if (dbCarousel) {
+			this.timer = setInterval(() => {
+				LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
+				this.props.changeSensorDisplayTypeDB();
+			}, 5000);
+		}
 	}
 
 	stopSensorTimer() {
@@ -159,10 +164,10 @@ class DashboardTab extends View {
 		this.timer = null;
 	}
 
-	changeDisplayType() {
+	changeDisplayType(id: number) {
 		this.stopSensorTimer();
 		LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
-		this.props.changeSensorDisplayTypeDB();
+		this.props.changeSensorDisplayTypeDB(id);
 		this.startSensorTimer();
 	}
 
@@ -568,16 +573,20 @@ const getRows = createSelector(
 
 function mapStateToProps(state: Object, props: Object): Object {
 	const { deviceIds = [], sensorIds = []} = state.dashboard;
+	const { defaultSettings } = state.app;
+	const { dbCarousel = true } = defaultSettings || {};
+
 	return {
 		rows: getRows(state),
 		isDBEmpty: (deviceIds.length === 0) && (sensorIds.length === 0),
+		dbCarousel,
 	};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		changeSensorDisplayTypeDB: () => {
-			dispatch(changeSensorDisplayTypeDB());
+		changeSensorDisplayTypeDB: (id?: number) => {
+			dispatch(changeSensorDisplayTypeDB(id));
 		},
 		dispatch,
 	};

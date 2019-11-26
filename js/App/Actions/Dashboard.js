@@ -31,28 +31,39 @@ function getSupportedDisplayTypes(data: Object = {}): Array<string> {
 	return Object.keys(data);
 }
 
-const changeSensorDisplayTypeDB = (): ThunkAction => (dispatch: Function, getState: Function) => {
-	const { sensors, dashboard, sensorsList } = getState();
+const changeSensorDisplayTypeDB = (id?: number): ThunkAction => (dispatch: Function, getState: Function) => {
+	const { sensors, dashboard, sensorsList, app: {defaultSettings} } = getState();
 	const { sensorIds } = dashboard;
 	const { defaultSensorSettings } = sensorsList;
 
-	sensorIds.forEach((sensorId: number) => {
-		const sensor = sensors.byId[sensorId];
-		const supportedDisplayTypes = getSupportedDisplayTypes(sensor.data);
-		const { displayTypeDB = supportedDisplayTypes[0] } = defaultSensorSettings[sensorId] ? defaultSensorSettings[sensorId] : {};
+	const { dbCarousel } = defaultSettings || {};
 
-		const max = supportedDisplayTypes.length;
-		const currentTypeIndex = supportedDisplayTypes.indexOf(displayTypeDB);
-		const nextTypeIndex = currentTypeIndex + 1;
-		const nextType = nextTypeIndex > (max - 1) ? supportedDisplayTypes[0] : supportedDisplayTypes[nextTypeIndex];
-		if (displayTypeDB !== nextType) {
-			dispatch({
-				type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE_DB',
-				id: sensorId,
-				displayTypeDB: nextType,
-			});
-		}
-	});
+	if (dbCarousel) {
+		sensorIds.forEach((sensorId: number) => {
+			const sensor = sensors.byId[sensorId];
+			dispatch(prepareAndUpdate(sensorId, sensor.data, defaultSensorSettings));
+		});
+	} else if (id) {
+		const sensor = sensors.byId[id];
+		dispatch(prepareAndUpdate(id, sensor.data, defaultSensorSettings));
+	}
+};
+
+const prepareAndUpdate = (sensorId: number, sensorData: Object, defaultSensorSettings: Object): ThunkAction => (dispatch: Function, getState: Function) => {
+	const supportedDisplayTypes = getSupportedDisplayTypes(sensorData);
+	const { displayTypeDB = supportedDisplayTypes[0] } = defaultSensorSettings[sensorId] ? defaultSensorSettings[sensorId] : {};
+
+	const max = supportedDisplayTypes.length;
+	const currentTypeIndex = supportedDisplayTypes.indexOf(displayTypeDB);
+	const nextTypeIndex = currentTypeIndex + 1;
+	const nextType = nextTypeIndex > (max - 1) ? supportedDisplayTypes[0] : supportedDisplayTypes[nextTypeIndex];
+	if (displayTypeDB !== nextType) {
+		dispatch({
+			type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE_DB',
+			id: sensorId,
+			displayTypeDB: nextType,
+		});
+	}
 };
 
 module.exports = {

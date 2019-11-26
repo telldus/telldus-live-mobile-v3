@@ -48,7 +48,7 @@ type Props = {
 	displayType: string,
 
 	style: Object,
-	onPress: () => void,
+	onPress: (number) => void,
 	intl: Object,
 	isGatewayActive: boolean,
 };
@@ -172,8 +172,13 @@ class SensorDashboardTile extends View<Props, null> {
 		);
 	}
 
+	onPressTile = () => {
+		const { onPress, item } = this.props;
+		onPress(item.id);
+	}
+
 	render(): Object {
-		const { item, tileWidth, isGatewayActive, intl, onPress } = this.props;
+		const { item, tileWidth, isGatewayActive, intl } = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
 		const { lastUpdated, gatewayTimezone } = item;
@@ -225,7 +230,7 @@ class SensorDashboardTile extends View<Props, null> {
 				]}>
 				<TypeBlockDB
 					sensors={slideList}
-					onPress={onPress}
+					onPress={this.onPressTile}
 					id={item.id}
 					lastUpdated={lastUpdated}
 					tileWidth={tileWidth}
