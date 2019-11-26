@@ -28,7 +28,6 @@ import { createStackNavigator } from 'react-navigation';
 import AddSensorContainer from './AddSensorContainer';
 
 import SelectLocationAddSensor from './SelectLocationAddSensor';
-import SelectSensorType from './SelectSensorType';
 import SensorsListAddSensor from './SensorsListAddSensor';
 import SetSensorName from './SetSensorName';
 
@@ -42,18 +41,14 @@ const renderAddSensorContainer = (navigation: Object, screenProps: Object): rend
 	</AddSensorContainer>
 );
 
-
 const RouteConfigs = {
 	InitialScreenAddSensor: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(
 			navigation.getParam('selectLocation', false) ?
 				SelectLocationAddSensor
 				:
-				SensorsListAddSensor // Change to "SelectSensorType" when more than one type is supported.
+				SensorsListAddSensor
 			, 'InitialScreenAddSensor'),
-	},
-	SelectSensorType: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(SelectSensorType, 'SelectSensorType'),
 	},
 	SensorsListAddSensor: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(SensorsListAddSensor, 'SensorsListAddSensor'),
