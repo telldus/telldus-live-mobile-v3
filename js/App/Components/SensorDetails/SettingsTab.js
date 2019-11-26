@@ -61,6 +61,7 @@ type Props = {
 	dispatch: Function,
 	sensor: Object,
 	inDashboard: boolean,
+	navigation: Object,
 
 	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
@@ -395,6 +396,28 @@ class SettingsTab extends View {
 		toggleDialogueBox(dialogueData);
 	}
 
+	deleteSensor = () => {
+		this.openDialogueBox('deleteSensor');
+	}
+
+	onConfirmDeleteSensor = () => {
+		const { dispatch, sensor, navigation } = this.props;
+
+		dispatch(setSensorName(sensor.id, '')).then(() => {
+			dispatch(setKeepHistory(sensor.id, 0));
+			clearHistory('sensor', sensor.id);
+			dispatch(removeSensorHistory(sensor.id));
+
+			navigation.navigate({
+				routeName: 'Sensors',
+				key: 'Sensors',
+			});
+		}).catch((err: Object) => {
+			const	message = err.message ? err.message : null;
+			dispatch(showToast(message));
+		});
+	}
+
 	prepareDialogueConfig(action: string): Object {
 		const { formatMessage } = this.props.screenProps.intl;
 		const data = {
@@ -423,6 +446,18 @@ class SettingsTab extends View {
 				text: formatMessage(i18n.messageClearCache),
 				positiveText: formatMessage(i18n.labelClearCache).toUpperCase(),
 				onPressPositive: this.onConfirmClearHistoryCache,
+			};
+		}
+		if (action === 'deleteSensor') {
+			return {
+				...data,
+				show: true,
+				showHeader: true,
+				header: formatMessage(i18n.deleteSensorWarningTitle).toUpperCase(),
+				text: formatMessage(i18n.deleteSensorWarningContent),
+				positiveText: formatMessage(i18n.delete).toUpperCase(),
+				onPressPositive: this.onConfirmDeleteSensor,
+				closeOnPressPositive: true,
 			};
 		}
 		return {
@@ -454,6 +489,7 @@ class SettingsTab extends View {
 			buttonStyle,
 			editBoxStyle,
 			clearCacheHintStyle,
+			brandDanger,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -526,6 +562,13 @@ class SettingsTab extends View {
 						onPress={this.clearHistoryCache}
 						style={buttonStyle}
 						accessible={true}/>
+					<TouchableButton
+						text={formatMessage(i18n.deleteSensor).toUpperCase()}
+						onPress={this.deleteSensor}
+						style={[buttonStyle, {
+							backgroundColor: brandDanger,
+						}]}
+						accessible={true}/>
 					<Text style={clearCacheHintStyle}>
 						{formatMessage(i18n.hintHistoryCache)}.
 					</Text>
@@ -563,12 +606,18 @@ class SettingsTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { inactiveTintColor, paddingFactor, eulaContentColor } = Theme.Core;
+		const {
+			inactiveTintColor,
+			paddingFactor,
+			eulaContentColor,
+			brandDanger,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
 
 		return {
+			brandDanger,
 			container: {
 				flex: 1,
 				paddingHorizontal: padding,
@@ -586,6 +635,9 @@ class SettingsTab extends View {
 			buttonStyle: {
 				marginTop: padding * 2,
 				paddingHorizontal: 15,
+				maxWidth: width * 0.9,
+				width: width * 0.8,
+				minWidth: width * 0.5,
 			},
 			dialogueHeaderStyle: {
 				paddingVertical: Math.floor(deviceWidth * 0.042),
