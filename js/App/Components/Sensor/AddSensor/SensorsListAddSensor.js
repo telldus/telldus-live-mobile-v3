@@ -23,18 +23,23 @@
 'use strict';
 
 import React from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
+import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import {
 	View,
-	Text,
 } from '../../../../BaseComponents';
+import {
+	SensorRow,
+} from './SubViews';
 
 import {
 	getNoNameSensors,
 } from '../../../Lib/SensorUtils';
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../../Lib/appUtils';
 
 import Theme from '../../../Theme';
 
@@ -74,7 +79,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.labelSelectSensor), formatMessage(i18n.labelSelectSensorToAdd));
+	onDidMount(capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelSelectSensor)), formatMessage(i18n.labelSelectSensorToAdd));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -109,23 +114,19 @@ getPadding(): number {
 	return deviceWidth * Theme.Core.paddingFactor;
 }
 
-onSelectSensor = (gateway: Object) => {
+onSelectSensor = (sensor: Object) => {
 	const { navigation } = this.props;
 	navigation.navigate('SetSensorName', {
-		gateway,
+		sensor,
 	});
 }
 
 renderRow(item: Object): Object {
-
 	return (
-		<TouchableOpacity onPress={this.onSelectSensor}>
-			<View>
-				<Text>
-				Sensors Row
-				</Text>
-			</View>
-		</TouchableOpacity>
+		<SensorRow
+			onSelectSensor={this.onSelectSensor}
+			appLayout={this.props.appLayout}
+			item={item.item}/>
 	);
 }
 
