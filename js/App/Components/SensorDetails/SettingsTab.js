@@ -492,7 +492,7 @@ class SettingsTab extends View {
 			return null;
 		}
 
-		const { model, protocol, sensorId, name } = sensor;
+		const { model, protocol = '', sensorId, name } = sensor;
 		const { appLayout, intl } = this.props.screenProps;
 		const { formatMessage } = intl;
 
@@ -520,6 +520,8 @@ class SettingsTab extends View {
 				</View>
 			);
 		}
+
+		const isZWave = protocol.trim().toLowerCase() === 'zwave';
 
 		return (
 			<ScrollView
@@ -575,13 +577,14 @@ class SettingsTab extends View {
 						onPress={this.clearHistoryCache}
 						style={buttonStyle}
 						accessible={true}/>
-					<TouchableButton
+					{!isZWave && <TouchableButton
 						text={formatMessage(i18n.deleteSensor).toUpperCase()}
 						onPress={this.deleteSensor}
 						style={[buttonStyle, {
 							backgroundColor: brandDanger,
 						}]}
 						accessible={true}/>
+					}
 					<Text style={clearCacheHintStyle}>
 						{formatMessage(i18n.hintHistoryCache)}.
 					</Text>
