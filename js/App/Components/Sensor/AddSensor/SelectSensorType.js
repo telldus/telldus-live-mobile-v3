@@ -71,7 +71,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	const { navigation, currentScreen, appLayout } = nextProps;
 	const { width } = this.props.appLayout;
 	const selectLocation = navigation.getParam('selectLocation', true);
-	if (!selectLocation && currentScreen === 'InitialScreen' && appLayout.width !== width) {
+	if (!selectLocation && currentScreen === 'InitialScreenAddSensor' && appLayout.width !== width) {
 		return true;
 	}
 	if (currentScreen === 'SelectSensorType' && appLayout.width !== width) {

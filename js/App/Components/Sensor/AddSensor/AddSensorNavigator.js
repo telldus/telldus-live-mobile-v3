@@ -30,6 +30,7 @@ import AddSensorContainer from './AddSensorContainer';
 import SelectLocationAddSensor from './SelectLocationAddSensor';
 import SelectSensorType from './SelectSensorType';
 import SensorsListAddSensor from './SensorsListAddSensor';
+import SetSensorName from './SetSensorName';
 
 const initialRouteName = 'InitialScreenAddSensor';
 
@@ -48,7 +49,7 @@ const RouteConfigs = {
 			navigation.getParam('selectLocation', false) ?
 				SelectLocationAddSensor
 				:
-				SelectSensorType
+				SensorsListAddSensor // Change to "SelectSensorType" when more than one type is supported.
 			, 'InitialScreenAddSensor'),
 	},
 	SelectSensorType: {
@@ -56,6 +57,9 @@ const RouteConfigs = {
 	},
 	SensorsListAddSensor: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(SensorsListAddSensor, 'SensorsListAddSensor'),
+	},
+	SetSensorName: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(SetSensorName, 'SetSensorName'),
 	},
 };
 

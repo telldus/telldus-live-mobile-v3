@@ -44,7 +44,7 @@ const SensorRow = (props: Object): Object => {
 		appLayout,
 		item,
 	} = props;
-	console.log('TEST item', item);
+
 	const {
 		sensorId,
 		protocol,
