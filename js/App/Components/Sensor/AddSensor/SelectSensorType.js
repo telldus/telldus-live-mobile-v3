@@ -29,7 +29,7 @@ import {
 	View,
 } from '../../../../BaseComponents';
 import {
-	DeviceTypeBlock,
+	SensorTypeBlock,
 } from './SubViews';
 import { getAvailableSensorsTypesAndInfo } from '../../../Lib/SensorUtils';
 
@@ -64,7 +64,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.labelDeviceType), formatMessage(i18n.AddZDTypeHeaderTwo));
+	onDidMount(formatMessage(i18n.labelSensorType), formatMessage(i18n.Add433STypeHeaderTwo));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -92,7 +92,7 @@ onChooseType({module, action, secure}: Object) {
 	});
 }
 
-getDeviceTypes(): Array<any> {
+getSensorTypes(): Array<any> {
 	const { navigation, intl } = this.props, types = [];
 	const { formatMessage, formatNumber } = intl;
 	const gateway = navigation.getParam('gateway', {});
@@ -108,10 +108,10 @@ getDeviceTypes(): Array<any> {
 	return types;
 }
 
-getDeviceTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
+getSensorTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
 	return types.map((type: Object, i: number): Object => {
 		return (
-			<DeviceTypeBlock
+			<SensorTypeBlock
 				key={i}
 				{...type}
 				appLayout={appLayout}
@@ -122,8 +122,8 @@ getDeviceTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
 }
 render(): Object {
 	const { appLayout } = this.props;
-	const types = this.getDeviceTypes();
-	const typesToRender = this.getDeviceTypesToRender(types, appLayout);
+	const types = this.getSensorTypes();
+	const typesToRender = this.getSensorTypesToRender(types, appLayout);
 
 	const {
 		container,

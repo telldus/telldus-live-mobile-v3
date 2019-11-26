@@ -53,7 +53,7 @@ type Props = {
 type State = {
 };
 
-class DeviceTypeBlock extends View<Props, State> {
+class SensorTypeBlock extends View<Props, State> {
 props: Props;
 state: State;
 
@@ -222,4 +222,4 @@ getStyles(): Object {
 }
 }
 
-export default DeviceTypeBlock;
+export default SensorTypeBlock;

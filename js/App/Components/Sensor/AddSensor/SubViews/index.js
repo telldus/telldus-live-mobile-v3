@@ -22,12 +22,12 @@
 
 'use strict';
 
-import DeviceTypeBlock from './DeviceTypeBlock';
-import NameRow from './NameRow';
 import DeviceInfoBlock from './DeviceInfoBlock';
+import NameRow from './NameRow';
+import SensorTypeBlock from './SensorTypeBlock';
 
 module.exports = {
-	DeviceTypeBlock,
-	NameRow,
 	DeviceInfoBlock,
+	NameRow,
+	SensorTypeBlock,
 };

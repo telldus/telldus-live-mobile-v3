@@ -74,7 +74,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.labelSelectLocation), formatMessage(i18n.AddZDSLHeaderTwo));
+	onDidMount(formatMessage(i18n.labelSelectSensor), formatMessage(i18n.labelSelectSensorToAdd));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
