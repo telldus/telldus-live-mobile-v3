@@ -32,11 +32,11 @@ import {
 	Text,
 	View,
 	BlockIcon,
-	FormattedRelative,
 } from '../../../../BaseComponents';
 import HiddenRow from './Sensor/HiddenRow';
 import GenericSensor from './Sensor/GenericSensor';
 import TypeBlockList from './Sensor/TypeBlockList';
+import LastUpdatedInfo from './Sensor/LastUpdatedInfo';
 
 import i18n from '../../../Translations/common';
 
@@ -46,7 +46,6 @@ import {
 	shouldUpdate,
 	getSensorInfo,
 	getWindDirection,
-	formatSensorLastUpdate,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -61,6 +60,11 @@ type Props = {
 	defaultType?: string,
 	screenReaderEnabled: boolean,
 	isLast: boolean,
+
+	isNew: boolean,
+	gatewayId: string,
+
+	onNewlyAddedDidMount: (number, string) => void,
 
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
@@ -101,8 +105,6 @@ class SensorRow extends View<Props, State> {
 	isAnimating: boolean;
 	animatedScaleX: any;
 	isTablet: boolean;
-
-	formatSensorLastUpdate: (string) => string;
 
 	shouldUpdateSwipeRow: (Object) => boolean;
 
@@ -145,7 +147,6 @@ class SensorRow extends View<Props, State> {
 		this.onSettingsSelected = this.onSettingsSelected.bind(this);
 		this.closeSwipeRow = this.closeSwipeRow.bind(this);
 
-		this.formatSensorLastUpdate = this.formatSensorLastUpdate.bind(this);
 		this.shouldUpdateSwipeRow = this.shouldUpdateSwipeRow.bind(this);
 	}
 
@@ -171,6 +172,7 @@ class SensorRow extends View<Props, State> {
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
 				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
+				'isNew', 'gatewayId',
 			]);
 			if (propsChange) {
 				return true;
@@ -192,6 +194,13 @@ class SensorRow extends View<Props, State> {
 		const { idToKeepOpen, forceClose } = propsSwipeRow;
 		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen))) {
 			this.closeSwipeRow();
+		}
+	}
+
+	componentDidMount() {
+		const { onNewlyAddedDidMount, sensor, isNew, gatewayId } = this.props;
+		if (onNewlyAddedDidMount && isNew) {
+			onNewlyAddedDidMount(sensor.id, gatewayId);
 		}
 	}
 
@@ -345,10 +354,6 @@ class SensorRow extends View<Props, State> {
 		}
 	}
 
-	formatSensorLastUpdate(time: string): string {
-		return formatSensorLastUpdate(time, this.props.intl);
-	}
-
 	getSensors(data: Object, styles: Object): Object {
 		let sensors = {}, sensorAccessibilityInfo = '';
 		const { formatMessage } = this.props.intl;
@@ -494,11 +499,11 @@ class SensorRow extends View<Props, State> {
 					{sensorName}
 				</Text>
 				{isGatewayActive ?
-					<FormattedRelative
+					<LastUpdatedInfo
 						value={-seconds}
 						numeric="auto"
 						updateIntervalInSeconds={60}
-						formatterFunction={this.formatSensorLastUpdate}
+						gatewayTimezone={sensor.gatewayTimezone}
 						textStyle={[
 							textInfoStyle, {
 								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
@@ -520,7 +525,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor = {}, isLast } = this.props;
+		const { appLayout, isGatewayActive, sensor = {}, isLast, isNew } = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -531,6 +536,7 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
+			brandSecondary,
 		} = Theme.Core;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -578,6 +584,8 @@ class SensorRow extends View<Props, State> {
 				height: rowHeight,
 				borderRadius: 2,
 				...Theme.Core.shadow,
+				borderWidth: isNew ? 2 : 0,
+				borderColor: isNew ? brandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',

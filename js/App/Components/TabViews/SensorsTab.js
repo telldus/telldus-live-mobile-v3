@@ -138,6 +138,14 @@ class SensorsTab extends View {
 		this.noSensorsContent = formatMessage(i18n.noSensorsContent);
 	}
 
+	componentDidMount() {
+		this.normalizeNewlyAddedUITimeout();
+	}
+
+	componentDidUpdate() {
+		this.normalizeNewlyAddedUITimeout();
+	}
+
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { currentScreen } = nextProps.screenProps;
 		const { currentScreen: prevScreen } = this.props.screenProps;
@@ -394,11 +402,11 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps } = this.props;
+		const { screenProps, navigation } = this.props;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
 		const { item, section, index } = row;
-		const { isOnline, buttonRow } = item;
+		const { isOnline, buttonRow, id } = item;
 
 		if (buttonRow) {
 			return (
@@ -410,6 +418,8 @@ class SensorsTab extends View {
 
 		const sectionLength = section.data.length;
 		const isLast = index === sectionLength - 1;
+
+		const newSensors = navigation.getParam('newSensors', {}) || {};
 
 		return (
 			<SensorRow
@@ -423,8 +433,70 @@ class SensorsTab extends View {
 				propsSwipeRow={propsSwipeRow}
 				onSettingsSelected={this.openSensorDetail}
 				screenReaderEnabled={screenReaderEnabled}
-				isLast={isLast}/>
+				isLast={isLast}
+				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
+				gatewayId={section.header}
+				isNew={!!newSensors[id]}/>
 		);
+	}
+
+	onNewlyAddedDidMount = (id: number, clientId: string) => {
+		const { rowsAndSections, navigation } = this.props;
+		const { visibleList } = rowsAndSections;
+		const newSensors = navigation.getParam('newSensors', {});
+		let section, row;
+		let item = newSensors[id];
+		if (item && item.mainNode) {
+			for (let i = 0; i < visibleList.length; i++) {
+				const list = visibleList[i];
+				if (list.header === clientId) {
+					section = i;
+					for (let j = 0; j < list.data.length; j++) {
+						if (list.data[j].id === id) {
+							row = j;
+							break;
+						}
+					}
+					if (row) {
+						break;
+					}
+				}
+			}
+			if (this.listView) {
+				this.listView.scrollToLocation({
+					animated: true,
+					sectionIndex: section,
+					itemIndex: row,
+					viewPosition: 0.4,
+				});
+			}
+		}
+	}
+
+	normalizeNewlyAddedUITimeout = () => {
+		const { navigation } = this.props;
+		const newSensors = navigation.getParam('newSensors', null);
+		if (newSensors && !this.timeoutNormalizeNewlyAdded ) {
+			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
+				this.normalizeNewlyAddedUI();
+				clearTimeout(this.timeoutNormalizeNewlyAdded);
+				this.timeoutNormalizeNewlyAdded = null;
+			}, 3000);
+		}
+	}
+
+	normalizeNewlyAddedUI = () => {
+		const { navigation } = this.props;
+		const newSensors = navigation.getParam('newSensors', null);
+		if (newSensors) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
+				// Callback only available in iOS
+				LayoutAnimation.configureNext(null);
+			});
+			navigation.setParams({
+				newSensors: undefined,
+			});
+		}
 	}
 
 	closeVisibleRows(sensorId: string) {

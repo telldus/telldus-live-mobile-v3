@@ -49,6 +49,7 @@ type Props = {
 	appLayout: Object,
 	lastUpdated?: number,
 	currentTemp?: string,
+	gatewayTimezone: string,
 
 	containerStyle?: Object | Array<any> | number,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
@@ -62,7 +63,16 @@ class DeviceActionDetails extends View {
 	}
 
 	render(): Object {
-		const { device, intl, isGatewayActive, appLayout, containerStyle, lastUpdated, currentTemp } = this.props;
+		const {
+			device,
+			intl,
+			isGatewayActive,
+			appLayout,
+			containerStyle,
+			lastUpdated,
+			currentTemp,
+			gatewayTimezone,
+		} = this.props;
 		const {
 			supportedMethods = {},
 			deviceType,
@@ -192,7 +202,8 @@ class DeviceActionDetails extends View {
 						modesCoverStyle={modesCoverStyle}
 						activeMode={activeMode}
 						currentTemp={currentTemp}
-						supportResume={supportResume}/>
+						supportResume={supportResume}
+						gatewayTimezone={gatewayTimezone}/>
 			}
 			{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>

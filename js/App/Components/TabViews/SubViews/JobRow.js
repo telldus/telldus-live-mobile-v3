@@ -34,7 +34,7 @@ import {
 	ListRow,
 	View,
 	Text,
-	FormattedTime,
+	TimezoneFormattedTime,
 } from '../../../../BaseComponents';
 import NowRow from './Jobs/NowRow';
 import Theme from '../../../Theme';
@@ -68,6 +68,7 @@ type Props = {
 	expired: boolean,
 	deviceType: string,
 	deviceSupportedMethods: Object,
+	gatewayTimezone: string,
 
 	intl: intlShape,
 	editJob: (schedule: Schedule) => void,
@@ -160,6 +161,7 @@ class JobRow extends View<null, Props, null> {
 			showNow,
 			expired,
 			currentScreen,
+			gatewayTimezone,
 		} = this.props;
 
 		const {
@@ -220,7 +222,8 @@ class JobRow extends View<null, Props, null> {
 						triangleColor={triangleColor}
 						triangleContainerStyle={{ opacity }}
 						isFirst={isFirst}
-					>
+						appLayout={appLayout}
+						gatewayTimezone={gatewayTimezone}>
 						{actionIcon}
 						<View style={{ flex: 1, opacity }}>
 							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
@@ -230,11 +233,14 @@ class JobRow extends View<null, Props, null> {
 								<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
 									{repeat}{' '}
 									{type === 'time' && (
-										<FormattedTime
+										<TimezoneFormattedTime
 											value={timestamp}
-											hour="numeric"
-											minute="numeric"
+											formattingOptions={{
+												hour: 'numeric',
+												minute: 'numeric',
+											}}
 											style={description}
+											gatewayTimezone={gatewayTimezone}
 										/>)
 									}
 								</Description>
@@ -264,6 +270,7 @@ class JobRow extends View<null, Props, null> {
 							rowWithTriangleContainerStyle={rowWithTriangleContainerNow}
 							textStyle={time}
 							lineStyle={lineStyle}
+							appLayout={appLayout}
 						/>
 					</View>
 				)}

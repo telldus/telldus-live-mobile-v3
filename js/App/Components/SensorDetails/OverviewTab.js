@@ -30,7 +30,10 @@ import { View, TabBar, LocationDetails } from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
 import { getSensorInfo } from '../../Actions';
-import { getLocationImageUrl } from '../../Lib';
+import {
+	getLocationImageUrl,
+	shouldUpdate,
+} from '../../Lib';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -39,6 +42,8 @@ type Props = {
 	sensor: Object,
 	gatewayType: string,
 	gatewayName: string,
+	gatewayTimezone: string,
+	gatewayTimezoneOffset: number,
 
 	screenProps: Object,
 	getSensorInfo: (id: number, includeUnit: 1 | 0) => Promise<any>,
@@ -98,7 +103,7 @@ class OverviewTab extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN } = nextProps;
+		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN, ...othersN } = nextProps;
 		const { currentScreen, appLayout } = screenPropsN;
 		if (currentScreen === 'SOverview') {
 			if (this.props.screenProps.currentScreen !== 'SOverview') {
@@ -110,8 +115,13 @@ class OverviewTab extends View<Props, State> {
 				return true;
 			}
 
-			const { screenProps, gatewayName, sensor } = this.props;
+			const { screenProps, gatewayName, sensor, ...others } = this.props;
 			if ((screenProps.appLayout.width !== appLayout.width) || (gatewayName !== gatewayNameN)) {
+				return true;
+			}
+
+			const propsEqual = shouldUpdate(others, othersN, ['gatewayTimezone', 'gatewayTimezoneOffset']);
+			if (propsEqual) {
 				return true;
 			}
 
@@ -127,7 +137,14 @@ class OverviewTab extends View<Props, State> {
 
 	render(): Object | null {
 		const { isRefreshing } = this.state;
-		const { sensor, screenProps, gatewayName, gatewayType } = this.props;
+		const {
+			sensor,
+			screenProps,
+			gatewayName,
+			gatewayType,
+			gatewayTimezone,
+			gatewayTimezoneOffset,
+		} = this.props;
 
 		if (!sensor) {
 			return null;
@@ -163,7 +180,12 @@ class OverviewTab extends View<Props, State> {
 						onRefresh={this.onRefresh}
 					/>
 				}>
-				<SensorTypes sensor={sensor} intl={intl} appLayout={appLayout}/>
+				<SensorTypes
+					sensor={sensor}
+					intl={intl}
+					appLayout={appLayout}
+					gatewayTimezone={gatewayTimezone}
+					gatewayTimezoneOffset={gatewayTimezoneOffset}/>
 				<LocationDetails
 					{...locationData}
 					style={LocationDetailsStyle}
@@ -220,12 +242,19 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { clientId } = sensor ? sensor : {};
 
 	const gateway = state.gateways.byId[clientId];
-	const { name: gatewayName, type: gatewayType } = gateway ? gateway : {};
+	const {
+		name: gatewayName,
+		type: gatewayType,
+		timezone: gatewayTimezone,
+		tzoffset: gatewayTimezoneOffset,
+	} = gateway ? gateway : {};
 
 	return {
 		sensor,
 		gatewayType,
 		gatewayName,
+		gatewayTimezone,
+		gatewayTimezoneOffset,
 	};
 }
 

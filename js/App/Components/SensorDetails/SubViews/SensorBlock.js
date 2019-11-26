@@ -29,13 +29,14 @@ import {
 	Icon,
 	IconTelldus,
 	FormattedNumber,
-	FormattedDate,
-	FormattedTime,
 	FormattedMessage,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
+import {
+	useRelativeIntl,
+} from '../../../Hooks/App';
 
 type Props = {
 	name: string,
@@ -50,104 +51,123 @@ type Props = {
 	formatOptions: Object,
 	lastUpdated: string,
 	appLayout: Object,
+	gatewayTimezone: string,
+	gatewayTimezoneOffset: number,
 };
 
-export default class SensorBlock extends View<Props, null> {
-	props: Props;
+const SensorBlock = (props: Props): Object => {
 
-	render(): Object {
-		const {
-			name,
-			icon,
-			label,
-			value,
-			unit,
-			formatOptions,
-			lastUpdated,
-			appLayout,
-			max,
-			min,
-			maxTime,
-			minTime,
-		} = this.props;
-		const {
-			containerStyle,
-			iconStyle,
-			textContainer,
-			labelStyle,
-			valueStyle,
-			updatedInfoStyle,
-			iconSize,
-		} = this.getStyles(appLayout);
-		const { brandSecondary } = Theme.Core;
+	const {
+		name,
+		icon,
+		label,
+		value,
+		unit,
+		formatOptions,
+		lastUpdated,
+		appLayout,
+		max,
+		min,
+		maxTime,
+		minTime,
+		gatewayTimezone,
+	} = props;
 
-		return (
-			<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
-				<IconTelldus icon={icon} style={iconStyle}/>
-				<View style={textContainer}>
-					<Text style={labelStyle}>
-						{label}
+	const {
+		formatDate,
+		formatTime,
+	} = useRelativeIntl(gatewayTimezone);
+
+	const { brandSecondary } = Theme.Core;
+
+	const {
+		containerStyle,
+		iconStyle,
+		textContainer,
+		labelStyle,
+		valueStyle,
+		updatedInfoStyle,
+		iconSize: icSize,
+	} = getStyles();
+
+	return (
+		<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
+			<IconTelldus icon={icon} style={iconStyle}/>
+			<View style={textContainer}>
+				<Text style={labelStyle}>
+					{label}
+				</Text>
+				{name === 'wdir' ?
+					<Text style={valueStyle}>
+						{value}
 					</Text>
-					{name === 'wdir' ?
-						<Text style={valueStyle}>
-							{value}
-						</Text>
-						:
-						<FormattedNumber
-							value={value}
-							{...formatOptions}
-							style={valueStyle}
-							suffix={unit}
-							suffixStyle={valueStyle}/>
-					}
+					:
+					<FormattedNumber
+						value={value}
+						{...formatOptions}
+						style={valueStyle}
+						suffix={unit}
+						suffixStyle={valueStyle}/>
+				}
+				<Text style={updatedInfoStyle}>
 					<Text style={updatedInfoStyle}>
-						<FormattedDate value={lastUpdated} style={updatedInfoStyle}/>
+						{formatDate(lastUpdated)}
+					</Text>
+					<Text style={Theme.Styles.hiddenText}>
+						{' '}
+					</Text>
+					<Text style={updatedInfoStyle}>
+						{formatTime(lastUpdated)}
+					</Text>
+				</Text>
+				{!!max && (
+					<Text style={updatedInfoStyle}>
+						<Icon name={'angle-up'} color={brandSecondary} size={icSize}/>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
 						</Text>
-						<FormattedTime value={lastUpdated} style={updatedInfoStyle}/>
+						<FormattedMessage {...i18n.labelMax} style={updatedInfoStyle}/>
+						{`: ${max}${unit}, `}
+						<Text style={updatedInfoStyle}>
+							{formatDate(maxTime)}
+						</Text>
+						<Text style={Theme.Styles.hiddenText}>
+							{' '}
+						</Text>
+						<Text style={updatedInfoStyle}>
+							{formatTime(maxTime)}
+						</Text>
 					</Text>
-					{!!max && (
-						<Text style={updatedInfoStyle}>
-							<Icon name={'angle-up'} color={brandSecondary} size={iconSize}/>
-							<Text style={Theme.Styles.hiddenText}>
-								{' '}
-							</Text>
-							<FormattedMessage {...i18n.labelMax} style={updatedInfoStyle}/>
-							{`: ${max}${unit}, `}
-							<FormattedDate value={maxTime} style={updatedInfoStyle}/>
-							<Text style={Theme.Styles.hiddenText}>
-								{' '}
-							</Text>
-							<FormattedTime value={maxTime} style={updatedInfoStyle}/>
+				)}
+				{!!min && (
+					<Text style={updatedInfoStyle}>
+						<Icon name={'angle-down'} color={brandSecondary} size={icSize}/>
+						<Text style={Theme.Styles.hiddenText}>
+							{' '}
 						</Text>
-					)}
-					{!!min && (
+						<FormattedMessage {...i18n.labelMin} style={updatedInfoStyle}/>
+						{`: ${min}${unit}, `}
 						<Text style={updatedInfoStyle}>
-							<Icon name={'angle-down'} color={brandSecondary} size={iconSize}/>
-							<Text style={Theme.Styles.hiddenText}>
-								{' '}
-							</Text>
-							<FormattedMessage {...i18n.labelMin} style={updatedInfoStyle}/>
-							{`: ${min}${unit}, `}
-							<FormattedDate value={minTime} style={updatedInfoStyle}/>
-							<Text style={Theme.Styles.hiddenText}>
-								{' '}
-							</Text>
-							<FormattedTime value={minTime} style={updatedInfoStyle}/>
+							{formatDate(minTime)}
 						</Text>
-					)}
-				</View>
+						<Text style={Theme.Styles.hiddenText}>
+							{' '}
+						</Text>
+						<Text style={updatedInfoStyle}>
+							{formatTime(minTime)}
+						</Text>
+					</Text>
+				)}
 			</View>
-		);
-	}
+		</View>
+	);
 
-	getStyles(appLayout: Object): Object {
+	function getStyles(): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { paddingFactor, shadow, brandSecondary } = Theme.Core;
+		const { paddingFactor, shadow } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const outerPadding = padding * 2;
@@ -198,4 +218,6 @@ export default class SensorBlock extends View<Props, null> {
 			iconSize: updateInfoFontSize * 1.5,
 		};
 	}
-}
+};
+
+export default SensorBlock;

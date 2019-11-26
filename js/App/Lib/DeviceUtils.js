@@ -47,6 +47,24 @@ function prepareNoZWaveSupportDialogueData(formatMessage: (Object) => string = (
 	};
 }
 
+function prepareNo433MHzSupportDialogueData(formatMessage: (Object) => string = (): string => '', locale: string): Object {
+	return {
+		show: true,
+		showHeader: true,
+		imageHeader: true,
+		header: 'No 433MHz Gateways header',
+		capitalizeHeader: false,
+		text: 'No 433MHz Gateways body',
+		showPositive: true,
+		showNegative: true,
+		negativeText: formatMessage(i18n.labelGoToWebshop).toUpperCase(),
+		onPressNegative: () => {
+			goToWebShop(locale);
+		},
+		negTextColor: Theme.Core.brandSecondary,
+	};
+}
+
 function goToWebShop(locale: string): any {
 	const linkEN = 'http://telld.us/buyznetlitev2';
 	const linkSWE = 'http://telld.us/kopznetlitev2';
@@ -72,6 +90,7 @@ module.exports = {
 	...deviceUtils,
 	...addDeviceUtils,
 	prepareNoZWaveSupportDialogueData,
+	prepareNo433MHzSupportDialogueData,
 	openURL,
 	goToWebShop,
 };

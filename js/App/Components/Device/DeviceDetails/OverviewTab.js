@@ -53,6 +53,7 @@ type Props = {
 	zwaveInfo: Object,
 	lastUpdated?: number,
 	currentTemp?: string,
+	gatewayTimezone: string,
 
 	screenProps: Object,
 	dispatch: Function,
@@ -155,7 +156,16 @@ class OverviewTab extends View<Props, null> {
 	}
 
 	render(): Object | null {
-		const { device, screenProps, gatewayName, gatewayType, isGatewayActive, lastUpdated, currentTemp } = this.props;
+		const {
+			device,
+			screenProps,
+			gatewayName,
+			gatewayType,
+			isGatewayActive,
+			lastUpdated,
+			currentTemp,
+			gatewayTimezone,
+		} = this.props;
 		const { appLayout, intl } = screenProps;
 
 		if (!device || !device.id) {
@@ -198,7 +208,8 @@ class OverviewTab extends View<Props, null> {
 					containerStyle={styles.actionDetails}
 					lastUpdated={lastUpdated}
 					deviceSetStateThermostat={this.props.deviceSetStateThermostat}
-					currentTemp={currentTemp}/>
+					currentTemp={currentTemp}
+					gatewayTimezone={gatewayTimezone}/>
 				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
 				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
 					marginBottom: styles.padding * 2,
@@ -250,7 +261,12 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { clientId, clientDeviceId } = device ? device : {};
 
 	const gateway = state.gateways.byId[clientId];
-	const { name: gatewayName, type: gatewayType, online: isGatewayActive } = gateway ? gateway : {};
+	const {
+		name: gatewayName,
+		type: gatewayType,
+		online: isGatewayActive,
+		timezone: gatewayTimezone,
+	} = gateway ? gateway : {};
 
 	return {
 		device,
@@ -259,6 +275,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		isGatewayActive,
 		lastUpdated: getLastUpdated(state.sensors.byId, clientDeviceId, clientId),
 		currentTemp: getThermostatValue(state.sensors.byId, clientDeviceId, clientId),
+		gatewayTimezone,
 	};
 }
 

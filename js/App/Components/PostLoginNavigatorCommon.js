@@ -68,10 +68,12 @@ import {
 	shouldUpdate,
 	navigate,
 	prepareNoZWaveSupportDialogueData,
+	prepareNo433MHzSupportDialogueData,
 	checkForZWaveSupport,
 	filterGatewaysWithZWaveSupport,
 	hasTellStickNetGetOne,
 	premiumAboutToExpire,
+	filter433Gateways,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -374,6 +376,26 @@ addNewDevice() {
 	}
 }
 
+addNewSensor = () => {
+	const { gateways, toggleDialogueBox, intl, locale } = this.props;
+	const filteredGateways = filter433Gateways(gateways.byId);
+	if (Object.keys(filteredGateways).length === 0) {
+		const dialogueData = prepareNo433MHzSupportDialogueData(intl.formatMessage, locale);
+		toggleDialogueBox(dialogueData);
+	} else {
+		const filteredAllIds = Object.keys(filteredGateways);
+		const gatewaysLen = filteredAllIds.length;
+
+		if (gatewaysLen > 0) {
+			const singleGateway = gatewaysLen === 1;
+			navigate('AddSensor', {
+				selectLocation: !singleGateway,
+				gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
+			}, 'AddSensor');
+		}
+	}
+}
+
 _showToast(message: string, durationToast: any, positionToast: any) {
 	Toast.showWithGravity(message, Toast[durationToast], Toast[positionToast]);
 	this.props.dispatch(hideToast());
@@ -464,6 +486,7 @@ render(): Object {
 					addNewLocation={this.addNewLocation}
 					addingNewLocation={this.state.addingNewLocation}
 					addNewDevice={this.addNewDevice}
+					addNewSensor={this.addNewSensor}
 					navigateToCampaign={this.navigateToCampaign}/>
 			</View>
 

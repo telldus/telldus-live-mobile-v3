@@ -35,6 +35,8 @@ type Props = {
 	appLayout: Object,
 	sensor: Object,
 	intl: Object,
+	gatewayTimezone: string,
+	gatewayTimezoneOffset: number,
 };
 
 type State = {
@@ -54,7 +56,13 @@ export default class SensorTypes extends View<Props, State> {
 	}
 
 	getSensors(): Array<Object> {
-		const { appLayout, sensor, intl } = this.props;
+		const {
+			appLayout,
+			sensor,
+			intl,
+			gatewayTimezone,
+			gatewayTimezoneOffset,
+		} = this.props;
 		const { data = {} } = sensor;
 		const { formatMessage } = intl;
 
@@ -77,6 +85,8 @@ export default class SensorTypes extends View<Props, State> {
 				appLayout,
 				lastUpdated: moment.unix(lastUpdated),
 				formatOptions,
+				gatewayTimezone,
+				gatewayTimezoneOffset,
 			};
 			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
 

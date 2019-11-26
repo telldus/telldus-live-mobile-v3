@@ -46,6 +46,7 @@ type Props = {
 	appLayout: Object,
 	lastUpdated: number,
 	currentTemp: string,
+	gatewayTimezone: string,
 
 	navigation: Object,
 	intl: Object,
@@ -61,7 +62,8 @@ constructor(props: Props) {
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
-	const propsChange = shouldUpdate(this.props, nextProps, ['device', 'appLayout', 'lastUpdated', 'currentTemp']);
+	const propsChange = shouldUpdate(this.props, nextProps, [
+		'device', 'appLayout', 'lastUpdated', 'currentTemp', 'gatewayTimezone']);
 	if (propsChange) {
 		return true;
 	}
@@ -77,6 +79,7 @@ render(): Object | null {
 		lastUpdated,
 		intl,
 		currentTemp,
+		gatewayTimezone,
 	} = this.props;
 
 	if (!device || !device.id) {
@@ -140,7 +143,8 @@ render(): Object | null {
 						lastUpdated={lastUpdated}
 						currentTemp={currentTemp}
 						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
-						supportResume={supportResume}/>
+						supportResume={supportResume}
+						gatewayTimezone={gatewayTimezone}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>
@@ -164,12 +168,15 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const device = store.devices.byId[id];
 	const { clientDeviceId, clientId } = device ? device : {};
 
+	const { timezone: gatewayTimezone } = store.gateways.byId[clientId] || {};
+
 
 	return {
 		...screenProps,
 		device,
 		lastUpdated: getLastUpdated(store.sensors.byId, clientDeviceId, clientId),
 		currentTemp: getThermostatValue(store.sensors.byId, clientDeviceId, clientId),
+		gatewayTimezone,
 	};
 }
 

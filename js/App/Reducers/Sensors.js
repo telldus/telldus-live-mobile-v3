@@ -30,21 +30,37 @@ import { hasTokenExpired } from '../Lib/LocalControl';
 import Theme from '../Theme';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
-	let modifiedData = paramOne.map((item: Object, index: number): Object => {
-		let gateway = gateways[item.clientId];
-		if (gateway) {
-			const { localKey, online, websocketOnline } = gateway;
-			const {
-				address,
-				key,
-				ttl,
-				supportLocal,
-			} = localKey;
-			const tokenExpired = hasTokenExpired(ttl);
-			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
-			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
+	let modifiedData = [];
+	paramOne.map((item: Object, index: number) => {
+		const { clientId, name } = item;
+		if (name) {
+			let gateway = gateways[clientId];
+			if (gateway) {
+				const { localKey, online, websocketOnline, timezone } = gateway;
+				const {
+					address,
+					key,
+					ttl,
+					supportLocal,
+				} = localKey;
+				const tokenExpired = hasTokenExpired(ttl);
+				const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+				modifiedData.push({
+					...item,
+					isOnline: online,
+					websocketOnline,
+					supportLocalControl,
+					gatewayTimezone: timezone,
+				});
+			} else {
+				modifiedData.push({
+					...item,
+					isOnline: false,
+					websocketOnline: false,
+					supportLocalControl: false,
+				});
+			}
 		}
-		return { ...item, isOnline: false, websocketOnline: false, supportLocalControl: false };
 	});
 	let result = groupBy(modifiedData, (items: Object): Array<any> => {
 		let gateway = gateways[items.clientId];

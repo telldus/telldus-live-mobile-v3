@@ -31,7 +31,8 @@ type Props = {
     roundIconContainerStyle?: number | Object | Array<any>,
     rowWithTriangleContainerStyle?: number | Object | Array<any>,
     textStyle?: number | Object | Array<any>,
-    lineStyle?: number | Object | Array<any>,
+	lineStyle?: number | Object | Array<any>,
+	appLayout: Object,
 };
 
 export default class NowRow extends View<Props, null> {
@@ -42,6 +43,7 @@ export default class NowRow extends View<Props, null> {
 			rowWithTriangleContainerStyle,
 			textStyle,
 			lineStyle,
+			appLayout,
 		} = this.props;
 
 		return (
@@ -60,7 +62,7 @@ export default class NowRow extends View<Props, null> {
 				}]}
 				triangleStyle={styles.triangleStyle}
 				triangleContainerStyle={styles.triangleContainerStyle}
-			>
+				appLayout={appLayout}>
 				<View style={styles.cover}>
 					<Text style={textStyle}>
 						{text}

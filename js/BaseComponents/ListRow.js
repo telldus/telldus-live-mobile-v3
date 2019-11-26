@@ -21,14 +21,17 @@
 
 'use strict';
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React from 'react';
+
 import View from './View';
-import FormattedTime from './FormattedTime';
 import BlockIcon from './BlockIcon';
 import RowWithTriangle from './RowWithTriangle';
 import Theme from '../App/Theme';
+import Text from './Text';
+
+import {
+	useRelativeIntl,
+} from '../App/Hooks/App';
 
 type Props = {
 	children: any,
@@ -50,106 +53,82 @@ type Props = {
 	rowWithTriangleContainerStyle?: number | Object | Array<any>,
 	triangleContainerStyle?: number | Object | Array<any>,
 	triangleStyle?: number | Object | Array<any>,
+	gatewayTimezone?: string,
+	appLayout: Object,
 };
 
-type DefaultProps = {
-	isFirst: boolean,
-	timeFormat: {
-		hour: 'numeric',
-		minute: 'numeric',
-		second: 'numeric',
-	},
-};
+const ListRow = (props: Props): Object => {
 
-class ListRow extends Component<Props, null> {
-	props: Props;
+	const {
+		children,
+		roundIcon,
+		roundIconStyle,
+		roundIconContainerStyle,
+		time,
+		timeStyle,
+		timeContainerStyle,
+		containerStyle,
+		rowContainerStyle,
+		rowStyle,
+		triangleColor,
+		timeFormat,
+		iconBackgroundMask,
+		iconBackgroundMaskStyle,
+		rowWithTriangleContainerStyle,
+		triangleStyle,
+		triangleContainerStyle,
+		gatewayTimezone,
+		isFirst,
+		appLayout,
+	} = props;
 
-	static propTypes = {
-		children: PropTypes.node.isRequired,
-		roundIcon: PropTypes.string,
-		roundIconStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		roundIconContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		time: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.number]),
-		timeFormat: PropTypes.object,
-		timeStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		timeContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		rowContainerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		rowStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		isFirst: PropTypes.bool,
-		triangleColor: PropTypes.string,
-		appLayout: PropTypes.object,
-	};
+	const style = _getStyle();
 
-	static defaultProps: DefaultProps = {
-		isFirst: false,
-		timeFormat: {
-			hour: 'numeric',
-			minute: 'numeric',
-			second: 'numeric',
-		},
-	};
-
-	render(): Object {
-		const {
-			children,
-			roundIcon,
-			roundIconStyle,
-			roundIconContainerStyle,
-			time,
-			timeStyle,
-			timeContainerStyle,
-			containerStyle,
-			rowContainerStyle,
-			rowStyle,
-			triangleColor,
-			timeFormat,
-			iconBackgroundMask,
-			iconBackgroundMaskStyle,
-			rowWithTriangleContainerStyle,
-			triangleStyle,
-			triangleContainerStyle,
-		} = this.props;
-
-		const style = this._getStyle();
-
-		return (
-			<View style={[style.container, containerStyle]} accessible={false} importantForAccessibility={'no-hide-descendants'}>
-				<BlockIcon
-					icon={roundIcon}
-					containerStyle={[style.roundIconContainer, roundIconContainerStyle]}
-					style={roundIconStyle}
-					backgroundMask={iconBackgroundMask}
-					backgroundMaskStyle={iconBackgroundMaskStyle}
-				/>
-				{!!time && (
-					<View style={timeContainerStyle}>
-						<FormattedTime
-							value={time}
-							localeMatcher= "best fit"
-							formatMatcher= "best fit"
-							{...timeFormat}
-							style={[style.time, timeStyle]} />
-					</View>
-
-				)}
-				<RowWithTriangle
-					layout={'row'}
-					triangleColor={triangleColor}
-					containerStyle={rowContainerStyle}
-					rowWithTriangleContainerStyle={rowWithTriangleContainerStyle}
-					triangleStyle={triangleStyle}
-					triangleContainerStyle={triangleContainerStyle}
-					style={rowStyle}
-				>
-					{children}
-				</RowWithTriangle>
-			</View>
-		);
+	let formattedTime;
+	const {
+		formatTime,
+	} = useRelativeIntl(gatewayTimezone);
+	if (time) {
+		formattedTime = formatTime(time, {
+			localeMatcher: 'best fit',
+			formatMatcher: 'best fit',
+			...timeFormat,
+		});
 	}
 
-	_getStyle = (): Object => {
-		let { appLayout } = this.props;
+	return (
+		<View style={[style.container, containerStyle]} accessible={false} importantForAccessibility={'no-hide-descendants'}>
+			<BlockIcon
+				icon={roundIcon}
+				containerStyle={[style.roundIconContainer, roundIconContainerStyle]}
+				style={roundIconStyle}
+				backgroundMask={iconBackgroundMask}
+				backgroundMaskStyle={iconBackgroundMaskStyle}
+			/>
+			{!!formattedTime && (
+				<View style={timeContainerStyle}>
+					<Text
+						style={[style.time, timeStyle]}>
+						{formattedTime}
+					</Text>
+				</View>
+
+			)}
+			<RowWithTriangle
+				layout={'row'}
+				triangleColor={triangleColor}
+				containerStyle={rowContainerStyle}
+				rowWithTriangleContainerStyle={rowWithTriangleContainerStyle}
+				triangleStyle={triangleStyle}
+				triangleContainerStyle={triangleContainerStyle}
+				style={rowStyle}
+			>
+				{children}
+			</RowWithTriangle>
+		</View>
+	);
+
+	function _getStyle(): Object {
 		let isPortrait = appLayout.height > appLayout.width;
 
 		const deviceWidth = appLayout.width;
@@ -164,7 +143,7 @@ class ListRow extends Component<Props, null> {
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
-				paddingTop: this.props.isFirst ? paddingFirst : padding,
+				paddingTop: isFirst ? paddingFirst : padding,
 				paddingBottom: padding,
 			},
 			roundIconContainer: {
@@ -180,14 +159,17 @@ class ListRow extends Component<Props, null> {
 				textAlign: 'center',
 			},
 		};
-	};
+	}
 
-}
+};
 
-function mapStateToProps(state: Object, ownProps: Object): Object {
-	return {
-		appLayout: state.app.layout,
-	};
-}
+ListRow.defaultProps = {
+	isFirst: false,
+	timeFormat: {
+		hour: 'numeric',
+		minute: 'numeric',
+		second: 'numeric',
+	},
+};
 
-module.exports = connect(mapStateToProps, null)(ListRow);
+export default ListRow;

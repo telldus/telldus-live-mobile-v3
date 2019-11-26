@@ -29,9 +29,9 @@ import {
 	View,
 	Text,
 	EditBox,
-	FormattedRelative,
 	IconTelldus,
 } from '../../../BaseComponents';
+import LastUpdatedInfo from '../TabViews/SubViews/Sensor/LastUpdatedInfo';
 
 import { LayoutAnimations, formatSensorLastUpdate, formatModeValue } from '../../Lib';
 import Theme from '../../Theme';
@@ -49,6 +49,7 @@ type Props = {
 	currentValueInScreen: number,
 	currentTemp: string,
 	supportResume: boolean,
+	gatewayTimezone: string,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
@@ -142,6 +143,7 @@ render(): Object {
 		currentTemp,
 		controllingMode,
 		supportResume,
+		gatewayTimezone,
 	} = this.props;
 
 	const {
@@ -276,12 +278,12 @@ render(): Object {
 			</>
 				}
 				{!!lastUpdated &&
-				<FormattedRelative
+				<LastUpdatedInfo
 					value={-seconds}
 					numeric="auto"
 					updateIntervalInSeconds={60}
-					formatterFunction={this.formatSensorLastUpdate}
-					textStyle={lastUpdatedInfoStyle}/>
+					gatewayTimezone={gatewayTimezone}
+					textStyle={lastUpdatedInfoStyle} />
 				}
 			</View>
 		</View>

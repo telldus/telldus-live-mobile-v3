@@ -30,6 +30,7 @@ import {
 import DashboardShadowTile from './DashboardShadowTile';
 import TypeBlockDB from './Sensor/TypeBlockDB';
 import GenericSensor from './Sensor/GenericSensor';
+import LastUpdatedInfo from './Sensor/LastUpdatedInfo';
 
 import {
 	formatLastUpdated,
@@ -152,13 +153,34 @@ class SensorDashboardTile extends View<Props, null> {
 		return {slideList, sensorAccessibilityInfo};
 	}
 
+	getLastUpdated = (lastUpdated: string, minutesAgo: number, gatewayTimezone: string): Object => {
+
+		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
+
+		return (
+			<LastUpdatedInfo
+				value={-seconds}
+				numeric="auto"
+				updateIntervalInSeconds={60}
+				gatewayTimezone={gatewayTimezone}
+				textStyle={{
+					textAlign: 'center',
+					textAlignVertical: 'center',
+					fontSize: Math.floor(this.props.tileWidth / 12),
+					color: Theme.Core.rowTextColor,
+				}} />
+		);
+	}
+
 	render(): Object {
 		const { item, tileWidth, isGatewayActive, intl, onPress } = this.props;
 		const { slideList, sensorAccessibilityInfo } = this.getSlideList(item);
 
-		const { lastUpdated } = item;
+		const { lastUpdated, gatewayTimezone } = item;
 		const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 		const lastUpdatedValue = formatLastUpdated(minutesAgo, lastUpdated, intl.formatMessage);
+
+		const info = this.getLastUpdated(lastUpdated, minutesAgo, gatewayTimezone);
 
 		const accessibilityLabel = `${this.labelSensor} ${item.name}, ${sensorAccessibilityInfo}, ${this.labelTimeAgo} ${lastUpdatedValue}`;
 
@@ -175,7 +197,7 @@ class SensorDashboardTile extends View<Props, null> {
 				item={item}
 				isEnabled={item.state !== 0}
 				name={item.name}
-				info={lastUpdatedValue}
+				info={info}
 				icon={'sensor'}
 				iconStyle={{
 					color: '#fff',
