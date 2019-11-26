@@ -59,6 +59,8 @@ type Props = {
 	textFieldStyle?: Object | Array<any> | number,
 	labelTextStyle?: Object | Array<any> | number,
 	valueTextStyle?: Object | Array<any> | number,
+	touchableStyle?: Object | Array<any> | number,
+	switchStyle?: Object | Array<any> | number,
 };
 
 type DefaultProps = {
@@ -160,12 +162,14 @@ class SettingsRow extends Component<Props, null> {
 			textFieldStyle,
 			labelTextStyle,
 			valueTextStyle,
+			touchableStyle,
+			switchStyle,
 		} = this.props;
 
 		const {
 			ShowOnDashCover,
-			touchableStyle,
-			switchStyle,
+			touchableStyleDef,
+			switchStyleDef,
 			textShowOnDashCover,
 			textShowOnDash,
 			valueText,
@@ -179,12 +183,12 @@ class SettingsRow extends Component<Props, null> {
 		} = this.getStyle();
 
 		let Parent = View, parentProps = {
-			style: touchableStyle,
+			style: touchableStyleDef,
 		};
 		if (onPress) {
 			Parent = RippleButton;
 			parentProps = {
-				style: [touchableStyle, contentCoverStyle],
+				style: [touchableStyleDef, contentCoverStyle],
 				onPress: this.onPress,
 			};
 		}
@@ -199,11 +203,11 @@ class SettingsRow extends Component<Props, null> {
 			<View style={[ShowOnDashCover, style]} accessible={accessible} accessibilityLabel={accessibilityLabel} importantForAccessibility={'yes'}>
 				{type === 'switch' ?
 					<View
-						style={touchableStyle}>
+						style={[touchableStyleDef, touchableStyle]}>
 						<View style={textShowOnDashCover}>
 							{!!label && (
 								typeof label === 'string' ?
-									<Text style={textShowOnDash}>
+									<Text style={[textShowOnDash, labelTextStyle]}>
 										{label}
 									</Text>
 									:
@@ -213,7 +217,7 @@ class SettingsRow extends Component<Props, null> {
 						<Switch
 							onValueChange={onValueChange}
 							value={value}
-							style={switchStyle}
+							style={[switchStyleDef, switchStyle]}
 						/>
 					</View>
 					:
@@ -293,7 +297,7 @@ class SettingsRow extends Component<Props, null> {
 				...Theme.Core.shadow,
 				borderRadius: 2,
 			},
-			touchableStyle: {
+			touchableStyleDef: {
 				padding: fontSize,
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -301,7 +305,7 @@ class SettingsRow extends Component<Props, null> {
 				borderRadius: 2,
 				overflow: 'hidden',
 			},
-			switchStyle: {
+			switchStyleDef: {
 				justifyContent: 'flex-end',
 			},
 			textShowOnDashCover: {
