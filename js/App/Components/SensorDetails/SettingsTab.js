@@ -237,8 +237,21 @@ class SettingsTab extends View {
 	}
 
 	submitName() {
-		const { dispatch, sensor } = this.props;
 		const { sensorName } = this.state;
+		const { dispatch, sensor, screenProps } = this.props;
+		const { toggleDialogueBox, intl } = screenProps;
+
+		if (!sensorName || !sensorName.trim()) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: intl.formatMessage(i18n.errorNameFieldEmpty),
+				showPositive: true,
+			});
+			return;
+		}
+
 		dispatch(setSensorName(sensor.id, sensorName)).then(() => {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			dispatch(getSensorInfo(sensor.id));
