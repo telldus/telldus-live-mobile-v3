@@ -40,6 +40,7 @@ import {
 import {
 	setSensorName,
 	getSensorInfo,
+	setKeepHistory,
 } from '../../../Actions/Sensors';
 import {
 	showToast,
@@ -105,6 +106,9 @@ const SetSensorName = (props: Object): Object => {
 				name,
 				isLoading: false,
 			});
+
+			dispatch(setKeepHistory(sensor.id, 1));
+
 			const sensorData = {[sensor.id]: {
 				id: sensor.id,
 				name,
