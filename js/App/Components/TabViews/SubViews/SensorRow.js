@@ -61,6 +61,11 @@ type Props = {
 	screenReaderEnabled: boolean,
 	isLast: boolean,
 
+	isNew: boolean,
+	gatewayId: string,
+
+	onNewlyAddedDidMount: (number, string) => void,
+
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
 	onSettingsSelected: Object => void,
@@ -167,6 +172,7 @@ class SensorRow extends View<Props, State> {
 
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
 				'appLayout', 'sensor', 'isGatewayActive', 'defaultType', 'isLast',
+				'isNew', 'gatewayId',
 			]);
 			if (propsChange) {
 				return true;
@@ -188,6 +194,13 @@ class SensorRow extends View<Props, State> {
 		const { idToKeepOpen, forceClose } = propsSwipeRow;
 		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen))) {
 			this.closeSwipeRow();
+		}
+	}
+
+	componentDidMount() {
+		const { onNewlyAddedDidMount, sensor, isNew, gatewayId } = this.props;
+		if (onNewlyAddedDidMount && isNew) {
+			onNewlyAddedDidMount(sensor.id, gatewayId);
 		}
 	}
 
@@ -512,7 +525,7 @@ class SensorRow extends View<Props, State> {
 	}
 
 	getStyles(): Object {
-		const { appLayout, isGatewayActive, sensor = {}, isLast } = this.props;
+		const { appLayout, isGatewayActive, sensor = {}, isLast, isNew } = this.props;
 		const { data = {} } = sensor;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -523,6 +536,7 @@ class SensorRow extends View<Props, State> {
 			maxSizeRowTextOne,
 			maxSizeRowTextTwo,
 			buttonWidth,
+			brandSecondary,
 		} = Theme.Core;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -570,6 +584,8 @@ class SensorRow extends View<Props, State> {
 				height: rowHeight,
 				borderRadius: 2,
 				...Theme.Core.shadow,
+				borderWidth: isNew ? 2 : 0,
+				borderColor: isNew ? brandSecondary : 'transparent',
 			},
 			hiddenRow: {
 				flexDirection: 'row',
