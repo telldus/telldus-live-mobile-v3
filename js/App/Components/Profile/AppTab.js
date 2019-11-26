@@ -40,6 +40,8 @@ import { pushServiceId } from '../../../Config';
 import {
 	View,
 	TabBar,
+	SettingsRow,
+	Text,
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
@@ -55,6 +57,7 @@ import {
 } from '../../Actions/User';
 import {
 	showToast,
+	setDBCarousel,
 } from '../../Actions/App';
 
 import Theme from '../../Theme';
@@ -62,10 +65,11 @@ import i18n from '../../Translations/common';
 
 const AppTab = (props: Object): Object => {
 	const { screenProps, navigation } = props;
-	const { formatMessage } = useIntl();
+	const intl = useIntl();
+	const { formatMessage } = intl;
 	const [ isPushSubmitLoading, setIsPushSubmitLoading ] = useState(false);
 
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const { layout, defaultSettings } = useSelector((state: Object): Object => state.app);
 	const {
 		phonesList = {},
 		pushToken,
@@ -73,9 +77,15 @@ const AppTab = (props: Object): Object => {
 		deviceId,
 	} = useSelector((state: Object): Object => state.user);
 
+	const { dbCarousel = true } = defaultSettings;
+
 	const {
 		container,
 		body,
+		touchableStyle,
+		labelTextStyle,
+		switchStyle,
+		titleStyle,
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
@@ -158,6 +168,10 @@ const AppTab = (props: Object): Object => {
 		setIsPushSubmitLoading(false);
 	}
 
+	function toggleDBCarousel() {
+		dispatch(setDBCarousel(!dbCarousel));
+	}
+
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
@@ -170,6 +184,18 @@ const AppTab = (props: Object): Object => {
 				/>
 				<DBSortControlBlock/>
 				<LanguageControlBlock/>
+				<Text style={titleStyle}>
+					{formatMessage(i18n.dashboard)}
+				</Text>
+				<SettingsRow
+					label={formatMessage(i18n.autoCycleSenVal)}
+					onValueChange={toggleDBCarousel}
+					value={dbCarousel}
+					appLayout={layout}
+					intl={intl}
+					labelTextStyle={labelTextStyle}
+					touchableStyle={touchableStyle}
+					switchStyle={switchStyle}/>
 			</View>
 		</ScrollView>
 	);
@@ -181,6 +207,8 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 	const padding = deviceWidth * Theme.Core.paddingFactor;
 
+	const fontSize = Math.floor(deviceWidth * 0.045);
+
 	return {
 		container: {
 			flex: 1,
@@ -191,6 +219,20 @@ const getStyles = (appLayout: Object): Object => {
 			paddingHorizontal: padding,
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
+		},
+		labelTextStyle: {
+			fontSize,
+		},
+		touchableStyle: {
+			height: fontSize * 3.1,
+		},
+		switchStyle: {
+			transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
+		},
+		titleStyle: {
+			marginBottom: 5,
+			color: '#b5b5b5',
+			fontSize,
 		},
 	};
 };
