@@ -314,10 +314,11 @@ const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, g
 	const { formatRelativeTime, formatMessage, formatDate } = intl;
 	const now = moment().unix();
 
-	const diff = moment().diff(moment.unix(timestamp), 'days');
+	const m = moment.unix(timestamp);
+	const diff = moment().diff(m, 'days', true);
 	if (diff > 1) {
 		moment.tz.setDefault();
-		return formatDate(moment.unix(timestamp));
+		return formatDate(m);
 	}
 
 	// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
