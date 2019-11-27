@@ -31,9 +31,17 @@ import { useIntl } from 'react-intl';
 import {
 	View,
 	Text,
+	IconTelldus,
 } from '../../../../../BaseComponents';
 import LastUpdatedInfo from '../../../TabViews/SubViews/Sensor/LastUpdatedInfo';
+import TypeBlockList from '../../../TabViews/SubViews/Sensor/TypeBlockList';
+import GenericSensor from '../../../TabViews/SubViews/Sensor/GenericSensor';
 
+import {
+	checkIfLarge,
+	getSensorInfo,
+	getWindDirection,
+} from '../../../../Lib';
 import Theme from '../../../../Theme';
 
 import i18n from '../../../../Translations/common';
@@ -49,6 +57,8 @@ const SensorRow = (props: Object): Object => {
 		sensorId,
 		protocol,
 		lastUpdated,
+		data,
+		id,
 	} = item;
 
 	const {
@@ -57,69 +67,127 @@ const SensorRow = (props: Object): Object => {
 
 	const {
 		cover,
-		blockStyle,
-		labelStyle,
+		blockOneStyle,
+		textOneStyle,
+		textTwoStyle,
+		blockTwoStyle,
+		dotCoverStyle,
+		dotStyle,
+		valueUnitCoverStyle,
 		valueStyle,
-	} = getStyles(appLayout);
+		unitStyle,
+		labelStyle,
+		sensorValueCoverStyle,
+		iconAndBlockStyle,
+		iconStyle,
+	} = getStyles(appLayout, data);
 
 	function onPress() {
 		onSelectSensor(item);
 	}
 
+	function getSensors(): Object {
+		let sensors = {}, sensorAccessibilityInfo = '';
+
+		for (let key in data) {
+			const values = data[key];
+			const { value, scale, name } = values;
+			const isLarge = checkIfLarge(value.toString());
+
+			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
+
+			let sharedProps = {
+				key,
+				name,
+				value,
+				unit,
+				label,
+				icon,
+				isLarge,
+				valueUnitCoverStyle,
+				valueStyle,
+				unitStyle,
+				labelStyle,
+				sensorValueCoverStyle,
+				formatOptions,
+			};
+			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
+
+			if (name === 'wdir') {
+				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
+			}
+			sensors[key] = <GenericSensor {...sharedProps} />;
+		}
+		return { sensors, sensorAccessibilityInfo };
+	}
+
 	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
 	const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
+
+	const textOne = `${protocol}, ${formatMessage(i18n.labelId)}: ${sensorId}`;
+
+	const { sensors } = getSensors();
 
 	return (
 		<TouchableOpacity onPress={onPress}>
 			<View style={cover}>
-				<View style={blockStyle}>
-					<Text style={labelStyle}>
-						{formatMessage(i18n.labelProtocol)}
-					</Text>
-					<Text style={valueStyle}>
-						{protocol}
-					</Text>
+				<View style={iconAndBlockStyle}>
+					<IconTelldus icon={'sensor'} style={iconStyle}/>
+					<View style={[blockOneStyle, {
+						alignItems: 'flex-start',
+					}]}>
+						<Text style={textOneStyle}>
+							{textOne.toUpperCase()}
+						</Text>
+						<LastUpdatedInfo
+							value={-seconds}
+							numeric="auto"
+							updateIntervalInSeconds={60}
+							textStyle={[
+								textTwoStyle, {
+									color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+									opacity: minutesAgo < 1440 ? 1 : 0.5,
+								},
+							]} />
+					</View>
 				</View>
-				<View style={blockStyle}>
-					<Text style={labelStyle}>
-						{formatMessage(i18n.labelId)}
-					</Text>
-					<Text style={valueStyle}>
-						{sensorId}
-					</Text>
-				</View>
-				<View style={[blockStyle, {
-					alignItems: 'flex-end',
-				}]}>
-					<Text style={labelStyle}>
-						{formatMessage(i18n.labelLastUpdated)}
-					</Text>
-					<LastUpdatedInfo
-						value={-seconds}
-						numeric="auto"
-						updateIntervalInSeconds={60}
-						textStyle={[
-							valueStyle, {
-								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-								opacity: minutesAgo < 1440 ? 1 : 0.5,
-							},
-						]} />
-				</View>
+				<TypeBlockList
+					sensors={sensors}
+					lastUpdated={lastUpdated}
+					id={id}
+					style={blockTwoStyle}
+					valueCoverStyle={blockTwoStyle}
+					dotCoverStyle={dotCoverStyle}
+					dotStyle={dotStyle} />
 			</View>
 		</TouchableOpacity>
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, data: Object = {}): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		rowTextColor,
+		brandPrimary,
+		buttonWidth,
+		rowHeight,
+		eulaContentColor,
+		maxSizeRowTextOne,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const blockWidth = Math.floor((width / 3) - (padding * 2));
+	const widthValueBlock = (buttonWidth * 2) + 6;
+
+	const dotSize = rowHeight * 0.09;
+
+	let nameFontSize = Math.floor(deviceWidth * 0.042);
+	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
 	return {
 		cover: {
@@ -128,22 +196,72 @@ const getStyles = (appLayout: Object): Object => {
 			...shadow,
 			marginHorizontal: padding,
 			marginBottom: padding / 2,
-			padding,
 			justifyContent: 'space-between',
+			height: rowHeight,
 		},
-		blockStyle: {
-			width: blockWidth,
+		iconAndBlockStyle: {
+			flex: 1,
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			padding,
+		},
+		iconStyle: {
+			color: eulaContentColor,
+			fontSize: nameFontSize * 1.8,
+		},
+		blockOneStyle: {
+			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'flex-start',
+			marginLeft: padding,
 		},
-		labelStyle: {
-			color: brandSecondary,
-			fontSize: Math.floor(deviceWidth * 0.045),
+		textOneStyle: {
+			color: rowTextColor,
+			fontSize: nameFontSize,
+		},
+		textTwoStyle: {
+			color: rowTextColor,
+			fontSize: nameFontSize * 0.9,
+			marginTop: 4,
+		},
+		blockTwoStyle: {
+			width: widthValueBlock,
+			backgroundColor: brandPrimary,
+			height: '100%',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+		},
+		dotCoverStyle: {
+			position: 'absolute',
+			width: '100%',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			bottom: 5,
+		},
+		dotStyle: {
+			width: dotSize,
+			height: dotSize,
+			borderRadius: dotSize / 2,
+			marginLeft: 2 + (dotSize * 0.2),
+		},
+		valueUnitCoverStyle: {
+			height: rowHeight * 0.39,
 		},
 		valueStyle: {
-			color: rowTextColor,
-			fontSize: Math.floor(deviceWidth * 0.045),
-			marginTop: 5,
+			fontSize: rowHeight * 0.33,
+			height: rowHeight * 0.39,
+		},
+		unitStyle: {
+			fontSize: rowHeight * 0.2,
+		},
+		labelStyle: {
+			fontSize: rowHeight * 0.21,
+			height: rowHeight * 0.3,
+		},
+		sensorValueCoverStyle: {
+			marginBottom: Object.keys(data).length <= 1 ? 0 : rowHeight * 0.16,
 		},
 	};
 };
