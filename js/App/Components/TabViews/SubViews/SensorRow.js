@@ -515,7 +515,6 @@ class SensorRow extends View<Props, State> {
 					<Text style={[
 						textInfoStyle, {
 							color: Theme.Core.rowTextColor,
-							opacity: minutesAgo < 1440 ? 1 : 0.5,
 						},
 					]}>
 						{this.offline}

@@ -26,6 +26,7 @@ import { StyleSheet } from 'react-native';
 
 import {
 	View,
+	Text,
 } from '../../../../BaseComponents';
 import DashboardShadowTile from './DashboardShadowTile';
 import TypeBlockDB from './Sensor/TypeBlockDB';
@@ -154,22 +155,36 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	getLastUpdated = (lastUpdated: string, minutesAgo: number, gatewayTimezone: string): Object => {
-
+		const { isGatewayActive, intl } = this.props;
 		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
 
 		return (
-			<LastUpdatedInfo
-				value={-seconds}
-				numeric="auto"
-				updateIntervalInSeconds={60}
-				gatewayTimezone={gatewayTimezone}
-				timestamp={lastUpdated}
-				textStyle={{
+			<>
+			{isGatewayActive ?
+				<LastUpdatedInfo
+					value={-seconds}
+					numeric="auto"
+					updateIntervalInSeconds={60}
+					gatewayTimezone={gatewayTimezone}
+					timestamp={lastUpdated}
+					textStyle={{
+						textAlign: 'center',
+						textAlignVertical: 'center',
+						fontSize: Math.floor(this.props.tileWidth / 12),
+						opacity: minutesAgo < 1440 ? 1 : 0.5,
+						color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+					}} />
+				:
+				<Text style={{
 					textAlign: 'center',
 					textAlignVertical: 'center',
 					fontSize: Math.floor(this.props.tileWidth / 12),
 					color: Theme.Core.rowTextColor,
-				}} />
+				}}>
+					{intl.formatMessage(i18n.offline)}
+				</Text>
+			}
+					</>
 		);
 	}
 
