@@ -73,7 +73,6 @@ import {
 	filterGatewaysWithZWaveSupport,
 	hasTellStickNetGetOne,
 	premiumAboutToExpire,
-	filter433Gateways,
 } from '../Lib';
 
 import i18n from '../Translations/common';
