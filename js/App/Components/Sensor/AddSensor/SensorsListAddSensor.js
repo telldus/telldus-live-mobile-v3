@@ -29,6 +29,7 @@ import { createSelector } from 'reselect';
 
 import {
 	View,
+	InfoBlock,
 } from '../../../../BaseComponents';
 import {
 	SensorRow,
@@ -132,8 +133,23 @@ renderRow(item: Object): Object {
 
 render(): Object {
 	const padding = this.getPadding();
-	const { rows } = this.props;
+	const { rows, intl, appLayout } = this.props;
 
+	const {
+		emptyCover,
+		infoContainer,
+	} = this.getStyles(appLayout);
+
+	if (rows.length === 0) {
+		return (
+			<View style={emptyCover}>
+				<InfoBlock
+					infoContainer={infoContainer}
+					appLayout={appLayout}
+					text={intl.formatMessage(i18n.noSensorsFound)}/>
+			</View>
+		);
+	}
 	return (
 		<FlatList
 			data={rows}
@@ -146,6 +162,31 @@ render(): Object {
 			}}
 		/>
 	);
+}
+
+getStyles = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	return {
+		emptyCover: {
+			flex: 1,
+			margin: padding,
+			alignItems: 'center',
+			justifyContent: 'flex-start',
+		},
+		infoContainer: {
+			flex: 0,
+			width: '100%',
+		},
+	};
 }
 }
 
