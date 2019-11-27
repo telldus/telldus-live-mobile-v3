@@ -410,7 +410,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                         SensorsUtilities sc = new SensorsUtilities();
 
                         String sensorName = responseObject.optString("name");
-                        if (sensorName == null || sensorName.equals("null")) {
+                        if (sensorName == null) {
                             sensorName = context.getResources().getString(R.string.reserved_widget_android_unknown);
                         }
 

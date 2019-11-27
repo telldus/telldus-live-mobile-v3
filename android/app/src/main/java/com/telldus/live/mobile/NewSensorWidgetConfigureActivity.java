@@ -555,13 +555,12 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                     for (int i = 0; i < JsonsensorList.length(); i++) {
                         JSONObject curObj = JsonsensorList.getJSONObject(i);
                         String name = curObj.getString("name");
-                        if (name == null || name.equals("null")) {
-                            name = getResources().getString(R.string.reserved_widget_android_unknown);
+                        if (name != null) {
+                            Integer id = curObj.getInt("id");
+                            String last = String.valueOf(curObj.getLong("lastUpdated"));
+                            nameListItems.add(name);
+                            idList.add(id.toString());
                         }
-                        Integer id = curObj.getInt("id");
-                        String last = String.valueOf(curObj.getLong("lastUpdated"));
-                        nameListItems.add(name);
-                        idList.add(id.toString());
                     }
                     sensorNameList = nameListItems.toArray(new CharSequence[nameListItems.size()]);
                     sensorIdList = idList.toArray(new CharSequence[idList.size()]);
