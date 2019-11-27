@@ -378,7 +378,7 @@ addNewDevice() {
 
 addNewSensor = () => {
 	const { gateways, toggleDialogueBox, intl, locale } = this.props;
-	const filteredGateways = filter433Gateways(gateways.byId);
+	const filteredGateways = gateways.byId;
 	if (Object.keys(filteredGateways).length === 0) {
 		const dialogueData = prepareNo433MHzSupportDialogueData(intl.formatMessage, locale);
 		toggleDialogueBox(dialogueData);

@@ -111,7 +111,7 @@ getPadding(): number {
 
 onChooseLocation(gateway: Object) {
 	const { navigation } = this.props;
-	navigation.navigate('SelectSensorType', {
+	navigation.navigate('SensorsListAddSensor', {
 		gateway,
 	});
 }
@@ -150,7 +150,7 @@ const getRows = createSelector(
 	[
 		({ gateways }: Object): Object => gateways,
 	],
-	(gateways: Object): Array<any> => parseGatewaysForListView(gateways, true)
+	(gateways: Object): Array<any> => parseGatewaysForListView(gateways)
 );
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
