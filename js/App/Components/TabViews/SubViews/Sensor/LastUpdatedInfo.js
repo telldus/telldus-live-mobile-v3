@@ -43,11 +43,12 @@ const LastUpdatedInfo = (props: Object): Object => {
 		value,
 		numeric,
 		updateIntervalInSeconds,
+		timestamp,
 	} = props;
 
 	const intl = useRelativeIntl(gatewayTimezone);
 	function formatSensorLastUpdateFunc(time: string): string {
-		return formatSensorLastUpdate(time, intl);
+		return formatSensorLastUpdate(time, intl, timestamp, gatewayTimezone);
 	}
 
 	return (

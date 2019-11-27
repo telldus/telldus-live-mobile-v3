@@ -503,6 +503,7 @@ class SensorRow extends View<Props, State> {
 						value={-seconds}
 						numeric="auto"
 						updateIntervalInSeconds={60}
+						timestamp={lastUpdatedValue}
 						gatewayTimezone={sensor.gatewayTimezone}
 						textStyle={[
 							textInfoStyle, {

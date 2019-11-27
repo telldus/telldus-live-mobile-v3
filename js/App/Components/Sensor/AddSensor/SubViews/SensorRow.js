@@ -143,6 +143,7 @@ const SensorRow = (props: Object): Object => {
 							value={-seconds}
 							numeric="auto"
 							updateIntervalInSeconds={60}
+							timestamp={lastUpdated}
 							textStyle={[
 								textTwoStyle, {
 									color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',

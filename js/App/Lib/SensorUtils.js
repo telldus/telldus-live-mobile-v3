@@ -24,6 +24,7 @@
 
 import moment from 'moment';
 import { reportException } from './Analytics';
+import DeviceInfo from 'react-native-device-info';
 
 import { utils } from 'live-shared-data';
 const { sensorUtils, addSensorUtils } = utils;
@@ -306,11 +307,19 @@ function getSensorInfo(name: string, scale: string, value: number = 0, isLarge: 
 	};
 }
 
-const formatSensorLastUpdate = (time: string, intl: Object): string => {
+const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, gatewayTimezone?: string = DeviceInfo.getTimezone()): string => {
 	const timeAgo = time.replace(/[0-9]/g, '').trim();
+	moment.tz.setDefault(gatewayTimezone);
 
-	const { formatRelativeTime, formatMessage } = intl;
+	const { formatRelativeTime, formatMessage, formatDate } = intl;
 	const now = moment().unix();
+
+	const diff = moment().diff(moment.unix(timestamp), 'days');
+	if (diff > 1) {
+		moment.tz.setDefault();
+		return formatDate(moment.unix(timestamp));
+	}
+
 	// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()
 	// This prevent from showing 'in 1 second' which is illogic!
 	let futureTimes = [];
@@ -328,9 +337,11 @@ const formatSensorLastUpdate = (time: string, intl: Object): string => {
 	}
 
 	if (timeAgo === relNow || (futureTimes.indexOf(timeAgo) !== -1) || (pastSeconds.indexOf(timeAgo) !== -1)) {
+		moment.tz.setDefault();
 		return formatMessage(i18n.justNow);
 	}
 
+	moment.tz.setDefault();
 	return time;
 };
 

@@ -163,6 +163,7 @@ class SensorDashboardTile extends View<Props, null> {
 				numeric="auto"
 				updateIntervalInSeconds={60}
 				gatewayTimezone={gatewayTimezone}
+				timestamp={lastUpdated}
 				textStyle={{
 					textAlign: 'center',
 					textAlignVertical: 'center',

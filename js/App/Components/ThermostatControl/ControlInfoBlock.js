@@ -33,7 +33,7 @@ import {
 } from '../../../BaseComponents';
 import LastUpdatedInfo from '../TabViews/SubViews/Sensor/LastUpdatedInfo';
 
-import { LayoutAnimations, formatSensorLastUpdate, formatModeValue } from '../../Lib';
+import { LayoutAnimations, formatModeValue } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -112,10 +112,6 @@ onSubmitEditing = () => {
 	}
 	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 	this.props.onControlThermostat(controllingMode, value, 1, 1);
-}
-
-formatSensorLastUpdate = (time: string): string => {
-	return formatSensorLastUpdate(time, this.props.intl);
 }
 
 formatModeValue = (modeValue: number | string): string | number => {
@@ -281,6 +277,7 @@ render(): Object {
 				<LastUpdatedInfo
 					value={-seconds}
 					numeric="auto"
+					timestamp={lastUpdated}
 					updateIntervalInSeconds={60}
 					gatewayTimezone={gatewayTimezone}
 					textStyle={lastUpdatedInfoStyle} />
