@@ -316,7 +316,7 @@ const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, g
 
 	const m = moment.unix(timestamp);
 	const diff = moment().diff(m, 'days', true);
-	if (diff > 1) {
+	if (diff > 7) {
 		moment.tz.setDefault();
 		return formatDate(m);
 	}
