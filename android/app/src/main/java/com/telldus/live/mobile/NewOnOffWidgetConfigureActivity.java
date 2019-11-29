@@ -28,15 +28,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
@@ -51,20 +48,15 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.text.DecimalFormat;
 
-import com.telldus.live.mobile.API.SensorsAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
-
-import com.google.android.flexbox.FlexboxLayout;
 
 public class NewOnOffWidgetConfigureActivity extends Activity {
     private static final String ACTION_ON = "ACTION_ON";
@@ -83,22 +75,15 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     CharSequence[] deviceIdList = null;
 
     public int selectedDeviceIndex;
-    public int selectedIntervalOptionsIndex = 1;
 
     //UI
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
     TextView deviceName, deviceHint, deviceOn, deviceOff,chooseSetting,textTest, deviceText, themeText;
-    ImageView deviceState;
     private AppWidgetManager widgetManager;
 
     private String accessToken;
-    private String expiresIn;
-    private String refreshToken;
-
-    private String client_ID;
-    private String client_secret;
 
     int stateID;
     String deviceCurrentState = null;
@@ -122,37 +107,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     TextView text_trans_dark;
     TextView text_trans_light;
 
-    private JSONArray JsonsensorList = null;
     private String deviceStateValue = null;
 
     public static final String ROOT = "fonts/",
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
-
-
-    CharSequence[] intervalOptionsValues = {
-            "5", "10", "30", "60",
-    };
-    int multiplierMilli = 60000;
-    private Integer selectInterval = 0;
-
-    public static Typeface getTypeface(Context context, String font) {
-        return Typeface.createFromAsset(context.getAssets(), font);
-    }
-
-    public static void markAsIconContainer(View v, Typeface typeface) {
-        if (v instanceof ViewGroup) {
-            ViewGroup vg = (ViewGroup) v;
-            for (int i = 0; i < vg.getChildCount(); i++) {
-                View child = vg.getChildAt(i);
-                markAsIconContainer(child);
-            }
-        } else if (v instanceof TextView) {
-            ((TextView) v).setTypeface(typeface);
-        }
-    }
-
-    private static void markAsIconContainer(View child) {
-    }
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -179,7 +137,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
         }
 
         setResult(RESULT_CANCELED);
-        getAllSensorsAndDevices();
+        getAllDevices();
         setContentView(R.layout.new_on_off_widget_configure);
 
         String message = getResources().getString(R.string.reserved_widget_android_loading)+"...";
@@ -303,9 +261,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                     String methodRequested = null;
 
                     Map<String, Object> dInfoMap = DeviceInfoMap.get(id);
-                    int clientDeviceId = dInfoMap.get("clientDeviceId") != null ? Integer.parseInt(dInfoMap.get("clientDeviceId").toString(), 10) : -1;
-                    int clientId = dInfoMap.get("clientId") != null ? Integer.parseInt(dInfoMap.get("clientId").toString(), 10) : -1;
-                    String secondaryStateValue = dInfoMap.get("secondaryStateValue") != null ? dInfoMap.get("secondaryStateValue").toString() : null;
 
                     DeviceInfo mInsert = new DeviceInfo(
                         deviceCurrentState,
@@ -319,11 +274,11 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         currentUserId,
                         methodRequested,
                         0,
-                        selectInterval,
-                        clientDeviceId,
-                        clientId,
-                        secondaryStateValue
-                            );
+                        0, // As of now required/handled only for thermostats
+                        -1, // As of now required/handled only for thermostats
+                        -1, // As of now required/handled only for thermostats
+                        null  // As of now required/handled only for thermostats
+                        );
                     db.addWidgetDevice(mInsert);
 
                     NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -338,11 +293,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
 
             Typeface titleFont = Typeface.createFromAsset(getAssets(),"fonts/RobotoLight.ttf");
             Typeface subtitleFont = Typeface.createFromAsset(getAssets(),"fonts/Roboto-Regular.ttf");
-
-            TextView settingText = (TextView) findViewById(R.id.settingText);
-            View btSelectPollInterval = (View)findViewById(R.id.btSelectPollInterval);
-            TextView sensorRepeatIntervalLabel = (TextView) findViewById(R.id.labelSelectPoll);
-
 
             btSelectDevice = (View) findViewById(R.id.btSelectDevice);
             btSelectDevice.setOnClickListener(new View.OnClickListener() {
@@ -370,54 +320,10 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 deviceCurrentState = info.get("state").toString();
 
                                 Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
-                                Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
-
-                                if (hasThermo) {
-                                    settingText.setVisibility(View.VISIBLE);
-                                    btSelectPollInterval.setVisibility(View.VISIBLE);
-                                    settingText.setTypeface(subtitleFont);
-                                    settingText.setText(getResources().getString(R.string.reserved_widget_android_settings)+":");
-
-                                    selectInterval = multiplierMilli * Integer.parseInt(intervalOptionsValues[0].toString());
-                                } else {
-                                    settingText.setVisibility(View.GONE);
-                                    btSelectPollInterval.setVisibility(View.GONE);
-                                    selectInterval = 0;
-                                }
                                 
                                 ad.dismiss();
                             }
                         });
-                    ad = builder.show();
-                }
-            });
-
-            final CharSequence[] intervalOptions = {
-                    getResources().getString(R.string.reserved_widget_android_label_update_interval_0),
-                    getResources().getString(R.string.reserved_widget_android_label_update_interval_1),
-                    getResources().getString(R.string.reserved_widget_android_label_update_interval_2),
-                    getResources().getString(R.string.reserved_widget_android_label_update_interval_3),
-            };
-
-            btSelectPollInterval.setOnClickListener(new View.OnClickListener() {
-                AlertDialog ad;
-
-                @Override
-                public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(NewOnOffWidgetConfigureActivity.this, R.style.MaterialThemeDialog);
-                builder.setSingleChoiceItems(intervalOptions, selectedIntervalOptionsIndex, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sensorRepeatIntervalLabel.setText(intervalOptions[which]);
-
-                            selectedIntervalOptionsIndex = which;
-                            String selected = intervalOptions[which].toString();
-                            Integer selectedValue = Integer.parseInt(intervalOptionsValues[which].toString());
-                            selectInterval = selectedValue * multiplierMilli;
-
-                            ad.dismiss();
-                        }
-                    });
                     ad = builder.show();
                 }
             });
@@ -507,7 +413,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_2);
                 try {
 
-                    String deviceStateValueLocal = null, secondaryStateValue = null;
+                    String deviceStateValueLocal = null;
 
                     DevicesUtilities deviceUtils = new DevicesUtilities();
 
@@ -530,75 +436,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         }
 
                         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
-                        Boolean showDevice = (sizeSuppMeth <= 2 && sizeSuppMeth > 0) || hasThermo;
-
-                        Integer clientDeviceId = curObj.getInt("clientDeviceId");
-                        Integer clientId = curObj.getInt("client");
-
-                        if (hasThermo) {
-                            if (JsonsensorList != null) {
-                                for (int ii = 0; ii < JsonsensorList.length(); ii++) {
-                                    try {
-                                        JSONObject currObject = JsonsensorList.getJSONObject(ii);
-
-                                        Integer sensorId = currObject.getInt("sensorId");
-                                        if (clientDeviceId == sensorId && clientId == currObject.getInt("client")) {
-                                            JSONArray SensorData = currObject.getJSONArray("data");
-                                            for (int j = 0; j < SensorData.length(); j++) {
-                                                JSONObject currData = SensorData.getJSONObject(j);
-
-                                                String nameScale = currData.optString("name");
-                                                Integer scale = currData.optInt("scale");
-                                                String value = currData.optString("value");
-
-                                                if (nameScale.equalsIgnoreCase("temp") && scale == 0) {
-                                                    deviceStateValueLocal = value;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    catch (Exception e) {
-                                    }
-                                }
-                            }
-                            if (stateValues != null && stateValues.length() > 0) {
-                                try {
-
-                                    ArrayList<Map> modes = deviceUtils.getKnownModesThermostat(getApplicationContext());
-
-                                    for (int ii = 0; ii < stateValues.length(); ii++) {
-
-                                        JSONObject stateAndVal = stateValues.getJSONObject(ii);
-                                        String item = deviceUtils.methods.get(Integer.parseInt(stateAndVal.getString("state"), 10));
-
-                                        if (item != null && item.equalsIgnoreCase("THERMOSTAT") && stateAndVal.getJSONObject("value") != null) {
-                                            JSONObject setpoint = stateAndVal.getJSONObject("value").getJSONObject("setpoint");
-                                            if (setpoint != null) {
-                                                for (int j = 0; j < modes.size(); j++) {
-                                                    Map m = modes.get(j);
-                                                    if (setpoint.length() == 1) {
-
-                                                        Iterator<String> setpointKeys = setpoint.keys();
-                                                        String setpointKey = setpointKeys.next();
-                                                        if (setpointKey.equalsIgnoreCase(m.get("mode").toString())) {
-                                                            stateID = Integer.parseInt(m.get("id").toString(), 10);
-                                                            secondaryStateValue = setpoint.optString(setpointKey);
-                                                        }
-                                                    } else {
-                                                        if (stateAndVal.getJSONObject("value").getString("mode").equalsIgnoreCase(m.get("mode").toString())) {
-                                                            stateID = Integer.parseInt(m.get("id").toString(), 10);
-                                                            secondaryStateValue = setpoint.optString(stateAndVal.getJSONObject("value").getString("mode"));
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                catch (Exception e) {
-                                }
-                            }
-                        }
+                        Boolean showDevice = (sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");
@@ -611,9 +449,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                             info.put("name", name);
                             info.put("deviceType", deviceType);
                             info.put("deviceStateValue", deviceStateValueLocal);
-                            info.put("secondaryStateValue", secondaryStateValue);
-                            info.put("clientDeviceId", clientDeviceId);
-                            info.put("clientId", clientId);
                             DeviceInfoMap.put(id, info);
                         }
                     }
@@ -631,28 +466,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
             public void onError(ANError error) {
                 String message = getResources().getString(R.string.reserved_widget_android_error_networkFailed);
                 updateUI(message);
-            }
-        });
-    }
-
-
-    void getAllSensorsAndDevices() {
-        String params = "/sensors/list?includeValues=1&includeScale=1";
-        SensorsAPI sensorsAPI = new SensorsAPI();
-        sensorsAPI.getSensorsList(params, getApplicationContext(), "SensorsApi", new OnAPITaskComplete() {
-            @Override
-            public void onSuccess(final JSONObject response) {
-                try {
-                    JSONObject sensorData = new JSONObject(response.toString());
-                    JsonsensorList = sensorData.getJSONArray("sensor");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                getAllDevices();
-            }
-            @Override
-            public void onError(ANError error) {
-                getAllDevices();
             }
         });
     }
