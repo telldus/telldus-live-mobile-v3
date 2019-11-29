@@ -593,10 +593,17 @@ public class NewOnOffWidget extends AppWidgetProvider {
         } else {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
 
-            int updateInterval = DeviceWidgetInfo.getUpdateInterval();
-            boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId, NewOnOffWidget.class);
-            if (!alreadyRunning) {
-                sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval, NewOnOffWidget.class);
+            if (hasThermo) {
+                int updateInterval = DeviceWidgetInfo.getUpdateInterval();
+                boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId, NewOnOffWidget.class);
+                if (!alreadyRunning) {
+                    sensorUpdateAlarmManager.startAlarm(appWidgetId, updateInterval, NewOnOffWidget.class);
+                }
+            } else {
+                boolean alreadyRunning = sensorUpdateAlarmManager.checkIfAlarmAlreadyRunning(appWidgetId, NewOnOffWidget.class);
+                if (!alreadyRunning) {
+                    sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewOnOffWidget.class);
+                }
             }
         }
 
