@@ -105,6 +105,8 @@ public class API {
                                             callBack.onError(errorRefreshToken);
                                         }
                                     });
+                                } else {
+                                    callBack.onError(error);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
