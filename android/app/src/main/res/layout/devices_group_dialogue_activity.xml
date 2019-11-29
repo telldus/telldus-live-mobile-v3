@@ -69,4 +69,12 @@
             <include layout="@layout/button_on"/>
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="4dp">
+        <include layout="@layout/rgb_control"/>
+    </LinearLayout>
 </LinearLayout>

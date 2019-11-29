@@ -20,12 +20,19 @@
 package com.telldus.live.mobile;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.content.Context;
@@ -39,10 +46,12 @@ import org.json.JSONObject;
 
 import com.androidnetworking.error.ANError;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
@@ -143,6 +152,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
         Boolean hasDim = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
+        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
 
         Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
         if (hasLearn) {
@@ -860,6 +870,53 @@ public class DevicesGroupDialogueActivity extends Activity {
                 hideFlashIndicator(R.id.flashing_indicator_on);
             }
             renderedButtonsCount++;
+        }
+
+        if (hasRGB) {
+            String[] info = new String[] {
+                                "#FF0000",
+                                "#FF0066",
+                                "#0000FF",
+                                "#00FFFF",
+                                "#00FF00",
+                                "#FFFF00",
+                                "#FF3200",
+                                "#9696FF",
+                                "#FFFFFF",
+                                "#FFFF96",
+                            };
+
+            findViewById(R.id.rgb_control_cover).setVisibility(View.VISIBLE);
+
+            LayoutInflater layoutInflator = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            FlexboxLayout insertPoint = (FlexboxLayout) findViewById(R.id.rgb_control_cover_inner);
+            insertPoint.removeAllViews();
+            
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70, 70);
+
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            float d = context.getResources().getDisplayMetrics().density;
+
+            int widthCover = (int) (width - (50 * d));
+            LinearLayout.LayoutParams paramsT = new LinearLayout.LayoutParams(widthCover, LinearLayout.LayoutParams.WRAP_CONTENT);
+            findViewById(R.id.rgb_control_cover).setLayoutParams(paramsT);
+
+            for (int i=0; i < info.length; i++){
+
+                params.setMargins((int)(d * 8), (int)(d * 4), 0, (int)(d * 4));
+
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setLayoutParams(params);
+                linearLayout.setBackgroundColor(Color.parseColor(info[i]));
+
+                GradientDrawable border = new GradientDrawable();
+                border.setColor(Color.parseColor(info[i]));
+                border.setStroke(1, Color.parseColor("#cccccc"));
+                border.setCornerRadius(5);
+                linearLayout.setBackground(border);
+
+                insertPoint.addView(linearLayout);
+            }
         }
     }
 
