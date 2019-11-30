@@ -21,4 +21,16 @@ package com.telldus.live.mobile.Utility;
 
 public class Constants  {
     public static String PURCHASE_SUCCESS_URL = "telldus-live-mobile://purchase-complete";
+    public static String[] swatchColors = new String[] {
+            "#FF0000",
+            "#FF0066",
+            "#0000FF",
+            "#00FFFF",
+            "#00FF00",
+            "#FFFF00",
+            "#FF3200",
+            "#9696FF",
+            "#FFFFFF",
+            "#FFFF96",
+    };
 }
