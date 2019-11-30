@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rgbActionCover"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="5dp"
+    android:elevation="5dp"
+    android:layout_width="0dip"
+    android:layout_height="match_parent"
+    android:layout_weight="0.2"
+    android:layout_gravity="center|center"
+    android:gravity="center|center"
+    android:visibility="gone"
+    android:background="@drawable/shape_right_rounded_corner">
+    <ImageView
+        android:id="@+id/palette"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|center"
+        android:gravity="center|center"/>
+</LinearLayout>

@@ -42,8 +42,8 @@
             android:id="@+id/widget_content_cover"
             android:visibility="gone">
             <include layout="@layout/button_off"/>
+            <include layout="@layout/rgb_palette"/>
             <include layout="@layout/button_on"/>
-            <include layout="@layout/button_thermostat"/>
         </LinearLayout>
     </LinearLayout>
     <include layout="@layout/premium_required_info"/>

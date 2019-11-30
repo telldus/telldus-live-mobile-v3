@@ -24,6 +24,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
@@ -60,6 +61,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
     private static final String ACTION_OFF = "ACTION_OFF";
     private static final String ACTION_BELL = "ACTION_BELL";
     private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
+    private static final String ACTION_MORE_ACTIONS = "ACTION_MORE_ACTIONS";
 
     private static final String METHOD_ON = "1";
     private static final String METHOD_OFF = "2";
@@ -254,6 +256,35 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
         Boolean hasOff = ((supportedMethods.get("TURNOFF") != null) && supportedMethods.get("TURNOFF"));
+        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+
+        if (hasRGB) {
+            views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
+
+            int colorIdle = ContextCompat.getColor(context, R.color.brandSecondary);
+            if (transparent.equals("dark")) {
+                views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_black);
+                colorIdle = ContextCompat.getColor(context, R.color.themeDark);
+            } else if (transparent.equals("light") || transparent.equals("true")) {
+                views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_white);
+                colorIdle = ContextCompat.getColor(context, R.color.white);
+            } else {
+                views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.button_background_no_bordradi);
+            }
+
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            int iconWidth = (int) (width * 0.14);
+
+            views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                    "palette",
+                    colorIdle,
+                    iconWidth,
+                    (int) (iconWidth * 0.7),
+                    (int) (iconWidth * 0.7),
+                    context));
+
+            views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
+        }
 
         // ON
         if (hasOn) {
@@ -602,6 +633,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
             updateAppWidget(context, widgetManager, widgetId);
 
             createDeviceActionApi(context, deviceId, 2, widgetId, db, "Off");
+        }
+        if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
+            Intent dialogueIntent = new Intent(context, DevicesGroupDialogueActivity.class);
+            dialogueIntent.putExtra("widgetId", widgetId);
+            dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(dialogueIntent);
         }
     }
 
