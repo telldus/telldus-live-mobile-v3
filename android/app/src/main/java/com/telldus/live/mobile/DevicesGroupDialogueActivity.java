@@ -52,9 +52,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.android.flexbox.FlexboxLayout;
+import com.skydoves.colorpickerview.ActionMode;
+import com.skydoves.colorpickerview.ColorEnvelope;
+import com.skydoves.colorpickerview.ColorPickerView;
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
+import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -136,6 +142,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String primarySetting = DeviceWidgetInfo.getPrimarySetting();
 
         final DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -873,49 +880,69 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
 
         if (hasRGB) {
-            String[] info = new String[] {
-                                "#FF0000",
-                                "#FF0066",
-                                "#0000FF",
-                                "#00FFFF",
-                                "#00FF00",
-                                "#FFFF00",
-                                "#FF3200",
-                                "#9696FF",
-                                "#FFFFFF",
-                                "#FFFF96",
-                            };
+            String rgbControl = primarySetting == null ? "picker" : primarySetting;
 
-            findViewById(R.id.rgb_control_cover).setVisibility(View.VISIBLE);
-
-            LayoutInflater layoutInflator = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            FlexboxLayout insertPoint = (FlexboxLayout) findViewById(R.id.rgb_control_cover_inner);
-            insertPoint.removeAllViews();
-            
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70, 70);
+            String swatchColors[] = Constants.swatchColors;
 
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             float d = context.getResources().getDisplayMetrics().density;
 
+            LinearLayout rgb_cover =  findViewById(R.id.rgb_control_cover);
+            rgb_cover.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70, 70);
             int widthCover = (int) (width - (50 * d));
             LinearLayout.LayoutParams paramsT = new LinearLayout.LayoutParams(widthCover, LinearLayout.LayoutParams.WRAP_CONTENT);
-            findViewById(R.id.rgb_control_cover).setLayoutParams(paramsT);
+            rgb_cover.setLayoutParams(paramsT);
 
-            for (int i=0; i < info.length; i++){
+            if (rgbControl.equalsIgnoreCase("picker") || rgbControl.equalsIgnoreCase("full")) {
+                ColorPickerView color_picker = findViewById(R.id.colorPickerView);
+                color_picker.setVisibility(View.VISIBLE);
+                color_picker.setActionMode(ActionMode.LAST);
+                color_picker.setColorListener(new ColorEnvelopeListener() {
+                    @Override
+                    public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
+                        if (fromUser) {
+                            int pickedColor = envelope.getColor();
+                            int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
+                        }
+                    }
+                });
+                int sizeColorPicker = (int) (width * 0.5);
+                LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(sizeColorPicker, sizeColorPicker);
+                paramsCPicker.setMargins(0, 0, 0, (int) (d * 8));
+                color_picker.setLayoutParams(paramsCPicker);
+            }
 
-                params.setMargins((int)(d * 8), (int)(d * 4), 0, (int)(d * 4));
+            if (rgbControl.equalsIgnoreCase("swatch") || rgbControl.equalsIgnoreCase("full")) {
+                FlexboxLayout insertPoint = (FlexboxLayout) findViewById(R.id.rgb_control_cover_inner);
+                insertPoint.setVisibility(View.VISIBLE);
+                insertPoint.removeAllViews();
 
-                LinearLayout linearLayout = new LinearLayout(this);
-                linearLayout.setLayoutParams(params);
-                linearLayout.setBackgroundColor(Color.parseColor(info[i]));
+                for (int i = 0; i < swatchColors.length; i++) {
+                    params.setMargins((int)(d * 8), (int)(d * 4), 0, (int)(d * 4));
 
-                GradientDrawable border = new GradientDrawable();
-                border.setColor(Color.parseColor(info[i]));
-                border.setStroke(1, Color.parseColor("#cccccc"));
-                border.setCornerRadius(5);
-                linearLayout.setBackground(border);
+                    LinearLayout swatch = new LinearLayout(this);
+                    swatch.setLayoutParams(params);
+                    swatch.setBackgroundColor(Color.parseColor(swatchColors[i]));
 
-                insertPoint.addView(linearLayout);
+                    GradientDrawable border = new GradientDrawable();
+                    border.setColor(Color.parseColor(swatchColors[i]));
+                    border.setStroke(1, Color.parseColor("#cccccc"));
+                    border.setCornerRadius(5);
+                    swatch.setBackground(border);
+
+                    swatch.setId(i);
+                    swatch.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int id  = view.getId();
+                            int pickedColor = Color.parseColor(swatchColors[id]);
+                            int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
+                        }
+                    });
+
+                    insertPoint.addView(swatch);
+                }
             }
         }
     }
