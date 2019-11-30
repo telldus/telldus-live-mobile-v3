@@ -87,16 +87,11 @@ public class NewRGBConfigureActivity extends Activity {
 
     private Button btAdd,btnCan;
     private View btSelectDevice, screenCover;
-    TextView deviceName, deviceHint, deviceOn, deviceOff, chooseSetting, textTest, deviceText, themeText, tvIcon1;
-    ImageView deviceState;
+    TextView deviceName, deviceHint, chooseSetting, textTest, deviceText, themeText, tvIcon1;
     private AppWidgetManager widgetManager;
 
     private String accessToken;
-    private String expiresIn;
-    private String refreshToken;
-
-    private String client_ID;
-    private String client_secret;
+    private String primarySetting = "picker";
 
     int stateID;
 
@@ -282,7 +277,8 @@ public class NewRGBConfigureActivity extends Activity {
                         0, // As of now required/handled only for thermostats
                             -1, // As of now required/handled only for thermostats
                             -1, // As of now required/handled only for thermostats
-                            null  // As of now required/handled only for thermostats
+                            null,  // As of now required/handled only for thermostats
+                            primarySetting
                     );
                     db.addWidgetDevice(mInsert);
                     NewRGBWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);

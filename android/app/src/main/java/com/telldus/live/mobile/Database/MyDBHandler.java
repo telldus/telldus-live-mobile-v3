@@ -34,7 +34,7 @@ import com.telldus.live.mobile.Model.SensorInfo;
 
 public class MyDBHandler extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "Telldus.db";
 
     private static final String TABLE_WIDGET_INFO_DEVICE = "WidgetInfoDevice";
@@ -50,6 +50,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String DEVICE_METHOD_REQUESTED = "deviceMethodRequested";
     public static final String DEVICE_IS_SHOWING_STATUS = "deviceIsShowingStatus";
     public static final String DEVICE_SECONDARY_STATE_VALUE = "deviceSecStateValue";
+
+    public static final String PRIMARY_SETTING = "primarySetting";
 
     public static final String CLIENT_DEVICE_ID = "clientDeviceId";
     public static final String CLIENT_ID = "clientId";
@@ -79,7 +81,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT
                 + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT," + DEVICE_METHOD_REQUESTED
                 + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
-                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT" +")";
+                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT" +
+                PRIMARY_SETTING + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
@@ -113,6 +116,27 @@ public class MyDBHandler extends SQLiteOpenHelper {
             addClientIdToDevicesTable(db);
             addSecondaryStateValueTable(db);
         }
+        if (oldVersion == 1 && newVersion == 4) {
+            // A new column introduced into the table "TABLE_WIDGET_INFO_SENSOR"
+            // A new columns introduced into the table "TABLE_WIDGET_INFO_DEVICE"
+            addColumnIsUpdatingToSensorsTable(db);
+            addUpdateIntervalToDevicesTable(db);
+            addClientDeviceIdToDevicesTable(db);
+            addClientIdToDevicesTable(db);
+            addSecondaryStateValueTable(db);
+            addPrimarySettingToDevicesTable(db);
+        }
+        if (oldVersion == 2 && newVersion == 4) {
+            // A new columns introduced into the table "TABLE_WIDGET_INFO_DEVICE"
+            addUpdateIntervalToDevicesTable(db);
+            addClientDeviceIdToDevicesTable(db);
+            addClientIdToDevicesTable(db);
+            addSecondaryStateValueTable(db);
+            addPrimarySettingToDevicesTable(db);
+        }
+        if (oldVersion == 3 && newVersion == 4) {
+            addPrimarySettingToDevicesTable(db);
+        }
     }
 
     public void addColumnIsUpdatingToSensorsTable(SQLiteDatabase db) {
@@ -140,6 +164,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(ALTER_TABLE_DEVICE);
     }
 
+    public void addPrimarySettingToDevicesTable(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + PRIMARY_SETTING + " TEXT";
+        db.execSQL(ALTER_TABLE_DEVICE);
+    }
+
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -159,6 +188,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(CLIENT_DEVICE_ID, mDeviceInfo.getClientDeviceid());
         values.put(CLIENT_ID, mDeviceInfo.getClientId());
         values.put(DEVICE_SECONDARY_STATE_VALUE, mDeviceInfo.getSecondaryStateValue());
+        values.put(PRIMARY_SETTING, mDeviceInfo.getPrimarySetting());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -211,6 +241,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setClientDeviceid(cursor.getInt(12));
             r.setClientId(cursor.getInt(13));
             r.setSecondaryStateValue(cursor.getString(14));
+            r.setPrimarySetting(cursor.getString(15));
 
             cursor.close();
         } else {
@@ -441,6 +472,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setClientDeviceid(cursor.getInt(12));
                 r.setClientId(cursor.getInt(13));
                 r.setSecondaryStateValue(cursor.getString(14));
+                r.setPrimarySetting(cursor.getString(15));
 
                 list.add(r);
             } while (cursor.moveToNext());

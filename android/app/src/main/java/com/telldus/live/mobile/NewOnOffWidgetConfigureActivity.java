@@ -277,7 +277,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         0, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
-                        null  // As of now required/handled only for thermostats
+                        null,  // As of now required/handled only for thermostats
+                        "full" // As of now set only for RGB[control option]
                         );
                     db.addWidgetDevice(mInsert);
 
@@ -436,7 +437,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         }
 
                         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
-                        Boolean showDevice = (sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo;
+                        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+                        Boolean showDevice = ((sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo) || hasRGB;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");

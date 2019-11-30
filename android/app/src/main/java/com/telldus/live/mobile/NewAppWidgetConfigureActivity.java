@@ -282,7 +282,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         0, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
-                        null  // As of now required/handled only for thermostats
+                        null,  // As of now required/handled only for thermostats
+                        null // As of now set only for RGB[control option]
                     );
                     db.addWidgetDevice(mInsert);
                     NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);

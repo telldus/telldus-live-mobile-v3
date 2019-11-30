@@ -297,8 +297,9 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                         selectInterval,
                         clientDeviceId,
                         clientId,
-                        secondaryStateValue
-                            );
+                        secondaryStateValue,
+                        null // As of now set only for RGB[control option]
+                        );
                     db.addWidgetDevice(mInsert);
 
                     NewThermostatWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);

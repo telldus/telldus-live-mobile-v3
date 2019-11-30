@@ -35,6 +35,7 @@ public class DeviceInfo {
     Integer clientDeviceId;
     Integer clientId;
     String secondaryStateValue;
+    String primarySetting;
 
     public DeviceInfo() {
     }
@@ -42,7 +43,7 @@ public class DeviceInfo {
     public DeviceInfo(String state, int widgetId, int deviceId, String deviceName, Integer methods,
     String deviceType, String deviceStateValue, String transparent, String userId, String methodRequested,
                       Integer isShowingStatus, Integer updateInterval, Integer clientDeviceId, Integer clientId,
-                      String secondaryStateValue) {
+                      String secondaryStateValue, String primarySetting) {
         this.state = state;
         this.widgetId = widgetId;
         this.deviceId = deviceId;
@@ -58,6 +59,7 @@ public class DeviceInfo {
         this.clientDeviceId = clientDeviceId;
         this.clientId = clientId;
         this.secondaryStateValue = secondaryStateValue;
+        this.primarySetting = primarySetting;
     }
 
     public String getState() {
@@ -178,5 +180,13 @@ public class DeviceInfo {
 
     public void setSecondaryStateValue(String secondaryStateValue) {
         this.secondaryStateValue = secondaryStateValue;
+    }
+
+    public String getPrimarySetting() {
+        return primarySetting;
+    }
+
+    public void setPrimarySetting(String primarySetting) {
+        this.primarySetting = primarySetting;
     }
 }
