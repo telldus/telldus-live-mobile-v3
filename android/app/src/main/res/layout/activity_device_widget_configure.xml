@@ -207,9 +207,22 @@
                         android:text="@string/reserved_widget_android_theme"
                         android:layout_marginBottom="10dp"
                         android:textColor="@color/darkGray"/>
-
                     <include
-                            layout="@layout/theme_dim"/>
+                        layout="@layout/theme_dim"/>
+
+                    <TextView
+                        android:id="@+id/rgb_control_options_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:text="Control Option"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/darkGray"
+                        android:visibility="gone"/>
+                    <include
+                            layout="@layout/rgb_control_options"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

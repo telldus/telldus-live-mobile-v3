@@ -25,6 +25,12 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -32,6 +38,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -52,9 +59,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.flexbox.FlexboxLayout;
+import com.skydoves.colorpickerview.ActionMode;
+import com.skydoves.colorpickerview.ColorEnvelope;
+import com.skydoves.colorpickerview.ColorPickerView;
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
+import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -100,17 +114,19 @@ public class NewRGBConfigureActivity extends Activity {
     private PrefManager prefManager;
     private RelativeLayout mBackLayout;
 
-    View def_cover;
-    View dark_cover;
-    View light_cover;
+    View def_cover,
+            dark_cover,
+            light_cover,
+            rgb_control_options;
 
-    RadioButton radio_def;
-    RadioButton radio_dark;
-    RadioButton radio_light;
+    RadioButton radio_def,
+            radio_dark,
+            radio_light;
 
-    TextView text_default;
-    TextView text_trans_dark;
-    TextView text_trans_light;
+    TextView text_default,
+            text_trans_dark,
+            text_trans_light,
+            rgb_control_options_label;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -199,6 +215,11 @@ public class NewRGBConfigureActivity extends Activity {
             text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
             text_trans_light = (TextView)findViewById(R.id.text_trans_light);
 
+            rgb_control_options = (View)findViewById(R.id.rgb_control_options);
+            rgb_control_options.setVisibility(View.VISIBLE);
+            rgb_control_options_label = (TextView)findViewById(R.id.rgb_control_options_label);
+            rgb_control_options_label.setVisibility(View.VISIBLE);
+
             radio_def.setChecked(true);
             View def_cover = (View)findViewById(R.id.def_cover);
             def_cover.setBackground(getResources().getDrawable(R.drawable.shape_border_round_sec));
@@ -225,6 +246,80 @@ public class NewRGBConfigureActivity extends Activity {
                     onPressLight();
                 }
             });
+
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            float d = getResources().getDisplayMetrics().density;
+
+            String swatchColors[] = Constants.swatchColors;
+            findViewById(R.id.rgb_control_options).setVisibility(View.VISIBLE);
+            FlexboxLayout insertPoint = (FlexboxLayout) findViewById(R.id.rgb_control_cover_inner);
+            insertPoint.removeAllViews();
+
+            int space = (int)(d * 8 * 6);
+            int swatchSize = (int) ((width - space)/ 6);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swatchSize , swatchSize);
+
+            ColorPickerView color_picker = findViewById(R.id.colorPickerView);
+            LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(swatchSize, swatchSize);
+            paramsCPicker.setMargins((int)(d * 8), 0, 0, (int) (d * 4));
+            color_picker.setLayoutParams(paramsCPicker);
+
+            GradientDrawable scaledDr = new GradientDrawable();
+            scaledDr.setColor(Color.parseColor("#00000000"));
+            scaledDr.setSize(0, 0);
+            color_picker.setSelectorDrawable(scaledDr);
+            color_picker.setColorListener(new ColorListener() {
+                @Override
+                public void onColorSelected(int color, boolean fromUser) {
+                    primarySetting = "picker";
+                    for (int i = 0; i < swatchColors.length; i++) {
+                        GradientDrawable border = new GradientDrawable();
+                        border.setColor(Color.parseColor(swatchColors[i]));
+                        border.setCornerRadius(swatchSize / 2);
+                        border.setStroke(1, Color.parseColor("#cccccc"));
+                        findViewById(i).setBackground(border);
+                    }
+                }
+            });
+
+            for (int i = 0; i < swatchColors.length; i++) {
+                params.setMargins((int)(d * 8), (int)(d * 4), 0, (int)(d * 4));
+
+                LinearLayout swatch = new LinearLayout(this);
+                swatch.setLayoutParams(params);
+                swatch.setBackgroundColor(Color.parseColor(swatchColors[i]));
+
+                GradientDrawable border = new GradientDrawable();
+                border.setColor(Color.parseColor(swatchColors[i]));
+                border.setStroke(1, Color.parseColor("#cccccc"));
+                border.setCornerRadius(swatchSize / 2);
+                swatch.setBackground(border);
+
+                swatch.setId(i);
+                swatch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int id  = view.getId();
+                        String pickedColor = swatchColors[id];
+                        primarySetting = pickedColor;
+
+                        for (int i = 0; i < swatchColors.length; i++) {
+                            GradientDrawable border = new GradientDrawable();
+                            border.setColor(Color.parseColor(swatchColors[i]));
+                            border.setCornerRadius(swatchSize / 2);
+                            if (id == i) {
+                                border.setStroke(4, Color.parseColor("#000000"));
+                                findViewById(i).setBackground(border);
+                            } else {
+                                border.setStroke(1, Color.parseColor("#cccccc"));
+                                findViewById(i).setBackground(border);
+                            }
+                        }
+                    }
+                });
+                insertPoint.addView(swatch);
+            }
 
 
             Intent intent = getIntent();
