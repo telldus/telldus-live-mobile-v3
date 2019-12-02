@@ -75,13 +75,72 @@ public class DevicesAPI {
                                     Boolean reset = runnableDeviceInfoCheckCount == ((int) (runnableDeviceInfoCheckMaxTimeout / runnableDeviceInfoCheckInterval)) - 1;
 
                                     if (info != null) {
-                                        String currentState = info.getState();
-                                        if (currentState == null) {
-                                            currentState = "null";
-                                        }
-                                        String requestedState = String.valueOf(method);
-                                        String currentStateValue = info.getDeviceStateValue();
-                                        String requestedStateValue = String.valueOf(stateValue);
+                                        getDeviceInfo(deviceId, method, widgetId, reset, context, callBack);
+                                    }
+                                    handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
+                                    runnableDeviceInfoCheckCount++;
+                                }
+                            };
+                            String key = String.valueOf(deviceId)+String.valueOf(widgetId);
+                            handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
+                            Map<String, HandlerRunnablePair> handlerRunnableHashMap = new HashMap<String, HandlerRunnablePair>();
+                            HandlerRunnablePair handlerRunnablePair = new HandlerRunnablePair(handlerDeviceInfoCheck, runnableDeviceInfoCheck);
+                            handlerRunnablePair.setRunnable(runnableDeviceInfoCheck);
+                            handlerRunnablePair.setHandler(handlerDeviceInfoCheck);
+                            handlerRunnableHashMap.put("HandlerRunnablePair", handlerRunnablePair);
+                            deviceInfoPendingCheckList.put(key, handlerRunnableHashMap);
+                        }
+                    }
+                    if (!error.isEmpty() && error != null) {
+                        MyDBHandler db = new MyDBHandler(context);
+                        Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
+                        callBack.onSuccess(response);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    MyDBHandler db = new MyDBHandler(context);
+                    Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
+                    callBack.onSuccess(response);
+                };
+            }
+            @Override
+            public void onError(ANError error) {
+                MyDBHandler db = new MyDBHandler(context);
+                Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
+                callBack.onError(error);
+            }
+        });
+    }
+
+    public void setDeviceStateRGB(final Integer deviceId, final Integer method, final Map rgb, final int widgetId, final Context context, String tag, final OnAPITaskComplete callBack) {
+
+        int r = Integer.parseInt(rgb.get("r").toString(), 10);
+        int g = Integer.parseInt(rgb.get("g").toString(), 10);
+        int b = Integer.parseInt(rgb.get("b").toString(), 10);
+
+        String params = "/device/rgb?id="+deviceId+"&r="+r+"&g="+g+"&b="+b;
+
+        API endPoints = new API();
+        endPoints.callEndPoint(context, params, tag, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(final JSONObject response) {
+
+                try {
+                    String status = response.optString("status");
+                    String error = response.optString("error");
+                    if (!status.isEmpty() && status != null && status.equalsIgnoreCase("success")) {
+                        if (method.intValue() != 32) {
+                            removeHandlerRunnablePair(deviceId, widgetId);
+                            final Handler handlerDeviceInfoCheck = new Handler(Looper.getMainLooper());
+                            runnableDeviceInfoCheck = new Runnable(){
+                                @Override
+                                public void run() {
+                                    // Check if socket has already updated.
+                                    MyDBHandler db = new MyDBHandler(context);
+                                    DeviceInfo info = db.findWidgetInfoDevice(widgetId);
+                                    Boolean reset = runnableDeviceInfoCheckCount == ((int) (runnableDeviceInfoCheckMaxTimeout / runnableDeviceInfoCheckInterval)) - 1;
+
+                                    if (info != null) {
                                         getDeviceInfo(deviceId, method, widgetId, reset, context, callBack);
                                     }
                                     handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
