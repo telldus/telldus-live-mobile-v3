@@ -29,7 +29,7 @@
             android:layout_alignRight="@id/headerImage"
             android:layout_alignBottom="@id/headerImage"
             android:gravity="center_vertical|left"
-            android:layout_marginLeft="5dp"/>
+            android:layout_marginLeft="8dp"/>
         <TextView
             android:id="@+id/widgetDialogueCloseIcon"
             android:layout_width="wrap_content"
@@ -45,27 +45,31 @@
             android:layout_alignRight="@id/headerImage"
             android:layout_alignBottom="@id/headerImage"
             android:gravity="center_vertical|right"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="8dp"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp">
+        android:layout_margin="4dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal">
+        <include
+            layout="@layout/dim_slider"/>
         <com.google.android.flexbox.FlexboxLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:flexWrap="wrap"
             app:flexDirection="row"
-            app:alignItems="flex_start"
-            app:alignContent="flex_start">
+            app:justifyContent="center"
+            app:alignItems="center"
+            app:alignContent="center"
+            android:layout_marginBottom="4dp">
             <include layout="@layout/button_bell"/>
             <include layout="@layout/button_up"/>
             <include layout="@layout/button_down"/>
             <include layout="@layout/button_stop"/>
             <include layout="@layout/button_off"/>
-            <include layout="@layout/button_dim25"/>
-            <include layout="@layout/button_dim50"/>
-            <include layout="@layout/button_dim75"/>
             <include layout="@layout/button_on"/>
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
@@ -73,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginLeft="4dp">
         <include layout="@layout/rgb_control"/>

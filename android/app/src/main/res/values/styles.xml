@@ -39,4 +39,9 @@
 		<item name="colorControlActivated">@color/brandSecondary</item>
 	</style>
 
+	<style name="ThemeOverlay.PrimaryPalette.Red" parent="Theme.MaterialComponents">
+		<item name="colorPrimary">#e26901</item>
+		<item name="colorPrimaryDark">#e26901</item>
+	</style>
+
 </resources>

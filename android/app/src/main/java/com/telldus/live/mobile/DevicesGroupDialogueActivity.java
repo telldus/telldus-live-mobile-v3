@@ -42,8 +42,10 @@ import android.appwidget.AppWidgetManager;
 import androidx.core.content.ContextCompat;
 import android.os.Handler;
 import android.os.Looper;
+import com.google.android.material.slider.Slider;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import com.androidnetworking.error.ANError;
 
@@ -93,6 +95,9 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     private Handler handlerResetDeviceStateToNull;
     private Runnable runnableResetDeviceStateToNull;
+
+    Handler callEndPointHandler;
+    Runnable callEndPointRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -549,269 +554,43 @@ public class DevicesGroupDialogueActivity extends Activity {
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
         if (hasDim) {
-            ImageView iconCheck25 = (ImageView) findViewById(R.id.iconCheck25);
-            ImageView iconCheck50 = (ImageView) findViewById(R.id.iconCheck50);
-            ImageView iconCheck75 = (ImageView) findViewById(R.id.iconCheck75);
-            View dimmer25CoverLinear = (View)findViewById(R.id.dimmer25CoverLinear);
-            View dimmer50CoverLinear = (View)findViewById(R.id.dimmer50CoverLinear);
-            View dimmer75CoverLinear = (View)findViewById(R.id.dimmer75CoverLinear);
-            iconCheck25.setVisibility(View.GONE);
-            iconCheck50.setVisibility(View.GONE);
-            iconCheck75.setVisibility(View.GONE);
-            dimmer25CoverLinear.setVisibility(View.VISIBLE);
-            dimmer50CoverLinear.setVisibility(View.VISIBLE);
-            dimmer75CoverLinear.setVisibility(View.VISIBLE);
+            View dim_slider_cover = (View) findViewById(R.id.dim_slider_cover);
+            dim_slider_cover.setVisibility(View.VISIBLE);
 
-            // "25%" dimmer button
-                View dimmer25Cover = (View) findViewById(R.id.dimmer25Cover);
-                ImageView dimmer25 = (ImageView)findViewById(R.id.dimmer25);
-                TextView txtDimmer25 = (TextView)findViewById(R.id.txtDimmer25);
-                dimmer25Cover.setVisibility(View.VISIBLE);
-                dimmer25Cover.setElevation(5f);
-                dimmer25.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "dim25",
-                    ContextCompat.getColor(context, R.color.brandSecondary),
-                    160,
-                    35,
-                    95,
-                    context));
-                txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
+            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+            int sliderWidth = (int) (width * 0.86);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sliderWidth, LayoutParams.WRAP_CONTENT);
+            dim_slider_cover.setLayoutParams(params);
 
-                LayoutParams layoutParamsB = dimmer25Cover.getLayoutParams();
-                layoutParamsB.width = 80;
-                layoutParamsB.height = 80;
-                dimmer25Cover.setLayoutParams(layoutParamsB);
-                ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) dimmer25Cover.getLayoutParams();
-                marginParams.setMargins(8, 8, 8, 8);
-                dimmer25Cover.requestLayout();
-                dimmer25Cover.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        db.updateDeviceInfo(METHOD_DIMMER_25, null, null, 0, null, widgetId);
-                        removeHandlerResetDeviceStateToNull();
-                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                        updateUI(widgetId);
-                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+            TextView dim_value = (TextView) findViewById(R.id.dim_value);
+            System.out.println("TEST deviceStateValue "+ deviceStateValue);
+            deviceStateValue = deviceStateValue == null ? "0" : deviceStateValue;
+            int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
+            System.out.println("TEST slidervalue "+ slidervalue);
+            dim_value.setText(String.valueOf(slidervalue)+"%");
 
-                        int value = deviceUtils.toDimmerValue(25);
-                        createDeviceApi(deviceId, 16, value, widgetId, context);
-                    }
-                });
-
-                dimmer25Cover.setBackgroundResource(R.drawable.button_background);
-
-                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_25)) {
-                    dimmer25Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                    dimmer25.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "dim25",
-                        ContextCompat.getColor(context, R.color.white),
-                        160,
-                        35,
-                        95,
-                        context));
-                    txtDimmer25.setTextColor(ContextCompat.getColor(context, R.color.white));
-
-                    showFlashIndicator(R.id.flash_view_dim25, R.id.flashing_indicator_dim25, R.drawable.shape_circle_white_fill);
-                }
-                if (methodRequested != null && isShowingStatus == 1) {
-                    int checkpoint = 0;
-                    if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
-                        int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-                        checkpoint = getClosestCheckPoint(slidervalue);
-                    }
-
-                    if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_25)) {
-                        if (checkpoint == 25) {
-                            iconCheck25.setVisibility(View.VISIBLE);
-                            dimmer25CoverLinear.setVisibility(View.GONE);
-                            iconCheck25.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                                "statuscheck",
-                                ContextCompat.getColor(context, R.color.widgetGreen),
-                                160,
-                                95,
-                                95,
-                                context));
-                        } else {
-                            iconCheck25.setVisibility(View.VISIBLE);
-                            dimmer25CoverLinear.setVisibility(View.GONE);
-                            iconCheck25.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                                "statusx",
-                                ContextCompat.getColor(context, R.color.widgetRed),
-                                160,
-                                95,
-                                95,
-                                context));
+            Slider dim_slider = (Slider) findViewById(R.id.dim_slider);
+            dim_slider.setValue(Float.parseFloat(deviceStateValue));
+            dim_slider.setOnChangeListener(
+                    (slider, value) -> {
+                        System.out.println("TEST value "+ value);
+                        int dimValue = (int) value;
+                        if (callEndPointHandler != null) {
+                            callEndPointHandler.removeCallbacks(callEndPointRunnable);
                         }
-                        hideFlashIndicator(R.id.flashing_indicator_dim25);
-                    }
-                }
-                renderedButtonsCount++;
 
-            // "50%" dimmer button
-                View dimmer50Cover = (View) findViewById(R.id.dimmer50Cover);
-                ImageView dimmer50 = (ImageView)findViewById(R.id.dimmer50);
-                TextView txtDimmer50 = (TextView)findViewById(R.id.txtDimmer50);
-                dimmer50Cover.setVisibility(View.VISIBLE);
-                dimmer50Cover.setElevation(5f);
-                dimmer50.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "dim",
-                    ContextCompat.getColor(context, R.color.brandSecondary),
-                    160,
-                    35,
-                    95,
-                    context));
-                txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
+                        // TODO: Workaround since "Slider" does not have an on release listener.
+                        callEndPointHandler = new Handler(Looper.getMainLooper());
+                        callEndPointRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                createDeviceApi(deviceId, 16, dimValue, widgetId, context);
+                            }
+                        };
+                        callEndPointHandler.postDelayed(callEndPointRunnable, 2000);
+                    });
 
-                layoutParamsB = dimmer50Cover.getLayoutParams();
-                layoutParamsB.width = 80;
-                layoutParamsB.height = 80;
-                dimmer50Cover.setLayoutParams(layoutParamsB);
-                marginParams = (ViewGroup.MarginLayoutParams) dimmer50Cover.getLayoutParams();
-                marginParams.setMargins(8, 8, 8, 8);
-                dimmer50Cover.requestLayout();
-                dimmer50Cover.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        db.updateDeviceInfo(METHOD_DIMMER_50, null, null, 0, null, widgetId);
-                        removeHandlerResetDeviceStateToNull();
-                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                        updateUI(widgetId);
-                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
-
-                        int value = deviceUtils.toDimmerValue(50);
-                        createDeviceApi(deviceId, 16, value, widgetId, context);
-                    }
-                });
-
-                dimmer50Cover.setBackgroundResource(R.drawable.button_background);
-                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_50)) {
-                    dimmer50Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                    dimmer50.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "dim",
-                        ContextCompat.getColor(context, R.color.white),
-                        160,
-                        35,
-                        95,
-                        context));
-                    txtDimmer50.setTextColor(ContextCompat.getColor(context, R.color.white));
-
-                    showFlashIndicator(R.id.flash_view_dim50, R.id.flashing_indicator_dim50, R.drawable.shape_circle_white_fill);
-                }
-                if (methodRequested != null && isShowingStatus == 1) {
-                    int checkpoint = 0;
-                    if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
-                        int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-                        checkpoint = getClosestCheckPoint(slidervalue);
-                    }
-                    if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_50)) {
-                        if (checkpoint == 50) {
-                            iconCheck50.setVisibility(View.VISIBLE);
-                            dimmer50CoverLinear.setVisibility(View.GONE);
-                            iconCheck50.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                                "statuscheck",
-                                ContextCompat.getColor(context, R.color.widgetGreen),
-                                160,
-                                95,
-                                95,
-                                context));
-                        } else {
-                            iconCheck50.setVisibility(View.VISIBLE);
-                            dimmer50CoverLinear.setVisibility(View.GONE);
-                            iconCheck50.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                                "statusx",
-                                ContextCompat.getColor(context, R.color.widgetRed),
-                                160,
-                                95,
-                                95,
-                                context));
-                        }
-                        hideFlashIndicator(R.id.flashing_indicator_dim50);
-                    }
-                }
-                renderedButtonsCount++;
-
-            // "75%" dimmer button
-                View dimmer75Cover = (View) findViewById(R.id.dimmer75Cover);
-                ImageView dimmer75 = (ImageView)findViewById(R.id.dimmer75);
-                TextView txtDimmer75 = (TextView)findViewById(R.id.txtDimmer75);
-                dimmer75Cover.setVisibility(View.VISIBLE);
-                dimmer75Cover.setElevation(5f);
-                dimmer75.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                    "dim75",
-                    ContextCompat.getColor(context, R.color.brandSecondary),
-                    160,
-                    35,
-                    95,
-                    context));
-                txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.brandSecondary));
-
-                layoutParamsB = dimmer75Cover.getLayoutParams();
-                layoutParamsB.width = 80;
-                layoutParamsB.height = 80;
-                dimmer75Cover.setLayoutParams(layoutParamsB);
-                marginParams = (ViewGroup.MarginLayoutParams) dimmer75Cover.getLayoutParams();
-                marginParams.setMargins(8, 8, 8, 8);
-                dimmer75Cover.requestLayout();
-                dimmer75Cover.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        db.updateDeviceInfo(METHOD_DIMMER_75, null, null, 0, null, widgetId);
-                        removeHandlerResetDeviceStateToNull();
-                        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                        updateUI(widgetId);
-                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
-
-                        int value = deviceUtils.toDimmerValue(75);
-                        createDeviceApi(deviceId, 16, value, widgetId, context);
-                    }
-                });
-
-                dimmer75Cover.setBackgroundResource(R.drawable.button_background);
-                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(METHOD_DIMMER_75)) {
-                    dimmer75Cover.setBackgroundResource(R.drawable.button_background_secondary_fill);
-                    dimmer75.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                        "dim75",
-                        ContextCompat.getColor(context, R.color.white),
-                        160,
-                        35,
-                        95,
-                        context));
-                    txtDimmer75.setTextColor(ContextCompat.getColor(context, R.color.white));
-
-                    showFlashIndicator(R.id.flash_view_dim75, R.id.flashing_indicator_dim75, R.drawable.shape_circle_white_fill);
-                }
-                if (methodRequested != null && isShowingStatus == 1) {
-                    int checkpoint = 0;
-                    if (deviceStateValue != null && !deviceStateValue.equals("") && !deviceStateValue.equals("null")) {
-                        int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
-                        checkpoint = getClosestCheckPoint(slidervalue);
-                    }
-                    if (methodRequested != null && methodRequested.equals(METHOD_DIMMER_75)) {
-                        if (checkpoint == 75) {
-                            iconCheck75.setVisibility(View.VISIBLE);
-                            dimmer75CoverLinear.setVisibility(View.GONE);
-                            iconCheck75.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                                "statuscheck",
-                                ContextCompat.getColor(context, R.color.widgetGreen),
-                                160,
-                                95,
-                                95,
-                                context));
-                        } else {
-                            iconCheck75.setVisibility(View.VISIBLE);
-                            dimmer75CoverLinear.setVisibility(View.GONE);
-                            iconCheck75.setImageBitmap(CommonUtilities.buildTelldusIcon(
-                                "statusx",
-                                ContextCompat.getColor(context, R.color.widgetRed),
-                                160,
-                                95,
-                                95,
-                                context));;
-                        }
-                        hideFlashIndicator(R.id.flashing_indicator_dim75);
-                    }
-                }
-                renderedButtonsCount++;
+            renderedButtonsCount++;
         }
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
@@ -1020,16 +799,17 @@ public class DevicesGroupDialogueActivity extends Activity {
             R.id.flashing_indicator_up,
             R.id.flashing_indicator_down,
             R.id.flashing_indicator_stop,
-            R.id.flashing_indicator_dim25,
-            R.id.flashing_indicator_dim50,
-            R.id.flashing_indicator_dim75,
+            R.id.flashing_indicator_rgb,
             };
 
         List<Integer> list = Arrays.asList(primaryShadedButtons);
 
         for (int i = 0; i < list.size(); i++) {
             int id = list.get(i);
-            findViewById(id).setVisibility(View.GONE);
+            View v = findViewById(id);
+            if (v != null) {
+                v.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -1053,6 +833,7 @@ public class DevicesGroupDialogueActivity extends Activity {
     }
 
     public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
+        System.out.println("TEST createDeviceApi "+ deviceId + " : " + value);
         PrefManager prefManager = new PrefManager(context);
         final MyDBHandler db = new MyDBHandler(context);
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {

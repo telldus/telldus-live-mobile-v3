@@ -274,6 +274,7 @@ dependencies {
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.google.android:flexbox:1.0.0'
     implementation "com.github.skydoves:colorpickerpreference:2.0.0"
+    implementation 'com.google.android.material:material:1.2.0-alpha02'
 }
 
 // Run this once to be able to run the application with BUCK
