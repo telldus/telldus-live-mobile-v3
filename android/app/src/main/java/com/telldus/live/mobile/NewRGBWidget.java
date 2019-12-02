@@ -27,6 +27,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
+
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.content.res.Resources;
@@ -35,11 +38,13 @@ import com.androidnetworking.error.ANError;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Date;
 import java.util.Arrays;
 import java.util.List;
 
+import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
@@ -50,9 +55,19 @@ import com.telldus.live.mobile.API.UserAPI;
 
 public class NewRGBWidget extends AppWidgetProvider {
 
+    private static final String ACTION_RGB_SINGLE = "ACTION_RGB_SINGLE";
+
     private static final String ACTION_MORE_ACTIONS = "ACTION_MORE_ACTIONS";
     private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
 
+    private static final int METHOD_RGB = 1024;
+
+    private static final String API_TAG = "SetState1";
+
+    DevicesAPI deviceAPI = new DevicesAPI();
+
+    Handler handlerResetDeviceStateToNull;
+    Runnable runnableResetDeviceStateToNull;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -110,6 +125,10 @@ public class NewRGBWidget extends AppWidgetProvider {
         CharSequence widgetText = DeviceWidgetInfo.getDeviceName();
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String transparent = DeviceWidgetInfo.getTransparent();
+        String primarySetting = DeviceWidgetInfo.getPrimarySetting();
+        String methodRequested = DeviceWidgetInfo.getMethodRequested();
+        String state = DeviceWidgetInfo.getState();
+        Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -136,7 +155,7 @@ public class NewRGBWidget extends AppWidgetProvider {
 
             Boolean isLastButton = true;
             int colorIdle = handleBackgroundWhenIdleOne(
-                                "ON",
+                                "RGB",
                                 transparent,
                                 renderedButtonsCount,
                                 isLastButton,
@@ -147,16 +166,72 @@ public class NewRGBWidget extends AppWidgetProvider {
 
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             int iconWidth = (int) (width * 0.14);
+            int iconSize = (int) (iconWidth * 0.7);
 
             views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                 "palette",
                 colorIdle,
                 iconWidth,
-                    (int) (iconWidth * 0.7),
-                    (int) (iconWidth * 0.7),
+                    iconSize,
+                    iconSize,
                 context));
 
-            views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                int colorOnAction = handleBackgroundOnActionOne(
+                        "RGB",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.flash_view_rgb,
+                        R.id.flashing_indicator_rgb,
+                        R.id.rgbActionCover,
+                        views,
+                        context
+                );
+                views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                        "palette",
+                        colorOnAction,
+                        iconWidth,
+                        iconSize,
+                        iconSize,
+                        context));
+            }
+
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                if (state != null && state.equals("1")) {
+                    views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                            "statuscheck",
+                            ContextCompat.getColor(context, R.color.widgetGreen),
+                            iconWidth,
+                            iconSize,
+                            iconSize,
+                            context));
+                } else {
+                    views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                            "statusx",
+                            ContextCompat.getColor(context, R.color.widgetRed),
+                            iconWidth,
+                            iconSize,
+                            iconSize,
+                            context));
+                }
+                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                handleBackgroundPostActionOne(
+                        "RGB",
+                        transparent,
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.id.rgbActionCover,
+                        views,
+                        context
+                );
+            }
+
+            if (primarySetting.equalsIgnoreCase("picker")) {
+                views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
+            } else {
+                views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_RGB_SINGLE, appWidgetId));
+            }
             
             renderedButtonsCount++;
         }
@@ -178,6 +253,117 @@ public class NewRGBWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    public static void handleBackgroundPostActionOne(
+            String button, String transparent,
+            int renderedButtonsCount, Boolean isLastButton,
+            int viewId, RemoteViews views, Context context) {
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_border_left_round_black_fill,
+                    R.drawable.shape_border_right_round_black_fill,
+                    R.drawable.shape_left_black_fill,
+                    R.drawable.shape_border_round_black_fill,
+                    viewId,
+                    views,
+                    context
+            );
+        } else if (transparent.equals("light") || transparent.equals("true")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_border_left_round_white_fill,
+                    R.drawable.shape_border_right_round_white_fill,
+                    R.drawable.shape_left_white_fill,
+                    R.drawable.shape_border_round_white_fill,
+                    viewId,
+                    views,
+                    context
+            );
+        }
+    }
+
+    public static int handleBackgroundOnActionOne(
+            String button, String transparent,
+            int renderedButtonsCount, Boolean isLastButton,
+            int flashViewId, int flashCoverId,
+            int viewId, RemoteViews views, Context context) {
+
+        if (transparent.equals("dark")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_black_round_fill,
+                    R.drawable.shape_border_right_round_black_fill,
+                    R.drawable.shape_left_black_fill,
+                    R.drawable.shape_border_round_black_fill,
+                    viewId,
+                    views,
+                    context
+            );
+            showFlashIndicator(
+                    views,
+                    flashViewId,
+                    flashCoverId,
+                    R.drawable.shape_circle_white_fill
+            );
+            return ContextCompat.getColor(context, R.color.white);
+        } else if (transparent.equals("light") || transparent.equals("true")) {
+            setCoverBackground(
+                    renderedButtonsCount,
+                    isLastButton,
+                    R.drawable.shape_left_white_round_fill,
+                    R.drawable.shape_border_right_round_white_fill,
+                    R.drawable.shape_left_white_fill,
+                    R.drawable.shape_border_round_white_fill,
+                    viewId,
+                    views,
+                    context
+            );
+            showFlashIndicator(
+                    views,
+                    flashViewId,
+                    flashCoverId,
+                    R.drawable.shape_circle_black_fill
+            );
+            return ContextCompat.getColor(context, R.color.themeDark);
+        } else {
+            if (isPrimaryShade(button)) {
+                setCoverBackground(
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.drawable.shape_left_rounded_corner_primary_fill,
+                        R.drawable.shape_right_rounded_corner_primary_fill,
+                        R.drawable.button_background_no_bordradi_primary_fill,
+                        R.drawable.button_background_primary_fill,
+                        viewId,
+                        views,
+                        context
+                );
+            } else {
+                setCoverBackground(
+                        renderedButtonsCount,
+                        isLastButton,
+                        R.drawable.shape_left_rounded_corner_secondary_fill,
+                        R.drawable.shape_right_rounded_corner_secondary_fill,
+                        R.drawable.button_background_no_bordradi_secondary_fill,
+                        R.drawable.button_background_secondary_fill,
+                        viewId,
+                        views,
+                        context
+                );
+            }
+            showFlashIndicator(
+                    views,
+                    flashViewId,
+                    flashCoverId,
+                    R.drawable.shape_circle_white_fill
+            );
+            return ContextCompat.getColor(context, R.color.white);
+        }
     }
 
     public static Boolean isPrimaryShade(String button) {
@@ -308,11 +494,56 @@ public class NewRGBWidget extends AppWidgetProvider {
             return;
         }
 
+        Integer methods = widgetInfo.getDeviceMethods();
+        int deviceId = widgetInfo.getDeviceId();
+
+        if (ACTION_RGB_SINGLE.equals(intent.getAction()) && methods != 0) {
+            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, null, widgetId);
+            removeHandlerResetDeviceStateToNull();
+
+            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+            updateAppWidget(context, widgetManager, widgetId);
+
+            String primarySetting = widgetInfo.getPrimarySetting();
+            int pickedColor = Color.parseColor(primarySetting);
+            int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
+
+            Map rgb = new HashMap<String, Object>();
+            rgb.put("r", r);
+            rgb.put("g", g);
+            rgb.put("b", b);
+
+            createDeviceActionApi(context, deviceId, METHOD_RGB, rgb, widgetId, db, "Off");
+        }
+
         if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
             Intent dialogueIntent = new Intent(context, DevicesGroupDialogueActivity.class);
             dialogueIntent.putExtra("widgetId", widgetId);
             dialogueIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(dialogueIntent);
+        }
+    }
+
+    public void resetDeviceStateToNull(final int deviceId, final int widgetId, final Context context) {
+        handlerResetDeviceStateToNull = new Handler(Looper.getMainLooper());
+        runnableResetDeviceStateToNull = new Runnable() {
+            @Override
+            public void run() {
+                MyDBHandler db = new MyDBHandler(context);
+                DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+                if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
+                    db.updateDeviceInfo(null, null, null, 0, null, widgetId);
+                    AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                    updateAppWidget(context, widgetManager, widgetId);
+                }
+            }
+        };
+        handlerResetDeviceStateToNull.postDelayed(runnableResetDeviceStateToNull, 5000);
+    }
+
+    public void removeHandlerResetDeviceStateToNull() {
+        if (handlerResetDeviceStateToNull != null && runnableResetDeviceStateToNull != null) {
+            handlerResetDeviceStateToNull.removeCallbacks(runnableResetDeviceStateToNull);
         }
     }
 
@@ -336,6 +567,17 @@ public class NewRGBWidget extends AppWidgetProvider {
         }
     }
 
+    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+        hideFlashIndicator(views, flashId);
+
+        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
+        views.setViewVisibility(flashId, View.VISIBLE);
+    }
+
+    public static void hideFlashIndicator(RemoteViews views, int flashId) {
+        views.setViewVisibility(flashId, View.GONE);
+    }
+
     public void updateUserProfile(final int widgetId, final Context context) {
         UserAPI userAPI = new UserAPI();
         userAPI.getUserProfile(context, new OnAPITaskComplete() {
@@ -346,6 +588,36 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
             @Override
             public void onError(ANError error) {
+            }
+        });
+    }
+
+    void createDeviceActionApi(final Context context, final int deviceId, int method, final Map rgb, final int widgetId, final MyDBHandler db, final String action) {
+        PrefManager prefManager = new PrefManager(context);
+
+        deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                String error = response.optString("error");
+                if (!error.isEmpty() && error != null) {
+                    String noDeviceMessage = "Device \""+deviceId+"\" not found!";
+                    if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
+                        db.updateDeviceIdDeviceWidget(-1, widgetId);
+                    }
+                }
+                db.updateIsShowingStatus(1, widgetId);
+                resetDeviceStateToNull(deviceId, widgetId, context);
+
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
+            }
+            @Override
+            public void onError(ANError error) {
+                db.updateIsShowingStatus(1, widgetId);
+                resetDeviceStateToNull(deviceId, widgetId, context);
+
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                updateAppWidget(context, widgetManager, widgetId);
             }
         });
     }
