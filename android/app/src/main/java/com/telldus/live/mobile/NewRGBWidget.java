@@ -593,8 +593,6 @@ public class NewRGBWidget extends AppWidgetProvider {
     }
 
     void createDeviceActionApi(final Context context, final int deviceId, int method, final Map rgb, final int widgetId, final MyDBHandler db, final String action) {
-        PrefManager prefManager = new PrefManager(context);
-
         deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {

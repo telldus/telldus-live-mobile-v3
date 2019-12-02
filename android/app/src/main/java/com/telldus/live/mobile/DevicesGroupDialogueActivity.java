@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ImageView;
@@ -47,6 +48,7 @@ import org.json.JSONObject;
 import com.androidnetworking.error.ANError;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
@@ -80,9 +82,13 @@ public class DevicesGroupDialogueActivity extends Activity {
     private static final String METHOD_DIMMER_50 = "16_50";
     private static final String METHOD_DIMMER_75 = "16_75";
 
+    private static final int METHOD_RGB = 1024;
+
     private static final String API_TAG = "SetState2";
 
     DevicesAPI deviceAPI = new DevicesAPI();
+
+    private static String rgbSelectedSwatch = null;
 
 
     private Handler handlerResetDeviceStateToNull;
@@ -887,12 +893,13 @@ public class DevicesGroupDialogueActivity extends Activity {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             float d = context.getResources().getDisplayMetrics().density;
 
-            LinearLayout rgb_cover =  findViewById(R.id.rgb_control_cover);
+            FrameLayout rgb_cover =  findViewById(R.id.rgb_control_cover);
             rgb_cover.setVisibility(View.VISIBLE);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70, 70);
-            int widthCover = (int) (width - (50 * d));
-            LinearLayout.LayoutParams paramsT = new LinearLayout.LayoutParams(widthCover, LinearLayout.LayoutParams.WRAP_CONTENT);
-            rgb_cover.setLayoutParams(paramsT);
+
+            int space = (int)(d * 8 * 6);
+            int swatchSize = (int) ((width - space)/ 6);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swatchSize, swatchSize);
 
             if (rgbControl.equalsIgnoreCase("picker") || rgbControl.equalsIgnoreCase("full")) {
                 ColorPickerView color_picker = findViewById(R.id.colorPickerView);
@@ -902,8 +909,23 @@ public class DevicesGroupDialogueActivity extends Activity {
                     @Override
                     public void onColorSelected(ColorEnvelope envelope, boolean fromUser) {
                         if (fromUser) {
+                            rgbSelectedSwatch = null;
+
                             int pickedColor = envelope.getColor();
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
+
+                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, null, widgetId);
+                            removeHandlerResetDeviceStateToNull();
+
+                            updateUI(widgetId);
+                            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+
+                            Map rgb = new HashMap<String, Object>();
+                            rgb.put("r", r);
+                            rgb.put("g", g);
+                            rgb.put("b", b);
+                            createDeviceApiRGB(deviceId, METHOD_RGB, rgb, widgetId, context);
                         }
                     }
                 });
@@ -911,6 +933,13 @@ public class DevicesGroupDialogueActivity extends Activity {
                 LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(sizeColorPicker, sizeColorPicker);
                 paramsCPicker.setMargins(0, 0, 0, (int) (d * 8));
                 color_picker.setLayoutParams(paramsCPicker);
+
+                if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                    showFlashIndicator(R.id.flash_view_rgb, R.id.flashing_indicator_rgb, R.drawable.shape_circle_black_fill);
+                }
+                if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                    hideFlashIndicator(R.id.flashing_indicator_rgb);
+                }
             }
 
             if (rgbControl.equalsIgnoreCase("swatch") || rgbControl.equalsIgnoreCase("full")) {
@@ -927,8 +956,12 @@ public class DevicesGroupDialogueActivity extends Activity {
 
                     GradientDrawable border = new GradientDrawable();
                     border.setColor(Color.parseColor(swatchColors[i]));
-                    border.setStroke(1, Color.parseColor("#cccccc"));
-                    border.setCornerRadius(5);
+                    if (rgbSelectedSwatch != null && rgbSelectedSwatch.equalsIgnoreCase(swatchColors[i])) {
+                        border.setStroke(3, Color.parseColor("#000000"));
+                    } else {
+                        border.setStroke(1, Color.parseColor("#cccccc"));
+                    }
+                    border.setCornerRadius(swatchSize / 2);
                     swatch.setBackground(border);
 
                     swatch.setId(i);
@@ -936,12 +969,33 @@ public class DevicesGroupDialogueActivity extends Activity {
                         @Override
                         public void onClick(View view) {
                             int id  = view.getId();
+                            rgbSelectedSwatch = swatchColors[id];
                             int pickedColor = Color.parseColor(swatchColors[id]);
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
+
+                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, null, widgetId);
+                            removeHandlerResetDeviceStateToNull();
+
+                            updateUI(widgetId);
+                            AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+
+                            Map rgb = new HashMap<String, Object>();
+                            rgb.put("r", r);
+                            rgb.put("g", g);
+                            rgb.put("b", b);
+                            createDeviceApiRGB(deviceId, METHOD_RGB, rgb, widgetId, context);
                         }
                     });
 
                     insertPoint.addView(swatch);
+
+                    if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                        showFlashIndicator(R.id.flash_view_rgb, R.id.flashing_indicator_rgb, R.drawable.shape_circle_black_fill);
+                    }
+                    if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+                        hideFlashIndicator(R.id.flashing_indicator_rgb);
+                    }
                 }
             }
         }
@@ -1000,9 +1054,7 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
-        String  accessToken = prefManager.getAccessToken();
         final MyDBHandler db = new MyDBHandler(context);
-        String params = "/device/command?id="+deviceId+"&method="+method+"&value="+value;
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -1014,7 +1066,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     }
                 }
                 db.updateIsShowingStatus(1, widgetId);
-                resetDeviceStateToNull(deviceId, widgetId, context);
+                resetDeviceStateToNull(deviceId, widgetId, context, method);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
                 NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
@@ -1022,7 +1074,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             @Override
             public void onError(ANError error) {
                 db.updateIsShowingStatus(1, widgetId);
-                resetDeviceStateToNull(deviceId, widgetId, context);
+                resetDeviceStateToNull(deviceId, widgetId, context, method);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
                 NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
@@ -1030,7 +1082,39 @@ public class DevicesGroupDialogueActivity extends Activity {
         });
     }
 
-    public void resetDeviceStateToNull(final int deviceId, final int widgetId, final Context context) {
+    public void createDeviceApiRGB(final int deviceId, int method, final Map rgb, final int widgetId, final Context context) {
+        PrefManager prefManager = new PrefManager(context);
+        final MyDBHandler db = new MyDBHandler(context);
+        deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                String error = response.optString("error");
+                if (!error.isEmpty() && error != null) {
+                    String noDeviceMessage = "Device \""+deviceId+"\" not found!";
+                    if (String.valueOf(error).trim().equalsIgnoreCase(noDeviceMessage.trim())) {
+                        db.updateDeviceIdDeviceWidget(-1, widgetId);
+                    }
+                }
+                db.updateIsShowingStatus(1, widgetId);
+                resetDeviceStateToNull(deviceId, widgetId, context, method);
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                rgbSelectedSwatch = null;
+                updateUI(widgetId);
+                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+            }
+            @Override
+            public void onError(ANError error) {
+                db.updateIsShowingStatus(1, widgetId);
+                resetDeviceStateToNull(deviceId, widgetId, context, method);
+                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                rgbSelectedSwatch = null;
+                updateUI(widgetId);
+                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+            }
+        });
+    }
+
+    public void resetDeviceStateToNull(final int deviceId, final int widgetId, final Context context, int method) {
         handlerResetDeviceStateToNull = new Handler(Looper.getMainLooper());
         runnableResetDeviceStateToNull = new Runnable() {
             @Override
@@ -1040,9 +1124,12 @@ public class DevicesGroupDialogueActivity extends Activity {
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
                     db.updateDeviceInfo(null, null, null, 0, null, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    if (method == METHOD_RGB) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                    } else {
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    }
                 }
             }
         };
