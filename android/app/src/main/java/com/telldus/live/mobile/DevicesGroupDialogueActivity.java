@@ -931,7 +931,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                 });
                 int sizeColorPicker = (int) (width * 0.6);
                 LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(sizeColorPicker, sizeColorPicker);
-                paramsCPicker.setMargins(0, 0, 0, (int) (d * 8));
+                paramsCPicker.setMargins((int) (d * 8), (int) (d * 4), (int) (d * 4), (int) (d * 8));
                 color_picker.setLayoutParams(paramsCPicker);
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
