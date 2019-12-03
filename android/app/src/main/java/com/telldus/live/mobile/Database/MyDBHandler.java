@@ -81,7 +81,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " INTEGER," +  DEVICE_TYPE + " TEXT," +  DEVICE_STATE_VALUE + " TEXT," + TRANSPARENT
                 + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT," + DEVICE_METHOD_REQUESTED
                 + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
-                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT" +
+                CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT," +
                 PRIMARY_SETTING + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
