@@ -477,7 +477,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
-        if (hasOff) {
+        if (hasOff && !hasRGB) {
             View offCover = (View) findViewById(R.id.offCover);
             ImageView offIcon = (ImageView)findViewById(R.id.iconOff);
             offCover.setVisibility(View.VISIBLE);
@@ -815,7 +815,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
-        if (hasOn) {
+        if (hasOn && !hasRGB) {
             View onCover = (View) findViewById(R.id.onCover);
             ImageView onText = (ImageView)findViewById(R.id.iconOn);
             onCover.setVisibility(View.VISIBLE);
