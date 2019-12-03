@@ -107,7 +107,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
     TextView text_trans_dark;
     TextView text_trans_light;
 
-    private String deviceStateValue = null;
+    private String deviceStateValue = null, secondaryStateValue;
 
     public static final String ROOT = "fonts/",
     FONTAWESOME = ROOT + "fontawesome-webfont.ttf";
@@ -277,7 +277,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         0, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
-                        null,  // As of now required/handled only for thermostats
+                        secondaryStateValue,  // As of now required/handled only for thermostats
                         "full" // As of now set only for RGB[control option]
                         );
                     db.addWidgetDevice(mInsert);
@@ -319,6 +319,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                                 tvIcon1.setText(deviceIcon);
 
                                 deviceCurrentState = info.get("state").toString();
+                                secondaryStateValue = info.get("secondaryStateValue").toString();
 
                                 Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(deviceSupportedMethods);
                                 
@@ -427,7 +428,6 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         stateID = curObj.getInt("state");
                         Integer methods = curObj.getInt("methods");
                         String deviceType = curObj.getString("deviceType");
-                        JSONArray stateValues = curObj.getJSONArray("stateValues");
 
                         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                         Integer sizeSuppMeth = supportedMethods.size();
@@ -440,6 +440,21 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
                         Boolean showDevice = ((sizeSuppMeth <= 2 && sizeSuppMeth > 0) && !hasThermo) || hasRGB;
 
+                        JSONArray stateValues = curObj.getJSONArray("stateValues");
+                        String secondaryStateValueLoc = "", stateValue = "";
+                        if (stateValues != null) {
+                            for (int j = 0; j < stateValues.length(); j++) {
+                                JSONObject stateAndValue = stateValues.getJSONObject(j);
+                                String sState = stateAndValue.optString("state");
+                                if (Integer.parseInt(sState, 10) == 16) {
+                                    stateValue = stateAndValue.optString("value");
+                                }
+                                if (Integer.parseInt(sState, 10) == 1024) {
+                                    secondaryStateValueLoc = stateAndValue.optString("value");
+                                }
+                            }
+                        }
+
                         if (showDevice) {
                             Integer id = curObj.getInt("id");
                             nameListItems.add(name);
@@ -450,7 +465,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                             info.put("methods", methods);
                             info.put("name", name);
                             info.put("deviceType", deviceType);
-                            info.put("deviceStateValue", deviceStateValueLocal);
+                            info.put("deviceStateValue", stateValue); // DIM value
+                            info.put("secondaryStateValue", secondaryStateValueLoc); // RGB value
                             DeviceInfoMap.put(id, info);
                         }
                     }
