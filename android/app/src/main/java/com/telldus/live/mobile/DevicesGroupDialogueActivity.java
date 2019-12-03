@@ -929,7 +929,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         }
                     }
                 });
-                int sizeColorPicker = (int) (width * 0.5);
+                int sizeColorPicker = (int) (width * 0.6);
                 LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(sizeColorPicker, sizeColorPicker);
                 paramsCPicker.setMargins(0, 0, 0, (int) (d * 8));
                 color_picker.setLayoutParams(paramsCPicker);
