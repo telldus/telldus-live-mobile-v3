@@ -154,7 +154,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
         String primarySetting = DeviceWidgetInfo.getPrimarySetting();
-
+        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
         final DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
         Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
@@ -221,7 +221,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             bellCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_BELL, null, null, 0, null, widgetId);
+                    db.updateDeviceInfo(METHOD_BELL, null, null, 0, secondaryStateValue, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -292,7 +292,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             upCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_UP, null, null, 0, null, widgetId);
+                    db.updateDeviceInfo(METHOD_UP, null, null, 0, secondaryStateValue, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -363,7 +363,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             downCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_DOWN, null, null, 0, null, widgetId);
+                    db.updateDeviceInfo(METHOD_DOWN, null, null, 0, secondaryStateValue, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -434,7 +434,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             stopCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_STOP, null, null, 0, null, widgetId);
+                    db.updateDeviceInfo(METHOD_STOP, null, null, 0, secondaryStateValue, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -482,7 +482,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
-        if (hasOff) {
+        if (hasOff && !hasRGB) {
             View offCover = (View) findViewById(R.id.offCover);
             ImageView offIcon = (ImageView)findViewById(R.id.iconOff);
             offCover.setVisibility(View.VISIBLE);
@@ -505,7 +505,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             offCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_OFF, null, null, 0, null, widgetId);
+                    db.updateDeviceInfo(METHOD_OFF, null, null, 0, secondaryStateValue, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -594,7 +594,7 @@ public class DevicesGroupDialogueActivity extends Activity {
         }
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
-        if (hasOn) {
+        if (hasOn && !hasRGB) {
             View onCover = (View) findViewById(R.id.onCover);
             ImageView onText = (ImageView)findViewById(R.id.iconOn);
             onCover.setVisibility(View.VISIBLE);
@@ -617,7 +617,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             onCover.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    db.updateDeviceInfo(METHOD_ON, null, null, 0, null, widgetId);
+                    db.updateDeviceInfo(METHOD_ON, null, null, 0, secondaryStateValue, widgetId);
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
@@ -693,7 +693,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                             int pickedColor = envelope.getColor();
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
-                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, null, widgetId);
+                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, secondaryStateValue, widgetId);
                             removeHandlerResetDeviceStateToNull();
 
                             updateUI(widgetId);
@@ -708,9 +708,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                         }
                     }
                 });
-                int sizeColorPicker = (int) (width * 0.5);
+                int sizeColorPicker = (int) (width * 0.6);
                 LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(sizeColorPicker, sizeColorPicker);
-                paramsCPicker.setMargins(0, 0, 0, (int) (d * 8));
+                paramsCPicker.setMargins((int) (d * 8), (int) (d * 4), (int) (d * 4), (int) (d * 8));
                 color_picker.setLayoutParams(paramsCPicker);
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
@@ -752,7 +752,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                             int pickedColor = Color.parseColor(swatchColors[id]);
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
-                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, null, widgetId);
+                            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, secondaryStateValue, widgetId);
                             removeHandlerResetDeviceStateToNull();
 
                             updateUI(widgetId);
@@ -903,11 +903,17 @@ public class DevicesGroupDialogueActivity extends Activity {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, null, widgetId);
+                    String secondaryStateValue = widgetInfo.getSecondaryStateValue();
+                    db.updateDeviceInfo(null, null, null, 0, secondaryStateValue, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
                     if (method == METHOD_RGB) {
-                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                        String primarySetting = widgetInfo.getPrimarySetting();
+                        if (primarySetting.equalsIgnoreCase("full")) {
+                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                        } else {
+                            NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                        }
                     } else {
                         NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
                     }

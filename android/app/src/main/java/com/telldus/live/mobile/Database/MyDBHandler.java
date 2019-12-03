@@ -303,12 +303,13 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return mSensorInfo;
     }
 
-    public boolean updateDeviceState(String action, int widgetId, String value) {
+    public boolean updateDeviceState(String action, int widgetId, String value, String secStateValue) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_STATE, action);
         contentValues.put(DEVICE_STATE_VALUE, value);
+        contentValues.put(DEVICE_SECONDARY_STATE_VALUE, secStateValue);
 
         String[] whereArgs = {val};
         int count = db.update(TABLE_WIDGET_INFO_DEVICE, contentValues, WIDGET_ID_DEVICE+" = ?", whereArgs);

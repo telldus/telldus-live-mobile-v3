@@ -496,9 +496,10 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         Integer methods = widgetInfo.getDeviceMethods();
         int deviceId = widgetInfo.getDeviceId();
+        String secondaryStateValue = widgetInfo.getSecondaryStateValue();
 
         if (ACTION_RGB_SINGLE.equals(intent.getAction()) && methods != 0) {
-            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, null, widgetId);
+            db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, null, 0, secondaryStateValue, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -532,7 +533,8 @@ public class NewRGBWidget extends AppWidgetProvider {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, null, widgetId);
+                    String secondaryStateValue = widgetInfo.getSecondaryStateValue();
+                    db.updateDeviceInfo(null, null, null, 0, secondaryStateValue, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId);
                 }

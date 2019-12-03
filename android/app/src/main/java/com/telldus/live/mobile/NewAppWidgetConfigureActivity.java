@@ -417,10 +417,17 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         stateID = curObj.getInt("state");
                         Integer methods = curObj.getInt("methods");
                         String deviceType = curObj.getString("deviceType");
-                        // ToDo : Only statevalue(String) is handled at widget side.
-                        // The app has migrated to new/future data structure
-                        // "statevalues"(Object).
-                        String stateValue = curObj.getString("statevalue");
+                        JSONArray stateValues = curObj.getJSONArray("stateValues");
+                        String stateValue = "";
+                        if (stateValues != null) {
+                            for (int j = 0; j < stateValues.length(); j++) {
+                                JSONObject stateAndValue = stateValues.getJSONObject(j);
+                                String sState = stateAndValue.optString("state");
+                                if (Integer.parseInt(sState, 10) == 16) {
+                                    stateValue = stateAndValue.optString("value");
+                                }
+                            }
+                        }
 
                         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                         Integer sizeSuppMeth = supportedMethods.size();
@@ -430,7 +437,8 @@ public class NewAppWidgetConfigureActivity extends Activity {
                         }
 
                         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
-                        Boolean showDevice = sizeSuppMeth > 2 && !hasThermo;
+                        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+                        Boolean showDevice = sizeSuppMeth > 2 && !hasThermo && !hasRGB;
 
                         if (showDevice) {
                             Integer id = curObj.getInt("id");

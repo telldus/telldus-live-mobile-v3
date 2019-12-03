@@ -604,10 +604,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
 
         Integer methods = widgetInfo.getDeviceMethods();
         int deviceId = widgetInfo.getDeviceId();
+        String secondaryStateValue = widgetInfo.getSecondaryStateValue();
 
         if (ACTION_BELL.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_BELL, null, null, 0, null, widgetId);
+            db.updateDeviceInfo(METHOD_BELL, null, null, 0, secondaryStateValue, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -617,7 +618,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         if (ACTION_ON.equals(intent.getAction()) && methods != 0) {
 
-            db.updateDeviceInfo(METHOD_ON, null, null, 0, null, widgetId);
+            db.updateDeviceInfo(METHOD_ON, null, null, 0, secondaryStateValue, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -626,7 +627,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             createDeviceActionApi(context, deviceId, 1, widgetId, db, "On");
         }
         if (ACTION_OFF.equals(intent.getAction()) && methods != 0) {
-            db.updateDeviceInfo(METHOD_OFF, null, null, 0, null, widgetId);
+            db.updateDeviceInfo(METHOD_OFF, null, null, 0, secondaryStateValue, widgetId);
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
@@ -682,7 +683,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 MyDBHandler db = new MyDBHandler(context);
                 DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
                 if (widgetInfo != null && widgetInfo.getIsShowingStatus() == 1) {
-                    db.updateDeviceInfo(null, null, null, 0, null, widgetId);
+                    String secondaryStateValue = widgetInfo.getSecondaryStateValue();
+                    db.updateDeviceInfo(null, null, null, 0, secondaryStateValue, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateAppWidget(context, widgetManager, widgetId);
                 }

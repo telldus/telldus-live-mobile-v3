@@ -20,6 +20,7 @@
 package com.telldus.live.mobile.API;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -42,6 +43,7 @@ import java.util.concurrent.Callable;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class DevicesAPI {
@@ -75,7 +77,9 @@ public class DevicesAPI {
                                     Boolean reset = runnableDeviceInfoCheckCount == ((int) (runnableDeviceInfoCheckMaxTimeout / runnableDeviceInfoCheckInterval)) - 1;
 
                                     if (info != null) {
-                                        getDeviceInfo(deviceId, method, widgetId, reset, context, callBack);
+                                        Map stateValueMap = new HashMap<String, Object>();
+                                        stateValueMap.put("stateValue", stateValue);
+                                        getDeviceInfo(deviceId, method, stateValueMap, widgetId, reset, context, callBack);
                                     }
                                     handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
                                     runnableDeviceInfoCheckCount++;
@@ -141,7 +145,7 @@ public class DevicesAPI {
                                     Boolean reset = runnableDeviceInfoCheckCount == ((int) (runnableDeviceInfoCheckMaxTimeout / runnableDeviceInfoCheckInterval)) - 1;
 
                                     if (info != null) {
-                                        getDeviceInfo(deviceId, method, widgetId, reset, context, callBack);
+                                        getDeviceInfo(deviceId, method, rgb, widgetId, reset, context, callBack);
                                     }
                                     handlerDeviceInfoCheck.postDelayed(runnableDeviceInfoCheck, runnableDeviceInfoCheckInterval);
                                     runnableDeviceInfoCheckCount++;
@@ -178,7 +182,7 @@ public class DevicesAPI {
         });
     }
 
-    public void getDeviceInfo(final Integer deviceId, final Integer requestedState, final int widgetId, final Boolean reset, final Context context, final OnAPITaskComplete callBack) {
+    public void getDeviceInfo(final Integer deviceId, final Integer requestedState, Map stateValueMap, final int widgetId, final Boolean reset, final Context context, final OnAPITaskComplete callBack) {
         String params =  "/device/info?id="+deviceId+"+&supportedMethods="+supportedMethodsAggreg;
         API endPoints = new API();
         endPoints.callEndPoint(context, params, "DeviceInfo", new OnAPITaskComplete() {
@@ -194,18 +198,70 @@ public class DevicesAPI {
                     if (info != null && finishedHandlerRunnableHash != null) {
                         String reqState = String.valueOf(requestedState);
                         String newState = response.optString("state");
-                        String stateValue = response.optString("statevalue");
-                        if (newState.equals(reqState)) {
-                            db.updateDeviceState(newState, widgetId, stateValue);
-                            removeHandlerRunnablePair(deviceId, widgetId);
-                            callBack.onSuccess(response);
-                            return;
+
+                        JSONArray stateValues = response.getJSONArray("statevalues");
+                        String stateValueRGB = "", stateValueDim = "";
+                        if (stateValues != null) {
+                            for (int j = 0; j < stateValues.length(); j++) {
+                                JSONObject stateAndValue = stateValues.getJSONObject(j);
+                                String sState = stateAndValue.optString("state");
+                                if (Integer.parseInt(sState, 10) == 16) {
+                                    stateValueDim = stateAndValue.optString("value");
+                                }
+                                if (Integer.parseInt(sState, 10) == 1024) {
+                                    stateValueRGB = stateAndValue.optString("value");
+                                }
+                            }
                         }
-                        if (reset && !newState.equals(reqState)) {
-                            Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
-                            removeHandlerRunnablePair(deviceId, widgetId);
-                            callBack.onSuccess(response);
-                            return;
+
+                        if (requestedState == 16) {
+                            Integer dimValueReq = Integer.parseInt(stateValueMap.get("stateValue").toString(), 10);
+                            if (newState.equals(reqState) && dimValueReq == Integer.parseInt(stateValueDim, 10)) {
+                                db.updateDeviceState(newState, widgetId, stateValueDim, stateValueRGB);
+                                removeHandlerRunnablePair(deviceId, widgetId);
+                                callBack.onSuccess(response);
+                                return;
+                            }
+                            if (reset && (!newState.equals(reqState) || dimValueReq != Integer.parseInt(stateValueDim, 10))) {
+                                Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
+                                removeHandlerRunnablePair(deviceId, widgetId);
+                                callBack.onSuccess(response);
+                                return;
+                            }
+                        } else if (requestedState == 1024) {
+                            Color color = Color.valueOf(Integer.parseInt(stateValueRGB));
+
+                            int rReq = Integer.parseInt(stateValueMap.get("r").toString(), 10);
+                            int gReq = Integer.parseInt(stateValueMap.get("g").toString(), 10);
+                            int bReq = Integer.parseInt(stateValueMap.get("b").toString(), 10);
+                            Color colorReq = Color.valueOf(rReq, gReq, bReq);
+
+                            Boolean isEqual = colorReq.equals(color);
+                            if (newState.equals(reqState) && isEqual) {
+                                db.updateDeviceState(newState, widgetId, stateValueDim, stateValueRGB);
+                                removeHandlerRunnablePair(deviceId, widgetId);
+                                callBack.onSuccess(response);
+                                return;
+                            }
+                            if (reset && (!newState.equals(reqState) || !isEqual)) {
+                                Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
+                                removeHandlerRunnablePair(deviceId, widgetId);
+                                callBack.onSuccess(response);
+                                return;
+                            }
+                        } else {
+                            if (newState.equals(reqState)) {
+                                db.updateDeviceState(newState, widgetId, stateValueDim, null);
+                                removeHandlerRunnablePair(deviceId, widgetId);
+                                callBack.onSuccess(response);
+                                return;
+                            }
+                            if (reset && !newState.equals(reqState)) {
+                                Toast.makeText(context, context.getResources().getString(R.string.reserved_widget_android_toast_deviceActionError), Toast.LENGTH_LONG).show();
+                                removeHandlerRunnablePair(deviceId, widgetId);
+                                callBack.onSuccess(response);
+                                return;
+                            }
                         }
                     }
                 } catch (Exception e) {
