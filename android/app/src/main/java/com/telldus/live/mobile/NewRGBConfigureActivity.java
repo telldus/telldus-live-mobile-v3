@@ -370,10 +370,10 @@ public class NewRGBConfigureActivity extends Activity {
                         methodRequested,
                         0,
                         0, // As of now required/handled only for thermostats
-                            -1, // As of now required/handled only for thermostats
-                            -1, // As of now required/handled only for thermostats
-                            secondaryStateValue,  // As of now required/handled only for thermostats
-                            primarySetting
+                        -1, // As of now required/handled only for thermostats
+                        -1, // As of now required/handled only for thermostats
+                        secondaryStateValue,  // As of now required/handled only for thermostats
+                        primarySetting
                     );
                     db.addWidgetDevice(mInsert);
                     NewRGBWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
@@ -407,7 +407,6 @@ public class NewRGBConfigureActivity extends Activity {
                                 deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
                                 tvIcon1.setText(deviceIcon);
-
                                 secondaryStateValue = info.get("secondaryStateValue").toString();
 
                                 ad.dismiss();
