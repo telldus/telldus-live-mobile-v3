@@ -86,7 +86,7 @@ public class NewRGBConfigureActivity extends Activity {
     Map<Integer, Map> DeviceInfoMap = new HashMap<Integer, Map>();
     Integer id;
     Integer deviceSupportedMethods = 0;
-    String deviceTypeCurrent, deviceStateValueCurrent;
+    String deviceTypeCurrent, deviceStateValueCurrent, secondaryStateValue;
 
     public int selectedDeviceIndex;
 
@@ -372,7 +372,7 @@ public class NewRGBConfigureActivity extends Activity {
                         0, // As of now required/handled only for thermostats
                             -1, // As of now required/handled only for thermostats
                             -1, // As of now required/handled only for thermostats
-                            null,  // As of now required/handled only for thermostats
+                            secondaryStateValue,  // As of now required/handled only for thermostats
                             primarySetting
                     );
                     db.addWidgetDevice(mInsert);
@@ -407,6 +407,8 @@ public class NewRGBConfigureActivity extends Activity {
                                 deviceStateValueCurrent = deviceStateValueCurrent == "null" ? "" : deviceStateValueCurrent;
                                 String deviceIcon = deviceUtils.getDeviceIcons(deviceTypeCurrent);
                                 tvIcon1.setText(deviceIcon);
+
+                                secondaryStateValue = info.get("secondaryStateValue").toString();
 
                                 ad.dismiss();
                             }
@@ -495,7 +497,6 @@ public class NewRGBConfigureActivity extends Activity {
             public void onSuccess(final JSONObject response) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
                 try {
-
                     DevicesUtilities deviceUtils = new DevicesUtilities();
 
                     JSONObject deviceData = new JSONObject(response.toString());
@@ -507,10 +508,22 @@ public class NewRGBConfigureActivity extends Activity {
                         stateID = curObj.getInt("state");
                         Integer methods = curObj.getInt("methods");
                         String deviceType = curObj.getString("deviceType");
-                        // ToDo : Only statevalue(String) is handled at widget side.
-                        // The app has migrated to new/future data structure
-                        // "statevalues"(Object).
-                        String stateValue = curObj.getString("statevalue");
+
+                        JSONArray stateValues = curObj.getJSONArray("stateValues");
+                        String secondaryStateValueLoc = "", stateValue = "";
+                        if (stateValues != null) {
+                            for (int j = 0; j < stateValues.length(); j++) {
+                                JSONObject stateAndValue = stateValues.getJSONObject(j);
+                                String sState = stateAndValue.optString("state");
+                                if (Integer.parseInt(sState, 10) == 16) {
+                                    stateValue = stateAndValue.optString("value");
+                                }
+                                if (Integer.parseInt(sState, 10) == 1024) {
+                                    secondaryStateValueLoc = stateAndValue.optString("value");
+                                }
+                            }
+                        }
+
                         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
 
                         Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
@@ -519,13 +532,13 @@ public class NewRGBConfigureActivity extends Activity {
                             Integer id = curObj.getInt("id");
                             nameListItems.add(name);
                             idList.add(id.toString());
-
                             Map<String, Object> info = new HashMap<String, Object>();
                             info.put("state", String.valueOf(stateID));
                             info.put("methods", methods);
                             info.put("name", name);
                             info.put("deviceType", deviceType);
-                            info.put("stateValue", stateValue);
+                            info.put("stateValue", stateValue); // DIM value
+                            info.put("secondaryStateValue", secondaryStateValueLoc); // RGB value
                             DeviceInfoMap.put(id, info);
                         }
                     }
