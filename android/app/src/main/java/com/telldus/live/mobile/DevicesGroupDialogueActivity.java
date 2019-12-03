@@ -570,11 +570,24 @@ public class DevicesGroupDialogueActivity extends Activity {
             dim_value.setText(String.valueOf(slidervalue)+"%");
 
             Slider dim_slider = (Slider) findViewById(R.id.dim_slider);
-            dim_slider.setValue(Float.parseFloat(deviceStateValue));
+
+            float currentDimValue = dim_slider.getValue();
+            float nextDimValue = Float.parseFloat(deviceStateValue);
+            // Setting over and over will trigger "setOnChangeListener" which inturn will result calling API and cause infinite cycle.
+            if (nextDimValue != currentDimValue) {
+                dim_slider.setValue(nextDimValue);
+            }
+
             dim_slider.setOnChangeListener(
                     (slider, value) -> {
-                        System.out.println("TEST value "+ value);
                         int dimValue = (int) value;
+                        if ((int) nextDimValue == dimValue) { // This prevents calling API on slider value reset
+                            return;
+                        }
+
+                        int newValue = deviceUtils.toSliderValue((int) value);
+                        dim_value.setText(String.valueOf(newValue)+"%");
+
                         if (callEndPointHandler != null) {
                             callEndPointHandler.removeCallbacks(callEndPointRunnable);
                         }
