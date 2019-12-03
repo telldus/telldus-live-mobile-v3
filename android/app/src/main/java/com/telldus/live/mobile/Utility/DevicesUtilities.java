@@ -402,4 +402,22 @@ public class DevicesUtilities {
 
         return modesList;
     }
+
+    public String getMainColorRGB (int decimalRGB) {
+        String mainColor = Integer.toHexString(decimalRGB);
+        int length = mainColor.length();
+        int len = 6;
+
+        if (length == len) {
+            return "#"+mainColor;
+        } else if (length < len) {
+            // Make sure it is in "#rrggbb" format
+            int deficit = len - length;
+            for (int i = 0; i < deficit; i++) {
+                mainColor = "0"+mainColor;
+            }
+            return "#"+mainColor;
+        }
+        return "#"+mainColor.substring(0, len);
+    }
 }

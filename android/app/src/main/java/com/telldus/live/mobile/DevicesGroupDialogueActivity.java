@@ -721,6 +721,22 @@ public class DevicesGroupDialogueActivity extends Activity {
                         }
                     }
                 });
+                color_picker.getViewTreeObserver()
+                        .addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                                    color_picker.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                }
+                                else {
+                                    color_picker.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                }
+                                if (methodRequested == null) {
+                                    int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
+                                    color_picker.selectByHsv(currentColor);
+                                }
+                            }
+                        });
                 int sizeColorPicker = (int) (width * 0.6);
                 LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(sizeColorPicker, sizeColorPicker);
                 paramsCPicker.setMargins((int) (d * 8), (int) (d * 4), (int) (d * 4), (int) (d * 8));

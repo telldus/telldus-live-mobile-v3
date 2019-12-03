@@ -229,7 +229,7 @@ public class DevicesAPI {
                                 return;
                             }
                         } else if (requestedState == 1024) {
-                            Color color = Color.valueOf(Integer.parseInt(stateValueRGB));
+                            Color color = Color.valueOf(Integer.parseInt(stateValueRGB, 10));
 
                             int rReq = Integer.parseInt(stateValueMap.get("r").toString(), 10);
                             int gReq = Integer.parseInt(stateValueMap.get("g").toString(), 10);
