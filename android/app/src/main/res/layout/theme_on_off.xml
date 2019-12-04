@@ -34,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_border_round_gray">
                         <ImageView
+                            android:id="@+id/image_def"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:src="@drawable/widget_on_off_default_theme"/>
@@ -72,6 +73,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_border_round_gray">
                         <ImageView
+                            android:id="@+id/image_dark"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:src="@drawable/widget_on_off_transparent_dark_theme"/>
@@ -110,6 +112,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_border_round_gray_fill_prim">
                         <ImageView
+                            android:id="@+id/image_light"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:src="@drawable/widget_on_off_transparent_light_theme"/>
