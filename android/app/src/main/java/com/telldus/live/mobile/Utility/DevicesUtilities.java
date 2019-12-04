@@ -20,6 +20,7 @@
 package com.telldus.live.mobile.Utility;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 
 import com.telldus.live.mobile.R;
@@ -419,5 +420,17 @@ public class DevicesUtilities {
             return "#"+mainColor;
         }
         return "#"+mainColor.substring(0, len);
+    }
+
+    public boolean isLightColor (String color) {
+        int thresholdLightColor = 230;
+
+        int c = Color.parseColor(color);
+        int r = Color.red(c);
+        int g = Color.green(c);
+        int b = Color.blue(c);
+
+        int brightness  =  (int) Math.sqrt((.299 * r * r) + (.587 * g * g) + (.114 * b * b));
+        return brightness <= thresholdLightColor;
     }
 }
