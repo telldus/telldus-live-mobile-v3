@@ -23,22 +23,21 @@
             android:layout_height="wrap_content"
             android:onClick="onRadioButtonClicked"
             android:theme="@style/WidgetRadioButton"/>
-            <com.google.android.flexbox.FlexboxLayout
-                app:flexDirection="column"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.google.android.flexbox.FlexboxLayout
+                <LinearLayout
                     android:id="@+id/def_cover"
-                    app:flexDirection="column"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_border_round_gray">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:src="@drawable/widget_dimmer_default_theme"/>
-                </com.google.android.flexbox.FlexboxLayout>
-            </com.google.android.flexbox.FlexboxLayout>
+                    <ImageView
+                        android:id="@+id/image_def"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:src="@drawable/widget_dimmer_default_theme"/>
+                </LinearLayout>
+            </LinearLayout>
         <TextView android:id="@+id/text_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,17 +64,17 @@
                 app:flexDirection="column"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.google.android.flexbox.FlexboxLayout
+                <LinearLayout
                     android:id="@+id/dark_cover"
-                    app:flexDirection="column"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_border_round_gray">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:src="@drawable/widget_dimmer_transparent_dark_theme"/>
-                </com.google.android.flexbox.FlexboxLayout>
+                    <ImageView
+                        android:id="@+id/image_dark"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:src="@drawable/widget_dimmer_transparent_dark_theme"/>
+                </LinearLayout>
             </com.google.android.flexbox.FlexboxLayout>
         <TextView android:id="@+id/text_trans_dark"
             android:layout_width="wrap_content"
@@ -103,17 +102,17 @@
                 app:flexDirection="column"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.google.android.flexbox.FlexboxLayout
+                <LinearLayout
                     android:id="@+id/light_cover"
-                    app:flexDirection="column"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_border_round_gray_fill_prim">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:src="@drawable/widget_dimmer_transparent_light_theme"/>
-                </com.google.android.flexbox.FlexboxLayout>
+                    <ImageView
+                        android:id="@+id/image_light"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:src="@drawable/widget_dimmer_transparent_light_theme"/>
+                </LinearLayout>
             </com.google.android.flexbox.FlexboxLayout>
         <TextView android:id="@+id/text_trans_light"
             android:layout_width="wrap_content"

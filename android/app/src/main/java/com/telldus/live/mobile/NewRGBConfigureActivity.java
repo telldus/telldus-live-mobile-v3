@@ -31,6 +31,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -128,6 +129,8 @@ public class NewRGBConfigureActivity extends Activity {
             text_trans_light,
             rgb_control_options_label;
 
+    ImageView image_def, image_dark, image_light;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -215,6 +218,14 @@ public class NewRGBConfigureActivity extends Activity {
             text_trans_dark = (TextView)findViewById(R.id.text_trans_dark);
             text_trans_light = (TextView)findViewById(R.id.text_trans_light);
 
+            image_def = (ImageView)findViewById(R.id.image_def);
+            image_dark = (ImageView)findViewById(R.id.image_dark);
+            image_light = (ImageView)findViewById(R.id.image_light);
+
+            image_def.setImageResource(R.drawable.widget_rgb_default);
+            image_dark.setImageResource(R.drawable.widget_rgb_dark);
+            image_light.setImageResource(R.drawable.widget_rgb_light);
+
             rgb_control_options = (View)findViewById(R.id.rgb_control_options);
             rgb_control_options.setVisibility(View.VISIBLE);
             rgb_control_options_label = (TextView)findViewById(R.id.rgb_control_options_label);
@@ -280,6 +291,11 @@ public class NewRGBConfigureActivity extends Activity {
                         border.setStroke(1, Color.parseColor("#cccccc"));
                         findViewById(i).setBackground(border);
                     }
+
+                    image_def.setImageResource(R.drawable.widget_rgb_default);
+                    image_dark.setImageResource(R.drawable.widget_rgb_dark);
+                    image_light.setImageResource(R.drawable.widget_rgb_light);
+
                 }
             });
 
@@ -303,6 +319,10 @@ public class NewRGBConfigureActivity extends Activity {
                         int id  = view.getId();
                         String pickedColor = swatchColors[id];
                         primarySetting = pickedColor;
+
+                        image_def.setImageResource(R.drawable.widget_rgb_preset_default);
+                        image_dark.setImageResource(R.drawable.widget_rgb_preset_dark);
+                        image_light.setImageResource(R.drawable.widget_rgb_preset_light);
 
                         for (int i = 0; i < swatchColors.length; i++) {
                             GradientDrawable border = new GradientDrawable();

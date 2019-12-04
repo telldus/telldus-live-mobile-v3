@@ -116,6 +116,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
     int multiplierMilli = 60000;
     private Integer selectInterval = 0;
 
+    ImageView image_def, image_dark, image_light;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -197,6 +199,14 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
             radio_def = (RadioButton)findViewById(R.id.radio_def);
             radio_dark = (RadioButton)findViewById(R.id.radio_dark);
             radio_light = (RadioButton)findViewById(R.id.radio_light);
+
+            image_def = (ImageView)findViewById(R.id.image_def);
+            image_dark = (ImageView)findViewById(R.id.image_dark);
+            image_light = (ImageView)findViewById(R.id.image_light);
+
+            image_def.setImageResource(R.drawable.widget_thermostat_default);
+            image_dark.setImageResource(R.drawable.widget_thermostat_dark);
+            image_light.setImageResource(R.drawable.widget_thermostat_light);
 
             TextView settingText = (TextView) findViewById(R.id.settingText);
             View btSelectPollInterval = (View)findViewById(R.id.btSelectPollInterval);
