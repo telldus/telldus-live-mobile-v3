@@ -422,15 +422,14 @@ public class DevicesUtilities {
         return "#"+mainColor.substring(0, len);
     }
 
-    public boolean isLightColor (String color) {
+    public boolean isLightColor (int c) {
         int thresholdLightColor = 230;
 
-        int c = Color.parseColor(color);
         int r = Color.red(c);
         int g = Color.green(c);
         int b = Color.blue(c);
 
-        int brightness  =  (int) Math.sqrt((.299 * r * r) + (.587 * g * g) + (.114 * b * b));
-        return brightness <= thresholdLightColor;
+        int brightness = (int) Math.sqrt((.299 * r * r) + (.587 * g * g) + (.114 * b * b));
+        return brightness >= thresholdLightColor;
     }
 }
