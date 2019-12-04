@@ -93,6 +93,8 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     private static String rgbSelectedSwatch = null;
 
+    final DevicesUtilities deviceUtils = new DevicesUtilities();
+
 
     private Handler handlerResetDeviceStateToNull;
     private Runnable runnableResetDeviceStateToNull;
@@ -156,7 +158,6 @@ public class DevicesGroupDialogueActivity extends Activity {
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
         String primarySetting = DeviceWidgetInfo.getPrimarySetting();
         String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
-        final DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
         Map<String, String> actionIconSet = deviceUtils.getDeviceActionIcon(deviceType, state, supportedMethods);
 
@@ -711,8 +712,13 @@ public class DevicesGroupDialogueActivity extends Activity {
                             removeHandlerResetDeviceStateToNull();
 
                             updateUI(widgetId);
+
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                            if (primarySetting.equalsIgnoreCase("full")) {
+                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                            } else {
+                                NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                            }
 
                             Map rgb = new HashMap<String, Object>();
                             rgb.put("r", r);
@@ -787,7 +793,11 @@ public class DevicesGroupDialogueActivity extends Activity {
 
                             updateUI(widgetId);
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                            if (primarySetting.equalsIgnoreCase("full")) {
+                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                            } else {
+                                NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                            }
 
                             Map rgb = new HashMap<String, Object>();
                             rgb.put("r", r);
@@ -865,6 +875,12 @@ public class DevicesGroupDialogueActivity extends Activity {
     public void createDeviceApi(final int deviceId, int method, int value, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
         final MyDBHandler db = new MyDBHandler(context);
+
+        DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+        Integer methods = widgetInfo.getDeviceMethods();
+        Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+        Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+
         deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -879,7 +895,17 @@ public class DevicesGroupDialogueActivity extends Activity {
                 resetDeviceStateToNull(deviceId, widgetId, context, method);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
-                NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+
+                if (hasRGB) {
+                    String primarySetting = widgetInfo.getPrimarySetting();
+                    if (primarySetting.equalsIgnoreCase("full")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                    } else {
+                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                    }
+                } else {
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                }
             }
             @Override
             public void onError(ANError error) {
@@ -887,7 +913,17 @@ public class DevicesGroupDialogueActivity extends Activity {
                 resetDeviceStateToNull(deviceId, widgetId, context, method);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
-                NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+
+                if (hasRGB) {
+                    String primarySetting = widgetInfo.getPrimarySetting();
+                    if (primarySetting.equalsIgnoreCase("full")) {
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                    } else {
+                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                    }
+                } else {
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                }
             }
         });
     }
@@ -895,6 +931,10 @@ public class DevicesGroupDialogueActivity extends Activity {
     public void createDeviceApiRGB(final int deviceId, int method, final Map rgb, final int widgetId, final Context context) {
         PrefManager prefManager = new PrefManager(context);
         final MyDBHandler db = new MyDBHandler(context);
+
+        DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+        String primarySetting = widgetInfo.getPrimarySetting();
+
         deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -910,7 +950,12 @@ public class DevicesGroupDialogueActivity extends Activity {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 rgbSelectedSwatch = null;
                 updateUI(widgetId);
-                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+
+                if (primarySetting.equalsIgnoreCase("full")) {
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                } else {
+                    NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                }
             }
             @Override
             public void onError(ANError error) {
@@ -919,7 +964,12 @@ public class DevicesGroupDialogueActivity extends Activity {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 rgbSelectedSwatch = null;
                 updateUI(widgetId);
-                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+
+                if (primarySetting.equalsIgnoreCase("full")) {
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                } else {
+                    NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                }
             }
         });
     }
@@ -937,7 +987,11 @@ public class DevicesGroupDialogueActivity extends Activity {
                     db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    if (method == METHOD_RGB) {
+
+                    Integer methods = widgetInfo.getDeviceMethods();
+                    Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
+                    Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+                    if (hasRGB) {
                         String primarySetting = widgetInfo.getPrimarySetting();
                         if (primarySetting.equalsIgnoreCase("full")) {
                             NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
