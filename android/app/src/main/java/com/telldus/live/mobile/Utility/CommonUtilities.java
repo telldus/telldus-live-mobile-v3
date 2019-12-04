@@ -23,6 +23,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 
 public class CommonUtilities  {
@@ -46,5 +50,25 @@ public class CommonUtilities  {
         myCanvas.drawText(icon, xPos, yPos, paint);
 
         return myBitmap;
+    }
+
+    public static Bitmap getCircularBitmap(int size, int color) {
+        Bitmap dstBitmap = Bitmap.createBitmap(
+                size, // Width
+                size, // Height
+                Bitmap.Config.ARGB_8888 // Config
+        );
+        Canvas canvas = new Canvas(dstBitmap);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+        Rect rect = new Rect(0, 0, size, size);
+        RectF rectF = new RectF(rect);
+        canvas.drawOval(rectF, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        canvas.drawBitmap(dstBitmap, 0, 0, paint);
+
+        return dstBitmap;
     }
 }
