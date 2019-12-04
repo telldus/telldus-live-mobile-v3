@@ -47,39 +47,71 @@
             android:gravity="center_vertical|right"
             android:layout_marginRight="8dp"/>
     </RelativeLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="4dp">
-        <include layout="@layout/rgb_control"/>
-    </LinearLayout>
-    <LinearLayout
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:orientation="vertical"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal">
-        <include
-            layout="@layout/dim_slider"/>
-        <com.google.android.flexbox.FlexboxLayout
+        <FrameLayout
+            android:id="@+id/flashing_indicator_common"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:flexWrap="wrap"
-            app:flexDirection="row"
-            app:justifyContent="center"
-            app:alignItems="center"
-            app:alignContent="center"
-            android:layout_marginBottom="4dp">
-            <include layout="@layout/button_bell"/>
-            <include layout="@layout/button_up"/>
-            <include layout="@layout/button_down"/>
-            <include layout="@layout/button_stop"/>
-            <include layout="@layout/button_off"/>
-            <include layout="@layout/button_on"/>
-        </com.google.android.flexbox.FlexboxLayout>
-    </LinearLayout>
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="left|top"
+            android:layout_gravity="left|top"
+            android:visibility="gone">
+            <ViewFlipper
+                android:measureAllChildren="true"
+                android:flipInterval="800"
+                android:autoStart="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:id="@+id/flash_view_common"/>
+                <LinearLayout
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:background="@android:color/transparent"/>
+            </ViewFlipper>
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="4dp">
+                <include layout="@layout/rgb_control"/>
+            </LinearLayout>
+            <include
+                layout="@layout/dim_slider"/>
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:flexDirection="row"
+                app:justifyContent="center"
+                app:alignItems="center"
+                app:alignContent="center"
+                android:layout_marginBottom="4dp">
+                <include layout="@layout/button_bell"/>
+                <include layout="@layout/button_up"/>
+                <include layout="@layout/button_down"/>
+                <include layout="@layout/button_stop"/>
+                <include layout="@layout/button_off"/>
+                <include layout="@layout/button_on"/>
+            </com.google.android.flexbox.FlexboxLayout>
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

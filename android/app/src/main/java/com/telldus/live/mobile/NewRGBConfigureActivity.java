@@ -376,7 +376,7 @@ public class NewRGBConfigureActivity extends Activity {
                         primarySetting
                     );
                     db.addWidgetDevice(mInsert);
-                    NewRGBWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                    NewRGBWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

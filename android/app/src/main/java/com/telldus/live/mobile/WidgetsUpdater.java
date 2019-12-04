@@ -23,6 +23,8 @@ import android.content.Context;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 
+import java.util.HashMap;
+
 public class WidgetsUpdater  {
 
     public int[] getAllWidgetsSensor(Context context) {
@@ -44,7 +46,7 @@ public class WidgetsUpdater  {
 
     public void updateUIWidgetDevice2By1(int widgetId, Context context) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
     }
 
     public void updateUIWidgetDevice3By1(int widgetId, Context context) {

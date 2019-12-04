@@ -30,6 +30,7 @@ import android.content.Context;
 
 import java.lang.String;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.telldus.live.mobile.Model.DeviceInfo;
@@ -116,7 +117,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           db.updateDeviceIdDeviceWidget(-1, wId);
 
           AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-          NewOnOffWidget.updateAppWidget(context, widgetManager, wId);
+          NewOnOffWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
           NewAppWidget.updateAppWidget(context, widgetManager, wId);
         }
       }

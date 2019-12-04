@@ -24,7 +24,14 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
 
@@ -61,6 +68,7 @@ public class NewRGBWidget extends AppWidgetProvider {
     private static final String ACTION_PURCHASE_PRO = "ACTION_PURCHASE_PRO";
 
     private static final int METHOD_RGB = 1024;
+    private static final int METHOD_DIM = 16;
 
     private static final String API_TAG = "SetState1";
 
@@ -70,7 +78,7 @@ public class NewRGBWidget extends AppWidgetProvider {
     Runnable runnableResetDeviceStateToNull;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+                                int appWidgetId, Map extraArgs) {
 
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
@@ -176,7 +184,27 @@ public class NewRGBWidget extends AppWidgetProvider {
                     iconSize,
                 context));
 
-            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+            if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
+                int backgroundColorFlash = Color.parseColor("#1b365d");
+                if (transparent.equals("dark")) {
+                    backgroundColorFlash = Color.parseColor("#e26901");
+                }
+                Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
+                if (colorControlledFromModalO != null) {
+                    int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
+                    if (!deviceUtils.isLightColor(colorControlledFromModal)) {
+                        backgroundColorFlash = colorControlledFromModal;
+                    }
+                } else if (!primarySetting.equalsIgnoreCase("picker")) {
+                        if (!deviceUtils.isLightColor(Color.parseColor(primarySetting))) {
+                            backgroundColorFlash = Color.parseColor(primarySetting);
+                        }
+                }
+
+                float d = context.getResources().getDisplayMetrics().density;
+                int flashSize = (int) (7 * d);
+                Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
+
                 int colorOnAction = handleBackgroundOnActionOne(
                         "RGB",
                         transparent,
@@ -186,6 +214,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                         R.id.flashing_indicator_rgb,
                         R.id.rgbActionCover,
                         views,
+                        backgroundFlash,
                         context
                 );
                 views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
@@ -197,7 +226,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                         context));
             }
 
-            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
+            if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
                 if (state != null && state.equals("1")) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
@@ -290,7 +319,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             String button, String transparent,
             int renderedButtonsCount, Boolean isLastButton,
             int flashViewId, int flashCoverId,
-            int viewId, RemoteViews views, Context context) {
+            int viewId, RemoteViews views, Bitmap backgroundFlash, Context context) {
 
         if (transparent.equals("dark")) {
             setCoverBackground(
@@ -308,7 +337,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                     views,
                     flashViewId,
                     flashCoverId,
-                    R.drawable.shape_circle_white_fill
+                    backgroundFlash
             );
             return ContextCompat.getColor(context, R.color.white);
         } else if (transparent.equals("light") || transparent.equals("true")) {
@@ -327,7 +356,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                     views,
                     flashViewId,
                     flashCoverId,
-                    R.drawable.shape_circle_black_fill
+                    backgroundFlash
             );
             return ContextCompat.getColor(context, R.color.themeDark);
         } else {
@@ -360,7 +389,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                     views,
                     flashViewId,
                     flashCoverId,
-                    R.drawable.shape_circle_white_fill
+                    backgroundFlash
             );
             return ContextCompat.getColor(context, R.color.white);
         }
@@ -445,7 +474,7 @@ public class NewRGBWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         }
     }
 
@@ -504,7 +533,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             String primarySetting = widgetInfo.getPrimarySetting();
             int pickedColor = Color.parseColor(primarySetting);
@@ -538,7 +567,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                     String stateValue = widgetInfo.getDeviceStateValue();
                     db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                    updateAppWidget(context, widgetManager, widgetId);
+                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
         };
@@ -571,10 +600,10 @@ public class NewRGBWidget extends AppWidgetProvider {
         }
     }
 
-    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
+    public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, Bitmap backgroundFlash) {
         hideFlashIndicator(views, flashId);
 
-        views.setInt(visibleFlashId, "setBackgroundResource", drawable);
+        views.setImageViewBitmap(visibleFlashId, backgroundFlash);
         views.setViewVisibility(flashId, View.VISIBLE);
     }
 
@@ -611,7 +640,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
             @Override
             public void onError(ANError error) {
@@ -619,7 +648,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
         });
     }

@@ -282,7 +282,7 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         );
                     db.addWidgetDevice(mInsert);
 
-                    NewOnOffWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                    NewOnOffWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

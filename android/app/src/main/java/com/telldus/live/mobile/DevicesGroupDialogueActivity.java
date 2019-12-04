@@ -21,6 +21,7 @@ package com.telldus.live.mobile;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -81,9 +82,7 @@ public class DevicesGroupDialogueActivity extends Activity {
     private static final String METHOD_UP = "128";
     private static final String METHOD_DOWN = "256";
     private static final String METHOD_STOP = "512";
-    private static final String METHOD_DIMMER_25 = "16_25";
-    private static final String METHOD_DIMMER_50 = "16_50";
-    private static final String METHOD_DIMMER_75 = "16_75";
+    private static final String METHOD_DIM = "16";
 
     private static final int METHOD_RGB = 1024;
 
@@ -91,7 +90,7 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     DevicesAPI deviceAPI = new DevicesAPI();
 
-    private static String rgbSelectedSwatch = null;
+    private String rgbSelectedSwatch = null;
 
     final DevicesUtilities deviceUtils = new DevicesUtilities();
 
@@ -101,6 +100,8 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     Handler callEndPointHandler;
     Runnable callEndPointRunnable;
+
+    int currentColorControlled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +200,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 DevicesGroupDialogueActivity.this.finish();
             }
         });
+
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        float d = context.getResources().getDisplayMetrics().density;
 
         int renderedButtonsCount = 0;
         int maxButtonsOnWidget = 5;
@@ -561,7 +565,6 @@ public class DevicesGroupDialogueActivity extends Activity {
             View dim_slider_cover = (View) findViewById(R.id.dim_slider_cover);
             dim_slider_cover.setVisibility(View.VISIBLE);
 
-            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             int sliderWidth = (int) (width * 0.86);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sliderWidth, LayoutParams.WRAP_CONTENT);
             dim_slider_cover.setLayoutParams(params);
@@ -576,8 +579,19 @@ public class DevicesGroupDialogueActivity extends Activity {
             float currentDimValue = dim_slider.getValue();
             float nextDimValue = Float.parseFloat(deviceStateValue);
             // Setting over and over will trigger "setOnChangeListener" which inturn will result calling API and cause infinite cycle.
-            if (nextDimValue != currentDimValue) {
+            if (nextDimValue != currentDimValue && methodRequested == null) {
                 dim_slider.setValue(nextDimValue);
+            }
+
+            if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equalsIgnoreCase("16")) {
+                int backgroundColorFlash = Color.parseColor("#e26901");
+
+                int flashSize = (int) (7 * d);
+                Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
+                showFlashIndicatorCommon(R.id.flash_view_common, R.id.flashing_indicator_common, backgroundFlash);
+            }
+            if (methodRequested != null && isShowingStatus == 1 && methodRequested.equalsIgnoreCase("16")) {
+                hideFlashIndicator(R.id.flashing_indicator_common);
             }
 
             dim_slider.setOnChangeListener(
@@ -599,6 +613,21 @@ public class DevicesGroupDialogueActivity extends Activity {
                         callEndPointRunnable = new Runnable() {
                             @Override
                             public void run() {
+                                db.updateDeviceInfo(METHOD_DIM, null, stateValue, 0, secondaryStateValue, widgetId);
+                                removeHandlerResetDeviceStateToNull();
+                                AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+                                updateUI(widgetId);
+                                if (!hasRGB) {
+                                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                                } else {
+                                    if (primarySetting.equalsIgnoreCase("full")) {
+                                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                                    } else {
+                                        Map extraArgs = new HashMap();
+                                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                                    }
+                                }
+
                                 createDeviceApi(deviceId, 16, dimValue, widgetId, context);
                             }
                         };
@@ -684,9 +713,6 @@ public class DevicesGroupDialogueActivity extends Activity {
 
             String swatchColors[] = Constants.swatchColors;
 
-            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-            float d = context.getResources().getDisplayMetrics().density;
-
             FrameLayout rgb_cover =  findViewById(R.id.rgb_control_cover);
             rgb_cover.setVisibility(View.VISIBLE);
 
@@ -706,6 +732,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                             rgbSelectedSwatch = null;
 
                             int pickedColor = envelope.getColor();
+                            currentColorControlled = pickedColor;
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
                             db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId);
@@ -713,11 +740,14 @@ public class DevicesGroupDialogueActivity extends Activity {
 
                             updateUI(widgetId);
 
+                            Map extraArgs = new HashMap();
+                            extraArgs.put("colorControlledFromModal", currentColorControlled);
+
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                             if (primarySetting.equalsIgnoreCase("full")) {
-                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
                             } else {
-                                NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                                NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
                             }
 
                             Map rgb = new HashMap<String, Object>();
@@ -750,10 +780,17 @@ public class DevicesGroupDialogueActivity extends Activity {
                 color_picker.setLayoutParams(paramsCPicker);
 
                 if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                    showFlashIndicator(R.id.flash_view_rgb, R.id.flashing_indicator_rgb, R.drawable.shape_circle_black_fill);
+                    int backgroundColorFlash = Color.parseColor("#e26901");
+                    if (!deviceUtils.isLightColor(currentColorControlled)) {
+                        backgroundColorFlash = currentColorControlled;
+                    }
+
+                    int flashSize = (int) (7 * d);
+                    Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
+                    showFlashIndicatorCommon(R.id.flash_view_common, R.id.flashing_indicator_common, backgroundFlash);
                 }
                 if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                    hideFlashIndicator(R.id.flashing_indicator_rgb);
+                    hideFlashIndicator(R.id.flashing_indicator_common);
                 }
             }
 
@@ -786,17 +823,27 @@ public class DevicesGroupDialogueActivity extends Activity {
                             int id  = view.getId();
                             rgbSelectedSwatch = swatchColors[id];
                             int pickedColor = Color.parseColor(swatchColors[id]);
+                            currentColorControlled = pickedColor;
                             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
                             db.updateDeviceInfo(String.valueOf(METHOD_RGB), null, stateValue, 0, secondaryStateValue, widgetId);
                             removeHandlerResetDeviceStateToNull();
 
                             updateUI(widgetId);
+
+                            Map extraArgs = new HashMap();
+                            extraArgs.put("colorControlledFromModal", currentColorControlled);
+
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                             if (primarySetting.equalsIgnoreCase("full")) {
-                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                                NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
                             } else {
-                                NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                                NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
+                            }
+
+                            ColorPickerView colorPicker = findViewById(R.id.colorPickerView);
+                            if (colorPicker != null) {
+                                colorPicker.selectByHsv(pickedColor);
                             }
 
                             Map rgb = new HashMap<String, Object>();
@@ -810,10 +857,17 @@ public class DevicesGroupDialogueActivity extends Activity {
                     insertPoint.addView(swatch);
 
                     if (methodRequested != null && state == null && isShowingStatus != 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                        showFlashIndicator(R.id.flash_view_rgb, R.id.flashing_indicator_rgb, R.drawable.shape_circle_black_fill);
+                        int backgroundColorFlash = Color.parseColor("#e26901");
+                        if (!deviceUtils.isLightColor(currentColorControlled)) {
+                            backgroundColorFlash = currentColorControlled;
+                        }
+
+                        int flashSize = (int) (7 * d);
+                        Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
+                        showFlashIndicatorCommon(R.id.flash_view_common, R.id.flashing_indicator_common, backgroundFlash);
                     }
                     if (methodRequested != null && isShowingStatus == 1 && methodRequested.equals(String.valueOf(METHOD_RGB))) {
-                        hideFlashIndicator(R.id.flashing_indicator_rgb);
+                        hideFlashIndicator(R.id.flashing_indicator_common);
                     }
                 }
             }
@@ -824,6 +878,14 @@ public class DevicesGroupDialogueActivity extends Activity {
         hideAllFlashIndicators();
 
         findViewById(visibleFlashId).setBackgroundResource(drawable);
+        findViewById(flashId).setVisibility(View.VISIBLE);
+    }
+
+    public void showFlashIndicatorCommon(int visibleFlashId, int flashId, Bitmap drawable) {
+        hideAllFlashIndicators();
+
+        ImageView im = (ImageView) findViewById(visibleFlashId);
+        im.setImageBitmap(drawable);
         findViewById(flashId).setVisibility(View.VISIBLE);
     }
 
@@ -839,7 +901,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             R.id.flashing_indicator_up,
             R.id.flashing_indicator_down,
             R.id.flashing_indicator_stop,
-            R.id.flashing_indicator_rgb,
+            R.id.flashing_indicator_common,
             };
 
         List<Integer> list = Arrays.asList(primaryShadedButtons);
@@ -899,9 +961,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
                     if (primarySetting.equalsIgnoreCase("full")) {
-                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     } else {
-                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     }
                 } else {
                     NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
@@ -917,9 +979,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
                     if (primarySetting.equalsIgnoreCase("full")) {
-                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     } else {
-                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     }
                 } else {
                     NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
@@ -952,9 +1014,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 updateUI(widgetId);
 
                 if (primarySetting.equalsIgnoreCase("full")) {
-                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else {
-                    NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
             @Override
@@ -966,9 +1028,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 updateUI(widgetId);
 
                 if (primarySetting.equalsIgnoreCase("full")) {
-                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } else {
-                    NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
         });
@@ -994,9 +1056,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                     if (hasRGB) {
                         String primarySetting = widgetInfo.getPrimarySetting();
                         if (primarySetting.equalsIgnoreCase("full")) {
-                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId);
+                            NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                         } else {
-                            NewRGBWidget.updateAppWidget(context, widgetManager, widgetId);
+                            NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                         }
                     } else {
                         NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
