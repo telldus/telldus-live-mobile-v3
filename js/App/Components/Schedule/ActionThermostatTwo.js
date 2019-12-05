@@ -22,135 +22,68 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
 import {
-	TouchableButton,
 	View,
 	Text,
 	IconTelldus,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 
-import {
-	shouldUpdate,
-} from '../../Lib';
-
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 interface Props extends ScheduleProps {
-	paddingRight: number,
 }
 
 type State = {
-	methodValue: number,
+	onChange: (Object) => void,
 };
 
 export default class ActionThermostatTwo extends View<null, Props, State> {
 
-	static propTypes = {
-		navigation: PropTypes.object,
-		actions: PropTypes.object,
-		onDidMount: PropTypes.func,
-		schedule: PropTypes.object,
-		paddingRight: PropTypes.number,
-		isEditMode: PropTypes.func,
-	};
-
 	constructor(props: Props) {
 		super(props);
-
-		const { isEditMode, intl, schedule, devices } = this.props;
-		const { formatMessage } = intl;
-
-		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
-		this.h2 = formatMessage(i18n.posterChooseAction);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
-
-		this.device = devices.byId[schedule.deviceId]; // We do not want scheduler to update on device prop change
-
-		const { methodValue } = schedule;
-		this.methodValue = {
-			changeMode: 1,
-		};
-		try {
-			this.methodValue = JSON.parse(methodValue);
-			this.methodValue = {
-				...this.methodValue,
-				changeMode: typeof this.methodValue.changeMode === 'undefined' ? 1 : this.methodValue.changeMode,
-			};
-		} catch (err) {
-			this.methodValue = {
-				changeMode: 1,
-			};
-		}
-
-		this.state = {
-			methodValue: this.methodValue,
-		};
-		this.label = formatMessage(i18n.labelChangeMode);
 	}
-
-	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
-	}
-
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (shouldUpdate(this.state, nextState, ['methodValue'])) {
-			return true;
-		}
-		return nextProps.currentScreen === 'ActionThermostatTwo' && shouldUpdate(this.props, nextProps, ['schedule', 'appLayout']);
-	}
-
-	selectAction = () => {
-		const { actions, navigation, isEditMode } = this.props;
-		const { methodValue } = this.state;
-
-		actions.selectAction(2048, JSON.stringify(methodValue));
-
-		if (isEditMode()) {
-			navigation.goBack(navigation.state.params.actionKey);
-		} else {
-			navigation.navigate({
-				routeName: 'Time',
-				key: 'Time',
-			});
-		}
-	};
 
 	onPressOne = () => {
-		const { methodValue } = this.state;
-		this.setState({
-			methodValue: {
-				...methodValue,
-				changeMode: 1,
-			},
-		});
+		const { methodValue } = this.props;
+		const newMethValue = {
+			...methodValue,
+			changeMode: 1,
+			changeTemp: true,
+		};
+		this.props.onChange(newMethValue);
 	}
 
 	onPressTwo = () => {
-		const { methodValue } = this.state;
-		this.setState({
-			methodValue: {
-				...methodValue,
-				changeMode: 0,
-			},
-		});
+		const { methodValue } = this.props;
+		const newMethValue = {
+			...methodValue,
+			changeMode: 1,
+			changeTemp: false,
+		};
+		this.props.onChange(newMethValue);
+	}
+
+	onPressThree = () => {
+		const { methodValue } = this.props;
+		const newMethValue = {
+			...methodValue,
+			changeMode: 0,
+			changeTemp: true,
+		};
+		this.props.onChange(newMethValue);
 	}
 
 	render(): React$Element<any> | null {
 		const {
 			appLayout,
 			intl,
+			methodValue,
 		} = this.props;
 		const {
-			container,
-			buttonStyle,
 			optionsCover,
 			optionCover,
 			iconStyle,
@@ -159,59 +92,59 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 			brandSecondary,
 		} = this._getStyle(appLayout);
 
-		if (!this.device) {
-			return null;
-		}
-
-		const { methodValue } = this.state;
-		const { changeMode } = methodValue || {};
+		let { changeMode, temperature, changeTemp } = methodValue || {};
+		changeTemp = changeTemp && temperature !== null && typeof temperature !== 'undefined';
+		const changeBoth = changeTemp && changeMode;
+		const changeTempAlone = changeTemp && !changeMode;
+		const changeModeAlone = !changeTemp && changeMode;
 
 		return (
-			<View style={container}>
-				<ScrollView
-					style={{flex: 1}}
-					contentContainerStyle={{
-						flexGrow: 1,
-						alignItems: 'stretch',
-					}}
-					keyboardShouldPersistTaps={'always'}>
-					<View style={optionsCover}>
-						<TouchableOpacity onPress={this.onPressOne}>
-							<View style={[optionCover, {
-								backgroundColor: changeMode ? brandSecondary : '#fff',
-							}]}>
-								<IconTelldus icon={'play'} style={[iconStyle, {
-									color: changeMode ? '#fff' : eulaContentColor,
-								}]}/>
-								<Text style={[textStyle, {
-									color: changeMode ? '#fff' : eulaContentColor,
-								}]}>
-									{intl.formatMessage(i18n.changeSettAndMode)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={this.onPressTwo}>
-							<View style={[optionCover, {
-								backgroundColor: changeMode ? '#fff' : brandSecondary,
-							}]}>
-								<IconTelldus icon={'settings'} style={[iconStyle, {
-									color: changeMode ? eulaContentColor : '#fff',
-								}]}/>
-								<Text style={[textStyle, {
-									color: changeMode ? eulaContentColor : '#fff',
-								}]}>
-									{intl.formatMessage(i18n.changeSettOnly)}
-								</Text>
-							</View>
-						</TouchableOpacity>
+			<View style={optionsCover}>
+				<TouchableOpacity onPress={this.onPressOne}>
+					<View style={[optionCover, {
+						backgroundColor: changeBoth ? brandSecondary : '#fff',
+					}]}>
+						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
+							color: changeBoth ? '#fff' : eulaContentColor,
+						}]}/>
+						<IconTelldus icon={'temperature'} style={[iconStyle, {
+							color: changeBoth ? '#fff' : eulaContentColor,
+						}]}/>
+						<Text style={[textStyle, {
+							color: changeBoth ? '#fff' : eulaContentColor,
+						}]}>
+							{intl.formatMessage(i18n.changeSettAndMode)}
+						</Text>
 					</View>
-					<TouchableButton
-						text={i18n.confirmAndSave}
-						style={buttonStyle}
-						onPress={this.selectAction}
-						accessible={true}
-					/>
-				</ScrollView>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={this.onPressTwo}>
+					<View style={[optionCover, {
+						backgroundColor: changeModeAlone ? brandSecondary : '#fff',
+					}]}>
+						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
+							color: changeModeAlone ? '#fff' : eulaContentColor,
+						}]}/>
+						<Text style={[textStyle, {
+							color: changeModeAlone ? '#fff' : eulaContentColor,
+						}]}>
+							{intl.formatMessage(i18n.changeModeOnly)}
+						</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity onPress={this.onPressThree}>
+					<View style={[optionCover, {
+						backgroundColor: changeTempAlone ? brandSecondary : '#fff',
+					}]}>
+						<IconTelldus icon={'temperature'} style={[iconStyle, {
+							color: changeTempAlone ? '#fff' : eulaContentColor,
+						}]}/>
+						<Text style={[textStyle, {
+							color: changeTempAlone ? '#fff' : eulaContentColor,
+						}]}>
+							{intl.formatMessage(i18n.changeSettOnly)}
+						</Text>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -236,28 +169,20 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 			outerPadding,
 			brandSecondary,
 			eulaContentColor,
-			container: {
-				flex: 1,
-				paddingVertical: outerPadding - (outerPadding / 4),
-			},
 			optionsCover: {
-				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
-				width: blockWidth,
-				marginVertical: outerPadding * 2,
-				marginHorizontal: outerPadding,
-				backgroundColor: '#fff',
-				height: (deviceWidth * 0.1) + 20,
-				...shadow,
 			},
 			optionCover: {
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
 				padding: 10,
-				width: blockWidth / 2,
-				height: '100%',
+				width: blockWidth,
+				...shadow,
+				borderRadius: 2,
+				marginHorizontal: outerPadding,
+				marginTop: outerPadding / 2,
 			},
 			iconStyle: {
 				fontSize: deviceWidth * 0.062,
@@ -269,10 +194,6 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 				marginLeft: 10,
 				textAlignVertical: 'center',
 				flexWrap: 'wrap',
-			},
-			buttonStyle: {
-				marginTop: outerPadding,
-				marginBottom: outerPadding * 2,
 			},
 		};
 	};

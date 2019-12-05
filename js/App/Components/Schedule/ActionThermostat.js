@@ -25,9 +25,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 
-import { FloatingButton, View } from '../../../BaseComponents';
+import { FloatingButton, View, Text } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import HeatControlWheelModes from '../ThermostatControl/HeatControlWheelModes';
+import ActionThermostatTwo from './ActionThermostatTwo';
 
 import {
 	getSupportedModes,
@@ -73,29 +74,39 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const { THERMOSTAT: { mode } } = stateValues;
 
 		const { methodValue } = schedule;
-		this.currentMode = undefined;
+		this.currentMode = mode;
 		this.currentValue = undefined;
 		this.methodValue = {
 			changeMode: 1,
+			changeTemp: false,
 		};
 		try {
 			this.methodValue = JSON.parse(methodValue);
+			this.methodValue = typeof this.methodValue !== 'object' ? {} : this.methodValue;
 			const {
 				mode: cMode,
 				temperature,
 			} = this.methodValue;
-			this.currentMode = cMode;
+			this.currentMode = cMode || mode;
 			this.currentValue = temperature;
+
+			const changeTemp = temperature !== null && typeof temperature !== 'undefined';
+			this.methodValue = {
+				...this.methodValue,
+				changeMode: typeof this.methodValue.changeMode === 'undefined' ? 1 : this.methodValue.changeMode,
+				mode: cMode || mode,
+				temperature,
+				changeTemp,
+			};
 		} catch (err) {
 			this.currentMode = mode;
 			this.methodValue = {
 				changeMode: 1,
+				mode,
+				changeTemp: false,
 			};
 		}
 
-		this.state = {
-			methodValue: this.methodValue,
-		};
 		this.label = formatMessage(i18n.labelChangeMode);
 
 		this.supportResume = false;
@@ -114,6 +125,14 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		this.supportedModes = getSupportedModes(parameter, setpoint, intl, true);
 		this.supportedModes = this.supportedModes.map((sm: Object): Object => {
+			if (sm.mode === this.currentMode && typeof this.currentValue === 'undefined') {
+				const changeTemp = sm.value !== null && typeof sm.value !== 'undefined';
+				this.methodValue = {
+					...this.methodValue,
+					temperature: sm.value,
+					changeTemp,
+				};
+			}
 			if (sm.mode === this.currentMode && this.currentValue) {
 				return {
 					...sm,
@@ -122,6 +141,10 @@ export default class ActionThermostat extends View<null, Props, State> {
 			}
 			return sm;
 		});
+
+		this.state = {
+			methodValue: this.methodValue,
+		};
 	}
 
 	componentDidMount() {
@@ -148,21 +171,22 @@ export default class ActionThermostat extends View<null, Props, State> {
 			}
 		});
 
+		const {
+			temperature,
+			changeTemp,
+		} = methodValue;
+		methodValue = {
+			...methodValue,
+			temperature: changeTemp ? temperature : null,
+		};
+
 		if (supportSetting) {
 			actions.selectAction(2048, JSON.stringify(methodValue));
-			this._navigate('ActionThermostatTwo');
+			this._navigate('Time');
 		} else if (isEditMode()) {
-			methodValue = {
-				...methodValue,
-				changeMode: 1,
-			};
 			actions.selectAction(2048, JSON.stringify(methodValue));
 			navigation.goBack(navigation.state.params.actionKey);
 		} else {
-			methodValue = {
-				...methodValue,
-				changeMode: 1,
-			};
 			actions.selectAction(2048, JSON.stringify(methodValue));
 			navigation.navigate({
 				routeName: 'Time',
@@ -203,12 +227,23 @@ export default class ActionThermostat extends View<null, Props, State> {
 		});
 	}
 
+	onChange = (newMethodValue: Object) => {
+		const { methodValue } = this.state;
+		const methodValueN = {
+			...methodValue,
+			...newMethodValue,
+		};
+		this.setState({
+			methodValue: methodValueN,
+		});
+	}
+
 	render(): React$Element<any> | null {
 		const {
 			appLayout,
 			intl,
 		} = this.props;
-		const { container, outerPadding } = this._getStyle(appLayout);
+		const { container, outerPadding, tempLabelStyle } = this._getStyle(appLayout);
 
 		if (!this.device) {
 			return null;
@@ -229,6 +264,14 @@ export default class ActionThermostat extends View<null, Props, State> {
 						alignItems: 'stretch',
 					}}
 					keyboardShouldPersistTaps={'always'}>
+					<ActionThermostatTwo
+						intl={intl}
+						methodValue={this.state.methodValue}
+						appLayout={appLayout}
+						onChange={this.onChange}/>
+					<Text style={tempLabelStyle}>
+						{intl.formatMessage(i18n.labelTemperature)}
+					</Text>
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={this.supportedModes}
@@ -260,6 +303,12 @@ export default class ActionThermostat extends View<null, Props, State> {
 			container: {
 				flex: 1,
 				paddingVertical: outerPadding - (outerPadding / 4),
+			},
+			tempLabelStyle: {
+				marginTop: outerPadding,
+				marginLeft: outerPadding,
+				fontSize: deviceWidth * 0.04,
+				color: Theme.Core.rowTextColor,
 			},
 		};
 	};
