@@ -163,14 +163,6 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const { actions, navigation, isEditMode } = this.props;
 		let { methodValue } = this.state;
 
-
-		let supportSetting = false;
-		this.supportedModes.map((m: Object) => {
-			if (m.mode === methodValue.mode) {
-				supportSetting = m.supportSetting;
-			}
-		});
-
 		const {
 			temperature,
 			changeTemp,
@@ -180,10 +172,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			temperature: changeTemp ? temperature : null,
 		};
 
-		if (supportSetting) {
-			actions.selectAction(2048, JSON.stringify(methodValue));
-			this._navigate('Time');
-		} else if (isEditMode()) {
+		if (isEditMode()) {
 			actions.selectAction(2048, JSON.stringify(methodValue));
 			navigation.goBack(navigation.state.params.actionKey);
 		} else {
@@ -194,25 +183,6 @@ export default class ActionThermostat extends View<null, Props, State> {
 			});
 		}
 	};
-
-	_navigate = (routeName: string) => {
-		const { navigation, isEditMode } = this.props;
-		if (isEditMode()) {
-			navigation.navigate({
-				routeName,
-				key: routeName,
-				params: {
-					actionKey: navigation.state.params.actionKey,
-					editMode: navigation.state.params.editMode,
-				},
-			});
-		} else {
-			navigation.navigate({
-				routeName,
-				key: routeName,
-			});
-		}
-	}
 
 	deviceSetStateThermostat = (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1) => {
 		const { methodValue } = this.state;
