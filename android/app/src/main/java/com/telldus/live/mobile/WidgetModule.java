@@ -48,6 +48,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   private static String widgetDevice2By1 = "WIDGET_DEVICE_2_BY_1";
   private static String widgetDevice3By1 = "WIDGET_DEVICE_3_BY_1";
   private static String widgetSensor = "WIDGET_SENSOR";
+  private static String widgetDeviceThermo = "WIDGET_THERMO";
 
   private static String ACTION_LOGIN = "ACTION_LOGIN";
 
@@ -84,6 +85,10 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     for (int widgetId : widgetIdsDevice3By1) {
       wUpdater.updateUIWidgetDevice3By1(widgetId, context);
     }
+    int widgetIdsDeviceThermo[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewThermostatWidget.class));
+    for (int widgetId : widgetIdsDeviceThermo) {
+      wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
+    }
   }
 
   @ReactMethod
@@ -118,6 +123,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
           NewOnOffWidget.updateAppWidget(context, widgetManager, wId);
           NewAppWidget.updateAppWidget(context, widgetManager, wId);
+          NewThermostatWidget.updateAppWidget(context, widgetManager, wId);
         }
       }
     }
@@ -135,6 +141,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     disableWidgetsOnLogout(widgetIdsD2, widgetDevice2By1);
     int widgetIdsD3[] = wUpdater.getAllWidgetsDevice3By1(context);
     disableWidgetsOnLogout(widgetIdsD3, widgetDevice3By1);
+    int widgetIdsDThermo[] = wUpdater.getAllThermostatWidgets(context);
+    disableWidgetsOnLogout(widgetIdsDThermo, widgetDeviceThermo);
 
     // Clear token and other credentials from shared preference
     prefManager.clear();
@@ -153,6 +161,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
       if (widgetType.equals(widgetDevice3By1)) {
         wUpdater.updateUIWidgetDevice3By1(widgetId, context);
       }
+      if (widgetType.equals(widgetDeviceThermo)) {
+        wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
+      }
     }
   }
 
@@ -160,6 +171,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   public void refreshWidgetsDevices(ReadableArray deviceIds, ReadableMap devicesData) {
     refreshWidgetsDevices2By1(deviceIds, devicesData);
     refreshWidgetsDevices3By1(deviceIds, devicesData);
+    refreshWidgetsDevicesThermo(deviceIds, devicesData);
   }
 
   public void refreshWidgetsDevices2By1(ReadableArray deviceIds, ReadableMap devicesData) {
@@ -172,6 +184,12 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     Context context = getReactApplicationContext();
     int widgetIds[] = wUpdater.getAllWidgetsDevice3By1(context);
     refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDevice3By1);
+  }
+
+  public void refreshWidgetsDevicesThermo(ReadableArray deviceIds, ReadableMap devicesData) {
+    Context context = getReactApplicationContext();
+    int widgetIds[] = wUpdater.getAllThermostatWidgets(context);
+    refreshWidgetsDevicesCommon(widgetIds, deviceIds, devicesData, widgetDeviceThermo);
   }
 
   public void refreshWidgetsDevicesCommon(int[] widgetIds, ReadableArray deviceIds, ReadableMap devicesData, String widgetType) {
@@ -233,6 +251,9 @@ public class WidgetModule extends ReactContextBaseJavaModule {
             }
             if (widgetType.equals(widgetDevice3By1)) {
               wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+            }
+            if (widgetType.equals(widgetDeviceThermo)) {
+              wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
             }
           }
         }
