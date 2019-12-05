@@ -140,7 +140,9 @@ render(): Object | null {
 						lastUpdated={lastUpdated}
 						currentTemp={currentTemp}
 						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
-						supportResume={supportResume}/>
+						supportResume={supportResume}
+						intl={intl}
+						source="ThermostatFullControl"/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>

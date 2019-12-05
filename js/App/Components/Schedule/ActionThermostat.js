@@ -206,6 +206,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 	render(): React$Element<any> | null {
 		const {
 			appLayout,
+			intl,
 		} = this.props;
 		const { container, outerPadding } = this._getStyle(appLayout);
 
@@ -234,13 +235,15 @@ export default class ActionThermostat extends View<null, Props, State> {
 						device={this.device}
 						activeMode={this.currentMode || mode}
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
-						supportResume={this.supportResume}/>
+						supportResume={this.supportResume}
+						intl={intl}/>
 				</ScrollView>
-				<FloatingButton
+				{(this.supportedModes && this.supportedModes.length > 0) && <FloatingButton
 					onPress={this.selectAction}
 					imageSource={{uri: 'right_arrow_key'}}
 					paddingRight={outerPadding - 2}
 				/>
+				}
 			</View>
 		);
 	}
@@ -260,5 +263,4 @@ export default class ActionThermostat extends View<null, Props, State> {
 			},
 		};
 	};
-
 }

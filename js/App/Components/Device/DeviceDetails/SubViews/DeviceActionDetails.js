@@ -192,7 +192,8 @@ class DeviceActionDetails extends View {
 						modesCoverStyle={modesCoverStyle}
 						activeMode={activeMode}
 						currentTemp={currentTemp}
-						supportResume={supportResume}/>
+						supportResume={supportResume}
+						intl={intl}/>
 			}
 			{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>
