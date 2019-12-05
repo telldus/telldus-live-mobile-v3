@@ -46,6 +46,7 @@ import {
 	getWeekends,
 	getTranslatableDays,
 	getDeviceActionIcon,
+	getKnownModes,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
 import { methods } from '../../../../Constants';
@@ -299,16 +300,55 @@ class JobRow extends View<null, Props, null> {
 			}
 			if (action.name === 'Thermostat') {
 				const {
-					mode,
+					mode = '',
 					temperature,
 					scale,
 					changeMode,
 				} = JSON.parse(methodValue);
+				const modesInfo = getKnownModes(formatMessage);
+
+				// $FlowFixMe
+				let Icon;
+				if (changeMode) {
+					modesInfo.map((info: Object) => {
+						if (info.mode.trim() === mode.trim()) {
+							Icon = info.IconActive;
+						}
+					});
+				}
+
+				const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
+
+				const {
+					fontSize,
+					color,
+				} = thermostateModeControlIcon;
+
+				const showModeIcon = !!changeMode && !!Icon;
+
 				return (
 					{
 						triangleColor: methodIconContainer.backgroundColor,
 						actionIcon: <View style={methodIconContainer}>
-							<IconTelldus icon={changeMode ? 'play' : 'settings'} style={thermostateModeControlIcon}/>
+							<View style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}>
+								{showModeIcon && (<Icon
+									height={fontSize}
+									width={fontSize}
+									style={{
+										color: color,
+									}}/>
+								)}
+								{hasTemp &&
+									(
+										<IconTelldus icon={'temperature'} style={thermostateModeControlIcon}/>
+									)
+								}
+							</View>
+							<>
 							{!!mode && <Text style={thermostatInfo}>
 								{mode.toUpperCase()}
 							</Text>
@@ -318,6 +358,7 @@ class JobRow extends View<null, Props, null> {
 								{temperature}{scale ? '°F' : '°C'}
 							</Text>
 							}
+							</>
 						</View>,
 						actionLabel: `${typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel)} ${mode} ${temperature}`,
 					}

@@ -29,6 +29,10 @@ import Title from './Title';
 import Description from './Description';
 import { methods } from '../../../../Constants';
 
+import {
+	getKnownModes,
+} from '../../../Lib/thermostatUtils';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -191,7 +195,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_renderIcon = (action: ActionType): Object => {
-		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons, method } = this.props;
+		const { showValue, methodValue, appLayout, iconContainerStyle, actionIcons, method, intl } = this.props;
 		const {
 			dimContainer,
 			dimValue,
@@ -221,14 +225,52 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 		if (showValue && method === 2048) {
 			let backgroundColor = action.bgColor;
 			const {
-				mode,
+				mode = '',
 				temperature,
 				scale,
 				changeMode,
 			} = JSON.parse(methodValue);
+
+			const modesInfo = getKnownModes(intl.formatMessage);
+			// $FlowFixMe
+			let Icon;
+			if (changeMode) {
+				modesInfo.map((info: Object) => {
+					if (info.mode.trim() === mode.trim()) {
+						Icon = info.IconActive;
+					}
+				});
+			}
+
+			const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
+
+			const {
+				fontSize,
+				...others
+			} = thermostateModeControlIcon;
+
+			const showModeIcon = !!changeMode && !!Icon;
+
 			return (
 				<View style={[thermostatContainer, { backgroundColor }, iconContainerStyle]}>
-					<IconTelldus icon={changeMode ? 'play' : 'settings'} style={thermostateModeControlIcon}/>
+					<View style={{
+						flexDirection: 'row',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						{showModeIcon && (<Icon
+							height={fontSize}
+							width={fontSize}
+							style={{
+								...others,
+							}}/>
+						)}
+						{hasTemp &&
+								(
+									<IconTelldus icon={'temperature'} style={thermostateModeControlIcon}/>
+								)
+						}
+					</View>
 					{!!mode && <Text style={thermostatMode}>
 						{mode.toUpperCase()}
 					</Text>
