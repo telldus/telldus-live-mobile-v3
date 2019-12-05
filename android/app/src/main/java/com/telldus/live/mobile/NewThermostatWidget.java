@@ -225,7 +225,11 @@ public class NewThermostatWidget extends AppWidgetProvider {
                     (int) (iconWidth * 0.8),
                     (int) (iconWidth * 0.8),
                 context));
-            if (secondaryStateValue != null && secondaryStateValue != "") {
+
+            Boolean hasSecStateVal = secondaryStateValue != null && secondaryStateValue != "";
+            Boolean hasStateVal = deviceStateValue != null && deviceStateValue != "";
+
+            if (hasSecStateVal) {
                 Double valueAsDouble = Double.valueOf(secondaryStateValue);
                 DecimalFormat df = new DecimalFormat("#.#");
                 String formattedSecondaryStateValue = df.format(valueAsDouble);
@@ -239,7 +243,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.thermoValueCover, View.GONE);
             }
 
-            if (deviceStateValue != null && deviceStateValue != "") {
+            if (hasStateVal) {
                 Double valueAsDouble = Double.valueOf(deviceStateValue);
                 DecimalFormat df = new DecimalFormat("#.#");
                 String formattedDeviceStateValue = df.format(valueAsDouble);
@@ -257,6 +261,27 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
             views.setTextViewText(R.id.txtLabel, thermoState);
             views.setTextColor(R.id.txtLabel, colorIdle);
+
+            if (!hasStateVal && !hasSecStateVal && thermoState == "") {
+                views.setViewVisibility(R.id.heaticon, View.GONE);
+
+                views.setViewVisibility(R.id.info_block_cover, View.VISIBLE);
+                views.setTextViewText(R.id.infoText, context.getResources().getString(R.string.reserved_widget_android_noThermostatSettings));
+                views.setTextColor(R.id.infoText, colorIdle);
+
+                int iconInfoWidth = (int) (width * 0.08);
+                views.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
+                    "info",
+                colorIdle,
+                        iconInfoWidth,
+                    (int) (iconInfoWidth * 0.8),
+                    (int) (iconInfoWidth * 0.8),
+                context));
+            } else {
+                views.setViewVisibility(R.id.heaticon, View.VISIBLE);
+
+                views.setViewVisibility(R.id.info_block_cover, View.GONE);
+            }
         }
 
         if (isBasicUser) {

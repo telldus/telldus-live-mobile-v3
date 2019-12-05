@@ -24,6 +24,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center|center"
             android:gravity="center|center">
+            <include layout="@layout/info_block"/>
             <ImageView
                 android:id="@+id/heaticon"
                 android:layout_width="wrap_content"
