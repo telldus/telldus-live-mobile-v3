@@ -147,7 +147,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
         Boolean hasThermo = ((supportedMethods.get("THERMOSTAT") != null) && supportedMethods.get("THERMOSTAT"));
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_on_off_widget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_thermostat_widget);
 
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
