@@ -170,4 +170,5 @@
 	<string name="reserved_widget_android_current_adjective">Current</string>
 
 	<string name="reserved_widget_android_thermostat">Thermostat</string>
+	<string name="reserved_widget_android_noThermostatSettings">Could not retrieve thermostat settings</string>
 </resources>
