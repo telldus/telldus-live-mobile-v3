@@ -37,6 +37,7 @@ import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.NewOnOffWidget;
 import com.telldus.live.mobile.NewSensorWidget;
 import com.telldus.live.mobile.Database.MyDBHandler;
+import com.telldus.live.mobile.NewThermostatWidget;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
 import com.telldus.live.mobile.Model.SensorInfo;
 
@@ -95,10 +96,13 @@ public class RestartSensorUpdateAlarmManager extends Service {
                 Integer updateInterval = widgetInfo.getUpdateInterval();
                 sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewSensorWidget.class);
             }
+        }
+        int widgetThermostatIds[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewThermostatWidget.class));
+        for (int widgetId : widgetThermostatIds) {
             DeviceInfo widgetInfoDevice = db.findWidgetInfoDevice(widgetId);
             if (widgetInfoDevice != null) {
                 Integer updateInterval = widgetInfoDevice.getUpdateInterval();
-                sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewOnOffWidget.class);
+                sensorUpdateAlarmManager.startAlarm(widgetId, updateInterval, NewThermostatWidget.class);
             }
         }
         this.stopSelf();
