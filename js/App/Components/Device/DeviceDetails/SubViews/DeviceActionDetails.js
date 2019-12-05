@@ -203,7 +203,8 @@ class DeviceActionDetails extends View {
 						activeMode={activeMode}
 						currentTemp={currentTemp}
 						supportResume={supportResume}
-						gatewayTimezone={gatewayTimezone}/>
+						gatewayTimezone={gatewayTimezone}
+						intl={intl}/>
 			}
 			{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>

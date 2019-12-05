@@ -28,6 +28,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
+	InfoBlock,
 } from '../../../BaseComponents';
 import ModesList from './ModesList';
 import ControlInfoBlock from './ControlInfoBlock';
@@ -38,6 +39,7 @@ import {
 } from '../../Lib';
 
 import Theme from '../../Theme';
+import i18n from '../../Translations/common';
 
 type Props = {
 	appLayout: Object,
@@ -48,7 +50,9 @@ type Props = {
 	currentTemp: string,
 	supportResume: boolean,
 	gatewayTimezone: string,
+	source?: string,
 
+	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
@@ -444,11 +448,8 @@ render(): Object | null {
 		currentTemp,
 		supportResume,
 		gatewayTimezone,
+		intl,
 	} = this.props;
-
-	if (!modes || modes.length === 0) {
-		return null;
-	}
 
 	const {
 		cover,
@@ -462,7 +463,15 @@ render(): Object | null {
 		knobStrokeWidth,
 		strokeWidth,
 		segments,
+		infoContainerStyle,
 	} = this.getStyles();
+
+	if (!modes || modes.length === 0) {
+		return <InfoBlock
+			text={`${intl.formatMessage(i18n.noThermostatSettings)}.`}
+			appLayout={appLayout}
+			infoContainer={infoContainerStyle}/>;
+	}
 
 	const {
 		startAngle,
@@ -575,7 +584,7 @@ render(): Object | null {
 }
 
 getStyles(): Object {
-	const { appLayout } = this.props;
+	const { appLayout, source = '' } = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -605,6 +614,15 @@ getStyles(): Object {
 		knobRadius,
 		knobStrokeWidth,
 		strokeWidth,
+		infoContainerStyle: {
+			flex: 0,
+			marginHorizontal: padding,
+			alignItems: 'center',
+			justifyContent: 'center',
+			width: width - (padding * 2),
+			marginBottom: 0,
+			marginTop: source === 'ThermostatFullControl' ? padding : 0,
+		},
 		cover: {
 			...shadow,
 			flex: 0,

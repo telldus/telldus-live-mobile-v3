@@ -144,7 +144,9 @@ render(): Object | null {
 						currentTemp={currentTemp}
 						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
 						supportResume={supportResume}
-						gatewayTimezone={gatewayTimezone}/>
+						gatewayTimezone={gatewayTimezone}
+						intl={intl}
+						source="ThermostatFullControl"/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>
