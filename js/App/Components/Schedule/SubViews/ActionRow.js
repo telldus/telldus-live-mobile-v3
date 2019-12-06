@@ -192,9 +192,11 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			const changeTemp = typeof temperature !== 'undefined' && temperature !== null;
 
 			if (changeMode) {
+				// $FlowFixMe
 				descriptionText = intl.formatMessage(action.descriptionThree);
 			}
 			if (changeTemp) {
+				// $FlowFixMe
 				descriptionText = intl.formatMessage(action.descriptionTwo);
 			}
 			if (changeTemp && changeMode) {
