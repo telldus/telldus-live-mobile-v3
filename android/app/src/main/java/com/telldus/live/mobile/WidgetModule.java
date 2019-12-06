@@ -260,6 +260,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
             }
             if (widgetType.equals(widgetDeviceRGB)) {
               wUpdater.updateUIWidgetDeviceRGB(widgetId, context);
+            if (widgetType.equals(widgetDeviceThermo)) {
+              wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
             }
           }
         }
