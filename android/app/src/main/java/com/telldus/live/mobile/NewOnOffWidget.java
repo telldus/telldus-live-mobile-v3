@@ -296,7 +296,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 int colorOnAction = ContextCompat.getColor(context, R.color.white);
 
                 Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
-                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting);
+                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, methodRequested.equals(String.valueOf(METHOD_RGB)), context);
 
                 int bgColor = settingColor, flashColor = Color.WHITE;
                 if (transparent.equals("dark")) {
@@ -345,7 +345,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
                 hideFlashIndicator(views, R.id.flashing_indicator_rgb);
                 views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
-                if (state == null || !state.equals("1")) {
+                if (state == null || !state.equals(String.valueOf(METHOD_RGB))) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statusx",
                             ContextCompat.getColor(context, R.color.widgetRed),

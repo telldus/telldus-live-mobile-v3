@@ -180,9 +180,14 @@ public class NewRGBWidget extends AppWidgetProvider {
             int iconWidth = (int) (width * 0.14);
             int iconSize = (int) (iconWidth * 0.7);
 
+            int paletteIconColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(context, R.color.brandSecondary)));
+            if (!primarySetting.equals("full") && !primarySetting.equals("picker")) {
+                paletteIconColor = Color.parseColor(primarySetting);
+            }
+
             views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                 "palette",
-                    currentColor,
+                    paletteIconColor,
                 iconWidth,
                     iconSize,
                     iconSize,
@@ -191,7 +196,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
 
                 Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
-                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting);
+                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, methodRequested.equals(String.valueOf(METHOD_RGB)), context);
 
                 int bgColor = settingColor, flashColor = Color.WHITE;
                 if (transparent.equals("dark")) {
@@ -230,7 +235,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
-                if (state != null && state.equals("1")) {
+                if (state != null && state.equals(String.valueOf(METHOD_RGB))) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),

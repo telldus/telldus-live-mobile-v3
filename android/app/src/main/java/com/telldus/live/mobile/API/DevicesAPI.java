@@ -36,6 +36,7 @@ import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.NewOnOffWidget;
+import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.R;
 
@@ -229,14 +230,19 @@ public class DevicesAPI {
                                 return;
                             }
                         } else if (requestedState == 1024) {
-                            Color color = Color.valueOf(Integer.parseInt(stateValueRGB, 10));
+                            DevicesUtilities du = new DevicesUtilities();
+                            int c = Color.parseColor(du.getMainColorRGB(Integer.parseInt(stateValueRGB)));
+                            int rRes = Color.red(c);
+                            int gRes = Color.green(c);
+                            int bRes = Color.blue(c);
+                            Color color = Color.valueOf(c);
 
                             int rReq = Integer.parseInt(stateValueMap.get("r").toString(), 10);
                             int gReq = Integer.parseInt(stateValueMap.get("g").toString(), 10);
                             int bReq = Integer.parseInt(stateValueMap.get("b").toString(), 10);
                             Color colorReq = Color.valueOf(rReq, gReq, bReq);
 
-                            Boolean isEqual = colorReq.equals(color);
+                            Boolean isEqual = rRes == rReq && gRes == gReq && bRes == bReq;
                             if (newState.equals(reqState) && isEqual) {
                                 db.updateDeviceState(newState, widgetId, stateValueDim, stateValueRGB);
                                 removeHandlerRunnablePair(deviceId, widgetId);

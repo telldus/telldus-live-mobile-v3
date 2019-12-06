@@ -1,28 +1,41 @@
 package com.telldus.live.mobile.Utility;
 
+import android.content.Context;
 import android.graphics.Color;
+
+import androidx.core.content.ContextCompat;
+
+import com.telldus.live.mobile.R;
 
 public class RGBUtilities {
 
-    public static int getSettingColor(String transparent, Object colorControlledFromModalO, String primarySetting) {
-
+    public static int getSettingColor(String transparent, Object colorControlledFromModalO, String primarySetting, Boolean isControllingRGB, Context context) {
         int settingColor = Color.parseColor("#e26901");
         if (transparent.equals("default")) {
-            if (colorControlledFromModalO != null) {
+            if (isControllingRGB) {
+                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+                settingColor = Color.parseColor(cL);
+            } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
                 settingColor = pickOnSettingColorBrightness(colorControlledFromModal, "light");
             } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("both")) {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "light");
             }
         } else if (transparent.equals("light")) {
-            if (colorControlledFromModalO != null) {
+            if (isControllingRGB) {
+                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
+                settingColor = Color.parseColor(cL);
+            } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
                 settingColor = pickOnSettingColorBrightness(colorControlledFromModal, "light");
             } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("both")) {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "light");
             }
         } else {
-            if (colorControlledFromModalO != null) {
+            if (isControllingRGB) {
+                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+                settingColor = Color.parseColor(cL);
+            } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
                 settingColor = pickOnSettingColorBrightness(colorControlledFromModal, "light");
             } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("both")) {
