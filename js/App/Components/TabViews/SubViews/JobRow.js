@@ -308,14 +308,13 @@ class JobRow extends View<null, Props, null> {
 				const modesInfo = getKnownModes(formatMessage);
 
 				// $FlowFixMe
-				let Icon;
-				if (changeMode) {
-					modesInfo.map((info: Object) => {
-						if (info.mode.trim() === mode.trim()) {
-							Icon = info.IconActive;
-						}
-					});
-				}
+				let Icon, label;
+				modesInfo.map((info: Object) => {
+					if (info.mode.trim() === mode.trim()) {
+						Icon = info.IconActive;
+						label = info.label;
+					}
+				});
 
 				const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
 
@@ -349,8 +348,8 @@ class JobRow extends View<null, Props, null> {
 								}
 							</View>
 							<>
-							{!!mode && <Text style={thermostatInfo}>
-								{mode.toUpperCase()}
+							{!!label && <Text style={thermostatInfo}>
+								{label.toUpperCase()}
 							</Text>
 							}
 							{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
