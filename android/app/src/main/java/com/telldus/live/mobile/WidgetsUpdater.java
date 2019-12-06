@@ -43,6 +43,10 @@ public class WidgetsUpdater  {
         return AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewThermostatWidget.class));
     }
 
+    public int[] getAllRGBWidgets(Context context) {
+        return AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewRGBWidget.class));
+    }
+
     public void updateUIWidgetSensor(int widgetId, Context context) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
         NewSensorWidget.updateAppWidget(context, widgetManager, widgetId);
@@ -63,6 +67,11 @@ public class WidgetsUpdater  {
         NewThermostatWidget.updateAppWidget(context, widgetManager, widgetId);
     }
 
+    public void updateUIWidgetDeviceRGB(int widgetId, Context context) {
+        AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+    }
+
     public void updateAllWidgets(Context context) {
         int widgetIdsSensor[] = getAllWidgetsSensor(context);
         for (int widgetId : widgetIdsSensor) {
@@ -79,6 +88,10 @@ public class WidgetsUpdater  {
         int widgetIdsDeviceThermo[] = getAllThermostatWidgets(context);
         for (int widgetId : widgetIdsDeviceThermo) {
             updateUIWidgetDeviceThermo(widgetId, context);
+        }
+        int widgetIdsDeviceRGB[] = getAllRGBWidgets(context);
+        for (int widgetId : widgetIdsDeviceRGB) {
+            updateUIWidgetDeviceRGB(widgetId, context);
         }
     }
 }
