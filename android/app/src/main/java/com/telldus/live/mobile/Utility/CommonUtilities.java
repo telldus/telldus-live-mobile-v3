@@ -22,6 +22,7 @@ package com.telldus.live.mobile.Utility;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
@@ -48,6 +49,21 @@ public class CommonUtilities  {
         int xPos = (myCanvas.getWidth() / 2);
         int yPos = (int) ((myCanvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2)) ;
         myCanvas.drawText(icon, xPos, yPos, paint);
+
+        return myBitmap;
+    }
+
+    public static Bitmap buildBitmapImageViewBG(int colorBG, int width, int height, int left, int borderRadi, Context context) {
+        Bitmap myBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        myBitmap.setDensity((int) context.getResources().getDisplayMetrics().density);
+        Canvas myCanvas = new Canvas(myBitmap);
+
+        Paint paintBG = new Paint();
+        paintBG.setColor(colorBG);
+        paintBG.setStyle(Paint.Style.FILL);
+        RectF rectF = new RectF(left, 0, myCanvas.getWidth(), myCanvas.getHeight());
+        myCanvas.drawRoundRect(rectF, borderRadi, borderRadi, paintBG);
+        myCanvas.drawBitmap(myBitmap, 0, 0, paintBG);
 
         return myBitmap;
     }
