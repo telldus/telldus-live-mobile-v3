@@ -133,6 +133,8 @@ export const ACTIONS: ActionType[] = [
 	{
 		name: 'Thermostat',
 		description: i18n.thermostateDescription,
+		descriptionTwo: i18n.changeSettOnly,
+		descriptionThree: i18n.changeModeOnly,
 		label: i18n.thermostat,
 		actionLabel: i18n.thermostat,
 		method: 2048,
@@ -168,7 +170,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	};
 
 	render(): React$Element<any> | null {
-		const { method, methodValue } = this.props;
+		const { method, methodValue, showValue } = this.props;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
 		if (!action) {
@@ -180,6 +182,26 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 
 		const accessibilityLabel = this._getAccessibilityLabel(method, methodValue, action.actionLabel);
 
+		let descriptionText = typeof action.description === 'string' ? action.description : intl.formatMessage(action.description);
+
+		if (showValue && method === 2048) {
+			const {
+				changeMode,
+				temperature,
+			} = JSON.parse(methodValue);
+			const changeTemp = typeof temperature !== 'undefined' && temperature !== null;
+
+			if (changeMode) {
+				descriptionText = intl.formatMessage(action.descriptionThree);
+			}
+			if (changeTemp) {
+				descriptionText = intl.formatMessage(action.descriptionTwo);
+			}
+			if (changeTemp && changeMode) {
+				descriptionText = intl.formatMessage(action.description);
+			}
+		}
+
 		return (
 			<Row onPress={onPress} row={action} layout="row" style={row} containerStyle={containerStyle}
 				accessible={true}
@@ -188,7 +210,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				{this._renderIcon(action)}
 				<TextRowWrapper appLayout={appLayout}>
 					<Title color={action.textColor} appLayout={appLayout}>{typeof action.label === 'string' ? action.label : intl.formatMessage(action.label)}</Title>
-					<Description style={description} appLayout={appLayout}>{typeof action.description === 'string' ? action.description : intl.formatMessage(action.description)}</Description>
+					<Description style={description} appLayout={appLayout}>{descriptionText}</Description>
 				</TextRowWrapper>
 			</Row>
 		);
@@ -233,14 +255,13 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 
 			const modesInfo = getKnownModes(intl.formatMessage);
 			// $FlowFixMe
-			let Icon;
-			if (changeMode) {
-				modesInfo.map((info: Object) => {
-					if (info.mode.trim() === mode.trim()) {
-						Icon = info.IconActive;
-					}
-				});
-			}
+			let Icon, label;
+			modesInfo.map((info: Object) => {
+				if (info.mode.trim() === mode.trim()) {
+					Icon = info.IconActive;
+					label = info.label;
+				}
+			});
 
 			const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
 
@@ -271,8 +292,8 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 								)
 						}
 					</View>
-					{!!mode && <Text style={thermostatMode}>
-						{mode.toUpperCase()}
+					{!!label && <Text style={thermostatMode}>
+						{label.toUpperCase()}
 					</Text>
 					}
 					{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
