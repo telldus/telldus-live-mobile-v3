@@ -13,6 +13,20 @@
     android:gravity="center|center"
     android:visibility="gone"
     android:background="@drawable/shape_right_rounded_corner">
+    <ImageView
+        android:id="@+id/rgb_dynamic_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|center"
+        android:gravity="center|center"
+        android:visibility="gone"
+        android:scaleType="fitXY"/>
+    <ImageView
+        android:id="@+id/palette"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center|center"
+        android:gravity="center|center"/>
     <FrameLayout
         android:id="@+id/flashing_indicator_rgb"
         android:layout_width="wrap_content"
@@ -38,10 +52,4 @@
                 android:background="@android:color/transparent"/>
         </ViewFlipper>
     </FrameLayout>
-    <ImageView
-        android:id="@+id/palette"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center|center"
-        android:gravity="center|center"/>
 </FrameLayout>

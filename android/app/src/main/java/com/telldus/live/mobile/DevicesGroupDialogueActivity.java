@@ -768,7 +768,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 else {
                                     color_picker.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                                 }
-                                if (methodRequested == null) {
+                                if (methodRequested == null && secondaryStateValue != null) {
                                     int currentColor = Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10)));
                                     color_picker.selectByHsv(currentColor);
                                 }

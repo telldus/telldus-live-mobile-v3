@@ -59,6 +59,7 @@ import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.UserAPI;
+import com.telldus.live.mobile.Utility.RGBUtilities;
 
 public class NewRGBWidget extends AppWidgetProvider {
 
@@ -179,22 +180,6 @@ public class NewRGBWidget extends AppWidgetProvider {
             int iconWidth = (int) (width * 0.14);
             int iconSize = (int) (iconWidth * 0.7);
 
-            int backgroundColorFlash = Color.parseColor("#1b365d");
-            if (transparent.equals("dark")) {
-                backgroundColorFlash = Color.parseColor("#e26901");
-            }
-            Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
-            if (colorControlledFromModalO != null) {
-                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                    backgroundColorFlash = colorControlledFromModal;
-                }
-            } else if (!primarySetting.equalsIgnoreCase("picker")) {
-                if (!deviceUtils.isLightColor(Color.parseColor(primarySetting))) {
-                    backgroundColorFlash = Color.parseColor(primarySetting);
-                }
-            }
-
             views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                 "palette",
                     currentColor,
@@ -205,28 +190,42 @@ public class NewRGBWidget extends AppWidgetProvider {
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
 
+                Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
+                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting);
+
+                int bgColor = settingColor, flashColor = Color.WHITE;
+                if (transparent.equals("dark")) {
+                    String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
+                    flashColor = Color.parseColor(cD);
+                } else if (transparent.equals("light") || transparent.equals("true")) {
+                    String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+                    flashColor = Color.parseColor(cL);
+                }
+
                 float d = context.getResources().getDisplayMetrics().density;
                 int flashSize = (int) (7 * d);
-                Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
+                Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
 
-                int colorOnAction = handleBackgroundOnActionOne(
-                        "RGB",
-                        transparent,
-                        renderedButtonsCount,
-                        isLastButton,
+                showFlashIndicator(
+                        views,
                         R.id.flash_view_rgb,
                         R.id.flashing_indicator_rgb,
-                        R.id.rgbActionCover,
-                        views,
-                        backgroundFlash,
-                        context
+                        backgroundFlash
                 );
+                views.setViewVisibility(R.id.rgb_dynamic_background, View.VISIBLE);
                 views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                         "palette",
-                        colorOnAction,
+                        flashColor,
                         iconWidth,
                         iconSize,
                         iconSize,
+                        context));
+                views.setImageViewBitmap(R.id.rgb_dynamic_background, CommonUtilities.buildBitmapImageViewBG(
+                        bgColor,
+                        60,
+                        60,
+                        0,
+                        5,
                         context));
             }
 
@@ -249,6 +248,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                             context));
                 }
                 hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
                 handleBackgroundPostActionOne(
                         "RGB",
                         transparent,
@@ -316,86 +316,6 @@ public class NewRGBWidget extends AppWidgetProvider {
                     views,
                     context
             );
-        }
-    }
-
-    public static int handleBackgroundOnActionOne(
-            String button, String transparent,
-            int renderedButtonsCount, Boolean isLastButton,
-            int flashViewId, int flashCoverId,
-            int viewId, RemoteViews views, Bitmap backgroundFlash, Context context) {
-
-        if (transparent.equals("dark")) {
-            setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_black_round_fill,
-                    R.drawable.shape_border_right_round_black_fill,
-                    R.drawable.shape_left_black_fill,
-                    R.drawable.shape_border_round_black_fill,
-                    viewId,
-                    views,
-                    context
-            );
-            showFlashIndicator(
-                    views,
-                    flashViewId,
-                    flashCoverId,
-                    backgroundFlash
-            );
-            return ContextCompat.getColor(context, R.color.white);
-        } else if (transparent.equals("light") || transparent.equals("true")) {
-            setCoverBackground(
-                    renderedButtonsCount,
-                    isLastButton,
-                    R.drawable.shape_left_white_round_fill,
-                    R.drawable.shape_border_right_round_white_fill,
-                    R.drawable.shape_left_white_fill,
-                    R.drawable.shape_border_round_white_fill,
-                    viewId,
-                    views,
-                    context
-            );
-            showFlashIndicator(
-                    views,
-                    flashViewId,
-                    flashCoverId,
-                    backgroundFlash
-            );
-            return ContextCompat.getColor(context, R.color.themeDark);
-        } else {
-            if (isPrimaryShade(button)) {
-                setCoverBackground(
-                        renderedButtonsCount,
-                        isLastButton,
-                        R.drawable.shape_left_rounded_corner_primary_fill,
-                        R.drawable.shape_right_rounded_corner_primary_fill,
-                        R.drawable.button_background_no_bordradi_primary_fill,
-                        R.drawable.button_background_primary_fill,
-                        viewId,
-                        views,
-                        context
-                );
-            } else {
-                setCoverBackground(
-                        renderedButtonsCount,
-                        isLastButton,
-                        R.drawable.shape_left_rounded_corner_secondary_fill,
-                        R.drawable.shape_right_rounded_corner_secondary_fill,
-                        R.drawable.button_background_no_bordradi_secondary_fill,
-                        R.drawable.button_background_secondary_fill,
-                        viewId,
-                        views,
-                        context
-                );
-            }
-            showFlashIndicator(
-                    views,
-                    flashViewId,
-                    flashCoverId,
-                    backgroundFlash
-            );
-            return ContextCompat.getColor(context, R.color.white);
         }
     }
 

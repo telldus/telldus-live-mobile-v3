@@ -52,6 +52,7 @@ import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
+import com.telldus.live.mobile.Utility.RGBUtilities;
 
 
 /**
@@ -144,6 +145,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         String deviceType = DeviceWidgetInfo.getDeviceType();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
         String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
+        String primarySetting = DeviceWidgetInfo.getPrimarySetting();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -282,13 +284,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             int iconWidth = (int) (width * 0.14);
 
-            Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
-            int backgroundColorFlash = getCurrentControlColor(colorControlledFromModalO, transparent);
-            int currentColor = getCurrentColor(Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10))), transparent);
-
             views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                     "palette",
-                    currentColor,
+                    colorIdle,
                     iconWidth,
                     (int) (iconWidth * 0.7),
                     (int) (iconWidth * 0.7),
@@ -297,60 +295,56 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (methodRequested != null && isShowingStatus != 1 && state == null && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
                 int colorOnAction = ContextCompat.getColor(context, R.color.white);
 
+                Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
+                int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting);
 
+                int bgColor = settingColor, flashColor = Color.WHITE;
                 if (transparent.equals("dark")) {
-                    views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_black_fill);
-                    colorOnAction = ContextCompat.getColor(context, R.color.white);
+                    String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
+                    bgColor = Color.parseColor(cD);
 
-                    float d = context.getResources().getDisplayMetrics().density;
-                    int flashSize = (int) (7 * d);
-                    Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
-
-                    showFlashIndicatorRGB(
-                            views,
-                            R.id.flash_view_rgb,
-                            R.id.flashing_indicator_rgb,
-                            backgroundFlash
-                    );
+                    flashColor = settingColor;
                 } else if (transparent.equals("light") || transparent.equals("true")) {
-                    views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_white_fill);
-                    colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
+                    String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+                    bgColor = Color.parseColor(cL);
 
-                    float d = context.getResources().getDisplayMetrics().density;
-                    int flashSize = (int) (7 * d);
-                    Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
-
-                    showFlashIndicatorRGB(
-                            views,
-                            R.id.flash_view_rgb,
-                            R.id.flashing_indicator_rgb,
-                            backgroundFlash
-                    );
-                } else {
-                    views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.button_background_no_bordradi_secondary_fill);
-
-                    float d = context.getResources().getDisplayMetrics().density;
-                    int flashSize = (int) (7 * d);
-                    Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
-
-                    showFlashIndicatorRGB(
-                            views,
-                            R.id.flash_view_rgb,
-                            R.id.flashing_indicator_rgb,
-                            backgroundFlash
-                    );
+                    flashColor = settingColor;
                 }
+
+                float d = context.getResources().getDisplayMetrics().density;
+                int flashSize = (int) (7 * d);
+                Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, flashColor);
+
+                int iconSize = (int) (d * 40);
+                int iconW = (int) (d * 40);
+                int iconH = (int) (d * 65);
+
+                views.setViewVisibility(R.id.rgb_dynamic_background, View.VISIBLE);
+                showFlashIndicatorRGB(
+                        views,
+                        R.id.flash_view_rgb,
+                        R.id.flashing_indicator_rgb,
+                        backgroundFlash
+                );
                 views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                         "palette",
-                        colorOnAction,
-                        160,
-                        85,
-                        85,
+                        flashColor,
+                        iconWidth,
+                        (int) (iconWidth * 0.7),
+                        (int) (iconWidth * 0.7),
+                        context));
+                views.setImageViewBitmap(R.id.rgb_dynamic_background, CommonUtilities.buildBitmapImageViewBG(
+                        bgColor,
+                        50,
+                        50,
+                        1,
+                        0,
                         context));
             }
 
             if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
                 hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+                views.setViewVisibility(R.id.rgb_dynamic_background, View.GONE);
                 if (state == null || !state.equals("1")) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statusx",
