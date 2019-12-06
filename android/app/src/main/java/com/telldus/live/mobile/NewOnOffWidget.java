@@ -298,14 +298,15 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
                 int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, methodRequested.equals(String.valueOf(METHOD_RGB)), context);
 
-                int bgColor = settingColor, flashColor = Color.WHITE;
+                String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
+                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+
+                int bgColor = settingColor, flashColor = Color.parseColor(cL);
                 if (transparent.equals("dark")) {
-                    String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
                     bgColor = Color.parseColor(cD);
 
                     flashColor = settingColor;
                 } else if (transparent.equals("light") || transparent.equals("true")) {
-                    String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
                     bgColor = Color.parseColor(cL);
 
                     flashColor = settingColor;

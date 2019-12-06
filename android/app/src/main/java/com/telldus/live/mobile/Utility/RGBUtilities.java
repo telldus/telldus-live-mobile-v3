@@ -12,8 +12,8 @@ public class RGBUtilities {
     public static int getSettingColor(String transparent, Object colorControlledFromModalO, String primarySetting, Boolean isControllingRGB, Context context) {
         int settingColor = Color.parseColor("#e26901");
         if (transparent.equals("default")) {
-            if (isControllingRGB) {
-                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+            if (!isControllingRGB) {
+                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.brandSecondary));
                 settingColor = Color.parseColor(cL);
             } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
@@ -22,7 +22,7 @@ public class RGBUtilities {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "light");
             }
         } else if (transparent.equals("light")) {
-            if (isControllingRGB) {
+            if (!isControllingRGB) {
                 String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
                 settingColor = Color.parseColor(cL);
             } else if (colorControlledFromModalO != null) {
@@ -32,7 +32,7 @@ public class RGBUtilities {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "light");
             }
         } else {
-            if (isControllingRGB) {
+            if (!isControllingRGB) {
                 String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
                 settingColor = Color.parseColor(cL);
             } else if (colorControlledFromModalO != null) {

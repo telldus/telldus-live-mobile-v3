@@ -198,13 +198,15 @@ public class NewRGBWidget extends AppWidgetProvider {
                 Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
                 int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, methodRequested.equals(String.valueOf(METHOD_RGB)), context);
 
-                int bgColor = settingColor, flashColor = Color.WHITE;
+                String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
+                String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
+                int bgColor = settingColor, flashColor = Color.parseColor(cL);
                 if (transparent.equals("dark")) {
-                    String cD = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.themeDark));
-                    flashColor = Color.parseColor(cD);
+                    flashColor = methodRequested.equals(String.valueOf(METHOD_RGB)) ? Color.parseColor(cD) : Color.parseColor(cL);
+                    bgColor = methodRequested.equals(String.valueOf(METHOD_RGB)) ? settingColor : Color.parseColor(cD);
                 } else if (transparent.equals("light") || transparent.equals("true")) {
-                    String cL = "#" + Integer.toHexString(ContextCompat.getColor(context, R.color.white));
-                    flashColor = Color.parseColor(cL);
+                    flashColor = methodRequested.equals(String.valueOf(METHOD_RGB)) ? Color.parseColor(cL) : Color.parseColor(cD);
+                    bgColor = methodRequested.equals(String.valueOf(METHOD_RGB)) ? settingColor : Color.parseColor(cL);
                 }
 
                 float d = context.getResources().getDisplayMetrics().density;
@@ -342,9 +344,9 @@ public class NewRGBWidget extends AppWidgetProvider {
                     renderedButtonsCount,
                     isLastButton,
                     R.drawable.shape_left_black_round,
-                    R.drawable.shape_border_right_round_black,
+                    R.drawable.shape_border_right_round_black_fill,
                     R.drawable.shape_left_black,
-                    R.drawable.shape_border_round_black,
+                    R.drawable.shape_border_round_black_fill,
                     viewId,
                     views,
                     context
@@ -355,9 +357,9 @@ public class NewRGBWidget extends AppWidgetProvider {
                     renderedButtonsCount,
                     isLastButton,
                     R.drawable.shape_left_white_round,
-                    R.drawable.shape_border_right_round_white,
+                    R.drawable.shape_border_right_round_white_fill,
                     R.drawable.shape_left_white,
-                    R.drawable.shape_border_round_white,
+                    R.drawable.shape_border_round_white_fill,
                     viewId,
                     views,
                     context
