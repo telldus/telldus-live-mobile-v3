@@ -143,6 +143,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         Integer methods = DeviceWidgetInfo.getDeviceMethods();
         String deviceType = DeviceWidgetInfo.getDeviceType();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -281,9 +282,13 @@ public class NewOnOffWidget extends AppWidgetProvider {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             int iconWidth = (int) (width * 0.14);
 
+            Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
+            int backgroundColorFlash = getCurrentControlColor(colorControlledFromModalO, transparent);
+            int currentColor = getCurrentColor(Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10))), transparent);
+
             views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                     "palette",
-                    colorIdle,
+                    currentColor,
                     iconWidth,
                     (int) (iconWidth * 0.7),
                     (int) (iconWidth * 0.7),
@@ -292,27 +297,14 @@ public class NewOnOffWidget extends AppWidgetProvider {
             if (methodRequested != null && isShowingStatus != 1 && state == null && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
                 int colorOnAction = ContextCompat.getColor(context, R.color.white);
 
-                int backgroundColorFlash = Color.parseColor("#1b365d");
-                Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
 
                 if (transparent.equals("dark")) {
                     views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_black_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.white);
 
-                    if (colorControlledFromModalO != null) {
-                        int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                        if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                            backgroundColorFlash = colorControlledFromModal;
-                        } else {
-                            backgroundColorFlash = Color.parseColor("#e26901");
-                        }
-                    } else {
-                        backgroundColorFlash = Color.parseColor("#e26901");
-                    }
                     float d = context.getResources().getDisplayMetrics().density;
                     int flashSize = (int) (7 * d);
                     Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
-
 
                     showFlashIndicatorRGB(
                             views,
@@ -324,16 +316,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.shape_left_white_fill);
                     colorOnAction = ContextCompat.getColor(context, R.color.themeDark);
 
-                    if (colorControlledFromModalO != null) {
-                        int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                        if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                            backgroundColorFlash = colorControlledFromModal;
-                        } else {
-                            backgroundColorFlash = Color.parseColor("#1b365d");
-                        }
-                    } else {
-                        backgroundColorFlash = Color.parseColor("#1b365d");
-                    }
                     float d = context.getResources().getDisplayMetrics().density;
                     int flashSize = (int) (7 * d);
                     Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
@@ -347,16 +329,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 } else {
                     views.setInt(R.id.rgbActionCover, "setBackgroundResource", R.drawable.button_background_no_bordradi_secondary_fill);
 
-                    if (colorControlledFromModalO != null) {
-                        int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                        if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                            backgroundColorFlash = colorControlledFromModal;
-                        } else {
-                            backgroundColorFlash = Color.parseColor("#1b365d");
-                        }
-                    } else {
-                        backgroundColorFlash = Color.parseColor("#1b365d");
-                    }
                     float d = context.getResources().getDisplayMetrics().density;
                     int flashSize = (int) (7 * d);
                     Bitmap backgroundFlash = CommonUtilities.getCircularBitmap(flashSize, backgroundColorFlash);
@@ -625,6 +597,58 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
+
+    public static int getCurrentControlColor(Object colorControlledFromModalO, String transparent) {
+        DevicesUtilities deviceUtils = new DevicesUtilities();
+
+        int backgroundColorFlash = Color.parseColor("#1b365d");
+        if (transparent.equals("dark")) {
+            if (colorControlledFromModalO != null) {
+                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
+                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
+                    backgroundColorFlash = colorControlledFromModal;
+                } else {
+                    backgroundColorFlash = Color.parseColor("#e26901");
+                }
+            } else {
+                backgroundColorFlash = Color.parseColor("#e26901");
+            }
+        } else if (transparent.equals("light") || transparent.equals("true")) {
+            if (colorControlledFromModalO != null) {
+                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
+                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
+                    backgroundColorFlash = colorControlledFromModal;
+                } else {
+                    backgroundColorFlash = Color.parseColor("#1b365d");
+                }
+            } else {
+                backgroundColorFlash = Color.parseColor("#1b365d");
+            }
+        } else {
+            if (colorControlledFromModalO != null) {
+                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
+                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
+                    backgroundColorFlash = colorControlledFromModal;
+                } else {
+                    backgroundColorFlash = Color.parseColor("#1b365d");
+                }
+            } else {
+                backgroundColorFlash = Color.parseColor("#1b365d");
+            }
+        }
+        return backgroundColorFlash;
+    }
+
+    public static int getCurrentColor(int currentColor, String transparent) {
+        DevicesUtilities deviceUtils = new DevicesUtilities();
+
+        int currentColorFinal = Color.parseColor("#1b365d");
+        if (!deviceUtils.isLightColor(currentColor)) {
+            currentColorFinal = currentColor;
+        }
+
+        return currentColorFinal;
     }
 
     public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {

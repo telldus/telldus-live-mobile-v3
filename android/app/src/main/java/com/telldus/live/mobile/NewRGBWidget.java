@@ -137,6 +137,7 @@ public class NewRGBWidget extends AppWidgetProvider {
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         String state = DeviceWidgetInfo.getState();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
+        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -161,6 +162,8 @@ public class NewRGBWidget extends AppWidgetProvider {
         if (hasRGB) {
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
 
+            int currentColor = getCurrentColor(Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10))), transparent);
+
             Boolean isLastButton = true;
             int colorIdle = handleBackgroundWhenIdleOne(
                                 "RGB",
@@ -176,30 +179,31 @@ public class NewRGBWidget extends AppWidgetProvider {
             int iconWidth = (int) (width * 0.14);
             int iconSize = (int) (iconWidth * 0.7);
 
+            int backgroundColorFlash = Color.parseColor("#1b365d");
+            if (transparent.equals("dark")) {
+                backgroundColorFlash = Color.parseColor("#e26901");
+            }
+            Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
+            if (colorControlledFromModalO != null) {
+                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
+                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
+                    backgroundColorFlash = colorControlledFromModal;
+                }
+            } else if (!primarySetting.equalsIgnoreCase("picker")) {
+                if (!deviceUtils.isLightColor(Color.parseColor(primarySetting))) {
+                    backgroundColorFlash = Color.parseColor(primarySetting);
+                }
+            }
+
             views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                 "palette",
-                colorIdle,
+                    currentColor,
                 iconWidth,
                     iconSize,
                     iconSize,
                 context));
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
-                int backgroundColorFlash = Color.parseColor("#1b365d");
-                if (transparent.equals("dark")) {
-                    backgroundColorFlash = Color.parseColor("#e26901");
-                }
-                Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
-                if (colorControlledFromModalO != null) {
-                    int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                    if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                        backgroundColorFlash = colorControlledFromModal;
-                    }
-                } else if (!primarySetting.equalsIgnoreCase("picker")) {
-                        if (!deviceUtils.isLightColor(Color.parseColor(primarySetting))) {
-                            backgroundColorFlash = Color.parseColor(primarySetting);
-                        }
-                }
 
                 float d = context.getResources().getDisplayMetrics().density;
                 int flashSize = (int) (7 * d);
@@ -572,6 +576,17 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
         };
         handlerResetDeviceStateToNull.postDelayed(runnableResetDeviceStateToNull, 5000);
+    }
+
+    public static int getCurrentColor(int currentColor, String transparent) {
+        DevicesUtilities deviceUtils = new DevicesUtilities();
+
+        int currentColorFinal = Color.parseColor("#1b365d");
+        if (!deviceUtils.isLightColor(currentColor)) {
+            currentColorFinal = currentColor;
+        }
+
+        return currentColorFinal;
     }
 
     public void removeHandlerResetDeviceStateToNull() {
