@@ -594,58 +594,6 @@ public class NewOnOffWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    public static int getCurrentControlColor(Object colorControlledFromModalO, String transparent) {
-        DevicesUtilities deviceUtils = new DevicesUtilities();
-
-        int backgroundColorFlash = Color.parseColor("#1b365d");
-        if (transparent.equals("dark")) {
-            if (colorControlledFromModalO != null) {
-                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                    backgroundColorFlash = colorControlledFromModal;
-                } else {
-                    backgroundColorFlash = Color.parseColor("#e26901");
-                }
-            } else {
-                backgroundColorFlash = Color.parseColor("#e26901");
-            }
-        } else if (transparent.equals("light") || transparent.equals("true")) {
-            if (colorControlledFromModalO != null) {
-                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                    backgroundColorFlash = colorControlledFromModal;
-                } else {
-                    backgroundColorFlash = Color.parseColor("#1b365d");
-                }
-            } else {
-                backgroundColorFlash = Color.parseColor("#1b365d");
-            }
-        } else {
-            if (colorControlledFromModalO != null) {
-                int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
-                if (!deviceUtils.isLightColor(colorControlledFromModal)) {
-                    backgroundColorFlash = colorControlledFromModal;
-                } else {
-                    backgroundColorFlash = Color.parseColor("#1b365d");
-                }
-            } else {
-                backgroundColorFlash = Color.parseColor("#1b365d");
-            }
-        }
-        return backgroundColorFlash;
-    }
-
-    public static int getCurrentColor(int currentColor, String transparent) {
-        DevicesUtilities deviceUtils = new DevicesUtilities();
-
-        int currentColorFinal = Color.parseColor("#1b365d");
-        if (!deviceUtils.isLightColor(currentColor)) {
-            currentColorFinal = currentColor;
-        }
-
-        return currentColorFinal;
-    }
-
     public static void showFlashIndicator(RemoteViews views, int visibleFlashId, int flashId, int drawable) {
         hideAllFlashIndicators(views);
 
