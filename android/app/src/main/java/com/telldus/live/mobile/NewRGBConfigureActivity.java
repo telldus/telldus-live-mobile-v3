@@ -285,10 +285,10 @@ public class NewRGBConfigureActivity extends Activity {
             paramsCPickerC.setMargins((int)(d * 8), (int) (d * 4), 0, (int) (d * 4));
             color_picker_cover.setLayoutParams(paramsCPickerC);
 
-            color_picker.setBorderWidth(borderWhenIdle);
-            color_picker.setBorderColor(Color.parseColor("#cccccc"));
             LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(swatchSize, swatchSize);
             color_picker.setLayoutParams(paramsCPicker);
+            color_picker.setBorderWidth(borderWhenActive);
+            color_picker.setBorderColor(Color.BLACK);
 
             color_picker.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -352,9 +352,12 @@ public class NewRGBConfigureActivity extends Activity {
                             }
                         }
 
+                        color_picker_cover.setLayoutParams(paramsCPickerC);
+                        
+                        LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(swatchSize, swatchSize);
                         color_picker.setLayoutParams(paramsCPicker);
-                        color_picker.setBorderWidth(borderWhenIdle);
-                        color_picker.setBorderColor(Color.parseColor("#cccccc"));
+                        color_picker.setBorderWidth(0);
+                        color_picker.setBorderColor(Color.TRANSPARENT);
                     }
                 });
                 insertPoint.addView(swatch);
