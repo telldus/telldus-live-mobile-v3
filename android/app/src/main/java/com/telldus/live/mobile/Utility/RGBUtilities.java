@@ -10,6 +10,7 @@ import com.telldus.live.mobile.R;
 public class RGBUtilities {
 
     public static int getSettingColor(String transparent, Object colorControlledFromModalO, String primarySetting, Boolean isControllingRGB, Context context) {
+
         int settingColor = Color.parseColor("#e26901");
         if (transparent.equals("default")) {
             if (!isControllingRGB) {
@@ -18,7 +19,7 @@ public class RGBUtilities {
             } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
                 settingColor = pickOnSettingColorBrightness(colorControlledFromModal, "light");
-            } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("both")) {
+            } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("full")) {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "light");
             }
         } else if (transparent.equals("light")) {
@@ -28,7 +29,7 @@ public class RGBUtilities {
             } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
                 settingColor = pickOnSettingColorBrightness(colorControlledFromModal, "light");
-            } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("both")) {
+            } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("full")) {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "light");
             }
         } else {
@@ -38,7 +39,7 @@ public class RGBUtilities {
             } else if (colorControlledFromModalO != null) {
                 int colorControlledFromModal = Integer.parseInt(colorControlledFromModalO.toString(), 10);
                 settingColor = pickOnSettingColorBrightness(colorControlledFromModal, "light");
-            } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("both")) {
+            } else if (!primarySetting.equalsIgnoreCase("picker") && !primarySetting.equalsIgnoreCase("full")) {
                 settingColor = pickOnSettingColorBrightness(Color.parseColor(primarySetting), "dark");
             }
         }

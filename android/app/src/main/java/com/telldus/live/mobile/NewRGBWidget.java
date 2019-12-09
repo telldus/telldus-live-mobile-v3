@@ -138,7 +138,8 @@ public class NewRGBWidget extends AppWidgetProvider {
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         String state = DeviceWidgetInfo.getState();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
-        String secondaryStateValue = DeviceWidgetInfo.getSecondaryStateValue();
+        String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
+        deviceStateValue = deviceStateValue == null || deviceStateValue == "null" ? "0" : deviceStateValue;
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -183,7 +184,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 paletteIconColor = Color.parseColor(primarySetting);
             }
 
-            Boolean isPicker = primarySetting.equals("picker") || primarySetting.equals("full");
+            Boolean isPicker = primarySetting.equals("picker");
             if (isPicker) {
                 views.setViewVisibility(R.id.palette_rainbow, View.VISIBLE);
                 views.setViewVisibility(R.id.palette, View.GONE);
@@ -197,6 +198,11 @@ public class NewRGBWidget extends AppWidgetProvider {
                         iconSize,
                         iconSize,
                         context));
+
+                views.setViewVisibility(R.id.dimValue, View.VISIBLE);
+                String valueDim = String.valueOf(deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue, 10)));
+                views.setTextViewText(R.id.dimValue, valueDim+"%");
+                views.setTextColor(R.id.dimValue, paletteIconColor);
             }
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
@@ -242,11 +248,13 @@ public class NewRGBWidget extends AppWidgetProvider {
                         0,
                         5,
                         context));
+                views.setTextColor(R.id.dimValue, flashColor);
             }
 
             if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
                 views.setViewVisibility(R.id.palette_rainbow, View.GONE);
                 views.setViewVisibility(R.id.palette, View.VISIBLE);
+                views.setViewVisibility(R.id.dimValue, View.GONE);
 
                 if (state != null && state.equals(String.valueOf(METHOD_RGB))) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(

@@ -21,12 +21,30 @@
         android:gravity="center|center"
         android:visibility="gone"
         android:scaleType="fitXY"/>
-    <ImageView
-        android:id="@+id/palette"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center|center"
-        android:gravity="center|center"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center|center"
+                android:gravity="center|center">
+                <ImageView
+                    android:id="@+id/palette"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center"
+                    android:gravity="center|center"/>
+                <TextView
+                    android:id="@+id/dimValue"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="9sp"
+                    android:layout_gravity="center|center"/>
+            </LinearLayout>
+        </FrameLayout>
     <ImageView
         android:id="@+id/palette_rainbow"
         android:layout_width="30dp"
