@@ -24,11 +24,17 @@
         app:alignContent="flex_start"
         app:justifyContent="center"
         android:id="@+id/rgb_control_cover_inner">
-        
     </com.google.android.flexbox.FlexboxLayout>
-    <com.skydoves.colorpickerview.ColorPickerView
+    <LinearLayout
+        android:id="@+id/colorPickerViewCover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|center"
+        android:layout_gravity="center|center">
+    <com.github.siyamed.shapeimageview.CircularImageView
         android:id="@+id/colorPickerView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:palette="@drawable/palette"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/palette"/>
+    </LinearLayout>
 </LinearLayout>

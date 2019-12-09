@@ -19,6 +19,7 @@
 
 package com.telldus.live.mobile;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -27,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -36,6 +38,7 @@ import android.os.Bundle;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -60,6 +63,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.android.flexbox.FlexboxLayout;
 import com.skydoves.colorpickerview.ActionMode;
 import com.skydoves.colorpickerview.ColorEnvelope;
@@ -69,6 +73,7 @@ import com.skydoves.colorpickerview.listeners.ColorListener;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
@@ -269,26 +274,31 @@ public class NewRGBConfigureActivity extends Activity {
             int space = (int)(d * 8 * 6);
             int swatchSize = (int) ((width - space)/ 6);
 
+            int borderWhenActive = (int) (5 * d);
+            int borderWhenIdle = (int) (1 * d);
+
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swatchSize , swatchSize);
 
-            ColorPickerView color_picker = findViewById(R.id.colorPickerView);
+            CircularImageView color_picker = findViewById(R.id.colorPickerView);
+            LinearLayout color_picker_cover = findViewById(R.id.colorPickerViewCover);
+            LinearLayout.LayoutParams paramsCPickerC = new LinearLayout.LayoutParams(swatchSize, swatchSize);
+            paramsCPickerC.setMargins((int)(d * 8), (int) (d * 4), 0, (int) (d * 4));
+            color_picker_cover.setLayoutParams(paramsCPickerC);
+
+            color_picker.setBorderWidth(borderWhenIdle);
+            color_picker.setBorderColor(Color.parseColor("#cccccc"));
             LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(swatchSize, swatchSize);
-            paramsCPicker.setMargins((int)(d * 8), 0, 0, (int) (d * 4));
             color_picker.setLayoutParams(paramsCPicker);
 
-            GradientDrawable scaledDr = new GradientDrawable();
-            scaledDr.setColor(Color.parseColor("#00000000"));
-            scaledDr.setSize(0, 0);
-            color_picker.setSelectorDrawable(scaledDr);
-            color_picker.setColorListener(new ColorListener() {
+            color_picker.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onColorSelected(int color, boolean fromUser) {
+                public void onClick(View view) {
                     primarySetting = "picker";
                     for (int i = 0; i < swatchColors.length; i++) {
                         GradientDrawable border = new GradientDrawable();
                         border.setColor(Color.parseColor(swatchColors[i]));
                         border.setCornerRadius(swatchSize / 2);
-                        border.setStroke(1, Color.parseColor("#cccccc"));
+                        border.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
                         findViewById(i).setBackground(border);
                     }
 
@@ -296,6 +306,11 @@ public class NewRGBConfigureActivity extends Activity {
                     image_dark.setImageResource(R.drawable.widget_rgb_dark);
                     image_light.setImageResource(R.drawable.widget_rgb_light);
 
+                    LinearLayout.LayoutParams paramsCPickerC = new LinearLayout.LayoutParams(swatchSize, swatchSize);
+                    color_picker.setLayoutParams(paramsCPickerC);
+
+                    color_picker.setBorderWidth(borderWhenActive);
+                    color_picker.setBorderColor(Color.BLACK);
                 }
             });
 
@@ -308,7 +323,7 @@ public class NewRGBConfigureActivity extends Activity {
 
                 GradientDrawable border = new GradientDrawable();
                 border.setColor(Color.parseColor(swatchColors[i]));
-                border.setStroke(1, Color.parseColor("#cccccc"));
+                border.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
                 border.setCornerRadius(swatchSize / 2);
                 swatch.setBackground(border);
 
@@ -329,13 +344,17 @@ public class NewRGBConfigureActivity extends Activity {
                             border.setColor(Color.parseColor(swatchColors[i]));
                             border.setCornerRadius(swatchSize / 2);
                             if (id == i) {
-                                border.setStroke(4, Color.parseColor("#000000"));
+                                border.setStroke(borderWhenActive, Color.parseColor("#000000"));
                                 findViewById(i).setBackground(border);
                             } else {
-                                border.setStroke(1, Color.parseColor("#cccccc"));
+                                border.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
                                 findViewById(i).setBackground(border);
                             }
                         }
+
+                        color_picker.setLayoutParams(paramsCPicker);
+                        color_picker.setBorderWidth(borderWhenIdle);
+                        color_picker.setBorderColor(Color.parseColor("#cccccc"));
                     }
                 });
                 insertPoint.addView(swatch);
