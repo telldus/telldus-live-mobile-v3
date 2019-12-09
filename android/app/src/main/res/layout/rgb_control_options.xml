@@ -25,16 +25,29 @@
         app:justifyContent="center"
         android:id="@+id/rgb_control_cover_inner">
     </com.google.android.flexbox.FlexboxLayout>
-    <LinearLayout
-        android:id="@+id/colorPickerViewCover"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="center|center"
         android:layout_gravity="center|center">
-    <com.github.siyamed.shapeimageview.CircularImageView
+    <LinearLayout
+        android:id="@+id/colorPickerViewCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center|center"
+        android:layout_gravity="center|center">
+    <ImageView
         android:id="@+id/colorPickerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/palette"/>
     </LinearLayout>
+        <FrameLayout
+            android:id="@+id/colorPickerViewFakeBG"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 </LinearLayout>

@@ -41,6 +41,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -279,16 +280,19 @@ public class NewRGBConfigureActivity extends Activity {
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swatchSize , swatchSize);
 
-            CircularImageView color_picker = findViewById(R.id.colorPickerView);
-            LinearLayout color_picker_cover = findViewById(R.id.colorPickerViewCover);
-            LinearLayout.LayoutParams paramsCPickerC = new LinearLayout.LayoutParams(swatchSize, swatchSize);
-            paramsCPickerC.setMargins((int)(d * 8), (int) (d * 4), 0, (int) (d * 4));
-            color_picker_cover.setLayoutParams(paramsCPickerC);
+            ImageView color_picker = findViewById(R.id.colorPickerView);
+            FrameLayout colorPickerViewFakeBG = findViewById(R.id.colorPickerViewFakeBG);
 
             LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(swatchSize, swatchSize);
             color_picker.setLayoutParams(paramsCPicker);
-            color_picker.setBorderWidth(borderWhenActive);
-            color_picker.setBorderColor(Color.BLACK);
+
+            FrameLayout.LayoutParams paramsCPickerFBG = new FrameLayout.LayoutParams(swatchSize, swatchSize);
+            colorPickerViewFakeBG.setLayoutParams(paramsCPickerFBG);
+
+            GradientDrawable borderCP = new GradientDrawable();
+            borderCP.setCornerRadius(swatchSize / 2);
+            borderCP.setStroke(borderWhenActive, Color.parseColor("#000000"));
+            colorPickerViewFakeBG.setBackground(borderCP);
 
             color_picker.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -309,8 +313,10 @@ public class NewRGBConfigureActivity extends Activity {
                     LinearLayout.LayoutParams paramsCPickerC = new LinearLayout.LayoutParams(swatchSize, swatchSize);
                     color_picker.setLayoutParams(paramsCPickerC);
 
-                    color_picker.setBorderWidth(borderWhenActive);
-                    color_picker.setBorderColor(Color.BLACK);
+                    GradientDrawable borderCP = new GradientDrawable();
+                    borderCP.setCornerRadius(swatchSize / 2);
+                    borderCP.setStroke(borderWhenActive, Color.parseColor("#000000"));
+                    colorPickerViewFakeBG.setBackground(borderCP);
                 }
             });
 
@@ -352,12 +358,10 @@ public class NewRGBConfigureActivity extends Activity {
                             }
                         }
 
-                        color_picker_cover.setLayoutParams(paramsCPickerC);
-                        
-                        LinearLayout.LayoutParams paramsCPicker = new LinearLayout.LayoutParams(swatchSize, swatchSize);
-                        color_picker.setLayoutParams(paramsCPicker);
-                        color_picker.setBorderWidth(0);
-                        color_picker.setBorderColor(Color.TRANSPARENT);
+                        GradientDrawable borderCP = new GradientDrawable();
+                        borderCP.setCornerRadius(swatchSize / 2);
+                        borderCP.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
+                        colorPickerViewFakeBG.setBackground(borderCP);
                     }
                 });
                 insertPoint.addView(swatch);
