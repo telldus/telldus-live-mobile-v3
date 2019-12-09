@@ -163,10 +163,8 @@ public class NewRGBWidget extends AppWidgetProvider {
         if (hasRGB) {
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
 
-            int currentColor = getCurrentColor(Color.parseColor(deviceUtils.getMainColorRGB(Integer.parseInt(secondaryStateValue, 10))), transparent);
-
             Boolean isLastButton = true;
-            int colorIdle = handleBackgroundWhenIdleOne(
+            handleBackgroundWhenIdleOne(
                                 "RGB",
                                 transparent,
                                 renderedButtonsCount,
@@ -185,15 +183,25 @@ public class NewRGBWidget extends AppWidgetProvider {
                 paletteIconColor = Color.parseColor(primarySetting);
             }
 
-            views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
-                "palette",
-                    paletteIconColor,
-                iconWidth,
-                    iconSize,
-                    iconSize,
-                context));
+            Boolean isPicker = primarySetting.equals("picker") || primarySetting.equals("full");
+            if (isPicker) {
+                views.setViewVisibility(R.id.palette_rainbow, View.VISIBLE);
+                views.setViewVisibility(R.id.palette, View.GONE);
+            } else {
+                views.setViewVisibility(R.id.palette_rainbow, View.GONE);
+                views.setViewVisibility(R.id.palette, View.VISIBLE);
+                views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
+                        "palette",
+                        paletteIconColor,
+                        iconWidth,
+                        iconSize,
+                        iconSize,
+                        context));
+            }
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
+                views.setViewVisibility(R.id.palette_rainbow, View.GONE);
+                views.setViewVisibility(R.id.palette, View.VISIBLE);
 
                 Object colorControlledFromModalO = extraArgs.get("colorControlledFromModal");
                 int settingColor = RGBUtilities.getSettingColor(transparent, colorControlledFromModalO, primarySetting, methodRequested.equals(String.valueOf(METHOD_RGB)), context);
@@ -237,6 +245,9 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
 
             if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {
+                views.setViewVisibility(R.id.palette_rainbow, View.GONE);
+                views.setViewVisibility(R.id.palette, View.VISIBLE);
+
                 if (state != null && state.equals(String.valueOf(METHOD_RGB))) {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
@@ -503,17 +514,6 @@ public class NewRGBWidget extends AppWidgetProvider {
             }
         };
         handlerResetDeviceStateToNull.postDelayed(runnableResetDeviceStateToNull, 5000);
-    }
-
-    public static int getCurrentColor(int currentColor, String transparent) {
-        DevicesUtilities deviceUtils = new DevicesUtilities();
-
-        int currentColorFinal = Color.parseColor("#1b365d");
-        if (!deviceUtils.isLightColor(currentColor)) {
-            currentColorFinal = currentColor;
-        }
-
-        return currentColorFinal;
     }
 
     public void removeHandlerResetDeviceStateToNull() {
