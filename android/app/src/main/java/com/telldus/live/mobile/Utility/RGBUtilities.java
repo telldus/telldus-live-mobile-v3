@@ -51,17 +51,17 @@ public class RGBUtilities {
         int settingColor;
 
         if (typeToCheck.equals("light")) {
-            if (!deviceUtils.isLightColor(color)) {
+            // if (!deviceUtils.isLightColor(color)) {
                 settingColor = color;
-            } else {
-                settingColor = Color.parseColor("#e26901");
-            }
+            // } else {
+            //     settingColor = Color.parseColor("#e26901");
+            // }
         } else {
-            if (!deviceUtils.isLightColor(color)) {// TODO check for dark
+            // if (!deviceUtils.isLightColor(color)) {// TODO check for dark
                 settingColor = color;
-            } else {
-                settingColor = Color.parseColor("#e26901");
-            }
+            // } else {
+            //     settingColor = Color.parseColor("#e26901");
+            // }
         }
 
         return settingColor;
