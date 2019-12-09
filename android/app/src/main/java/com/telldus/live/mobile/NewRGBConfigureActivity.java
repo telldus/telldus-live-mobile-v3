@@ -277,6 +277,7 @@ public class NewRGBConfigureActivity extends Activity {
 
             int borderWhenActive = (int) (5 * d);
             int borderWhenIdle = (int) (1 * d);
+            int borderColor = Color.parseColor("#CCCCCC");
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(swatchSize , swatchSize);
 
@@ -291,7 +292,7 @@ public class NewRGBConfigureActivity extends Activity {
 
             GradientDrawable borderCP = new GradientDrawable();
             borderCP.setCornerRadius(swatchSize / 2);
-            borderCP.setStroke(borderWhenActive, Color.parseColor("#000000"));
+            borderCP.setStroke(borderWhenActive, borderColor);
             colorPickerViewFakeBG.setBackground(borderCP);
 
             color_picker.setOnClickListener(new View.OnClickListener() {
@@ -302,7 +303,7 @@ public class NewRGBConfigureActivity extends Activity {
                         GradientDrawable border = new GradientDrawable();
                         border.setColor(Color.parseColor(swatchColors[i]));
                         border.setCornerRadius(swatchSize / 2);
-                        border.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
+                        border.setStroke(borderWhenIdle, borderColor);
                         findViewById(i).setBackground(border);
                     }
 
@@ -315,7 +316,7 @@ public class NewRGBConfigureActivity extends Activity {
 
                     GradientDrawable borderCP = new GradientDrawable();
                     borderCP.setCornerRadius(swatchSize / 2);
-                    borderCP.setStroke(borderWhenActive, Color.parseColor("#000000"));
+                    borderCP.setStroke(borderWhenActive, borderColor);
                     colorPickerViewFakeBG.setBackground(borderCP);
                 }
             });
@@ -329,7 +330,7 @@ public class NewRGBConfigureActivity extends Activity {
 
                 GradientDrawable border = new GradientDrawable();
                 border.setColor(Color.parseColor(swatchColors[i]));
-                border.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
+                border.setStroke(borderWhenIdle, borderColor);
                 border.setCornerRadius(swatchSize / 2);
                 swatch.setBackground(border);
 
@@ -350,17 +351,17 @@ public class NewRGBConfigureActivity extends Activity {
                             border.setColor(Color.parseColor(swatchColors[i]));
                             border.setCornerRadius(swatchSize / 2);
                             if (id == i) {
-                                border.setStroke(borderWhenActive, Color.parseColor("#000000"));
+                                border.setStroke(borderWhenActive, borderColor);
                                 findViewById(i).setBackground(border);
                             } else {
-                                border.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
+                                border.setStroke(borderWhenIdle, borderColor);
                                 findViewById(i).setBackground(border);
                             }
                         }
 
                         GradientDrawable borderCP = new GradientDrawable();
                         borderCP.setCornerRadius(swatchSize / 2);
-                        borderCP.setStroke(borderWhenIdle, Color.parseColor("#cccccc"));
+                        borderCP.setStroke(borderWhenIdle, borderColor);
                         colorPickerViewFakeBG.setBackground(borderCP);
                     }
                 });
