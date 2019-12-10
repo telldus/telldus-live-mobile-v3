@@ -486,6 +486,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             String primarySetting = widgetInfo.getPrimarySetting();
+            String secondarySetting = widgetInfo.getSecondarySetting();
             int pickedColor = Color.parseColor(primarySetting);
             int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
 
@@ -494,7 +495,9 @@ public class NewRGBWidget extends AppWidgetProvider {
             rgb.put("g", g);
             rgb.put("b", b);
 
-            createDeviceActionApi(context, deviceId, METHOD_RGB, rgb, widgetId, db, "Off");
+            int sSetting = secondarySetting == null ? 0 : Integer.parseInt(secondarySetting, 10);
+            createDeviceActionDim(deviceId, METHOD_DIM, sSetting, widgetId, context);
+            createDeviceActionRGB(context, deviceId, METHOD_RGB, rgb, widgetId, db);
         }
 
         if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
@@ -575,7 +578,7 @@ public class NewRGBWidget extends AppWidgetProvider {
         });
     }
 
-    void createDeviceActionApi(final Context context, final int deviceId, int method, final Map rgb, final int widgetId, final MyDBHandler db, final String action) {
+    void createDeviceActionRGB(final Context context, final int deviceId, int method, final Map rgb, final int widgetId, final MyDBHandler db) {
         deviceAPI.setDeviceStateRGB(deviceId, method, rgb, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -599,6 +602,17 @@ public class NewRGBWidget extends AppWidgetProvider {
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateAppWidget(context, widgetManager, widgetId, new HashMap());
+            }
+        });
+    }
+
+    public void createDeviceActionDim(final int deviceId, int method, int value, final int widgetId, final Context context) {
+        deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {
+            @Override
+            public void onSuccess(JSONObject response) {
+            }
+            @Override
+            public void onError(ANError error) {
             }
         });
     }
