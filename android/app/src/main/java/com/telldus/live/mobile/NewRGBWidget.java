@@ -485,20 +485,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
             updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
-            String primarySetting = widgetInfo.getPrimarySetting();
-            String secondarySetting = widgetInfo.getSecondarySetting();
-            int pickedColor = Color.parseColor(primarySetting);
-            int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
-
-            Map rgb = new HashMap<String, Object>();
-            rgb.put("r", r);
-            rgb.put("g", g);
-            rgb.put("b", b);
-
-            DevicesUtilities deviceUtils = new DevicesUtilities();
-            int sSetting = secondarySetting == null ? 0 : deviceUtils.toDimmerValue(Integer.parseInt(secondarySetting, 10));
-            createDeviceActionDim(deviceId, METHOD_DIM, sSetting, widgetId, context);
-            createDeviceActionRGB(context, deviceId, METHOD_RGB, rgb, widgetId, db);
+            createDeviceAction(deviceId, widgetId, context);
         }
 
         if (ACTION_MORE_ACTIONS.equals(intent.getAction())) {
@@ -607,13 +594,30 @@ public class NewRGBWidget extends AppWidgetProvider {
         });
     }
 
-    public void createDeviceActionDim(final int deviceId, int method, int value, final int widgetId, final Context context) {
-        deviceAPI.setDeviceState(deviceId, method, value, widgetId, context, API_TAG, new OnAPITaskComplete() {
+    public void createDeviceAction(final int deviceId, final int widgetId, final Context context) {
+        MyDBHandler db = new MyDBHandler(context);
+        DeviceInfo widgetInfo = db.findWidgetInfoDevice(widgetId);
+        String primarySetting = widgetInfo.getPrimarySetting();
+        String secondarySetting = widgetInfo.getSecondarySetting();
+        int pickedColor = Color.parseColor(primarySetting);
+        int r = Color.red(pickedColor), g = Color.green(pickedColor), b = Color.blue(pickedColor);
+
+        Map rgb = new HashMap<String, Object>();
+        rgb.put("r", r);
+        rgb.put("g", g);
+        rgb.put("b", b);
+
+        DevicesUtilities deviceUtils = new DevicesUtilities();
+        int dimValue = secondarySetting == null ? 0 : deviceUtils.toDimmerValue(Integer.parseInt(secondarySetting, 10));
+
+        deviceAPI.setDeviceState(deviceId, METHOD_DIM, dimValue, widgetId, context, API_TAG, new OnAPITaskComplete() {
             @Override
             public void onSuccess(JSONObject response) {
+                createDeviceActionRGB(context, deviceId, METHOD_RGB, rgb, widgetId, db);
             }
             @Override
             public void onError(ANError error) {
+                createDeviceActionRGB(context, deviceId, METHOD_RGB, rgb, widgetId, db);
             }
         });
     }
