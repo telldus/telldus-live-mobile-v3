@@ -289,7 +289,7 @@ getStyle(appLayout: Object): Object {
 			flexGrow: 1,
 			justifyContent: 'center',
 		},
-		posterWidth: '100%',
+		posterWidth: width,
 		posterHeight,
 		posterItemsStyle: {
 			flex: 1,
