@@ -52,6 +52,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public static final String DEVICE_SECONDARY_STATE_VALUE = "deviceSecStateValue";
 
     public static final String PRIMARY_SETTING = "primarySetting";
+    public static final String SECONDARY_SETTING = "secondarySetting";
 
     public static final String CLIENT_DEVICE_ID = "clientDeviceId";
     public static final String CLIENT_ID = "clientId";
@@ -82,7 +83,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 + " TEXT," + WIDGET_DEVICE_USER_ID + " TEXT," + DEVICE_METHOD_REQUESTED
                 + " TEXT,"+ DEVICE_IS_SHOWING_STATUS + " INTEGER," + SENSOR_UPDATE_INTERVAL + " INTEGER," +
                 CLIENT_DEVICE_ID + " INTEGER," + CLIENT_ID + " INTEGER," +  DEVICE_SECONDARY_STATE_VALUE + " TEXT," +
-                PRIMARY_SETTING + " TEXT" + ")";
+                PRIMARY_SETTING + " TEXT," + SECONDARY_SETTING + " TEXT" + ")";
 
         String CREATE_SENSOR_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_SENSOR + "("+ WIDGET_ID_SENSOR + " INTEGER," + SENSOR_ID
@@ -125,6 +126,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             addClientIdToDevicesTable(db);
             addSecondaryStateValueTable(db);
             addPrimarySettingToDevicesTable(db);
+            addSecondarySettingToDevicesTable(db);
         }
         if (oldVersion == 2 && newVersion == 4) {
             // A new columns introduced into the table "TABLE_WIDGET_INFO_DEVICE"
@@ -133,9 +135,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
             addClientIdToDevicesTable(db);
             addSecondaryStateValueTable(db);
             addPrimarySettingToDevicesTable(db);
+            addSecondarySettingToDevicesTable(db);
         }
         if (oldVersion == 3 && newVersion == 4) {
             addPrimarySettingToDevicesTable(db);
+            addSecondarySettingToDevicesTable(db);
         }
     }
 
@@ -169,6 +173,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL(ALTER_TABLE_DEVICE);
     }
 
+    public void addSecondarySettingToDevicesTable(SQLiteDatabase db) {
+        String ALTER_TABLE_DEVICE = "ALTER TABLE " + TABLE_WIDGET_INFO_DEVICE + " ADD COLUMN " + SECONDARY_SETTING + " TEXT";
+        db.execSQL(ALTER_TABLE_DEVICE);
+    }
+
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -189,6 +198,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(CLIENT_ID, mDeviceInfo.getClientId());
         values.put(DEVICE_SECONDARY_STATE_VALUE, mDeviceInfo.getSecondaryStateValue());
         values.put(PRIMARY_SETTING, mDeviceInfo.getPrimarySetting());
+        values.put(SECONDARY_SETTING, mDeviceInfo.getSecondarySetting());
 
         //Inserting Row
         db.insert(TABLE_WIDGET_INFO_DEVICE, null, values);
@@ -242,6 +252,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
             r.setClientId(cursor.getInt(13));
             r.setSecondaryStateValue(cursor.getString(14));
             r.setPrimarySetting(cursor.getString(15));
+            r.setSecondarySetting(cursor.getString(16));
 
             cursor.close();
         } else {
@@ -474,6 +485,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 r.setClientId(cursor.getInt(13));
                 r.setSecondaryStateValue(cursor.getString(14));
                 r.setPrimarySetting(cursor.getString(15));
+                r.setSecondarySetting(cursor.getString(16));
 
                 list.add(r);
             } while (cursor.moveToNext());

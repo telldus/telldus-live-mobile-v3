@@ -96,7 +96,7 @@ public class NewRGBConfigureActivity extends Activity {
     private AppWidgetManager widgetManager;
 
     private String accessToken;
-    private String primarySetting = "picker";
+    private String primarySetting = "picker", secondarySetting = null;
 
     int stateID;
 
@@ -309,6 +309,7 @@ public class NewRGBConfigureActivity extends Activity {
                     colorPickerViewFakeBG.setBackground(borderCP);
 
                     dimSliderCover.setVisibility(View.GONE);
+                    secondarySetting = null;
                 }
             });
 
@@ -364,6 +365,7 @@ public class NewRGBConfigureActivity extends Activity {
                             dimSliderCover.setBackground(getResources().getDrawable(R.drawable.shape));
 
                             dimV.setText("0%");
+                            secondarySetting = "0";
                         }
                     }
                 });
@@ -375,6 +377,8 @@ public class NewRGBConfigureActivity extends Activity {
 
                         int newValue = deviceUtils.toSliderValue((int) value);
                         dimV.setText(String.valueOf(newValue)+"%");
+
+                        secondarySetting = String.valueOf(newValue);
                     });
 
 
@@ -429,7 +433,8 @@ public class NewRGBConfigureActivity extends Activity {
                         -1, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
                         secondaryStateValue,  // As of now required/handled only for thermostats
-                        primarySetting
+                        primarySetting,
+                            secondarySetting
                     );
                     db.addWidgetDevice(mInsert);
                     NewRGBWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());

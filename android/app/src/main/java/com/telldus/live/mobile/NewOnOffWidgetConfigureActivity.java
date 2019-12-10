@@ -278,7 +278,8 @@ public class NewOnOffWidgetConfigureActivity extends Activity {
                         -1, // As of now required/handled only for thermostats
                         -1, // As of now required/handled only for thermostats
                         secondaryStateValue,  // As of now required/handled only for thermostats
-                        "full" // As of now set only for RGB[control option]
+                        "full", // As of now set only for RGB[control option]
+                            null // As of now set only for RGB[control option]
                         );
                     db.addWidgetDevice(mInsert);
 

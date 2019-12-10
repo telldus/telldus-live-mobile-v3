@@ -138,8 +138,9 @@ public class NewRGBWidget extends AppWidgetProvider {
         String methodRequested = DeviceWidgetInfo.getMethodRequested();
         String state = DeviceWidgetInfo.getState();
         Integer isShowingStatus = DeviceWidgetInfo.getIsShowingStatus();
-        String deviceStateValue = DeviceWidgetInfo.getDeviceStateValue();
-        deviceStateValue = deviceStateValue == null || deviceStateValue == "null" ? "0" : deviceStateValue;
+
+        String secondarySetting = DeviceWidgetInfo.getSecondarySetting();
+        secondarySetting = secondarySetting == null ? "0" : secondarySetting;
 
         DevicesUtilities deviceUtils = new DevicesUtilities();
         Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
@@ -200,8 +201,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                         context));
 
                 views.setViewVisibility(R.id.dimValue, View.VISIBLE);
-                String valueDim = String.valueOf(deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue, 10)));
-                views.setTextViewText(R.id.dimValue, valueDim+"%");
+                views.setTextViewText(R.id.dimValue, secondarySetting+"%");
                 views.setTextColor(R.id.dimValue, paletteIconColor);
             }
 

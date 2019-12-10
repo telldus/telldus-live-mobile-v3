@@ -308,7 +308,8 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                         clientDeviceId,
                         clientId,
                         secondaryStateValue,
-                        null // As of now set only for RGB[control option]
+                        null, // As of now set only for RGB[control option]
+                            null // As of now set only for RGB[control option]
                         );
                     db.addWidgetDevice(mInsert);
 
