@@ -70,7 +70,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		};
 
 		this.device = devices.byId[schedule.deviceId]; // We do not want scheduler to update on device prop change
-		const { stateValues = {}, parameter } = this.device || {};
+		const { stateValues = {}, parameter = [] } = this.device || {};
 		const { THERMOSTAT: { mode } } = stateValues;
 
 		const { methodValue } = schedule;

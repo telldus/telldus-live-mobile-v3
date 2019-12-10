@@ -78,7 +78,7 @@ class DeviceActionDetails extends View {
 			deviceType,
 			isInState,
 			stateValues = {},
-			parameter,
+			parameter = [],
 		} = device;
 		const {
 			TURNON,
