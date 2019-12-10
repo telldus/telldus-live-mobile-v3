@@ -495,7 +495,8 @@ public class NewRGBWidget extends AppWidgetProvider {
             rgb.put("g", g);
             rgb.put("b", b);
 
-            int sSetting = secondarySetting == null ? 0 : Integer.parseInt(secondarySetting, 10);
+            DevicesUtilities deviceUtils = new DevicesUtilities();
+            int sSetting = secondarySetting == null ? 0 : deviceUtils.toDimmerValue(Integer.parseInt(secondarySetting, 10));
             createDeviceActionDim(deviceId, METHOD_DIM, sSetting, widgetId, context);
             createDeviceActionRGB(context, deviceId, METHOD_RGB, rgb, widgetId, db);
         }
