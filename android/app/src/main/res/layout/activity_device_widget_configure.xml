@@ -217,12 +217,24 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:textSize="16sp"
-                        android:text="Control Option"
+                        android:text="@string/reserved_widget_android_label_rgb_control_option"
                         android:layout_marginBottom="10dp"
                         android:textColor="@color/darkGray"
                         android:visibility="gone"/>
                     <include
                             layout="@layout/rgb_control_options"/>
+
+                    <TextView
+                        android:id="@+id/dim_slider_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:text="@string/reserved_widget_android_dimmingLevel"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/darkGray"
+                        android:visibility="gone"/>
                     <include
                         layout="@layout/dim_slider"/>
 

@@ -260,6 +260,7 @@ public class NewRGBConfigureActivity extends Activity {
             LinearLayout dimSliderCover = (LinearLayout) findViewById(R.id.dim_slider_cover);
             Slider dimSlider = (Slider) findViewById(R.id.dim_slider);
             TextView dimV = (TextView) findViewById(R.id.dim_value);
+            TextView dim_slider_label = (TextView) findViewById(R.id.dim_slider_label);
 
             int space = (int)(d * 8 * 6);
             int swatchSize = (int) ((width - space)/ 6);
@@ -310,6 +311,7 @@ public class NewRGBConfigureActivity extends Activity {
 
                     dimSliderCover.setVisibility(View.GONE);
                     secondarySetting = null;
+                    dim_slider_label.setVisibility(View.GONE);
                 }
             });
 
@@ -356,6 +358,7 @@ public class NewRGBConfigureActivity extends Activity {
                         borderCP.setStroke(borderWhenIdle, borderColor);
                         colorPickerViewFakeBG.setBackground(borderCP);
 
+                        dim_slider_label.setVisibility(View.VISIBLE);
                         if (dimSliderCover.getVisibility() != View.VISIBLE) {
                             dimSliderCover.setVisibility(View.VISIBLE);
                             LinearLayout.LayoutParams paramsDIMC = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
