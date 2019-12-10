@@ -16,26 +16,27 @@
         android:gravity="center|center"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"
-        android:paddingTop="4dp">
+        android:paddingBottom="4dp">
+        <include layout="@layout/widget_3_1_devices"/>
         <LinearLayout
             android:id="@+id/widgetTitleCover"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_weight="0">
             <TextView
                 android:id="@+id/txtWidgetTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reserved_widget_android_unknown"
                 android:textSize="14sp"
-                android:textStyle="bold"
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:layout_centerInParent="true"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:fontFamily="sans-serif-light"/>
         </LinearLayout>
-        <include layout="@layout/widget_3_1_devices"/>
     </LinearLayout>
     <include layout="@layout/premium_required_info"/>
 </FrameLayout>
