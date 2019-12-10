@@ -223,6 +223,8 @@
                         android:visibility="gone"/>
                     <include
                             layout="@layout/rgb_control_options"/>
+                    <include
+                        layout="@layout/dim_slider"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

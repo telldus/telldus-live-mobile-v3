@@ -19,7 +19,6 @@
 
 package com.telldus.live.mobile;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -27,25 +26,16 @@ import android.appwidget.AppWidgetManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.view.Gravity;
@@ -64,17 +54,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.siyamed.shapeimageview.CircularImageView;
 import com.google.android.flexbox.FlexboxLayout;
-import com.skydoves.colorpickerview.ActionMode;
-import com.skydoves.colorpickerview.ColorEnvelope;
-import com.skydoves.colorpickerview.ColorPickerView;
-import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener;
-import com.skydoves.colorpickerview.listeners.ColorListener;
+import com.google.android.material.slider.Slider;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
-import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
@@ -136,6 +120,8 @@ public class NewRGBConfigureActivity extends Activity {
             rgb_control_options_label;
 
     ImageView image_def, image_dark, image_light;
+
+    DevicesUtilities deviceUtils = new DevicesUtilities();
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -268,9 +254,12 @@ public class NewRGBConfigureActivity extends Activity {
             float d = getResources().getDisplayMetrics().density;
 
             String swatchColors[] = Constants.swatchColors;
-            findViewById(R.id.rgb_control_options).setVisibility(View.VISIBLE);
             FlexboxLayout insertPoint = (FlexboxLayout) findViewById(R.id.rgb_control_cover_inner);
             insertPoint.removeAllViews();
+
+            LinearLayout dimSliderCover = (LinearLayout) findViewById(R.id.dim_slider_cover);
+            Slider dimSlider = (Slider) findViewById(R.id.dim_slider);
+            TextView dimV = (TextView) findViewById(R.id.dim_value);
 
             int space = (int)(d * 8 * 6);
             int swatchSize = (int) ((width - space)/ 6);
@@ -318,6 +307,8 @@ public class NewRGBConfigureActivity extends Activity {
                     borderCP.setCornerRadius(swatchSize / 2);
                     borderCP.setStroke(borderWhenActive, borderColor);
                     colorPickerViewFakeBG.setBackground(borderCP);
+
+                    dimSliderCover.setVisibility(View.GONE);
                 }
             });
 
@@ -363,10 +354,28 @@ public class NewRGBConfigureActivity extends Activity {
                         borderCP.setCornerRadius(swatchSize / 2);
                         borderCP.setStroke(borderWhenIdle, borderColor);
                         colorPickerViewFakeBG.setBackground(borderCP);
+
+                        if (dimSliderCover.getVisibility() != View.VISIBLE) {
+                            dimSliderCover.setVisibility(View.VISIBLE);
+                            LinearLayout.LayoutParams paramsDIMC = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            paramsDIMC.setMargins((int) (d * 10), (int) (d * 5), (int) (d * 10), 0);
+                            dimSliderCover.setLayoutParams(paramsDIMC);
+                            dimSliderCover.setElevation((int) (d * 2));
+                            dimSliderCover.setBackground(getResources().getDrawable(R.drawable.shape));
+
+                            dimV.setText("0%");
+                        }
                     }
                 });
                 insertPoint.addView(swatch);
             }
+
+            dimSlider.setOnChangeListener(
+                    (slider, value) -> {
+
+                        int newValue = deviceUtils.toSliderValue((int) value);
+                        dimV.setText(String.valueOf(newValue)+"%");
+                    });
 
 
             Intent intent = getIntent();
@@ -435,7 +444,6 @@ public class NewRGBConfigureActivity extends Activity {
 
             btSelectDevice.setOnClickListener(new View.OnClickListener() {
                 AlertDialog ad;
-                DevicesUtilities deviceUtils = new DevicesUtilities();
                 public void onClick(View view) {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(NewRGBConfigureActivity.this, R.style.MaterialThemeDialog);
                     builder.setTitle(R.string.reserved_widget_android_pick_device)
@@ -543,7 +551,6 @@ public class NewRGBConfigureActivity extends Activity {
             public void onSuccess(final JSONObject response) {
                 String message = getResources().getString(R.string.reserved_widget_android_message_add_widget_no_device_3);
                 try {
-                    DevicesUtilities deviceUtils = new DevicesUtilities();
 
                     JSONObject deviceData = new JSONObject(response.toString());
                     JSONArray deviceList = deviceData.getJSONArray("device");
