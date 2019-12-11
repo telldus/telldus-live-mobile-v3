@@ -84,15 +84,25 @@ onChooseType({module, action, secure}: Object) {
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
 
-	// get all nodes list in the chosen gateway, to check if device already included
-	this.getNodesList(gateway.id);
+	if (module === 'zwave') {
+		// get all nodes list in the chosen gateway, to check if device already included
+		this.getNodesList(gateway.id);
 
-	navigation.navigate('IncludeDevice', {
-		gateway,
-		module,
-		action,
-		secure,
-	});
+		navigation.navigate('IncludeDevice', {
+			gateway,
+			module,
+			action,
+			secure,
+		});
+	} else if (module === 'rf433') {
+		navigation.navigate('SelectBrand433', {
+			gateway,
+			module,
+			action,
+			secure,
+		});
+	}
+
 }
 
 getNodesList(id: number) {
