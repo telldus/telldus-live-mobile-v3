@@ -82,7 +82,7 @@ constructor(props: Props) {
 componentDidMount() {
 	const { onDidMount, intl } = this.props;
 	const { formatMessage } = intl;
-	onDidMount(formatMessage(i18n.brand), formatMessage(i18n.selectBrandOfD));
+	onDidMount(formatMessage(i18n.labelModel), formatMessage(i18n.selectModelOfD));
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
