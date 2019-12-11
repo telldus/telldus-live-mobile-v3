@@ -78,7 +78,7 @@ const NumberedBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, isLast: boolean): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;

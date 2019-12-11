@@ -38,6 +38,7 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	currentScreen: string,
+	locale: string,
 
     navigation: Object,
     appLayout: Object,
