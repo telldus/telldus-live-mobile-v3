@@ -35,12 +35,13 @@ const InfoBlock = (props: Object): Object => {
 		appLayout,
 		infoIconStyle,
 		infoContainer,
+		textStyle,
 	} = props;
 
 	const {
 		infoContainerDef,
 		infoIconStyleDef,
-		textStyle,
+		textStyleDef,
 		blockIconContainerStyle,
 	} = getStyles(appLayout);
 
@@ -55,7 +56,7 @@ const InfoBlock = (props: Object): Object => {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 			}}>
-				<Text style={textStyle}>
+				<Text style={[textStyleDef, textStyle]}>
 					{text}
 				</Text>
 			</View>
@@ -98,7 +99,7 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: deviceWidth * 0.14,
 			color: brandSecondary,
 		},
-		textStyle: {
+		textStyleDef: {
 			flex: 1,
 			fontSize: fontSizeBody,
 			color: eulaContentColor,
