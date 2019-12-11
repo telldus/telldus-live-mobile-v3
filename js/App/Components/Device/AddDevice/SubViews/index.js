@@ -25,9 +25,13 @@
 import DeviceTypeBlock from './DeviceTypeBlock';
 import NameRow from './NameRow';
 import DeviceInfoBlock from './DeviceInfoBlock';
+import Row from './Row';
+import NumberedBlock from './NumberedBlock';
 
 module.exports = {
 	DeviceTypeBlock,
 	NameRow,
 	DeviceInfoBlock,
+	Row,
+	NumberedBlock,
 };

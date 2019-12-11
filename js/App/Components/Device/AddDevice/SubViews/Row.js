@@ -1,0 +1,118 @@
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+// @flow
+
+'use strict';
+
+import React from 'react';
+import {
+	TouchableOpacity,
+	StyleSheet,
+} from 'react-native';
+import { useSelector } from 'react-redux';
+
+import {
+	View,
+	Text,
+	Image,
+} from '../../../../../BaseComponents';
+
+import Theme from '../../../../Theme';
+
+const Row = (props: Object): Object => {
+	const {
+		img = {uri: 'icon_plus'},
+		name,
+		isLast,
+		onPress,
+	} = props;
+
+	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const {
+		coverStyle,
+		imgStyle,
+		textStyle,
+	} = getStyles(layout, isLast);
+
+	function onPressRow() {
+		if (onPress) {
+			onPress(name);
+		}
+	}
+
+	return (
+		<TouchableOpacity onPress={onPressRow}>
+			<View style={coverStyle}>
+				<Image source={img} style={imgStyle} resizeMode={'stretch'}/>
+				<Text style={textStyle}>
+					{name}
+				</Text>
+			</View>
+		</TouchableOpacity>
+	);
+};
+
+const getStyles = (appLayout: Object, isLast: boolean): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		shadow,
+		paddingFactor,
+		eulaContentColor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+	const imageW = deviceWidth * 0.15;
+	const imageH = deviceWidth * 0.1;
+	const fontSize = deviceWidth * 0.045;
+
+	const sdw = isLast ? shadow : {};
+
+	return {
+		coverStyle: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			width: width,
+			borderTopWidth: StyleSheet.hairlineWidth,
+			borderTopColor: eulaContentColor,
+			paddingVertical: padding,
+			paddingHorizontal: padding * 2,
+			backgroundColor: '#fff',
+			...sdw,
+			marginBottom: isLast ? padding : 0,
+		},
+		imgStyle: {
+			height: imageH,
+			width: imageW,
+			tintColor: 'red',
+		},
+		textStyle: {
+			color: eulaContentColor,
+			marginLeft: padding * 2,
+			fontSize,
+		},
+	};
+};
+
+export default Row;

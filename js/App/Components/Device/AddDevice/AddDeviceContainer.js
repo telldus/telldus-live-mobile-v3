@@ -52,6 +52,7 @@ type Props = {
 	actions?: Object,
 	screenProps: Object,
 	ScreenName: string,
+	locale: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
@@ -159,6 +160,7 @@ class AddDeviceContainer extends View<Props, State> {
 			screenProps,
 			navigation,
 			addDevice,
+			locale,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton } = this.state;
@@ -200,6 +202,7 @@ class AddDeviceContainer extends View<Props, State> {
 							paddingHorizontal: padding,
 							addDevice,
 							processWebsocketMessage: this.props.processWebsocketMessage,
+							locale,
 						},
 					)}
 				</KeyboardAvoidingView>
@@ -209,8 +212,13 @@ class AddDeviceContainer extends View<Props, State> {
 }
 
 const mapStateToProps = (store: Object): Object => {
+	const { defaultSettings } = store.app;
+	const { language = {} } = defaultSettings || {};
+	const locale = language.code;
+
 	return {
 		addDevice: store.addDevice,
+		locale,
 	};
 };
 
