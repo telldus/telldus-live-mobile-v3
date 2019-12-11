@@ -90,6 +90,7 @@ render(): Object {
 		imageComponentStyle,
 		imageComponentHeight,
 		imageComponentWidth,
+		boxOneStyle,
 	} = this.getStyles();
 	return (
 		<RippleButton
@@ -97,11 +98,13 @@ render(): Object {
 			disabled={!enabled}>
 			<View style={container}>
 				<View style={itemsCover}>
-					{!!icon && <IconTelldus icon={icon} style={imageType}/>}
-					{!!ImageSVG && <ImageSVG
-						height={imageComponentHeight}
-						width={imageComponentWidth}
-						style={imageComponentStyle}/>}
+					<View style={boxOneStyle}>
+						{!!icon && <IconTelldus icon={icon} style={imageType}/>}
+						{!!ImageSVG && <ImageSVG
+							height={imageComponentHeight}
+							width={imageComponentWidth}
+							style={imageComponentStyle}/>}
+					</View>
 					<View style={{
 						flex: 1,
 						flexDirection: 'column',
@@ -163,6 +166,8 @@ getStyles(): Object {
 	const imageComponentWidth = deviceWidth * 0.16;
 	const imageComponentHeight = deviceWidth * 0.22;
 
+	const boxOneWidth = deviceWidth * 0.3;
+
 	return {
 		container: {
 			...shadow,
@@ -172,6 +177,9 @@ getStyles(): Object {
 			borderRadius: 2,
 			marginHorizontal: padding,
 			height: imageComponentHeight + (padding * 3),
+		},
+		boxOneStyle: {
+			width: boxOneWidth,
 		},
 		arrowCover: {
 			flex: 0,
