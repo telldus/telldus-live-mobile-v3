@@ -108,6 +108,7 @@ onNext = () => {
 		deviceId,
 	} = this.state;
 	const deviceName = navigation.getParam('deviceName', '');
+	// $FlowFixMe
 	let rowData = {[deviceId]: {
 		id: deviceId,
 		name: deviceName,
