@@ -56,7 +56,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 			clearRequestTimer(clientDeviceId);
 			clearTimers(clientDeviceId);
 
-			const url = format({
+			let url = format({
 				pathname: '/device/command',
 				query: {
 					id: clientDeviceId,
@@ -64,6 +64,14 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 					value: stateValue,
 				},
 			});
+			if (state === 32) {
+				url = format({
+					pathname: '/device/learn',
+					query: {
+						id: deviceId,
+					},
+				});
+			}
 			const source = CancelToken.source();
 			const payload = {
 				address,
