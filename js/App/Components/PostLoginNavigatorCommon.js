@@ -67,10 +67,7 @@ import {
 	getRSAKey,
 	shouldUpdate,
 	navigate,
-	prepareNoZWaveSupportDialogueData,
 	prepareNo433MHzSupportDialogueData,
-	checkForZWaveSupport,
-	filterGatewaysWithZWaveSupport,
 	hasTellStickNetGetOne,
 	premiumAboutToExpire,
 } from '../Lib';

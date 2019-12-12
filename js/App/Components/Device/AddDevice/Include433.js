@@ -93,7 +93,7 @@ componentDidMount() {
 	const deviceName = navigation.getParam('deviceName', '');
 	const deviceProtocol = navigation.getParam('deviceProtocol', '');
 	const deviceModel = navigation.getParam('deviceModel', '');
-	actions.addDeviceAction(this.gatewayId, deviceName, deviceProtocol, deviceModel).then((res) => {
+	actions.addDeviceAction(this.gatewayId, deviceName, deviceProtocol, deviceModel).then((res: Object) => {
 		if (res.id) {
 			this.setState({
 				deviceId: res.id,
