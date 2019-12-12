@@ -32,6 +32,7 @@ import {
 	FloatingButton,
 	TouchableButton,
 	InfoBlock,
+	FullPageActivityIndicator,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
@@ -53,20 +54,85 @@ type Props = {
 };
 
 type State = {
+	deviceId: string | null,
 };
 
 class Include433 extends View<Props, State> {
 props: Props;
 state: State;
 
+constructor(props: Props) {
+	super(props);
+
+	const { actions, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	this.websocket = actions.getSocketObject(gateway.id);
+	this.gatewayId = gateway.id;
+
+	this.hasUnmount = false;
+
+	if (this.websocket) {
+		this.setSocketListeners();
+	}
+
+	this.state = {
+		deviceId: null,
+	};
+}
+
 componentDidMount() {
-	const { onDidMount, intl } = this.props;
+	const {
+		onDidMount,
+		intl,
+		navigation,
+		actions,
+	} = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
+
+	const deviceName = navigation.getParam('deviceName', '');
+	const deviceProtocol = navigation.getParam('deviceProtocol', '');
+	const deviceModel = navigation.getParam('deviceModel', '');
+	actions.addDeviceAction(this.gatewayId, deviceName, deviceProtocol, deviceModel).then((res) => {
+		if (res.id) {
+			this.setState({
+				deviceId: res.id,
+			});
+		}
+	});
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'Include433';
+}
+
+componentWillUnmount() {
+	this.hasUnmount = true;
+}
+
+setSocketListeners = () => {
+	const that = this;
+	const { processWebsocketMessage, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	this.latestInterviewTime = null;
+
+	this.websocket.onmessage = (msg: Object) => {
+		let title = '';
+		let message = {};
+		try {
+			message = JSON.parse(msg.data);
+		} catch (e) {
+			message = msg.data;
+			title = ` ${msg.data}`;
+		}
+
+		const { module, action, data } = message;
+		if (module && action && !that.hasUnmount) {
+			console.log('TEST data', data);
+		}
+
+		processWebsocketMessage(gateway.id.toString(), message, title, that.websocket);
+	};
 }
 
 onNext = () => {
@@ -80,11 +146,19 @@ render(): Object {
 	const { formatMessage } = intl;
 
 	const {
+		deviceId,
+	} = this.state;
+
+	const {
 		containerStyle,
 		buttonStyle,
 		infoContainer,
 		infoTextStyle,
 	} = this.getStyles();
+
+	if (!deviceId) {
+		return <FullPageActivityIndicator/>;
+	}
 
 	const uri = {uri: 'img_zwave_include'};
 
