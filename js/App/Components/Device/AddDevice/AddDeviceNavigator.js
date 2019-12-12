@@ -39,6 +39,7 @@ import CantEnterInclusion from './CantEnterInclusion';
 import SelectBrand433 from './SelectBrand433';
 import SelectModel433 from './SelectModel433';
 import Include433 from './Include433';
+import SetDeviceName433 from './SetDeviceName433';
 
 const initialRouteName = 'InitialScreen';
 
@@ -92,6 +93,9 @@ const RouteConfigs = {
 	},
 	Include433: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(Include433, 'Include433'),
+	},
+	SetDeviceName433: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SetDeviceName433, 'SetDeviceName433'),
 	},
 };
 
