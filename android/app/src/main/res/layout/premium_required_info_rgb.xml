@@ -7,7 +7,7 @@
         android:background="@drawable/shape_bottom_rounded_corner_secondary_fill"
         android:gravity="center"
         android:layout_gravity="bottom"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="5dp"
         android:visibility="gone">
     <ImageView

@@ -48,5 +48,5 @@
                 android:maxLines="1"/>
         </LinearLayout>
     </LinearLayout>
-    <include layout="@layout/premium_required_info"/>
+    <include layout="@layout/premium_required_info_rgb"/>
 </FrameLayout>
