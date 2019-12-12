@@ -43,6 +43,7 @@ const Row = (props: Object): Object => {
 		name,
 		isLast,
 		onPress,
+		rowProps,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -55,7 +56,10 @@ const Row = (props: Object): Object => {
 
 	function onPressRow() {
 		if (onPress) {
-			onPress(name);
+			onPress({
+				name,
+				...rowProps,
+			});
 		}
 	}
 

@@ -80,8 +80,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'SelectBrand433';
 }
 
-keyExtractor(item: Object): string {
-	return `${item.name}${item.index}`;
+keyExtractor(item: Object, i: number): string {
+	return `${item.name}${i}`;
 }
 
 getPadding(): number {
@@ -92,7 +92,7 @@ getPadding(): number {
 	return deviceWidth * Theme.Core.paddingFactor;
 }
 
-onChooseBrand = (deviceBrand: string) => {
+onChooseBrand = ({deviceBrand}: Object) => {
 	const { navigation } = this.props;
 
 	const prevParams = navigation.state.params || {};
@@ -110,6 +110,9 @@ renderRow(item: Object): Object {
 	return (
 		<Row
 			name={name}
+			rowProps={{
+				deviceBrand: name,
+			}}
 			navigation={navigation}
 			intl={intl}
 			onPress={this.onChooseBrand}

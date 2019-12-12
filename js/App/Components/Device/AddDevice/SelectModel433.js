@@ -90,8 +90,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'SelectModel433';
 }
 
-keyExtractor(item: Object): string {
-	return `${item.name}${item.index}`;
+keyExtractor(item: Object, i: number): string {
+	return `${item.modelName}${item.widget}${i}`;
 }
 
 getPadding(): number {
@@ -102,13 +102,14 @@ getPadding(): number {
 	return deviceWidth * Theme.Core.paddingFactor;
 }
 
-onChooseModel = (deviceModel: string) => {
+onChooseModel = ({deviceModel, protocol: deviceProtocol}: Object) => {
 	const { navigation } = this.props;
 
 	const prevParams = navigation.state.params || {};
-	navigation.navigate('Include433', {
+	navigation.navigate('SetDeviceName433', {
 		...prevParams,
 		deviceModel,
+		deviceProtocol,
 	});
 }
 
@@ -128,6 +129,8 @@ renderRow(item: Object): Object {
 	const {
 		lang,
 		modelName,
+		protocol,
+		model,
 	} = item.item;
 
 	return (
@@ -135,6 +138,10 @@ renderRow(item: Object): Object {
 			name={this.prepareName(lang, modelName)}
 			navigation={navigation}
 			intl={intl}
+			rowProps={{
+				protocol,
+				deviceModel: model,
+			}}
 			onPress={this.onChooseModel}
 			isLast={item.index === (this.state.rows.length - 1)}/>
 	);
