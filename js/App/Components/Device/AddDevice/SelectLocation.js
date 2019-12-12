@@ -150,7 +150,7 @@ const getRows = createSelector(
 	[
 		({ gateways }: Object): Object => gateways,
 	],
-	(gateways: Object): Array<any> => parseGatewaysForListView(gateways, true)
+	(gateways: Object): Array<any> => parseGatewaysForListView(gateways)
 );
 
 function mapStateToProps(state: Object, ownProps: Object): Object {

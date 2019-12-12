@@ -354,24 +354,18 @@ addNewLocation() {
 }
 
 addNewDevice() {
-	const { gateways, toggleDialogueBox, intl, locale } = this.props;
-	const zwavesupport = checkForZWaveSupport(gateways.byId);
-	if (!zwavesupport) {
-		const dialogueData = prepareNoZWaveSupportDialogueData(intl.formatMessage, locale);
-		toggleDialogueBox(dialogueData);
-	} else {
-		const { byId } = gateways;
-		const filteredGateways = filterGatewaysWithZWaveSupport(byId);
-		const filteredAllIds = Object.keys(filteredGateways);
-		const gatewaysLen = filteredAllIds.length;
+	const { gateways } = this.props;
+	const { byId } = gateways;
+	const gatewaysLen = Object.keys(byId).length;
 
-		if (gatewaysLen > 0) {
-			const singleGateway = gatewaysLen === 1;
-			navigate('AddDevice', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
-			}, 'AddDevice');
-		}
+	if (gatewaysLen > 0) {
+		const singleGateway = gatewaysLen === 1;
+		navigate('AddDevice', {
+			selectLocation: !singleGateway,
+			gateway: singleGateway ? {
+				...byId[Object.keys(byId)[0]],
+			} : null,
+		}, 'AddDevice');
 	}
 }
 
