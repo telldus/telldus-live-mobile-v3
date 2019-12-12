@@ -30,13 +30,15 @@ import {
 import {
 	View,
 	FloatingButton,
-	TouchableButton,
 	InfoBlock,
 	FullPageActivityIndicator,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
 } from './SubViews';
+import {
+	LearnButton,
+} from '../../TabViews/SubViews';
 
 import Theme from '../../../Theme';
 
@@ -64,16 +66,9 @@ state: State;
 constructor(props: Props) {
 	super(props);
 
-	const { actions, navigation } = this.props;
+	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
-	this.websocket = actions.getSocketObject(gateway.id);
 	this.gatewayId = gateway.id;
-
-	this.hasUnmount = false;
-
-	if (this.websocket) {
-		this.setSocketListeners();
-	}
 
 	this.state = {
 		deviceId: null,
@@ -98,6 +93,7 @@ componentDidMount() {
 			this.setState({
 				deviceId: res.id,
 			});
+			actions.getDevices();
 		}
 	});
 }
@@ -106,39 +102,25 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'Include433';
 }
 
-componentWillUnmount() {
-	this.hasUnmount = true;
-}
-
-setSocketListeners = () => {
-	const that = this;
-	const { processWebsocketMessage, navigation } = this.props;
-	const gateway = navigation.getParam('gateway', {});
-	this.latestInterviewTime = null;
-
-	this.websocket.onmessage = (msg: Object) => {
-		let title = '';
-		let message = {};
-		try {
-			message = JSON.parse(msg.data);
-		} catch (e) {
-			message = msg.data;
-			title = ` ${msg.data}`;
-		}
-
-		const { module, action, data } = message;
-		if (module && action && !that.hasUnmount) {
-			console.log('TEST data', data);
-		}
-
-		processWebsocketMessage(gateway.id.toString(), message, title, that.websocket);
-	};
-}
-
 onNext = () => {
-}
-
-onPressLearn = () => {
+	const { navigation } = this.props;
+	const {
+		deviceId,
+	} = this.state;
+	const deviceName = navigation.getParam('deviceName', '');
+	let rowData = {[deviceId]: {
+		id: deviceId,
+		name: deviceName,
+		index: 0,
+		mainNode: true,
+	}};
+	navigation.navigate({
+		routeName: 'Devices',
+		key: 'Devices',
+		params: {
+			newDevices: rowData,
+		},
+	});
 }
 
 render(): Object {
@@ -181,9 +163,8 @@ render(): Object {
 					text={`${formatMessage(i18n.add433DInfoThree)}. (${formatMessage(i18n.add433DInfoFour)}.)`}
 					img={uri}
 					rightBlockIItemOne={
-						<TouchableButton
-							text={i18n.learn}
-							onPress={this.onPressLearn}
+						<LearnButton
+							id={deviceId}
 							style={buttonStyle}/>
 					}/>
 				<NumberedBlock
