@@ -139,7 +139,7 @@ render(): Object {
 			refreshing={this.state.isRefreshing}
 			keyExtractor={this.keyExtractor}
 			contentContainerStyle={{
-				marginVertical: padding - (padding / 4),
+				paddingVertical: padding - (padding / 4),
 			}}
 		/>
 	);
