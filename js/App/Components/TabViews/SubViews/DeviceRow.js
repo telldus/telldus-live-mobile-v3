@@ -627,7 +627,7 @@ class DeviceRow extends View<Props, State> {
 		} = styles;
 		const {
 			THERMOSTAT,
-		} = device.supportedMethods;
+		} = device.supportedMethods || {};
 
 		let coverStyle = name;
 		let textPowerStyle = textPowerConsumed;
