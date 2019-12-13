@@ -179,7 +179,7 @@ render(): Object {
 			</ScrollView>
 			<FloatingButton
 				onPress={this.onNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
+				iconName={'checkmark'}/>
 		</View>
 	);
 }

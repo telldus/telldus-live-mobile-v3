@@ -89,7 +89,6 @@ const SetDeviceName433 = (props: Object): Object => {
 		textFieldStyle,
 		textFieldCoverStyle,
 		labelStyle,
-		iconStyle,
 		accessoryiconStyle,
 	} = getStyles(appLayout);
 
@@ -124,8 +123,7 @@ const SetDeviceName433 = (props: Object): Object => {
 			</View>
 			<FloatingButton
 				onPress={submitName}
-				iconName={'checkmark'}
-				iconStyle={iconStyle}
+				imageSource={{uri: 'right_arrow_key'}}
 			/>
 		</ScrollView>
 	);
