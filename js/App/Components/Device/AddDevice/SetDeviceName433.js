@@ -35,6 +35,13 @@ import {
 	FloatingButton,
 	IconTelldus,
 } from '../../../../BaseComponents';
+import {
+	DeviceSettings,
+} from './SubViews';
+
+import {
+	getDeviceSettings,
+} from '../../../Actions/AddDevice';
 
 import Theme from '../../../Theme';
 
@@ -52,9 +59,17 @@ const SetDeviceName433 = (props: Object): Object => {
 	const { formatMessage } = intl;
 
 	const [name, setName] = useState('');
+	const [settings, setSettings] = useState(null);
 
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));
+
+		const deviceInfo = navigation.getParam('deviceInfo', {});
+		const { widget, configuration } = deviceInfo;
+		if (widget && configuration) {
+			const dSettings = getDeviceSettings(parseInt(widget, 10));
+			setSettings(dSettings);
+		}
 	}, []);
 
 	function onChangeName(value: string) {
@@ -120,6 +135,8 @@ const SetDeviceName433 = (props: Object): Object => {
 					autoCapitalize={'none'}
 					renderLeftAccessory={renderLeftAccessory}
 				/>
+				{!!settings && <DeviceSettings
+					settings={settings}/>}
 			</View>
 			<FloatingButton
 				onPress={submitName}

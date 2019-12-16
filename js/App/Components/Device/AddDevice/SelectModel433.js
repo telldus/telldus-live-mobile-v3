@@ -102,15 +102,13 @@ getPadding(): number {
 	return deviceWidth * Theme.Core.paddingFactor;
 }
 
-onChooseModel = ({deviceModel, protocol: deviceProtocol, deviceWidget}: Object) => {
+onChooseModel = (deviceInfo: Object) => {
 	const { navigation } = this.props;
 
 	const prevParams = navigation.state.params || {};
 	navigation.navigate('SetDeviceName433', {
 		...prevParams,
-		deviceModel,
-		deviceProtocol,
-		deviceWidget,
+		deviceInfo,
 	});
 }
 
@@ -130,9 +128,6 @@ renderRow(item: Object): Object {
 	const {
 		lang,
 		modelName,
-		protocol,
-		model,
-		widget,
 	} = item.item;
 
 	return (
@@ -141,9 +136,7 @@ renderRow(item: Object): Object {
 			navigation={navigation}
 			intl={intl}
 			rowProps={{
-				protocol,
-				deviceModel: model,
-				deviceWidget: widget,
+				...item.item,
 			}}
 			onPress={this.onChooseModel}
 			isLast={item.index === (this.state.rows.length - 1)}/>

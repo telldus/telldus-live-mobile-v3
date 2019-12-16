@@ -87,10 +87,10 @@ componentDidMount() {
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
 
+	const deviceInfo = navigation.getParam('deviceInfo', {});
 	const deviceName = navigation.getParam('deviceName', '');
-	const deviceProtocol = navigation.getParam('deviceProtocol', '');
-	const deviceModel = navigation.getParam('deviceModel', '');
-	actions.addDeviceAction(this.gatewayId, deviceName, deviceProtocol, deviceModel).then((res: Object) => {
+	const { protocol, model } = deviceInfo;
+	actions.addDeviceAction(this.gatewayId, deviceName, protocol, model).then((res: Object) => {
 		if (res.id) {
 			this.setState({
 				deviceId: res.id,
