@@ -27,6 +27,7 @@ import NameRow from './NameRow';
 import DeviceInfoBlock from './DeviceInfoBlock';
 import Row from './Row';
 import NumberedBlock from './NumberedBlock';
+import DeviceSettings from './DeviceSettings';
 
 module.exports = {
 	DeviceTypeBlock,
@@ -34,4 +35,5 @@ module.exports = {
 	DeviceInfoBlock,
 	Row,
 	NumberedBlock,
+	DeviceSettings,
 };
