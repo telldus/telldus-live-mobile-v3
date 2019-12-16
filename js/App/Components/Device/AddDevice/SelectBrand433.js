@@ -52,7 +52,7 @@ type State = {
 
 const prepareDataForList = (data: Array<Object>): Array<Object> => {
 	let listData = [];
-	data.map((d: Object): Array<Object> => {
+	data.map((d: Object) => {
 		listData = [
 			...listData,
 			...d.vendor,
