@@ -95,9 +95,9 @@ render(): Object {
 
 	return (
 		<TouchableOpacity
-			style={[style, container]}
 			onPress={this.onToggleCheckBox}
-			accessibilityLabel={accessibilityLabel}>
+			accessibilityLabel={accessibilityLabel}
+			style={[container, style]}>
 			<IconTelldus icon={'checkmark'} style={{ ...checkIconCommon, ...checkIconStyle, ...iconStyle }}/>
 			{!!text && (
 				<Text style={[textDefaultStyle, textStyle]}>
