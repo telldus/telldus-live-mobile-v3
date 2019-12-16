@@ -53,11 +53,13 @@ type State = {
 
 const prepareDataForList = (data: Array<Object>, brand: string): Array<Object> => {
 	let listData = [];
-	for (let i = 0; i < data[0].vendor.length; i++) {
-		const { name = '', device } = data[0].vendor[i];
-		if (name.trim() === brand.trim()) {
-			listData = device;
-			break;
+	for (let h = 0; h < data.length; h++) {
+		for (let i = 0; i < data[h].vendor.length; i++) {
+			const { name = '', device } = data[h].vendor[i];
+			if (name.trim() === brand.trim()) {
+				listData = device;
+				break;
+			}
 		}
 	}
 	return listData;

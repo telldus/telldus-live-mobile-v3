@@ -51,7 +51,14 @@ type State = {
 };
 
 const prepareDataForList = (data: Array<Object>): Array<Object> => {
-	return data[0].vendor;
+	let listData = [];
+	data.map((d: Object): Array<Object> => {
+		listData = [
+			...listData,
+			...d.vendor,
+		];
+	});
+	return listData;
 };
 
 class SelectBrand433 extends View<Props, State> {
