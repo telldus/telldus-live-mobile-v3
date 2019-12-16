@@ -137,6 +137,8 @@ render(): Object {
 		buttonStyle,
 		infoContainer,
 		infoTextStyle,
+		padding,
+		iconStyle,
 	} = this.getStyles();
 
 	if (!deviceId) {
@@ -179,7 +181,8 @@ render(): Object {
 			</ScrollView>
 			<FloatingButton
 				onPress={this.onNext}
-				iconName={'checkmark'}/>
+				iconName={'checkmark'}
+				iconStyle={iconStyle}/>
 		</View>
 	);
 }
@@ -209,12 +212,16 @@ getStyles(): Object {
 			marginTop: padding,
 		},
 		infoContainer: {
+			flex: 0,
 			marginHorizontal: padding,
 			marginBottom: padding * 5,
 		},
 		infoTextStyle: {
 			color: rowTextColor,
 			fontSize: fontSizeText,
+		},
+		iconStyle: {
+			color: '#fff',
 		},
 	};
 }
