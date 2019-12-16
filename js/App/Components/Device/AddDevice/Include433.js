@@ -57,6 +57,7 @@ type Props = {
 
 type State = {
 	deviceId: string | null,
+	isLoading: boolean,
 };
 
 class Include433 extends View<Props, State> {
@@ -72,6 +73,7 @@ constructor(props: Props) {
 
 	this.state = {
 		deviceId: null,
+		isLoading: true,
 	};
 }
 
@@ -92,9 +94,18 @@ componentDidMount() {
 		if (res.id) {
 			this.setState({
 				deviceId: res.id,
+				isLoading: false,
 			});
 			actions.getDevices();
+		} else {
+			this.setState({
+				isLoading: false,
+			});
 		}
+	}).catch(() => {
+		this.setState({
+			isLoading: false,
+		});
 	});
 }
 
@@ -130,6 +141,7 @@ render(): Object {
 
 	const {
 		deviceId,
+		isLoading,
 	} = this.state;
 
 	const {
@@ -141,8 +153,17 @@ render(): Object {
 		iconStyle,
 	} = this.getStyles();
 
-	if (!deviceId) {
+	if (isLoading) {
 		return <FullPageActivityIndicator/>;
+	}
+	if (!isLoading && !deviceId) {
+		return <InfoBlock
+			text={formatMessage(i18n.messageAdd433Failed)}
+			appLayout={appLayout}
+			infoContainer={[infoContainer, {
+				marginVertical: padding,
+			}]}
+			textStyle={infoTextStyle}/>;
 	}
 
 	const uri = {uri: 'img_zwave_include'};
