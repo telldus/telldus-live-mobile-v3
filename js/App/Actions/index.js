@@ -41,6 +41,7 @@ import UserActions from './User';
 import LocalTest from './LocalTest';
 import LocalControl from './LocalControl';
 import Widget from './Widget';
+import AddDevice from './AddDevice';
 
 module.exports = {
 	...GatewayActions,
@@ -62,4 +63,5 @@ module.exports = {
 	...LocalTest,
 	...LocalControl,
 	...Widget,
+	...AddDevice,
 };
