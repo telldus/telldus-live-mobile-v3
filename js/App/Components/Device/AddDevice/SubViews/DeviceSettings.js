@@ -23,6 +23,7 @@
 'use strict';
 
 import React, { useState } from 'react';
+import { TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
 import { RadioButtonInput } from 'react-native-simple-radio-button';
 import { useIntl } from 'react-intl';
@@ -45,6 +46,9 @@ const DeviceSettings = (props: Object): Object => {
 	const [v, setV] = useState({});
 	const [u, setU] = useState({});
 	const [s, setS] = useState({});
+	const [system, setSystem] = useState('');
+	const [house, setHouse] = useState('');
+	const [unit, setUnit] = useState('');
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -62,15 +66,52 @@ const DeviceSettings = (props: Object): Object => {
 		uCheckBoxIconStyle,
 		sRBCoverStyle,
 		sRBHTextStyle,
+		optionInputCover,
+		optionInputLabelStyle,
+		optionInputStyle,
 	} = getStyles(layout);
 
 	let Setting = [];
 	Object.keys(settings).map((setting: Object) => {
+
 		if (setting === 'system') {
+			const {
+				min,
+				max,
+			} = settings[setting];
+
+			function onChangeText(value: string): any {
+
+				if (!value || value === '') {
+					setSystem(value);
+					return;
+				}
+
+				let newValue = parseInt(value, 10);
+				if (isNaN(newValue)) {
+					setSystem(system);
+					return;
+				}
+
+				let acceptValue = (newValue <= max) && (newValue >= min);
+				if (!acceptValue) {
+					setSystem(system);
+					return;
+				}
+
+				setSystem(newValue.toString());
+			}
+
 			Setting.push(
-				<Text style={textStyle}>
+				<View style={optionInputCover} key={setting}>
+					<Text style={optionInputLabelStyle}>
 					System
-				</Text>
+					</Text>
+					<TextInput
+						value={system}
+						style={optionInputStyle}
+						onChangeText={onChangeText}/>
+				</View>
 			);
 		}
 		if (setting === 'v') {
@@ -125,7 +166,7 @@ const DeviceSettings = (props: Object): Object => {
 				);
 			});
 			Setting.push(
-				<View style={radioButtonsCover}>
+				<View style={radioButtonsCover} key={setting}>
 					{VSetting}
 				</View>);
 		}
@@ -161,13 +202,12 @@ const DeviceSettings = (props: Object): Object => {
 				);
 			});
 			Setting.push(
-				<View style={radioButtonsCover}>
+				<View style={radioButtonsCover} key={setting}>
 					{USetting}
 				</View>);
 		}
 		if (setting === 's') {
 			const SSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
-				const { option } = settings[setting][sSet];
 
 				function onPressOne() {
 					setS({
@@ -252,22 +292,90 @@ const DeviceSettings = (props: Object): Object => {
 				);
 			});
 			Setting.push(
-				<View style={radioButtonsCover}>
+				<View style={radioButtonsCover} key={setting}>
 					{SSetting}
 				</View>);
 		}
 		if (setting === 'house') {
-			Setting.push(
-				<Text style={textStyle}>
-					House
-				</Text>
-			);
+			const {
+				min,
+				max,
+			} = settings[setting];
+
+			if (min || min) {
+				function onChangeText(value: string): any {
+
+					if (!value || value === '') {
+						setHouse(value);
+						return;
+					}
+
+					let newValue = parseInt(value, 10);
+					if (isNaN(newValue)) {
+						setHouse(house);
+						return;
+					}
+
+					let acceptValue = (newValue <= max) && (newValue >= min);
+					if (!acceptValue) {
+						setHouse(house);
+						return;
+					}
+
+					setHouse(newValue.toString());
+				}
+
+				Setting.push(
+					<View style={optionInputCover} key={setting}>
+						<Text style={optionInputLabelStyle}>
+						House
+						</Text>
+						<TextInput
+							value={house}
+							style={optionInputStyle}
+							onChangeText={onChangeText}/>
+					</View>
+				);
+			}
 		}
 		if (setting === 'unit') {
+			const {
+				min,
+				max,
+			} = settings[setting];
+
+			function onChangeText(value: string): any {
+
+				if (!value || value === '') {
+					setUnit(value);
+					return;
+				}
+
+				let newValue = parseInt(value, 10);
+				if (isNaN(newValue)) {
+					setUnit(unit);
+					return;
+				}
+
+				let acceptValue = (newValue <= max) && (newValue >= min);
+				if (!acceptValue) {
+					setUnit(unit);
+					return;
+				}
+
+				setUnit(newValue.toString());
+			}
+
 			Setting.push(
-				<Text style={textStyle}>
+				<View style={optionInputCover} key={setting}>
+					<Text style={optionInputLabelStyle}>
 					Unit
-				</Text>
+					</Text>
+					<TextInput
+						value={unit}
+						style={optionInputStyle}
+						onChangeText={onChangeText}/>
+				</View>
 			);
 		}
 		if (setting === 'fade') {
@@ -296,11 +404,13 @@ const getStyles = (appLayout: Object): Object => {
 		shadow,
 		rowTextColor,
 		brandPrimary,
+		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeLabel = deviceWidth * 0.04;
 
 	const outerPadding = padding * 2;
 
@@ -369,6 +479,26 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSizeText * 1.2,
 			borderColor: brandPrimary,
 			textAlignVertical: 'center',
+		},
+		optionInputLabelStyle: {
+			fontSize: fontSizeText * 1.4,
+			color: rowTextColor,
+		},
+		optionInputCover: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			margin: padding,
+		},
+		optionInputStyle: {
+			fontSize: fontSizeLabel,
+			borderWidth: 1,
+			borderColor: rowTextColor,
+			borderRadius: 2,
+			color: eulaContentColor,
+			width: deviceWidth * 0.3,
+			marginLeft: padding,
+			padding: 5,
 		},
 	};
 };
