@@ -67,6 +67,7 @@ type Props = {
 	dropdownMargins?: DDMargin,
 	pickerBaseCoverStyle?: Array<any> | number | Object,
 	textColor?: string,
+	animationDuration?: number,
 };
 
 type DefaultProps = {
@@ -174,6 +175,7 @@ static defaultProps: DefaultProps = {
 			overlayStyle,
 			dropdownMargins,
 			textColor,
+			animationDuration,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -217,6 +219,7 @@ static defaultProps: DefaultProps = {
 						}}
 						dropdownMargins={dropdownMargins}
 						textColor={textColor}
+						animationDuration={animationDuration}
 					/>
 				</View>
 			</View>
