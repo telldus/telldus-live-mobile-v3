@@ -23,16 +23,19 @@
 'use strict';
 
 import React, { useState } from 'react';
-import { TextInput } from 'react-native';
 import { useSelector } from 'react-redux';
-import { RadioButtonInput } from 'react-native-simple-radio-button';
 import { useIntl } from 'react-intl';
 
 import {
 	View,
 	Text,
-	CheckBoxIconText,
 } from '../../../../../BaseComponents';
+import VSetting from './VSetting';
+import USetting from './USetting';
+import SSetting from './SSetting';
+import DropDownSetting from './DropDownSetting';
+import FadeSetting from './FadeSetting';
+import InputSetting from './InputSetting';
 
 import Theme from '../../../../Theme';
 
@@ -49,26 +52,16 @@ const DeviceSettings = (props: Object): Object => {
 	const [system, setSystem] = useState('');
 	const [house, setHouse] = useState('');
 	const [unit, setUnit] = useState('');
+	const [fade, setFade] = useState(false);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
 		coverStyle,
-		textStyle,
 		radioButtonsCover,
-		radioButtonLabelStyle,
-		rButtonStyle,
-		optionWrapStyle,
-		optionButtonCover,
-		buttonOuterSizeV,
-		buttonSizeV,
-		brandPrimary,
-		uCheckBoxIconStyle,
-		sRBCoverStyle,
-		sRBHTextStyle,
 		optionInputCover,
 		optionInputLabelStyle,
-		optionInputStyle,
+		fadeSettingsCover,
 	} = getStyles(layout);
 
 	let Setting = [];
@@ -103,19 +96,15 @@ const DeviceSettings = (props: Object): Object => {
 			}
 
 			Setting.push(
-				<View style={optionInputCover} key={setting}>
-					<Text style={optionInputLabelStyle}>
-					System
-					</Text>
-					<TextInput
-						value={system}
-						style={optionInputStyle}
-						onChangeText={onChangeText}/>
-				</View>
+				<InputSetting
+					key={setting}
+					label={'System'}
+					value={system}
+					onChangeText={onChangeText}/>
 			);
 		}
 		if (setting === 'v') {
-			const VSetting = Object.keys(settings[setting]).map((vSet: Object, index: number): Object => {
+			const vSetting = Object.keys(settings[setting]).map((vSet: Object, index: number): Object => {
 				const { option } = settings[setting][vSet];
 
 				function onPressOne() {
@@ -134,44 +123,24 @@ const DeviceSettings = (props: Object): Object => {
 				const isOneSelected = v[vSet] || false;
 
 				return (
-					<View style={optionButtonCover} key={vSet}>
-						<RadioButtonInput
-							isSelected={isOneSelected}
-							buttonStyle={rButtonStyle}
-							buttonWrapStyle={optionWrapStyle}
-							buttonOuterSize={buttonOuterSizeV}
-							buttonSize={buttonSizeV}
-							borderWidth={3}
-							buttonInnerColor={brandPrimary}
-							buttonOuterColor={brandPrimary}
-							onPress={onPressOne}
-							obj={{value: vSet}}
-							index={index}/>
-						<RadioButtonInput
-							isSelected={!isOneSelected}
-							buttonStyle={rButtonStyle}
-							buttonWrapStyle={optionWrapStyle}
-							buttonOuterSize={buttonOuterSizeV}
-							buttonSize={buttonSizeV}
-							borderWidth={3}
-							buttonInnerColor={brandPrimary}
-							buttonOuterColor={brandPrimary}
-							onPress={onPressTwo}
-							obj={{value: vSet}}
-							index={index}/>
-						<Text style={radioButtonLabelStyle}>
-							{option}
-						</Text>
-					</View>
+					<VSetting
+						key={vSet}
+						option={option}
+						isOneSelected={isOneSelected}
+						isTwoSelected={!isOneSelected}
+						value={vSet}
+						index={index}
+						onPressOne={onPressOne}
+						onPressTwo={onPressTwo}/>
 				);
 			});
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
-					{VSetting}
+					{vSetting}
 				</View>);
 		}
 		if (setting === 'u') {
-			const USetting = Object.keys(settings[setting]).map((uSet: Object, index: number): Object => {
+			const uSetting = Object.keys(settings[setting]).map((uSet: Object, index: number): Object => {
 				const { option } = settings[setting][uSet];
 
 				const cUSet = u[uSet] || false;
@@ -182,32 +151,20 @@ const DeviceSettings = (props: Object): Object => {
 					});
 				}
 
-				return (
-					<View style={optionButtonCover} key={uSet}>
-						<CheckBoxIconText
-							isChecked={cUSet}
-							iconStyle={{
-								...optionWrapStyle,
-								...uCheckBoxIconStyle,
-								backgroundColor: cUSet ? brandPrimary : '#fff',
-								color: cUSet ? '#fff' : 'transparent',
-							}}
-							textStyle={radioButtonLabelStyle}
-							onToggleCheckBox={onToggleCheckBox}
-							intl={intl}/>
-						<Text style={radioButtonLabelStyle}>
-							{option}
-						</Text>
-					</View>
-				);
+				return (<USetting
+					key={uSet}
+					isChecked={cUSet}
+					onToggleCheckBox={onToggleCheckBox}
+					intl={intl}
+					option={option}/>);
 			});
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
-					{USetting}
+					{uSetting}
 				</View>);
 		}
 		if (setting === 's') {
-			const SSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
+			const sSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
 
 				function onPressOne() {
 					setS({
@@ -228,78 +185,33 @@ const DeviceSettings = (props: Object): Object => {
 					});
 				}
 
-				const isOneSelected = s[sSet] || '-';
-				const isTwoSelected = s[sSet] || '-';
-				const isThreeSelected = s[sSet] || '-';
+				const one = s[sSet] || '-';
+				const two = s[sSet] || '-';
+				const three = s[sSet] || '-';
 
 				return (
-					<View style={optionButtonCover} key={sSet}>
-						<View style={sRBCoverStyle}>
-							{index === 0 && <Text style={sRBHTextStyle}>
-								{1}
-							</Text>
-							}
-							<RadioButtonInput
-								isSelected={isOneSelected === '1'}
-								buttonStyle={rButtonStyle}
-								buttonWrapStyle={optionWrapStyle}
-								buttonOuterSize={buttonOuterSizeV}
-								buttonSize={buttonSizeV}
-								borderWidth={3}
-								buttonInnerColor={brandPrimary}
-								buttonOuterColor={brandPrimary}
-								onPress={onPressOne}
-								obj={{value: sSet}}
-								index={index}/>
-						</View>
-						<View style={sRBCoverStyle}>
-							{index === 0 && <Text style={sRBHTextStyle}>
-								{'-'}
-							</Text>
-							}
-							<RadioButtonInput
-								isSelected={isTwoSelected === '-'}
-								buttonStyle={rButtonStyle}
-								buttonWrapStyle={optionWrapStyle}
-								buttonOuterSize={buttonOuterSizeV}
-								buttonSize={buttonSizeV}
-								borderWidth={3}
-								buttonInnerColor={brandPrimary}
-								buttonOuterColor={brandPrimary}
-								onPress={onPressTwo}
-								obj={{value: sSet}}
-								index={index}/>
-						</View>
-						<View style={sRBCoverStyle}>
-							{index === 0 && <Text style={sRBHTextStyle}>
-								{0}
-							</Text>
-							}
-							<RadioButtonInput
-								isSelected={isThreeSelected === '0'}
-								buttonStyle={rButtonStyle}
-								buttonWrapStyle={optionWrapStyle}
-								buttonOuterSize={buttonOuterSizeV}
-								buttonSize={buttonSizeV}
-								borderWidth={3}
-								buttonInnerColor={brandPrimary}
-								buttonOuterColor={brandPrimary}
-								onPress={onPressThree}
-								obj={{value: sSet}}
-								index={index}/>
-						</View>
-					</View>
+					<SSetting
+						key={sSet}
+						index={index}
+						onPressOne={onPressOne}
+						onPressTwo={onPressTwo}
+						onPressThree={onPressThree}
+						value={sSet}
+						isOneSelected={one === '1'}
+						isTwoSelected={two === '-'}
+						isThreeSelected={three === '0'}/>
 				);
 			});
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
-					{SSetting}
+					{sSetting}
 				</View>);
 		}
 		if (setting === 'house') {
 			const {
 				min,
 				max,
+				options,
 			} = settings[setting];
 
 			if (min || min) {
@@ -326,64 +238,123 @@ const DeviceSettings = (props: Object): Object => {
 				}
 
 				Setting.push(
-					<View style={optionInputCover} key={setting}>
-						<Text style={optionInputLabelStyle}>
-						House
-						</Text>
-						<TextInput
-							value={house}
-							style={optionInputStyle}
-							onChangeText={onChangeText}/>
-					</View>
+					<InputSetting
+						key={setting}
+						label={'House'}
+						value={house}
+						onChangeText={onChangeText}/>
 				);
+			}
+			if (options) {
+				const items = options.map((o: string): Object => {
+					return {
+						key: o,
+						value: o,
+					};
+				});
+
+				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
+					const { key } = items[itemIndex] || {};
+					setHouse(key);
+				}
+
+				const ddValue = house === '' ? items[0].key : house;
+				Setting.push(<DropDownSetting
+					items={items}
+					value={ddValue}
+					onValueChange={onValueChange}
+					label={'House'}
+					key={setting}/>);
 			}
 		}
 		if (setting === 'unit') {
 			const {
 				min,
 				max,
+				options,
 			} = settings[setting];
 
-			function onChangeText(value: string): any {
+			if (min || max) {
+				function onChangeText(value: string): any {
 
-				if (!value || value === '') {
-					setUnit(value);
-					return;
+					if (!value || value === '') {
+						setUnit(value);
+						return;
+					}
+
+					let newValue = parseInt(value, 10);
+					if (isNaN(newValue)) {
+						setUnit(unit);
+						return;
+					}
+
+					let acceptValue = (newValue <= max) && (newValue >= min);
+					if (!acceptValue) {
+						setUnit(unit);
+						return;
+					}
+
+					setUnit(newValue.toString());
 				}
 
-				let newValue = parseInt(value, 10);
-				if (isNaN(newValue)) {
-					setUnit(unit);
-					return;
-				}
-
-				let acceptValue = (newValue <= max) && (newValue >= min);
-				if (!acceptValue) {
-					setUnit(unit);
-					return;
-				}
-
-				setUnit(newValue.toString());
+				Setting.push(
+					<InputSetting
+						key={setting}
+						label={'Unit'}
+						value={unit}
+						onChangeText={onChangeText}/>
+				);
 			}
+			if (options) {
+				const items = options.map((o: string): Object => {
+					return {
+						key: o,
+						value: o,
+					};
+				});
+
+				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
+					const { key } = items[itemIndex] || {};
+					setUnit(key);
+				}
+
+				const ddValue = unit === '' ? items[0].key : unit;
+				Setting.push(<DropDownSetting
+					items={items}
+					value={ddValue}
+					onValueChange={onValueChange}
+					label={'Unit'}
+					key={setting}/>);
+			}
+		}
+		if (setting === 'fade') {
+			const { optionValues } = settings[setting];
+
+			const fadeSetting = Object.keys(optionValues).map((key: string, i: number): Object => {
+				const value = optionValues[key];
+				function onToggleCheckBox() {
+					setFade(value);
+				}
+
+				return (
+					<FadeSetting
+						isChecked={fade === value}
+						onToggleCheckBox={onToggleCheckBox}
+						intl={intl}
+						option={key}
+						key={key}/>
+				);
+			});
 
 			Setting.push(
 				<View style={optionInputCover} key={setting}>
 					<Text style={optionInputLabelStyle}>
-					Unit
+						Fade
 					</Text>
-					<TextInput
-						value={unit}
-						style={optionInputStyle}
-						onChangeText={onChangeText}/>
-				</View>
-			);
-		}
-		if (setting === 'fade') {
-			Setting.push(
-				<Text style={textStyle}>
-					Fade
-				</Text>
-			);
+					<View style={fadeSettingsCover}>
+						{fadeSetting}
+					</View>
+				</View>);
 		}
 	});
 
@@ -403,40 +374,19 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		shadow,
 		rowTextColor,
-		brandPrimary,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * 0.035;
-	const fontSizeLabel = deviceWidth * 0.04;
-
-	const outerPadding = padding * 2;
-
-	const totalPaddingV = padding * 11;
-	const buttonOuterSizeV = Math.floor((deviceWidth - (outerPadding + totalPaddingV)) / 10);
-	const buttonSizeV = buttonOuterSizeV * 0.5;
-
-	const totalPaddingU = padding * 11;
-	const paddingU = 3, borderWidthU = 1;
-	const iconSizeU = Math.floor((deviceWidth - (outerPadding + totalPaddingU + ((paddingU + borderWidthU) * 20))) / 10);
 
 	return {
-		paddingU,
-		buttonOuterSizeV,
-		buttonSizeV,
-		brandPrimary,
 		coverStyle: {
 			marginTop: padding / 2,
 			marginHorizontal: padding,
 			backgroundColor: '#fff',
 			...shadow,
 			width: width - (2 * padding),
-		},
-		textStyle: {
-			fontSize: fontSizeText,
-			color: rowTextColor,
 		},
 		radioButtonsCover: {
 			flexDirection: 'row',
@@ -445,40 +395,6 @@ const getStyles = (appLayout: Object): Object => {
 			paddingRight: padding,
 			flexWrap: 'wrap',
 			paddingBottom: padding,
-		},
-		optionButtonCover: {
-			flexDirection: 'column',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		radioButtonLabelStyle: {
-			fontSize: fontSizeText,
-			color: rowTextColor,
-			marginTop: padding,
-		},
-		rButtonStyle: {
-		},
-		uCheckBoxIconStyle: {
-			fontSize: iconSizeU,
-			borderColor: brandPrimary,
-			padding: paddingU,
-			borderWidth: borderWidthU,
-		},
-		optionWrapStyle: {
-			marginTop: padding,
-			marginLeft: padding,
-		},
-		sRBCoverStyle: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		sRBHTextStyle: {
-			marginTop: padding,
-			marginLeft: padding,
-			fontSize: fontSizeText * 1.2,
-			borderColor: brandPrimary,
-			textAlignVertical: 'center',
 		},
 		optionInputLabelStyle: {
 			fontSize: fontSizeText * 1.4,
@@ -490,15 +406,10 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			margin: padding,
 		},
-		optionInputStyle: {
-			fontSize: fontSizeLabel,
-			borderWidth: 1,
-			borderColor: rowTextColor,
-			borderRadius: 2,
-			color: eulaContentColor,
-			width: deviceWidth * 0.3,
-			marginLeft: padding,
-			padding: 5,
+		fadeSettingsCover: {
+			flexDirection: 'column',
+			alignItems: 'flex-end',
+			justifyContent: 'center',
 		},
 	};
 };
