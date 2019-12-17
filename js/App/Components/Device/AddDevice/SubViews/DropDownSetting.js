@@ -66,7 +66,8 @@ const DropDownSetting = (props: Object): Object => {
 				pickerStyle={pickerStyle}
 				baseColor={'#000'}
 				fontSize={fontSize}
-				accessibilityLabelPrefix={accessibilityLabelPrefix}/>
+				accessibilityLabelPrefix={accessibilityLabelPrefix}
+				animationDuration={50}/>
 		</View>
 	);
 };
