@@ -87,7 +87,7 @@ const getStyles = (appLayout: Object): Object => {
 			margin: padding,
 		},
 		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.4,
+			fontSize: fontSizeText * 1.3,
 			color: rowTextColor,
 		},
 		optionInputStyle: {

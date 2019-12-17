@@ -39,12 +39,15 @@ import InputSetting from './InputSetting';
 
 import Theme from '../../../../Theme';
 
+import i18n from '../../../../Translations/common';
+
 const DeviceSettings = (props: Object): Object => {
 	const {
 		settings,
 	} = props;
 
 	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const [v, setV] = useState({});
 	const [u, setU] = useState({});
@@ -62,6 +65,7 @@ const DeviceSettings = (props: Object): Object => {
 		optionInputCover,
 		optionInputLabelStyle,
 		fadeSettingsCover,
+		uSettingsCover,
 	} = getStyles(layout);
 
 	let Setting = [];
@@ -98,7 +102,7 @@ const DeviceSettings = (props: Object): Object => {
 			Setting.push(
 				<InputSetting
 					key={setting}
-					label={'System'}
+					label={formatMessage(i18n.system)}
 					value={system}
 					onChangeText={onChangeText}/>
 			);
@@ -159,8 +163,17 @@ const DeviceSettings = (props: Object): Object => {
 					option={option}/>);
 			});
 			Setting.push(
-				<View style={radioButtonsCover} key={setting}>
-					{uSetting}
+				<View style={uSettingsCover} key={setting}>
+					<Text style={optionInputLabelStyle}>
+						{formatMessage(i18n.units)}
+					</Text>
+					<View style={{
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'flex-end',
+					}}>
+						{uSetting}
+					</View>
 				</View>);
 		}
 		if (setting === 's') {
@@ -240,7 +253,7 @@ const DeviceSettings = (props: Object): Object => {
 				Setting.push(
 					<InputSetting
 						key={setting}
-						label={'House'}
+						label={formatMessage(i18n.houseCode)}
 						value={house}
 						onChangeText={onChangeText}/>
 				);
@@ -263,7 +276,7 @@ const DeviceSettings = (props: Object): Object => {
 					items={items}
 					value={ddValue}
 					onValueChange={onValueChange}
-					label={'House'}
+					label={formatMessage(i18n.houseCode)}
 					key={setting}/>);
 			}
 		}
@@ -300,7 +313,7 @@ const DeviceSettings = (props: Object): Object => {
 				Setting.push(
 					<InputSetting
 						key={setting}
-						label={'Unit'}
+						label={formatMessage(i18n.unitCode)}
 						value={unit}
 						onChangeText={onChangeText}/>
 				);
@@ -323,7 +336,7 @@ const DeviceSettings = (props: Object): Object => {
 					items={items}
 					value={ddValue}
 					onValueChange={onValueChange}
-					label={'Unit'}
+					label={formatMessage(i18n.unitCode)}
 					key={setting}/>);
 			}
 		}
@@ -349,7 +362,7 @@ const DeviceSettings = (props: Object): Object => {
 			Setting.push(
 				<View style={optionInputCover} key={setting}>
 					<Text style={optionInputLabelStyle}>
-						Fade
+						{formatMessage(i18n.fade)}
 					</Text>
 					<View style={fadeSettingsCover}>
 						{fadeSetting}
@@ -381,6 +394,7 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSizeText = deviceWidth * 0.035;
 
 	return {
+		padding,
 		coverStyle: {
 			marginTop: padding / 2,
 			marginHorizontal: padding,
@@ -391,13 +405,13 @@ const getStyles = (appLayout: Object): Object => {
 		radioButtonsCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
-			justifyContent: 'center',
+			justifyContent: 'space-between',
 			paddingRight: padding,
 			flexWrap: 'wrap',
 			paddingBottom: padding,
 		},
 		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.4,
+			fontSize: fontSizeText * 1.3,
 			color: rowTextColor,
 		},
 		optionInputCover: {
@@ -410,6 +424,15 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'column',
 			alignItems: 'flex-end',
 			justifyContent: 'center',
+		},
+		uSettingsCover: {
+			flexDirection: 'column',
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+			paddingRight: padding,
+			flexWrap: 'wrap',
+			paddingBottom: padding,
+			paddingLeft: padding,
 		},
 	};
 };

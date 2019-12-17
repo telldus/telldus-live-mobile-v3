@@ -89,18 +89,14 @@ const getStyles = (appLayout: Object): Object => {
 
 	const outerPadding = padding * 2;
 
-	const totalPaddingV = padding * 11;
-	const buttonOuterSizeV = Math.floor((deviceWidth - (outerPadding + totalPaddingV)) / 10);
-	const buttonSizeV = buttonOuterSizeV * 0.5;
+	const checkBoxSpace = padding;
 
-	const totalPaddingU = padding * 11;
-	const paddingU = 3, borderWidthU = 1;
+	const totalPaddingU = (checkBoxSpace * 10) + padding;
+	const paddingU = 2, borderWidthU = 1;
 	const iconSizeU = Math.floor((deviceWidth - (outerPadding + totalPaddingU + ((paddingU + borderWidthU) * 20))) / 10);
 
 	return {
 		paddingU,
-		buttonOuterSizeV,
-		buttonSizeV,
 		brandPrimary,
 		optionButtonCover: {
 			flexDirection: 'row',
@@ -117,8 +113,6 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSizeText,
 			color: rowTextColor,
 			marginTop: padding,
-		},
-		rButtonStyle: {
 		},
 		optionWrapStyle: {
 			marginTop: padding,
