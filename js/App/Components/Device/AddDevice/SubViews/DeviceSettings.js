@@ -22,8 +22,8 @@
 
 'use strict';
 
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
 import {
@@ -37,6 +37,15 @@ import DropDownSetting from './DropDownSetting';
 import FadeSetting from './FadeSetting';
 import InputSetting from './InputSetting';
 
+import {
+	setWidgetParamFade,
+	setWidgetParamSystem,
+	setWidgetParamCode,
+	setWidgetParamUnits,
+	setWidgetParamUnit,
+	setWidgetParamHouse,
+} from '../../../../Actions/AddDevice';
+
 import Theme from '../../../../Theme';
 
 import i18n from '../../../../Translations/common';
@@ -46,18 +55,21 @@ const DeviceSettings = (props: Object): Object => {
 		settings,
 	} = props;
 
+	const dispatch = useDispatch();
+
 	const intl = useIntl();
 	const { formatMessage } = intl;
 
-	const [v, setV] = useState({});
-	const [u, setU] = useState({});
-	const [s, setS] = useState({});
-	const [system, setSystem] = useState('');
-	const [house, setHouse] = useState('');
-	const [unit, setUnit] = useState('');
-	const [fade, setFade] = useState(false);
-
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const { widgetParams433Device = {} } = useSelector((state: Object): Object => state.addDevice);
+	const {
+		system = '',
+		house = '',
+		unit = '',
+		fade = false,
+		units = {},
+		code = {},
+	} = widgetParams433Device;
 
 	const {
 		coverStyle,
@@ -80,23 +92,23 @@ const DeviceSettings = (props: Object): Object => {
 			function onChangeText(value: string): any {
 
 				if (!value || value === '') {
-					setSystem(value);
+					dispatch(setWidgetParamSystem(''));
 					return;
 				}
 
 				let newValue = parseInt(value, 10);
 				if (isNaN(newValue)) {
-					setSystem(system);
+					dispatch(setWidgetParamSystem(system));
 					return;
 				}
 
 				let acceptValue = (newValue <= max) && (newValue >= min);
 				if (!acceptValue) {
-					setSystem(system);
+					dispatch(setWidgetParamSystem(system));
 					return;
 				}
 
-				setSystem(newValue.toString());
+				dispatch(setWidgetParamSystem(newValue.toString()));
 			}
 
 			Setting.push(
@@ -112,19 +124,19 @@ const DeviceSettings = (props: Object): Object => {
 				const { option } = settings[setting][vSet];
 
 				function onPressOne() {
-					setV({
-						...v,
-						[vSet]: true,
-					});
+					dispatch(setWidgetParamCode({
+						...code,
+						[vSet]: 1,
+					}));
 				}
 				function onPressTwo() {
-					setV({
-						...v,
-						[vSet]: false,
-					});
+					dispatch(setWidgetParamCode({
+						...code,
+						[vSet]: 0,
+					}));
 				}
 
-				const isOneSelected = v[vSet] || false;
+				const isOneSelected = code[vSet] === 1 || false;
 
 				return (
 					<VSetting
@@ -147,17 +159,17 @@ const DeviceSettings = (props: Object): Object => {
 			const uSetting = Object.keys(settings[setting]).map((uSet: Object, index: number): Object => {
 				const { option } = settings[setting][uSet];
 
-				const cUSet = u[uSet] || false;
+				const cUSet = units[uSet] || 0;
 				function onToggleCheckBox() {
-					setU({
-						...u,
-						[uSet]: !cUSet,
-					});
+					dispatch(setWidgetParamUnits({
+						...units,
+						[uSet]: cUSet === 1 ? 0 : 1,
+					}));
 				}
 
 				return (<USetting
 					key={uSet}
-					isChecked={cUSet}
+					isChecked={cUSet === 1}
 					onToggleCheckBox={onToggleCheckBox}
 					intl={intl}
 					option={option}/>);
@@ -179,28 +191,30 @@ const DeviceSettings = (props: Object): Object => {
 		if (setting === 's') {
 			const sSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
 
+				let houseObject = typeof house !== 'object' ? {} : house;
+
 				function onPressOne() {
-					setS({
-						...s,
+					dispatch(setWidgetParamHouse({
+						...houseObject,
 						[sSet]: '1',
-					});
+					}));
 				}
 				function onPressTwo() {
-					setS({
-						...s,
+					dispatch(setWidgetParamHouse({
+						...houseObject,
 						[sSet]: '-',
-					});
+					}));
 				}
 				function onPressThree() {
-					setS({
-						...s,
+					dispatch(setWidgetParamHouse({
+						...houseObject,
 						[sSet]: '0',
-					});
+					}));
 				}
 
-				const one = s[sSet] || '-';
-				const two = s[sSet] || '-';
-				const three = s[sSet] || '-';
+				const one = houseObject[sSet] || '-';
+				const two = houseObject[sSet] || '-';
+				const three = houseObject[sSet] || '-';
 
 				return (
 					<SSetting
@@ -231,23 +245,23 @@ const DeviceSettings = (props: Object): Object => {
 				function onChangeText(value: string): any {
 
 					if (!value || value === '') {
-						setHouse(value);
+						dispatch(setWidgetParamHouse(''));
 						return;
 					}
 
 					let newValue = parseInt(value, 10);
 					if (isNaN(newValue)) {
-						setHouse(house);
+						dispatch(setWidgetParamHouse(house));
 						return;
 					}
 
 					let acceptValue = (newValue <= max) && (newValue >= min);
 					if (!acceptValue) {
-						setHouse(house);
+						dispatch(setWidgetParamHouse(house));
 						return;
 					}
 
-					setHouse(newValue.toString());
+					dispatch(setWidgetParamHouse(newValue.toString()));
 				}
 
 				Setting.push(
@@ -268,7 +282,7 @@ const DeviceSettings = (props: Object): Object => {
 
 				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
 					const { key } = items[itemIndex] || {};
-					setHouse(key);
+					dispatch(setWidgetParamHouse(key));
 				}
 
 				const ddValue = house === '' ? items[0].key : house;
@@ -291,23 +305,23 @@ const DeviceSettings = (props: Object): Object => {
 				function onChangeText(value: string): any {
 
 					if (!value || value === '') {
-						setUnit(value);
+						dispatch(setWidgetParamUnit(''));
 						return;
 					}
 
 					let newValue = parseInt(value, 10);
 					if (isNaN(newValue)) {
-						setUnit(unit);
+						dispatch(setWidgetParamUnit(unit));
 						return;
 					}
 
 					let acceptValue = (newValue <= max) && (newValue >= min);
 					if (!acceptValue) {
-						setUnit(unit);
+						dispatch(setWidgetParamUnit(unit));
 						return;
 					}
 
-					setUnit(newValue.toString());
+					dispatch(setWidgetParamUnit(newValue.toString()));
 				}
 
 				Setting.push(
@@ -328,7 +342,7 @@ const DeviceSettings = (props: Object): Object => {
 
 				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
 					const { key } = items[itemIndex] || {};
-					setUnit(key);
+					dispatch(setWidgetParamUnit(key));
 				}
 
 				const ddValue = unit === '' ? items[0].key : unit;
@@ -346,7 +360,7 @@ const DeviceSettings = (props: Object): Object => {
 			const fadeSetting = Object.keys(optionValues).map((key: string, i: number): Object => {
 				const value = optionValues[key];
 				function onToggleCheckBox() {
-					setFade(value);
+					dispatch(setWidgetParamFade(value));
 				}
 
 				return (

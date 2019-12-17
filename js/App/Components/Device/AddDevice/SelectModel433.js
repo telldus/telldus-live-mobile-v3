@@ -105,7 +105,9 @@ getPadding(): number {
 }
 
 onChooseModel = (deviceInfo: Object) => {
-	const { navigation } = this.props;
+	const { navigation, actions } = this.props;
+
+	actions.setWidgetParamId(deviceInfo.widget);
 
 	const prevParams = navigation.state.params || {};
 	navigation.navigate('SetDeviceName433', {
