@@ -44,6 +44,7 @@ import {
 	showToast,
 	processWebsocketMessage,
 	addDevice as addDeviceAction,
+	setWidgetParamId,
 } from '../../../Actions';
 
 type Props = {
@@ -236,6 +237,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getDeviceManufacturerInfo,
 				showToast,
 				addDeviceAction,
+				setWidgetParamId,
 			}, dispatch),
 		},
 		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
