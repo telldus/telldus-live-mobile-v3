@@ -40,6 +40,10 @@ import {
 	LearnButton,
 } from '../../TabViews/SubViews';
 
+import {
+	prepareDeviceParameters,
+} from '../../../Lib/DeviceUtils';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -87,9 +91,13 @@ componentDidMount() {
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
 
+	const widgetParams433Device = navigation.getParam('widgetParams433Device', {});
 	const deviceInfo = navigation.getParam('deviceInfo', {});
 	const deviceName = navigation.getParam('deviceName', '');
-	const { protocol, model } = deviceInfo;
+	const { protocol, model, widget } = deviceInfo;
+
+	const parameters = prepareDeviceParameters(parseInt(widget, 10), widgetParams433Device);
+
 	actions.addDeviceAction(this.gatewayId, deviceName, protocol, model).then((res: Object) => {
 		if (res.id) {
 			this.setState({
