@@ -95,25 +95,16 @@ componentDidMount() {
 	const deviceInfo = navigation.getParam('deviceInfo', {});
 	const deviceName = navigation.getParam('deviceName', '');
 	const { protocol, model, widget } = deviceInfo;
-	
-	actions.addDeviceAction(this.gatewayId, deviceName, protocol, model).then(async (res: Object) => {
+
+	const parameters = prepareDeviceParameters(parseInt(widget, 10), widgetParams433Device) || {};
+	const params = {
+		protocol,
+		model,
+		parameters: JSON.stringify(parameters),
+		transport: '433',
+	};
+	actions.addDeviceAction(this.gatewayId, deviceName, params).then((res: Object) => {
 		if (res.id) {
-
-			const parameters = prepareDeviceParameters(parseInt(widget, 10), widgetParams433Device);
-			console.log('TEST parameters', parameters);
-			let promises = [];
-			Object.keys(parameters).map((parameterKey: Object) => {
-				promises.push(actions.setDeviceParameter(res.id, parameterKey, parameters[parameterKey]));
-			});
-
-			await Promise.all(promises.map((promise: any): any => {
-				return promise.then((res: Object) => {
-					console.log('TEST res', res);
-				}).catch(err => {
-					console.log('TEST err', err);
-				});
-			}));
-
 			this.setState({
 				deviceId: res.id,
 				isLoading: false,
