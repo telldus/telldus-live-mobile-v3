@@ -30,7 +30,9 @@ import {
 } from '../../../../BaseComponents';
 import { Row } from './SubViews';
 import { utils } from 'live-shared-data';
-const { Devices433MHz } = utils;
+const { Devices433MHz, images } = utils;
+
+const { DEVICES } = images;
 
 import Theme from '../../../Theme';
 
@@ -132,11 +134,15 @@ renderRow(item: Object): Object {
 	const {
 		lang,
 		modelName,
+		image = '',
 	} = item.item;
+
+	const img = DEVICES[`d_${image.replace(/-/g, '_')}`];
 
 	return (
 		<Row
 			name={this.prepareName(lang, modelName)}
+			img={img}
 			navigation={navigation}
 			intl={intl}
 			rowProps={{
