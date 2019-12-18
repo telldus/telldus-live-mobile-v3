@@ -22,9 +22,10 @@
 
 'use strict';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
+import isEmpty from 'lodash/isEmpty';
 
 import {
 	View,
@@ -66,10 +67,34 @@ const DeviceSettings = (props: Object): Object => {
 		system = '',
 		house = '',
 		unit = '',
-		fade = false,
+		fade,
 		units = {},
 		code = {},
 	} = widgetParams433Device;
+
+	useEffect(() => {
+
+		let hasFade = false, systemMin;
+		Object.keys(settings).map((setting: Object) => {
+			if (setting === 'fade') {
+				hasFade = true;
+			}
+			if (setting === 'system') {
+				const {
+					min,
+				} = settings[setting];
+				systemMin = min;
+			}
+		});
+
+		// Stores initial/default settings in store.
+		if (system === '' && typeof systemMin !== 'undefined') {
+			dispatch(setWidgetParamSystem(systemMin.toString()));
+		}
+		if (typeof fade === 'undefined' && hasFade) {
+			dispatch(setWidgetParamFade(false));
+		}
+	}, []);
 
 	const {
 		coverStyle,
@@ -120,8 +145,14 @@ const DeviceSettings = (props: Object): Object => {
 			);
 		}
 		if (setting === 'v') {
+			let initialSetCode = {};
+
 			const vSetting = Object.keys(settings[setting]).map((vSet: Object, index: number): Object => {
 				const { option } = settings[setting][vSet];
+
+				if (isEmpty(code)) {
+					initialSetCode[vSet] = 0;
+				}
 
 				function onPressOne() {
 					dispatch(setWidgetParamCode({
@@ -150,14 +181,28 @@ const DeviceSettings = (props: Object): Object => {
 						onPressTwo={onPressTwo}/>
 				);
 			});
+
+			// Stores initial/default settings in store.
+			if (isEmpty(code) && !isEmpty(initialSetCode)) {
+				dispatch(setWidgetParamCode({
+					...initialSetCode,
+				}));
+			}
+
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
 					{vSetting}
 				</View>);
 		}
 		if (setting === 'u') {
+			let initialSetU = {};
+
 			const uSetting = Object.keys(settings[setting]).map((uSet: Object, index: number): Object => {
 				const { option } = settings[setting][uSet];
+
+				if (isEmpty(units)) {
+					initialSetU[uSet] = 0;
+				}
 
 				const cUSet = units[uSet] || 0;
 				function onToggleCheckBox() {
@@ -174,6 +219,14 @@ const DeviceSettings = (props: Object): Object => {
 					intl={intl}
 					option={option}/>);
 			});
+
+			// Stores initial/default settings in store.
+			if (isEmpty(units) && !isEmpty(initialSetU)) {
+				dispatch(setWidgetParamUnits({
+					...initialSetU,
+				}));
+			}
+
 			Setting.push(
 				<View style={uSettingsCover} key={setting}>
 					<Text style={optionInputLabelStyle}>
@@ -189,9 +242,13 @@ const DeviceSettings = (props: Object): Object => {
 				</View>);
 		}
 		if (setting === 's') {
-			const sSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
+			let houseObject = typeof house !== 'object' ? {} : house;
+			let initalSetHouse = {};
 
-				let houseObject = typeof house !== 'object' ? {} : house;
+			const sSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
+				if (isEmpty(houseObject)) {
+					initalSetHouse[sSet] = '-';
+				}
 
 				function onPressOne() {
 					dispatch(setWidgetParamHouse({
@@ -229,6 +286,14 @@ const DeviceSettings = (props: Object): Object => {
 						isThreeSelected={three === '0'}/>
 				);
 			});
+
+			// Stores initial/default settings in store.
+			if (isEmpty(houseObject) && !isEmpty(initalSetHouse)) {
+				dispatch(setWidgetParamHouse({
+					...initalSetHouse,
+				}));
+			}
+
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
 					{sSetting}
@@ -264,6 +329,11 @@ const DeviceSettings = (props: Object): Object => {
 					dispatch(setWidgetParamHouse(newValue.toString()));
 				}
 
+				// Stores initial/default settings in store.
+				if (house === '') {
+					dispatch(setWidgetParamHouse(min.toString()));
+				}
+
 				Setting.push(
 					<InputSetting
 						key={setting}
@@ -283,6 +353,11 @@ const DeviceSettings = (props: Object): Object => {
 				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
 					const { key } = items[itemIndex] || {};
 					dispatch(setWidgetParamHouse(key));
+				}
+
+				// Stores initial/default settings in store.
+				if (house === '') {
+					dispatch(setWidgetParamHouse(items[0].key));
 				}
 
 				const ddValue = house === '' ? items[0].key : house;
@@ -324,6 +399,11 @@ const DeviceSettings = (props: Object): Object => {
 					dispatch(setWidgetParamUnit(newValue.toString()));
 				}
 
+				// Stores initial/default settings in store.
+				if (unit === '') {
+					dispatch(setWidgetParamUnit(min.toString()));
+				}
+
 				Setting.push(
 					<InputSetting
 						key={setting}
@@ -343,6 +423,11 @@ const DeviceSettings = (props: Object): Object => {
 				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
 					const { key } = items[itemIndex] || {};
 					dispatch(setWidgetParamUnit(key));
+				}
+
+				// Stores initial/default settings in store.
+				if (unit === '') {
+					dispatch(setWidgetParamUnit(items[0].key));
 				}
 
 				const ddValue = unit === '' ? items[0].key : unit;

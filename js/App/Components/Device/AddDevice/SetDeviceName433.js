@@ -29,6 +29,7 @@ import {
 import {
 	TextField,
 } from 'react-native-material-textfield';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	View,
@@ -60,6 +61,8 @@ const SetDeviceName433 = (props: Object): Object => {
 
 	const [name, setName] = useState('');
 	const [settings, setSettings] = useState(null);
+
+	const { widgetParams433Device = {} } = useSelector((state: Object): Object => state.addDevice);
 
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));
@@ -94,6 +97,7 @@ const SetDeviceName433 = (props: Object): Object => {
 			params: {
 				...prevParams,
 				deviceName: name,
+				widgetParams433Device,
 			},
 		});
 	}
