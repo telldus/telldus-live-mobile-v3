@@ -21,6 +21,7 @@
 
 import React from 'react';
 import { TextInput, Platform, InteractionManager } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 import Theme from '../../../Theme';
@@ -65,6 +66,10 @@ constructor(props: Props) {
 	this.input = null;
 
 	this.onFocus = this.onFocus.bind(this);
+
+	const brand = DeviceInfo.getBrand() || '';
+	const isSamsung = brand.trim().toLowerCase() === 'samsung';
+	this.keyboardType = Platform.OS === 'ios' ? 'numbers-and-punctuation' : isSamsung ? 'default' : 'decimal-pad';
 }
 
 componentDidMount() {
@@ -149,7 +154,7 @@ render(): Object {
 				onChangeText={this.onEdit}
 				autoCapitalize="characters"
 				autoCorrect={false}
-				keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'decimal-pad'}
+				keyboardType={this.keyboardType}
 				ref={this.setRef}
 				onFocus={this.onFocus}
 				blurOnSubmit={true}
