@@ -171,4 +171,7 @@
 
 	<string name="reserved_widget_android_thermostat">Thermostat</string>
 	<string name="reserved_widget_android_noThermostatSettings">Could not retrieve thermostat settings</string>
+
+	<string name="reserved_widget_android_label_rgb_control_option">Select swatch or color picker</string>
+	<string name="reserved_widget_android_dimmingLevel">Dimming level</string>
 </resources>
