@@ -422,8 +422,7 @@ class JobRow extends View<null, Props, null> {
 			}
 			repeatDays = capitalize(repeatDays.slice(0, -2));
 		}
-
-		return repeatDays;
+		return repeatDays.trim();
 	};
 
 	getRepeatTime(type: string): string {
