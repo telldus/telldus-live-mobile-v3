@@ -29,7 +29,7 @@ import {
 import {
 	TextField,
 } from 'react-native-material-textfield';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
 	View,
