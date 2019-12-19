@@ -143,7 +143,7 @@ class AddDeviceContainer extends View<Props, State> {
 	disAllowBackNavigation(): boolean {
 		const {screenProps} = this.props;
 		const { currentScreen } = screenProps;
-		const screens = ['AlreadyIncluded', 'IncludeFailed', 'DeviceName', 'NoDeviceFound', 'ExcludeScreen', 'CantEnterInclusion'];
+		const screens = ['AlreadyIncluded', 'IncludeFailed', 'DeviceName', 'NoDeviceFound', 'ExcludeScreen', 'CantEnterInclusion', 'Include433'];
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
