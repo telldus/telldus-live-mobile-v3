@@ -46,6 +46,9 @@ import {
 	setWidgetParamUnit,
 	setWidgetParamHouse,
 } from '../../../../Actions/AddDevice';
+import {
+	getRandom,
+} from '../../../../Lib/appUtils';
 
 import Theme from '../../../../Theme';
 
@@ -74,7 +77,7 @@ const DeviceSettings = (props: Object): Object => {
 
 	useEffect(() => {
 
-		let hasFade = false, systemMin;
+		let hasFade = false, systemMin, systemMax;
 		Object.keys(settings).map((setting: Object) => {
 			if (setting === 'fade') {
 				hasFade = true;
@@ -82,14 +85,18 @@ const DeviceSettings = (props: Object): Object => {
 			if (setting === 'system') {
 				const {
 					min,
+					max,
 				} = settings[setting];
 				systemMin = min;
+				systemMax = max;
 			}
 		});
 
 		// Stores initial/default settings in store.
 		if (system === '' && typeof systemMin !== 'undefined') {
-			dispatch(setWidgetParamSystem(systemMin.toString()));
+			const random = getRandom(systemMin, systemMax);
+			const sysInitValue = random || systemMin;
+			dispatch(setWidgetParamSystem(sysInitValue.toString()));
 		}
 		if (typeof fade === 'undefined' && hasFade) {
 			dispatch(setWidgetParamFade(false));
@@ -329,9 +336,11 @@ const DeviceSettings = (props: Object): Object => {
 					dispatch(setWidgetParamHouse(newValue.toString()));
 				}
 
+				const random = getRandom(min, max);
+				const houseInitValue = random || min;
 				// Stores initial/default settings in store.
 				if (house === '') {
-					dispatch(setWidgetParamHouse(min.toString()));
+					dispatch(setWidgetParamHouse(houseInitValue.toString()));
 				}
 
 				Setting.push(
@@ -399,9 +408,11 @@ const DeviceSettings = (props: Object): Object => {
 					dispatch(setWidgetParamUnit(newValue.toString()));
 				}
 
+				const random = getRandom(min, max);
+				const unitInitValue = random || min;
 				// Stores initial/default settings in store.
 				if (unit === '') {
-					dispatch(setWidgetParamUnit(min.toString()));
+					dispatch(setWidgetParamUnit(unitInitValue.toString()));
 				}
 
 				Setting.push(
