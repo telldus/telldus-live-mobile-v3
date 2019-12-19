@@ -42,6 +42,7 @@ import {
 
 import {
 	prepareDeviceParameters,
+	get433DevicePostConfigScreenOptions,
 } from '../../../Lib/DeviceUtils';
 
 import Theme from '../../../Theme';
@@ -225,7 +226,7 @@ onNext = () => {
 }
 
 render(): Object {
-	const { intl, appLayout } = this.props;
+	const { intl, appLayout, navigation } = this.props;
 	const { formatMessage } = intl;
 
 	const {
@@ -257,6 +258,42 @@ render(): Object {
 
 	const uri = {uri: 'img_zwave_include'};
 
+	const deviceInfo = navigation.getParam('deviceInfo', '');
+	const {
+		postConfig,
+	} = deviceInfo;
+	const {
+		descriptions,
+		info,
+		learnButtonIndex,
+	} = get433DevicePostConfigScreenOptions(postConfig, formatMessage);
+
+	const Descriptions = descriptions.map((text: string, i: number): Object => {
+		return (<NumberedBlock
+			number={`${i + 1}.`}
+			text={text}
+			img={i === learnButtonIndex ? uri : undefined}
+			rightBlockIItemOne={
+				i === learnButtonIndex ?
+					<LearnButton
+						id={deviceId}
+						style={buttonStyle}/>
+					: undefined
+			}/>);
+	});
+
+	const Info = (info && info.length > 0) ? info.map((text: string): Object => {
+		return (
+			<InfoBlock
+				text={text}
+				appLayout={appLayout}
+				infoContainer={infoContainer}
+				textStyle={infoTextStyle}/>
+		);
+	})
+		:
+		undefined;
+
 	return (
 		<View style={{
 			flex: 1,
@@ -265,29 +302,8 @@ render(): Object {
 				flex: 1,
 			}}
 			contentContainerStyle={containerStyle}>
-				<NumberedBlock
-					number={'1.'}
-					text={`${formatMessage(i18n.add433DInfoOne)}.`}/>
-				<NumberedBlock
-					number={'2.'}
-					text={`${formatMessage(i18n.add433DInfoTwo)}.`}/>
-				<NumberedBlock
-					number={'3.'}
-					text={`${formatMessage(i18n.add433DInfoThree)}. (${formatMessage(i18n.add433DInfoFour)}.)`}
-					img={uri}
-					rightBlockIItemOne={
-						<LearnButton
-							id={deviceId}
-							style={buttonStyle}/>
-					}/>
-				<NumberedBlock
-					number={'4.'}
-					text={`${formatMessage(i18n.add433DInfoFive)}.`}/>
-				<InfoBlock
-					text={`${formatMessage(i18n.add433DInfoOnFail)}.`}
-					appLayout={appLayout}
-					infoContainer={infoContainer}
-					textStyle={infoTextStyle}/>
+				{!!Descriptions && Descriptions}
+				{!!Info && Info}
 			</ScrollView>
 			<FloatingButton
 				onPress={this.onNext}
