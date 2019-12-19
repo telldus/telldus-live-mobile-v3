@@ -111,6 +111,10 @@ function premiumAboutToExpire(subscriptions: Object = {}, pro: number): boolean 
 	return diff <= 7;
 }
 
+function getRandom(min: number, max: number): number {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -120,4 +124,5 @@ module.exports = {
 	...appUtils,
 	hasTellStickNetGetOne,
 	premiumAboutToExpire,
+	getRandom,
 };
