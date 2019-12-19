@@ -406,7 +406,7 @@ class DeviceRow extends View<Props, State> {
 			screenReaderEnabled,
 			currentTemp,
 		} = this.props;
-		const { isInState, name, deviceType, supportedMethods = {}, stateValues } = device;
+		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
 		const deviceName = name ? name : intl.formatMessage(i18n.noName);
 		const showDeviceIcon = PixelRatio.getPixelSizeForLayoutSize(appLayout.width) >= 750;
