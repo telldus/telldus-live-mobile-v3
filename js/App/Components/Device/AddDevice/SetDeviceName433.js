@@ -136,7 +136,7 @@ const SetDeviceName433 = (props: Object): Object => {
 					autoCorrect={false}
 					autoFocus={true}
 					returnKeyType={'done'}
-					autoCapitalize={'none'}
+					autoCapitalize={'sentences'}
 					renderLeftAccessory={renderLeftAccessory}
 				/>
 				{!!settings && <DeviceSettings
