@@ -64,6 +64,7 @@ type State = {
 	infoButton: null | Object,
 	loading: boolean,
 	keyboardShown: boolean,
+	forceLeftIconVisibilty: boolean,
 };
 
 class AddDeviceContainer extends View<Props, State> {
@@ -77,6 +78,7 @@ class AddDeviceContainer extends View<Props, State> {
 		h2: '',
 		infoButton: null,
 		keyboardShown: false,
+		forceLeftIconVisibilty: false,
 	};
 
 	constructor(props: Props) {
@@ -155,6 +157,12 @@ class AddDeviceContainer extends View<Props, State> {
 		});
 	};
 
+	toggleLeftIconVisibilty = (forceLeftIconVisibilty: boolean) => {
+		this.setState({
+			forceLeftIconVisibilty,
+		});
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -165,7 +173,7 @@ class AddDeviceContainer extends View<Props, State> {
 			locale,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
-		const { h1, h2, infoButton } = this.state;
+		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
@@ -186,7 +194,7 @@ class AddDeviceContainer extends View<Props, State> {
 					infoButton={infoButton}
 					align={'right'}
 					navigation={navigation}
-					showLeftIcon={showLeftIcon}
+					showLeftIcon={showLeftIcon || forceLeftIconVisibilty}
 					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
 					{...screenProps}/>
 				<KeyboardAvoidingView
@@ -205,6 +213,7 @@ class AddDeviceContainer extends View<Props, State> {
 							addDevice,
 							processWebsocketMessage: this.props.processWebsocketMessage,
 							locale,
+							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
 						},
 					)}
 				</KeyboardAvoidingView>

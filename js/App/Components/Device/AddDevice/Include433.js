@@ -57,6 +57,7 @@ type Props = {
 	actions: Object,
 	intl: Object,
 	processWebsocketMessage: (string, string, string, Object) => any,
+	toggleLeftIconVisibilty: (boolean) => void,
 };
 
 type State = {
@@ -73,12 +74,15 @@ constructor(props: Props) {
 
 	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
-	this.gatewayId = gateway.id;
+	const { id } = gateway;
+	this.gatewayId = id;
 
 	this.state = {
 		deviceId: null,
 		isLoading: true,
 	};
+
+	this.hasUnmount = false;
 }
 
 componentDidMount() {
@@ -87,6 +91,7 @@ componentDidMount() {
 		intl,
 		navigation,
 		actions,
+		toggleLeftIconVisibilty,
 	} = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
@@ -103,27 +108,98 @@ componentDidMount() {
 		parameters: JSON.stringify(parameters),
 		transport: '433',
 	};
-	actions.addDeviceAction(this.gatewayId, deviceName, params).then((res: Object) => {
-		if (res.id) {
-			this.setState({
-				deviceId: res.id,
-				isLoading: false,
-			});
-			actions.getDevices();
-		} else {
-			this.setState({
-				isLoading: false,
-			});
+
+	const gateway = navigation.getParam('gateway', {});
+	const { id, transports = '' } = gateway;
+	const transportsArr = transports.split(',');
+	if (transportsArr.indexOf('433') !== -1 || transportsArr.indexOf('433tx') !== -1) {
+		this.websocket = actions.getSocketObject(id);
+		if (this.websocket) {
+			this.setSocketListeners();
 		}
-	}).catch(() => {
+
+		this.addDeviceToGen2();
+	} else if (transportsArr.indexOf('e433') !== -1) {
+		actions.addDeviceAction(this.gatewayId, deviceName, params).then((res: Object) => {
+			if (res.id) {
+				this.setState({
+					deviceId: res.id,
+					isLoading: false,
+				});
+				actions.getDevices();
+			} else {
+				this.setState({
+					isLoading: false,
+				});
+				toggleLeftIconVisibilty(true);
+			}
+		}).catch(() => {
+			this.setState({
+				isLoading: false,
+			});
+			toggleLeftIconVisibilty(true);
+		});
+	} else {
 		this.setState({
 			isLoading: false,
 		});
-	});
+		toggleLeftIconVisibilty(true);
+	}
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'Include433';
+}
+
+componentWillUnmount() {
+	this.hasUnmount = true;
+}
+
+setSocketListeners = () => {
+	const that = this;
+	const { processWebsocketMessage, navigation } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+
+	this.websocket.onmessage = (msg: Object) => {
+		let title = '';
+		let message = {};
+		try {
+			message = JSON.parse(msg.data);
+		} catch (e) {
+			message = msg.data;
+			title = ` ${msg.data}`;
+		}
+		const { module, action, data } = message;
+		if (module && action && !that.hasUnmount) {
+			const { id } = data;
+			this.setState({
+				deviceId: id,
+				isLoading: false,
+			});
+		}
+		processWebsocketMessage(gateway.id.toString(), message, title, that.websocket);
+	};
+}
+
+addDeviceToGen2 = () => {
+	const { navigation, actions } = this.props;
+
+	const deviceName = navigation.getParam('deviceName', '');
+	const deviceInfo = navigation.getParam('deviceInfo', '');
+	const {
+		protocol,
+		model,
+		widget,
+	} = deviceInfo;
+
+	actions.sendSocketMessage(this.gatewayId, 'client', 'forward', {
+		'module': 'rf433',
+		'action': 'addDevice',
+		'name': deviceName,
+		'protocol': protocol,
+		'model': model,
+		'parameters': widget,
+	});
 }
 
 onNext = () => {
