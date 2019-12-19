@@ -23,12 +23,13 @@
 'use strict';
 
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, ScrollView } from 'react-native';
 
 import {
 	View,
+	Text,
 } from '../../../../BaseComponents';
-import { Row } from './SubViews';
+import { Row, ShortcutRow } from './SubViews';
 import { utils } from 'live-shared-data';
 const { Devices433MHz, images } = utils;
 
@@ -77,7 +78,8 @@ onChooseLocation: (Object) => void;
 constructor(props: Props) {
 	super(props);
 
-	const deviceBrand = props.navigation.getParam('deviceBrand', '');
+	const shortcutToTelldus = props.navigation.getParam('shortcutToTelldus', false);
+	const deviceBrand = shortcutToTelldus ? 'Telldus' : props.navigation.getParam('deviceBrand', '');
 	this.state = {
 		rows: prepareDataForList(Devices433MHz, deviceBrand),
 	};
@@ -96,14 +98,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 keyExtractor(item: Object, i: number): string {
 	return `${item.modelName}${item.widget}${i}`;
-}
-
-getPadding(): number {
-	const { appLayout } = this.props;
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-	return deviceWidth * Theme.Core.paddingFactor;
 }
 
 onChooseModel = (deviceInfo: Object) => {
@@ -153,9 +147,80 @@ renderRow(item: Object): Object {
 	);
 }
 
+onPressShortcutRow = (deviceInfo: Object) => {
+	const { navigation, actions } = this.props;
+
+	actions.setWidgetParamId(deviceInfo.widget);
+
+	const prevParams = navigation.state.params || {};
+	navigation.navigate('SetDeviceName433', {
+		...prevParams,
+		shortcutToTelldus: false,
+		deviceInfo,
+	});
+}
+
+onPressOtherBrand = () => {
+	const { navigation } = this.props;
+	const prevParams = navigation.state.params || {};
+	navigation.navigate('SelectBrand433', {
+		...prevParams,
+	});
+}
+
+renderRowShortcut = (data: Object, key: number): Object => {
+	const {
+		image,
+		modelName,
+		lang,
+	} = data;
+
+	const img = DEVICES[`d_${image.replace(/-/g, '_')}`];
+
+	return (
+		<ShortcutRow
+			name={this.prepareName(lang, modelName)}
+			img={img}
+			rowProps={{
+				...data,
+			}}
+			onPress={this.onPressShortcutRow}
+			key={key}/>
+	);
+}
+
 render(): Object {
-	const padding = this.getPadding();
+	const {
+		padding,
+		shortCutItemsCover,
+		clickTextStyle,
+	} = this.getStyles();
 	const { rows } = this.state;
+
+	const { navigation } = this.props;
+	const shortcutToTelldus = navigation.getParam('shortcutToTelldus', false);
+	if (shortcutToTelldus) {
+		const telldusDevices = rows.map((data: Object, i: number): Object => {
+			return this.renderRowShortcut(data, i);
+		});
+		return (
+			<ScrollView
+				style={{
+					flex: 1,
+				}}
+				contentContainerStyle={{
+					flexGrow: 1,
+					paddingVertical: padding,
+				}}>
+				<View style={shortCutItemsCover}>
+					{telldusDevices}
+					<Text style={clickTextStyle} onPress={this.onPressOtherBrand}>
+							Click here to show devices from other brands
+					</Text>
+				</View>
+			</ScrollView>
+		);
+	}
 
 	return (
 		<FlatList
@@ -168,6 +233,34 @@ render(): Object {
 		/>
 	);
 }
+
+getStyles(): Object {
+	const { appLayout } = this.props;
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const fontSize = deviceWidth * 0.038;
+
+	return {
+		padding,
+		shortCutItemsCover: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			justifyContent: 'center',
+			paddingRight: padding / 2,
+		},
+		clickTextStyle: {
+			fontSize,
+			color: Theme.Core.textColor,
+			padding,
+			marginVertical: padding,
+		},
+	};
+}
+
 }
 
 export default SelectModel433;

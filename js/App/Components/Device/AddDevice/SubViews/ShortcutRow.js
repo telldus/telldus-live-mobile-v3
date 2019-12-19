@@ -37,11 +37,10 @@ import {
 
 import Theme from '../../../../Theme';
 
-const Row = (props: Object): Object => {
+const ShortcutRow = (props: Object): Object => {
 	const {
 		img,
 		name,
-		isLast,
 		onPress,
 		rowProps,
 	} = props;
@@ -52,7 +51,8 @@ const Row = (props: Object): Object => {
 		coverStyle,
 		imgStyle,
 		textStyle,
-	} = getStyles(layout, isLast);
+		textCoverStyle,
+	} = getStyles(layout);
 
 	function onPressRow() {
 		if (onPress) {
@@ -67,56 +67,61 @@ const Row = (props: Object): Object => {
 		<TouchableOpacity onPress={onPressRow}>
 			<View style={coverStyle}>
 				<Image source={img} style={imgStyle} resizeMode={'contain'}/>
-				<Text style={textStyle}>
-					{name}
-				</Text>
+				<View style={textCoverStyle}>
+					<Text style={textStyle} numberOfLines={2}>
+						{name}
+					</Text>
+				</View>
 			</View>
 		</TouchableOpacity>
 	);
 };
 
-const getStyles = (appLayout: Object, isLast: boolean): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		shadow,
 		paddingFactor,
 		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const imageW = deviceWidth * 0.15;
-	let imageH = deviceWidth * 0.12;
-	let paddingVertical = padding / 2;
-	const fontSize = deviceWidth * 0.045;
+	const fontSize = deviceWidth * 0.038;
 
-	const sdw = isLast ? shadow : {};
+	const imageSize = Math.floor((deviceWidth - (padding * 3)) / 3);
+	const textCoverHeight = fontSize * 3;
 
 	return {
 		coverStyle: {
-			flexDirection: 'row',
 			alignItems: 'center',
-			width: width,
-			borderTopWidth: StyleSheet.hairlineWidth,
-			borderTopColor: eulaContentColor,
-			paddingVertical,
-			paddingHorizontal: padding * 2,
+			justifyContent: 'center',
+			borderWidth: StyleSheet.hairlineWidth,
+			borderColor: eulaContentColor,
+			marginLeft: padding / 2,
+			marginTop: padding / 2,
 			backgroundColor: '#fff',
-			...sdw,
-			marginBottom: isLast ? padding : 0,
+			width: imageSize,
+			borderRadius: 2,
 		},
 		imgStyle: {
-			height: imageH,
-			width: imageW,
+			height: imageSize * 0.8,
+			width: imageSize,
+		},
+		textCoverStyle: {
+			height: textCoverHeight,
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		textStyle: {
 			color: eulaContentColor,
-			marginLeft: padding * 2,
+			margin: padding / 2,
 			fontSize,
+			flexWrap: 'wrap',
+			textAlign: 'center',
 		},
 	};
 };
 
-export default Row;
+export default ShortcutRow;

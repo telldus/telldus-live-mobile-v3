@@ -95,11 +95,12 @@ onChooseType({module, action, secure}: Object) {
 			secure,
 		});
 	} else if (module === 'rf433') {
-		navigation.navigate('SelectBrand433', {
+		navigation.navigate('SelectModel433', {
 			gateway,
 			module,
 			action,
 			secure,
+			shortcutToTelldus: true,
 		});
 	}
 

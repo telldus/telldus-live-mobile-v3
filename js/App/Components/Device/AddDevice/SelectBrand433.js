@@ -108,6 +108,7 @@ onChooseBrand = ({deviceBrand}: Object) => {
 	navigation.navigate('SelectModel433', {
 		...prevParams,
 		deviceBrand,
+		shortcutToTelldus: false,
 	});
 }
 
