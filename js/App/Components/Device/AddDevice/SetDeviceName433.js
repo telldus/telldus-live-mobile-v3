@@ -69,7 +69,7 @@ const SetDeviceName433 = (props: Object): Object => {
 
 		const deviceInfo = navigation.getParam('deviceInfo', {});
 		const { widget, configuration } = deviceInfo;
-		if (widget && configuration) {
+		if (widget && configuration === 'true') {
 			const dSettings = getDeviceSettings(parseInt(widget, 10), formatMessage);
 			setSettings(dSettings);
 		}
