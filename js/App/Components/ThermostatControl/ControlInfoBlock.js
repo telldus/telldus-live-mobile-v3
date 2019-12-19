@@ -93,16 +93,20 @@ onSubmitEditing = () => {
 		editValue: false,
 	});
 
+	const { minVal, maxVal, currentValue } = this.props;
+	let fallbackValue = currentValue || minVal || maxVal;
+	fallbackValue = fallbackValue ? fallbackValue.toString() : '';
+
 	if (!this.props.currentValueInScreen || this.props.currentValueInScreen === '') {
-		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
+		this.props.updateCurrentValueInScreen(fallbackValue);
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
 
 	const value = parseFloat(parseFloat(this.props.currentValueInScreen).toFixed(1));
-	const { maxVal, minVal, controllingMode } = this.props;
+	const { controllingMode } = this.props;
 	if (isNaN(value) || value > parseFloat(maxVal) || value < parseFloat(minVal)) {
-		this.props.updateCurrentValueInScreen(this.props.currentValue.toString());
+		this.props.updateCurrentValueInScreen(fallbackValue);
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		return;
 	}
