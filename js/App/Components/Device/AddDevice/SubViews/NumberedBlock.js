@@ -42,7 +42,9 @@ const NumberedBlock = (props: Object): Object => {
 		text,
 		number,
 		blockStyle,
+		blockStyleCover,
 		rightBlockIItemOne,
+		progress,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -51,6 +53,7 @@ const NumberedBlock = (props: Object): Object => {
 		markerTextCover,
 		markerText,
 		blockLeft,
+		blockStyleCoverDef,
 		blockStyleDef,
 		blockRight,
 		infoText,
@@ -58,22 +61,25 @@ const NumberedBlock = (props: Object): Object => {
 	} = getStyles(layout);
 
 	return (
-		<View style={[blockStyleDef, blockStyle]}>
-			<View style={blockLeft}>
-				<View style={markerTextCover}/>
-				<Text style={markerText}>
-					{number}
-				</Text>
-				{!!img &&
+		<View style={[blockStyleCoverDef, blockStyleCover]}>
+			<View style={[blockStyleDef, blockStyle]}>
+				<View style={blockLeft}>
+					<View style={markerTextCover}/>
+					<Text style={markerText}>
+						{number}
+					</Text>
+					{!!img &&
                     <Image source={img} resizeMode={'cover'} style={imageType}/>
-				}
+					}
+				</View>
+				<View style={blockRight}>
+					<Text style={infoText}>
+						{text}
+					</Text>
+					{!!rightBlockIItemOne && rightBlockIItemOne}
+				</View>
 			</View>
-			<View style={blockRight}>
-				<Text style={infoText}>
-					{text}
-				</Text>
-				{!!rightBlockIItemOne && rightBlockIItemOne}
-			</View>
+			{!!progress && progress}
 		</View>
 	);
 };
@@ -98,14 +104,17 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		padding,
-		blockStyleDef: {
-			flexDirection: 'row',
+		blockStyleCoverDef: {
 			marginHorizontal: padding,
 			backgroundColor: '#fff',
 			...shadow,
 			width: width - (2 * padding),
 			borderRadius: 2,
 			marginBottom: padding / 2,
+			alignItems: 'center',
+		},
+		blockStyleDef: {
+			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'stretch',
 		},

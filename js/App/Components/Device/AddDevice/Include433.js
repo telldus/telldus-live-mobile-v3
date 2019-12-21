@@ -8,7 +8,7 @@
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Telldus Live! app is distributed in the hope that it will be useful,
+ * Telldus Live! app is distributed in the hope this it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -32,6 +32,7 @@ import {
 	FloatingButton,
 	InfoBlock,
 	FullPageActivityIndicator,
+	ProgressBarLinear,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
@@ -46,12 +47,15 @@ import {
 } from '../../../Lib/DeviceUtils';
 
 import Theme from '../../../Theme';
+import TelldusWebsocket from '../../../Lib/Socket';
 
 import i18n from '../../../Translations/common';
+import isEmpty from 'lodash/isEmpty';
 
 type Props = {
 	appLayout: Object,
 	addDevice: Object,
+	sessionId: string,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -64,6 +68,8 @@ type Props = {
 type State = {
 	deviceId: string | null,
 	isLoading: boolean,
+	progress: number,
+	showProgress: boolean,
 };
 
 class Include433 extends View<Props, State> {
@@ -73,29 +79,81 @@ state: State;
 constructor(props: Props) {
 	super(props);
 
-	const { navigation } = this.props;
+	const { navigation, intl } = props;
 	const gateway = navigation.getParam('gateway', {});
 	const { id } = gateway;
-	this.gatewayId = id;
+	this.gatewayId = id.toString();
 
 	this.state = {
 		deviceId: null,
 		isLoading: true,
+		showProgress: false,
+		progress: 0,
 	};
 
-	this.hasUnmount = false;
+	this.receivingTimer = null;
+	this.noAccept = false;
+	this.acceptProtocol = '';
+	this.acceptModel = '';
+	this.miminimScans = 2;
+	this.scanResult = {};
+	this.scanTimer = null;
+
+	const deviceInfo = navigation.getParam('deviceInfo', '');
+	const {
+		postConfig,
+	} = deviceInfo;
+	this.PostConfigScreenOptions = get433DevicePostConfigScreenOptions(postConfig, intl.formatMessage);
+
+	this.socketKeepAliveInterval = null;
 }
 
 componentDidMount() {
+	this.hasUnmount = false;
+
 	const {
 		onDidMount,
 		intl,
 		navigation,
 		actions,
 		toggleLeftIconVisibilty,
+		sessionId,
 	} = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
+
+	const gateway = navigation.getParam('gateway', {});
+	const { transports = '', websocketAddress: { address } } = gateway;
+	const transportsArr = transports.split(',');
+
+	const websocketUrl = `wss://${address}/websocket`;
+	this.websocket = new TelldusWebsocket(this.gatewayId, websocketUrl);
+	const auth = `{"module":"auth","action":"auth","data":{"sessionid":"${sessionId}","clientId":"${this.gatewayId}"}}`;
+
+	if (this.websocket) {
+		this.websocket.onopen = () => {
+			this.sendSocketMessage(auth);
+
+			this.socketKeepAliveInterval = setInterval(() => {
+				this.sendSocketMessage('{}');
+			}, 20000);
+
+			const filter = {'module': 'device', 'action': 'added'};
+			this.sendSocketMessage(JSON.stringify({module: 'filter', action: 'accept', data: filter}));
+		};
+
+		this.websocket.onclose = () => {
+			clearInterval(this.socketKeepAliveInterval);
+		};
+
+		this.setSocketListeners();
+	}
+
+	const {
+		progress,
+		protocol: protocolSO,
+		model: modelSO,
+	} = this.PostConfigScreenOptions;
 
 	const widgetParams433Device = navigation.getParam('widgetParams433Device', {});
 	const deviceInfo = navigation.getParam('deviceInfo', {});
@@ -110,17 +168,7 @@ componentDidMount() {
 		transport: '433',
 	};
 
-	const gateway = navigation.getParam('gateway', {});
-	const { id, transports = '' } = gateway;
-	const transportsArr = transports.split(',');
-	if (transportsArr.indexOf('433') !== -1 || transportsArr.indexOf('433tx') !== -1) {
-		this.websocket = actions.getSocketObject(id);
-		if (this.websocket) {
-			this.setSocketListeners();
-		}
-
-		this.addDeviceToGen2();
-	} else if (transportsArr.indexOf('e433') !== -1) {
+	if (transportsArr.indexOf('e433') !== -1) {
 		actions.addDeviceAction(this.gatewayId, deviceName, params).then((res: Object) => {
 			if (res.id) {
 				this.setState({
@@ -128,6 +176,9 @@ componentDidMount() {
 					isLoading: false,
 				});
 				actions.getDevices();
+				if (progress) {
+					this.startScan(protocolSO, modelSO);
+				}
 			} else {
 				this.setState({
 					isLoading: false,
@@ -140,7 +191,7 @@ componentDidMount() {
 			});
 			toggleLeftIconVisibilty(true);
 		});
-	} else {
+	} else if (transportsArr.indexOf('433') === -1 && transportsArr.indexOf('433tx') === -1) {
 		this.setState({
 			isLoading: false,
 		});
@@ -154,36 +205,226 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 componentWillUnmount() {
 	this.hasUnmount = true;
+	if (this.websocket && this.websocket.destroy) {
+		this.websocket.destroy();
+		delete this.websocket;
+	}
+}
+
+startScan = (protocol: string, model: string) => {
+	const { navigation } = this.props;
+	this.noAccept = false;
+	this.setMinimumScans(1);
+	this.accept(protocol, model);
+
+	const gateway = navigation.getParam('gateway', {});
+	const { transports = '' } = gateway;
+	const transportsArr = transports.split(',');
+
+	const filter = {'module': 'client', 'action': 'rawData'};
+	this.sendSocketMessage(JSON.stringify({module: 'filter', action: 'accept', data: filter}));
+
+	this.scanResult = {};
+
+	if (transportsArr.indexOf('433') !== -1) {
+		this.sendSocketMessage(JSON.stringify({module: 'client', action: 'forward', data: {
+			'module': 'rf433',
+			'action': 'rawEnabled',
+			'value': 1,
+		}}));
+	}
+}
+
+sendSocketMessage = (message: string) => {
+	if (this.websocket) {
+		this.websocket.send(message);
+	}
+}
+
+accept = (protocol: string, model: string) => {
+	this.acceptProtocol = protocol;
+	if (model.indexOf(':') > 0) {
+		model = model.substring(0, model.indexOf(':'));
+	}
+	if (model === 'selflearning-switch') {
+		model = 'selflearning';
+	} else if (model === 'selflearning-dimmer') {
+		model = 'selflearning';
+	} else if (model === 'bell') {
+		model = 'codeswitch';
+	} else if (model === 'selflearning-bell') {
+		model = 'selflearning';
+	}
+	this.acceptModel = model;
+}
+
+setMinimumScans = (minimumScans: number) => {
+	this.minimumScans = minimumScans;
+}
+
+stopScan = () => {
+	const { navigation } = this.props;
+	this.noAccept = true;
+
+	const gateway = navigation.getParam('gateway', {});
+	const { transports = '' } = gateway;
+	const transportsArr = transports.split(',');
+
+	const filter = {'module': 'client', 'action': 'rawData'};
+	this.sendSocketMessage(JSON.stringify({module: 'filter', action: 'deny', data: filter}));
+
+	this.scanResult = {};
+
+	if (transportsArr.indexOf('433') !== -1) {
+		this.sendSocketMessage(JSON.stringify({module: 'client', action: 'forward', data: {
+			'module': 'rf433',
+			'action': 'rawEnabled',
+			'value': 0,
+		}}));
+	}
 }
 
 setSocketListeners = () => {
-	const that = this;
-	const { processWebsocketMessage, navigation } = this.props;
+	const { navigation } = this.props;
 	const gateway = navigation.getParam('gateway', {});
+	const { transports = '' } = gateway;
+	const transportsArr = transports.split(',');
+
+	const that = this;
+
+	const {
+		progress,
+		protocol: protocolSO,
+		model: modelSO,
+	} = this.PostConfigScreenOptions;
 
 	this.websocket.onmessage = (msg: Object) => {
-		let title = '';
 		let message = {};
 		try {
 			message = JSON.parse(msg.data);
 		} catch (e) {
 			message = msg.data;
-			title = ` ${msg.data}`;
 		}
-		const { module, action, data } = message;
-		if (module && action && !that.hasUnmount) {
-			const { id } = data;
-			this.setState({
-				deviceId: id,
-				isLoading: false,
-			});
+		console.log('TEST message', message);
+		if (typeof message === 'string') {
+			if (message === 'validconnection' && that.state.isLoading && transportsArr.indexOf('433') !== -1 || transportsArr.indexOf('433tx') !== -1) {
+				this.addDeviceToGen2();
+			}
+		} else {
+			// $FlowFixMe
+			const { module, action, data } = message;
+			if (module && action && !that.hasUnmount && !that.noAccept) {
+				const { id } = data;
+				if (id) {
+					that.setState({
+						deviceId: id,
+						isLoading: false,
+					});
+					if (progress) {
+						that.startScan(protocolSO, modelSO);
+					}
+				}
+
+				if (module === 'client' && action === 'rawData') {
+					const found = that.parseRawMessage(data);
+					console.log('TEST found', found);
+					if (found) {
+					// $FlowFixMe
+						let scans = Math.min(found.scans, 5);
+						let progressValue = Math.round(scans / 5.0 * 100);
+						that.setState({
+							progress: progressValue,
+						});
+
+						if (scans >= 5) {
+							that.stopScan();
+						}
+					}
+				}
+			}
 		}
-		processWebsocketMessage(gateway.id.toString(), message, title, that.websocket);
 	};
 }
 
+parseRawMessage = (data: Object): any => {
+	const that = this;
+
+	let protocol = data.protocol;
+	let model = data.model;
+	let key = `${protocol}:${model}`;
+
+	if (protocol !== that.acceptProtocol) {
+		return;
+	}
+	if (model !== that.acceptModel) {
+		return;
+	}
+
+	if (that.receivingTimer !== null) {
+		clearTimeout(that.receivingTimer);
+	}
+	that.receivingTimer = setTimeout(() => {
+		that.setState({
+			showProgress: false,
+		});
+		that.receivingTimer = null;
+	}, 2000);
+	that.setState({
+		showProgress: true,
+	});
+
+	if (!that.scanResult[key]) {
+		that.scanResult[key] = [];
+	}
+
+	let found = {};
+	for (let i = 0; i < that.scanResult[key].length; ++i) {
+		if (that.scanResult[key][i].house !== data.house) {
+			continue;
+		} else if (that.scanResult[key][i].unit !== data.unit) {
+			continue;
+		} else if (that.scanResult[key][i].code !== data.code) {
+			continue;
+		}
+		that.scanResult[key][i].scans++;
+		that.scanResult[key][i].lastReceived = new Date();
+		found = that.scanResult[key][i];
+		break;
+	}
+
+	if (isEmpty(found)) {
+		found = {
+			'house': data.house,
+			'unit': data.unit,
+			'code': data.code,
+			'scans': 1,
+			'lastReceived': new Date(),
+		};
+		that.scanResult[key].push(found);
+	}
+	// Find the one most used
+	let now = new Date();
+	for (let i = 0; i < that.scanResult[key].length; ++i) {
+		if (now - that.scanResult[key][i].lastReceived > 2000) {
+			// Hasn't been received in 2 seconds. Ignore
+			continue;
+		}
+		if (that.scanResult[key][i].scans < found.scans) {
+			continue;
+		}
+		found = that.scanResult[key][i];
+	}
+
+	if (found.scans < that.minimumScans) {
+		// Not enough packets received
+		return;
+	}
+
+	return found;
+}
+
 addDeviceToGen2 = () => {
-	const { navigation, actions } = this.props;
+	const { navigation } = this.props;
 
 	const deviceName = navigation.getParam('deviceName', '');
 	const deviceInfo = navigation.getParam('deviceInfo', '');
@@ -192,15 +433,14 @@ addDeviceToGen2 = () => {
 		model,
 		widget,
 	} = deviceInfo;
-
-	actions.sendSocketMessage(this.gatewayId, 'client', 'forward', {
+	this.sendSocketMessage(JSON.stringify({module: 'client', action: 'forward', data: {
 		'module': 'rf433',
 		'action': 'addDevice',
 		'name': deviceName,
 		'protocol': protocol,
 		'model': model,
 		'parameters': widget,
-	});
+	}}));
 }
 
 onNext = () => {
@@ -232,6 +472,8 @@ render(): Object {
 	const {
 		deviceId,
 		isLoading,
+		showProgress,
+		progress,
 	} = this.state;
 
 	const {
@@ -241,6 +483,8 @@ render(): Object {
 		infoTextStyle,
 		padding,
 		iconStyle,
+		progressWidth,
+		progressBarStyle,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -260,16 +504,16 @@ render(): Object {
 
 	const deviceInfo = navigation.getParam('deviceInfo', '');
 	const {
-		postConfig,
 	} = deviceInfo;
 	const {
 		descriptions,
 		info,
 		learnButtonIndex,
-	} = get433DevicePostConfigScreenOptions(postConfig, formatMessage);
+	} = this.PostConfigScreenOptions;
 
 	const Descriptions = descriptions.map((text: string, i: number): Object => {
 		return (<NumberedBlock
+			key={i}
 			number={`${i + 1}.`}
 			text={text}
 			img={i === learnButtonIndex ? uri : undefined}
@@ -279,12 +523,21 @@ render(): Object {
 						id={deviceId}
 						style={buttonStyle}/>
 					: undefined
-			}/>);
+			}
+			progress={showProgress && <ProgressBarLinear
+				progress={progress}
+				height={4}
+				width={progressWidth}
+				borderWidth={0}
+				borderColor="transparent"
+				unfilledColor={Theme.Core.inactiveSwitchBackground}
+				style={progressBarStyle}/>}/>);
 	});
 
-	const Info = (info && info.length > 0) ? info.map((text: string): Object => {
+	const Info = (info && info.length > 0) ? info.map((text: string, i: number): Object => {
 		return (
 			<InfoBlock
+				key={i}
 				text={text}
 				appLayout={appLayout}
 				infoContainer={infoContainer}
@@ -330,6 +583,7 @@ getStyles(): Object {
 
 	return {
 		padding,
+		progressWidth: width - (padding * 4),
 		containerStyle: {
 			flexGrow: 1,
 			paddingVertical: padding,
@@ -348,6 +602,9 @@ getStyles(): Object {
 		},
 		iconStyle: {
 			color: '#fff',
+		},
+		progressBarStyle: {
+			marginBottom: padding,
 		},
 	};
 }

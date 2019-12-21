@@ -171,6 +171,7 @@ class AddDeviceContainer extends View<Props, State> {
 			navigation,
 			addDevice,
 			locale,
+			sessionId,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
@@ -214,6 +215,7 @@ class AddDeviceContainer extends View<Props, State> {
 							processWebsocketMessage: this.props.processWebsocketMessage,
 							locale,
 							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
+							sessionId,
 						},
 					)}
 				</KeyboardAvoidingView>
@@ -227,9 +229,12 @@ const mapStateToProps = (store: Object): Object => {
 	const { language = {} } = defaultSettings || {};
 	const locale = language.code;
 
+	const { websockets: { session: { id: sessionId } } } = store;
+
 	return {
 		addDevice: store.addDevice,
 		locale,
+		sessionId,
 	};
 };
 
