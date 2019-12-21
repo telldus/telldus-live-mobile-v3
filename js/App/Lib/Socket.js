@@ -73,6 +73,7 @@ export default class TelldusWebsocket {
 
 		const options = {
 			minReconnectionDelay: 10,
+			maxRetries: 20,
 		};
 		this.websocket = new ReconnectingWebSocket(this.websocketUrl, [], options);
 
