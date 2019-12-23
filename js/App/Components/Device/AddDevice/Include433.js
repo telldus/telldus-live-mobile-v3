@@ -120,10 +120,11 @@ componentWillUnmount() {
 }
 
 onNext = () => {
-	const { navigation } = this.props;
+	const { navigation, addDevice } = this.props;
+	const { addDevice433 = {}} = addDevice;
 	const {
 		deviceId,
-	} = this.state;
+	} = addDevice433;
 	const deviceName = navigation.getParam('deviceName', '');
 	// $FlowFixMe
 	let rowData = {[deviceId]: {
