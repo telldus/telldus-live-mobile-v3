@@ -33,6 +33,7 @@ import {
 	InfoBlock,
 	FullPageActivityIndicator,
 	ProgressBarLinear,
+	Text,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
@@ -145,13 +146,12 @@ onNext = () => {
 render(): Object {
 	const { intl, appLayout, navigation, addDevice } = this.props;
 	const { formatMessage } = intl;
-	console.log('TEST addDevice', addDevice);
+
 	const { addDevice433 = {}} = addDevice;
 	const {
 		deviceId,
 		isLoading = true,
-		showProgress = false,
-		progress = 0,
+		progressValue = 0,
 	} = addDevice433;
 
 	const {
@@ -163,6 +163,8 @@ render(): Object {
 		iconStyle,
 		progressWidth,
 		progressBarStyle,
+		progressCover,
+		statusStyle,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -187,7 +189,10 @@ render(): Object {
 		descriptions,
 		info,
 		learnButtonIndex,
+		progress,
 	} = this.PostConfigScreenOptions;
+
+	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
 
 	const Descriptions = descriptions.map((text: string, i: number): Object => {
 		return (<NumberedBlock
@@ -202,14 +207,22 @@ render(): Object {
 						style={buttonStyle}/>
 					: undefined
 			}
-			progress={showProgress && <ProgressBarLinear
-				progress={progress}
-				height={4}
-				width={progressWidth}
-				borderWidth={0}
-				borderColor="transparent"
-				unfilledColor={Theme.Core.inactiveSwitchBackground}
-				style={progressBarStyle}/>}/>);
+			progress={progress &&
+				<View style={progressCover}>
+					<Text style={statusStyle}>
+						{statusText}
+					</Text>
+					<ProgressBarLinear
+						progress={Math.max(progressValue / 100, 0)}
+						height={4}
+						width={progressWidth}
+						borderWidth={0}
+						borderColor="transparent"
+						unfilledColor={Theme.Core.inactiveSwitchBackground}
+						style={progressBarStyle}/>
+				</View>
+			}/>
+		);
 	});
 
 	const Info = (info && info.length > 0) ? info.map((text: string, i: number): Object => {
@@ -258,6 +271,7 @@ getStyles(): Object {
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeStatus = deviceWidth * 0.03;
 
 	return {
 		padding,
@@ -283,6 +297,14 @@ getStyles(): Object {
 		},
 		progressBarStyle: {
 			marginBottom: padding,
+		},
+		progressCover: {
+
+		},
+		statusStyle: {
+			fontSize: fontSizeStatus,
+			color: rowTextColor,
+			marginBottom: 4,
 		},
 	};
 }
