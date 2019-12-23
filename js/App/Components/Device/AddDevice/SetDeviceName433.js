@@ -62,7 +62,8 @@ const SetDeviceName433 = (props: Object): Object => {
 	const [name, setName] = useState('');
 	const [settings, setSettings] = useState(null);
 
-	const { widgetParams433Device = {} } = useSelector((state: Object): Object => state.addDevice);
+	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
+	const { widgetParams433Device = {} } = addDevice433;
 
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));

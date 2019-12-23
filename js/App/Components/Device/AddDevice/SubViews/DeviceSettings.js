@@ -65,7 +65,8 @@ const DeviceSettings = (props: Object): Object => {
 	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { widgetParams433Device = {} } = useSelector((state: Object): Object => state.addDevice);
+	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
+	const { widgetParams433Device = {} } = addDevice433;
 	const {
 		system = '',
 		house = '',
