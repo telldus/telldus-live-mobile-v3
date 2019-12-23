@@ -31,7 +31,7 @@ import {
 } from '../../../../BaseComponents';
 import { Row, ShortcutRow } from './SubViews';
 import { utils } from 'live-shared-data';
-const { Devices433MHz, images } = utils;
+const { Devices433MHz, images, addDeviceUtils: {supportsDeviceType} } = utils;
 
 const { DEVICES } = images;
 
@@ -54,13 +54,23 @@ type State = {
     rows: Array<Object>,
 };
 
-const prepareDataForList = (data: Array<Object>, brand: string): Array<Object> => {
+const filterDevices = (devices: Array<Object>, transports: Array<string>): Array<Object> => {
+	let newDevices = [];
+	devices.map((d: Object) => {
+		if (supportsDeviceType(d.type, transports)) {
+			newDevices.push(d);
+		}
+	});
+	return newDevices;
+};
+
+const prepareDataForList = (data: Array<Object>, brand: string, transports: Array<string>): Array<Object> => {
 	let listData = [];
 	for (let h = 0; h < data.length; h++) {
 		for (let i = 0; i < data[h].vendor.length; i++) {
 			const { name = '', device } = data[h].vendor[i];
 			if (name.trim() === brand.trim()) {
-				listData = device;
+				listData = filterDevices(device, transports);
 				break;
 			}
 		}
@@ -80,8 +90,12 @@ constructor(props: Props) {
 
 	const shortcutToTelldus = props.navigation.getParam('shortcutToTelldus', false);
 	const deviceBrand = shortcutToTelldus ? 'Telldus' : props.navigation.getParam('deviceBrand', '');
+	const gateway = props.navigation.getParam('gateway', {});
+	const { transports = '' } = gateway;
+	const transportsArr = transports.split(',');
+
 	this.state = {
-		rows: prepareDataForList(Devices433MHz, deviceBrand),
+		rows: prepareDataForList(Devices433MHz, deviceBrand, transportsArr),
 	};
 	this.renderRow = this.renderRow.bind(this);
 }
