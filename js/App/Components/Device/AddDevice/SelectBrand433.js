@@ -30,7 +30,7 @@ import {
 } from '../../../../BaseComponents';
 import { Row } from './SubViews';
 import { utils } from 'live-shared-data';
-const { Devices433MHz, images } = utils;
+const { addDevice433MHz: {getVendorsList}, images } = utils;
 
 const { VENDORS } = images;
 
@@ -52,17 +52,6 @@ type State = {
     rows: Array<Object>,
 };
 
-const prepareDataForList = (data: Array<Object>): Array<Object> => {
-	let listData = [];
-	data.map((d: Object) => {
-		listData = [
-			...listData,
-			...d.vendor,
-		];
-	});
-	return listData;
-};
-
 class SelectBrand433 extends View<Props, State> {
 props: Props;
 state: State;
@@ -74,7 +63,7 @@ constructor(props: Props) {
 	super(props);
 
 	this.state = {
-		rows: prepareDataForList(Devices433MHz),
+		rows: getVendorsList(),
 	};
 	this.renderRow = this.renderRow.bind(this);
 }
