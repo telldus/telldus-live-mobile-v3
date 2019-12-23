@@ -69,7 +69,7 @@ const NumberedBlock = (props: Object): Object => {
 						{number}
 					</Text>
 					{!!img &&
-                    <Image source={img} resizeMode={'cover'} style={imageType}/>
+                    <Image source={img} resizeMode={'contain'} style={imageType}/>
 					}
 				</View>
 				<View style={blockRight}>
@@ -150,6 +150,8 @@ const getStyles = (appLayout: Object): Object => {
 			alignSelf: 'center',
 			height: deviceWidth * 0.20,
 			width: deviceWidth * 0.17,
+			marginTop: padding,
+			marginLeft: padding,
 		},
 		blockRight: {
 			width: width * 0.74,

@@ -180,8 +180,6 @@ render(): Object {
 			textStyle={infoTextStyle}/>;
 	}
 
-	const uri = {uri: 'img_zwave_include'};
-
 	const deviceInfo = navigation.getParam('deviceInfo', '');
 	const {
 	} = deviceInfo;
@@ -190,6 +188,8 @@ render(): Object {
 		info,
 		learnButtonIndex,
 		progress,
+		image,
+		imageIndex,
 	} = this.PostConfigScreenOptions;
 
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
@@ -199,7 +199,7 @@ render(): Object {
 			key={i}
 			number={`${i + 1}.`}
 			text={text}
-			img={i === learnButtonIndex ? uri : undefined}
+			img={(i === imageIndex && image) ? image : undefined}
 			rightBlockIItemOne={
 				i === learnButtonIndex ?
 					<LearnButton
