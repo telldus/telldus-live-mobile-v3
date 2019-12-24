@@ -84,7 +84,6 @@ constructor(props: Props) {
 	} = deviceInfo;
 	this.PostConfigScreenOptions = get433DevicePostConfigScreenOptions(postConfig, intl.formatMessage);
 
-	this.socketKeepAliveInterval = null;
 	this.deleteSocketAndTimer = null;
 }
 
