@@ -25,7 +25,7 @@
 import { Linking } from 'react-native';
 
 import { utils } from 'live-shared-data';
-const { deviceUtils, addDeviceUtils } = utils;
+const { deviceUtils, addDeviceUtils, addDevice433MHz } = utils;
 import i18n from '../Translations/common';
 import Theme from '../Theme';
 
@@ -89,6 +89,7 @@ function openURL(url: string): any {
 module.exports = {
 	...deviceUtils,
 	...addDeviceUtils,
+	...addDevice433MHz,
 	prepareNoZWaveSupportDialogueData,
 	prepareNo433MHzSupportDialogueData,
 	openURL,
