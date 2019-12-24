@@ -23,8 +23,9 @@
 'use strict';
 
 import { actions } from 'live-shared-data';
-const { AddDevice } = actions;
+const { AddDevice, AddDevice433MHz } = actions;
 
 module.exports = {
 	...AddDevice,
+	...AddDevice433MHz,
 };
