@@ -92,7 +92,7 @@ onChooseBrand = ({deviceBrand}: Object) => {
 	const { navigation } = this.props;
 
 	const prevParams = navigation.state.params || {};
-	navigation.navigate('SelectModel433', {
+	navigation.push('SelectModel433', {
 		...prevParams,
 		deviceBrand,
 		shortcutToTelldus: false,
