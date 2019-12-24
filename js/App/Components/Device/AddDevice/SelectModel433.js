@@ -31,9 +31,7 @@ import {
 } from '../../../../BaseComponents';
 import { Row, ShortcutRow } from './SubViews';
 import { utils } from 'live-shared-data';
-const { images, addDevice433MHz: {getVendorDevices} } = utils;
-
-const { DEVICES } = images;
+const { addDevice433MHz: {getVendorDevices} } = utils;
 
 import Theme from '../../../Theme';
 
@@ -118,15 +116,13 @@ renderRow(item: Object): Object {
 	const {
 		lang,
 		modelName,
-		image = '',
+		imageSource,
 	} = item.item;
-
-	const img = DEVICES[`d_${image.replace(/-/g, '_')}`];
 
 	return (
 		<Row
 			name={this.prepareName(lang, modelName)}
-			img={img}
+			img={imageSource}
 			navigation={navigation}
 			intl={intl}
 			rowProps={{
@@ -160,17 +156,15 @@ onPressOtherBrand = () => {
 
 renderRowShortcut = (data: Object, key: number): Object => {
 	const {
-		image,
+		imageSource,
 		modelName,
 		lang,
 	} = data;
 
-	const img = DEVICES[`d_${image.replace(/-/g, '_')}`];
-
 	return (
 		<ShortcutRow
 			name={this.prepareName(lang, modelName)}
-			img={img}
+			img={imageSource}
 			rowProps={{
 				...data,
 			}}
