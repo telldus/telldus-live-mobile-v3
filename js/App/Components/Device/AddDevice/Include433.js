@@ -120,8 +120,8 @@ componentWillUnmount() {
 	}
 }
 
-onNext = () => {
-	const { navigation, addDevice } = this.props;
+onNext = async () => {
+	const { navigation, addDevice, actions } = this.props;
 	const { addDevice433 = {}} = addDevice;
 	const {
 		deviceId,
@@ -134,6 +134,8 @@ onNext = () => {
 		index: 0,
 		mainNode: true,
 	}};
+
+	await actions.getDevices();
 	navigation.navigate({
 		routeName: 'Devices',
 		key: 'Devices',
