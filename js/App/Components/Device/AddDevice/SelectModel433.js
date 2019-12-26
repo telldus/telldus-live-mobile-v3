@@ -197,10 +197,10 @@ render(): Object {
 					paddingVertical: padding,
 				}}>
 				<View style={shortCutItemsCover}>
-					{telldusDevices}
 					<Text style={clickTextStyle} onPress={this.onPressOtherBrand}>
-							Click here to show devices from other brands
+					Showing Telldus 433 MHz devices, click here to show devices from other brands
 					</Text>
+					{telldusDevices}
 				</View>
 			</ScrollView>
 		);
@@ -241,6 +241,7 @@ getStyles(): Object {
 			color: Theme.Core.textColor,
 			padding,
 			marginVertical: padding,
+			textAlign: 'center',
 		},
 	};
 }
