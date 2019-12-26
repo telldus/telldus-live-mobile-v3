@@ -134,6 +134,7 @@ const SetDeviceName433 = (props: Object): Object => {
 					style={textFieldStyle}
 					containerStyle={textFieldCoverStyle}
 					onChangeText={onChangeName}
+					onSubmitEditing={submitName}
 					autoCorrect={false}
 					autoFocus={true}
 					returnKeyType={'done'}
