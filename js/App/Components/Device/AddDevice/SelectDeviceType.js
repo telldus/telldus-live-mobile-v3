@@ -85,9 +85,6 @@ onChooseType({module, action, secure}: Object) {
 	const gateway = navigation.getParam('gateway', {});
 
 	if (module === 'zwave') {
-		// get all nodes list in the chosen gateway, to check if device already included
-		this.getNodesList(gateway.id);
-
 		navigation.navigate('IncludeDevice', {
 			gateway,
 			module,
@@ -103,15 +100,6 @@ onChooseType({module, action, secure}: Object) {
 			shortcutToTelldus: true,
 		});
 	}
-
-}
-
-getNodesList(id: number) {
-	const { actions } = this.props;
-	actions.sendSocketMessage(id, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'nodeList',
-	});
 }
 
 getDeviceTypes(): Array<any> {
