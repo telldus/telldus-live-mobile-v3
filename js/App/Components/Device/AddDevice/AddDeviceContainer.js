@@ -186,6 +186,12 @@ class AddDeviceContainer extends View<Props, State> {
 
 		const showLeftIcon = !this.disAllowBackNavigation();
 
+		const { addDevice433 = {}} = addDevice;
+		const {
+			deviceId,
+			message,
+		} = addDevice433;
+
 		return (
 			<View
 				style={{
@@ -197,7 +203,7 @@ class AddDeviceContainer extends View<Props, State> {
 					infoButton={infoButton}
 					align={'right'}
 					navigation={navigation}
-					showLeftIcon={showLeftIcon || forceLeftIconVisibilty}
+					showLeftIcon={showLeftIcon || forceLeftIconVisibilty || (!deviceId && message)}
 					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
 					{...screenProps}/>
 				<KeyboardAvoidingView

@@ -146,13 +146,13 @@ onNext = async () => {
 
 render(): Object {
 	const { intl, appLayout, navigation, addDevice } = this.props;
-	const { formatMessage } = intl;
 
 	const { addDevice433 = {}} = addDevice;
 	const {
 		deviceId,
 		isLoading = true,
 		progressValue = 0,
+		message,
 	} = addDevice433;
 
 	const {
@@ -173,7 +173,7 @@ render(): Object {
 	}
 	if (!isLoading && !deviceId) {
 		return <InfoBlock
-			text={formatMessage(i18n.messageAdd433Failed)}
+			text={message}
 			appLayout={appLayout}
 			infoContainer={[infoContainer, {
 				marginVertical: padding,
@@ -208,7 +208,7 @@ render(): Object {
 						style={buttonStyle}/>
 					: undefined
 			}
-			progress={progress &&
+			progress={(progress && (i === (descriptions.length - 1))) &&
 				<View style={progressCover}>
 					<Text style={statusStyle}>
 						{statusText}
