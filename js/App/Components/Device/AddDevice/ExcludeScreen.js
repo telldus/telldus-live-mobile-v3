@@ -39,8 +39,7 @@ import { ExcludeDevice } from '../Common';
 
 import {
 	showToast,
-	getSocketObject,
-	sendSocketMessage,
+	registerForWebSocketEvents,
 } from '../../../Actions';
 
 import { LayoutAnimations } from '../../../Lib';
@@ -56,9 +55,7 @@ type Props = {
 	actions: Object,
 	navigation: Object,
 	showToast: (?string) => void,
-	getSocketObject: (number) => any,
-	sendSocketMessage: (number, string, string, Object) => any,
-	processWebsocketMessage: (string, string, string, Object) => any,
+	dispatch: Function,
 };
 
 type State = {
@@ -141,6 +138,12 @@ onCantEnterExclusionTimeout() {
 	onDidMount(formatMessage(i18n.couldNotExclude), formatMessage(i18n.cantEnterExclusionTwo));
 }
 
+registerForWebSocketEvents = (callbacks: Object): () => Object => {
+	const { navigation, dispatch } = this.props;
+	const gateway = navigation.getParam('gateway', {});
+	return dispatch(registerForWebSocketEvents(gateway.id, callbacks));
+}
+
 render(): Object {
 
 	const {
@@ -187,10 +190,8 @@ render(): Object {
 						clientId={gateway.id}
 						appLayout={appLayout}
 						intl={intl}
-						sendSocketMessage={this.props.sendSocketMessage}
-						getSocketObject={this.props.getSocketObject}
+						registerForWebSocketEvents={this.registerForWebSocketEvents}
 						showToast={this.props.showToast}
-						processWebsocketMessage={this.props.processWebsocketMessage}
 						onExcludeSuccessImmediate={this.onExcludeSuccessImmediate}
 						onExcludeTimedoutImmediate={this.onExcludeTimedoutImmediate}
 						onPressCancelExclude={this.onPressCancelExclude}
@@ -248,9 +249,8 @@ getStyles(): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
-		getSocketObject: (id: number): any => dispatch(getSocketObject(id)),
 		showToast: (message: string): any => dispatch(showToast(message)),
+		dispatch,
 	};
 }
 

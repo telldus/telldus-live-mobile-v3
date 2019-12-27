@@ -37,7 +37,6 @@ import * as modalActions from '../../../Actions/Modal';
 import {
 	getGateways,
 	sendSocketMessage,
-	getSocketObject,
 	setDeviceName,
 	getDevices,
 	getDeviceManufacturerInfo,
@@ -221,7 +220,6 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				...modalActions,
 				getGateways,
 				sendSocketMessage,
-				getSocketObject,
 				setDeviceName,
 				getDevices,
 				getDeviceManufacturerInfo,

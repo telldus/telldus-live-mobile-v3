@@ -37,7 +37,6 @@ import * as modalActions from '../../../Actions/Modal';
 import {
 	getGateways,
 	sendSocketMessage,
-	getSocketObject,
 	setDeviceName,
 	getDevices,
 	getDeviceManufacturerInfo,
@@ -46,6 +45,7 @@ import {
 	addDevice as addDeviceAction,
 	setWidgetParamId,
 	initiateAdd433MHz,
+	deviceAdded,
 	registerForWebSocketEvents,
 } from '../../../Actions';
 
@@ -284,7 +284,6 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				...modalActions,
 				getGateways,
 				sendSocketMessage,
-				getSocketObject,
 				setDeviceName,
 				getDevices,
 				getDeviceManufacturerInfo,
@@ -293,6 +292,7 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				setWidgetParamId,
 				initiateAdd433MHz,
 				registerForWebSocketEvents,
+				deviceAdded,
 			}, dispatch),
 		},
 		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),

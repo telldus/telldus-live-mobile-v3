@@ -47,14 +47,13 @@ type Props = {
     clientId: number,
 
     intl: Object,
-    getSocketObject: (number) => any,
-    sendSocketMessage: (number, string, string, Object) => any,
 	onExcludeSuccess: () => void,
 	onExcludeSuccessImmediate: () => void,
 	onExcludeTimedoutImmediate: () => void,
 	onPressCancelExclude: () => void,
 	processWebsocketMessage: (string, string, string, Object) => any,
 	onCantEnterExclusionTimeout: () => void,
+	registerForWebSocketEvents: (Object) => Object,
 };
 
 type State = {
@@ -73,7 +72,6 @@ class ExcludeDevice extends View<Props, State> {
 props: Props;
 state: State;
 
-setSocketListeners: () => void;
 onPressCancelExclude: () => void;
 onPressOkay: () => void;
 handleErrorEnterLearnMode: () => void;
@@ -94,15 +92,6 @@ constructor(props: Props) {
 		cantEnterLearnMode: false,
 	};
 
-	this.setSocketListeners = this.setSocketListeners.bind(this);
-
-	const { clientId, getSocketObject } = this.props;
-
-	this.websocket = getSocketObject(clientId);
-	if (this.websocket) {
-		this.setSocketListeners();
-	}
-
 	this.onPressCancelExclude = this.onPressCancelExclude.bind(this);
 	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
 	this.onPressOkay = this.onPressOkay.bind(this);
@@ -113,14 +102,49 @@ constructor(props: Props) {
 	this.enterExclusionModeTimeout = null;
 	this.showThrobberTimeout = null;
 
-	this.hasUnmount = false;
+	this.destroyInstanceWebSocket = null;
+	this.sendSocketMessageMeth = null;
 }
 
 componentDidMount() {
-	this.startRemoveDevice();
+	const { registerForWebSocketEvents } = this.props;
 
-	this.startEnterExclusionModeTimeout();
-	this.startShowThrobberTimeout();
+	const callbacks = {
+		callbackOnOpen: this.callbackOnOpen,
+		callbackOnMessage: this.callbackOnMessage,
+	};
+
+	let {
+		sendSocketMessage,
+		destroyInstance,
+	} = registerForWebSocketEvents(callbacks);
+	this.sendSocketMessageMeth = sendSocketMessage;
+	this.destroyInstanceWebSocket = destroyInstance;
+}
+
+callbackOnOpen = () => {
+	this.sendFilter('zwave', 'removeNodeFromNetwork');
+	this.sendFilter('zwave', 'removeNodeFromNetworkStartTimeout');
+	this.sendFilter('device', 'removed');
+	this.sendFilter('sensor', 'removed');
+}
+
+sendFilter = (module: string, action: string) => {
+	const message = JSON.stringify({
+		module: 'filter',
+		action: 'accept',
+		data: {
+			module,
+			action,
+		},
+	});
+	this.sendSocketMessage(message);
+}
+
+sendSocketMessage = (message: string) => {
+	if (this.sendSocketMessageMeth) {
+		this.sendSocketMessageMeth(message);
+	}
 }
 
 onPressTryAgain() {
@@ -133,31 +157,48 @@ onPressTryAgain() {
 }
 
 stopAddRemoveDevice() {
-	const { sendSocketMessage, clientId } = this.props;
-	sendSocketMessage(clientId, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'removeNodeFromNetworkStop',
+	const message = JSON.stringify({
+		module: 'client',
+		action: 'forward',
+		data: {
+			'module': 'zwave',
+			'action': 'removeNodeFromNetworkStop',
+		},
 	});
-	sendSocketMessage(clientId, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'addNodeToNetworkStop',
+	this.sendSocketMessage(message);
+	const message2 = JSON.stringify({
+		module: 'client',
+		action: 'forward',
+		data: {
+			'module': 'zwave',
+			'action': 'addNodeToNetworkStop',
+		},
 	});
+	this.sendSocketMessage(message2);
 }
 
 startRemoveDevice() {
-	const { clientId, sendSocketMessage } = this.props;
-	sendSocketMessage(clientId, 'client', 'forward', {
-		module: 'zwave',
-		action: 'removeNodeFromNetwork',
+	const message = JSON.stringify({
+		module: 'client',
+		action: 'forward',
+		data: {
+			'module': 'zwave',
+			'action': 'removeNodeFromNetwork',
+		},
 	});
+	this.sendSocketMessage(message);
 }
 
 stopRemoveDevice() {
-	const { clientId, sendSocketMessage } = this.props;
-	sendSocketMessage(clientId, 'client', 'forward', {
-		'module': 'zwave',
-		'action': 'removeNodeFromNetworkStop',
+	const message = JSON.stringify({
+		module: 'client',
+		action: 'forward',
+		data: {
+			'module': 'zwave',
+			'action': 'removeNodeFromNetworkStop',
+		},
 	});
+	this.sendSocketMessage(message);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -166,9 +207,12 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 componentWillUnmount() {
 	this.clearTimer();
-	this.hasUnmount = true;
 	clearTimeout(this.enterExclusionModeTimeout);
 	clearTimeout(this.showThrobberTimeout);
+
+	if (this.destroyInstanceWebSocket) {
+		this.destroyInstanceWebSocket();
+	}
 }
 
 startEnterExclusionModeTimeout() {
@@ -204,86 +248,86 @@ startShowThrobberTimeout() {
 	}, 1000);
 }
 
-setSocketListeners() {
-	const that = this;
+callbackOnMessage = (msg: Object) => {
 	const {
-		processWebsocketMessage,
 		intl,
 		onExcludeSuccessImmediate,
-		clientId,
 	} = this.props;
-	this.websocket.onmessage = (msg: Object) => {
-		let title = '';
-		let message = {};
-		try {
-			message = JSON.parse(msg.data);
-		} catch (e) {
-			message = msg.data;
-			title = ` ${msg.data}`;
-		}
 
-		const { module, action, data } = message;
-		if (module && action && !that.hasUnmount) {
-			if (module === 'zwave' && action === 'removeNodeFromNetworkStartTimeout') {
-				clearTimeout(that.enterExclusionModeTimeout);
-				clearTimeout(that.showThrobberTimeout);
-				if (that.exclusionTimer) {
-					clearInterval(that.exclusionTimer);
-				}
-				that.exclusionTimer = setInterval(() => {
-					that.runExclusionTimer(data);
-				}, 1000);
-			} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
-				clearTimeout(that.enterExclusionModeTimeout);
-				clearTimeout(that.showThrobberTimeout);
-				let status = data[0];
-				if (status === 6) {
-					if (data[2] > 0) {
-						that.clearTimer();
-						if (onExcludeSuccessImmediate) {
-							onExcludeSuccessImmediate();
-						} else {
-							that.setState({
-								excludeSucces: true,
-								timer: `${intl.formatMessage(i18n.done)}!`,
-								status: intl.formatMessage(i18n.messageDeviceExcluded),
-								progress: 100,
-								showThrobber: false,
-								cantEnterLearnMode: false,
-							});
-						}
+	let message = {};
+	try {
+		message = JSON.parse(msg.data);
+	} catch (e) {
+		message = msg.data;
+	}
+
+	const { module, action, data } = message;
+	if (typeof message === 'string') {
+		if (message === 'validconnection') {
+			this.startRemoveDevice();
+
+			this.startEnterExclusionModeTimeout();
+			this.startShowThrobberTimeout();
+		}
+	} else if (module && action) {
+		if (module === 'zwave' && action === 'removeNodeFromNetworkStartTimeout') {
+			clearTimeout(this.enterExclusionModeTimeout);
+			clearTimeout(this.showThrobberTimeout);
+			if (this.exclusionTimer) {
+				clearInterval(this.exclusionTimer);
+			}
+			this.exclusionTimer = setInterval(() => {
+				this.runExclusionTimer(data);
+			}, 1000);
+		} else if (module === 'zwave' && action === 'removeNodeFromNetwork') {
+			clearTimeout(this.enterExclusionModeTimeout);
+			clearTimeout(this.showThrobberTimeout);
+			let status = data[0];
+			if (status === 6) {
+				if (data[2] > 0) {
+					this.clearTimer();
+					if (onExcludeSuccessImmediate) {
+						onExcludeSuccessImmediate();
+					} else {
+						this.setState({
+							excludeSucces: true,
+							timer: `${intl.formatMessage(i18n.done)}!`,
+							status: intl.formatMessage(i18n.messageDeviceExcluded),
+							progress: 100,
+							showThrobber: false,
+							cantEnterLearnMode: false,
+						});
 					}
 				}
-				if (status === 7) {
-					that.handleErrorEnterLearnMode();
-				}
 			}
-			if (module === 'device' && action === 'removed') {
-				clearTimeout(that.enterExclusionModeTimeout);
-				clearTimeout(that.showThrobberTimeout);
-				that.clearTimer();
-				if (onExcludeSuccessImmediate) {
-					onExcludeSuccessImmediate();
-				} else {
-					that.setState({
-						excludeSucces: true,
-						timer: `${intl.formatMessage(i18n.done)}!`,
-						status: intl.formatMessage(i18n.messageDeviceExcluded),
-						progress: 100,
-						showThrobber: false,
-						cantEnterLearnMode: false,
-					});
-				}
-				const { id } = data;
-				widgetAndroidDisableWidget(id, 'DEVICE');
-			}
-			if (module === 'sensor' && action === 'removed') {
-				const { id } = data;
-				widgetAndroidDisableWidget(id, 'SENSOR');
+			if (status === 7) {
+				this.handleErrorEnterLearnMode();
 			}
 		}
-		processWebsocketMessage(clientId.toString(), message, title, that.websocket);
-	};
+		if (module === 'device' && action === 'removed') {
+			clearTimeout(this.enterExclusionModeTimeout);
+			clearTimeout(this.showThrobberTimeout);
+			this.clearTimer();
+			if (onExcludeSuccessImmediate) {
+				onExcludeSuccessImmediate();
+			} else {
+				this.setState({
+					excludeSucces: true,
+					timer: `${intl.formatMessage(i18n.done)}!`,
+					status: intl.formatMessage(i18n.messageDeviceExcluded),
+					progress: 100,
+					showThrobber: false,
+					cantEnterLearnMode: false,
+				});
+			}
+			const { id } = data;
+			widgetAndroidDisableWidget(id, 'DEVICE');
+		}
+		if (module === 'sensor' && action === 'removed') {
+			const { id } = data;
+			widgetAndroidDisableWidget(id, 'SENSOR');
+		}
+	}
 }
 
 handleErrorEnterLearnMode() {

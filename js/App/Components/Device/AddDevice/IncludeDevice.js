@@ -230,7 +230,7 @@ navigateToCantEnter() {
 }
 
 callbackOnMessage = (msg: Object) => {
-	const { intl } = this.props;
+	const { intl, actions } = this.props;
 	const { formatMessage } = intl;
 	this.latestInterviewTime = null;
 
@@ -467,6 +467,7 @@ callbackOnMessage = (msg: Object) => {
 						id,
 						clientDeviceId,
 					});
+					actions.deviceAdded(data);
 				}
 			}
 		}

@@ -43,9 +43,7 @@ import {
 	addToDashboard,
 	removeFromDashboard,
 	showToast,
-	getSocketObject,
 	sendSocketMessage,
-	processWebsocketMessage,
 	registerForWebSocketEvents,
 } from '../../../Actions';
 import { shouldUpdate, LayoutAnimations } from '../../../Lib';
@@ -65,9 +63,7 @@ type Props = {
 	screenProps: Object,
 	navigation: Object,
 	showToast: (?string) => void,
-	getSocketObject: (number) => any,
 	sendSocketMessage: (number, string, string, Object) => any,
-	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
 type State = {
@@ -294,6 +290,7 @@ class SettingsTab extends View {
 		this.sendSocketMessage(clientId, 'removeFailedNode', clientDeviceId);
 	}
 
+	// TODO: See if possible to replace with 'sendSocketMessage' received from "registerForWebSocketEvents".
 	sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
 		const { sendSocketMessage: SSM } = this.props;
 		SSM(clientId, 'client', 'forward', {
@@ -383,12 +380,10 @@ class SettingsTab extends View {
 						clientId={clientId}
 						appLayout={appLayout}
 						intl={intl}
-						sendSocketMessage={this.props.sendSocketMessage}
-						getSocketObject={this.props.getSocketObject}
 						showToast={this.props.showToast}
-						processWebsocketMessage={this.props.processWebsocketMessage}
 						onExcludeSuccess={this.goBack}
-						onPressCancelExclude={this.onPressCancelExclude}/>
+						onPressCancelExclude={this.onPressCancelExclude}
+						registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 					:
 					<View style={container}>
 						{isReplacing ?
@@ -396,8 +391,6 @@ class SettingsTab extends View {
 								intl={intl}
 								appLayout={appLayout}
 								device={device}
-								processWebsocketMessage={this.props.processWebsocketMessage}
-								getSocketObject={this.props.getSocketObject}
 								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}
 								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:
@@ -504,9 +497,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 		onAddToDashboard: (id: number): any => dispatch(addToDashboard('device', id)),
 		onRemoveFromDashboard: (id: number): any => dispatch(removeFromDashboard('device', id)),
 		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
-		getSocketObject: (id: number): any => dispatch(getSocketObject(id)),
 		showToast: (message: string): any => dispatch(showToast(message)),
-		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
 		dispatch,
 	};
 }

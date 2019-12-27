@@ -35,9 +35,7 @@ import { ExcludeDevice } from '../../Device/Common';
 
 import {
 	showToast,
-	getSocketObject,
-	sendSocketMessage,
-	processWebsocketMessage,
+	registerForWebSocketEvents,
 } from '../../../Actions';
 
 import { LayoutAnimations } from '../../../Lib';
@@ -52,9 +50,7 @@ type Props = {
 
 	navigation: Object,
 	showToast: (?string) => void,
-	getSocketObject: (number) => any,
-	sendSocketMessage: (number, string, string, Object) => any,
-	processWebsocketMessage: (string, string, string, Object) => any,
+	dispatch: Function,
 };
 
 type State = {
@@ -127,6 +123,11 @@ supportZWave(transports: string = ''): boolean {
 	return items.indexOf('zwave') !== -1;
 }
 
+registerForWebSocketEvents = (callbacks: Object): () => Object => {
+	const { location, dispatch } = this.props;
+	return dispatch(registerForWebSocketEvents(location.id, callbacks));
+}
+
 render(): Object {
 	const { excludeActive } = this.state;
 	const { screenProps, location } = this.props;
@@ -153,10 +154,8 @@ render(): Object {
 					clientId={id}
 					appLayout={appLayout}
 					intl={intl}
-					sendSocketMessage={this.props.sendSocketMessage}
-					getSocketObject={this.props.getSocketObject}
 					showToast={this.props.showToast}
-					processWebsocketMessage={this.props.processWebsocketMessage}
+					registerForWebSocketEvents={this.registerForWebSocketEvents}
 					onExcludeSuccess={this.goBack}
 					onPressCancelExclude={this.onPressCancelExclude}/>
 			)}
@@ -195,10 +194,7 @@ getStyles(appLayout: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
-		getSocketObject: (id: number): any => dispatch(getSocketObject(id)),
 		showToast: (message: string): any => dispatch(showToast(message)),
-		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
 		dispatch,
 	};
 }

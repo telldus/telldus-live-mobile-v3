@@ -37,8 +37,6 @@ type Props = {
     device: Object,
 
     intl: Object,
-    getSocketObject: (number) => any,
-    processWebsocketMessage: (string, string, string, Object) => any,
 	onDoneReplaceFailedNode: () => void,
 	registerForWebSocketEvents: (Object) => Object,
 };

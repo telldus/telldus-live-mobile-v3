@@ -144,9 +144,11 @@ submitName() {
 	}
 }
 
-postSubmitName() {
-	const { navigation } = this.props;
+postSubmitName = async () => {
+	const { navigation, actions } = this.props;
 	const { rowData } = this.state;
+
+	await actions.getDevices();
 
 	this.setState({
 		isLoading: false,
