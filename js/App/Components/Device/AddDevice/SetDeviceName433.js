@@ -123,7 +123,8 @@ const SetDeviceName433 = (props: Object): Object => {
 			}}
 			contentContainerStyle={{
 				flexGrow: 1,
-			}}>
+			}}
+			keyboardShouldPersistTaps={'always'}>
 			<View style={coverStyle}>
 				<TextField
 					value={name}
@@ -179,7 +180,7 @@ const getStyles = (appLayout: Object): Object => {
 			padding,
 		},
 		textFieldStyle: {
-			fontSize: fontSize * 1.4,
+			fontSize: fontSize * 1.3,
 			color: '#A59F9A',
 		},
 		labelStyle: {
