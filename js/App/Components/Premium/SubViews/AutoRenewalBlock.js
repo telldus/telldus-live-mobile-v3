@@ -35,6 +35,7 @@ import {
 
 import {
 	premiumAboutToExpire,
+	isAutoRenew as isAutoRenewMeth,
 } from '../../../Lib/appUtils';
 
 import Theme from '../../../Theme';
@@ -72,14 +73,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 		});
 	}
 
-	let isAutoRenew = false;
-	Object.keys(subscriptions).map((key: string) => {
-		const {
-			product,
-			status,
-		} = subscriptions[key];
-		isAutoRenew = product === 'premium' && status === 'active';
-	});
+	let isAutoRenew = isAutoRenewMeth(subscriptions);
 
 	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
 	const value = isAutoRenew ? formatMessage(i18n.labelActive) : formatDate(new Date(pro * 1000));

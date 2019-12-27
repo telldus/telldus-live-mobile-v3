@@ -91,26 +91,6 @@ function hasTellStickNetGetOne(gatewaysById: Object): boolean {
 	return flag;
 }
 
-function premiumAboutToExpire(subscriptions: Object = {}, pro: number): boolean {
-	let auto = false;
-	Object.keys(subscriptions).map((key: string) => {
-		const {
-			product,
-			status,
-		} = subscriptions[key];
-		auto = product === 'premium' && status === 'active';
-	});
-	if (auto) {
-		return false;
-	}
-	if (moment().unix() > pro) {// Already expired
-		return false;
-	}
-	const proDate = moment.unix(pro);
-	const diff = proDate.diff(moment(), 'days');
-	return diff <= 7;
-}
-
 function getRandom(min: number, max: number): number {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -123,6 +103,5 @@ module.exports = {
 	isDeviceLanguage,
 	...appUtils,
 	hasTellStickNetGetOne,
-	premiumAboutToExpire,
 	getRandom,
 };
