@@ -188,7 +188,6 @@ render(): Object {
 		message,
 		status,
 	} = addDevice433;
-	const disableNext = status !== 'done';
 
 	const {
 		containerStyle,
@@ -227,6 +226,8 @@ render(): Object {
 		image,
 		imageIndex,
 	} = this.PostConfigScreenOptions;
+
+	const disableNext = progress && status !== 'done';
 
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
 
