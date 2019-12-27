@@ -136,10 +136,22 @@ class AddDeviceContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let { navigation } = this.props;
-		if (this.disAllowBackNavigation()) {
+		const { navigation, screenProps } = this.props;
+		const { forceLeftIconVisibilty } = this.state;
+
+		const { currentScreen } = screenProps;
+		const onLeftPress = this.getLeftIconPressAction(currentScreen);
+
+		const allowBacknavigation = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
+		if (allowBacknavigation && onLeftPress) {
+			onLeftPress();
 			return true;
 		}
+
+		if (!allowBacknavigation) {
+			return true;
+		}
+
 		navigation.pop();
 		return true;
 	}
@@ -165,6 +177,24 @@ class AddDeviceContainer extends View<Props, State> {
 		});
 	}
 
+	getLeftIcon = (CS: string): ?string => {
+		const SCNS = ['InitialScreen', 'Include433'];
+		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
+	}
+
+	getLeftIconPressAction = (CS: string): Function => {
+		const EXSCNS = ['Include433'];
+		return EXSCNS.indexOf(CS) === -1 ? undefined : this.closeAdd433MHz;
+	}
+
+	closeAdd433MHz = () => {
+		const { navigation } = this.props;
+		navigation.navigate({
+			routeName: 'Devices',
+			key: 'Devices',
+		});
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -184,13 +214,9 @@ class AddDeviceContainer extends View<Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const showLeftIcon = !this.disAllowBackNavigation();
-
-		const { addDevice433 = {}} = addDevice;
-		const {
-			deviceId,
-			message,
-		} = addDevice433;
+		const showLeftIcon = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
+		const leftIcon = this.getLeftIcon(currentScreen);
+		const goBack = this.getLeftIconPressAction(currentScreen);
 
 		return (
 			<View
@@ -203,8 +229,9 @@ class AddDeviceContainer extends View<Props, State> {
 					infoButton={infoButton}
 					align={'right'}
 					navigation={navigation}
-					showLeftIcon={showLeftIcon || forceLeftIconVisibilty || (!deviceId && message)}
-					leftIcon={currentScreen === 'InitialScreen' ? 'close' : undefined}
+					showLeftIcon={showLeftIcon}
+					leftIcon={leftIcon}
+					goBack={goBack}
 					{...screenProps}/>
 				<KeyboardAvoidingView
 					behavior="padding"
@@ -227,6 +254,7 @@ class AddDeviceContainer extends View<Props, State> {
 							locale,
 							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
 							sessionId,
+							showLeftIcon,
 						},
 					)}
 				</KeyboardAvoidingView>

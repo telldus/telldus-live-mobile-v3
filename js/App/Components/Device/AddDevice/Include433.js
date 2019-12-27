@@ -54,6 +54,7 @@ type Props = {
 	appLayout: Object,
 	addDevice: Object,
 	sessionId: string,
+	showLeftIcon: boolean,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -113,6 +114,38 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'Include433';
 }
 
+componentDidUpdate(prevProps: Object, prevState: Object) {
+	const {
+		toggleLeftIconVisibilty,
+		addDevice,
+		showLeftIcon,
+	} = this.props;
+	const { addDevice433 = {}} = addDevice;
+	const {
+		deviceId,
+		message,
+		isLoading,
+		status: statusC,
+	} = addDevice433;
+
+	if (!deviceId && !isLoading && message && !showLeftIcon) {
+		toggleLeftIconVisibilty(true);
+	}
+
+	const {
+		progress,
+	} = this.PostConfigScreenOptions;
+	if (progress) {
+		const disableClose = statusC === 'done'; // TODO: Include statusC === 'receiving' if required.
+		if (showLeftIcon && statusC && (disableClose)) {
+			toggleLeftIconVisibilty(false);
+		}
+		if (!showLeftIcon && (!statusC || !disableClose)) {
+			toggleLeftIconVisibilty(true);
+		}
+	}
+}
+
 componentWillUnmount() {
 	if (this.deleteSocketAndTimer) {
 		this.deleteSocketAndTimer();
@@ -153,7 +186,9 @@ render(): Object {
 		isLoading = true,
 		progressValue = 0,
 		message,
+		status,
 	} = addDevice433;
+	const disableNext = status !== 'done';
 
 	const {
 		containerStyle,
@@ -253,7 +288,8 @@ render(): Object {
 			<FloatingButton
 				onPress={this.onNext}
 				iconName={'checkmark'}
-				iconStyle={iconStyle}/>
+				iconStyle={iconStyle}
+				disabled={disableNext}/>
 		</View>
 	);
 }
