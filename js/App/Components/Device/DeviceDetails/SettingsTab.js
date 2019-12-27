@@ -46,6 +46,7 @@ import {
 	getSocketObject,
 	sendSocketMessage,
 	processWebsocketMessage,
+	registerForWebSocketEvents,
 } from '../../../Actions';
 import { shouldUpdate, LayoutAnimations } from '../../../Lib';
 
@@ -337,6 +338,11 @@ class SettingsTab extends View {
 		});
 	}
 
+	registerForWebSocketEvents = (callbacks: Object): () => Object => {
+		const { device, dispatch } = this.props;
+		return dispatch(registerForWebSocketEvents(device.clientId, callbacks));
+	}
+
 	render(): Object | null {
 		const { isHidden, excludeActive, isMarking, isReplacing } = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
@@ -391,9 +397,9 @@ class SettingsTab extends View {
 								appLayout={appLayout}
 								device={device}
 								processWebsocketMessage={this.props.processWebsocketMessage}
-								sendSocketMessage={this.props.sendSocketMessage}
 								getSocketObject={this.props.getSocketObject}
-								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}/>
+								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}
+								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:
 							<>
 								<SettingsRow

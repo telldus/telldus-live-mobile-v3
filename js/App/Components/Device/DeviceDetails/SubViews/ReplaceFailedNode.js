@@ -38,9 +38,9 @@ type Props = {
 
     intl: Object,
     getSocketObject: (number) => any,
-    sendSocketMessage: (number, string, string, Object) => any,
     processWebsocketMessage: (string, string, string, Object) => any,
-    onDoneReplaceFailedNode: () => void,
+	onDoneReplaceFailedNode: () => void,
+	registerForWebSocketEvents: (Object) => Object,
 };
 
 type State = {
@@ -71,64 +71,102 @@ setSocketListeners: () => void;
 constructor(props: Props) {
 	super(props);
 
-	const { getSocketObject, device } = this.props;
-	this.websocket = getSocketObject(device.clientId);
-	if (this.websocket) {
-		this.setSocketListeners();
-	}
-
-	this.setSocketListeners = this.setSocketListeners.bind(this);
-	this.hasUnmount = false;
+	this.destroyInstanceWebSocket = null;
+	this.sendSocketMessageMeth = null;
 }
 
 componentDidMount() {
-	const { clientId, clientDeviceId } = this.props.device;
-	this.sendSocketMessage(clientId, 'replaceFailedNode', clientDeviceId);
+	const { registerForWebSocketEvents } = this.props;
+
+	const callbacks = {
+		callbackOnOpen: this.callbackOnOpen,
+		callbackOnMessage: this.callbackOnMessage,
+	};
+
+	let {
+		sendSocketMessage,
+		destroyInstance,
+	} = registerForWebSocketEvents(callbacks);
+	this.sendSocketMessageMeth = sendSocketMessage;
+	this.destroyInstanceWebSocket = destroyInstance;
 }
 
 componentWillUnmount() {
-	this.hasUnmount = true;
+	if (this.destroyInstanceWebSocket) {
+		this.destroyInstanceWebSocket();
+	}
 }
 
-setSocketListeners() {
-	const that = this;
+callbackOnOpen = () => {
+	this.sendFilter('zwave', 'replaceFailedNode');
+	this.sendFilter('zwave', 'replaceFailedNodeStartTimeout');
+}
+
+sendFilter = (module: string, action: string) => {
+	const message = JSON.stringify({
+		module: 'filter',
+		action: 'accept',
+		data: {
+			module,
+			action,
+		},
+	});
+	this.sendSocketMessage(message);
+}
+
+sendSocketMessage = (message: string) => {
+	if (this.sendSocketMessageMeth) {
+		this.sendSocketMessageMeth(message);
+	}
+}
+
+callbackOnMessage = (msg: Object) => {
 	const {
-		processWebsocketMessage,
-		device,
 		onDoneReplaceFailedNode,
+		device,
 	} = this.props;
+	const { clientDeviceId } = device;
 
-	this.websocket.onmessage = (msg: Object) => {
-		let title = '';
-		let message = {};
-		try {
-			message = JSON.parse(msg.data);
-		} catch (e) {
-			message = msg.data;
-			title = ` ${msg.data}`;
+	let message = {};
+	try {
+		message = JSON.parse(msg.data);
+	} catch (e) {
+		message = msg.data;
+	}
+	if (typeof message === 'string') {
+		if (message === 'validconnection') {
+			const replaceMessage = JSON.stringify({
+				module: 'client',
+				action: 'forward',
+				data: {
+					'module': 'zwave',
+					'action': 'replaceFailedNode',
+					'device': clientDeviceId,
+				},
+			});
+			this.sendSocketMessage(replaceMessage);
 		}
-
+	} else {
 		const { module, action, data } = message;
-		if (module && action && !that.hasUnmount) {
+		if (module && action) {
 			if (module === 'zwave' && action === 'replaceFailedNodeStartTimeout') {
-				if (that.inclusionTimer) {
-					clearInterval(that.inclusionTimer);
+				if (this.inclusionTimer) {
+					clearInterval(this.inclusionTimer);
 				}
-				that.inclusionTimer = setInterval(() => {
-					that.runInclusionTimer(data);
+				this.inclusionTimer = setInterval(() => {
+					this.runInclusionTimer(data);
 				}, 1000);
 			} else if (module === 'zwave' && action === 'replaceFailedNode') {
 				let status = data[0];
 				if (status === 6) {
-					clearInterval(that.inclusionTimer);
+					clearInterval(this.inclusionTimer);
 					if (data[2] > 0) {
 						onDoneReplaceFailedNode();
 					}
 				}
 			}
 		}
-		processWebsocketMessage(device.clientId.toString(), message, title, that.websocket);
-	};
+	}
 }
 
 runInclusionTimer(data?: number = 60) {
@@ -151,15 +189,6 @@ runInclusionTimer(data?: number = 60) {
 
 clearTimer() {
 	clearInterval(this.inclusionTimer);
-}
-
-sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
-	const { sendSocketMessage: SSM } = this.props;
-	SSM(clientId, 'client', 'forward', {
-		'module': 'zwave',
-		'action': action,
-		'device': clientDeviceId,
-	});
 }
 
 render(): Object {
