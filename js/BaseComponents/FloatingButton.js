@@ -36,6 +36,7 @@ import i18n from '../App/Translations/common';
 type DefaultProps = {
 	tabs: boolean,
 	paddingRight: number,
+	disabled: boolean,
 };
 
 type Props = {
@@ -53,6 +54,7 @@ type Props = {
 	iconStyle?: Object | number,
 	iconName?: string,
 	customComponent?: Object,
+	disabled?: boolean,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -76,6 +78,7 @@ class FloatingButton extends Component<Props, null> {
 		paddingRight: 0,
 		showThrobber: false,
 		accessible: true,
+		disabled: false,
 	};
 
 	constructor(props: Props) {
@@ -90,13 +93,20 @@ class FloatingButton extends Component<Props, null> {
 
 	render(): Object {
 		let { buttonStyle, onPress, imageSource, iconName, showThrobber,
-			appLayout, accessible, accessibilityLabel, iconStyle, customComponent } = this.props;
+			appLayout, accessible, accessibilityLabel, iconStyle, customComponent,
+			disabled,
+		} = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
 		const { container, button, icon, throbber } = this._getStyle(appLayout);
 
 		return (
-			<TouchableOpacity style={[container, buttonStyle]} onPress={onPress} accessible={accessible} accessibilityLabel={accessibilityLabel}>
+			<TouchableOpacity
+				style={[container, buttonStyle]}
+				onPress={onPress}
+				accessible={accessible}
+				accessibilityLabel={accessibilityLabel}
+				disabled={disabled}>
 				<View style={button}>
 					{!!imageSource &&
 					(
@@ -124,14 +134,19 @@ class FloatingButton extends Component<Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { shadow: themeShadow, brandSecondary, maxSizeFloatingButton } = Theme.Core;
+		const {
+			shadow: themeShadow,
+			brandSecondary,
+			maxSizeFloatingButton,
+			inactiveSwitchBackground,
+		} = Theme.Core;
 		const height = appLayout.height;
 		const width = appLayout.width;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 		const maxIconSize = 40;
 
-		let { tabs, iconSize, paddingRight } = this.props;
+		let { tabs, iconSize, paddingRight, disabled } = this.props;
 		iconSize = iconSize ? iconSize : isPortrait ? width * 0.056 : height * 0.056;
 		iconSize = iconSize > maxIconSize ? maxIconSize : iconSize;
 
@@ -153,7 +168,7 @@ class FloatingButton extends Component<Props, null> {
 
 		return {
 			container: {
-				backgroundColor: brandSecondary,
+				backgroundColor: disabled ? inactiveSwitchBackground : brandSecondary,
 				borderRadius: buttonSize / 2,
 				position: 'absolute',
 				height: buttonSize,
