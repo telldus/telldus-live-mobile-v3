@@ -22,9 +22,10 @@
 'use strict';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import moment from 'moment';
+import sectionListGetItemLayout from 'react-native-section-list-get-item-layout';
 
 import { forceLocale } from '../../Config';
+import Theme from '../Theme';
 
 import { utils } from 'live-shared-data';
 const { appUtils } = utils;
@@ -95,6 +96,41 @@ function getRandom(min: number, max: number): number {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const getItemLayout = (appLayout: Object): any => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+		rowHeight,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	return sectionListGetItemLayout({
+		// The height of the row with rowData at the given sectionIndex and rowIndex
+		getItemHeight: (): number => rowHeight,
+
+		// These four properties are optional
+		getSeparatorHeight: (): number => padding / 2, // The height of your separators
+		getSectionHeaderHeight: (): number => getSectionHeaderHeight(getSectionHeaderFontSize(deviceWidth)), // The height of your section headers
+		getSectionFooterHeight: (): number => 0, // The height of your section footers
+		listHeaderHeight: 0, // The height of your list header
+	});
+};
+
+const getSectionHeaderFontSize = (deviceWidth: number): number => {
+	const {
+		maxSizeRowTextOne,
+	} = Theme.Core;
+
+	let sectionHeaderFontSize = Math.floor(deviceWidth * 0.047);
+	return sectionHeaderFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : sectionHeaderFontSize;
+};
+
+const getSectionHeaderHeight = (sectionHeaderFontSize: number): number => sectionHeaderFontSize * 1.8;
+
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -104,4 +140,7 @@ module.exports = {
 	...appUtils,
 	hasTellStickNetGetOne,
 	getRandom,
+	getItemLayout,
+	getSectionHeaderFontSize,
+	getSectionHeaderHeight,
 };
