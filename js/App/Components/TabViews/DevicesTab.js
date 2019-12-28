@@ -206,8 +206,7 @@ class DevicesTab extends View {
 		this.handleAddDeviceAttentionCapture();
 		this.normalizeNewlyAddedUITimeout();
 
-		const { rowsAndSections, navigation } = this.props;
-		const { visibleList } = rowsAndSections;
+		const { navigation } = this.props;
 		const newDevices = navigation.getParam('newDevices', {});
 		const gateway = navigation.getParam('gateway', {});
 		if (gateway && newDevices && !isEmpty(newDevices) && !this.calledOnNewlyAddedDidMount) {
@@ -216,10 +215,6 @@ class DevicesTab extends View {
 				this.onNewlyAddedDidMount(parseInt(id, 10), gId);
 			});
 		}
-
-		console.log('TEST componentDidUpdate visibleList', visibleList);
-		console.log('TEST componentDidUpdate newDevices', newDevices);
-		console.log('TEST componentDidUpdate gateway', gateway);
 	}
 
 	componentWillUnmount() {
@@ -687,14 +682,12 @@ class DevicesTab extends View {
 	}
 
 	onNewlyAddedDidMount = (id: number, clientId: string) => {
-		console.log('TEST onNewlyAddedDidMount', id, clientId);
 		const { rowsAndSections, navigation } = this.props;
 		const { visibleList } = rowsAndSections;
 		const newDevices = navigation.getParam('newDevices', {});
 		let section = 0, row = 0;
 		let item = newDevices[id];
-		console.log('TEST onNewlyAddedDidMount newDevices', newDevices);
-		console.log('TEST onNewlyAddedDidMount visibleList', visibleList);
+
 		if (item && item.mainNode) {
 			for (let i = 0; i < visibleList.length; i++) {
 				const list = visibleList[i];
@@ -713,7 +706,6 @@ class DevicesTab extends View {
 			}
 			if (this.listView) {
 				this.calledOnNewlyAddedDidMount = true;
-				console.log('TEST onNewlyAddedDidMount section, row', section, row);
 				this.listView.scrollToLocation({
 					animated: true,
 					sectionIndex: section,
@@ -783,7 +775,6 @@ class DevicesTab extends View {
 			propsSwipeRow,
 		};
 		const listData = this.prepareFinalListData(rowsAndSections);
-		console.log('TEST getItemLayout', this.getItemLayout);
 		return (
 			<View style={style.container}>
 				<SectionList
