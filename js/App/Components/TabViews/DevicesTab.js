@@ -26,6 +26,7 @@ import { Image, TouchableOpacity, Linking, SectionList, RefreshControl, LayoutAn
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
+import isEmpty from 'lodash/isEmpty';
 
 import {
 	Text,
@@ -38,7 +39,7 @@ import { DimmerControlInfo } from './SubViews/Device';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getTabBarIcon, LayoutAnimations } from '../../Lib';
+import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast, getGateways } from '../../Actions';
@@ -148,7 +149,8 @@ class DevicesTab extends View {
 		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
 		this.addNewDevice = this.addNewDevice.bind(this);
 
-		let { formatMessage } = props.screenProps.intl;
+		const { intl, appLayout } = props.screenProps;
+		let { formatMessage } = intl;
 
 		let hiddenDevices = formatMessage(i18n.hiddenDevices).toLowerCase();
 		this.hideHidden = `${formatMessage(i18n.hide)} ${hiddenDevices}`;
@@ -174,7 +176,6 @@ class DevicesTab extends View {
 		this.setRef = this.setRef.bind(this);
 		this.listView = null;
 
-		this.onNewlyAddedDidMount = this.onNewlyAddedDidMount.bind(this);
 		this.timeoutNormalizeNewlyAdded = null;
 		this.timeoutScrollToHidden = null;
 
@@ -184,11 +185,15 @@ class DevicesTab extends View {
 		this.attentionCapture = false;
 
 		this.openRGBControl = this.openRGBControl.bind(this);
+
+		this.getItemLayout = getItemLayout(appLayout);
+		this.calledOnNewlyAddedDidMount = false;
 	}
 
 	componentDidMount() {
 		this.handleAddDeviceAttentionCapture();
 		this.normalizeNewlyAddedUITimeout();
+		this.calledOnNewlyAddedDidMount = false;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -200,12 +205,28 @@ class DevicesTab extends View {
 	componentDidUpdate() {
 		this.handleAddDeviceAttentionCapture();
 		this.normalizeNewlyAddedUITimeout();
+
+		const { rowsAndSections, navigation } = this.props;
+		const { visibleList } = rowsAndSections;
+		const newDevices = navigation.getParam('newDevices', {});
+		const gateway = navigation.getParam('gateway', {});
+		if (gateway && newDevices && !isEmpty(newDevices) && !this.calledOnNewlyAddedDidMount) {
+			Object.keys(newDevices).map((id: string) => {
+				let gId = gateway.id.toString();
+				this.onNewlyAddedDidMount(parseInt(id, 10), gId);
+			});
+		}
+
+		console.log('TEST componentDidUpdate visibleList', visibleList);
+		console.log('TEST componentDidUpdate newDevices', newDevices);
+		console.log('TEST componentDidUpdate gateway', gateway);
 	}
 
 	componentWillUnmount() {
 		clearTimeout(this.timeoutNormalizeNewlyAdded);
 		clearTimeout(this.timeoutScrollToHidden);
 		clearTimeout(this.hideAttentionCaptureTimeout);
+		this.calledOnNewlyAddedDidMount = false;
 	}
 
 	setRef(ref: any) {
@@ -626,7 +647,6 @@ class DevicesTab extends View {
 				screenReaderEnabled={screenReaderEnabled}
 				isNew={!!newDevices[id]}
 				gatewayId={section.header}
-				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 				onPressDeviceAction={this.onPressDeviceAction}
 				openRGBControl={this.openRGBControl}
 				isLast={isLast}
@@ -647,6 +667,7 @@ class DevicesTab extends View {
 				this.normalizeNewlyAddedUI();
 				clearTimeout(this.timeoutNormalizeNewlyAdded);
 				this.timeoutNormalizeNewlyAdded = null;
+				this.calledOnNewlyAddedDidMount = false;
 			}, 3000);
 		}
 	}
@@ -665,19 +686,22 @@ class DevicesTab extends View {
 		}
 	}
 
-	onNewlyAddedDidMount(id: number, clientId: string) {
+	onNewlyAddedDidMount = (id: number, clientId: string) => {
+		console.log('TEST onNewlyAddedDidMount', id, clientId);
 		const { rowsAndSections, navigation } = this.props;
 		const { visibleList } = rowsAndSections;
 		const newDevices = navigation.getParam('newDevices', {});
-		let section, row;
+		let section = 0, row = 0;
 		let item = newDevices[id];
+		console.log('TEST onNewlyAddedDidMount newDevices', newDevices);
+		console.log('TEST onNewlyAddedDidMount visibleList', visibleList);
 		if (item && item.mainNode) {
 			for (let i = 0; i < visibleList.length; i++) {
 				const list = visibleList[i];
-				if (list.header === clientId) {
+				if (list.header && list.header.toString() === clientId) {
 					section = i;
 					for (let j = 0; j < list.data.length; j++) {
-						if (list.data[j].id === id) {
+						if (list.data[j].id && parseInt(list.data[j].id, 10) === id) {
 							row = j;
 							break;
 						}
@@ -688,6 +712,8 @@ class DevicesTab extends View {
 				}
 			}
 			if (this.listView) {
+				this.calledOnNewlyAddedDidMount = true;
+				console.log('TEST onNewlyAddedDidMount section, row', section, row);
 				this.listView.scrollToLocation({
 					animated: true,
 					sectionIndex: section,
@@ -757,7 +783,7 @@ class DevicesTab extends View {
 			propsSwipeRow,
 		};
 		const listData = this.prepareFinalListData(rowsAndSections);
-
+		console.log('TEST getItemLayout', this.getItemLayout);
 		return (
 			<View style={style.container}>
 				<SectionList
@@ -777,6 +803,7 @@ class DevicesTab extends View {
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 					ref={this.setRef}
+					getItemLayout={this.getItemLayout}
 				/>
 			</View>
 		);

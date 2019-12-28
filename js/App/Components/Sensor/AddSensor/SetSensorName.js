@@ -115,11 +115,13 @@ const SetSensorName = (props: Object): Object => {
 				mainNode: true,
 				clientDeviceId: sensor.clientDeviceId,
 			}};
+			const prevParams = navigation.state.params || {};
 			navigation.navigate({
 				routeName: 'Sensors',
 				key: 'Sensors',
 				params: {
 					newSensors: sensorData,
+					...prevParams,
 				},
 			});
 		}).catch((err: Object) => {

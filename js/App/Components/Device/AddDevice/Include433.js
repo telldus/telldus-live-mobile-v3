@@ -179,10 +179,12 @@ onNext = async () => {
 	this.setState({
 		isLoading: false,
 	});
+	const gateway = navigation.getParam('gateway', {});
 	navigation.navigate({
 		routeName: 'Devices',
 		key: 'Devices',
 		params: {
+			gateway,
 			newDevices: rowData,
 		},
 	});

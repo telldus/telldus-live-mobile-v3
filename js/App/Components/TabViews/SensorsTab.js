@@ -26,6 +26,7 @@ import { SectionList, TouchableOpacity, RefreshControl, LayoutAnimation } from '
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import Platform from 'Platform';
+import isEmpty from 'lodash/isEmpty';
 
 import { View, IconTelldus, Text } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
@@ -34,7 +35,7 @@ import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actio
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon, LayoutAnimations } from '../../Lib';
+import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
@@ -113,7 +114,8 @@ class SensorsTab extends View {
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
 
-		let { formatMessage } = props.screenProps.intl;
+		const { intl, appLayout } = props.screenProps;
+		let { formatMessage } = intl;
 
 		this.addedToHiddenList = formatMessage(i18n.sensorAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.sensorRemovedFromHiddenList);
@@ -136,14 +138,28 @@ class SensorsTab extends View {
 
 		this.noSensorsTitle = formatMessage(i18n.noSensorsTitle);
 		this.noSensorsContent = formatMessage(i18n.noSensorsContent);
+
+		this.getItemLayout = getItemLayout(appLayout);
+		this.calledOnNewlyAddedDidMount = false;
 	}
 
 	componentDidMount() {
 		this.normalizeNewlyAddedUITimeout();
+		this.calledOnNewlyAddedDidMount = false;
 	}
 
 	componentDidUpdate() {
 		this.normalizeNewlyAddedUITimeout();
+
+		const { navigation } = this.props;
+		const newSensors = navigation.getParam('newSensors', {});
+		const gateway = navigation.getParam('gateway', {});
+		if (gateway && newSensors && !isEmpty(newSensors) && !this.calledOnNewlyAddedDidMount) {
+			Object.keys(newSensors).map((id: string) => {
+				let gId = gateway.id.toString();
+				this.onNewlyAddedDidMount(parseInt(id, 10), gId);
+			});
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -154,6 +170,7 @@ class SensorsTab extends View {
 
 	componentWillUnmount() {
 		clearTimeout(this.timeoutScrollToHidden);
+		this.calledOnNewlyAddedDidMount = false;
 	}
 
 	setRef(ref: any) {
@@ -372,6 +389,7 @@ class SensorsTab extends View {
 							onRefresh={this.onRefresh}
 						/>}
 					ref={this.setRef}
+					getItemLayout={this.getItemLayout}
 				/>
 			</View>
 		);
@@ -434,7 +452,6 @@ class SensorsTab extends View {
 				onSettingsSelected={this.openSensorDetail}
 				screenReaderEnabled={screenReaderEnabled}
 				isLast={isLast}
-				onNewlyAddedDidMount={this.onNewlyAddedDidMount}
 				gatewayId={section.header}
 				isNew={!!newSensors[id]}/>
 		);
@@ -444,15 +461,15 @@ class SensorsTab extends View {
 		const { rowsAndSections, navigation } = this.props;
 		const { visibleList } = rowsAndSections;
 		const newSensors = navigation.getParam('newSensors', {});
-		let section, row;
+		let section = 0, row = 0;
 		let item = newSensors[id];
 		if (item && item.mainNode) {
 			for (let i = 0; i < visibleList.length; i++) {
 				const list = visibleList[i];
-				if (list.header === clientId) {
+				if (list.header && list.header.toString() === clientId) {
 					section = i;
 					for (let j = 0; j < list.data.length; j++) {
-						if (list.data[j].id === id) {
+						if (list.data[j].id && parseInt(list.data[j].id, 10) === id) {
 							row = j;
 							break;
 						}
@@ -463,6 +480,7 @@ class SensorsTab extends View {
 				}
 			}
 			if (this.listView) {
+				this.calledOnNewlyAddedDidMount = true;
 				this.listView.scrollToLocation({
 					animated: true,
 					sectionIndex: section,
@@ -481,6 +499,7 @@ class SensorsTab extends View {
 				this.normalizeNewlyAddedUI();
 				clearTimeout(this.timeoutNormalizeNewlyAdded);
 				this.timeoutNormalizeNewlyAdded = null;
+				this.calledOnNewlyAddedDidMount = false;
 			}, 3000);
 		}
 	}

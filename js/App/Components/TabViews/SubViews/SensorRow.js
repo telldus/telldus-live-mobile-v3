@@ -64,8 +64,6 @@ type Props = {
 	isNew: boolean,
 	gatewayId: string,
 
-	onNewlyAddedDidMount: (number, string) => void,
-
 	setIgnoreSensor: (Object) => void,
 	onHiddenRowOpen: (string) => void,
 	onSettingsSelected: Object => void,
@@ -194,13 +192,6 @@ class SensorRow extends View<Props, State> {
 		const { idToKeepOpen, forceClose } = propsSwipeRow;
 		if (isOpen && (currentScreen !== 'Sensors' || (forceClose && sensor.id !== idToKeepOpen))) {
 			this.closeSwipeRow();
-		}
-	}
-
-	componentDidMount() {
-		const { onNewlyAddedDidMount, sensor, isNew, gatewayId } = this.props;
-		if (onNewlyAddedDidMount && isNew) {
-			onNewlyAddedDidMount(sensor.id, gatewayId);
 		}
 	}
 

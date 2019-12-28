@@ -25,7 +25,11 @@ import React from 'react';
 import { View, Text, IconTelldus } from '../../../../BaseComponents';
 
 import { getControlIconColorLabel } from '../../../Lib/gatewayUtils';
-import { shouldUpdate } from '../../../Lib';
+import {
+	shouldUpdate,
+	getSectionHeaderFontSize,
+	getSectionHeaderHeight,
+} from '../../../Lib';
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -100,7 +104,6 @@ export default class DeviceHeader extends View<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
-			maxSizeRowTextOne,
 			shadow,
 			paddingFactor,
 		} = Theme.Core;
@@ -108,8 +111,7 @@ export default class DeviceHeader extends View<Props, null> {
 		let statusInfoSize = Math.floor(deviceWidth * 0.055);
 		statusInfoSize = statusInfoSize > 28 ? 28 : statusInfoSize;
 
-		let nameFontSize = Math.floor(deviceWidth * 0.047);
-		nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
+		let nameFontSize = getSectionHeaderFontSize(deviceWidth);
 
 		const padding = deviceWidth * paddingFactor;
 
@@ -121,7 +123,7 @@ export default class DeviceHeader extends View<Props, null> {
 			nameFontSize,
 			sectionHeader: {
 				flexDirection: 'row',
-				paddingVertical: 2 + (nameFontSize * 0.2),
+				height: getSectionHeaderHeight(nameFontSize),
 				backgroundColor: '#ffffff',
 				alignItems: 'center',
 				paddingLeft: 5 + (nameFontSize * 0.2),

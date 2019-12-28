@@ -154,10 +154,12 @@ postSubmitName = async () => {
 		isLoading: false,
 	}, () => {
 		InteractionManager.runAfterInteractions(() => {
+			const gateway = navigation.getParam('gateway', {});
 			navigation.navigate({
 				routeName: 'Devices',
 				key: 'Devices',
 				params: {
+					gateway,
 					newDevices: rowData,
 				},
 			});

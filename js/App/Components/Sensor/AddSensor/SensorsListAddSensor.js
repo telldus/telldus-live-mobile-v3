@@ -117,8 +117,10 @@ getPadding(): number {
 
 onSelectSensor = (sensor: Object) => {
 	const { navigation } = this.props;
+	const prevParams = navigation.state.params || {};
 	navigation.navigate('SetSensorName', {
 		sensor,
+		...prevParams,
 	});
 }
 

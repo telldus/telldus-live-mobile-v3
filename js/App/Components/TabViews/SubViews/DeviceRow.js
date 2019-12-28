@@ -81,7 +81,6 @@ type Props = {
 	onPressMore: (Array<Object>) => void,
 	onHiddenRowOpen: (string) => void,
 	onPressDimButton: (device: Object) => void,
-	onNewlyAddedDidMount: (number, string) => void,
 	onPressDeviceAction: () => void,
 	screenReaderEnabled: boolean,
 	openRGBControl: (number) => void,
@@ -197,13 +196,6 @@ class DeviceRow extends View<Props, State> {
 		}
 
 		return false;
-	}
-
-	componentDidMount() {
-		const { onNewlyAddedDidMount, device, isNew, gatewayId } = this.props;
-		if (onNewlyAddedDidMount && isNew) {
-			onNewlyAddedDidMount(device.id, gatewayId);
-		}
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
