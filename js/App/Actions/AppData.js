@@ -24,7 +24,7 @@
 
 import type { ThunkAction } from './Types';
 import { actions } from 'live-shared-data';
-const {Devices: {getDevices}} = actions;
+const {DevicesCommon: {getDevices}} = actions;
 const {Sensors: {getSensors}} = actions;
 const {Jobs: {getJobs}} = actions;
 const {Websockets: {authenticateSession, connectToGateways}} = actions;

@@ -32,7 +32,7 @@ import { LocalApi, hasTokenExpired, getTokenForLocalControl, LiveApi } from '../
 import { validateLocalControlSupport } from './Gateways';
 // Device actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
-const { Devices, App } = actions;
+const { Devices, App, DevicesCommon } = actions;
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
 const { deviceSetStateSuccess, deviceResetState, requestDeviceAction, getDeviceInfo } = otherActions;
 const { showToast } = App;
@@ -276,5 +276,6 @@ function getDeviceInfoLocal(deviceId: number, clientDeviceId: number, address: s
 
 module.exports = {
 	...otherActions,
+	...DevicesCommon,
 	deviceSetState,
 };

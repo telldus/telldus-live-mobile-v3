@@ -32,7 +32,7 @@ import type { ThunkAction, Action } from './Types';
 
 // Gateways actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
-const { Gateways } = actions;
+const { Gateways, GatewaysCommon } = actions;
 
 import dgram from 'dgram';
 
@@ -220,6 +220,7 @@ const toggleSupportLocal = (gatewayId: number, supportLocal: boolean): Action =>
 
 module.exports = {
 	...Gateways,
+	...GatewaysCommon,
 	autoDetectLocalTellStick,
 	resetLocalControlSupport,
 	closeUDPSocket,
