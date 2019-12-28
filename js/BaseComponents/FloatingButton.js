@@ -40,7 +40,7 @@ type DefaultProps = {
 };
 
 type Props = {
-	onPress: Function,
+	onPress?: Function,
 	imageSource?: number | boolean | Object,
 	tabs: boolean,
 	iconSize: number,

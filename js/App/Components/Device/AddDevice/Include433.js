@@ -65,6 +65,7 @@ type Props = {
 };
 
 type State = {
+	isLoading: boolean,
 };
 
 class Include433 extends View<Props, State> {
@@ -73,6 +74,10 @@ state: State;
 
 constructor(props: Props) {
 	super(props);
+
+	this.state = {
+		isLoading: false,
+	};
 
 	const { navigation, intl } = props;
 	const gateway = navigation.getParam('gateway', {});
@@ -153,6 +158,9 @@ componentWillUnmount() {
 }
 
 onNext = async () => {
+	this.setState({
+		isLoading: true,
+	});
 	const { navigation, addDevice, actions } = this.props;
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -168,6 +176,9 @@ onNext = async () => {
 	}};
 
 	await actions.getDevices();
+	this.setState({
+		isLoading: false,
+	});
 	navigation.navigate({
 		routeName: 'Devices',
 		key: 'Devices',
@@ -179,6 +190,7 @@ onNext = async () => {
 
 render(): Object {
 	const { intl, appLayout, navigation, addDevice } = this.props;
+	const { isLoading: isLoadingINS } = this.state;
 
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -287,8 +299,9 @@ render(): Object {
 				{!!Info && Info}
 			</ScrollView>
 			<FloatingButton
-				onPress={this.onNext}
-				iconName={'checkmark'}
+				onPress={isLoadingINS ? null : this.onNext}
+				iconName={isLoadingINS ? false : 'checkmark'}
+				showThrobber={isLoadingINS}
 				iconStyle={iconStyle}
 				disabled={disableNext}/>
 		</View>
