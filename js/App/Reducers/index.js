@@ -26,7 +26,7 @@ import { persistCombineReducers } from 'redux-persist';
 import {AsyncStorage} from 'react-native';
 import { localStorageKey } from '../../Config';
 
-import { migrations } from '../Store';
+import migrations from '../Store/migrations';
 import Navigation from './Navigation';
 import User from './User';
 import LiveApi from './LiveApi';
