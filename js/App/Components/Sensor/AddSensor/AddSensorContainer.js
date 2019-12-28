@@ -187,7 +187,10 @@ class AddSensorContainer extends View<Props, State> {
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={{flex: 1}}
-					contentContainerStyle={{ flexGrow: 1 }}
+					contentContainerStyle={{
+						flexGrow: 1,
+						justifyContent: 'center',
+					}}
 					keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
 					{React.cloneElement(
 						children,

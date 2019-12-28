@@ -153,7 +153,8 @@ const SetSensorName = (props: Object): Object => {
 			}}
 			contentContainerStyle={{
 				flexGrow: 1,
-			}}>
+			}}
+			keyboardShouldPersistTaps={'always'}>
 			<View style={coverStyle}>
 				<TextField
 					value={name}
@@ -167,8 +168,9 @@ const SetSensorName = (props: Object): Object => {
 					autoCorrect={false}
 					autoFocus={true}
 					returnKeyType={'done'}
-					autoCapitalize={'none'}
+					autoCapitalize={'sentences'}
 					renderLeftAccessory={renderLeftAccessory}
+					onSubmitEditing={submitName}
 				/>
 			</View>
 			<FloatingButton
