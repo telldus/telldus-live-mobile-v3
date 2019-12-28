@@ -64,7 +64,6 @@ class FloatingButton extends Component<Props, null> {
 	props: Props;
 
 	static propTypes = {
-		onPress: PropTypes.func.isRequired,
 		imageSource: PropTypes.oneOfType([PropTypes.number, PropTypes.bool, PropTypes.object]),
 		tabs: PropTypes.bool,
 		iconSize: PropTypes.number,
