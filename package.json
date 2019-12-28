@@ -62,6 +62,7 @@
     "react-native-modal": "~9.0.0",
     "react-native-orientation-locker": "^1.1.6",
     "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git",
+    "react-native-section-list-get-item-layout": "~2.2.3",
     "react-native-sensitive-info": "https://github.com/telldus/react-native-sensitive-info.git",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-simple-toast": "^0.1.1",
