@@ -176,6 +176,7 @@ onNext = async () => {
 	}};
 
 	await actions.getDevices();
+	await actions.getDeviceInfoCommon(deviceId); // This will cache device parameters
 	this.setState({
 		isLoading: false,
 	});
