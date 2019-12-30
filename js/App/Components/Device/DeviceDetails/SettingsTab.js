@@ -83,7 +83,7 @@ type State = {
 	isReplacing: boolean,
 	isDeleting433MHz: boolean,
 	settings433MHz: Object | null,
-	widget433MHz: string,
+	widget433MHz: string | null,
 };
 
 

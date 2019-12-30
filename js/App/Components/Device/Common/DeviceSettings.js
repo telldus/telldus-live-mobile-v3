@@ -58,9 +58,9 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	settings: Object,
-	coverStyle: Array<any> | number | Object,
-	labelStyle: Array<any> | number | Object,
-	widgetId?: string,
+	coverStyle?: Array<any> | number | Object,
+	labelStyle?: Array<any> | number | Object,
+	widgetId?: string | null,
 	deviceId?: string,
 	initializeValueFromStore?: boolean,
 };
