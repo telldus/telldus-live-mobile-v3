@@ -33,6 +33,7 @@ import {
 	deviceZWaveInfo,
 	requestDeviceAction,
 	deviceSetStateThermostat,
+	getDeviceInfoCommon,
 } from '../../../Actions/Devices';
 import { requestNodeInfo } from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
@@ -88,6 +89,7 @@ class OverviewTab extends View<Props, null> {
 	componentDidMount() {
 		const { dispatch, device } = this.props;
 		const { nodeInfo, id, clientId, clientDeviceId } = device;
+		dispatch(getDeviceInfoCommon(id));
 		if (nodeInfo) {
 			const {
 				manufacturerId,
