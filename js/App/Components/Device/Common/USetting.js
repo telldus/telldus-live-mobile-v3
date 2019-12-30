@@ -24,64 +24,47 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RadioButtonInput } from 'react-native-simple-radio-button';
 
 import {
 	View,
 	Text,
-} from '../../../../../BaseComponents';
+	CheckBoxIconText,
+} from '../../../../BaseComponents';
 
-import Theme from '../../../../Theme';
+import Theme from '../../../Theme';
 
-const VSetting = (props: Object): Object => {
+const USetting = (props: Object): Object => {
 	const {
+		isChecked,
+		onToggleCheckBox,
+		intl,
 		option,
-		isOneSelected,
-		value,
-		index,
-		onPressOne,
-		onPressTwo,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
 		radioButtonLabelStyle,
-		rButtonStyle,
 		optionWrapStyle,
 		optionButtonCover,
-		buttonOuterSizeV,
-		buttonSizeV,
+		uCheckBoxIconStyle,
 		brandPrimary,
 	} = getStyles(layout);
 
 
 	return (
 		<View style={optionButtonCover}>
-			<RadioButtonInput
-				isSelected={isOneSelected}
-				buttonStyle={rButtonStyle}
-				buttonWrapStyle={optionWrapStyle}
-				buttonOuterSize={buttonOuterSizeV}
-				buttonSize={buttonSizeV}
-				borderWidth={3}
-				buttonInnerColor={brandPrimary}
-				buttonOuterColor={brandPrimary}
-				onPress={onPressOne}
-				obj={{value}}
-				index={index}/>
-			<RadioButtonInput
-				isSelected={!isOneSelected}
-				buttonStyle={rButtonStyle}
-				buttonWrapStyle={optionWrapStyle}
-				buttonOuterSize={buttonOuterSizeV}
-				buttonSize={buttonSizeV}
-				borderWidth={3}
-				buttonInnerColor={brandPrimary}
-				buttonOuterColor={brandPrimary}
-				onPress={onPressTwo}
-				obj={{value}}
-				index={index}/>
+			<CheckBoxIconText
+				isChecked={isChecked}
+				iconStyle={{
+					...optionWrapStyle,
+					...uCheckBoxIconStyle,
+					backgroundColor: isChecked ? brandPrimary : '#fff',
+					color: isChecked ? '#fff' : 'transparent',
+				}}
+				textStyle={radioButtonLabelStyle}
+				onToggleCheckBox={onToggleCheckBox}
+				intl={intl}/>
 			<Text style={radioButtonLabelStyle}>
 				{option}
 			</Text>
@@ -107,18 +90,25 @@ const getStyles = (appLayout: Object): Object => {
 
 	const outerPadding = padding * 2;
 
-	const totalPaddingV = padding * 11;
-	const buttonOuterSizeV = Math.floor((deviceWidth - (outerPadding + totalPaddingV)) / 10);
-	const buttonSizeV = buttonOuterSizeV * 0.5;
+	const checkBoxSpace = padding;
+
+	const totalPaddingU = (checkBoxSpace * 10) + padding;
+	const paddingU = 2, borderWidthU = 1;
+	const iconSizeU = Math.floor((deviceWidth - (outerPadding + totalPaddingU + ((paddingU + borderWidthU) * 20))) / 10);
 
 	return {
-		buttonOuterSizeV,
-		buttonSizeV,
+		paddingU,
 		brandPrimary,
 		optionButtonCover: {
 			flexDirection: 'column',
 			alignItems: 'center',
 			justifyContent: 'center',
+		},
+		uCheckBoxIconStyle: {
+			fontSize: iconSizeU,
+			borderColor: brandPrimary,
+			padding: paddingU,
+			borderWidth: borderWidthU,
 		},
 		radioButtonLabelStyle: {
 			fontSize: fontSizeText,
@@ -129,10 +119,10 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		optionWrapStyle: {
 			marginTop: padding,
-			marginLeft: padding,
+			marginLeft: checkBoxSpace,
 		},
 	};
 };
 
-export default VSetting;
+export default USetting;
 

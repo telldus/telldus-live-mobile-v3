@@ -25,9 +25,11 @@
 import ZWaveIncludeExcludeUI from './ZWaveIncludeExcludeUI';
 import CantEnterInclusionExclusionUI from './CantEnterInclusionExclusionUI';
 import ExcludeDevice from './ExcludeDevice';
+import DeviceSettings from './DeviceSettings';
 
 module.exports = {
 	ZWaveIncludeExcludeUI,
 	CantEnterInclusionExclusionUI,
 	ExcludeDevice,
+	DeviceSettings,
 };

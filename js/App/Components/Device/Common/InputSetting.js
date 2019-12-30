@@ -24,53 +24,44 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+	TextInput,
+} from 'react-native';
 
 import {
 	View,
 	Text,
-	CheckBoxIconText,
-} from '../../../../../BaseComponents';
+} from '../../../../BaseComponents';
 
-import Theme from '../../../../Theme';
+import Theme from '../../../Theme';
 
-const USetting = (props: Object): Object => {
+const InputSetting = (props: Object): Object => {
+
 	const {
-		isChecked,
-		onToggleCheckBox,
-		intl,
-		option,
+		label,
+		value,
+		onChangeText,
+		labelStyle,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-
 	const {
-		radioButtonLabelStyle,
-		optionWrapStyle,
-		optionButtonCover,
-		uCheckBoxIconStyle,
-		brandPrimary,
+		optionInputCover,
+		optionInputLabelStyle,
+		optionInputStyle,
 	} = getStyles(layout);
 
-
 	return (
-		<View style={optionButtonCover}>
-			<CheckBoxIconText
-				isChecked={isChecked}
-				iconStyle={{
-					...optionWrapStyle,
-					...uCheckBoxIconStyle,
-					backgroundColor: isChecked ? brandPrimary : '#fff',
-					color: isChecked ? '#fff' : 'transparent',
-				}}
-				textStyle={radioButtonLabelStyle}
-				onToggleCheckBox={onToggleCheckBox}
-				intl={intl}/>
-			<Text style={radioButtonLabelStyle}>
-				{option}
+		<View style={optionInputCover}>
+			<Text style={[optionInputLabelStyle, labelStyle]}>
+				{label}
 			</Text>
+			<TextInput
+				value={value}
+				style={optionInputStyle}
+				onChangeText={onChangeText}/>
 		</View>
 	);
-
 };
 
 const getStyles = (appLayout: Object): Object => {
@@ -81,48 +72,36 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		rowTextColor,
-		brandPrimary,
+		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSizeText = deviceWidth * 0.035;
-
-	const outerPadding = padding * 2;
-
-	const checkBoxSpace = padding;
-
-	const totalPaddingU = (checkBoxSpace * 10) + padding;
-	const paddingU = 2, borderWidthU = 1;
-	const iconSizeU = Math.floor((deviceWidth - (outerPadding + totalPaddingU + ((paddingU + borderWidthU) * 20))) / 10);
+	const fontSizeInput = deviceWidth * 0.04;
 
 	return {
-		paddingU,
-		brandPrimary,
-		optionButtonCover: {
-			flexDirection: 'column',
+		optionInputCover: {
+			flexDirection: 'row',
 			alignItems: 'center',
-			justifyContent: 'center',
+			justifyContent: 'space-between',
+			margin: padding,
 		},
-		uCheckBoxIconStyle: {
-			fontSize: iconSizeU,
-			borderColor: brandPrimary,
-			padding: paddingU,
-			borderWidth: borderWidthU,
-		},
-		radioButtonLabelStyle: {
-			fontSize: fontSizeText,
+		optionInputLabelStyle: {
+			fontSize: fontSizeText * 1.3,
 			color: rowTextColor,
-			marginTop: padding,
 		},
-		rButtonStyle: {
-		},
-		optionWrapStyle: {
-			marginTop: padding,
-			marginLeft: checkBoxSpace,
+		optionInputStyle: {
+			fontSize: fontSizeInput,
+			borderWidth: 1,
+			borderColor: rowTextColor,
+			borderRadius: 2,
+			color: eulaContentColor,
+			width: deviceWidth * 0.3,
+			marginLeft: padding,
+			padding: 5,
 		},
 	};
 };
 
-export default USetting;
-
+export default InputSetting;

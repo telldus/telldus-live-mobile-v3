@@ -30,7 +30,7 @@ import isEmpty from 'lodash/isEmpty';
 import {
 	View,
 	Text,
-} from '../../../../../BaseComponents';
+} from '../../../../BaseComponents';
 import VSetting from './VSetting';
 import USetting from './USetting';
 import SSetting from './SSetting';
@@ -45,18 +45,34 @@ import {
 	setWidgetParamUnits,
 	setWidgetParamUnit,
 	setWidgetParamHouse,
-} from '../../../../Actions/AddDevice';
+	editDevice433Param,
+} from '../../../Actions/AddDevice';
 import {
 	getRandom,
-} from '../../../../Lib/appUtils';
+	prepare433DeviceParamsToStore,
+} from '../../../Lib';
 
-import Theme from '../../../../Theme';
+import Theme from '../../../Theme';
 
-import i18n from '../../../../Translations/common';
+import i18n from '../../../Translations/common';
 
-const DeviceSettings = (props: Object): Object => {
+type Props = {
+	settings: Object,
+	coverStyle: Array<any> | number | Object,
+	labelStyle: Array<any> | number | Object,
+	widgetId?: string,
+	deviceId?: string,
+	initializeValueFromStore?: boolean,
+};
+
+const DeviceSettings = (props: Props): Object => {
 	const {
 		settings,
+		coverStyle,
+		labelStyle,
+		widgetId, // Optional
+		deviceId, // Optional
+		initializeValueFromStore = false, // Optional
 	} = props;
 
 	const dispatch = useDispatch();
@@ -76,7 +92,26 @@ const DeviceSettings = (props: Object): Object => {
 		code = {},
 	} = widgetParams433Device;
 
+	const editingDevice = useSelector((state: Object): Object => state.devices.byId[deviceId]);
+	let DeviceParams433 = {};
+	if (initializeValueFromStore && editingDevice) {
+		const { parameter } = editingDevice;
+		DeviceParams433 = prepare433DeviceParamsToStore(parseInt(widgetId, 10), parameter);
+	}
+	let {
+		system: currSystem,
+		house: currHouse,
+		unit: currUnit,
+		fade: currFade,
+		units: currUnits,
+		code: currCode,
+	} = DeviceParams433 || {};
+
 	useEffect(() => {
+		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
+		if (deviceId && initializeValueFromStore) {
+			dispatch(editDevice433Param(widgetId, deviceId));
+		}
 
 		let hasFade = false, systemMin, systemMax;
 		Object.keys(settings).map((setting: Object) => {
@@ -96,16 +131,16 @@ const DeviceSettings = (props: Object): Object => {
 		// Stores initial/default settings in store.
 		if (system === '' && typeof systemMin !== 'undefined') {
 			const random = getRandom(systemMin, systemMax);
-			const sysInitValue = random || systemMin;
+			const sysInitValue = currSystem || random || systemMin || systemMax;
 			dispatch(setWidgetParamSystem(sysInitValue.toString()));
 		}
 		if (typeof fade === 'undefined' && hasFade) {
-			dispatch(setWidgetParamFade(false));
+			dispatch(setWidgetParamFade(currFade || false));
 		}
 	}, []);
 
 	const {
-		coverStyle,
+		coverStyleDef,
 		radioButtonsCover,
 		optionInputCover,
 		optionInputLabelStyle,
@@ -149,13 +184,14 @@ const DeviceSettings = (props: Object): Object => {
 					key={setting}
 					label={formatMessage(i18n.system)}
 					value={system}
-					onChangeText={onChangeText}/>
+					onChangeText={onChangeText}
+					labelStyle={labelStyle}/>
 			);
 		}
 		if (setting === 'v') {
 			let initialSetCode = {};
 
-			const vSetting = Object.keys(settings[setting]).map((vSet: Object, index: number): Object => {
+			const vSetting = Object.keys(settings[setting]).map((vSet: string, index: number): Object => {
 				const { option } = settings[setting][vSet];
 
 				if (isEmpty(code)) {
@@ -192,8 +228,9 @@ const DeviceSettings = (props: Object): Object => {
 
 			// Stores initial/default settings in store.
 			if (isEmpty(code) && !isEmpty(initialSetCode)) {
+				const initalValue = currCode || initialSetCode;
 				dispatch(setWidgetParamCode({
-					...initialSetCode,
+					...initalValue,
 				}));
 			}
 
@@ -205,7 +242,7 @@ const DeviceSettings = (props: Object): Object => {
 		if (setting === 'u') {
 			let initialSetU = {};
 
-			const uSetting = Object.keys(settings[setting]).map((uSet: Object, index: number): Object => {
+			const uSetting = Object.keys(settings[setting]).map((uSet: string, index: number): Object => {
 				const { option } = settings[setting][uSet];
 
 				if (isEmpty(units)) {
@@ -230,14 +267,15 @@ const DeviceSettings = (props: Object): Object => {
 
 			// Stores initial/default settings in store.
 			if (isEmpty(units) && !isEmpty(initialSetU)) {
+				const initialValue = currUnits || initialSetU;
 				dispatch(setWidgetParamUnits({
-					...initialSetU,
+					...initialValue,
 				}));
 			}
 
 			Setting.push(
 				<View style={uSettingsCover} key={setting}>
-					<Text style={optionInputLabelStyle}>
+					<Text style={[optionInputLabelStyle, labelStyle]}>
 						{formatMessage(i18n.units)}
 					</Text>
 					<View style={{
@@ -253,7 +291,7 @@ const DeviceSettings = (props: Object): Object => {
 			let houseObject = typeof house !== 'object' ? {} : house;
 			let initalSetHouse = {};
 
-			const sSetting = Object.keys(settings[setting]).map((sSet: Object, index: number): Object => {
+			const sSetting = Object.keys(settings[setting]).map((sSet: string, index: number): Object => {
 				if (isEmpty(houseObject)) {
 					initalSetHouse[sSet] = '-';
 				}
@@ -297,8 +335,9 @@ const DeviceSettings = (props: Object): Object => {
 
 			// Stores initial/default settings in store.
 			if (isEmpty(houseObject) && !isEmpty(initalSetHouse)) {
+				const initialValue = currHouse || initalSetHouse;
 				dispatch(setWidgetParamHouse({
-					...initalSetHouse,
+					...initialValue,
 				}));
 			}
 
@@ -338,7 +377,7 @@ const DeviceSettings = (props: Object): Object => {
 				}
 
 				const random = getRandom(min, max);
-				const houseInitValue = random || min;
+				const houseInitValue = currHouse || random || min;
 				// Stores initial/default settings in store.
 				if (house === '') {
 					dispatch(setWidgetParamHouse(houseInitValue.toString()));
@@ -367,11 +406,12 @@ const DeviceSettings = (props: Object): Object => {
 
 				// Stores initial/default settings in store.
 				if (house === '') {
-					dispatch(setWidgetParamHouse(items[0].key));
+					dispatch(setWidgetParamHouse(currHouse || items[0].key));
 				}
 
 				const ddValue = house === '' ? items[0].key : house;
 				Setting.push(<DropDownSetting
+					labelStyle={labelStyle}
 					items={items}
 					value={ddValue}
 					onValueChange={onValueChange}
@@ -410,7 +450,7 @@ const DeviceSettings = (props: Object): Object => {
 				}
 
 				const random = getRandom(min, max);
-				const unitInitValue = random || min;
+				const unitInitValue = currUnit || random || min;
 				// Stores initial/default settings in store.
 				if (unit === '') {
 					dispatch(setWidgetParamUnit(unitInitValue.toString()));
@@ -439,11 +479,12 @@ const DeviceSettings = (props: Object): Object => {
 
 				// Stores initial/default settings in store.
 				if (unit === '') {
-					dispatch(setWidgetParamUnit(items[0].key));
+					dispatch(setWidgetParamUnit(currUnit || items[0].key));
 				}
 
 				const ddValue = unit === '' ? items[0].key : unit;
 				Setting.push(<DropDownSetting
+					labelStyle={labelStyle}
 					items={items}
 					value={ddValue}
 					onValueChange={onValueChange}
@@ -472,7 +513,7 @@ const DeviceSettings = (props: Object): Object => {
 
 			Setting.push(
 				<View style={optionInputCover} key={setting}>
-					<Text style={optionInputLabelStyle}>
+					<Text style={[optionInputLabelStyle, labelStyle]}>
 						{formatMessage(i18n.fade)}
 					</Text>
 					<View style={fadeSettingsCover}>
@@ -483,7 +524,7 @@ const DeviceSettings = (props: Object): Object => {
 	});
 
 	return (
-		<View style={coverStyle}>
+		<View style={[coverStyleDef, coverStyle]}>
 			{Setting}
 		</View>
 	);
@@ -506,7 +547,7 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		padding,
-		coverStyle: {
+		coverStyleDef: {
 			marginTop: padding / 2,
 			marginHorizontal: padding,
 			backgroundColor: '#fff',

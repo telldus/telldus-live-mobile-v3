@@ -34,7 +34,10 @@ import {
 } from '../../../../BaseComponents';
 
 import { LearnButton } from '../../TabViews/SubViews';
-import { ExcludeDevice } from '../Common';
+import {
+	ExcludeDevice,
+	DeviceSettings,
+} from '../Common';
 import { ReplaceFailedNode } from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';

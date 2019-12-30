@@ -27,7 +27,6 @@ import NameRow from './NameRow';
 import DeviceInfoBlock from './DeviceInfoBlock';
 import Row from './Row';
 import NumberedBlock from './NumberedBlock';
-import DeviceSettings from './DeviceSettings';
 import ShortcutRow from './ShortcutRow';
 
 module.exports = {
@@ -36,6 +35,5 @@ module.exports = {
 	DeviceInfoBlock,
 	Row,
 	NumberedBlock,
-	DeviceSettings,
 	ShortcutRow,
 };

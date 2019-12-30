@@ -21,44 +21,54 @@
 // @flow
 
 'use strict';
-
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-	TextInput,
-} from 'react-native';
 
 import {
+	DropDown,
 	View,
 	Text,
-} from '../../../../../BaseComponents';
+} from '../../../../BaseComponents';
 
-import Theme from '../../../../Theme';
+import Theme from '../../../Theme';
 
-const InputSetting = (props: Object): Object => {
-
+const DropDownSetting = (props: Object): Object => {
 	const {
-		label,
+		items,
 		value,
-		onChangeText,
+		onValueChange,
+		label,
+		labelStyle,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+
 	const {
+		fontSize,
+		pickerContainerStyle,
+		pickerStyle,
 		optionInputCover,
 		optionInputLabelStyle,
-		optionInputStyle,
 	} = getStyles(layout);
+
+	const accessibilityLabelPrefix = '';
 
 	return (
 		<View style={optionInputCover}>
-			<Text style={optionInputLabelStyle}>
+			<Text style={[optionInputLabelStyle, labelStyle]}>
 				{label}
 			</Text>
-			<TextInput
+			<DropDown
+				items={items}
 				value={value}
-				style={optionInputStyle}
-				onChangeText={onChangeText}/>
+				onValueChange={onValueChange}
+				appLayout={layout}
+				pickerContainerStyle={pickerContainerStyle}
+				pickerStyle={pickerStyle}
+				baseColor={'#000'}
+				fontSize={fontSize}
+				accessibilityLabelPrefix={accessibilityLabelPrefix}
+				animationDuration={50}/>
 		</View>
 	);
 };
@@ -69,38 +79,49 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		paddingFactor,
 		rowTextColor,
-		eulaContentColor,
+		paddingFactor,
 	} = Theme.Core;
+
+	const ddWidth = deviceWidth * 0.3;
+
+	const fontSizeText = deviceWidth * 0.035;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
-	const fontSizeInput = deviceWidth * 0.04;
-
 	return {
+		pickerStyle: {
+			width: ddWidth,
+			right: padding * 2,
+			left: undefined,
+		},
+		pickerContainerStyle: {
+			flex: 0,
+			width: ddWidth,
+			borderWidth: 1,
+			borderColor: rowTextColor,
+			elevation: 0,
+			shadowRadius: 0,
+			shadowOpacity: 0,
+			shadowOffset: {
+				width: 0,
+				height: 0,
+			},
+			marginBottom: 0,
+			borderRadius: 2,
+		},
 		optionInputCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			margin: padding,
+			padding,
+			borderRadius: 2,
 		},
 		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.3,
+			fontSize: fontSizeText * 1.4,
 			color: rowTextColor,
-		},
-		optionInputStyle: {
-			fontSize: fontSizeInput,
-			borderWidth: 1,
-			borderColor: rowTextColor,
-			borderRadius: 2,
-			color: eulaContentColor,
-			width: deviceWidth * 0.3,
-			marginLeft: padding,
-			padding: 5,
 		},
 	};
 };
 
-export default InputSetting;
+export default DropDownSetting;

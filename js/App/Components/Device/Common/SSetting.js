@@ -29,9 +29,9 @@ import { RadioButtonInput } from 'react-native-simple-radio-button';
 import {
 	View,
 	Text,
-} from '../../../../../BaseComponents';
+} from '../../../../BaseComponents';
 
-import Theme from '../../../../Theme';
+import Theme from '../../../Theme';
 
 const SSetting = (props: Object): Object => {
 	const {
