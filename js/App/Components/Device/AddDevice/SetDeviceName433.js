@@ -38,11 +38,11 @@ import {
 } from '../../../../BaseComponents';
 import {
 	DeviceSettings,
-} from './SubViews';
+} from '../Common';
 
 import {
 	getDeviceSettings,
-} from '../../../Actions/AddDevice';
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 
