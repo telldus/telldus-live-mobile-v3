@@ -45,8 +45,13 @@ import {
 	showToast,
 	sendSocketMessage,
 	registerForWebSocketEvents,
+	removeDevice,
 } from '../../../Actions';
-import { shouldUpdate, LayoutAnimations } from '../../../Lib';
+import {
+	shouldUpdate,
+	LayoutAnimations,
+	is433MHzTransport,
+} from '../../../Lib';
 
 import Theme from '../../../Theme';
 
@@ -71,6 +76,7 @@ type State = {
 	excludeActive: boolean,
 	isMarking: boolean,
 	isReplacing: boolean,
+	isDeleting433MHz: boolean,
 };
 
 
@@ -117,6 +123,7 @@ class SettingsTab extends View {
 			excludeActive: false,
 			isMarking: false,
 			isReplacing: false,
+			isDeleting433MHz: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -290,6 +297,72 @@ class SettingsTab extends View {
 		this.sendSocketMessage(clientId, 'removeFailedNode', clientDeviceId);
 	}
 
+	onPressDelete433Device = () => {
+		const { toggleDialogueBox, intl } = this.props.screenProps;
+		const { formatMessage } = intl;
+
+		const dialogueData = {
+			show: true,
+			showPositive: true,
+			positiveText: formatMessage(i18n.delete).toUpperCase(),
+			showNegative: true,
+			header: formatMessage(i18n.deleteDeviceWarningTitle),
+			imageHeader: true,
+			text: formatMessage(i18n.deleteDeviceWarningContent),
+			showHeader: true,
+			closeOnPressPositive: true,
+			onPressPositive: this.onConfirmDelete433Mhz,
+			capitalizeHeader: false,
+		};
+		toggleDialogueBox(dialogueData);
+	}
+
+	onConfirmDelete433Mhz = () => {
+		const { dispatch, device } = this.props;
+		this.setState({
+			isDeleting433MHz: true,
+		});
+		dispatch(removeDevice(device.id)).then(async (res: Object) => {
+			if (res.status && res.status === 'success') {
+				try {
+					await dispatch(getDevices());
+				// eslint-disable-next-line no-empty
+				} catch (err) {
+
+				} finally {
+					this.setState({
+						isDeleting433MHz: false,
+					}, () => {
+						this.goBack();
+					});
+				}
+			} else {
+				this.onErrorDelete433();
+			}
+		}).catch((err: Object) => {
+			this.onErrorDelete433(err.message);
+		});
+	}
+
+	onErrorDelete433 = (message?: string) => {
+		this.setState({
+			isDeleting433MHz: false,
+		}, () => {
+			const { toggleDialogueBox, intl } = this.props.screenProps;
+			const { formatMessage } = intl;
+			const dialogueData = {
+				show: true,
+				showPositive: true,
+				imageHeader: true,
+				text: message || formatMessage(i18n.unknownError),
+				showHeader: true,
+				closeOnPressPositive: true,
+				capitalizeHeader: false,
+			};
+			toggleDialogueBox(dialogueData);
+		});
+	}
+
 	// TODO: See if possible to replace with 'sendSocketMessage' received from "registerForWebSocketEvents".
 	sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
 		const { sendSocketMessage: SSM } = this.props;
@@ -341,7 +414,13 @@ class SettingsTab extends View {
 	}
 
 	render(): Object | null {
-		const { isHidden, excludeActive, isMarking, isReplacing } = this.state;
+		const {
+			isHidden,
+			excludeActive,
+			isMarking,
+			isReplacing,
+			isDeleting433MHz,
+		} = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -353,8 +432,7 @@ class SettingsTab extends View {
 
 		const {
 			container,
-			learn,
-			excludeButtonStyle,
+			touchableButtonCommon,
 			brandDanger,
 			btnDisabledBg,
 		} = this.getStyle(appLayout);
@@ -364,10 +442,11 @@ class SettingsTab extends View {
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={id} style={learn} />;
+			learnButton = <LearnButton id={id} style={touchableButtonCommon} />;
 		}
 
 		const isZWave = transport === 'zwave';
+		const is433MHz = is433MHzTransport(transport);
 		const { isFailed = false } = nodeInfo;
 
 		return (
@@ -420,14 +499,14 @@ class SettingsTab extends View {
 															text={i18n.labelRemoveFailed}
 															onPress={this.onPressRemoveFailedNode}
 															disabled={!isGatewayReachable}
-															style={[excludeButtonStyle, {
+															style={[touchableButtonCommon, {
 																backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 															}]}/>
 														<TouchableButton
 															text={i18n.labelReplaceFailed}
 															onPress={this.onPressReplaceFailedNode}
 															disabled={!isGatewayReachable}
-															style={[excludeButtonStyle, {
+															style={[touchableButtonCommon, {
 																backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 															}]}/>
 													</>
@@ -439,7 +518,7 @@ class SettingsTab extends View {
 													text={i18n.labelMarkAsFailed}
 													onPress={this.onPressMarkAsFailed}
 													disabled={!isGatewayReachable || isMarking}
-													style={[excludeButtonStyle, {
+													style={[touchableButtonCommon, {
 														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 													}]}
 													showThrobber={isMarking}/>
@@ -447,13 +526,24 @@ class SettingsTab extends View {
 													text={formatMessage(i18n.headerExclude).toUpperCase()}
 													onPress={this.onPressExcludeDevice}
 													disabled={!isGatewayReachable}
-													style={[excludeButtonStyle, {
+													style={[touchableButtonCommon, {
 														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
 													}]}/>
 											</>
 										}
 									</>
 								)}
+								{
+									is433MHz && (
+										<TouchableButton
+											text={formatMessage(i18n.delete).toUpperCase()}
+											onPress={this.onPressDelete433Device}
+											disabled={isDeleting433MHz}
+											style={[touchableButtonCommon, {
+												backgroundColor: brandDanger,
+											}]}/>
+									)
+								}
 							</>
 						}
 					</View>
@@ -480,11 +570,7 @@ class SettingsTab extends View {
 				paddingTop: padding / 2,
 				backgroundColor: appBackground,
 			},
-			learn: {
-				marginHorizontal: width * 0.25,
-				marginVertical: padding / 2,
-			},
-			excludeButtonStyle: {
+			touchableButtonCommon: {
 				marginTop: padding * 2,
 				minWidth: Math.floor(deviceWidth * 0.6),
 			},
