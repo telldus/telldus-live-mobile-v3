@@ -54,6 +54,8 @@ import {
 	shouldUpdate,
 	LayoutAnimations,
 	is433MHzTransport,
+	getDeviceVendorInfo433MHz,
+	getDeviceSettings,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -80,6 +82,8 @@ type State = {
 	isMarking: boolean,
 	isReplacing: boolean,
 	isDeleting433MHz: boolean,
+	settings433MHz: Object | null,
+	widget433MHz: string,
 };
 
 
@@ -121,12 +125,19 @@ class SettingsTab extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
+		const {
+			widget433MHz = null,
+			settings433MHz = null,
+		} = this.get433MHzDeviceSettings();
+
 		this.state = {
 			isHidden: props.device.ignored,
 			excludeActive: false,
 			isMarking: false,
 			isReplacing: false,
 			isDeleting433MHz: false,
+			settings433MHz,
+			widget433MHz,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -183,6 +194,31 @@ class SettingsTab extends View {
 	componentWillUnmount() {
 		clearTimeout(this.markAsFailedTimeoutOne);
 		clearTimeout(this.markAsFailedTimeoutTwo);
+	}
+
+	get433MHzDeviceSettings(): Object {
+		const { screenProps, device } = this.props;
+		const { formatMessage } = screenProps.intl;
+		const { protocol, model, transport } = device;
+
+		if (!is433MHzTransport(transport)) {
+			return {};
+		}
+		let info = getDeviceVendorInfo433MHz(protocol, model);
+		if (!info) {
+			return {};
+		}
+		const {
+			widget,
+			configuration,
+		} = info.deviceInfo || {};
+		if (widget && configuration === 'true') {
+			return {
+				widget433MHz: widget,
+				settings433MHz: getDeviceSettings(parseInt(widget, 10), formatMessage),
+			};
+		}
+		return {};
 	}
 
 	onPressExcludeDevice() {
@@ -423,6 +459,8 @@ class SettingsTab extends View {
 			isMarking,
 			isReplacing,
 			isDeleting433MHz,
+			settings433MHz,
+			widget433MHz,
 		} = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
@@ -438,6 +476,8 @@ class SettingsTab extends View {
 			touchableButtonCommon,
 			brandDanger,
 			btnDisabledBg,
+			coverStyleDeviceSettings433,
+			labelStyleDeviceSettings433,
 		} = this.getStyle(appLayout);
 
 		const { LEARN } = supportedMethods;
@@ -491,6 +531,13 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
+								{!!settings433MHz && <DeviceSettings
+									coverStyle={coverStyleDeviceSettings433}
+									labelStyle={labelStyleDeviceSettings433}
+									deviceId={id}
+									initializeValueFromStore={true}
+									settings={settings433MHz}
+									widgetId={widget433MHz}/>}
 								{learnButton}
 								{isZWave && (
 									<>
@@ -563,6 +610,8 @@ class SettingsTab extends View {
 
 		const padding = deviceWidth * paddingFactor;
 
+		const fontSize = deviceWidth * 0.04;
+
 		return {
 			brandDanger,
 			btnDisabledBg,
@@ -576,6 +625,13 @@ class SettingsTab extends View {
 			touchableButtonCommon: {
 				marginTop: padding * 2,
 				minWidth: Math.floor(deviceWidth * 0.6),
+			},
+			coverStyleDeviceSettings433: {
+				marginHorizontal: 0,
+			},
+			labelStyleDeviceSettings433: {
+				color: '#000',
+				fontSize,
 			},
 		};
 	}
