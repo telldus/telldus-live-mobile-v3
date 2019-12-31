@@ -86,6 +86,16 @@ function openURL(url: string): any {
 	  });
 }
 
+const prepare433ModelName = (locale: string, lang: Array<Object> = [], modelNameDef: string): string => {
+	let name = modelNameDef;
+	for (let i = 0; i < lang.length; i++) {
+		if (lang[i].lang === locale) {
+			name = lang[i].modelName;
+		}
+	}
+	return name;
+};
+
 module.exports = {
 	...deviceUtils,
 	...addDeviceUtils,
@@ -94,4 +104,5 @@ module.exports = {
 	prepareNo433MHzSupportDialogueData,
 	openURL,
 	goToWebShop,
+	prepare433ModelName,
 };
