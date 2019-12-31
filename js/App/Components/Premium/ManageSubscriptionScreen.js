@@ -46,6 +46,7 @@ import {
 } from '../../Actions/Login';
 import {
 	capitalizeFirstLetterOfEachWord,
+	isPremiumBonus,
 } from '../../Lib/appUtils';
 
 import Theme from '../../Theme';
@@ -55,7 +56,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	const { toggleDialogueBox } = screenProps;
 	const {layout} = useSelector((state: Object): Object => state.app);
-	const { userProfile = {}} = useSelector((state: Object): Object => state.user);
+	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
 	const { credits } = userProfile;
 	const {
 		container,
@@ -72,6 +73,8 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	const {
 		formatMessage,
 	} = useIntl();
+
+	const isPremBonusPeriod = isPremiumBonus(subscriptions);
 
 	const dispatch = useDispatch();
 	function onConfirm() {
@@ -156,6 +159,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 					text={formatMessage(i18n.cancelAutoRenew)}
 					accessibilityLabel={formatMessage(i18n.cancelAutoRenew)}
 					accessible={true}
+					disabled={isPremBonusPeriod}
 					style={buttonStyle}
 				/>
 			</ScrollView>
