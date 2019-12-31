@@ -46,6 +46,7 @@ type Props = {
 	infoContainerStyle?: any,
 	fromJS?: boolean,
 	info2?: Object,
+	resizeMode?: string,
 };
 
 type DefaultProps = {
@@ -164,7 +165,7 @@ class LocationDetails extends Component<Props, State> {
 									onError={this.onError}/>
 								:
 								<CachedImage
-									resizeMode={'contain'}
+									resizeMode={resizeMode || 'contain'}
 									useQueryParamsInCacheKey={true}
 									source={{uri: image}}
 									style={locationImage}
