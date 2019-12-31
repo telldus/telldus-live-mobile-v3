@@ -44,14 +44,13 @@ type Props = {
 	accessible?: boolean,
 	info?: Object,
 	infoContainerStyle?: any,
-	isStatic?: boolean,
+	fromJS?: boolean,
 	info2?: Object,
 };
 
 type DefaultProps = {
-	isStatic: boolean,
+	fromJS: boolean,
 };
-
 
 type State = {
 	errorShowImage: boolean,
@@ -63,7 +62,7 @@ class LocationDetails extends Component<Props, State> {
 	onPress: () => void;
 
 	static defaultProps: DefaultProps = {
-		isStatic: true,
+		fromJS: false,
 	};
 
 	state: State = {
@@ -127,6 +126,8 @@ class LocationDetails extends Component<Props, State> {
 			onPress,
 			infoContainerStyle,
 			info2,
+			fromJS,
+			resizeMode,
 		} = this.props;
 
 		const {
@@ -155,12 +156,19 @@ class LocationDetails extends Component<Props, State> {
 						{errorShowImage ?
 							<IconTelldus icon={'zwave'} style={locationIcon}/>
 							:
-							<CachedImage
-								resizeMode={'contain'}
-								useQueryParamsInCacheKey={true}
-								source={{uri: image}}
-								style={locationImage}
-								renderImage={this.renderImage}/>
+							fromJS ?
+								<Image
+									style={locationImage}
+									source={image}
+									resizeMode={resizeMode || 'contain'}
+									onError={this.onError}/>
+								:
+								<CachedImage
+									resizeMode={'contain'}
+									useQueryParamsInCacheKey={true}
+									source={{uri: image}}
+									style={locationImage}
+									renderImage={this.renderImage}/>
 						}
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
