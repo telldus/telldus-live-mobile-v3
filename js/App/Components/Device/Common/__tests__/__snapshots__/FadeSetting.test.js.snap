@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders FadeSetting when checked using Snapshots 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "center",
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      Array [
+        Object {
+          "color": "#8e8e93",
+          "fontSize": 26.250000000000004,
+          "marginTop": 20.83275,
+        },
+        undefined,
+      ]
+    }
+  />
+  <View
+    accessibilityLabel=" , , "
+    accessible={true}
+    clickable={true}
+    isTVSelectable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "borderBottomLeftRadius": 2,
+        "borderTopLeftRadius": 2,
+        "flexDirection": "row",
+        "justifyContent": "center",
+        "opacity": 1,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={false}
+      importantForAccessibility="yes"
+      style={
+        Array [
+          Object {
+            "color": "#999",
+            "fontSize": 30,
+          },
+          Object {
+            "backgroundColor": "#1b365d",
+            "borderColor": "#1b365d",
+            "borderRadius": 2,
+            "borderWidth": 1,
+            "color": "#fff",
+            "fontSize": 41,
+            "marginLeft": 20.83275,
+            "marginTop": 20.83275,
+            "overflow": "hidden",
+            "padding": 2,
+            "textAlign": "center",
+            "textAlignVertical": "center",
+          },
+          Object {
+            "fontFamily": "telldusicons",
+          },
+        ]
+      }
+    >
+      checkmark
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flexDirection": "row",
+      "justifyContent": "center",
+    }
+  }
+>
+  <Text
+    allowFontScaling={false}
+    style={
+      Array [
+        Object {
+          "color": "#8e8e93",
+          "fontSize": 26.250000000000004,
+          "marginTop": 20.83275,
+        },
+        undefined,
+      ]
+    }
+  />
+  <View
+    accessibilityLabel=" , , "
+    accessible={true}
+    clickable={true}
+    isTVSelectable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "borderBottomLeftRadius": 2,
+        "borderTopLeftRadius": 2,
+        "flexDirection": "row",
+        "justifyContent": "center",
+        "opacity": 1,
+        "overflow": "hidden",
+      }
+    }
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={false}
+      importantForAccessibility="yes"
+      style={
+        Array [
+          Object {
+            "color": "#999",
+            "fontSize": 30,
+          },
+          Object {
+            "backgroundColor": "#fff",
+            "borderColor": "#1b365d",
+            "borderRadius": 2,
+            "borderWidth": 1,
+            "color": "transparent",
+            "fontSize": 41,
+            "marginLeft": 20.83275,
+            "marginTop": 20.83275,
+            "overflow": "hidden",
+            "padding": 2,
+            "textAlign": "center",
+            "textAlignVertical": "center",
+          },
+          Object {
+            "fontFamily": "telldusicons",
+          },
+        ]
+      }
+    >
+      checkmark
+    </Text>
+  </View>
+</View>
+`;
