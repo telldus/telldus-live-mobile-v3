@@ -23,9 +23,8 @@
 
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import Base from './Base';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
 
@@ -36,47 +35,31 @@ type Props = {
     style?: Array<any> | Object | number,
     iconStyle?: Object,
     textStyle?: Array<any> | Object | number,
-    onToggleCheckBox: (boolean) => void,
+    onToggleCheckBox: () => void,
     isChecked: boolean,
     text?: string,
-	appLayout: Object,
 	intl: Object,
 };
 
-type DefaultProps = {
-    isChecked: boolean,
-};
+const CheckBoxIconText = (props: Props): Object => {
 
-class CheckBoxIconText extends Base {
-
-    onToggleCheckBox: () => void;
-
-static defaultProps: DefaultProps = {
-	isChecked: false,
-	checkBoxColor: '#fff',
-};
-constructor(props: Props) {
-	super(props);
-	this.onToggleCheckBox = this.onToggleCheckBox.bind(this);
-}
-
-onToggleCheckBox() {
-	const { onToggleCheckBox } = this.props;
-	if (onToggleCheckBox) {
-		onToggleCheckBox();
-	}
-}
-
-render(): Object {
 	const {
+		onToggleCheckBox,
 		style,
 		iconStyle,
 		textStyle,
 		text,
 		isChecked,
-		appLayout,
 		intl,
-	} = this.props;
+	} = props;
+
+	const { layout } = useSelector((state: Object): Object => state.app);
+
+	function onPress() {
+		if (onToggleCheckBox) {
+			onToggleCheckBox();
+		}
+	}
 
 	const {
 		checkIconStyleActive,
@@ -84,18 +67,18 @@ render(): Object {
 		textDefaultStyle,
 		checkIconCommon,
 		container,
-	} = this.getStyle(appLayout);
+	} = getStyle();
 
 	const checkIconStyle = isChecked ? checkIconStyleActive : checkIconStyleInactive;
 
 	const { formatMessage } = intl;
 	const labelOne = formatMessage(i18n.labelCheckbox);
 	const labelTwo = isChecked ? formatMessage(i18n.labelCheckboxChecked) : formatMessage(i18n.labelCheckboxUnchecked);
-	const accessibilityLabel = `${labelOne} ${text}, ${labelTwo}, ${formatMessage(i18n.labelHintChangeTimeZone)}`;
+	const accessibilityLabel = `${labelOne} ${text || ''}, ${labelTwo}, ${formatMessage(i18n.labelHintChangeTimeZone)}`;
 
 	return (
 		<TouchableOpacity
-			onPress={this.onToggleCheckBox}
+			onPress={onPress}
 			accessibilityLabel={accessibilityLabel}
 			style={[container, style]}>
 			<IconTelldus icon={'checkmark'} style={{ ...checkIconCommon, ...checkIconStyle, ...iconStyle }}/>
@@ -106,58 +89,57 @@ render(): Object {
 			)}
 		</TouchableOpacity>
 	);
-}
 
-getStyle(appLayout: Object): Object {
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
 
-	const fontSize = Math.floor(deviceWidth * 0.035);
-	const fontSizeIcon = Math.floor(deviceWidth * 0.038);
+	function getStyle(): Object {
+		const { height, width } = layout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
 
-	return {
-		container: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
-			borderTopLeftRadius: 2,
-			borderBottomLeftRadius: 2,
-			overflow: 'hidden',
-		},
-		textDefaultStyle: {
-			marginLeft: 5 + (fontSize * 0.4),
-			fontSize: fontSize,
-			color: '#fff',
-			fontFamily: Theme.Core.fonts.robotoLight,
-		},
-		checkIconCommon: {
-			borderWidth: 1,
-			fontSize: fontSizeIcon,
-			textAlign: 'center',
-			textAlignVertical: 'center',
-			padding: fontSizeIcon * 0.05,
-			borderRadius: 2,
-			overflow: 'hidden',
-		},
-		checkIconStyleActive: {
-			color: Theme.Core.brandSecondary,
-			backgroundColor: '#fff',
-			borderColor: Theme.Core.brandSecondary,
-		},
-		checkIconStyleInactive: {
-			color: 'transparent',
-			backgroundColor: 'transparent',
-			borderColor: '#fff',
-		},
-	};
-}
-}
+		const fontSize = Math.floor(deviceWidth * 0.035);
+		const fontSizeIcon = Math.floor(deviceWidth * 0.038);
 
-function mapStateToProps(store: Object): Object {
-	return {
-		appLayout: store.app.layout,
-	};
-}
+		return {
+			container: {
+				flexDirection: 'row',
+				alignItems: 'center',
+				justifyContent: 'center',
+				borderTopLeftRadius: 2,
+				borderBottomLeftRadius: 2,
+				overflow: 'hidden',
+			},
+			textDefaultStyle: {
+				marginLeft: 5 + (fontSize * 0.4),
+				fontSize: fontSize,
+				color: '#fff',
+				fontFamily: Theme.Core.fonts.robotoLight,
+			},
+			checkIconCommon: {
+				borderWidth: 1,
+				fontSize: fontSizeIcon,
+				textAlign: 'center',
+				textAlignVertical: 'center',
+				padding: fontSizeIcon * 0.05,
+				borderRadius: 2,
+				overflow: 'hidden',
+			},
+			checkIconStyleActive: {
+				color: Theme.Core.brandSecondary,
+				backgroundColor: '#fff',
+				borderColor: Theme.Core.brandSecondary,
+			},
+			checkIconStyleInactive: {
+				color: 'transparent',
+				backgroundColor: 'transparent',
+				borderColor: '#fff',
+			},
+		};
+	}
+};
 
-export default connect(mapStateToProps, null)(CheckBoxIconText);
+CheckBoxIconText.defaultProps = {
+	isChecked: false,
+	checkBoxColor: '#fff',
+};
+
+export default CheckBoxIconText;
