@@ -24,7 +24,10 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-const isEqual = require('react-fast-compare');
+import isEmpty from 'lodash/isEmpty';
+import { utils } from 'live-shared-data';
+
+const { images: {DEVICES} } = utils;
 
 import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
 
@@ -39,6 +42,13 @@ import { requestNodeInfo } from '../../../Actions/Websockets';
 import getDeviceType from '../../../Lib/getDeviceType';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import { getLastUpdated, getThermostatValue } from '../../../Lib/SensorUtils';
+import {
+	is433MHzTransport,
+	getDeviceVendorInfo433MHz,
+	shouldUpdate,
+	prepare433ModelName,
+} from '../../../Lib';
+
 import {
 	DeviceActionDetails,
 } from './SubViews';
@@ -55,6 +65,7 @@ type Props = {
 	lastUpdated?: number,
 	currentTemp?: string,
 	gatewayTimezone: string,
+	locale: string,
 
 	screenProps: Object,
 	dispatch: Function,
@@ -115,36 +126,19 @@ class OverviewTab extends View<Props, null> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const {
-			screenProps: screenPropsN,
-			gatewayName: gatewayNameN,
-			isGatewayActive: isGatewayActiveN,
-			device: deviceN,
-			lastUpdated: lastUpdatedN,
-			currentTemp: currentTempN,
+			screenProps,
 		} = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { currentScreen } = screenProps;
 		if (currentScreen === 'Overview') {
-
-			const { screenProps, gatewayName, isGatewayActive, device, lastUpdated, currentTemp } = this.props;
-			if ((screenProps.appLayout.width !== appLayout.width) ||
-			(gatewayName !== gatewayNameN) ||
-			(isGatewayActive !== isGatewayActiveN) ||
-			(lastUpdated !== lastUpdatedN) ||
-			(currentTemp !== currentTempN)) {
-				return true;
-			}
-
-			if (!isEqual(deviceN, device)) {
-				return true;
-			}
-
-			if (currentScreen !== screenProps.currentScreen) {
-				return true;
-			}
-
-			return false;
+			return shouldUpdate(this.props, nextProps, [
+				'screenProps',
+				'gatewayName',
+				'isGatewayActive',
+				'device',
+				'lastUpdated',
+				'currentTemp',
+			]);
 		}
-
 		return false;
 	}
 
@@ -155,6 +149,44 @@ class OverviewTab extends View<Props, null> {
 
 		const {supportedMethods = {}} = device;
 		return getDeviceType(supportedMethods);
+	}
+
+	getDeviceInfo = (device: Object): Object => {
+		const { protocol, model, transport, zwaveInfo = {} } = device;
+
+		if (is433MHzTransport(transport)) {
+			let info = getDeviceVendorInfo433MHz(protocol, model);
+			if (!info || isEmpty(info)) {
+				return {};
+			}
+			const {
+				deviceInfo: {
+					image,
+					lang,
+					modelName,
+				},
+				vendorInfo: {
+					name,
+				},
+			} = info;
+			return {
+				image: DEVICES[`d_${image.replace(/-/g, '_')}`],
+				H1: prepare433ModelName(this.props.locale, lang, modelName),
+				H2: name,
+				fromJS: true,
+			};
+		}
+		const {
+			Image,
+			Name,
+			Brand,
+		} = zwaveInfo;
+		return {
+			image: Image,
+			H1: Name,
+			H2: Brand,
+			fromJS: false,
+		};
 	}
 
 	render(): Object | null {
@@ -182,17 +214,8 @@ class OverviewTab extends View<Props, null> {
 			H2: gatewayType,
 		};
 
-		const { zwaveInfo = {} } = device;
-		const {
-			Image,
-			Name,
-			Brand,
-		} = zwaveInfo;
-		const locationDataZWave = {
-			image: Image,
-			H1: Name,
-			H2: Brand,
-		};
+		const deviceInfo = this.getDeviceInfo(device);
+
 		const styles = this.getStyles(appLayout);
 
 		return (
@@ -212,10 +235,14 @@ class OverviewTab extends View<Props, null> {
 					deviceSetStateThermostat={this.props.deviceSetStateThermostat}
 					currentTemp={currentTemp}
 					gatewayTimezone={gatewayTimezone}/>
-				{Name && <LocationDetails {...locationDataZWave} isStatic={false} style={styles.LocationDetail}/>}
-				<LocationDetails {...locationData} isStatic={true} style={[styles.LocationDetail, {
-					marginBottom: styles.padding * 2,
-				}]}/>
+				{(deviceInfo && deviceInfo.H1) && <LocationDetails
+					{...deviceInfo}
+					style={styles.LocationDetail}/>}
+				<LocationDetails {...locationData}
+					fromJS={false}
+					style={[styles.LocationDetail, {
+						marginBottom: styles.padding * 2,
+					}]}/>
 			</ScrollView>
 		);
 	}
@@ -270,6 +297,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		timezone: gatewayTimezone,
 	} = gateway ? gateway : {};
 
+	const { defaultSettings } = state.app;
+	const { language = {} } = defaultSettings || {};
+	const locale = language.code;
+
 	return {
 		device,
 		gatewayType,
@@ -278,6 +309,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		lastUpdated: getLastUpdated(state.sensors.byId, clientDeviceId, clientId),
 		currentTemp: getThermostatValue(state.sensors.byId, clientDeviceId, clientId),
 		gatewayTimezone,
+		locale,
 	};
 }
 
