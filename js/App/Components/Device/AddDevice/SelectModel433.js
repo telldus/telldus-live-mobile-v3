@@ -33,6 +33,10 @@ import { Row, ShortcutRow } from './SubViews';
 import { utils } from 'live-shared-data';
 const { addDevice433MHz: {getVendorDevices} } = utils;
 
+import {
+	prepare433ModelName,
+} from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -101,14 +105,7 @@ onChooseModel = (deviceInfo: Object) => {
 }
 
 prepareName = (lang: Array<Object> = [], modelNameDef: string): string => {
-	const { locale } = this.props;
-	let name = modelNameDef;
-	for (let i = 0; i < lang.length; i++) {
-		if (lang[i].lang === locale) {
-			name = lang[i].modelName;
-		}
-	}
-	return name;
+	return prepare433ModelName(this.props.locale, lang, modelNameDef);
 }
 
 renderRow(item: Object): Object {
