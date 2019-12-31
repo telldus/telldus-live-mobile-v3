@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders ShortcutRow using Snapshots 1`] = `
+<View
+  accessible={true}
+  clickable={true}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "opacity": 1,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#fff",
+        "borderColor": "#555555",
+        "borderRadius": 2,
+        "borderWidth": 0.5,
+        "justifyContent": "center",
+        "marginLeft": 10.416375,
+        "marginTop": 10.416375,
+        "width": 229,
+      }
+    }
+  >
+    <Image
+      resizeMode="contain"
+      style={
+        Object {
+          "height": 183.20000000000002,
+          "width": 229,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "height": 85.5,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        numberOfLines={2}
+        style={
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#555555",
+            "flexWrap": "wrap",
+            "fontSize": 28.5,
+            "margin": 10.416375,
+            "textAlign": "center",
+          }
+        }
+      />
+    </View>
+  </View>
+</View>
+`;
