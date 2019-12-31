@@ -22,13 +22,58 @@ import React from 'react';
 jest.mock('react-dom');
 import renderer from 'react-test-renderer';
 import { IntlProvider } from 'react-intl';
+import { Provider } from 'react-redux';
+
+import { configureStore } from '../App/Store/ConfigureStore';
+const store = configureStore();
 
 const messages = require('../App/Translations');
 
-const rendererWithIntl = (node) => {
-	return renderer.create(<IntlProvider locale="en" messages={messages}>{node}</IntlProvider>);
+const rendererWithIntlAndRedux = (node) => {
+	return renderer.create(
+		<Provider store={store}>
+			<IntlProvider locale="en" messages={messages}>
+				{node}
+			</IntlProvider>
+		</Provider>);
+};
+
+const DUMMY_DEVICE_433 = {
+	'id': '5928354',
+	'clientDeviceId': '630',
+	'name': '32e',
+	'state': 2,
+	'statevalue': null,
+	'stateValues': [],
+	'methods': 35,
+	'metadataHash': 'bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f',
+	'parametersHash': 'beeb00208f9b7bc435f8434a084f489323b0cc21',
+	'type': 'device',
+	'client': '422192',
+	'clientName': 'Three',
+	'online': '1',
+	'editable': 1,
+	'ignored': 0,
+	'transport': '433',
+	'protocol': 'arctech', // Do not change
+	'model': 'selflearning-switch:telldus-remote', // Do not change
+	'parameter': [
+		{
+			'name': 'devicetype',
+			'value': '0000000C-0001-1000-2005-ACCA54000000',
+		},
+		{
+			'name': 'house',
+			'value': 12,
+		},
+		{
+			'name': 'unit',
+			'value': 4,
+		},
+	],
 };
 
 export {
-	rendererWithIntl,
+	rendererWithIntlAndRedux,
+	DUMMY_DEVICE_433,
 };
