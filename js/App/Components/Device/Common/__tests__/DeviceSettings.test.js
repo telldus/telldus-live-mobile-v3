@@ -23,99 +23,106 @@ import React from 'react';
 import {
 	Dimensions,
 } from 'react-native';
-import * as redux from 'react-redux';
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import * as intl from 'react-intl';
+import { configureStore } from '../../../../Store/ConfigureStore';
+import {act} from 'react-test-renderer';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
-
-import { rendererWithIntl } from '../../../../../Utils/jestUtils';
+import {
+	rendererWithIntlAndRedux,
+	DUMMY_DEVICE_433,
+} from '../../../../../Utils/jestUtils';
 
 import DeviceSettings from '../DeviceSettings';
 import {
 	getDeviceSettings,
+	getDeviceVendorInfo433MHz,
 } from '../../../../Lib';
+import {
+	setAppLayout,
+	deviceInfoSuccess,
+	setWidgetParamHouse,
+	setWidgetParamUnit,
+} from '../../../../Actions';
 
 let {height, width} = Dimensions.get('window');
 
-const store = mockStore();
+const store = configureStore();
 
-const deviceId = 101, widgetId = 1;
+const {
+	id,
+	protocol,
+	model,
+} = DUMMY_DEVICE_433;
 
-const spy = jest.spyOn(redux, 'useSelector');
+let info = getDeviceVendorInfo433MHz(protocol, model);
+const {
+	widget,
+} = info.deviceInfo;
 
-const spyDispatch = jest.spyOn(redux, 'useDispatch');
-spyDispatch.mockReturnValue(store.dispatch);
+const deviceId = id, widgetId = widget;
 
-const spyUseIntl = jest.spyOn(intl, 'useIntl');
-spyUseIntl.mockImplementation(() => {
-	return {
-		formatMessage: jest.fn(() => ''),
-	};
-});
-
-const setting = getDeviceSettings(widgetId, () => '');
+const setting = getDeviceSettings(parseInt(widgetId, 10), () => '');
 
 describe('<DeviceSettings /> - snapshot', () => {
+	it('renders DeviceSettings, with initializeValueFromStore', () => {
+		let component;
+		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
 
-	it('renders DeviceSettings for widget 10, without initializeValueFromStore', () => {
-		spy.mockReturnValue(
-			{
-				layout: {
-					height,
-					width,
-				},
-				addDevice433: {
-					widgetParams433Device: {},
-				},
-			}
-		);
-
-		const component = rendererWithIntl(
-			<DeviceSettings
-				settings={setting}/>
-		);
-
-		const tree = component.toJSON();
-		expect(tree).toMatchSnapshot();
-	});
-
-	it('renders DeviceSettings for widget 10, with initializeValueFromStore', () => {
-
-		spy.mockReturnValue(
-			{
-				layout: {
-					height,
-					width,
-				},
-				addDevice433: {
-					widgetParams433Device: {},
-				},
-				parameter: [
-					{
-						name: 'house',
-						value: 12,
-					},
-					{
-						name: 'unit',
-						value: 4,
-					},
+			const devices = {
+				device: [
+					DUMMY_DEVICE_433,
 				],
-			}
-		);
+			};
+			store.dispatch({
+				type: 'RECEIVED_DEVICES',
+				payload: {
+					...devices,
+				},
+			});
+			store.dispatch(deviceInfoSuccess(DUMMY_DEVICE_433));
 
-		const component = rendererWithIntl(
-			<DeviceSettings
-				settings={setting}
-				deviceId={deviceId}
-				widgetId={widgetId}
-				initializeValueFromStore/>
-		);
+			component = rendererWithIntlAndRedux(
+				<DeviceSettings
+					settings={setting}
+					deviceId={deviceId}
+					widgetId={widgetId}
+					initializeValueFromStore/>
+			);
+		});
 
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
 	});
 });
 
+describe('<DeviceSettings /> - snapshot', () => {
+	it('renders DeviceSettings, without initializeValueFromStore', () => {
+		let component;
+		act(() => {
+			store.dispatch(setAppLayout({
+				height,
+				width,
+			}));
+
+			// NOTE: Setting initial value here to prevent random selection, random selection
+			// will make it impossible to use toMatchSnapshot.
+			// setWidgetParamHouse, setWidgetParamUnit, is done based on DUMMY_DEVICE_433's
+			// 'widget'(number). Do not update it.
+			// Incase if 'protocol' or 'model' of DUMMY_DEVICE_433 is changed
+			// use corresponding methods below.
+			store.dispatch(setWidgetParamHouse('13'));
+			store.dispatch(setWidgetParamUnit('5'));
+
+			component = rendererWithIntlAndRedux(
+				<DeviceSettings
+					settings={setting}/>
+			);
+		});
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+});
