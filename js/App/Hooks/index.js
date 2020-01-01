@@ -21,7 +21,9 @@
 'use strict';
 
 import * as AppHooks from './App';
+import * as DialogueboxHooks from './Dialoguebox';
 
 module.exports = {
 	...AppHooks,
+	...DialogueboxHooks,
 };
