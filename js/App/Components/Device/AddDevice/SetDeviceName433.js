@@ -43,6 +43,9 @@ import {
 import {
 	getDeviceSettings,
 } from '../../../Lib';
+import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
 
 import Theme from '../../../Theme';
 
@@ -55,9 +58,12 @@ const SetDeviceName433 = (props: Object): Object => {
 		intl,
 		appLayout,
 		navigation,
-		toggleDialogueBox,
 	} = props;
 	const { formatMessage } = intl;
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	const [name, setName] = useState('');
 	const [settings, setSettings] = useState(null);
@@ -82,7 +88,7 @@ const SetDeviceName433 = (props: Object): Object => {
 
 	function submitName() {
 		if (!name || !name.trim()) {
-			toggleDialogueBox({
+			toggleDialogueBoxState({
 				show: true,
 				showHeader: true,
 				imageHeader: true,
