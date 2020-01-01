@@ -26,7 +26,6 @@ import { Animated, Easing } from 'react-native';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 import { connect } from 'react-redux';
-import { clearData } from '../App/Actions/Modal';
 
 import Theme from '../App/Theme';
 
@@ -116,10 +115,6 @@ class Modal extends Component<Props, State> {
 			let entryAnimationType = this.handleAnimationEntryType(this.props.entry);
 			entryAnimationType(this.props.entryDuration);
 		}
-	}
-
-	componentWillUnmount() {
-		this.props.dispatch(clearData());
 	}
 
 	animationZoomIn(duration?: number) {
