@@ -40,6 +40,13 @@ const hideModal = (data?: any, extras?: any): Action => ({
 	},
 });
 
+const toggleDialogueBoxState = (data: any): Action => ({
+	type: 'TOGGLE_DIALOGUE_BOX_STATE',
+	payload: {
+		data,
+	},
+});
+
 const clearData = (): Action => ({
 	type: 'REQUEST_MODAL_CLEAR_DATA',
 });
@@ -48,4 +55,5 @@ module.exports = {
 	showModal,
 	hideModal,
 	clearData,
+	toggleDialogueBoxState,
 };

@@ -37,19 +37,23 @@ const initialState = {
 export default function reduceModal(state: State = initialState, action: Action): State {
 	switch (action.type) {
 		case 'REQUEST_MODAL_OPEN':
-			let extras = action.payload.extras ? action.payload.extras : false;
-			let data = action.payload.data ? action.payload.data : '';
+			let extras = action.payload.extras || {};
+			let data = action.payload.data || {};
 			return {
-				...state,
 				openModal: true,
-				data,
-				extras,
+				...data,
+				...extras,
 			};
 
 		case 'REQUEST_MODAL_CLOSE':
 			return {
 				...state,
 				openModal: false,
+			};
+
+		case 'TOGGLE_DIALOGUE_BOX_STATE':
+			return {
+				...action.payload.data,
 			};
 
 		case 'REQUEST_MODAL_CLEAR_DATA':
