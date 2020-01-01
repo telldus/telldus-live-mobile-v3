@@ -56,6 +56,7 @@ type Props = {
 	latitudeDelta?: number,
 	longitudeDelta?: number,
 	isSearchLoading?: boolean,
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
@@ -240,7 +241,15 @@ class GeoPosition extends View {
 				longitudeDelta,
 			});
 		} else {
-			this.props.actions.showModal(this.unknownError);
+			const dialogueData = {
+				show: true,
+				showHeader: true,
+				closeOnPressPositive: true,
+				dialogueContainerStyle: {elevation: 0},
+				showPositive: true,
+				text: this.unknownError,
+			};
+			this.props.toggleDialogueBox(dialogueData);
 		}
 		this.setState({
 			showList: false,
