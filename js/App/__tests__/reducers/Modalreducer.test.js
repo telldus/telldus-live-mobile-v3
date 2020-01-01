@@ -29,14 +29,18 @@ describe('Modal reducer', () => {
 			type: 'REQUEST_MODAL_OPEN',
 			openModal: true,
 			payload: {
-				data: 'ksr',
-				extras: false,
+				data: {
+					text: 'ksr',
+				},
+				extras: {
+					source: false,
+				},
 			},
 		};
 		const state = {
 			openModal: true,
-			data: 'ksr',
-			extras: false,
+			text: 'ksr',
+			source: false,
 		};
 		expect(reducer({}, action)).toEqual(state);
 	});
