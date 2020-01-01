@@ -40,6 +40,7 @@ import {
 	setAccessibilityInfo,
 	widgetAndroidConfigure,
 	networkConnection,
+	toggleDialogueBoxState,
 } from './App/Actions';
 import {
 	getTranslatableDayNames,
@@ -59,10 +60,10 @@ type Props = {
 	intl: Object,
 	locale: string,
 	deviceId?: string,
+	dialogueData: Object,
 };
 
 type State = {
-	dialogueData: Object,
 	keyboard: boolean,
 };
 
@@ -96,9 +97,6 @@ class App extends React.Component<Props, State> {
 		this.setCalendarLocale = this.setCalendarLocale.bind(this);
 
 		this.state = {
-			dialogueData: {
-				show: false,
-			},
 			keyboard: false,
 		};
 
@@ -196,30 +194,39 @@ class App extends React.Component<Props, State> {
 	}
 
 	toggleDialogueBox(dialogueData: Object) {
-		this.setState({
-			dialogueData,
-		});
+		const {
+			show,
+			...others
+		} = dialogueData;
+		if (show) {
+			this.props.dispatch(toggleDialogueBoxState({
+				...others,
+				openModal: true,
+			}));
+		} else {
+			this.props.dispatch(toggleDialogueBoxState({
+				...others,
+				openModal: false,
+			}));
+		}
 	}
 
 	closeDialogue(postClose?: () => void = (): void => undefined, timeout?: number = 0) {
-		const { dialogueData } = this.state;
-		this.setState({
-			dialogueData: {
-				...dialogueData,
-				show: false,
-			},
-		}, () => {
-			if (this.timeoutToCallCallback) {
-				clearTimeout(this.timeoutToCallCallback);
-			}
-			this.timeoutToCallCallback = setTimeout(() => {
-				postClose();
-			}, timeout);
-		});
+		const { dialogueData } = this.props;
+		this.props.dispatch(toggleDialogueBoxState({
+			...dialogueData,
+			openModal: false,
+		}));
+		if (this.timeoutToCallCallback) {
+			clearTimeout(this.timeoutToCallCallback);
+		}
+		this.timeoutToCallCallback = setTimeout(() => {
+			postClose();
+		}, timeout);
 	}
 
 	onPressDialoguePositive() {
-		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false, timeoutToCallPositive = 0 } = this.state.dialogueData;
+		const { onPressPositive = this.closeDialogue, closeOnPressPositive = false, timeoutToCallPositive = 0 } = this.props.dialogueData;
 		if (closeOnPressPositive) {
 			this.closeDialogue(onPressPositive, timeoutToCallPositive);
 		} else if (onPressPositive) {
@@ -228,7 +235,7 @@ class App extends React.Component<Props, State> {
 	}
 
 	onPressDialogueNegative() {
-		const { onPressNegative = this.closeDialogue, closeOnPressNegative = false, timeoutToCallNegative = 0 } = this.state.dialogueData;
+		const { onPressNegative = this.closeDialogue, closeOnPressNegative = false, timeoutToCallNegative = 0 } = this.props.dialogueData;
 		if (closeOnPressNegative) {
 			this.closeDialogue(onPressNegative, timeoutToCallNegative);
 		} else if (onPressNegative) {
@@ -237,7 +244,7 @@ class App extends React.Component<Props, State> {
 	}
 
 	onPressHeader() {
-		const { onPressHeader, closeOnPressHeader = false } = this.state.dialogueData;
+		const { onPressHeader, closeOnPressHeader = false } = this.props.dialogueData;
 		if (closeOnPressHeader) {
 			this.closeDialogue(onPressHeader, 0);
 		} else if (onPressHeader) {
@@ -246,18 +253,24 @@ class App extends React.Component<Props, State> {
 	}
 
 	render(): Object {
-		let { prevChangeLogVersion, accessToken, isTokenValid, forceShowChangeLog } = this.props;
+		let {
+			prevChangeLogVersion,
+			accessToken,
+			isTokenValid,
+			forceShowChangeLog,
+			dialogueData,
+		} = this.props;
 
 		let showChangeLog = (changeLogVersion !== prevChangeLogVersion) || forceShowChangeLog;
 
 		let hasNotLoggedIn = ((!accessToken) || (accessToken && !isTokenValid));
 
 		let {
-			show = false,
+			openModal = false,
 			showHeader = false,
 			imageHeader = false,
 			...others
-		} = this.state.dialogueData;
+		} = dialogueData;
 
 		return (
 			<SafeAreaView onLayout={this.onLayout} backgroundColor={Theme.Core.appBackground}>
@@ -273,7 +286,7 @@ class App extends React.Component<Props, State> {
 					onLayout={this.onLayout}/>
 				<DialogueBox
 					{...others}
-					showDialogue={show}
+					showDialogue={openModal}
 					showHeader={showHeader}
 					imageHeader={imageHeader}
 					onPressNegative={this.onPressDialogueNegative}
@@ -306,6 +319,7 @@ function mapStateToProps(store: Object): Object {
 		prevChangeLogVersion,
 		forceShowChangeLog,
 		deviceId,
+		dialogueData: store.modal,
 	};
 }
 
