@@ -51,6 +51,12 @@ type DialogueData = {
 	posTextColor?: string,
 };
 
+/**
+ *
+ * Use this hook to control root 'DialogueBox' from components(functional) which does not have
+ * access to 'screenProps.toggleDialogueBox'.
+ *
+ */
 const useDialogueBox = (): Object => {
 	const dispatch = useDispatch();
 	return {
