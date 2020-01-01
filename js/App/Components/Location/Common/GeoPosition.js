@@ -90,7 +90,6 @@ class GeoPosition extends View {
 	_refs: (Object | any) => any;
 	onSubmit: () => void;
 	onDragEnd: (Object) => void;
-	onInfoPress: () => void;
 
 	keyboardDidShow: () => void;
 	keyboardDidHide: () => void;
@@ -168,10 +167,6 @@ class GeoPosition extends View {
 	componentWillUnmount() {
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
-	}
-
-	onInfoPress() {
-		this.props.actions.showModal(null, {source: 'Position'});
 	}
 
 	onAddressChange(address: string) {
