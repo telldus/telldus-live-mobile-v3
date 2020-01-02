@@ -191,7 +191,7 @@ onNext = async () => {
 }
 
 render(): Object {
-	const { intl, appLayout, navigation, addDevice } = this.props;
+	const { intl, appLayout, navigation, addDevice = {} } = this.props;
 	const { isLoading: isLoadingINS } = this.state;
 
 	const { addDevice433 = {}} = addDevice;
