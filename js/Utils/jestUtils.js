@@ -23,9 +23,17 @@ jest.mock('react-dom');
 import renderer from 'react-test-renderer';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
+import {
+	Dimensions,
+} from 'react-native';
 
 import { configureStore } from '../App/Store/ConfigureStore';
 const store = configureStore();
+import {
+	setAppLayout,
+} from '../App/Actions';
+
+let {height, width} = Dimensions.get('window');
 
 const messages = require('../App/Translations');
 
@@ -73,7 +81,51 @@ const DUMMY_DEVICE_433 = {
 	],
 };
 
+const DEVICE_MANU_INFO_433 = {
+	'model': 'selflearning-switch:telldus-remote',
+	'protocol': 'arctech',
+	'widget': '8',
+	'image': 'proove_remote',
+	'configuration': 'false',
+	'postConfig': 'proove-sending-remote',
+	'scannable': 'true',
+	'type': 'tx',
+	'devicetype': '0000000c-0001-1000-2005-acca54000000',
+	'lang': [
+		{
+			'lang': 'en',
+			'modelName': 'Remote Control',
+		},
+		{
+			'lang': 'sv',
+			'modelName': 'Fjärrkontroll',
+		},
+	],
+	'modelName': 'Remote Control',
+};
+
+const setAppLayoutInStore = () => {
+	store.dispatch(setAppLayout({
+		height,
+		width,
+	}));
+};
+
+
+const NAVIGATION_PROP = {
+	getParam: (paramName, defaultValue) => {
+		return NAVIGATION_PROP.state.params[paramName] || defaultValue;
+	},
+	state: {
+		params: {
+		},
+	},
+};
+
 export {
 	rendererWithIntlAndRedux,
 	DUMMY_DEVICE_433,
+	setAppLayoutInStore,
+	NAVIGATION_PROP,
+	DEVICE_MANU_INFO_433,
 };
