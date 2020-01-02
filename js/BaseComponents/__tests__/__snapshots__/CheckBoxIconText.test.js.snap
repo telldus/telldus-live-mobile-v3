@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders CheckBoxIconText when checked 1`] = `
+<View
+  accessibilityLabel=" CheckBoxIconText, , "
+  accessible={true}
+  clickable={true}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomLeftRadius": 2,
+      "borderTopLeftRadius": 2,
+      "flexDirection": "row",
+      "justifyContent": "center",
+      "opacity": 1,
+      "overflow": "hidden",
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={false}
+    importantForAccessibility="yes"
+    style={
+      Array [
+        Object {
+          "color": "#999",
+          "fontSize": 30,
+        },
+        Object {
+          "backgroundColor": "#fff",
+          "borderColor": "#e26901",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "#e26901",
+          "fontSize": 28,
+          "overflow": "hidden",
+          "padding": 1.4000000000000001,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        },
+        Object {
+          "fontFamily": "telldusicons",
+        },
+      ]
+    }
+  >
+    checkmark
+  </Text>
+  <Text
+    allowFontScaling={false}
+    style={
+      Array [
+        Object {
+          "color": "#fff",
+          "fontFamily": "Roboto-Light",
+          "fontSize": 26,
+          "marginLeft": 15.4,
+        },
+        undefined,
+      ]
+    }
+  >
+    CheckBoxIconText
+  </Text>
+</View>
+`;
+
+exports[`renders CheckBoxIconText when unchecked 1`] = `
+<View
+  accessibilityLabel=" CheckBoxIconText, , "
+  accessible={true}
+  clickable={true}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "alignItems": "center",
+      "borderBottomLeftRadius": 2,
+      "borderTopLeftRadius": 2,
+      "flexDirection": "row",
+      "justifyContent": "center",
+      "opacity": 1,
+      "overflow": "hidden",
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={false}
+    importantForAccessibility="yes"
+    style={
+      Array [
+        Object {
+          "color": "#999",
+          "fontSize": 30,
+        },
+        Object {
+          "backgroundColor": "transparent",
+          "borderColor": "#fff",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "transparent",
+          "fontSize": 28,
+          "overflow": "hidden",
+          "padding": 1.4000000000000001,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        },
+        Object {
+          "fontFamily": "telldusicons",
+        },
+      ]
+    }
+  >
+    checkmark
+  </Text>
+  <Text
+    allowFontScaling={false}
+    style={
+      Array [
+        Object {
+          "color": "#fff",
+          "fontFamily": "Roboto-Light",
+          "fontSize": 26,
+          "marginLeft": 15.4,
+        },
+        undefined,
+      ]
+    }
+  >
+    CheckBoxIconText
+  </Text>
+</View>
+`;

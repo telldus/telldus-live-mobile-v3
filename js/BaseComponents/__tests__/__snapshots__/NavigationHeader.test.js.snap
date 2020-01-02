@@ -1,0 +1,235 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftIcon is false 1`] = `
+<View
+  style={
+    Object {
+      "flex": 0,
+    }
+  }
+>
+  <View
+    appLayout={
+      Object {
+        "height": 1334,
+        "width": 750,
+      }
+    }
+    forceHideStatus={false}
+    leftButton={
+      Object {
+        "accessibilityLabel": "navigational back button .Double tap to activate",
+        "component": <Icon
+          allowFontScaling={false}
+          color="#fff"
+          name="angle-left"
+          size={45}
+          style={
+            Object {
+              "paddingVertical": 10,
+            }
+          }
+        />,
+        "onPress": [Function],
+      }
+    }
+    showAttentionCapture={false}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1b365d",
+        "flexDirection": "row",
+        "height": 148.2074,
+        "justifyContent": "center",
+        "paddingHorizontal": 15,
+        "paddingTop": 15,
+        "position": "relative",
+      }
+    }
+  >
+    <View
+      accessibilityLabel="navigational back button .Double tap to activate"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "flex-start",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "justifyContent": "center",
+          "left": 0,
+          "opacity": 1,
+          "paddingHorizontal": 15,
+          "paddingTop": 15,
+          "position": "absolute",
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "color": "#fff",
+              "fontSize": 45,
+            },
+            Object {
+              "paddingVertical": 10,
+            },
+            Object {
+              "fontFamily": "FontAwesome",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+    <Image
+      source={
+        Object {
+          "uri": "telldus_logo",
+        }
+      }
+      style={
+        Array [
+          Object {
+            "height": 35.00000025,
+            "resizeMode": "contain",
+            "width": 230.49999975,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
+</View>
+`;
+
+exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftIcon is true 1`] = `
+<View
+  style={
+    Object {
+      "flex": 0,
+    }
+  }
+>
+  <View
+    appLayout={
+      Object {
+        "height": 1334,
+        "width": 750,
+      }
+    }
+    forceHideStatus={false}
+    leftButton={
+      Object {
+        "accessibilityLabel": "navigational back button .Double tap to activate",
+        "component": <Icon
+          allowFontScaling={false}
+          color="#fff"
+          name="angle-left"
+          size={45}
+          style={
+            Object {
+              "paddingVertical": 10,
+            }
+          }
+        />,
+        "onPress": [Function],
+      }
+    }
+    showAttentionCapture={false}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1b365d",
+        "flexDirection": "row",
+        "height": 148.2074,
+        "justifyContent": "center",
+        "paddingHorizontal": 15,
+        "paddingTop": 15,
+        "position": "relative",
+      }
+    }
+  >
+    <View
+      accessibilityLabel="navigational back button .Double tap to activate"
+      accessible={true}
+      clickable={true}
+      isTVSelectable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignItems": "flex-start",
+          "backgroundColor": "transparent",
+          "flex": 1,
+          "justifyContent": "center",
+          "left": 0,
+          "opacity": 1,
+          "paddingHorizontal": 15,
+          "paddingTop": 15,
+          "position": "absolute",
+        }
+      }
+    >
+      <Text
+        allowFontScaling={false}
+        style={
+          Array [
+            Object {
+              "color": "#fff",
+              "fontSize": 45,
+            },
+            Object {
+              "paddingVertical": 10,
+            },
+            Object {
+              "fontFamily": "FontAwesome",
+              "fontStyle": "normal",
+              "fontWeight": "normal",
+            },
+            Object {},
+          ]
+        }
+      >
+        
+      </Text>
+    </View>
+    <Image
+      source={
+        Object {
+          "uri": "telldus_logo",
+        }
+      }
+      style={
+        Array [
+          Object {
+            "height": 35.00000025,
+            "resizeMode": "contain",
+            "width": 230.49999975,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
+</View>
+`;

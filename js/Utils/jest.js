@@ -45,6 +45,7 @@ jest.mock('@react-native-community/google-signin', () => {
 jest.mock('react-native-device-info', () => {
 	return {
 		getSystemVersion: jest.fn(),
+		isTablet: jest.fn(),
 	};
 });
 

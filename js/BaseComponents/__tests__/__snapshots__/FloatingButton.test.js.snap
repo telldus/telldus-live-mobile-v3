@@ -1,0 +1,265 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled 1`] = `
+<View
+  accessibilityLabel="next button. Double tap to activate"
+  accessible={true}
+  clickable={false}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#cccccc",
+      "borderRadius": 40,
+      "bottom": 35.00000025,
+      "elevation": 5,
+      "height": 80,
+      "opacity": 1,
+      "position": "absolute",
+      "right": 26.00000025,
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.35,
+      "shadowRadius": 2,
+      "width": 80,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  />
+</View>
+`;
+
+exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and loading 1`] = `
+<View
+  accessibilityLabel="next button. Double tap to activate"
+  accessible={true}
+  clickable={false}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#cccccc",
+      "borderRadius": 40,
+      "bottom": 35.00000025,
+      "elevation": 5,
+      "height": 80,
+      "opacity": 1,
+      "position": "absolute",
+      "right": 26.00000025,
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.35,
+      "shadowRadius": 2,
+      "width": 80,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "position": "absolute",
+          },
+          undefined,
+        ]
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "color": "#999",
+              "fontSize": 30,
+            },
+            Object {
+              "color": "#ffffff",
+              "fontSize": 25,
+              "transform": Array [
+                Object {
+                  "rotate": "0deg",
+                },
+              ],
+            },
+            Object {
+              "fontFamily": "telldusicons",
+            },
+          ]
+        }
+      >
+        loading
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled 1`] = `
+<View
+  accessibilityLabel="next button. Double tap to activate"
+  accessible={true}
+  clickable={false}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#e26901",
+      "borderRadius": 40,
+      "bottom": 35.00000025,
+      "elevation": 5,
+      "height": 80,
+      "opacity": 1,
+      "position": "absolute",
+      "right": 26.00000025,
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.35,
+      "shadowRadius": 2,
+      "width": 80,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  />
+</View>
+`;
+
+exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and loading 1`] = `
+<View
+  accessibilityLabel="next button. Double tap to activate"
+  accessible={true}
+  clickable={false}
+  isTVSelectable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#e26901",
+      "borderRadius": 40,
+      "bottom": 35.00000025,
+      "elevation": 5,
+      "height": 80,
+      "opacity": 1,
+      "position": "absolute",
+      "right": 26.00000025,
+      "shadowColor": "#000",
+      "shadowOffset": Object {
+        "height": 2,
+        "width": 0,
+      },
+      "shadowOpacity": 0.35,
+      "shadowRadius": 2,
+      "width": 80,
+    }
+  }
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          Object {
+            "alignItems": "center",
+            "position": "absolute",
+          },
+          undefined,
+        ]
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={false}
+        importantForAccessibility="yes"
+        style={
+          Array [
+            Object {
+              "color": "#999",
+              "fontSize": 30,
+            },
+            Object {
+              "color": "#ffffff",
+              "fontSize": 25,
+              "transform": Array [
+                Object {
+                  "rotate": "0deg",
+                },
+              ],
+            },
+            Object {
+              "fontFamily": "telldusicons",
+            },
+          ]
+        }
+      >
+        loading
+      </Text>
+    </View>
+  </View>
+</View>
+`;
