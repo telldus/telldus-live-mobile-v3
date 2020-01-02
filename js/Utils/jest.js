@@ -65,6 +65,14 @@ jest.mock('react-native-sensitive-info', () => {
 	};
 });
 
+jest.mock('reconnecting-websocket', () => {
+	class MockSocket {
+		constructor(arg1, arg2, arg3) {
+		}
+	}
+	return MockSocket;
+});
+
 global.window.addEventListener = () => null;
 
 NativeModules.AndroidWidget = {
