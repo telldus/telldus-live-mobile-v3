@@ -28,6 +28,10 @@ import {
 	NAVIGATION_PROP,
 	DUMMY_DEVICE_433,
 	DEVICE_MANU_INFO_433,
+	DUMMY_CLIENT,
+	setDeviceListInStore,
+	setGatewaysListInStore,
+	setDeviceInfoInStore,
 } from '../../../../../Utils/jestUtils';
 import Include433 from '../Include433';
 
@@ -75,10 +79,22 @@ describe('<Include433 />', () => {
 
 	beforeAll(() => {
 		setAppLayoutInStore();
+		setDeviceListInStore();
+		setGatewaysListInStore();
+		setDeviceInfoInStore();
+		store.dispatch({
+			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+			gatewayId: DUMMY_CLIENT.id,
+			payload: {
+				address: 123,
+				instance: 123,
+				port: 123,
+			},
+		});
 	});
 
-	it('Should initiateAdd433MHz', () => {
-		// eslint-disable-next-line no-unused-vars
+	it('Should initiateAdd433MHz and show activity indicator', () => {
+
 		let component;
 		act(() => {
 			component = rendererWithIntlAndRedux(
@@ -90,7 +106,7 @@ describe('<Include433 />', () => {
 					actions={actions}/>
 			);
 		});
-		expect(actions.initiateAdd433MHz).toBeCalledTimes(1);
+
 		const args = [
 			DUMMY_DEVICE_433.client,
 			{
@@ -99,6 +115,14 @@ describe('<Include433 />', () => {
 			},
 			intl.formatMessage,
 		];
+
+		const root = component.root;
+		const childInclude433 = root.findByType(Include433);
+		const childInclude433Instance = childInclude433.instance;
+
+		expect(childInclude433Instance.deleteSocketAndTimer).toBeInstanceOf(Function);
+
+		expect(actions.initiateAdd433MHz).toBeCalledTimes(1);
 		expect(actions.initiateAdd433MHz).toBeCalledWith(...args);
 	});
 });
