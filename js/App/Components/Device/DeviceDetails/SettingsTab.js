@@ -402,7 +402,6 @@ class SettingsTab extends View {
 		});
 	}
 
-	// TODO: See if possible to replace with 'sendSocketMessage' received from "registerForWebSocketEvents".
 	sendSocketMessage(clientId: number, action: string, clientDeviceId: number) {
 		const { sendSocketMessage: SSM } = this.props;
 		SSM(clientId, 'client', 'forward', {
