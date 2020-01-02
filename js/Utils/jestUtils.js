@@ -31,6 +31,7 @@ import { configureStore } from '../App/Store/ConfigureStore';
 const store = configureStore();
 import {
 	setAppLayout,
+	deviceInfoSuccess,
 } from '../App/Actions';
 
 let {height, width} = Dimensions.get('window');
@@ -104,13 +105,31 @@ const DEVICE_MANU_INFO_433 = {
 	'modelName': 'Remote Control',
 };
 
+const DUMMY_CLIENT = {
+	'id': '422192',
+	'uuid': '88669026-4417-4a34-9a0b-666355a763ee',
+	'name': 'Three',
+	'online': '1',
+	'editable': 1,
+	'extensions': 3,
+	'version': '1.2.0',
+	'type': 'TellStick ZNet Lite v2',
+	'ip': '43.229.90.244',
+	'longitude': 13.19321,
+	'latitude': 55.70584,
+	'sunrise': 1578036960,
+	'sunset': 1578062820,
+	'timezone': 'Asia\/Kolkata',
+	'tzoffset': 19800,
+	'transports': 'zwave,433,group',
+};
+
 const setAppLayoutInStore = () => {
 	store.dispatch(setAppLayout({
 		height,
 		width,
 	}));
 };
-
 
 const NAVIGATION_PROP = {
 	getParam: (paramName, defaultValue) => {
@@ -122,10 +141,46 @@ const NAVIGATION_PROP = {
 	},
 };
 
+const setDeviceListInStore = () => {
+	const devices = {
+		device: [
+			DUMMY_DEVICE_433,
+		],
+	};
+	store.dispatch({
+		type: 'RECEIVED_DEVICES',
+		payload: {
+			...devices,
+		},
+	});
+};
+
+const setGatewaysListInStore = () => {
+	const clients = {
+		client: [
+			DUMMY_CLIENT,
+		],
+	};
+	store.dispatch({
+		type: 'RECEIVED_GATEWAYS',
+		payload: {
+			...clients,
+		},
+	});
+};
+
+const setDeviceInfoInStore = () => {
+	deviceInfoSuccess(DUMMY_DEVICE_433);
+};
+
 export {
 	rendererWithIntlAndRedux,
 	DUMMY_DEVICE_433,
 	setAppLayoutInStore,
 	NAVIGATION_PROP,
 	DEVICE_MANU_INFO_433,
+	DUMMY_CLIENT,
+	setDeviceListInStore,
+	setGatewaysListInStore,
+	setDeviceInfoInStore,
 };
