@@ -53,7 +53,6 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	addDevice: Object,
-	sessionId: string,
 	showLeftIcon: boolean,
 
 	onDidMount: (string, string, ?Object) => void,
