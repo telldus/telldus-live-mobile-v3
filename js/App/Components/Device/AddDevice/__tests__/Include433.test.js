@@ -124,5 +124,8 @@ describe('<Include433 />', () => {
 
 		expect(actions.initiateAdd433MHz).toBeCalledTimes(1);
 		expect(actions.initiateAdd433MHz).toBeCalledWith(...args);
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
 	});
 });
