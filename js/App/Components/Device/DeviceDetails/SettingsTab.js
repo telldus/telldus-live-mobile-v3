@@ -49,6 +49,8 @@ import {
 	sendSocketMessage,
 	registerForWebSocketEvents,
 	removeDevice,
+	setDeviceParameter,
+	getDeviceInfoCommon,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -56,6 +58,8 @@ import {
 	is433MHzTransport,
 	getDeviceVendorInfo433MHz,
 	getDeviceSettings,
+	prepare433DeviceParamsToStore,
+	prepareDeviceParameters,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -66,6 +70,7 @@ type Props = {
 	isGatewayReachable: boolean,
 	device: Object,
 	inDashboard: boolean,
+	addDevice433: Object,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -84,6 +89,7 @@ type State = {
 	isDeleting433MHz: boolean,
 	settings433MHz: Object | null,
 	widget433MHz: string | null,
+	isSaving433MhzParams: boolean,
 };
 
 
@@ -138,6 +144,7 @@ class SettingsTab extends View {
 			isDeleting433MHz: false,
 			settings433MHz,
 			widget433MHz,
+			isSaving433MhzParams: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -174,7 +181,7 @@ class SettingsTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['device', 'isGatewayReachable']);
+			const propsChange = shouldUpdate(others, othersN, ['device', 'isGatewayReachable', 'addDevice433']);
 			if (propsChange) {
 				return true;
 			}
@@ -451,6 +458,109 @@ class SettingsTab extends View {
 		return dispatch(registerForWebSocketEvents(device.clientId, callbacks));
 	}
 
+	onPressSaveParams433MHz = () => {
+		const {
+			addDevice433,
+			device,
+			dispatch,
+		} = this.props;
+		const {
+			widget433MHz,
+		} = this.state;
+
+		const {
+			parameter,
+			id,
+		} = device;
+
+		const { widgetParams433Device = {} } = addDevice433;
+		const parameters = prepareDeviceParameters(parseInt(widget433MHz, 10), widgetParams433Device);
+		if (!parameters) {
+			return;
+		}
+
+		const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
+		if (!settings) {
+			return;
+		}
+
+		let availableSettings = {};
+		Object.keys(settings).map((s: string) => {
+			if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
+				availableSettings[s] = settings[s];
+			}
+		});
+
+		let promises = [];
+		Object.keys(parameters).map((p: string) => {
+			if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
+				promises.push(
+					dispatch(setDeviceParameter(id, p, parameters[p]))
+				);
+			}
+		});
+
+		this.setState({
+			isSaving433MhzParams: true,
+		});
+
+		Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+			return promise.then((res: any): any => res).catch((err: any): any => err);
+		})).then(() => {
+			this.postSaveParams433MHz(id, true);
+		}).catch(() => {
+			// TODO: Show message on error saving new params!
+			this.postSaveParams433MHz(id, false);
+		});
+	}
+
+	postSaveParams433MHz = (deviceId: string, success: boolean = true) => {
+		this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
+			this.setState({
+				isSaving433MhzParams: false,
+			});
+		}).catch(() => {
+			this.setState({
+				isSaving433MhzParams: false,
+			});
+		});
+	}
+
+	hasSettingsChanged = (widget433MHz: Object): boolean => {
+		if (!widget433MHz) {
+			return false;
+		}
+		const {
+			addDevice433,
+			device,
+		} = this.props;
+		const {
+			parameter,
+		} = device;
+
+		const { widgetParams433Device = {} } = addDevice433;
+		const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
+		if (!settings) {
+			return false;
+		}
+
+		let availableSettings = {};
+		Object.keys(settings).map((s: string) => {
+			if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
+				availableSettings[s] = settings[s];
+			}
+		});
+
+		let hasChanged = false;
+		for (let s in availableSettings) {
+			hasChanged = !isEqual(availableSettings[s], widgetParams433Device[s]);
+			if (hasChanged) {
+				break;
+			}
+		}
+		return hasChanged;
+	}
+
 	render(): Object | null {
 		const {
 			isHidden,
@@ -460,11 +570,18 @@ class SettingsTab extends View {
 			isDeleting433MHz,
 			settings433MHz,
 			widget433MHz,
+			isSaving433MhzParams,
 		} = this.state;
 		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
-		const { supportedMethods = {}, id, clientId, transport, nodeInfo = {} } = device;
+		const {
+			supportedMethods = {},
+			id,
+			clientId,
+			transport,
+			nodeInfo = {},
+		} = device;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -490,6 +607,8 @@ class SettingsTab extends View {
 		const isZWave = transport === 'zwave';
 		const is433MHz = is433MHzTransport(transport);
 		const { isFailed = false } = nodeInfo;
+
+		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
 
 		return (
 			<ScrollView style={{
@@ -530,13 +649,27 @@ class SettingsTab extends View {
 									appLayout={appLayout}
 									intl={intl}
 								/>
-								{!!settings433MHz && <DeviceSettings
-									coverStyle={coverStyleDeviceSettings433}
-									labelStyle={labelStyleDeviceSettings433}
-									deviceId={id}
-									initializeValueFromStore={true}
-									settings={settings433MHz}
-									widgetId={widget433MHz}/>}
+								{!!settings433MHz &&
+								<>
+									<DeviceSettings
+										coverStyle={coverStyleDeviceSettings433}
+										labelStyle={labelStyleDeviceSettings433}
+										deviceId={id}
+										initializeValueFromStore={true}
+										settings={settings433MHz}
+										widgetId={widget433MHz}/>
+										{settingsHasChanged &&
+										<TouchableButton
+											text={i18n.saveLabel}
+											onPress={isSaving433MhzParams ? null : this.onPressSaveParams433MHz}
+											disabled={isSaving433MhzParams}
+											style={[touchableButtonCommon, {
+												backgroundColor: isSaving433MhzParams ? btnDisabledBg : brandDanger,
+											}]}
+											showThrobber={isSaving433MhzParams}/>
+										}
+								</>
+								}
 								{learnButton}
 								{isZWave && (
 									<>
@@ -653,10 +786,13 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { clientId } = device;
 	const { online = false, websocketOnline = false } = state.gateways.byId[clientId] || {};
 
+	const { addDevice433 = {}} = state.addDevice;
+
 	return {
 		device: device ? device : {},
 		inDashboard: !!state.dashboard.devicesById[id],
 		isGatewayReachable: online && websocketOnline,
+		addDevice433,
 	};
 }
 
