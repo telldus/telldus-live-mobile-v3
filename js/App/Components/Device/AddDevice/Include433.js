@@ -49,6 +49,7 @@ import {
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
+import isEmpty from 'lodash/isEmpty';
 
 type Props = {
 	appLayout: Object,
@@ -250,7 +251,7 @@ render(): Object {
 			key={i}
 			number={`${i + 1}.`}
 			text={text}
-			img={(i === imageIndex && image) ? image : undefined}
+			img={((i === imageIndex) && image && !isEmpty(image)) ? image : undefined}
 			rightBlockIItemOne={
 				i === learnButtonIndex ?
 					<LearnButton
