@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  *
+ *
  */
 
 
@@ -32,15 +33,16 @@ import {
 	setDeviceListInStore,
 	setGatewaysListInStore,
 	setDeviceInfoInStore,
+	getStore,
 } from '../../../../../Utils/jestUtils';
 import Include433 from '../Include433';
+import AddDeviceContainer from '../AddDeviceContainer';
 
-import { configureStore } from '../../../../Store/ConfigureStore';
 import {
 	initiateAdd433MHz,
 } from '../../../../Actions';
 
-const store = configureStore();
+const store = getStore();
 
 const intl = {
 	formatMessage: jest.fn(),
@@ -68,16 +70,25 @@ const navigation = {
 		},
 	},
 };
+const currentScreen = 'Include433';
 
-const actions = {
+let actions = {
 	initiateAdd433MHz: jest.fn((id, deviceInfo, formatMessage) => {
-		return store.dispatch(initiateAdd433MHz(id, deviceInfo, formatMessage));
+		return Promise.resolve(() => {});
 	}),
 };
 
 describe('<Include433 />', () => {
 
 	beforeAll(() => {
+		actions.initiateAdd433MHz.mockReset();
+		actions = {
+			...actions,
+			initiateAdd433MHz: jest.fn((id, deviceInfo, formatMessage) => {
+				return store.dispatch(initiateAdd433MHz(id, deviceInfo, formatMessage));
+			}),
+		};
+
 		setAppLayoutInStore();
 		setDeviceListInStore();
 		setGatewaysListInStore();
@@ -124,6 +135,55 @@ describe('<Include433 />', () => {
 
 		expect(actions.initiateAdd433MHz).toBeCalledTimes(1);
 		expect(actions.initiateAdd433MHz).toBeCalledWith(...args);
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
+	});
+});
+
+describe('<Include433 /> with container component', () => {
+
+	beforeAll(() => {
+		setAppLayoutInStore();
+		setDeviceListInStore();
+		setGatewaysListInStore();
+		setDeviceInfoInStore();
+		store.dispatch({
+			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+			gatewayId: DUMMY_CLIENT.id,
+			payload: {
+				address: 123,
+				instance: 123,
+				port: 123,
+			},
+		});
+	});
+
+	it('Should initiateAdd433MHz and show activity indicator with container', () => {
+
+		let component;
+		act(() => {
+			const screenProps = {
+				appLayout,
+				currentScreen,
+				intl,
+			};
+			component = rendererWithIntlAndRedux(
+				<AddDeviceContainer
+					screenProps={screenProps}
+					navigation={navigation}
+					children={
+						<Include433/>
+					}
+				/>
+			);
+		});
+
+		const root = component.root;
+		const childInclude433 = root.findByType(Include433);
+		const childInclude433Instance = childInclude433.instance;
+
+		expect(childInclude433Instance.deleteSocketAndTimer).toBeInstanceOf(Function);
 
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
