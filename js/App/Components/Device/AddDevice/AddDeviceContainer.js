@@ -70,7 +70,7 @@ type State = {
 	forceLeftIconVisibilty: boolean,
 };
 
-class AddDeviceContainer extends View<Props, State> {
+export class AddDeviceContainer extends View<Props, State> {
 
 	handleBackPress: () => boolean;
 	_keyboardDidShow: () => void;
@@ -264,7 +264,7 @@ class AddDeviceContainer extends View<Props, State> {
 	}
 }
 
-const mapStateToProps = (store: Object): Object => {
+export const mapStateToProps = (store: Object): Object => {
 	const { defaultSettings } = store.app;
 	const { language = {} } = defaultSettings || {};
 	const locale = language.code;
@@ -278,7 +278,7 @@ const mapStateToProps = (store: Object): Object => {
 	};
 };
 
-const mapDispatchToProps = (dispatch: Function): Object => (
+export const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
 			...bindActionCreators({
