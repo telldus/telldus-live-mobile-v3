@@ -130,7 +130,8 @@
   "jest": {
     "preset": "react-native",
     "moduleNameMapper": {
-      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2|svg)$": "identity-obj-proxy"
+      "\\.(svg)$": "<rootDir>/js/Utils/__mocks__/svgMock.js",
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
     },
     "setupFiles": [
       "<rootDir>/js/Utils/jest.js"
