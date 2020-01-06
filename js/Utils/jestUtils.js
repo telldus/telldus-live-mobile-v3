@@ -173,6 +173,10 @@ const setDeviceInfoInStore = () => {
 	deviceInfoSuccess(DUMMY_DEVICE_433);
 };
 
+const getStore = () => {
+	return store;
+};
+
 export {
 	rendererWithIntlAndRedux,
 	DUMMY_DEVICE_433,
@@ -183,4 +187,5 @@ export {
 	setDeviceListInStore,
 	setGatewaysListInStore,
 	setDeviceInfoInStore,
+	getStore,
 };
