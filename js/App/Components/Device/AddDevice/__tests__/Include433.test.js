@@ -22,6 +22,7 @@
 
 import React from 'react';
 import {act} from 'react-test-renderer';
+import { connect } from 'react-redux';
 
 import {
 	rendererWithIntlAndRedux,
@@ -36,16 +37,18 @@ import {
 	getStore,
 } from '../../../../../Utils/jestUtils';
 import Include433 from '../Include433';
-import AddDeviceContainer from '../AddDeviceContainer';
 
+import * as Actions from '../../../../Actions';
 import {
-	initiateAdd433MHz,
-} from '../../../../Actions';
+	AddDeviceContainer as UnConnectedAddDeviceContainer,
+	mapDispatchToProps,
+	mapStateToProps,
+} from '../AddDeviceContainer';
 
 const store = getStore();
 
 const intl = {
-	formatMessage: jest.fn(),
+	formatMessage: jest.fn(() => ''),
 };
 const appLayout = {
 	height: 100,
@@ -85,7 +88,7 @@ describe('<Include433 />', () => {
 		actions = {
 			...actions,
 			initiateAdd433MHz: jest.fn((id, deviceInfo, formatMessage) => {
-				return store.dispatch(initiateAdd433MHz(id, deviceInfo, formatMessage));
+				return store.dispatch(Actions.initiateAdd433MHz(id, deviceInfo, formatMessage));
 			}),
 		};
 
@@ -142,6 +145,27 @@ describe('<Include433 />', () => {
 });
 
 describe('<Include433 /> with container component', () => {
+	const deleteSocketAndTimer = jest.fn(() => {});
+
+	const initiateAdd433MHz = jest.fn(() => {
+		return deleteSocketAndTimer;
+	});
+
+	const customMapDispatchToProps = (dispatch) => {
+		const {
+			actions: actionsProp,
+			...others
+		} = mapDispatchToProps(dispatch);
+		return {
+			...others,
+			actions: {
+				...actionsProp,
+				initiateAdd433MHz,
+			},
+		};
+	};
+
+	const ConnectedAddDeviceContainer = connect(mapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
 
 	beforeAll(() => {
 		setAppLayoutInStore();
@@ -159,17 +183,25 @@ describe('<Include433 /> with container component', () => {
 		});
 	});
 
+	afterAll(() => {
+		initiateAdd433MHz.mockReset();
+		deleteSocketAndTimer.mockReset();
+	});
+
 	it('Should initiateAdd433MHz and show activity indicator with container', () => {
 
 		let component;
 		act(() => {
+
+			store.dispatch(Actions.addDevice433Initiate());
+
 			const screenProps = {
 				appLayout,
 				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
-				<AddDeviceContainer
+				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
 					children={
@@ -183,9 +215,179 @@ describe('<Include433 /> with container component', () => {
 		const childInclude433 = root.findByType(Include433);
 		const childInclude433Instance = childInclude433.instance;
 
-		expect(childInclude433Instance.deleteSocketAndTimer).toBeInstanceOf(Function);
+		expect(childInclude433Instance.deleteSocketAndTimer).toBeInstanceOf(jest.fn().constructor);
 
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();
+	});
+});
+
+describe('<Include433 /> on success with container component', () => {
+
+	const deleteSocketAndTimer = jest.fn(() => {}).mockName('deleteSocketAndTimer');
+
+	const dummyDeviceId = DUMMY_DEVICE_433.id;
+	const initiateAdd433MHz = jest.fn(() => {
+		return deleteSocketAndTimer;
+	}).mockName('initiateAdd433MHz');
+
+	const customMapDispatchToProps2 = (dispatch) => {
+		const {
+			actions: actionsProp,
+			...others
+		} = mapDispatchToProps(dispatch);
+		return {
+			...others,
+			actions: {
+				...actionsProp,
+				initiateAdd433MHz,
+			},
+		};
+	};
+
+	const ConnectedAddDeviceContainer = connect(mapStateToProps, customMapDispatchToProps2)(UnConnectedAddDeviceContainer);
+
+	beforeAll(() => {
+		setAppLayoutInStore();
+		setDeviceListInStore();
+		setGatewaysListInStore();
+		setDeviceInfoInStore();
+		store.dispatch({
+			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+			gatewayId: DUMMY_CLIENT.id,
+			payload: {
+				address: 123,
+				instance: 123,
+				port: 123,
+			},
+		});
+	});
+
+	afterAll(() => {
+		initiateAdd433MHz.mockReset();
+		deleteSocketAndTimer.mockReset();
+	});
+
+	it('Should initiateAdd433MHz and show success screen with container, also call deleteSocketAndTimer when unmount', () => {
+
+		let component;
+		act(() => {
+			// Mocking the add device success here
+			store.dispatch(Actions.addDevice433Initiate());
+			store.dispatch(Actions.addDevice433Success(dummyDeviceId));
+
+			const screenProps = {
+				appLayout,
+				currentScreen,
+				intl,
+			};
+			component = rendererWithIntlAndRedux(
+				<ConnectedAddDeviceContainer
+					screenProps={screenProps}
+					navigation={navigation}
+					children={
+						<Include433/>
+					}
+				/>
+			);
+		});
+
+		const root = component.root;
+		const childInclude433 = root.findByType(Include433);
+		const childInclude433Instance = childInclude433.instance;
+
+		expect(childInclude433Instance.deleteSocketAndTimer).toBeInstanceOf(jest.fn().constructor);
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
+
+		component.unmount();
+
+		expect(deleteSocketAndTimer).toBeCalledTimes(1);
+	});
+});
+
+describe('<Include433 /> on error with container component', () => {
+
+	const deleteSocketAndTimer = jest.fn(() => {}).mockName('deleteSocketAndTimer');
+
+	const initiateAdd433MHz = jest.fn(() => {
+		return deleteSocketAndTimer;
+	}).mockName('initiateAdd433MHz');
+
+	const customMapDispatchToProps = (dispatch) => {
+		const {
+			actions: actionsProp,
+			...others
+		} = mapDispatchToProps(dispatch);
+		return {
+			...others,
+			actions: {
+				...actionsProp,
+				initiateAdd433MHz,
+			},
+		};
+	};
+
+	const ConnectedAddDeviceContainer = connect(mapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
+
+	beforeAll(() => {
+		setAppLayoutInStore();
+		setDeviceListInStore();
+		setGatewaysListInStore();
+		setDeviceInfoInStore();
+		store.dispatch({
+			type: 'RECEIVED_GATEWAY_WEBSOCKET_ADDRESS',
+			gatewayId: DUMMY_CLIENT.id,
+			payload: {
+				address: 123,
+				instance: 123,
+				port: 123,
+			},
+		});
+	});
+
+	afterAll(() => {
+		initiateAdd433MHz.mockReset();
+		deleteSocketAndTimer.mockReset();
+	});
+
+	it('Should initiateAdd433MHz and show error screen with container, also call deleteSocketAndTimer when unmount', () => {
+
+		let component;
+		act(() => {
+
+			// Mocking the add device fail here
+			store.dispatch(Actions.addDevice433Initiate());
+			store.dispatch(Actions.addDevice433Failed('Error when add device 433MHz failed'));
+
+			const screenProps = {
+				appLayout,
+				currentScreen,
+				intl,
+			};
+			component = rendererWithIntlAndRedux(
+				<ConnectedAddDeviceContainer
+					screenProps={screenProps}
+					navigation={navigation}
+					children={
+						<Include433/>
+					}
+				/>
+			);
+		});
+
+		const root = component.root;
+		const childInclude433 = root.findByType(Include433);
+		const childInclude433Instance = childInclude433.instance;
+
+		expect(childInclude433Instance.deleteSocketAndTimer).toBeInstanceOf(jest.fn().constructor);
+
+		const tree = component.toJSON();
+		expect(tree).toMatchSnapshot();
+
+		component.unmount();
+
+		expect(deleteSocketAndTimer).toBeCalledTimes(1);
 	});
 });
