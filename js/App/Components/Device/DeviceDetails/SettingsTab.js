@@ -220,9 +220,8 @@ class SettingsTab extends View {
 		}
 		const {
 			widget,
-			configuration,
 		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
-		if (widget && configuration === 'true') {
+		if (widget) {
 			return {
 				widget433MHz: widget,
 				settings433MHz: getDeviceSettings(parseInt(widget, 10), formatMessage),
