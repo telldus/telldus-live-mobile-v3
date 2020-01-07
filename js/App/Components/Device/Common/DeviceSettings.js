@@ -22,10 +22,11 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -90,8 +91,8 @@ const DeviceSettings = (props: Props): Object => {
 	const { widgetParams433Device = {} } = addDevice433;
 	const {
 		system = '',
-		house = '',
-		unit = '',
+		house = 'null',
+		unit = 'null',
 		fade,
 		units = {},
 		code = {},
@@ -111,6 +112,11 @@ const DeviceSettings = (props: Props): Object => {
 		units: currUnits,
 		code: currCode,
 	} = DeviceParams433 || {};
+
+	const [ paramUpdatedViaScan, setParamUpdatedViaScan ] = useState(false);
+	function callbackOnParamUpdate() {
+		setParamUpdatedViaScan(true);
+	}
 
 	useEffect(() => {
 		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
@@ -190,7 +196,8 @@ const DeviceSettings = (props: Props): Object => {
 					label={formatMessage(i18n.system)}
 					value={system}
 					onChangeText={onChangeText}
-					labelStyle={labelStyle}/>
+					labelStyle={labelStyle}
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(system, currSystem)}/>
 			);
 		}
 		if (setting === 'v') {
@@ -227,7 +234,8 @@ const DeviceSettings = (props: Props): Object => {
 						value={vSet}
 						index={index}
 						onPressOne={onPressOne}
-						onPressTwo={onPressTwo}/>
+						onPressTwo={onPressTwo}
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(code, currCode)}/>
 				);
 			});
 
@@ -267,7 +275,8 @@ const DeviceSettings = (props: Props): Object => {
 					isChecked={cUSet === 1}
 					onToggleCheckBox={onToggleCheckBox}
 					intl={intl}
-					option={option}/>);
+					option={option}
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(units, currUnits)}/>);
 			});
 
 			// Stores initial/default settings in store.
@@ -334,7 +343,8 @@ const DeviceSettings = (props: Props): Object => {
 						value={sSet}
 						isOneSelected={one === '1'}
 						isTwoSelected={two === '-'}
-						isThreeSelected={three === '0'}/>
+						isThreeSelected={three === '0'}
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>
 				);
 			});
 
@@ -360,7 +370,6 @@ const DeviceSettings = (props: Props): Object => {
 
 			if (min || min) {
 				function onChangeText(value: string): any {
-
 					if (!value || value === '') {
 						dispatch(setWidgetParamHouse(''));
 						return;
@@ -384,7 +393,7 @@ const DeviceSettings = (props: Props): Object => {
 				const random = getRandom(min, max);
 				const houseInitValue = currHouse || random || min;
 				// Stores initial/default settings in store.
-				if (house === '') {
+				if (house === 'null') {
 					dispatch(setWidgetParamHouse(houseInitValue.toString()));
 				}
 
@@ -393,7 +402,8 @@ const DeviceSettings = (props: Props): Object => {
 						key={setting}
 						label={formatMessage(i18n.houseCode)}
 						value={house}
-						onChangeText={onChangeText}/>
+						onChangeText={onChangeText}
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>
 				);
 			}
 			if (options) {
@@ -410,7 +420,7 @@ const DeviceSettings = (props: Props): Object => {
 				}
 
 				// Stores initial/default settings in store.
-				if (house === '') {
+				if (house === 'null') {
 					dispatch(setWidgetParamHouse(currHouse || items[0].key));
 				}
 
@@ -421,7 +431,8 @@ const DeviceSettings = (props: Props): Object => {
 					value={ddValue}
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.houseCode)}
-					key={setting}/>);
+					key={setting}
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>);
 			}
 		}
 		if (setting === 'unit') {
@@ -457,7 +468,7 @@ const DeviceSettings = (props: Props): Object => {
 				const random = getRandom(min, max);
 				const unitInitValue = currUnit || random || min;
 				// Stores initial/default settings in store.
-				if (unit === '') {
+				if (unit === 'null') {
 					dispatch(setWidgetParamUnit(unitInitValue.toString()));
 				}
 
@@ -466,7 +477,8 @@ const DeviceSettings = (props: Props): Object => {
 						key={setting}
 						label={formatMessage(i18n.unitCode)}
 						value={unit}
-						onChangeText={onChangeText}/>
+						onChangeText={onChangeText}
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}/>
 				);
 			}
 			if (options) {
@@ -483,7 +495,7 @@ const DeviceSettings = (props: Props): Object => {
 				}
 
 				// Stores initial/default settings in store.
-				if (unit === '') {
+				if (unit === 'null') {
 					dispatch(setWidgetParamUnit(currUnit || items[0].key));
 				}
 
@@ -494,7 +506,8 @@ const DeviceSettings = (props: Props): Object => {
 					value={ddValue}
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.unitCode)}
-					key={setting}/>);
+					key={setting}
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}/>);
 			}
 		}
 		if (setting === 'fade') {
@@ -512,7 +525,8 @@ const DeviceSettings = (props: Props): Object => {
 						onToggleCheckBox={onToggleCheckBox}
 						intl={intl}
 						option={key}
-						key={key}/>
+						key={key}
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(fade, currFade)}/>
 				);
 			});
 
@@ -534,7 +548,8 @@ const DeviceSettings = (props: Props): Object => {
 			{(showScan && clientId) &&
 				<ScanButton
 					clientId={clientId}
-					deviceId={deviceId}/>
+					deviceId={deviceId}
+					callbackOnParamUpdate={callbackOnParamUpdate}/>
 			}
 		</View>
 	);

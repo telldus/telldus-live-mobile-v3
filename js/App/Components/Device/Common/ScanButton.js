@@ -42,11 +42,16 @@ import {
 
 import Theme from '../../../Theme';
 
+let noOp = () => {};
+let startScan = noOp, stopScan = noOp, destroyInstance = noOp;
+
 const ScanButton = (props: Object): Object => {
 	const {
 		scanButtonCover,
 		scanButtonTextStyle,
 		clientId,
+		deviceId,
+		callbackOnParamUpdate,
 	} = props;
 
 	const dispatch = useDispatch();
@@ -55,10 +60,8 @@ const ScanButton = (props: Object): Object => {
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
 	const { isScanning = false } = addDevice433;
 
-	let noOp = () => {};
-	let startScan = noOp, stopScan = noOp, destroyInstance = noOp;
 	useEffect((): Function => {
-		const methods = dispatch(initiateScanTransmitter433MHz(clientId));
+		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, callbackOnParamUpdate));
 		if (methods) {
 			startScan = methods.startScan;
 			stopScan = methods.stopScan;
@@ -66,6 +69,9 @@ const ScanButton = (props: Object): Object => {
 		}
 		return (): Function => {
 			destroyInstance();
+			startScan = noOp;
+			stopScan = noOp;
+			destroyInstance = noOp;
 		};
 	}, []);
 
