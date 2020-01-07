@@ -255,8 +255,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const { showEULA, showToast: showToastBool, gateways, addNewGatewayBool, ...others } = this.props;
-	const { showEULA: showEULAN, showToast: showToastN, gateways: gatewaysN, addNewGatewayBool: addNewGatewayBoolN, ...othersN } = nextProps;
+	const { gateways, ...others } = this.props;
+	const { gateways: gatewaysN, ...othersN } = nextProps;
 
 	const dimmerPropsChange = shouldUpdate(others.dimmer, othersN.dimmer, ['show', 'value', 'name', 'showStep', 'deviceStep']);
 	if (dimmerPropsChange) {
@@ -272,13 +272,15 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'subscriptions',
 		'pro',
 		'visibilityProExpireHeadsup',
+		'showToast',
+		'showEULA',
+		'addNewGatewayBool',
 	]);
 	if (propsChange) {
 		return true;
 	}
 
-	if ((showEULA !== showEULAN) || (showToastBool !== showToastN) ||
-    (gateways.allIds.length !== gatewaysN.allIds.length) || (addNewGatewayBool !== addNewGatewayBoolN)) {
+	if (gateways.allIds.length !== gatewaysN.allIds.length) {
 		return true;
 	}
 
