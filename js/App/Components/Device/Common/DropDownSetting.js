@@ -39,6 +39,7 @@ const DropDownSetting = (props: Object): Object => {
 		onValueChange,
 		label,
 		labelStyle,
+		paramUpdatedViaScan,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -49,7 +50,7 @@ const DropDownSetting = (props: Object): Object => {
 		pickerStyle,
 		optionInputCover,
 		optionInputLabelStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, paramUpdatedViaScan);
 
 	const accessibilityLabelPrefix = '';
 
@@ -73,7 +74,7 @@ const DropDownSetting = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -98,7 +99,7 @@ const getStyles = (appLayout: Object): Object => {
 		pickerContainerStyle: {
 			flex: 0,
 			width: ddWidth,
-			borderWidth: 1,
+			borderWidth: paramUpdatedViaScan ? 4 : 1,
 			borderColor: rowTextColor,
 			elevation: 0,
 			shadowRadius: 0,

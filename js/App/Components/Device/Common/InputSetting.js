@@ -42,6 +42,7 @@ const InputSetting = (props: Object): Object => {
 		value,
 		onChangeText,
 		labelStyle,
+		paramUpdatedViaScan,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -49,7 +50,7 @@ const InputSetting = (props: Object): Object => {
 		optionInputCover,
 		optionInputLabelStyle,
 		optionInputStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, paramUpdatedViaScan);
 
 	return (
 		<View style={optionInputCover}>
@@ -64,7 +65,7 @@ const InputSetting = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -93,7 +94,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		optionInputStyle: {
 			fontSize: fontSizeInput,
-			borderWidth: 1,
+			borderWidth: paramUpdatedViaScan ? 4 : 1,
 			borderColor: rowTextColor,
 			borderRadius: 2,
 			color: eulaContentColor,
