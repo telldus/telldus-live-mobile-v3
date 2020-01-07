@@ -37,6 +37,7 @@ import SSetting from './SSetting';
 import DropDownSetting from './DropDownSetting';
 import FadeSetting from './FadeSetting';
 import InputSetting from './InputSetting';
+import ScanButton from './ScanButton';
 
 import {
 	setWidgetParamFade,
@@ -63,6 +64,8 @@ type Props = {
 	widgetId?: string | null,
 	deviceId?: string,
 	initializeValueFromStore?: boolean,
+	showScan?: boolean,
+	clientId?: string,
 };
 
 const DeviceSettings = (props: Props): Object => {
@@ -73,6 +76,8 @@ const DeviceSettings = (props: Props): Object => {
 		widgetId, // Optional
 		deviceId, // Optional
 		initializeValueFromStore = false, // Optional
+		showScan = false,
+		clientId,
 	} = props;
 
 	const dispatch = useDispatch();
@@ -526,6 +531,11 @@ const DeviceSettings = (props: Props): Object => {
 	return (
 		<View style={[coverStyleDef, coverStyle]}>
 			{Setting}
+			{(showScan && clientId) &&
+				<ScanButton
+					clientId={clientId}
+					deviceId={deviceId}/>
+			}
 		</View>
 	);
 };

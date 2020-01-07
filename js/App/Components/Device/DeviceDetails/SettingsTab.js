@@ -60,6 +60,7 @@ import {
 	getDeviceSettings,
 	prepare433DeviceParamsToStore,
 	prepareDeviceParameters,
+	supportsScan,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -71,6 +72,7 @@ type Props = {
 	device: Object,
 	inDashboard: boolean,
 	addDevice433: Object,
+	transports: string,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -131,6 +133,7 @@ class SettingsTab extends View {
 		this.onValueChange = this.onValueChange.bind(this);
 		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
+		this.DeviceVendorInfo433MHz = undefined;
 		const {
 			widget433MHz = null,
 			settings433MHz = null,
@@ -181,7 +184,7 @@ class SettingsTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['device', 'isGatewayReachable', 'addDevice433']);
+			const propsChange = shouldUpdate(others, othersN, ['device', 'isGatewayReachable', 'addDevice433', 'transports']);
 			if (propsChange) {
 				return true;
 			}
@@ -211,14 +214,14 @@ class SettingsTab extends View {
 		if (!is433MHzTransport(transport)) {
 			return {};
 		}
-		let info = getDeviceVendorInfo433MHz(protocol, model);
-		if (!info) {
+		this.DeviceVendorInfo433MHz = getDeviceVendorInfo433MHz(protocol, model);
+		if (!this.DeviceVendorInfo433MHz) {
 			return {};
 		}
 		const {
 			widget,
 			configuration,
-		} = info.deviceInfo || {};
+		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
 		if (widget && configuration === 'true') {
 			return {
 				widget433MHz: widget,
@@ -572,7 +575,13 @@ class SettingsTab extends View {
 			widget433MHz,
 			isSaving433MhzParams,
 		} = this.state;
-		const { device, screenProps, inDashboard, isGatewayReachable } = this.props;
+		const {
+			device,
+			screenProps,
+			inDashboard,
+			isGatewayReachable,
+			transports,
+		} = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
 		const {
@@ -609,6 +618,10 @@ class SettingsTab extends View {
 		const { isFailed = false } = nodeInfo;
 
 		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
+
+		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
+		const transportsArray = transports.split(',');
+		const showScan = supportsScan(transportsArray) && deviceInfo.scannable;
 
 		return (
 			<ScrollView style={{
@@ -657,7 +670,9 @@ class SettingsTab extends View {
 										deviceId={id}
 										initializeValueFromStore={true}
 										settings={settings433MHz}
-										widgetId={widget433MHz}/>
+										widgetId={widget433MHz}
+										showScan={showScan}
+										clientId={clientId}/>
 										{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
@@ -784,7 +799,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	device = device ? device : {};
 
 	const { clientId } = device;
-	const { online = false, websocketOnline = false } = state.gateways.byId[clientId] || {};
+	const { online = false, websocketOnline = false, transports = '' } = state.gateways.byId[clientId] || {};
 
 	const { addDevice433 = {}} = state.addDevice;
 
@@ -793,6 +808,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		inDashboard: !!state.dashboard.devicesById[id],
 		isGatewayReachable: online && websocketOnline,
 		addDevice433,
+		transports,
 	};
 }
 
