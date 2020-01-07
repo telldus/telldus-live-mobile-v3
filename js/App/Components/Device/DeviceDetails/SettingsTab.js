@@ -184,7 +184,12 @@ class SettingsTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['device', 'isGatewayReachable', 'addDevice433', 'transports']);
+			const propsChange = shouldUpdate(others, othersN, [
+				'device',
+				'isGatewayReachable',
+				'addDevice433',
+				'transports',
+			]);
 			if (propsChange) {
 				return true;
 			}
@@ -602,6 +607,7 @@ class SettingsTab extends View {
 			btnDisabledBg,
 			coverStyleDeviceSettings433,
 			labelStyleDeviceSettings433,
+			brandSecondary,
 		} = this.getStyle(appLayout);
 
 		const { LEARN } = supportedMethods;
@@ -678,7 +684,7 @@ class SettingsTab extends View {
 											onPress={isSaving433MhzParams ? null : this.onPressSaveParams433MHz}
 											disabled={isSaving433MhzParams}
 											style={[touchableButtonCommon, {
-												backgroundColor: isSaving433MhzParams ? btnDisabledBg : brandDanger,
+												backgroundColor: isSaving433MhzParams ? btnDisabledBg : brandSecondary,
 											}]}
 											showThrobber={isSaving433MhzParams}/>
 										}
@@ -752,7 +758,13 @@ class SettingsTab extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const { paddingFactor, appBackground, brandDanger, btnDisabledBg } = Theme.Core;
+		const {
+			paddingFactor,
+			appBackground,
+			brandDanger,
+			btnDisabledBg,
+			brandSecondary,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
@@ -761,6 +773,7 @@ class SettingsTab extends View {
 		return {
 			brandDanger,
 			btnDisabledBg,
+			brandSecondary,
 			container: {
 				flex: 0,
 				paddingHorizontal: padding,
