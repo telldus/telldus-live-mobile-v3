@@ -20,6 +20,7 @@
 package com.telldus.live.mobile.Utility;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,6 +30,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 
 public class CommonUtilities  {
     public static Bitmap buildTelldusIcon(String icon, int color, int width, int height, int fontSize, Context context) {
@@ -86,5 +88,26 @@ public class CommonUtilities  {
         canvas.drawBitmap(dstBitmap, 0, 0, paint);
 
         return dstBitmap;
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable, int width, int height) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static int getBaseFontSize(Context context) {
+        float d = context.getResources().getDisplayMetrics().density;
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        return (int) ((width * 0.02) / (d * 0.5));
+    }
+
+    public static int getBaseIconWidth(Context context) {
+        float d = context.getResources().getDisplayMetrics().density;
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        return (int) ((width * 0.12) / (d * 0.5));
     }
 }
