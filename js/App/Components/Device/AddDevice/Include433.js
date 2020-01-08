@@ -161,7 +161,7 @@ onNext = async () => {
 	this.setState({
 		isLoading: true,
 	});
-	const { navigation, addDevice, actions } = this.props;
+	const { navigation, addDevice } = this.props;
 	const { addDevice433 = {}} = addDevice;
 	const {
 		deviceId,
@@ -175,8 +175,6 @@ onNext = async () => {
 		mainNode: true,
 	}};
 
-	await actions.getDevices();
-	await actions.getDeviceInfoCommon(deviceId); // This will cache device parameters
 	this.setState({
 		isLoading: false,
 	});
