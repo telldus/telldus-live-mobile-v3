@@ -741,6 +741,7 @@ class SettingsTab extends View {
 											text={formatMessage(i18n.delete).toUpperCase()}
 											onPress={this.onPressDelete433Device}
 											disabled={isDeleting433MHz}
+											showThrobber={isDeleting433MHz}
 											style={[touchableButtonCommon, {
 												backgroundColor: brandDanger,
 											}]}/>
