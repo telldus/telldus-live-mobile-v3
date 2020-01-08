@@ -24,6 +24,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.widget.RemoteViews;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import java.text.DateFormat;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.SensorInfo;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.SensorsUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -58,6 +60,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 public class NewSensorWidget extends AppWidgetProvider {
     private static final String ACTION_SENSOR_UPDATE = "ACTION_SENSOR_UPDATE";
@@ -96,6 +100,15 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (currentUserId == null || userId == null) {
             return;
         }
+
+        int iconWidth = CommonUtilities.getBaseIconWidth(context);
+        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int fontSizeOne = (int) (fontSize * 1.2);
+        int fontSizeTwo = (int) (fontSize * 0.88);
+        int fontSizeFour = (int) (fontSize * 0.9);
+        int fontSizeFive = (int) (fontSize * 0.6);
+        fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
+
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
@@ -107,6 +120,10 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setTextViewText(R.id.loggedOutInfoEmail, userId);
             view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
 
+            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeFive);
+            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeFive);
+            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeFive);
+
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
             return;
@@ -114,15 +131,17 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         Integer sensorId = sensorWidgetInfo.getSensorId();
         if (sensorId.intValue() == -1) {
+            iconWidth = (int) iconWidth / 2;
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
             view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_sensor_not_found));
             view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
                     "info",
                     ContextCompat.getColor(context, R.color.brightRed),
-                    80,
-                    95,
-                    65,
+                    iconWidth,
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
                     context));
+            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
@@ -227,9 +246,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
                 color,
-                70,
-                100,
-                70,
+                iconWidth,
+                (int) (iconWidth * 0.8),
+                (int) (iconWidth * 0.8),
                 context));
         view.setTextColor(R.id.txtSensorType, colorTitle);
         view.setTextColor(R.id.txtHistoryInfo, color);
@@ -240,6 +259,11 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setTextViewText(R.id.txtHistoryInfo, formattedDT);
         view.setTextViewText(R.id.txtSensorValue, formattedValue);
         view.setTextViewText(R.id.txtSensorUnit, sensorUnit);
+
+        view.setTextViewTextSize(R.id.txtSensorValue, COMPLEX_UNIT_SP, fontSizeOne);
+        view.setTextViewTextSize(R.id.txtSensorUnit, COMPLEX_UNIT_SP, fontSizeTwo);
+        view.setTextViewTextSize(R.id.txtHistoryInfo, COMPLEX_UNIT_SP, fontSizeFive);
+        view.setTextViewTextSize(R.id.txtSensorType, COMPLEX_UNIT_SP, fontSizeFour);
 
         long currentTime = new Date().getTime();
         long timeAgo = currentTime - time;
@@ -253,6 +277,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         if (isBasicUser) {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             view.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
+
+            view.setTextViewTextSize(R.id.textPremiumRequired, COMPLEX_UNIT_SP, fontSizeFive);
+
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
         } else {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);

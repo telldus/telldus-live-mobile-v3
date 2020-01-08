@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.os.Handler;
+import android.widget.TextView;
 
 import com.androidnetworking.error.ANError;
 
@@ -50,12 +51,15 @@ import com.telldus.live.mobile.API.SensorsAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.SensorUpdateAlarmManager;
+
+import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 
 /**
@@ -96,6 +100,16 @@ public class NewThermostatWidget extends AppWidgetProvider {
         if (currentUserId == null || userId == null) {
             return;
         }
+
+        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int iconWidth = CommonUtilities.getBaseIconWidth(context);
+        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int fontSizeOne = (int) (fontSize * 0.88);
+        int fontSizeTwo = (int) (fontSize * 0.68);
+        int fontSizeFour = (int) (fontSize * 0.9);
+        int fontSizeFive = (int) (fontSize * 0.6);
+        fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
+
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
 
@@ -108,6 +122,10 @@ public class NewThermostatWidget extends AppWidgetProvider {
             view.setTextViewText(R.id.loggedOutInfoEmail, userId);
             view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
 
+            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeFive);
+            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeFive);
+            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeFive);
+
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
             return;
@@ -115,15 +133,18 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
+            iconWidth = (int) iconWidth / 2;
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
             view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
             view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
                 "info",
                 ContextCompat.getColor(context, R.color.brightRed),
-                80,
-                95,
-                65,
+                    iconWidth,
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
                 context));
+
+            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewThermostatWidget.class);
@@ -215,9 +236,6 @@ public class NewThermostatWidget extends AppWidgetProvider {
                 }
             }
 
-            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-            int iconWidth = (int) (width * 0.12);
-
             views.setImageViewBitmap(R.id.heaticon, CommonUtilities.buildTelldusIcon(
                     icon,
                 colorIdle,
@@ -239,6 +257,9 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                 views.setTextColor(R.id.txtValue, colorIdle);
                 views.setTextColor(R.id.txtUnit, colorIdle);
+
+                views.setTextViewTextSize(R.id.txtValue, COMPLEX_UNIT_SP, fontSize);
+                views.setTextViewTextSize(R.id.txtUnit, COMPLEX_UNIT_SP, fontSizeOne);
             } else {
                 views.setViewVisibility(R.id.thermoValueCover, View.GONE);
             }
@@ -255,12 +276,16 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                 views.setTextColor(R.id.txtCurrValue, colorIdle);
                 views.setTextColor(R.id.txtCurrUnit, colorIdle);
+
+                views.setTextViewTextSize(R.id.txtCurrValue, COMPLEX_UNIT_SP, fontSizeTwo);
+                views.setTextViewTextSize(R.id.txtCurrUnit, COMPLEX_UNIT_SP, fontSizeTwo);
             } else {
                 views.setViewVisibility(R.id.thermoCurrValueCover, View.GONE);
             }
 
             views.setTextViewText(R.id.txtLabel, thermoState);
             views.setTextColor(R.id.txtLabel, colorIdle);
+            views.setTextViewTextSize(R.id.txtLabel, COMPLEX_UNIT_SP, fontSizeTwo);
 
             if (!hasStateVal && !hasSecStateVal && thermoState == "") {
                 views.setViewVisibility(R.id.heaticon, View.GONE);
@@ -268,6 +293,8 @@ public class NewThermostatWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.info_block_cover, View.VISIBLE);
                 views.setTextViewText(R.id.infoText, context.getResources().getString(R.string.reserved_widget_android_noThermostatSettings));
                 views.setTextColor(R.id.infoText, colorIdle);
+
+                views.setTextViewTextSize(R.id.infoText, COMPLEX_UNIT_SP, fontSizeFive);
 
                 int iconInfoWidth = (int) (width * 0.08);
                 views.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
@@ -288,6 +315,8 @@ public class NewThermostatWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             views.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
 
+            views.setTextViewTextSize(R.id.textPremiumRequired, COMPLEX_UNIT_SP, fontSizeFive);
+
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewThermostatWidget.class);
         } else {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
@@ -307,6 +336,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
+        views.setTextViewTextSize(R.id.txtWidgetTitle, COMPLEX_UNIT_SP, fontSizeFour);
         if (transparent.equals("dark")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
         } else if (transparent.equals("light") || transparent.equals("true")) {

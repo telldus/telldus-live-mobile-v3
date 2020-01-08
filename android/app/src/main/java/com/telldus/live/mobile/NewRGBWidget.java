@@ -55,11 +55,14 @@ import com.telldus.live.mobile.API.DevicesAPI;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Utility.CommonUtilities;
 import com.telldus.live.mobile.API.UserAPI;
 import com.telldus.live.mobile.Utility.RGBUtilities;
+
+import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 public class NewRGBWidget extends AppWidgetProvider {
 
@@ -100,6 +103,14 @@ public class NewRGBWidget extends AppWidgetProvider {
         if (currentUserId == null || userId == null) {
             return;
         }
+
+        int iconWidth = CommonUtilities.getBaseIconWidth(context);
+        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int fontSizeFour = (int) (fontSize * 0.9);
+        int fontSizeFive = (int) (fontSize * 0.6);
+        int fontSizeSix = (int) (fontSize * 0.45);
+        fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
+
         Boolean isSameAccount = userId.trim().equals(currentUserId.trim());
         if (!isSameAccount) {
 
@@ -110,6 +121,10 @@ public class NewRGBWidget extends AppWidgetProvider {
             view.setTextViewText(R.id.loggedOutInfoEmail, userId);
             view.setTextViewText(R.id.loggedOutInfoTwo, phraseTwo);
 
+            view.setTextViewTextSize(R.id.loggedOutInfoOne, COMPLEX_UNIT_SP, fontSizeSix);
+            view.setTextViewTextSize(R.id.loggedOutInfoEmail, COMPLEX_UNIT_SP, fontSizeSix);
+            view.setTextViewTextSize(R.id.loggedOutInfoTwo, COMPLEX_UNIT_SP, fontSizeSix);
+
             appWidgetManager.updateAppWidget(appWidgetId, view);
 
             return;
@@ -117,15 +132,18 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         Integer deviceId = DeviceWidgetInfo.getDeviceId();
         if (deviceId.intValue() == -1) {
+            iconWidth = (int) iconWidth / 2;
             RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.widget_item_removed);
             view.setTextViewText(R.id.widgetItemRemovedInfo, context.getResources().getString(R.string.reserved_widget_android_message_device_not_found));
             view.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
                     "info",
                     ContextCompat.getColor(context, R.color.brightRed),
-                    80,
-                    95,
-                    65,
+                    iconWidth,
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
                     context));
+
+            view.setTextViewTextSize(R.id.widgetItemRemovedInfo, COMPLEX_UNIT_SP, fontSizeFive);
 
             appWidgetManager.updateAppWidget(appWidgetId, view);
             return;
@@ -175,9 +193,6 @@ public class NewRGBWidget extends AppWidgetProvider {
                                 views,
                                 context
                             );
-
-            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-            int iconWidth = (int) (width * 0.14);
             int iconSize = (int) (iconWidth * 0.7);
 
             int paletteIconColor = Color.parseColor("#" + Integer.toHexString(ContextCompat.getColor(context, R.color.brandSecondary)));
@@ -189,6 +204,9 @@ public class NewRGBWidget extends AppWidgetProvider {
             if (isPicker) {
                 views.setViewVisibility(R.id.palette_rainbow, View.VISIBLE);
                 views.setViewVisibility(R.id.palette, View.GONE);
+
+                int imageSize = (int) (iconWidth * 0.8);
+                views.setImageViewBitmap(R.id.palette_rainbow, CommonUtilities.drawableToBitmap(context.getDrawable(R.drawable.rgb_rainbow), imageSize, imageSize));
             } else {
                 views.setViewVisibility(R.id.palette_rainbow, View.GONE);
                 views.setViewVisibility(R.id.palette, View.VISIBLE);
@@ -203,6 +221,8 @@ public class NewRGBWidget extends AppWidgetProvider {
                 views.setViewVisibility(R.id.dimValue, View.VISIBLE);
                 views.setTextViewText(R.id.dimValue, secondarySetting+"%");
                 views.setTextColor(R.id.dimValue, paletteIconColor);
+
+                views.setTextViewTextSize(R.id.dimValue, COMPLEX_UNIT_SP, fontSizeFive);
             }
 
             if (methodRequested != null && state == null && isShowingStatus != 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)) )) {
@@ -298,11 +318,14 @@ public class NewRGBWidget extends AppWidgetProvider {
         if (isBasicUser) {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             views.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
+
+            views.setTextViewTextSize(R.id.textPremiumRequired, COMPLEX_UNIT_SP, (int) (fontSizeFive * 0.8));
         } else {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.GONE);
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
+        views.setTextViewTextSize(R.id.txtWidgetTitle, COMPLEX_UNIT_SP, fontSizeFour);
         if (transparent.equals("dark")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
         } else if (transparent.equals("light") || transparent.equals("true")) {
