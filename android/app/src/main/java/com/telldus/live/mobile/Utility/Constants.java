@@ -33,4 +33,5 @@ public class Constants  {
             "#FFFFFF",
             "#FFFF96",
     };
+    public static int widgetTitleMaxSize = 20;
 }
