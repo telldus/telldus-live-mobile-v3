@@ -246,7 +246,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
                 sensorIcon,
                 color,
-                iconWidth,
+                (int) (iconWidth * 0.8),
                 (int) (iconWidth * 0.8),
                 (int) (iconWidth * 0.8),
                 context));
