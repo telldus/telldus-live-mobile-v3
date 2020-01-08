@@ -90,7 +90,7 @@ const DeviceSettings = (props: Props): Object => {
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
 	const { widgetParams433Device = {} } = addDevice433;
 	const {
-		system = '',
+		system = 'null',
 		house = 'null',
 		unit = 'null',
 		fade,
@@ -122,31 +122,6 @@ const DeviceSettings = (props: Props): Object => {
 		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
 		if (deviceId && initializeValueFromStore) {
 			dispatch(editDevice433Param(widgetId, deviceId));
-		}
-
-		let hasFade = false, systemMin, systemMax;
-		Object.keys(settings).map((setting: Object) => {
-			if (setting === 'fade') {
-				hasFade = true;
-			}
-			if (setting === 'system') {
-				const {
-					min,
-					max,
-				} = settings[setting];
-				systemMin = min;
-				systemMax = max;
-			}
-		});
-
-		// Stores initial/default settings in store.
-		if (system === '' && typeof systemMin !== 'undefined') {
-			const random = getRandom(systemMin, systemMax);
-			const sysInitValue = currSystem || random || systemMin || systemMax;
-			dispatch(setWidgetParamSystem(sysInitValue.toString()));
-		}
-		if (typeof fade === 'undefined' && hasFade) {
-			dispatch(setWidgetParamFade(currFade || false));
 		}
 	}, []);
 
@@ -188,6 +163,13 @@ const DeviceSettings = (props: Props): Object => {
 				}
 
 				dispatch(setWidgetParamSystem(newValue.toString()));
+			}
+
+			// Stores initial/default settings in store.
+			if (system === 'null' && typeof min !== 'undefined') {
+				const random = getRandom(min, max);
+				const sysInitValue = currSystem || random || min || max;
+				dispatch(setWidgetParamSystem(sysInitValue.toString()));
 			}
 
 			Setting.push(
@@ -529,6 +511,11 @@ const DeviceSettings = (props: Props): Object => {
 						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(fade, currFade)}/>
 				);
 			});
+
+			// Stores initial/default settings in store.
+			if (typeof fade === 'undefined') {
+				dispatch(setWidgetParamFade(currFade || false));
+			}
 
 			Setting.push(
 				<View style={optionInputCover} key={setting}>
