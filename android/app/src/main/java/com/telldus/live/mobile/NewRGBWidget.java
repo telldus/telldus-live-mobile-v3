@@ -104,8 +104,8 @@ public class NewRGBWidget extends AppWidgetProvider {
             return;
         }
 
-        int iconWidth = CommonUtilities.getBaseIconWidth(context);
-        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
+        int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeFour = (int) (fontSize * 0.9);
         int fontSizeFive = (int) (fontSize * 0.6);
         int fontSizeSix = (int) (fontSize * 0.45);
@@ -213,7 +213,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                         "palette",
                         paletteIconColor,
-                        iconWidth,
+                        iconSize,
                         iconSize,
                         iconSize,
                         context));
@@ -257,7 +257,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                 views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                         "palette",
                         flashColor,
-                        iconWidth,
+                        iconSize,
                         iconSize,
                         iconSize,
                         context));
@@ -280,7 +280,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statuscheck",
                             ContextCompat.getColor(context, R.color.widgetGreen),
-                            iconWidth,
+                            iconSize,
                             iconSize,
                             iconSize,
                             context));
@@ -288,7 +288,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                     views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                             "statusx",
                             ContextCompat.getColor(context, R.color.widgetRed),
-                            iconWidth,
+                            iconSize,
                             iconSize,
                             iconSize,
                             context));
@@ -446,6 +446,12 @@ public class NewRGBWidget extends AppWidgetProvider {
         } else {
             views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
         }
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
     @Override

@@ -110,8 +110,8 @@ public class NewOnOffWidget extends AppWidgetProvider {
             return;
         }
 
-        int iconWidth = CommonUtilities.getBaseIconWidth(context);
-        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
+        int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeFour = (int) (fontSize * 0.9);
         int fontSizeFive = (int) (fontSize * 0.6);
         fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
@@ -644,6 +644,12 @@ public class NewOnOffWidget extends AppWidgetProvider {
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
         return PendingIntent.getBroadcast(context, id, intent, 0);
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
     @Override

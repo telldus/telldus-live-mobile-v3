@@ -19,6 +19,7 @@
 
 package com.telldus.live.mobile.Utility;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -31,6 +32,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
+
+import java.util.HashMap;
 
 public class CommonUtilities  {
     public static Bitmap buildTelldusIcon(String icon, int color, int width, int height, int fontSize, Context context) {
@@ -57,13 +63,16 @@ public class CommonUtilities  {
 
     public static Bitmap buildBitmapImageViewBG(int colorBG, int width, int height, int left, int borderRadi, Context context) {
         Bitmap myBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        myBitmap.setDensity((int) context.getResources().getDisplayMetrics().density);
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        myBitmap.setDensity(dm.densityDpi);
         Canvas myCanvas = new Canvas(myBitmap);
 
         Paint paintBG = new Paint();
+        paintBG.setAntiAlias(true);
         paintBG.setColor(colorBG);
         paintBG.setStyle(Paint.Style.FILL);
         RectF rectF = new RectF(left, 0, myCanvas.getWidth(), myCanvas.getHeight());
+        myCanvas.setDensity(dm.densityDpi);
         myCanvas.drawRoundRect(rectF, borderRadi, borderRadi, paintBG);
         myCanvas.drawBitmap(myBitmap, 0, 0, paintBG);
 
@@ -99,15 +108,34 @@ public class CommonUtilities  {
         return bitmap;
     }
 
-    public static int getBaseFontSize(Context context) {
-        float d = context.getResources().getDisplayMetrics().density;
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        return (int) ((width * 0.02) / (d * 0.5));
+    public static HashMap getWidgetDimensions(AppWidgetManager appWidgetManager, int appWidgetId) {
+        // See the dimensions and
+        Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
+        // Get min width and height.
+        int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
+        int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+        HashMap dim = new HashMap();
+        dim.put("width", minWidth);
+        dim.put("height", minHeight);
+        return dim;
     }
 
-    public static int getBaseIconWidth(Context context) {
-        float d = context.getResources().getDisplayMetrics().density;
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        return (int) ((width * 0.12) / (d * 0.5));
+    public static int getAttributeForStyling(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        HashMap dimensions = getWidgetDimensions(appWidgetManager, appWidgetId);
+        int width = Integer.parseInt(dimensions.get("width").toString());
+        int height = Integer.parseInt(dimensions.get("height").toString());
+        int attribute = height < width ? height : width;
+        return attribute;
+    }
+
+    public static int getBaseFontSize(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        int attribute = getAttributeForStyling(context, appWidgetManager, appWidgetId);
+        return (int) (attribute * 0.32);
+    }
+
+    public static int getBaseIconWidth(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        float density = context.getResources().getDisplayMetrics().density;
+        int attribute = getAttributeForStyling(context, appWidgetManager, appWidgetId);
+        return (int) (attribute * 2);
     }
 }

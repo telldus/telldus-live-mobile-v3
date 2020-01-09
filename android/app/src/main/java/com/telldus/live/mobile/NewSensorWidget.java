@@ -56,6 +56,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Arrays;
@@ -101,8 +102,8 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
-        int iconWidth = CommonUtilities.getBaseIconWidth(context);
-        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
+        int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeOne = (int) (fontSize * 1.2);
         int fontSizeTwo = (int) (fontSize * 0.88);
         int fontSizeFour = (int) (fontSize * 0.9);
@@ -307,6 +308,12 @@ public class NewSensorWidget extends AppWidgetProvider {
 
     public static void hideFlashIndicator(RemoteViews views, int flashId) {
         views.setViewVisibility(flashId, View.GONE);
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        updateAppWidget(context, appWidgetManager, appWidgetId);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
     @Override

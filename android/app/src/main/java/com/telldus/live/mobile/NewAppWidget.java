@@ -37,6 +37,7 @@ import com.androidnetworking.error.ANError;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Date;
 import java.util.Arrays;
@@ -114,8 +115,8 @@ public class NewAppWidget extends AppWidgetProvider {
             return;
         }
 
-        int iconWidth = CommonUtilities.getBaseIconWidth(context);
-        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
+        int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeFour = (int) (fontSize * 0.9);
         int fontSizeFive = (int) (fontSize * 0.6);
         fontSizeFour = fontSizeFour > Constants.widgetTitleMaxSize ? Constants.widgetTitleMaxSize : fontSizeFour;
@@ -1213,6 +1214,12 @@ public class NewAppWidget extends AppWidgetProvider {
         } else {
             views.setInt(viewId, "setBackgroundResource", drawableWhenInMiddle);
         }
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        updateAppWidget(context, appWidgetManager, appWidgetId);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
     @Override

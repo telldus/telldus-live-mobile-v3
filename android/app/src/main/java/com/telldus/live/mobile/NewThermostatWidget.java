@@ -41,6 +41,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Date;
@@ -101,9 +102,8 @@ public class NewThermostatWidget extends AppWidgetProvider {
             return;
         }
 
-        int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-        int iconWidth = CommonUtilities.getBaseIconWidth(context);
-        int fontSize = CommonUtilities.getBaseFontSize(context);
+        int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
+        int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeOne = (int) (fontSize * 0.88);
         int fontSizeTwo = (int) (fontSize * 0.68);
         int fontSizeFour = (int) (fontSize * 0.9);
@@ -296,7 +296,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                 views.setTextViewTextSize(R.id.infoText, COMPLEX_UNIT_SP, fontSizeFive);
 
-                int iconInfoWidth = (int) (width * 0.08);
+                int iconInfoWidth = (int) (iconWidth / 2);
                 views.setImageViewBitmap(R.id.infoIcon, CommonUtilities.buildTelldusIcon(
                     "info",
                 colorIdle,
@@ -380,6 +380,12 @@ public class NewThermostatWidget extends AppWidgetProvider {
         intent.setAction(action);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,id);
         return PendingIntent.getBroadcast(context, id, intent, 0);
+    }
+
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
+        updateAppWidget(context, appWidgetManager, appWidgetId);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
     @Override
