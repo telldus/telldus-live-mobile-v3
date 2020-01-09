@@ -315,6 +315,11 @@ public class NewThermostatWidget extends AppWidgetProvider {
             views.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             views.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
 
+            iconWidth = (int) (iconWidth * 0.3);
+            int padding = (int) (iconWidth * 0.3) + 8;
+
+            views.setImageViewBitmap(R.id.icon_premium, CommonUtilities.drawableToBitmap(context.getDrawable(R.drawable.icon_premium), iconWidth, iconWidth));
+            views.setImageViewBitmap(R.id.icon_premium_bg_mask, CommonUtilities.drawableToBitmap(context.getDrawable(R.drawable.shape_circle), iconWidth + padding, iconWidth + padding));
             views.setTextViewTextSize(R.id.textPremiumRequired, COMPLEX_UNIT_SP, fontSizeFive);
 
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewThermostatWidget.class);

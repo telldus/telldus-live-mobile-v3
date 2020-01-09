@@ -10,13 +10,24 @@
         android:orientation="horizontal"
         android:padding="5dp"
         android:visibility="gone">
-    <ImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:src="@drawable/icon_premium"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:background="@drawable/shape_circle"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center|center"
+        android:layout_gravity="center|center">
+        <ImageView
+            android:id="@+id/icon_premium_bg_mask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center"
+            android:gravity="center|center"/>
+        <ImageView
+            android:id="@+id/icon_premium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center"
+            android:gravity="center|center"/>
+    </FrameLayout>
     <TextView
         android:id="@+id/textPremiumRequired"
         android:layout_width="wrap_content"
@@ -27,4 +38,4 @@
         android:gravity="left"
         android:layout_marginLeft="5dp"
         android:textColor="@color/white"/>
-    </LinearLayout>
+</LinearLayout>

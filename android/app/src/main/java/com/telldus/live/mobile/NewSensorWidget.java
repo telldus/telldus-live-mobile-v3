@@ -278,6 +278,11 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             view.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
 
+            iconWidth = (int) (iconWidth * 0.3);
+            int padding = (int) (iconWidth * 0.3) + 8;
+
+            view.setImageViewBitmap(R.id.icon_premium, CommonUtilities.drawableToBitmap(context.getDrawable(R.drawable.icon_premium), iconWidth, iconWidth));
+            view.setImageViewBitmap(R.id.icon_premium_bg_mask, CommonUtilities.drawableToBitmap(context.getDrawable(R.drawable.shape_circle), iconWidth + padding, iconWidth + padding));
             view.setTextViewTextSize(R.id.textPremiumRequired, COMPLEX_UNIT_SP, fontSizeFive);
 
             sensorUpdateAlarmManager.stopAlarm(appWidgetId, NewSensorWidget.class);
