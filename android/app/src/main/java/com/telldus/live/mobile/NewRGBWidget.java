@@ -261,13 +261,7 @@ public class NewRGBWidget extends AppWidgetProvider {
                         iconSize,
                         iconSize,
                         context));
-                views.setImageViewBitmap(R.id.rgb_dynamic_background, CommonUtilities.buildBitmapImageViewBG(
-                        bgColor,
-                        60,
-                        60,
-                        0,
-                        5,
-                        context));
+                views.setInt(R.id.rgb_dynamic_background,"setColorFilter", bgColor);
                 views.setTextColor(R.id.dimValue, flashColor);
             }
 

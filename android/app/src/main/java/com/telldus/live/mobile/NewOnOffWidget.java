@@ -336,6 +336,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         R.id.flashing_indicator_rgb,
                         backgroundFlash
                 );
+                views.setImageViewResource(R.id.rgb_dynamic_background, R.drawable.shape_rgb_mask_no_radi);
                 views.setImageViewBitmap(R.id.palette, CommonUtilities.buildTelldusIcon(
                         "palette",
                         flashColor,
@@ -343,13 +344,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
                         (int) (iconWidth * 0.7),
                         (int) (iconWidth * 0.7),
                         context));
-                views.setImageViewBitmap(R.id.rgb_dynamic_background, CommonUtilities.buildBitmapImageViewBG(
-                        bgColor,
-                        50,
-                        50,
-                        1,
-                        0,
-                        context));
+                views.setInt(R.id.rgb_dynamic_background,"setColorFilter", bgColor);
             }
 
             if (methodRequested != null && isShowingStatus == 1 && (methodRequested.equals(String.valueOf(METHOD_RGB)) || methodRequested.equals(String.valueOf(METHOD_DIM)))) {

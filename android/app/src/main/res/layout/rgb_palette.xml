@@ -20,7 +20,8 @@
         android:layout_gravity="center|center"
         android:gravity="center|center"
         android:visibility="gone"
-        android:scaleType="fitXY"/>
+        android:src="@drawable/shape_rgb_mask"
+        android:tintMode="src_over"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
