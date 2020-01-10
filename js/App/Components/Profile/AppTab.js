@@ -58,6 +58,7 @@ import {
 import {
 	showToast,
 	setDBCarousel,
+	setReportCrash,
 } from '../../Actions/App';
 
 import Theme from '../../Theme';
@@ -77,7 +78,7 @@ const AppTab = (props: Object): Object => {
 		deviceId,
 	} = useSelector((state: Object): Object => state.user);
 
-	const { dbCarousel = true } = defaultSettings;
+	const { dbCarousel = true, reportCrash = true } = defaultSettings;
 
 	const {
 		container,
@@ -86,6 +87,7 @@ const AppTab = (props: Object): Object => {
 		labelTextStyle,
 		switchStyle,
 		titleStyle,
+		contentCoverStyle,
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
@@ -172,6 +174,10 @@ const AppTab = (props: Object): Object => {
 		dispatch(setDBCarousel(!dbCarousel));
 	}
 
+	function toggleReportCrash() {
+		dispatch(setReportCrash(!reportCrash));
+	}
+
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
@@ -195,7 +201,21 @@ const AppTab = (props: Object): Object => {
 					intl={intl}
 					labelTextStyle={labelTextStyle}
 					touchableStyle={touchableStyle}
-					switchStyle={switchStyle}/>
+					switchStyle={switchStyle}
+					style={contentCoverStyle}/>
+				<Text style={titleStyle}>
+					Crashlytics
+				</Text>
+				<SettingsRow
+					label={'Report crash'}
+					onValueChange={toggleReportCrash}
+					value={reportCrash}
+					appLayout={layout}
+					intl={intl}
+					labelTextStyle={labelTextStyle}
+					touchableStyle={touchableStyle}
+					switchStyle={switchStyle}
+					style={contentCoverStyle}/>
 			</View>
 		</ScrollView>
 	);
@@ -228,6 +248,9 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		switchStyle: {
 			transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
+		},
+		contentCoverStyle: {
+			marginBottom: fontSize / 2,
 		},
 		titleStyle: {
 			marginBottom: 5,
