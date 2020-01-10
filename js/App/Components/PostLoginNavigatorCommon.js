@@ -32,7 +32,6 @@ import NetInfo from '@react-native-community/netinfo';
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
-import ExchangeOffer from './ExchangeOffer/ExchangeOffer';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
 
@@ -68,7 +67,6 @@ import {
 	shouldUpdate,
 	navigate,
 	prepareNo433MHzSupportDialogueData,
-	hasTellStickNetGetOne,
 	premiumAboutToExpire,
 } from '../Lib';
 
@@ -457,18 +455,10 @@ render(): Object {
 		dimmer,
 		intl,
 		screenReaderEnabled,
-		visibilityExchangeOffer,
-		gateways,
-		locale,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
-
-	const showEO = !showEULA
-	&& locale === 'sv'
-	&& (!visibilityExchangeOffer || visibilityExchangeOffer === 'show' || visibilityExchangeOffer === 'force_show')
-	&& hasTellStickNetGetOne(gateways.byId);
 
 	return (
 		<View style={{flex: 1}}>
@@ -496,7 +486,6 @@ render(): Object {
 				/>
 			)}
 			<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
-			<ExchangeOffer showModal={showEO} onLayout={this.onLayout}/>
 		</View>
 	);
 }
