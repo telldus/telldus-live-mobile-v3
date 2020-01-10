@@ -150,27 +150,34 @@ constructor(props: Props) {
 	this.onNotificationOpened = Push.onNotificationOpened();
 }
 
-componentDidMount() {
+async componentDidMount() {
 	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
 	dispatch(appStart());
 	dispatch(appState());
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 	// and results in generating multiple tokens.
-	dispatch(getUserProfile()).then(() => {
-		dispatch(widgetAndroidConfigure());
-		dispatch(widgetiOSConfigure());
-		dispatch(syncLiveApiOnForeground());
-		dispatch(getGateways());
-		dispatch(getAppData()).then(() => {
-			dispatch(widgetAndroidRefresh());
-		});
+	try {
+		await dispatch(getUserProfile());
+	} catch (e) {
+		// Nothing much to do here
+	} finally {
 		dispatch(getPhonesList()).then((phonesList: Object) => {
 			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
 			this.pushConf(register);
 			if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
 				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
 			}
+		}).catch(() => {
+			this.pushConf(false);
+		});
+
+		dispatch(widgetAndroidConfigure());
+		dispatch(widgetiOSConfigure());
+		dispatch(syncLiveApiOnForeground());
+		dispatch(getGateways());
+		dispatch(getAppData()).then(() => {
+			dispatch(widgetAndroidRefresh());
 		});
 		dispatch(getUserSubscriptions());
 
@@ -179,7 +186,7 @@ componentDidMount() {
 
 		// Auto discover TellStick's that support local control.
 		this.autoDetectLocalTellStick();
-	});
+	}
 
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
