@@ -59,9 +59,7 @@ import { configureStore } from './App/Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
 import * as Translations from './App/Translations';
 import {
-	setUserIdentifier,
 	enableCrashlyticsCollection,
-	setUserName,
 } from './App/Lib/Analytics';
 import {
 	getLocale,
@@ -71,6 +69,10 @@ import {
 import {
 	setAppLanguage,
 } from './App/Actions/App';
+import {
+	setUserIdentifierFirebaseCrashlytics,
+	setUserNameFirebaseCrashlytics,
+} from './App/Actions/Analytics';
 
 function Bootstrap(): Object {
 
@@ -98,10 +100,11 @@ function Bootstrap(): Object {
 		_configureStoreCompleted() {
 			this.setState({ isLoading: false });
 			SplashScreen.hide();
-			let state = this.state.store.getState();
+			const { getState, dispatch } = this.state.store;
+			let state = getState();
 			if (state.user && state.user.userProfile) {
-				setUserIdentifier(state.user.userProfile.email);
-				setUserName(`${state.user.userProfile.firstname} ${state.user.userProfile.lastname}`);
+				dispatch(setUserIdentifierFirebaseCrashlytics());
+				dispatch(setUserNameFirebaseCrashlytics());
 			}
 		}
 

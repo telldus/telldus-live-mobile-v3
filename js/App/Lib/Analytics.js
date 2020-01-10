@@ -23,6 +23,7 @@
 'use strict';
 
 import firebase from 'react-native-firebase';
+import DeviceInfo from 'react-native-device-info';
 
 export function reportError(msg: string) {
 	if (!__DEV__) {
@@ -48,9 +49,10 @@ export function setBoolean(key: string, value: boolean) {
 	}
 }
 
-export function setUserIdentifier(userId: string = '') {
+export function setUserIdentifier(userId?: string | null) {
 	if (!__DEV__) {
-		firebase.crashlytics().setUserIdentifier(userId);
+		const uid = typeof userId !== 'string' ? DeviceInfo.getUniqueID() : userId;
+		firebase.crashlytics().setUserIdentifier(uid);
 	}
 }
 
@@ -60,9 +62,10 @@ export function enableCrashlyticsCollection() {
 	}
 }
 
-export function setUserName(uname: string) {
+export function setUserName(uname?: string | null) {
 	// TODO: Enable once the method is supported. rn-firebase v6
 	// if (!__DEV__) {
-	// 	firebase.crashlytics().setUserName(uname);
+	//  const uName = typeof uname !== 'string' ? 'anonymous' : uname;
+	// 	firebase.crashlytics().setUserName(uName);
 	// }
 }

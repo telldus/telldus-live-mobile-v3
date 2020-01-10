@@ -31,6 +31,11 @@ import { destroyAllConnections } from '../Actions/Websockets';
 import { widgetAndroidDisableAll, widgetiOSRemoveDataFromKeychain } from './Widget';
 import { setBoolean } from '../Lib/Analytics';
 
+import {
+	setUserIdentifierFirebaseCrashlytics,
+	setUserNameFirebaseCrashlytics,
+} from './Analytics';
+
 type loginCredential = {
 	username: string,
 	password: string,
@@ -97,6 +102,8 @@ function getUserProfile(): ThunkAction {
 					...response,
 				},
 			});
+			dispatch(setUserIdentifierFirebaseCrashlytics());
+			dispatch(setUserNameFirebaseCrashlytics());
 			return response;
 		}).catch((err: any) => {
 			throw err;

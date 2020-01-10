@@ -27,6 +27,7 @@ import {
 	ScrollView,
 	Platform,
 	LayoutAnimation,
+	TouchableOpacity,
 } from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {
@@ -60,6 +61,13 @@ import {
 	setDBCarousel,
 	setReportCrash,
 } from '../../Actions/App';
+import {
+	setUserIdentifierFirebaseCrashlytics,
+	setUserNameFirebaseCrashlytics,
+} from '../../Actions/Analytics';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -88,7 +96,13 @@ const AppTab = (props: Object): Object => {
 		switchStyle,
 		titleStyle,
 		contentCoverStyle,
+		crashLabelCover,
+		crashInfoText,
 	} = getStyles(layout);
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	const dispatch = useDispatch();
 	useEffect(() => {
@@ -176,6 +190,19 @@ const AppTab = (props: Object): Object => {
 
 	function toggleReportCrash() {
 		dispatch(setReportCrash(!reportCrash));
+		dispatch(setUserIdentifierFirebaseCrashlytics());
+		dispatch(setUserNameFirebaseCrashlytics());
+	}
+
+	function onPressCrashInfo() {
+		toggleDialogueBoxState({
+			show: true,
+			showHeader: true,
+			imageHeader: true,
+			header: formatMessage(i18n.crashReports),
+			text: formatMessage(i18n.sendCrashAnonymouslyInfo),
+			showPositive: true,
+		});
 	}
 
 	return (
@@ -204,10 +231,21 @@ const AppTab = (props: Object): Object => {
 					switchStyle={switchStyle}
 					style={contentCoverStyle}/>
 				<Text style={titleStyle}>
-					Crashlytics
+					{formatMessage(i18n.crashReports)}
 				</Text>
 				<SettingsRow
-					label={'Report crash'}
+					label={
+						<View style={crashLabelCover}>
+							<Text style={labelTextStyle}>
+								{formatMessage(i18n.sendCrashAnonymously)}
+							</Text>
+							<TouchableOpacity onPress={onPressCrashInfo}>
+								<Text style={crashInfoText}>
+									?
+								</Text>
+							</TouchableOpacity>
+						</View>
+					}
 					onValueChange={toggleReportCrash}
 					value={reportCrash}
 					appLayout={layout}
@@ -240,8 +278,15 @@ const getStyles = (appLayout: Object): Object => {
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
 		},
+		crashLabelCover: {
+			justifyContent: 'center',
+			alignItems: 'center',
+			flexDirection: 'row',
+		},
 		labelTextStyle: {
 			fontSize,
+			color: '#000',
+			justifyContent: 'center',
 		},
 		touchableStyle: {
 			height: fontSize * 3.1,
@@ -256,6 +301,12 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: 5,
 			color: '#b5b5b5',
 			fontSize,
+		},
+		crashInfoText: {
+			fontSize,
+			color: Theme.Core.red,
+			fontWeight: 'bold',
+			paddingHorizontal: 3,
 		},
 	};
 };
