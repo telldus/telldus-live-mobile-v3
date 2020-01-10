@@ -23,7 +23,6 @@
 'use strict';
 
 import firebase from 'react-native-firebase';
-import DeviceInfo from 'react-native-device-info';
 
 export function reportError(msg: string) {
 	if (!__DEV__) {
@@ -51,7 +50,7 @@ export function setBoolean(key: string, value: boolean) {
 
 export function setUserIdentifier(userId?: string | null) {
 	if (!__DEV__) {
-		const uid = typeof userId !== 'string' ? DeviceInfo.getUniqueID() : userId;
+		const uid = typeof userId !== 'string' ? '' : userId;
 		firebase.crashlytics().setUserIdentifier(uid);
 	}
 }
