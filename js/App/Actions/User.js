@@ -241,9 +241,8 @@ function getPhonesList(): ThunkAction {
 			const { phone } = response;
 			if (phone) {
 				dispatch(receivedPhonesList(phone));
-				return response;
 			}
-			throw response;
+			return response;
 		}).catch((err: any) => {
 			throw err;
 		});
