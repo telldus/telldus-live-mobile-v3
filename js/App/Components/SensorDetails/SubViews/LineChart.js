@@ -35,6 +35,9 @@ const isEqual = require('react-fast-compare');
 
 import { View } from '../../../../BaseComponents';
 
+import {
+	getTickConfigY,
+} from '../../../Lib/chartUtils';
 import shouldUpdate from '../../../Lib/shouldUpdate';
 import Theme from '../../../Theme';
 
@@ -149,7 +152,7 @@ formatXTick(tick: number): string {
 	return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
 }
 
-renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
+renderAxis(d: Array<Object>, i: number, styles: Object, ticks?: Array<number>): null | Object {
 	const {
 		showOne,
 		showTwo,
@@ -182,7 +185,8 @@ renderAxis(d: Array<Object>, i: number, styles: Object): null | Object {
 				tickLabels: { fill: Theme.Core.inactiveTintColor, textAnchor: anchors[i] },
 				grid: chartLineStyle,
 			}}
-			tickCount={3}
+			tickCount={ticks ? ticks.length : 3}
+			tickValues={ticks}
 		/>
 	);
 }
@@ -251,9 +255,10 @@ render(): Object | null {
 	} = styles;
 
 	const { ticks } = this.getTickConfigX();
+	const { ticksYOne, ticksYTwo } = getTickConfigY(this.props);
 
-	const axisOne = this.renderAxis(chartDataOne, 0, styles);
-	const axisTwo = this.renderAxis(chartDataTwo, 1, styles);
+	const axisOne = this.renderAxis(chartDataOne, 0, styles, ticksYOne);
+	const axisTwo = this.renderAxis(chartDataTwo, 1, styles, ticksYTwo);
 
 	const lineOne = this.renderLine(chartDataOne, 0, others);
 	const lineTwo = this.renderLine(chartDataTwo, 1, others);
