@@ -54,16 +54,14 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 			return;
 		}
 
-		const { timezone } = gateway;
+		const { timezone, sunrise, sunset } = gateway;
 		let gatewayTimezone = timezone;
 
 		if (job.type === 'sunrise') {
-			const { sunrise } = gateway;
 			const sunriseInMs = sunrise * 1000;
 			const offsetInMs = job.offset * 60 * 1000;
 			tempDay = moment(sunriseInMs + offsetInMs).tz(timezone);
 		} else if (job.type === 'sunset') {
-			const { sunset } = gateway;
 			const sunsetInMs = sunset * 1000;
 			const offsetInMs = job.offset * 60 * 1000;
 			tempDay = moment(sunsetInMs + offsetInMs).tz(timezone);

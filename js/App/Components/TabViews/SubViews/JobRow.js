@@ -162,7 +162,6 @@ class JobRow extends View<null, Props, null> {
 			showNow,
 			expired,
 			currentScreen,
-			gatewayTimezone,
 		} = this.props;
 
 		const {
@@ -223,8 +222,7 @@ class JobRow extends View<null, Props, null> {
 						triangleColor={triangleColor}
 						triangleContainerStyle={{ opacity }}
 						isFirst={isFirst}
-						appLayout={appLayout}
-						gatewayTimezone={gatewayTimezone}>
+						appLayout={appLayout}>
 						{actionIcon}
 						<View style={{ flex: 1, opacity }}>
 							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
@@ -241,7 +239,6 @@ class JobRow extends View<null, Props, null> {
 												minute: 'numeric',
 											}}
 											style={description}
-											gatewayTimezone={gatewayTimezone}
 										/>)
 									}
 								</Description>
