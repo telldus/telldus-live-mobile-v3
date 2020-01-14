@@ -50,6 +50,7 @@ type Props = {
 	maxDate: string,
 	propToUpdate: 1 | 2,
 	timestamp: Object,
+	gatewayTimezone: string,
 };
 
 type DefaultProps = {
@@ -130,7 +131,11 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onDayPress(day: Object) {
-	const { propToUpdate } = this.props;
+	const { propToUpdate, gatewayTimezone } = this.props;
+
+	if (gatewayTimezone) {
+		moment.tz.setDefault(gatewayTimezone);
+	}
 
 	// The received timestamp is in GMT also start of the day timestamp in milliseconds
 	let { timestamp } = day;
@@ -152,6 +157,7 @@ onDayPress(day: Object) {
 			selectedTimestamp = parseInt(moment().format('X'), 10);
 		}
 	}
+	moment.tz.setDefault();
 	this.setState({
 		current: selectedTimestamp,
 	});
@@ -170,7 +176,11 @@ renderDay({date, state, marking}: Object): Object {
 	);
 }
 
-getMarkedDates(current: number): Object {
+getMarkedDatesAndPosterDate(current: number, gatewayTimezone: string): Object {
+	if (gatewayTimezone) {
+		moment.tz.setDefault(gatewayTimezone);
+	}
+	const posterDate = moment.unix(current);
 	let currentMark = moment.unix(current).format('YYYY-MM-DD');
 	let { timestamp, propToUpdate } = this.props, markedDates = {};
 	let { fromTimestamp, toTimestamp } = timestamp;
@@ -190,14 +200,22 @@ getMarkedDates(current: number): Object {
 		if (startDate === currentMark) {
 			markedDates[startDate] = {marked: true, startingDay: true, selected: true, endingDay: true};
 		}
-		return markedDates;
+		moment.tz.setDefault();
+		return {
+			markedDates,
+			posterDate,
+		};
 	}
 	let temp = startDate;
 	for (let i = 0; i < diff; i++) {
 		temp = moment(temp).add(1, 'd').format('YYYY-MM-DD');
 		markedDates[temp] = {marked: true, endingDay: i === (diff - 1), selected: temp === currentMark};
 	}
-	return markedDates;
+	moment.tz.setDefault();
+	return {
+		markedDates,
+		posterDate,
+	};
 }
 
 render(): Object {
@@ -205,6 +223,7 @@ render(): Object {
 	const {
 		appLayout,
 		maxDate,
+		gatewayTimezone,
 	} = this.props;
 
 	const {
@@ -220,7 +239,10 @@ render(): Object {
 		negativeLabelStyle,
 	} = this.getStyle(appLayout);
 
-	const markedDates = this.getMarkedDates(current);
+	const {
+		markedDates,
+		posterDate,
+	} = this.getMarkedDatesAndPosterDate(current, gatewayTimezone);
 
 	return (
 		<Modal
@@ -232,11 +254,11 @@ render(): Object {
 				<Poster posterWidth={posterWidth} posterHeight={posterHeight}>
 					<View style={posterItemsStyle}>
 						<FormattedDate
-							value={moment.unix(current)}
+							value={posterDate}
 							year="numeric"
 							style={posterTextOneStyle}/>
 						<FormattedDate
-							value={moment.unix(current)}
+							value={posterDate}
 							day="numeric"
 							month="short"
 							weekday="short"

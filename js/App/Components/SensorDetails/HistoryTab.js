@@ -70,6 +70,7 @@ type Props = {
 	screenProps: Object,
 	smoothing: boolean,
 	graphView: string,
+	gatewayTimezone: string,
 
 	sensorId: number,
 	dispatch: Function,
@@ -137,6 +138,9 @@ class HistoryTab extends View {
 
 	constructor(props: Props) {
 		super(props);
+
+		const { gatewayTimezone } = props;
+
 		this.state = {
 			hasRefreshed: false,
 			refreshing: true,
@@ -145,7 +149,7 @@ class HistoryTab extends View {
 			chartDataTwo: [],
 			list: [],
 			showCalendar: false,
-			timestamp: getHistoryTimestamp(3),
+			timestamp: getHistoryTimestamp(3, gatewayTimezone),
 			propToUpdate: 1,
 			isChartLoading: true,
 		};
@@ -320,9 +324,15 @@ class HistoryTab extends View {
 	}
 
 	refreshHistoryDataAfterLiveUpdate(): Promise<any> {
-		const { sensorId, selectedOne, selectedTwo } = this.props;
+		const {
+			sensorId,
+			selectedOne,
+			selectedTwo,
+			gatewayTimezone,
+		} = this.props;
 		const { timestamp } = this.state;
 		const { toTimestamp: from, fromTimestamp } = timestamp;// get only those data from previous 'to' till new 'to'[Getting full data again is too slow]
+		moment.tz.setDefault(gatewayTimezone);
 		const to = moment().unix();
 
 		// Do not update 'toTimestamp' here, instead introduce new variable 'liveDataToTimestamp'
@@ -343,6 +353,7 @@ class HistoryTab extends View {
 			from,
 			to,
 		};
+		moment.tz.setDefault();
 		return Promise.all([
 			this.refreshFromLocal(params, true, false, 1, timestampNew),
 			this.refreshFromLocal(paramsTwo, true, false, 2, timestampNew),
@@ -410,7 +421,7 @@ class HistoryTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo', 'smoothing', 'graphView']);
+			const propsChange = shouldUpdate(this.props, nextProps, ['selectedOne', 'selectedTwo', 'showOne', 'showTwo', 'smoothing', 'graphView', 'gatewayTimezone']);
 			if (propsChange) {
 				return propsChange;
 			}
@@ -548,10 +559,15 @@ class HistoryTab extends View {
 
 	getMaxDate(index: number, timestamp: Object): string {
 		const { toTimestamp } = timestamp;
+		moment.tz.setDefault(this.props.gatewayTimezone);
+		let maxD;
 		if (index === 1) {
-			return moment.unix(toTimestamp).format('YYYY-MM-DD');
+			maxD = moment.unix(toTimestamp).format('YYYY-MM-DD');
+		} else {
+			maxD = moment().format('YYYY-MM-DD');
 		}
-		return moment().format('YYYY-MM-DD');
+		moment.tz.setDefault();
+		return maxD;
 	}
 
 	render(): Object | null {
@@ -565,6 +581,7 @@ class HistoryTab extends View {
 			keepHistory,
 			smoothing,
 			graphView,
+			gatewayTimezone,
 		} = this.props;
 		const {
 			list,
@@ -627,6 +644,7 @@ class HistoryTab extends View {
 			isChartLoading,
 			smoothing,
 			graphView,
+			gatewayTimezone,
 		};
 
 		return (
@@ -687,7 +705,8 @@ class HistoryTab extends View {
 					onPressPositive={this.onPressPositive}
 					onPressNegative={this.onPressNegative}
 					appLayout={appLayout}
-					intl={intl}/>
+					intl={intl}
+					gatewayTimezone={gatewayTimezone}/>
 			</ScrollView>
 		);
 	}
@@ -740,7 +759,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const { defaultSensorSettings } = state.sensorsList;
 	const defaultSettings = defaultSensorSettings[id];
-	const { keepHistory } = state.sensors.byId[id] ? state.sensors.byId[id] : {};
+	const { keepHistory, clientId } = state.sensors.byId[id] ? state.sensors.byId[id] : {};
 	const {
 		selectedOne = null,
 		selectedTwo = null,
@@ -749,6 +768,11 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		smoothing = false,
 		graphView = 'overview',
 	} = prepareDefaultSettings(defaultSettings);
+
+	const gateway = state.gateways.byId[clientId];
+	const {
+		timezone: gatewayTimezone,
+	} = gateway ? gateway : {};
 
 	return {
 		sensorId: id,
@@ -759,6 +783,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showTwo,
 		smoothing,
 		graphView,
+		gatewayTimezone,
 	};
 }
 

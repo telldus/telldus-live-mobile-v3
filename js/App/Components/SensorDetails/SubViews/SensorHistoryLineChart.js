@@ -528,9 +528,16 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 }
 
-function getNewData(data: Object, toTimestamp: number, selectedData: Object, tsOne?: number, tsTwo?: number): Object {
+function getNewData(data: Object, toTimestamp: number, selectedData: Object, gatewayTimezone: string, tsOne?: number, tsTwo?: number): Object {
+	if (gatewayTimezone) {
+		moment.tz.setDefault(gatewayTimezone);
+	}
+
 	const today = moment().format('YYYY-MM-DD');
 	const toDay = moment.unix(toTimestamp).format('YYYY-MM-DD');
+
+	moment.tz.setDefault();
+
 	// Return live data only if 'to' date is today.
 	if (today !== toDay) {
 		return {};
@@ -567,11 +574,12 @@ const checkForNewData = createSelector(
 		({ data }: Object): Object => data,
 		({ toTimestamp }: Object): number => toTimestamp,
 		({ selectedData }: Object): Object => selectedData,
+		({ gatewayTimezone }: Object): Object => gatewayTimezone,
 		({ tsOne }: Object): Object => tsOne,
 		({ tsTwo }: Object): Object => tsTwo,
 	],
-	(data: Object, toTimestamp: number, selectedData: Object, tsOne?: number, tsTwo?: number): Object =>
-		getNewData(data, toTimestamp, selectedData, tsOne, tsTwo)
+	(data: Object, toTimestamp: number, selectedData: Object, gatewayTimezone: string, tsOne?: number, tsTwo?: number): Object =>
+		getNewData(data, toTimestamp, selectedData, gatewayTimezone, tsOne, tsTwo)
 );
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
@@ -583,6 +591,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		selectedTwo,
 		chartDataOne = [],
 		chartDataTwo = [],
+		gatewayTimezone,
 	} = ownProps;
 	const sensor = byId[sensorId];
 	const { scale: scale1, type: type1 } = selectedOne ? selectedOne : { scale: null, type: null };
@@ -597,7 +606,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		tsTwo = chartDataTwo[0].ts;
 	}
 
-	let liveData = checkForNewData({ ...sensor, ...timestamp, selectedData, tsOne, tsTwo });
+	let liveData = checkForNewData({ ...sensor, ...timestamp, selectedData, gatewayTimezone, tsOne, tsTwo });
 
 	return {
 		liveData,
