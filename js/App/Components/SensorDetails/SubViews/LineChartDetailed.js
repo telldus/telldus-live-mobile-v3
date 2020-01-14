@@ -56,6 +56,9 @@ type Props = {
 	min2: Object,
 	min: Object,
 	max: Object,
+
+	y2Tick: string,
+	setLargeYTick: (string) => void,
 };
 
 type DefaultProps = {
@@ -95,12 +98,14 @@ constructor(props: Props) {
 	this.getYTwo = this.getYTwo.bind(this);
 	this.formatYTickOne = this.formatYTickOne.bind(this);
 	this.formatYTickTwo = this.formatYTickTwo.bind(this);
+
+	this.minyTickLength = 2;
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 	const propsChange = shouldUpdate( this.props, nextProps, [
-		'showOne', 'showTwo', 'smoothing', 'fullscreen',
+		'showOne', 'showTwo', 'smoothing', 'fullscreen', 'y2Tick',
 	]);
 	if (propsChange) {
 		return propsChange;
@@ -184,11 +189,18 @@ formatYTickOne(tick: number): number {
 }
 
 formatYTickTwo(tick: number): number {
-	const { max2 } = this.props;
+	const { max2, y2Tick } = this.props;
 	if (!max2) {
+		if (tick.toString().length > y2Tick.length) {
+			this.props.setLargeYTick(tick.toString());
+		}
 		return tick;
 	}
-	return parseFloat(parseFloat(tick * max2.value).toFixed(1));
+	const formattedTick = parseFloat(parseFloat(tick * max2.value).toFixed(1));
+	if (formattedTick.toString().length > y2Tick.length) {
+		this.props.setLargeYTick(formattedTick.toString());
+	}
+	return formattedTick;
 }
 
 getDomainY(): Array<number> {
@@ -377,7 +389,18 @@ render(): Object | null {
 }
 
 getStyle(): Object {
-	const { appLayout, fullscreen } = this.props;
+	const {
+		appLayout,
+		fullscreen,
+		y2Tick = '0',
+	} = this.props;
+
+	const maxLen = y2Tick.length;
+	let tickPaddingRight = 8;
+	if (maxLen > this.minyTickLength) {
+		tickPaddingRight += ((maxLen - this.minyTickLength) * 4);
+	}
+
 	const { show, force } = fullscreen;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -406,7 +429,7 @@ getStyle(): Object {
 		chartHeight,
 		padding,
 		xOffsets: [0, chartWidth],
-		tickPadding: [-20, 5],
+		tickPadding: [-20, tickPaddingRight],
 		anchors: ['start', 'start'],
 		colors: [brandDanger, brandInfo],
 		colorsScatter: [brandDanger, brandInfo],

@@ -73,6 +73,7 @@ type State = {
 	orientation: any,
 	isLoading: boolean,
 	isUpdating: boolean,
+	y2Tick: string,
 };
 
 class SensorHistoryLineChart extends View<Props, State> {
@@ -105,6 +106,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 			orientation: Orientation.getInitialOrientation(),
 			isLoading: false,
 			isUpdating: false,
+			y2Tick: '2',
 		};
 
 		this.toggleOne = this.toggleOne.bind(this);
@@ -177,8 +179,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 		const { showTwo, showOne, onToggleChartData } = this.props;
 		if (showOne || (!showOne && !showTwo)) {
 			onToggleChartData({ showTwo: !showTwo });
+			this.setLargeYTick('2');
 		} else if (!showOne && !showTwo) {
 			onToggleChartData({ showTwo: true });
+			this.setLargeYTick('2');
 		}
 	}
 
@@ -186,8 +190,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 		const { showOne, showTwo, onToggleChartData } = this.props;
 		if (showTwo || (!showTwo && !showOne)) {
 			onToggleChartData({ showOne: !showOne });
+			this.setLargeYTick('2');
 		} else if (!showOne && !showTwo) {
 			onToggleChartData({ showOne: true });
+			this.setLargeYTick('2');
 		}
 	}
 
@@ -212,7 +218,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 	}
 
 	onPressResetChartView() {
-		this.setState({ isLoading: true });
+		this.setState({
+			isLoading: true,
+			y2Tick: '2',
+		});
 		setTimeout(() => {
 		  this.setState({ isLoading: false });
 		}, 10);
@@ -309,8 +318,14 @@ class SensorHistoryLineChart extends View<Props, State> {
 		}
 	}
 
+	setLargeYTick = (y2Tick: string) => {
+		this.setState({
+			y2Tick,
+		});
+	}
+
 	renderChart(): Object | null {
-		const { fullscreen, isLoading } = this.state;
+		const { fullscreen, isLoading, y2Tick } = this.state;
 		const { show } = fullscreen;
 		const {
 			chartDataOne,
@@ -372,6 +387,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 			fullscreen,
 			smoothing,
 			graphView,
+			setLargeYTick: this.setLargeYTick,
+			y2Tick,
 		};
 
 		return (

@@ -57,6 +57,9 @@ type Props = {
 	max2: Object,
 	min1: Object,
 	min2: Object,
+
+	y2Tick: string,
+	setLargeYTick: (string) => void,
 };
 
 type DefaultProps = {
@@ -87,12 +90,14 @@ constructor(props: Props) {
 	this.formatXTick = this.formatXTick.bind(this);
 	this.renderAxis = this.renderAxis.bind(this);
 	this.renderLine = this.renderLine.bind(this);
+
+	this.minyTickLength = 2;
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 
 	const propsChange = shouldUpdate(this.props, nextProps, [
-		'showOne', 'showTwo', 'smoothing', 'fullscreen',
+		'showOne', 'showTwo', 'smoothing', 'fullscreen', 'y2Tick',
 	]);
 	if (propsChange) {
 		return propsChange;
@@ -152,6 +157,14 @@ formatXTick(tick: number): string {
 	return `${moment.unix(tick).format('D')}/${moment.unix(tick).format('M')}`;
 }
 
+checkIfTickIsLarge = (tick: number = 0): number => {
+	const { y2Tick } = this.props;
+	if (tick.toString().length > y2Tick.length) {
+		this.props.setLargeYTick(tick.toString());
+	}
+	return tick;
+}
+
 renderAxis(d: Array<Object>, i: number, styles: Object, ticks?: Array<number>): null | Object {
 	const {
 		showOne,
@@ -187,6 +200,7 @@ renderAxis(d: Array<Object>, i: number, styles: Object, ticks?: Array<number>): 
 			}}
 			tickCount={ticks ? ticks.length : 3}
 			tickValues={ticks}
+			tickFormat={i === 0 ? undefined : this.checkIfTickIsLarge}
 		/>
 	);
 }
@@ -295,7 +309,18 @@ render(): Object | null {
 }
 
 getStyle(): Object {
-	const { appLayout, fullscreen } = this.props;
+	const {
+		appLayout,
+		fullscreen,
+		y2Tick = '0',
+	} = this.props;
+
+	const maxLen = y2Tick.length;
+	let tickPaddingRight = 8;
+	if (maxLen > this.minyTickLength) {
+		tickPaddingRight += ((maxLen - this.minyTickLength) * 4);
+	}
+
 	const { show, force } = fullscreen;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -324,7 +349,7 @@ getStyle(): Object {
 		chartHeight,
 		padding,
 		xOffsets: [0, chartWidth],
-		tickPadding: [-20, 5],
+		tickPadding: [-20, tickPaddingRight],
 		anchors: ['start', 'start'],
 		colors: [brandDanger, brandInfo],
 		colorsScatter: [brandDanger, brandInfo],
