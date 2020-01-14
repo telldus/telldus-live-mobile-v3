@@ -76,7 +76,7 @@ class LineChart extends View<Props, null> {
 	getY: (Object) => number;
 	getX: (Object) => number;
 	formatXTick: (number) => string;
-	renderAxis: (Array<Object>, number, Object) => Object;
+	renderAxis: (Array<Object>, number, Object, ?Array<number>) => Object;
 renderLine: (Array<Object>, number, Object) => Object;
 
 constructor(props: Props) {
