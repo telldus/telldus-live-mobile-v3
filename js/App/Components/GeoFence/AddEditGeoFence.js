@@ -21,22 +21,32 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useState,
+} from 'react';
 import {
 	StyleSheet,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
+import MapView, {
+	AnimatedRegion,
+} from 'react-native-maps';
 
 import {
 	View,
 	FloatingButton,
-	Text,
 } from '../../../BaseComponents';
-import MapView, {
-	AnimatedRegion,
-	Circle,
-	Callout,
-} from 'react-native-maps';
+import {
+	FenceCallout,
+} from './SubViews';
+
+import {
+	setEditFence,
+} from '../../Actions/Fences';
+
 import Theme from '../../Theme';
 
 type Props = {
@@ -51,6 +61,9 @@ const AddEditGeoFence = (props: Props): Object => {
 		appLayout,
 	} = props;
 
+	let { fences, location } = useSelector((state: Object): Object => state.fences);
+	location = location ? location : {};
+
 	function onPressNext() {
 		navigation.navigate({
 			routeName: 'SelectArea',
@@ -58,72 +71,93 @@ const AddEditGeoFence = (props: Props): Object => {
 		});
 	}
 
+	const dispatch = useDispatch();
+
+	const [ activeFenceIndex, setActiveFenceIndex ] = useState(0);
+
 	const {
 		container,
 		mapStyle,
-		calloutStyle,
-		calloutInnerView,
-		editIconSize,
-		calloutText,
 	} = getStyles(appLayout);
 
+	const {
+		latitude = 55.70584,
+		longitude = 13.19321,
+		latitudeDelta = 0.24442,
+		longitudeDelta = 0.24442,
+	} = location;
+	fences = (fences && fences.length > 0) ? fences : [{
+		latitude,
+		longitude,
+		radius: 3000,
+		title: 'Home',
+	}];
 	const region = new AnimatedRegion({
-		latitude: 55.70584,
-		longitude: 13.19321,
-		latitudeDelta: 0.24442,
-		longitudeDelta: 0.24442,
+		latitude,
+		longitude,
+		latitudeDelta,
+		longitudeDelta,
 	});
 
-	const coordinate = {
-		latitude: 55.70584,
-		longitude: 13.19321,
-	};
-
-	const circleCenter = {
-		latitude: 55.70584,
-		longitude: 13.19321,
-	};
-
-	// eslint-disable-next-line no-unused-vars
-	let marker;
-	function setRefMarker(ref: any) {
-		marker = ref;
+	function setActiveFence(index: number) {
+		setActiveFenceIndex(index);
 	}
 
-	// eslint-disable-next-line no-unused-vars
-	let map;
-	function setRefMap(ref: any) {
-		map = ref;
-	}
-
-	function onPressCallout() {
+	function onEditFence(index: number) {
+		dispatch(setEditFence(index));
+		setActiveFenceIndex(0);
 		navigation.navigate({
 			routeName: 'EditGeoFence',
 			key: 'EditGeoFence',
 		});
 	}
 
+	function renderMarker(fence: Object, index: number): Object {
+
+		function setActiveFenceInner() {
+			setActiveFence(index);
+		}
+
+		function onEditFenceInner() {
+			onEditFence(index);
+		}
+
+		return (
+			<MapView.Marker
+				image={{uri: 'marker'}}
+				title={'Home'}
+				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}
+				onPress={setActiveFenceInner}>
+				<MapView.Callout onPress={onEditFenceInner}>
+					<FenceCallout
+						title={fence.title}
+						onEdit={onEditFenceInner}
+					/>
+				</MapView.Callout>
+			</MapView.Marker>
+		);
+	}
+
 	return (
 		<View style={container}>
 			<MapView.Animated
 				style={mapStyle}
-				ref={setRefMap}
-				region={region}>
-				<MapView.Marker.Animated
-					ref={setRefMarker}
-					coordinate={coordinate}>
-					<Callout style={calloutStyle} onPress={onPressCallout}>
-						<View style={calloutInnerView}>
-							<Text style={calloutText}>Area name</Text>
-							<Icon name={'edit'} size={editIconSize} color={Theme.Core.rowTextColor}/>
-						</View>
-					</Callout>
-				</MapView.Marker.Animated>
-				<Circle
-					center={circleCenter}
-					radius={3000}
-					fillColor={'#e2690150'}
+				initialRegion={region}>
+				{
+					fences.map((fence: Object, index: number): () => Object => {
+						return renderMarker(fence, index);
+					})
+				}
+				<MapView.Circle
+					key={`fence-${activeFenceIndex}`}
+					center={{
+						latitude: fences[activeFenceIndex].latitude,
+						longitude: fences[activeFenceIndex].longitude,
+					}}
+					radius={fences[activeFenceIndex].radius}
+					fillColor="rgba(226, 105, 1, 0.3)"
 					strokeColor={Theme.Core.brandSecondary}/>
+
 			</MapView.Animated>
 			<FloatingButton
 				onPress={onPressNext}
@@ -133,15 +167,6 @@ const AddEditGeoFence = (props: Props): Object => {
 };
 
 const getStyles = (appLayout: Object): Object => {
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-
-	const {
-		brandSecondary,
-	} = Theme.Core;
-
-	const editIconSize = deviceWidth * 0.04;
 
 	return {
 		container: {
@@ -149,20 +174,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		mapStyle: {
 			...StyleSheet.absoluteFillObject,
-		},
-		calloutStyle: {
-			padding: 5,
-		},
-		calloutInnerView: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		editIconSize,
-		calloutText: {
-			fontSize: editIconSize,
-			color: brandSecondary,
-			marginRight: 10,
 		},
 	};
 };
