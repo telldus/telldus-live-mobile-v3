@@ -63,7 +63,7 @@ const SetAreaName = (props: Props): Object => {
 			</Text>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}
+				iconName={'checkmark'}
 			/>
 		</View>
 	);
