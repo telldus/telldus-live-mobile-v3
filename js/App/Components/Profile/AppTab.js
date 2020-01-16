@@ -203,11 +203,26 @@ const AppTab = (props: Object): Object => {
 		});
 	}
 
+	function onPressGeoFence() {
+		navigation.navigate({
+			routeName: 'GeoFenceNavigator',
+			key: 'GeoFenceNavigator',
+		});
+	}
+
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
+				<Text style={{
+					padding: 10,
+					color: 'red',
+					alignSelf: 'center',
+					margin: 10,
+				}} onPress={onPressGeoFence}>
+				Add or Edit Geo Fence
+				</Text>
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}

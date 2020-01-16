@@ -37,6 +37,7 @@ import RGBControlScreen from './RGBControl/RGBControlScreen';
 import ThermostatControl from './ThermostatControl/ThermostatFullControl';
 import ProfileNavigator from './Profile/ProfileNavigator';
 import AddSensorNavigator from './Sensor/AddSensor/AddSensorNavigator';
+import GeoFenceNavigator from './GeoFence/GeoFenceNavigator';
 
 import SettingsContainer from './Settings/SettingsContainer';
 import PushSettings from './PushSettings/PushSettings';
@@ -342,6 +343,17 @@ const RouteConfigs = {
 	},
 	RegisterForPushScreen: {
 		screen: RegisterForPushScreen,
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	GeoFenceNavigator: {
+		screen: GeoFenceNavigator,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
