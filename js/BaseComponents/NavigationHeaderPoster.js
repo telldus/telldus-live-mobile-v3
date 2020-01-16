@@ -64,6 +64,7 @@ type Props = {
     intl: Object,
 	posterCoverStyle?: Array<any> | Object | number,
 	goBack: () => void,
+	showPoster?: boolean,
 };
 
 type DefaultProps = {
@@ -71,6 +72,7 @@ type DefaultProps = {
 	align: 'right' | 'center',
 	showLeftIcon: boolean,
 	leftIcon: string,
+	showPoster: boolean,
 };
 
 type State = {
@@ -87,6 +89,7 @@ static defaultProps: DefaultProps = {
 	align: 'center',
 	showLeftIcon: true,
 	leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
+	showPoster: true,
 };
 
 goBack: () => void;
@@ -143,7 +146,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon']);
+	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon', 'showPoster']);
 	if (propsChange) {
 		return true;
 	}
@@ -205,6 +208,7 @@ render(): Object {
 		showLeftIcon,
 		leftIcon,
 		goBack,
+		showPoster,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -228,41 +232,43 @@ render(): Object {
 				showLeftIcon={showLeftIcon}
 				leftIcon={leftIcon}
 				goBack={goBack}/>
-			<Poster posterHeight={posterHeight}>
-				<View style={[posterCover, posterCoverStyle]}>
-					<View style={posterItemsContainer}>
-						{!!icon && (
-							<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
-						)}
-						{!!h1 && (
-							<ScrollView
-								horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
-								<Text style={h1Style} onLayout={this.onLayoutHeaderOne}>
-									{h1}
+			{showPoster && (
+				<Poster posterHeight={posterHeight}>
+					<View style={[posterCover, posterCoverStyle]}>
+						<View style={posterItemsContainer}>
+							{!!icon && (
+								<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
+							)}
+							{!!h1 && (
+								<ScrollView
+									horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
+									<Text style={h1Style} onLayout={this.onLayoutHeaderOne}>
+										{h1}
+									</Text>
+								</ScrollView>
+							)}
+							{!!h2 && (
+								<Text style={h2Style} onLayout={this.onLayoutHeaderTwo}>
+									{h2}
 								</Text>
-							</ScrollView>
+							)}
+						</View>
+						{adjustItems && showBackButton && showLeftIcon && (
+							<TouchableOpacity
+								style={styles.backButtonLand}
+								onPress={this.goBack}
+								accessibilityLabel={this.labelLeftIcon}>
+								{Platform.OS === 'ios' && leftIcon !== 'close' ?
+									<FontAwesome name={leftIcon} size={width * 0.047} color="#fff"/>
+									:
+									<Icon name={leftIcon} size={width * 0.047} color="#fff"/>
+								}
+							</TouchableOpacity>
 						)}
-						{!!h2 && (
-							<Text style={h2Style} onLayout={this.onLayoutHeaderTwo}>
-								{h2}
-							</Text>
-						)}
+						{!!infoButton && this._renderInfoButton(infoButton)}
 					</View>
-					{adjustItems && showBackButton && showLeftIcon && (
-						<TouchableOpacity
-							style={styles.backButtonLand}
-							onPress={this.goBack}
-							accessibilityLabel={this.labelLeftIcon}>
-							{Platform.OS === 'ios' && leftIcon !== 'close' ?
-								<FontAwesome name={leftIcon} size={width * 0.047} color="#fff"/>
-								:
-								<Icon name={leftIcon} size={width * 0.047} color="#fff"/>
-							}
-						</TouchableOpacity>
-					)}
-					{!!infoButton && this._renderInfoButton(infoButton)}
-				</View>
-			</Poster>
+				</Poster>
+			)}
 		</View>
 	);
 }
