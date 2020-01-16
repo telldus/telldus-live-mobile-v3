@@ -137,6 +137,19 @@ export type Action =
 
 	| { type: 'TOGGLE_DIALOGUE_BOX_STATE', payload: Object }
 
+	| { type: 'SET_FENCE_AREA', payload: Object }
+	| { type: 'SET_FENCE_ARRIVING_ACTIONS', payload: Object }
+	| { type: 'SET_FENCE_LEAVING_ACTIONS', payload: Object }
+	| { type: 'SET_FENCE_ACTIVE_TIME', payload: Object }
+	| { type: 'SET_FENCE_TITLE', payload: Object }
+	| { type: 'SAVE_FENCE', payload: Object }
+	| { type: 'SET_CURRENT_LOCATION', payload: Object }
+	| { type: 'SET_EDIT_FENCE', payload: Object }
+	| { type: 'DELETE_FENCE', payload: Object }
+	| { type: 'UPDATE_FENCE', payload: Object }
+	| { type: 'RESET_FENCE', payload: Object }
+	| { type: 'CLEAR_FENCES', payload: Object }
+
 	| { type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 	| { type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 	;
