@@ -27,7 +27,6 @@ import {
 } from 'react-native';
 import {
 	useSelector,
-	useDispatch,
 } from 'react-redux';
 
 import {
