@@ -23,7 +23,7 @@
 'use strict';
 
 import React, { useState } from 'react';
-import { ScrollView, TextInput } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -32,6 +32,7 @@ import {
 	NavigationHeaderPoster,
 	Text,
 	TouchableButton,
+	MaterialTextInput,
 } from '../../../BaseComponents';
 import {
 	changePassword,
@@ -157,35 +158,38 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		<Text style={currentLabelStyle}>
 			{formatMessage(i18n.currentPassword)}
 		</Text>
-		<TextInput
+		<MaterialTextInput
 			value={currentPas}
 			style={[textFieldStyle, textFieldStyleCurrent]}
 			onChangeText={onChangeTextCurrent}
 			autoCorrect={false}
 			autoFocus={true}
-			underlineColorAndroid={Theme.Core.brandSecondary}
+			baseColor={Theme.Core.brandSecondary}
+			tintColor={Theme.Core.brandSecondary}
 			returnKeyType={'done'}
 			secureTextEntry={true}
 		/>
-		<TextInput
+		<MaterialTextInput
 			value={newPass}
 			style={[textFieldStyle, textFieldStyleNew]}
 			onChangeText={onChangeTextNew}
 			autoCorrect={false}
 			autoFocus={false}
-			underlineColorAndroid={Theme.Core.inactiveGray}
+			baseColor={Theme.Core.inactiveGray}
+			tintColor={Theme.Core.inactiveGray}
 			returnKeyType={'done'}
 			placeholder={formatMessage(i18n.newPassword)}
 			placeholderTextColor={Theme.Core.inactiveGray}
 			secureTextEntry={true}
 		/>
-		<TextInput
+		<MaterialTextInput
 			value={newPassConf}
 			style={[textFieldStyle, textFieldStyleConfirm]}
 			onChangeText={onChangeTextConf}
 			autoCorrect={false}
 			autoFocus={false}
-			underlineColorAndroid={Theme.Core.inactiveGray}
+			baseColor={Theme.Core.inactiveGray}
+			tintColor={Theme.Core.inactiveGray}
 			returnKeyType={'done'}
 			placeholder={formatMessage(i18n.newPasswordConfirm)}
 			placeholderTextColor={Theme.Core.inactiveGray}
@@ -238,7 +242,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		textFieldStyle: {
 			fontSize: fontSize * 1.3,
-			marginTop: 20,
+			marginTop: 16,
 			width: '100%',
 			color: '#000',
 		},
