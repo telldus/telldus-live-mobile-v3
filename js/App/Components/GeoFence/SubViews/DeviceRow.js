@@ -21,9 +21,8 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
-	StyleSheet,
 	PixelRatio,
 } from 'react-native';
 import {
@@ -232,41 +231,6 @@ const DeviceRow = (props: Object): Object => {
 	);
 
 };
-
-const styles = StyleSheet.create({
-	container: {
-		marginRight: 16,
-		flexDirection: 'row',
-		alignItems: 'center',
-	},
-	name: {
-		flex: 20,
-		justifyContent: 'center',
-	},
-	text: {
-		marginLeft: 8,
-		fontSize: 20,
-		textAlignVertical: 'center',
-	},
-	gear: {
-		flex: 2.5,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginRight: 8,
-	},
-	bell: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'stretch',
-	},
-	navigation: {
-		flex: 7,
-		height: 32,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-});
 
 const getStyles = (appLayout: Object, deviceState: string): Object => {
 	let { height, width } = appLayout;
