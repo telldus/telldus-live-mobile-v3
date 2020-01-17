@@ -29,10 +29,6 @@ import { intlShape } from 'react-intl';
 import { Text } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../../Lib/appUtils';
-
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
