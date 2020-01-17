@@ -21,12 +21,24 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-	View,
-	Text,
+	ScrollView,
+} from 'react-native';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
+
+import {
 	FloatingButton,
 } from '../../../BaseComponents';
+import {
+	ActionSectionHeader,
+	DeviceRow,
+} from './SubViews';
+
+import Theme from '../../Theme';
 
 type Props = {
 	navigation: Object,
@@ -52,31 +64,116 @@ const ArrivingActions = (props: Props): Object => {
 		});
 	}
 
+	let { allIds, byId } = useSelector((state: Object): Object => state.devices);
+	let jobs = useSelector((state: Object): Object => state.jobs) || [];
+	let events = useSelector((state: Object): Object => state.events) || [];
+
 	const {
 		container,
+		contentContainerStyle,
 	} = getStyles(appLayout);
 
+	const [ showDevices, setShowDevices ] = useState(false);
+	const [ showEvents, setShowEvents ] = useState(false);
+	const [ showJobs, setShowJobs ] = useState(false);
+
+	function toggleShowDevices(collapsed: boolean) {
+		setShowDevices(collapsed);
+	}
+
+	function toggleShowEvents(collapsed: boolean) {
+		setShowEvents(collapsed);
+	}
+
+	function toggleShowJobs(collapsed: boolean) {
+		setShowJobs(collapsed);
+	}
+
+	function renderDevice(device: Object): Object {
+
+		function onDeviceValueChange() {
+		}
+
+		return (
+			<DeviceRow
+				device={device}
+				onValueChange={onDeviceValueChange}/>
+		);
+	}
+
+	function renderEvent(event: Object): Object {
+
+	}
+
+	function renderJob(job: Object): Object {
+
+	}
+
+	let DEVICES;
+	if (showDevices) {
+		DEVICES = allIds.map((deviceId: string): () => Object => {
+			let device = byId[deviceId];
+			return renderDevice(device);
+		});
+	}
+
+	let EVENTS;
+	if (showEvents) {
+		EVENTS = events.map((event: Object): () => Object => {
+			return renderEvent(event);
+		});
+	}
+
+	let JOBS;
+	if (showJobs) {
+		JOBS = jobs.map((job: Object): () => Object => {
+			return renderJob(job);
+		});
+	}
+
+
 	return (
-		<View style={container}>
-			<Text>
-            ArrivingActions
-			</Text>
+		<ScrollView
+			style={container}
+			contentContainerStyle={contentContainerStyle}>
+			<ActionSectionHeader title="Devices"
+				onToggle={toggleShowDevices}
+			/>
+			{!!DEVICES && DEVICES}
+			<ActionSectionHeader title="Events"
+				onToggle={toggleShowEvents}
+			/>
+			{!!EVENTS && EVENTS}
+			<ActionSectionHeader title="Schedules"
+				onToggle={toggleShowJobs}
+			/>
+			{!!JOBS && JOBS}
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}
 			/>
-		</View>
+		</ScrollView>
 	);
 };
 
 const getStyles = (appLayout: Object): Object => {
-	// const { height, width } = appLayout;
-	// const isPortrait = height > width;
-	// const deviceWidth = isPortrait ? width : height;
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 
 	return {
 		container: {
 			flex: 1,
+		},
+		contentContainerStyle: {
+			flexGrow: 1,
+			paddingBottom: padding * 6,
 		},
 	};
 };
