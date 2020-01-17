@@ -22,7 +22,6 @@
 'use strict';
 import React from 'react';
 import {
-	TextInput,
 	Keyboard,
 	ScrollView,
 } from 'react-native';
