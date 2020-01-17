@@ -89,7 +89,6 @@ type Props = {
 
 	addNewGatewayBool: boolean,
 
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
@@ -269,7 +268,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	}
 
 	const propsChange = shouldUpdate(others, othersN, [
-		'visibilityExchangeOffer',
 		'pushTokenRegistered',
 		'pushToken',
 		'deviceId',
@@ -512,7 +510,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	let locale = language.code;
 
 	const {
-		visibilityExchangeOffer,
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
@@ -544,7 +541,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pushTokenRegistered,
 		pushToken,
 		deviceId,
-		visibilityExchangeOffer,
 		subscriptions,
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,

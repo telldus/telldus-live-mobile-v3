@@ -29,10 +29,6 @@ import { intlShape } from 'react-intl';
 import { Text } from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
-import {
-	capitalizeFirstLetterOfEachWord,
-} from '../../../Lib/appUtils';
-
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -53,27 +49,15 @@ export default class WizardOne extends PureComponent<Props, null> {
 	titleWTwo: string;
 	descriptionWTwo: string;
 
-	titleWThree: string;
-	descriptionWThree: string;
-
-	titleWFour: string;
-	descriptionWFour: string;
-
 	constructor(props: Props) {
 		super(props);
 		let { formatMessage } = props.intl;
 
-		this.titleWOne = formatMessage(i18n.wizardOneHeader312);
-		this.descriptionWOne = formatMessage(i18n.wizardOneDescription312);
+		this.titleWOne = formatMessage(i18n.wizardOneHeader314);
+		this.descriptionWOne = formatMessage(i18n.wizardOneDescription314);
 
-		this.titleWTwo = formatMessage(i18n.wizardTwoHeader312);
-		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription312);
-
-		this.titleWThree = formatMessage(i18n.wizardThreeHeader312);
-		this.descriptionWThree = formatMessage(i18n.wizardThreeDescription312);
-
-		this.titleWFour = capitalizeFirstLetterOfEachWord('Premium access');
-		this.descriptionWFour = formatMessage(i18n.wizardFourDescription312);
+		this.titleWTwo = formatMessage(i18n.wizardTwoHeader314);
+		this.descriptionWTwo = formatMessage(i18n.wizardTwoDescription314);
 	}
 
 	getScreenData(currentScreen: number, styles: Object): Object {
@@ -98,8 +82,7 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 1:
 				return {
 					...screenData,
-					icon: 'thermostat',
-					iconSize: iconSize * 1.2,
+					icon: 'outlet',
 					title: this.titleWOne,
 					description: this.descriptionWOne,
 				};
@@ -107,25 +90,9 @@ export default class WizardOne extends PureComponent<Props, null> {
 			case 2:
 				return {
 					...screenData,
-					icon: 'user',
+					icon: 'palette',
 					title: this.titleWTwo,
 					description: this.descriptionWTwo,
-				};
-
-			case 3:
-				return {
-					...screenData,
-					icon: 'faq',
-					title: this.titleWThree,
-					description: this.descriptionWThree,
-				};
-
-			case 4:
-				return {
-					...screenData,
-					icon: 'premium',
-					title: this.titleWFour,
-					description: this.descriptionWFour,
 				};
 
 			default:
