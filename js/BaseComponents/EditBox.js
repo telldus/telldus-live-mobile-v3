@@ -148,7 +148,7 @@ render(): Object {
 					returnKeyType={'done'}
 					placeholder={placeholder}
 					placeholderTextColor={placeholderTextColor}
-					ref={this.setRef}
+					setRef={this.setRef}
 					keyboardType={keyboardType}
 					labelOffset={{
 						x0: 5,

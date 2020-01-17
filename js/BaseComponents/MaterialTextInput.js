@@ -34,6 +34,7 @@ const MaterialTextInput = (props: Object = {}): Object => {
 	const {
 		containerStyle,
 		renderLeftAccessory,
+		setRef,
 		...others
 	} = props;
 
@@ -54,7 +55,8 @@ const MaterialTextInput = (props: Object = {}): Object => {
 		<TextField
 			{...others}
 			containerStyle={[containerStyleDef, containerStyle]}
-			renderLeftAccessory={_renderLeftAccessory}/>
+			renderLeftAccessory={_renderLeftAccessory}
+			ref={setRef}/>
 	);
 };
 
