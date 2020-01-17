@@ -38,6 +38,7 @@ import {
 	NavigationHeaderPoster,
 	IconTelldus,
 	DropDown,
+	MaterialTextInput,
 } from '../../../BaseComponents';
 
 import shouldUpdate from '../../Lib/shouldUpdate';
@@ -251,6 +252,7 @@ render(testData: Object): Object {
 		statusIconStyle,
 		infoTextStyle,
 		textFieldMessage,
+		textFieldContainerStyle,
 	} = this.getStyles(appLayout);
 	const { formatMessage } = intl;
 
@@ -291,14 +293,15 @@ render(testData: Object): Object {
 				<Text style={label}>
 					{formatMessage(i18n.emailAddress)}
 				</Text>
-				<TextInput
+				<MaterialTextInput
 					value={emailValue}
 					style={textField}
 					onChangeText={this.onChangeTextEmail}
 					autoCapitalize="none"
 					autoCorrect={false}
 					autoFocus={true}
-					underlineColorAndroid={brandSecondary}
+					baseColor={brandSecondary}
+					tintColor={brandSecondary}
 					returnKeyType={'done'}
 				/>
 				<Text style={label}>
@@ -317,21 +320,25 @@ render(testData: Object): Object {
 					textColor={rowTextColor}
 					pickerBaseCoverStyle={pickerBaseCoverStyle}
 				/>
-				<Text style={label}>
-					{formatMessage(i18n.labelMessage)}
-				</Text>
-				<TextInput
-					value={value}
-					style={[textField, textFieldMessage]}
-					onChangeText={this.onChangeText}
-					onSubmitEditing={this.onSubmitEditing}
-					autoCapitalize="sentences"
-					autoCorrect={false}
-					autoFocus={false}
-					underlineColorAndroid={brandSecondary}
-					returnKeyType={'done'}
-					multiline={true}
-				/>
+				<View>
+					<Text style={label}>
+						{formatMessage(i18n.labelMessage)}
+					</Text>
+					<MaterialTextInput
+						value={value}
+						style={[textField, textFieldMessage]}
+						containerStyle={textFieldContainerStyle}
+						onChangeText={this.onChangeText}
+						onSubmitEditing={this.onSubmitEditing}
+						autoCapitalize="sentences"
+						autoCorrect={false}
+						autoFocus={false}
+						baseColor={brandSecondary}
+						tintColor={brandSecondary}
+						returnKeyType={'done'}
+						multiline={true}
+					/>
+				</View>
 			</View>
 			{descLen < 50 && <View style={infoContainer}>
 				<IconTelldus icon={'info'} style={statusIconStyle}/>
@@ -395,6 +402,11 @@ getStyles(appLayout: Object): Object {
 			fontSize: fontSizeLabel,
 			marginTop: 22,
 		},
+		textFieldContainerStyle: {
+			height: fontSizeText * 8,
+			width: '100%',
+			justifyContent: 'flex-end',
+		},
 		textFieldMessage: {
 			height: fontSizeText * 8,
 			textAlignVertical: 'top',
@@ -403,7 +415,7 @@ getStyles(appLayout: Object): Object {
 			width: '100%',
 			color: '#A59F9A',
 			fontSize: fontSizeText,
-			marginTop: 8,
+			marginTop: 4,
 		},
 		button: {
 			marginVertical: padding * 1.5,
