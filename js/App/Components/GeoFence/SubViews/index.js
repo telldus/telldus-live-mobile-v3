@@ -22,7 +22,13 @@
 'use strict';
 
 import FenceCallout from './FenceCallout';
+import MapOverlay from './MapOverlay';
+import ActionSectionHeader from './ActionSectionHeader';
+import DeviceRow from './DeviceRow';
 
 module.exports = {
 	FenceCallout,
+	MapOverlay,
+	ActionSectionHeader,
+	DeviceRow,
 };
