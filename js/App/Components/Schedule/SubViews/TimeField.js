@@ -20,10 +20,14 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Platform, InteractionManager } from 'react-native';
+import { Platform, InteractionManager } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
-import { View, Text, IconTelldus } from '../../../../BaseComponents';
+import {
+	View,
+	IconTelldus,
+	MaterialTextInput,
+} from '../../../../BaseComponents';
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -137,18 +141,15 @@ render(): Object {
 		container,
 		inputStyle,
 		iconStyle,
-		labelStyle,
 	} = this.getStyles(appLayout);
 
 	return (
 		<View style={container}>
-			<Text style={labelStyle}>
-				{this.minutes}
-			</Text>
-			<IconTelldus icon={icon} color={'#D9D5DC'} style={iconStyle}/>
-			<TextInput
+			<MaterialTextInput
+				label={this.minutes}
 				style={inputStyle}
-				underlineColorAndroid={Theme.Core.brandSecondary}
+				baseColor={Theme.Core.brandSecondary}
+				tintColor={Theme.Core.brandSecondary}
 				autoFocus={false}
 				value={value}
 				onChangeText={this.onEdit}
@@ -158,7 +159,14 @@ render(): Object {
 				ref={this.setRef}
 				onFocus={this.onFocus}
 				blurOnSubmit={true}
-				onSubmitEditing={this.onSubmitEditing}/>
+				onSubmitEditing={this.onSubmitEditing}
+				labelOffset={{
+					x0: 5,
+					y0: 0,
+					x1: 0,
+					y1: -5,
+				}}
+				renderLeftAccessory={<IconTelldus icon={icon} color={'#D9D5DC'} style={iconStyle}/>}/>
 		</View>
 	);
 }
@@ -183,10 +191,7 @@ getStyles(appLayout: Object): Object {
 			color: '#000000',
 		},
 		iconStyle: {
-			position: 'absolute',
-			bottom: Platform.OS === 'android' ? deviceWidth * 0.045 : deviceWidth * 0.002,
 			fontSize: iconFontSize,
-			left: 0,
 		},
 		labelStyle: {
 			fontSize: labelFontSize,
