@@ -93,6 +93,7 @@ import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import TwoStepFooter from './TwoStepFooter';
 import InfoBlock from './InfoBlock';
+import MaterialTextInput from './MaterialTextInput';
 
 import {
 	AppState,
@@ -176,6 +177,7 @@ module.exports = {
 	CampaignIcon,
 	TwoStepFooter,
 	InfoBlock,
+	MaterialTextInput,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
