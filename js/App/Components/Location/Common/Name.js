@@ -24,13 +24,19 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import { intlShape } from 'react-intl';
 
-import {View, FloatingButton} from '../../../../BaseComponents';
+import {
+	View,
+	FloatingButton,
+	MaterialTextInput,
+	IconTelldus,
+} from '../../../../BaseComponents';
 import LabelBox from './LabelBox';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = {
 	navigation: Object,
@@ -122,17 +128,24 @@ class Name extends View {
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 				<LabelBox
 					containerStyle={{marginBottom: 10}}
-					label={this.label}
-					showIcon={true}
 					appLayout={appLayout}>
-					<TextInput
+					<MaterialTextInput
+						label={this.label}
 						style={styles.textField}
 						onChangeText={this.onLocationNameChange}
 						autoCapitalize="sentences"
 						autoCorrect={false}
 						autoFocus={true}
-						underlineColorAndroid="#e26901"
+						baseColor={Theme.Core.brandSecondary}
+						tintColor={Theme.Core.brandSecondary}
 						defaultValue={this.state.locationName}
+						labelOffset={{
+							x0: 5,
+							y0: 0,
+							x1: 0,
+							y1: -5,
+						}}
+						renderLeftAccessory={<IconTelldus icon={'location'} size={styles.iconSize} color={'#A59F9A'}/>}
 					/>
 				</LabelBox>
 				<FloatingButton
@@ -151,19 +164,20 @@ class Name extends View {
 		const deviceWidth = isPortrait ? width : height;
 		const fontSize = deviceWidth * 0.06;
 
+		const iconSize = Math.floor(deviceWidth * 0.09);
+
 		return {
 			textField: {
 				width: deviceWidth * 0.8,
-				paddingLeft: 35 + fontSize,
+				paddingLeft: 5 + fontSize,
 				color: '#A59F9A',
 				fontSize,
-				marginTop: 10 + fontSize,
-				marginBottom: fontSize,
 			},
 			buttonStyle: {
 				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
 				elevation: 10,
 			},
+			iconSize,
 		};
 	}
 }
