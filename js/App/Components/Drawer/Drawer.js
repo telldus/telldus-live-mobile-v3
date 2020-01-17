@@ -43,8 +43,6 @@ type Props = {
 	gateways: Object,
 	appLayout: Object,
 	isOpen: boolean,
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
-	locale: string,
 
 	userProfile: Function,
 	onOpenSetting: Function,
@@ -68,7 +66,7 @@ class Drawer extends View<Props, null> {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile', 'visibilityExchangeOffer', 'locale']);
+			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
 			if (propsChange) {
 				return true;
 			}
@@ -88,12 +86,8 @@ class Drawer extends View<Props, null> {
 			appLayout,
 			onPressGateway,
 			dispatch,
-			visibilityExchangeOffer,
-			locale,
 		} = this.props;
 		const styles = this.getStyles(appLayout);
-
-		const exchangeCheckOne = locale === 'sv';
 
 		return (
 			<ScrollView
@@ -110,9 +104,7 @@ class Drawer extends View<Props, null> {
 							gateway={gateways.byId[id]}
 							key={index} appLayout={appLayout}
 							onPressGateway={onPressGateway}
-							dispatch={dispatch}
-							showExchange={exchangeCheckOne}
-							visibilityExchangeOffer={visibilityExchangeOffer}/>);
+							dispatch={dispatch}/>);
 					})}
 					<AddLocation onPress={addNewLocation} styles={styles}/>
 					<SettingsButton onPress={onOpenSetting} styles={styles}/>
@@ -213,18 +205,10 @@ class Drawer extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object): Object {
-	const {
-		defaultSettings,
-	} = store.app;
-
-	let { language = {} } = defaultSettings || {};
-	let locale = language.code;
 
 	return {
 		gateways: store.gateways,
 		userProfile: getUserProfileSelector(store),
-		visibilityExchangeOffer: store.user.visibilityExchangeOffer,
-		locale,
 	};
 }
 

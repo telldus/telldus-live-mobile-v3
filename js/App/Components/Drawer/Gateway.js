@@ -31,13 +31,6 @@ import {
 } from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
-import {
-	TellStickExchangeLink,
-} from '../ExchangeOffer/SubViews';
-
-import {
-	toggleVisibilityExchangeOffer,
-} from '../../Actions';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
 
 type Props = {
@@ -47,7 +40,6 @@ type Props = {
 	appLayout: Object,
 	dispatch: Function,
 	showExchange: boolean,
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 };
 
 class Gateway extends PureComponent<Props, null> {
@@ -73,17 +65,8 @@ class Gateway extends PureComponent<Props, null> {
 		);
 	}
 
-	goToExchangeScreen = () => {
-		const {
-			visibilityExchangeOffer: vo,
-			dispatch,
-		} = this.props;
-		const val = vo === 'hide_perm' ? 'force_show' : 'show';
-		dispatch(toggleVisibilityExchangeOffer(val));
-	}
-
 	render(): Object {
-		const { gateway, appLayout, intl, showExchange } = this.props;
+		const { gateway, appLayout } = this.props;
 		const { name, online, websocketOnline, type, localKey = {} } = gateway;
 		const { width, height } = appLayout;
 		const deviceWidth = height > width ? width : height;
@@ -99,12 +82,7 @@ class Gateway extends PureComponent<Props, null> {
 			statusStyle,
 			iconSize,
 			statusInfoStyle,
-			coverStyle,
-			iconStyle,
-			textStyle,
 		} = this.getStyles(drawerWidth);
-
-		const showExchangeLink = showExchange && type.trim().toLowerCase() === 'TellStick Net'.trim().toLowerCase();
 
 		const info = this.getLocationStatus(online, websocketOnline, statusStyle, statusInfoStyle, localKey);
 		const locationImageUrl = getLocationImageUrl(type);
@@ -113,13 +91,6 @@ class Gateway extends PureComponent<Props, null> {
 			H1: name,
 			H2: type,
 			info,
-			info2: showExchangeLink ? <TellStickExchangeLink
-				appLayout={appLayout}
-				intl={intl}
-				onPress={this.goToExchangeScreen}
-				coverStyle={coverStyle}
-				iconStyle={iconStyle}
-				textStyle={textStyle}/> : undefined,
 		};
 
 		return (

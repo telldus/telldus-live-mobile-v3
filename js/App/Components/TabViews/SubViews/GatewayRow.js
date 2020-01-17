@@ -30,13 +30,6 @@ import { View, Image, LocationDetails } from '../../../../BaseComponents';
 import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
-import {
-	TellStickExchangeLink,
-} from '../../ExchangeOffer/SubViews';
-
-import {
-	toggleVisibilityExchangeOffer,
-} from '../../../Actions';
 
 import Theme from '../../../Theme';
 
@@ -50,8 +43,6 @@ type Props = {
 	navigation: Object,
 	onPress: (Object) => void,
 	dispatch: Function,
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
-	locale: string,
 };
 
 type State = {
@@ -94,28 +85,16 @@ class GatewayRow extends PureComponent<Props, State> {
 		);
 	}
 
-	goToExchangeScreen = () => {
-		const {
-			visibilityExchangeOffer: vo,
-			dispatch,
-		} = this.props;
-		const val = vo === 'hide_perm' ? 'force_show' : 'show';
-		dispatch(toggleVisibilityExchangeOffer(val));
-	}
-
 	render(): Object {
 		let {
 			location,
 			appLayout,
 			intl,
 			screenReaderEnabled,
-			locale,
 		} = this.props;
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
-
-		const showExchange = locale === 'sv' && type.trim().toLowerCase() === 'TellStick Net'.trim().toLowerCase();
 
 		let styles = this.getStyles(appLayout);
 
@@ -125,11 +104,6 @@ class GatewayRow extends PureComponent<Props, State> {
 			H1: name,
 			H2: type,
 			info,
-			info2: showExchange ? <TellStickExchangeLink
-				appLayout={appLayout}
-				intl={intl}
-				onPress={this.goToExchangeScreen}
-				coverStyle={styles.coverStyle}/> : undefined,
 		};
 
 		let accessibilityLabel = '';
@@ -209,16 +183,11 @@ class GatewayRow extends PureComponent<Props, State> {
 }
 
 function mapStateToProps(state: Object, props: Object): Object {
-	const { screenReaderEnabled, defaultSettings } = state.app;
-
-	let { language = {} } = defaultSettings || {};
-	let locale = language.code;
+	const { screenReaderEnabled } = state.app;
 
 	return {
 		appLayout: state.app.layout,
 		screenReaderEnabled,
-		visibilityExchangeOffer: state.user.visibilityExchangeOffer,
-		locale,
 	};
 }
 
