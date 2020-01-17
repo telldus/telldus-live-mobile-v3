@@ -306,7 +306,6 @@ class GeoPosition extends View {
 						},
 						container: styles.searchBoxContainer,
 					}}
-					underlineColorAndroid="#e26901"
 					renderLeftButton={this.renderLeftButton}
 				/>
 				<Text style={styles.labelStyle}>
@@ -410,6 +409,8 @@ class GeoPosition extends View {
 				marginTop: 0,
 				marginLeft: 0,
 				marginRight: 0,
+				borderBottomWidth: 1,
+				borderBottomColor: Theme.Core.brandSecondary,
 			},
 			iconStyle: {
 				position: 'absolute',
