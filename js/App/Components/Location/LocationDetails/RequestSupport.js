@@ -22,7 +22,6 @@
 'use strict';
 import React from 'react';
 import {
-	TextInput,
 	Keyboard,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -32,6 +31,7 @@ import {
 	View,
 	Text,
 	TouchableButton,
+	MaterialTextInput,
 } from '../../../../BaseComponents';
 
 import capitalise from '../../../Lib/capitalize';
@@ -240,7 +240,7 @@ render(testData: Object): Object {
 					<Text style={label}>
 						{formatMessage(i18n.labelMessage)}
 					</Text>
-					<TextInput
+					<MaterialTextInput
 						value={value}
 						style={textField}
 						onChangeText={this.onChangeText}
@@ -248,34 +248,37 @@ render(testData: Object): Object {
 						autoCapitalize="sentences"
 						autoCorrect={false}
 						autoFocus={true}
-						underlineColorAndroid={brandSecondary}
+						baseColor={brandSecondary}
+						tintColor={brandSecondary}
 						returnKeyType={'done'}
 						multiline={true}
 					/>
 					<Text style={label}>
 						{`${formatMessage(i18n.labelInternetRouter)} (${formatMessage(i18n.labelBrandAndModel)})`}
 					</Text>
-					<TextInput
+					<MaterialTextInput
 						value={routerValue}
 						style={textField}
 						onChangeText={this.onChangeTextRouter}
 						autoCapitalize="sentences"
 						autoCorrect={false}
 						autoFocus={false}
-						underlineColorAndroid={brandSecondary}
+						baseColor={brandSecondary}
+						tintColor={brandSecondary}
 						returnKeyType={'done'}
 					/>
 					<Text style={label}>
 						{formatMessage(i18n.emailAddress)}
 					</Text>
-					<TextInput
+					<MaterialTextInput
 						value={emailValue}
 						style={textField}
 						onChangeText={this.onChangeTextEmail}
 						autoCapitalize="none"
 						autoCorrect={false}
 						autoFocus={false}
-						underlineColorAndroid={brandSecondary}
+						baseColor={brandSecondary}
+						tintColor={brandSecondary}
 						returnKeyType={'done'}
 					/>
 				</View>
@@ -329,7 +332,7 @@ getStyles(appLayout: Object): Object {
 			width: '100%',
 			color: '#A59F9A',
 			fontSize: fontSizeText,
-			marginTop: 8,
+			marginTop: 4,
 		},
 		button: {
 			marginVertical: padding * 1.5,
