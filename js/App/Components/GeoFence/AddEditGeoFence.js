@@ -26,6 +26,7 @@ import React, {
 } from 'react';
 import {
 	StyleSheet,
+	ScrollView,
 } from 'react-native';
 import {
 	useSelector,
@@ -36,7 +37,6 @@ import MapView, {
 } from 'react-native-maps';
 
 import {
-	View,
 	FloatingButton,
 } from '../../../BaseComponents';
 import {
@@ -78,6 +78,7 @@ const AddEditGeoFence = (props: Props): Object => {
 	const {
 		container,
 		mapStyle,
+		contentContainerStyle,
 	} = getStyles(appLayout);
 
 	const {
@@ -139,7 +140,9 @@ const AddEditGeoFence = (props: Props): Object => {
 	}
 
 	return (
-		<View style={container}>
+		<ScrollView
+			style={container}
+			contentContainerStyle={contentContainerStyle}>
 			<MapView.Animated
 				style={mapStyle}
 				initialRegion={region}>
@@ -162,7 +165,7 @@ const AddEditGeoFence = (props: Props): Object => {
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}/>
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -174,6 +177,9 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		mapStyle: {
 			...StyleSheet.absoluteFillObject,
+		},
+		contentContainerStyle: {
+			flexGrow: 1,
 		},
 	};
 };
