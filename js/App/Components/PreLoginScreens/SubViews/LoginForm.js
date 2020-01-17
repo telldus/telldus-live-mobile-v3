@@ -22,13 +22,18 @@
 'use strict';
 
 import React from 'react';
-import { TextInput, Platform, Keyboard, InteractionManager } from 'react-native';
+import { Platform, Keyboard, InteractionManager } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 
-import { TouchableButton, View, H1 } from '../../../../BaseComponents';
+import {
+	TouchableButton,
+	View,
+	H1,
+	MaterialTextInput,
+} from '../../../../BaseComponents';
 import { loginToTelldus } from '../../../Actions';
 import {
 	testUsername,
@@ -107,7 +112,7 @@ class LoginForm extends View {
 			offlineAccess: true,
 			iosClientId: Platform.OS === 'ios' ? iosClientId : undefined,
 		});
-	  }
+	}
 
 	render(): Object {
 		let { dialogueOpen, styles, headerText } = this.props;
@@ -125,33 +130,31 @@ class LoginForm extends View {
 					<View style={styles.fieldsPairContainerStyle}>
 						<View style={styles.textFieldIconContainer}>
 							<View style={[styles.textFieldIconCover, styles.textFieldIconCoverOne]}>
-								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onChangeUsername}
 									placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 									keyboardType="email-address"
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									defaultValue={this.state.username}
+									renderLeftAccessory={<Icon name={'email'} size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>
 						<View style={styles.textFieldIconContainer}>
 							<View style={styles.textFieldIconCover}>
-								<Icon name="lock" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onChangePassword}
 									placeholder={this.props.intl.formatMessage(i18n.password)}
 									secureTextEntry={true}
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									defaultValue={this.state.password}
+									renderLeftAccessory={<Icon name={'lock'} size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>
