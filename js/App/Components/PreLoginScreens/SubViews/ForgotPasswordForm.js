@@ -22,13 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, TouchableButton, H1 } from '../../../../BaseComponents';
+import {
+	View,
+	TouchableButton,
+	H1,
+	MaterialTextInput,
+} from '../../../../BaseComponents';
 
 import { forgotPassword } from '../../../Actions/User';
 import { validateEmail } from '../../../Lib/UserUtils';
@@ -145,8 +149,7 @@ class ForgotPasswordForm extends View<Props, State> {
 					<View style={styles.fieldsPairContainerStyle}>
 						<View style={styles.textFieldIconContainer}>
 							<View style={[styles.textFieldIconCover, {justifyContent: 'center'}]}>
-								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onEmailChange}
 									onBlur={this.onEmailBlur}
@@ -154,9 +157,9 @@ class ForgotPasswordForm extends View<Props, State> {
 									keyboardType="email-address"
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									defaultValue={this.state.email}
+									renderLeftAccessory={<Icon name="email" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>
@@ -165,8 +168,7 @@ class ForgotPasswordForm extends View<Props, State> {
 				<View style={{ height: 10 }}/>
 				<TouchableButton
 					onPress={this.onFormSubmit}
-					text={buttonLabel}
-				/>
+					text={buttonLabel}/>
 			</View>
 		);
 	}
