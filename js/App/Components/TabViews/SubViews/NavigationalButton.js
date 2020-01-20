@@ -45,7 +45,7 @@ type Props = {
 	intl: Object,
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
-	onPressOverride?: (number) => void,
+	onPressOverride?: (Object) => void,
 };
 
 type DefaultProps = {

@@ -48,7 +48,7 @@ type Props = {
 	isOpen: boolean,
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
-	onPressOverride?: (number) => void,
+	onPressOverride?: (Object) => void,
 };
 
 class UpButton extends View {
@@ -75,7 +75,9 @@ class UpButton extends View {
 		} = this.props;
 
 		if (onPressOverride) {
-			onPressOverride(commandUp);
+			onPressOverride({
+				method: commandUp,
+			});
 			return;
 		}
 		if (isOpen && closeSwipeRow) {

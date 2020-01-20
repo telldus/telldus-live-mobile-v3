@@ -46,7 +46,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,
-	onPressOverride?: (number) => void,
+	onPressOverride?: (Object) => void,
 };
 
 class BellButton extends View {
@@ -88,7 +88,9 @@ class BellButton extends View {
 		} = this.props;
 
 		if (onPressOverride) {
-			onPressOverride(command);
+			onPressOverride({
+				method: command,
+			});
 			return;
 		}
 		if (isOpen && closeSwipeRow) {
