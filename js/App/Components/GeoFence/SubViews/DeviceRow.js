@@ -41,6 +41,9 @@ import {
 	NavigationalButton,
 	BellButton,
 	DimmerButton,
+	ToggleButton,
+	RGBButton,
+	ThermostatButton,
 } from '../../TabViews/SubViews';
 import ShowMoreButton from '../../TabViews/SubViews/Device/ShowMoreButton';
 
@@ -61,6 +64,9 @@ const DeviceRow = (props: Object): Object => {
 	let button = [];
 	const {
 		device,
+		openRGBControl,
+		openThermostatControl,
+		onDeviceValueChange,
 	} = props;
 	const {
 		supportedMethods = {},
@@ -68,6 +74,7 @@ const DeviceRow = (props: Object): Object => {
 		deviceType,
 		stateValues = {},
 		name,
+		id,
 	} = device;
 
 	const {
@@ -97,7 +104,13 @@ const DeviceRow = (props: Object): Object => {
 		textStyle,
 		bellStyle,
 		navigationStyle,
+		toggle,
+		thermostat,
 	} = getStyles(layout, isInState);
+
+	function setScrollEnabled() {}
+	function onSlideActive() {}
+	function onSlideComplete() {}
 
 	// const [checked, setChecked] = useState(false);
 
@@ -121,6 +134,13 @@ const DeviceRow = (props: Object): Object => {
 	}
 	colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : iconContainerStyle.backgroundColor;
 
+	function onPressOverride(args: Object) {
+		onDeviceValueChange({
+			deviceId: id,
+			...args,
+		});
+	}
+
 
 	const sharedProps = {
 		device,
@@ -128,6 +148,7 @@ const DeviceRow = (props: Object): Object => {
 		isGatewayActive: true,
 		appLayout: layout,
 		actionIcons,
+		onPressOverride,
 	};
 
 	if (BELL) {
@@ -150,9 +171,6 @@ const DeviceRow = (props: Object): Object => {
 		);
 	}
 	if (DIM && !RGB && !THERMOSTAT) {
-		function setScrollEnabled() {}
-		function onSlideActive() {}
-		function onSlideComplete() {}
 		function onPressDimButton() {}
 		button.unshift(
 			<DimmerButton
@@ -163,6 +181,54 @@ const DeviceRow = (props: Object): Object => {
 				onSlideComplete={onSlideComplete}
 				onPressDimButton={onPressDimButton}
 				key={2}
+			/>
+		);
+	}
+	if ((TURNON || TURNOFF) && !DIM && !RGB && !THERMOSTAT) {
+		button.unshift(
+			<ToggleButton
+				{...sharedProps}
+				style={toggle}
+				key={3}
+			/>
+		);
+	}
+	if (RGB) {
+		function _openRGBControl() {
+			openRGBControl(id);
+		}
+		button.unshift(
+			<RGBButton
+				{...sharedProps}
+				openRGBControl={_openRGBControl}
+				setScrollEnabled={setScrollEnabled}
+				showSlider={!BELL && !UP && !DOWN && !STOP}
+				onSlideActive={onSlideActive}
+				onSlideComplete={onSlideComplete}
+				key={7}
+				offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
+				onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
+				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
+				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
+			/>
+		);
+	}
+	if (THERMOSTAT) {
+		button.unshift(
+			<ThermostatButton
+				{...sharedProps}
+				key={8}
+				style={thermostat}
+				openThermostatControl={openThermostatControl}
+			/>
+		);
+	}
+	if (!TURNON && !TURNOFF && !BELL && !DIM && !UP && !DOWN && !STOP && !RGB && !THERMOSTAT) {
+		button.unshift(
+			<ToggleButton
+				{...sharedProps}
+				style={toggle}
+				key={5}
 			/>
 		);
 	}
@@ -216,15 +282,16 @@ const DeviceRow = (props: Object): Object => {
 				{button.length === 1 ?
 					button[0]
 					:
-					[
-						button[0],
+					button.length > 0 &&
+					<>
+						{button[0]}
 						<ShowMoreButton
 							onPress={onPressMore}
 							name={name}
 							buttons={button}
 							key={6}
-							intl={intl}/>,
-					]
+							intl={intl}/>
+					</>
 				}
 			</View>
 		</ListItem>
