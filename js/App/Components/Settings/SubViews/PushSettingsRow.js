@@ -246,7 +246,6 @@ render(): Object {
 							autoCapitalize="sentences"
 							autoCorrect={false}
 							autoFocus={true}
-							underlineColorAndroid={Theme.Core.brandSecondary}
 							returnKeyType={'done'}
 						/>
 						:

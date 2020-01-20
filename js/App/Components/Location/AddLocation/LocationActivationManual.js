@@ -25,14 +25,21 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { TextInput, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
 
-import {View, FormattedMessage, FloatingButton} from '../../../../BaseComponents';
+import {
+	View,
+	FormattedMessage,
+	FloatingButton,
+	MaterialTextInput,
+	IconTelldus,
+} from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 type Props = {
 	navigation: Object,
@@ -205,17 +212,24 @@ class LocationActivationManual extends View {
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 				<LabelBox
 					containerStyle={{marginBottom: 10}}
-					label={this.label}
-					showIcon={true}
 					appLayout={appLayout}>
-					<TextInput
+					<MaterialTextInput
+						label={this.label}
 						style={styles.textField}
 						onChangeText={this.onActivationCodeChange}
 						autoCapitalize="characters"
 						autoCorrect={false}
 						autoFocus={true}
-						underlineColorAndroid="#e26901"
+						baseColor={Theme.Core.brandSecondary}
+						tintColor={Theme.Core.brandSecondary}
 						defaultValue={this.state.activationCode}
+						labelOffset={{
+							x0: 5,
+							y0: 0,
+							x1: 0,
+							y1: -5,
+						}}
+						renderLeftAccessory={<IconTelldus icon={'location'} size={styles.iconSize} color={'#A59F9A'}/>}
 					/>
 					<FormattedMessage style={styles.textBody} {...i18n.bodyContent}/>
 				</LabelBox>
@@ -235,6 +249,8 @@ class LocationActivationManual extends View {
 		const deviceWidth = isPortrait ? width : height;
 		const fontSize = deviceWidth * 0.06;
 
+		const iconSize = Math.floor(deviceWidth * 0.09);
+
 		return {
 			textBody: {
 				color: '#A59F9A',
@@ -243,12 +259,9 @@ class LocationActivationManual extends View {
 				paddingLeft: 2,
 			},
 			textField: {
-				width: deviceWidth * 0.8,
-				paddingLeft: 35 + fontSize,
+				paddingLeft: 5 + fontSize,
 				color: '#A59F9A',
 				fontSize,
-				marginTop: 10 + fontSize,
-				marginBottom: fontSize,
 			},
 			locationIcon: {
 				position: 'absolute',
@@ -259,6 +272,7 @@ class LocationActivationManual extends View {
 				right: isPortrait ? width * 0.053333333 : height * 0.053333333,
 				elevation: 10,
 			},
+			iconSize,
 		};
 	}
 }

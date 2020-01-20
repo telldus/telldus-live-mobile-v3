@@ -95,6 +95,7 @@ import TwoStepFooter from './TwoStepFooter';
 import InfoBlock from './InfoBlock';
 import TimezoneFormattedDate from './TimezoneFormattedDate';
 import TimezoneFormattedTime from './TimezoneFormattedTime';
+import MaterialTextInput from './MaterialTextInput';
 
 import {
 	AppState,
@@ -180,6 +181,7 @@ module.exports = {
 	InfoBlock,
 	TimezoneFormattedTime,
 	TimezoneFormattedDate,
+	MaterialTextInput,
 
 	AppState: AppState,
 	Dimensions: Dimensions,

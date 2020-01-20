@@ -24,11 +24,11 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Platform, TextInput } from 'react-native';
+import { Platform } from 'react-native';
 
 import IconTelldus from './IconTelldus';
-import Text from './Text';
 import View from './View';
+import MaterialTextInput from './MaterialTextInput';
 
 import Theme from '../App/Theme';
 
@@ -131,29 +131,34 @@ render(): Object {
 	return (
 		<View style={[styles.container, containerStyle]}>
 			{!!header && header}
-			{!!label && (
-				<Text style={[styles.label, labelStyle]}>
-					{label}
-				</Text>
-			)}
 			<View style={styles.inputCover}>
-				{!!icon && (
-					<IconTelldus icon={icon} style={[styles.icon, iconStyle]}/>
-				)}
-				<TextInput
+				<MaterialTextInput
 					value={value}
+					label={label}
+					labelFontSize={styles.label.fontSize}
+					labelTextStyle={[styles.label, {labelStyle}]}
 					style={[styles.textField, textStyle]}
 					onChangeText={this.onChangeText}
 					onSubmitEditing={this.onSubmitEditing}
 					autoCapitalize="sentences"
 					autoCorrect={false}
 					autoFocus={autoFocus}
-					underlineColorAndroid={Theme.Core.brandSecondary}
+					baseColor={Theme.Core.brandSecondary}
+					tintColor={Theme.Core.brandSecondary}
 					returnKeyType={'done'}
 					placeholder={placeholder}
 					placeholderTextColor={placeholderTextColor}
-					ref={this.setRef}
+					setRef={this.setRef}
 					keyboardType={keyboardType}
+					labelOffset={{
+						x0: 5,
+						y0: 0,
+						x1: 0,
+						y1: -5,
+					}}
+					renderLeftAccessory={!!icon && (
+						<IconTelldus icon={icon} style={[styles.icon, iconStyle]}/>
+					)}
 				/>
 			</View>
 		</View>
@@ -194,16 +199,14 @@ getStyle(appLayout: Object): Object {
 			fontSize,
 		},
 		icon: {
-			position: 'absolute',
 			textAlign: 'left',
 			fontSize: iconSize,
 			color: '#A59F9A',
 		},
 		textField: {
-			width: '100%',
 			color: '#A59F9A',
 			fontSize: fontSizeText,
-			paddingLeft: iconSize + 8,
+			paddingLeft: 3,
 		},
 	};
 }

@@ -22,13 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { View, TouchableButton, H1 } from '../../../../BaseComponents';
+import {
+	View,
+	TouchableButton,
+	H1,
+	MaterialTextInput,
+} from '../../../../BaseComponents';
 
 import { registerUser } from '../../../Actions/User';
 import { validateEmail } from '../../../Lib/UserUtils';
@@ -177,33 +181,31 @@ class RegisterForm extends View {
 					<View style={styles.fieldsPairContainerStyle}>
 						<View style={styles.textFieldIconContainer}>
 							<View style={[styles.textFieldIconCover, styles.textFieldIconCoverOne]}>
-								<Icon name="account" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onFirstNameChange}
 									placeholder={this.props.intl.formatMessage(i18n.firstName)}
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.firstName}
+									renderLeftAccessory={<Icon name="account" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>
 						<View style={styles.textFieldIconContainer}>
 							<View style={styles.textFieldIconCover}>
-								<Icon name="account" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onLastNameChange}
 									placeholder={this.props.intl.formatMessage(i18n.lastName)}
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.lastName}
+									renderLeftAccessory={<Icon name="account" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>
@@ -211,35 +213,33 @@ class RegisterForm extends View {
 					<View style={styles.fieldsPairContainerStyle}>
 						<View style={styles.textFieldIconContainer}>
 							<View style={[styles.textFieldIconCover, styles.textFieldIconCoverOne]}>
-								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onEmailChange}
 									placeholder={this.props.intl.formatMessage(i18n.emailAddress)}
 									keyboardType="email-address"
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.email}
+									renderLeftAccessory={<Icon name="email" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>
 						<View style={styles.textFieldIconContainer}>
 							<View style={styles.textFieldIconCover}>
-								<Icon name="email" style={styles.iconStyle} size={styles.iconSize} color="#ffffff80"/>
-								<TextInput
+								<MaterialTextInput
 									style={styles.textFieldStyle}
 									onChangeText={this.onConfirmEmailChange}
 									placeholder={this.props.intl.formatMessage(i18n.confirmEmailAddress)}
 									keyboardType="email-address"
 									autoCapitalize="none"
 									autoCorrect={false}
-									placeholderTextColor="#ffffff80"
-									underlineColorAndroid="#ffffff80"
+									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.confirmEmail}
+									renderLeftAccessory={<Icon name="email" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
 								/>
 							</View>
 						</View>

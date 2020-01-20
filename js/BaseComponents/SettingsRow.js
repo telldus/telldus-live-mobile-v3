@@ -245,7 +245,6 @@ class SettingsRow extends Component<Props, null> {
 									onSubmitEditing={this.onSubmitEditing}
 									autoCorrect={false}
 									autoFocus={true}
-									underlineColorAndroid="#e26901"
 									returnKeyType={'done'}
 									keyboardType={keyboardTypeInLineEdit}
 								/>

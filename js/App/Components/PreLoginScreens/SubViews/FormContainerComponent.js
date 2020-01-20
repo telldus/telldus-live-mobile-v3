@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { KeyboardAvoidingView, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
@@ -132,7 +132,7 @@ class FormContainerComponent extends View<Props, null> {
 			headerTextStyle: {
 				margin: headerFontSize * 0.5,
 				fontSize: headerFontSize,
-				color: '#ffffff80',
+				color: Theme.Core.inputBaseColor,
 				textAlign: 'center',
 			},
 			formCover: {
@@ -168,19 +168,13 @@ class FormContainerComponent extends View<Props, null> {
 			textFieldStyle: {
 				paddingLeft: 12 + textFieldFontSize,
 				width: this.isTablet ? width * 0.4 : width * 0.8,
-				paddingTop: textFieldFontSize,
 				minWidth: 200,
 				borderRadius: 3,
 
 				fontSize: textFieldFontSize,
-				color: '#ffffff80',
+				color: Theme.Core.inputBaseColor,
 				textAlign: 'left',
 				textAlignVertical: 'bottom',
-			},
-			iconStyle: {
-				position: 'absolute',
-				bottom: Platform.OS === 'android' ? 10 : 0,
-				left: Platform.OS === 'android' ? 3 : 0,
 			},
 			iconSize: textFieldFontSize,
 			loginButtonStyleG: {
