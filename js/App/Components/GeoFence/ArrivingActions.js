@@ -72,6 +72,31 @@ const ArrivingActions = (props: Props): Object => {
 		contentContainerStyle,
 	} = getStyles(appLayout);
 
+	function onDeviceValueChange(args: Object) {
+	}
+
+	function openRGBControl(id: number) {
+		navigation.navigate({
+			routeName: 'RGBControl',
+			key: 'RGBControl',
+			params: {
+				id,
+				onPressOverride: onDeviceValueChange,
+			},
+		});
+	}
+
+	function openThermostatControl(id: number) {
+		navigation.navigate({
+			routeName: 'ThermostatControl',
+			key: 'ThermostatControl',
+			params: {
+				id,
+				onPressOverride: onDeviceValueChange,
+			},
+		});
+	}
+
 	const [ showDevices, setShowDevices ] = useState(false);
 	const [ showEvents, setShowEvents ] = useState(false);
 	const [ showJobs, setShowJobs ] = useState(false);
@@ -88,15 +113,14 @@ const ArrivingActions = (props: Props): Object => {
 		setShowJobs(collapsed);
 	}
 
-	function renderDevice(device: Object): Object {
-
-		function onDeviceValueChange() {
-		}
-
+	function renderDevice(device: Object, index: number): Object {
 		return (
 			<DeviceRow
+				key={`${device.id}${index}`}
 				device={device}
-				onValueChange={onDeviceValueChange}/>
+				onDeviceValueChange={onDeviceValueChange}
+				openRGBControl={openRGBControl}
+				openThermostatControl={openThermostatControl}/>
 		);
 	}
 
@@ -110,9 +134,9 @@ const ArrivingActions = (props: Props): Object => {
 
 	let DEVICES;
 	if (showDevices) {
-		DEVICES = allIds.map((deviceId: string): () => Object => {
+		DEVICES = allIds.map((deviceId: string, index: number): () => Object => {
 			let device = byId[deviceId];
-			return renderDevice(device);
+			return renderDevice(device, index);
 		});
 	}
 
