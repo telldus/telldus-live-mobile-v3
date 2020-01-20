@@ -71,6 +71,31 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
+_deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale: 0 | 1, changeMode: 1 | 0, requestedState: number) => {
+	const {
+		deviceSetStateThermostat: dSetState,
+		navigation,
+	} = this.props;
+
+	const onPressOverride = navigation.getParam('onPressOverride');
+	if (onPressOverride) {
+		onPressOverride({
+			deviceId,
+			method: requestedState,
+			changeMode,
+			scale: 0,
+			mode,
+			stateValues: {
+				'2048': {
+					[mode]: temp,
+				},
+			},
+		});
+		return;
+	}
+	dSetState(deviceId, mode, temp, scale, changeMode, requestedState);
+}
+
 render(): Object | null {
 	const {
 		navigation,
@@ -142,7 +167,7 @@ render(): Object | null {
 						activeMode={mode}
 						lastUpdated={lastUpdated}
 						currentTemp={currentTemp}
-						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
+						deviceSetStateThermostat={this._deviceSetStateThermostat}
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						intl={intl}
