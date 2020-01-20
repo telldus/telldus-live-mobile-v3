@@ -56,6 +56,7 @@ type Props = {
 	isGatewayActive: boolean,
 	style: Object | number | Array<any>,
 	appLayout: Object,
+	onPressOverride?: (Object) => void,
 };
 
 type State = {
@@ -125,17 +126,61 @@ class SliderDetails extends View {
 	}
 
 	onSlidingComplete(sliderValue: number) {
+		const {
+			device,
+			commandOFF,
+			commandDIM,
+			onPressOverride,
+		} = this.props;
+
 		let dimValue = toDimmerValue(sliderValue);
-		let command = dimValue === 0 ? this.props.commandOFF : this.props.commandDIM;
-		this.props.deviceSetState(this.props.device.id, command, dimValue);
+		let command = dimValue === 0 ? commandOFF : commandDIM;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: command,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+			return;
+		}
+
+		this.props.deviceSetState(device.id, command, dimValue);
 	}
 
 	onTurnOn() {
-		this.props.deviceSetState(this.props.device.id, this.props.commandON);
+		const {
+			device,
+			commandON,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandON,
+			});
+			return;
+		}
+
+		this.props.deviceSetState(device.id, commandON);
 	}
 
 	onTurnOff() {
-		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
+		const {
+			device,
+			commandOFF,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandOFF,
+			});
+			return;
+		}
+
+		this.props.deviceSetState(device.id, commandOFF);
 	}
 
 	render(): Object {
