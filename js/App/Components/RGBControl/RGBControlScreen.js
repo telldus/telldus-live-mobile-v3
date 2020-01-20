@@ -51,7 +51,8 @@ type Props = {
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
 	intl: Object,
 	dispatch: Function,
-    navigation: Object,
+	navigation: Object,
+	onPressOverride?: (Object) => void,
 };
 
 type State = {
@@ -108,8 +109,21 @@ class RGBControlScreen extends View<Props, State> {
 		});
 	}
 
+	_deviceSetStateRGBOverride = (id: number, valueHex: string) => {
+		const { navigation } = this.props;
+		const onPressOverride = navigation.getParam('onPressOverride');
+		onPressOverride({
+			deviceId: id,
+			method: 1024,
+			stateValues: {
+				'1024': valueHex,
+			},
+		});
+	}
+
 	renderColorPicker(styles: Object): Object {
-		const { device, appLayout } = this.props;
+		const { device, appLayout, navigation } = this.props;
+		const deviceSetStateRGBOverride = navigation.getParam('onPressOverride');
 
 		return (
 			<View style={styles.wheelCover}>
@@ -122,13 +136,25 @@ class RGBControlScreen extends View<Props, State> {
 					swatchesCover={styles.swatchesCover}
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
-					thumbSize={15}/>
+					thumbSize={15}
+					deviceSetStateRGBOverride={deviceSetStateRGBOverride ? this._deviceSetStateRGBOverride : undefined}/>
 			</View>
 		);
 	}
 
+	_onPressOverride = (params: Object) => {
+		const { navigation } = this.props;
+		const onPressOverride = navigation.getParam('onPressOverride');
+		const id = navigation.getParam('id', null);
+		onPressOverride({
+			deviceId: id,
+			...params,
+		});
+	}
+
 	renderSlider(styles: Object): Object {
-		const { device, intl, isGatewayActive, appLayout } = this.props;
+		const { device, intl, isGatewayActive, appLayout, navigation } = this.props;
+		const onPressOverride = navigation.getParam('onPressOverride');
 
 		return (
 			<View style={styles.sliderCover}>
@@ -136,7 +162,8 @@ class RGBControlScreen extends View<Props, State> {
 					device={device}
 					intl={intl}
 					isGatewayActive={isGatewayActive}
-					appLayout={appLayout}/>
+					appLayout={appLayout}
+					onPressOverride={onPressOverride ? this._onPressOverride : undefined}/>
 			</View>
 		);
 	}
