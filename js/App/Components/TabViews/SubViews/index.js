@@ -46,6 +46,8 @@ import DimmerOnButton from './DimmerOnButton';
 import LearnButton from './LearnButton';
 import JobsPoster from './JobsPoster';
 import DashboardRow from './DashboardRow';
+import RGBButton from './RGBButton';
+import ThermostatButton from './Thermostat/ThermostatButton';
 
 module.exports = {
 	DeviceRow: DeviceRow,
@@ -74,4 +76,6 @@ module.exports = {
 	JobsPoster,
 	GatewayRow,
 	DashboardRow,
+	RGBButton,
+	ThermostatButton,
 };
