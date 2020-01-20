@@ -35,6 +35,8 @@ import {
 } from '../../../../BaseComponents';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import Theme from '../../../Theme';
+
 const ActionSectionHeader = (props: Object): Object => {
 	const {
 		onToggle,
@@ -77,17 +79,25 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const fontSize = deviceWidth * 0.03;
+	const fontSize = deviceWidth * 0.04;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 
 	return {
 		container: {
-			marginTop: 8,
+			marginTop: padding,
 			flexDirection: 'row',
 			alignItems: 'center',
+			marginBottom: 3,
 		},
 		label: {
 			color: '#999',
 			fontSize,
+			marginLeft: padding,
 		},
 		arrow: {
 			marginLeft: 8,
