@@ -36,6 +36,7 @@ import {
 	View,
 	ListItem,
 	BlockIcon,
+	CheckBoxIconText,
 } from '../../../../BaseComponents';
 import {
 	NavigationalButton,
@@ -67,6 +68,8 @@ const DeviceRow = (props: Object): Object => {
 		openRGBControl,
 		openThermostatControl,
 		onDeviceValueChange,
+		onToggleCheckBox,
+		isChecked,
 	} = props;
 	const {
 		supportedMethods = {},
@@ -106,13 +109,14 @@ const DeviceRow = (props: Object): Object => {
 		navigationStyle,
 		toggle,
 		thermostat,
+		checkButtonStyle,
+		checkIconActiveStyle,
+		checkIconInActiveStyle,
 	} = getStyles(layout, isInState);
 
 	function setScrollEnabled() {}
 	function onSlideActive() {}
 	function onSlideComplete() {}
-
-	// const [checked, setChecked] = useState(false);
 
 	const actionIcons = getDeviceActionIcon(deviceType, isInState, supportedMethods);
 
@@ -260,6 +264,12 @@ const DeviceRow = (props: Object): Object => {
 	function onPressMore() {
 	}
 
+	function _onToggleCheckBox() {
+		onToggleCheckBox(id);
+	}
+
+	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
+
 	return (
 		<ListItem
 			style={row}
@@ -270,6 +280,13 @@ const DeviceRow = (props: Object): Object => {
 			accessible={false}
 			importantForAccessibility={'no-hide-descendants'}>
 			<View style={cover}>
+				<CheckBoxIconText
+					style={checkButtonStyle}
+					iconStyle={checkIconStyle}
+					onToggleCheckBox={_onToggleCheckBox}
+					isChecked={isChecked}
+					intl={intl}
+				/>
 				<View style={touchableContainer}>
 					{showDeviceIcon && <BlockIcon
 						icon={icon}
@@ -403,6 +420,19 @@ const getStyles = (appLayout: Object, deviceState: string): Object => {
 			flexDirection: 'row',
 			justifyContent: 'center',
 			alignItems: 'center',
+		},
+		checkButtonStyle: {
+			paddingHorizontal: padding,
+		},
+		checkIconActiveStyle: {
+			borderColor: brandSecondary,
+			backgroundColor: brandSecondary,
+			color: '#fff',
+		},
+		checkIconInActiveStyle: {
+			borderColor: rowTextColor,
+			backgroundColor: 'transparent',
+			color: 'transparent',
 		},
 	};
 };
