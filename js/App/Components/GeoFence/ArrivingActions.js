@@ -63,6 +63,8 @@ const ArrivingActions = (props: Props): Object => {
 		});
 	}
 
+	const [checked, setChecked] = useState({});
+
 	let { allIds, byId } = useSelector((state: Object): Object => state.devices);
 	let jobs = useSelector((state: Object): Object => state.jobs) || [];
 	let events = useSelector((state: Object): Object => state.events) || [];
@@ -113,6 +115,14 @@ const ArrivingActions = (props: Props): Object => {
 		setShowJobs(collapsed);
 	}
 
+	function onToggleCheckBox(id: string) {
+		const curr = checked[id] || false;
+		setChecked({
+			...checked,
+			[id]: !curr,
+		});
+	}
+
 	function renderDevice(device: Object, index: number): Object {
 		return (
 			<DeviceRow
@@ -120,7 +130,9 @@ const ArrivingActions = (props: Props): Object => {
 				device={device}
 				onDeviceValueChange={onDeviceValueChange}
 				openRGBControl={openRGBControl}
-				openThermostatControl={openThermostatControl}/>
+				openThermostatControl={openThermostatControl}
+				onToggleCheckBox={onToggleCheckBox}
+				isChecked={checked[device.id]}/>
 		);
 	}
 
