@@ -125,6 +125,7 @@ const AddEditGeoFence = (props: Props): Object => {
 
 		return (
 			<MapView.Marker
+				key={`${index}`}
 				image={{uri: 'marker'}}
 				title={'Home'}
 				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}
