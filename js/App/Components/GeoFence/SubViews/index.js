@@ -27,6 +27,7 @@ import ActionSectionHeader from './ActionSectionHeader';
 import DeviceRow from './DeviceRow';
 import JobRow from './JobRow';
 import EventRow from './EventRow';
+import TimePicker from './TimePicker';
 
 module.exports = {
 	FenceCallout,
@@ -35,4 +36,5 @@ module.exports = {
 	DeviceRow,
 	JobRow,
 	EventRow,
+	TimePicker,
 };
