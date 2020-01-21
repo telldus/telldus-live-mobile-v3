@@ -51,10 +51,6 @@ const JobRow = (props: Object): Object => {
 		checkBoxId,
 	} = props;
 	const {
-		id,
-		deviceId,
-	} = job;
-	const {
 		name,
 	} = device;
 
