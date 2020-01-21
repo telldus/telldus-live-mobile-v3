@@ -70,6 +70,7 @@ const DeviceRow = (props: Object): Object => {
 		onDeviceValueChange,
 		onToggleCheckBox,
 		isChecked,
+		checkBoxId,
 	} = props;
 	const {
 		supportedMethods = {},
@@ -265,7 +266,7 @@ const DeviceRow = (props: Object): Object => {
 	}
 
 	function _onToggleCheckBox() {
-		onToggleCheckBox(id);
+		onToggleCheckBox(checkBoxId);
 	}
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;

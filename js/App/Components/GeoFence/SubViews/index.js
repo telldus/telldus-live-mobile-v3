@@ -25,10 +25,14 @@ import FenceCallout from './FenceCallout';
 import MapOverlay from './MapOverlay';
 import ActionSectionHeader from './ActionSectionHeader';
 import DeviceRow from './DeviceRow';
+import JobRow from './JobRow';
+import EventRow from './EventRow';
 
 module.exports = {
 	FenceCallout,
 	MapOverlay,
 	ActionSectionHeader,
 	DeviceRow,
+	JobRow,
+	EventRow,
 };
