@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
 
 	<item
 		android:drawable="@drawable/telldusliveapp_launchscreen"/>
@@ -8,8 +10,6 @@
 		android:drawable="@drawable/logo_splash"/>
 
 	<item
-		android:gravity="center|center"
-		android:drawable="@drawable/splash_loading_icon"
-		android:height="50dp" android:width="166dp"/>
+		android:drawable="@drawable/splash_loading_icon"/>
 
 </layer-list>
