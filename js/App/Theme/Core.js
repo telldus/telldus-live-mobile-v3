@@ -82,6 +82,9 @@ export default {
 	rowHeight: 60,
 
 	buttonRowKey: '  **buttonRow**  ',
+	GeoFenceDevicesHeaderKey: '  **devicesHeader**  ',
+	GeoFenceJobsHeaderKey: '  **jobsHeader**  ',
+	GeoFenceEventsHeaderKey: '  **eventsHeader**  ',
 
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,

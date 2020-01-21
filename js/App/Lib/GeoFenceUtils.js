@@ -19,6 +19,105 @@
 
 // @flow
 
+'use strict';
+
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy';
+import reduce from 'lodash/reduce';
+import isEmpty from 'lodash/isEmpty';
+
+import { hasTokenExpired } from '../Lib/LocalControl';
+import Theme from '../Theme';
+
+function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
+	let modifiedData = paramOne.map((item: Object, index: number): Object => {
+		let gateway = gateways[item.clientId];
+		if (gateway) {
+			const { localKey, online, websocketOnline } = gateway;
+			const {
+				address,
+				key,
+				ttl,
+				supportLocal,
+			} = localKey;
+			const tokenExpired = hasTokenExpired(ttl);
+			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
+			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
+		}
+		return { ...item, isOnline: false, websocketOnline: false, supportLocalControl: false };
+	});
+	let result = groupBy(modifiedData, (items: Object): Array<any> => {
+		let gateway = gateways[items.clientId];
+		return gateway && gateway.id;
+	});
+	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
+		acc.push({
+			data: next,
+			header: index,
+		});
+		return acc;
+	}, []);
+	return orderBy(result, [(item: Object): any => {
+		const { name = '' } = gateways[item.header] || {};
+		return name.toLowerCase();
+	}], ['asc']);
+}
+
+function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): Object {
+	let devicesList = [];
+	const GeoFenceDevicesHeaderRow = {
+		header: Theme.Core.GeoFenceDevicesHeaderKey,
+		headerText: 'Devices', // TODO: translate
+		data: [],
+	};
+	devicesList.push(GeoFenceDevicesHeaderRow);
+	let isGatwaysEmpty = isEmpty(gateways);
+	let isDevicesEmpty = isEmpty(devices);
+	if (!isGatwaysEmpty && !isDevicesEmpty) {
+		let orderedList = orderBy(devices, [(device: Object): any => {
+			let { name = '' } = device;
+			name = typeof name !== 'string' ? '' : name;
+			return name.toLowerCase();
+		}], ['asc']);
+		devicesList.push(...prepareSectionRow(orderedList, gateways));
+	}
+	return devicesList;
+}
+
+function parseEventsForListView(events: Object): Array<Object> {
+	let eventsList = [], data = [];
+	let isEventsEmpty = isEmpty(events);
+	if (!isEventsEmpty) {
+		Object.keys(events).map((event: Object, i: number) => {
+			data.push(events[event]);
+		});
+	}
+	const GeoFenceEventsHeaderRow = {
+		header: Theme.Core.GeoFenceEventsHeaderKey,
+		headerText: 'Events', // TODO: translate
+		data,
+	};
+	eventsList.push(GeoFenceEventsHeaderRow);
+	return eventsList;
+}
+
+function parseJobsForListView(jobs: Object): Array<Object> {
+	let jobsList = [], data = [];
+	let isJobsEmpty = isEmpty(jobs);
+	if (!isJobsEmpty) {
+		Object.keys(jobs).map((job: Object, i: number) => {
+			data.push(jobs[job]);
+		});
+	}
+	const GeoFenceJobsHeaderRow = {
+		header: Theme.Core.GeoFenceJobsHeaderKey,
+		headerText: 'Schedules', // TODO: translate
+		data,
+	};
+	jobsList.push(GeoFenceJobsHeaderRow);
+	return jobsList;
+}
+
 function deg2rad(deg: number): number {
 	return deg * (Math.PI / 180);
 }
@@ -56,6 +155,15 @@ const GeoFenceUtils = {
 		let d = R * c; // Distance in km
 		return d;
 	},
+	prepareDataForListArrivingActions(devices: Object, gateways: Object, events: Object, jobs: Object): Array<Object> {
+		let listData = [];
+		listData.push(...parseDevicesForListView(devices, gateways));
+		listData.push(...parseEventsForListView(events));
+		listData.push(...parseJobsForListView(jobs));
+		return listData;
+	},
 };
+
+
 
 export default GeoFenceUtils;
