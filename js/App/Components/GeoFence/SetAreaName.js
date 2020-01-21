@@ -21,12 +21,14 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	View,
-	Text,
+	MaterialTextInput,
 	FloatingButton,
 } from '../../../BaseComponents';
+
+import Theme from '../../Theme';
 
 type Props = {
 	navigation: Object,
@@ -54,29 +56,74 @@ const SetAreaName = (props: Props): Object => {
 
 	const {
 		container,
+		textField,
+		containerStyleTF,
+		brandSecondary,
+		iconStyle,
 	} = getStyles(appLayout);
+
+	const [ name, setName ] = useState('');
+	function onChangeText(value: string) {
+		setName(value);
+	}
 
 	return (
 		<View style={container}>
-			<Text>
-            SetAreaName
-			</Text>
+			<MaterialTextInput
+				label={'Name'}
+				containerStyle={containerStyleTF}
+				style={textField}
+				baseColor={brandSecondary}
+				tintColor={brandSecondary}
+				onChangeText={onChangeText}
+				autoCapitalize="characters"
+				autoCorrect={false}
+				autoFocus={true}
+				value={name}/>
 			<FloatingButton
 				onPress={onPressNext}
 				iconName={'checkmark'}
-			/>
+				iconStyle={iconStyle}/>
 		</View>
 	);
 };
 
 const getStyles = (appLayout: Object): Object => {
-	// const { height, width } = appLayout;
-	// const isPortrait = height > width;
-	// const deviceWidth = isPortrait ? width : height;
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+		rowTextColor,
+		brandSecondary,
+		shadow,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+	const fontSize = deviceWidth * 0.045;
 
 	return {
+		brandSecondary,
 		container: {
 			flex: 1,
+		},
+		containerStyleTF: {
+			marginVertical: padding * 2,
+			width: width - (padding * 2),
+			marginHorizontal: padding,
+			backgroundColor: '#fff',
+			...shadow,
+			paddingVertical: padding * 2,
+			paddingHorizontal: padding,
+			borderRadius: 2,
+		},
+		textField: {
+			fontSize: fontSize * 1.3,
+			color: rowTextColor,
+		},
+		iconStyle: {
+			color: '#fff',
 		},
 	};
 };
