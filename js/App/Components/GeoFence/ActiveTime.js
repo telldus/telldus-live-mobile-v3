@@ -23,10 +23,17 @@
 
 import React, { useEffect } from 'react';
 import {
-	View,
-	Text,
+	ScrollView,
+} from 'react-native';
+import {
 	FloatingButton,
 } from '../../../BaseComponents';
+
+import {
+	TimePicker,
+} from './SubViews';
+
+import Theme from '../../Theme';
 
 type Props = {
 	navigation: Object,
@@ -54,29 +61,43 @@ const ActiveTime = (props: Props): Object => {
 
 	const {
 		container,
+		contentContainerStyle,
 	} = getStyles(appLayout);
 
+	function onChangeTime() {
+	}
+
 	return (
-		<View style={container}>
-			<Text>
-            ActiveTime
-			</Text>
+		<ScrollView
+			style={container}
+			contentContainerStyle={contentContainerStyle}>
+			<TimePicker
+				onChange={onChangeTime}/>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}
-			/>
-		</View>
+				imageSource={{uri: 'right_arrow_key'}}/>
+		</ScrollView>
 	);
 };
 
 const getStyles = (appLayout: Object): Object => {
-	// const { height, width } = appLayout;
-	// const isPortrait = height > width;
-	// const deviceWidth = isPortrait ? width : height;
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 
 	return {
 		container: {
 			flex: 1,
+		},
+		contentContainerStyle: {
+			flexGrow: 1,
+			paddingVertical: padding * 2,
 		},
 	};
 };
