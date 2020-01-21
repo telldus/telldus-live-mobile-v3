@@ -155,7 +155,7 @@ const GeoFenceUtils = {
 		let d = R * c; // Distance in km
 		return d;
 	},
-	prepareDataForListArrivingActions(devices: Object, gateways: Object, events: Object, jobs: Object): Array<Object> {
+	prepareDataForListGeoFenceActions(devices: Object, gateways: Object, events: Object, jobs: Object): Array<Object> {
 		let listData = [];
 		listData.push(...parseDevicesForListView(devices, gateways));
 		listData.push(...parseEventsForListView(events));
