@@ -23,19 +23,39 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-	ScrollView,
+	SectionList,
+	RefreshControl,
+	LayoutAnimation,
 } from 'react-native';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 
 import {
 	FloatingButton,
+	View,
 } from '../../../BaseComponents';
 import {
 	ActionSectionHeader,
 	DeviceRow,
+	JobRow,
+	EventRow,
 } from './SubViews';
+import {
+	DeviceHeader,
+} from '../TabViews/SubViews';
+
+import {
+	LayoutAnimations,
+	GeoFenceUtils,
+} from '../../Lib';
+
+import {
+	getEvents,
+	getDevices,
+	getJobs,
+} from '../../Actions';
 
 import Theme from '../../Theme';
 
@@ -43,6 +63,8 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	currentScreen: string,
+	intl: Object,
 };
 
 const ArrivingActions = (props: Props): Object => {
@@ -50,6 +72,8 @@ const ArrivingActions = (props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		currentScreen,
+		intl,
 	} = props;
 
 	useEffect(() => {
@@ -63,18 +87,47 @@ const ArrivingActions = (props: Props): Object => {
 		});
 	}
 
+	const dispatch = useDispatch();
+
 	const [checked, setChecked] = useState({});
 
-	let { allIds, byId } = useSelector((state: Object): Object => state.devices);
+	let { screenReaderEnabled } = useSelector((state: Object): Object => state.app);
+	let { byId } = useSelector((state: Object): Object => state.devices);
 	let jobs = useSelector((state: Object): Object => state.jobs) || [];
 	let events = useSelector((state: Object): Object => state.events) || [];
+	let { byId: gatewaysById } = useSelector((state: Object): Object => state.gateways) || [];
+
+	const [ showDevices, setShowDevices ] = useState(false);
+	const [ showEvents, setShowEvents ] = useState(false);
+	const [ showJobs, setShowJobs ] = useState(false);
+
+	const listData = GeoFenceUtils.prepareDataForListArrivingActions(
+		showDevices ? byId : {},
+		gatewaysById,
+		showEvents ? events : {},
+		showJobs ? jobs : {},
+	);
 
 	const {
 		container,
-		contentContainerStyle,
 	} = getStyles(appLayout);
 
 	function onDeviceValueChange(args: Object) {
+	}
+
+	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
+		scrollEnabled: true,
+		showRefresh: true,
+	});
+	const {
+		scrollEnabled,
+		showRefresh,
+	} = confOnSetScroll;
+	function _setScrollEnabled(enable: boolean) {
+		setConfOnSetScroll({
+			scrollEnabled: enable,
+			showRefresh: enable,
+		});
 	}
 
 	function openRGBControl(id: number) {
@@ -99,19 +152,18 @@ const ArrivingActions = (props: Props): Object => {
 		});
 	}
 
-	const [ showDevices, setShowDevices ] = useState(false);
-	const [ showEvents, setShowEvents ] = useState(false);
-	const [ showJobs, setShowJobs ] = useState(false);
-
 	function toggleShowDevices(collapsed: boolean) {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		setShowDevices(collapsed);
 	}
 
 	function toggleShowEvents(collapsed: boolean) {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		setShowEvents(collapsed);
 	}
 
 	function toggleShowJobs(collapsed: boolean) {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		setShowJobs(collapsed);
 	}
 
@@ -123,71 +175,140 @@ const ArrivingActions = (props: Props): Object => {
 		});
 	}
 
-	function renderDevice(device: Object, index: number): Object {
+	function renderDevice({item, index}: Object): Object {
+		const checkBoxId = `${item.id}-device`;
+
 		return (
 			<DeviceRow
-				key={`${device.id}${index}`}
-				device={device}
+				key={`${item.id}${index}`}
+				device={item}
 				onDeviceValueChange={onDeviceValueChange}
 				openRGBControl={openRGBControl}
 				openThermostatControl={openThermostatControl}
 				onToggleCheckBox={onToggleCheckBox}
-				isChecked={checked[device.id]}/>
+				checkBoxId={checkBoxId}
+				isChecked={checked[checkBoxId]}
+				setScrollEnabled={_setScrollEnabled}/>
 		);
 	}
 
-	function renderEvent(event: Object): Object {
+	function renderEvent({item}: Object): Object {
+		const checkBoxId = `${item.id}-event`;
 
+		return (
+			<EventRow
+				event={item}
+				onToggleCheckBox={onToggleCheckBox}
+				checkBoxId={checkBoxId}
+				isChecked={checked[checkBoxId]}/>
+		);
 	}
 
-	function renderJob(job: Object): Object {
+	function renderJob({item}: Object): Object {
+		const checkBoxId = `${item.id}-job`;
 
+		return (
+			<JobRow
+				job={item}
+				device={byId[item.deviceId]}
+				onToggleCheckBox={onToggleCheckBox}
+				checkBoxId={checkBoxId}
+				isChecked={checked[checkBoxId]}/>
+		);
 	}
 
-	let DEVICES;
-	if (showDevices) {
-		DEVICES = allIds.map((deviceId: string, index: number): () => Object => {
-			let device = byId[deviceId];
-			return renderDevice(device, index);
-		});
+	const [ isRefreshing, setIsRefreshing ] = useState(false);
+	async function onRefresh() {
+		setIsRefreshing(true);
+		try {
+			await dispatch(getDevices());
+			await dispatch(getEvents());
+			await dispatch(getJobs());
+		} catch (e) {
+			// None
+		} finally {
+			setIsRefreshing(false);
+		}
 	}
 
-	let EVENTS;
-	if (showEvents) {
-		EVENTS = events.map((event: Object): () => Object => {
-			return renderEvent(event);
-		});
+	function renderRow(rowData: Object): Object {
+		const isEHeader = rowData.section.header === Theme.Core.GeoFenceEventsHeaderKey;
+		const isJHeader = rowData.section.header === Theme.Core.GeoFenceJobsHeaderKey;
+
+		if (isEHeader) {
+			return renderEvent({...rowData});
+		} else if (isJHeader) {
+			return renderJob({...rowData});
+		}
+		return renderDevice({...rowData});
 	}
 
-	let JOBS;
-	if (showJobs) {
-		JOBS = jobs.map((job: Object): () => Object => {
-			return renderJob(job);
-		});
+	function renderSectionHeader(sectionData: Object): Object {
+
+		const isDHeader = sectionData.section.header === Theme.Core.GeoFenceDevicesHeaderKey;
+		const isEHeader = sectionData.section.header === Theme.Core.GeoFenceEventsHeaderKey;
+		const isJHeader = sectionData.section.header === Theme.Core.GeoFenceJobsHeaderKey;
+
+		if (isDHeader || isEHeader || isJHeader) {
+			return (
+				<ActionSectionHeader
+					title={sectionData.section.headerText}
+					onToggle={isDHeader ? toggleShowDevices : isEHeader ? toggleShowEvents : toggleShowJobs}/>
+			);
+		}
+
+		const { supportLocalControl, isOnline, websocketOnline } = sectionData.section.data[0];
+
+		const { name } = gatewaysById[sectionData.section.header] || {};
+
+		return (
+			<DeviceHeader
+				gateway={name}
+				appLayout={appLayout}
+				intl={intl}
+				supportLocalControl={supportLocalControl}
+				isOnline={isOnline}
+				websocketOnline={websocketOnline}
+				accessible={currentScreen === 'ArrivingActions'}
+			/>
+		);
 	}
 
+	function keyExtractor(item: Object, index: number): string {
+		return `${item.id}${index}`;
+	}
+
+	let makeRowAccessible = 0;
+	if (screenReaderEnabled && currentScreen === 'ArrivingActions') {
+		makeRowAccessible = 1;
+	}
+	const extraData = {
+		makeRowAccessible,
+		appLayout,
+	};
 
 	return (
-		<ScrollView
-			style={container}
-			contentContainerStyle={contentContainerStyle}>
-			<ActionSectionHeader title="Devices"
-				onToggle={toggleShowDevices}
+		<View style={container}>
+			<SectionList
+				sections={listData}
+				renderItem={renderRow}
+				renderSectionHeader={renderSectionHeader}
+				stickySectionHeadersEnabled={true}
+				refreshControl={
+					<RefreshControl
+						enabled={showRefresh}
+						refreshing={isRefreshing}
+						onRefresh={onRefresh}
+					/>
+				}
+				keyExtractor={keyExtractor}
+				extraData={extraData}
+				scrollEnabled={scrollEnabled}
 			/>
-			{!!DEVICES && DEVICES}
-			<ActionSectionHeader title="Events"
-				onToggle={toggleShowEvents}
-			/>
-			{!!EVENTS && EVENTS}
-			<ActionSectionHeader title="Schedules"
-				onToggle={toggleShowJobs}
-			/>
-			{!!JOBS && JOBS}
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}
-			/>
-		</ScrollView>
+				imageSource={{uri: 'right_arrow_key'}}/>
+		</View>
 	);
 };
 
