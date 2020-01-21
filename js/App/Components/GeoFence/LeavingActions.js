@@ -24,9 +24,9 @@
 import React, { useEffect } from 'react';
 import {
 	View,
-	Text,
 	FloatingButton,
 } from '../../../BaseComponents';
+import Actions from './Actions';
 
 type Props = {
 	navigation: Object,
@@ -58,9 +58,8 @@ const LeavingActions = (props: Props): Object => {
 
 	return (
 		<View style={container}>
-			<Text>
-            LeavingActions
-			</Text>
+			<Actions
+				navigation={navigation}/>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}
@@ -70,9 +69,6 @@ const LeavingActions = (props: Props): Object => {
 };
 
 const getStyles = (appLayout: Object): Object => {
-	// const { height, width } = appLayout;
-	// const isPortrait = height > width;
-	// const deviceWidth = isPortrait ? width : height;
 
 	return {
 		container: {
