@@ -21,10 +21,14 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	ScrollView,
 } from 'react-native';
+import {
+	useDispatch,
+} from 'react-redux';
+
 import {
 	FloatingButton,
 } from '../../../BaseComponents';
@@ -34,6 +38,10 @@ import {
 } from './SubViews';
 
 import Theme from '../../Theme';
+
+import {
+	setFenceActiveTime,
+} from '../../Actions/Fences';
 
 type Props = {
 	navigation: Object,
@@ -48,11 +56,29 @@ const ActiveTime = (props: Props): Object => {
 		onDidMount,
 	} = props;
 
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		onDidMount('4. Active time', 'Select time for fence to be active');
 	}, []);
 
+	const [ timeInfo, setTimeInfo ] = useState({
+		alwaysActive: true,
+		fromHr: 0,
+		fromMin: 0,
+		toHr: 0,
+		toMin: 0,
+	});
+	const {
+		alwaysActive: aA,
+		fromHr: fH,
+		fromMin: fM,
+		toHr: tH,
+		toMin: tM,
+	} = timeInfo;
+
 	function onPressNext() {
+		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		navigation.navigate({
 			routeName: 'SetAreaName',
 			key: 'SetAreaName',
@@ -64,7 +90,20 @@ const ActiveTime = (props: Props): Object => {
 		contentContainerStyle,
 	} = getStyles(appLayout);
 
-	function onChangeTime() {
+	function onChangeTime(
+		alwaysActive: boolean,
+		fromHr: number,
+		fromMin: number,
+		toHr: number,
+		toMin: number,
+	) {
+		setTimeInfo({
+			alwaysActive,
+			fromHr,
+			fromMin,
+			toHr,
+			toMin,
+		});
 	}
 
 	return (
