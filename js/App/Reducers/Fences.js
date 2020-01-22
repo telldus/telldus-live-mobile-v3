@@ -123,6 +123,17 @@ const resetFence = (state: Object, action: Object): Object => ({
 	fence: {},
 });
 
+const rehydrateFence = (state: Object, action: Object): Object => {
+	if (action.payload && action.payload.fences) {
+		return {
+			...state,
+			...action.payload.fences,
+			fence: {},
+		};
+	}
+	return state;
+};
+
 const actionHandlers = {
 
 	['SET_FENCE_AREA']: setArea,
@@ -137,6 +148,7 @@ const actionHandlers = {
 	['UPDATE_FENCE']: updateFence,
 	['CLEAR_FENCES']: clearFences,
 	['RESET_FENCE']: resetFence,
+	['persist/REHYDRATE']: rehydrateFence,
 
 };
 
