@@ -34,6 +34,10 @@ import {
 import { useIntl } from 'react-intl';
 
 import {
+	View,
+	FloatingButton,
+} from '../../../BaseComponents';
+import {
 	ActionSectionHeader,
 	DeviceRow,
 	JobRow,
@@ -52,24 +56,43 @@ import {
 	getEvents,
 	getDevices,
 	getJobs,
+	setFenceArrivingActions,
+	setFenceLeavingActions,
 } from '../../Actions';
 
 import Theme from '../../Theme';
 
 type Props = {
 	navigation: Object,
+	onPressNext: Function,
+	iconName?: string,
+	imageSource?: Object,
+	currentScreen: string,
 };
 
 const Actions = (props: Props): Object => {
 	const {
 		navigation,
+		onPressNext,
+		iconName,
+		imageSource,
+		currentScreen,
 	} = props;
 
 	const intl = useIntl();
 
 	const dispatch = useDispatch();
 
-	const [checked, setChecked] = useState({});
+	const [selectedItems, setSelectedItems] = useState({
+		selectedDevices: {},
+		selectedSchedules: {},
+		selectedEvents: {},
+	});
+	const {
+		selectedDevices = {},
+		selectedSchedules = {},
+		selectedEvents = {},
+	} = selectedItems;
 
 	let { screenReaderEnabled, layout: appLayout } = useSelector((state: Object): Object => state.app);
 	let { byId } = useSelector((state: Object): Object => state.devices);
@@ -89,6 +112,19 @@ const Actions = (props: Props): Object => {
 	);
 
 	function onDeviceValueChange(args: Object) {
+		const {
+			deviceId,
+			...others
+		} = args;
+		const isSelected = !!selectedDevices[deviceId];
+		if (!isSelected) {
+			return;
+		}
+		let newSelected = {...selectedItems};
+		newSelected.selectedDevices[deviceId] = {
+			...others,
+		};
+		setSelectedItems(newSelected);
 	}
 
 	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
@@ -143,17 +179,32 @@ const Actions = (props: Props): Object => {
 		setShowJobs(collapsed);
 	}
 
-	function onToggleCheckBox(id: string) {
-		const curr = checked[id] || false;
-		setChecked({
-			...checked,
-			[id]: !curr,
-		});
+	function onChangeSelection(type: 'device' | 'schedule' | 'event', id: string, data: Object) {
+		let newSelected = {...selectedItems};
+		if (type === 'device') {
+			if (selectedDevices[id]) {
+				delete newSelected.selectedDevices[id];
+			} else {
+				newSelected.selectedDevices[id] = data;
+			}
+		} else if (type === 'schedule') {
+			if (selectedSchedules[id]) {
+				delete newSelected.selectedSchedules[id];
+			} else {
+				newSelected.selectedSchedules[id] = data;
+			}
+		} else if (type === 'event') {
+			if (selectedEvents[id]) {
+				delete newSelected.selectedEvents[id];
+			} else {
+				newSelected.selectedEvents[id] = data;
+			}
+		}
+		setSelectedItems(newSelected);
 	}
 
 	function renderDevice({item, index}: Object): Object {
-		const checkBoxId = `${item.id}-device`;
-
+		const checkBoxId = item.id;
 		return (
 			<DeviceRow
 				key={`${item.id}${index}`}
@@ -161,35 +212,35 @@ const Actions = (props: Props): Object => {
 				onDeviceValueChange={onDeviceValueChange}
 				openRGBControl={openRGBControl}
 				openThermostatControl={openThermostatControl}
-				onToggleCheckBox={onToggleCheckBox}
+				onChangeSelection={onChangeSelection}
 				checkBoxId={checkBoxId}
-				isChecked={checked[checkBoxId]}
+				isChecked={!!selectedDevices[checkBoxId]}
 				setScrollEnabled={_setScrollEnabled}/>
 		);
 	}
 
 	function renderEvent({item}: Object): Object {
-		const checkBoxId = `${item.id}-event`;
+		const checkBoxId = item.id;
 
 		return (
 			<EventRow
 				event={item}
-				onToggleCheckBox={onToggleCheckBox}
+				onChangeSelection={onChangeSelection}
 				checkBoxId={checkBoxId}
-				isChecked={checked[checkBoxId]}/>
+				isChecked={!!selectedEvents[checkBoxId]}/>
 		);
 	}
 
 	function renderJob({item}: Object): Object {
-		const checkBoxId = `${item.id}-job`;
+		const checkBoxId = item.id;
 
 		return (
 			<JobRow
 				job={item}
 				device={byId[item.deviceId]}
-				onToggleCheckBox={onToggleCheckBox}
+				onChangeSelection={onChangeSelection}
 				checkBoxId={checkBoxId}
-				isChecked={checked[checkBoxId]}/>
+				isChecked={!!selectedSchedules[checkBoxId]}/>
 		);
 	}
 
@@ -249,6 +300,23 @@ const Actions = (props: Props): Object => {
 		);
 	}
 
+	function _onPressNext() {
+		if (currentScreen === 'ArrivingActions') {
+			dispatch(setFenceArrivingActions({
+				devices: selectedDevices,
+				events: selectedSchedules,
+				schedules: selectedEvents,
+			}));
+		} else if (currentScreen === 'LeavingActions') {
+			dispatch(setFenceLeavingActions({
+				devices: selectedDevices,
+				events: selectedSchedules,
+				schedules: selectedEvents,
+			}));
+		}
+		onPressNext();
+	}
+
 	function keyExtractor(item: Object, index: number): string {
 		return `${item.id}${index}`;
 	}
@@ -263,22 +331,29 @@ const Actions = (props: Props): Object => {
 	};
 
 	return (
-		<SectionList
-			sections={listData}
-			renderItem={renderRow}
-			renderSectionHeader={renderSectionHeader}
-			stickySectionHeadersEnabled={true}
-			refreshControl={
-				<RefreshControl
-					enabled={showRefresh}
-					refreshing={isRefreshing}
-					onRefresh={onRefresh}
-				/>
-			}
-			keyExtractor={keyExtractor}
-			extraData={extraData}
-			scrollEnabled={scrollEnabled}
-		/>
+		<View style={{flex: 1}}>
+			<SectionList
+				sections={listData}
+				renderItem={renderRow}
+				renderSectionHeader={renderSectionHeader}
+				stickySectionHeadersEnabled={true}
+				refreshControl={
+					<RefreshControl
+						enabled={showRefresh}
+						refreshing={isRefreshing}
+						onRefresh={onRefresh}
+					/>
+				}
+				keyExtractor={keyExtractor}
+				extraData={extraData}
+				scrollEnabled={scrollEnabled}
+			/>
+			<FloatingButton
+				onPress={_onPressNext}
+				iconName={iconName}
+				imageSource={imageSource}
+			/>
+		</View>
 	);
 };
 

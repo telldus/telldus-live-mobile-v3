@@ -27,6 +27,9 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+import {
+	Switch,
+} from 'react-native';
 
 import {
 	Text,
@@ -43,7 +46,7 @@ const EventRow = (props: Object): Object => {
 
 	const {
 		event,
-		onToggleCheckBox,
+		onChangeSelection,
 		isChecked,
 		checkBoxId,
 	} = props;
@@ -65,6 +68,8 @@ const EventRow = (props: Object): Object => {
 		checkButtonStyle,
 		checkIconActiveStyle,
 		checkIconInActiveStyle,
+		switchStyle,
+		switchTextStyle,
 	} = getStyles(layout);
 
 	function noOp() {}
@@ -89,8 +94,11 @@ const EventRow = (props: Object): Object => {
 
 	const nameInfo = getNameInfo();
 
-	function _onToggleCheckBox() {
-		onToggleCheckBox(checkBoxId);
+	function _onChangeSelection() {
+		onChangeSelection('event', checkBoxId, event);
+	}
+
+	function onValueChange() {
 	}
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
@@ -108,13 +116,27 @@ const EventRow = (props: Object): Object => {
 				<CheckBoxIconText
 					style={checkButtonStyle}
 					iconStyle={checkIconStyle}
-					onToggleCheckBox={_onToggleCheckBox}
+					onToggleCheckBox={_onChangeSelection}
 					isChecked={isChecked}
 					intl={intl}
 				/>
 				<View style={touchableContainer}>
 					{nameInfo}
 				</View>
+				{
+					isChecked ? (
+						<>
+						<Text style={switchTextStyle}>
+							Active
+						</Text>
+						<Switch
+							style={switchStyle}
+							value={isChecked}
+							onValueChange={onValueChange}
+						/>
+						</>
+					) : null
+				}
 			</View>
 		</ListItem>
 	);
@@ -161,7 +183,7 @@ const getStyles = (appLayout: Object): Object => {
 			overflow: 'hidden',
 			justifyContent: 'space-between',
 			paddingLeft: 5,
-			alignItems: 'stretch',
+			alignItems: 'center',
 			flexDirection: 'row',
 			borderRadius: 2,
 		},
@@ -195,6 +217,16 @@ const getStyles = (appLayout: Object): Object => {
 			borderColor: rowTextColor,
 			backgroundColor: 'transparent',
 			color: 'transparent',
+		},
+		switchStyle: {
+			marginRight: padding,
+		},
+		switchTextStyle: {
+			color: rowTextColor,
+			fontSize: nameFontSize * 0.8,
+			textAlignVertical: 'center',
+			textAlign: 'right',
+			marginRight: 5,
 		},
 	};
 };
