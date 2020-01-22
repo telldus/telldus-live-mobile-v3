@@ -25,6 +25,7 @@
 import React from 'react';
 import {
 	TouchableOpacity,
+	StyleSheet,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -95,6 +96,7 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		eulaContentColor,
 		angleTintColor,
+		angledRowBorderColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -103,7 +105,8 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		rowCoverStyleDef: {
 			padding: padding * 1.5,
-			marginBottom: 1,
+			borderColor: angledRowBorderColor,
+			borderBottomWidth: StyleSheet.hairlineWidth,
 			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',

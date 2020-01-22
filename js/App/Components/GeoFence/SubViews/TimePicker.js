@@ -34,6 +34,8 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
+import Theme from '../../../Theme';
+
 type Props = {
 	value: Object,
 	onSwitch: (boolean, number, number, number, number) => void,
@@ -206,9 +208,8 @@ const styles = StyleSheet.create({
 		height: 44,
 		padding: 12,
 		backgroundColor: '#FFF',
-		borderColor: '#BBB',
-		borderBottomWidth: 1,
-
+		borderColor: Theme.Core.angledRowBorderColor,
+		borderBottomWidth: StyleSheet.hairlineWidth,
 	},
 	switchLabel: {
 		flex: 1,
