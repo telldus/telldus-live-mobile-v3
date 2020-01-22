@@ -125,7 +125,9 @@ class FloatingButton extends Component<Props, null> {
 					}
 					{!!iconName &&
 						(
-							<IconTelldus icon={iconName} style={iconStyle}/>
+							<IconTelldus icon={iconName} style={[{
+								color: '#fff',
+							}, iconStyle]}/>
 						)
 					}
 					{
