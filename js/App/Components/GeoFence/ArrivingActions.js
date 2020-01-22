@@ -22,10 +22,6 @@
 'use strict';
 
 import React, { useEffect } from 'react';
-import {
-	View,
-	FloatingButton,
-} from '../../../BaseComponents';
 import Actions from './Actions';
 
 type Props = {
@@ -38,7 +34,6 @@ type Props = {
 const ArrivingActions = (props: Props): Object => {
 	const {
 		navigation,
-		appLayout,
 		onDidMount,
 		isEditMode,
 	} = props;
@@ -62,30 +57,14 @@ const ArrivingActions = (props: Props): Object => {
 		}
 	}
 
-	const {
-		container,
-	} = getStyles(appLayout);
-
 	return (
-		<View style={container}>
-			<Actions
-				navigation={navigation}/>
-			<FloatingButton
-				onPress={onPressNext}
-				iconName={isEdit ? 'checkmark' : undefined}
-				imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}
-			/>
-		</View>
+		<Actions
+			navigation={navigation}
+			onPressNext={onPressNext}
+			iconName={isEdit ? 'checkmark' : undefined}
+			currentScreen={'ArrivingActions'}
+			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}/>
 	);
-};
-
-const getStyles = (appLayout: Object): Object => {
-
-	return {
-		container: {
-			flex: 1,
-		},
-	};
 };
 
 export default ArrivingActions;
