@@ -23,10 +23,23 @@
 
 import React, { useEffect, useState } from 'react';
 import {
+	useDispatch,
+} from 'react-redux';
+import {
+	NavigationActions,
+	StackActions,
+} from 'react-navigation';
+
+import {
 	View,
 	MaterialTextInput,
 	FloatingButton,
 } from '../../../BaseComponents';
+
+import {
+	saveFence,
+	setFenceTitle,
+} from '../../Actions/Fences';
 
 import Theme from '../../Theme';
 
@@ -47,11 +60,29 @@ const SetAreaName = (props: Props): Object => {
 		onDidMount('5. Name', 'Select a name for your area');
 	}, []);
 
+	const dispatch = useDispatch();
+	const [ name, setName ] = useState('');
+
 	function onPressNext() {
-		navigation.navigate({
-			routeName: 'AddEditGeoFence',
-			key: 'AddEditGeoFence',
-		});
+		dispatch(setFenceTitle(name));
+		dispatch(saveFence());
+		navigation.dispatch(StackActions.reset({
+			index: 2,
+			actions: [
+				NavigationActions.navigate({
+					routeName: 'Tabs',
+					key: 'Tabs',
+				}),
+				NavigationActions.navigate({
+					routeName: 'Profile',
+					key: 'Profile',
+				}),
+				NavigationActions.navigate({
+					routeName: 'GeoFenceNavigator',
+					key: 'GeoFenceNavigator',
+				}),
+			],
+		}));
 	}
 
 	const {
@@ -62,7 +93,6 @@ const SetAreaName = (props: Props): Object => {
 		iconStyle,
 	} = getStyles(appLayout);
 
-	const [ name, setName ] = useState('');
 	function onChangeText(value: string) {
 		setName(value);
 	}
