@@ -87,22 +87,12 @@ const AddEditGeoFence = (props: Props): Object => {
 		latitudeDelta = 0.24442,
 		longitudeDelta = 0.24442,
 	} = location;
-	fences = (fences && fences.length > 0) ? fences : [{
-		latitude,
-		longitude,
-		radius: 3000,
-		title: 'Home',
-	}];
 	const region = new AnimatedRegion({
 		latitude,
 		longitude,
 		latitudeDelta,
 		longitudeDelta,
 	});
-
-	function setActiveFence(index: number) {
-		setActiveFenceIndex(index);
-	}
 
 	function onEditFence(index: number) {
 		dispatch(setEditFence(index));
@@ -114,9 +104,8 @@ const AddEditGeoFence = (props: Props): Object => {
 	}
 
 	function renderMarker(fence: Object, index: number): Object {
-
-		function setActiveFenceInner() {
-			setActiveFence(index);
+		if (!fence) {
+			return;
 		}
 
 		function onEditFenceInner() {
@@ -128,13 +117,10 @@ const AddEditGeoFence = (props: Props): Object => {
 				key={`${index}`}
 				image={{uri: 'marker'}}
 				title={'Home'}
-				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}
-				onPress={setActiveFenceInner}>
+				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}>
 				<MapView.Callout onPress={onEditFenceInner}>
 					<FenceCallout
-						title={fence.title}
-						onEdit={onEditFenceInner}
-					/>
+						title={fence.title}/>
 				</MapView.Callout>
 			</MapView.Marker>
 		);
