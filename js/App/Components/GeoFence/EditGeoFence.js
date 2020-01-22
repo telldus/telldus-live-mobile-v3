@@ -29,7 +29,10 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import MapView from 'react-native-maps';
-import { useSelector } from 'react-redux';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
 
 import {
 	View,
@@ -42,6 +45,16 @@ import {
 	TimePicker,
 	MapOverlay,
 } from './SubViews';
+
+import {
+	setFenceActiveTime,
+	deleteFence,
+	updateFence,
+	setFenceArea,
+	setFenceTitle,
+} from '../../Actions/Fences';
+
+import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -79,20 +92,19 @@ const EditGeoFence = (props: Props): Object => {
 		rightItemStyle,
 	} = getStyles(appLayout);
 
-	let { location } = useSelector((state: Object): Object => state.fences);
-	location = location ? location : {};
+	let { fence } = useSelector((state: Object): Object => state.fences);
 
 	const {
-		latitude = 55.70584,
-		longitude = 13.19321,
-		latitudeDelta = 0.24442,
-		longitudeDelta = 0.24442,
-	} = location;
+		latitude,
+		longitude,
+		radius,
+	} = fence;
+	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
 	const region = {
 		latitude,
 		longitude,
-		latitudeDelta,
-		longitudeDelta,
+		latitudeDelta: lngDelta / 2,
+		longitudeDelta: lngDelta,
 	};
 	const [initialRegion, setInitialRegion] = useState(region);
 
@@ -100,10 +112,44 @@ const EditGeoFence = (props: Props): Object => {
 		setInitialRegion(reg);
 	}
 
+	const [ timeInfo, setTimeInfo ] = useState({
+		alwaysActive: true,
+		fromHr: 0,
+		fromMin: 0,
+		toHr: 0,
+		toMin: 0,
+	});
+	const {
+		alwaysActive: aA,
+		fromHr: fH,
+		fromMin: fM,
+		toHr: tH,
+		toMin: tM,
+	} = timeInfo;
+
+	const dispatch = useDispatch();
+	const [ areaName, setAreaName ] = useState(fence.title);
+	const [ editName, setEditName ] = useState(false);
+
 	function onSave() {
+		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
+		const {
+			latitude: lat,
+			longitude: long,
+		} = initialRegion;
+		dispatch(setFenceArea(
+			lat,
+			long,
+			GeoFenceUtils.getRadiusFromRegion(initialRegion),
+		));
+		dispatch(setFenceTitle(areaName));
+		dispatch(updateFence());
+		navigation.goBack();
 	}
 
 	function onDelete() {
+		dispatch(deleteFence());
+		navigation.goBack();
 	}
 
 	function onEditArriving() {
@@ -126,10 +172,22 @@ const EditGeoFence = (props: Props): Object => {
 		});
 	}
 
-	function onChangeTime() {}
+	function onChangeTime(
+		alwaysActive: boolean,
+		fromHr: number,
+		fromMin: number,
+		toHr: number,
+		toMin: number,
+	) {
+		setTimeInfo({
+			alwaysActive,
+			fromHr,
+			fromMin,
+			toHr,
+			toMin,
+		});
+	}
 
-	const [ areaName, setAreaName ] = useState('Area name');
-	const [ editName, setEditName ] = useState(false);
 	function onEditName() {
 		setEditName(true);
 	}
@@ -177,7 +235,14 @@ const EditGeoFence = (props: Props): Object => {
 					labelText={'Leaving actions'}
 					onPress={onEditLeaving}/>
 				<TimePicker
-					onChange={onChangeTime}/>
+					onChange={onChangeTime}
+					value={{
+						alwaysActive: fence.isAlwaysActive,
+						fromHr: fence.fromHr,
+						fromMin: fence.fromMin,
+						toHr: fence.toHr,
+						toMin: fence.toMin,
+					}}/>
 			</View>
 			<View style={mapCover}>
 				<MapView.Animated

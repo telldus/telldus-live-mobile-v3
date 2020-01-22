@@ -40,7 +40,6 @@ import Theme from '../../../Theme';
 
 const FenceCallout = (props: Object): Object => {
 	const {
-		onEdit,
 		title,
 	} = props;
 
@@ -60,8 +59,7 @@ const FenceCallout = (props: Object): Object => {
 				{title}
 			</Text>
 			<TouchableOpacity
-				style={editBtn}
-				onPress={onEdit}>
+				style={editBtn}>
 				<Icon
 					style={editIcon}
 					name="mode-edit"/>
