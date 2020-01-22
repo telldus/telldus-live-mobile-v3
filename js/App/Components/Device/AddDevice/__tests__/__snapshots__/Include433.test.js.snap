@@ -733,9 +733,14 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   "color": "#999",
                   "fontSize": 30,
                 },
-                Object {
-                  "color": "#fff",
-                },
+                Array [
+                  Object {
+                    "color": "#fff",
+                  },
+                  Object {
+                    "color": "#fff",
+                  },
+                ],
                 Object {
                   "fontFamily": "telldusicons",
                 },
