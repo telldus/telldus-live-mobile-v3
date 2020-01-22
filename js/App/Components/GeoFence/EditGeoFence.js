@@ -21,10 +21,12 @@
 
 'use strict';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	StyleSheet,
 	ScrollView,
+	TextInput,
+	TouchableOpacity,
 } from 'react-native';
 import MapView, {
 	Circle,
@@ -34,9 +36,13 @@ import MapView, {
 import {
 	View,
 	Text,
-	FloatingButton,
 	TouchableButton,
 } from '../../../BaseComponents';
+
+import {
+	RowWithAngle,
+	TimePicker,
+} from './SubViews';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -59,13 +65,6 @@ const EditGeoFence = (props: Props): Object => {
 		onDidMount(`Edit ${name}`, 'Edit or delete geo fence');
 	}, []);
 
-	function onPressNext() {
-		navigation.navigate({
-			routeName: 'AppTab',
-			key: 'AppTab',
-		});
-	}
-
 	const {
 		container,
 		contentContainerStyle,
@@ -77,6 +76,8 @@ const EditGeoFence = (props: Props): Object => {
 		mapCover,
 		buttonStyle,
 		labelStyle,
+		textFieldStyle,
+		rightItemStyle,
 	} = getStyles(appLayout);
 
 	const region = new AnimatedRegion({
@@ -114,34 +115,78 @@ const EditGeoFence = (props: Props): Object => {
 	function onDelete() {
 	}
 
+	function onEditArriving() {
+		navigation.navigate({
+			routeName: 'ArrivingActions',
+			key: 'ArrivingActions',
+			params: {
+				isEditMode: true,
+			},
+		});
+	}
+
+	function onEditLeaving() {
+		navigation.navigate({
+			routeName: 'LeavingActions',
+			key: 'LeavingActions',
+			params: {
+				isEditMode: true,
+			},
+		});
+	}
+
+	function onChangeTime() {}
+
+	const [ areaName, setAreaName ] = useState('Area name');
+	const [ editName, setEditName ] = useState(false);
+	function onEditName() {
+		setEditName(true);
+	}
+
+	function onSubmitEditing() {
+		setEditName(false);
+	}
+
+	function onChangeText(value: string) {
+		setAreaName(value);
+	}
+
 	return (
 		<ScrollView
 			style={container}
 			contentContainerStyle={contentContainerStyle}>
 			<View style={rowContainer}>
+
 				<View style={rowStyle}>
 					<Text style={leftItemStyle}>
 						Name
 					</Text>
-					<Text style={rightTextItemStyle}>
-						Area name
-					</Text>
+					{editName ?
+						<TextInput
+							value={areaName}
+							style={textFieldStyle}
+							onChangeText={onChangeText}
+							onSubmitEditing={onSubmitEditing}
+							autoCorrect={false}
+							autoFocus={true}
+							returnKeyType={'done'}
+						/>
+						:
+						<TouchableOpacity onPress={onEditName} style={rightItemStyle}>
+							<Text style={rightTextItemStyle}>
+								{areaName}
+							</Text>
+						</TouchableOpacity>
+					}
 				</View>
-				<View style={rowStyle}>
-					<Text style={leftItemStyle}>
-						Arriving actions
-					</Text>
-				</View>
-				<View style={rowStyle}>
-					<Text style={leftItemStyle}>
-						Leaving actions
-					</Text>
-				</View>
-				<View style={rowStyle}>
-					<Text style={leftItemStyle}>
-						Always active
-					</Text>
-				</View>
+				<RowWithAngle
+					labelText={'Arriving actions'}
+					onPress={onEditArriving}/>
+				<RowWithAngle
+					labelText={'Leaving actions'}
+					onPress={onEditLeaving}/>
+				<TimePicker
+					onChange={onChangeTime}/>
 			</View>
 			<View style={mapCover}>
 				<MapView.Animated
@@ -175,9 +220,6 @@ const EditGeoFence = (props: Props): Object => {
 				onPress={onDelete}
 				accessible={true}
 			/>
-			<FloatingButton
-				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
 		</ScrollView>
 	);
 };
@@ -192,6 +234,7 @@ const getStyles = (appLayout: Object): Object => {
 		eulaContentColor,
 		rowTextColor,
 		shadow,
+		angledRowBorderColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -205,7 +248,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
-			paddingBottom: padding * 6,
+			paddingBottom: padding * 4,
 		},
 		mapCover: {
 			marginHorizontal: padding,
@@ -223,10 +266,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowStyle: {
 			padding: padding * 1.5,
-			marginBottom: 1,
 			backgroundColor: '#fff',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
+			borderColor: angledRowBorderColor,
+			borderBottomWidth: StyleSheet.hairlineWidth,
 		},
 		leftItemStyle: {
 			color: eulaContentColor,
@@ -243,6 +287,15 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			fontSize: fontSizeButtonLabel,
+		},
+		textFieldStyle: {
+			color: eulaContentColor,
+			fontSize,
+			textAlign: 'right',
+		},
+		rightItemStyle: {
+			alignItems: 'flex-end',
+			justifyContent: 'center',
 		},
 	};
 };

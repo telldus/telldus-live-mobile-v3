@@ -71,6 +71,7 @@ export default {
 	inactiveTintColor: '#A59F9A',
 	gatewayInactive: '#a2a2a2',
 	angleTintColor: '#A59F9A90',
+	angledRowBorderColor: '#BBB',
 
 	rippleColor: '#efefef',
 	rippleOpacity: 0.9,
