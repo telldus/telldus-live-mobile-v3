@@ -32,6 +32,7 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	isEditMode: () => boolean,
 };
 
 const ArrivingActions = (props: Props): Object => {
@@ -39,17 +40,26 @@ const ArrivingActions = (props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		isEditMode,
 	} = props;
 
+	const isEdit = isEditMode();
+
 	useEffect(() => {
-		onDidMount('2. Arriving actions', 'Select actions for when you arrive');
+		const h = 'Arriving actions';
+		const h1 = `${isEdit ? h : `2. ${h}`}`;
+		onDidMount(h1, 'Select actions for when you arrive');
 	}, []);
 
 	function onPressNext() {
-		navigation.navigate({
-			routeName: 'LeavingActions',
-			key: 'LeavingActions',
-		});
+		if (isEdit) {
+			navigation.goBack();
+		} else {
+			navigation.navigate({
+				routeName: 'LeavingActions',
+				key: 'LeavingActions',
+			});
+		}
 	}
 
 	const {
@@ -62,7 +72,8 @@ const ArrivingActions = (props: Props): Object => {
 				navigation={navigation}/>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}
+				iconName={isEdit ? 'checkmark' : undefined}
+				imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}
 			/>
 		</View>
 	);
