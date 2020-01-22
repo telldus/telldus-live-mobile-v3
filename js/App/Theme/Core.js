@@ -70,6 +70,7 @@ export default {
 	eulaContentColor: '#555555',
 	inactiveTintColor: '#A59F9A',
 	gatewayInactive: '#a2a2a2',
+	angleTintColor: '#A59F9A90',
 
 	rippleColor: '#efefef',
 	rippleOpacity: 0.9,
