@@ -68,7 +68,7 @@ const DeviceRow = (props: Object): Object => {
 		openRGBControl,
 		openThermostatControl,
 		onDeviceValueChange,
-		onToggleCheckBox,
+		onChangeSelection,
 		isChecked,
 		checkBoxId,
 	} = props;
@@ -141,6 +141,7 @@ const DeviceRow = (props: Object): Object => {
 
 	function onPressOverride(args: Object) {
 		onDeviceValueChange({
+			checkBoxId,
 			deviceId: id,
 			...args,
 		});
@@ -265,8 +266,9 @@ const DeviceRow = (props: Object): Object => {
 	function onPressMore() {
 	}
 
-	function _onToggleCheckBox() {
-		onToggleCheckBox(checkBoxId);
+	function _onChangeSelection() {
+		const data = {}; // For a device need to choose some action. So now pass empty.
+		onChangeSelection('device', checkBoxId, data);
 	}
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
@@ -284,7 +286,7 @@ const DeviceRow = (props: Object): Object => {
 				<CheckBoxIconText
 					style={checkButtonStyle}
 					iconStyle={checkIconStyle}
-					onToggleCheckBox={_onToggleCheckBox}
+					onToggleCheckBox={_onChangeSelection}
 					isChecked={isChecked}
 					intl={intl}
 				/>
