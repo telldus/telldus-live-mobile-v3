@@ -28,6 +28,7 @@ import {
 	StyleSheet,
 	Switch,
 	Picker,
+	LayoutAnimation,
 } from 'react-native';
 import {
 	View,
@@ -35,6 +36,10 @@ import {
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+
+import {
+	LayoutAnimations,
+} from '../../../Lib';
 
 type Props = {
 	value: Object,
@@ -90,6 +95,7 @@ class TimePicker extends View<Props, State> {
 	}
 
 	onSwitch(value: boolean) {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		if (value) {
 			this.setState({ alwaysActive: value, fromHr: 0, fromMin: 0, toHr: 0, toMin: 0 });
 			this.props.onChange(true, 0, 0, 0, 0);
