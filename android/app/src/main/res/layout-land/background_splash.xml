@@ -4,12 +4,12 @@
 	android:layout_width="match_parent">
 
 	<item
-		android:drawable="@drawable/telldusliveapp_launchscreen"/>
+		android:drawable="@drawable/telldusliveapp_launchscreen_landscape"/>
 
 	<item
-		android:drawable="@drawable/logo_splash"/>
+		android:drawable="@drawable/telldus_logo_pi_land"/>
 
 	<item
-		android:drawable="@drawable/splash_loading_icon"/>
+		android:drawable="@drawable/splash_loading_icon_land"/>
 
 </layer-list>
