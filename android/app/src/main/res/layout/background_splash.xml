@@ -7,7 +7,7 @@
 		android:drawable="@drawable/telldusliveapp_launchscreen"/>
 
 	<item
-		android:drawable="@drawable/logo_splash"/>
+		android:drawable="@drawable/telldus_logo_pi"/>
 
 	<item
 		android:drawable="@drawable/splash_loading_icon"/>
