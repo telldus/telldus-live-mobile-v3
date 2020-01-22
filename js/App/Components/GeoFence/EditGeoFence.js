@@ -28,10 +28,8 @@ import {
 	TextInput,
 	TouchableOpacity,
 } from 'react-native';
-import MapView, {
-	Circle,
-	AnimatedRegion,
-} from 'react-native-maps';
+import MapView from 'react-native-maps';
+import { useSelector } from 'react-redux';
 
 import {
 	View,
@@ -42,6 +40,7 @@ import {
 import {
 	RowWithAngle,
 	TimePicker,
+	MapOverlay,
 } from './SubViews';
 
 import Theme from '../../Theme';
@@ -80,33 +79,25 @@ const EditGeoFence = (props: Props): Object => {
 		rightItemStyle,
 	} = getStyles(appLayout);
 
-	const region = new AnimatedRegion({
-		latitude: 55.70584,
-		longitude: 13.19321,
-		latitudeDelta: 0.24442,
-		longitudeDelta: 0.24442,
-	});
+	let { location } = useSelector((state: Object): Object => state.fences);
+	location = location ? location : {};
 
-	const coordinate = {
-		latitude: 55.70584,
-		longitude: 13.19321,
+	const {
+		latitude = 55.70584,
+		longitude = 13.19321,
+		latitudeDelta = 0.24442,
+		longitudeDelta = 0.24442,
+	} = location;
+	const region = {
+		latitude,
+		longitude,
+		latitudeDelta,
+		longitudeDelta,
 	};
+	const [initialRegion, setInitialRegion] = useState(region);
 
-	const circleCenter = {
-		latitude: 55.70584,
-		longitude: 13.19321,
-	};
-
-	// eslint-disable-next-line no-unused-vars
-	let marker;
-	function setRefMarker(ref: any) {
-		marker = ref;
-	}
-
-	// eslint-disable-next-line no-unused-vars
-	let map;
-	function setRefMap(ref: any) {
-		map = ref;
+	function onRegionChangeComplete(reg: Object) {
+		setInitialRegion(reg);
 	}
 
 	function onSave() {
@@ -191,18 +182,9 @@ const EditGeoFence = (props: Props): Object => {
 			<View style={mapCover}>
 				<MapView.Animated
 					style={mapStyle}
-					ref={setRefMap}
-					region={region}>
-					<MapView.Marker.Animated
-						ref={setRefMarker}
-						coordinate={coordinate}>
-					</MapView.Marker.Animated>
-					<Circle
-						center={circleCenter}
-						radius={3000}
-						fillColor={'#e2690150'}
-						strokeColor={Theme.Core.brandSecondary}/>
-				</MapView.Animated>
+					initialRegion={new MapView.AnimatedRegion(initialRegion)}
+					onRegionChangeComplete={onRegionChangeComplete}/>
+				<MapOverlay/>
 			</View>
 			<TouchableButton
 				text={i18n.confirmAndSave}
@@ -254,7 +236,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginHorizontal: padding,
 			marginTop: padding * 2,
 			marginBottom: padding,
-			height: deviceWidth * 0.9,
+			height: deviceWidth * 1.2,
 			width: deviceWidth - (2 * padding),
 		},
 		mapStyle: {
