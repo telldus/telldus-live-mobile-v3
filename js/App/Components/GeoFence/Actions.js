@@ -83,11 +83,18 @@ const Actions = (props: Props): Object => {
 
 	const dispatch = useDispatch();
 
-	const [selectedItems, setSelectedItems] = useState({
-		selectedDevices: {},
-		selectedSchedules: {},
-		selectedEvents: {},
-	});
+	let { fence = {}} = useSelector((state: Object): Object => state.fences);
+	const {
+		arriving = {},
+		leaving = {},
+	} = fence;
+	const action = currentScreen === 'ArrivingActions' ? arriving : leaving;
+	const initialSelection = {
+		selectedDevices: action.devices || {},
+		selectedSchedules: action.schedules || {},
+		selectedEvents: action.events || {},
+	};
+	const [selectedItems, setSelectedItems] = useState(initialSelection);
 	const {
 		selectedDevices = {},
 		selectedSchedules = {},
@@ -221,7 +228,6 @@ const Actions = (props: Props): Object => {
 
 	function renderEvent({item}: Object): Object {
 		const checkBoxId = item.id;
-
 		return (
 			<EventRow
 				event={item}
