@@ -172,6 +172,13 @@ export class GeoFenceContainer extends View<Props, State> {
 		return EXSCNS.indexOf(CS) === -1;
 	}
 
+	isEditMode = (): boolean => {
+		const {
+			navigation,
+		} = this.props;
+		return navigation.getParam('isEditMode', false);
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -227,6 +234,7 @@ export class GeoFenceContainer extends View<Props, State> {
 							paddingHorizontal: padding,
 							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
 							showLeftIcon,
+							isEditMode: this.isEditMode,
 						},
 					)}
 				</KeyboardAvoidingView>
