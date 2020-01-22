@@ -35,6 +35,8 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+import { NavigationActions } from 'react-navigation';
+
 import { pushServiceId } from '../../../Config';
 
 import {
@@ -203,11 +205,24 @@ const AppTab = (props: Object): Object => {
 		});
 	}
 
+	const { fences } = useSelector((state: Object): Object => state.fences);
 	function onPressGeoFence() {
-		navigation.navigate({
-			routeName: 'GeoFenceNavigator',
-			key: 'GeoFenceNavigator',
-		});
+		if (!fences || fences.length === 0) {
+			const navigateAction = NavigationActions.navigate({
+				routeName: 'GeoFenceNavigator',
+				key: 'GeoFenceNavigator',
+				action: NavigationActions.navigate({
+					routeName: 'SelectArea',
+					key: 'SelectArea',
+				}),
+			  });
+			navigation.dispatch(navigateAction);
+		} else {
+			navigation.navigate({
+				routeName: 'GeoFenceNavigator',
+				key: 'GeoFenceNavigator',
+			});
+		}
 	}
 
 	return (
