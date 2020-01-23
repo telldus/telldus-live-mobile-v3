@@ -35,8 +35,10 @@ import {
 
 import Theme from '../../../Theme';
 
-const InputSetting = (props: Object): Object => {
-
+const InputSetting = (props: Object, ref: Object): Object => {
+	const inputRef = React.useRef({
+		blur: () => {},
+	});
 	const {
 		label,
 		value,
@@ -52,6 +54,14 @@ const InputSetting = (props: Object): Object => {
 		optionInputStyle,
 	} = getStyles(layout, paramUpdatedViaScan);
 
+	React.useImperativeHandle(ref, (): Object => ({
+		blur: () => {
+			if (inputRef.current && inputRef.current.blur) {
+				inputRef.current.blur();
+			}
+		},
+	}));
+
 	return (
 		<View style={optionInputCover}>
 			<Text style={[optionInputLabelStyle, labelStyle]}>
@@ -60,7 +70,8 @@ const InputSetting = (props: Object): Object => {
 			<TextInput
 				value={value}
 				style={optionInputStyle}
-				onChangeText={onChangeText}/>
+				onChangeText={onChangeText}
+				ref={inputRef}/>
 		</View>
 	);
 };
@@ -105,4 +116,4 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	};
 };
 
-export default InputSetting;
+export default React.forwardRef<Object, Object>(InputSetting);

@@ -108,7 +108,7 @@ render(): Object {
 					<View style={{
 						flex: 1,
 						flexDirection: 'column',
-						flexWrap: 'wrap',
+						justifyContent: 'center',
 					}}>
 						<Text>
 							{!!secure && (
@@ -124,7 +124,6 @@ render(): Object {
 							</Text>
 						</Text>
 						<View style={{
-							flex: 1,
 							flexDirection: 'row',
 							flexWrap: 'wrap',
 						}}>
@@ -166,7 +165,7 @@ getStyles(): Object {
 	const imageComponentWidth = deviceWidth * 0.16;
 	const imageComponentHeight = deviceWidth * 0.22;
 
-	const boxOneWidth = deviceWidth * 0.3;
+	const boxOneWidth = deviceWidth * 0.26;
 
 	return {
 		container: {
@@ -180,6 +179,8 @@ getStyles(): Object {
 		},
 		boxOneStyle: {
 			width: boxOneWidth,
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 		arrowCover: {
 			flex: 0,
@@ -210,7 +211,6 @@ getStyles(): Object {
 		imageType: {
 			fontSize: deviceWidth * 0.18,
 			color: colorIcon,
-			marginHorizontal: padding * 2,
 		},
 		iconSecurity: {
 			fontSize: h1FontSize,
@@ -221,7 +221,6 @@ getStyles(): Object {
 			color: '#bdbdbd',
 		},
 		imageComponentStyle: {
-			marginHorizontal: padding,
 			color: colorIcon,
 		},
 		imageComponentHeight,
