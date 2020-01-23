@@ -23,11 +23,15 @@
 'use strict';
 
 import React from 'react';
-import { FlatList, ScrollView } from 'react-native';
+import {
+	ScrollView,
+	TouchableOpacity,
+} from 'react-native';
 
 import {
 	View,
 	Text,
+	Image,
 } from '../../../../BaseComponents';
 import { Row, ShortcutRow } from './SubViews';
 import { utils } from 'live-shared-data';
@@ -67,13 +71,13 @@ constructor(props: Props) {
 	super(props);
 
 	const shortcutToTelldus = props.navigation.getParam('shortcutToTelldus', false);
-	const deviceBrand = shortcutToTelldus ? 'Telldus' : props.navigation.getParam('deviceBrand', '');
+	this.deviceBrand = shortcutToTelldus ? 'Telldus' : props.navigation.getParam('deviceBrand', '');
 	const gateway = props.navigation.getParam('gateway', {});
 	const { transports = '' } = gateway;
 	const transportsArr = transports.split(',');
 
 	this.state = {
-		rows: getVendorDevices(deviceBrand, transportsArr),
+		rows: getVendorDevices(this.deviceBrand, transportsArr),
 	};
 	this.renderRow = this.renderRow.bind(this);
 }
@@ -175,43 +179,48 @@ render(): Object {
 		padding,
 		shortCutItemsCover,
 		clickTextStyle,
+		imageStyle,
+		shortCutInfoCover,
+		shortCutDevicesCover,
+		labelTextStyle,
 	} = this.getStyles();
 	const { rows } = this.state;
 
-	const { navigation } = this.props;
+	const { navigation, intl } = this.props;
+	const { formatMessage } = intl;
 	const shortcutToTelldus = navigation.getParam('shortcutToTelldus', false);
-	if (shortcutToTelldus) {
-		const telldusDevices = rows.map((data: Object, i: number): Object => {
-			return this.renderRowShortcut(data, i);
-		});
-		return (
-			<ScrollView
-				style={{
-					flex: 1,
-				}}
-				contentContainerStyle={{
-					flexGrow: 1,
-					paddingVertical: padding,
-				}}>
-				<View style={shortCutItemsCover}>
-					<Text style={clickTextStyle} onPress={this.onPressOtherBrand}>
-					Showing Telldus 433 MHz devices, click here to show devices from other brands
-					</Text>
-					{telldusDevices}
-				</View>
-			</ScrollView>
-		);
-	}
+
+	const telldusDevices = rows.map((data: Object, i: number): Object => {
+		return this.renderRowShortcut(data, i);
+	});
 
 	return (
-		<FlatList
-			data={rows}
-			renderItem={this.renderRow}
-			keyExtractor={this.keyExtractor}
-			contentContainerStyle={{
-				paddingVertical: padding,
+		<ScrollView
+			style={{
+				flex: 1,
 			}}
-		/>
+			contentContainerStyle={{
+				flexGrow: 1,
+				paddingVertical: padding,
+			}}>
+			<View style={shortCutItemsCover}>
+				{shortcutToTelldus && <TouchableOpacity onPress={this.onPressOtherBrand}>
+					<View style={shortCutInfoCover}>
+						<Text style={clickTextStyle}>
+							{formatMessage(i18n.addDeviceAnotherBrand)}
+						</Text>
+						<Image source={{uri: 'right_arrow_key'}} style={imageStyle}/>
+					</View>
+				</TouchableOpacity>
+				}
+				<Text style={labelTextStyle}>
+					{`${this.deviceBrand} ${formatMessage(i18n.devices)}:`}
+				</Text>
+				<View style={shortCutDevicesCover}>
+					{telldusDevices}
+				</View>
+			</View>
+		</ScrollView>
 	);
 }
 
@@ -221,24 +230,61 @@ getStyles(): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const {
+		shadow,
+		paddingFactor,
+		brandSecondary,
+	} = Theme.Core;
 
-	const fontSize = deviceWidth * 0.038;
+	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = deviceWidth * 0.036;
+	const imgW = deviceWidth * 0.05;
+	const imgH = deviceWidth * 0.06;
 
 	return {
 		padding,
 		shortCutItemsCover: {
-			flexDirection: 'row',
-			flexWrap: 'wrap',
-			justifyContent: 'center',
-			paddingRight: padding / 2,
+			justifyContent: 'flex-start',
+			alignItems: 'flex-start',
 		},
 		clickTextStyle: {
+			flex: 1,
 			fontSize,
-			color: Theme.Core.textColor,
-			padding,
-			marginVertical: padding,
+			color: brandSecondary,
 			textAlign: 'center',
+			flexWrap: 'wrap',
+			marginLeft: padding,
+		},
+		imageStyle: {
+			height: imgH,
+			width: imgW,
+			tintColor: '#A59F9A90',
+			marginHorizontal: padding,
+		},
+		shortCutDevicesCover: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			justifyContent: 'flex-start',
+			alignItems: 'flex-start',
+			marginLeft: padding / 2,
+		},
+		shortCutInfoCover: {
+			marginLeft: padding,
+			width: width - (padding * 2),
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			backgroundColor: '#fff',
+			...shadow,
+			paddingVertical: padding,
+		},
+		labelTextStyle: {
+			marginBottom: padding / 2,
+			color: brandSecondary,
+			fontSize: fontSize * 1.4,
+			marginTop: padding,
+			marginLeft: padding,
 		},
 	};
 }

@@ -124,6 +124,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		toggleLeftIconVisibilty,
 		addDevice,
 		showLeftIcon,
+		navigation,
 	} = this.props;
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -135,6 +136,14 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 	if (!deviceId && !isLoading && message && !showLeftIcon) {
 		toggleLeftIconVisibilty(true);
+	}
+
+	const deviceInfo = navigation.getParam('deviceInfo', '');
+	const {
+		postConfig,
+	} = deviceInfo;
+	if (deviceId && !isLoading && !postConfig) {
+		this.onNext();
 	}
 
 	const {
@@ -239,6 +248,10 @@ render(): Object {
 		image,
 		imageIndex,
 	} = this.PostConfigScreenOptions;
+
+	if (!descriptions) {
+		return <FullPageActivityIndicator/>;
+	}
 
 	const disableNext = progress && status !== 'done';
 

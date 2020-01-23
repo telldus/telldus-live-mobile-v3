@@ -28,22 +28,33 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import {
 	DropDown,
+	View,
+	Text,
 } from '../../../../BaseComponents';
 
 import { changeSortingDB } from '../../../Actions';
 
+import Theme from '../../../Theme';
+
 import i18n from '../../../Translations/common';
 
 const DBSortControlBlock = (props: Object): Object => {
+	const {
+		dropDownContainerStyle,
+	} = props;
 	const { formatMessage } = useIntl();
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { sortingDB: sortingDBProp } = defaultSettings;
 
 	const {
-		dropDownContainerStyle,
+		dropDownContainerStyleDef,
 		dropDownHeaderStyle,
 		fontSize,
+		pickerContainerStyle,
+		coverStyle,
+		labelStyle,
+		pickerBaseTextStyle,
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
@@ -56,24 +67,30 @@ const DBSortControlBlock = (props: Object): Object => {
 	const alpha = formatMessage(i18n.labelAlphabetical);
 	const chrono = formatMessage(i18n.labelChronological);
 
-	const labelSortingDB = formatMessage(i18n.labelSortingDb);
+	const labelSortingDB = formatMessage(i18n.sorting);
 
 	return (
-		<DropDown
-			items={[
-				{key: 'Alphabetical', value: alpha},
-				{key: 'Chronological', value: chrono},
-			]}
-			value={sortingDBProp === alpha ? alpha : chrono}
-			label={labelSortingDB}
-			onValueChange={saveSortingDB}
-			appLayout={layout}
-			dropDownContainerStyle={dropDownContainerStyle}
-			dropDownHeaderStyle={dropDownHeaderStyle}
-			baseColor={'#000'}
-			fontSize={fontSize}
-			accessibilityLabelPrefix={labelSortingDB}
-		/>
+		<View style={coverStyle}>
+			<Text style={labelStyle} numberOfLine={1}>
+				{labelSortingDB}
+			</Text>
+			<DropDown
+				items={[
+					{key: 'Alphabetical', value: alpha},
+					{key: 'Chronological', value: chrono},
+				]}
+				value={sortingDBProp === alpha ? alpha : chrono}
+				onValueChange={saveSortingDB}
+				appLayout={layout}
+				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
+				dropDownHeaderStyle={dropDownHeaderStyle}
+				baseColor={'#000'}
+				fontSize={fontSize}
+				accessibilityLabelPrefix={labelSortingDB}
+				pickerContainerStyle={pickerContainerStyle}
+				pickerBaseTextStyle={pickerBaseTextStyle}
+			/>
+		</View>
 	);
 };
 
@@ -83,8 +100,15 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
+	const {
+		paddingFactor,
+		shadow,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
 	return {
-		dropDownContainerStyle: {
+		dropDownContainerStyleDef: {
 			marginBottom: fontSize / 2,
 		},
 		dropDownHeaderStyle: {
@@ -92,6 +116,36 @@ const getStyles = (appLayout: Object): Object => {
 			color: '#b5b5b5',
 		},
 		fontSize,
+		pickerContainerStyle: {
+			elevation: 0,
+			shadowColor: 'transparent',
+			shadowRadius: 0,
+			shadowOpacity: 0,
+			shadowOffset: {
+				width: 0,
+				height: 0,
+			},
+			marginBottom: 0,
+		},
+		pickerBaseTextStyle: {
+			textAlign: 'right',
+		},
+		coverStyle: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			width: width - (padding * 2),
+			justifyContent: 'space-between',
+			...shadow,
+			backgroundColor: '#fff',
+			marginBottom: padding / 2,
+		},
+		labelStyle: {
+			flex: 0,
+			color: '#000',
+			fontSize,
+			flexWrap: 'wrap',
+			marginLeft: fontSize,
+		},
 	};
 };
 
