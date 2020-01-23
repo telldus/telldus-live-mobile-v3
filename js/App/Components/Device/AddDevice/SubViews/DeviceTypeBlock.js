@@ -179,6 +179,8 @@ getStyles(): Object {
 		},
 		boxOneStyle: {
 			width: boxOneWidth,
+			justifyContent: 'center',
+			alignItems: 'center',
 		},
 		arrowCover: {
 			flex: 0,
