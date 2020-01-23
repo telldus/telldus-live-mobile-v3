@@ -68,6 +68,7 @@ type Props = {
 	pickerBaseCoverStyle?: Array<any> | number | Object,
 	textColor?: string,
 	animationDuration?: number,
+	pickerBaseTextStyle?: Array<any> | number | Object,
 };
 
 type DefaultProps = {
@@ -130,11 +131,17 @@ static defaultProps: DefaultProps = {
 
 	renderBase(items: Object): Object {
 		const { title } = items;
-		const { appLayout, baseLeftIcon, baseColor, pickerBaseCoverStyle } = this.props;
+		const {
+			appLayout,
+			baseLeftIcon,
+			baseColor,
+			pickerBaseCoverStyle,
+			pickerBaseTextStyle,
+		} = this.props;
 
 		const {
 			pickerBaseCoverStyleDef,
-			pickerBaseTextStyle,
+			pickerBaseTextStyleDef,
 			rightIconStyle,
 		} = this.getStyle(appLayout);
 		const accessibilityLabel = `${this.phraseOne}, ${this.phraseTwo} ${title}, ${this.phraseThree}`;
@@ -146,7 +153,7 @@ static defaultProps: DefaultProps = {
 				onPress={this.onPressPicker}
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}>
-				<Text style={[pickerBaseTextStyle, {color: baseColor}]} numberOfLines={1}>
+				<Text style={[pickerBaseTextStyleDef, {color: baseColor}, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>
 				<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
@@ -271,7 +278,7 @@ static defaultProps: DefaultProps = {
 				alignItems: 'center',
 				padding: fontSizeText,
 			},
-			pickerBaseTextStyle: {
+			pickerBaseTextStyleDef: {
 				flex: 1,
 				fontSize: fontSizeText,
 				color: rowTextColor,
