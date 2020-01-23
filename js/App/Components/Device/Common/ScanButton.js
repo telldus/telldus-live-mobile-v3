@@ -78,6 +78,7 @@ const ScanButton = (props: Object): Object => {
 	const {
 		scanButtonCoverDef,
 		scanButtonTextDefStyle,
+		touchableStyleDef,
 	} = getStyles(layout);
 
 	function onPress() {
@@ -91,7 +92,7 @@ const ScanButton = (props: Object): Object => {
 	}
 
 	return (
-		<TouchableOpacity onPress={onPress}>
+		<TouchableOpacity onPress={onPress} style={touchableStyleDef}>
 			<View style={[scanButtonCoverDef, scanButtonCover]}>
 				<Text style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
 					{isScanning ? 'Stop Scan' : 'Scan transmitter'}
@@ -119,9 +120,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		scanButtonCoverDef: {
-			alignSelf: 'flex-end',
-			marginRight: padding,
-			marginBottom: padding,
 			backgroundColor: brandPrimary,
 			height: heightCover,
 			...shadow,
@@ -129,10 +127,17 @@ const getStyles = (appLayout: Object): Object => {
 			paddingHorizontal: fontSize,
 			alignItems: 'center',
 			justifyContent: 'center',
+			minWidth: Math.floor(deviceWidth * 0.45),
 		},
 		scanButtonTextDefStyle: {
 			fontSize,
 			color: '#fff',
+		},
+		touchableStyleDef: {
+			alignSelf: 'flex-end',
+			flex: 0,
+			marginRight: padding,
+			marginBottom: padding,
 		},
 	};
 };
