@@ -98,6 +98,7 @@ const AppTab = (props: Object): Object => {
 		contentCoverStyle,
 		crashLabelCover,
 		crashInfoText,
+		bBSortDropDownContainerStyle,
 	} = getStyles(layout);
 
 	const {
@@ -215,11 +216,13 @@ const AppTab = (props: Object): Object => {
 					isPushSubmitLoading={isPushSubmitLoading}
 					submitPushToken={submitPushToken}
 				/>
-				<DBSortControlBlock/>
 				<LanguageControlBlock/>
 				<Text style={titleStyle}>
 					{formatMessage(i18n.dashboard)}
 				</Text>
+				<DBSortControlBlock
+					showLabel={true}
+					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
 				<SettingsRow
 					label={formatMessage(i18n.autoCycleSenVal)}
 					onValueChange={toggleDBCarousel}
@@ -229,7 +232,9 @@ const AppTab = (props: Object): Object => {
 					labelTextStyle={labelTextStyle}
 					touchableStyle={touchableStyle}
 					switchStyle={switchStyle}
-					style={contentCoverStyle}/>
+					style={[contentCoverStyle, {
+						marginTop: 0,
+					}]}/>
 				<Text style={titleStyle}>
 					{formatMessage(i18n.crashReports)}
 				</Text>
@@ -307,6 +312,10 @@ const getStyles = (appLayout: Object): Object => {
 			color: Theme.Core.red,
 			fontWeight: 'bold',
 			paddingHorizontal: 3,
+		},
+		bBSortDropDownContainerStyle: {
+			marginBottom: 0,
+			flex: 1,
 		},
 	};
 };
