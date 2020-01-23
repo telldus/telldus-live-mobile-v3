@@ -108,7 +108,7 @@ render(): Object {
 					<View style={{
 						flex: 1,
 						flexDirection: 'column',
-						flexWrap: 'wrap',
+						justifyContent: 'center',
 					}}>
 						<Text>
 							{!!secure && (
@@ -124,7 +124,6 @@ render(): Object {
 							</Text>
 						</Text>
 						<View style={{
-							flex: 1,
 							flexDirection: 'row',
 							flexWrap: 'wrap',
 						}}>
