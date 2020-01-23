@@ -22,11 +22,14 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
 const isEqual = require('react-fast-compare');
+import {
+	Keyboard,
+} from 'react-native';
 
 import {
 	View,
@@ -70,6 +73,10 @@ type Props = {
 };
 
 const DeviceSettings = (props: Props): Object => {
+	const inputRefSystem = useRef(null);
+	const inputRefHouse = useRef(null);
+	const inputRefUnit = useRef(null);
+
 	const {
 		settings,
 		coverStyle,
@@ -80,6 +87,25 @@ const DeviceSettings = (props: Props): Object => {
 		showScan = false,
 		clientId,
 	} = props;
+
+	function _keyboardDidHide() {
+		const refs = [inputRefSystem, inputRefHouse, inputRefUnit];
+		refs.forEach((ref: Object) => {
+			if (ref && ref.current && ref.current.blur) {
+				ref.current.blur();
+			}
+		});
+	}
+
+	useEffect((): Function => {
+		const keyboardDidHideListener = Keyboard.addListener(
+			'keyboardDidHide',
+			_keyboardDidHide,
+		  );
+		return () => {
+			keyboardDidHideListener.remove();
+		};
+	}, []);
 
 	const dispatch = useDispatch();
 
@@ -174,6 +200,7 @@ const DeviceSettings = (props: Props): Object => {
 
 			Setting.push(
 				<InputSetting
+					ref={inputRefSystem}
 					key={setting}
 					label={formatMessage(i18n.system)}
 					value={system}
@@ -381,6 +408,7 @@ const DeviceSettings = (props: Props): Object => {
 
 				Setting.push(
 					<InputSetting
+						ref={inputRefHouse}
 						key={setting}
 						label={formatMessage(i18n.houseCode)}
 						value={house}
@@ -456,6 +484,7 @@ const DeviceSettings = (props: Props): Object => {
 
 				Setting.push(
 					<InputSetting
+						ref={inputRefUnit}
 						key={setting}
 						label={formatMessage(i18n.unitCode)}
 						value={unit}
