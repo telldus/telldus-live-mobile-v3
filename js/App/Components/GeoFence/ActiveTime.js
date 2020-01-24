@@ -31,6 +31,7 @@ import {
 
 import {
 	FloatingButton,
+	View,
 } from '../../../BaseComponents';
 
 import {
@@ -107,15 +108,18 @@ const ActiveTime = (props: Props): Object => {
 	}
 
 	return (
-		<ScrollView
-			style={container}
-			contentContainerStyle={contentContainerStyle}>
-			<TimePicker
-				onChange={onChangeTime}/>
+		<View style={{flex: 1}}>
+			<ScrollView
+				style={container}
+				contentContainerStyle={contentContainerStyle}>
+				<TimePicker
+					onChange={onChangeTime}/>
+			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}/>
-		</ScrollView>
+		</View>
+
 	);
 };
 

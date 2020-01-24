@@ -38,6 +38,7 @@ import MapView, {
 
 import {
 	FloatingButton,
+	View,
 } from '../../../BaseComponents';
 import {
 	FenceCallout,
@@ -127,32 +128,34 @@ const AddEditGeoFence = (props: Props): Object => {
 	}
 
 	return (
-		<ScrollView
-			style={container}
-			contentContainerStyle={contentContainerStyle}>
-			<MapView.Animated
-				style={mapStyle}
-				initialRegion={region}>
-				{
-					fences.map((fence: Object, index: number): () => Object => {
-						return renderMarker(fence, index);
-					})
-				}
-				<MapView.Circle
-					key={`fence-${activeFenceIndex}`}
-					center={{
-						latitude: fences[activeFenceIndex].latitude,
-						longitude: fences[activeFenceIndex].longitude,
-					}}
-					radius={fences[activeFenceIndex].radius}
-					fillColor="rgba(226, 105, 1, 0.3)"
-					strokeColor={Theme.Core.brandSecondary}/>
+		<View style={{flex: 1}}>
+			<ScrollView
+				style={container}
+				contentContainerStyle={contentContainerStyle}>
+				<MapView.Animated
+					style={mapStyle}
+					initialRegion={region}>
+					{
+						fences.map((fence: Object, index: number): () => Object => {
+							return renderMarker(fence, index);
+						})
+					}
+					<MapView.Circle
+						key={`fence-${activeFenceIndex}`}
+						center={{
+							latitude: fences[activeFenceIndex].latitude,
+							longitude: fences[activeFenceIndex].longitude,
+						}}
+						radius={fences[activeFenceIndex].radius}
+						fillColor="rgba(226, 105, 1, 0.3)"
+						strokeColor={Theme.Core.brandSecondary}/>
 
-			</MapView.Animated>
+				</MapView.Animated>
+			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}/>
-		</ScrollView>
+		</View>
 	);
 };
 
