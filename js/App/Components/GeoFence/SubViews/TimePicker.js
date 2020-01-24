@@ -73,7 +73,7 @@ class TimePicker extends View<Props, State> {
 		this.state = {
 			alwaysActive: this.props.value ? this.props.value.alwaysActive : true,
 			fromHr: this.props.value ? this.props.value.fromHr : 0,
-			fromMin: this.props.value ? this.props.value.froMin : 0,
+			fromMin: this.props.value ? this.props.value.fromMin : 0,
 			toHr: this.props.value ? this.props.value.toHr : 0,
 			toMin: this.props.value ? this.props.value.toMin : 0,
 		};
