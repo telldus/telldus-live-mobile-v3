@@ -111,6 +111,10 @@ class DimmerButton extends View<Props, null> {
 			trailing: true,
 		});
 
+		this.onValueChangeOverrideThrottled = throttle(this._onValueChangeOverride, 100, {
+			trailing: true,
+		});
+
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
@@ -137,8 +141,21 @@ class DimmerButton extends View<Props, null> {
 		return false;
 	}
 
+	_onValueChangeOverride(dimValue: number) {
+		let { commandDIM, onPressOverride } = this.props;
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandDIM,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+		}
+	}
+
 	onValueChange(sliderValue: number) {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
+		this.onValueChangeOverrideThrottled(toDimmerValue(sliderValue));
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
