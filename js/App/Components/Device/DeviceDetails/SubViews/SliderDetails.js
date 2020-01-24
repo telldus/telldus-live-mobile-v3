@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StyleSheet, Dimensions } from 'react-native';
 import Slider from 'react-native-slider';
+import throttle from 'lodash/throttle';
 
 const deviceHeight = Dimensions.get('window').height;
 
@@ -101,6 +102,10 @@ class SliderDetails extends View {
 
 		const dimmerValue: number = prepareDimmerValue(this.props.device);
 
+		this.onValueChangeOverrideThrottled = throttle(this._onValueChangeOverride, 100, {
+			trailing: true,
+		});
+
 		this.state = {
 			dimmerValue,
 		};
@@ -121,8 +126,21 @@ class SliderDetails extends View {
 		rDA(id);
 	}
 
+	_onValueChangeOverride(dimValue: number) {
+		let { commandDIM, onPressOverride } = this.props;
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandDIM,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+		}
+	}
+
 	onValueChange(dimmerValue: number) {
 		this.setState({ dimmerValue });
+		this.onValueChangeOverrideThrottled(dimmerValue);
 	}
 
 	onSlidingComplete(sliderValue: number) {
