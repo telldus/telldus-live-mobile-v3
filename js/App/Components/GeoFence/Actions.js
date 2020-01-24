@@ -101,6 +101,8 @@ const Actions = (props: Props): Object => {
 		selectedEvents = {},
 	} = selectedItems;
 
+	let dimmerData = useSelector((state: Object): Object => state.dimmer);
+
 	let { screenReaderEnabled, layout: appLayout } = useSelector((state: Object): Object => state.app);
 	let { byId } = useSelector((state: Object): Object => state.devices);
 	let jobs = useSelector((state: Object): Object => state.jobs) || [];
@@ -111,17 +113,11 @@ const Actions = (props: Props): Object => {
 	const [ showEvents, setShowEvents ] = useState(false);
 	const [ showJobs, setShowJobs ] = useState(false);
 
-	const listData = GeoFenceUtils.prepareDataForListGeoFenceActions(
-		showDevices ? byId : {},
-		gatewaysById,
-		showEvents ? events : {},
-		showJobs ? jobs : {},
-	);
+	const [ devices, setDevices ] = useState(byId);
 
 	function onDeviceValueChange(args: Object) {
 		const {
 			deviceId,
-			...others
 		} = args;
 		const isSelected = !!selectedDevices[deviceId];
 		if (!isSelected) {
@@ -129,10 +125,19 @@ const Actions = (props: Props): Object => {
 		}
 		let newSelected = {...selectedItems};
 		newSelected.selectedDevices[deviceId] = {
-			...others,
+			...args,
 		};
 		setSelectedItems(newSelected);
+		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
 	}
+
+	const listData = GeoFenceUtils.prepareDataForListGeoFenceActions(
+		showDevices ? devices : {},
+		gatewaysById,
+		showEvents ? events : {},
+		showJobs ? jobs : {},
+		dimmerData,
+	);
 
 	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
 		scrollEnabled: true,
@@ -150,6 +155,10 @@ const Actions = (props: Props): Object => {
 	}
 
 	function openRGBControl(id: number) {
+		const isSelected = !!selectedDevices[id];
+		if (!isSelected) {
+			return;
+		}
 		navigation.navigate({
 			routeName: 'RGBControl',
 			key: 'RGBControl',
@@ -161,6 +170,10 @@ const Actions = (props: Props): Object => {
 	}
 
 	function openThermostatControl(id: number) {
+		const isSelected = !!selectedDevices[id];
+		if (!isSelected) {
+			return;
+		}
 		navigation.navigate({
 			routeName: 'ThermostatControl',
 			key: 'ThermostatControl',
@@ -243,7 +256,7 @@ const Actions = (props: Props): Object => {
 		return (
 			<JobRow
 				job={item}
-				device={byId[item.deviceId]}
+				device={devices[item.deviceId]}
 				onChangeSelection={onChangeSelection}
 				checkBoxId={checkBoxId}
 				isChecked={!!selectedSchedules[checkBoxId]}/>
