@@ -44,6 +44,7 @@ import Widget from './Widget';
 import AddDevice from './AddDevice';
 import * as Fences from './Fences';
 import * as Events from './Events';
+import * as GeoFence from './GeoFence';
 
 module.exports = {
 	...GatewayActions,
@@ -68,4 +69,5 @@ module.exports = {
 	...AddDevice,
 	...Fences,
 	...Events,
+	...GeoFence,
 };
