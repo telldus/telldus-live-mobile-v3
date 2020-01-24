@@ -69,8 +69,8 @@ const SelectArea = (props: Props): Object => {
 	const {
 		latitude = 55.70584,
 		longitude = 13.19321,
-		latitudeDelta = 0.24442,
-		longitudeDelta = 0.24442,
+		latitudeDelta = 0.1,
+		longitudeDelta = 0.1,
 	} = location;
 	const region = {
 		latitude,
