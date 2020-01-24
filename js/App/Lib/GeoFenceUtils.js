@@ -28,6 +28,9 @@ import isEmpty from 'lodash/isEmpty';
 
 import { hasTokenExpired } from '../Lib/LocalControl';
 import Theme from '../Theme';
+import {
+	methods,
+} from '../../Constants';
 
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
@@ -161,6 +164,45 @@ const GeoFenceUtils = {
 		listData.push(...parseEventsForListView(events));
 		listData.push(...parseJobsForListView(jobs));
 		return listData;
+	},
+	prepareDevicesWithNewStateValues(devices: Object, selectedDevices: Object = {}): Object {
+		const updatedDevices = {};
+		Object.keys(selectedDevices).forEach((dId: string) => {
+			const { deviceId, stateValues, method } = selectedDevices[dId];
+			if (devices[deviceId]) {
+				const { stateValues: stateValuesP, ...others } = devices[deviceId] || {};
+				let newStateValues = {...stateValuesP} || {};
+				if (stateValues) {
+					Object.keys(stateValues).forEach((k: string) => {
+						const methodS = methods[k];
+						if (methodS === 'THERMOSTAT') {
+							const { setpoint, mode } = stateValues[k];
+							const { setpoint: sp = {} } = newStateValues[methodS];
+							let newSetpoint = {
+								...sp,
+								...setpoint,
+							};
+							newStateValues[methodS] = {
+								setpoint: newSetpoint,
+								mode,
+							};
+
+						} else {
+							newStateValues[methodS] = stateValues[k];
+						}
+					});
+				}
+				updatedDevices[deviceId] = {
+					...others,
+					stateValues: newStateValues,
+					isInState: methods[method],
+				};
+			}
+		});
+		return {
+			...devices,
+			...updatedDevices,
+		};
 	},
 };
 
