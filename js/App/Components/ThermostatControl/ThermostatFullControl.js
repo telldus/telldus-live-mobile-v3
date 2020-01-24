@@ -71,7 +71,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
-_deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale: 0 | 1, changeMode: 1 | 0, requestedState: number) => {
+_deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale: 0 | 1 = 0, changeMode: 1 | 0, requestedState: number) => {
 	const {
 		deviceSetStateThermostat: dSetState,
 		navigation,
@@ -83,11 +83,15 @@ _deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale
 			deviceId,
 			method: requestedState,
 			changeMode,
-			scale: 0,
+			scale,
 			mode,
+			temp,
 			stateValues: {
-				'2048': {
-					[mode]: temp,
+				[2048]: {
+					mode,
+					setpoint: {
+						[mode]: typeof temp === 'number' ? temp.toString() : temp,
+					},
 				},
 			},
 		});
