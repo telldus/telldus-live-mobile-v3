@@ -37,6 +37,7 @@ import {
 
 import {
 	FloatingButton,
+	View,
 } from '../../../BaseComponents';
 import {
 	MapOverlay,
@@ -107,18 +108,20 @@ const SelectArea = (props: Props): Object => {
 	}
 
 	return (
-		<ScrollView
-			style={container}
-			contentContainerStyle={contentContainerStyle}>
-			<MapView.Animated
-				style={mapStyle}
-				initialRegion={new MapView.AnimatedRegion(initialRegion)}
-				onRegionChangeComplete={onRegionChangeComplete}/>
-			<MapOverlay/>
+		<View style={{flex: 1}}>
+			<ScrollView
+				style={container}
+				contentContainerStyle={contentContainerStyle}>
+				<MapView.Animated
+					style={mapStyle}
+					initialRegion={new MapView.AnimatedRegion(initialRegion)}
+					onRegionChangeComplete={onRegionChangeComplete}/>
+				<MapOverlay/>
+			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}/>
-		</ScrollView>
+		</View>
 	);
 };
 

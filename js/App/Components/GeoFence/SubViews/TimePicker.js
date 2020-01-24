@@ -207,6 +207,7 @@ class TimePicker extends View<Props, State> {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 	},
 	switchHeader: {
 		flexDirection: 'row',
