@@ -239,8 +239,8 @@ getStyles(): Object {
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = deviceWidth * 0.036;
-	const imgW = deviceWidth * 0.05;
-	const imgH = deviceWidth * 0.06;
+	const imgW = deviceWidth * 0.038;
+	const imgH = deviceWidth * 0.053;
 
 	return {
 		padding,
