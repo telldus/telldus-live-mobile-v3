@@ -143,7 +143,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		postConfig,
 	} = deviceInfo;
 	if (deviceId && !isLoading && !postConfig) {
-		this.onNext();
+		this.onNext(false);
 	}
 
 	const {
@@ -166,10 +166,13 @@ componentWillUnmount() {
 	}
 }
 
-onNext = async () => {
-	this.setState({
-		isLoading: true,
-	});
+onNext = async (handleLoading?: boolean = true) => {
+	if (handleLoading) {
+		this.setState({
+			isLoading: true,
+		});
+	}
+
 	const { navigation, addDevice } = this.props;
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -184,9 +187,11 @@ onNext = async () => {
 		mainNode: true,
 	}};
 
-	this.setState({
-		isLoading: false,
-	});
+	if (handleLoading) {
+		this.setState({
+			isLoading: false,
+		});
+	}
 	const gateway = navigation.getParam('gateway', {});
 	navigation.navigate({
 		routeName: 'Devices',
