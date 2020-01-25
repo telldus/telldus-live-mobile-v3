@@ -244,8 +244,8 @@ public class NewThermostatWidget extends AppWidgetProvider {
                     (int) (iconWidth * 0.8),
                 context));
 
-            Boolean hasSecStateVal = secondaryStateValue != null && secondaryStateValue != "";
-            Boolean hasStateVal = deviceStateValue != null && deviceStateValue != "";
+            Boolean hasSecStateVal = secondaryStateValue != null && !secondaryStateValue.trim().isEmpty();
+            Boolean hasStateVal = deviceStateValue != null && !deviceStateValue.trim().isEmpty();
 
             if (hasSecStateVal) {
                 Double valueAsDouble = Double.valueOf(secondaryStateValue);
