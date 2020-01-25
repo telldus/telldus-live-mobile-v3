@@ -32,6 +32,7 @@ import type { ThunkAction } from './Types';
 import {
 	setCurrentLocation,
 } from './Fences';
+import GeoFenceUtils from '../Lib/GeoFenceUtils';
 
 function checkPermissionAndInitializeWatcher(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
@@ -77,6 +78,7 @@ function initializeWatcher(): ThunkAction {
 		);
 		Geolocation.watchPosition(
 			(position: Object) => {
+				dispatch(checkFences(position.coords));
 				const {
 					latitude,
 					longitude,
@@ -93,6 +95,40 @@ function initializeWatcher(): ThunkAction {
 				distanceFilter: 5,
 			},
 		);
+	};
+}
+
+function checkFences(newLocation: Object): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		const { fences: { fences, location: oldLocation } } = getState();
+		if (oldLocation) {
+			fences.forEach((fence: Object) => {
+				const {fromHr, fromMin, toHr, toMin} = fence;
+				if (fence.isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
+					let inFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, newLocation.latitude, newLocation.longitude) < fence.radius);
+					let wasInFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
+					console.log('Fence active: ', fence.title, inFence, wasInFence);
+					let actions = null;
+					if (inFence && !wasInFence) { // arrive fence
+						console.log('arrive: ', fence.title);
+						actions = fence.arriving;
+					} else if (!inFence && wasInFence) { // leave fence
+						console.log('leave: ', fence.title);
+						actions = fence.leaving;
+					}
+
+					if (actions) {
+						dispatch(handleActions(actions));
+					}
+				}
+			});
+		}
+	};
+}
+
+function handleActions(actions: Object): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		console.log('TEST actions', actions);
 	};
 }
 
