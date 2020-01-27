@@ -46,6 +46,7 @@ import {
 
 import {
 	setEditFence,
+	resetFence,
 } from '../../Actions/Fences';
 
 import Theme from '../../Theme';
@@ -62,17 +63,18 @@ const AddEditGeoFence = (props: Props): Object => {
 		appLayout,
 	} = props;
 
+	const dispatch = useDispatch();
+
 	let { fences, location } = useSelector((state: Object): Object => state.fences);
 	location = location ? location : {};
 
 	function onPressNext() {
+		dispatch(resetFence());
 		navigation.navigate({
 			routeName: 'SelectArea',
 			key: 'SelectArea',
 		});
 	}
-
-	const dispatch = useDispatch();
 
 	const [ activeFenceIndex, setActiveFenceIndex ] = useState(0);
 
