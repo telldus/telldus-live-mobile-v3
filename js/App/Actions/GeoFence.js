@@ -27,6 +27,13 @@ import {
 	PermissionsAndroid,
 } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+const colorsys = require('colorsys');
+
+import {
+	deviceSetState,
+	deviceSetStateThermostat,
+	deviceSetStateRGB,
+} from './Devices';
 
 import type { ThunkAction } from './Types';
 import {
@@ -129,9 +136,59 @@ function checkFences(newLocation: Object): ThunkAction {
 function handleActions(actions: Object): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		console.log('TEST actions', actions);
+		const { devices = {}, schedules = {}, events = {} } = actions;
+		for (let id in devices) {
+			dispatch(handleActionDevice(devices[id]));
+		}
+		for (let id in events) {
+			dispatch(handleActionEvent(events[id]));
+		}
+		for (let id in schedules) {
+			dispatch(handleActionSchedule(schedules[id]));
+		}
 	};
 }
 
+function handleActionDevice(action: Object): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		const { deviceId, method, stateValues = {} } = action;
+		if (!deviceId) {
+			return;
+		}
+		console.log('TEST handleActionDevice', action);
+
+		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
+		if (methodsSharedSetState.indexOf(method) !== -1) {
+			const dimValue = stateValues[16];
+			dispatch(deviceSetState(deviceId, method, dimValue));
+		} else if (method === 1024) {
+			const rgbValue = stateValues[1024];
+			const rgb = colorsys.hexToRgb(rgbValue);
+			const { r, g, b } = rgb;
+			dispatch(deviceSetStateRGB(deviceId, r, g, b));
+		} else if (method === 2048) {
+			const {
+				changeMode,
+				scale,
+				mode,
+				temp,
+			} = action;
+			dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1));
+		}
+	};
+}
+
+function handleActionEvent(action: Object): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		console.log('TEST handleActionEvent', action);
+	};
+}
+
+function handleActionSchedule(action: Object): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		console.log('TEST handleActionSchedule', action);
+	};
+}
 
 module.exports = {
 	initializeWatcher,
