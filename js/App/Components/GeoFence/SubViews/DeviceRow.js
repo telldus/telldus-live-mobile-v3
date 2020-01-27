@@ -58,6 +58,7 @@ import {
 	getMainColorRGB,
 	getOffColorRGB,
 	prepareMainColor,
+	isValidHexColorCode,
 } from '../../../Lib';
 
 const DeviceRow = (props: Object): Object => {
@@ -126,7 +127,7 @@ const DeviceRow = (props: Object): Object => {
 	// eslint-disable-next-line no-unused-vars
 	let offColorRGB, iconOffColor, iconOnColor, iconOnBGColor;
 	if (typeof rgbValue !== 'undefined') {
-		let mainColorRGB = getMainColorRGB(rgbValue);
+		let mainColorRGB = isValidHexColorCode(rgbValue) ? rgbValue : getMainColorRGB(rgbValue);
 
 		offColorRGB = getOffColorRGB(mainColorRGB);
 		iconOffColor = offColorRGB;
