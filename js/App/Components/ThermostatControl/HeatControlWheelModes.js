@@ -493,10 +493,12 @@ render(): Object | null {
 
 	let startAngleF = this.initialAngle, angleLengthF = 100;
 	const hasValidMinMax = typeof minVal === 'number' && typeof maxVal === 'number';
-	if (hasValidMinMax) {
+	if (hasValidMinMax && !isNaN(angleLength) && !isNaN(startAngle)) {
 		startAngleF = startAngle;
 		angleLengthF = angleLength;
 	}
+
+	const showCircularSlider = typeof startAngleF === 'number' && typeof angleLengthF === 'number';
 
 	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan';
 
@@ -512,7 +514,7 @@ render(): Object | null {
 						size={iconSize}/>
 				</TouchableOpacity>
 				}
-				<CircularSlider
+				{showCircularSlider && <CircularSlider
 					SVGKey={SVGKey}
 					coverStyle={coverStyle}
 					startAngle={startAngleF}
@@ -537,6 +539,7 @@ render(): Object | null {
 					onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
 					onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
 				/>
+				}
 				<ControlInfoBlock
 					appLayout={appLayout}
 					baseColor={baseColor}
