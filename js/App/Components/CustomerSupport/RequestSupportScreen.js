@@ -23,7 +23,6 @@
 import React from 'react';
 import {
 	Keyboard,
-	ScrollView,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 const isEqual = require('react-fast-compare');
@@ -34,7 +33,7 @@ import {
 	View,
 	Text,
 	TouchableButton,
-	NavigationHeaderPoster,
+	ScrollableNavigationHeaderPoster,
 	IconTelldus,
 	DropDown,
 	MaterialTextInput,
@@ -245,7 +244,6 @@ render(testData: Object): Object {
 		rowTextColor,
 		dropDownContainerStyle,
 		pickerContainerStyle,
-		scrollView,
 		pickerBaseCoverStyle,
 		infoContainer,
 		statusIconStyle,
@@ -274,14 +272,13 @@ render(testData: Object): Object {
 	const descLen = value.trim().length;
 
 	return (
-		<ScrollView style={scrollView}>
-			<NavigationHeaderPoster
-				h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
-				align={'right'}
-				showLeftIcon={true}
-				leftIcon={'close'}
-				navigation={navigation}
-				{...screenProps}/>
+		<ScrollableNavigationHeaderPoster
+			h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
+			align={'right'}
+			showLeftIcon={true}
+			leftIcon={'close'}
+			navigation={navigation}
+			{...screenProps}>
 			<View style={container}>
 				<Text style={title}>
 					{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
@@ -352,7 +349,7 @@ render(testData: Object): Object {
 				onPress={this.contactSupport}
 				disabled={isLoading || descLen < 50}
 				showThrobber={isLoading}/>
-		</ScrollView>
+		</ScrollableNavigationHeaderPoster>
 	);
 }
 
