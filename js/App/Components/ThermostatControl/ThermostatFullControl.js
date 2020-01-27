@@ -81,7 +81,7 @@ _deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale
 	if (onPressOverride) {
 		onPressOverride({
 			deviceId,
-			method: requestedState,
+			method: 2048,
 			changeMode,
 			scale,
 			mode,
