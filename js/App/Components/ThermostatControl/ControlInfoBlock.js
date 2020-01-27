@@ -72,15 +72,14 @@ constructor(props: Props) {
 	};
 }
 
-shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return true;
-}
-
 onPressEdit = () => {
-	this.setState({
-		editValue: true,
-	});
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	const { controllingMode } = this.props;
+	if (controllingMode) {
+		this.setState({
+			editValue: true,
+		});
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	}
 }
 
 onChangeText = (value: string) => {
