@@ -68,6 +68,9 @@ import {
 	setUserNameFirebaseCrashlytics,
 } from '../../Actions/Analytics';
 import {
+	resetFence,
+} from '../../Actions/Fences';
+import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
 
@@ -211,6 +214,7 @@ const AppTab = (props: Object): Object => {
 	const { fences } = useSelector((state: Object): Object => state.fences);
 	function onPressGeoFence() {
 		if (!fences || fences.length === 0) {
+			dispatch(resetFence());
 			const navigateAction = NavigationActions.navigate({
 				routeName: 'GeoFenceNavigator',
 				key: 'GeoFenceNavigator',
