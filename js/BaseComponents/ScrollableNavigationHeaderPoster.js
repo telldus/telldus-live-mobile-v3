@@ -132,26 +132,6 @@ componentDidMount() {
 	BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
 }
 
-shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const isStateEqual = isEqual(this.state, nextState);
-	if (!isStateEqual) {
-		return true;
-	}
-
-	const { appLayout, h1, h2, ...others } = this.props;
-	const { appLayout: appLayoutN, h1: h1N, h2: h2N, ...othersN} = nextProps;
-	if (appLayout.width !== appLayoutN.width || h1 !== h1N || h2 !== h2N) {
-		return true;
-	}
-
-	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon']);
-	if (propsChange) {
-		return true;
-	}
-
-	return false;
-}
-
 componentWillUnmount() {
 	BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 }
