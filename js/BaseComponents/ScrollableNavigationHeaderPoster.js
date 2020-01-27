@@ -27,7 +27,6 @@ import { StyleSheet, TouchableOpacity, BackHandler, Platform, ScrollView } from 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-const isEqual = require('react-fast-compare');
 
 import Text from './Text';
 import View from './View';
@@ -35,8 +34,6 @@ import Poster from './Poster';
 import BlockIcon from './BlockIcon';
 import NavigationHeader from './NavigationHeader';
 import RoundedInfoButton from './RoundedInfoButton';
-
-import { shouldUpdate } from '../App/Lib';
 
 import Theme from '../App/Theme';
 
