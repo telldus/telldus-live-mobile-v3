@@ -242,7 +242,9 @@ const EditGeoFence = (props: Props): Object => {
 						fromMin: fence.fromMin,
 						toHr: fence.toHr,
 						toMin: fence.toMin,
-					}}/>
+					}}
+					labelStyle={leftItemStyle}
+					rowStyle={rowStyle}/>
 			</View>
 			<View style={mapCover}>
 				<MapView.Animated
@@ -318,6 +320,7 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			borderColor: angledRowBorderColor,
 			borderBottomWidth: StyleSheet.hairlineWidth,
+			height: undefined,
 		},
 		leftItemStyle: {
 			color: eulaContentColor,

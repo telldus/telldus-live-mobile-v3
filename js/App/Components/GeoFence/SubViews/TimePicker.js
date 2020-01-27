@@ -48,6 +48,9 @@ type Props = {
 	onChangeFromMin: (boolean, number, number, number, number) => void,
 	onChangeToHr: (boolean, number, number, number, number) => void,
 	onChangeToMin: (boolean, number, number, number, number) => void,
+
+	labelStyle?: number | Object | Array<any>,
+	rowStyle?: number | Object | Array<any>,
 };
 
 type State = {
@@ -130,10 +133,15 @@ class TimePicker extends View<Props, State> {
 	}
 
 	render(): Object {
+		const {
+			labelStyle,
+			rowStyle,
+		} = this.props;
+
 		return (
 			<View style={styles.container}>
-				<View style={styles.switchHeader}>
-					<Text style={styles.switchLabel}>Always Active</Text>
+				<View style={[styles.switchHeader, rowStyle]}>
+					<Text style={[styles.switchLabel, labelStyle]}>Always Active</Text>
 					<Switch
 						value={this.state.alwaysActive}
 						onValueChange={this.onSwitch}
