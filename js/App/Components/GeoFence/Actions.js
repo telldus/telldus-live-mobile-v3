@@ -101,8 +101,6 @@ const Actions = (props: Props): Object => {
 		selectedEvents = {},
 	} = selectedItems;
 
-	let dimmerData = useSelector((state: Object): Object => state.dimmer);
-
 	let { screenReaderEnabled, layout: appLayout } = useSelector((state: Object): Object => state.app);
 	let { byId } = useSelector((state: Object): Object => state.devices);
 	let jobs = useSelector((state: Object): Object => state.jobs) || [];
@@ -113,7 +111,7 @@ const Actions = (props: Props): Object => {
 	const [ showEvents, setShowEvents ] = useState(false);
 	const [ showJobs, setShowJobs ] = useState(false);
 
-	const [ devices, setDevices ] = useState(byId);
+	const [ devices, setDevices ] = useState(GeoFenceUtils.prepareDevicesWithNewStateValues(byId, selectedDevices));
 
 	function onDeviceValueChange(args: Object) {
 		const {
@@ -136,7 +134,6 @@ const Actions = (props: Props): Object => {
 		gatewaysById,
 		showEvents ? events : {},
 		showJobs ? jobs : {},
-		dimmerData,
 	);
 
 	const [ confOnSetScroll, setConfOnSetScroll ] = useState({
