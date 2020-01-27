@@ -249,7 +249,8 @@ export default class ActionThermostat extends View<null, Props, State> {
 						activeMode={this.currentMode || mode}
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
 						supportResume={this.supportResume}
-						intl={intl}/>
+						intl={intl}
+						source="Schedule_ActionThermostat"/>
 				</ScrollView>
 				{(this.supportedModes && this.supportedModes.length > 0) && <FloatingButton
 					onPress={this.selectAction}

@@ -51,6 +51,7 @@ type Props = {
 	supportResume: boolean,
 	gatewayTimezone: string,
 	source?: string,
+	activeMode?: string,
 
 	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
@@ -449,6 +450,7 @@ render(): Object | null {
 		supportResume,
 		gatewayTimezone,
 		intl,
+		activeMode,
 	} = this.props;
 
 	const {
@@ -464,6 +466,8 @@ render(): Object | null {
 		strokeWidth,
 		segments,
 		infoContainerStyle,
+		infoContainer,
+		infoTextStyle,
 	} = this.getStyles();
 
 	if (!modes || modes.length === 0) {
@@ -500,12 +504,20 @@ render(): Object | null {
 
 	const showCircularSlider = typeof startAngleF === 'number' && typeof angleLengthF === 'number';
 
-	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan';
+	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan' && currentValue !== null && typeof currentValue !== 'undefined';
 
 	const SVGKey = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
 
+	const titleInfoBlock = (activeMode && title) ? title : `${intl.formatMessage(i18n.mode)} N/A`;
+
 	return (
 		<>
+		{typeof activeMode !== 'string' && <InfoBlock
+			text={intl.formatMessage(i18n.infoNoThermostatMode)}
+			appLayout={appLayout}
+			infoContainer={infoContainer}
+			textStyle={infoTextStyle}/>
+		}
 			<View style={cover}>
 				{showControlIcons && <TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
 					<MaterialIcons
@@ -545,7 +557,7 @@ render(): Object | null {
 					baseColor={baseColor}
 					currentValue={currentValue}
 					currentValueInScreen={currentValueInScreen}
-					title={title}
+					title={titleInfoBlock}
 					lastUpdated={lastUpdated}
 					onControlThermostat={this.onControlThermostat}
 					controllingMode={controllingMode}
@@ -596,6 +608,7 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		appBackground,
+		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -611,6 +624,8 @@ getStyles(): Object {
 	const segments = 15;
 
 	const padConst = padding / 2;
+
+	const fontSizeText = deviceWidth * 0.035;
 
 	return {
 		segments,
@@ -657,6 +672,16 @@ getStyles(): Object {
 			right: iconSpace,
 		},
 		iconSize,
+		infoContainer: {
+			flex: 0,
+			marginHorizontal: padding,
+			marginBottom: -(padding / 2),
+			marginTop: source === 'ThermostatFullControl' ? padding : 0,
+		},
+		infoTextStyle: {
+			color: rowTextColor,
+			fontSize: fontSizeText,
+		},
 	};
 }
 }
