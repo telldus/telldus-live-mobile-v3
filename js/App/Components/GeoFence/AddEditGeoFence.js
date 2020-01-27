@@ -140,7 +140,7 @@ const AddEditGeoFence = (props: Props): Object => {
 							return renderMarker(fence, index);
 						})
 					}
-					<MapView.Circle
+					{fences.length > 0 && <MapView.Circle
 						key={`fence-${activeFenceIndex}`}
 						center={{
 							latitude: fences[activeFenceIndex].latitude,
@@ -149,7 +149,7 @@ const AddEditGeoFence = (props: Props): Object => {
 						radius={fences[activeFenceIndex].radius}
 						fillColor="rgba(226, 105, 1, 0.3)"
 						strokeColor={Theme.Core.brandSecondary}/>
-
+					}
 				</MapView.Animated>
 			</ScrollView>
 			<FloatingButton

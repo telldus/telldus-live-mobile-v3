@@ -323,14 +323,14 @@ const Actions = (props: Props): Object => {
 		if (currentScreen === 'ArrivingActions') {
 			dispatch(setFenceArrivingActions({
 				devices: selectedDevices,
-				events: selectedSchedules,
-				schedules: selectedEvents,
+				events: selectedEvents,
+				schedules: selectedSchedules,
 			}));
 		} else if (currentScreen === 'LeavingActions') {
 			dispatch(setFenceLeavingActions({
 				devices: selectedDevices,
-				events: selectedSchedules,
-				schedules: selectedEvents,
+				events: selectedEvents,
+				schedules: selectedSchedules,
 			}));
 		}
 		onPressNext();
