@@ -139,7 +139,15 @@ class LoginForm extends View {
 									autoCorrect={false}
 									placeholderTextColor={styles.textFieldStyle.color}
 									defaultValue={this.state.username}
-									renderLeftAccessory={<Icon name={'email'} size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									contentInset={styles.contentInset}
+									renderLeftAccessory={
+										<Icon
+											name={'email'}
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>
@@ -154,7 +162,14 @@ class LoginForm extends View {
 									autoCorrect={false}
 									placeholderTextColor={styles.textFieldStyle.color}
 									defaultValue={this.state.password}
-									renderLeftAccessory={<Icon name={'lock'} size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									contentInset={styles.contentInset}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									renderLeftAccessory={
+										<Icon name={'lock'}
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>
