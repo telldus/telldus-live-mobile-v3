@@ -248,18 +248,23 @@ class DialogueBox extends Component<Props, null> {
 		return (
 			<View style={styles.notificationModalFooter}>
 				{showNegative ?
-					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
-						onPress={this.onPressNegative}
-						accessibilityLabel={accessibilityLabelNegative}>
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {
+						marginRight: showPositive ? 5 : 0,
+						paddingRight: showPositive ? 10 : 30,
+					}]}
+					onPress={this.onPressNegative}
+					accessibilityLabel={accessibilityLabelNegative}>
 						<Text style={styles.notificationModalFooterNegativeText}>{nText}</Text>
 					</TouchableOpacity>
 					:
 					null
 				}
 				{showPositive ?
-					<TouchableOpacity style={styles.notificationModalFooterTextCover}
-						onPress={this.onPressPositive}
-						accessibilityLabel={accessibilityLabelPositive}>
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {
+						paddingRight: 30,
+					}]}
+					onPress={this.onPressPositive}
+					accessibilityLabel={accessibilityLabelPositive}>
 						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
 					</TouchableOpacity>
 					:
@@ -408,15 +413,13 @@ class DialogueBox extends Component<Props, null> {
 				alignItems: 'center',
 				justifyContent: 'flex-end',
 				flexDirection: 'row',
-				paddingRight: 20,
 				width: deviceWidth * 0.75,
-				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterTextCover: {
 				alignItems: 'flex-end',
 				justifyContent: 'center',
-				paddingRight: 5,
-				paddingLeft: 5,
+				paddingLeft: 10,
+				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterNegativeText: {
 				color: negTextColor,
