@@ -45,7 +45,9 @@ type Props = {
     appLayout: Object,
     items: Array<Object>,
     value: string,
-    label: string,
+	label: string,
+	extraData?: Object,
+	disabled?: boolean,
 
 	fontSize?: number,
 	baseColor?: string,
@@ -54,7 +56,7 @@ type Props = {
 	dropdownPosition?: number,
 	itemCount?: number,
 	itemPadding?: number,
-    baseLeftIcon?: string,
+    baseLeftIcon?: string | Object,
 	onValueChange: (string, number, Array<any>) => void,
     pickerContainerStyle: Array<any> | number | Object,
     dropDownHeaderStyle: Array<any> | number | Object,
@@ -72,13 +74,14 @@ type Props = {
 };
 
 type DefaultProps = {
-	baseLeftIcon: string,
+	baseLeftIcon: string | Object,
 	baseColor: string,
 	itemColor: string,
 	selectedItemColor: string,
 	dropdownPosition: number,
 	itemCount: number,
 	itemPadding: number,
+	disabled: boolean,
 };
 
 type State = {
@@ -96,6 +99,7 @@ static defaultProps: DefaultProps = {
 	dropdownPosition: 0,
 	itemCount: 4,
 	itemPadding: 8,
+	disabled: false,
 };
 	renderBase: () => Object;
 	onPressPicker: () => void;
@@ -115,7 +119,8 @@ static defaultProps: DefaultProps = {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const propsChange = shouldUpdate(this.props, nextProps, ['value', 'appLayout', 'label']);
+		const propsChange = shouldUpdate(this.props, nextProps, [
+			'value', 'appLayout', 'label', 'extraData', 'disabled']);
 		if (propsChange) {
 			return true;
 		}
@@ -137,6 +142,7 @@ static defaultProps: DefaultProps = {
 			baseColor,
 			pickerBaseCoverStyle,
 			pickerBaseTextStyle,
+			disabled,
 		} = this.props;
 
 		const {
@@ -152,11 +158,16 @@ static defaultProps: DefaultProps = {
 				style={[pickerBaseCoverStyleDef, pickerBaseCoverStyle]}
 				onPress={this.onPressPicker}
 				accessible={true}
-				accessibilityLabel={accessibilityLabel}>
+				accessibilityLabel={accessibilityLabel}
+				disabled={disabled}>
 				<Text style={[pickerBaseTextStyleDef, {color: baseColor}, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>
-				<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
+				{React.isValidElement(baseLeftIcon) ?
+					baseLeftIcon
+					:
+					<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
+				}
 			</RippleButton>
 		);
 	}
@@ -183,6 +194,7 @@ static defaultProps: DefaultProps = {
 			dropdownMargins,
 			textColor,
 			animationDuration,
+			disabled,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -224,6 +236,7 @@ static defaultProps: DefaultProps = {
 							top: dropdownTop,
 							left: 0,
 						}}
+						disabled={disabled}
 						dropdownMargins={dropdownMargins}
 						textColor={textColor}
 						animationDuration={animationDuration}
