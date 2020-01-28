@@ -23,7 +23,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
@@ -226,7 +226,7 @@ class DialogueBox extends Component<Props, null> {
 		}
 
 		return (
-			<View style={styles.notificationModalBody}>
+			<View style={styles.notificationModalBody} accessible={true} importantForAccessibility={'yes'} accessibilityLabel={text}>
 				<Text style={styles.notificationModalBodyText}>{text}</Text>
 			</View>
 		);
@@ -295,6 +295,21 @@ class DialogueBox extends Component<Props, null> {
 		return hasMessage ? `${phrase}. ${text}. ${buttonInfo}` : '';
 	}
 
+	renderCustomBackdrop = ({
+		backdropColor,
+		backdropOpacity,
+	}: Object): Object => {
+		return (
+			<TouchableWithoutFeedback accessible={false}>
+				<View accessible={false} style={{
+					flex: 1,
+					backgroundColor: backdropColor,
+					opacity: backdropOpacity,
+				}}/>
+			</TouchableWithoutFeedback>
+		);
+	}
+
 	render(): Object {
 		const {
 			showDialogue,
@@ -307,17 +322,22 @@ class DialogueBox extends Component<Props, null> {
 		} = this.props;
 		const styles = this.getStyles();
 
+		const customBackdrop = this.renderCustomBackdrop({
+			backdropColor,
+			backdropOpacity,
+		});
+
 		return (
 			<Modal
+				accessible={false}
 				style={styles.modal}
-				backdropColor={backdropColor}
-				backdropOpacity={backdropOpacity}
 				isVisible={showDialogue}
 				animationInTiming={entryDuration}
 				animationOutTiming={exitDuration}
 				hideModalContentWhileAnimating={true}
 				onModalShow={this.onModalOpened}
-				supportedOrientations={['portrait', 'landscape']}>
+				supportedOrientations={['portrait', 'landscape']}
+				customBackdrop={customBackdrop}>
 				<View style={[styles.container, style]}>
 					{!!showHeader && this.renderHeader(styles)}
 					{this.renderBody(styles)}
