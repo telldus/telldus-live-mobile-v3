@@ -158,6 +158,7 @@ const DeviceSettings = (props: Props): Object => {
 		optionInputLabelStyle,
 		fadeSettingsCover,
 		uSettingsCover,
+		titleStyle,
 	} = getStyles(layout);
 
 	let Setting = [];
@@ -204,6 +205,8 @@ const DeviceSettings = (props: Props): Object => {
 					key={setting}
 					label={formatMessage(i18n.system)}
 					value={system}
+					textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
+					headerOnPressHelp={formatMessage(i18n.system)}
 					onChangeText={onChangeText}
 					labelStyle={labelStyle}
 					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(system, currSystem)}/>
@@ -281,6 +284,7 @@ const DeviceSettings = (props: Props): Object => {
 
 				return (<USetting
 					key={uSet}
+					index={index}
 					isChecked={cUSet === 1}
 					onToggleCheckBox={onToggleCheckBox}
 					intl={intl}
@@ -304,7 +308,8 @@ const DeviceSettings = (props: Props): Object => {
 					<View style={{
 						flex: 1,
 						flexDirection: 'row',
-						justifyContent: 'flex-end',
+						justifyContent: 'space-between',
+						alignItems: 'center',
 					}}>
 						{uSetting}
 					</View>
@@ -412,6 +417,8 @@ const DeviceSettings = (props: Props): Object => {
 						key={setting}
 						label={formatMessage(i18n.houseCode)}
 						value={house}
+						textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
+						headerOnPressHelp={formatMessage(i18n.houseCode)}
 						onChangeText={onChangeText}
 						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>
 				);
@@ -439,6 +446,8 @@ const DeviceSettings = (props: Props): Object => {
 					labelStyle={labelStyle}
 					items={items}
 					value={ddValue}
+					textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
+					headerOnPressHelp={formatMessage(i18n.houseCode)}
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.houseCode)}
 					key={setting}
@@ -488,6 +497,8 @@ const DeviceSettings = (props: Props): Object => {
 						key={setting}
 						label={formatMessage(i18n.unitCode)}
 						value={unit}
+						textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
+						headerOnPressHelp={formatMessage(i18n.unitCode)}
 						onChangeText={onChangeText}
 						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}/>
 				);
@@ -515,6 +526,8 @@ const DeviceSettings = (props: Props): Object => {
 					labelStyle={labelStyle}
 					items={items}
 					value={ddValue}
+					textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
+					headerOnPressHelp={formatMessage(i18n.unitCode)}
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.unitCode)}
 					key={setting}
@@ -560,6 +573,9 @@ const DeviceSettings = (props: Props): Object => {
 
 	return (
 		<View style={[coverStyleDef, coverStyle]}>
+			<Text style={titleStyle}>
+				{formatMessage(i18n.deviceSettings)}
+			</Text>
 			{Setting}
 			{(showScan && clientId) &&
 				<ScanButton
@@ -579,21 +595,25 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = Math.floor(deviceWidth * 0.04);
+	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	return {
 		padding,
 		coverStyleDef: {
 			marginTop: padding / 2,
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
-			...shadow,
 			width: width - (2 * padding),
+		},
+		titleStyle: {
+			marginTop: padding / 2,
+			marginBottom: 5,
+			color: '#b5b5b5',
+			fontSize,
 		},
 		radioButtonsCover: {
 			flexDirection: 'row',
@@ -602,16 +622,24 @@ const getStyles = (appLayout: Object): Object => {
 			paddingRight: padding,
 			flexWrap: 'wrap',
 			paddingBottom: padding,
+			backgroundColor: '#fff',
+			...shadow,
+			marginBottom: padding / 2,
+			borderRadius: 2,
 		},
 		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.3,
-			color: rowTextColor,
+			fontSize: fontSizeText,
+			color: '#000',
 		},
 		optionInputCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			margin: padding,
+			padding: padding,
+			backgroundColor: '#fff',
+			...shadow,
+			marginBottom: padding / 2,
+			borderRadius: 2,
 		},
 		fadeSettingsCover: {
 			flexDirection: 'column',
@@ -620,12 +648,13 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		uSettingsCover: {
 			flexDirection: 'column',
-			alignItems: 'flex-start',
+			alignItems: 'stretch',
 			justifyContent: 'center',
-			paddingRight: padding,
-			flexWrap: 'wrap',
-			paddingBottom: padding,
-			paddingLeft: padding,
+			padding,
+			backgroundColor: '#fff',
+			...shadow,
+			marginBottom: padding / 2,
+			borderRadius: 2,
 		},
 	};
 };

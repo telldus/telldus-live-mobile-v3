@@ -23,14 +23,22 @@
 'use strict';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+	TouchableOpacity,
+} from 'react-native';
 
 import {
 	DropDown,
 	View,
 	Text,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+
+import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
 
 const DropDownSetting = (props: Object): Object => {
 	const {
@@ -40,6 +48,8 @@ const DropDownSetting = (props: Object): Object => {
 		label,
 		labelStyle,
 		paramUpdatedViaScan,
+		textOnPressHelp,
+		headerOnPressHelp,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -50,15 +60,43 @@ const DropDownSetting = (props: Object): Object => {
 		pickerStyle,
 		optionInputCover,
 		optionInputLabelStyle,
+		infoIconStyle,
 	} = getStyles(layout, paramUpdatedViaScan);
 
 	const accessibilityLabelPrefix = '';
 
+	const { toggleDialogueBoxState } = useDialogueBox();
+	function onPressInfo() {
+		if (textOnPressHelp && headerOnPressHelp) {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: textOnPressHelp,
+				header: headerOnPressHelp,
+				showIconOnHeader: true,
+				onPressHeader: () => {
+					toggleDialogueBoxState({
+						show: false,
+					});
+				},
+			});
+		}
+	}
+
 	return (
 		<View style={optionInputCover}>
-			<Text style={[optionInputLabelStyle, labelStyle]}>
-				{label}
-			</Text>
+			<View style={{
+				flexDirection: 'row',
+				alignItems: 'center',
+			}}>
+				<Text style={[optionInputLabelStyle, labelStyle]}>
+					{label}
+				</Text>
+				<TouchableOpacity onPress={onPressInfo}>
+					<IconTelldus icon={'help'} style={infoIconStyle}/>
+				</TouchableOpacity>
+			</View>
 			<DropDown
 				items={items}
 				value={value}
@@ -80,27 +118,27 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		rowTextColor,
 		paddingFactor,
+		shadow,
+		brandSecondary,
 	} = Theme.Core;
 
-	const ddWidth = deviceWidth * 0.3;
+	const ddWidth = deviceWidth * 0.2;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = Math.floor(deviceWidth * 0.04);
 
 	const padding = deviceWidth * paddingFactor;
 
 	return {
+		fontSize: fontSizeText,
 		pickerStyle: {
 			width: ddWidth,
-			right: padding * 2,
+			right: padding,
 			left: undefined,
 		},
 		pickerContainerStyle: {
 			flex: 0,
 			width: ddWidth,
-			borderWidth: paramUpdatedViaScan ? 4 : 1,
-			borderColor: rowTextColor,
 			elevation: 0,
 			shadowRadius: 0,
 			shadowOpacity: 0,
@@ -115,12 +153,20 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			padding,
+			paddingLeft: padding,
 			borderRadius: 2,
+			backgroundColor: '#fff',
+			...shadow,
+			marginBottom: padding / 2,
 		},
 		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.4,
-			color: rowTextColor,
+			fontSize: fontSizeText,
+			color: '#000',
+		},
+		infoIconStyle: {
+			marginLeft: 3,
+			fontSize: fontSizeText,
+			color: brandSecondary,
 		},
 	};
 };

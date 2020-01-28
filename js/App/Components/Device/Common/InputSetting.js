@@ -24,14 +24,15 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-	TextInput,
-} from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
-	View,
-	Text,
+	SettingsRow,
 } from '../../../../BaseComponents';
+
+import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
 
 import Theme from '../../../Theme';
 
@@ -43,15 +44,18 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		label,
 		value,
 		onChangeText,
-		labelStyle,
 		paramUpdatedViaScan,
+		textOnPressHelp,
+		headerOnPressHelp,
 	} = props;
+
+	const intl = useIntl();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		optionInputCover,
-		optionInputLabelStyle,
-		optionInputStyle,
+		iconValueRightSize,
+		contentCoverStyle,
 	} = getStyles(layout, paramUpdatedViaScan);
 
 	React.useImperativeHandle(ref, (): Object => ({
@@ -62,17 +66,48 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		},
 	}));
 
+	const { toggleDialogueBoxState } = useDialogueBox();
+	function onPressIconLabelRight() {
+		if (textOnPressHelp && headerOnPressHelp) {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: textOnPressHelp,
+				header: headerOnPressHelp,
+				showIconOnHeader: true,
+				onPressHeader: () => {
+					toggleDialogueBoxState({
+						show: false,
+					});
+				},
+			});
+		}
+	}
+
+	const [ inLineEditActive, setInLineEditActive ] = React.useState(false);
+	function onPressIconValueRight() {
+		setInLineEditActive(!inLineEditActive);
+	}
+
 	return (
-		<View style={optionInputCover}>
-			<Text style={[optionInputLabelStyle, labelStyle]}>
-				{label}
-			</Text>
-			<TextInput
-				value={value}
-				style={optionInputStyle}
-				onChangeText={onChangeText}
-				ref={inputRef}/>
-		</View>
+		<SettingsRow
+			type={'text'}
+			edit={false}
+			inLineEditActive={inLineEditActive}
+			label={label}
+			value={value}
+			appLayout={layout}
+			iconLabelRight={'help'}
+			iconValueRight={inLineEditActive ? 'done' : 'edit'}
+			onPress={false}
+			iconValueRightSize={inLineEditActive ? iconValueRightSize : null}
+			onPressIconLabelRight={onPressIconLabelRight}
+			onPressIconValueRight={onPressIconValueRight}
+			onChangeText={onChangeText}
+			style={optionInputCover}
+			contentCoverStyle={contentCoverStyle}
+			intl={intl}/>
 	);
 };
 
@@ -83,35 +118,19 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 
 	const {
 		paddingFactor,
-		rowTextColor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSizeText = deviceWidth * 0.035;
-	const fontSizeInput = deviceWidth * 0.04;
-
 	return {
+		iconValueRightSize: deviceWidth * 0.05,
 		optionInputCover: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'space-between',
-			margin: padding,
-		},
-		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.3,
-			color: rowTextColor,
-		},
-		optionInputStyle: {
-			fontSize: fontSizeInput,
-			borderWidth: paramUpdatedViaScan ? 4 : 1,
-			borderColor: rowTextColor,
+			marginBottom: padding / 2,
 			borderRadius: 2,
-			color: eulaContentColor,
-			width: deviceWidth * 0.3,
-			marginLeft: padding,
-			padding: 5,
+			marginTop: 0,
+		},
+		contentCoverStyle: {
+			padding,
 		},
 	};
 };

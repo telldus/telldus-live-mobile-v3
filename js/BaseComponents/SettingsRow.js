@@ -183,7 +183,7 @@ class SettingsRow extends Component<Props, null> {
 		} = this.getStyle();
 
 		let Parent = View, parentProps = {
-			style: touchableStyleDef,
+			style: [touchableStyleDef, contentCoverStyle],
 		};
 		if (onPress) {
 			Parent = RippleButton;
