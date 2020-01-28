@@ -33,6 +33,10 @@ import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
+import {
+	shouldUpdate,
+} from '../App/Lib';
+
 type Props = {
     value: any,
     label: string,
@@ -40,6 +44,7 @@ type Props = {
 	iconLabelRight?: string,
 	iconValueRight?: string,
 	inLineEditActive?: boolean,
+	extraData?: Object,
 
 	valuePostfix?: string,
 	iconValueRightSize?: number,
@@ -102,9 +107,12 @@ class SettingsRow extends Component<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object): boolean {
-		const { appLayout, value, inLineEditActive } = this.props;
-		const { appLayout: appLayoutN, value: valueN, inLineEditActive: inLineEditActiveN } = nextProps;
-		return appLayout.width !== appLayoutN.width || value !== valueN || inLineEditActive !== inLineEditActiveN;
+		return shouldUpdate(this.props, nextProps, [
+			'inLineEditActive',
+			'value',
+			'appLayout',
+			'extraData',
+		]);
 	}
 
 	onPress() {
