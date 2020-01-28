@@ -32,6 +32,7 @@ import {
 	View,
 	Text,
 	IconTelldus,
+	Throbber,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -50,6 +51,7 @@ const DropDownSetting = (props: Object): Object => {
 		paramUpdatedViaScan,
 		textOnPressHelp,
 		headerOnPressHelp,
+		isScanning,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -61,6 +63,9 @@ const DropDownSetting = (props: Object): Object => {
 		optionInputCover,
 		optionInputLabelStyle,
 		infoIconStyle,
+		throbberContainerStyle,
+		throbberStyle,
+		inactiveTintColor,
 	} = getStyles(layout, paramUpdatedViaScan);
 
 	const accessibilityLabelPrefix = '';
@@ -84,6 +89,8 @@ const DropDownSetting = (props: Object): Object => {
 		}
 	}
 
+	const _value = isScanning ? `Scanning...  ${value}` : value;
+
 	return (
 		<View style={optionInputCover}>
 			<View style={{
@@ -99,15 +106,29 @@ const DropDownSetting = (props: Object): Object => {
 			</View>
 			<DropDown
 				items={items}
-				value={value}
+				extraData={{
+					isScanning,
+				}}
+				baseLeftIcon={isScanning ?
+					<Throbber
+						throbberContainerStyle={throbberContainerStyle}
+						throbberStyle={throbberStyle}
+					/>
+					: 'down'}
+				value={_value}
+				disabled={isScanning}
 				onValueChange={onValueChange}
 				appLayout={layout}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerStyle={pickerStyle}
-				baseColor={'#000'}
+				baseColor={inactiveTintColor}
 				fontSize={fontSize}
 				accessibilityLabelPrefix={accessibilityLabelPrefix}
-				animationDuration={50}/>
+				animationDuration={50}
+				pickerBaseTextStyle={{flex: 0}}
+				pickerBaseCoverStyle={{
+					justifyContent: 'flex-end',
+				}}/>
 		</View>
 	);
 };
@@ -121,20 +142,25 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		paddingFactor,
 		shadow,
 		brandSecondary,
+		inactiveTintColor,
 	} = Theme.Core;
 
-	const ddWidth = deviceWidth * 0.2;
+	const ddWidth = deviceWidth * 0.45;
 
 	const fontSizeText = Math.floor(deviceWidth * 0.04);
 
 	const padding = deviceWidth * paddingFactor;
 
+	const iconValueRightSize = deviceWidth * 0.05;
+
 	return {
+		inactiveTintColor,
 		fontSize: fontSizeText,
 		pickerStyle: {
 			width: ddWidth,
 			right: padding,
 			left: undefined,
+			justifyContent: 'flex-end',
 		},
 		pickerContainerStyle: {
 			flex: 0,
@@ -148,6 +174,8 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 			},
 			marginBottom: 0,
 			borderRadius: 2,
+			alignSelf: 'flex-end',
+			justifyContent: 'flex-end',
 		},
 		optionInputCover: {
 			flexDirection: 'row',
@@ -167,6 +195,14 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 			marginLeft: 3,
 			fontSize: fontSizeText,
 			color: brandSecondary,
+		},
+		throbberContainerStyle: {
+			backgroundColor: 'transparent',
+			position: 'relative',
+		},
+		throbberStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: inactiveTintColor,
 		},
 	};
 };

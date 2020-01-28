@@ -28,12 +28,15 @@ import React, {
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	TouchableOpacity,
+	LayoutAnimation,
 } from 'react-native';
 
 import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
+
+import LayoutAnimations from '../../../Lib/LayoutAnimations';
 
 import {
 	toggleScanStatus433MHz,
@@ -82,6 +85,7 @@ const ScanButton = (props: Object): Object => {
 	} = getStyles(layout);
 
 	function onPress() {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		if (isScanning) {
 			dispatch(toggleScanStatus433MHz(false));
 			stopScan();
@@ -91,11 +95,13 @@ const ScanButton = (props: Object): Object => {
 		}
 	}
 
+	const text = isScanning ? 'Stop Scan' : 'Scan remote control';
+
 	return (
 		<TouchableOpacity onPress={onPress} style={touchableStyleDef}>
 			<View style={[scanButtonCoverDef, scanButtonCover]}>
 				<Text style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
-					{isScanning ? 'Stop Scan' : 'Scan transmitter'}
+					{text.toUpperCase()}
 				</Text>
 			</View>
 		</TouchableOpacity>
@@ -109,35 +115,32 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		brandPrimary,
+		brandSecondary,
 		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
-	const heightCover = fontSize * 2.6;
+	const fontSize = Math.floor(deviceWidth * 0.03);
+	const heightCover = fontSize * 2.8;
 
 	return {
 		scanButtonCoverDef: {
-			backgroundColor: brandPrimary,
+			backgroundColor: brandSecondary,
 			height: heightCover,
 			...shadow,
 			borderRadius: heightCover / 2,
-			paddingHorizontal: fontSize,
 			alignItems: 'center',
 			justifyContent: 'center',
-			minWidth: Math.floor(deviceWidth * 0.45),
+			width: Math.floor((deviceWidth - (padding * 3)) / 2 ),
 		},
 		scanButtonTextDefStyle: {
 			fontSize,
 			color: '#fff',
 		},
 		touchableStyleDef: {
-			alignSelf: 'flex-end',
 			flex: 0,
-			marginRight: padding,
-			marginBottom: padding,
+			borderRadius: heightCover / 2,
 		},
 	};
 };

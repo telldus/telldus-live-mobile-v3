@@ -608,6 +608,8 @@ class SettingsTab extends View {
 			coverStyleDeviceSettings433,
 			labelStyleDeviceSettings433,
 			brandSecondary,
+			learnButtonWithScan,
+			labelStyle,
 		} = this.getStyle(appLayout);
 
 		const { LEARN } = supportedMethods;
@@ -615,7 +617,10 @@ class SettingsTab extends View {
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={id} style={touchableButtonCommon} />;
+			learnButton = <LearnButton
+				id={id}
+				style={!settings433MHz ? touchableButtonCommon : learnButtonWithScan}
+				labelStyle={!settings433MHz ? {} : labelStyle}/>;
 		}
 
 		const isZWave = transport === 'zwave';
@@ -677,7 +682,8 @@ class SettingsTab extends View {
 										settings={settings433MHz}
 										widgetId={widget433MHz}
 										showScan={showScan}
-										clientId={clientId}/>
+										clientId={clientId}
+										learnButton={learnButton}/>
 										{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
@@ -690,7 +696,7 @@ class SettingsTab extends View {
 										}
 								</>
 								}
-								{learnButton}
+								{!settings433MHz && learnButton}
 								{isZWave && (
 									<>
 										{isFailed ?
@@ -771,6 +777,9 @@ class SettingsTab extends View {
 
 		const fontSize = deviceWidth * 0.04;
 
+		const fontSize2 = Math.floor(deviceWidth * 0.03);
+		const heightCover = fontSize2 * 2.8;
+
 		return {
 			brandDanger,
 			btnDisabledBg,
@@ -786,12 +795,24 @@ class SettingsTab extends View {
 				marginTop: padding * 2,
 				minWidth: Math.floor(deviceWidth * 0.6),
 			},
+			learnButtonWithScan: {
+				height: heightCover,
+				width: Math.floor((deviceWidth - (padding * 3)) / 2 ),
+				borderRadius: heightCover / 2,
+				paddingVertical: undefined,
+				paddingHorizontal: undefined,
+				maxWidth: undefined,
+				minWidth: undefined,
+			},
 			coverStyleDeviceSettings433: {
 				marginHorizontal: 0,
 			},
 			labelStyleDeviceSettings433: {
 				color: '#000',
 				fontSize,
+			},
+			labelStyle: {
+				fontSize: fontSize2,
 			},
 		};
 	}

@@ -28,6 +28,7 @@ import { useIntl } from 'react-intl';
 
 import {
 	SettingsRow,
+	Throbber,
 } from '../../../../BaseComponents';
 
 import {
@@ -47,6 +48,7 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		paramUpdatedViaScan,
 		textOnPressHelp,
 		headerOnPressHelp,
+		isScanning,
 	} = props;
 
 	const intl = useIntl();
@@ -56,6 +58,8 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		optionInputCover,
 		iconValueRightSize,
 		contentCoverStyle,
+		throbberContainerStyle,
+		throbberStyle,
 	} = getStyles(layout, paramUpdatedViaScan);
 
 	React.useImperativeHandle(ref, (): Object => ({
@@ -90,16 +94,23 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		setInLineEditActive(!inLineEditActive);
 	}
 
+	const _value = isScanning ? `Scanning...  ${value}` : value;
+
 	return (
 		<SettingsRow
 			type={'text'}
 			edit={false}
 			inLineEditActive={inLineEditActive}
 			label={label}
-			value={value}
+			value={_value}
 			appLayout={layout}
 			iconLabelRight={'help'}
-			iconValueRight={inLineEditActive ? 'done' : 'edit'}
+			extraData={{isScanning}}
+			iconValueRight={isScanning ? <Throbber
+				throbberContainerStyle={throbberContainerStyle}
+				throbberStyle={throbberStyle}
+			/>
+				: inLineEditActive ? 'done' : 'edit'}
 			onPress={false}
 			iconValueRightSize={inLineEditActive ? iconValueRightSize : null}
 			onPressIconLabelRight={onPressIconLabelRight}
@@ -118,12 +129,14 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 
 	const {
 		paddingFactor,
+		inactiveTintColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+	const iconValueRightSize = deviceWidth * 0.05;
 
 	return {
-		iconValueRightSize: deviceWidth * 0.05,
+		iconValueRightSize,
 		optionInputCover: {
 			marginBottom: padding / 2,
 			borderRadius: 2,
@@ -131,6 +144,14 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		},
 		contentCoverStyle: {
 			padding,
+		},
+		throbberContainerStyle: {
+			backgroundColor: 'transparent',
+			position: 'relative',
+		},
+		throbberStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: inactiveTintColor,
 		},
 	};
 };

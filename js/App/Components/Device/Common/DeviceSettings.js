@@ -70,6 +70,7 @@ type Props = {
 	initializeValueFromStore?: boolean,
 	showScan?: boolean,
 	clientId?: string,
+	learnButton?: Object,
 };
 
 const DeviceSettings = (props: Props): Object => {
@@ -86,6 +87,7 @@ const DeviceSettings = (props: Props): Object => {
 		initializeValueFromStore = false, // Optional
 		showScan = false,
 		clientId,
+		learnButton,
 	} = props;
 
 	function _keyboardDidHide() {
@@ -114,7 +116,7 @@ const DeviceSettings = (props: Props): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
-	const { widgetParams433Device = {} } = addDevice433;
+	const { widgetParams433Device = {}, isScanning = false } = addDevice433;
 	const {
 		system = 'null',
 		house = 'null',
@@ -159,6 +161,7 @@ const DeviceSettings = (props: Props): Object => {
 		fadeSettingsCover,
 		uSettingsCover,
 		titleStyle,
+		scanLearnCover,
 	} = getStyles(layout);
 
 	let Setting = [];
@@ -209,7 +212,8 @@ const DeviceSettings = (props: Props): Object => {
 					headerOnPressHelp={formatMessage(i18n.system)}
 					onChangeText={onChangeText}
 					labelStyle={labelStyle}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(system, currSystem)}/>
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(system, currSystem)}
+					isScanning={isScanning}/>
 			);
 		}
 		if (setting === 'v') {
@@ -247,7 +251,8 @@ const DeviceSettings = (props: Props): Object => {
 						index={index}
 						onPressOne={onPressOne}
 						onPressTwo={onPressTwo}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(code, currCode)}/>
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(code, currCode)}
+						isScanning={isScanning}/>
 				);
 			});
 
@@ -289,7 +294,8 @@ const DeviceSettings = (props: Props): Object => {
 					onToggleCheckBox={onToggleCheckBox}
 					intl={intl}
 					option={option}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(units, currUnits)}/>);
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(units, currUnits)}
+					isScanning={isScanning}/>);
 			});
 
 			// Stores initial/default settings in store.
@@ -358,7 +364,8 @@ const DeviceSettings = (props: Props): Object => {
 						isOneSelected={one === '1'}
 						isTwoSelected={two === '-'}
 						isThreeSelected={three === '0'}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}
+						isScanning={isScanning}/>
 				);
 			});
 
@@ -420,7 +427,8 @@ const DeviceSettings = (props: Props): Object => {
 						textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
 						headerOnPressHelp={formatMessage(i18n.houseCode)}
 						onChangeText={onChangeText}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}
+						isScanning={isScanning}/>
 				);
 			}
 			if (options) {
@@ -451,7 +459,8 @@ const DeviceSettings = (props: Props): Object => {
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.houseCode)}
 					key={setting}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}/>);
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}
+					isScanning={isScanning}/>);
 			}
 		}
 		if (setting === 'unit') {
@@ -500,7 +509,8 @@ const DeviceSettings = (props: Props): Object => {
 						textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
 						headerOnPressHelp={formatMessage(i18n.unitCode)}
 						onChangeText={onChangeText}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}/>
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}
+						isScanning={isScanning}/>
 				);
 			}
 			if (options) {
@@ -531,7 +541,8 @@ const DeviceSettings = (props: Props): Object => {
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.unitCode)}
 					key={setting}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}/>);
+					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}
+					isScanning={isScanning}/>);
 			}
 		}
 		if (setting === 'fade') {
@@ -550,7 +561,8 @@ const DeviceSettings = (props: Props): Object => {
 						intl={intl}
 						option={key}
 						key={key}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(fade, currFade)}/>
+						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(fade, currFade)}
+						isScanning={isScanning}/>
 				);
 			});
 
@@ -578,10 +590,13 @@ const DeviceSettings = (props: Props): Object => {
 			</Text>
 			{Setting}
 			{(showScan && clientId) &&
+			<View style={scanLearnCover}>
+				{!!learnButton && learnButton}
 				<ScanButton
 					clientId={clientId}
 					deviceId={deviceId}
 					callbackOnParamUpdate={callbackOnParamUpdate}/>
+			</View>
 			}
 		</View>
 	);
@@ -655,6 +670,12 @@ const getStyles = (appLayout: Object): Object => {
 			...shadow,
 			marginBottom: padding / 2,
 			borderRadius: 2,
+		},
+		scanLearnCover: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'space-around',
+			marginTop: padding,
 		},
 	};
 };
