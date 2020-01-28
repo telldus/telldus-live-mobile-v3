@@ -43,6 +43,7 @@ import {
 	TabBar,
 	SettingsRow,
 	Text,
+	IconTelldus,
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
@@ -245,9 +246,7 @@ const AppTab = (props: Object): Object => {
 								{formatMessage(i18n.sendCrashAnonymously)}
 							</Text>
 							<TouchableOpacity onPress={onPressCrashInfo}>
-								<Text style={crashInfoText}>
-									?
-								</Text>
+								<IconTelldus icon={'help'} style={crashInfoText}/>
 							</TouchableOpacity>
 						</View>
 					}
@@ -309,7 +308,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		crashInfoText: {
 			fontSize,
-			color: Theme.Core.red,
+			color: Theme.Core.brandSecondary,
 			fontWeight: 'bold',
 			paddingHorizontal: 3,
 		},
