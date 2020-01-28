@@ -99,7 +99,7 @@ class ForgotPasswordScreen extends View<Props, null> {
 					headerText={intl.formatMessage(i18n.forgotPassword)}
 					styles={commonStyles}
 					openDialogueBox={this.openDialogueBox}/>
-				<View style={{ height: 10 }}/>
+				<View style={{ height: 5 }}/>
 				<TouchableOpacity
 					onPress={this.goBackToLogin}
 					accessibilityLabel={this.labelBackToLogin}
@@ -127,6 +127,7 @@ class ForgotPasswordScreen extends View<Props, null> {
 				marginHorizontal: infoFontSize * 0.2,
 				marginVertical: infoFontSize * 0.8,
 				color: '#bbb',
+				padding: 5,
 			},
 		};
 	}
