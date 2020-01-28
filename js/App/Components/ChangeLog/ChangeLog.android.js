@@ -62,9 +62,7 @@ class ChangeLogNavigator extends View {
 	h1: string;
 	h2: string;
 
-	nextButton: string;
 	skipButton: string;
-	doneButton: string;
 
 	onPressNext: () => void;
 	onPressPrev: () => void;
@@ -79,6 +77,11 @@ class ChangeLogNavigator extends View {
 
 	onRequestClose: () => void;
 
+	defaultDescription: string;
+	labelButton: string;
+	nextLabel: string;
+	prevLabel: string;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -92,9 +95,7 @@ class ChangeLogNavigator extends View {
 		this.h1 = formatMessage(i18n.changeLogHeaderOne);
 		this.h2 = `${formatMessage(i18n.changeLogHeaderTwo)} ${appVersion.substring(0, 4)}`;
 
-		this.nextButton = formatMessage(i18n.next);
 		this.skipButton = formatMessage(i18n.skipButton).toUpperCase();
-		this.doneButton = formatMessage(i18n.done);
 
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
@@ -108,6 +109,11 @@ class ChangeLogNavigator extends View {
 
 		this.animatedX = new Animated.Value(0);
 		this.animatedOpacity = new Animated.Value(1);
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelButton = `${formatMessage(i18n.button)}`;
+		this.nextLabel = `${formatMessage(i18n.next)} ${this.labelButton}. ${this.defaultDescription}`;
+		this.prevLabel = `${formatMessage(i18n.previous)} ${this.labelButton}. ${this.defaultDescription}`;
 	}
 
 	onRequestClose() {
@@ -270,7 +276,8 @@ class ChangeLogNavigator extends View {
 								imageSource={{uri: 'right_arrow_key'}}
 								onPress={this.onPressPrev}
 								buttonStyle={floatingButtonLeft}
-								iconStyle={styles.buttonIconStyle}/>
+								iconStyle={styles.buttonIconStyle}
+								accessibilityLabel={this.prevLabel}/>
 							)}
 							{Screens.length > 1 && Screens.map((screen: number, index: number): Object => {
 								let backgroundColor = Screens[index] === currentScreen ?
@@ -286,7 +293,8 @@ class ChangeLogNavigator extends View {
 								iconName={isLastScreen ? 'checkmark' : false}
 								iconStyle={isLastScreen ? checkIconStyle : {}}
 								onPress={this.onPressNext}
-								buttonStyle={{bottom: 0}}/>
+								buttonStyle={{bottom: 0}}
+								accessibilityLabel={this.nextLabel}/>
 						</View>
 					</ScrollView>
 				</View>
