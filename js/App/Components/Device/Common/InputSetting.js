@@ -96,7 +96,7 @@ const InputSetting = (props: Object, ref: Object): Object => {
 	function onPressIconValueRight() {
 		setInLineEditActive(!inLineEditActive);
 	}
-
+	// TODO: translate
 	const _value = isScanning ? `Scanning...  ${value}` : value;
 	const iconValueLeft = paramUpdatedViaScan ?
 		<IconTelldus

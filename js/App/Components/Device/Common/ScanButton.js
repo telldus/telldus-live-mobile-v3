@@ -30,6 +30,7 @@ import {
 	TouchableOpacity,
 	LayoutAnimation,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -56,6 +57,7 @@ const ScanButton = (props: Object): Object => {
 		callbackOnParamUpdate,
 	} = props;
 
+	const intl = useIntl();
 	const dispatch = useDispatch();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -63,7 +65,7 @@ const ScanButton = (props: Object): Object => {
 	const { isScanning = false } = addDevice433;
 
 	useEffect((): Function => {
-		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, callbackOnParamUpdate));
+		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, intl.formatMessage, callbackOnParamUpdate));
 		if (methods) {
 			startScan = methods.startScan;
 			stopScan = methods.stopScan;
@@ -93,6 +95,7 @@ const ScanButton = (props: Object): Object => {
 		}
 	}
 
+	// TODO: confirm string and translate
 	const text = isScanning ? 'Stop Scan' : 'Scan remote control';
 
 	return (

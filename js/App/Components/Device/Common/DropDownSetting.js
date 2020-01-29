@@ -90,7 +90,7 @@ const DropDownSetting = (props: Object): Object => {
 			});
 		}
 	}
-
+	// TODO: translate
 	const _value = isScanning ? `Scanning...  ${value}` : value;
 
 	const iconLeftPickerBase = paramUpdatedViaScan ?
