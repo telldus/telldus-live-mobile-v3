@@ -214,7 +214,7 @@ render(): Object {
 				</TouchableOpacity>
 				}
 				<Text style={labelTextStyle}>
-					{`${this.deviceBrand} ${formatMessage(i18n.devices).toLowerCase()}:`}
+					{`${this.deviceBrand}:`}
 				</Text>
 				<View style={shortCutDevicesCover}>
 					{telldusDevices}
