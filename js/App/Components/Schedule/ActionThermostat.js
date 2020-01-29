@@ -243,6 +243,8 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const changeModeAlone = (!changeTemp && changeMode) || noTemp;
 
 		const hideTemperatureControl = changeModeAlone;
+		const changeTempAlone = changeTemp && !changeMode;
+		const hideModeControl = changeTempAlone;
 
 		return (
 			<View style={container}>
@@ -271,6 +273,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
 						supportResume={this.supportResume}
 						hideTemperatureControl={hideTemperatureControl}
+						hideModeControl={hideModeControl}
 						intl={intl}
 						source="Schedule_ActionThermostat"/>
 				</ScrollView>
