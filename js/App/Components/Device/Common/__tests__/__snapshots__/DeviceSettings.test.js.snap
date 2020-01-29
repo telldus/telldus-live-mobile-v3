@@ -160,8 +160,11 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
+                "textAlignVertical": "center",
               },
-              undefined,
+              Object {
+                "flex": 0,
+              },
             ]
           }
         >
@@ -344,8 +347,11 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
+                "textAlignVertical": "center",
               },
-              undefined,
+              Object {
+                "flex": 0,
+              },
             ]
           }
         >
@@ -558,8 +564,11 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
+                "textAlignVertical": "center",
               },
-              undefined,
+              Object {
+                "flex": 0,
+              },
             ]
           }
         >
@@ -742,8 +751,11 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
+                "textAlignVertical": "center",
               },
-              undefined,
+              Object {
+                "flex": 0,
+              },
             ]
           }
         >
