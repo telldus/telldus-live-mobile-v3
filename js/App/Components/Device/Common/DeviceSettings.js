@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import isEmpty from 'lodash/isEmpty';
@@ -51,6 +51,7 @@ import {
 	setWidgetParamUnit,
 	setWidgetParamHouse,
 	editDevice433Param,
+	toggleStatusUpdatedViaScan433MHZ,
 } from '../../../Actions/AddDevice';
 import {
 	getRandom,
@@ -71,6 +72,7 @@ type Props = {
 	showScan?: boolean,
 	clientId?: string,
 	learnButton?: Object,
+	isSaving433MhzParams?: boolean,
 };
 
 const DeviceSettings = (props: Props): Object => {
@@ -88,6 +90,7 @@ const DeviceSettings = (props: Props): Object => {
 		showScan = false,
 		clientId,
 		learnButton,
+		isSaving433MhzParams = false,
 	} = props;
 
 	function _keyboardDidHide() {
@@ -116,7 +119,7 @@ const DeviceSettings = (props: Props): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
-	const { widgetParams433Device = {}, isScanning = false } = addDevice433;
+	const { widgetParams433Device = {}, isScanning = false, paramUpdatedViaScan = false } = addDevice433;
 	const {
 		system = 'null',
 		house = 'null',
@@ -141,16 +144,12 @@ const DeviceSettings = (props: Props): Object => {
 		code: currCode,
 	} = DeviceParams433 || {};
 
-	const [ paramUpdatedViaScan, setParamUpdatedViaScan ] = useState(false);
-	function callbackOnParamUpdate() {
-		setParamUpdatedViaScan(true);
-	}
-
 	useEffect(() => {
 		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
 		if (deviceId && initializeValueFromStore) {
 			dispatch(editDevice433Param(widgetId, deviceId));
 		}
+		dispatch(toggleStatusUpdatedViaScan433MHZ(false));
 	}, []);
 
 	const {
@@ -212,8 +211,10 @@ const DeviceSettings = (props: Props): Object => {
 					headerOnPressHelp={formatMessage(i18n.system)}
 					onChangeText={onChangeText}
 					labelStyle={labelStyle}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(system, currSystem)}
-					isScanning={isScanning}/>
+					paramUpdatedViaScan={paramUpdatedViaScan}
+					isCodeEqual={isEqual(system, currSystem)}
+					isScanning={isScanning}
+					isSaving433MhzParams={isSaving433MhzParams}/>
 			);
 		}
 		if (setting === 'v') {
@@ -251,8 +252,10 @@ const DeviceSettings = (props: Props): Object => {
 						index={index}
 						onPressOne={onPressOne}
 						onPressTwo={onPressTwo}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(code, currCode)}
-						isScanning={isScanning}/>
+						paramUpdatedViaScan={paramUpdatedViaScan}
+						isCodeEqual={isEqual(code, currCode)}
+						isScanning={isScanning}
+						isSaving433MhzParams={isSaving433MhzParams}/>
 				);
 			});
 
@@ -294,8 +297,10 @@ const DeviceSettings = (props: Props): Object => {
 					onToggleCheckBox={onToggleCheckBox}
 					intl={intl}
 					option={option}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(units, currUnits)}
-					isScanning={isScanning}/>);
+					paramUpdatedViaScan={paramUpdatedViaScan}
+					isCodeEqual={isEqual(units, currUnits)}
+					isScanning={isScanning}
+					isSaving433MhzParams={isSaving433MhzParams}/>);
 			});
 
 			// Stores initial/default settings in store.
@@ -364,8 +369,10 @@ const DeviceSettings = (props: Props): Object => {
 						isOneSelected={one === '1'}
 						isTwoSelected={two === '-'}
 						isThreeSelected={three === '0'}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}
-						isScanning={isScanning}/>
+						paramUpdatedViaScan={paramUpdatedViaScan}
+						isCodeEqual={isEqual(house, currHouse)}
+						isScanning={isScanning}
+						isSaving433MhzParams={isSaving433MhzParams}/>
 				);
 			});
 
@@ -427,8 +434,10 @@ const DeviceSettings = (props: Props): Object => {
 						textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
 						headerOnPressHelp={formatMessage(i18n.houseCode)}
 						onChangeText={onChangeText}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}
-						isScanning={isScanning}/>
+						paramUpdatedViaScan={paramUpdatedViaScan}
+						isCodeEqual={isEqual(house, currHouse)}
+						isScanning={isScanning}
+						isSaving433MhzParams={isSaving433MhzParams}/>
 				);
 			}
 			if (options) {
@@ -459,8 +468,10 @@ const DeviceSettings = (props: Props): Object => {
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.houseCode)}
 					key={setting}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(house, currHouse)}
-					isScanning={isScanning}/>);
+					paramUpdatedViaScan={paramUpdatedViaScan}
+					isCodeEqual={isEqual(house, currHouse)}
+					isScanning={isScanning}
+					isSaving433MhzParams={isSaving433MhzParams}/>);
 			}
 		}
 		if (setting === 'unit') {
@@ -509,8 +520,10 @@ const DeviceSettings = (props: Props): Object => {
 						textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
 						headerOnPressHelp={formatMessage(i18n.unitCode)}
 						onChangeText={onChangeText}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}
-						isScanning={isScanning}/>
+						paramUpdatedViaScan={paramUpdatedViaScan}
+						isCodeEqual={isEqual(unit, currUnit)}
+						isScanning={isScanning}
+						isSaving433MhzParams={isSaving433MhzParams}/>
 				);
 			}
 			if (options) {
@@ -541,8 +554,10 @@ const DeviceSettings = (props: Props): Object => {
 					onValueChange={onValueChange}
 					label={formatMessage(i18n.unitCode)}
 					key={setting}
-					paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(unit, currUnit)}
-					isScanning={isScanning}/>);
+					paramUpdatedViaScan={paramUpdatedViaScan}
+					isCodeEqual={isEqual(unit, currUnit)}
+					isScanning={isScanning}
+					isSaving433MhzParams={isSaving433MhzParams}/>);
 			}
 		}
 		if (setting === 'fade') {
@@ -561,8 +576,10 @@ const DeviceSettings = (props: Props): Object => {
 						intl={intl}
 						option={key}
 						key={key}
-						paramUpdatedViaScan={paramUpdatedViaScan && !isEqual(fade, currFade)}
-						isScanning={isScanning}/>
+						paramUpdatedViaScan={paramUpdatedViaScan}
+						isCodeEqual={isEqual(fade, currFade)}
+						isScanning={isScanning}
+						isSaving433MhzParams={isSaving433MhzParams}/>
 				);
 			});
 
@@ -594,8 +611,7 @@ const DeviceSettings = (props: Props): Object => {
 				{!!learnButton && learnButton}
 				<ScanButton
 					clientId={clientId}
-					deviceId={deviceId}
-					callbackOnParamUpdate={callbackOnParamUpdate}/>
+					deviceId={deviceId}/>
 			</View>
 			}
 		</View>

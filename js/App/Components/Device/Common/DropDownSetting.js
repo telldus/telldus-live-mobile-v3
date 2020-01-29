@@ -52,6 +52,7 @@ const DropDownSetting = (props: Object): Object => {
 		textOnPressHelp,
 		headerOnPressHelp,
 		isScanning,
+		isSaving433MhzParams,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -66,6 +67,7 @@ const DropDownSetting = (props: Object): Object => {
 		throbberContainerStyle,
 		throbberStyle,
 		inactiveTintColor,
+		statuscheckStyle,
 	} = getStyles(layout, paramUpdatedViaScan);
 
 	const accessibilityLabelPrefix = '';
@@ -91,6 +93,11 @@ const DropDownSetting = (props: Object): Object => {
 
 	const _value = isScanning ? `Scanning...  ${value}` : value;
 
+	const iconLeftPickerBase = paramUpdatedViaScan ?
+		<IconTelldus
+			icon="statuscheck"
+			style={statuscheckStyle}/> : undefined;
+
 	return (
 		<View style={optionInputCover}>
 			<View style={{
@@ -108,6 +115,7 @@ const DropDownSetting = (props: Object): Object => {
 				items={items}
 				extraData={{
 					isScanning,
+					paramUpdatedViaScan,
 				}}
 				baseLeftIcon={isScanning ?
 					<Throbber
@@ -116,7 +124,8 @@ const DropDownSetting = (props: Object): Object => {
 					/>
 					: 'down'}
 				value={_value}
-				disabled={isScanning}
+				iconLeftPickerBase={iconLeftPickerBase}
+				disabled={isScanning || isSaving433MhzParams}
 				onValueChange={onValueChange}
 				appLayout={layout}
 				pickerContainerStyle={pickerContainerStyle}
@@ -143,6 +152,7 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		shadow,
 		brandSecondary,
 		inactiveTintColor,
+		brandSuccess,
 	} = Theme.Core;
 
 	const ddWidth = deviceWidth * 0.45;
@@ -203,6 +213,12 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		throbberStyle: {
 			fontSize: iconValueRightSize * 0.8,
 			color: inactiveTintColor,
+		},
+		statuscheckStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: brandSuccess,
+			textAlignVertical: 'center',
+			marginRight: 5,
 		},
 	};
 };

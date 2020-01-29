@@ -29,6 +29,7 @@ import { useIntl } from 'react-intl';
 import {
 	SettingsRow,
 	Throbber,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 import {
@@ -49,6 +50,7 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		textOnPressHelp,
 		headerOnPressHelp,
 		isScanning,
+		isSaving433MhzParams,
 	} = props;
 
 	const intl = useIntl();
@@ -60,7 +62,8 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		contentCoverStyle,
 		throbberContainerStyle,
 		throbberStyle,
-	} = getStyles(layout, paramUpdatedViaScan);
+		statuscheckStyle,
+	} = getStyles(layout);
 
 	React.useImperativeHandle(ref, (): Object => ({
 		blur: () => {
@@ -95,6 +98,17 @@ const InputSetting = (props: Object, ref: Object): Object => {
 	}
 
 	const _value = isScanning ? `Scanning...  ${value}` : value;
+	const iconValueLeft = paramUpdatedViaScan ?
+		<IconTelldus
+			icon="statuscheck"
+			style={statuscheckStyle}/> : undefined;
+
+	const iconValueRight = isSaving433MhzParams ? undefined :
+		isScanning ? <Throbber
+			throbberContainerStyle={throbberContainerStyle}
+			throbberStyle={throbberStyle}
+		/>
+			: inLineEditActive ? 'done' : 'edit';
 
 	return (
 		<SettingsRow
@@ -103,14 +117,15 @@ const InputSetting = (props: Object, ref: Object): Object => {
 			inLineEditActive={inLineEditActive}
 			label={label}
 			value={_value}
+			iconValueLeft={iconValueLeft}
 			appLayout={layout}
 			iconLabelRight={'help'}
-			extraData={{isScanning}}
-			iconValueRight={isScanning ? <Throbber
-				throbberContainerStyle={throbberContainerStyle}
-				throbberStyle={throbberStyle}
-			/>
-				: inLineEditActive ? 'done' : 'edit'}
+			extraData={{
+				isScanning,
+				paramUpdatedViaScan,
+				isSaving433MhzParams,
+			}}
+			iconValueRight={iconValueRight}
 			onPress={false}
 			iconValueRightSize={inLineEditActive ? iconValueRightSize : null}
 			onPressIconLabelRight={onPressIconLabelRight}
@@ -118,11 +133,14 @@ const InputSetting = (props: Object, ref: Object): Object => {
 			onChangeText={onChangeText}
 			style={optionInputCover}
 			contentCoverStyle={contentCoverStyle}
+			valueTextStyle={{
+				flex: 0,
+			}}
 			intl={intl}/>
 	);
 };
 
-const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -130,6 +148,7 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const {
 		paddingFactor,
 		inactiveTintColor,
+		brandSuccess,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -152,6 +171,12 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		throbberStyle: {
 			fontSize: iconValueRightSize * 0.8,
 			color: inactiveTintColor,
+		},
+		statuscheckStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: brandSuccess,
+			textAlignVertical: 'center',
+			marginRight: 5,
 		},
 	};
 };

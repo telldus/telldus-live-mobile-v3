@@ -51,6 +51,7 @@ import {
 	removeDevice,
 	setDeviceParameter,
 	getDeviceInfoCommon,
+	toggleStatusUpdatedViaScan433MHZ,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -515,6 +516,7 @@ class SettingsTab extends View {
 			return promise.then((res: any): any => res).catch((err: any): any => err);
 		})).then(() => {
 			this.postSaveParams433MHz(id, true);
+			dispatch(toggleStatusUpdatedViaScan433MHZ(false));
 		}).catch(() => {
 			// TODO: Show message on error saving new params!
 			this.postSaveParams433MHz(id, false);
@@ -683,7 +685,8 @@ class SettingsTab extends View {
 										widgetId={widget433MHz}
 										showScan={showScan}
 										clientId={clientId}
-										learnButton={learnButton}/>
+										learnButton={learnButton}
+										isSaving433MhzParams={isSaving433MhzParams}/>
 										{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
