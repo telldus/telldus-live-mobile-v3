@@ -39,7 +39,6 @@ import {
 import LayoutAnimations from '../../../Lib/LayoutAnimations';
 
 import {
-	toggleScanStatus433MHz,
 	initiateScanTransmitter433MHz,
 } from '../../../Actions';
 
@@ -71,6 +70,7 @@ const ScanButton = (props: Object): Object => {
 			destroyInstance = methods.destroyInstance;
 		}
 		return (): Function => {
+			stopScan();
 			destroyInstance();
 			startScan = noOp;
 			stopScan = noOp;
@@ -87,10 +87,8 @@ const ScanButton = (props: Object): Object => {
 	function onPress() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		if (isScanning) {
-			dispatch(toggleScanStatus433MHz(false));
 			stopScan();
 		} else {
-			dispatch(toggleScanStatus433MHz(true));
 			startScan();
 		}
 	}
