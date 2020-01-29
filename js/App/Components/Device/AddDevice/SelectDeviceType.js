@@ -116,7 +116,13 @@ getDeviceTypes(): Array<any> {
 			types.push(...availableTypes);
 		}
 	});
-	return types;
+	let finalTypes = [];
+	types.map((i: Object) => {
+		if (i.type !== 'sensor') {
+			finalTypes.push(i);
+		}
+	});
+	return finalTypes;
 }
 
 getDeviceTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
