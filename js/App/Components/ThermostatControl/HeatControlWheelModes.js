@@ -52,6 +52,7 @@ type Props = {
 	gatewayTimezone: string,
 	source?: string,
 	activeMode?: string,
+	hideTemperatureControl?: boolean,
 
 	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
@@ -451,6 +452,7 @@ render(): Object | null {
 		gatewayTimezone,
 		intl,
 		activeMode,
+		hideTemperatureControl = false,
 	} = this.props;
 
 	const {
@@ -518,7 +520,7 @@ render(): Object | null {
 			infoContainer={infoContainer}
 			textStyle={infoTextStyle}/>
 		}
-			<View style={cover}>
+			{!hideTemperatureControl && <View style={cover}>
 				{showControlIcons && <TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
 					<MaterialIcons
 						name="remove"
@@ -578,6 +580,7 @@ render(): Object | null {
 				</TouchableOpacity>
 				}
 			</View>
+			}
 			<ModesList
 				appLayout={appLayout}
 				onPressRow={this.onPressRow}

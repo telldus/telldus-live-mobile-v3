@@ -23,9 +23,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	LayoutAnimation,
+} from 'react-native';
 
-import { FloatingButton, View, Text } from '../../../BaseComponents';
+import {
+	FloatingButton,
+	View,
+	Text,
+} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import HeatControlWheelModes from '../ThermostatControl/HeatControlWheelModes';
 import ActionThermostatTwo from './ActionThermostatTwo';
@@ -33,6 +40,7 @@ import ActionThermostatTwo from './ActionThermostatTwo';
 import {
 	getSupportedModes,
 	shouldUpdate,
+	LayoutAnimations,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -203,6 +211,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			...methodValue,
 			...newMethodValue,
 		};
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			methodValue: methodValueN,
 		});
@@ -213,6 +222,9 @@ export default class ActionThermostat extends View<null, Props, State> {
 			appLayout,
 			intl,
 		} = this.props;
+		const {
+			methodValue,
+		} = this.state;
 		const { container, outerPadding, tempLabelStyle } = this._getStyle(appLayout);
 
 		if (!this.device) {
@@ -224,6 +236,13 @@ export default class ActionThermostat extends View<null, Props, State> {
 		} = this.device;
 
 		const { THERMOSTAT: { mode } } = stateValues;
+		const activeMode = methodValue.mode || this.currentMode || mode;
+
+		const { changeMode, changeTemp, temperature } = methodValue || {};
+		const noTemp = typeof temperature !== 'number' || isNaN(temperature);
+		const changeModeAlone = (!changeTemp && changeMode) || noTemp;
+
+		const hideTemperatureControl = changeModeAlone;
 
 		return (
 			<View style={container}>
@@ -236,19 +255,22 @@ export default class ActionThermostat extends View<null, Props, State> {
 					keyboardShouldPersistTaps={'always'}>
 					<ActionThermostatTwo
 						intl={intl}
-						methodValue={this.state.methodValue}
+						methodValue={methodValue}
 						appLayout={appLayout}
 						onChange={this.onChange}/>
-					<Text style={tempLabelStyle}>
-						{intl.formatMessage(i18n.labelTemperature)}
-					</Text>
+					{!hideTemperatureControl && (
+						<Text style={tempLabelStyle}>
+							{intl.formatMessage(i18n.labelTemperature)}
+						</Text>
+					)}
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={this.supportedModes}
 						device={this.device}
-						activeMode={this.currentMode || mode}
+						activeMode={activeMode}
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
 						supportResume={this.supportResume}
+						hideTemperatureControl={hideTemperatureControl}
 						intl={intl}
 						source="Schedule_ActionThermostat"/>
 				</ScrollView>
