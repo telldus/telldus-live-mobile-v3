@@ -52,6 +52,7 @@ type Props = {
 	source?: string,
 	activeMode?: string,
 	hideTemperatureControl?: boolean,
+	hideModeControl?: boolean,
 
 	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
@@ -451,6 +452,7 @@ render(): Object | null {
 		intl,
 		activeMode,
 		hideTemperatureControl = false,
+		hideModeControl = false,
 	} = this.props;
 
 	const {
@@ -578,22 +580,24 @@ render(): Object | null {
 				}
 			</View>
 			}
-			<ModesList
-				appLayout={appLayout}
-				onPressRow={this.onPressRow}
-				controllingMode={controllingMode}
-				modes={modes}
-				onControlThermostat={this.onControlThermostat}
-				onEditSubmitValue={this.onEditSubmitValue}
-				currentValue={currentValue}
-				currentValueInScreen={currentValueInScreen}
-				updateCurrentValueInScreen={this.updateCurrentValueInScreen}
-				modesCoverStyle={modesCoverStyle}
-				changeMode={changeMode}
-				setpointMode={setpointMode}
-				setpointValue={setpointValue}
-				setpointValueLocal={setpointValueLocal}
-				handleAddMinus={this.handleAddMinus}/>
+			{!hideModeControl && (
+				<ModesList
+					appLayout={appLayout}
+					onPressRow={this.onPressRow}
+					controllingMode={controllingMode}
+					modes={modes}
+					onControlThermostat={this.onControlThermostat}
+					onEditSubmitValue={this.onEditSubmitValue}
+					currentValue={currentValue}
+					currentValueInScreen={currentValueInScreen}
+					updateCurrentValueInScreen={this.updateCurrentValueInScreen}
+					modesCoverStyle={modesCoverStyle}
+					changeMode={changeMode}
+					setpointMode={setpointMode}
+					setpointValue={setpointValue}
+					setpointValueLocal={setpointValueLocal}
+					handleAddMinus={this.handleAddMinus}/>
+			)}
 		</>
 	);
 }
