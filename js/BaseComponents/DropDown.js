@@ -71,6 +71,7 @@ type Props = {
 	textColor?: string,
 	animationDuration?: number,
 	pickerBaseTextStyle?: Array<any> | number | Object,
+	iconLeftPickerBase?: Object,
 };
 
 type DefaultProps = {
@@ -143,6 +144,7 @@ static defaultProps: DefaultProps = {
 			pickerBaseCoverStyle,
 			pickerBaseTextStyle,
 			disabled,
+			iconLeftPickerBase,
 		} = this.props;
 
 		const {
@@ -160,6 +162,7 @@ static defaultProps: DefaultProps = {
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}
 				disabled={disabled}>
+				{React.isValidElement(iconLeftPickerBase) && iconLeftPickerBase}
 				<Text style={[pickerBaseTextStyleDef, {color: baseColor}, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>
