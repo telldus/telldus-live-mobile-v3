@@ -46,6 +46,7 @@ type Props = {
 	inLineEditActive?: boolean,
 	extraData?: Object,
 
+	iconValueLeft: string | Object,
 	valuePostfix?: string,
 	iconValueRightSize?: number,
 	edit?: boolean,
@@ -172,6 +173,7 @@ class SettingsRow extends Component<Props, null> {
 			valueTextStyle,
 			touchableStyle,
 			switchStyle,
+			iconValueLeft,
 		} = this.props;
 
 		const {
@@ -260,9 +262,12 @@ class SettingsRow extends Component<Props, null> {
 								<>
 								{!!value && (
 									(typeof value === 'string') || (typeof value === 'number') ?
-										<Text style={[valueText, valueTextStyle]}>
-											{value} {valuePostfix}
-										</Text>
+										<>
+											{iconValueLeft}
+											<Text style={[valueText, valueTextStyle]}>
+												{value} {valuePostfix}
+											</Text>
+										</>
 										:
 										(typeof value === 'object') ?
 											value
@@ -337,6 +342,7 @@ class SettingsRow extends Component<Props, null> {
 				fontSize,
 				color: inactiveTintColor,
 				textAlign: 'right',
+				textAlignVertical: 'center',
 			},
 			arrowStyle: {
 				height: fontSize,
