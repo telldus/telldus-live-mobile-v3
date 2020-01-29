@@ -223,6 +223,11 @@ class SettingsRow extends Component<Props, null> {
 									:
 									label
 							)}
+							{!!iconLabelRight && (
+								<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
+									<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+								</TouchableOpacity>
+							)}
 						</View>
 						<Switch
 							onValueChange={onValueChange}

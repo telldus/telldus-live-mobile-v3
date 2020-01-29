@@ -27,7 +27,6 @@ import {
 	ScrollView,
 	Platform,
 	LayoutAnimation,
-	TouchableOpacity,
 } from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {
@@ -43,7 +42,6 @@ import {
 	TabBar,
 	SettingsRow,
 	Text,
-	IconTelldus,
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
@@ -97,8 +95,6 @@ const AppTab = (props: Object): Object => {
 		switchStyle,
 		titleStyle,
 		contentCoverStyle,
-		crashLabelCover,
-		crashInfoText,
 		bBSortDropDownContainerStyle,
 	} = getStyles(layout);
 
@@ -240,16 +236,9 @@ const AppTab = (props: Object): Object => {
 					{formatMessage(i18n.crashReports)}
 				</Text>
 				<SettingsRow
-					label={
-						<View style={crashLabelCover}>
-							<Text style={labelTextStyle}>
-								{formatMessage(i18n.sendCrashAnonymously)}
-							</Text>
-							<TouchableOpacity onPress={onPressCrashInfo}>
-								<IconTelldus icon={'help'} style={crashInfoText}/>
-							</TouchableOpacity>
-						</View>
-					}
+					label={formatMessage(i18n.sendCrashAnonymously)}
+					onPressIconLabelRight={onPressCrashInfo}
+					iconLabelRight={'help'}
 					onValueChange={toggleReportCrash}
 					value={reportCrash}
 					appLayout={layout}
@@ -282,11 +271,6 @@ const getStyles = (appLayout: Object): Object => {
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
 		},
-		crashLabelCover: {
-			justifyContent: 'center',
-			alignItems: 'center',
-			flexDirection: 'row',
-		},
 		labelTextStyle: {
 			fontSize,
 			color: '#000',
@@ -305,12 +289,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: 5,
 			color: '#b5b5b5',
 			fontSize,
-		},
-		crashInfoText: {
-			fontSize,
-			color: Theme.Core.brandSecondary,
-			fontWeight: 'bold',
-			paddingHorizontal: 3,
 		},
 		bBSortDropDownContainerStyle: {
 			marginBottom: 0,
