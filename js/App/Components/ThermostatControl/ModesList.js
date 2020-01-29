@@ -42,6 +42,7 @@ type Props = {
 	setpointMode: string,
 	setpointValue: string,
 	setpointValueLocal: string,
+	hideTemperatureControl: boolean,
 
 	modesCoverStyle: number | Array<any> | Object,
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
@@ -79,6 +80,7 @@ render(): Object {
 		setpointMode,
 		setpointValueLocal,
 		handleAddMinus,
+		hideTemperatureControl,
 	} = this.props;
 
 	const {
@@ -131,7 +133,8 @@ render(): Object {
 				initialValue={value}
 				setpointMode={setpointMode}
 				setpointValueLocal={setpointValueLocal}
-				handleAddMinus={handleAddMinus}/>
+				handleAddMinus={handleAddMinus}
+				hideTemperatureControl={hideTemperatureControl}/>
 		);
 	});
 

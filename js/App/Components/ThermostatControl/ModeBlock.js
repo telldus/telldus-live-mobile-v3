@@ -60,6 +60,7 @@ type Props = {
 	controllingMode: string,
 	setpointMode: string,
 	setpointValueLocal: string,
+	hideTemperatureControl: boolean,
 
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => Promise<any>,
@@ -150,6 +151,7 @@ render(): Object {
 		IconActive,
 		Icon,
 		initialValue,
+		hideTemperatureControl,
 	} = this.props;
 
 	const {
@@ -190,7 +192,7 @@ render(): Object {
 					textStyle={[labelStyle, { color: textColor }]}
 					label={label.toUpperCase()}
 					onPressRow={this.onPressChangeMode}/>
-				{hasInitialValue && (
+				{(hasInitialValue && !hideTemperatureControl ) && (
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
 							<TouchableOpacity onPress={this.onPressDown} style={addRemoveIconCover}>

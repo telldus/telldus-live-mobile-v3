@@ -599,7 +599,8 @@ render(): Object | null {
 					setpointMode={setpointMode}
 					setpointValue={setpointValue}
 					setpointValueLocal={setpointValueLocal}
-					handleAddMinus={this.handleAddMinus}/>
+					handleAddMinus={this.handleAddMinus}
+					hideTemperatureControl={hideTemperatureControl}/>
 			)}
 		</>
 	);
