@@ -148,7 +148,7 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		inactiveTintColor,
-		brandSuccess,
+		locationOnline,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -174,7 +174,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		statuscheckStyle: {
 			fontSize: iconValueRightSize * 0.8,
-			color: brandSuccess,
+			color: locationOnline,
 			textAlignVertical: 'center',
 			marginRight: 5,
 		},

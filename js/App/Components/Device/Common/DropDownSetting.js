@@ -152,7 +152,7 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		shadow,
 		brandSecondary,
 		inactiveTintColor,
-		brandSuccess,
+		locationOnline,
 	} = Theme.Core;
 
 	const ddWidth = deviceWidth * 0.45;
@@ -216,7 +216,7 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 		},
 		statuscheckStyle: {
 			fontSize: iconValueRightSize * 0.8,
-			color: brandSuccess,
+			color: locationOnline,
 			textAlignVertical: 'center',
 			marginRight: 5,
 		},
