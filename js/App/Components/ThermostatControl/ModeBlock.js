@@ -31,6 +31,7 @@ import {
 	View,
 	Text,
 	IconTelldus,
+	EmptyView,
 } from '../../../BaseComponents';
 import {
 	LabelBlock,
@@ -192,7 +193,7 @@ render(): Object {
 					textStyle={[labelStyle, { color: textColor }]}
 					label={label.toUpperCase()}
 					onPressRow={this.onPressChangeMode}/>
-				{(hasInitialValue && !hideTemperatureControl ) && (
+				{(hasInitialValue && !hideTemperatureControl ) ?
 					<View style={controlBlockStyle}>
 						<View style={{flex: 0}}>
 							<TouchableOpacity onPress={this.onPressDown} style={addRemoveIconCover}>
@@ -221,7 +222,9 @@ render(): Object {
 							</TouchableOpacity>
 						</View>
 					</View>
-				)}
+					:
+					<EmptyView/>
+				}
 			</View>
 			<ModeIconBlock style={[iconBlockStyle, {backgroundColor: iconBGColor}]} onPressRow={this.onPressChangeMode}>
 				{mode !== 'off' ?

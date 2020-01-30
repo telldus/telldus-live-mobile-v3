@@ -29,6 +29,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
 	View,
 	InfoBlock,
+	EmptyView,
 } from '../../../BaseComponents';
 import ModesList from './ModesList';
 import ControlInfoBlock from './ControlInfoBlock';
@@ -516,74 +517,88 @@ render(): Object | null {
 
 	return (
 		<>
-		{typeof activeMode !== 'string' && <InfoBlock
+		{typeof activeMode !== 'string' ? <InfoBlock
 			text={intl.formatMessage(i18n.infoNoThermostatMode)}
 			appLayout={appLayout}
 			infoContainer={infoContainer}
 			textStyle={infoTextStyle}/>
+			:
+			<EmptyView/>
 		}
-			{!hideTemperatureControl && <View style={cover}>
-				{showControlIcons && <TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
-					<MaterialIcons
-						name="remove"
-						color={Theme.Core.brandPrimary}
-						size={iconSize}/>
-				</TouchableOpacity>
-				}
-				{showCircularSlider && <CircularSlider
-					SVGKey={SVGKey}
-					coverStyle={coverStyle}
-					startAngle={startAngleF}
-					maxAngleLength={HeatControlWheelModes.maxALength}
-					angleLength={angleLengthF}
-					onUpdate={hasValidMinMax ? this.onUpdate : this.noOP}
-					segments={segments}
-					strokeWidth={strokeWidth}
-					radius={radius}
-					gradientColorFrom={gradientColorFrom}
-					gradientColorTo={gradientColorTo}
-					bgCircleColor="transparent"
-					knobStrokeColor="#fff"
-					knobFillColor={gradientColorTo}
-					keepArcVisible
-					showStartKnob={false}
-					showStopKnob={hasValidMinMax}
-					roundedEnds
-					allowKnobBeyondLimits={false}
-					knobRadius={knobRadius}
-					knobStrokeWidth={knobStrokeWidth}
-					onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
-					onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
-				/>
-				}
-				<ControlInfoBlock
-					appLayout={appLayout}
-					baseColor={baseColor}
-					currentValue={currentValue}
-					currentValueInScreen={currentValueInScreen}
-					title={titleInfoBlock}
-					lastUpdated={lastUpdated}
-					onControlThermostat={this.onControlThermostat}
-					controllingMode={controllingMode}
-					minVal={minVal}
-					maxVal={maxVal}
-					onEditSubmitValue={this.onEditSubmitValue}
-					updateCurrentValueInScreen={this.updateCurrentValueInScreen}
-					changeMode={changeMode}
-					currentTemp={currentTemp}
-					supportResume={supportResume}
-					gatewayTimezone={gatewayTimezone}
-				/>
-				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
-					<MaterialIcons
-						name="add"
-						color={Theme.Core.brandSecondary}
-						size={iconSize}/>
-				</TouchableOpacity>
-				}
-			</View>
+			{!hideTemperatureControl ?
+				<View style={cover}>
+					{showControlIcons ?
+						<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
+							<MaterialIcons
+								name="remove"
+								color={Theme.Core.brandPrimary}
+								size={iconSize}/>
+						</TouchableOpacity>
+						:
+						<EmptyView/>
+					}
+					{showCircularSlider ?
+						<CircularSlider
+							SVGKey={SVGKey}
+							coverStyle={coverStyle}
+							startAngle={startAngleF}
+							maxAngleLength={HeatControlWheelModes.maxALength}
+							angleLength={angleLengthF}
+							onUpdate={hasValidMinMax ? this.onUpdate : this.noOP}
+							segments={segments}
+							strokeWidth={strokeWidth}
+							radius={radius}
+							gradientColorFrom={gradientColorFrom}
+							gradientColorTo={gradientColorTo}
+							bgCircleColor="transparent"
+							knobStrokeColor="#fff"
+							knobFillColor={gradientColorTo}
+							keepArcVisible
+							showStartKnob={false}
+							showStopKnob={hasValidMinMax}
+							roundedEnds
+							allowKnobBeyondLimits={false}
+							knobRadius={knobRadius}
+							knobStrokeWidth={knobStrokeWidth}
+							onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
+							onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
+						/>
+						:
+						<EmptyView/>
+					}
+					<ControlInfoBlock
+						appLayout={appLayout}
+						baseColor={baseColor}
+						currentValue={currentValue}
+						currentValueInScreen={currentValueInScreen}
+						title={titleInfoBlock}
+						lastUpdated={lastUpdated}
+						onControlThermostat={this.onControlThermostat}
+						controllingMode={controllingMode}
+						minVal={minVal}
+						maxVal={maxVal}
+						onEditSubmitValue={this.onEditSubmitValue}
+						updateCurrentValueInScreen={this.updateCurrentValueInScreen}
+						changeMode={changeMode}
+						currentTemp={currentTemp}
+						supportResume={supportResume}
+						gatewayTimezone={gatewayTimezone}
+					/>
+					{showControlIcons ?
+						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
+							<MaterialIcons
+								name="add"
+								color={Theme.Core.brandSecondary}
+								size={iconSize}/>
+						</TouchableOpacity>
+						:
+						<EmptyView/>
+					}
+				</View>
+				:
+				<EmptyView/>
 			}
-			{!hideModeControl && (
+			{!hideModeControl ?
 				<ModesList
 					appLayout={appLayout}
 					onPressRow={this.onPressRow}
@@ -601,7 +616,9 @@ render(): Object | null {
 					setpointValueLocal={setpointValueLocal}
 					handleAddMinus={this.handleAddMinus}
 					hideTemperatureControl={hideTemperatureControl}/>
-			)}
+				:
+				<EmptyView/>
+			}
 		</>
 	);
 }
