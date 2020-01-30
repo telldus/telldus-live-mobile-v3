@@ -632,8 +632,9 @@ class SettingsTab extends View {
 		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
 
 		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
+		const { scannable, devicetype } = deviceInfo;
 		const transportsArray = transports.split(',');
-		const showScan = supportsScan(transportsArray) && deviceInfo.scannable;
+		const showScan = supportsScan(transportsArray) && scannable;
 
 		return (
 			<ScrollView style={{
@@ -686,7 +687,8 @@ class SettingsTab extends View {
 										showScan={showScan}
 										clientId={clientId}
 										learnButton={learnButton}
-										isSaving433MhzParams={isSaving433MhzParams}/>
+										isSaving433MhzParams={isSaving433MhzParams}
+										devicetype={devicetype}/>
 										{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}

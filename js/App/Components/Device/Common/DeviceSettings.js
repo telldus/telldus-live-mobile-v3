@@ -73,6 +73,7 @@ type Props = {
 	clientId?: string,
 	learnButton?: Object,
 	isSaving433MhzParams?: boolean,
+	devicetype: string,
 };
 
 const DeviceSettings = (props: Props): Object => {
@@ -91,6 +92,7 @@ const DeviceSettings = (props: Props): Object => {
 		clientId,
 		learnButton,
 		isSaving433MhzParams = false,
+		devicetype,
 	} = props;
 
 	function _keyboardDidHide() {
@@ -611,7 +613,8 @@ const DeviceSettings = (props: Props): Object => {
 				{!!learnButton && learnButton}
 				<ScanButton
 					clientId={clientId}
-					deviceId={deviceId}/>
+					deviceId={deviceId}
+					devicetype={devicetype}/>
 			</View>
 			}
 		</View>

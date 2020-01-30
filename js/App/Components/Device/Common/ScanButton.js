@@ -37,10 +37,11 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
-import LayoutAnimations from '../../../Lib/LayoutAnimations';
 import {
+	LayoutAnimations,
 	capitalizeFirstLetterOfEachWord,
-} from '../../../Lib/appUtils';
+	getScanButtonLabel,
+} from '../../../Lib';
 
 import {
 	initiateScanTransmitter433MHz,
@@ -60,6 +61,7 @@ const ScanButton = (props: Object): Object => {
 		clientId,
 		deviceId,
 		callbackOnParamUpdate,
+		devicetype,
 	} = props;
 
 	const intl = useIntl();
@@ -101,9 +103,8 @@ const ScanButton = (props: Object): Object => {
 		}
 	}
 
-	// TODO: confirm string and translate
 	const text = isScanning ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.stopScan)) :
-		'Scan remote control';
+		getScanButtonLabel(devicetype, formatMessage);
 
 	return (
 		<TouchableOpacity onPress={onPress} style={touchableStyleDef}>
