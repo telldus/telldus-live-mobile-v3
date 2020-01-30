@@ -500,7 +500,7 @@ render(): Object | null {
 		setpointValueLocal,
 	} = this.state;
 
-	let startAngleF = this.initialAngle, angleLengthF = 100;
+	let startAngleF = this.initialAngle, angleLengthF;
 	const hasValidMinMax = typeof minVal === 'number' && typeof maxVal === 'number';
 	if (hasValidMinMax && !isNaN(angleLength) && !isNaN(startAngle)) {
 		startAngleF = startAngle;
@@ -564,7 +564,10 @@ render(): Object | null {
 							onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
 						/>
 						:
-						<EmptyView/>
+						<View style={{
+							height: radius * 2,
+							width: radius * 2,
+						}}/>
 					}
 					<ControlInfoBlock
 						appLayout={appLayout}
