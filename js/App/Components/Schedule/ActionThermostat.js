@@ -32,6 +32,7 @@ import {
 	FloatingButton,
 	View,
 	Text,
+	EmptyView,
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import HeatControlWheelModes from '../ThermostatControl/HeatControlWheelModes';
@@ -260,11 +261,13 @@ export default class ActionThermostat extends View<null, Props, State> {
 						methodValue={methodValue}
 						appLayout={appLayout}
 						onChange={this.onChange}/>
-					{!hideTemperatureControl && (
+					{!hideTemperatureControl ?
 						<Text style={tempLabelStyle}>
 							{intl.formatMessage(i18n.labelTemperature)}
 						</Text>
-					)}
+						:
+						<EmptyView/>
+					}
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={this.supportedModes}
@@ -277,11 +280,13 @@ export default class ActionThermostat extends View<null, Props, State> {
 						intl={intl}
 						source="Schedule_ActionThermostat"/>
 				</ScrollView>
-				{(this.supportedModes && this.supportedModes.length > 0) && <FloatingButton
+				{(this.supportedModes && this.supportedModes.length > 0) ? <FloatingButton
 					onPress={this.selectAction}
 					imageSource={{uri: 'right_arrow_key'}}
 					paddingRight={outerPadding - 2}
 				/>
+					:
+					<EmptyView/>
 				}
 			</View>
 		);
