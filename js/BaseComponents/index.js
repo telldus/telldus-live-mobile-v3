@@ -97,6 +97,7 @@ import TimezoneFormattedDate from './TimezoneFormattedDate';
 import TimezoneFormattedTime from './TimezoneFormattedTime';
 import MaterialTextInput from './MaterialTextInput';
 import ScrollableNavigationHeaderPoster from './ScrollableNavigationHeaderPoster';
+import EmptyView from './EmptyView';
 
 import {
 	AppState,
@@ -184,6 +185,7 @@ module.exports = {
 	TimezoneFormattedDate,
 	MaterialTextInput,
 	ScrollableNavigationHeaderPoster,
+	EmptyView,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
