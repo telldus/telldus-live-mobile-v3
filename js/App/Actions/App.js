@@ -52,8 +52,8 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 		const { email, firstname, lastname } = userProfile;
 
 		const gateway = byId[gatewayId];
-		const { localKey = {}, online, uuid } = gateway || {};
-		const { key, ttl, address, macAddress } = localKey;
+		const { localKey = {}, online } = gateway || {};
+		const { key, ttl, address, macAddress, uuid } = localKey;
 		let tokenExpired = hasTokenExpired(ttl);
 		const keyInfo = !key ? 'null' : tokenExpired ? 'expired' : true;
 
