@@ -52,12 +52,14 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 		const { email, firstname, lastname } = userProfile;
 
 		const gateway = byId[gatewayId];
-		const { localKey = {}, online } = gateway || {};
-		const { key, ttl, address, macAddress, uuid } = localKey;
+		const { localKey = {}, online, uuid } = gateway || {};
+		const { key, ttl, address, macAddress, uuid: localUuid } = localKey;
 		let tokenExpired = hasTokenExpired(ttl);
 		const keyInfo = !key ? 'null' : tokenExpired ? 'expired' : true;
 
 		const deviceUniqueID = DeviceInfo.getUniqueID();
+
+		const ttlString = ttl === null ? 'null' : `${ttl} (${(new Date(ttl * 1000)).toUTCString()})`;
 
 		return DeviceInfo.getIPAddress().then((ip: string): any => {
 			let data = JSON.stringify({
@@ -69,7 +71,9 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				'topicId': topicId,
 				'online': online,
 				'key': keyInfo,
-				'uuid': uuid === null ? 'null' : uuid,
+				'uuid': uuid,
+				'localUuid': localUuid === null ? 'null' : localUuid,
+				'ttl': ttlString,
 				'phoneIP': ip === null ? 'null' : ip,
 				'gatewayIP': address === null ? 'null' : address,
 				'macAddress': macAddress === null ? 'null' : macAddress,
@@ -80,7 +84,7 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				...ticketData,
 			});
 			return dispatch(createSupportTicket(data));
-		  });
+		});
 	};
 }
 
