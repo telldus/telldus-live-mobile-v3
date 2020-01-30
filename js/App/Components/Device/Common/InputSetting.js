@@ -38,6 +38,8 @@ import {
 
 import Theme from '../../../Theme';
 
+import i18n from '../../../Translations/common';
+
 const InputSetting = (props: Object, ref: Object): Object => {
 	const inputRef = React.useRef({
 		blur: () => {},
@@ -54,6 +56,7 @@ const InputSetting = (props: Object, ref: Object): Object => {
 	} = props;
 
 	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
@@ -96,8 +99,8 @@ const InputSetting = (props: Object, ref: Object): Object => {
 	function onPressIconValueRight() {
 		setInLineEditActive(!inLineEditActive);
 	}
-	// TODO: translate
-	const _value = isScanning ? `Scanning...  ${value}` : value;
+
+	const _value = isScanning ? `${formatMessage(i18n.scanning)}...  ${value}` : value;
 	const iconValueLeft = paramUpdatedViaScan ?
 		<IconTelldus
 			icon="statuscheck"

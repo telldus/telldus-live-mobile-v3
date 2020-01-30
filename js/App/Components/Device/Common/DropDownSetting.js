@@ -26,6 +26,7 @@ import { useSelector } from 'react-redux';
 import {
 	TouchableOpacity,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	DropDown,
@@ -41,6 +42,8 @@ import {
 	useDialogueBox,
 } from '../../../Hooks/Dialoguebox';
 
+import i18n from '../../../Translations/common';
+
 const DropDownSetting = (props: Object): Object => {
 	const {
 		items,
@@ -54,6 +57,9 @@ const DropDownSetting = (props: Object): Object => {
 		isScanning,
 		isSaving433MhzParams,
 	} = props;
+
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -90,8 +96,8 @@ const DropDownSetting = (props: Object): Object => {
 			});
 		}
 	}
-	// TODO: translate
-	const _value = isScanning ? `Scanning...  ${value}` : value;
+
+	const _value = isScanning ? `${formatMessage(i18n.scanning)}...  ${value}` : value;
 
 	const iconLeftPickerBase = paramUpdatedViaScan ?
 		<IconTelldus

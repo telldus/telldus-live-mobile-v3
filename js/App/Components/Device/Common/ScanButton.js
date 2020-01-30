@@ -38,12 +38,17 @@ import {
 } from '../../../../BaseComponents';
 
 import LayoutAnimations from '../../../Lib/LayoutAnimations';
+import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../../Lib/appUtils';
 
 import {
 	initiateScanTransmitter433MHz,
 } from '../../../Actions';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 let noOp = () => {};
 let startScan = noOp, stopScan = noOp, destroyInstance = noOp;
@@ -58,6 +63,7 @@ const ScanButton = (props: Object): Object => {
 	} = props;
 
 	const intl = useIntl();
+	const { formatMessage } = intl;
 	const dispatch = useDispatch();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -65,7 +71,7 @@ const ScanButton = (props: Object): Object => {
 	const { isScanning = false } = addDevice433;
 
 	useEffect((): Function => {
-		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, intl.formatMessage, callbackOnParamUpdate));
+		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, formatMessage, callbackOnParamUpdate));
 		if (methods) {
 			startScan = methods.startScan;
 			stopScan = methods.stopScan;
@@ -96,7 +102,8 @@ const ScanButton = (props: Object): Object => {
 	}
 
 	// TODO: confirm string and translate
-	const text = isScanning ? 'Stop Scan' : 'Scan remote control';
+	const text = isScanning ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.stopScan)) :
+		'Scan remote control';
 
 	return (
 		<TouchableOpacity onPress={onPress} style={touchableStyleDef}>
