@@ -94,6 +94,7 @@ import CampaignIcon from './CampaignIcon';
 import TwoStepFooter from './TwoStepFooter';
 import InfoBlock from './InfoBlock';
 import MaterialTextInput from './MaterialTextInput';
+import EmptyView from './EmptyView';
 
 import {
 	AppState,
@@ -178,6 +179,7 @@ module.exports = {
 	TwoStepFooter,
 	InfoBlock,
 	MaterialTextInput,
+	EmptyView,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
