@@ -362,7 +362,7 @@ class DialogueBox extends Component<Props, null> {
 		const fontSize = Math.floor(deviceWidth * 0.042);
 
 		const headerWidth = Math.ceil(deviceWidth * 0.75);
-		const headerHeight = Math.ceil(deviceWidth * 0.1);
+		const headerHeight = Math.ceil(deviceWidth * 0.12);
 		const borderRadi = 5;
 
 		return {
