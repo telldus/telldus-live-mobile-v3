@@ -346,7 +346,7 @@ class ChangeLogNavigator extends View {
 		let buttonSize = deviceWidth * 0.134666667;
 		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
 
-		const adjust = 10;
+		const adjust = buttonSize * 0.2;
 		const buttonSizeOuter = buttonSize + adjust;
 
 		const shadow = Object.assign({}, themeShadow, {
@@ -395,8 +395,6 @@ class ChangeLogNavigator extends View {
 					width: 0,
 					height: 0,
 				},
-				borderWidth: 1,
-				borderColor: 'red',
 			},
 			floatingButtonRight: {
 				right: padFloat,
