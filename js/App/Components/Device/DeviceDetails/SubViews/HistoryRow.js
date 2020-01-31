@@ -70,6 +70,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 
 	onOriginPress: () => void;
 
+	BGPrimaryActions: Array<number>;
+
 	constructor(props: Props) {
 		super(props);
 		this.onOriginPress = this.onOriginPress.bind(this);
@@ -91,6 +93,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 
 		this.labelDate = formatMessage(i18n.date);
 		this.labelOrigin = formatMessage(i18n.origin);
+
+		this.BGPrimaryActions = [2, 512];
 	}
 
 	onOriginPress() {
@@ -176,6 +180,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			deviceType,
 			appLayout,
 			gatewayTimezone,
+			item,
 		} = this.props;
 
 		let {
@@ -194,20 +199,20 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			rowWithTriangleContainer,
 		} = this.getStyle();
 
-		let time = new Date(this.props.item.ts * 1000);
-		let deviceState = getDeviceStateMethod(this.props.item.state);
-		let { TURNON: icon, TURNOFF: iconOff } = getDeviceActionIcon(deviceType, deviceState, {});
-		if (deviceState === 'TURNOFF') {
-			icon = iconOff;
-		}
+		let time = new Date(item.ts * 1000);
+		let deviceState = getDeviceStateMethod(item.state);
+
+		const icons = getDeviceActionIcon(deviceType, deviceState, {});
+		let icon = icons[deviceState];
 		if (!icon) {
 			icon = this.getIcon(deviceState);
 		}
 		if (deviceState === 'RGB') {
 			icon = 'palette';
 		}
+
 		let originText = '', originInfo = '';
-		let origin = this.props.item.origin;
+		let origin = item.origin;
 		if (origin === 'Scheduler') {
 			originText = <FormattedMessage {...i18n.scheduler} style={originTextStyle}/>;
 			originInfo = `${this.labelOrigin}, ${intl.formatMessage(i18n.scheduler)}`;
@@ -232,10 +237,10 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
 
-		let bGColor = deviceState === 'RGB' ? getMainColorRGB(this.props.item.stateValue) :
-			this.props.item.state === 2 || (deviceState === 'DIM' && this.props.item.stateValue === 0)
+		let bGColor = deviceState === 'RGB' ? getMainColorRGB(item.stateValue) :
+			this.BGPrimaryActions.indexOf(item.state) !== -1 || (deviceState === 'DIM' && item.stateValue === 0)
 				? '#1b365d' : '#F06F0C';
-		let roundIcon = this.props.item.successStatus !== 0 ? 'info' : '';
+		let roundIcon = item.successStatus !== 0 ? 'info' : '';
 
 		return (
 			<TouchableOpacity style={styles.rowItemsContainer}
@@ -261,14 +266,14 @@ class HistoryRow extends React.PureComponent<Props, null> {
 					gatewayTimezone={gatewayTimezone}
 				>
 
-					{(deviceState === 'DIM' && this.props.item.stateValue === 0) ?
+					{(deviceState === 'DIM' && item.stateValue === 0) ?
 						<View style={[statusView, { backgroundColor: '#1b365d' }]}>
 							<IconTelldus icon={'off'} size={statusIconSize} color="#ffffff" />
 						</View>
 						:
 						<View style={[statusView, { backgroundColor: bGColor }]}>
 							{deviceState === 'DIM' ?
-								<Text style={statusValueText}>{this.getPercentage(this.props.item.stateValue)}%</Text>
+								<Text style={statusValueText}>{this.getPercentage(item.stateValue)}%</Text>
 								:
 								<IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />
 							}
@@ -283,7 +288,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 	}
 
 	getStyle(): Object {
-		const { appLayout, isLast, isFirst } = this.props;
+		const { appLayout, isLast, isFirst, item } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -340,13 +345,13 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			roundIconContainerStyle: {
-				backgroundColor: this.props.item.successStatus !== 0 ? 'transparent' : '#929292',
+				backgroundColor: item.successStatus !== 0 ? 'transparent' : '#929292',
 				width: deviceWidth * 0.0667777777,
 				height: deviceWidth * 0.0667777777,
 				borderRadius: deviceWidth * 0.03338888885,
 			},
 			iconBackgroundMaskStyle: {
-				backgroundColor: this.props.item.successStatus !== 0 ? '#fff' : '#929292',
+				backgroundColor: item.successStatus !== 0 ? '#fff' : '#929292',
 				width: deviceWidth * 0.05,
 				height: deviceWidth * 0.05,
 				borderRadius: deviceWidth * 0.025,
