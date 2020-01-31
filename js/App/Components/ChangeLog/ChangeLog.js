@@ -23,12 +23,20 @@
 'use strict';
 
 import React from 'react';
-import { Animated, ScrollView, Modal, BackHandler } from 'react-native';
+import {
+	Animated,
+	ScrollView,
+	Modal,
+	BackHandler,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+import { ifIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, FloatingButton, Text, StyleSheet, NavigationHeader } from '../../../BaseComponents';
+
+import { View, FloatingButton, Text, StyleSheet, SafeAreaView, NavigationHeader } from '../../../BaseComponents';
 
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
@@ -82,6 +90,8 @@ class ChangeLogNavigator extends View {
 	nextLabel: string;
 	prevLabel: string;
 
+	isIos: boolean;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -90,6 +100,8 @@ class ChangeLogNavigator extends View {
 		};
 
 		let { formatMessage } = props.intl;
+
+		this.isIos = Platform.OS === 'ios';
 
 		const appVersion = DeviceInfo.getReadableVersion();
 		this.h1 = formatMessage(i18n.changeLogHeaderOne);
@@ -201,7 +213,6 @@ class ChangeLogNavigator extends View {
 			return { end: false };
 		}
 		return { end: true };
-
 	}
 
 	onPressSkip() {
@@ -216,7 +227,7 @@ class ChangeLogNavigator extends View {
 		});
 	}
 
-	render(): Object {
+	render(): Object | null {
 		const { currentScreen } = this.state;
 		const { appLayout, intl, showChangeLog, onLayout } = this.props;
 		const { width } = appLayout;
@@ -254,10 +265,10 @@ class ChangeLogNavigator extends View {
 				transparent={false}
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
-				onRequestClose={this.onRequestClose}
+				onRequestClose={this.isIos ? this.noOP : this.onRequestClose}
 				supportedOrientations={['portrait', 'landscape']}>
-				<View style={{flex: 1, backgroundColor: Theme.Core.appBackground}} onLayout={onLayout}>
-					<NavigationHeader showLeftIcon={false} topMargin={false} forceHideStatus/>
+				<SafeAreaView backgroundColor={Theme.Core.appBackground} onLayout={onLayout}>
+					<NavigationHeader showLeftIcon={false} topMargin={this.isIos} forceHideStatus={!this.isIos}/>
 					<ChangeLogPoster h1={h1} h2={h2} appLayout={appLayout}/>
 					<ScrollView>
 						<Wizard
@@ -297,7 +308,7 @@ class ChangeLogNavigator extends View {
 								accessibilityLabel={this.nextLabel}/>
 						</View>
 					</ScrollView>
-				</View>
+				</SafeAreaView>
 			</Modal>
 		);
 	}
@@ -320,6 +331,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
+				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 			},
 			stepIndicator: {
 				height: stepIndicatorSize,
@@ -343,12 +355,16 @@ class ChangeLogNavigator extends View {
 			stepIndicatorSize,
 		};
 	}
+
+	noOP() {
+	}
 }
 
 const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
+		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
 	},
 	buttonIconStyle: {
 		transform: [{rotateZ: '180deg'}],
