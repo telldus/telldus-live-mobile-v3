@@ -73,7 +73,7 @@ class ChangeLogNavigator extends View {
 	skipButton: string;
 
 	onPressNext: () => void;
-	onPressPrev: () => void;
+	onPressPrev: () => Object;
 	onPressSkip: () => void;
 
 	animatedX: Object;
@@ -196,7 +196,7 @@ class ChangeLogNavigator extends View {
 		}).start();
 	}
 
-	onPressPrev(): Object | null {
+	onPressPrev(): Object {
 		let { appLayout } = this.props;
 		let { currentScreen } = this.state;
 		let prevIndex = Screens.indexOf(currentScreen) - 1;
@@ -240,7 +240,17 @@ class ChangeLogNavigator extends View {
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		const isLastScreen = Screens.indexOf(currentScreen) === Screens.length - 1;
 
-		const { stepIndicatorCover, floatingButtonLeft, checkIconStyle, textSkip, stepIndicator, stepIndicatorSize } = this.getStyles(appLayout);
+		const {
+			stepIndicatorCover,
+			floatingButtonLeft,
+			checkIconStyle,
+			textSkip,
+			stepIndicator,
+			stepIndicatorSize,
+			innerContainer,
+			floatingButtonRight,
+			floatingCommon,
+		} = this.getStyles(appLayout);
 
 		const inputRange = width ? [-width, 0] : [-100, 0];
 		const outputRange = width ? [width, 0] : [-100, 0];
@@ -286,8 +296,9 @@ class ChangeLogNavigator extends View {
 							{!isFirstScreen && (<FloatingButton
 								imageSource={{uri: 'right_arrow_key'}}
 								onPress={this.onPressPrev}
-								buttonStyle={floatingButtonLeft}
+								buttonStyle={[floatingButtonLeft, floatingCommon]}
 								iconStyle={styles.buttonIconStyle}
+								innerContainer={innerContainer}
 								accessibilityLabel={this.prevLabel}/>
 							)}
 							{Screens.length > 1 && Screens.map((screen: number, index: number): Object => {
@@ -304,7 +315,8 @@ class ChangeLogNavigator extends View {
 								iconName={isLastScreen ? 'checkmark' : false}
 								iconStyle={isLastScreen ? checkIconStyle : {}}
 								onPress={this.onPressNext}
-								buttonStyle={{bottom: 0}}
+								buttonStyle={[floatingCommon, floatingButtonRight]}
+								innerContainer={innerContainer}
 								accessibilityLabel={this.nextLabel}/>
 						</View>
 					</ScrollView>
@@ -317,12 +329,38 @@ class ChangeLogNavigator extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const buttonSize = deviceWidth * 0.134666667;
 		const stepIndicatorSize = Math.floor(deviceWidth * 0.033);
 		const maxIconSize = 40;
 
+		const {
+			brandSecondary,
+			maxSizeFloatingButton,
+			iPhoneXbg,
+			shadow: themeShadow,
+			paddingFactor,
+		} = Theme.Core;
+
 		let iconSize = Math.floor(deviceWidth * 0.07);
 		iconSize = iconSize > maxIconSize ? maxIconSize : iconSize;
+
+		let buttonSize = deviceWidth * 0.134666667;
+		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+
+		const adjust = 10;
+		const buttonSizeOuter = buttonSize + adjust;
+
+		const shadow = Object.assign({}, themeShadow, {
+			shadowOpacity: 0.35,
+			shadowOffset: {
+				...themeShadow.shadowOffset,
+				height: 2,
+			},
+			elevation: 5,
+		});
+
+		const padding = deviceWidth * paddingFactor;
+		const adjustFloatPad = adjust < padding ? adjust : padding;
+		const padFloat = padding - (adjustFloatPad / 2);
 
 		return {
 			stepIndicatorCover: {
@@ -331,7 +369,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
+				...ifIphoneX({ flex: 1, backgroundColor: iPhoneXbg }, { flex: 1 }),
 			},
 			stepIndicator: {
 				height: stepIndicatorSize,
@@ -339,8 +377,37 @@ class ChangeLogNavigator extends View {
 				borderRadius: stepIndicatorSize / 2,
 			},
 			floatingButtonLeft: {
-				left: deviceWidth * 0.034666667,
+				left: padFloat,
+			},
+			floatingCommon: {
+				height: buttonSizeOuter,
+				width: buttonSizeOuter,
+				borderRadius: buttonSizeOuter / 2,
 				bottom: 0,
+				backgroundColor: 'transparent',
+				alignItems: 'center',
+				justifyContent: 'center',
+				elevation: 0,
+				shadowColor: 'transparent',
+				shadowRadius: 0,
+				shadowOpacity: 0,
+				shadowOffset: {
+					width: 0,
+					height: 0,
+				},
+				borderWidth: 1,
+				borderColor: 'red',
+			},
+			floatingButtonRight: {
+				right: padFloat,
+			},
+			innerContainer: {
+				flex: 0,
+				height: buttonSize,
+				width: buttonSize,
+				borderRadius: buttonSize / 2,
+				backgroundColor: brandSecondary,
+				...shadow,
 			},
 			checkIconStyle: {
 				color: '#fff',
@@ -348,7 +415,7 @@ class ChangeLogNavigator extends View {
 			},
 			textSkip: {
 				paddingVertical: 10,
-				color: Theme.Core.brandSecondary,
+				color: brandSecondary,
 				textAlign: 'center',
 				fontSize: Math.floor(deviceWidth * 0.039),
 			},
