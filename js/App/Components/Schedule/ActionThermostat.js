@@ -99,12 +99,13 @@ export default class ActionThermostat extends View<null, Props, State> {
 			this.currentMode = cMode || mode;
 			this.currentValue = temperature;
 
-			const changeTemp = temperature !== null && typeof temperature !== 'undefined';
+			const hadValidTemp = temperature !== null && typeof temperature !== 'undefined';
+			const changeTemp = hadValidTemp;
 			this.methodValue = {
 				...this.methodValue,
 				changeMode: typeof this.methodValue.changeMode === 'undefined' ? 1 : this.methodValue.changeMode,
 				mode: cMode || mode,
-				temperature,
+				temperature: hadValidTemp ? parseInt(temperature, 10) : temperature,
 				changeTemp,
 			};
 		} catch (err) {
@@ -138,7 +139,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 				const changeTemp = sm.value !== null && typeof sm.value !== 'undefined';
 				this.methodValue = {
 					...this.methodValue,
-					temperature: sm.value,
+					temperature: changeTemp ? parseInt(sm.value, 10) : sm.value,
 					changeTemp,
 				};
 			}
