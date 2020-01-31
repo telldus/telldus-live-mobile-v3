@@ -51,7 +51,6 @@ import Card from './Card';
 import Badge from './Badge';
 import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
-import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
 import Modal from './Modal';
@@ -195,5 +194,4 @@ module.exports = {
 	TabBarIOS: TabBarIOS,
 	Gravatar: Gravatar,
 	Image: Image,
-	I18n: I18n,
 };
