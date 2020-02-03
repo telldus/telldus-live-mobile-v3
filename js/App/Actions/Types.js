@@ -36,6 +36,8 @@ export type Action =
 	| { type: 'LOCK_SESSION' }
 	| { type: 'SET_NETWORK_CONNECTION_INFO', payload: Object }
 
+	| { type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: string }
+
 	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 

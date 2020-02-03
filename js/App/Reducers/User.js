@@ -41,6 +41,7 @@ export type State = {
 	subscriptions: Object,
 	hasVisitedCampaign: boolean,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	generatePushError: string,
 };
 
 export const initialState = {
@@ -60,6 +61,7 @@ export const initialState = {
 	subscriptions: {}, // Included in v3.12, and not in migrations, make sure to supply default value while using this prop.
 	hasVisitedCampaign: false,
 	visibilityProExpireHeadsup: 'show',
+	generatePushError: '',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -104,6 +106,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			pushToken: action.pushToken,
+		};
+	}
+	if (action.type === 'GENERATE_PUSH_TOKEN_ERROR') {
+		return {
+			...state,
+			generatePushError: action.generatePushError,
 		};
 	}
 	if (action.type === 'PUSH_TOKEN_REGISTERED') {

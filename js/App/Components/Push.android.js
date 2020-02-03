@@ -90,10 +90,13 @@ const Push = {
 							dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 						}
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
+					} else {
+						dispatch({ type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: `token: ${token}, pushToken: ${pushToken}, pushTokenRegistered: ${pushTokenRegistered}` });
 					}
 					return token;
 				})
 				.catch((err: any) => {
+					dispatch({ type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: err.message });
 					throw err;
 				});
 		};
