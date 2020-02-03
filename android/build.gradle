@@ -7,7 +7,7 @@ buildscript {
         compileSdkVersion = 28
         targetSdkVersion = 28
         supportLibVersion = "28.0.0"
-        googlePlayServicesVersion = "11.8.0"
+        googlePlayServicesVersion = "16.1.0"
         androidMapsUtilsVersion = "0.5+"
         googlePlayServicesAuthVersion = "17.0.0"
     }
