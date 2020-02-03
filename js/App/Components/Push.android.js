@@ -84,7 +84,7 @@ const Push = {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
-					if (token && pushToken !== token) {
+					if (token && (!pushToken || pushToken !== token || !pushTokenRegistered)) {
 						if (register) {
 							const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
 							dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
