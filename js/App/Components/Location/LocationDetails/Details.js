@@ -59,6 +59,7 @@ type Props = {
 	screenProps: Object,
 	pushToken: boolean | string,
 	networkInfo: Object,
+	generatePushError: string,
 };
 
 type State = {
@@ -279,7 +280,7 @@ class Details extends View<Props, State> {
 		clearTimeout(this.timeoutInfoPress);
 		this.infoPressCount++;
 		if (this.infoPressCount >= 5) {
-			const { location = {}, pushToken } = this.props;
+			const { location = {}, pushToken, generatePushError } = this.props;
 			const {
 				online,
 				websocketOnline,
@@ -304,6 +305,7 @@ class Details extends View<Props, State> {
 					deviceName,
 					deviceUniqueID,
 					pushToken,
+					generatePushError,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
@@ -611,13 +613,17 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	let { id } = ownProps.navigation.getParam('location', {id: null});
-	const { pushToken } = store.user;
+	const {
+		pushToken,
+		generatePushError,
+	} = store.user;
 	const { networkInfo } = store.app;
 
 	return {
 		location: store.gateways.byId[id],
 		pushToken,
 		networkInfo,
+		generatePushError,
 	};
 }
 
