@@ -44,6 +44,7 @@ export type State = {
 	hasVisitedCampaign: boolean,
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	generatePushError: string,
 };
 
 export const initialState = {
@@ -64,6 +65,7 @@ export const initialState = {
 	hasVisitedCampaign: false,
 	visibilityExchangeOffer: 'show',
 	visibilityProExpireHeadsup: 'show',
+	generatePushError: '',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -118,6 +120,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			pushToken: action.pushToken,
+		};
+	}
+	if (action.type === 'GENERATE_PUSH_TOKEN_ERROR') {
+		return {
+			...state,
+			generatePushError: action.generatePushError,
 		};
 	}
 	if (action.type === 'PUSH_TOKEN_REGISTERED') {
