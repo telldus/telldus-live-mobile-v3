@@ -48,7 +48,7 @@ const Push = {
 	onRegister: (token: string, params: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): any => {
 			const { pushToken, pushTokenRegistered, deviceId, register } = params;
-			if (token && (!pushToken) || (pushToken !== token) || (!pushTokenRegistered)) {
+			if (token && (!pushToken || pushToken !== token || !pushTokenRegistered)) {
 				const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
 				if (register) {
 					// stores fcm token in the server
