@@ -106,7 +106,7 @@ const SetAreaName = (props: Props): Object => {
 				baseColor={brandSecondary}
 				tintColor={brandSecondary}
 				onChangeText={onChangeText}
-				autoCapitalize="characters"
+				autoCapitalize="sentences"
 				autoCorrect={false}
 				autoFocus={true}
 				value={name}/>
