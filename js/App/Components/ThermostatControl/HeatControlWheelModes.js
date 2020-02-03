@@ -583,6 +583,7 @@ render(): Object | null {
 						changeMode={changeMode}
 						currentTemp={currentTemp}
 						supportResume={supportResume}
+						hideModeControl={hideModeControl}
 					/>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
