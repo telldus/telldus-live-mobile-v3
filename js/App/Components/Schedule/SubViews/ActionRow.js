@@ -258,12 +258,14 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			const modesInfo = getKnownModes(intl.formatMessage);
 			// $FlowFixMe
 			let Icon, label;
-			modesInfo.map((info: Object) => {
-				if (info.mode.trim() === mode.trim()) {
-					Icon = info.IconActive;
-					label = info.label;
-				}
-			});
+			if (changeMode) {
+				modesInfo.map((info: Object) => {
+					if (info.mode.trim() === mode.trim()) {
+						Icon = info.IconActive;
+						label = info.label;
+					}
+				});
+			}
 
 			const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
 
