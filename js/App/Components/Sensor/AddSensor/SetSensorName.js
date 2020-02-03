@@ -41,6 +41,7 @@ import {
 	setSensorName,
 	getSensorInfo,
 	setKeepHistory,
+	setIgnoreSensor,
 } from '../../../Actions/Sensors';
 import {
 	showToast,
@@ -100,30 +101,38 @@ const SetSensorName = (props: Object): Object => {
 			name,
 			isLoading: true,
 		});
-		dispatch(setSensorName(sensor.id, name)).then(() => {
-			dispatch(getSensorInfo(sensor.id));
-			setNameConf({
-				name,
-				isLoading: false,
-			});
+		dispatch(setSensorName(sensor.id, name)).then(async () => {
+			try {
+				if (sensor.ignored) {
+					await dispatch(setIgnoreSensor(sensor.id, 0));
+				}
+			} catch (e) {
+				// Not imp
+			} finally {
+				dispatch(getSensorInfo(sensor.id));
+				setNameConf({
+					name,
+					isLoading: false,
+				});
 
-			dispatch(setKeepHistory(sensor.id, 1));
+				dispatch(setKeepHistory(sensor.id, 1));
 
-			const sensorData = {[sensor.id]: {
-				id: sensor.id,
-				name,
-				mainNode: true,
-				clientDeviceId: sensor.clientDeviceId,
-			}};
-			const prevParams = navigation.state.params || {};
-			navigation.navigate({
-				routeName: 'Sensors',
-				key: 'Sensors',
-				params: {
-					newSensors: sensorData,
-					...prevParams,
-				},
-			});
+				const sensorData = {[sensor.id]: {
+					id: sensor.id,
+					name,
+					mainNode: true,
+					clientDeviceId: sensor.clientDeviceId,
+				}};
+				const prevParams = navigation.state.params || {};
+				navigation.navigate({
+					routeName: 'Sensors',
+					key: 'Sensors',
+					params: {
+						newSensors: sensorData,
+						...prevParams,
+					},
+				});
+			}
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			dispatch(showToast(message));

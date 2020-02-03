@@ -33,6 +33,10 @@ import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
+import {
+	shouldUpdate,
+} from '../App/Lib';
+
 type Props = {
     value: any,
     label: string,
@@ -40,7 +44,9 @@ type Props = {
 	iconLabelRight?: string,
 	iconValueRight?: string,
 	inLineEditActive?: boolean,
+	extraData?: Object,
 
+	iconValueLeft: string | Object,
 	valuePostfix?: string,
 	iconValueRightSize?: number,
 	edit?: boolean,
@@ -102,9 +108,12 @@ class SettingsRow extends Component<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object): boolean {
-		const { appLayout, value, inLineEditActive } = this.props;
-		const { appLayout: appLayoutN, value: valueN, inLineEditActive: inLineEditActiveN } = nextProps;
-		return appLayout.width !== appLayoutN.width || value !== valueN || inLineEditActive !== inLineEditActiveN;
+		return shouldUpdate(this.props, nextProps, [
+			'inLineEditActive',
+			'value',
+			'appLayout',
+			'extraData',
+		]);
 	}
 
 	onPress() {
@@ -164,6 +173,7 @@ class SettingsRow extends Component<Props, null> {
 			valueTextStyle,
 			touchableStyle,
 			switchStyle,
+			iconValueLeft,
 		} = this.props;
 
 		const {
@@ -183,7 +193,7 @@ class SettingsRow extends Component<Props, null> {
 		} = this.getStyle();
 
 		let Parent = View, parentProps = {
-			style: touchableStyleDef,
+			style: [touchableStyleDef, contentCoverStyle],
 		};
 		if (onPress) {
 			Parent = RippleButton;
@@ -212,6 +222,11 @@ class SettingsRow extends Component<Props, null> {
 									</Text>
 									:
 									label
+							)}
+							{!!iconLabelRight && (
+								<TouchableOpacity onPress={this.onPressIconLabelRight} style={iconLabelRightCover}>
+									<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+								</TouchableOpacity>
 							)}
 						</View>
 						<Switch
@@ -252,9 +267,12 @@ class SettingsRow extends Component<Props, null> {
 								<>
 								{!!value && (
 									(typeof value === 'string') || (typeof value === 'number') ?
-										<Text style={[valueText, valueTextStyle]}>
-											{value} {valuePostfix}
-										</Text>
+										<>
+											{iconValueLeft}
+											<Text style={[valueText, valueTextStyle]}>
+												{value} {valuePostfix}
+											</Text>
+										</>
 										:
 										(typeof value === 'object') ?
 											value
@@ -329,6 +347,7 @@ class SettingsRow extends Component<Props, null> {
 				fontSize,
 				color: inactiveTintColor,
 				textAlign: 'right',
+				textAlignVertical: 'center',
 			},
 			arrowStyle: {
 				height: fontSize,

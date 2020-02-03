@@ -24,16 +24,21 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import {
-	TextInput,
-} from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
-	View,
-	Text,
+	SettingsRow,
+	Throbber,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
+import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
+
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 const InputSetting = (props: Object, ref: Object): Object => {
 	const inputRef = React.useRef({
@@ -43,16 +48,25 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		label,
 		value,
 		onChangeText,
-		labelStyle,
 		paramUpdatedViaScan,
+		textOnPressHelp,
+		headerOnPressHelp,
+		isScanning,
+		isSaving433MhzParams,
 	} = props;
+
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		optionInputCover,
-		optionInputLabelStyle,
-		optionInputStyle,
-	} = getStyles(layout, paramUpdatedViaScan);
+		iconValueRightSize,
+		contentCoverStyle,
+		throbberContainerStyle,
+		throbberStyle,
+		statuscheckStyle,
+	} = getStyles(layout);
 
 	React.useImperativeHandle(ref, (): Object => ({
 		blur: () => {
@@ -62,56 +76,110 @@ const InputSetting = (props: Object, ref: Object): Object => {
 		},
 	}));
 
+	const { toggleDialogueBoxState } = useDialogueBox();
+	function onPressIconLabelRight() {
+		if (textOnPressHelp && headerOnPressHelp) {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: textOnPressHelp,
+				header: headerOnPressHelp,
+				showIconOnHeader: true,
+				onPressHeader: () => {
+					toggleDialogueBoxState({
+						show: false,
+					});
+				},
+			});
+		}
+	}
+
+	const [ inLineEditActive, setInLineEditActive ] = React.useState(false);
+	function onPressIconValueRight() {
+		setInLineEditActive(!inLineEditActive);
+	}
+
+	const _value = isScanning ? `${formatMessage(i18n.scanning)}...  ${value}` : value;
+	const iconValueLeft = paramUpdatedViaScan ?
+		<IconTelldus
+			icon="statuscheck"
+			style={statuscheckStyle}/> : undefined;
+
+	const iconValueRight = isSaving433MhzParams ? undefined :
+		isScanning ? <Throbber
+			throbberContainerStyle={throbberContainerStyle}
+			throbberStyle={throbberStyle}
+		/>
+			: inLineEditActive ? 'done' : 'edit';
+
 	return (
-		<View style={optionInputCover}>
-			<Text style={[optionInputLabelStyle, labelStyle]}>
-				{label}
-			</Text>
-			<TextInput
-				value={value}
-				style={optionInputStyle}
-				onChangeText={onChangeText}
-				ref={inputRef}/>
-		</View>
+		<SettingsRow
+			type={'text'}
+			edit={false}
+			inLineEditActive={inLineEditActive}
+			label={label}
+			value={_value}
+			iconValueLeft={iconValueLeft}
+			appLayout={layout}
+			iconLabelRight={'help'}
+			extraData={{
+				isScanning,
+				paramUpdatedViaScan,
+				isSaving433MhzParams,
+			}}
+			iconValueRight={iconValueRight}
+			onPress={false}
+			iconValueRightSize={inLineEditActive ? iconValueRightSize : null}
+			onPressIconLabelRight={onPressIconLabelRight}
+			onPressIconValueRight={onPressIconValueRight}
+			onChangeText={onChangeText}
+			style={optionInputCover}
+			contentCoverStyle={contentCoverStyle}
+			valueTextStyle={{
+				flex: 0,
+			}}
+			intl={intl}/>
 	);
 };
 
-const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		paddingFactor,
-		rowTextColor,
-		eulaContentColor,
+		inactiveTintColor,
+		locationOnline,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-
-	const fontSizeText = deviceWidth * 0.035;
-	const fontSizeInput = deviceWidth * 0.04;
+	const iconValueRightSize = deviceWidth * 0.05;
 
 	return {
+		iconValueRightSize,
 		optionInputCover: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'space-between',
-			margin: padding,
-		},
-		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.3,
-			color: rowTextColor,
-		},
-		optionInputStyle: {
-			fontSize: fontSizeInput,
-			borderWidth: paramUpdatedViaScan ? 4 : 1,
-			borderColor: rowTextColor,
+			marginBottom: padding / 2,
 			borderRadius: 2,
-			color: eulaContentColor,
-			width: deviceWidth * 0.3,
-			marginLeft: padding,
-			padding: 5,
+			marginTop: 0,
+		},
+		contentCoverStyle: {
+			padding,
+		},
+		throbberContainerStyle: {
+			backgroundColor: 'transparent',
+			position: 'relative',
+		},
+		throbberStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: inactiveTintColor,
+		},
+		statuscheckStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: locationOnline,
+			textAlignVertical: 'center',
+			marginRight: 5,
 		},
 	};
 };

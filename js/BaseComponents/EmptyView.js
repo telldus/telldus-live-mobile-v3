@@ -15,21 +15,24 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
  */
 
 // @flow
 
 'use strict';
 
-import I18n from 'react-native-i18n';
-import Translations from '../App/Translations';
-import Config from '../Config';
+import React from 'react';
 
-I18n.fallbacks = true;
-I18n.translations = Translations;
-if (Config.forceLocale) {
-	I18n.defaultLocale = Config.forceLocale;
-	I18n.locale = Config.forceLocale;
-}
+import View from './View';
 
-module.exports = I18n;
+const EmptyView = (props: Object): Object => {
+	return <View
+		style={{
+			height: 0,
+			width: 0,
+		}}/>;
+};
+
+export default EmptyView;

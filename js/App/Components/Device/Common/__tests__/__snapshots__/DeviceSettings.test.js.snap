@@ -5,110 +5,401 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
   style={
     Array [
       Object {
-        "backgroundColor": "#fff",
-        "elevation": 2,
         "marginHorizontal": 20.83275,
         "marginTop": 10.416375,
-        "shadowColor": "#000",
-        "shadowOffset": Object {
-          "height": 1,
-          "width": 0,
-        },
-        "shadowOpacity": 0.23,
-        "shadowRadius": 2,
         "width": 708.3345,
       },
       undefined,
     ]
   }
 >
-  <View
+  <Text
+    allowFontScaling={false}
     style={
       Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "margin": 20.83275,
+        "backgroundColor": "transparent",
+        "color": "#b5b5b5",
+        "fontSize": 33,
+        "marginBottom": 5,
+        "marginTop": 10.416375,
       }
     }
   >
-    <Text
-      allowFontScaling={false}
+    Device settings
+  </Text>
+  <View
+    accessibilityLabel="House code, 12 , "
+    accessible={true}
+    importantForAccessibility="yes"
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#fff",
+          "borderRadius": 2,
+          "elevation": 2,
+          "marginTop": 10.416375,
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 0.23,
+          "shadowRadius": 2,
+        },
+        Object {
+          "borderRadius": 2,
+          "marginBottom": 10.416375,
+          "marginTop": 0,
+        },
+      ]
+    }
+  >
+    <View
       style={
         Array [
           Object {
-            "color": "#8e8e93",
-            "fontSize": 34.12500000000001,
+            "alignItems": "center",
+            "borderRadius": 2,
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "overflow": "hidden",
+            "padding": 30,
           },
-          undefined,
+          Object {
+            "padding": 20.83275,
+          },
         ]
       }
     >
-      House code
-    </Text>
-    <TextInput
-      allowFontScaling={true}
-      onChangeText={[Function]}
-      rejectResponderTermination={true}
-      style={
-        Object {
-          "borderColor": "#8e8e93",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "#555555",
-          "fontSize": 30,
-          "marginLeft": 20.83275,
-          "padding": 5,
-          "width": 225,
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+          }
         }
-      }
-      underlineColorAndroid="transparent"
-      value="12"
-    />
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#000",
+                "fontSize": 30,
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          House code
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "color": "#999",
+                  "fontSize": 30,
+                },
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                Object {
+                  "fontFamily": "telldusicons",
+                },
+              ]
+            }
+          >
+            help
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "flex-end",
+              "paddingVertical": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#A59F9A",
+                "flex": 1,
+                "fontSize": 30,
+                "textAlign": "right",
+                "textAlignVertical": "center",
+              },
+              Object {
+                "flex": 0,
+              },
+            ]
+          }
+        >
+          12
+           
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginLeft": 3,
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Array [
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                undefined,
+                Object {
+                  "fontFamily": "Material Icons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
   </View>
   <View
+    accessibilityLabel="Unit code, 4 , "
+    accessible={true}
+    importantForAccessibility="yes"
     style={
-      Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "margin": 20.83275,
-      }
+      Array [
+        Object {
+          "backgroundColor": "#fff",
+          "borderRadius": 2,
+          "elevation": 2,
+          "marginTop": 10.416375,
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 0.23,
+          "shadowRadius": 2,
+        },
+        Object {
+          "borderRadius": 2,
+          "marginBottom": 10.416375,
+          "marginTop": 0,
+        },
+      ]
     }
   >
-    <Text
-      allowFontScaling={false}
+    <View
       style={
         Array [
           Object {
-            "color": "#8e8e93",
-            "fontSize": 34.12500000000001,
+            "alignItems": "center",
+            "borderRadius": 2,
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "overflow": "hidden",
+            "padding": 30,
           },
-          undefined,
+          Object {
+            "padding": 20.83275,
+          },
         ]
       }
     >
-      Unit code
-    </Text>
-    <TextInput
-      allowFontScaling={true}
-      onChangeText={[Function]}
-      rejectResponderTermination={true}
-      style={
-        Object {
-          "borderColor": "#8e8e93",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "#555555",
-          "fontSize": 30,
-          "marginLeft": 20.83275,
-          "padding": 5,
-          "width": 225,
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+          }
         }
-      }
-      underlineColorAndroid="transparent"
-      value="4"
-    />
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#000",
+                "fontSize": 30,
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          Unit code
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "color": "#999",
+                  "fontSize": 30,
+                },
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                Object {
+                  "fontFamily": "telldusicons",
+                },
+              ]
+            }
+          >
+            help
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "flex-end",
+              "paddingVertical": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#A59F9A",
+                "flex": 1,
+                "fontSize": 30,
+                "textAlign": "right",
+                "textAlignVertical": "center",
+              },
+              Object {
+                "flex": 0,
+              },
+            ]
+          }
+        >
+          4
+           
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginLeft": 3,
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Array [
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                undefined,
+                Object {
+                  "fontFamily": "Material Icons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
   </View>
 </View>
 `;
@@ -118,110 +409,401 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
   style={
     Array [
       Object {
-        "backgroundColor": "#fff",
-        "elevation": 2,
         "marginHorizontal": 20.83275,
         "marginTop": 10.416375,
-        "shadowColor": "#000",
-        "shadowOffset": Object {
-          "height": 1,
-          "width": 0,
-        },
-        "shadowOpacity": 0.23,
-        "shadowRadius": 2,
         "width": 708.3345,
       },
       undefined,
     ]
   }
 >
-  <View
+  <Text
+    allowFontScaling={false}
     style={
       Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "margin": 20.83275,
+        "backgroundColor": "transparent",
+        "color": "#b5b5b5",
+        "fontSize": 33,
+        "marginBottom": 5,
+        "marginTop": 10.416375,
       }
     }
   >
-    <Text
-      allowFontScaling={false}
+    Device settings
+  </Text>
+  <View
+    accessibilityLabel="House code, 13 , "
+    accessible={true}
+    importantForAccessibility="yes"
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#fff",
+          "borderRadius": 2,
+          "elevation": 2,
+          "marginTop": 10.416375,
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 0.23,
+          "shadowRadius": 2,
+        },
+        Object {
+          "borderRadius": 2,
+          "marginBottom": 10.416375,
+          "marginTop": 0,
+        },
+      ]
+    }
+  >
+    <View
       style={
         Array [
           Object {
-            "color": "#8e8e93",
-            "fontSize": 34.12500000000001,
+            "alignItems": "center",
+            "borderRadius": 2,
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "overflow": "hidden",
+            "padding": 30,
           },
-          undefined,
+          Object {
+            "padding": 20.83275,
+          },
         ]
       }
     >
-      House code
-    </Text>
-    <TextInput
-      allowFontScaling={true}
-      onChangeText={[Function]}
-      rejectResponderTermination={true}
-      style={
-        Object {
-          "borderColor": "#8e8e93",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "#555555",
-          "fontSize": 30,
-          "marginLeft": 20.83275,
-          "padding": 5,
-          "width": 225,
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+          }
         }
-      }
-      underlineColorAndroid="transparent"
-      value="13"
-    />
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#000",
+                "fontSize": 30,
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          House code
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "color": "#999",
+                  "fontSize": 30,
+                },
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                Object {
+                  "fontFamily": "telldusicons",
+                },
+              ]
+            }
+          >
+            help
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "flex-end",
+              "paddingVertical": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#A59F9A",
+                "flex": 1,
+                "fontSize": 30,
+                "textAlign": "right",
+                "textAlignVertical": "center",
+              },
+              Object {
+                "flex": 0,
+              },
+            ]
+          }
+        >
+          13
+           
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginLeft": 3,
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Array [
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                undefined,
+                Object {
+                  "fontFamily": "Material Icons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
   </View>
   <View
+    accessibilityLabel="Unit code, 5 , "
+    accessible={true}
+    importantForAccessibility="yes"
     style={
-      Object {
-        "alignItems": "center",
-        "flexDirection": "row",
-        "justifyContent": "space-between",
-        "margin": 20.83275,
-      }
+      Array [
+        Object {
+          "backgroundColor": "#fff",
+          "borderRadius": 2,
+          "elevation": 2,
+          "marginTop": 10.416375,
+          "shadowColor": "#000",
+          "shadowOffset": Object {
+            "height": 1,
+            "width": 0,
+          },
+          "shadowOpacity": 0.23,
+          "shadowRadius": 2,
+        },
+        Object {
+          "borderRadius": 2,
+          "marginBottom": 10.416375,
+          "marginTop": 0,
+        },
+      ]
     }
   >
-    <Text
-      allowFontScaling={false}
+    <View
       style={
         Array [
           Object {
-            "color": "#8e8e93",
-            "fontSize": 34.12500000000001,
+            "alignItems": "center",
+            "borderRadius": 2,
+            "flexDirection": "row",
+            "justifyContent": "space-between",
+            "overflow": "hidden",
+            "padding": 30,
           },
-          undefined,
+          Object {
+            "padding": 20.83275,
+          },
         ]
       }
     >
-      Unit code
-    </Text>
-    <TextInput
-      allowFontScaling={true}
-      onChangeText={[Function]}
-      rejectResponderTermination={true}
-      style={
-        Object {
-          "borderColor": "#8e8e93",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "#555555",
-          "fontSize": 30,
-          "marginLeft": 20.83275,
-          "padding": 5,
-          "width": 225,
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "flex-start",
+          }
         }
-      }
-      underlineColorAndroid="transparent"
-      value="5"
-    />
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#000",
+                "fontSize": 30,
+                "justifyContent": "center",
+              },
+              undefined,
+            ]
+          }
+        >
+          Unit code
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            accessible={true}
+            allowFontScaling={false}
+            importantForAccessibility="yes"
+            style={
+              Array [
+                Object {
+                  "color": "#999",
+                  "fontSize": 30,
+                },
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                Object {
+                  "fontFamily": "telldusicons",
+                },
+              ]
+            }
+          >
+            help
+          </Text>
+        </View>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "alignItems": "center",
+              "flex": 1,
+              "flexDirection": "row",
+              "justifyContent": "flex-end",
+              "paddingVertical": 8,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          allowFontScaling={false}
+          style={
+            Array [
+              Object {
+                "color": "#A59F9A",
+                "flex": 1,
+                "fontSize": 30,
+                "textAlign": "right",
+                "textAlignVertical": "center",
+              },
+              Object {
+                "flex": 0,
+              },
+            ]
+          }
+        >
+          5
+           
+        </Text>
+        <View
+          accessible={true}
+          clickable={true}
+          isTVSelectable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "marginLeft": 3,
+              "opacity": 1,
+              "padding": 2,
+            }
+          }
+        >
+          <Text
+            allowFontScaling={false}
+            style={
+              Array [
+                Object {
+                  "color": "#e26901",
+                  "fontSize": 30,
+                },
+                undefined,
+                Object {
+                  "fontFamily": "Material Icons",
+                  "fontStyle": "normal",
+                  "fontWeight": "normal",
+                },
+                Object {},
+              ]
+            }
+          >
+            
+          </Text>
+        </View>
+      </View>
+    </View>
   </View>
 </View>
 `;

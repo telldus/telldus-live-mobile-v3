@@ -51,7 +51,6 @@ import Card from './Card';
 import Badge from './Badge';
 import Spinner from './Spinner';
 import ProgressBar from './ProgressBar';
-import I18n from './I18n';
 import Gravatar from './Gravatar';
 import TouchableButton from './TouchableButton';
 import Modal from './Modal';
@@ -96,6 +95,8 @@ import InfoBlock from './InfoBlock';
 import TimezoneFormattedDate from './TimezoneFormattedDate';
 import TimezoneFormattedTime from './TimezoneFormattedTime';
 import MaterialTextInput from './MaterialTextInput';
+import ScrollableNavigationHeaderPoster from './ScrollableNavigationHeaderPoster';
+import EmptyView from './EmptyView';
 
 import {
 	AppState,
@@ -182,6 +183,8 @@ module.exports = {
 	TimezoneFormattedTime,
 	TimezoneFormattedDate,
 	MaterialTextInput,
+	ScrollableNavigationHeaderPoster,
+	EmptyView,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
@@ -191,5 +194,4 @@ module.exports = {
 	TabBarIOS: TabBarIOS,
 	Gravatar: Gravatar,
 	Image: Image,
-	I18n: I18n,
 };

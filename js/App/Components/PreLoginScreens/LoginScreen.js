@@ -239,7 +239,9 @@ class LoginScreen extends View {
 				color: '#bbb',
 				fontSize: infoFontSize,
 				marginHorizontal: infoFontSize * 0.2,
-				marginBottom: 10,
+				marginBottom: 5,
+				paddingBottom: 5,
+				paddingHorizontal: 3,
 			},
 		};
 	}

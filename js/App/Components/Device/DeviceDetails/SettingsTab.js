@@ -51,6 +51,7 @@ import {
 	removeDevice,
 	setDeviceParameter,
 	getDeviceInfoCommon,
+	toggleStatusUpdatedViaScan433MHZ,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -515,6 +516,7 @@ class SettingsTab extends View {
 			return promise.then((res: any): any => res).catch((err: any): any => err);
 		})).then(() => {
 			this.postSaveParams433MHz(id, true);
+			dispatch(toggleStatusUpdatedViaScan433MHZ(false));
 		}).catch(() => {
 			// TODO: Show message on error saving new params!
 			this.postSaveParams433MHz(id, false);
@@ -608,6 +610,8 @@ class SettingsTab extends View {
 			coverStyleDeviceSettings433,
 			labelStyleDeviceSettings433,
 			brandSecondary,
+			learnButtonWithScan,
+			labelStyle,
 		} = this.getStyle(appLayout);
 
 		const { LEARN } = supportedMethods;
@@ -615,7 +619,10 @@ class SettingsTab extends View {
 		let learnButton = null;
 
 		if (LEARN) {
-			learnButton = <LearnButton id={id} style={touchableButtonCommon} />;
+			learnButton = <LearnButton
+				id={id}
+				style={!settings433MHz ? touchableButtonCommon : learnButtonWithScan}
+				labelStyle={!settings433MHz ? {} : labelStyle}/>;
 		}
 
 		const isZWave = transport === 'zwave';
@@ -625,8 +632,9 @@ class SettingsTab extends View {
 		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
 
 		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
+		const { scannable, devicetype } = deviceInfo;
 		const transportsArray = transports.split(',');
-		const showScan = supportsScan(transportsArray) && deviceInfo.scannable;
+		const showScan = supportsScan(transportsArray) && scannable;
 
 		return (
 			<ScrollView style={{
@@ -677,7 +685,10 @@ class SettingsTab extends View {
 										settings={settings433MHz}
 										widgetId={widget433MHz}
 										showScan={showScan}
-										clientId={clientId}/>
+										clientId={clientId}
+										learnButton={learnButton}
+										isSaving433MhzParams={isSaving433MhzParams}
+										devicetype={devicetype}/>
 										{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
@@ -690,7 +701,7 @@ class SettingsTab extends View {
 										}
 								</>
 								}
-								{learnButton}
+								{!settings433MHz && learnButton}
 								{isZWave && (
 									<>
 										{isFailed ?
@@ -771,6 +782,9 @@ class SettingsTab extends View {
 
 		const fontSize = deviceWidth * 0.04;
 
+		const fontSize2 = Math.floor(deviceWidth * 0.03);
+		const heightCover = fontSize2 * 2.8;
+
 		return {
 			brandDanger,
 			btnDisabledBg,
@@ -786,12 +800,24 @@ class SettingsTab extends View {
 				marginTop: padding * 2,
 				minWidth: Math.floor(deviceWidth * 0.6),
 			},
+			learnButtonWithScan: {
+				height: heightCover,
+				width: Math.floor((deviceWidth - (padding * 3)) / 2 ),
+				borderRadius: heightCover / 2,
+				paddingVertical: undefined,
+				paddingHorizontal: undefined,
+				maxWidth: undefined,
+				minWidth: undefined,
+			},
 			coverStyleDeviceSettings433: {
 				marginHorizontal: 0,
 			},
 			labelStyleDeviceSettings433: {
 				color: '#000',
 				fontSize,
+			},
+			labelStyle: {
+				fontSize: fontSize2,
 			},
 		};
 	}

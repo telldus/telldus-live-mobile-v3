@@ -23,7 +23,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import Modal from 'react-native-modal';
 import { intlShape, injectIntl } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
@@ -226,7 +226,7 @@ class DialogueBox extends Component<Props, null> {
 		}
 
 		return (
-			<View style={styles.notificationModalBody}>
+			<View style={styles.notificationModalBody} accessible={true} importantForAccessibility={'yes'} accessibilityLabel={text}>
 				<Text style={styles.notificationModalBodyText}>{text}</Text>
 			</View>
 		);
@@ -248,18 +248,23 @@ class DialogueBox extends Component<Props, null> {
 		return (
 			<View style={styles.notificationModalFooter}>
 				{showNegative ?
-					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {marginRight: 10}]}
-						onPress={this.onPressNegative}
-						accessibilityLabel={accessibilityLabelNegative}>
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {
+						marginRight: showPositive ? 5 : 0,
+						paddingRight: showPositive ? 10 : 30,
+					}]}
+					onPress={this.onPressNegative}
+					accessibilityLabel={accessibilityLabelNegative}>
 						<Text style={styles.notificationModalFooterNegativeText}>{nText}</Text>
 					</TouchableOpacity>
 					:
 					null
 				}
 				{showPositive ?
-					<TouchableOpacity style={styles.notificationModalFooterTextCover}
-						onPress={this.onPressPositive}
-						accessibilityLabel={accessibilityLabelPositive}>
+					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {
+						paddingRight: 30,
+					}]}
+					onPress={this.onPressPositive}
+					accessibilityLabel={accessibilityLabelPositive}>
 						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
 					</TouchableOpacity>
 					:
@@ -295,6 +300,21 @@ class DialogueBox extends Component<Props, null> {
 		return hasMessage ? `${phrase}. ${text}. ${buttonInfo}` : '';
 	}
 
+	renderCustomBackdrop = ({
+		backdropColor,
+		backdropOpacity,
+	}: Object): Object => {
+		return (
+			<TouchableWithoutFeedback accessible={false}>
+				<View accessible={false} style={{
+					flex: 1,
+					backgroundColor: backdropColor,
+					opacity: backdropOpacity,
+				}}/>
+			</TouchableWithoutFeedback>
+		);
+	}
+
 	render(): Object {
 		const {
 			showDialogue,
@@ -307,17 +327,22 @@ class DialogueBox extends Component<Props, null> {
 		} = this.props;
 		const styles = this.getStyles();
 
+		const customBackdrop = this.renderCustomBackdrop({
+			backdropColor,
+			backdropOpacity,
+		});
+
 		return (
 			<Modal
+				accessible={false}
 				style={styles.modal}
-				backdropColor={backdropColor}
-				backdropOpacity={backdropOpacity}
 				isVisible={showDialogue}
 				animationInTiming={entryDuration}
 				animationOutTiming={exitDuration}
 				hideModalContentWhileAnimating={true}
 				onModalShow={this.onModalOpened}
-				supportedOrientations={['portrait', 'landscape']}>
+				supportedOrientations={['portrait', 'landscape']}
+				customBackdrop={customBackdrop}>
 				<View style={[styles.container, style]}>
 					{!!showHeader && this.renderHeader(styles)}
 					{this.renderBody(styles)}
@@ -337,7 +362,7 @@ class DialogueBox extends Component<Props, null> {
 		const fontSize = Math.floor(deviceWidth * 0.042);
 
 		const headerWidth = Math.ceil(deviceWidth * 0.75);
-		const headerHeight = Math.ceil(deviceWidth * 0.1);
+		const headerHeight = Math.ceil(deviceWidth * 0.12);
 		const borderRadi = 5;
 
 		return {
@@ -388,15 +413,13 @@ class DialogueBox extends Component<Props, null> {
 				alignItems: 'center',
 				justifyContent: 'flex-end',
 				flexDirection: 'row',
-				paddingRight: 20,
 				width: deviceWidth * 0.75,
-				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterTextCover: {
 				alignItems: 'flex-end',
 				justifyContent: 'center',
-				paddingRight: 5,
-				paddingLeft: 5,
+				paddingLeft: 10,
+				paddingBottom: 5 + fontSize,
 			},
 			notificationModalFooterNegativeText: {
 				color: negTextColor,

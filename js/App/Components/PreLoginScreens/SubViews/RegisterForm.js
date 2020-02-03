@@ -190,7 +190,15 @@ class RegisterForm extends View {
 									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.firstName}
-									renderLeftAccessory={<Icon name="account" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									contentInset={styles.contentInset}
+									renderLeftAccessory={
+										<Icon
+											name="account"
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>
@@ -205,7 +213,15 @@ class RegisterForm extends View {
 									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.lastName}
-									renderLeftAccessory={<Icon name="account" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									contentInset={styles.contentInset}
+									renderLeftAccessory={
+										<Icon
+											name="account"
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>
@@ -223,7 +239,15 @@ class RegisterForm extends View {
 									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.email}
-									renderLeftAccessory={<Icon name="email" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									contentInset={styles.contentInset}
+									renderLeftAccessory={
+										<Icon
+											name="email"
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>
@@ -239,7 +263,15 @@ class RegisterForm extends View {
 									placeholderTextColor={styles.textFieldStyle.color}
 									editable={!this.props.dialogueOpen}
 									defaultValue={this.state.confirmEmail}
-									renderLeftAccessory={<Icon name="email" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									contentInset={styles.contentInset}
+									renderLeftAccessory={
+										<Icon
+											name="email"
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>

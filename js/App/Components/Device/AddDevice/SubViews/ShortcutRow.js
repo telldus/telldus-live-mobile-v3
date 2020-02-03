@@ -25,7 +25,6 @@
 import React from 'react';
 import {
 	TouchableOpacity,
-	StyleSheet,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -85,40 +84,38 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		eulaContentColor,
+		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-	const fontSize = deviceWidth * 0.038;
 
-	const imageSize = Math.floor((deviceWidth - (padding * 3)) / 3);
-	const textCoverHeight = fontSize * 3;
+	const blockSize = Math.floor((deviceWidth - (padding * 3)) / 3);
+	const fontSize = blockSize * 0.1;
 
 	return {
 		coverStyle: {
 			alignItems: 'center',
-			justifyContent: 'center',
-			borderWidth: StyleSheet.hairlineWidth,
-			borderColor: eulaContentColor,
+			justifyContent: 'space-between',
 			marginLeft: padding / 2,
 			marginTop: padding / 2,
 			backgroundColor: '#fff',
-			width: imageSize,
+			width: blockSize,
+			height: blockSize,
 			borderRadius: 2,
+			...shadow,
+			padding,
 		},
 		imgStyle: {
-			height: imageSize * 0.8,
-			width: imageSize,
+			height: blockSize * 0.55,
+			width: blockSize * 0.55,
 		},
 		textCoverStyle: {
-			height: textCoverHeight,
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
 		textStyle: {
 			color: eulaContentColor,
-			margin: padding / 2,
 			fontSize,
-			flexWrap: 'wrap',
 			textAlign: 'center',
 		},
 	};

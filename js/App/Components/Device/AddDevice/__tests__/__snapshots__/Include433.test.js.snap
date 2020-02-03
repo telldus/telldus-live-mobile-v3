@@ -511,7 +511,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                     }
                   }
                 >
-                  Press a button on the remote control, until the progressbar below is filled.
+                  
                 </Text>
               </View>
             </View>
@@ -672,7 +672,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   ]
                 }
               >
-                The distance to the remote control may have to be shorter when scanning than during ordinary use.
+                
               </Text>
             </View>
           </View>

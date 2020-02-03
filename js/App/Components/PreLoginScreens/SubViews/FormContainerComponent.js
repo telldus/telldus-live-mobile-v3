@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
@@ -161,20 +161,26 @@ class FormContainerComponent extends View<Props, null> {
 				flexDirection: 'row',
 				alignItems: 'flex-end',
 				justifyContent: 'center',
+				height: textFieldFontSize + 40,
+				width: this.isTablet ? width * 0.4 : width * 0.8,
 			},
 			textFieldIconCoverOne: {
 				justifyContent: this.isTablet ? 'flex-end' : 'center',
 			},
 			textFieldStyle: {
 				paddingLeft: 12 + textFieldFontSize,
-				width: this.isTablet ? width * 0.4 : width * 0.8,
+				height: '100%',
 				minWidth: 200,
 				borderRadius: 3,
+				paddingBottom: Platform.OS === 'android' ? 10 : 0,
 
 				fontSize: textFieldFontSize,
 				color: Theme.Core.inputBaseColor,
 				textAlign: 'left',
 				textAlignVertical: 'bottom',
+			},
+			leftAccessoryStyle: {
+				marginBottom: 10,
 			},
 			iconSize: textFieldFontSize,
 			loginButtonStyleG: {
@@ -183,6 +189,20 @@ class FormContainerComponent extends View<Props, null> {
 				alignSelf: 'center',
 				alignItems: 'center',
 				justifyContent: 'center',
+			},
+			contentInset: {
+				top: 0,
+				label: 0,
+				input: 0,
+				left: 0,
+				right: 0,
+				bottom: 0,
+			},
+			inputContainerStyle: {
+				height: '100%',
+			},
+			containerStyle: {
+				height: '100%',
 			},
 		};
 	}

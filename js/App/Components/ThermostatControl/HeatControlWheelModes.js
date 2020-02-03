@@ -29,6 +29,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
 	View,
 	InfoBlock,
+	EmptyView,
 } from '../../../BaseComponents';
 import ModesList from './ModesList';
 import ControlInfoBlock from './ControlInfoBlock';
@@ -51,6 +52,9 @@ type Props = {
 	supportResume: boolean,
 	gatewayTimezone: string,
 	source?: string,
+	activeMode?: string,
+	hideTemperatureControl?: boolean,
+	hideModeControl?: boolean,
 
 	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
@@ -449,6 +453,9 @@ render(): Object | null {
 		supportResume,
 		gatewayTimezone,
 		intl,
+		activeMode,
+		hideTemperatureControl = false,
+		hideModeControl = false,
 	} = this.props;
 
 	const {
@@ -464,6 +471,8 @@ render(): Object | null {
 		strokeWidth,
 		segments,
 		infoContainerStyle,
+		infoContainer,
+		infoTextStyle,
 	} = this.getStyles();
 
 	if (!modes || modes.length === 0) {
@@ -491,94 +500,128 @@ render(): Object | null {
 		setpointValueLocal,
 	} = this.state;
 
-	let startAngleF = this.initialAngle, angleLengthF = 100;
+	let startAngleF = this.initialAngle, angleLengthF;
 	const hasValidMinMax = typeof minVal === 'number' && typeof maxVal === 'number';
-	if (hasValidMinMax) {
+	if (hasValidMinMax && !isNaN(angleLength) && !isNaN(startAngle)) {
 		startAngleF = startAngle;
 		angleLengthF = angleLength;
 	}
 
-	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan';
+	const showCircularSlider = typeof startAngleF === 'number' && typeof angleLengthF === 'number';
+
+	const showControlIcons = controllingMode !== 'off' && controllingMode !== 'fan' && currentValue !== null && typeof currentValue !== 'undefined';
 
 	const SVGKey = hasValidMinMax ? `${controllingMode}8` : `${controllingMode}88`;
 
+	const titleInfoBlock = (activeMode && title) ? title : `${intl.formatMessage(i18n.mode)} N/A`;
+
 	return (
 		<>
-			<View style={cover}>
-				{showControlIcons && <TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
-					<MaterialIcons
-						name="remove"
-						color={Theme.Core.brandPrimary}
-						size={iconSize}/>
-				</TouchableOpacity>
-				}
-				<CircularSlider
-					SVGKey={SVGKey}
-					coverStyle={coverStyle}
-					startAngle={startAngleF}
-					maxAngleLength={HeatControlWheelModes.maxALength}
-					angleLength={angleLengthF}
-					onUpdate={hasValidMinMax ? this.onUpdate : this.noOP}
-					segments={segments}
-					strokeWidth={strokeWidth}
-					radius={radius}
-					gradientColorFrom={gradientColorFrom}
-					gradientColorTo={gradientColorTo}
-					bgCircleColor="transparent"
-					knobStrokeColor="#fff"
-					knobFillColor={gradientColorTo}
-					keepArcVisible
-					showStartKnob={false}
-					showStopKnob={hasValidMinMax}
-					roundedEnds
-					allowKnobBeyondLimits={false}
-					knobRadius={knobRadius}
-					knobStrokeWidth={knobStrokeWidth}
-					onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
-					onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
-				/>
-				<ControlInfoBlock
+		{typeof activeMode !== 'string' ? <InfoBlock
+			text={intl.formatMessage(i18n.infoNoThermostatMode)}
+			appLayout={appLayout}
+			infoContainer={infoContainer}
+			textStyle={infoTextStyle}/>
+			:
+			<EmptyView/>
+		}
+			{!hideTemperatureControl ?
+				<View style={cover}>
+					{showControlIcons ?
+						<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
+							<MaterialIcons
+								name="remove"
+								color={Theme.Core.brandPrimary}
+								size={iconSize}/>
+						</TouchableOpacity>
+						:
+						<EmptyView/>
+					}
+					{showCircularSlider ?
+						<CircularSlider
+							SVGKey={SVGKey}
+							coverStyle={coverStyle}
+							startAngle={startAngleF}
+							maxAngleLength={HeatControlWheelModes.maxALength}
+							angleLength={angleLengthF}
+							onUpdate={hasValidMinMax ? this.onUpdate : this.noOP}
+							segments={segments}
+							strokeWidth={strokeWidth}
+							radius={radius}
+							gradientColorFrom={gradientColorFrom}
+							gradientColorTo={gradientColorTo}
+							bgCircleColor="transparent"
+							knobStrokeColor="#fff"
+							knobFillColor={gradientColorTo}
+							keepArcVisible
+							showStartKnob={false}
+							showStopKnob={hasValidMinMax}
+							roundedEnds
+							allowKnobBeyondLimits={false}
+							knobRadius={knobRadius}
+							knobStrokeWidth={knobStrokeWidth}
+							onReleaseStopKnob={hasValidMinMax ? this.onEndSlide : null}
+							onPressSliderPath={hasValidMinMax ? this.onPressSliderPath : null}
+						/>
+						:
+						<View style={{
+							height: radius * 2,
+							width: radius * 2,
+						}}/>
+					}
+					<ControlInfoBlock
+						appLayout={appLayout}
+						baseColor={baseColor}
+						currentValue={currentValue}
+						currentValueInScreen={currentValueInScreen}
+						title={titleInfoBlock}
+						lastUpdated={lastUpdated}
+						onControlThermostat={this.onControlThermostat}
+						controllingMode={controllingMode}
+						minVal={minVal}
+						maxVal={maxVal}
+						onEditSubmitValue={this.onEditSubmitValue}
+						updateCurrentValueInScreen={this.updateCurrentValueInScreen}
+						changeMode={changeMode}
+						currentTemp={currentTemp}
+						supportResume={supportResume}
+						gatewayTimezone={gatewayTimezone}
+					/>
+					{showControlIcons ?
+						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
+							<MaterialIcons
+								name="add"
+								color={Theme.Core.brandSecondary}
+								size={iconSize}/>
+						</TouchableOpacity>
+						:
+						<EmptyView/>
+					}
+				</View>
+				:
+				<EmptyView/>
+			}
+			{!hideModeControl ?
+				<ModesList
 					appLayout={appLayout}
-					baseColor={baseColor}
+					onPressRow={this.onPressRow}
+					controllingMode={controllingMode}
+					modes={modes}
+					onControlThermostat={this.onControlThermostat}
+					onEditSubmitValue={this.onEditSubmitValue}
 					currentValue={currentValue}
 					currentValueInScreen={currentValueInScreen}
-					title={title}
-					lastUpdated={lastUpdated}
-					onControlThermostat={this.onControlThermostat}
-					controllingMode={controllingMode}
-					minVal={minVal}
-					maxVal={maxVal}
-					onEditSubmitValue={this.onEditSubmitValue}
 					updateCurrentValueInScreen={this.updateCurrentValueInScreen}
+					modesCoverStyle={modesCoverStyle}
 					changeMode={changeMode}
-					currentTemp={currentTemp}
-					supportResume={supportResume}
-					gatewayTimezone={gatewayTimezone}
-				/>
-				{showControlIcons && <TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>
-					<MaterialIcons
-						name="add"
-						color={Theme.Core.brandSecondary}
-						size={iconSize}/>
-				</TouchableOpacity>
-				}
-			</View>
-			<ModesList
-				appLayout={appLayout}
-				onPressRow={this.onPressRow}
-				controllingMode={controllingMode}
-				modes={modes}
-				onControlThermostat={this.onControlThermostat}
-				onEditSubmitValue={this.onEditSubmitValue}
-				currentValue={currentValue}
-				currentValueInScreen={currentValueInScreen}
-				updateCurrentValueInScreen={this.updateCurrentValueInScreen}
-				modesCoverStyle={modesCoverStyle}
-				changeMode={changeMode}
-				setpointMode={setpointMode}
-				setpointValue={setpointValue}
-				setpointValueLocal={setpointValueLocal}
-				handleAddMinus={this.handleAddMinus}/>
+					setpointMode={setpointMode}
+					setpointValue={setpointValue}
+					setpointValueLocal={setpointValueLocal}
+					handleAddMinus={this.handleAddMinus}
+					hideTemperatureControl={hideTemperatureControl}/>
+				:
+				<EmptyView/>
+			}
 		</>
 	);
 }
@@ -593,6 +636,7 @@ getStyles(): Object {
 		paddingFactor,
 		shadow,
 		appBackground,
+		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -608,6 +652,8 @@ getStyles(): Object {
 	const segments = 15;
 
 	const padConst = padding / 2;
+
+	const fontSizeText = deviceWidth * 0.035;
 
 	return {
 		segments,
@@ -654,6 +700,16 @@ getStyles(): Object {
 			right: iconSpace,
 		},
 		iconSize,
+		infoContainer: {
+			flex: 0,
+			marginHorizontal: padding,
+			marginBottom: -(padding / 2),
+			marginTop: source === 'ThermostatFullControl' ? padding : 0,
+		},
+		infoTextStyle: {
+			color: rowTextColor,
+			fontSize: fontSizeText,
+		},
 	};
 }
 }

@@ -124,6 +124,7 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSizeText,
 			color: rowTextColor,
 			marginTop: padding,
+			marginLeft: padding,
 		},
 		rButtonStyle: {
 		},

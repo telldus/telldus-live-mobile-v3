@@ -55,6 +55,7 @@ type Props = {
 	iconName?: string,
 	customComponent?: Object,
 	disabled?: boolean,
+	innerContainer?: number | Array<any> | Object,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -91,13 +92,23 @@ class FloatingButton extends Component<Props, null> {
 	}
 
 	render(): Object {
-		let { buttonStyle, onPress, imageSource, iconName, showThrobber,
-			appLayout, accessible, accessibilityLabel, iconStyle, customComponent,
+		let {
+			buttonStyle,
+			onPress,
+			imageSource,
+			iconName,
+			showThrobber,
+			appLayout,
+			accessible,
+			accessibilityLabel,
+			iconStyle,
+			customComponent,
 			disabled,
+			innerContainer,
 		} = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
-		const { container, button, icon, throbber } = this._getStyle(appLayout);
+		const { container, innerContainerDef, icon, throbber } = this._getStyle(appLayout);
 
 		return (
 			<TouchableOpacity
@@ -106,7 +117,7 @@ class FloatingButton extends Component<Props, null> {
 				accessible={accessible}
 				accessibilityLabel={accessibilityLabel}
 				disabled={disabled}>
-				<View style={button}>
+				<View style={[innerContainerDef, innerContainer]}>
 					{!!imageSource &&
 					(
 						<Image source={imageSource} style={[icon, iconStyle]} resizeMode="contain"/>
@@ -178,7 +189,7 @@ class FloatingButton extends Component<Props, null> {
 				right: offsetRight,
 				...shadow,
 			},
-			button: {
+			innerContainerDef: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',

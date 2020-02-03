@@ -159,7 +159,15 @@ class ForgotPasswordForm extends View<Props, State> {
 									autoCorrect={false}
 									placeholderTextColor={styles.textFieldStyle.color}
 									defaultValue={this.state.email}
-									renderLeftAccessory={<Icon name="email" size={styles.iconSize} color={styles.textFieldStyle.color}/>}
+									inputContainerStyle={styles.inputContainerStyle}
+									containerStyle={styles.containerStyle}
+									contentInset={styles.contentInset}
+									renderLeftAccessory={
+										<Icon
+											name="email"
+											size={styles.iconSize}
+											color={styles.textFieldStyle.color}
+											style={styles.leftAccessoryStyle}/>}
 								/>
 							</View>
 						</View>

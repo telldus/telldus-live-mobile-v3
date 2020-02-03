@@ -175,6 +175,7 @@ class RegisterScreen extends View<Props, State> {
 				marginHorizontal: infoFontSize * 0.2,
 				marginVertical: infoFontSize * 0.8,
 				color: '#bbb',
+				padding: 5,
 			},
 		};
 	}

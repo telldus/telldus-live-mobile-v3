@@ -23,17 +23,23 @@
 'use strict';
 
 import React from 'react';
-import { Animated, ScrollView, Modal } from 'react-native';
+import {
+	Animated,
+	ScrollView,
+	Modal,
+	BackHandler,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 
+
 import { View, FloatingButton, Text, StyleSheet, SafeAreaView, NavigationHeader } from '../../../BaseComponents';
 
 import ChangeLogPoster from './SubViews/ChangeLogPoster';
 import Wizard from './SubViews/Wizard';
-
 
 import Screens from './SubViews/Screens';
 import Theme from '../../Theme';
@@ -47,6 +53,7 @@ type Props = {
 	intl: intlShape,
 	changeLogVersion?: string,
 	dispatch: Function,
+	changeLogVersion: string,
 	showChangeLog: boolean,
 	forceShowChangeLog: boolean,
 	onLayout: (Object) => void,
@@ -56,7 +63,6 @@ type State = {
 	currentScreen: number,
 };
 
-
 class ChangeLogNavigator extends View {
 	props: Props;
 	state: State;
@@ -64,12 +70,10 @@ class ChangeLogNavigator extends View {
 	h1: string;
 	h2: string;
 
-	nextButton: string;
 	skipButton: string;
-	doneButton: string;
 
 	onPressNext: () => void;
-	onPressPrev: () => void;
+	onPressPrev: () => Object;
 	onPressSkip: () => void;
 
 	animatedX: Object;
@@ -78,6 +82,15 @@ class ChangeLogNavigator extends View {
 	startAnimationX: (number) => void;
 	startAnimationParallel: (number) => void;
 	startAnimationOpacity: () => void;
+
+	onRequestClose: () => void;
+
+	defaultDescription: string;
+	labelButton: string;
+	nextLabel: string;
+	prevLabel: string;
+
+	isIos: boolean;
 
 	constructor(props: Props) {
 		super(props);
@@ -88,13 +101,13 @@ class ChangeLogNavigator extends View {
 
 		let { formatMessage } = props.intl;
 
+		this.isIos = Platform.OS === 'ios';
+
 		const appVersion = DeviceInfo.getReadableVersion();
 		this.h1 = formatMessage(i18n.changeLogHeaderOne);
 		this.h2 = `${formatMessage(i18n.changeLogHeaderTwo)} ${appVersion.substring(0, 4)}`;
 
-		this.nextButton = formatMessage(i18n.next);
 		this.skipButton = formatMessage(i18n.skipButton).toUpperCase();
-		this.doneButton = formatMessage(i18n.done);
 
 		this.onPressNext = this.onPressNext.bind(this);
 		this.onPressPrev = this.onPressPrev.bind(this);
@@ -104,8 +117,36 @@ class ChangeLogNavigator extends View {
 		this.startAnimationOpacity = this.startAnimationOpacity.bind(this);
 		this.startAnimationParallel = this.startAnimationParallel.bind(this);
 
+		this.onRequestClose = this.onRequestClose.bind(this);
+
 		this.animatedX = new Animated.Value(0);
 		this.animatedOpacity = new Animated.Value(1);
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelButton = `${formatMessage(i18n.button)}`;
+		this.nextLabel = `${formatMessage(i18n.next)} ${this.labelButton}. ${this.defaultDescription}`;
+		this.prevLabel = `${formatMessage(i18n.previous)} ${this.labelButton}. ${this.defaultDescription}`;
+	}
+
+	onRequestClose() {
+		let { dispatch, forceShowChangeLog, showChangeLog } = this.props;
+		if (forceShowChangeLog) {
+			let { end } = this.onPressPrev();
+			if (end) {
+				dispatch(hideChangeLog());
+				this.setState({
+					currentScreen: Screens[0],
+				});
+			}
+		} else if (showChangeLog) {
+			let { end } = this.onPressPrev();
+			if (end) {
+				BackHandler.exitApp();
+				this.setState({
+					currentScreen: Screens[0],
+				});
+			}
+		}
 	}
 
 	onPressNext() {
@@ -155,7 +196,7 @@ class ChangeLogNavigator extends View {
 		}).start();
 	}
 
-	onPressPrev() {
+	onPressPrev(): Object {
 		let { appLayout } = this.props;
 		let { currentScreen } = this.state;
 		let prevIndex = Screens.indexOf(currentScreen) - 1;
@@ -169,7 +210,9 @@ class ChangeLogNavigator extends View {
 			this.animatedX.setValue(appLayout.width);
 			this.animatedOpacity.setValue(0);
 			this.startAnimationParallel(0);
+			return { end: false };
 		}
+		return { end: true };
 	}
 
 	onPressSkip() {
@@ -185,10 +228,10 @@ class ChangeLogNavigator extends View {
 	}
 
 	render(): Object | null {
-		let { currentScreen } = this.state;
-		let { appLayout, intl, showChangeLog, onLayout } = this.props;
-		let { width } = appLayout;
-		let { h1, h2 } = this;
+		const { currentScreen } = this.state;
+		const { appLayout, intl, showChangeLog, onLayout } = this.props;
+		const { width } = appLayout;
+		const { h1, h2 } = this;
 
 		if (!width) {
 			return null;
@@ -197,12 +240,22 @@ class ChangeLogNavigator extends View {
 		const isFirstScreen = Screens.indexOf(currentScreen) === 0;
 		const isLastScreen = Screens.indexOf(currentScreen) === Screens.length - 1;
 
-		let { stepIndicatorCover, floatingButtonLeft, checkIconStyle, textSkip, stepIndicator, stepIndicatorSize } = this.getStyles(appLayout);
+		const {
+			stepIndicatorCover,
+			floatingButtonLeft,
+			checkIconStyle,
+			textSkip,
+			stepIndicator,
+			stepIndicatorSize,
+			innerContainer,
+			floatingButtonRight,
+			floatingCommon,
+		} = this.getStyles(appLayout);
 
-		let inputRange = width ? [-width, 0] : [-100, 0];
-		let outputRange = width ? [width, 0] : [-100, 0];
+		const inputRange = width ? [-width, 0] : [-100, 0];
+		const outputRange = width ? [width, 0] : [-100, 0];
 
-		let inputRangeOpacity = width ? [-width, -width / 2, 0] : [-100, -50, 0];
+		const inputRangeOpacity = width ? [-width, -width / 2, 0] : [-100, -50, 0];
 
 		const animatedX = this.animatedX.interpolate({
 			inputRange,
@@ -222,10 +275,10 @@ class ChangeLogNavigator extends View {
 				transparent={false}
 				animationType={'slide'}
 				presentationStyle={'fullScreen'}
-				onRequestClose={this.noOP}
+				onRequestClose={this.isIos ? this.noOP : this.onRequestClose}
 				supportedOrientations={['portrait', 'landscape']}>
-				<SafeAreaView onLayout={onLayout} backgroundColor={Theme.Core.appBackground}>
-					<NavigationHeader showLeftIcon={false}/>
+				<SafeAreaView backgroundColor={Theme.Core.appBackground} onLayout={onLayout}>
+					<NavigationHeader showLeftIcon={false} topMargin={this.isIos} forceHideStatus={!this.isIos}/>
 					<ChangeLogPoster h1={h1} h2={h2} appLayout={appLayout}/>
 					<ScrollView>
 						<Wizard
@@ -243,8 +296,10 @@ class ChangeLogNavigator extends View {
 							{!isFirstScreen && (<FloatingButton
 								imageSource={{uri: 'right_arrow_key'}}
 								onPress={this.onPressPrev}
-								buttonStyle={floatingButtonLeft}
-								iconStyle={styles.buttonIconStyle}/>
+								buttonStyle={[floatingButtonLeft, floatingCommon]}
+								iconStyle={styles.buttonIconStyle}
+								innerContainer={innerContainer}
+								accessibilityLabel={this.prevLabel}/>
 							)}
 							{Screens.length > 1 && Screens.map((screen: number, index: number): Object => {
 								let backgroundColor = Screens[index] === currentScreen ?
@@ -260,7 +315,9 @@ class ChangeLogNavigator extends View {
 								iconName={isLastScreen ? 'checkmark' : false}
 								iconStyle={isLastScreen ? checkIconStyle : {}}
 								onPress={this.onPressNext}
-								buttonStyle={{bottom: 0}}/>
+								buttonStyle={[floatingCommon, floatingButtonRight]}
+								innerContainer={innerContainer}
+								accessibilityLabel={this.nextLabel}/>
 						</View>
 					</ScrollView>
 				</SafeAreaView>
@@ -272,12 +329,38 @@ class ChangeLogNavigator extends View {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-		const buttonSize = deviceWidth * 0.134666667;
 		const stepIndicatorSize = Math.floor(deviceWidth * 0.033);
 		const maxIconSize = 40;
 
+		const {
+			brandSecondary,
+			maxSizeFloatingButton,
+			iPhoneXbg,
+			shadow: themeShadow,
+			paddingFactor,
+		} = Theme.Core;
+
 		let iconSize = Math.floor(deviceWidth * 0.07);
 		iconSize = iconSize > maxIconSize ? maxIconSize : iconSize;
+
+		let buttonSize = deviceWidth * 0.134666667;
+		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+
+		const adjust = buttonSize * 0.2;
+		const buttonSizeOuter = buttonSize + adjust;
+
+		const shadow = Object.assign({}, themeShadow, {
+			shadowOpacity: 0.35,
+			shadowOffset: {
+				...themeShadow.shadowOffset,
+				height: 2,
+			},
+			elevation: 5,
+		});
+
+		const padding = deviceWidth * paddingFactor;
+		const adjustFloatPad = adjust < padding ? adjust : padding;
+		const padFloat = padding - (adjustFloatPad / 2);
 
 		return {
 			stepIndicatorCover: {
@@ -286,7 +369,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
+				...ifIphoneX({ flex: 1, backgroundColor: iPhoneXbg }, { flex: 1 }),
 			},
 			stepIndicator: {
 				height: stepIndicatorSize,
@@ -294,8 +377,35 @@ class ChangeLogNavigator extends View {
 				borderRadius: stepIndicatorSize / 2,
 			},
 			floatingButtonLeft: {
-				left: deviceWidth * 0.034666667,
+				left: padFloat,
+			},
+			floatingCommon: {
+				height: buttonSizeOuter,
+				width: buttonSizeOuter,
+				borderRadius: buttonSizeOuter / 2,
 				bottom: 0,
+				backgroundColor: 'transparent',
+				alignItems: 'center',
+				justifyContent: 'center',
+				elevation: 0,
+				shadowColor: 'transparent',
+				shadowRadius: 0,
+				shadowOpacity: 0,
+				shadowOffset: {
+					width: 0,
+					height: 0,
+				},
+			},
+			floatingButtonRight: {
+				right: padFloat,
+			},
+			innerContainer: {
+				flex: 0,
+				height: buttonSize,
+				width: buttonSize,
+				borderRadius: buttonSize / 2,
+				backgroundColor: brandSecondary,
+				...shadow,
 			},
 			checkIconStyle: {
 				color: '#fff',
@@ -303,7 +413,7 @@ class ChangeLogNavigator extends View {
 			},
 			textSkip: {
 				paddingVertical: 10,
-				color: Theme.Core.brandSecondary,
+				color: brandSecondary,
 				textAlign: 'center',
 				fontSize: Math.floor(deviceWidth * 0.039),
 			},

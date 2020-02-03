@@ -23,14 +23,26 @@
 'use strict';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import {
+	TouchableOpacity,
+} from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	DropDown,
 	View,
 	Text,
+	IconTelldus,
+	Throbber,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
+
+import {
+	useDialogueBox,
+} from '../../../Hooks/Dialoguebox';
+
+import i18n from '../../../Translations/common';
 
 const DropDownSetting = (props: Object): Object => {
 	const {
@@ -40,7 +52,14 @@ const DropDownSetting = (props: Object): Object => {
 		label,
 		labelStyle,
 		paramUpdatedViaScan,
+		textOnPressHelp,
+		headerOnPressHelp,
+		isScanning,
+		isSaving433MhzParams,
 	} = props;
+
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -50,26 +69,81 @@ const DropDownSetting = (props: Object): Object => {
 		pickerStyle,
 		optionInputCover,
 		optionInputLabelStyle,
+		infoIconStyle,
+		throbberContainerStyle,
+		throbberStyle,
+		inactiveTintColor,
+		statuscheckStyle,
 	} = getStyles(layout, paramUpdatedViaScan);
 
 	const accessibilityLabelPrefix = '';
 
+	const { toggleDialogueBoxState } = useDialogueBox();
+	function onPressInfo() {
+		if (textOnPressHelp && headerOnPressHelp) {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: textOnPressHelp,
+				header: headerOnPressHelp,
+				showIconOnHeader: true,
+				onPressHeader: () => {
+					toggleDialogueBoxState({
+						show: false,
+					});
+				},
+			});
+		}
+	}
+
+	const _value = isScanning ? `${formatMessage(i18n.scanning)}...  ${value}` : value;
+
+	const iconLeftPickerBase = paramUpdatedViaScan ?
+		<IconTelldus
+			icon="statuscheck"
+			style={statuscheckStyle}/> : undefined;
+
 	return (
 		<View style={optionInputCover}>
-			<Text style={[optionInputLabelStyle, labelStyle]}>
-				{label}
-			</Text>
+			<View style={{
+				flexDirection: 'row',
+				alignItems: 'center',
+			}}>
+				<Text style={[optionInputLabelStyle, labelStyle]}>
+					{label}
+				</Text>
+				<TouchableOpacity onPress={onPressInfo}>
+					<IconTelldus icon={'help'} style={infoIconStyle}/>
+				</TouchableOpacity>
+			</View>
 			<DropDown
 				items={items}
-				value={value}
+				extraData={{
+					isScanning,
+					paramUpdatedViaScan,
+				}}
+				baseLeftIcon={isScanning ?
+					<Throbber
+						throbberContainerStyle={throbberContainerStyle}
+						throbberStyle={throbberStyle}
+					/>
+					: 'down'}
+				value={_value}
+				iconLeftPickerBase={iconLeftPickerBase}
+				disabled={isScanning || isSaving433MhzParams}
 				onValueChange={onValueChange}
 				appLayout={layout}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerStyle={pickerStyle}
-				baseColor={'#000'}
+				baseColor={inactiveTintColor}
 				fontSize={fontSize}
 				accessibilityLabelPrefix={accessibilityLabelPrefix}
-				animationDuration={50}/>
+				animationDuration={50}
+				pickerBaseTextStyle={{flex: 0}}
+				pickerBaseCoverStyle={{
+					justifyContent: 'flex-end',
+				}}/>
 		</View>
 	);
 };
@@ -80,27 +154,33 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		rowTextColor,
 		paddingFactor,
+		shadow,
+		brandSecondary,
+		inactiveTintColor,
+		locationOnline,
 	} = Theme.Core;
 
-	const ddWidth = deviceWidth * 0.3;
+	const ddWidth = deviceWidth * 0.45;
 
-	const fontSizeText = deviceWidth * 0.035;
+	const fontSizeText = Math.floor(deviceWidth * 0.04);
 
 	const padding = deviceWidth * paddingFactor;
 
+	const iconValueRightSize = deviceWidth * 0.05;
+
 	return {
+		inactiveTintColor,
+		fontSize: fontSizeText,
 		pickerStyle: {
 			width: ddWidth,
-			right: padding * 2,
+			right: padding,
 			left: undefined,
+			justifyContent: 'flex-end',
 		},
 		pickerContainerStyle: {
 			flex: 0,
 			width: ddWidth,
-			borderWidth: paramUpdatedViaScan ? 4 : 1,
-			borderColor: rowTextColor,
 			elevation: 0,
 			shadowRadius: 0,
 			shadowOpacity: 0,
@@ -110,17 +190,41 @@ const getStyles = (appLayout: Object, paramUpdatedViaScan: boolean): Object => {
 			},
 			marginBottom: 0,
 			borderRadius: 2,
+			alignSelf: 'flex-end',
+			justifyContent: 'flex-end',
 		},
 		optionInputCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			padding,
+			paddingLeft: padding,
 			borderRadius: 2,
+			backgroundColor: '#fff',
+			...shadow,
+			marginBottom: padding / 2,
 		},
 		optionInputLabelStyle: {
-			fontSize: fontSizeText * 1.4,
-			color: rowTextColor,
+			fontSize: fontSizeText,
+			color: '#000',
+		},
+		infoIconStyle: {
+			marginLeft: 3,
+			fontSize: fontSizeText,
+			color: brandSecondary,
+		},
+		throbberContainerStyle: {
+			backgroundColor: 'transparent',
+			position: 'relative',
+		},
+		throbberStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: inactiveTintColor,
+		},
+		statuscheckStyle: {
+			fontSize: iconValueRightSize * 0.8,
+			color: locationOnline,
+			textAlignVertical: 'center',
+			marginRight: 5,
 		},
 	};
 };

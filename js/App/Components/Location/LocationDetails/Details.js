@@ -280,7 +280,12 @@ class Details extends View<Props, State> {
 		this.infoPressCount++;
 		if (this.infoPressCount >= 5) {
 			const { location = {}, pushToken } = this.props;
-			const { online, websocketOnline, localKey = {} } = location;
+			const {
+				online,
+				websocketOnline,
+				localKey = {},
+				websocketConnected,
+			} = location;
 			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
 				this.infoPressCount = 0;
 				const { type, effectiveType } = connectionInfo;
@@ -291,6 +296,7 @@ class Details extends View<Props, State> {
 				const debugData = {
 					online,
 					websocketOnline,
+					websocketConnected,
 					...localKey,
 					tokenExpired,
 					connectionType: type,

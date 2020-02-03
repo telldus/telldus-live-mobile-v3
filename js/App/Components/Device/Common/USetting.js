@@ -92,12 +92,12 @@ const getStyles = (appLayout: Object): Object => {
 
 	const checkBoxSpace = padding;
 
-	const totalPaddingU = (checkBoxSpace * 10) + padding;
-	const paddingU = 2, borderWidthU = 1;
-	const iconSizeU = Math.floor((deviceWidth - (outerPadding + totalPaddingU + ((paddingU + borderWidthU) * 20))) / 10);
+	const totalPaddingU = checkBoxSpace * 11;
+	const borderWidthU = 1;
+	const size = Math.floor((deviceWidth - (outerPadding + totalPaddingU)) / 10);
 
 	return {
-		paddingU,
+		checkBoxSpace,
 		brandPrimary,
 		optionButtonCover: {
 			flexDirection: 'column',
@@ -105,9 +105,10 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'center',
 		},
 		uCheckBoxIconStyle: {
-			fontSize: iconSizeU,
+			fontSize: size * 0.8,
+			height: size,
+			width: size,
 			borderColor: brandPrimary,
-			padding: paddingU,
 			borderWidth: borderWidthU,
 		},
 		radioButtonLabelStyle: {
@@ -119,7 +120,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		optionWrapStyle: {
 			marginTop: padding,
-			marginLeft: checkBoxSpace,
 		},
 	};
 };

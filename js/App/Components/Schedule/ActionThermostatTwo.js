@@ -90,28 +90,35 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 			textStyle,
 			eulaContentColor,
 			brandSecondary,
+			inactiveSwitchBackground,
 		} = this._getStyle(appLayout);
 
-		let { changeMode, temperature, changeTemp } = methodValue || {};
-		changeTemp = changeTemp && temperature !== null && typeof temperature !== 'undefined';
+		const { changeMode, changeTemp, temperature } = methodValue || {};
+
+		const noTemp = typeof temperature !== 'number' || isNaN(temperature);
+
 		const changeBoth = changeTemp && changeMode;
 		const changeTempAlone = changeTemp && !changeMode;
-		const changeModeAlone = !changeTemp && changeMode;
+		const changeModeAlone = (!changeTemp && changeMode) || noTemp;
+
+		const oneItemsColor = (changeBoth || noTemp) ? '#fff' : eulaContentColor;
+		const twoItemsColor = changeModeAlone ? '#fff' : eulaContentColor;
+		const threeItemsColor = (changeTempAlone || noTemp) ? '#fff' : eulaContentColor;
 
 		return (
 			<View style={optionsCover}>
-				<TouchableOpacity onPress={this.onPressOne}>
+				<TouchableOpacity onPress={this.onPressOne} disabled={noTemp}>
 					<View style={[optionCover, {
-						backgroundColor: changeBoth ? brandSecondary : '#fff',
+						backgroundColor: noTemp ? inactiveSwitchBackground : changeBoth ? brandSecondary : '#fff',
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
-							color: changeBoth ? '#fff' : eulaContentColor,
+							color: oneItemsColor,
 						}]}/>
 						<IconTelldus icon={'temperature'} style={[iconStyle, {
-							color: changeBoth ? '#fff' : eulaContentColor,
+							color: oneItemsColor,
 						}]}/>
 						<Text style={[textStyle, {
-							color: changeBoth ? '#fff' : eulaContentColor,
+							color: oneItemsColor,
 						}]}>
 							{intl.formatMessage(i18n.changeSettAndMode)}
 						</Text>
@@ -122,24 +129,24 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 						backgroundColor: changeModeAlone ? brandSecondary : '#fff',
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
-							color: changeModeAlone ? '#fff' : eulaContentColor,
+							color: twoItemsColor,
 						}]}/>
 						<Text style={[textStyle, {
-							color: changeModeAlone ? '#fff' : eulaContentColor,
+							color: twoItemsColor,
 						}]}>
 							{intl.formatMessage(i18n.changeModeOnly)}
 						</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={this.onPressThree}>
+				<TouchableOpacity onPress={this.onPressThree} disabled={noTemp}>
 					<View style={[optionCover, {
-						backgroundColor: changeTempAlone ? brandSecondary : '#fff',
+						backgroundColor: noTemp ? inactiveSwitchBackground : changeTempAlone ? brandSecondary : '#fff',
 					}]}>
 						<IconTelldus icon={'temperature'} style={[iconStyle, {
-							color: changeTempAlone ? '#fff' : eulaContentColor,
+							color: threeItemsColor,
 						}]}/>
 						<Text style={[textStyle, {
-							color: changeTempAlone ? '#fff' : eulaContentColor,
+							color: threeItemsColor,
 						}]}>
 							{intl.formatMessage(i18n.changeSettOnly)}
 						</Text>
@@ -159,6 +166,7 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 			shadow,
 			brandSecondary,
 			eulaContentColor,
+			inactiveSwitchBackground,
 		} = Theme.Core;
 
 		const outerPadding = deviceWidth * paddingFactor;
@@ -166,6 +174,7 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 		const blockWidth = width - (outerPadding * 2);
 
 		return {
+			inactiveSwitchBackground,
 			outerPadding,
 			brandSecondary,
 			eulaContentColor,

@@ -214,7 +214,7 @@ render(): Object {
 				</TouchableOpacity>
 				}
 				<Text style={labelTextStyle}>
-					{`${this.deviceBrand} ${formatMessage(i18n.devices)}:`}
+					{`${this.deviceBrand}:`}
 				</Text>
 				<View style={shortCutDevicesCover}>
 					{telldusDevices}
@@ -239,8 +239,8 @@ getStyles(): Object {
 	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = deviceWidth * 0.036;
-	const imgW = deviceWidth * 0.038;
-	const imgH = deviceWidth * 0.053;
+	const imgW = deviceWidth * 0.035;
+	const imgH = deviceWidth * 0.05;
 
 	return {
 		padding,
@@ -278,6 +278,7 @@ getStyles(): Object {
 			backgroundColor: '#fff',
 			...shadow,
 			paddingVertical: padding,
+			borderRadius: 2,
 		},
 		labelTextStyle: {
 			marginBottom: padding / 2,

@@ -71,11 +71,12 @@ const SetDeviceName433 = (props: Object): Object => {
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
 	const { widgetParams433Device = {} } = addDevice433;
 
+	const deviceInfo = navigation.getParam('deviceInfo', {});
+	const { widget, configuration, devicetype } = deviceInfo;
+
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));
 
-		const deviceInfo = navigation.getParam('deviceInfo', {});
-		const { widget, configuration } = deviceInfo;
 		if (widget && configuration === 'true') {
 			const dSettings = getDeviceSettings(parseInt(widget, 10), formatMessage);
 			setSettings(dSettings);
@@ -149,7 +150,8 @@ const SetDeviceName433 = (props: Object): Object => {
 					renderLeftAccessory={renderLeftAccessory}
 				/>
 				{!!settings && <DeviceSettings
-					settings={settings}/>}
+					settings={settings}
+					devicetype={devicetype}/>}
 			</View>
 			<FloatingButton
 				onPress={submitName}

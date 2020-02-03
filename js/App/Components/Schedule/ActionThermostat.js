@@ -23,9 +23,17 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	LayoutAnimation,
+} from 'react-native';
 
-import { FloatingButton, View, Text } from '../../../BaseComponents';
+import {
+	FloatingButton,
+	View,
+	Text,
+	EmptyView,
+} from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 import HeatControlWheelModes from '../ThermostatControl/HeatControlWheelModes';
 import ActionThermostatTwo from './ActionThermostatTwo';
@@ -33,6 +41,7 @@ import ActionThermostatTwo from './ActionThermostatTwo';
 import {
 	getSupportedModes,
 	shouldUpdate,
+	LayoutAnimations,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -90,12 +99,13 @@ export default class ActionThermostat extends View<null, Props, State> {
 			this.currentMode = cMode || mode;
 			this.currentValue = temperature;
 
-			const changeTemp = temperature !== null && typeof temperature !== 'undefined';
+			const hadValidTemp = temperature !== null && typeof temperature !== 'undefined';
+			const changeTemp = hadValidTemp;
 			this.methodValue = {
 				...this.methodValue,
 				changeMode: typeof this.methodValue.changeMode === 'undefined' ? 1 : this.methodValue.changeMode,
 				mode: cMode || mode,
-				temperature,
+				temperature: hadValidTemp ? parseInt(temperature, 10) : temperature,
 				changeTemp,
 			};
 		} catch (err) {
@@ -129,7 +139,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 				const changeTemp = sm.value !== null && typeof sm.value !== 'undefined';
 				this.methodValue = {
 					...this.methodValue,
-					temperature: sm.value,
+					temperature: changeTemp ? parseInt(sm.value, 10) : sm.value,
 					changeTemp,
 				};
 			}
@@ -203,6 +213,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			...methodValue,
 			...newMethodValue,
 		};
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		this.setState({
 			methodValue: methodValueN,
 		});
@@ -213,6 +224,9 @@ export default class ActionThermostat extends View<null, Props, State> {
 			appLayout,
 			intl,
 		} = this.props;
+		const {
+			methodValue,
+		} = this.state;
 		const { container, outerPadding, tempLabelStyle } = this._getStyle(appLayout);
 
 		if (!this.device) {
@@ -224,6 +238,15 @@ export default class ActionThermostat extends View<null, Props, State> {
 		} = this.device;
 
 		const { THERMOSTAT: { mode } } = stateValues;
+		const activeMode = methodValue.mode || this.currentMode || mode;
+
+		const { changeMode, changeTemp, temperature } = methodValue || {};
+		const noTemp = typeof temperature !== 'number' || isNaN(temperature);
+		const changeModeAlone = (!changeTemp && changeMode) || noTemp;
+
+		const hideTemperatureControl = changeModeAlone;
+		const changeTempAlone = changeTemp && !changeMode;
+		const hideModeControl = changeTempAlone;
 
 		return (
 			<View style={container}>
@@ -236,26 +259,35 @@ export default class ActionThermostat extends View<null, Props, State> {
 					keyboardShouldPersistTaps={'always'}>
 					<ActionThermostatTwo
 						intl={intl}
-						methodValue={this.state.methodValue}
+						methodValue={methodValue}
 						appLayout={appLayout}
 						onChange={this.onChange}/>
-					<Text style={tempLabelStyle}>
-						{intl.formatMessage(i18n.labelTemperature)}
-					</Text>
+					{!hideTemperatureControl ?
+						<Text style={tempLabelStyle}>
+							{intl.formatMessage(i18n.labelTemperature)}
+						</Text>
+						:
+						<EmptyView/>
+					}
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={this.supportedModes}
 						device={this.device}
-						activeMode={this.currentMode || mode}
+						activeMode={activeMode}
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
 						supportResume={this.supportResume}
-						intl={intl}/>
+						hideTemperatureControl={hideTemperatureControl}
+						hideModeControl={hideModeControl}
+						intl={intl}
+						source="Schedule_ActionThermostat"/>
 				</ScrollView>
-				{(this.supportedModes && this.supportedModes.length > 0) && <FloatingButton
+				{(this.supportedModes && this.supportedModes.length > 0) ? <FloatingButton
 					onPress={this.selectAction}
 					imageSource={{uri: 'right_arrow_key'}}
 					paddingRight={outerPadding - 2}
 				/>
+					:
+					<EmptyView/>
 				}
 			</View>
 		);

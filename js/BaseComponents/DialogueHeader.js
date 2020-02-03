@@ -78,9 +78,11 @@ constructor(props: Props) {
 }
 
 onPressIcon() {
-	let { onPressIcon } = this.props;
+	let { onPressIcon, onPressHeader } = this.props;
 	if (onPressIcon) {
 		onPressIcon();
+	} else if (onPressHeader) {
+		onPressHeader();
 	}
 }
 

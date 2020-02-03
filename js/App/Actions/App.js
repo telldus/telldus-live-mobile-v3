@@ -52,10 +52,26 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 		const { email, firstname, lastname } = userProfile;
 
 		const gateway = byId[gatewayId];
-		const { localKey = {}, online, uuid } = gateway || {};
-		const { key, ttl, address, macAddress } = localKey;
-		let tokenExpired = hasTokenExpired(ttl);
+		const {
+			localKey = {},
+			online,
+			uuid,
+			websocketOnline,
+			websocketConnected,
+		} = gateway || {};
+		const { key, ttl, address, macAddress, uuid: localUuid } = localKey;
+		const tokenExpired = hasTokenExpired(ttl);
 		const keyInfo = !key ? 'null' : tokenExpired ? 'expired' : true;
+		const ttlString = ttl === null ? 'null' : `${ttl} (${(new Date(ttl * 1000)).toUTCString()})`;
+
+		let websocketStatus = 'offline and disconnected';
+		if (websocketOnline && websocketConnected) {
+			websocketStatus = 'online and connected';
+		} else if (websocketOnline) {
+			websocketStatus = 'online and disconnected';
+		} else if (websocketConnected) {
+			websocketStatus = 'offline and connected';
+		}
 
 		const deviceUniqueID = DeviceInfo.getUniqueID();
 
@@ -68,8 +84,11 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				'autorespond': true,
 				'topicId': topicId,
 				'online': online,
+				'websocketStatus': websocketStatus,
 				'key': keyInfo,
-				'uuid': uuid === null ? 'null' : uuid,
+				'uuid': uuid,
+				'localUuid': localUuid === null ? 'null' : localUuid,
+				'ttl': ttlString,
 				'phoneIP': ip === null ? 'null' : ip,
 				'gatewayIP': address === null ? 'null' : address,
 				'macAddress': macAddress === null ? 'null' : macAddress,
@@ -80,7 +99,7 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				...ticketData,
 			});
 			return dispatch(createSupportTicket(data));
-		  });
+		});
 	};
 }
 

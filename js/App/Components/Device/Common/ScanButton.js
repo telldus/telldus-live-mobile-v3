@@ -28,7 +28,9 @@ import React, {
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	TouchableOpacity,
+	LayoutAnimation,
 } from 'react-native';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -36,11 +38,18 @@ import {
 } from '../../../../BaseComponents';
 
 import {
-	toggleScanStatus433MHz,
+	LayoutAnimations,
+	capitalizeFirstLetterOfEachWord,
+	getScanButtonLabel,
+} from '../../../Lib';
+
+import {
 	initiateScanTransmitter433MHz,
 } from '../../../Actions';
 
 import Theme from '../../../Theme';
+
+import i18n from '../../../Translations/common';
 
 let noOp = () => {};
 let startScan = noOp, stopScan = noOp, destroyInstance = noOp;
@@ -52,8 +61,11 @@ const ScanButton = (props: Object): Object => {
 		clientId,
 		deviceId,
 		callbackOnParamUpdate,
+		devicetype,
 	} = props;
 
+	const intl = useIntl();
+	const { formatMessage } = intl;
 	const dispatch = useDispatch();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -61,13 +73,14 @@ const ScanButton = (props: Object): Object => {
 	const { isScanning = false } = addDevice433;
 
 	useEffect((): Function => {
-		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, callbackOnParamUpdate));
+		const methods = dispatch(initiateScanTransmitter433MHz(clientId, deviceId, formatMessage, callbackOnParamUpdate));
 		if (methods) {
 			startScan = methods.startScan;
 			stopScan = methods.stopScan;
 			destroyInstance = methods.destroyInstance;
 		}
 		return (): Function => {
+			stopScan();
 			destroyInstance();
 			startScan = noOp;
 			stopScan = noOp;
@@ -82,20 +95,22 @@ const ScanButton = (props: Object): Object => {
 	} = getStyles(layout);
 
 	function onPress() {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		if (isScanning) {
-			dispatch(toggleScanStatus433MHz(false));
 			stopScan();
 		} else {
-			dispatch(toggleScanStatus433MHz(true));
 			startScan();
 		}
 	}
+
+	const text = isScanning ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.stopScan)) :
+		getScanButtonLabel(devicetype, formatMessage);
 
 	return (
 		<TouchableOpacity onPress={onPress} style={touchableStyleDef}>
 			<View style={[scanButtonCoverDef, scanButtonCover]}>
 				<Text style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
-					{isScanning ? 'Stop Scan' : 'Scan transmitter'}
+					{text.toUpperCase()}
 				</Text>
 			</View>
 		</TouchableOpacity>
@@ -109,35 +124,32 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		brandPrimary,
+		brandSecondary,
 		shadow,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
-	const fontSize = Math.floor(deviceWidth * 0.045);
-	const heightCover = fontSize * 2.6;
+	const fontSize = Math.floor(deviceWidth * 0.03);
+	const heightCover = fontSize * 2.8;
 
 	return {
 		scanButtonCoverDef: {
-			backgroundColor: brandPrimary,
+			backgroundColor: brandSecondary,
 			height: heightCover,
 			...shadow,
 			borderRadius: heightCover / 2,
-			paddingHorizontal: fontSize,
 			alignItems: 'center',
 			justifyContent: 'center',
-			minWidth: Math.floor(deviceWidth * 0.45),
+			width: Math.floor((deviceWidth - (padding * 3)) / 2 ),
 		},
 		scanButtonTextDefStyle: {
 			fontSize,
 			color: '#fff',
 		},
 		touchableStyleDef: {
-			alignSelf: 'flex-end',
 			flex: 0,
-			marginRight: padding,
-			marginBottom: padding,
+			borderRadius: heightCover / 2,
 		},
 	};
 };
