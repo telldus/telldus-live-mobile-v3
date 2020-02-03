@@ -586,6 +586,7 @@ render(): Object | null {
 						currentTemp={currentTemp}
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
+						hideModeControl={hideModeControl}
 					/>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, addStyle]} onPress={this.onAdd}>

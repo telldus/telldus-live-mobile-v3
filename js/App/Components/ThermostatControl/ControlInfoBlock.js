@@ -50,6 +50,7 @@ type Props = {
 	currentTemp: string,
 	supportResume: boolean,
 	gatewayTimezone: string,
+	hideModeControl: boolean,
 
 	onControlThermostat: (mode: string, temperature?: number | string | null, changeMode: 1 | 0, requestedState: number) => void,
 	intl: intlShape,
@@ -143,6 +144,7 @@ render(): Object {
 		controllingMode,
 		supportResume,
 		gatewayTimezone,
+		hideModeControl,
 	} = this.props;
 
 	const {
@@ -181,15 +183,17 @@ render(): Object {
 	const isEditBoxValueValid = currentValueInScreen !== null && typeof currentValueInScreen !== 'undefined';
 	return (
 		<View style={InfoCover} pointerEvents="box-none">
-			{!!title &&
 			<View style={box1}>
 				<Text style={[infoTitleStyle, {
 					color: controllingMode === 'fan' ? brandSecondary : baseColor,
 				}]}>
-					{title.toUpperCase()}
+					{!!title && hideModeControl ?
+						''
+						:
+						title.toUpperCase()
+					}
 				</Text>
 			</View>
-			}
 			{editValue ?
 				<View style={[box2, {
 					alignItems: 'center',
