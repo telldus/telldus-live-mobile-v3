@@ -49,6 +49,7 @@ const EventRow = (props: Object): Object => {
 		onChangeSelection,
 		isChecked,
 		checkBoxId,
+		toggleActiveState,
 	} = props;
 	const {
 		description,
@@ -98,7 +99,11 @@ const EventRow = (props: Object): Object => {
 		onChangeSelection('event', checkBoxId, event);
 	}
 
-	function onValueChange() {
+	function _toggleActiveState(active: boolean) {
+		toggleActiveState('event', checkBoxId, {
+			...event,
+			active,
+		});
 	}
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
@@ -131,8 +136,8 @@ const EventRow = (props: Object): Object => {
 						</Text>
 						<Switch
 							style={switchStyle}
-							value={isChecked}
-							onValueChange={onValueChange}
+							value={event.active}
+							onValueChange={_toggleActiveState}
 						/>
 						</>
 					) : null
