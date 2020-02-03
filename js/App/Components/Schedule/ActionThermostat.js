@@ -283,7 +283,8 @@ export default class ActionThermostat extends View<null, Props, State> {
 						hideTemperatureControl={hideTemperatureControl}
 						hideModeControl={hideModeControl}
 						intl={intl}
-						source="Schedule_ActionThermostat"/>
+						source="Schedule_ActionThermostat"
+						timeoutPlusMinus={0}/>
 				</ScrollView>
 				{(this.supportedModes && this.supportedModes.length > 0) ? <FloatingButton
 					onPress={this.selectAction}
