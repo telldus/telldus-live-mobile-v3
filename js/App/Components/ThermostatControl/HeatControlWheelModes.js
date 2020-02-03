@@ -55,6 +55,7 @@ type Props = {
 	activeMode?: string,
 	hideTemperatureControl?: boolean,
 	hideModeControl?: boolean,
+	timeoutPlusMinus?: number,
 
 	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
@@ -426,6 +427,7 @@ onAdd = () => {
 }
 
 handleAddMinus = (mode: string, changeMode: 0 | 1, nextValue: number) => {
+	const { timeoutPlusMinus } = this.props;
 
 	this.onPressRow(mode, changeMode, () => {
 		this.updateCurrentValueInScreen(nextValue.toString(), nextValue.toString());
@@ -435,7 +437,7 @@ handleAddMinus = (mode: string, changeMode: 0 | 1, nextValue: number) => {
 		}
 		this.submitTimeout = setTimeout(() => {
 			this.onControlThermostat(mode, nextValue, changeMode, mode === 'off' ? 2 : 1);
-		}, 2000);
+		}, timeoutPlusMinus);
 	});
 }
 
@@ -714,5 +716,9 @@ getStyles(): Object {
 	};
 }
 }
+
+HeatControlWheelModes.defaultProps = {
+	timeoutPlusMinus: 2000,
+};
 
 module.exports = HeatControlWheelModes;
