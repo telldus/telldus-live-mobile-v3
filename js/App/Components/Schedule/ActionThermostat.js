@@ -257,11 +257,15 @@ export default class ActionThermostat extends View<null, Props, State> {
 						alignItems: 'stretch',
 					}}
 					keyboardShouldPersistTaps={'always'}>
-					<ActionThermostatTwo
-						intl={intl}
-						methodValue={methodValue}
-						appLayout={appLayout}
-						onChange={this.onChange}/>
+					{(!this.supportedModes || this.supportedModes.length === 0) ?
+						<EmptyView/>
+						:
+						<ActionThermostatTwo
+							intl={intl}
+							methodValue={methodValue}
+							appLayout={appLayout}
+							onChange={this.onChange}/>
+					}
 					{!hideTemperatureControl ?
 						<Text style={tempLabelStyle}>
 							{intl.formatMessage(i18n.labelTemperature)}
