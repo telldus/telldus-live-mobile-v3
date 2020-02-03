@@ -52,6 +52,7 @@ const JobRow = (props: Object): Object => {
 		isChecked,
 		device = {},
 		checkBoxId,
+		toggleActiveState,
 	} = props;
 	const {
 		name,
@@ -111,7 +112,11 @@ const JobRow = (props: Object): Object => {
 		onChangeSelection('schedule', checkBoxId, job);
 	}
 
-	function onValueChange() {
+	function _toggleActiveState(active: boolean) {
+		toggleActiveState('schedule', checkBoxId, {
+			...job,
+			active,
+		});
 	}
 
 	const checkIconStyle = isChecked ? checkIconActiveStyle : checkIconInActiveStyle;
@@ -144,8 +149,8 @@ const JobRow = (props: Object): Object => {
 						</Text>
 						<Switch
 							style={switchStyle}
-							value={isChecked}
-							onValueChange={onValueChange}/>
+							value={job.active}
+							onValueChange={_toggleActiveState}/>
 						</>
 					) : null
 				}

@@ -220,6 +220,16 @@ const Actions = (props: Props): Object => {
 		setSelectedItems(newSelected);
 	}
 
+	function toggleActiveState(type: 'schedule' | 'event', id: string, data: Object) {
+		let newSelected = {...selectedItems};
+		if (type === 'schedule') {
+			newSelected.selectedSchedules[id] = data;
+		} else if (type === 'event') {
+			newSelected.selectedEvents[id] = data;
+		}
+		setSelectedItems(newSelected);
+	}
+
 	function renderDevice({item, index}: Object): Object {
 		const checkBoxId = item.id;
 		return (
@@ -237,26 +247,29 @@ const Actions = (props: Props): Object => {
 	}
 
 	function renderEvent({item}: Object): Object {
-		const checkBoxId = item.id;
+		const { id } = item;
+
 		return (
 			<EventRow
-				event={item}
+				event={selectedEvents[id] || item}
 				onChangeSelection={onChangeSelection}
-				checkBoxId={checkBoxId}
-				isChecked={!!selectedEvents[checkBoxId]}/>
+				checkBoxId={id}
+				isChecked={!!selectedEvents[id]}
+				toggleActiveState={toggleActiveState}/>
 		);
 	}
 
 	function renderJob({item}: Object): Object {
-		const checkBoxId = item.id;
+		const { id } = item;
 
 		return (
 			<JobRow
-				job={item}
+				job={selectedSchedules[id] || item}
 				device={devices[item.deviceId]}
 				onChangeSelection={onChangeSelection}
-				checkBoxId={checkBoxId}
-				isChecked={!!selectedSchedules[checkBoxId]}/>
+				checkBoxId={id}
+				isChecked={!!selectedSchedules[id]}
+				toggleActiveState={toggleActiveState}/>
 		);
 	}
 
