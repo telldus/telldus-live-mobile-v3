@@ -34,6 +34,14 @@ import {
 	deviceSetStateThermostat,
 	deviceSetStateRGB,
 } from './Devices';
+import {
+	getScheduleOptions,
+	saveSchedule,
+} from './Schedule';
+import {
+	getEventOptions,
+	setEvent,
+} from './Events';
 
 import type { ThunkAction } from './Types';
 import {
@@ -114,13 +122,10 @@ function checkFences(newLocation: Object): ThunkAction {
 				if (fence.isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
 					let inFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, newLocation.latitude, newLocation.longitude) < fence.radius);
 					let wasInFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
-					console.log('Fence active: ', fence.title, inFence, wasInFence);
 					let actions = null;
 					if (inFence && !wasInFence) { // arrive fence
-						console.log('arrive: ', fence.title);
 						actions = fence.arriving;
 					} else if (!inFence && wasInFence) { // leave fence
-						console.log('leave: ', fence.title);
 						actions = fence.leaving;
 					}
 
@@ -135,7 +140,6 @@ function checkFences(newLocation: Object): ThunkAction {
 
 function handleActions(actions: Object): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
-		console.log('TEST actions', actions);
 		const { devices = {}, schedules = {}, events = {} } = actions;
 		for (let id in devices) {
 			dispatch(handleActionDevice(devices[id]));
@@ -155,7 +159,6 @@ function handleActionDevice(action: Object): ThunkAction {
 		if (!deviceId) {
 			return;
 		}
-		console.log('TEST handleActionDevice', action);
 
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
@@ -179,14 +182,19 @@ function handleActionDevice(action: Object): ThunkAction {
 }
 
 function handleActionEvent(action: Object): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
-		console.log('TEST handleActionEvent', action);
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			id,
+			...options
+		} = getEventOptions(action);
+		return dispatch(setEvent(id, options));
 	};
 }
 
 function handleActionSchedule(action: Object): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
-		console.log('TEST handleActionSchedule', action);
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const options = getScheduleOptions(action);
+		return dispatch(saveSchedule(options));
 	};
 }
 
