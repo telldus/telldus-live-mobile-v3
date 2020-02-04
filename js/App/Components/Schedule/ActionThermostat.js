@@ -171,22 +171,24 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 	selectAction = () => {
 		const { actions, navigation, isEditMode } = this.props;
-		let { methodValue } = this.state;
+		const { methodValue } = this.state;
 
 		const {
-			temperature,
 			changeTemp,
 		} = methodValue;
-		methodValue = {
+		let data = {
 			...methodValue,
-			temperature: changeTemp ? temperature : null,
 		};
 
+		if (!changeTemp) {
+			delete data.temperature;
+		}
+
 		if (isEditMode()) {
-			actions.selectAction(2048, JSON.stringify(methodValue));
+			actions.selectAction(2048, JSON.stringify(data));
 			navigation.goBack(navigation.state.params.actionKey);
 		} else {
-			actions.selectAction(2048, JSON.stringify(methodValue));
+			actions.selectAction(2048, JSON.stringify(data));
 			navigation.navigate({
 				routeName: 'Time',
 				key: 'Time',
