@@ -216,12 +216,14 @@ pushConf(register: boolean) {
 		deviceId,
 		pushTokenRegistered,
 		pushToken,
+		toggleDialogueBox,
 	} = this.props;
 	const data = {
 		deviceId,
 		pushTokenRegistered,
 		pushToken,
 		register,
+		toggleDialogueBox,
 	};
 	dispatch(Push.configure(data));
 	if (!this.onTokenRefreshListener) {
