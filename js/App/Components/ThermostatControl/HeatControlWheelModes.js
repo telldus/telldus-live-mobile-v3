@@ -55,6 +55,8 @@ type Props = {
 	hideTemperatureControl?: boolean,
 	hideModeControl?: boolean,
 	timeoutPlusMinus?: number,
+	gradientColorFromOverride?: string,
+	gradientColorToOverride?: string,
 
 	intl: Object,
 	modesCoverStyle: number | Array<any> | Object,
@@ -456,6 +458,8 @@ render(): Object | null {
 		activeMode,
 		hideTemperatureControl = false,
 		hideModeControl = false,
+		gradientColorToOverride,
+		gradientColorFromOverride,
 	} = this.props;
 
 	const {
@@ -548,11 +552,11 @@ render(): Object | null {
 							segments={segments}
 							strokeWidth={strokeWidth}
 							radius={radius}
-							gradientColorFrom={gradientColorFrom}
-							gradientColorTo={gradientColorTo}
+							gradientColorFrom={gradientColorFromOverride || gradientColorFrom}
+							gradientColorTo={gradientColorToOverride || gradientColorTo}
 							bgCircleColor="transparent"
 							knobStrokeColor="#fff"
-							knobFillColor={gradientColorTo}
+							knobFillColor={gradientColorToOverride || gradientColorTo}
 							keepArcVisible
 							showStartKnob={false}
 							showStopKnob={hasValidMinMax}
