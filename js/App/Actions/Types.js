@@ -37,6 +37,7 @@ export type Action =
 	| { type: 'SET_NETWORK_CONNECTION_INFO', payload: Object }
 
 	| { type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: string }
+	| { type: 'PLAY_SERVICES_INFO', payload: Object }
 
 	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
