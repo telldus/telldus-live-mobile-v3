@@ -38,35 +38,64 @@ import {
 const Push = {
 	configure: (params: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
-			const { pushToken, pushTokenRegistered } = params;
+			const {
+				user: {
+					playServicesInfo = {},
+				},
+			} = getState();
 
-			// It is mandatory to create channel. https://rnfirebase.io/docs/v4.2.x/notifications/android-channels
-			// TODO: Check the behaviour in lower android versions.
-			Push.setChannel();
+			const { isAvailable, ...others } = Push.checkPlayServices();
+			if (isAvailable) {
+				if (!playServicesInfo.isAvailable) {
+					dispatch({
+						type: 'PLAY_SERVICES_INFO',
+						payload:
+							{
+								isAvailable,
+								...others,
+							},
+					});
+				}
 
-			return firebase.messaging().hasPermission()
-				.then((enabled: boolean): any => {
-					if (enabled) {
-						// user has permissions
-						if (!pushToken || !pushTokenRegistered) {
-							return dispatch(Push.getToken(params));
+				const { pushToken, pushTokenRegistered } = params;
+
+				// It is mandatory to create channel. https://rnfirebase.io/docs/v4.2.x/notifications/android-channels
+				// TODO: Check the behaviour in lower android versions.
+				Push.setChannel();
+
+				return firebase.messaging().hasPermission()
+					.then((enabled: boolean): any => {
+						if (enabled) {
+							// user has permissions
+							if (!pushToken || !pushTokenRegistered) {
+								return dispatch(Push.getToken(params));
+							}
+						} else {
+							return firebase.messaging().requestPermission()
+								.then((): any => {
+									// User has authorised
+									if (!pushToken || !pushTokenRegistered) {
+										return dispatch(Push.getToken(params));
+									}
+								})
+								.catch((): any => {
+									// User has rejected permissions
+									if (!pushToken || !pushTokenRegistered) {
+										return dispatch(Push.getToken(params));
+									}
+								});
 						}
-					} else {
-						return firebase.messaging().requestPermission()
-							.then((): any => {
-								// User has authorised
-								if (!pushToken || !pushTokenRegistered) {
-									return dispatch(Push.getToken(params));
-								}
-							})
-							.catch((): any => {
-								// User has rejected permissions
-								if (!pushToken || !pushTokenRegistered) {
-									return dispatch(Push.getToken(params));
-								}
-							});
-					}
-				});
+					});
+			}
+			dispatch({
+				type: 'PLAY_SERVICES_INFO',
+				payload:
+					{
+						isAvailable,
+						...others,
+					},
+			});
+			return Promise.resolve();
 		};
 	},
 	setChannel: () => {

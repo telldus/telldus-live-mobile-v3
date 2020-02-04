@@ -45,6 +45,7 @@ export type State = {
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	generatePushError: string,
+	playServicesInfo: Object,
 };
 
 export const initialState = {
@@ -66,6 +67,7 @@ export const initialState = {
 	visibilityExchangeOffer: 'show',
 	visibilityProExpireHeadsup: 'show',
 	generatePushError: '',
+	playServicesInfo: {},
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -126,6 +128,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			generatePushError: action.generatePushError,
+		};
+	}
+	if (action.type === 'PLAY_SERVICES_INFO') {
+		return {
+			...state,
+			playServicesInfo: action.payload,
 		};
 	}
 	if (action.type === 'PUSH_TOKEN_REGISTERED') {
