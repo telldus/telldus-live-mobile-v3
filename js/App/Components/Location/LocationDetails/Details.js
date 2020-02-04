@@ -60,6 +60,7 @@ type Props = {
 	pushToken: boolean | string,
 	networkInfo: Object,
 	generatePushError: string,
+	playServicesInfo: Object,
 };
 
 type State = {
@@ -280,7 +281,12 @@ class Details extends View<Props, State> {
 		clearTimeout(this.timeoutInfoPress);
 		this.infoPressCount++;
 		if (this.infoPressCount >= 5) {
-			const { location = {}, pushToken, generatePushError } = this.props;
+			const {
+				location = {},
+				pushToken,
+				generatePushError,
+				playServicesInfo,
+			} = this.props;
 			const {
 				online,
 				websocketOnline,
@@ -306,6 +312,7 @@ class Details extends View<Props, State> {
 					pushToken,
 					generatePushError,
 					websocketConnected,
+					playServicesInfo,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
@@ -616,6 +623,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const {
 		pushToken,
 		generatePushError,
+		playServicesInfo,
 	} = store.user;
 	const { networkInfo } = store.app;
 
@@ -624,6 +632,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		pushToken,
 		networkInfo,
 		generatePushError,
+		playServicesInfo,
 	};
 }
 
