@@ -109,7 +109,13 @@ const Push = {
 
 		firebase.notifications().android.createChannel(channel);
 	},
-	getToken: ({ pushToken, pushTokenRegistered, deviceId, register }: Object): ThunkAction => {
+	getToken: ({
+		pushToken,
+		pushTokenRegistered,
+		deviceId,
+		register,
+		toggleDialogueBox,
+	}: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
 				.then((token: string): string => {
@@ -125,6 +131,19 @@ const Push = {
 					return token;
 				})
 				.catch((err: any) => {
+					if (err.message && err.message === 'AUTHENTICATION_FAILED') {
+						if (toggleDialogueBox) {
+							toggleDialogueBox({
+								show: true,
+								showHeader: true,
+								text: 'Push notification might not work. ' +
+								'Please make sure Google account is configured properly ' +
+								'and working in this device. Also make sure you have latest ' +
+								'Google play services installed.',
+								showPositive: true,
+							});
+						}
+					}
 					dispatch({ type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: err.message });
 					throw err;
 				});
