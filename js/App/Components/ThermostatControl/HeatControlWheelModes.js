@@ -504,7 +504,7 @@ render(): Object | null {
 		setpointValueLocal,
 	} = this.state;
 
-	let startAngleF = this.initialAngle, angleLengthF;
+	let startAngleF = this.initialAngle, angleLengthF = 100;
 	const hasValidMinMax = typeof minVal === 'number' && typeof maxVal === 'number';
 	if (hasValidMinMax && !isNaN(angleLength) && !isNaN(startAngle)) {
 		startAngleF = startAngle;
