@@ -460,6 +460,7 @@ render(): Object | null {
 		hideModeControl = false,
 		gradientColorToOverride,
 		gradientColorFromOverride,
+		source,
 	} = this.props;
 
 	const {
@@ -622,7 +623,7 @@ render(): Object | null {
 					setpointValue={setpointValue}
 					setpointValueLocal={setpointValueLocal}
 					handleAddMinus={this.handleAddMinus}
-					hideTemperatureControl={hideTemperatureControl}/>
+					hideTemperatureControl={hideTemperatureControl || source === 'Schedule_ActionThermostat'}/>
 				:
 				<EmptyView/>
 			}
