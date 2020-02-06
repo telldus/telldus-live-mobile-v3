@@ -390,6 +390,9 @@ onEndSlide = () => {
 }
 
 onPressSliderPath = (data: Object) => {
+	if (!this.hasValidMinMax()) {
+		return;
+	}
 	const {startAngle, angleLength} = data;
 	const { temp } = this.getValueFromAngle(angleLength, this.state.controllingMode);
 	this.setState({
@@ -444,6 +447,14 @@ handleAddMinus = (mode: string, changeMode: 0 | 1, nextValue: number) => {
 }
 
 noOP = () => {
+}
+
+hasValidMinMax = (): boolean => {
+	const {
+		minVal,
+		maxVal,
+	} = this.state;
+	return typeof minVal === 'number' && typeof maxVal === 'number';
 }
 
 render(): Object | null {
@@ -508,7 +519,7 @@ render(): Object | null {
 	} = this.state;
 
 	let startAngleF = this.initialAngle, angleLengthF = 100;
-	const hasValidMinMax = typeof minVal === 'number' && typeof maxVal === 'number';
+	const hasValidMinMax = this.hasValidMinMax();
 	if (hasValidMinMax && !isNaN(angleLength) && !isNaN(startAngle)) {
 		startAngleF = startAngle;
 		angleLengthF = angleLength;
