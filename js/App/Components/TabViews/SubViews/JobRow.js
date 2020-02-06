@@ -354,7 +354,7 @@ class JobRow extends View<null, Props, null> {
 								}
 							</View>
 							<>
-							{!!label && <Text style={thermostatInfo}>
+							{(!!label && !!changeMode) && <Text style={thermostatInfo}>
 								{label.toUpperCase()}
 							</Text>
 							}
