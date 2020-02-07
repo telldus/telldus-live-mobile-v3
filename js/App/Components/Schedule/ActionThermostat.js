@@ -300,9 +300,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 						hideTemperatureControl={hideTemperatureControl}
 						intl={intl}
 						source="Schedule_ActionThermostat"
-						timeoutPlusMinus={0}
-						gradientColorFromOverride={changeTempAlone ? '#004D92' : undefined}
-						gradientColorToOverride={changeTempAlone ? '#e26901' : undefined}/>
+						timeoutPlusMinus={0}/>
 				</ScrollView>
 				{(this.supportedModes && this.supportedModes.length > 0) ? <FloatingButton
 					onPress={this.selectAction}
