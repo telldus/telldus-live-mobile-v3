@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, Animated, Easing } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
@@ -72,10 +72,6 @@ type Props = {
 type State = {
 	isOpen: boolean,
 	forceClose: boolean,
-	showFullName: boolean,
-	coverMaxWidth: number,
-	coverOccupiedWidth: number,
-	buttonsWidth?: number,
 };
 
 class SensorRow extends View<Props, State> {
@@ -92,16 +88,9 @@ class SensorRow extends View<Props, State> {
 	onRowOpen: () => void;
 	onRowClose: () => void;
 	onSetIgnoreSensor: () => void;
-	onPressSensorName: () => void;
 	onSettingsSelected: (Object) => void;
 	closeSwipeRow: () => void;
 
-	onLayoutDeviceName: (Object) => void;
-	onLayoutCover: (Object) => void;
-	onLayoutButtons: (Object) => void;
-	animatedWidth: any;
-	isAnimating: boolean;
-	animatedScaleX: any;
 	isTablet: boolean;
 
 	shouldUpdateSwipeRow: (Object) => boolean;
@@ -109,10 +98,6 @@ class SensorRow extends View<Props, State> {
 	state = {
 		isOpen: false,
 		forceClose: false,
-		showFullName: false,
-		coverMaxWidth: 0,
-		coverOccupiedWidth: 0,
-		buttonsWidth: undefined,
 	};
 
 	constructor(props: Props) {
@@ -130,15 +115,6 @@ class SensorRow extends View<Props, State> {
 
 		this.onRowOpen = this.onRowOpen.bind(this);
 		this.onRowClose = this.onRowClose.bind(this);
-		this.onPressSensorName = this.onPressSensorName.bind(this);
-
-		this.onLayoutDeviceName = this.onLayoutDeviceName.bind(this);
-		this.onLayoutCover = this.onLayoutCover.bind(this);
-		this.onLayoutButtons = this.onLayoutButtons.bind(this);
-
-		this.animatedWidth = null;
-		this.animatedScaleX = new Animated.Value(1);
-		this.isAnimating = false;
 
 		this.isTablet = DeviceInfo.isTablet();
 
@@ -221,30 +197,6 @@ class SensorRow extends View<Props, State> {
 		this.props.setIgnoreSensor(this.props.sensor);
 	}
 
-	onPressSensorName() {
-		let { showFullName, coverOccupiedWidth, coverMaxWidth, isOpen } = this.state;
-		if (isOpen) {
-			this.closeSwipeRow();
-		} else if (coverOccupiedWidth >= coverMaxWidth || showFullName) {
-			if (!showFullName) {
-				this.isAnimating = true;
-				this.setState({
-					showFullName: true,
-				}, () => {
-					this.showFullName(200, 10, Easing.linear());
-				});
-			} else {
-				this.isAnimating = true;
-				this.setState({
-					showFullName: false,
-				}, () => {
-					this.hideFullName(200, 10, Easing.linear());
-				});
-			}
-		}
-	}
-
-
 	closeSwipeRow() {
 		this.refs.SwipeRow.closeRow();
 	}
@@ -252,97 +204,6 @@ class SensorRow extends View<Props, State> {
 	onSettingsSelected() {
 		this.closeSwipeRow();
 		this.props.onSettingsSelected(this.props.sensor);
-	}
-
-	showFullName(duration: number, delay: number, easing: any) {
-		Animated.parallel([
-			this.reduceButtons(duration, delay, easing),
-			this.scaleDown(duration, delay, easing),
-		]).start();
-	}
-
-	hideFullName(duration: number, delay: number, easing: any) {
-		Animated.parallel([
-			this.expandButtons(duration, delay, easing),
-			this.scaleUp(duration, delay, easing),
-		]).start();
-	}
-
-	scaleDown(duration: number, delay: number, easing: any) {
-		Animated.timing(this.animatedScaleX, {
-			duration,
-			delay,
-			toValue: 0,
-			easing,
-		}).start();
-	}
-
-	scaleUp(duration: number, delay: number, easing: any) {
-		Animated.timing(this.animatedScaleX, {
-			duration,
-			delay,
-			toValue: 1,
-			easing,
-		}).start();
-	}
-
-	reduceButtons(duration: number, delay: number, easing: any) {
-		Animated.timing(this.animatedWidth, {
-			duration,
-			delay,
-			toValue: 0,
-			easing,
-		}).start(({ finished }: Object) => {
-			if (finished) {
-				this.isAnimating = false;
-			}
-		});
-	}
-
-	expandButtons(duration: number, delay: number, easing: any) {
-		Animated.timing(this.animatedWidth, {
-			duration,
-			delay,
-			toValue: this.state.buttonsWidth,
-			easing,
-		}).start(({ finished }: Object) => {
-			if (finished) {
-				this.isAnimating = false;
-			}
-		});
-	}
-
-	onLayoutDeviceName(ev: Object) {
-		const { x, width } = ev.nativeEvent.layout;
-		const { coverMaxWidth } = this.state;
-		// adding a const to the calculated space as some text seem to leave extra space in the right after truncating.
-		const maxRightPadd = 12;
-		const newOccWidth = width + x + maxRightPadd;
-		if (!this.state.showFullName && (newOccWidth !== coverMaxWidth)) {
-			this.setState({
-				coverOccupiedWidth: newOccWidth,
-			});
-		}
-	}
-
-	onLayoutCover(ev: Object) {
-		const { coverMaxWidth } = this.state;
-		const { width } = ev.nativeEvent.layout;
-		if (!this.state.showFullName && (coverMaxWidth !== width)) {
-			this.setState({
-				coverMaxWidth: width,
-			});
-		}
-	}
-
-	onLayoutButtons(ev: Object) {
-		const { buttonsWidth } = this.state;
-		if (!buttonsWidth) {
-			this.animatedWidth = new Animated.Value(ev.nativeEvent.layout.width);
-			this.setState({
-				buttonsWidth: ev.nativeEvent.layout.width,
-			});
-		}
 	}
 
 	getSensors(data: Object, styles: Object): Object {
@@ -410,11 +271,6 @@ class SensorRow extends View<Props, State> {
 		let accessibilityLabelPhraseTwo = intl.formatMessage(i18n.accessibilityLabelViewSD);
 		let accessibilityLabel = `${accessibilityLabelPhraseOne}, ${accessibilityLabelPhraseTwo}`;
 
-		const interpolatedScale = this.animatedScaleX.interpolate({
-			inputRange: [0, 0.5, 1],
-			outputRange: [0, 1, 1],
-		});
-
 		const nameInfo = this.getNameInfo(sensor, sensorName, minutesAgo, lastUpdated, isGatewayActive, styles);
 
 		return (
@@ -454,13 +310,7 @@ class SensorRow extends View<Props, State> {
 							id={id}
 							isOpen={isOpen}
 							closeSwipeRow={this.closeSwipeRow}
-							onLayout={this.onLayoutButtons}
-							style={[styles.sensorValueCover, {
-								width: this.animatedWidth,
-								transform: [{
-									scaleX: interpolatedScale,
-								}],
-							}]}
+							style={styles.sensorValueCover}
 							valueCoverStyle={styles.sensorValueCover}
 							dotCoverStyle={styles.dotCoverStyle}
 							dotStyle={styles.dotStyle} />
@@ -482,11 +332,10 @@ class SensorRow extends View<Props, State> {
 		const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdatedValue));
 
 		return (
-			<View style={coverStyle} onLayout={this.onLayoutCover}>
+			<View style={coverStyle}>
 				<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
 					ellipsizeMode="middle"
-					numberOfLines={1}
-					onLayout={this.onLayoutDeviceName}>
+					numberOfLines={1}>
 					{sensorName}
 				</Text>
 				{isGatewayActive ?
