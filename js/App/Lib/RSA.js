@@ -20,7 +20,6 @@
 // @flow
 
 'use strict';
-import { Platform } from 'react-native';
 import SInfo from 'react-native-sensitive-info';
 const forge = require('node-forge');
 
@@ -39,45 +38,28 @@ function getRSAKey(generate: boolean = true, onSuccess: (Object) => void): any {
 		SInfo.getAllItems({
 			sharedPreferencesName: 'TelldusSharedPrefs',
 			keychainService: 'TelldusKeychain'}).then((values: any) => {
-			if (Platform.OS === 'android') {
-				let { pemPub: pemPubS, pemPvt: pemPvtS } = values;
-				if (pemPubS && pemPvtS) {
-					if (onSuccess) {
-						onSuccess({pemPub: pemPubS, pemPvt: pemPvtS});
-					}
-				} else if (generate) {
-					generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
-						if (onSuccess) {
-							onSuccess({pemPub, pemPvt});
+			let keys = values[0];
+			if (keys && keys.length >= 2) {
+				if (onSuccess) {
+					let data = {};
+					keys.map((key: Object) => {
+						if (key.key === 'pemPub') {
+							data.pemPub = key.value;
+						}
+						if (key.key === 'pemPvt') {
+							data.pemPvt = key.value;
 						}
 					});
-				} else if (onSuccess) {
-					onSuccess({pemPub: null, pemPvt: null});
+					onSuccess(data);
 				}
-			} else {
-				let keys = values[0];
-				if (keys && keys.length >= 2) {
+			} else if (generate) {
+				generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
 					if (onSuccess) {
-						let data = {};
-						keys.map((key: Object) => {
-							if (key.key === 'pemPub') {
-								data.pemPub = key.value;
-							}
-							if (key.key === 'pemPvt') {
-								data.pemPvt = key.value;
-							}
-						});
-						onSuccess(data);
+						onSuccess({pemPub, pemPvt});
 					}
-				} else if (generate) {
-					generateAndStoreRSAKey(({ pemPub, pemPvt }: Object) => {
-						if (onSuccess) {
-							onSuccess({pemPub, pemPvt});
-						}
-					});
-				} else if (onSuccess) {
-					onSuccess({pemPub: null, pemPvt: null});
-				}
+				});
+			} else if (onSuccess) {
+				onSuccess({pemPub: null, pemPvt: null});
 			}
 		});
 	}
