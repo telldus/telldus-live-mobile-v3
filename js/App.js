@@ -264,7 +264,10 @@ class App extends React.Component<Props, State> {
 				{hasNotLoggedIn ?
 					<PreLoginNavigator toggleDialogueBox={this.toggleDialogueBox}/>
 					:
-					<PostLoginNavigatorCommon {...this.props} toggleDialogueBox={this.toggleDialogueBox}/>
+					<PostLoginNavigatorCommon
+						{...this.props}
+						toggleDialogueBox={this.toggleDialogueBox}
+						showChangeLog={showChangeLog}/>
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}
@@ -273,7 +276,7 @@ class App extends React.Component<Props, State> {
 					onLayout={this.onLayout}/>
 				<DialogueBox
 					{...others}
-					showDialogue={show}
+					showDialogue={show && !showChangeLog}
 					showHeader={showHeader}
 					imageHeader={imageHeader}
 					onPressNegative={this.onPressDialogueNegative}
