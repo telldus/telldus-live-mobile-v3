@@ -386,11 +386,12 @@ checkForNext(): Object {
 }
 
 onPressReRunTest() {
-	this.TESTS_TO_RUN.map((test: Object) => {
-		test.status = null;
+	this.TESTS_TO_RUN.map((test: Object, i: number) => {
+		this.TESTS_TO_RUN[i].status = null;
 	});
 	this.setState({
 		testCount: this.state.testCount + 1,
+		currentRunningTest: {},
 	}, () => {
 		this.updateTest(undefined, undefined, 0, () => {
 			this.validateAndRunTests();
@@ -458,6 +459,7 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 		if (failedIndex === 3 && !supportRSA()) {
 			messages.push(
 				<InfoBlock
+					key={`${i}`}
 					text={intl.formatMessage(i18n.infoLocalTestFailOne)}
 					{...sharedProps}/>
 			);
@@ -466,6 +468,7 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 				if (!address) {
 					messages.push(
 						<InfoBlock
+							key={`${i}`}
 							text={intl.formatMessage(i18n.infoLocalTestFailFour)}
 							{...sharedProps}/>
 					);
@@ -476,6 +479,7 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 					if (!online) {
 						messages.push(
 							<InfoBlock
+								key={`${i}`}
 								text={intl.formatMessage(i18n.infoLocalTestFailTwo)}
 								{...sharedProps}/>
 						);
@@ -483,6 +487,7 @@ getTroubleShootInfo(failedTestsIndex: Array<number>, style: Object): Array<Objec
 					if (!websocketOnline) {
 						messages.push(
 							<InfoBlock
+								key={`${i}`}
 								text={intl.formatMessage(i18n.infoLocalTestFailThree)}
 								{...sharedProps}/>
 						);
