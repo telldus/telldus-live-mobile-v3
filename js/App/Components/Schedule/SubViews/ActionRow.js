@@ -258,23 +258,19 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 			const modesInfo = getKnownModes(intl.formatMessage);
 			// $FlowFixMe
 			let Icon, label;
-			if (changeMode) {
-				modesInfo.map((info: Object) => {
-					if (info.mode.trim() === mode.trim()) {
-						Icon = info.IconActive;
-						label = info.label;
-					}
-				});
-			}
-
-			const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
+			modesInfo.map((info: Object) => {
+				if (info.mode.trim() === mode.trim()) {
+					Icon = info.IconActive;
+					label = info.label;
+				}
+			});
 
 			const {
 				fontSize,
 				...others
 			} = thermostateModeControlIcon;
 
-			const showModeIcon = !!changeMode && !!Icon;
+			const showModeIcon = !!Icon;
 
 			return (
 				<View style={[thermostatContainer, { backgroundColor }, iconContainerStyle]}>
@@ -290,9 +286,9 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 								...others,
 							}}/>
 						)}
-						{hasTemp &&
+						{!!changeMode &&
 								(
-									<IconTelldus icon={'temperature'} style={thermostateModeControlIcon}/>
+									<IconTelldus icon={'play'} style={thermostateModeControlIcon}/>
 								)
 						}
 					</View>
