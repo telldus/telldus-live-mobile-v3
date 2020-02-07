@@ -243,18 +243,20 @@ getTokenForLocalControlTS() {
 }
 
 getRSAKeyTS() {
-	getRSAKey(true, ({ pemPvt, pemPub }: Object): any => {
-		if (pemPvt && pemPub) {
-			this.hasRSAKeys = true;
-			this.updateTest(3, 'ok', 0, () => {
-				this.validateAndRunTests();
-			});
-		} else {
-			this.hasRSAKeys = false;
-			this.updateTest(3, 'fail', 0, () => {
-				this.validateAndRunTests();
-			});
-		}
+	getRSAKey(true, (): any => {
+		getRSAKey(false, ({ pemPvt, pemPub }: Object): any => {
+			if (pemPvt && pemPub) {
+				this.hasRSAKeys = true;
+				this.updateTest(3, 'ok', 0, () => {
+					this.validateAndRunTests();
+				});
+			} else {
+				this.hasRSAKeys = false;
+				this.updateTest(3, 'fail', 0, () => {
+					this.validateAndRunTests();
+				});
+			}
+		});
 	});
 }
 
