@@ -45,7 +45,10 @@ import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import { getGatewayInfo, getGateways, removeGateway } from '../../../Actions/Gateways';
 import { getAppData } from '../../../Actions/AppData';
-import { hasTokenExpired } from '../../../Lib';
+import {
+	hasTokenExpired,
+	getRSAKey,
+} from '../../../Lib';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 
 import Theme from '../../../Theme';
@@ -160,6 +163,23 @@ class Details extends View<Props, State> {
 		this.handleBackPress = this.handleBackPress.bind(this);
 
 		this.ACCEPTABLE = ['ethernet', 'wifi', 'vpn'];
+
+		this.RSAKeysAreGenerated = false;
+		this.RSAKeysRetrievableFromLocal = false;
+		getRSAKey(true, ({ pemPvt, pemPub }: Object): any => {
+			if (pemPvt && pemPub) {
+				this.RSAKeysAreGenerated = true;
+			} else {
+				this.RSAKeysAreGenerated = false;
+			}
+			getRSAKey(false, ({ pemPvt: pemPvtL, pemPub: pemPubL }: Object): any => {
+				if (pemPvtL && pemPubL) {
+					this.RSAKeysRetrievableFromLocal = true;
+				} else {
+					this.RSAKeysRetrievableFromLocal = false;
+				}
+			});
+		});
 	}
 
 	componentDidMount() {
@@ -313,6 +333,8 @@ class Details extends View<Props, State> {
 					pushToken,
 					generatePushError,
 					playServicesInfo,
+					RSAKeysAreGenerated: this.RSAKeysAreGenerated,
+					RSAKeysRetrievableFromLocal: this.RSAKeysRetrievableFromLocal,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
