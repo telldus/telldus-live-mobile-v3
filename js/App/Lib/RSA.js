@@ -62,6 +62,8 @@ function getRSAKey(generate: boolean = true, onSuccess: (Object) => void): any {
 				onSuccess({pemPub: null, pemPvt: null});
 			}
 		});
+	} else if (onSuccess) {
+		onSuccess({pemPub: null, pemPvt: null});
 	}
 }
 
