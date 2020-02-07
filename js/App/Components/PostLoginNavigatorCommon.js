@@ -466,9 +466,6 @@ render(): Object {
 		dimmer,
 		intl,
 		screenReaderEnabled,
-		visibilityExchangeOffer,
-		gateways,
-		locale,
 		showChangeLog,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
@@ -494,14 +491,13 @@ render(): Object {
 			/>
 			{screenReaderEnabled && (
 				<DimmerStep
-					showModal={showStep && !showEULA && !showEO && !showChangeLog}
+					showModal={showStep && !showEULA && !showChangeLog}
 					deviceId={deviceStep}
 					onDoneDimming={this.onDoneDimming}
 					intl={intl}
 				/>
 			)}
 			<UserAgreement showModal={showEULA && !showChangeLog} onLayout={this.onLayout}/>
-			<ExchangeOffer showModal={showEO && !showChangeLog} onLayout={this.onLayout}/>
 		</View>
 	);
 }
