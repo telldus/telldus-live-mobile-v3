@@ -320,14 +320,12 @@ class JobRow extends View<null, Props, null> {
 					}
 				});
 
-				const hasTemp = typeof temperature !== 'undefined' && temperature !== null;
-
 				const {
 					fontSize,
 					color,
 				} = thermostateModeControlIcon;
 
-				const showModeIcon = !!changeMode && !!Icon;
+				const showModeIcon = !!Icon;
 
 				return (
 					{
@@ -345,14 +343,14 @@ class JobRow extends View<null, Props, null> {
 										color: color,
 									}}/>
 								)}
-								{hasTemp &&
+								{!!changeMode &&
 									(
-										<IconTelldus icon={'temperature'} style={thermostateModeControlIcon}/>
+										<IconTelldus icon={'play'} style={thermostateModeControlIcon}/>
 									)
 								}
 							</View>
 							<>
-							{(!!label && !!changeMode) && <Text style={thermostatInfo}>
+							{!!label && <Text style={thermostatInfo}>
 								{label.toUpperCase()}
 							</Text>
 							}

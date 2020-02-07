@@ -82,7 +82,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		const { stateValues = {}, parameter = [] } = this.device || {};
 		const { THERMOSTAT: { mode } } = stateValues;
 
-		const { methodValue } = schedule;
+		const { methodValue, edit } = schedule;
 		this.currentMode = mode;
 		this.currentValue = undefined;
 		this.methodValue = {
@@ -140,7 +140,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 				this.methodValue = {
 					...this.methodValue,
 					temperature: changeTemp ? parseInt(sm.value, 10) : sm.value,
-					changeTemp,
+					changeTemp: !edit ? changeTemp : false,
 				};
 			}
 			if (sm.mode === this.currentMode && this.currentValue) {
@@ -248,7 +248,17 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		const hideTemperatureControl = changeModeAlone;
 		const changeTempAlone = changeTemp && !changeMode;
-		const hideModeControl = changeTempAlone;
+
+		let modes = [];
+		this.supportedModes.forEach((m: Object) => {
+			if (changeTempAlone) {
+				if (m.mode !== 'off' && m.mode !== 'fan') {
+					modes.push(m);
+				}
+			} else {
+				modes.push(m);
+			}
+		});
 
 		return (
 			<View style={container}>
@@ -259,7 +269,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 						alignItems: 'stretch',
 					}}
 					keyboardShouldPersistTaps={'always'}>
-					{(!this.supportedModes || this.supportedModes.length === 0) ?
+					{(!modes || modes.length === 0) ?
 						<EmptyView/>
 						:
 						<ActionThermostatTwo
@@ -277,24 +287,20 @@ export default class ActionThermostat extends View<null, Props, State> {
 					}
 					<HeatControlWheelModes
 						appLayout={appLayout}
-						modes={this.supportedModes}
+						modes={modes}
 						device={this.device}
 						activeMode={activeMode}
 						deviceSetStateThermostat={this.deviceSetStateThermostat}
 						supportResume={this.supportResume}
 						hideTemperatureControl={hideTemperatureControl}
-						hideModeControl={hideModeControl}
 						intl={intl}
 						source="Schedule_ActionThermostat"
-						timeoutPlusMinus={0}
-						gradientColorFromOverride={changeTempAlone ? '#004D92' : undefined}
-						gradientColorToOverride={changeTempAlone ? '#e26901' : undefined}/>
+						timeoutPlusMinus={0}/>
 				</ScrollView>
 				{(this.supportedModes && this.supportedModes.length > 0) ? <FloatingButton
 					onPress={this.selectAction}
 					imageSource={{uri: 'right_arrow_key'}}
-					paddingRight={outerPadding - 2}
-				/>
+					paddingRight={outerPadding - 2}/>
 					:
 					<EmptyView/>
 				}
