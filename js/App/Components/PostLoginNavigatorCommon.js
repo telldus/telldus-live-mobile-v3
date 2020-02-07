@@ -89,6 +89,9 @@ type Props = {
 
 	addNewGatewayBool: boolean,
 
+	showChangeLog: boolean,
+
+	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
@@ -280,6 +283,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showToast',
 		'showEULA',
 		'addNewGatewayBool',
+		'showChangeLog',
 	]);
 	if (propsChange) {
 		return true;
@@ -462,6 +466,10 @@ render(): Object {
 		dimmer,
 		intl,
 		screenReaderEnabled,
+		visibilityExchangeOffer,
+		gateways,
+		locale,
+		showChangeLog,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
@@ -486,13 +494,14 @@ render(): Object {
 			/>
 			{screenReaderEnabled && (
 				<DimmerStep
-					showModal={showStep}
+					showModal={showStep && !showEULA && !showEO && !showChangeLog}
 					deviceId={deviceStep}
 					onDoneDimming={this.onDoneDimming}
 					intl={intl}
 				/>
 			)}
-			<UserAgreement showModal={showEULA} onLayout={this.onLayout}/>
+			<UserAgreement showModal={showEULA && !showChangeLog} onLayout={this.onLayout}/>
+			<ExchangeOffer showModal={showEO && !showChangeLog} onLayout={this.onLayout}/>
 		</View>
 	);
 }
