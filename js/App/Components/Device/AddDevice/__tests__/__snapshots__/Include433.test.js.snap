@@ -488,6 +488,14 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 >
                   1.
                 </Text>
+                <View
+                  style={
+                    Object {
+                      "height": 0,
+                      "width": 0,
+                    }
+                  }
+                />
               </View>
               <View
                 style={
