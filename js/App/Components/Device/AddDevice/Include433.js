@@ -44,12 +44,12 @@ import {
 
 import {
 	get433DevicePostConfigScreenOptions,
+	getTelldusLearnImage,
 } from '../../../Lib/DeviceUtils';
 
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
-import isEmpty from 'lodash/isEmpty';
 
 type Props = {
 	appLayout: Object,
@@ -243,7 +243,9 @@ render(): Object {
 	}
 
 	const deviceInfo = navigation.getParam('deviceInfo', '');
+	const deviceBrand = navigation.getParam('deviceBrand', '');
 	const {
+		model,
 	} = deviceInfo;
 	const {
 		descriptions,
@@ -258,6 +260,11 @@ render(): Object {
 		return <FullPageActivityIndicator/>;
 	}
 
+	let img = image;
+	if (deviceBrand === 'Telldus') {
+		img = getTelldusLearnImage(model);
+	}
+
 	const disableNext = progress && status !== 'done';
 
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
@@ -267,7 +274,7 @@ render(): Object {
 			key={i}
 			number={`${i + 1}.`}
 			text={text}
-			img={((i === imageIndex) && image && !isEmpty(image)) ? image : undefined}
+			img={((i === imageIndex) && img) ? img : undefined}
 			rightBlockIItemOne={
 				i === learnButtonIndex ?
 					<LearnButton
