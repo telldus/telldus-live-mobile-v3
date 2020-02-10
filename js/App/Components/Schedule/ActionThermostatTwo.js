@@ -90,26 +90,23 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 			textStyle,
 			eulaContentColor,
 			brandSecondary,
-			inactiveSwitchBackground,
 		} = this._getStyle(appLayout);
 
-		const { changeMode, changeTemp, temperature } = methodValue || {};
-
-		const noTemp = typeof temperature !== 'number' || isNaN(temperature);
+		const { changeMode, changeTemp } = methodValue || {};
 
 		const changeBoth = changeTemp && changeMode;
 		const changeTempAlone = changeTemp && !changeMode;
-		const changeModeAlone = (!changeTemp && changeMode) || noTemp;
+		const changeModeAlone = (!changeTemp && changeMode);
 
-		const oneItemsColor = (changeBoth || noTemp) ? '#fff' : eulaContentColor;
+		const oneItemsColor = (changeBoth) ? '#fff' : eulaContentColor;
 		const twoItemsColor = changeModeAlone ? '#fff' : eulaContentColor;
-		const threeItemsColor = (changeTempAlone || noTemp) ? '#fff' : eulaContentColor;
+		const threeItemsColor = (changeTempAlone) ? '#fff' : eulaContentColor;
 
 		return (
 			<View style={optionsCover}>
-				<TouchableOpacity onPress={this.onPressOne} disabled={noTemp}>
+				<TouchableOpacity onPress={this.onPressOne}>
 					<View style={[optionCover, {
-						backgroundColor: noTemp ? inactiveSwitchBackground : changeBoth ? brandSecondary : '#fff',
+						backgroundColor: changeBoth ? brandSecondary : '#fff',
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
 							color: oneItemsColor,
@@ -138,9 +135,9 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 						</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity onPress={this.onPressThree} disabled={noTemp}>
+				<TouchableOpacity onPress={this.onPressThree}>
 					<View style={[optionCover, {
-						backgroundColor: noTemp ? inactiveSwitchBackground : changeTempAlone ? brandSecondary : '#fff',
+						backgroundColor: changeTempAlone ? brandSecondary : '#fff',
 					}]}>
 						<IconTelldus icon={'temperature'} style={[iconStyle, {
 							color: threeItemsColor,

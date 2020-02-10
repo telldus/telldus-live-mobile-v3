@@ -88,6 +88,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 		this.methodValue = {
 			changeMode: 1,
 			changeTemp: false,
+			mode,
 		};
 		try {
 			this.methodValue = JSON.parse(methodValue);
@@ -175,12 +176,17 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		const {
 			changeTemp,
+			mode,
 		} = methodValue;
 		let data = {
 			...methodValue,
 		};
 
 		if (!changeTemp) {
+			delete data.temperature;
+		}
+		if (mode === 'off' || mode === 'fan') {
+			data.changeTemp = false;
 			delete data.temperature;
 		}
 
@@ -198,12 +204,16 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 	deviceSetStateThermostat = (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1) => {
 		const { methodValue } = this.state;
-		const methodValueN = {
+		let methodValueN = {
 			...methodValue,
 			mode,
 			temperature,
 			scale,
 		};
+		if (mode === 'off' || mode === 'fan') {
+			methodValueN.changeTemp = false;
+			delete methodValueN.temperature;
+		}
 		this.setState({
 			methodValue: methodValueN,
 		});
@@ -235,12 +245,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			return null;
 		}
 
-		const {
-			stateValues,
-		} = this.device;
-
-		const { THERMOSTAT: { mode } } = stateValues;
-		const activeMode = methodValue.mode || this.currentMode || mode;
+		const activeMode = methodValue.mode;
 
 		const { changeMode, changeTemp, temperature } = methodValue || {};
 		const noTemp = typeof temperature !== 'number' || isNaN(temperature);
