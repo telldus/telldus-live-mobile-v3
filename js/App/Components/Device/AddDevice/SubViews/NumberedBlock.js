@@ -73,10 +73,13 @@ const NumberedBlock = (props: Object): Object => {
 						typeof IMG === 'number' ?
 							<Image source={IMG} resizeMode={'contain'} style={imageType}/>
 							:
-							<IMG
-								height={imageType.height}
-								width={imageType.width}
-								style={imageType}/>
+							typeof IMG === 'function' ?
+								<IMG
+									height={imageType.height}
+									width={imageType.width}
+									style={imageType}/>
+								:
+								<EmptyView/>
 						:
 						<EmptyView/>
 					}
