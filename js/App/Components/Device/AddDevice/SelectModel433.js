@@ -33,7 +33,7 @@ import {
 	Text,
 	Image,
 } from '../../../../BaseComponents';
-import { Row, ShortcutRow } from './SubViews';
+import { ShortcutRow } from './SubViews';
 import { utils } from 'live-shared-data';
 const { addDevice433MHz: {getVendorDevices} } = utils;
 
