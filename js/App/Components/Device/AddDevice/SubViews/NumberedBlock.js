@@ -32,13 +32,14 @@ import {
 	View,
 	Text,
 	Image,
+	EmptyView,
 } from '../../../../../BaseComponents';
 
 import Theme from '../../../../Theme';
 
 const NumberedBlock = (props: Object): Object => {
 	const {
-		img,
+		img: IMG,
 		text,
 		number,
 		blockStyle,
@@ -68,8 +69,16 @@ const NumberedBlock = (props: Object): Object => {
 					<Text style={markerText}>
 						{number}
 					</Text>
-					{!!img &&
-                    <Image source={img} resizeMode={'contain'} style={imageType}/>
+					{IMG ?
+						typeof IMG === 'number' ?
+							<Image source={IMG} resizeMode={'contain'} style={imageType}/>
+							:
+							<IMG
+								height={imageType.height}
+								width={imageType.width}
+								style={imageType}/>
+						:
+						<EmptyView/>
 					}
 				</View>
 				<View style={blockRight}>

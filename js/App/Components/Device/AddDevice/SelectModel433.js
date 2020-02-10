@@ -64,7 +64,6 @@ class SelectModel433 extends View<Props, State> {
 props: Props;
 state: State;
 
-renderRow: (Object) => Object;
 onRefresh: () => void;
 onChooseLocation: (Object) => void;
 constructor(props: Props) {
@@ -79,7 +78,6 @@ constructor(props: Props) {
 	this.state = {
 		rows: getVendorDevices(this.deviceBrand, transportsArr),
 	};
-	this.renderRow = this.renderRow.bind(this);
 }
 
 componentDidMount() {
@@ -92,46 +90,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return nextProps.currentScreen === 'SelectModel433';
 }
 
-keyExtractor(item: Object, i: number): string {
-	return `${item.modelName}${item.widget}${i}`;
-}
-
-onChooseModel = (deviceInfo: Object) => {
-	const { navigation, actions } = this.props;
-
-	actions.setWidgetParamId(deviceInfo.widget);
-
-	const prevParams = navigation.state.params || {};
-	navigation.navigate('SetDeviceName433', {
-		...prevParams,
-		deviceInfo,
-	});
-}
-
 prepareName = (lang: Array<Object> = [], modelNameDef: string): string => {
 	return prepare433ModelName(this.props.locale, lang, modelNameDef);
-}
-
-renderRow(item: Object): Object {
-	const { navigation, intl } = this.props;
-	const {
-		lang,
-		modelName,
-		imageSource,
-	} = item.item;
-
-	return (
-		<Row
-			name={this.prepareName(lang, modelName)}
-			img={imageSource}
-			navigation={navigation}
-			intl={intl}
-			rowProps={{
-				...item.item,
-			}}
-			onPress={this.onChooseModel}
-			isLast={item.index === (this.state.rows.length - 1)}/>
-	);
 }
 
 onPressShortcutRow = (deviceInfo: Object) => {
@@ -144,6 +104,7 @@ onPressShortcutRow = (deviceInfo: Object) => {
 		...prevParams,
 		shortcutToTelldus: false,
 		deviceInfo,
+		deviceBrand: this.deviceBrand,
 	});
 }
 
