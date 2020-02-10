@@ -179,7 +179,6 @@ class JobRow extends View<null, Props, null> {
 			lineStyle,
 			rowWithTriangleContainerNow,
 		} = this._getStyle(appLayout);
-		const opacity = active ? 1 : 0.5;
 		const color = !active ? '#BDBDBD' : (expired ? '#999999' : '#929292');
 
 		const repeat = this._getRepeatDescription();
@@ -207,7 +206,7 @@ class JobRow extends View<null, Props, null> {
 					accessibilityLabel={accessible ? accessibilityLabel : ''}
 				>
 					<ListRow
-						roundIcon={type}
+						roundIcon={!active ? 'pause' : type}
 						roundIconStyle={roundIcon}
 						roundIconContainerStyle={[roundIconContainer, { backgroundColor: color } ]}
 						time={timestamp}
@@ -216,15 +215,14 @@ class JobRow extends View<null, Props, null> {
 							minute: 'numeric',
 						}}
 						timeStyle={time}
-						timeContainerStyle={{ opacity }}
 						rowContainerStyle={rowContainer}
 						rowWithTriangleContainerStyle={rowWithTriangleContainer}
 						triangleColor={triangleColor}
-						triangleContainerStyle={{ opacity }}
+						showShadow={active}
 						isFirst={isFirst}
 						appLayout={appLayout}>
 						{actionIcon}
-						<View style={{ flex: 1, opacity }}>
+						<View style={{ flex: 1 }}>
 							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
 								<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
 									{deviceName}
@@ -277,12 +275,18 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_renderActionIcon = (): Object => {
-		const { intl, method, appLayout, methodValue, expired, deviceSupportedMethods, deviceType } = this.props;
+		const { intl, method, appLayout, methodValue, expired, active, deviceSupportedMethods, deviceType } = this.props;
 		const { formatMessage } = intl;
 		const action = ACTIONS.find((a: Object): boolean => a.method === method);
 
 		if (action) {
-			const { methodIconContainer, methodIcon, thermostatInfo, thermostateModeControlIcon } = this._getStyle(appLayout);
+			const {
+				methodIconContainer,
+				methodIcon,
+				thermostatInfo,
+				thermostateModeControlIcon,
+				inactiveGray,
+			} = this._getStyle(appLayout);
 			const actionIcons = getDeviceActionIcon(deviceType, null, deviceSupportedMethods);
 			const methodString = methods[action.method];
 			let iconName = actionIcons[methodString];
@@ -369,11 +373,15 @@ class JobRow extends View<null, Props, null> {
 				const color = methodValue.toLowerCase() === '#ffffff' ? Theme.Core.brandSecondary : methodValue;
 				return (
 					{
-						triangleColor: color,
+						triangleColor: !active ? inactiveGray : expired ? '#999999' : color,
 						actionIcon: <BlockIcon
 							icon={iconName ? iconName : action.icon}
-							bgColor={expired ? '#999999' : action.bgColor}
-							containerStyle={[methodIconContainer, {backgroundColor: color}]}
+							containerStyle={[
+								methodIconContainer,
+								{
+									backgroundColor: !active ? inactiveGray : expired ? '#999999' : color,
+								},
+							]}
 							style={methodIcon}
 						/>,
 						actionLabel: typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel),
@@ -385,8 +393,11 @@ class JobRow extends View<null, Props, null> {
 					triangleColor: methodIconContainer.backgroundColor,
 					actionIcon: <BlockIcon
 						icon={iconName ? iconName : action.icon}
-						bgColor={expired ? '#999999' : action.bgColor}
-						containerStyle={methodIconContainer}
+						containerStyle={[
+							methodIconContainer,
+							{
+								backgroundColor: !active ? inactiveGray : expired ? '#999999' : action.bgColor,
+							}]}
 						style={methodIcon}
 					/>,
 					actionLabel: typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel),
@@ -431,7 +442,11 @@ class JobRow extends View<null, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		let { fonts, borderRadiusRow } = Theme.Core;
+		let {
+			fonts,
+			borderRadiusRow,
+			inactiveGray,
+		} = Theme.Core;
 		let { active, method, methodValue, expired } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
@@ -453,10 +468,11 @@ class JobRow extends View<null, Props, null> {
 				let roundVal = Math.round(methodValue / 255 * 100);
 				showDarkBG = roundVal >= 50 && roundVal < 100;
 			}
-			backgroundColor = !active ? '#bdbdbd' : (expired ? '#999999' : (showDarkBG ? action.bgColorDark : action.bgColor));
+			backgroundColor = !active ? inactiveGray : (expired ? '#999999' : (showDarkBG ? action.bgColorDark : action.bgColor));
 		}
 
 		return {
+			inactiveGray,
 			container: {
 				flexDirection: 'row',
 				alignItems: 'center',
@@ -492,15 +508,14 @@ class JobRow extends View<null, Props, null> {
 				width: null,
 			},
 			title: {
-				color: '#707070',
+				color: !active ? inactiveGray : '#707070',
 				fontSize: deviceWidth * 0.04,
 				fontFamily: fonts.robotoRegular,
 				marginBottom: width * 0.008,
 			},
 			description: {
-				color: '#707070',
+				color: !active ? inactiveGray : '#707070',
 				fontSize: deviceWidth * 0.032,
-				opacity: 1,
 			},
 			iconOffset: {
 				position: 'absolute',
@@ -520,7 +535,7 @@ class JobRow extends View<null, Props, null> {
 				width: timeWidth,
 				textAlign: 'center',
 				fontSize: deviceWidth * 0.044,
-				color: '#707070',
+				color: !active ? inactiveGray : '#707070',
 			},
 			rowContainer: {
 				width: rowWidth,
