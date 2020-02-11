@@ -252,7 +252,7 @@ dependencies {
       transitive = true;
     }
     implementation 'com.android.support:multidex:1.0.2'
-    implementation ("com.google.android.gms:play-services-base:16.1.0") {
+    implementation ("com.google.android.gms:play-services-base:17.0.0") {
         force = true;
     }
     implementation ("com.google.android.gms:play-services-maps:16.0.0") {
