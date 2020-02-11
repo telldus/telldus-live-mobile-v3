@@ -88,7 +88,11 @@ const AppTab = (props: Object): Object => {
 		pushToken,
 		deviceName,
 		deviceId,
+		firebaseRemoteConfig = {},
 	} = useSelector((state: Object): Object => state.user);
+
+	const { geoFenceFeature = '{}'} = firebaseRemoteConfig;
+	const { enable } = JSON.parse(geoFenceFeature);
 
 	const { dbCarousel = true, reportCrash = true } = defaultSettings;
 
@@ -234,7 +238,7 @@ const AppTab = (props: Object): Object => {
 			<View style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
-				<Text style={{
+				{enable && <Text style={{
 					padding: 10,
 					color: 'red',
 					alignSelf: 'center',
@@ -242,6 +246,7 @@ const AppTab = (props: Object): Object => {
 				}} onPress={onPressGeoFence}>
 				Add or Edit Geo Fence
 				</Text>
+				}
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}
