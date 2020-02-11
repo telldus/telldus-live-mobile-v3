@@ -87,6 +87,14 @@ const hasLocationPermission = async (): Promise<boolean> => {
 function checkPermissionAndInitializeWatcher(): ThunkAction {
 	return async (dispatch: Function, getState: Function) => {
 
+		const { user: { firebaseRemoteConfig = {} } } = getState();
+		const { geoFenceFeature = '{}'} = firebaseRemoteConfig;
+		const { enable } = JSON.parse(geoFenceFeature);
+
+		if (!enable) {
+			return;
+		}
+
 		const _hasLocationPermission = await hasLocationPermission();
 
 		if (!_hasLocationPermission) {
