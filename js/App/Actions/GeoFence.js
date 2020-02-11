@@ -49,7 +49,7 @@ import {
 } from './Fences';
 import GeoFenceUtils from '../Lib/GeoFenceUtils';
 
-const hasLocationPermission = async (): boolean => {
+const hasLocationPermission = async (): Promise<boolean> => {
 	if (Platform.OS === 'ios' ||
         (Platform.OS === 'android' && Platform.Version < 23)) {
 		if (Platform.OS === 'ios') {
