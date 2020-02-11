@@ -43,7 +43,7 @@ const fetchRemoteConfig = (): ThunkAction => {
 			},
 		});
 
-		return firebase.config().fetch()
+		return firebase.config().fetch(0)
 			.then((): any => {
 				return firebase.config().activateFetched();
 			})
