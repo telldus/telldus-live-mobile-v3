@@ -49,24 +49,51 @@ import {
 } from './Fences';
 import GeoFenceUtils from '../Lib/GeoFenceUtils';
 
-function checkPermissionAndInitializeWatcher(): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
-		if (Platform.OS === 'android') {
-			PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-				.then((granted: boolean) => {
-					if (granted === PermissionsAndroid.RESULTS.GRANTED || granted === true) {
-						dispatch(initializeWatcher());
-					}
-				}).catch((error: Object) => {
-				});
-		} else {
-			Geolocation.setRNConfiguration({
-				skipPermissionRequests: true,
-				authorizationLevel: 'always',
-			});
+const hasLocationPermission = async (): boolean => {
+	if (Platform.OS === 'ios' ||
+        (Platform.OS === 'android' && Platform.Version < 23)) {
+		if (Platform.OS === 'ios') {
+			Geolocation.setRNConfiguration({ authorizationLevel: 'always' });
 			Geolocation.requestAuthorization();
-			dispatch(initializeWatcher());
 		}
+		return true;
+	}
+
+	const hasPermission = await PermissionsAndroid.check(
+		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+	);
+
+	if (hasPermission) {
+		return true;
+	}
+
+	const status = await PermissionsAndroid.request(
+		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+	);
+
+	if (status === PermissionsAndroid.RESULTS.GRANTED) {
+		return true;
+	}
+
+	if (status === PermissionsAndroid.RESULTS.DENIED) {
+		// Location permission denied by user
+	} else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+		// Location permission revoked by user
+	}
+
+	return false;
+};
+
+function checkPermissionAndInitializeWatcher(): ThunkAction {
+	return async (dispatch: Function, getState: Function) => {
+
+		const _hasLocationPermission = await hasLocationPermission();
+
+		if (!_hasLocationPermission) {
+			return;
+		}
+
+		dispatch(initializeWatcher());
 	};
 }
 
