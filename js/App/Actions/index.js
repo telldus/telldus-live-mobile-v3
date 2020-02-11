@@ -42,6 +42,9 @@ import LocalTest from './LocalTest';
 import LocalControl from './LocalControl';
 import Widget from './Widget';
 import AddDevice from './AddDevice';
+import * as Fences from './Fences';
+import * as Events from './Events';
+import * as GeoFence from './GeoFence';
 
 module.exports = {
 	...GatewayActions,
@@ -64,4 +67,7 @@ module.exports = {
 	...LocalControl,
 	...Widget,
 	...AddDevice,
+	...Fences,
+	...Events,
+	...GeoFence,
 };

@@ -70,6 +70,8 @@ export default {
 	eulaContentColor: '#555555',
 	inactiveTintColor: '#A59F9A',
 	gatewayInactive: '#a2a2a2',
+	angleTintColor: '#A59F9A90',
+	angledRowBorderColor: '#BBB',
 
 	rippleColor: '#efefef',
 	rippleOpacity: 0.9,
@@ -82,6 +84,9 @@ export default {
 	rowHeight: 60,
 
 	buttonRowKey: '  **buttonRow**  ',
+	GeoFenceDevicesHeaderKey: '  **devicesHeader**  ',
+	GeoFenceJobsHeaderKey: '  **jobsHeader**  ',
+	GeoFenceEventsHeaderKey: '  **eventsHeader**  ',
 
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,

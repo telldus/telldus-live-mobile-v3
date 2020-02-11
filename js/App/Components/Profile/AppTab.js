@@ -35,6 +35,8 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+import { NavigationActions } from 'react-navigation';
+
 import { pushServiceId } from '../../../Config';
 
 import {
@@ -64,6 +66,9 @@ import {
 	setUserIdentifierFirebaseCrashlytics,
 	setUserNameFirebaseCrashlytics,
 } from '../../Actions/Analytics';
+import {
+	resetFence,
+} from '../../Actions/Fences';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
@@ -203,11 +208,40 @@ const AppTab = (props: Object): Object => {
 		});
 	}
 
+	const { fences } = useSelector((state: Object): Object => state.fences);
+	function onPressGeoFence() {
+		if (!fences || fences.length === 0) {
+			dispatch(resetFence());
+			const navigateAction = NavigationActions.navigate({
+				routeName: 'GeoFenceNavigator',
+				key: 'GeoFenceNavigator',
+				action: NavigationActions.navigate({
+					routeName: 'SelectArea',
+					key: 'SelectArea',
+				}),
+			  });
+			navigation.dispatch(navigateAction);
+		} else {
+			navigation.navigate({
+				routeName: 'GeoFenceNavigator',
+				key: 'GeoFenceNavigator',
+			});
+		}
+	}
+
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
+				<Text style={{
+					padding: 10,
+					color: 'red',
+					alignSelf: 'center',
+					margin: 10,
+				}} onPress={onPressGeoFence}>
+				Add or Edit Geo Fence
+				</Text>
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}

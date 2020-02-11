@@ -72,6 +72,7 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDimButton: (device: Object) => void,
 	onPressDeviceAction?: () => void,
+	onPressOverride?: (Object) => void,
 };
 
 type DefaultProps = {
@@ -110,6 +111,10 @@ class DimmerButton extends View<Props, null> {
 			trailing: true,
 		});
 
+		this.onValueChangeOverrideThrottled = throttle(this._onValueChangeOverride, 100, {
+			trailing: true,
+		});
+
 		this.onTurnOn = this.onTurnOn.bind(this);
 		this.onTurnOff = this.onTurnOff.bind(this);
 		this.onSlidingStart = this.onSlidingStart.bind(this);
@@ -136,8 +141,21 @@ class DimmerButton extends View<Props, null> {
 		return false;
 	}
 
+	_onValueChangeOverride(dimValue: number) {
+		let { commandDIM, onPressOverride } = this.props;
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandDIM,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+		}
+	}
+
 	onValueChange(sliderValue: number) {
 		this.onValueChangeThrottled(toDimmerValue(sliderValue));
+		this.onValueChangeOverrideThrottled(toDimmerValue(sliderValue));
 	}
 
 	onSlidingStart(name: string, sliderValue: number) {
@@ -150,9 +168,10 @@ class DimmerButton extends View<Props, null> {
 	}
 
 	onSlidingComplete(sliderValue: number) {
-		let { device, commandON, commandOFF, commandDIM } = this.props;
+		let { device, commandON, commandOFF, commandDIM, onPressOverride } = this.props;
 		let command = commandDIM;
 		this.props.onSlideComplete();
+
 		if (sliderValue === 100) {
 			command = commandON;
 		}
@@ -160,12 +179,38 @@ class DimmerButton extends View<Props, null> {
 			command = commandOFF;
 		}
 		let dimValue = toDimmerValue(sliderValue);
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: command,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+			this.props.hideDimmerPopup();
+			return;
+		}
+
 		this.props.deviceSetState(device.id, command, dimValue);
 		this.props.hideDimmerPopup();
 	}
 
 	onTurnOn() {
-		const { isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		const {
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+			onPressOverride,
+			commandON,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandON,
+			});
+			return;
+		}
+
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
@@ -173,11 +218,25 @@ class DimmerButton extends View<Props, null> {
 		if (onPressDeviceAction) {
 			onPressDeviceAction();
 		}
-		this.props.deviceSetState(this.props.device.id, this.props.commandON);
+		this.props.deviceSetState(this.props.device.id, commandON);
 	}
 
 	onTurnOff() {
-		const { isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		const {
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+			onPressOverride,
+			commandOFF,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandOFF,
+			});
+			return;
+		}
+
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
@@ -185,7 +244,7 @@ class DimmerButton extends View<Props, null> {
 		if (onPressDeviceAction) {
 			onPressDeviceAction();
 		}
-		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
+		this.props.deviceSetState(this.props.device.id, commandOFF);
 	}
 
 	showDimmerStep(id: number) {

@@ -33,6 +33,7 @@ import LiveApi from './LiveApi';
 import Modal from './Modal';
 import sensorsList from './SensorsList';
 import jobsList from './Jobs';
+import fences from './Fences';
 import { reducers } from 'live-shared-data';
 
 const config = {
@@ -50,4 +51,5 @@ module.exports = persistCombineReducers(config, {
 	sensorsList,
 	...reducers,
 	jobsList,
+	fences,
 });

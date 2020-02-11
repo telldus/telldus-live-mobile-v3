@@ -47,6 +47,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	actionIcon?: string,
 	onPressDeviceAction?: () => void,
+	onPressOverride?: (Object) => void,
 };
 
 class OffButton extends View {
@@ -63,7 +64,21 @@ class OffButton extends View {
 	}
 
 	onPress() {
-		const { command, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		const {
+			command,
+			id,
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: command,
+			});
+			return;
+		}
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
