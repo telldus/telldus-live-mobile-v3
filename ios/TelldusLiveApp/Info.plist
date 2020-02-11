@@ -68,6 +68,8 @@
 	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>telldusicons.ttf</string>
