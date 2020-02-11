@@ -45,6 +45,7 @@ import AddDevice from './AddDevice';
 import * as Fences from './Fences';
 import * as Events from './Events';
 import * as GeoFence from './GeoFence';
+import * as Firebase from './Firebase';
 
 module.exports = {
 	...GatewayActions,
@@ -70,4 +71,5 @@ module.exports = {
 	...Fences,
 	...Events,
 	...GeoFence,
+	...Firebase,
 };
