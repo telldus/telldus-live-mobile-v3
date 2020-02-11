@@ -37,6 +37,7 @@ import java.util.List;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.fabric.crashlytics.RNFirebaseCrashlyticsPackage;
+import io.invertase.firebase.config.RNFirebaseRemoteConfigPackage;
 import com.telldus.live.mobile.WidgetPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -57,6 +58,7 @@ public class MainApplication extends Application implements ReactApplication {
 			packages.add(new RNFirebaseMessagingPackage());
 			packages.add(new RNFirebaseNotificationsPackage());
 			packages.add(new RNFirebaseCrashlyticsPackage());
+			packages.add(new RNFirebaseRemoteConfigPackage());
 			packages.add(new WidgetPackage());
 			return packages;
 		}

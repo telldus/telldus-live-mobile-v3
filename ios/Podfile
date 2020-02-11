@@ -30,7 +30,8 @@ target 'TelldusLiveApp' do
 
   pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
 
-  pod 'Firebase/Core', '~> 5.20.1'
+  pod 'Firebase/Core', '~> 6.13.0'
+  pod 'Firebase/RemoteConfig', '~> 6.13.0'
   pod 'Fabric', '~> 1.9.0'
   pod 'Crashlytics', '~> 3.12.0'
   pod 'GoogleSignIn', '~> 5.0.0'
