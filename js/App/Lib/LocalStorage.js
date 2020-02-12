@@ -29,9 +29,8 @@ SQLite.enablePromise(true);
 
 import { getSensorInfo } from './SensorUtils';
 
-
 const databaseName = 'tellduslocalstorage.db';
-const databaseVersion = '1.0';
+const databaseVersion = '1.1';
 const databaseDisplayName = 'TelldusDB';
 const databaseSize = 200000;
 let db;
@@ -47,6 +46,19 @@ export type SensorHistoryQueryParams = {
 export default class TelldusLocalStorage {
 
 	constructor() {
+		// TODO: See if db version can be detected.
+		this.performUpdateActions();
+	}
+
+	performUpdateActions = async () => {
+		await this.dropOldDeviceHistoryTable();
+	}
+
+	dropOldDeviceHistoryTable = (): Promise<any> => {
+		return this.loadDatabase().then((DB: Object): any => {
+			return db.executeSql('DROP TABLE IF EXISTS DeviceHistory');
+		}).catch((error: Object) => {
+		});
 	}
 
 	loadDatabase = (): Promise<any> => {
@@ -90,12 +102,12 @@ export default class TelldusLocalStorage {
 		let insertQuery = this.prepareInsertQueryDeviceHistory(data, deviceId);
 
 		return db.sqlBatch([
-			'CREATE TABLE IF NOT EXISTS DeviceHistory( '
+			'CREATE TABLE IF NOT EXISTS DeviceHistory1_1( '
 			+ 'id INTEGER PRIMARY KEY AUTOINCREMENT, '
 			+ 'ts INTEGER, '
 			+ 'deviceId INTEGER, '
 			+ 'state INTEGER, '
-			+ 'stateValue INTEGER, '
+			+ 'stateValue VARCHAR(350), '
 			+ 'origin VARCHAR(150), '
 			+ 'successStatus INTEGER, '
 			+ 'title VARCHAR(50), '
@@ -104,8 +116,8 @@ export default class TelldusLocalStorage {
 			+ 'icon VARCHAR(50), '
 			+ 'class VARCHAR(50)'
 			+ '); ',
-			['CREATE UNIQUE INDEX IF NOT EXISTS IndexIdXdevice ON DeviceHistory(ts, deviceId, state, origin);'],
-			['CREATE INDEX IF NOT EXISTS IndexDeviceId ON DeviceHistory(deviceId);'],
+			['CREATE UNIQUE INDEX IF NOT EXISTS IndexIdXdevice ON DeviceHistory1_1(ts, deviceId, state, origin);'],
+			['CREATE INDEX IF NOT EXISTS IndexDeviceId ON DeviceHistory1_1(deviceId);'],
 			...insertQuery,
 		  ]);
 	}
@@ -116,7 +128,10 @@ export default class TelldusLocalStorage {
 			let { ts = 0, state = '', stateValue = '', origin = '', successStatus = '', title = '',
 				description = '', color = '', icon = '', deviceClass = '' } = history[key];
 
-			query.push(`${'REPLACE INTO DeviceHistory '
+			stateValue = stateValue.toString();
+			stateValue = stateValue.replace(/"/g, '').replace(/ /g, '').trim();
+
+			query.push(`${'REPLACE INTO DeviceHistory1_1 '
 			+ '( ts, '
 			+ 'deviceId, state,'
 			+ 'stateValue, origin, '
@@ -127,7 +142,7 @@ export default class TelldusLocalStorage {
 			+ `${ts}, `
 			+ `${deviceId}, `
 			+ `${state}, `
-			+ `${stateValue}, `
+			+ `"${stateValue}", `
 			+ `"${origin}"` + ', '
 			+ `${successStatus}, `
 			+ `"${title}"` + ', '
@@ -148,7 +163,7 @@ export default class TelldusLocalStorage {
 	}
 
 	queryDeviceHistory = (id: number): Promise<any> => {
-		return db.executeSql(`SELECT * FROM DeviceHistory WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]: Array<any>): Array<any> => {
+		return db.executeSql(`SELECT * FROM DeviceHistory1_1 WHERE ${id} = deviceId ORDER BY ts DESC`).then(([results]: Array<any>): Array<any> => {
 			let len = results.rows.length, data = [];
 			for (let i = 0; i < len; i++) {
 				let row = results.rows.item(i);
@@ -289,7 +304,7 @@ export default class TelldusLocalStorage {
 	getLatestTimestamp = (type: string, id: number): Promise<any> => {
 		let tableName = '', uniqueParam = '';
 		if (type === 'device') {
-			tableName = 'DeviceHistory';
+			tableName = 'DeviceHistory1_1';
 			uniqueParam = 'deviceId';
 		} else if (type === 'sensor') {
 			tableName = 'SensorHistory';
@@ -316,7 +331,7 @@ export default class TelldusLocalStorage {
 	clearHistory(type: string, id: number): Promise<any> {
 		let tableName = '', uniqueParam = '';
 		if (type === 'device') {
-			tableName = 'DeviceHistory';
+			tableName = 'DeviceHistory1_1';
 			uniqueParam = 'deviceId';
 		} else if (type === 'sensor') {
 			tableName = 'SensorHistory';
