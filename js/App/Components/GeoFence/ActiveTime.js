@@ -113,7 +113,8 @@ const ActiveTime = (props: Props): Object => {
 				style={container}
 				contentContainerStyle={contentContainerStyle}>
 				<TimePicker
-					onChange={onChangeTime}/>
+					onChange={onChangeTime}
+					appLayout={appLayout}/>
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}

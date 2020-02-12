@@ -33,6 +33,7 @@ import {
 import {
 	View,
 	Text,
+	EmptyView,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -43,6 +44,7 @@ import {
 
 type Props = {
 	value: Object,
+	appLayout: Object,
 	onSwitch: (boolean, number, number, number, number) => void,
 	onChangeFromHr: (boolean, number, number, number, number) => void,
 	onChangeFromMin: (boolean, number, number, number, number) => void,
@@ -136,7 +138,10 @@ class TimePicker extends View<Props, State> {
 		const {
 			labelStyle,
 			rowStyle,
+			appLayout,
 		} = this.props;
+
+		const styles = getStyles(appLayout);
 
 		return (
 			<View style={styles.container}>
@@ -145,109 +150,131 @@ class TimePicker extends View<Props, State> {
 					<Switch
 						value={this.state.alwaysActive}
 						onValueChange={this.onSwitch}
-					/>
+						style={styles.switchStyle}/>
 				</View>
 				{
-					(this.state.alwaysActive) ? null : (
+					(this.state.alwaysActive) ?
+						<EmptyView/>
+						:
+						(
 
-						<View style={styles.body}>
-							<Text style={styles.sectionLabel}>{'Active from:'}</Text>
-							<View
-								style={styles.pickers}
-							>
-								<Picker
-									selectedValue={this.state.fromHr}
-									onValueChange={this.onChangeFromHr}
-									style={styles.picker}
+							<View style={styles.body}>
+								<Text style={styles.sectionLabel}>{'Active from:'}</Text>
+								<View
+									style={styles.pickers}
 								>
-									{
-										this.hrs.map((hr: number, index: number): Object => (
-											<Picker.Item label={`${hr}`} value={hr} key={`fromHr-${hr}`} />
-										))
-									}
-								</Picker>
-								<Picker
-									selectedValue={this.state.fromMin}
-									onValueChange={this.onChangeFromMin}
-									style={styles.picker}
+									<Picker
+										selectedValue={this.state.fromHr}
+										onValueChange={this.onChangeFromHr}
+										style={styles.picker}
+									>
+										{
+											this.hrs.map((hr: number, index: number): Object => (
+												<Picker.Item label={`${hr}`} value={hr} key={`fromHr-${hr}`} />
+											))
+										}
+									</Picker>
+									<Picker
+										selectedValue={this.state.fromMin}
+										onValueChange={this.onChangeFromMin}
+										style={styles.picker}
+									>
+										{
+											this.mins.map((min: number, index: number): Object => (
+												<Picker.Item label={`${min}`} value={min} key={`fromMin-${min}`} />
+											))
+										}
+									</Picker>
+								</View>
+								<Text style={styles.sectionLabel}>{'Active to:'}</Text>
+								<View
+									style={styles.pickers}
 								>
-									{
-										this.mins.map((min: number, index: number): Object => (
-											<Picker.Item label={`${min}`} value={min} key={`fromMin-${min}`} />
-										))
-									}
-								</Picker>
+									<Picker
+										selectedValue={this.state.toHr}
+										onValueChange={this.onChangeToHr}
+										style={styles.picker}
+									>
+										{
+											this.hrs.map((hr: number, index: number): Object => (
+												<Picker.Item label={`${hr}`} value={hr} key={`toHr-${hr}`} />
+											))
+										}
+									</Picker>
+									<Picker
+										selectedValue={this.state.toMin}
+										onValueChange={this.onChangeToMin}
+										style={styles.picker}
+									>
+										{
+											this.mins.map((min: number, index: number): Object => (
+												<Picker.Item label={`${min}`} value={min} key={`toMin-${min}`} />
+											))
+										}
+									</Picker>
+								</View>
 							</View>
-							<Text style={styles.sectionLabel}>{'Active to:'}</Text>
-							<View
-								style={styles.pickers}
-							>
-								<Picker
-									selectedValue={this.state.toHr}
-									onValueChange={this.onChangeToHr}
-									style={styles.picker}
-								>
-									{
-										this.hrs.map((hr: number, index: number): Object => (
-											<Picker.Item label={`${hr}`} value={hr} key={`toHr-${hr}`} />
-										))
-									}
-								</Picker>
-								<Picker
-									selectedValue={this.state.toMin}
-									onValueChange={this.onChangeToMin}
-									style={styles.picker}
-								>
-									{
-										this.mins.map((min: number, index: number): Object => (
-											<Picker.Item label={`${min}`} value={min} key={`toMin-${min}`} />
-										))
-									}
-								</Picker>
-							</View>
-						</View>
-					)
+						)
 				}
 			</View>
 		);
 	}
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	switchHeader: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		height: 44,
-		padding: 12,
-		backgroundColor: '#FFF',
-		borderColor: Theme.Core.angledRowBorderColor,
-		borderBottomWidth: StyleSheet.hairlineWidth,
-	},
-	switchLabel: {
-		flex: 1,
-		fontSize: 14,
-		color: '#333',
-	},
-	body: {
-		padding: 12,
-	},
-	sectionLabel: {
-		marginTop: 8,
-		fontSize: 14,
-		color: '#999',
-	},
-	pickers: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginTop: 8,
-	},
-	picker: {
-		flex: 1,
-		color: '#000',
-	},
-});
+const getStyles = (appLayout: Object): Object => {
+
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+		eulaContentColor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+	const fontSize = deviceWidth * 0.04;
+
+	return {
+		container: {
+			flex: 1,
+		},
+		switchHeader: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			paddingHorizontal: padding * 1.5,
+			backgroundColor: '#FFF',
+			borderColor: Theme.Core.angledRowBorderColor,
+			borderBottomWidth: StyleSheet.hairlineWidth,
+		},
+		switchLabel: {
+			flex: 1,
+			fontSize,
+			color: eulaContentColor,
+		},
+		body: {
+			padding: padding * 1.5,
+		},
+		sectionLabel: {
+			marginTop: padding,
+			fontSize,
+			color: '#999',
+		},
+		pickers: {
+			flexDirection: 'row',
+			alignItems: 'center',
+			marginTop: padding,
+		},
+		picker: {
+			flex: 1,
+			color: '#000',
+		},
+		switchStyle: {
+			borderColor: 'red',
+			borderWidth: 1,
+			alignItems: 'center',
+		},
+	};
+};
 
 module.exports = TimePicker;
