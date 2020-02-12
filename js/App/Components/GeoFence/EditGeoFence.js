@@ -244,7 +244,8 @@ const EditGeoFence = (props: Props): Object => {
 						toMin: fence.toMin,
 					}}
 					labelStyle={leftItemStyle}
-					rowStyle={rowStyle}/>
+					rowStyle={rowStyle}
+					appLayout={appLayout}/>
 			</View>
 			<View style={mapCover}>
 				<MapView.Animated
