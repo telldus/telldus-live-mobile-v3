@@ -149,8 +149,7 @@ class TimePicker extends View<Props, State> {
 					<Text style={[styles.switchLabel, labelStyle]}>Always Active</Text>
 					<Switch
 						value={this.state.alwaysActive}
-						onValueChange={this.onSwitch}
-						style={styles.switchStyle}/>
+						onValueChange={this.onSwitch}/>
 				</View>
 				{
 					(this.state.alwaysActive) ?
@@ -268,11 +267,6 @@ const getStyles = (appLayout: Object): Object => {
 		picker: {
 			flex: 1,
 			color: '#000',
-		},
-		switchStyle: {
-			borderColor: 'red',
-			borderWidth: 1,
-			alignItems: 'center',
 		},
 	};
 };
