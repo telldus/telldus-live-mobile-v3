@@ -23,7 +23,11 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import {
+	ScrollView,
+	TouchableOpacity,
+	StyleSheet,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 
@@ -32,6 +36,7 @@ import {
 	TabBar,
 	IconTelldus,
 	Text,
+	ActionSheet,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -54,6 +59,8 @@ import {
 } from '../../Lib/appUtils';
 import Theme from '../../Theme';
 
+import AddAccountBlock from './SubViews/AddAccountBlock';
+
 import i18n from '../../Translations/common';
 
 const ProfileTab = (props: Object): Object => {
@@ -64,6 +71,8 @@ const ProfileTab = (props: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
+
+	const actionSheetRef = React.useRef();
 
 	function onPressRedeemGift() {
 		navigation.navigate({
@@ -88,6 +97,16 @@ const ProfileTab = (props: Object): Object => {
 		redeemIconStyle,
 		redeemTextSyle,
 		pHistoryCStyle,
+		actionSheetTitle,
+		actionSheetTitleCover,
+		actionSheetOverlay,
+		actionSheetTitleBox,
+		actionSheetMessageBox,
+		actionSheetButtonBox,
+		actionSheetButtonOne,
+		actionSheetButtonTwo,
+		actionSheetButtonOneCover,
+		actionSheetButtonTwoCover,
 	} = getStyles(layout);
 
 	let showAuto = isAutoRenew(subscriptions);
@@ -98,6 +117,21 @@ const ProfileTab = (props: Object): Object => {
 			routeName: 'PurchaseHistoryScreen',
 			key: 'PurchaseHistoryScreen',
 		});
+	}
+
+	function onPressAddAccount() {
+		if (actionSheetRef.current) {
+			actionSheetRef.current.show();
+		}
+	}
+
+	function closeActionSheet() {
+		if (actionSheetRef.current) {
+			actionSheetRef.current.hide();
+		}
+	}
+
+	function onSelectActionSheet(index: number) {
 	}
 
 	return (
@@ -116,6 +150,9 @@ const ProfileTab = (props: Object): Object => {
 				/>
 				<UpdatePasswordBlock
 					navigation={navigation}/>
+				<AddAccountBlock
+					navigation={navigation}
+					onPress={onPressAddAccount}/>
 				<SubscriptionStatusBlock
 					navigation={navigation}
 					contentCoverStyle={contentCoverStyleENB}
@@ -163,6 +200,35 @@ const ProfileTab = (props: Object): Object => {
 					toggleDialogueBox={toggleDialogueBox}
 				/>
 			</View>
+			<ActionSheet
+				ref={actionSheetRef}
+				styles={{
+					overlay: actionSheetOverlay,
+					body: actionSheetOverlay,
+					titleBox: actionSheetTitleBox,
+					messageBox: actionSheetMessageBox,
+					buttonBox: actionSheetButtonBox,
+				}}
+				title={
+					<View style={actionSheetTitleCover}>
+						<Text style={actionSheetTitle} onPress={closeActionSheet}>
+							Add Account
+						</Text>
+					</View>
+				}
+				options={[
+					<View style={actionSheetButtonOneCover}>
+						<Text style={actionSheetButtonOne}>
+							Log Into Existing Account
+						</Text>
+					</View>,
+					<View style={actionSheetButtonTwoCover}>
+						<Text style={actionSheetButtonTwo}>
+						Create New Account
+						</Text>
+					</View>,
+				]}
+				onPress={onSelectActionSheet}/>
 		</ScrollView>
 	);
 };
@@ -171,10 +237,17 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const {
+		paddingFactor,
+		brandSecondary,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 	const paddingEditNameBlock = Math.floor(deviceWidth * 0.045);
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
+	const fontSizeActionSheetTitle = Math.floor(deviceWidth * 0.05);
 
 	return {
 		style: {
@@ -223,6 +296,57 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSize,
 			color: Theme.Core.brandSecondary,
 			marginRight: 5,
+		},
+		actionSheetOverlay: {
+			borderTopLeftRadius: 8,
+			borderTopRightRadius: 8,
+			overflow: 'hidden',
+		},
+		actionSheetTitleCover: {
+			paddingHorizontal: padding,
+		},
+		actionSheetTitle: {
+			fontSize: fontSizeActionSheetTitle,
+			color: '#000',
+		},
+		actionSheetMessageBox: {
+			height: undefined,
+		},
+		actionSheetButtonBox: {
+			height: (fontSize * 2.2) + (padding * 2),
+			paddingHorizontal: padding,
+			alignItems: 'stretch',
+			justifyContent: 'center',
+			backgroundColor: '#fff',
+		},
+		actionSheetTitleBox: {
+			height: (fontSizeActionSheetTitle * 3) + 8,
+			marginBottom: StyleSheet.hairlineWidth,
+		},
+		actionSheetButtonOneCover: {
+			flex: 1,
+			backgroundColor: brandSecondary,
+			alignItems: 'center',
+			justifyContent: 'center',
+			borderRadius: 8,
+			marginTop: 8,
+		},
+		actionSheetButtonTwoCover: {
+			flex: 1,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		actionSheetButtonOne: {
+			fontSize,
+			color: '#fff',
+			textAlignVertical: 'center',
+			textAlign: 'center',
+		},
+		actionSheetButtonTwo: {
+			fontSize,
+			color: brandSecondary,
+			textAlignVertical: 'center',
+			textAlign: 'center',
 		},
 	};
 };
