@@ -41,7 +41,7 @@ function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> |
 				key,
 				ttl,
 				supportLocal,
-			} = localKey;
+			} = localKey || {};
 			const tokenExpired = hasTokenExpired(ttl);
 			const supportLocalControl = !!(address && key && ttl && !tokenExpired && supportLocal);
 			return { ...item, isOnline: online, websocketOnline, supportLocalControl };
