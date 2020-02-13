@@ -366,6 +366,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
 			attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
+			source: 'postlogin',
 		};
 
 		return (

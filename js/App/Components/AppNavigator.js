@@ -56,6 +56,14 @@ import RequestSupportScreen from './CustomerSupport/RequestSupportScreen';
 import BuySMSCreditsScreen from './Premium/BuySMSCreditsScreen';
 import RegisterForPushScreen from './PushSettings/RegisterForPushScreen';
 
+import {
+	RegisterScreen,
+	LoginScreen,
+} from './PreLoginScreens';
+import {
+	FormContainerComponent,
+} from './PreLoginScreens/SubViews';
+
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
@@ -363,7 +371,35 @@ const RouteConfigs = {
 			header: null,
 		},
 	},
+	LoginScreen: {
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(LoginScreen),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	RegisterScreen: {
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(RegisterScreen),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
 };
+
+const renderFormContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
+	<FormContainerComponent navigation={navigation} screenProps={screenProps}>
+		<Component/>
+	</FormContainerComponent>
+);
 
 const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
 	<SettingsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
