@@ -28,7 +28,7 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import {
@@ -37,6 +37,7 @@ import {
 	IconTelldus,
 	Text,
 	ActionSheet,
+	Image,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -59,6 +60,14 @@ import {
 } from '../../Lib/appUtils';
 import Theme from '../../Theme';
 
+import {
+	onSwitchAccount,
+	getUserProfile,
+} from '../../Actions';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
 import AddAccountBlock from './SubViews/AddAccountBlock';
 
 import i18n from '../../Translations/common';
@@ -69,7 +78,11 @@ const ProfileTab = (props: Object): Object => {
 		intl,
 	}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
+	const {
+		userProfile = {},
+		subscriptions = {},
+		accounts = {},
+	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
 	const actionSheetRef = React.useRef();
@@ -80,6 +93,13 @@ const ProfileTab = (props: Object): Object => {
 			key: 'RedeemGiftScreen',
 		});
 	}
+
+	const dispatch = useDispatch();
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const [ showAddNewAccount, setShowAddNewAccount ] = React.useState(false);
 
 	const {
 		formatMessage,
@@ -107,7 +127,11 @@ const ProfileTab = (props: Object): Object => {
 		actionSheetButtonTwo,
 		actionSheetButtonOneCover,
 		actionSheetButtonTwoCover,
-	} = getStyles(layout);
+		actionSheetButtonAccCover,
+		actionSheetButtonAccText,
+		addIconStyle,
+		addIconCoverStyle,
+	} = getStyles(layout, showAddNewAccount);
 
 	let showAuto = isAutoRenew(subscriptions);
 	const isBasic = moment().unix() > pro;
@@ -132,7 +156,67 @@ const ProfileTab = (props: Object): Object => {
 	}
 
 	function onSelectActionSheet(index: number) {
+		if (showAddNewAccount) {
+			setShowAddNewAccount(false);
+			if (index === 0) {
+				navigation.navigate({
+					routeName: 'LoginScreen',
+					key: 'LoginScreen',
+				});
+			} else if (index === 1) {
+				navigation.navigate({
+					routeName: 'RegisterScreen',
+					key: 'RegisterScreen',
+				});
+			}
+		} else {
+			const addNewIndex = Object.keys(accounts).length;
+			if (index === addNewIndex) {
+				setShowAddNewAccount(true);
+				actionSheetRef.current.show();
+			} else {
+				const email = Object.keys(accounts)[index];
+				if (email) {
+					const {
+						accessToken,
+					} = accounts[email];
+					dispatch(getUserProfile(accessToken)).then(() => {
+						dispatch(onSwitchAccount({
+							email,
+						}));
+					}).catch((err: Object) => {
+						toggleDialogueBoxState({
+							show: true,
+							showHeader: true,
+							imageHeader: true,
+							text: err.message || formatMessage(i18n.unknownError),
+							showPositive: true,
+						});
+					});
+				}
+			}
+		}
 	}
+
+	let ACCOUNTS = [];
+	Object.keys(accounts).map((un: string) => {
+		const {
+			email,
+			firstname = '',
+			lastname = '',
+		} = accounts[un];
+		const nameInfo = `${firstname} ${lastname}\n(${email})`;
+		ACCOUNTS.push(
+			<View style={actionSheetButtonAccCover}>
+				<View style={addIconCoverStyle}>
+					<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
+				</View>
+				<Text style={actionSheetButtonAccText}>
+					{nameInfo.trim()}
+				</Text>
+			</View>
+		);
+	});
 
 	return (
 		<ScrollView style={container}>
@@ -147,7 +231,7 @@ const ProfileTab = (props: Object): Object => {
 					labelTextStyle={labelTextStyleENB}
 					toggleDialogueBox={toggleDialogueBox}
 					style={style}
-				/>
+					userProfile={userProfile}/>
 				<UpdatePasswordBlock
 					navigation={navigation}/>
 				<AddAccountBlock
@@ -202,6 +286,7 @@ const ProfileTab = (props: Object): Object => {
 			</View>
 			<ActionSheet
 				ref={actionSheetRef}
+				changeMoiToUpdateHeight={showAddNewAccount}
 				styles={{
 					overlay: actionSheetOverlay,
 					body: actionSheetOverlay,
@@ -209,31 +294,47 @@ const ProfileTab = (props: Object): Object => {
 					messageBox: actionSheetMessageBox,
 					buttonBox: actionSheetButtonBox,
 				}}
-				title={
+				title={showAddNewAccount ?
 					<View style={actionSheetTitleCover}>
 						<Text style={actionSheetTitle} onPress={closeActionSheet}>
 							Add Account
 						</Text>
 					</View>
+					:
+					undefined
 				}
-				options={[
-					<View style={actionSheetButtonOneCover}>
-						<Text style={actionSheetButtonOne}>
+				options={showAddNewAccount ?
+					[
+						<View style={actionSheetButtonOneCover}>
+							<Text style={actionSheetButtonOne}>
 							Log Into Existing Account
-						</Text>
-					</View>,
-					<View style={actionSheetButtonTwoCover}>
-						<Text style={actionSheetButtonTwo}>
+							</Text>
+						</View>,
+						<View style={actionSheetButtonTwoCover}>
+							<Text style={actionSheetButtonTwo}>
 						Create New Account
-						</Text>
-					</View>,
-				]}
+							</Text>
+						</View>,
+					]
+					:
+					[
+						...ACCOUNTS,
+						<View style={actionSheetButtonAccCover}>
+							<View style={addIconCoverStyle}>
+								<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
+							</View>
+							<Text style={actionSheetButtonAccText}>
+							Add Account
+							</Text>
+						</View>,
+					]
+				}
 				onPress={onSelectActionSheet}/>
 		</ScrollView>
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -241,6 +342,8 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		brandSecondary,
+		rowTextColor,
+		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -248,6 +351,12 @@ const getStyles = (appLayout: Object): Object => {
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 	const fontSizeActionSheetTitle = Math.floor(deviceWidth * 0.05);
+
+	const addIconSize = Math.floor(deviceWidth * 0.07);
+	const addIconCoverSize = addIconSize + 15;
+
+	const butBoxHeight = !showAddNewAccount ? addIconCoverSize * 2 : (fontSize * 2.2) + (padding * 2);
+	const titleBoxHeight = !showAddNewAccount ? undefined : (fontSizeActionSheetTitle * 3) + 8;
 
 	return {
 		style: {
@@ -313,14 +422,14 @@ const getStyles = (appLayout: Object): Object => {
 			height: undefined,
 		},
 		actionSheetButtonBox: {
-			height: (fontSize * 2.2) + (padding * 2),
+			height: butBoxHeight,
 			paddingHorizontal: padding,
 			alignItems: 'stretch',
 			justifyContent: 'center',
 			backgroundColor: '#fff',
 		},
 		actionSheetTitleBox: {
-			height: (fontSizeActionSheetTitle * 3) + 8,
+			height: titleBoxHeight,
 			marginBottom: StyleSheet.hairlineWidth,
 		},
 		actionSheetButtonOneCover: {
@@ -347,6 +456,32 @@ const getStyles = (appLayout: Object): Object => {
 			color: brandSecondary,
 			textAlignVertical: 'center',
 			textAlign: 'center',
+		},
+		actionSheetButtonAccCover: {
+			padding,
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		actionSheetButtonAccText: {
+			fontSize,
+			color: '#000',
+			textAlignVertical: 'center',
+			textAlign: 'left',
+			marginHorizontal: padding,
+		},
+		addIconCoverStyle: {
+			borderRadius: addIconCoverSize / 2,
+			height: addIconCoverSize,
+			width: addIconCoverSize,
+			borderWidth: 0.5,
+			borderColor: rowTextColor,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		addIconStyle: {
+			height: addIconSize,
+			width: addIconSize,
+			tintColor: eulaContentColor,
 		},
 	};
 };

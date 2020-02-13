@@ -65,10 +65,10 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 		.then((response: Object): Object => {
 			if (response.status === 200) {
 				setBoolean('Password', true);
-				dispatch({
-					type: 'RECEIVED_ACCESS_TOKEN',
-					accessToken: response.data,
-				});
+				dispatch(updateAccessToken({
+					...response.data,
+					username: credential.username,
+				}));
 				return response;
 			}
 			throw response;
