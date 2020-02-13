@@ -86,13 +86,14 @@ function updateAccessToken(accessToken: Object): Action {
 	};
 }
 
-function getUserProfile(): ThunkAction {
+function getUserProfile(_accessToken?: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
 				method: 'GET',
 			},
+			_accessToken,
 		};
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
 			dispatch({
