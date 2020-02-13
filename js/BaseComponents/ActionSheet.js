@@ -109,6 +109,7 @@ type Props = {
 	cancelButtonIndex: number,
 	destructiveButtonIndex: number,
 	message: any,
+	disabledButtonIndexes?: Array<number>,
 };
 
 type State = {
@@ -124,6 +125,7 @@ static defaultProps = {
 	buttonUnderlayColor: '#F4F4F4',
 	onPress: () => {},
 	styles: {},
+	disabledButtonIndexes: [],
 }
 
 state: State;
@@ -229,12 +231,19 @@ _renderCancelButton(): Object | null {
 
 _createButton(title: any, index: number): Object {
 	const styles = prepareStyles(this.props.styles);
-	const { buttonUnderlayColor, cancelButtonIndex, destructiveButtonIndex, tintColor } = this.props;
+	const {
+		buttonUnderlayColor,
+		cancelButtonIndex,
+		destructiveButtonIndex,
+		tintColor,
+		disabledButtonIndexes = [],
+	} = this.props;
 	const fontColor = destructiveButtonIndex === index ? WARN_COLOR : tintColor;
 	const buttonBoxStyle = cancelButtonIndex === index ? styles.cancelButtonBox : styles.buttonBox;
 
 	return (
 		<TouchableHighlight
+			disabled={disabledButtonIndexes.indexOf(index) !== -1}
 			key={index}
 			activeOpacity={1}
 			underlayColor={buttonUnderlayColor}
