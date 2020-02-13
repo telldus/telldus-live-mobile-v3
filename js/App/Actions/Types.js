@@ -35,6 +35,7 @@ export type Action =
 	| { type: 'LOGGED_OUT' }
 	| { type: 'LOCK_SESSION' }
 	| { type: 'SET_NETWORK_CONNECTION_INFO', payload: Object }
+	| { type: 'SWITCH_USER_ACCOUNT', payload: Object }
 
 	| { type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: string }
 	| { type: 'PLAY_SERVICES_INFO', payload: Object }
