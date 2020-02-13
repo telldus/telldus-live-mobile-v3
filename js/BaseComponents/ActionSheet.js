@@ -23,8 +23,6 @@
 
 import React from 'react';
 import {
-	Text,
-	View,
 	Dimensions,
 	Modal,
 	TouchableHighlight,
@@ -32,6 +30,9 @@ import {
 	ScrollView,
 	Easing,
 } from 'react-native';
+
+import View from './View';
+import Text from './Text';
 
 const WARN_COLOR = '#FF3B30';
 const MAX_HEIGHT = Dimensions.get('window').height * 0.7;
@@ -42,99 +43,21 @@ const utils = {
 	},
 };
 
-
-type Props = {
-    tintColor?: string,
-	buttonUnderlayColor?: string,
-	onPress: Function,
-    styles: Object,
-    title: Object | string,
-	options: Array<Object | string>,
-	cancelButtonIndex: number,
-	destructiveButtonIndex: number,
-	message: any,
-};
-
-type State = {
-    visible: boolean,
-    sheetAnim: Object,
-};
-
-class ActionSheet extends React.Component<Props, State> {
-static defaultProps = {
-	tintColor: '#007AFF',
-	buttonUnderlayColor: '#F4F4F4',
-	onPress: () => {},
-	styles: {},
-}
-
-state: State;
-props: Props;
-
-scrollEnabled: boolean;
-translateY: number;
-
-constructor(props: Props) {
-	super(props);
-	this.scrollEnabled = false;
-	this.translateY = this._calculateHeight(props);
-	this.state = {
-		visible: false,
-		sheetAnim: new Animated.Value(this.translateY),
-	};
-}
-
-get styles(): Object {
-	const { styles } = this.props;
+const prepareStyles = (stylesFromProps: Object): Object => {
 	const styles2 = getStyles();
 	const obj = {};
 	Object.keys(styles2).forEach((key: string) => {
 		const arr = [styles2[key]];
-		if (styles[key]) {
-			arr.push(styles[key]);
+		if (stylesFromProps[key]) {
+			arr.push(stylesFromProps[key]);
 		}
 		obj[key] = arr;
 	});
 	return obj;
-}
+};
 
-show = () => {
-	this.setState({visible: true}, () => {
-		this._showSheet();
-	});
-}
-
-hide = (index: number) => {
-	this._hideSheet(() => {
-		this.setState({visible: false}, () => {
-			this.props.onPress(index);
-		});
-	});
-}
-
-_cancel = () => {
-	this._hideSheet(() => {
-		this.setState({visible: false});
-	});
-}
-
-_showSheet = () => {
-	Animated.timing(this.state.sheetAnim, {
-		toValue: 0,
-		duration: 250,
-		easing: Easing.out(Easing.ease),
-	}).start();
-}
-
-_hideSheet(callback?: Function) {
-	Animated.timing(this.state.sheetAnim, {
-		toValue: this.translateY,
-		duration: 200,
-	}).start(callback);
-}
-
-_calculateHeight(props: Object): number {
-	const styles = this.styles;
+const calculateHeight = (props: Object): Object => {
+	const styles = prepareStyles(props.styles);
 
 	const getHeight = (name: string): number => {
 		const style = styles[name][styles[name].length - 1];
@@ -161,19 +84,114 @@ _calculateHeight(props: Object): number {
 		height += props.options.length * getHeight('buttonBox');
 	}
 
+	let scrollEnabled = false;
 	if (height > MAX_HEIGHT) {
-		this.scrollEnabled = true;
+		scrollEnabled = true;
 		height = MAX_HEIGHT;
 	} else {
-		this.scrollEnabled = false;
+		scrollEnabled = false;
 	}
 
-	return height;
+	return {
+		height,
+		scrollEnabled,
+	};
+};
+
+
+type Props = {
+    tintColor?: string,
+	buttonUnderlayColor?: string,
+	onPress: Function,
+    styles: Object,
+    title: Object | string,
+	options: Array<Object | string>,
+	cancelButtonIndex: number,
+	destructiveButtonIndex: number,
+	message: any,
+};
+
+type State = {
+    visible: boolean,
+	sheetAnim: Object,
+	translateY: number,
+	scrollEnabled: boolean,
+};
+
+class ActionSheet extends React.Component<Props, State> {
+static defaultProps = {
+	tintColor: '#007AFF',
+	buttonUnderlayColor: '#F4F4F4',
+	onPress: () => {},
+	styles: {},
+}
+
+state: State;
+props: Props;
+
+static getDerivedStateFromProps(nextProps: Object, prevState: Object): ?Object {
+	if (nextProps.changeMoiToUpdateHeight !== prevState.changeMoiToUpdateHeight) {
+		const { height, scrollEnabled } = calculateHeight(nextProps);
+		return {
+			changeMoiToUpdateHeight: nextProps.changeMoiToUpdateHeight,
+			translateY: height,
+			scrollEnabled,
+		};
+	}
+	return null; // Triggers no change in the state
+}
+
+constructor(props: Props) {
+	super(props);
+	const { height } = calculateHeight(props);
+	this.state = {
+		visible: false,
+		sheetAnim: new Animated.Value(height),
+		translateY: height,
+		scrollEnabled: false,
+	};
+}
+
+show = () => {
+	this.setState({visible: true}, () => {
+		this._showSheet();
+	});
+}
+
+hide = (index: number) => {
+	this._hideSheet(() => {
+		this.setState({visible: false}, () => {
+			this.props.onPress(index);
+		});
+	});
+}
+
+_cancel = () => {
+	this._hideSheet(() => {
+		this.setState({visible: false}, () => {
+			this.props.onPress(-1);
+		});
+	});
+}
+
+_showSheet = () => {
+	Animated.timing(this.state.sheetAnim, {
+		toValue: 0,
+		duration: 250,
+		easing: Easing.out(Easing.ease),
+	}).start();
+}
+
+_hideSheet(callback?: Function) {
+	Animated.timing(this.state.sheetAnim, {
+		toValue: this.state.translateY,
+		duration: 200,
+	}).start(callback);
 }
 
 _renderTitle(): Object | null {
 	const { title } = this.props;
-	const styles = this.styles;
+	const styles = prepareStyles(this.props.styles);
 	if (!title) {
 		return null;
 	}
@@ -188,7 +206,7 @@ _renderTitle(): Object | null {
 
 _renderMessage(): Object | null {
 	const { message } = this.props;
-	const styles = this.styles;
+	const styles = prepareStyles(this.props.styles);
 	if (!message) {
 		return null;
 	}
@@ -210,11 +228,11 @@ _renderCancelButton(): Object | null {
 }
 
 _createButton(title: any, index: number): Object {
-	const styles = this.styles;
+	const styles = prepareStyles(this.props.styles);
 	const { buttonUnderlayColor, cancelButtonIndex, destructiveButtonIndex, tintColor } = this.props;
 	const fontColor = destructiveButtonIndex === index ? WARN_COLOR : tintColor;
 	const buttonBoxStyle = cancelButtonIndex === index ? styles.cancelButtonBox : styles.buttonBox;
-	console.log('TEST buttonBoxStyle NEW', buttonBoxStyle);
+
 	return (
 		<TouchableHighlight
 			key={index}
@@ -239,8 +257,14 @@ _renderOptions(): Array<Object> {
 }
 
 render(): Object {
-	const styles = this.styles;
-	const { visible, sheetAnim } = this.state;
+	const styles = prepareStyles(this.props.styles);
+	const {
+		visible,
+		sheetAnim,
+		scrollEnabled,
+		translateY,
+	} = this.state;
+
 	return (
 		<Modal visible={visible}
 			animationType="none"
@@ -255,12 +279,12 @@ render(): Object {
 				<Animated.View
 					style={[
 						styles.body,
-						{ height: this.translateY, transform: [{ translateY: sheetAnim }] },
+						{ height: translateY, transform: [{ translateY: sheetAnim }] },
 					]}
 				>
 					{this._renderTitle()}
 					{this._renderMessage()}
-					<ScrollView scrollEnabled={this.scrollEnabled}>{this._renderOptions()}</ScrollView>
+					<ScrollView scrollEnabled={scrollEnabled}>{this._renderOptions()}</ScrollView>
 					{this._renderCancelButton()}
 				</Animated.View>
 			</View>
