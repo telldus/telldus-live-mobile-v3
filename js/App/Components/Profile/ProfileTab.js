@@ -31,6 +31,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 const gravatar = require('gravatar-api');
+import { RadioButtonInput } from 'react-native-simple-radio-button';
 
 import {
 	View,
@@ -39,6 +40,7 @@ import {
 	Text,
 	ActionSheet,
 	Image,
+	Throbber,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -101,6 +103,7 @@ const ProfileTab = (props: Object): Object => {
 	} = useDialogueBox();
 
 	const [ showAddNewAccount, setShowAddNewAccount ] = React.useState(false);
+	const [ switchingId, setSwitchingId ] = React.useState(null);
 
 	const {
 		formatMessage,
@@ -133,6 +136,11 @@ const ProfileTab = (props: Object): Object => {
 		addIconStyle,
 		addIconCoverStyle,
 		gravatarStyle,
+		brandSecondary,
+		rbSize,
+		rbOuterSize,
+		throbberContainerStyle,
+		throbberStyle,
 	} = getStyles(layout, showAddNewAccount);
 
 	let showAuto = isAutoRenew(subscriptions);
@@ -181,14 +189,22 @@ const ProfileTab = (props: Object): Object => {
 			} else {
 				const email = Object.keys(accounts)[index];
 				if (email) {
+					if (switchingId) {
+						return;
+					}
+					setSwitchingId(email.trim().toLowerCase());
 					const {
 						accessToken,
 					} = accounts[email];
 					dispatch(getUserProfile(accessToken)).then(() => {
+						setSwitchingId(null);
 						dispatch(onSwitchAccount({
 							email,
 						}));
+						closeActionSheet();
 					}).catch((err: Object) => {
+						setSwitchingId(null);
+						closeActionSheet();
 						toggleDialogueBoxState({
 							show: true,
 							showHeader: true,
@@ -203,7 +219,7 @@ const ProfileTab = (props: Object): Object => {
 	}
 
 	let ACCOUNTS = [];
-	Object.keys(accounts).map((un: string) => {
+	Object.keys(accounts).map((un: string, index: number) => {
 		const {
 			email,
 			firstname = '',
@@ -217,12 +233,37 @@ const ProfileTab = (props: Object): Object => {
 		};
 		let avatar = gravatar.imageUrl(options);
 
+		const isSelected = email.trim().toLowerCase() === userProfile.email.trim().toLowerCase();
+
+		function onPressRB() {
+			if (isSelected) {
+				return;
+			}
+			onSelectActionSheet(index);
+		}
+
 		ACCOUNTS.push(
 			<View style={actionSheetButtonAccCover}>
 				<Image source={{uri: avatar}} style={gravatarStyle}/>
 				<Text style={actionSheetButtonAccText}>
 					{nameInfo.trim()}
 				</Text>
+				{switchingId === email.trim().toLowerCase() ?
+					<Throbber
+						throbberContainerStyle={throbberContainerStyle}
+						throbberStyle={throbberStyle}/>
+					:
+					<RadioButtonInput
+						isSelected={isSelected}
+						buttonSize={rbSize}
+						buttonOuterSize={rbOuterSize}
+						borderWidth={3}
+						buttonInnerColor={brandSecondary}
+						buttonOuterColor={brandSecondary}
+						onPress={onPressRB}
+						obj={{email}}
+						index={index}/>
+				}
 			</View>
 		);
 	});
@@ -296,6 +337,7 @@ const ProfileTab = (props: Object): Object => {
 			<ActionSheet
 				ref={actionSheetRef}
 				changeMoiToUpdateHeight={showAddNewAccount}
+				disabledButtonIndexes={showAddNewAccount ? [] : [0, 1]}
 				styles={{
 					overlay: actionSheetOverlay,
 					body: actionSheetOverlay,
@@ -367,7 +409,13 @@ const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
 	const butBoxHeight = !showAddNewAccount ? addIconCoverSize * 2 : (fontSize * 2.2) + (padding * 2);
 	const titleBoxHeight = !showAddNewAccount ? undefined : (fontSizeActionSheetTitle * 3) + 8;
 
+	const rbOuterSize = Math.floor(deviceWidth * 0.055);
+	const rbSize = rbOuterSize * 0.5;
+
 	return {
+		rbOuterSize,
+		rbSize,
+		brandSecondary,
 		style: {
 			marginBottom: padding / 2,
 		},
@@ -477,6 +525,7 @@ const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
 			textAlignVertical: 'center',
 			textAlign: 'left',
 			marginHorizontal: padding,
+			flex: 1,
 		},
 		addIconCoverStyle: {
 			borderRadius: addIconCoverSize / 2,
@@ -498,6 +547,14 @@ const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
 			height: addIconSize,
 			width: addIconSize,
 			tintColor: eulaContentColor,
+		},
+		throbberContainerStyle: {
+			backgroundColor: 'transparent',
+			position: 'relative',
+		},
+		throbberStyle: {
+			fontSize: rbOuterSize,
+			color: brandSecondary,
 		},
 	};
 };
