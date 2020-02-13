@@ -97,6 +97,7 @@ type Props = {
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	username: string,
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -155,9 +156,20 @@ constructor(props: Props) {
 }
 
 async componentDidMount() {
-	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
+	const { dispatch } = this.props;
 	dispatch(appStart());
 	dispatch(appState());
+
+	this.actionsToPerformOnStart();
+
+	NetInfo.addEventListener(
+		'connectionChange',
+		this.handleConnectivityChange,
+	);
+}
+
+actionsToPerformOnStart = async () => {
+	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
 
 	// NOTE : Make sure "fetchRemoteConfig" is called before 'checkPermissionAndInitializeWatcher'.
 	await dispatch(fetchRemoteConfig());
@@ -200,11 +212,6 @@ async componentDidMount() {
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
 
-	NetInfo.addEventListener(
-		'connectionChange',
-		this.handleConnectivityChange,
-	);
-
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
 		this.addNewLocation();
@@ -214,6 +221,7 @@ async componentDidMount() {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	}
+
 }
 
 /*
@@ -291,6 +299,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showEULA',
 		'addNewGatewayBool',
 		'showChangeLog',
+		'username',
 	]);
 	if (propsChange) {
 		return true;
@@ -310,7 +319,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		durationToast,
 		positionToast,
 		intl,
-		addNewGatewayBool,
+		username,
 	} = this.props;
 	if (showToastBool && !prevProps.showToast) {
 		const { formatMessage } = intl;
@@ -318,9 +327,9 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		this._showToast(message, durationToast, positionToast);
 	}
 
-	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && !hasTriedAddLocation) {
-		this.addNewLocation();
+	// Account switched
+	if (username && prevProps.username && (username.trim().toLowerCase() !== prevProps.username.trim().toLowerCase())) {
+		this.actionsToPerformOnStart();
 	}
 }
 
@@ -527,16 +536,14 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		pushToken,
+		pushTokenRegistered,
+		deviceId = null,
+		username,
 	} = state.user;
 
 	const { allIds = [], toActivate } = state.gateways;
 	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
-
-	let {
-		pushToken,
-		pushTokenRegistered,
-		deviceId = null,
-	} = state.user;
 
 	return {
 		messageToast,
@@ -558,6 +565,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		subscriptions,
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,
+		username,
 	};
 }
 
