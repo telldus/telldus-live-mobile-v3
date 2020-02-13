@@ -43,7 +43,7 @@ import {
 
 import i18n from '../../../Translations/common';
 
-function usePrevious(value: string): string {
+function usePrevious(value: string): ?string {
 	const ref = useRef();
 	useEffect(() => {
 	  ref.current = value;

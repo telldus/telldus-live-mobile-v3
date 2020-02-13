@@ -173,7 +173,9 @@ const ProfileTab = (props: Object): Object => {
 			const addNewIndex = Object.keys(accounts).length;
 			if (index === addNewIndex) {
 				setShowAddNewAccount(true);
-				actionSheetRef.current.show();
+				if (actionSheetRef.current) {
+					actionSheetRef.current.show();
+				}
 			} else {
 				const email = Object.keys(accounts)[index];
 				if (email) {

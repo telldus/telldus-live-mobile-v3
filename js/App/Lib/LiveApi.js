@@ -36,7 +36,7 @@ import { apiServer, publicKey, privateKey } from '../../Config';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi({ url, requestParams, _accessToken }: {url: string, requestParams: Object}): ThunkAction {
+export function LiveApi({ url, requestParams, _accessToken }: {url: string, requestParams: Object, _accessToken?: Object }): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const { user: { accessToken } } = getState();
 		return doApiCall(url, requestParams, _accessToken || accessToken, dispatch).then((response: Object): any => {

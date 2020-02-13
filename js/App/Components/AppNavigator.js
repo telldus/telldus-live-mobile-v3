@@ -395,6 +395,8 @@ const RouteConfigs = {
 	},
 };
 
+type renderContainer = (Object) => Object;
+
 const renderFormContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
 	<FormContainerComponent navigation={navigation} screenProps={screenProps}>
 		<Component/>

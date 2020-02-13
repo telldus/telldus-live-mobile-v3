@@ -45,6 +45,7 @@ export type State = {
 	playServicesInfo: Object,
 	firebaseRemoteConfig: Object,
 	accounts: Object,
+	username: string,
 };
 
 export const initialState = {
@@ -68,6 +69,7 @@ export const initialState = {
 	playServicesInfo: {},
 	firebaseRemoteConfig: {},
 	accounts: {},
+	username: '',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
