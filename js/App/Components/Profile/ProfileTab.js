@@ -166,6 +166,9 @@ const ProfileTab = (props: Object): Object => {
 	}
 
 	function onSelectActionSheet(index: number) {
+		if (switchingId) {
+			return;
+		}
 		if (showAddNewAccount) {
 			setShowAddNewAccount(false);
 			if (index === 0) {
@@ -189,9 +192,6 @@ const ProfileTab = (props: Object): Object => {
 			} else {
 				const email = Object.keys(accounts)[index];
 				if (email) {
-					if (switchingId) {
-						return;
-					}
 					setSwitchingId(email.trim().toLowerCase());
 					const {
 						accessToken,
