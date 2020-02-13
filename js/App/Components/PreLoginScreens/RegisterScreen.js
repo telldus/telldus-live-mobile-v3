@@ -133,9 +133,15 @@ class RegisterScreen extends View<Props, State> {
 		return true;
 	}
 
+	goBack = () => {
+		this.props.navigation.goBack();
+	}
+
 	render(): Object {
-		let { appLayout, intl, styles: commonStyles } = this.props;
+		let { appLayout, intl, styles: commonStyles, screenProps } = this.props;
 		let styles = this.getStyles(appLayout);
+
+		const { source = 'prelogin' } = screenProps;
 
 		return (
 			<View style={{
@@ -148,14 +154,26 @@ class RegisterScreen extends View<Props, State> {
 					headerText={intl.formatMessage(i18n.createAccount)}
 					styles={commonStyles}
 					openDialogueBox={this.openDialogueBox}/>
-				<TouchableOpacity
-					onPress={this.goBackToLogin}
-					accessibilityLabel={this.labelAlreadyHaveAccount}
-					style={{
-						alignSelf: 'center',
-					}}>
-					<FormattedMessage {...i18n.alreadyHaveAccount} style={styles.accountExist}/>
-				</TouchableOpacity>
+				{source === 'prelogin' && (
+					<TouchableOpacity
+						onPress={this.goBackToLogin}
+						accessibilityLabel={this.labelAlreadyHaveAccount}
+						style={{
+							alignSelf: 'center',
+						}}>
+						<FormattedMessage {...i18n.alreadyHaveAccount} style={styles.accountExist}/>
+					</TouchableOpacity>
+				)}
+				{source === 'postlogin' && (
+					<TouchableOpacity
+						onPress={this.goBack}
+						accessibilityLabel={intl.formatMessage(i18n.cancelAndBack)}
+						style={{
+							alignSelf: 'center',
+						}}>
+						<FormattedMessage {...i18n.cancelAndBack} style={styles.accountExist} />
+					</TouchableOpacity>
+				)}
 			</View>
 		);
 	}

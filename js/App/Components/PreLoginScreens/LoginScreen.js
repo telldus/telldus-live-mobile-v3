@@ -170,9 +170,15 @@ class LoginScreen extends View {
 		});
 	}
 
+	goBack = () => {
+		this.props.navigation.goBack();
+	}
+
 	render(): Object {
-		let { appLayout, styles: commonStyles } = this.props;
+		let { appLayout, styles: commonStyles, screenProps, intl } = this.props;
 		let styles = this.getStyles(appLayout);
+
+		const { source = 'prelogin' } = screenProps;
 
 		let {
 			headerText,
@@ -196,12 +202,15 @@ class LoginScreen extends View {
 						dialogueOpen={this.state.showModal}
 						headerText={headerText}
 						styles={commonStyles}
-						openDialogueBox={this.openDialogueBox}/>
+						openDialogueBox={this.openDialogueBox}
+						onLoginSuccess={source === 'postlogin' ? this.goBack : undefined}/>
 				}
 				{this.props.accessToken && !this.props.isTokenValid ?
 					null
 					:
 					<View style={styles.otherLinks}>
+						{source === 'prelogin' && (
+							<>
 						<TouchableOpacity
 							onPress={this.onForgotPassword}
 							accessibilityLabel={this.labelForgotPassword}>
@@ -213,6 +222,18 @@ class LoginScreen extends View {
 							<FormattedMessage {...i18n.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
 						</TouchableOpacity>
 						<View style={{ height: 10 }}/>
+						</>
+						)}
+						{source === 'postlogin' && (
+							<TouchableOpacity
+								onPress={this.goBack}
+								accessibilityLabel={intl.formatMessage(i18n.cancelAndBack)}
+								style={{
+									alignSelf: 'center',
+								}}>
+								<FormattedMessage {...i18n.cancelAndBack} style={styles.textLink} />
+							</TouchableOpacity>
+						)}
 					</View>
 				}
 			</View>
