@@ -23,7 +23,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -43,6 +43,14 @@ import {
 
 import i18n from '../../../Translations/common';
 
+function usePrevious(value: string): string {
+	const ref = useRef();
+	useEffect(() => {
+	  ref.current = value;
+	});
+	return ref.current;
+}
+
 const EditNameBlock = (props: Object): Object => {
 	const {
 		style,
@@ -51,6 +59,7 @@ const EditNameBlock = (props: Object): Object => {
 		textFieldStyle,
 		labelTextStyle,
 		toggleDialogueBox,
+		userProfile,
 	} = props;
 	const [ inLineEditActive, setInLineEditActive ] = useState(false);
 
@@ -58,11 +67,16 @@ const EditNameBlock = (props: Object): Object => {
 	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile } = useSelector((state: Object): Object => state.user);
 	const { firstname = '', lastname = '' } = userProfile || {};
 	const FN = `${firstname} ${lastname}`;
 
 	const [ nameEditValue, setNameEditValue ] = useState(FN);
+	const prevNameEditValue = usePrevious(FN);
+	useEffect(() => {
+		if (prevNameEditValue !== FN) {
+			setNameEditValue(FN);
+		}
+	}, [FN]);
 
 	function toggleEdit() {
 		if (inLineEditActive) {
@@ -100,7 +114,6 @@ const EditNameBlock = (props: Object): Object => {
 	function onChangeText(text: string) {
 		setNameEditValue(text);
 	}
-
 
 	const {
 		iconValueRightSize,
