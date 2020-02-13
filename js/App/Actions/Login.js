@@ -67,7 +67,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 				setBoolean('Password', true);
 				dispatch(updateAccessToken({
 					...response.data,
-					username: credential.username,
+					username: credential.username || undefined, // TODO: Shall use user id, once it is available.
 				}));
 				return response;
 			}

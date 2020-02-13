@@ -328,6 +328,8 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 	}
 
 	// Account switched
+	// TODO: Use user id instead of emaill once available.
+	// https://code.telldus.com/telldus/live-api/issues/143
 	if (username && prevProps.username && (username.trim().toLowerCase() !== prevProps.username.trim().toLowerCase())) {
 		this.actionsToPerformOnStart();
 	}
