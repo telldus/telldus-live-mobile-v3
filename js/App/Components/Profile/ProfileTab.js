@@ -57,7 +57,10 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const ProfileTab = (props: Object): Object => {
-	const { screenProps: {toggleDialogueBox}, navigation } = props;
+	const { screenProps: {
+		toggleDialogueBox,
+		intl,
+	}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {}, subscriptions = {} } = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
@@ -68,6 +71,10 @@ const ProfileTab = (props: Object): Object => {
 			key: 'RedeemGiftScreen',
 		});
 	}
+
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		container,
@@ -130,14 +137,14 @@ const ProfileTab = (props: Object): Object => {
 					navigation={navigation}/>}
 				<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
 					<Text style={redeemTextSyle}>
-							View purchase history
+						{formatMessage(i18n.viewPurchaseHistory)}
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity onPress={onPressRedeemGift}>
 					<View style={redeemCoverStyle}>
 						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
 						<Text style={redeemTextSyle}>
-							Redeem gift card
+							{formatMessage(i18n.redeemGiftCard)}
 						</Text>
 					</View>
 				</TouchableOpacity>
