@@ -30,6 +30,7 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
+const gravatar = require('gravatar-api');
 
 import {
 	View,
@@ -131,6 +132,7 @@ const ProfileTab = (props: Object): Object => {
 		actionSheetButtonAccText,
 		addIconStyle,
 		addIconCoverStyle,
+		gravatarStyle,
 	} = getStyles(layout, showAddNewAccount);
 
 	let showAuto = isAutoRenew(subscriptions);
@@ -208,11 +210,16 @@ const ProfileTab = (props: Object): Object => {
 			lastname = '',
 		} = accounts[un];
 		const nameInfo = `${firstname} ${lastname}\n(${email})`;
+
+		let options = {
+			email,
+			parameters: { 'size': '200', 'd': 'mm' },
+		};
+		let avatar = gravatar.imageUrl(options);
+
 		ACCOUNTS.push(
 			<View style={actionSheetButtonAccCover}>
-				<View style={addIconCoverStyle}>
-					<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
-				</View>
+				<Image source={{uri: avatar}} style={gravatarStyle}/>
 				<Text style={actionSheetButtonAccText}>
 					{nameInfo.trim()}
 				</Text>
@@ -479,6 +486,13 @@ const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
 			borderColor: rowTextColor,
 			alignItems: 'center',
 			justifyContent: 'center',
+		},
+		gravatarStyle: {
+			borderRadius: addIconCoverSize / 2,
+			height: addIconCoverSize,
+			width: addIconCoverSize,
+			borderWidth: 0.5,
+			borderColor: rowTextColor,
 		},
 		addIconStyle: {
 			height: addIconSize,
