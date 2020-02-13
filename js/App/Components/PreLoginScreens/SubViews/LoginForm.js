@@ -55,6 +55,7 @@ type Props = {
 	headerText: string,
 
 	openDialogueBox: (string, ?string) => void,
+	onLoginSuccess?: () => void,
 };
 
 type State = {
@@ -208,7 +209,7 @@ class LoginForm extends View {
 	}
 
 	async signIn(): any {
-		const { openDialogueBox, intl } = this.props;
+		const { openDialogueBox, intl, onLoginSuccess } = this.props;
 		this.setState({ isSigninInProgress: true });
 		try {
 			await GoogleSignin.hasPlayServices();
@@ -221,6 +222,11 @@ class LoginForm extends View {
 						idToken,
 					};
 					this.props.loginToTelldus(credential, 'google')
+						.then(() => {
+							if (onLoginSuccess) {
+								onLoginSuccess();
+							}
+						})
 						.catch((err: Object) => {
 							this.setState({
 								isSigninInProgress: false,
@@ -262,7 +268,7 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
-		const { intl, openDialogueBox } = this.props;
+		const { intl, openDialogueBox, onLoginSuccess } = this.props;
 		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
@@ -273,6 +279,11 @@ class LoginForm extends View {
 					password,
 				};
 				this.props.loginToTelldus(credential, 'password')
+					.then(() => {
+						if (onLoginSuccess) {
+							onLoginSuccess();
+						}
+					})
 					.catch((err: Object) => {
 						this.postSubmit();
 						this.handleLoginError(err);
