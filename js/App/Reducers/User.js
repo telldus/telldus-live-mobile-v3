@@ -23,6 +23,7 @@
 
 import type { Action } from '../Actions/Types';
 import { createSelector } from 'reselect';
+import isEmpty from 'lodash/isEmpty';
 
 export type State = {
 	accessToken: any,
@@ -191,10 +192,19 @@ export default function reduceUser(state: State = initialState, action: Action):
 		if (action.payload.email) {
 			const email = action.payload.email.trim().toLowerCase();
 			const existAccount = accounts[email] || {};
-			newAccounts[email] = {
-				...existAccount,
-				...action.payload,
-			};
+
+			// Required while upgrading from older version, and already logged in
+			if (isEmpty(accounts)) {
+				newAccounts[email] = {
+					accessToken: state.accessToken,
+					...action.payload,
+				};
+			} else {
+				newAccounts[email] = {
+					...existAccount,
+					...action.payload,
+				};
+			}
 		}
 
 		let userIdN = state.userId;
