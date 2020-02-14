@@ -121,6 +121,17 @@ export default function reduceUser(state: State = initialState, action: Action):
 				...existAccount,
 				accessToken: action.accessToken,
 			};
+		} else if (userIdN) { // Refreshing access token
+			userId = userIdN.trim().toLowerCase();
+			const existAccount = accounts[userId] || {};
+			const uId = existAccount.userId || userIdN;
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken: {
+					...action.accessToken,
+					userId: uId,
+				},
+			};
 		}
 
 		return {
