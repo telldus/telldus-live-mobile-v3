@@ -70,6 +70,9 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 			tempDay.hours(job.hour);
 			tempDay.minutes(job.minute);
 		}
+		if (!tempDay) {
+			return;
+		}
 
 		job.gatewayTimezone = gatewayTimezone;
 
@@ -82,6 +85,9 @@ export function parseJobsForListView(jobs: Array<Object> = [], gateways: Object 
 		job.deviceSupportedMethods = supportedMethods;
 
 		const now = moment().tz(timezone);
+		if (!now) {
+			return;
+		}
 		const { showInactive } = userOptions;
 		const showJobs = showInactive || (!showInactive && job.active);
 		if (job.weekdays && showJobs) {
