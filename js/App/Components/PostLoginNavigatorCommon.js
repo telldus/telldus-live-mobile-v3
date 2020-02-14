@@ -56,6 +56,7 @@ import {
 	getUserSubscriptions,
 	campaignVisited,
 	toggleVisibilityProExpireHeadsup,
+	fetchRemoteConfig,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -159,6 +160,10 @@ async componentDidMount() {
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 	// and results in generating multiple tokens.
+
+	await dispatch(fetchRemoteConfig());
+
+
 	try {
 		await dispatch(getUserProfile());
 	} catch (e) {
