@@ -50,6 +50,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 		textFieldStyle,
 		labelTextStyle,
 		navigation,
+		enablePurchase,
 	} = props;
 
 	const intl = useIntl();
@@ -99,13 +100,19 @@ const AutoRenewalBlock = (props: Object): Object => {
 			iconValueRight={isAutoRenew ?
 				<IconTelldus icon={'settings'} style={upgradeSyle}/>
 				:
-				<Text style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
+				enablePurchase ?
+					<Text style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
+					:
+					undefined
 			}
 			onPress={false}
-			onPressIconValueRight={isAutoRenew ?
-				onPressManageSubscription
+			onPressIconValueRight={!enablePurchase ?
+				undefined
 				:
-				onPressUpgrade
+				isAutoRenew ?
+					onPressManageSubscription
+					:
+					onPressUpgrade
 			}
 			intl={intl}
 			style={style}

@@ -48,6 +48,7 @@ const SMSBlock = (props: Object): Object => {
 		textFieldStyle,
 		labelTextStyle,
 		navigation,
+		enablePurchase,
 	} = props;
 
 	const intl = useIntl();
@@ -89,8 +90,15 @@ const SMSBlock = (props: Object): Object => {
 				label={formatMessage(i18n.smsCredits)}
 				value={`${credits}`}
 				appLayout={layout}
-				iconValueRight={<Text style={buyCreditsStyle}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}</Text>}
-				onPressIconValueRight={onPressBuyCredits}
+				iconValueRight={
+					enablePurchase ?
+						<Text style={buyCreditsStyle}>
+							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
+						</Text>
+						:
+						undefined
+				}
+				onPressIconValueRight={enablePurchase ? onPressBuyCredits : undefined}
 				onPress={false}
 				intl={intl}
 				style={style}

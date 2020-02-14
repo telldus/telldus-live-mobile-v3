@@ -86,10 +86,15 @@ const ProfileTab = (props: Object): Object => {
 		subscriptions = {},
 		accounts = {},
 		userId = '',
+		firebaseRemoteConfig = {},
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
 	const actionSheetRef = React.useRef();
+
+	const { premiumPurchase = '{}'} = firebaseRemoteConfig;
+	const { enable } = JSON.parse(premiumPurchase);
+
 
 	function onPressRedeemGift() {
 		navigation.navigate({
@@ -310,15 +315,18 @@ const ProfileTab = (props: Object): Object => {
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
 					style={style}
+					enablePurchase={enable}
 				/>)}
 				{isBasic && <PremiumInfoContent/>}
-				{isBasic && <UpgradePremiumButton
+				{(isBasic && enable) && <UpgradePremiumButton
 					navigation={navigation}/>}
-				<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
-					<Text style={redeemTextSyle}>
-						{formatMessage(i18n.viewPurchaseHistory)}
-					</Text>
-				</TouchableOpacity>
+				{enable && (
+					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
+						<Text style={redeemTextSyle}>
+							{formatMessage(i18n.viewPurchaseHistory)}
+						</Text>
+					</TouchableOpacity>
+				)}
 				<TouchableOpacity onPress={onPressRedeemGift}>
 					<View style={redeemCoverStyle}>
 						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
@@ -333,9 +341,10 @@ const ProfileTab = (props: Object): Object => {
 					valueCoverStyle={valueCoverStyleENB}
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
-					style={style}/>
+					style={style}
+					enablePurchase={enable}/>
 				)}
-				{isBasic && <ViewPremiumBenefitsButton
+				{(isBasic && enable) && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
 				<LogoutButton
 					buttonAccessibleProp={true}
