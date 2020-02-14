@@ -22,7 +22,7 @@ describe('Test User reducers', ()=>{
 			{
 				access_token: 'tell',
 				refresh_token: 'tell',
-				username: 'rz',
+				userId: 'rz',
 			},
 			registeredCredential: false,
 			isTokenValid: true,
@@ -32,15 +32,15 @@ describe('Test User reducers', ()=>{
 					{
 						access_token: 'tell',
 						refresh_token: 'tell',
-						username: 'rz',
+						userId: 'rz',
 					},
 				},
 			},
-			username: 'rz',
+			userId: 'rz',
 		};
 		const action = {
 			type: 'RECEIVED_ACCESS_TOKEN',
-			accessToken: {access_token: 'tell', refresh_token: 'tell', username: 'rz'},
+			accessToken: {access_token: 'tell', refresh_token: 'tell', userId: 'rz'},
 		};
 		expect(reducer( {}, action )).toEqual(State);
 	});
