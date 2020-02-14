@@ -93,6 +93,8 @@ type Props = {
 
 	showChangeLog: boolean,
 
+	screen: string,
+
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
@@ -122,6 +124,9 @@ autoDetectLocalTellStick: () => void;
 handleConnectivityChange: () => void;
 addNewLocation: () => void;
 addNewDevice: () => void;
+
+screensAllowsNavigationOrModalOverride: Array<string>;
+
 constructor(props: Props) {
 	super(props);
 
@@ -153,6 +158,15 @@ constructor(props: Props) {
 	// sets push notification listeners and returns a method that clears all listeners.
 	this.onNotification = Push.onNotification();
 	this.onNotificationOpened = Push.onNotificationOpened();
+
+	this.screensAllowsNavigationOrModalOverride = [
+		'Tabs',
+		'Dashboard',
+		'Devices',
+		'Sensors',
+		'Scheduler',
+		'Gateways',
+	];
 }
 
 async componentDidMount() {
@@ -186,7 +200,12 @@ actionsToPerformOnStart = async () => {
 		dispatch(getPhonesList()).then((phonesList: Object) => {
 			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
 			this.pushConf(register);
-			if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
+			if (
+				!pushTokenRegistered &&
+				phonesList.phone &&
+				phonesList.phone.length > 0 &&
+				this.doesAllowsToOverrideScreen()
+			) {
 				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
 			}
 		}).catch(() => {
@@ -213,11 +232,15 @@ actionsToPerformOnStart = async () => {
 	this.checkIfOpenThermostatControl();
 
 	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && !hasTriedAddLocation) {
+	if (addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
 		this.addNewLocation();
 	}
 
-	if (premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
+	if (
+		premiumAboutToExpire(subscriptions, pro) &&
+		visibilityProExpireHeadsup !== 'hide_perm' &&
+		this.doesAllowsToOverrideScreen()
+	) {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	}
@@ -300,6 +323,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'addNewGatewayBool',
 		'showChangeLog',
 		'userId',
+		'screen',
 	]);
 	if (propsChange) {
 		return true;
@@ -353,6 +377,11 @@ componentWillUnmount() {
 		this.onTokenRefreshListener();
 		this.onTokenRefreshListener = null;
 	}
+}
+
+doesAllowsToOverrideScreen = (): boolean => {
+	const { screen } = this.props;
+	return this.screensAllowsNavigationOrModalOverride.indexOf(screen) !== -1;
 }
 
 addNewLocation() {
@@ -488,6 +517,8 @@ render(): Object {
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
+	const showEulaMdal = showEULA && !showChangeLog && this.doesAllowsToOverrideScreen();
+
 	return (
 		<View style={{flex: 1}}>
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
@@ -513,7 +544,7 @@ render(): Object {
 					intl={intl}
 				/>
 			)}
-			<UserAgreement showModal={showEULA && !showChangeLog} onLayout={this.onLayout}/>
+			<UserAgreement showModal={showEulaMdal} onLayout={this.onLayout}/>
 		</View>
 	);
 }
@@ -566,6 +597,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,
 		userId,
+		screen: state.navigation.screen,
 	};
 }
 
