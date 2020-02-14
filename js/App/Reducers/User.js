@@ -45,7 +45,7 @@ export type State = {
 	playServicesInfo: Object,
 	firebaseRemoteConfig: Object,
 	accounts: Object,
-	username: string,
+	userId: string,
 };
 
 export const initialState = {
@@ -69,7 +69,7 @@ export const initialState = {
 	playServicesInfo: {},
 	firebaseRemoteConfig: {},
 	accounts: {},
-	username: '',
+	userId: '',
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -109,14 +109,14 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...accounts,
 		};
 
-		let username = state.username;
-		let { username: un } = action.accessToken;
-		if (un) {
-			un = un.trim().toLowerCase();
-			username = un;
+		let userIdN = state.userId;
+		let { userId } = action.accessToken;
+		if (userId) {
+			userIdN = userId;
+			userId = userId.trim().toLowerCase();
 
-			const existAccount = accounts[un] || {};
-			newAccounts[un] = {
+			const existAccount = accounts[userId] || {};
+			newAccounts[userId] = {
 				...existAccount,
 				accessToken: action.accessToken,
 			};
@@ -128,7 +128,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			registeredCredential: false,
 			isTokenValid: true,
 			accounts: newAccounts,
-			username,
+			userId: userIdN,
 		};
 	}
 	if (action.type === 'RECEIVED_PUSH_TOKEN') {
@@ -197,10 +197,16 @@ export default function reduceUser(state: State = initialState, action: Action):
 			};
 		}
 
+		let userIdN = state.userId;
+		if (action.payload.email) {
+			userIdN = action.payload.email; // TODO: Should use user id, once it is available.
+		}
+
 		return {
 			...state,
 			userProfile: action.payload,
 			accounts: newAccounts,
+			userId: userIdN,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {
@@ -290,11 +296,10 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'SWITCH_USER_ACCOUNT') {
-		let { email } = action.payload;
+		let { userId } = action.payload;
 		const { accounts = {} } = state;
 
-		email = email.trim().toLowerCase();
-		const existAccount = accounts[email] || {};
+		const existAccount = accounts[userId] || {};
 		const {
 			accessToken,
 		} = existAccount;
@@ -307,7 +312,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...state,
 			...state,
 			accessToken,
-			username: accessToken.username,
+			userId: accessToken.userId,
 		};
 	}
 	return state;

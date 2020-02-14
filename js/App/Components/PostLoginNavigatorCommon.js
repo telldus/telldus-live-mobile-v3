@@ -97,7 +97,7 @@ type Props = {
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
-	username: string,
+	userId: string,
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -299,7 +299,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showEULA',
 		'addNewGatewayBool',
 		'showChangeLog',
-		'username',
+		'userId',
 	]);
 	if (propsChange) {
 		return true;
@@ -319,7 +319,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		durationToast,
 		positionToast,
 		intl,
-		username,
+		userId,
 	} = this.props;
 	if (showToastBool && !prevProps.showToast) {
 		const { formatMessage } = intl;
@@ -328,9 +328,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 	}
 
 	// Account switched
-	// TODO: Use user id instead of emaill once available.
-	// https://code.telldus.com/telldus/live-api/issues/143
-	if (username && prevProps.username && (username.trim().toLowerCase() !== prevProps.username.trim().toLowerCase())) {
+	if (userId && prevProps.userId && (userId.trim().toLowerCase() !== prevProps.userId.trim().toLowerCase())) {
 		this.actionsToPerformOnStart();
 	}
 }
@@ -541,7 +539,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pushToken,
 		pushTokenRegistered,
 		deviceId = null,
-		username,
+		userId,
 	} = state.user;
 
 	const { allIds = [], toActivate } = state.gateways;
@@ -567,7 +565,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		subscriptions,
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,
-		username,
+		userId,
 	};
 }
 

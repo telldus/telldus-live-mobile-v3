@@ -85,6 +85,7 @@ const ProfileTab = (props: Object): Object => {
 		userProfile = {},
 		subscriptions = {},
 		accounts = {},
+		userId = '',
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
@@ -190,21 +191,22 @@ const ProfileTab = (props: Object): Object => {
 					actionSheetRef.current.show();
 				}
 			} else {
-				const email = Object.keys(accounts)[index];
-				if (email) {
-					setSwitchingId(email.trim().toLowerCase());
+				let userIdKey = Object.keys(accounts)[index];
+				if (userIdKey) {
+					userIdKey = userIdKey.trim().toLowerCase();
+					setSwitchingId(userIdKey);
 					const {
 						accessToken,
-					} = accounts[email];
+					} = accounts[userIdKey];
 					dispatch(getUserProfile(accessToken)).then(() => {
+						closeActionSheet();
 						setSwitchingId(null);
 						dispatch(onSwitchAccount({
-							email,
+							userId: userIdKey,
 						}));
-						closeActionSheet();
 					}).catch((err: Object) => {
-						setSwitchingId(null);
 						closeActionSheet();
+						setSwitchingId(null);
 						toggleDialogueBoxState({
 							show: true,
 							showHeader: true,
@@ -219,11 +221,16 @@ const ProfileTab = (props: Object): Object => {
 	}
 
 	let ACCOUNTS = [];
+	const disabledButtonIndexes = [];
 	Object.keys(accounts).map((un: string, index: number) => {
+		if (!showAddNewAccount) {
+			disabledButtonIndexes.push(index);
+		}
 		const {
 			email,
 			firstname = '',
 			lastname = '',
+			accessToken = {},
 		} = accounts[un];
 		const nameInfo = `${firstname} ${lastname}\n(${email})`;
 
@@ -233,7 +240,8 @@ const ProfileTab = (props: Object): Object => {
 		};
 		let avatar = gravatar.imageUrl(options);
 
-		const isSelected = email.trim().toLowerCase() === userProfile.email.trim().toLowerCase();
+		const uid = accessToken.userId || '';
+		const isSelected = uid.trim().toLowerCase() === userId.trim().toLowerCase();
 
 		function onPressRB() {
 			if (isSelected) {
@@ -248,7 +256,7 @@ const ProfileTab = (props: Object): Object => {
 				<Text style={actionSheetButtonAccText}>
 					{nameInfo.trim()}
 				</Text>
-				{switchingId === email.trim().toLowerCase() ?
+				{switchingId === uid.trim().toLowerCase() ?
 					<Throbber
 						throbberContainerStyle={throbberContainerStyle}
 						throbberStyle={throbberStyle}/>
@@ -261,7 +269,7 @@ const ProfileTab = (props: Object): Object => {
 						buttonInnerColor={brandSecondary}
 						buttonOuterColor={brandSecondary}
 						onPress={onPressRB}
-						obj={{email}}
+						obj={{userId: accessToken.userId}}
 						index={index}/>
 				}
 			</View>
@@ -336,8 +344,11 @@ const ProfileTab = (props: Object): Object => {
 			</View>
 			<ActionSheet
 				ref={actionSheetRef}
-				changeMoiToUpdateHeight={showAddNewAccount}
-				disabledButtonIndexes={showAddNewAccount ? [] : [0, 1]}
+				extraData={{
+					showAddNewAccount,
+					items: Object.keys(accounts),
+				}}
+				disabledButtonIndexes={disabledButtonIndexes}
 				styles={{
 					overlay: actionSheetOverlay,
 					body: actionSheetOverlay,
