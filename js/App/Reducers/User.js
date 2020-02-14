@@ -46,6 +46,7 @@ export type State = {
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	generatePushError: string,
 	playServicesInfo: Object,
+	firebaseRemoteConfig: Object,
 };
 
 export const initialState = {
@@ -68,6 +69,7 @@ export const initialState = {
 	visibilityProExpireHeadsup: 'show',
 	generatePushError: '',
 	playServicesInfo: {},
+	firebaseRemoteConfig: {},
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -260,6 +262,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			visibilityProExpireHeadsup: action.payload,
+		};
+	}
+	if (action.type === 'SET_FIREBASE_REMOTE_CONFIG') {
+		return {
+			...state,
+			firebaseRemoteConfig: action.payload,
 		};
 	}
 	return state;
