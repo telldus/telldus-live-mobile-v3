@@ -28,6 +28,7 @@ import type { ThunkAction, Action } from './Types';
 
 const remoteConfigs = [
 	'geoFenceFeature',
+	'premiumPurchase',
 ];
 
 const fetchRemoteConfig = (): ThunkAction => {
@@ -39,6 +40,9 @@ const fetchRemoteConfig = (): ThunkAction => {
 		// Set default values
 		firebase.config().setDefaults({
 			geoFenceFeature: {
+				enable: false,
+			},
+			premiumPurchase: {
 				enable: false,
 			},
 		});
