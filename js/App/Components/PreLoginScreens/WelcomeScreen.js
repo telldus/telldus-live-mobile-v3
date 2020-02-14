@@ -41,6 +41,8 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	styles: Object,
+	navigation: Object,
+	screenProps: Object,
 };
 
 class WelcomeScreen extends View {
