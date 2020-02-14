@@ -34,6 +34,8 @@ import {
 import View from './View';
 import Text from './Text';
 
+import shouldUpdate from '../App/Lib/shouldUpdate';
+
 const WARN_COLOR = '#FF3B30';
 const MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
@@ -110,6 +112,7 @@ type Props = {
 	destructiveButtonIndex: number,
 	message: any,
 	disabledButtonIndexes?: Array<number>,
+	extraData?: Object,
 };
 
 type State = {
@@ -117,6 +120,7 @@ type State = {
 	sheetAnim: Object,
 	translateY: number,
 	scrollEnabled: boolean,
+	extraData: Object,
 };
 
 class ActionSheet extends React.Component<Props, State> {
@@ -126,16 +130,17 @@ static defaultProps = {
 	onPress: () => {},
 	styles: {},
 	disabledButtonIndexes: [],
+	extraData: {},
 }
 
 state: State;
 props: Props;
 
 static getDerivedStateFromProps(nextProps: Object, prevState: Object): ?Object {
-	if (nextProps.changeMoiToUpdateHeight !== prevState.changeMoiToUpdateHeight) {
+	if (shouldUpdate(nextProps, prevState, ['extraData'])) {
 		const { height, scrollEnabled } = calculateHeight(nextProps);
 		return {
-			changeMoiToUpdateHeight: nextProps.changeMoiToUpdateHeight,
+			extraData: nextProps.extraData,
 			translateY: height,
 			scrollEnabled,
 		};
@@ -151,6 +156,7 @@ constructor(props: Props) {
 		sheetAnim: new Animated.Value(height),
 		translateY: height,
 		scrollEnabled: false,
+		extraData: {},
 	};
 }
 
