@@ -22,12 +22,13 @@
 
 'use strict';
 
-export const setFenceArea = (lat: number, lng: number, rad: number): Object => ({
+export const setFenceArea = (lat: number, lng: number, rad: number, userId: string): Object => ({
 	type: 'SET_FENCE_AREA',
 	payload: {
 		latitude: lat,
 		longitude: lng,
 		radius: rad,
+		userId,
 	},
 });
 
@@ -66,9 +67,12 @@ export const setCurrentLocation = (location: Object): Object => ({
 	payload: location,
 });
 
-export const setEditFence = (index: number): Object => ({
+export const setEditFence = (index: number, userId: string): Object => ({
 	type: 'SET_EDIT_FENCE',
-	payload: index,
+	payload: {
+		index,
+		userId,
+	},
 });
 
 export const deleteFence = (): Object => ({

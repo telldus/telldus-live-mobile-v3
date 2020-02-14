@@ -131,6 +131,8 @@ const EditGeoFence = (props: Props): Object => {
 	const [ areaName, setAreaName ] = useState(fence.title);
 	const [ editName, setEditName ] = useState(false);
 
+	const { userId } = useSelector((state: Object): Object => state.user);
+
 	function onSave() {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		const {
@@ -141,6 +143,7 @@ const EditGeoFence = (props: Props): Object => {
 			lat,
 			long,
 			GeoFenceUtils.getRadiusFromRegion(initialRegion),
+			userId,
 		));
 		dispatch(setFenceTitle(areaName));
 		dispatch(updateFence());

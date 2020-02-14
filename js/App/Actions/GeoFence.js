@@ -152,22 +152,24 @@ function checkFences(newLocation: Object): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		const { fences: { fences, location: oldLocation } } = getState();
 		if (oldLocation) {
-			fences.forEach((fence: Object) => {
-				const {fromHr, fromMin, toHr, toMin} = fence;
-				if (fence.isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
-					let inFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, newLocation.latitude, newLocation.longitude) < fence.radius);
-					let wasInFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
-					let actions = null;
-					if (inFence && !wasInFence) { // arrive fence
-						actions = fence.arriving;
-					} else if (!inFence && wasInFence) { // leave fence
-						actions = fence.leaving;
-					}
+			Object.keys(fences).forEach((userId: string) => {
+				fences[userId].forEach((fence: Object) => {
+					const {fromHr, fromMin, toHr, toMin} = fence;
+					if (fence.isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
+						let inFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, newLocation.latitude, newLocation.longitude) < fence.radius);
+						let wasInFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
+						let actions = null;
+						if (inFence && !wasInFence) { // arrive fence
+							actions = fence.arriving;
+						} else if (!inFence && wasInFence) { // leave fence
+							actions = fence.leaving;
+						}
 
-					if (actions) {
-						dispatch(handleActions(actions));
+						if (actions) {
+							dispatch(handleActions(actions));
+						}
 					}
-				}
+				});
 			});
 		}
 	};

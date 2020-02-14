@@ -63,6 +63,7 @@ const SelectArea = (props: Props): Object => {
 
 	const dispatch = useDispatch();
 
+	const { userId } = useSelector((state: Object): Object => state.user);
 	let { location } = useSelector((state: Object): Object => state.fences);
 	location = location ? location : {};
 
@@ -89,7 +90,7 @@ const SelectArea = (props: Props): Object => {
 			latitude: lat,
 			longitude: long,
 		} = initialRegion;
-		dispatch(setFenceArea(lat, long, GeoFenceUtils.getRadiusFromRegion(initialRegion)));
+		dispatch(setFenceArea(lat, long, GeoFenceUtils.getRadiusFromRegion(initialRegion), userId));
 
 		navigation.navigate({
 			routeName: 'ArrivingActions',

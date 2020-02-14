@@ -24,7 +24,7 @@ import {createReducer} from 'reduxsauce';
 
 
 export const initialState = Immutable({
-	fences: [],
+	fences: {},
 	fence: {},
 	editIndex: -1,
 	location: null,
@@ -38,7 +38,9 @@ const setArea = (state: Object, action: Object): Object => ({
 		longitude: action.payload.longitude,
 		radius: action.payload.radius,
 	},
+	userId: action.payload.userId,
 });
+
 const setArrivingActions = (state: Object, action: Object): Object => ({
 	...state,
 	fence: {
@@ -46,6 +48,7 @@ const setArrivingActions = (state: Object, action: Object): Object => ({
 		arriving: action.payload,
 	},
 });
+
 const setLeavingActions = (state: Object, action: Object): Object => ({
 	...state,
 	fence: {
@@ -74,38 +77,65 @@ const setTitle = (state: Object, action: Object): Object => ({
 	},
 });
 
-const saveFence = (state: Object, action: Object): Object => ({
-	...state,
-	fences: state.fences.concat(state.fence),
-	fence: {},
-});
+const saveFence = (state: Object, action: Object): Object => {
+	let userFences = state.fences[state.userId] || [];
+	userFences = userFences.concat(state.fence);
+	return {
+		...state,
+		fences: {
+			...state.fences,
+			[state.userId]: userFences,
+		},
+		fence: {},
+	};
+};
 
 const setCurrentLocation = (state: Object, action: Object): Object => ({
 	...state,
 	location: action.payload,
 });
 
-const setEditFence = (state: Object, action: Object): Object => ({
-	...state,
-	editIndex: action.payload,
-	fence: state.fences[action.payload],
-});
+const setEditFence = (state: Object, action: Object): Object => {
+	const {
+		index: editIndex,
+		userId,
+	} = action.payload;
 
-const deleteFence = (state: Object, action: Object): Object => {
-	let fences = state.fences.slice();
-	fences.splice(state.editIndex, 1);
+	const userFences = state.fences[userId] || {};
+	const fence = userFences[editIndex];
+
 	return {
 		...state,
-		fences: fences,
+		editIndex,
+		userId,
+		fence,
+	};
+};
+
+const deleteFence = (state: Object, action: Object): Object => {
+	let userFences = state.fences[state.userId] || [];
+	userFences = userFences.slice();
+	userFences.splice(state.editIndex, 1);
+	return {
+		...state,
+		fences: {
+			...state.fences,
+			[state.userId]: userFences,
+		},
 	};
 };
 
 const updateFence = (state: Object, action: Object): Object => {
-	let nFences = state.fences.slice();
-	nFences.splice(state.editIndex, 1, state.fence);
+	let userFences = state.fences[state.userId] || [];
+	userFences = userFences.slice();
+	userFences.splice(state.editIndex, 1, state.fence);
+
 	return {
 		...state,
-		fences: nFences,
+		fences: {
+			...state.fences,
+			[state.userId]: userFences,
+		},
 		fence: {},
 		editIndex: -1,
 	};
@@ -113,7 +143,7 @@ const updateFence = (state: Object, action: Object): Object => {
 
 const clearFences = (state: Object, action: Object): Object => ({
 	...state,
-	fences: [],
+	fences: {},
 	fence: {},
 	editIndex: -1,
 });

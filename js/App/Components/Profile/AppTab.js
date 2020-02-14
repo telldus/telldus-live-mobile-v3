@@ -89,6 +89,7 @@ const AppTab = (props: Object): Object => {
 		deviceName,
 		deviceId,
 		firebaseRemoteConfig = {},
+		userId,
 	} = useSelector((state: Object): Object => state.user);
 
 	const { geoFenceFeature = '{}'} = firebaseRemoteConfig;
@@ -213,8 +214,9 @@ const AppTab = (props: Object): Object => {
 	}
 
 	const { fences } = useSelector((state: Object): Object => state.fences);
+	const currentAccFences = fences[userId] || [];
 	function onPressGeoFence() {
-		if (!fences || fences.length === 0) {
+		if (!currentAccFences || currentAccFences.length === 0) {
 			dispatch(resetFence());
 			const navigateAction = NavigationActions.navigate({
 				routeName: 'GeoFenceNavigator',

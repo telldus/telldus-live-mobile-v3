@@ -65,7 +65,9 @@ const AddEditGeoFence = (props: Props): Object => {
 
 	const dispatch = useDispatch();
 
-	let { fences, location } = useSelector((state: Object): Object => state.fences);
+	const { userId } = useSelector((state: Object): Object => state.user);
+	let { fences = {}, location } = useSelector((state: Object): Object => state.fences);
+	const currentAccFences = fences[userId] || [];
 	location = location ? location : {};
 
 	function onPressNext() {
@@ -98,7 +100,7 @@ const AddEditGeoFence = (props: Props): Object => {
 	});
 
 	function onEditFence(index: number) {
-		dispatch(setEditFence(index));
+		dispatch(setEditFence(index, userId));
 		setActiveFenceIndex(0);
 		navigation.navigate({
 			routeName: 'EditGeoFence',
@@ -138,17 +140,17 @@ const AddEditGeoFence = (props: Props): Object => {
 					style={mapStyle}
 					initialRegion={region}>
 					{
-						fences.map((fence: Object, index: number): () => Object => {
+						currentAccFences.map((fence: Object, index: number): () => Object => {
 							return renderMarker(fence, index);
 						})
 					}
-					{fences.length > 0 && <MapView.Circle
+					{currentAccFences.length > 0 && <MapView.Circle
 						key={`fence-${activeFenceIndex}`}
 						center={{
-							latitude: fences[activeFenceIndex].latitude,
-							longitude: fences[activeFenceIndex].longitude,
+							latitude: currentAccFences[activeFenceIndex].latitude,
+							longitude: currentAccFences[activeFenceIndex].longitude,
 						}}
-						radius={fences[activeFenceIndex].radius}
+						radius={currentAccFences[activeFenceIndex].radius}
 						fillColor="rgba(226, 105, 1, 0.3)"
 						strokeColor={Theme.Core.brandSecondary}/>
 					}
