@@ -270,6 +270,9 @@ dependencies {
     implementation ('com.google.android.gms:play-services-auth:16.0.0') {
         force = true;
     }
+    implementation ('com.google.firebase:firebase-config:17.0.0') {
+        force = true;
+    }
     implementation "com.amitshekhar.android:jackson-android-networking:1.0.0"
     implementation 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
     implementation 'com.google.android:flexbox:1.0.0'
