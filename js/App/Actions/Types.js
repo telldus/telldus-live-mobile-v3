@@ -136,6 +136,7 @@ export type Action =
 	| { type: 'CAMPAIGN_VISITED', payload: boolean }
 
 	| { type: 'TOGGLE_DIALOGUE_BOX_STATE', payload: Object }
+	| { type: 'SET_FIREBASE_REMOTE_CONFIG', payload: Object }
 
 	| { type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 	| { type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
