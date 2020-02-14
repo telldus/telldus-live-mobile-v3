@@ -59,6 +59,7 @@ import RegisterForPushScreen from './PushSettings/RegisterForPushScreen';
 import {
 	RegisterScreen,
 	LoginScreen,
+	WelcomeScreen,
 } from './PreLoginScreens';
 import {
 	FormContainerComponent,
@@ -384,6 +385,17 @@ const RouteConfigs = {
 	},
 	RegisterScreen: {
 		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(RegisterScreen),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	Welcome: {
+		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(WelcomeScreen),
 		navigationOptions: {
 			headerStyle: {
 				height: 0,

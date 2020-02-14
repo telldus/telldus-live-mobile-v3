@@ -152,7 +152,11 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			setBoolean('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
-				accessToken: responseData,
+				accessToken: {
+					...responseData,
+					userId: email || undefined, // TODO: Should use user id, once it is available.
+					// https://code.telldus.com/telldus/live-api/issues/143
+				},
 			});
 			return responseData;
 		}).catch((e: Object): any => {

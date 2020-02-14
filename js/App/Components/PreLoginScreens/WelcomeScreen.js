@@ -30,6 +30,10 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
+import {
+	updateAccessToken,
+} from '../../Actions/Login';
+
 type Props = {
 	accessToken: Object,
 	onPressOK: Function,
@@ -51,7 +55,22 @@ class WelcomeScreen extends View {
 	}
 
 	onPressOK() {
-		this.props.onPressOK(this.props.registeredCredential);
+		const {
+			screenProps,
+			registeredCredential,
+			onPressOK,
+		} = this.props;
+
+		onPressOK(registeredCredential);
+
+		const { source = 'prelogin' } = screenProps;
+		if (source === 'postlogin') {
+			this.goBack();
+		}
+	}
+
+	goBack = () => {
+		this.props.navigation.pop(2);
 	}
 
 	render(): Object {
@@ -106,10 +125,7 @@ function mapStateToProps(store: Object): Object {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onPressOK: (accessToken: string) => {
-			dispatch({
-				type: 'RECEIVED_ACCESS_TOKEN',
-				accessToken,
-			});
+			dispatch(updateAccessToken(accessToken));
 		},
 	};
 }
