@@ -42,6 +42,7 @@ import LocalTest from './LocalTest';
 import LocalControl from './LocalControl';
 import Widget from './Widget';
 import AddDevice from './AddDevice';
+import Firebase from './Firebase';
 
 module.exports = {
 	...GatewayActions,
@@ -64,4 +65,5 @@ module.exports = {
 	...LocalControl,
 	...Widget,
 	...AddDevice,
+	...Firebase,
 };
