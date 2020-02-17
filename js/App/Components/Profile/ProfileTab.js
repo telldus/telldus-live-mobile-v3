@@ -52,6 +52,7 @@ import {
 import {
 	isAutoRenew,
 } from '../../Lib/appUtils';
+import capitalize from '../../Lib/capitalize';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -151,7 +152,7 @@ const ProfileTab = (props: Object): Object => {
 					<View style={redeemCoverStyle}>
 						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
 						<Text style={redeemTextSyle}>
-							{formatMessage(i18n.redeemGiftCard)}
+							{capitalize(formatMessage(i18n.redeemCard))}
 						</Text>
 					</View>
 				</TouchableOpacity>
