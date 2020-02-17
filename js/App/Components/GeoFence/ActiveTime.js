@@ -89,6 +89,8 @@ const ActiveTime = (props: Props): Object => {
 	const {
 		container,
 		contentContainerStyle,
+		rowStyle,
+		leftItemStyle,
 	} = getStyles(appLayout);
 
 	function onChangeTime(
@@ -114,7 +116,9 @@ const ActiveTime = (props: Props): Object => {
 				contentContainerStyle={contentContainerStyle}>
 				<TimePicker
 					onChange={onChangeTime}
-					appLayout={appLayout}/>
+					appLayout={appLayout}
+					labelStyle={leftItemStyle}
+					rowStyle={rowStyle}/>
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
@@ -131,9 +135,12 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
+		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = deviceWidth * 0.04;
 
 	return {
 		container: {
@@ -142,6 +149,17 @@ const getStyles = (appLayout: Object): Object => {
 		contentContainerStyle: {
 			flexGrow: 1,
 			paddingVertical: padding * 2,
+		},
+		rowStyle: {
+			padding: padding * 1.5,
+			backgroundColor: '#fff',
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			height: undefined,
+		},
+		leftItemStyle: {
+			color: eulaContentColor,
+			fontSize,
 		},
 	};
 };
