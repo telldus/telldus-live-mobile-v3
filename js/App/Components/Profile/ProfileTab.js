@@ -45,6 +45,7 @@ import {
 import {
 	UserInfoBlock,
 	LogoutButton,
+	LogoutAllAccButton,
 } from '../Settings/SubViews';
 import {
 	EditNameBlock,
@@ -67,6 +68,8 @@ import Theme from '../../Theme';
 import {
 	onSwitchAccount,
 	getUserProfile,
+	unregisterPushToken,
+	logoutSelectedFromTelldus,
 } from '../../Actions';
 import {
 	useDialogueBox,
@@ -88,6 +91,7 @@ const ProfileTab = (props: Object): Object => {
 		accounts = {},
 		userId = '',
 		firebaseRemoteConfig = {},
+		pushToken,
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
@@ -111,6 +115,7 @@ const ProfileTab = (props: Object): Object => {
 
 	const [ showAddNewAccount, setShowAddNewAccount ] = React.useState(false);
 	const [ switchingId, setSwitchingId ] = React.useState(null);
+	const [ isLoggingOut, setIsLoggingOut ] = React.useState(false);
 
 	const {
 		formatMessage,
@@ -148,7 +153,10 @@ const ProfileTab = (props: Object): Object => {
 		rbOuterSize,
 		throbberContainerStyle,
 		throbberStyle,
-	} = getStyles(layout, showAddNewAccount);
+	} = getStyles(layout, {
+		showAddNewAccount,
+		isLoggingOut,
+	});
 
 	let showAuto = isAutoRenew(subscriptions);
 	const isBasic = moment().unix() > pro;
@@ -160,16 +168,24 @@ const ProfileTab = (props: Object): Object => {
 		});
 	}
 
-	function onPressAddAccount() {
+	function showActionSheet() {
 		if (actionSheetRef.current) {
 			actionSheetRef.current.show();
 		}
+	}
+
+	function onPressAddAccount() {
+		showActionSheet();
 	}
 
 	function closeActionSheet() {
 		if (actionSheetRef.current) {
 			actionSheetRef.current.hide();
 		}
+	}
+
+	function onConfirmLogout() {
+		setIsLoggingOut(true);
 	}
 
 	function onSelectActionSheet(index: number) {
@@ -204,12 +220,21 @@ const ProfileTab = (props: Object): Object => {
 					const {
 						accessToken,
 					} = accounts[userIdKey];
+
 					dispatch(getUserProfile(accessToken)).then(() => {
 						closeActionSheet();
 						setSwitchingId(null);
 						dispatch(onSwitchAccount({
 							userId: userIdKey,
 						}));
+
+						if (isLoggingOut) {
+							dispatch(unregisterPushToken(pushToken));
+							setIsLoggingOut(false);
+							dispatch(logoutSelectedFromTelldus({
+								userId,
+							}));
+						}
 					}).catch((err: Object) => {
 						closeActionSheet();
 						setSwitchingId(null);
@@ -220,6 +245,14 @@ const ProfileTab = (props: Object): Object => {
 							text: err.message || formatMessage(i18n.unknownError),
 							showPositive: true,
 						});
+
+						if (isLoggingOut) {
+							dispatch(unregisterPushToken(pushToken));
+							setIsLoggingOut(false);
+							dispatch(logoutSelectedFromTelldus({
+								userId,
+							}));
+						}
 					});
 				}
 			}
@@ -281,6 +314,19 @@ const ProfileTab = (props: Object): Object => {
 			</View>
 		);
 	});
+
+	const hasMultipleAccounts = Object.keys(accounts).length > 1;
+
+	const moreButtons = isLoggingOut ? []
+		:
+		[<View style={actionSheetButtonAccCover}>
+			<View style={addIconCoverStyle}>
+				<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
+			</View>
+			<Text style={actionSheetButtonAccText}>
+	Add Account
+			</Text>
+		</View>];
 
 	return (
 		<ScrollView style={container}>
@@ -347,9 +393,16 @@ const ProfileTab = (props: Object): Object => {
 				)}
 				{(isBasic && enable) && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
-				<LogoutButton
+				{hasMultipleAccounts && <LogoutButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
+					showActionSheet={showActionSheet}
+					onConfirmLogout={onConfirmLogout}
+				/>}
+				<LogoutAllAccButton
+					buttonAccessibleProp={true}
+					toggleDialogueBox={toggleDialogueBox}
+					label={hasMultipleAccounts ? 'Log out from all accounts' : formatMessage(i18n.labelLogOut)}
 				/>
 			</View>
 			<ActionSheet
@@ -357,6 +410,7 @@ const ProfileTab = (props: Object): Object => {
 				extraData={{
 					showAddNewAccount,
 					items: Object.keys(accounts),
+					isLoggingOut,
 				}}
 				disabledButtonIndexes={disabledButtonIndexes}
 				styles={{
@@ -373,7 +427,14 @@ const ProfileTab = (props: Object): Object => {
 						</Text>
 					</View>
 					:
-					undefined
+					isLoggingOut ?
+						<View style={actionSheetTitleCover}>
+							<Text style={actionSheetTitle} onPress={closeActionSheet}>
+							Choose Account To Log Into
+							</Text>
+						</View>
+						:
+						undefined
 				}
 				options={showAddNewAccount ?
 					[
@@ -391,14 +452,7 @@ const ProfileTab = (props: Object): Object => {
 					:
 					[
 						...ACCOUNTS,
-						<View style={actionSheetButtonAccCover}>
-							<View style={addIconCoverStyle}>
-								<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
-							</View>
-							<Text style={actionSheetButtonAccText}>
-							Add Account
-							</Text>
-						</View>,
+						...moreButtons,
 					]
 				}
 				onPress={onSelectActionSheet}/>
@@ -406,7 +460,7 @@ const ProfileTab = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
+const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -427,8 +481,8 @@ const getStyles = (appLayout: Object, showAddNewAccount: boolean): Object => {
 	const addIconSize = Math.floor(deviceWidth * 0.07);
 	const addIconCoverSize = addIconSize + 15;
 
-	const butBoxHeight = !showAddNewAccount ? addIconCoverSize * 2 : (fontSize * 2.2) + (padding * 2);
-	const titleBoxHeight = !showAddNewAccount ? undefined : (fontSizeActionSheetTitle * 3) + 8;
+	const butBoxHeight = (showAddNewAccount || isLoggingOut) ? (fontSize * 2.2) + (padding * 2) : addIconCoverSize * 2;
+	const titleBoxHeight = (showAddNewAccount || isLoggingOut) ? (fontSizeActionSheetTitle * 3) + 8 : undefined;
 
 	const rbOuterSize = Math.floor(deviceWidth * 0.055);
 	const rbSize = rbOuterSize * 0.5;

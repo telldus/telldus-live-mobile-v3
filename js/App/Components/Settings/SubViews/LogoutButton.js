@@ -22,42 +22,36 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useIntl } from 'react-intl';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
 	TouchableButton,
 } from '../../../../BaseComponents';
 
-import { unregisterPushToken, logoutFromTelldus } from '../../../Actions';
-
+import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const LogoutButton = (props: Object): Object => {
-	const { toggleDialogueBox, buttonAccessibleProp = true } = props;
+	const {
+		toggleDialogueBox,
+		buttonAccessibleProp = true,
+		onConfirmLogout: onConfirmLogoutP,
+		showActionSheet,
+		loading = false,
+	} = props;
 	const { formatMessage } = useIntl();
 
-	const { user: { pushToken }, app: { layout } } = useSelector((state: Object): Object => state);
+	const { app: { layout } } = useSelector((state: Object): Object => state);
 
 	const {
-		fontSize,
+		buttonStyle,
 	} = getStyles(layout);
 
-	const dispatch = useDispatch();
-	const [ loadingAndPushRegStatus, setLoadingAndPushRegStatus ] = useState({loading: false, pushRegStatus: true});
 	function onConfirmLogout() {
-		setLoadingAndPushRegStatus({loading: true, pushRegStatus: true});
-		dispatch(unregisterPushToken(pushToken)).then(() => {
-			setLoadingAndPushRegStatus({loading: false, pushRegStatus: false});
-		}).catch(() => {
-			setLoadingAndPushRegStatus({loading: false, pushRegStatus: false});
-		});
-	}
-	const { loading, pushRegStatus } = loadingAndPushRegStatus;
-
-	if (!loading && !pushRegStatus) {
-		dispatch(logoutFromTelldus());
+		onConfirmLogoutP();
+		showActionSheet();
 	}
 
 	function logout() {
@@ -71,6 +65,7 @@ const LogoutButton = (props: Object): Object => {
 			positiveText: formatMessage(i18n.logout).toUpperCase(),
 			onPressPositive: onConfirmLogout,
 			closeOnPressPositive: true,
+			timeoutToCallPositive: 400,
 		});
 	}
 
@@ -89,9 +84,7 @@ const LogoutButton = (props: Object): Object => {
 			postScript={loading ? '...' : null}
 			accessibilityLabel={labelLogOut}
 			accessible={buttonAccessible}
-			style={{
-				marginTop: fontSize / 2,
-			}}
+			style={buttonStyle}
 		/>
 	);
 };
@@ -100,10 +93,18 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const fontSize = Math.floor(deviceWidth * 0.045);
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 
 	return {
-		fontSize,
+		buttonStyle: {
+			marginTop: padding,
+			width: width * 0.9,
+		},
 	};
 };
 
