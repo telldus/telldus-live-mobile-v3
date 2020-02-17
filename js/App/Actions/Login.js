@@ -124,9 +124,25 @@ function logoutFromTelldus(): ThunkAction {
 	};
 }
 
+function logoutSelectedFromTelldus(data: Object): ThunkAction {
+	destroyAllConnections();
+	widgetiOSRemoveDataFromKeychain();
+
+	return (dispatch: Function): Function => {
+		dispatch(widgetAndroidDisableAll());
+		return dispatch({
+			type: 'LOGGED_OUT_SELECTED',
+			payload: {
+				...data,
+			},
+		});
+	};
+}
+
 module.exports = {
 	loginToTelldus,
 	logoutFromTelldus,
 	getUserProfile,
 	updateAccessToken,
+	logoutSelectedFromTelldus,
 };
