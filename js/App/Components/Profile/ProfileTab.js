@@ -41,6 +41,8 @@ import {
 	ActionSheet,
 	Image,
 	Throbber,
+	EmptyView,
+	RippleButton,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -93,7 +95,7 @@ const ProfileTab = (props: Object): Object => {
 		firebaseRemoteConfig = {},
 		pushToken,
 	} = useSelector((state: Object): Object => state.user);
-	const { pro } = userProfile;
+	const { pro, firstname: fn, lastname: ln } = userProfile;
 
 	const actionSheetRef = React.useRef();
 
@@ -213,6 +215,9 @@ const ProfileTab = (props: Object): Object => {
 					actionSheetRef.current.show();
 				}
 			} else {
+				if (index === -1) {
+					setIsLoggingOut(false);
+				}
 				let userIdKey = Object.keys(accounts)[index];
 				if (userIdKey) {
 					userIdKey = userIdKey.trim().toLowerCase();
@@ -288,30 +293,36 @@ const ProfileTab = (props: Object): Object => {
 			}
 			onSelectActionSheet(index);
 		}
-
+		if (isLoggingOut && isSelected) {
+			return;
+		}
 		ACCOUNTS.push(
-			<View style={actionSheetButtonAccCover}>
+			<RippleButton onPress={onPressRB} style={actionSheetButtonAccCover}>
 				<Image source={{uri: avatar}} style={gravatarStyle}/>
 				<Text style={actionSheetButtonAccText}>
 					{nameInfo.trim()}
 				</Text>
-				{switchingId === uid.trim().toLowerCase() ?
-					<Throbber
-						throbberContainerStyle={throbberContainerStyle}
-						throbberStyle={throbberStyle}/>
-					:
-					<RadioButtonInput
-						isSelected={isSelected}
-						buttonSize={rbSize}
-						buttonOuterSize={rbOuterSize}
-						borderWidth={3}
-						buttonInnerColor={brandSecondary}
-						buttonOuterColor={brandSecondary}
-						onPress={onPressRB}
-						obj={{userId: accessToken.userId}}
-						index={index}/>
+				{
+					switchingId === uid.trim().toLowerCase() ?
+						<Throbber
+							throbberContainerStyle={throbberContainerStyle}
+							throbberStyle={throbberStyle}/>
+						:
+						isLoggingOut ?
+							<EmptyView/>
+							:
+							<RadioButtonInput
+								isSelected={isSelected}
+								buttonSize={rbSize}
+								buttonOuterSize={rbOuterSize}
+								borderWidth={3}
+								buttonInnerColor={brandSecondary}
+								buttonOuterColor={brandSecondary}
+								onPress={onPressRB}
+								obj={{userId: accessToken.userId}}
+								index={index}/>
 				}
-			</View>
+			</RippleButton>
 		);
 	});
 
@@ -398,6 +409,8 @@ const ProfileTab = (props: Object): Object => {
 					toggleDialogueBox={toggleDialogueBox}
 					showActionSheet={showActionSheet}
 					onConfirmLogout={onConfirmLogout}
+					label={`${formatMessage(i18n.labelLogOut)}`}
+					postScript={` ${fn} ${ln}`}
 				/>}
 				<LogoutAllAccButton
 					buttonAccessibleProp={true}
@@ -430,7 +443,7 @@ const ProfileTab = (props: Object): Object => {
 					isLoggingOut ?
 						<View style={actionSheetTitleCover}>
 							<Text style={actionSheetTitle} onPress={closeActionSheet}>
-							Choose Account To Log Into
+							Choose account to switch to
 							</Text>
 						</View>
 						:

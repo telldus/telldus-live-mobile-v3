@@ -40,6 +40,8 @@ const LogoutButton = (props: Object): Object => {
 		onConfirmLogout: onConfirmLogoutP,
 		showActionSheet,
 		loading = false,
+		label,
+		postScript,
 	} = props;
 	const { formatMessage } = useIntl();
 
@@ -71,9 +73,9 @@ const LogoutButton = (props: Object): Object => {
 
 	const labelButton = formatMessage(i18n.button);
 	const labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
-	const labelLogOut = `${formatMessage(i18n.labelLogOut)} ${labelButton}. ${labelButtondefaultDescription}`;
+	const labelLogOut = `${label} ${labelButton}. ${labelButtondefaultDescription}`;
 
-	const logoutButText = loading ? formatMessage(i18n.loggingout) : formatMessage(i18n.labelLogOut);
+	const logoutButText = loading ? formatMessage(i18n.loggingout) : label;
 
 	const buttonAccessible = !loading && buttonAccessibleProp;
 
@@ -81,10 +83,13 @@ const LogoutButton = (props: Object): Object => {
 		<TouchableButton
 			onPress={loading ? null : logout}
 			text={logoutButText}
-			postScript={loading ? '...' : null}
+			postScript={loading ? '...' : postScript}
 			accessibilityLabel={labelLogOut}
 			accessible={buttonAccessible}
 			style={buttonStyle}
+			textProps={{
+				numberOfLines: 1,
+			}}
 		/>
 	);
 };
