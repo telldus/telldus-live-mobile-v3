@@ -33,6 +33,7 @@ export type Action =
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
 	| { type: 'PUSH_TOKEN_DELETED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
+	| { type: 'LOGGED_OUT_SELECTED', payload: Object }
 	| { type: 'LOCK_SESSION' }
 	| { type: 'SET_NETWORK_CONNECTION_INFO', payload: Object }
 	| { type: 'SWITCH_USER_ACCOUNT', payload: Object }

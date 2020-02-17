@@ -24,6 +24,7 @@
 import type { Action } from '../Actions/Types';
 import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
 
 export type State = {
 	accessToken: any,
@@ -331,9 +332,17 @@ export default function reduceUser(state: State = initialState, action: Action):
 
 		return {
 			...state,
-			...state,
 			accessToken,
 			userId: accessToken.userId,
+		};
+	}
+	if (action.type === 'LOGGED_OUT_SELECTED') {
+		let { userId } = action.payload;
+		const { accounts = {} } = state;
+
+		return {
+			...state,
+			accounts: omit(accounts, userId),
 		};
 	}
 	return state;
