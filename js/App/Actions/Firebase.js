@@ -58,7 +58,6 @@ const fetchRemoteConfig = (): ThunkAction => {
 				return firebase.config().getValues(remoteConfigs);
 			})
 			.then((objects: Object) => {
-				console.log('TEST objects', objects);
 				let data = {};
 				Object.keys(objects).forEach((key: string) => {
 					data[key] = objects[key].val();
