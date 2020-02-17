@@ -46,6 +46,7 @@ type Props = {
 	accessibilityLabel?: string,
 	disabled?: boolean,
 	showThrobber?: boolean,
+	textProps?: Object,
 };
 
 type DefaultProps = {
@@ -101,6 +102,7 @@ class TouchableButton extends Component<Props, void> {
 			accessible,
 			disabled,
 			showThrobber,
+			textProps = {},
 		} = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		accessibilityLabel = !accessible ? '' :
@@ -128,7 +130,8 @@ class TouchableButton extends Component<Props, void> {
 					typeof preScript === 'function') && preScript}
 					<Text style={[buttonLabel, labelStyle]}
 						accessible={accessible}
-						importantForAccessibility={importantForAccessibility}>
+						importantForAccessibility={importantForAccessibility}
+						{...textProps}>
 						{typeof preScript === 'string' && preScript}{label.toUpperCase()}{postScript}
 					</Text>
 					{!!showThrobber &&
