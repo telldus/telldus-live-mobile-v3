@@ -166,7 +166,7 @@ function checkFences(newLocation: Object): ThunkAction {
 						}
 
 						if (actions) {
-							dispatch(handleActions(actions));
+							dispatch(handleActions(actions, userId));
 						}
 					}
 				});
@@ -175,22 +175,34 @@ function checkFences(newLocation: Object): ThunkAction {
 	};
 }
 
-function handleActions(actions: Object): ThunkAction {
+function handleActions(actions: Object, userId: string): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		const { devices = {}, schedules = {}, events = {} } = actions;
+
+		if (!userId) {
+			return;
+		}
+
+		const { user: { accounts = {} } } = getState();
+		const { accessToken } = accounts[userId.trim().toLowerCase()];
+
+		if (!accessToken) {
+			return;
+		}
+
 		for (let id in devices) {
-			dispatch(handleActionDevice(devices[id]));
+			dispatch(handleActionDevice(devices[id], accessToken));
 		}
 		for (let id in events) {
-			dispatch(handleActionEvent(events[id]));
+			dispatch(handleActionEvent(events[id], accessToken));
 		}
 		for (let id in schedules) {
-			dispatch(handleActionSchedule(schedules[id]));
+			dispatch(handleActionSchedule(schedules[id], accessToken));
 		}
 	};
 }
 
-function handleActionDevice(action: Object): ThunkAction {
+function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 		const { deviceId, method, stateValues = {} } = action;
 		if (!deviceId) {
@@ -200,12 +212,12 @@ function handleActionDevice(action: Object): ThunkAction {
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
-			dispatch(deviceSetState(deviceId, method, dimValue));
+			dispatch(deviceSetState(deviceId, method, dimValue, accessToken));
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
-			dispatch(deviceSetStateRGB(deviceId, r, g, b));
+			dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken));
 		} else if (method === 2048) {
 			const {
 				changeMode,
@@ -213,25 +225,25 @@ function handleActionDevice(action: Object): ThunkAction {
 				mode,
 				temp,
 			} = action;
-			dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1));
+			dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
 		}
 	};
 }
 
-function handleActionEvent(action: Object): ThunkAction {
+function handleActionEvent(action: Object, accessToken: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const {
 			id,
 			...options
 		} = getEventOptions(action);
-		return dispatch(setEvent(id, options));
+		return dispatch(setEvent(id, options, accessToken));
 	};
 }
 
-function handleActionSchedule(action: Object): ThunkAction {
+function handleActionSchedule(action: Object, accessToken: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const options = getScheduleOptions(action);
-		return dispatch(saveSchedule(options));
+		return dispatch(saveSchedule(options, accessToken));
 	};
 }
 
