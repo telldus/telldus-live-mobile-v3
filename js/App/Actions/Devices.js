@@ -42,7 +42,7 @@ let setStateInterval = {};
 let requestTimeout = {};
 let infoRequestTimeout = {};
 
-function deviceSetState(deviceId: number, state: number, stateValue: number | null = null): ThunkAction {
+function deviceSetState(deviceId: number, state: number, stateValue: number | null = null, _accessToken?: Object | null = null): ThunkAction {
 	return (dispatch: Function, getState: Function): any => {
 		const { gateways, devices } = getState();
 		const { clientId, clientDeviceId } = devices.byId[deviceId] ? devices.byId[deviceId] : {};
@@ -162,7 +162,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 				if (supportLocal) {
 					dispatch(validateLocalControlSupport(clientId, false));
 				}
-				return dispatch(deviceSetStateShared(deviceId, state, stateValue));
+				return dispatch(deviceSetStateShared(deviceId, state, stateValue, _accessToken));
 			});
 		} else if (ttl && tokenExpired) {
 
@@ -171,7 +171,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 			dispatch(getTokenForLocalControl(clientId));
 		}
 		dispatch(requestDeviceAction(deviceId, state, false));
-		return dispatch(deviceSetStateShared(deviceId, state, stateValue));
+		return dispatch(deviceSetStateShared(deviceId, state, stateValue, _accessToken));
 	};
 }
 
