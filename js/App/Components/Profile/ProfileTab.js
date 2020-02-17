@@ -49,12 +49,14 @@ import {
 	AutoRenewalBlock,
 	SMSBlock,
 } from '../Premium/SubViews';
+
+import capitalize from '../../Lib/capitalize';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
 const ProfileTab = (props: Object): Object => {
-	const { screenProps: {toggleDialogueBox}, navigation } = props;
+	const { screenProps: {toggleDialogueBox, intl}, navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { userProfile = {}, subscriptions = {}, firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
@@ -69,6 +71,10 @@ const ProfileTab = (props: Object): Object => {
 			key: 'RedeemGiftScreen',
 		});
 	}
+
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		container,
@@ -140,7 +146,7 @@ const ProfileTab = (props: Object): Object => {
 				{enable && (
 					<TouchableOpacity onPress={onPressViewPurchaseHistory} style={pHistoryCStyle}>
 						<Text style={redeemTextSyle}>
-							View purchase history
+							{formatMessage(i18n.viewPurchaseHistory)}
 						</Text>
 					</TouchableOpacity>
 				)}
@@ -148,7 +154,7 @@ const ProfileTab = (props: Object): Object => {
 					<View style={redeemCoverStyle}>
 						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
 						<Text style={redeemTextSyle}>
-							Redeem gift card
+							{capitalize(formatMessage(i18n.redeemCard))}
 						</Text>
 					</View>
 				</TouchableOpacity>
