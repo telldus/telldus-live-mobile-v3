@@ -137,6 +137,8 @@ render(): Object | null {
 
 	const supportedModes = getSupportedModes(parameter, setpoint, intl);
 
+	const timeoutPlusMinus = navigation.getParam('timeoutPlusMinus', undefined);
+
 	return (
 		<View style={{
 			flex: 1,
@@ -175,7 +177,8 @@ render(): Object | null {
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						intl={intl}
-						source="ThermostatFullControl"/>
+						source="ThermostatFullControl"
+						timeoutPlusMinus={timeoutPlusMinus}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>
