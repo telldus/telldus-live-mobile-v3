@@ -228,6 +228,8 @@ render(testData: Object): Object {
 	} = this.getStyles(appLayout);
 	const { formatMessage } = intl;
 
+	const descLen = value.trim().length;
+
 	return (
 			<>
 				<View style={container}>
@@ -286,7 +288,7 @@ render(testData: Object): Object {
 					text={i18n.labelSend}
 					style={button}
 					onPress={this.contactSupport}
-					disabled={isLoading}
+					disabled={isLoading || descLen < 50}
 					showThrobber={isLoading}/>
 			</>
 	);
