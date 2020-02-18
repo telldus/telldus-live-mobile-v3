@@ -177,6 +177,7 @@ const Actions = (props: Props): Object => {
 			params: {
 				id,
 				onPressOverride: onDeviceValueChange,
+				timeoutPlusMinus: 0,
 			},
 		});
 	}
