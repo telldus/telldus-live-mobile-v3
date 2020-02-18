@@ -22,6 +22,12 @@
 
 'use strict';
 
+import axios from 'axios';
+import { parse } from 'url';
+
+const CancelToken = axios.CancelToken;
+let axiosSources = {};
+
 import type { ThunkAction } from '../Actions/Types';
 import { apiServer, publicKey, privateKey } from '../../Config';
 
@@ -36,19 +42,59 @@ import { apiServer, publicKey, privateKey } from '../../Config';
  * The validity of the refresh token is about a year or so and will be renewed when used.
  */
 
-export function LiveApi({ url, requestParams, _accessToken }: {url: string, requestParams: Object, _accessToken?: Object }): ThunkAction {
+export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = false }: {url: string, requestParams: Object, _accessToken?: Object, cancelAllPending?: boolean }): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
-		const { user: { accessToken } } = getState();
+		const { user: { accessToken, userId } } = getState();
+
+		const { path } = parse(url);
+		let source = {};
+		if (path) {
+			const sourcesUserIds = Object.keys(axiosSources);
+			if (cancelAllPending) {
+				sourcesUserIds.map((sourceUserId: string) => {
+					const userSources = axiosSources[sourceUserId];
+					Object.keys(userSources).forEach((sources: Object) => {
+						if (userSources[sources] && userSources[sources].cancel) {
+							userSources[sources].cancel();
+						}
+					});
+					delete axiosSources[sourceUserId];
+				});
+			}
+			const currUserSources = axiosSources[userId] || {};
+			if (currUserSources[path]) {
+				source = currUserSources[path];
+			} else {
+				source = CancelToken.source("API call Cancelled by 'cancelAllPending'");
+				currUserSources[path] = source;
+			}
+			axiosSources[userId] = currUserSources;
+		}
+
+		requestParams = {
+			cancelToken: source.token,
+			...requestParams,
+		};
+
 		return doApiCall(url, requestParams, _accessToken || accessToken, dispatch).then((response: Object): any => {
+			const currUserSources = axiosSources[userId] || {};
+			delete currUserSources[path];
+
 			if (!response) {
 				throw (new Error('unexpected error: response empty'));
 			}
 			return (response);
 		}).catch((error: Object): any => {
+			const currUserSources = axiosSources[userId] || {};
+			delete currUserSources[path];
+
 			if (error.message === 'invalid_token' || error.message === 'expired_token') {
 				return dispatch({
 					type: 'LOCK_SESSION',
 				});
+			}
+			if (!axios.isCancel(error)) {
+				return error;
 			}
 			throw (error);
 		});
@@ -97,9 +143,9 @@ async function callEndPoint(url: string, requestParams: Object, accessToken: Obj
 		});
 	}
 
-	let response = await fetch(`${apiServer}/oauth2${url}`, params);
-	response = await response.text();
-	return JSON.parse(response);
+	let response = await axios(`${apiServer}/oauth2${url}`, params);
+	let { data = {} } = response;
+	return data;
 }
 
 // create new token with refresh token
