@@ -50,7 +50,7 @@ function getTokenForLocalControl(id: number): ThunkAction {
 					url,
 					requestParams: {
 						method: 'POST',
-						body: formData,
+						data: formData,
 						headers: {
 							'Accept': 'application/json',
 							'Content-Type': 'multipart/form-data',
