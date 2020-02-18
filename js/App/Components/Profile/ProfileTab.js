@@ -201,7 +201,7 @@ const ProfileTab = (props: Object): Object => {
 			});
 			if (otherUserId) {
 				let { accessToken } = accounts[otherUserId];
-				dispatch(getUserProfile(accessToken)).then(() => {
+				dispatch(getUserProfile(accessToken, true)).then(() => {
 					dispatch(onSwitchAccount({
 						userId: otherUserId,
 					}));
@@ -264,7 +264,7 @@ const ProfileTab = (props: Object): Object => {
 						accessToken,
 					} = accounts[userIdKey];
 
-					dispatch(getUserProfile(accessToken)).then(() => {
+					dispatch(getUserProfile(accessToken, true)).then(() => {
 						closeActionSheet();
 						setSwitchingId(null);
 						dispatch(onSwitchAccount({

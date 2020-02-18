@@ -86,7 +86,7 @@ function updateAccessToken(accessToken: Object): Action {
 	};
 }
 
-function getUserProfile(_accessToken?: Object): ThunkAction {
+function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: boolean = false): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/user/profile',
@@ -94,6 +94,7 @@ function getUserProfile(_accessToken?: Object): ThunkAction {
 				method: 'GET',
 			},
 			_accessToken,
+			cancelAllPending,
 		};
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
 			dispatch({
@@ -138,6 +139,18 @@ function logoutSelectedFromTelldus(data: Object): ThunkAction {
 		});
 	};
 }
+function onSwitchAccount(payload: Object): ThunkAction {
+	destroyAllConnections();
+	widgetiOSRemoveDataFromKeychain();
+
+	return (dispatch: Function): Function => {
+		dispatch(widgetAndroidDisableAll());
+		return dispatch({
+			type: 'SWITCH_USER_ACCOUNT',
+			payload,
+		});
+	};
+}
 
 module.exports = {
 	loginToTelldus,
@@ -145,4 +158,5 @@ module.exports = {
 	getUserProfile,
 	updateAccessToken,
 	logoutSelectedFromTelldus,
+	onSwitchAccount,
 };

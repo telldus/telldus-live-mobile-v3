@@ -316,12 +316,7 @@ function toggleVisibilityProExpireHeadsup(value: 'show' | 'hide_temp' | 'hide_pe
 	};
 }
 
-function onSwitchAccount(payload: Object): Action {
-	return {
-		type: 'SWITCH_USER_ACCOUNT',
-		payload,
-	};
-}
+
 
 module.exports = {
 	...User,
@@ -337,5 +332,4 @@ module.exports = {
 	campaignVisited,
 	toggleVisibilityExchangeOffer,
 	toggleVisibilityProExpireHeadsup,
-	onSwitchAccount,
 };
