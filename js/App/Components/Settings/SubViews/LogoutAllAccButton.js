@@ -37,7 +37,7 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const LogoutAllAccButton = (props: Object): Object => {
-	const { toggleDialogueBox, buttonAccessibleProp = true, label } = props;
+	const { toggleDialogueBox, buttonAccessibleProp = true, label, isLoggingOut } = props;
 	const { formatMessage } = useIntl();
 
 	const { user: { pushToken }, app: { layout } } = useSelector((state: Object): Object => state);
@@ -92,6 +92,7 @@ const LogoutAllAccButton = (props: Object): Object => {
 			accessibilityLabel={labelLogOut}
 			accessible={buttonAccessible}
 			style={buttonStyle}
+			disabled={isLoggingOut || loading}
 		/>
 	);
 };

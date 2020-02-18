@@ -38,8 +38,7 @@ const LogoutButton = (props: Object): Object => {
 		toggleDialogueBox,
 		buttonAccessibleProp = true,
 		onConfirmLogout: onConfirmLogoutP,
-		showActionSheet,
-		loading = false,
+		isLoggingOut = false,
 		label,
 		postScript,
 	} = props;
@@ -53,7 +52,6 @@ const LogoutButton = (props: Object): Object => {
 
 	function onConfirmLogout() {
 		onConfirmLogoutP();
-		showActionSheet();
 	}
 
 	function logout() {
@@ -75,21 +73,22 @@ const LogoutButton = (props: Object): Object => {
 	const labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 	const labelLogOut = `${label} ${labelButton}. ${labelButtondefaultDescription}`;
 
-	const logoutButText = loading ? formatMessage(i18n.loggingout) : label;
+	const logoutButText = isLoggingOut ? formatMessage(i18n.loggingout) : label;
 
-	const buttonAccessible = !loading && buttonAccessibleProp;
+	const buttonAccessible = !isLoggingOut && buttonAccessibleProp;
 
 	return (
 		<TouchableButton
-			onPress={loading ? null : logout}
+			onPress={isLoggingOut ? null : logout}
 			text={logoutButText}
-			postScript={loading ? '...' : postScript}
+			postScript={isLoggingOut ? '...' : postScript}
 			accessibilityLabel={labelLogOut}
 			accessible={buttonAccessible}
 			style={buttonStyle}
 			textProps={{
 				numberOfLines: 1,
 			}}
+			disabled={isLoggingOut}
 		/>
 	);
 };

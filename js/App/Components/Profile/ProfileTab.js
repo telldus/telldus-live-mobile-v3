@@ -177,6 +177,9 @@ const ProfileTab = (props: Object): Object => {
 	}
 
 	function onPressAddAccount() {
+		if (isLoggingOut) {
+			return;
+		}
 		showActionSheet();
 	}
 
@@ -188,6 +191,41 @@ const ProfileTab = (props: Object): Object => {
 
 	function onConfirmLogout() {
 		setIsLoggingOut(true);
+		if (Object.keys(accounts).length === 2) {
+			let otherUserId;
+			Object.keys(accounts).forEach((uid: string) => {
+				const check1 = uid.trim().toLowerCase();
+				if (check1 !== userId.trim().toLowerCase()) {
+					otherUserId = check1;
+				}
+			});
+			if (otherUserId) {
+				let { accessToken } = accounts[otherUserId];
+				dispatch(getUserProfile(accessToken)).then(() => {
+					dispatch(onSwitchAccount({
+						userId: otherUserId,
+					}));
+
+					dispatch(unregisterPushToken(pushToken));
+					setIsLoggingOut(false);
+					dispatch(logoutSelectedFromTelldus({
+						userId,
+					}));
+				}).catch((err: Object) => {
+					setIsLoggingOut(false);
+					toggleDialogueBoxState({
+						show: true,
+						showHeader: true,
+						imageHeader: true,
+						text: err.message || formatMessage(i18n.unknownError),
+						showPositive: true,
+					});
+				});
+			}
+
+		} else {
+			showActionSheet();
+		}
 	}
 
 	function onSelectActionSheet(index: number) {
@@ -243,6 +281,7 @@ const ProfileTab = (props: Object): Object => {
 					}).catch((err: Object) => {
 						closeActionSheet();
 						setSwitchingId(null);
+						setIsLoggingOut(false);
 						toggleDialogueBoxState({
 							show: true,
 							showHeader: true,
@@ -250,14 +289,6 @@ const ProfileTab = (props: Object): Object => {
 							text: err.message || formatMessage(i18n.unknownError),
 							showPositive: true,
 						});
-
-						if (isLoggingOut) {
-							dispatch(unregisterPushToken(pushToken));
-							setIsLoggingOut(false);
-							dispatch(logoutSelectedFromTelldus({
-								userId,
-							}));
-						}
 					});
 				}
 			}
@@ -407,15 +438,16 @@ const ProfileTab = (props: Object): Object => {
 				{hasMultipleAccounts && <LogoutButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
-					showActionSheet={showActionSheet}
 					onConfirmLogout={onConfirmLogout}
 					label={`${formatMessage(i18n.labelLogOut)}`}
 					postScript={` ${fn} ${ln}`}
+					isLoggingOut={isLoggingOut}
 				/>}
 				<LogoutAllAccButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
 					label={hasMultipleAccounts ? 'Log out from all accounts' : formatMessage(i18n.labelLogOut)}
+					isLoggingOut={isLoggingOut}
 				/>
 			</View>
 			<ActionSheet
