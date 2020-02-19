@@ -147,7 +147,8 @@
     "globals": {
       "window": {
         "navigator": {}
-      }
+      },
+      "__DEV__": true
     }
   }
 }
