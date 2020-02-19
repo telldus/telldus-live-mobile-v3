@@ -125,7 +125,7 @@ render(): Object {
 	} = this.getStyles();
 
 	return (
-		<View style={[containerStyle, {marginTop: containerTop}]}>
+		<View style={[containerStyle, {marginTop: containerTop}]} pointerEvents={'none'}>
 			<Animated.View style={{
 				position: 'absolute',
 				right: animatedRight,
@@ -133,7 +133,7 @@ render(): Object {
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
-			}}>
+			}} pointerEvents={'none'}>
 				{arrowPos === 'left' && (
 					<Image
 						source={{uri: 'triangle'}}
