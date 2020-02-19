@@ -102,9 +102,8 @@ const ProfileTab = (props: Object): Object => {
 
 	const actionSheetRef = React.useRef();
 
-	const { premiumPurchase = '{}'} = firebaseRemoteConfig;
+	const { premiumPurchase = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
-
 
 	function onPressRedeemGift() {
 		navigation.navigate({

@@ -88,7 +88,7 @@ function checkPermissionAndInitializeWatcher(): ThunkAction {
 	return async (dispatch: Function, getState: Function) => {
 
 		const { user: { firebaseRemoteConfig = {} } } = getState();
-		const { geoFenceFeature = '{}'} = firebaseRemoteConfig;
+		const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 		const { enable } = JSON.parse(geoFenceFeature);
 
 		if (!enable) {

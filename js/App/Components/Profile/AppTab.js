@@ -92,7 +92,7 @@ const AppTab = (props: Object): Object => {
 		userId,
 	} = useSelector((state: Object): Object => state.user);
 
-	const { geoFenceFeature = '{}'} = firebaseRemoteConfig;
+	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 	const { enable } = JSON.parse(geoFenceFeature);
 
 	const { dbCarousel = true, reportCrash = true } = defaultSettings;
