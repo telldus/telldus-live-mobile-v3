@@ -25,10 +25,10 @@ import React from 'react';
 import {
 	Dimensions,
 	Modal,
-	TouchableHighlight,
 	Animated,
 	ScrollView,
 	Easing,
+	TouchableOpacity,
 } from 'react-native';
 
 import View from './View';
@@ -100,6 +100,43 @@ const calculateHeight = (props: Object): Object => {
 	};
 };
 
+const ButtonComponent = (props: Object): Object => {
+
+	const {
+		buttonUnderlayColor,
+		cancelButtonIndex,
+		destructiveButtonIndex,
+		tintColor,
+		disabledButtonIndexes = [],
+		styles: stypesP,
+		title,
+		index,
+		hide,
+	} = props;
+
+	const styles = prepareStyles(stypesP);
+
+	const fontColor = destructiveButtonIndex === index ? WARN_COLOR : tintColor;
+	const buttonBoxStyle = cancelButtonIndex === index ? styles.cancelButtonBox : styles.buttonBox;
+
+	function onPress() {
+		hide(index);
+	}
+
+	return (
+		<TouchableOpacity
+			disabled={disabledButtonIndexes.indexOf(index) !== -1}
+			activeOpacity={1}
+			underlayColor={buttonUnderlayColor}
+			style={buttonBoxStyle}
+			onPress={onPress}>
+			{React.isValidElement(title) ? title : (
+				<Text style={[styles.buttonText, {color: fontColor}]}>{title}</Text>
+			)}
+		</TouchableOpacity>
+	);
+};
+
 
 type Props = {
     tintColor?: string,
@@ -166,10 +203,13 @@ show = () => {
 	});
 }
 
-hide = (index: number) => {
+hide = (index: number, customCallback?: Function) => {
 	this._hideSheet(() => {
 		this.setState({visible: false}, () => {
 			this.props.onPress(index);
+			if (customCallback) {
+				customCallback();
+			}
 		});
 	});
 }
@@ -232,42 +272,25 @@ _renderCancelButton(): Object | null {
 	if (!utils.isset(cancelButtonIndex)) {
 		return null;
 	}
-	return this._createButton(options[cancelButtonIndex], cancelButtonIndex);
+	return <ButtonComponent
+		{...this.props}
+		title={options[cancelButtonIndex]}
+		index={cancelButtonIndex}
+		hide={this.hide}
+		key={cancelButtonIndex}/>;
 }
 
-_createButton(title: any, index: number): Object {
-	const styles = prepareStyles(this.props.styles);
-	const {
-		buttonUnderlayColor,
-		cancelButtonIndex,
-		destructiveButtonIndex,
-		tintColor,
-		disabledButtonIndexes = [],
-	} = this.props;
-	const fontColor = destructiveButtonIndex === index ? WARN_COLOR : tintColor;
-	const buttonBoxStyle = cancelButtonIndex === index ? styles.cancelButtonBox : styles.buttonBox;
 
-	return (
-		<TouchableHighlight
-			disabled={disabledButtonIndexes.indexOf(index) !== -1}
-			key={index}
-			activeOpacity={1}
-			underlayColor={buttonUnderlayColor}
-			style={buttonBoxStyle}
-			// eslint-disable-next-line react/jsx-no-bind
-			onPress={(): Function => this.hide(index)}
-		>
-			{React.isValidElement(title) ? title : (
-				<Text style={[styles.buttonText, {color: fontColor}]}>{title}</Text>
-			)}
-		</TouchableHighlight>
-	);
-}
 
 _renderOptions(): Array<Object> {
 	const { cancelButtonIndex } = this.props;
 	return this.props.options.map((title: any, index: number): Object => {
-		return cancelButtonIndex === index ? null : this._createButton(title, index);
+		return cancelButtonIndex === index ? null : <ButtonComponent
+			{...this.props}
+			title={title}
+			index={index}
+			key={index}
+			hide={this.hide}/>;
 	});
 }
 
@@ -279,6 +302,8 @@ render(): Object {
 		scrollEnabled,
 		translateY,
 	} = this.state;
+
+	const options = this._renderOptions();
 
 	return (
 		<Modal visible={visible}
@@ -299,7 +324,7 @@ render(): Object {
 				>
 					{this._renderTitle()}
 					{this._renderMessage()}
-					<ScrollView scrollEnabled={scrollEnabled}>{this._renderOptions()}</ScrollView>
+					<ScrollView scrollEnabled={scrollEnabled}>{options}</ScrollView>
 					{this._renderCancelButton()}
 				</Animated.View>
 			</View>
