@@ -98,6 +98,7 @@ import MaterialTextInput from './MaterialTextInput';
 import ScrollableNavigationHeaderPoster from './ScrollableNavigationHeaderPoster';
 import EmptyView from './EmptyView';
 import ActionSheet from './ActionSheet';
+import CachedImage from './CachedImage';
 
 import {
 	AppState,
@@ -187,6 +188,7 @@ module.exports = {
 	ScrollableNavigationHeaderPoster,
 	EmptyView,
 	ActionSheet,
+	CachedImage,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
