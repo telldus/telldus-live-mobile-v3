@@ -203,10 +203,12 @@ show = () => {
 	});
 }
 
-hide = (index: number, customCallback?: Function) => {
+hide = (index?: number, customCallback?: Function) => {
 	this._hideSheet(() => {
 		this.setState({visible: false}, () => {
-			this.props.onPress(index);
+			if (typeof index === 'number') {
+				this.props.onPress(index);
+			}
 			if (customCallback) {
 				customCallback();
 			}

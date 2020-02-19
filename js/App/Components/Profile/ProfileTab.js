@@ -205,7 +205,7 @@ const ProfileTab = (props: Object): Object => {
 		showActionSheet();
 	}
 
-	function closeActionSheet(index: number, callback?: Function) {
+	function closeActionSheet(index?: number, callback?: Function) {
 		if (actionSheetRef.current) {
 			actionSheetRef.current.hide(index, callback);
 		}
@@ -317,7 +317,7 @@ const ProfileTab = (props: Object): Object => {
 					} = accounts[userIdKey];
 
 					dispatch(getUserProfile(accessToken, true)).then(() => {
-						closeActionSheet(-2, () => {
+						closeActionSheet(undefined, () => {
 							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
 							setTimeout(() => {
 								dispatch(showToast(`You have switched to the account ${userProfile.email}`));
