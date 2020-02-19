@@ -29,7 +29,6 @@ import {
 	StyleSheet,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 const gravatar = require('gravatar-api');
 import { RadioButtonInput } from 'react-native-simple-radio-button';
 
@@ -64,6 +63,8 @@ import {
 } from '../Premium/SubViews';
 import {
 	isAutoRenew,
+	isBasicUser,
+	getPremiumAccounts,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 import Theme from '../../Theme';
@@ -162,7 +163,9 @@ const ProfileTab = (props: Object): Object => {
 	});
 
 	let showAuto = isAutoRenew(subscriptions);
-	const isBasic = moment().unix() > pro;
+	const isBasic = isBasicUser(pro);
+	const premAccounts = getPremiumAccounts(accounts);
+	const hasAPremAccount = Object.keys(premAccounts).length > 0;
 
 	function onPressViewPurchaseHistory() {
 		navigation.navigate({
@@ -178,6 +181,24 @@ const ProfileTab = (props: Object): Object => {
 	}
 
 	function onPressAddAccount() {
+		if (!hasAPremAccount) {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: formatMessage(i18n.upgradeToPremium),
+				text: 'This is a premium feature. Please buy any of our premium package to enjoy this feature.',
+				showPositive: true,
+				showNegative: true,
+				positiveText: formatMessage(i18n.upgrade).toUpperCase(),
+				onPressPositive: () => {
+					navigation.navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+				},
+				closeOnPressPositive: true,
+				timeoutToCallPositive: 200,
+			});
+			return;
+		}
 		if (isLoggingOut) {
 			return;
 		}
@@ -190,7 +211,7 @@ const ProfileTab = (props: Object): Object => {
 		}
 	}
 
-	function onConfirmLogout() {
+	function proceedWithLogout() {
 		setIsLoggingOut(true);
 		if (Object.keys(accounts).length === 2) {
 			let otherUserId;
@@ -226,6 +247,34 @@ const ProfileTab = (props: Object): Object => {
 
 		} else {
 			showActionSheet();
+		}
+	}
+
+	function onConfirmLogout() {
+		const premAccsCount = Object.keys(premAccounts).length;
+		if (premAccsCount > 1) {
+			proceedWithLogout();
+		} else {
+			const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
+			if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
+				toggleDialogueBoxState({
+					show: true,
+					showHeader: true,
+					imageHeader: true,
+					text: 'You are about to log out from the only premium account. You no longer can access premium features.' +
+					' Hence mulitple accounts feature will be disabled. If you would like to log out any way please select any one ' +
+					'account that you would like to switch to.',
+					showPositive: true,
+					positiveText: formatMessage(i18n.logout).toUpperCase(),
+					onPressPositive: proceedWithLogout,
+					showNegative: true,
+					closeOnPressNegative: true,
+					closeOnPressPositive: true,
+					timeoutToCallPositive: 400,
+				});
+			} else {
+				proceedWithLogout();
+			}
 		}
 	}
 
@@ -440,7 +489,7 @@ const ProfileTab = (props: Object): Object => {
 				)}
 				{(isBasic && enable) && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
-				{hasMultipleAccounts && <LogoutButton
+				{(hasMultipleAccounts && hasAPremAccount) && <LogoutButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
 					onConfirmLogout={onConfirmLogout}
