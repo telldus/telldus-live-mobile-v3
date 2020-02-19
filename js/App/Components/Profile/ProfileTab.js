@@ -66,9 +66,8 @@ const ProfileTab = (props: Object): Object => {
 	const { userProfile = {}, subscriptions = {}, firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
-	const { premiumPurchase = '{}'} = firebaseRemoteConfig;
+	const { premiumPurchase = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
-
 
 	function onPressRedeemGift() {
 		navigation.navigate({
