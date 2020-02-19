@@ -133,10 +133,10 @@
   "jest": {
     "preset": "react-native",
     "globals": {
+      "__DEV__": true,
       "window": {
         "navigator": {}
-      },
-      "__DEV__": true
+      }
     },
     "moduleNameMapper": {
       "\\.(svg)$": "<rootDir>/js/Utils/__mocks__/svgMock.js",
