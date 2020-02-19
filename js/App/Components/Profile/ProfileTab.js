@@ -43,6 +43,7 @@ import {
 	Throbber,
 	EmptyView,
 	RippleButton,
+	CachedImage,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -329,7 +330,11 @@ const ProfileTab = (props: Object): Object => {
 		}
 		ACCOUNTS.push(
 			<RippleButton onPress={onPressRB} style={actionSheetButtonAccCover}>
-				<Image source={{uri: avatar}} style={gravatarStyle}/>
+				<CachedImage
+					resizeMode={'contain'}
+					useQueryParamsInCacheKey={true}
+					sourceImg={avatar}
+					style={gravatarStyle}/>
 				<Text style={actionSheetButtonAccText}>
 					{nameInfo.trim()}
 				</Text>
