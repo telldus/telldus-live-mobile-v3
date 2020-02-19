@@ -74,6 +74,7 @@ import {
 	getUserProfile,
 	unregisterPushToken,
 	logoutSelectedFromTelldus,
+	showToast,
 } from '../../Actions';
 import {
 	useDialogueBox,
@@ -205,9 +206,9 @@ const ProfileTab = (props: Object): Object => {
 		showActionSheet();
 	}
 
-	function closeActionSheet() {
+	function closeActionSheet(index: number, callback?: Function) {
 		if (actionSheetRef.current) {
-			actionSheetRef.current.hide();
+			actionSheetRef.current.hide(index, callback);
 		}
 	}
 
@@ -233,6 +234,8 @@ const ProfileTab = (props: Object): Object => {
 					dispatch(logoutSelectedFromTelldus({
 						userId,
 					}));
+
+					dispatch(showToast(`You have switched to the account ${userProfile.email}`));
 				}).catch((err: Object) => {
 					setIsLoggingOut(false);
 					toggleDialogueBoxState({
@@ -315,7 +318,12 @@ const ProfileTab = (props: Object): Object => {
 					} = accounts[userIdKey];
 
 					dispatch(getUserProfile(accessToken, true)).then(() => {
-						closeActionSheet();
+						closeActionSheet(-2, () => {
+							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
+							setTimeout(() => {
+								dispatch(showToast(`You have switched to the account ${userProfile.email}`));
+							}, 200);
+						});
 						setSwitchingId(null);
 						dispatch(onSwitchAccount({
 							userId: userIdKey,
