@@ -17,11 +17,12 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
 import { NativeModules } from 'react-native';
 
 // import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
 
-jest.mock('react-native-orientation-locker', () => {
+jest.mock('react-native-orientation-locker', (): Object => {
 	return {
 		addEventListener: jest.fn(),
 		removeEventListener: jest.fn(),
@@ -32,7 +33,7 @@ jest.mock('react-native-orientation-locker', () => {
 	};
 });
 
-jest.mock('@react-native-community/google-signin', () => {
+jest.mock('@react-native-community/google-signin', (): Object => {
 	return {
 		statusCodes: {
 			SIGN_IN_CANCELLED: '',
@@ -42,21 +43,21 @@ jest.mock('@react-native-community/google-signin', () => {
 	};
 });
 
-jest.mock('react-native-device-info', () => {
+jest.mock('react-native-device-info', (): Object => {
 	return {
 		getSystemVersion: jest.fn(),
 		isTablet: jest.fn(),
 	};
 });
 
-jest.mock('react-native-firebase', () => {
+jest.mock('react-native-firebase', (): Object => {
 	return {
 		crashlytics: jest.fn(),
 		notifications: jest.fn(),
 	};
 });
 
-jest.mock('react-native-sensitive-info', () => {
+jest.mock('react-native-sensitive-info', (): Object => {
 	return {
 		setItem: jest.fn(),
 		getItem: jest.fn(),
@@ -65,15 +66,15 @@ jest.mock('react-native-sensitive-info', () => {
 	};
 });
 
-jest.mock('reconnecting-websocket', () => {
+jest.mock('reconnecting-websocket', (): Object => {
 	class MockSocket {
-		constructor(arg1, arg2, arg3) {
+		constructor(arg1: any, arg2: any, arg3: any) {
 		}
 	}
 	return MockSocket;
 });
 
-global.window.addEventListener = () => null;
+global.window.addEventListener = (): null => null;
 
 NativeModules.AndroidWidget = {
 	configureWidgetAuthData: jest.fn(),
@@ -82,6 +83,22 @@ NativeModules.AndroidWidget = {
 
 // jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
 
-jest.mock('@react-native-community/netinfo', () => {
+jest.mock('@react-native-community/netinfo', (): Object => {
 	return {};
+});
+
+jest.mock('axios', (): Object => {
+	let mockAxios: Object = jest.fn((url: string, params?: Object): Promise<any> => Promise.resolve({ data: {} }));
+	mockAxios.CancelToken = {
+		source: jest.fn((): Object => {
+			return {
+				token: '',
+				cancel: jest.fn(),
+			};
+		}),
+	};
+	mockAxios.isCancel = jest.fn((): boolean => {
+		return false;
+	});
+	return mockAxios;
 });
