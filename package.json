@@ -128,6 +128,12 @@
   },
   "jest": {
     "preset": "react-native",
+    "globals": {
+      "window": {
+        "navigator": {}
+      },
+      "__DEV__": true
+    },
     "moduleNameMapper": {
       "\\.(svg)$": "<rootDir>/js/Utils/__mocks__/svgMock.js",
       ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
@@ -139,12 +145,6 @@
     "transform": {
       "^.+\\.jsx$": "babel-jest",
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    },
-    "globals": {
-      "window": {
-        "navigator": {}
-      },
-      "__DEV__": true
     }
   }
 }
