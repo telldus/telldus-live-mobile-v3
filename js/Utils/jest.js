@@ -18,6 +18,10 @@
  */
 
 // @flow
+
+global.window.addEventListener = (): null => null;
+global.__DEV__ = true;
+
 import { NativeModules } from 'react-native';
 
 // import mockAsyncStorage from '@react-native-community/async-storage/jest/async-storage-mock';
@@ -73,8 +77,6 @@ jest.mock('reconnecting-websocket', (): Object => {
 	}
 	return MockSocket;
 });
-
-global.window.addEventListener = (): null => null;
 
 NativeModules.AndroidWidget = {
 	configureWidgetAuthData: jest.fn(),
