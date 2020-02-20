@@ -44,7 +44,7 @@ import { apiServer, publicKey, privateKey } from '../../Config';
 
 export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = false }: {url: string, requestParams: Object, _accessToken?: Object, cancelAllPending?: boolean }): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
-		const { user: { accessToken, userId } } = getState();
+		const { user: { accessToken, userId = '' } } = getState();
 
 		const { path } = parse(url);
 		let source = {};
@@ -83,44 +83,47 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			if (!response) {
 				throw (new Error('unexpected error: response empty'));
 			}
-			return (response);
+
+			return response;
 		}).catch((error: Object): any => {
 			const currUserSources = axiosSources[userId] || {};
 			delete currUserSources[path];
 
-			if (error.message === 'invalid_token' || error.message === 'expired_token') {
-				return dispatch({
-					type: 'LOCK_SESSION',
-				});
-			}
+			const { data } = error.response;
 			if (!axios.isCancel(error)) {
 				return error;
+			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
+				return error;
 			}
-			throw (error);
+
+			throw error;
 		});
 	};
 }
 
 async function doApiCall(url: string, requestParams: Object, accessToken: Object, dispatch: Function): any {
-	let response = await callEndPoint(url, requestParams, accessToken);
-	if (!response.error) {
-		// All is well, so return the data from the API.
-		return response;
-	}
-	if (response.error !== 'invalid_token' && response.error !== 'expired_token') {
-		// An error from the API we cannot recover from
+	let response;
+	try {
+		response = await callEndPoint(url, requestParams, accessToken);
+
+		if (!response.error) {
+			// All is well, so return the data from the API.
+			return response;
+		}
+
 		throw new Error(response.error);
+	} catch (err) {
+		const { data } = err.response;
+
+		if (data && (data.error !== 'invalid_token' && data.error !== 'expired_token')) {
+			// An error from the API we cannot recover from
+			throw err;
+		}
+
+		let accessTokenRefreshed = await dispatch(refreshAccessToken(url, requestParams, accessToken)); // Token has expired, so we'll try to get a new one.
+
+		return callEndPoint(url, requestParams, accessTokenRefreshed); // retry api call
 	}
-
-	response = await refreshAccessToken(url, requestParams, accessToken, dispatch); // Token has expired, so we'll try to get a new one.
-
-	response = await callEndPoint(url, requestParams, response); // retry api call
-	if (!response.error) {
-		// All is well, so return the data from the API.
-		return response;
-	}
-
-	throw new Error(response.error);
 }
 
 async function callEndPoint(url: string, requestParams: Object, accessToken: Object): Object {
@@ -149,38 +152,42 @@ async function callEndPoint(url: string, requestParams: Object, accessToken: Obj
 }
 
 // create new token with refresh token
-export async function refreshAccessToken(url?: string = '', requestParams?: Object = {}, accessToken: Object, dispatch: Function): any {
+export function refreshAccessToken(url?: string = '', requestParams?: Object = {}, accessToken: Object): any {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return fetch(`${apiServer}/oauth2/accessToken`, {
+			method: 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				'client_id': publicKey,
+				'client_secret': privateKey,
+				'grant_type': 'refresh_token',
+				'refresh_token': accessToken.refresh_token,
+			}),
+		})
+			.then((response: Object): any => response.json())
+			.then((response: Object): any => {
+				if (response.error) {
+					// We couldn't get a new access token with the refresh_token, so we lock the session.
+					dispatch({
+						type: 'LOCK_SESSION',
+					});
+					throw response;
+				}
 
-	return fetch(`${apiServer}/oauth2/accessToken`, {
-		method: 'POST',
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			'client_id': publicKey,
-			'client_secret': privateKey,
-			'grant_type': 'refresh_token',
-			'refresh_token': accessToken.refresh_token,
-		}),
-	})
-		.then((response: Object): any => response.json())
-		.then((response: Object): any => {
-			if (response.error) {
-				// We couldn't get a new access token with the refresh_token, so we lock the session.
+				// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
+				// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
 				dispatch({
-					type: 'LOCK_SESSION',
+					type: 'RECEIVED_ACCESS_TOKEN',
+					accessToken: {
+						...response,
+					},
 				});
-				throw response;
-			}
-			// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
-			// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
-			dispatch({
-				type: 'RECEIVED_ACCESS_TOKEN',
-				accessToken: response,
+				return response;
+			}).catch((err: any) => {
+				throw err;
 			});
-			return response;
-		}).catch((err: any) => {
-			throw err;
-		});
+	};
 }

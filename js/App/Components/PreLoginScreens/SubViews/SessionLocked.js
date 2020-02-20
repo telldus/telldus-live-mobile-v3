@@ -210,7 +210,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 			});
 		},
 		refreshAccessToken: (accessToken: Object): Promise<any> => {
-			return refreshAccessToken('', '', accessToken, dispatch);
+			return dispatch(refreshAccessToken('', '', accessToken));
 		},
 		dispatch,
 	};
