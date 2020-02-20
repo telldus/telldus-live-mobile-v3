@@ -144,6 +144,42 @@ export default function reduceUser(state: State = initialState, action: Action):
 			userId: userIdN,
 		};
 	}
+	if (action.type === 'RECEIVED_ACCESS_TOKEN_OTHER_ACCOUNT') {
+		let accessToken = action.accessToken;
+
+		const { accounts = {}} = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		let userIdN = state.userId;
+		let { userId } = accessToken || {};
+		if (userId) {
+			userId = userId.trim().toLowerCase();
+
+			const existAccount = accounts[userId] || {};
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken,
+			};
+		} else if (userIdN) { // Refreshing access token
+			userId = userIdN.trim().toLowerCase();
+			const existAccount = accounts[userId] || {};
+			const uId = existAccount.userId || userIdN;
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken: {
+					...accessToken,
+					userId: uId,
+				},
+			};
+		}
+
+		return {
+			...state,
+			accounts: newAccounts,
+		};
+	}
 	if (action.type === 'RECEIVED_PUSH_TOKEN') {
 		return {
 			...state,
