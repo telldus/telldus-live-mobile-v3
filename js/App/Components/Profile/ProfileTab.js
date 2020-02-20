@@ -223,7 +223,7 @@ const ProfileTab = (props: Object): Object => {
 			});
 			if (otherUserId) {
 				let { accessToken } = accounts[otherUserId];
-				dispatch(getUserProfile(accessToken, true)).then(() => {
+				dispatch(getUserProfile(accessToken, true)).then((res: Object = {}) => {
 					dispatch(onSwitchAccount({
 						userId: otherUserId,
 					}));
@@ -233,8 +233,8 @@ const ProfileTab = (props: Object): Object => {
 					dispatch(logoutSelectedFromTelldus({
 						userId,
 					}));
-
-					dispatch(showToast(`You have switched to the account ${userProfile.email}`));
+					const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+					dispatch(showToast(messageOnSuccesSwitch));
 				}).catch((err: Object) => {
 					setIsLoggingOut(false);
 					toggleDialogueBoxState({
@@ -316,11 +316,12 @@ const ProfileTab = (props: Object): Object => {
 						accessToken,
 					} = accounts[userIdKey];
 
-					dispatch(getUserProfile(accessToken, true)).then(() => {
+					dispatch(getUserProfile(accessToken, true)).then((res: Object = {}) => {
 						closeActionSheet(undefined, () => {
 							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
 							setTimeout(() => {
-								dispatch(showToast(`You have switched to the account ${userProfile.email}`));
+								const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+								dispatch(showToast(messageOnSuccesSwitch));
 							}, 200);
 						});
 						setSwitchingId(null);
