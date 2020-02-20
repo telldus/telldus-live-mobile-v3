@@ -32,6 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	MaterialTextInput,
+	IconTelldus,
 } from '../../../../BaseComponents';
 
 import capitalise from '../../../Lib/capitalize';
@@ -225,6 +226,9 @@ render(testData: Object): Object {
 		textField,
 		brandSecondary,
 		button,
+		infoContainer,
+		statusIconStyle,
+		infoTextStyle,
 	} = this.getStyles(appLayout);
 	const { formatMessage } = intl;
 
@@ -284,6 +288,13 @@ render(testData: Object): Object {
 						returnKeyType={'done'}
 					/>
 				</View>
+				{descLen < 50 && <View style={infoContainer}>
+					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<Text style={infoTextStyle}>
+						{formatMessage(i18n.supportTicketDescriptionInfo)}
+					</Text>
+				</View>
+				}
 				<TouchableButton
 					text={i18n.labelSend}
 					style={button}
@@ -299,7 +310,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor } = Theme.Core;
+	const { shadow, paddingFactor, brandSecondary, rowTextColor, eulaContentColor } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -338,6 +349,28 @@ getStyles(appLayout: Object): Object {
 		},
 		button: {
 			marginVertical: padding * 1.5,
+		},
+		infoContainer: {
+			flex: 1,
+			flexDirection: 'row',
+			marginBottom: padding,
+			padding: padding,
+			backgroundColor: '#fff',
+			...shadow,
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			borderRadius: 2,
+		},
+		statusIconStyle: {
+			fontSize: deviceWidth * 0.16,
+			color: brandSecondary,
+		},
+		infoTextStyle: {
+			flex: 1,
+			fontSize: fontSizeBody,
+			color: eulaContentColor,
+			flexWrap: 'wrap',
+			marginLeft: padding,
 		},
 	};
 }
