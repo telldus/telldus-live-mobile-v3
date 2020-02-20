@@ -28,6 +28,10 @@ import { parse } from 'url';
 const CancelToken = axios.CancelToken;
 let axiosSources = {};
 
+import {
+	updateAccessTokenOtherAccount,
+} from '../Actions/Auth';
+
 import type { ThunkAction } from '../Actions/Types';
 import { apiServer, publicKey, privateKey } from '../../Config';
 
@@ -93,6 +97,13 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			if (!axios.isCancel(error)) {
 				return error;
 			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
+				const { userId: userIdRequest = '' } = accessToken;
+				const isRequestMadeByTheActiveAccount = userIdRequest.trim().toLowerCase() === userId.trim().toLowerCase();
+				if (isRequestMadeByTheActiveAccount) {
+					return dispatch({
+						type: 'LOCK_SESSION',
+					});
+				}
 				return error;
 			}
 
@@ -169,22 +180,36 @@ export function refreshAccessToken(url?: string = '', requestParams?: Object = {
 		})
 			.then((response: Object): any => response.json())
 			.then((response: Object): any => {
+				const { userId = '' } = accessToken;
+				const { user: { userId: userIdActive = '' } } = getState();
+				const isRequestMadeByTheActiveAccount = userIdActive.trim().toLowerCase() === userId.trim().toLowerCase();
 				if (response.error) {
+					if (isRequestMadeByTheActiveAccount) {
 					// We couldn't get a new access token with the refresh_token, so we lock the session.
-					dispatch({
-						type: 'LOCK_SESSION',
-					});
+						dispatch({
+							type: 'LOCK_SESSION',
+						});
+					}
 					throw response;
 				}
 
-				// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
+				if (isRequestMadeByTheActiveAccount) {
+					// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
 				// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
-				dispatch({
-					type: 'RECEIVED_ACCESS_TOKEN',
-					accessToken: {
+					dispatch({
+						type: 'RECEIVED_ACCESS_TOKEN',
+						accessToken: {
+							...response,
+							userId, // TODO: No need to override once userId is available via API response
+						},
+					});
+				} else {
+					dispatch(updateAccessTokenOtherAccount({
 						...response,
-					},
-				});
+						userId, // TODO: No need to override once userId is available via API response
+					}));
+				}
+
 				return response;
 			}).catch((err: any) => {
 				throw err;
