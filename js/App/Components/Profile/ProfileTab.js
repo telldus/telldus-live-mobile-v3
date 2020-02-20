@@ -501,8 +501,7 @@ const ProfileTab = (props: Object): Object => {
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
 					onConfirmLogout={onConfirmLogout}
-					label={`${formatMessage(i18n.labelLogOut)}`}
-					postScript={` ${fn} ${ln}`}
+					label={`${formatMessage(i18n.labelLogOut)} ${fn} ${ln}`}
 					isLoggingOut={isLoggingOut}
 				/>}
 				<LogoutAllAccButton
