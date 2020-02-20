@@ -23,6 +23,7 @@
 export type Action =
 	  { type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
+	| { type: 'RECEIVED_ACCESS_TOKEN_OTHER_ACCOUNT', accessToken: Object }
 	| { type: 'RECEIVED_PUSH_TOKEN', pushToken: string }
 	| { type: 'RECEIVED_USER_PROFILE', payload: Object }
 	| { type: 'RECEIVED_DEVICES', payload: Object }
