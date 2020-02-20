@@ -34,7 +34,7 @@ const CachedImageComponent = (props: Object): Object => {
 		style,
 		sourceImg,
 		sourceImgFallback,
-		resizeMode = 'contain',
+		resizeMode = 'cover',
 	} = props;
 
 	const [ errorShowImage, setErrorShowImage ] = React.useState(false);

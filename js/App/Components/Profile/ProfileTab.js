@@ -387,7 +387,7 @@ const ProfileTab = (props: Object): Object => {
 		ACCOUNTS.push(
 			<RippleButton onPress={onPressRB} style={actionSheetButtonAccCover}>
 				<CachedImage
-					resizeMode={'contain'}
+					resizeMode={'cover'}
 					useQueryParamsInCacheKey={true}
 					sourceImg={avatar}
 					style={gravatarStyle}/>
