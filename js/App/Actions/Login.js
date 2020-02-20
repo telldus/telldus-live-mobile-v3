@@ -114,15 +114,20 @@ function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: bo
 				dispatch(setUserIdentifierFirebaseCrashlytics());
 				dispatch(setUserNameFirebaseCrashlytics());
 
-				let options = {
-					email: response.email,
-					parameters: { 'size': '200', 'd': 'mm' },
-				};
-				const url = gravatar.imageUrl(options);
-				ImageCacheManager().downloadAndCacheUrl(url, {
-					useQueryParamsInCacheKey: true,
-				});
-				return response;
+				try {
+					let options = {
+						email: response.email,
+						parameters: { 'size': '200', 'd': 'mm' },
+					};
+					const url = gravatar.imageUrl(options);
+					ImageCacheManager().downloadAndCacheUrl(url, {
+						useQueryParamsInCacheKey: true,
+					});
+				} catch (e) {
+					// Just ignore
+				} finally {
+					return response;
+				}
 			}
 			throw response;
 		}).catch((err: any) => {
