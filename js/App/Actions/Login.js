@@ -118,6 +118,7 @@ function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: bo
 					let options = {
 						email: response.email,
 						parameters: { 'size': '200', 'd': 'mm' },
+						secure: true,
 					};
 					const url = gravatar.imageUrl(options);
 					ImageCacheManager().downloadAndCacheUrl(url, {

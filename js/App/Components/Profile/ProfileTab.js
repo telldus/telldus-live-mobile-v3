@@ -370,6 +370,7 @@ const ProfileTab = (props: Object): Object => {
 		let options = {
 			email,
 			parameters: { 'size': '200', 'd': 'mm' },
+			secure: true,
 		};
 		let avatar = gravatar.imageUrl(options);
 
