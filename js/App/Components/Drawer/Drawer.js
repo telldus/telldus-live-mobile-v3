@@ -55,26 +55,12 @@ class Drawer extends View<Props, null> {
 	props: Props;
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { appLayout, isOpen, ...others } = this.props;
-		const { appLayout: appLayoutN, isOpen: isOpenN, ...othersN } = nextProps;
-		if (isOpenN) {
-			if (!isOpen) {
-				return true;
-			}
-
-			if (appLayout.width !== appLayoutN.width) {
-				return true;
-			}
-
-			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
-			if (propsChange) {
-				return true;
-			}
-
-			return false;
-		}
-
-		return false;
+		return shouldUpdate(this.props, nextProps, [
+			'gateways',
+			'userProfile',
+			'isOpen',
+			'appLayout',
+		]);
 	}
 
 	render(): Object {
