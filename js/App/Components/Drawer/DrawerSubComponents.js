@@ -59,7 +59,7 @@ const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
 				</Text>
 				{lastName ?
 					<Text numberOfLines={1} style={styles.navigationHeaderText}>
-						{lastName}
+						{` ${lastName}`}
 					</Text>
 					:
 					null

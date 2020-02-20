@@ -148,7 +148,6 @@ class Drawer extends View<Props, null> {
 			navigationHeaderText: {
 				color: '#e26901',
 				fontSize: fontSizeHeader,
-				marginLeft: 10,
 				zIndex: 3,
 				textAlignVertical: 'bottom',
 			},
@@ -158,6 +157,7 @@ class Drawer extends View<Props, null> {
 				flexWrap: 'wrap',
 				justifyContent: 'flex-start',
 				alignItems: 'flex-end',
+				paddingLeft: 10,
 			},
 			navigationTitle: {
 				flexDirection: 'row',
