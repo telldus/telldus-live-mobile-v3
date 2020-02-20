@@ -23,6 +23,11 @@
 'use strict';
 
 import axios from 'axios';
+const gravatar = require('gravatar-api');
+import {
+	ImageCacheManager,
+} from 'react-native-cached-image';
+
 import type { Action, ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 
@@ -97,16 +102,29 @@ function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: bo
 			cancelAllPending,
 		};
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
-			dispatch({
-				type: 'RECEIVED_USER_PROFILE',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-			dispatch(setUserIdentifierFirebaseCrashlytics());
-			dispatch(setUserNameFirebaseCrashlytics());
-			return response;
+			if (response && response.email) {
+				dispatch({
+					type: 'RECEIVED_USER_PROFILE',
+					payload: {
+						...payload,
+						...response,
+					},
+				});
+
+				dispatch(setUserIdentifierFirebaseCrashlytics());
+				dispatch(setUserNameFirebaseCrashlytics());
+
+				let options = {
+					email: response.email,
+					parameters: { 'size': '200', 'd': 'mm' },
+				};
+				const url = gravatar.imageUrl(options);
+				ImageCacheManager().downloadAndCacheUrl(url, {
+					useQueryParamsInCacheKey: true,
+				});
+				return response;
+			}
+			throw response;
 		}).catch((err: any) => {
 			throw err;
 		});
