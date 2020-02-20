@@ -79,7 +79,7 @@ const DBSortControlBlock = (props: Object): Object => {
 					{key: 'Alphabetical', value: alpha},
 					{key: 'Chronological', value: chrono},
 				]}
-				value={sortingDBProp === alpha ? alpha : chrono}
+				value={sortingDBProp === 'Alphabetical' ? alpha : chrono}
 				onValueChange={saveSortingDB}
 				appLayout={layout}
 				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
