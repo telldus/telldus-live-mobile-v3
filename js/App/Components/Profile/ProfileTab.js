@@ -454,6 +454,7 @@ const ProfileTab = (props: Object): Object => {
 					onPress={onPressAddAccount}/>
 				<SubscriptionStatusBlock
 					navigation={navigation}
+					enable={enable}
 					contentCoverStyle={contentCoverStyleENB}
 					valueCoverStyle={valueCoverStyleENB}
 					textFieldStyle={textFieldStyleENB}
