@@ -91,7 +91,13 @@ function updateAccessToken(accessToken: Object): Action {
 	};
 }
 
-function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: boolean = false): ThunkAction {
+/**
+ *
+ * @param {Object} _accessToken : Should have all attributes received upon login and cached in store.
+ * @param {boolean} cancelAllPending : If true, will cancel all pending API calls if any.
+ * @param {boolean} activeAccount : If true, will update active accounts user profile, else the account that belongs to the received user id
+ */
+function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: boolean = false, activeAccount?: boolean = true): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/user/profile',
@@ -103,13 +109,23 @@ function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: bo
 		};
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
 			if (response && response.email) {
-				dispatch({
-					type: 'RECEIVED_USER_PROFILE',
-					payload: {
-						...payload,
-						...response,
-					},
-				});
+				if (activeAccount) {
+					dispatch({
+						type: 'RECEIVED_USER_PROFILE',
+						payload: {
+							...payload,
+							...response,
+						},
+					});
+				} else {
+					dispatch({
+						type: 'RECEIVED_USER_PROFILE_OTHER',
+						payload: {
+							...payload,
+							...response,
+						},
+					});
+				}
 
 				dispatch(setUserIdentifierFirebaseCrashlytics());
 				dispatch(setUserNameFirebaseCrashlytics());
