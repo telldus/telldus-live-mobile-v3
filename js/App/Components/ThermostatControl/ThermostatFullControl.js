@@ -165,7 +165,8 @@ render(): Object | null {
 						appLayout={appLayout}
 						align={'center'}
 						icon={'thermostat'}
-						h2={name}/>
+						h2={name}
+						navigation={navigation}/>
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={supportedModes}
