@@ -27,6 +27,8 @@ const gravatar = require('gravatar-api');
 import {
 	ImageCacheManager,
 } from 'react-native-cached-image';
+import max from 'lodash/max';
+import min from 'lodash/min';
 
 import type { Action, ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
@@ -34,7 +36,14 @@ import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../C
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
 import { widgetAndroidDisableAll, widgetiOSRemoveDataFromKeychain } from './Widget';
-import { setBoolean } from '../Lib/Analytics';
+import {
+	setBoolean,
+} from '../Lib/Analytics';
+
+import {
+	getPremiumAccounts,
+	isAutoRenew,
+} from '../Lib/appUtils';
 
 import {
 	setUserIdentifierFirebaseCrashlytics,
@@ -192,6 +201,53 @@ function onSwitchAccount(payload: Object): ThunkAction {
 	};
 }
 
+function prepareGAPremiumProperties(): ThunkAction {
+	return (dispatch: Function, getState: Function): Object => {
+		const {
+			user: {
+				accounts = {},
+			},
+		} = getState();
+
+		let isPremium = false, premiumDate = '';
+
+		const premAccounts = getPremiumAccounts(accounts);
+		isPremium = Object.keys(premAccounts).length > 0;
+
+		if (!isPremium) {
+			let dates = [];
+			Object.keys(accounts).forEach((userId: string) => {
+				const { pro = -1 } = accounts[userId];
+				dates.push(pro);
+			});
+
+			let greatestTS = max(dates);
+			greatestTS = greatestTS === -1 ? '' : greatestTS;
+
+			return {
+				isPremium: 'false',
+				premiumDate: greatestTS.toString(),
+			};
+		}
+
+		let dates = [], hasARecurringSubs = false;
+		Object.keys(premAccounts).forEach((userId: string) => {
+			const { pro, subscriptions } = premAccounts[userId];
+			if (isAutoRenew(subscriptions)) {
+				hasARecurringSubs = true;
+			}
+			dates.push(pro);
+		});
+
+		premiumDate = hasARecurringSubs ? '' : min(dates).toString();
+
+		return {
+			isPremium: 'true',
+			premiumDate,
+		};
+	};
+}
+
 module.exports = {
 	loginToTelldus,
 	logoutFromTelldus,
@@ -199,4 +255,5 @@ module.exports = {
 	updateAccessToken,
 	logoutSelectedFromTelldus,
 	onSwitchAccount,
+	prepareGAPremiumProperties,
 };

@@ -58,6 +58,7 @@ import {
 	toggleVisibilityProExpireHeadsup,
 	checkPermissionAndInitializeWatcher,
 	fetchRemoteConfig,
+	prepareGAPremiumProperties,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -70,6 +71,7 @@ import {
 	navigate,
 	prepareNo433MHzSupportDialogueData,
 	premiumAboutToExpire,
+	setGAUserProperties,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -219,7 +221,15 @@ actionsToPerformOnStart = async () => {
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
-		dispatch(getUserSubscriptions());
+
+		try {
+			await dispatch(getUserSubscriptions());
+		} catch (userSubsErr) {
+			// Ignore
+		} finally {
+			const gAPremProps = dispatch(prepareGAPremiumProperties());
+			setGAUserProperties(gAPremProps);
+		}
 
 		// test gateway local control end-point on app restart.
 		dispatch(initiateGatewayLocalTest());
