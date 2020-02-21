@@ -114,6 +114,21 @@ public class CommonUtilities  {
         // Get min width and height.
         int minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         int minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT);
+
+        if (minWidth <= 0) {
+            minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH);
+        }
+        if (minHeight <= 0) {
+            minHeight = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
+        }
+
+        if (minWidth <= 0) {
+            minWidth = 50;
+        }
+        if (minHeight <= 0) {
+            minHeight = 50;
+        }
+
         HashMap dim = new HashMap();
         dim.put("width", minWidth);
         dim.put("height", minHeight);
