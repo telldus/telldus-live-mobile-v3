@@ -59,6 +59,7 @@ import {
 	checkPermissionAndInitializeWatcher,
 	fetchRemoteConfig,
 	prepareGAPremiumProperties,
+	updateAllAccountsInfo,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -175,6 +176,8 @@ async componentDidMount() {
 	const { dispatch } = this.props;
 	dispatch(appStart());
 	dispatch(appState());
+
+	dispatch(updateAllAccountsInfo());
 
 	this.actionsToPerformOnStart();
 

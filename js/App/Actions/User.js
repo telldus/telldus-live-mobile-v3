@@ -28,10 +28,16 @@ import axios from 'axios';
 import { actions } from 'live-shared-data';
 const { User } = actions;
 
+const { getUserSubscriptions } = User;
+
 import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
 import { LiveApi } from '../Lib';
 import { setBoolean } from '../Lib/Analytics';
+
+import {
+	getUserProfile,
+} from './Login';
 
 
 /*
@@ -316,7 +322,25 @@ function toggleVisibilityProExpireHeadsup(value: 'show' | 'hide_temp' | 'hide_pe
 	};
 }
 
+function updateAllAccountsInfo(): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
 
+		const {
+			user: {
+				accounts = {},
+				userId: activeUserId = '',
+			},
+		} = getState();
+
+		Object.keys(accounts).forEach((userId: string) => {
+			const { accessToken } = accounts[userId];
+			if (accessToken && (activeUserId.trim().toLowerCase() !== userId.trim().toLowerCase())) {
+				dispatch(getUserProfile(accessToken, false, false));
+				dispatch(getUserSubscriptions(accessToken));
+			}
+		});
+	};
+}
 
 module.exports = {
 	...User,
@@ -332,4 +356,5 @@ module.exports = {
 	campaignVisited,
 	toggleVisibilityExchangeOffer,
 	toggleVisibilityProExpireHeadsup,
+	updateAllAccountsInfo,
 };

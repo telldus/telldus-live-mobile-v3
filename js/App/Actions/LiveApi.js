@@ -29,6 +29,9 @@ import { getJobs } from './Jobs';
 import { getDevices } from './Devices';
 import { getSensors } from './Sensors';
 import { getUserProfile } from './Login';
+import {
+	updateAllAccountsInfo,
+} from './User';
 
 import { AppState } from 'react-native';
 
@@ -44,6 +47,7 @@ function syncLiveApiOnForeground(): ThunkAction {
 				dispatch(getDevices());
 				dispatch(getSensors());
 				dispatch(getJobs());
+				dispatch(updateAllAccountsInfo());
 			}
 		});
 	};
