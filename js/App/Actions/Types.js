@@ -26,6 +26,7 @@ export type Action =
 	| { type: 'RECEIVED_ACCESS_TOKEN_OTHER_ACCOUNT', accessToken: Object }
 	| { type: 'RECEIVED_PUSH_TOKEN', pushToken: string }
 	| { type: 'RECEIVED_USER_PROFILE', payload: Object }
+	| { type: 'RECEIVED_USER_PROFILE_OTHER', payload: Object }
 	| { type: 'RECEIVED_DEVICES', payload: Object }
 	| { type: 'RECEIVED_GATEWAYS', payload: Object }
 	| { type: 'RECEIVED_SENSORS', payload: Object }
@@ -135,6 +136,7 @@ export type Action =
 	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 
 	| { type: 'RECEIVED_USER_SUBSCRIPTIONS', payload: Object }
+	| { type: 'RECEIVED_USER_SUBSCRIPTIONS_OTHER', payload: Object }
 
 	| { type: 'CAMPAIGN_VISITED', payload: boolean }
 

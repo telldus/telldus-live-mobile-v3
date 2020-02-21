@@ -237,7 +237,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...accounts,
 		};
 
-		if (action.payload.email) {
+		if (action.payload.email) { // TODO: Should use user id, once it is available.
 			const email = action.payload.email.trim().toLowerCase();
 			const existAccount = accounts[email] || {};
 
@@ -265,6 +265,41 @@ export default function reduceUser(state: State = initialState, action: Action):
 			userProfile: action.payload,
 			accounts: newAccounts,
 			userId: userIdN,
+		};
+	}
+	if (action.type === 'RECEIVED_USER_PROFILE_OTHER') {
+
+		const { accounts = {} } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const {
+			email, // TODO: Should use user id, once it is available.
+		} = action.payload;
+		if (!email) {
+			return state;
+		}
+
+		const userId = email.trim().toLowerCase();
+		const account = accounts[userId];
+		if (!account) {
+			return state;
+		}
+
+		const updatedAccount = {
+			...account,
+			...action.payload,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
+		return {
+			...state,
+			accounts: newAccounts,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {
@@ -328,11 +363,72 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS') {
+
+		const { accounts = {}, userId = '' } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const subscriptions = action.payload;
+
+		const account = accounts[userId] || {};
+
+		const updatedAccount = {
+			...account,
+			subscriptions,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
 		return {
 			...state,
-			subscriptions: {
-				...action.payload,
-			},
+			subscriptions,
+			accounts: newAccounts,
+		};
+	}
+	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS_OTHER') {
+
+		const { accounts = {}, userId: activeAccUserId = '' } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const {
+			userId,
+			subscriptions,
+		} = action.payload;
+		if (!userId) {
+			return state;
+		}
+
+		const account = accounts[userId];
+		if (!account) {
+			return state;
+		}
+
+		const updatedAccount = {
+			...account,
+			subscriptions,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
+		// Update if the other account is the active one
+		let activeAccountSubscriptions = state.subscriptions;
+		if (userId.trim().toLowerCase() === activeAccUserId.trim().toLowerCase()) {
+			activeAccountSubscriptions = subscriptions;
+		}
+
+		return {
+			...state,
+			accounts: newAccounts,
+			subscriptions: activeAccountSubscriptions,
 		};
 	}
 	if (action.type === 'CAMPAIGN_VISITED') {
