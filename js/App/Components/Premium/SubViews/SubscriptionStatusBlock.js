@@ -51,6 +51,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		textFieldStyle,
 		labelTextStyle,
 		navigation,
+		enable,
 	} = props;
 
 	const intl = useIntl();
@@ -96,7 +97,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 				label={formatMessage(i18n.subscription)}
 				value={accStatus}
 				appLayout={layout}
-				iconValueRight={isBasic ? <Text style={upgradeSyle}>{formatMessage(i18n.upgrade)}</Text> : null}
+				iconValueRight={(isBasic && enable) ? <Text style={upgradeSyle}>{formatMessage(i18n.upgrade)}</Text> : null}
 				onPress={false}
 				onPressIconValueRight={isBasic ? onPressUpgrade : null}
 				intl={intl}
