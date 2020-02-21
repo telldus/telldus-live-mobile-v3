@@ -122,6 +122,7 @@ const ProfileTab = (props: Object): Object => {
 					navigation={navigation}/>
 				<SubscriptionStatusBlock
 					navigation={navigation}
+					enable={enable}
 					contentCoverStyle={contentCoverStyleENB}
 					valueCoverStyle={valueCoverStyleENB}
 					textFieldStyle={textFieldStyleENB}
