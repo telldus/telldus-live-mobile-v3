@@ -69,6 +69,10 @@ export function setUserName(uname?: string | null) {
 	// }
 }
 
-export const setGAUserPropery = (key: Object, value: string) => {
+export const setGAUserProperty = (key: Object, value: string) => {
 	firebase.analytics().setUserProperty(key, value);
+};
+
+export const setGAUserProperties = (properties: Object) => {
+	firebase.analytics().setUserProperties(properties);
 };

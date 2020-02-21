@@ -46,7 +46,7 @@ import {
 import {
 	getTranslatableDayNames,
 	getTranslatableMonthNames,
-	setGAUserPropery,
+	setGAUserProperty,
 } from './App/Lib';
 
 import Theme from './App/Theme';
@@ -138,7 +138,7 @@ class App extends React.Component<Props, State> {
 		}
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
-		setGAUserPropery('deviceUniqueId', deviceId ? deviceId : DeviceInfo.getUniqueID());
+		setGAUserProperty('deviceUniqueId', deviceId ? deviceId : DeviceInfo.getUniqueID());
 	}
 
 	setCalendarLocale() {
