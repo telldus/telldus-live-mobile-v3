@@ -23,13 +23,26 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	TouchableOpacity,
+	BackHandler,
+} from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { announceForAccessibility } from 'react-native-accessibility';
 import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 
-import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../../BaseComponents';
+import {
+	FormattedMessage,
+	View,
+	Text,
+	Icon,
+	Modal,
+	FormattedDate,
+	FormattedTime,
+	IconTelldus,
+} from '../../../../../BaseComponents';
 import { states, statusMessage } from '../../../../../Config';
 
 import { getOriginString } from '../../../../Lib';
@@ -38,11 +51,14 @@ let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
 import i18n from '../../../../Translations/common';
 
+import Theme from '../../../../Theme';
+
 type Props = {
 	detailsData: Object,
 	appLayout: Object,
 	currentScreen: string,
 	intl: Object,
+	closeHistoryDetailsModal: () => void,
 };
 
 class DeviceHistoryDetails extends View {
@@ -53,6 +69,26 @@ class DeviceHistoryDetails extends View {
 
 		this.labelAnnouncementOnOpen = formatMessage(i18n.announcementOnDetailsModalOpen);
 		this.labelAnnouncementOnClose = `${formatMessage(i18n.announcementOnModalClose)}.`;
+	}
+
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	componentWillUnmount() {
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	handleBackPress = (): boolean => {
+		let {
+			showDetails,
+			closeHistoryDetailsModal,
+		} = this.props;
+		if (showDetails) {
+			closeHistoryDetailsModal();
+			return true;
+		}
+		return false;
 	}
 
 	getPercentage(value: number): number {
@@ -77,7 +113,13 @@ class DeviceHistoryDetails extends View {
 	}
 
 	render(): Object {
-		let { detailsData, appLayout, currentScreen, intl } = this.props;
+		let {
+			detailsData,
+			appLayout,
+			currentScreen,
+			intl,
+			closeHistoryDetailsModal,
+		} = this.props;
 		let textState = '', textDate = '', textStatus = '', originText = '';
 		let { origin, stateValue, ts, successStatus } = detailsData;
 
@@ -96,6 +138,8 @@ class DeviceHistoryDetails extends View {
 			detailsText,
 			timeText,
 			detailsTextError,
+			closeIconCoverStyle,
+			closeIconStyle,
 		} = this.getStyle(appLayout);
 
 		originText = getOriginString(origin, intl.formatMessage);
@@ -160,7 +204,6 @@ class DeviceHistoryDetails extends View {
 		return (
 			<Modal
 				modalStyle={container}
-				modalContainerStyle={container}
 				entry= "SlideInY"
 				exit= "SlideOutY"
 				showOverlay= {false}
@@ -173,8 +216,19 @@ class DeviceHistoryDetails extends View {
 					<Text style={titleText}>
 						<FormattedMessage {...i18n.details} style={titleText}/>
 					</Text>
+					<TouchableOpacity
+						style={closeIconCoverStyle}
+						onPress={closeHistoryDetailsModal}>
+						<IconTelldus
+							icon="statusx"
+							style={closeIconStyle}/>
+					</TouchableOpacity>
 				</View>
-				<ScrollView contentContainerStyle={detailsContainer}>
+				<ScrollView
+					style={{
+						flex: 1,
+					}}
+					contentContainerStyle={detailsContainer}>
 					<View style={detailsRow}
 						accessible={accessible}
 						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
@@ -215,7 +269,7 @@ class DeviceHistoryDetails extends View {
 									hour="numeric"
 									minute="numeric"
 									second="numeric"
-									style={[timeText, {paddingLeft: 6, marginRight: 15}]} />
+									style={[timeText, {paddingLeft: 6}]} />
 							</View>
 							:
 							null
@@ -260,85 +314,115 @@ class DeviceHistoryDetails extends View {
 	}
 
 	getStyle(appLayout: Object): Object {
-		const height = appLayout.height;
-		const width = appLayout.width;
+		const { height, width } = appLayout;
 		let isPortrait = height > width;
 
-		let stackNavHeaderHeight = appLayout.height * 0.1;
-		let deviceIconCoverHeight = appLayout.height * 0.2;
-		let tabViewHeaderHeight = appLayout.height * 0.085;
+		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			brandSecondary,
+			shadow,
+			paddingFactor,
+			appBackground,
+			inactiveTintColor,
+		} = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
+
+		let stackNavHeaderHeight = height * 0.1;
+		let deviceIconCoverHeight = height * 0.2;
+		let tabViewHeaderHeight = height * 0.085;
 		statusBarHeight = (Platform.OS === 'android' && StatusBar) ? statusBarHeight : 0;
 		stackNavHeaderHeight = isPortrait ? stackNavHeaderHeight : 0;
 		let totalTop = statusBarHeight + stackNavHeaderHeight + deviceIconCoverHeight + tabViewHeaderHeight;
-		let screenSpaceRemaining = appLayout.height - totalTop;
+		let screenSpaceRemaining = height - totalTop;
+
+		const closeIconSize = Math.floor(deviceWidth * 0.05);
+		const closeIconCSize = closeIconSize;
+
+		const detailsRowWidth = width - (padding * 2);
+
+		const itemInnerPadding = padding + 3;
 
 		return {
 			startValue: screenSpaceRemaining,
 			container: {
 				flex: 1,
 				position: 'absolute',
-				backgroundColor: '#eeeeef',
+				backgroundColor: appBackground,
 				top: 0,
+				left: 0,
+				right: 0,
 				bottom: 0,
-				width: width,
+				alignItems: 'center',
+				paddingTop: 8,
 			},
 			titleTextCover: {
-				width: width,
-				height: isPortrait ? height * 0.09 : width * 0.09,
+				flexDirection: 'row',
+				alignItems: 'center',
+				marginVertical: padding,
+				width: detailsRowWidth,
+				justifyContent: 'space-between',
+			},
+			closeIconCoverStyle: {
+				alignItems: 'center',
 				justifyContent: 'center',
+				height: closeIconCSize,
+				width: closeIconCSize,
+				borderRadius: closeIconCSize / 2,
+			},
+			closeIconStyle: {
+				fontSize: closeIconSize,
+				color: brandSecondary,
+				backgroundColor: appBackground,
 			},
 			detailsContainer: {
-				alignItems: 'center',
-				justifyContent: 'flex-end',
-				flexDirection: 'column',
-				width: width,
+				flexGrow: 1,
 			},
 			detailsRow: {
 				flexDirection: 'row',
-				height: isPortrait ? height * 0.09 : width * 0.09,
-				marginTop: 1,
+				padding: itemInnerPadding,
 				backgroundColor: '#fff',
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				width: width,
+				marginHorizontal: padding,
+				...shadow,
+				marginBottom: padding / 2,
+				borderRadius: 2,
 			},
 			detailsLabelCover: {
 				alignItems: 'flex-start',
-				width: width * 0.3,
+				width: '30%',
 			},
 			detailsValueCover: {
 				alignItems: 'flex-end',
-				width: width * 0.7,
+				width: '70%',
 			},
 			timeCover: {
 				justifyContent: 'flex-end',
-				width: width * 0.7,
+				width: '70%',
 				flexDirection: 'row',
 			},
 			titleText: {
-				marginLeft: 10,
-				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				color: inactiveTintColor,
+				fontSize: Math.floor(deviceWidth * 0.04),
 			},
-			statusIconSize: isPortrait ? Math.floor(width * 0.047) : Math.floor(height * 0.047),
+			statusIconSize: Math.floor(deviceWidth * 0.047),
 			detailsLabel: {
-				marginLeft: 10,
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				fontSize: Math.floor(deviceWidth * 0.04),
 				color: '#4C4C4C',
 			},
 			detailsText: {
-				marginRight: 15,
-				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				color: inactiveTintColor,
+				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			detailsTextError: {
-				marginRight: 15,
 				color: '#d32f2f',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			timeText: {
-				color: '#A59F9A',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
+				color: inactiveTintColor,
+				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 		};
 	}
