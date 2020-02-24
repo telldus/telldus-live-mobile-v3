@@ -108,7 +108,6 @@ class HistoryTab extends View {
 		};
 		this.renderRow = this.renderRow.bind(this);
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
-		this.closeHistoryDetailsModal = this.closeHistoryDetailsModal.bind(this);
 
 		this._onRefresh = this._onRefresh.bind(this);
 		this.getHistoryDataFromAPI = this.getHistoryDataFromAPI.bind(this);
@@ -124,7 +123,7 @@ class HistoryTab extends View {
 		this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
 	}
 
-	closeHistoryDetailsModal() {
+	closeHistoryDetailsModal = () => {
 		const { show, data } = this.state.historyDetails;
 		if (show) {
 			this.setState({
@@ -365,7 +364,8 @@ class HistoryTab extends View {
 					intl={intl}
 					currentScreen={currentScreen}
 					showDetails={historyDetails.show}
-					detailsData={historyDetails.data}/>
+					detailsData={historyDetails.data}
+					closeHistoryDetailsModal={this.closeHistoryDetailsModal}/>
 			</View>
 		);
 	}
