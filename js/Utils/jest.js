@@ -51,6 +51,7 @@ jest.mock('react-native-device-info', (): Object => {
 	return {
 		getSystemVersion: jest.fn(),
 		isTablet: jest.fn(),
+		getUniqueID: jest.fn(),
 	};
 });
 
