@@ -253,7 +253,7 @@ SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
 		<TabBar
 			icon="faq"
 			tintColor={tintColor}
-			label={i18n.labelSupport}
+			label={i18n.userHelp}
 			accessibilityLabel={i18n.labelAccessibleSupportTab}/>
 	),
 	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
