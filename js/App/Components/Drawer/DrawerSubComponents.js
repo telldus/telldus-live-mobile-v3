@@ -58,7 +58,8 @@ const NavigationHeader = ({ firstName, lastName, email, styles }: Object): Objec
 	let avatar = gravatar.imageUrl(options);
 
 	return (
-		<View style={styles.navigationHeader}>
+		<RippleButton
+			style={styles.navigationHeader}>
 			<View style={{
 				flex: 0,
 				flexDirection: 'row',
@@ -69,20 +70,25 @@ const NavigationHeader = ({ firstName, lastName, email, styles }: Object): Objec
 					useQueryParamsInCacheKey={true}
 					sourceImg={avatar}
 					style={styles.navigationHeaderImage}/>
-				<View style={styles.navigationHeaderTextCover}>
-					<Text numberOfLines={1} style={styles.navigationHeaderText}>
-						{firstName}
-					</Text>
-					{lastName ?
+				<View>
+					<View style={styles.navigationHeaderTextCover}>
 						<Text numberOfLines={1} style={styles.navigationHeaderText}>
-							{` ${lastName}`}
+							{firstName}
 						</Text>
-						:
-						null
-					}
+						{lastName ?
+							<Text numberOfLines={1} style={styles.navigationHeaderText}>
+								{` ${lastName}`}
+							</Text>
+							:
+							null
+						}
+					</View>
+					<Text style={styles.switchOrAdd}>
+						Switch or add new account
+					</Text>
 				</View>
 			</View>
-		</View>
+		</RippleButton>
 	);
 };
 

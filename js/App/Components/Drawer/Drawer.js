@@ -39,6 +39,8 @@ import {
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
 import { hasStatusBar, getDrawerWidth, shouldUpdate } from '../../Lib';
 
+import Theme from '../../Theme';
+
 type Props = {
 	gateways: Object,
 	appLayout: Object,
@@ -107,11 +109,19 @@ class Drawer extends View<Props, null> {
 	getStyles(appLayout: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
+
+		const {
+			paddingFactor,
+		} = Theme.Core;
+
 		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * paddingFactor;
+
 		const drawerWidth = getDrawerWidth(deviceWidth);
 
 		const fontSizeHeader = Math.floor(drawerWidth * 0.072);
+		const fontSizeHeaderTwo = Math.floor(drawerWidth * 0.045);
 		const fontSizeRow = Math.floor(drawerWidth * 0.062);
 		const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
 
@@ -119,7 +129,7 @@ class Drawer extends View<Props, null> {
 
 		return {
 			navigationHeader: {
-				height: deviceHeight * 0.197,
+				paddingVertical: padding * 2,
 				width: drawerWidth,
 				minWidth: 250,
 				backgroundColor: 'rgba(26,53,92,255)',
@@ -127,8 +137,8 @@ class Drawer extends View<Props, null> {
 				paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
 				flexDirection: 'row',
 				justifyContent: 'center',
-				alignItems: 'flex-end',
-				paddingLeft: 15,
+				alignItems: 'center',
+				paddingHorizontal: 15,
 			},
 			navigationHeaderImage: {
 				width: ImageSize,
@@ -142,7 +152,6 @@ class Drawer extends View<Props, null> {
 				textAlignVertical: 'center',
 			},
 			navigationHeaderTextCover: {
-				flex: 1,
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 				justifyContent: 'flex-start',
@@ -154,6 +163,13 @@ class Drawer extends View<Props, null> {
 				marginVertical: 5 + (fontSizeRow * 0.5),
 				marginLeft: 10,
 				alignItems: 'center',
+			},
+			switchOrAdd: {
+				color: '#fff',
+				fontSize: fontSizeHeaderTwo,
+				zIndex: 3,
+				textAlignVertical: 'center',
+				marginLeft: 10,
 			},
 			settingsCover: {
 				flexDirection: 'row',
