@@ -27,7 +27,6 @@ import {
 	Image,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
-	Alert,
 	ScrollView,
 	BackHandler,
 } from 'react-native';
