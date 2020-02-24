@@ -130,8 +130,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
-		this.onCloseDrawer = this.onCloseDrawer.bind(this);
-		this.onOpenDrawer = this.onOpenDrawer.bind(this);
 		this.openDrawer = this.openDrawer.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.onPressGateway = this.onPressGateway.bind(this);
@@ -174,18 +172,18 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}, 'Schedule');
 	}
 
-	onOpenDrawer() {
+	onOpenDrawer = () => {
 		this.setState({ drawer: true });
 		if (this.props.screenReaderEnabled) {
 			announceForAccessibility(this.messageCloseMenu);
 		}
 	}
 
-	closeDrawer() {
+	closeDrawer = () => {
 		this.refs.drawer.closeDrawer();
 	}
 
-	onCloseDrawer() {
+	onCloseDrawer = () => {
 		this.setState({ drawer: false });
 	}
 
@@ -199,9 +197,16 @@ class AppNavigatorRenderer extends View<Props, State> {
 		navigate('LocationDetails', location, 'LocationDetails', navigateAction);
 	}
 
-	onOpenSetting() {
+	onOpenSetting(tabName?: string) {
 		this.closeDrawer();
-		navigate('Profile', {}, 'Profile');
+		let navigateAction;
+		if (tabName) {
+			navigateAction = NavigationActions.navigate({
+				routeName: tabName,
+				key: tabName,
+			});
+		}
+		navigate('Profile', {}, 'Profile', navigateAction);
 	}
 
 	onNavigationStateChange(prevState: Object, currentState: Object) {
@@ -283,6 +288,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout={appLayout}
 			isOpen={this.state.drawer}
 			onPressGateway={this.onPressGateway}
+			closeDrawer={this.closeDrawer}
 		/>;
 	}
 

@@ -26,20 +26,33 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { View } from '../../../BaseComponents';
+import {
+	View,
+	RippleButton,
+	Text,
+} from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
 	SettingsButton,
-	ConnectedLocations,
+	DrawerSubHeader,
 	NavigationHeader,
 	AddLocation,
+	SettingsLink,
 } from './DrawerSubComponents';
 
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
-import { hasStatusBar, getDrawerWidth, shouldUpdate } from '../../Lib';
+import {
+	hasStatusBar,
+	getDrawerWidth,
+	shouldUpdate,
+	navigate,
+} from '../../Lib';
 
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 type Props = {
 	gateways: Object,
@@ -51,10 +64,43 @@ type Props = {
 	addNewLocation: Function,
 	onPressGateway: () => void,
 	dispatch: Function,
+	closeDrawer: Function,
 };
 
 class Drawer extends View<Props, null> {
 	props: Props;
+
+	constructor(props: Props) {
+		super(props);
+
+		const {
+			onOpenSetting,
+		} = props;
+
+		this.SETTINGS = [
+			{
+				icon: 'phone',
+				text: i18n.appSettigs,
+				onPressLink: () => {
+					onOpenSetting('AppTab');
+				},
+			},
+			{
+				icon: 'user',
+				text: i18n.userProfile,
+				onPressLink: () => {
+					onOpenSetting('ProfileTab');
+				},
+			},
+			{
+				icon: 'faq',
+				text: i18n.labelHelpAndSupport,
+				onPressLink: () => {
+					onOpenSetting('SupportTab');
+				},
+			},
+		];
+	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return shouldUpdate(this.props, nextProps, [
@@ -63,6 +109,11 @@ class Drawer extends View<Props, null> {
 			'isOpen',
 			'appLayout',
 		]);
+	}
+
+	onPressGeoFence = () => {
+		this.props.closeDrawer();
+		navigate('GeoFenceNavigator', {}, 'GeoFenceNavigator');
 	}
 
 	render(): Object {
@@ -76,6 +127,15 @@ class Drawer extends View<Props, null> {
 			dispatch,
 		} = this.props;
 		const styles = this.getStyles(appLayout);
+
+		const settingLinks = this.SETTINGS.map((s: Object, index: number): Object => {
+			return <SettingsLink
+				key={index}
+				styles={styles}
+				textIntl={s.text}
+				iconName={s.icon}
+				onPressLink={s.onPressLink}/>;
+		});
 
 		return (
 			<ScrollView
@@ -91,11 +151,26 @@ class Drawer extends View<Props, null> {
 					flex: 1,
 					backgroundColor: 'white',
 				}}>
-					<ConnectedLocations styles={styles}/>
+					<View style={styles.settingsLinkCover}>
+						<DrawerSubHeader
+							textIntl={i18n.settingsHeader}
+							styles={styles}/>
+						{settingLinks}
+						<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
+							<MaterialIcons style={styles.linkIconStyle} name={'location-on'}/>
+							<Text style={styles.linkLabelStyle}>
+			Geo Fence Settings
+							</Text>
+						</RippleButton>
+					</View>
+					<DrawerSubHeader
+						textIntl={i18n.connectedGateways}
+						styles={styles}/>
 					{gateways.allIds.map((id: number, index: number): Object => {
 						return (<Gateway
 							gateway={gateways.byId[id]}
-							key={index} appLayout={appLayout}
+							key={index}
+							appLayout={appLayout}
 							onPressGateway={onPressGateway}
 							dispatch={dispatch}/>);
 					})}
@@ -112,6 +187,9 @@ class Drawer extends View<Props, null> {
 
 		const {
 			paddingFactor,
+			brandSecondary,
+			eulaContentColor,
+			brandPrimary,
 		} = Theme.Core;
 
 		const deviceWidth = isPortrait ? width : height;
@@ -125,6 +203,8 @@ class Drawer extends View<Props, null> {
 		const fontSizeRow = Math.floor(drawerWidth * 0.062);
 		const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
 
+		const fontSizeSettingsIcon = Math.floor(drawerWidth * 0.07);
+
 		const ImageSize = Math.floor(drawerWidth * 0.18);
 
 		return {
@@ -132,7 +212,7 @@ class Drawer extends View<Props, null> {
 				paddingVertical: padding * 2,
 				width: drawerWidth,
 				minWidth: 250,
-				backgroundColor: 'rgba(26,53,92,255)',
+				backgroundColor: brandPrimary,
 				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
 				flexDirection: 'row',
@@ -146,7 +226,7 @@ class Drawer extends View<Props, null> {
 				borderRadius: ImageSize / 2,
 			},
 			navigationHeaderText: {
-				color: '#e26901',
+				color: brandSecondary,
 				fontSize: fontSizeHeader,
 				zIndex: 3,
 				textAlignVertical: 'center',
@@ -160,9 +240,11 @@ class Drawer extends View<Props, null> {
 			},
 			navigationTitle: {
 				flexDirection: 'row',
-				marginVertical: 5 + (fontSizeRow * 0.5),
-				marginLeft: 10,
+				marginBottom: padding,
+				paddingVertical: padding / 2,
+				paddingLeft: 10,
 				alignItems: 'center',
+				backgroundColor: brandSecondary,
 			},
 			switchOrAdd: {
 				color: '#fff',
@@ -180,7 +262,7 @@ class Drawer extends View<Props, null> {
 			iconAddLocSize: fontSizeAddLocText * 1.2,
 			settingsIconSize: fontSizeRow * 1.6,
 			navigationTextTitle: {
-				color: 'rgba(26,53,92,255)',
+				color: '#fff',
 				fontSize: fontSizeRow,
 				marginLeft: 10,
 			},
@@ -189,8 +271,9 @@ class Drawer extends View<Props, null> {
 				minWidth: 100,
 			},
 			settingsText: {
-				color: 'white',
+				color: brandPrimary,
 				fontSize: fontSizeRow,
+				marginLeft: 10,
 			},
 			addNewLocationContainer: {
 				flexDirection: 'row',
@@ -203,8 +286,27 @@ class Drawer extends View<Props, null> {
 			},
 			addNewLocationText: {
 				fontSize: fontSizeAddLocText,
-				color: '#e26901',
+				color: brandSecondary,
 				marginLeft: 10,
+			},
+			settingsLinkCover: {
+				marginBottom: padding / 2,
+			},
+			linkCoverStyle: {
+				flexDirection: 'row',
+				paddingHorizontal: 10,
+				alignItems: 'center',
+				paddingVertical: padding / 2,
+			},
+			linkIconStyle: {
+				fontSize: fontSizeSettingsIcon,
+				color: brandSecondary,
+				marginRight: 8,
+				marginLeft: 10,
+			},
+			linkLabelStyle: {
+				fontSize: fontSizeAddLocText,
+				color: eulaContentColor,
 			},
 		};
 	}

@@ -92,10 +92,17 @@ const NavigationHeader = ({ firstName, lastName, email, styles }: Object): Objec
 	);
 };
 
-const ConnectedLocations = ({styles}: Object): Object => (
+const DrawerSubHeader = ({styles, textIntl}: Object): Object => (
 	<View style={styles.navigationTitle}>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.connectedLocations} style={styles.navigationTextTitle}/></Text>
+		<Text style={styles.navigationTextTitle}><FormattedMessage {...textIntl} style={styles.navigationTextTitle}/></Text>
 	</View>
+);
+
+const SettingsLink = ({styles, textIntl, iconName, onPressLink}: Object): Object => (
+	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
+		<IconTelldus style={styles.linkIconStyle} icon={iconName}/>
+		<Text style={styles.linkLabelStyle}><FormattedMessage {...textIntl} style={styles.linkLabelStyle}/></Text>
+	</RippleButton>
 );
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
@@ -103,13 +110,14 @@ const SettingsButton = ({ onPress, styles }: Object): Object => (
 		style={styles.settingsCover}
 		onPress={onPress}>
 		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
+		<Text style={styles.settingsText}><FormattedMessage {...i18n.settingsHeader} style={styles.settingsText} /></Text>
 	</RippleButton>
 );
 
 module.exports = {
 	SettingsButton,
-	ConnectedLocations,
+	DrawerSubHeader,
 	NavigationHeader,
 	AddLocation,
+	SettingsLink,
 };
