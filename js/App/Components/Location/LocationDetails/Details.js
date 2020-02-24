@@ -298,6 +298,61 @@ class Details extends View<Props, State> {
 		});
 	}
 
+	prepareDebugData = (data: Object): Object => {
+
+		const { appLayout } = this.props.screenProps;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		let body = Object.keys(data).map((d: string | Object): Object => {
+			let text = data[d];
+			if (typeof text === 'object') {
+				text = JSON.stringify(text);
+			} else if (typeof text === 'boolean') {
+				text = text.toString();
+			}
+			return (
+				<View style={{
+					flexDirection: 'row',
+					flexWrap: 'wrap',
+					width: deviceWidth * 0.75,
+					paddingHorizontal: 10,
+					paddingTop: 2,
+				}}>
+					<Text style={{
+						fontSize: 10,
+						color: Theme.Core.eulaContentColor,
+						flexWrap: 'wrap',
+					}}>
+						{`${d}: `}
+					</Text>
+					<Text style={{
+						fontSize: 10,
+						color: Theme.Core.rowTextColor,
+						flexWrap: 'wrap',
+					}}>
+						{text}
+					</Text>
+				</View>
+			);
+		});
+		return (
+			<ScrollView
+				style={{
+					flex: 1,
+				}}
+				contentContainerStyle={{
+					flexGrow: 1,
+					paddingVertical: 10,
+				}}>
+				{body}
+				{body}
+				{body}
+			</ScrollView>
+		);
+	}
+
 	onPressGatewayInfo() {
 		clearTimeout(this.timeoutInfoPress);
 		this.infoPressCount++;
@@ -306,8 +361,9 @@ class Details extends View<Props, State> {
 				location = {},
 				pushToken,
 				generatePushError,
-				playServicesInfo,
+				playServicesInfo = {},
 				deviceId,
+				screenProps,
 			} = this.props;
 			const {
 				online,
@@ -339,7 +395,17 @@ class Details extends View<Props, State> {
 					RSAKeysAreGenerated: this.RSAKeysAreGenerated,
 					RSAKeysRetrievableFromLocal: this.RSAKeysRetrievableFromLocal,
 				};
-				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
+				const dialogueData = {
+					show: true,
+					showPositive: true,
+					header: 'Gateway && Network Info',
+					text: ((): Object => {
+						return this.prepareDebugData(debugData);
+					})(),
+					showHeader: true,
+					closeOnPressPositive: true,
+				};
+				screenProps.toggleDialogueBox(dialogueData);
 			});
 		}
 		this.timeoutInfoPress = setTimeout(() => {
