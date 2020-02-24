@@ -209,10 +209,8 @@ function prepareGAPremiumProperties(): ThunkAction {
 			},
 		} = getState();
 
-		let isPremium = false, premiumDate = '';
-
 		const premAccounts = getPremiumAccounts(accounts);
-		isPremium = Object.keys(premAccounts).length > 0;
+		const isPremium = Object.keys(premAccounts).length > 0;
 
 		if (!isPremium) {
 			let dates = [];
@@ -230,20 +228,17 @@ function prepareGAPremiumProperties(): ThunkAction {
 			};
 		}
 
-		let dates = [], hasARecurringSubs = false;
+		let dates = [];
 		Object.keys(premAccounts).forEach((userId: string) => {
 			const { pro, subscriptions } = premAccounts[userId];
-			if (isAutoRenew(subscriptions)) {
-				hasARecurringSubs = true;
+			if (!isAutoRenew(subscriptions)) {
+				dates.push(pro);
 			}
-			dates.push(pro);
 		});
-
-		premiumDate = hasARecurringSubs ? '' : min(dates).toString();
 
 		return {
 			isPremium: 'true',
-			premiumDate,
+			premiumDate: dates.length > 0 ? min(dates).toString() : '',
 		};
 	};
 }
