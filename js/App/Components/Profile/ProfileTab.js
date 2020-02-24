@@ -157,6 +157,8 @@ const ProfileTab = (props: Object): Object => {
 		rbOuterSize,
 		throbberContainerStyle,
 		throbberStyle,
+		actionSheetButtonAccEmailText,
+		actionSheetTextCover,
 	} = getStyles(layout, {
 		showAddNewAccount,
 		isLoggingOut,
@@ -365,7 +367,7 @@ const ProfileTab = (props: Object): Object => {
 			lastname = '',
 			accessToken = {},
 		} = accounts[un];
-		const nameInfo = `${firstname} ${lastname}\n(${email})`;
+		const nameInfo = `${firstname} ${lastname}`;
 
 		let options = {
 			email,
@@ -393,9 +395,14 @@ const ProfileTab = (props: Object): Object => {
 					useQueryParamsInCacheKey={true}
 					sourceImg={avatar}
 					style={gravatarStyle}/>
-				<Text style={actionSheetButtonAccText}>
-					{nameInfo.trim()}
-				</Text>
+				<View style={actionSheetTextCover}>
+					<Text style={actionSheetButtonAccText}>
+						{nameInfo.trim()}
+					</Text>
+					<Text style={actionSheetButtonAccEmailText}>
+						{email}
+					</Text>
+				</View>
 				{
 					switchingId === uid.trim().toLowerCase() ?
 						<Throbber
@@ -709,6 +716,19 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			textAlign: 'left',
 			marginHorizontal: padding,
 			flex: 1,
+			fontWeight: 'bold',
+		},
+		actionSheetButtonAccEmailText: {
+			fontSize: fontSize * 0.9,
+			color: '#000',
+			textAlignVertical: 'center',
+			textAlign: 'left',
+			marginHorizontal: padding,
+		},
+		actionSheetTextCover: {
+			flex: 1,
+			alignItems: 'flex-start',
+			justifyContent: 'center',
 		},
 		addIconCoverStyle: {
 			borderRadius: addIconCoverSize / 2,
