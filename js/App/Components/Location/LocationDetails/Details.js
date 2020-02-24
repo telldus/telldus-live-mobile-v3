@@ -64,6 +64,7 @@ type Props = {
 	networkInfo: Object,
 	generatePushError: string,
 	playServicesInfo: Object,
+	deviceId: string,
 };
 
 type State = {
@@ -306,6 +307,7 @@ class Details extends View<Props, State> {
 				pushToken,
 				generatePushError,
 				playServicesInfo,
+				deviceId,
 			} = this.props;
 			const {
 				online,
@@ -329,6 +331,7 @@ class Details extends View<Props, State> {
 					connectionEffectiveType: effectiveType,
 					deviceName,
 					deviceUniqueID,
+					deviceUniqueIDCached: deviceId,
 					pushToken,
 					generatePushError,
 					websocketConnected,
@@ -646,6 +649,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		pushToken,
 		generatePushError,
 		playServicesInfo,
+		deviceId,
 	} = store.user;
 	const { networkInfo } = store.app;
 
@@ -655,6 +659,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		networkInfo,
 		generatePushError,
 		playServicesInfo,
+		deviceId,
 	};
 }
 
