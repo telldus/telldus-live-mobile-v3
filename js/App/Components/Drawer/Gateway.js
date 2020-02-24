@@ -102,7 +102,7 @@ class Gateway extends PureComponent<Props, null> {
 					h1Style={h1Style}
 					h2Style={h2Style}
 					onPress={this.onPress}/>
-				<View style={iconSettingsContainer}>
+				<View style={iconSettingsContainer} pointerEvents="none">
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
 			</View>
@@ -170,12 +170,15 @@ class Gateway extends PureComponent<Props, null> {
 				fontSize: fontSizeH3 * 2,
 			},
 			iconSettingsContainer: {
-				width: iconContainerWidth,
+				flex: 1,
 				alignItems: 'flex-end',
 				justifyContent: 'center',
 				position: 'absolute',
-				right: 5,
-				top: drawerWidth * 0.016,
+				right: 0,
+				left: 0,
+				top: 0,
+				bottom: 0,
+				paddingRight: 10,
 			},
 			coverStyle: {
 				paddingVertical: 5,

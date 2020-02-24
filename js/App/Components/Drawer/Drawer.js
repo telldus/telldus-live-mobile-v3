@@ -79,7 +79,12 @@ class Drawer extends View<Props, null> {
 			<ScrollView
 				style={{ flex: 1 }}
 				contentContainerStyle={{flexGrow: 1}}>
-				<NavigationHeader firstName={userProfile.firstname} appLayout={appLayout} lastName={userProfile.lastname} styles={styles}/>
+				<NavigationHeader
+					firstName={userProfile.firstname}
+					email={userProfile.email}
+					appLayout={appLayout}
+					lastName={userProfile.lastname}
+					styles={styles}/>
 				<View style={{
 					flex: 1,
 					backgroundColor: 'white',
@@ -110,13 +115,12 @@ class Drawer extends View<Props, null> {
 		const fontSizeRow = Math.floor(drawerWidth * 0.062);
 		const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
 
-		const ImageWidth = Math.floor(drawerWidth * 0.18);
-		const ImageHeight = Math.floor(drawerWidth * 0.186);
+		const ImageSize = Math.floor(drawerWidth * 0.18);
 
 		return {
 			navigationHeader: {
 				height: deviceHeight * 0.197,
-				width: isPortrait ? width * 0.6 : height * 0.6,
+				width: drawerWidth,
 				minWidth: 250,
 				backgroundColor: 'rgba(26,53,92,255)',
 				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
@@ -124,18 +128,18 @@ class Drawer extends View<Props, null> {
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'flex-end',
-				paddingLeft: 10,
+				paddingLeft: 15,
 			},
 			navigationHeaderImage: {
-				width: ImageWidth,
-				height: ImageHeight,
-				padding: 5,
+				width: ImageSize,
+				height: ImageSize,
+				borderRadius: ImageSize / 2,
 			},
 			navigationHeaderText: {
 				color: '#e26901',
 				fontSize: fontSizeHeader,
 				zIndex: 3,
-				textAlignVertical: 'bottom',
+				textAlignVertical: 'center',
 			},
 			navigationHeaderTextCover: {
 				flex: 1,

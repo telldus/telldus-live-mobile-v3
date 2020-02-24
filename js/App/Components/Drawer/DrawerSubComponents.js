@@ -22,13 +22,14 @@
 
 'use strict';
 import React from 'react';
+const gravatar = require('gravatar-api');
 
 import {
 	FormattedMessage,
 	Text,
 	View,
 	Icon,
-	Image,
+	CachedImage,
 	IconTelldus,
 	RippleButton,
 } from '../../../BaseComponents';
@@ -47,23 +48,39 @@ const AddLocation = ({onPress, styles}: Object): Object => {
 	);
 };
 
-const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
+const NavigationHeader = ({ firstName, lastName, email, styles }: Object): Object => {
+
+	let options = {
+		email,
+		parameters: { 'size': '200', 'd': 'mm' },
+		secure: true,
+	};
+	let avatar = gravatar.imageUrl(options);
+
 	return (
 		<View style={styles.navigationHeader}>
-			<Image style={styles.navigationHeaderImage}
-		       source={{uri: 'telldus'}}
-		       resizeMode={'contain'}/>
-			<View style={styles.navigationHeaderTextCover}>
-				<Text numberOfLines={1} style={styles.navigationHeaderText}>
-					{firstName}
-				</Text>
-				{lastName ?
+			<View style={{
+				flex: 0,
+				flexDirection: 'row',
+				alignItems: 'center',
+			}}>
+				<CachedImage
+					resizeMode={'cover'}
+					useQueryParamsInCacheKey={true}
+					sourceImg={avatar}
+					style={styles.navigationHeaderImage}/>
+				<View style={styles.navigationHeaderTextCover}>
 					<Text numberOfLines={1} style={styles.navigationHeaderText}>
-						{` ${lastName}`}
+						{firstName}
 					</Text>
-					:
-					null
-				}
+					{lastName ?
+						<Text numberOfLines={1} style={styles.navigationHeaderText}>
+							{` ${lastName}`}
+						</Text>
+						:
+						null
+					}
+				</View>
 			</View>
 		</View>
 	);
