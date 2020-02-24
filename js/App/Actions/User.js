@@ -23,6 +23,7 @@
 'use strict';
 import { format } from 'url';
 import axios from 'axios';
+import DeviceInfo from 'react-native-device-info';
 
 // User actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -39,11 +40,16 @@ import {
 	getUserProfile,
 } from './Login';
 
+const prepareDeviceId = (deviceId: string = ''): string => {
+	deviceId = deviceId.trim();
+	return (!deviceId || deviceId.length === 0) ? DeviceInfo.getUniqueID() : deviceId;
+};
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
  */
-const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string, pushServiceId: number ): ThunkAction => (dispatch: Function): Promise<any> => {
+const registerPushToken = (token: string, name: string, model: string, manufacturer: string, osVersion: string, deviceId: string = '', pushServiceId: number ): ThunkAction => (dispatch: Function): Promise<any> => {
+	deviceId = prepareDeviceId(deviceId);
 	const url = format({
 		pathname: '/user/registerPushToken',
 		query: {
