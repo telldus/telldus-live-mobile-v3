@@ -112,7 +112,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 
 		let userIdN = state.userId;
-		let { userId } = action.accessToken;
+		let { userId } = accessToken;
 		if (userId) {
 			userIdN = userId;
 			userId = userId.trim().toLowerCase();
@@ -120,7 +120,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			const existAccount = accounts[userId] || {};
 			newAccounts[userId] = {
 				...existAccount,
-				accessToken: action.accessToken,
+				accessToken,
 			};
 		} else if (userIdN) { // Refreshing access token
 			userId = userIdN.trim().toLowerCase();
@@ -129,7 +129,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			newAccounts[userId] = {
 				...existAccount,
 				accessToken: {
-					...action.accessToken,
+					...accessToken,
 					userId: uId,
 				},
 			};
@@ -137,7 +137,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 
 		return {
 			...state,
-			accessToken: accessToken,
+			accessToken,
 			registeredCredential: false,
 			isTokenValid: true,
 			accounts: newAccounts,
