@@ -229,6 +229,7 @@ _showSheet = () => {
 		toValue: 0,
 		duration: 250,
 		easing: Easing.out(Easing.ease),
+		useNativeDriver: true,
 	}).start();
 }
 
@@ -236,6 +237,7 @@ _hideSheet(callback?: Function) {
 	Animated.timing(this.state.sheetAnim, {
 		toValue: this.state.translateY,
 		duration: 200,
+		useNativeDriver: true,
 	}).start(callback);
 }
 
