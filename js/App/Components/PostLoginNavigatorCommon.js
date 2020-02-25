@@ -119,6 +119,7 @@ type Props = {
 type State = {
     addingNewLocation: boolean,
 	hasTriedAddLocation: boolean,
+	isDrawerOpen: boolean,
 };
 
 class PostLoginNavigatorCommon extends View<Props, State> {
@@ -143,6 +144,7 @@ constructor(props: Props) {
 	this.state = {
 		addingNewLocation: false,
 		hasTriedAddLocation: false,
+		isDrawerOpen: false,
 	};
 
 	this.timeOutConfigureLocalControl = null;
@@ -197,7 +199,13 @@ async componentDidMount() {
 }
 
 actionsToPerformOnStart = async () => {
-	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
+	const {
+		dispatch,
+		addNewGatewayBool,
+		subscriptions,
+		pro,
+		visibilityProExpireHeadsup,
+	} = this.props;
 
 	// NOTE : Make sure "fetchRemoteConfig" is called before 'checkPermissionAndInitializeWatcher'.
 	await dispatch(fetchRemoteConfig());
@@ -215,7 +223,8 @@ actionsToPerformOnStart = async () => {
 			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
 			this.pushConf(register);
 			if (
-				!pushTokenRegistered &&
+				!this.state.isDrawerOpen &&
+				!this.props.pushTokenRegistered &&
 				phonesList.phone &&
 				phonesList.phone.length > 0 &&
 				this.doesAllowsToOverrideScreen()
@@ -253,12 +262,16 @@ actionsToPerformOnStart = async () => {
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
 
-	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
+	const {
+		isDrawerOpen,
+		hasTriedAddLocation,
+	} = this.state;
+	if (!isDrawerOpen && addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
 		this.addNewLocation();
 	}
 
 	if (
+		!isDrawerOpen &&
 		premiumAboutToExpire(subscriptions, pro) &&
 		visibilityProExpireHeadsup !== 'hide_perm' &&
 		this.doesAllowsToOverrideScreen()
@@ -537,7 +550,16 @@ setRefSwitchAccountActionSheet = (ref: any) => {
 	this.refSwitchAccountActionSheet = ref;
 }
 
+toggleDrawerState = (isDrawerOpen: boolean) => {
+	this.setState({
+		isDrawerOpen,
+	});
+}
+
 render(): Object {
+	const {
+		isDrawerOpen,
+	} = this.state;
 
 	const {
 		showEULA,
@@ -550,7 +572,7 @@ render(): Object {
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEulaMdal = showEULA && !showChangeLog && this.doesAllowsToOverrideScreen();
+	const showEulaMdal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen();
 
 	return (
 		<View style={{flex: 1}}>
@@ -562,7 +584,8 @@ render(): Object {
 					addingNewLocation={this.state.addingNewLocation}
 					addNewDevice={this.addNewDevice}
 					addNewSensor={this.addNewSensor}
-					navigateToCampaign={this.navigateToCampaign}/>
+					navigateToCampaign={this.navigateToCampaign}
+					toggleDrawerState={this.toggleDrawerState}/>
 			</View>
 
 			<DimmerPopup

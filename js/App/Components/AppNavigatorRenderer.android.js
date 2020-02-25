@@ -71,6 +71,7 @@ type Props = {
 	navigateToCampaign: () => void,
 	addNewSensor: () => void,
 	showSwitchAccountActionSheet: () => void,
+	toggleDrawerState: (boolean) => void,
 };
 
 type State = {
@@ -184,6 +185,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	onOpenDrawer = () => {
+		this.props.toggleDrawerState(true);
 		this.setState({ drawer: true });
 		if (this.props.screenReaderEnabled) {
 			announceForAccessibility(this.messageCloseMenu);
@@ -203,6 +205,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	onCloseDrawer = () => {
+		this.props.toggleDrawerState(false);
 		this.setState({ drawer: false });
 	}
 
