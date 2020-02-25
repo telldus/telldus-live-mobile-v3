@@ -34,6 +34,7 @@ import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
+import SwitchAccountActionSheet from './AccountSettings/SwitchAccountActionSheet';
 
 const { AndroidWidget } = NativeModules;
 
@@ -63,7 +64,11 @@ import {
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
-import { widgetAndroidConfigure, widgetAndroidRefresh, widgetiOSConfigure } from '../Actions/Widget';
+import {
+	widgetAndroidConfigure,
+	widgetAndroidRefresh,
+	widgetiOSConfigure,
+} from '../Actions/Widget';
 import Push from './Push';
 
 import {
@@ -128,6 +133,8 @@ handleConnectivityChange: () => void;
 addNewLocation: () => void;
 addNewDevice: () => void;
 
+refSwitchAccountActionSheet: Object;
+
 screensAllowsNavigationOrModalOverride: Array<string>;
 
 constructor(props: Props) {
@@ -170,6 +177,8 @@ constructor(props: Props) {
 		'Scheduler',
 		'Gateways',
 	];
+
+	this.refSwitchAccountActionSheet = {};
 }
 
 async componentDidMount() {
@@ -518,7 +527,18 @@ onDoneDimming() {
 	this.props.dispatch(hideDimmerStep());
 }
 
+showSwitchAccountActionSheet = () => {
+	if (this.refSwitchAccountActionSheet && this.refSwitchAccountActionSheet.show) {
+		this.refSwitchAccountActionSheet.show();
+	}
+}
+
+setRefSwitchAccountActionSheet = (ref: any) => {
+	this.refSwitchAccountActionSheet = ref;
+}
+
 render(): Object {
+
 	const {
 		showEULA,
 		dimmer,
@@ -537,6 +557,7 @@ render(): Object {
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 				<AppNavigatorRenderer
 					{...this.props}
+					showSwitchAccountActionSheet={this.showSwitchAccountActionSheet}
 					addNewLocation={this.addNewLocation}
 					addingNewLocation={this.state.addingNewLocation}
 					addNewDevice={this.addNewDevice}
@@ -558,6 +579,8 @@ render(): Object {
 				/>
 			)}
 			<UserAgreement showModal={showEulaMdal} onLayout={this.onLayout}/>
+			<SwitchAccountActionSheet
+				ref={this.setRefSwitchAccountActionSheet}/>
 		</View>
 	);
 }

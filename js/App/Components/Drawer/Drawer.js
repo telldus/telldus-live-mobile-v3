@@ -65,6 +65,7 @@ type Props = {
 	onPressGateway: () => void,
 	dispatch: Function,
 	closeDrawer: Function,
+	showSwitchAccountActionSheet: () => void,
 };
 
 class Drawer extends View<Props, null> {
@@ -125,6 +126,7 @@ class Drawer extends View<Props, null> {
 			appLayout,
 			onPressGateway,
 			dispatch,
+			showSwitchAccountActionSheet,
 		} = this.props;
 		const {
 			drawerSubHeader,
@@ -149,7 +151,8 @@ class Drawer extends View<Props, null> {
 					email={userProfile.email}
 					appLayout={appLayout}
 					lastName={userProfile.lastname}
-					styles={styles}/>
+					styles={styles}
+					onPress={showSwitchAccountActionSheet}/>
 				<View style={{
 					flex: 1,
 					backgroundColor: 'white',

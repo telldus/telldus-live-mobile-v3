@@ -70,6 +70,7 @@ type Props = {
 	toggleDialogueBox: (Object) => void,
 	navigateToCampaign: () => void,
 	addNewSensor: () => void,
+	showSwitchAccountActionSheet: () => void,
 };
 
 type State = {
@@ -98,6 +99,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	addNewDevice: () => void;
 	addNewSensor: () => void;
+
+	timeoutCloseDrawer: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -138,6 +141,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.newSchedule = this.newSchedule.bind(this);
 		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
+
+		this.timeoutCloseDrawer = null;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -155,6 +160,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 
 		return false;
+	}
+
+	componentWillUnmount() {
+		if (this.timeoutCloseDrawer) {
+			clearTimeout(this.timeoutCloseDrawer);
+		}
 	}
 
 	addNewLocation() {
@@ -177,6 +188,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 		if (this.props.screenReaderEnabled) {
 			announceForAccessibility(this.messageCloseMenu);
 		}
+	}
+
+	showSwitchAccountActionSheet = () => {
+		this.closeDrawer();
+		this.timeoutCloseDrawer = setTimeout(() => {
+			this.props.showSwitchAccountActionSheet();
+			this.timeoutCloseDrawer = null;
+		}, 300);
 	}
 
 	closeDrawer = () => {
@@ -289,6 +308,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			isOpen={this.state.drawer}
 			onPressGateway={this.onPressGateway}
 			closeDrawer={this.closeDrawer}
+			showSwitchAccountActionSheet={this.showSwitchAccountActionSheet}
 		/>;
 	}
 

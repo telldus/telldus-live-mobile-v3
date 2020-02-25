@@ -48,7 +48,7 @@ const AddLocation = ({onPress, styles}: Object): Object => {
 	);
 };
 
-const NavigationHeader = ({ firstName, lastName, email, styles }: Object): Object => {
+const NavigationHeader = ({ firstName, lastName, email, styles, onPress }: Object): Object => {
 
 	let options = {
 		email,
@@ -59,7 +59,8 @@ const NavigationHeader = ({ firstName, lastName, email, styles }: Object): Objec
 
 	return (
 		<RippleButton
-			style={styles.navigationHeader}>
+			style={styles.navigationHeader}
+			onPress={onPress}>
 			<View style={{
 				flex: 0,
 				flexDirection: 'row',
