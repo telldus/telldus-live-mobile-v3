@@ -136,6 +136,19 @@ function createSupportTicketGeneral(gatewayId: number, ticketData: TicketData): 
 	};
 }
 
+function createSupportInAppDebugData(debugData: Object): ThunkAction {
+	return (dispatch: Function, getState: Function): any => {
+		let data = JSON.stringify({
+			'alert': false,
+			'source': 'API',
+			'autorespond': true,
+			'subject': 'Gateway and Network Info',
+			...debugData,
+		});
+		return dispatch(createSupportTicket(data));
+	};
+}
+
 function createSupportTicket(data: string): ThunkAction {
 	return (dispatch: Function, getState: Object): any => {
 		return axios({
@@ -170,5 +183,6 @@ module.exports = {
 	createSupportTicketLCT,
 	createSupportTicketGeneral,
 	setNetworkConnectionInfo,
+	createSupportInAppDebugData,
 };
 

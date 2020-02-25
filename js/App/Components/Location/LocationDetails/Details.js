@@ -42,6 +42,9 @@ import {
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
+import {
+	createSupportInAppDebugData,
+} from '../../../Actions/App';
 import { getGatewayInfo, getGateways, removeGateway } from '../../../Actions/Gateways';
 import { getAppData } from '../../../Actions/AppData';
 import {
@@ -69,6 +72,7 @@ type Props = {
 type State = {
 	isLoading: boolean,
 	showTestLocalControl: boolean,
+	isContactingSupport: boolean,
 };
 
 class Details extends View<Props, State> {
@@ -124,6 +128,7 @@ class Details extends View<Props, State> {
 		this.state = {
 			isLoading: false,
 			showTestLocalControl: false,
+			isContactingSupport: false,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -346,10 +351,60 @@ class Details extends View<Props, State> {
 					paddingVertical: 10,
 				}}>
 				{body}
-				{body}
-				{body}
 			</ScrollView>
 		);
+	}
+
+	contactSupport = (debugData: Object) => {
+		const { dispatch, screenProps } = this.props;
+		const { intl } = screenProps;
+		const { formatMessage } = intl;
+		const { isContactingSupport } = this.state;
+
+		const errorH = formatMessage(i18n.errorCannotCreateTicketH);
+		const errorB = formatMessage(i18n.errorCannotCreateTicketB, {url: 'support.telldus.com.'});
+
+		if (!isContactingSupport) {
+			this.setState({
+				isContactingSupport: true,
+			});
+			dispatch(createSupportInAppDebugData(debugData)).then((ticketNum: number) => {
+				if (ticketNum && typeof ticketNum === 'number') {
+					this.showDialogue(formatMessage(i18n.labelSupportTicketCreated), formatMessage(i18n.messageSupportTicket, {ticketNum}));
+				} else {
+					this.showDialogue(errorH, errorB);
+				}
+				this.setState({
+					isContactingSupport: false,
+				});
+			}).catch((error: Object) => {
+				let errMess = errorB;
+				if (error.request && error.request.responseText === 'The request timed out.') {
+					errMess = formatMessage(i18n.errorTimeoutCannotCreateTicketB, {url: 'support.telldus.com.'});
+				}
+				this.showDialogue(errorH, errMess);
+				this.setState({
+					isContactingSupport: false,
+				});
+			});
+		}
+	}
+
+	showDialogue(header: string, text: string) {
+		const { screenProps } = this.props;
+		const { toggleDialogueBox } = screenProps;
+
+		const dialogueData = {
+			show: true,
+			showPositive: true,
+			header,
+			imageHeader: true,
+			text,
+			showHeader: true,
+			closeOnPressPositive: true,
+			capitalizeHeader: false,
+		};
+		toggleDialogueBox(dialogueData);
 	}
 
 	onPressGatewayInfo() {
@@ -377,11 +432,28 @@ class Details extends View<Props, State> {
 				const tokenExpired = hasTokenExpired(ttl);
 				const deviceName = DeviceInfo.getDeviceName();
 				const deviceUniqueID = DeviceInfo.getUniqueID();
+
+				const {
+					ttl: ttlToSend = 'null',
+					address = 'null',
+					port = 'null',
+					macAddress = 'null',
+					uuid = 'null',
+					key = 'null',
+					supportLocal = 'null',
+				 } = localKey;
+
 				const debugData = {
 					online,
 					websocketOnline,
 					websocketConnected,
-					...localKey,
+					ttl: ttlToSend,
+					address,
+					port,
+					macAddress,
+					uuid,
+					key,
+					supportLocal,
 					tokenExpired,
 					connectionType: type,
 					connectionEffectiveType: effectiveType,
@@ -397,12 +469,27 @@ class Details extends View<Props, State> {
 				const dialogueData = {
 					show: true,
 					showPositive: true,
+					positiveText: 'SEND TO SUPPORT TEAM',
+					negativeText: 'CLOSE',
+					showNegative: true,
 					header: 'Gateway && Network Info',
 					text: ((): Object => {
 						return this.prepareDebugData(debugData);
 					})(),
 					showHeader: true,
 					closeOnPressPositive: true,
+					closeOnPressNegative: true,
+					onPressPositive: () => {
+						this.contactSupport(debugData);
+					},
+					notificationModalFooterStyle: {
+						flexDirection: 'column',
+						alignItems: 'flex-end',
+						justifyContent: 'center',
+					},
+					notificationModalFooterPositiveTextCoverStyle: {
+						paddingRight: 15,
+					},
 				};
 				screenProps.toggleDialogueBox(dialogueData);
 			});
@@ -457,7 +544,7 @@ class Details extends View<Props, State> {
 	}
 
 	render(): Object | null {
-		const { isLoading } = this.state;
+		const { isLoading, isContactingSupport } = this.state;
 		const { location, screenProps, networkInfo } = this.props;
 		const { appLayout } = screenProps;
 		const { height, width } = appLayout;
@@ -590,17 +677,23 @@ class Details extends View<Props, State> {
 						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
 					</TouchableOpacity>
 					{supportLocalControl && (
-						<TouchableButton text={i18n.labelTestLocalControl} style={{
-							marginTop: padding,
-							minWidth: minWidthButton,
-							backgroundColor: disableButton ? inactiveSwitchBackground : btnPrimaryBg,
-						}}
-						onPress={this.onPressTestLocalControl}/>
+						<TouchableButton
+							text={i18n.labelTestLocalControl}
+							style={{
+								marginTop: padding,
+								minWidth: minWidthButton,
+								backgroundColor: disableButton ? inactiveSwitchBackground : btnPrimaryBg,
+							}}
+							disabled={isContactingSupport}
+							onPress={this.onPressTestLocalControl}/>
 					)}
 					<View style={styles.buttonCover}>
-						<TouchableButton text={this.labelDelete} style={[styles.button, {
-							minWidth: minWidthButton,
-						}]} onPress={isLoading ? null : this.onPressRemoveLocation}/>
+						<TouchableButton
+							disabled={isContactingSupport}
+							text={this.labelDelete} style={[styles.button, {
+								minWidth: minWidthButton,
+							}]}
+							onPress={isLoading ? null : this.onPressRemoveLocation}/>
 						{isLoading &&
 					(
 						<Throbber
