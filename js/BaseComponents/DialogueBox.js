@@ -64,6 +64,8 @@ type Props = {
 	capitalizeHeader?: boolean,
 	negTextColor?: string,
 	posTextColor?: string,
+	notificationModalFooterPositiveTextCoverStyle: number | Object | Array<any>,
+	notificationModalFooterStyle: number | Object | Array<any>,
 };
 
 type defaultProps = {
@@ -233,7 +235,14 @@ class DialogueBox extends Component<Props, null> {
 	}
 
 	renderFooter(styles: Object): any {
-		const { positiveText, negativeText, showNegative, showPositive } = this.props;
+		const {
+			positiveText,
+			negativeText,
+			showNegative,
+			showPositive,
+			notificationModalFooterStyle,
+			notificationModalFooterPositiveTextCoverStyle,
+		} = this.props;
 		if (!showNegative && !showPositive) {
 			return null;
 		}
@@ -246,7 +255,7 @@ class DialogueBox extends Component<Props, null> {
 		let accessibilityLabelNegative = `${nText} ${this.labelButton} ${this.labelButtondefaultDescription}`;
 
 		return (
-			<View style={styles.notificationModalFooter}>
+			<View style={[styles.notificationModalFooterDef, notificationModalFooterStyle]}>
 				{showNegative ?
 					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {
 						marginRight: showPositive ? 5 : 0,
@@ -262,7 +271,7 @@ class DialogueBox extends Component<Props, null> {
 				{showPositive ?
 					<TouchableOpacity style={[styles.notificationModalFooterTextCover, {
 						paddingRight: 30,
-					}]}
+					}, notificationModalFooterPositiveTextCoverStyle]}
 					onPress={this.onPressPositive}
 					accessibilityLabel={accessibilityLabelPositive}>
 						<Text style={styles.notificationModalFooterPositiveText}>{pText}</Text>
@@ -409,7 +418,7 @@ class DialogueBox extends Component<Props, null> {
 				fontSize,
 				color: '#6B6969',
 			},
-			notificationModalFooter: {
+			notificationModalFooterDef: {
 				alignItems: 'center',
 				justifyContent: 'flex-end',
 				flexDirection: 'row',
