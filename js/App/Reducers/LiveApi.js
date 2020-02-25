@@ -45,6 +45,9 @@ function reduceRefetchLiveApi(state: Object = initialState, action: Action): Obj
 	if (action.type === 'LOGGED_OUT') {
 		return {};
 	}
+	if (action.type === 'SWITCH_USER_ACCOUNT') {
+		return {};
+	}
 	return state;
 }
 
