@@ -346,8 +346,6 @@ class Details extends View<Props, State> {
 					paddingVertical: 10,
 				}}>
 				{body}
-				{body}
-				{body}
 			</ScrollView>
 		);
 	}
