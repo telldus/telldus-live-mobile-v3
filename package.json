@@ -32,7 +32,7 @@
     "global": "~4.3.2",
     "gravatar-api": "^1.5.0",
     "intl": "~1.2.5",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#5f8982b442fee76c739d9b5b50e323a30d0f3959",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#9bff470a4d2fded19dcae228e74c3c2742042171",
     "lodash": "~4.17.11",
     "moment": "~2.24.0",
     "moment-timezone": "~0.5.23",
