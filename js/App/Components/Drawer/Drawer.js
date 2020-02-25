@@ -126,7 +126,10 @@ class Drawer extends View<Props, null> {
 			onPressGateway,
 			dispatch,
 		} = this.props;
-		const styles = this.getStyles(appLayout);
+		const {
+			drawerSubHeader,
+			...styles
+		 } = this.getStyles(appLayout);
 
 		const settingLinks = this.SETTINGS.map((s: Object, index: number): Object => {
 			return <SettingsLink
@@ -154,18 +157,29 @@ class Drawer extends View<Props, null> {
 					<View style={styles.settingsLinkCover}>
 						<DrawerSubHeader
 							textIntl={i18n.settingsHeader}
-							styles={styles}/>
+							styles={drawerSubHeader}/>
 						{settingLinks}
+					</View>
+					<View style={styles.settingsLinkCover}>
+						<DrawerSubHeader
+							textIntl={i18n.settingsHeader}
+							styles={drawerSubHeader}/>
 						<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
 							<MaterialIcons style={styles.linkIconStyle} name={'location-on'}/>
 							<Text style={styles.linkLabelStyle}>
-			Geo Fence Settings
+			GeoFence Settings
 							</Text>
 						</RippleButton>
 					</View>
 					<DrawerSubHeader
-						textIntl={i18n.connectedGateways}
-						styles={styles}/>
+						textIntl={i18n.locationsLayoutTitle}
+						styles={{
+							...drawerSubHeader,
+							navigationTitle: {
+								...drawerSubHeader.navigationTitle,
+								marginBottom: 0,
+							},
+						}}/>
 					{gateways.allIds.map((id: number, index: number): Object => {
 						return (<Gateway
 							gateway={gateways.byId[id]}
@@ -214,7 +228,7 @@ class Drawer extends View<Props, null> {
 				minWidth: 250,
 				backgroundColor: brandPrimary,
 				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-				paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+				paddingBottom: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -238,13 +252,20 @@ class Drawer extends View<Props, null> {
 				alignItems: 'flex-end',
 				paddingLeft: 10,
 			},
-			navigationTitle: {
-				flexDirection: 'row',
-				marginBottom: padding,
-				paddingVertical: padding / 2,
-				paddingLeft: 10,
-				alignItems: 'center',
-				backgroundColor: brandSecondary,
+			drawerSubHeader: {
+				navigationTitle: {
+					flexDirection: 'row',
+					marginBottom: padding,
+					paddingVertical: padding / 2,
+					paddingLeft: 10,
+					alignItems: 'center',
+					backgroundColor: brandSecondary,
+				},
+				navigationTextTitle: {
+					color: '#fff',
+					fontSize: fontSizeRow,
+					marginLeft: 10,
+				},
 			},
 			switchOrAdd: {
 				color: '#fff',
@@ -261,11 +282,6 @@ class Drawer extends View<Props, null> {
 			},
 			iconAddLocSize: fontSizeAddLocText * 1.2,
 			settingsIconSize: fontSizeRow * 1.6,
-			navigationTextTitle: {
-				color: '#fff',
-				fontSize: fontSizeRow,
-				marginLeft: 10,
-			},
 			settingsButton: {
 				padding: 6,
 				minWidth: 100,
@@ -290,13 +306,13 @@ class Drawer extends View<Props, null> {
 				marginLeft: 10,
 			},
 			settingsLinkCover: {
-				marginBottom: padding / 2,
+				marginBottom: padding * 0.9,
 			},
 			linkCoverStyle: {
 				flexDirection: 'row',
 				paddingHorizontal: 10,
 				alignItems: 'center',
-				paddingVertical: padding / 2,
+				paddingVertical: padding * 0.9,
 			},
 			linkIconStyle: {
 				fontSize: fontSizeSettingsIcon,
