@@ -842,9 +842,21 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 
 	const { addDevice433 = {}} = state.addDevice;
 
+	const {
+		dashboard,
+		user: { userId },
+		app: {defaultSettings},
+	} = state;
+
+	const { activeDashboardId } = defaultSettings || {};
+
+	const { devicesById = {} } = dashboard;
+	const userDbsAndDevicesById = devicesById[userId] || {};
+	const devicesByIdInCurrentDb = userDbsAndDevicesById[activeDashboardId] || {};
+
 	return {
 		device: device ? device : {},
-		inDashboard: !!state.dashboard.devicesById[id],
+		inDashboard: !!devicesByIdInCurrentDb[id],
 		isGatewayReachable: online && websocketOnline,
 		addDevice433,
 		transports,

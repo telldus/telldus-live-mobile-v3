@@ -157,8 +157,21 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object): Object {
+
+	const {
+		dashboard,
+		user: { userId },
+		app: {defaultSettings},
+	} = store;
+
+	const { activeDashboardId } = defaultSettings || {};
+
+	const { sensorIds = {} } = dashboard;
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+
 	return {
-		sensorIds: store.dashboard.sensorIds,
+		sensorIds: sensorIdsInCurrentDb,
 	};
 }
 

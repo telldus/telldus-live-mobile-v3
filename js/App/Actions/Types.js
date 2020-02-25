@@ -46,8 +46,18 @@ export type Action =
 	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
-	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }
-	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
+	| { type: 'ADD_TO_DASHBOARD', payload: {
+		kind: 'device' | 'sensor',
+		id: number,
+		userId: string,
+		dashboardId: string,
+	}}
+	| { type: 'REMOVE_FROM_DASHBOARD', payload: {
+		kind: 'device' | 'sensor',
+		id: number,
+		userId: string,
+		dashboardId: string,
+	}}
 
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
 	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE', id: number, displayType: string }

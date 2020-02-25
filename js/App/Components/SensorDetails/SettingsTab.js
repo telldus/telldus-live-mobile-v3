@@ -684,9 +684,22 @@ function mapDispatchToProps(dispatch: Function): Object {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
 	const sensor = state.sensors.byId[id];
+
+	const {
+		dashboard,
+		user: { userId },
+		app: {defaultSettings},
+	} = state;
+
+	const { activeDashboardId } = defaultSettings || {};
+
+	const { sensorsById = {} } = dashboard;
+	const userDbsAndSensorsById = sensorsById[userId] || {};
+	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
+
 	return {
 		sensor: sensor ? sensor : {},
-		inDashboard: !!state.dashboard.sensorsById[id],
+		inDashboard: !!sensorsByIdInCurrentDb[id],
 	};
 }
 

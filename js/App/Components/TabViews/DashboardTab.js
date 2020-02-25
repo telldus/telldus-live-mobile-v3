@@ -567,18 +567,26 @@ const getRows = createSelector(
 		({ sensors }: Object): Object => sensors,
 		({ gateways }: Object): Object => gateways,
 		({ app }: Object): Object => app,
+		({ user }: Object): Object => user,
 	],
-	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
 	const { deviceIds = [], sensorIds = []} = state.dashboard;
 	const { defaultSettings } = state.app;
-	const { dbCarousel = true } = defaultSettings || {};
+	const { dbCarousel = true, activeDashboardId } = defaultSettings || {};
+
+	const { userId } = state.user;
+
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
 	return {
 		rows: getRows(state),
-		isDBEmpty: (deviceIds.length === 0) && (sensorIds.length === 0),
+		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0),
 		dbCarousel,
 	};
 }

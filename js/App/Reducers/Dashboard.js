@@ -23,8 +23,22 @@
 import orderBy from 'lodash/orderBy';
 import { hasTokenExpired } from '../Lib/LocalControl';
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}): Array<Object> {
-	const deviceItems = dashboard.deviceIds.map((deviceId: number): Object => {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
+
+	const { defaultSettings } = app;
+	const { activeDashboardId } = defaultSettings;
+
+	const { userId } = user;
+
+	const { sensorIds = {}, deviceIds = {} } = dashboard;
+
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+
+	const deviceItems = deviceIdsInCurrentDb.map((deviceId: number): Object => {
 		let device = devices.byId[deviceId] || {};
 		let { clientId } = device;
 		let gateway = gateways.byId[clientId];
@@ -53,7 +67,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	});
 
 	const sensorItems = [];
-	dashboard.sensorIds.map((sensorId: number) => {
+	sensorIdsInCurrentDb.map((sensorId: number) => {
 		let sensor = sensors.byId[sensorId] || {};
 		let { clientId, name } = sensor;
 
@@ -94,7 +108,6 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			});
 		}
 	});
-	const { defaultSettings = {} } = app;
 	const { sortingDB } = defaultSettings;
 	let orderedList = [...deviceItems, ...sensorItems];
 	if (sortingDB === 'Alphabetical') {
