@@ -434,27 +434,11 @@ class Details extends View<Props, State> {
 				const deviceName = DeviceInfo.getDeviceName();
 				const deviceUniqueID = DeviceInfo.getUniqueID();
 
-				const {
-					ttl: ttlToSend = 'null',
-					address = 'null',
-					port = 'null',
-					macAddress = 'null',
-					uuid = 'null',
-					key = 'null',
-					supportLocal = 'null',
-				 } = localKey;
-
 				const debugData = {
 					online,
 					websocketOnline,
 					websocketConnected,
-					ttl: ttlToSend,
-					address,
-					port,
-					macAddress,
-					uuid,
-					key,
-					supportLocal,
+					...localKey,
 					tokenExpired,
 					connectionType: type,
 					connectionEffectiveType: effectiveType,

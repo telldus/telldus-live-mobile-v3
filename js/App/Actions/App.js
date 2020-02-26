@@ -137,24 +137,29 @@ function createSupportTicketGeneral(gatewayId: number, ticketData: TicketData): 
 }
 
 function createSupportInAppDebugData(debugData: Object): ThunkAction {
-	let finalData = {};
-	Object.keys(debugData).forEach((d: string | Object) => {
-		const item = debugData[d];
-		if (typeof item === 'object') {
-			finalData[d] = JSON.stringify(item);
-		} else if (typeof item === 'undefined' || item === null) {
-			finalData[d] = 'null';
-		} else {
-			finalData[d] = item;
-		}
-	});
 	return (dispatch: Function, getState: Function): any => {
+
+		const { user } = getState();
+		const { userProfile = {} } = user;
+		const { email } = userProfile;
+
+		let stringifiedData = '';
+		Object.keys(debugData).forEach((d: any) => {
+			const item = debugData[d];
+			if (typeof item === 'object') {
+				stringifiedData += `${d}: ${JSON.stringify(item)}\n`;
+			} else {
+				stringifiedData += `${d}: ${item}\n`;
+			}
+		});
+
 		let data = JSON.stringify({
 			'alert': false,
 			'source': 'API',
 			'autorespond': true,
 			'subject': 'Gateway and Network Info',
-			...finalData,
+			'message': stringifiedData,
+			email,
 		});
 		return dispatch(createSupportTicket(data));
 	};
@@ -162,6 +167,7 @@ function createSupportInAppDebugData(debugData: Object): ThunkAction {
 
 function createSupportTicket(data: string): ThunkAction {
 	return (dispatch: Function, getState: Object): any => {
+		console.log('TEST data', data);
 		return axios({
 			method: 'post',
 			headers: {
@@ -176,6 +182,8 @@ function createSupportTicket(data: string): ThunkAction {
 			.then((response: Object): Object => {
 				return response.data;
 			}).catch((error: any) => {
+				console.log('TEST error', error);
+				console.log('TEST error.res', error.response);
 				throw error;
 			});
 	};
