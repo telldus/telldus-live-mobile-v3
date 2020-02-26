@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, LayoutAnimation } from 'react-native';
+import { ScrollView, LayoutAnimation, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
@@ -31,6 +31,7 @@ import {
 	TabBar,
 	SettingsRow,
 	TouchableButton,
+	EditBox,
 } from '../../../../BaseComponents';
 
 import { LearnButton } from '../../TabViews/SubViews';
@@ -52,6 +53,7 @@ import {
 	setDeviceParameter,
 	getDeviceInfoCommon,
 	toggleStatusUpdatedViaScan433MHZ,
+	setDeviceName,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -93,6 +95,8 @@ type State = {
 	settings433MHz: Object | null,
 	widget433MHz: string | null,
 	isSaving433MhzParams: boolean,
+	editName: boolean,
+	deviceName: string,
 };
 
 
@@ -149,6 +153,8 @@ class SettingsTab extends View {
 			settings433MHz,
 			widget433MHz,
 			isSaving433MhzParams: false,
+			editName: false,
+			deviceName: props.device.name,
 		};
 
 		let { formatMessage } = props.screenProps.intl;
@@ -210,6 +216,7 @@ class SettingsTab extends View {
 	componentWillUnmount() {
 		clearTimeout(this.markAsFailedTimeoutOne);
 		clearTimeout(this.markAsFailedTimeoutTwo);
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
 	get433MHzDeviceSettings(): Object {
@@ -570,6 +577,69 @@ class SettingsTab extends View {
 		return hasChanged;
 	}
 
+	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+	}
+
+	handleBackPress = (): boolean => {
+		const { editName } = this.state;
+		if (editName) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			this.setState({
+				editName: false,
+				deviceName: this.props.device.name,
+			});
+			return true;
+		}
+		return false;
+	}
+
+	editName = () => {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		this.setState({
+			editName: true,
+		});
+	}
+
+	onChangeName = (deviceName: string) => {
+		this.setState({
+			deviceName,
+		});
+	}
+
+	submitName = () => {
+		const { deviceName } = this.state;
+		const { dispatch, device, screenProps } = this.props;
+		const { toggleDialogueBox, intl } = screenProps;
+
+		if (!deviceName || !deviceName.trim()) {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: intl.formatMessage(i18n.errorNameFieldEmpty),
+				showPositive: true,
+			});
+			return;
+		}
+
+		dispatch(setDeviceName(device.id, deviceName)).then(() => {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			dispatch(getDeviceInfoCommon(device.id));
+			this.setState({
+				editName: false,
+			});
+		}).catch((err: Object) => {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			this.setState({
+				editName: false,
+				deviceName: device.name,
+			});
+			const	message = err.message ? err.message : null;
+			dispatch(showToast(message));
+		});
+	}
+
 	render(): Object | null {
 		const {
 			isHidden,
@@ -580,6 +650,8 @@ class SettingsTab extends View {
 			settings433MHz,
 			widget433MHz,
 			isSaving433MhzParams,
+			editName,
+			deviceName,
 		} = this.state;
 		const {
 			device,
@@ -596,6 +668,7 @@ class SettingsTab extends View {
 			clientId,
 			transport,
 			nodeInfo = {},
+			name,
 		} = device;
 
 		if (!id && !excludeActive) {
@@ -604,6 +677,7 @@ class SettingsTab extends View {
 
 		const {
 			container,
+			containerWhenEditName,
 			touchableButtonCommon,
 			brandDanger,
 			btnDisabledBg,
@@ -612,7 +686,23 @@ class SettingsTab extends View {
 			brandSecondary,
 			learnButtonWithScan,
 			labelStyle,
+			editBoxStyle,
 		} = this.getStyle(appLayout);
+
+		if (editName) {
+			return (
+				<View style={containerWhenEditName}>
+					<EditBox
+						value={deviceName}
+						icon={'sensor'}
+						label={formatMessage(i18n.name)}
+						onChangeText={this.onChangeName}
+						onSubmitEditing={this.submitName}
+						appLayout={appLayout}
+						containerStyle={editBoxStyle}/>
+				</View>
+			);
+		}
 
 		const { LEARN } = supportedMethods;
 
@@ -641,7 +731,6 @@ class SettingsTab extends View {
 				backgroundColor: Theme.Core.appBackground,
 			}}>
 				{excludeActive ?
-
 					<ExcludeDevice
 						clientId={clientId}
 						appLayout={appLayout}
@@ -661,6 +750,15 @@ class SettingsTab extends View {
 								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:
 							<>
+							<SettingsRow
+								type={'text'}
+								edit={true}
+								onPress={this.editName}
+								label={formatMessage(i18n.name)}
+								value={name}
+								appLayout={appLayout}
+								intl={intl}
+								keyboardTypeInLineEdit={'default'}/>
 								<SettingsRow
 									label={formatMessage(i18n.showOnDashborad)}
 									onValueChange={this.onValueChange}
@@ -796,6 +894,12 @@ class SettingsTab extends View {
 				paddingTop: padding / 2,
 				backgroundColor: appBackground,
 			},
+			containerWhenEditName: {
+				flex: 1,
+				paddingHorizontal: padding,
+				paddingBottom: padding,
+				paddingTop: padding / 2,
+			},
 			touchableButtonCommon: {
 				marginTop: padding * 2,
 				minWidth: Math.floor(deviceWidth * 0.6),
@@ -818,6 +922,9 @@ class SettingsTab extends View {
 			},
 			labelStyle: {
 				fontSize: fontSize2,
+			},
+			editBoxStyle: {
+				marginTop: padding * 2,
 			},
 		};
 	}
