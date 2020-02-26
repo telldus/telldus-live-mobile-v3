@@ -68,6 +68,9 @@ type Props = {
 	powerConsumed: string | null,
 	currentTemp?: number,
 	propsSwipeRow: Object,
+	offColorMultiplier: number,
+	onColorMultiplier: number,
+
 	onBell: (number) => void,
 	onDown: (number) => void,
 	onUp: (number) => void,
@@ -159,6 +162,8 @@ class DeviceRow extends View<Props, State> {
 			const propsChange = shouldUpdate(otherProps, nextOtherProps, [
 				'appLayout', 'device', 'setScrollEnabled', 'isGatewayActive', 'powerConsumed',
 				'isNew', 'gatewayId', 'isLast', 'currentTemp',
+				'offColorMultiplier',
+				'onColorMultiplier',
 			]);
 			if (propsChange) {
 				return true;
@@ -263,6 +268,8 @@ class DeviceRow extends View<Props, State> {
 			onPressDeviceAction,
 			screenReaderEnabled,
 			currentTemp,
+			offColorMultiplier,
+			onColorMultiplier,
 		} = this.props;
 		const { isInState, name, deviceType, supportedMethods = {}, stateValues = {} } = device;
 		const styles = this.getStyles(appLayout, isGatewayActive, isInState);
@@ -300,10 +307,10 @@ class DeviceRow extends View<Props, State> {
 		if (typeof rgbValue !== 'undefined' && isGatewayActive) {
 			let mainColorRGB = getMainColorRGB(rgbValue);
 
-			offColorRGB = getOffColorRGB(mainColorRGB);
+			offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
 			iconOffColor = offColorRGB;
 
-			colorDeviceIconBack = prepareMainColor(mainColorRGB);
+			colorDeviceIconBack = prepareMainColor(mainColorRGB, onColorMultiplier);
 			iconOnColor = colorDeviceIconBack;
 			iconOnBGColor = colorDeviceIconBack;
 
@@ -360,6 +367,8 @@ class DeviceRow extends View<Props, State> {
 			button.unshift(
 				<RGBButton
 					{...sharedProps}
+					onColorMultiplier={onColorMultiplier}
+					offColorMultiplier={offColorMultiplier}
 					openRGBControl={this.openRGBControl}
 					setScrollEnabled={this.props.setScrollEnabled}
 					showSlider={!BELL && !UP && !DOWN && !STOP}
@@ -674,9 +683,18 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
+	const { firebaseRemoteConfig = {} } = store.user;
+	const { rgb = JSON.stringify({}) } = firebaseRemoteConfig;
+	const {
+		onColorMultiplier,
+		offColorMultiplier,
+	} = JSON.parse(rgb);
+
 	return {
 		powerConsumed,
 		currentTemp,
+		onColorMultiplier,
+		offColorMultiplier,
 	};
 }
 
