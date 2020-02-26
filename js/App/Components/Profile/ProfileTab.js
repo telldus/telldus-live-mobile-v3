@@ -51,6 +51,9 @@ import {
 } from '../Premium/SubViews';
 
 import capitalize from '../../Lib/capitalize';
+import {
+	isAutoRenew,
+} from '../../Lib/appUtils';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -90,14 +93,7 @@ const ProfileTab = (props: Object): Object => {
 		pHistoryCStyle,
 	} = getStyles(layout);
 
-	let showAuto = false;
-	Object.keys(subscriptions).map((key: string) => {
-		const {
-			product,
-			status,
-		} = subscriptions[key];
-		showAuto = product === 'premium' && status === 'active';
-	});
+	let showAuto = isAutoRenew(subscriptions);
 	const isBasic = moment().unix() > pro;
 
 	function onPressViewPurchaseHistory() {
