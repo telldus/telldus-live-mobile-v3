@@ -138,7 +138,7 @@ function createSupportTicketGeneral(gatewayId: number, ticketData: TicketData): 
 
 function createSupportInAppDebugData(debugData: Object): ThunkAction {
 	let finalData = {};
-	Object.keys(debugData).forEach((d: string | Object): string => {
+	Object.keys(debugData).forEach((d: string | Object) => {
 		const item = debugData[d];
 		if (typeof item === 'object') {
 			finalData[d] = JSON.stringify(item);
