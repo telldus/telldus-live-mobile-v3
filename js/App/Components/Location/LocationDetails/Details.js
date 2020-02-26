@@ -309,7 +309,7 @@ class Details extends View<Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		let body = Object.keys(data).map((d: string | Object): Object => {
+		let body = Object.keys(data).map((d: string | Object, index: number): Object => {
 			let text = data[d];
 			if (typeof text === 'object') {
 				text = JSON.stringify(text);
@@ -323,7 +323,8 @@ class Details extends View<Props, State> {
 					width: deviceWidth * 0.75,
 					paddingHorizontal: 10,
 					paddingTop: 2,
-				}}>
+				}}
+				key={index}>
 					<Text style={{
 						fontSize: 10,
 						color: Theme.Core.eulaContentColor,
