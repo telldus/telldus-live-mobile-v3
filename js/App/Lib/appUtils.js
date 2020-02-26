@@ -93,14 +93,17 @@ function hasTellStickNetGetOne(gatewaysById: Object): boolean {
 
 function premiumAboutToExpire(subscriptions: Object = {}, pro: number): boolean {
 	let auto = false;
-	Object.keys(subscriptions).map((key: string) => {
+	for (let key in subscriptions) {
 		const {
 			product,
 			status,
 		} = subscriptions[key];
-		auto = product === 'premium' && status === 'active';
-	});
-	if (auto) {
+		if (product === 'premium' && (status === 'active' || status === 'trialing')) {
+			auto = true;
+			break;
+		}
+	}
+	if (auto) {// Auto renew it is
 		return false;
 	}
 	if (moment().unix() > pro) {// Already expired
