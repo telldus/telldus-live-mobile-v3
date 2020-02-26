@@ -58,7 +58,8 @@ type Props = {
 	onButtonColor?: string,
 	iconOnColor?: string,
 	iconOffColor?: string,
-
+	offColorMultiplier: number,
+	onColorMultiplier: number,
 
 	intl: Object,
 	isGatewayActive: boolean,
@@ -87,7 +88,7 @@ type DefaultProps = {
 	commandDIM: number,
 };
 
-class DimmerButton extends View<Props, null> {
+class RGBButton extends View<Props, null> {
 	props: Props;
 
 	parentScrollEnabled: boolean;
@@ -143,6 +144,8 @@ class DimmerButton extends View<Props, null> {
 			'offButtonColor',
 			'iconOffColor',
 			'iconOnColor',
+			'offColorMultiplier',
+			'onColorMultiplier',
 		]);
 		if (propsChange) {
 			return true;
@@ -236,6 +239,8 @@ class DimmerButton extends View<Props, null> {
 			offButtonColor,
 			iconOnColor,
 			iconOffColor,
+			offColorMultiplier,
+			onColorMultiplier,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -309,7 +314,9 @@ class DimmerButton extends View<Props, null> {
 			>
 				<RGBPalette
 					{...sharedProps}
-					rgb={stateValues.RGB}/>
+					rgb={stateValues.RGB}
+					onColorMultiplier={onColorMultiplier}
+					offColorMultiplier={offColorMultiplier}/>
 			</HVSliderContainer>
 		) : null;
 
@@ -381,4 +388,4 @@ function mapStateToProps(store: Object, dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DimmerButton);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(RGBButton);

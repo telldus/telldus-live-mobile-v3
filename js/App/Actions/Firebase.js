@@ -29,6 +29,7 @@ import type { ThunkAction, Action } from './Types';
 const remoteConfigs = [
 	'geoFenceFeature',
 	'premiumPurchase',
+	'rgb',
 ];
 
 const fetchRemoteConfig = (): ThunkAction => {
@@ -44,6 +45,10 @@ const fetchRemoteConfig = (): ThunkAction => {
 			},
 			premiumPurchase: {
 				enable: false,
+			},
+			rgb: {
+				onColorMultiplier: 0.7,
+				offColorMultiplier: 0.55,
 			},
 		});
 

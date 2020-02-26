@@ -56,6 +56,8 @@ type Props = {
     powerConsumed?: number,
 	appLayout: Object,
 	currentTemp?: number,
+	offColorMultiplier: number,
+	onColorMultiplier: number,
 
     style: Object,
 	setScrollEnabled: (boolean) => void,
@@ -100,7 +102,13 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['item', 'powerConsumed', 'currentTemp']);
+	const propsChange = shouldUpdate(others, othersN, [
+		'item',
+		'powerConsumed',
+		'currentTemp',
+		'offColorMultiplier',
+		'onColorMultiplier',
+	]);
 	if (propsChange) {
 		return true;
 	}
@@ -124,7 +132,13 @@ openRGBControl = () => {
 
 getButtonsInfo(item: Object, styles: Object): Object {
 	let { supportedMethods = {}, isInState, isOnline, deviceType, stateValues = {} } = item, buttons = [], buttonsInfo = [];
-	let { tileWidth, setScrollEnabled, onPressDimButton } = this.props;
+	let {
+		tileWidth,
+		setScrollEnabled,
+		onPressDimButton,
+		offColorMultiplier,
+		onColorMultiplier,
+	} = this.props;
 	const {
 		TURNON,
 		TURNOFF,
@@ -148,10 +162,10 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	if (typeof rgbValue !== 'undefined' && isOnline) {
 		let mainColorRGB = getMainColorRGB(rgbValue);
 
-		offColorRGB = getOffColorRGB(mainColorRGB);
+		offColorRGB = getOffColorRGB(mainColorRGB, offColorMultiplier);
 		iconOffColor = offColorRGB;
 
-		colorDeviceIconBack = prepareMainColor(mainColorRGB);
+		colorDeviceIconBack = prepareMainColor(mainColorRGB, onColorMultiplier);
 		iconOnColor = colorDeviceIconBack;
 	}
 	colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
@@ -399,10 +413,19 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const powerConsumed = getPowerConsumed(store.sensors.byId, clientDeviceId, clientId, deviceType);
 	const currentTemp = getThermostatValue(store.sensors.byId, clientDeviceId, clientId);
 
+	const { firebaseRemoteConfig = {} } = store.user;
+	const { rgb = JSON.stringify({}) } = firebaseRemoteConfig;
+	const {
+		onColorMultiplier,
+		offColorMultiplier,
+	} = JSON.parse(rgb);
+
 	return {
 		appLayout: store.app.layout,
 		powerConsumed,
 		currentTemp,
+		onColorMultiplier,
+		offColorMultiplier,
 	};
 }
 

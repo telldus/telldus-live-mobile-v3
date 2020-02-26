@@ -39,6 +39,8 @@ type Props = {
 	isInState: string,
 	fontSize?: number,
 	fontSizeIcon?: number,
+	offColorMultiplier: number,
+	onColorMultiplier: number,
 };
 
 type DefaultProps = {
@@ -59,10 +61,18 @@ class RGBPalette extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { displayedValue, rgb, isInState, fontSize, fontSizeIcon, isGatewayActive } = this.props;
+		const {
+			displayedValue,
+			rgb,
+			isInState,
+			fontSize,
+			fontSizeIcon,
+			isGatewayActive,
+			onColorMultiplier,
+		} = this.props;
 
-		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb)) : '#eeeeee';
-		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : prepareMainColor(getMainColorRGB(rgb));
+		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb), onColorMultiplier) : '#eeeeee';
+		let iconColor = isInState === 'DIM' || isInState === 'RGB' ? '#FFF' : prepareMainColor(getMainColorRGB(rgb), onColorMultiplier);
 
 		mainColor = isGatewayActive ? mainColor : '#eeeeee';
 		iconColor = isGatewayActive ? iconColor : '#a2a2a2';
