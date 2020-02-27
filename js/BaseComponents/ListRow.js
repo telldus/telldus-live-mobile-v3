@@ -57,7 +57,7 @@ type Props = {
 	appLayout: Object,
 };
 
-const ListRow = React.memo<Object>((props: Props): Object => {
+const ListRow: Object = React.memo<Object>((props: Props): Object => {
 
 	const {
 		children,

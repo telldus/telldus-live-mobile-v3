@@ -71,7 +71,7 @@ import {
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-const AppTab = React.memo<Object>((props: Object): Object => {
+const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	const { screenProps, navigation } = props;
 	const intl = useIntl();
 	const { formatMessage } = intl;

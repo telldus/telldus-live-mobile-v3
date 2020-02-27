@@ -57,7 +57,7 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
-const ProfileTab = React.memo<Object>((props: Object): Object => {
+const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	const { screenProps: {
 		toggleDialogueBox,
 		intl,
