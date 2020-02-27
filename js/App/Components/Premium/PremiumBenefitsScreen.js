@@ -303,4 +303,4 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-export default PremiumBenefitsScreen;
+export default React.memo<Object>(PremiumBenefitsScreen);

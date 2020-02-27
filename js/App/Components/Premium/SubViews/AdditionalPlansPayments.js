@@ -101,4 +101,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default AdditionalPlansPayments;
+export default React.memo<Object>(AdditionalPlansPayments);

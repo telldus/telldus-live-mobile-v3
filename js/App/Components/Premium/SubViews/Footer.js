@@ -74,4 +74,4 @@ const Footer = (props: Object): Object => {
 
 };
 
-export default Footer;
+export default React.memo<Object>(Footer);

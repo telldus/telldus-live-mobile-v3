@@ -282,4 +282,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default SMSHistoryScreen;
+export default React.memo<Object>(SMSHistoryScreen);

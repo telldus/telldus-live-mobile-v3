@@ -398,4 +398,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default RegisterForPushScreen;
+export default React.memo<Object>(RegisterForPushScreen);

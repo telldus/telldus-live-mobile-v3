@@ -35,4 +35,4 @@ const EmptyView = (props: Object): Object => {
 		}}/>;
 };
 
-export default EmptyView;
+export default React.memo<Object>(EmptyView);

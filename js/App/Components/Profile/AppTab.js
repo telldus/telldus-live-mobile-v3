@@ -313,4 +313,4 @@ AppTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default AppTab;
+export default React.memo<Object>(AppTab);

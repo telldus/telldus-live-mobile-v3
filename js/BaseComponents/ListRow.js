@@ -172,4 +172,4 @@ ListRow.defaultProps = {
 	},
 };
 
-export default ListRow;
+export default React.memo<Object>(ListRow);

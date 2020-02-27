@@ -164,5 +164,5 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default SSetting;
+export default React.memo<Object>(SSetting);
 

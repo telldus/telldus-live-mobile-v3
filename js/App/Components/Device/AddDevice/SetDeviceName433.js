@@ -225,4 +225,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default SetDeviceName433;
+export default React.memo<Object>(SetDeviceName433);

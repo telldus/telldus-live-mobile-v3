@@ -293,4 +293,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default BuySMSCreditsScreen;
+export default React.memo<Object>(BuySMSCreditsScreen);

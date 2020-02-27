@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default FormattedNumberComponent;
+export default React.memo<Object>(FormattedNumberComponent);

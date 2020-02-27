@@ -232,4 +232,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default ManageSubscriptionScreen;
+export default React.memo<Object>(ManageSubscriptionScreen);

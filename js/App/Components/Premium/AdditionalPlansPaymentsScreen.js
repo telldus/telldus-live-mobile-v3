@@ -436,4 +436,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default AdditionalPlansPaymentsScreen;
+export default React.memo<Object>(AdditionalPlansPaymentsScreen);

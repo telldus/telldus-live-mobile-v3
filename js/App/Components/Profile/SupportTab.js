@@ -264,4 +264,4 @@ SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default SupportTab;
+export default React.memo<Object>(SupportTab);

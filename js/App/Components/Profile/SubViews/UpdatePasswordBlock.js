@@ -76,4 +76,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default UpdatePasswordBlock;
+export default React.memo<Object>(UpdatePasswordBlock);

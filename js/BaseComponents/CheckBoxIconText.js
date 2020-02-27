@@ -142,4 +142,4 @@ CheckBoxIconText.defaultProps = {
 	checkBoxColor: '#fff',
 };
 
-export default CheckBoxIconText;
+export default React.memo<Object>(CheckBoxIconText);

@@ -180,4 +180,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default NumberedBlock;
+export default React.memo<Object>(NumberedBlock);

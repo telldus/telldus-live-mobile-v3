@@ -191,5 +191,5 @@ const getStyles = (appLayout: Object, index: number): Object => {
 	};
 };
 
-export default Block;
+export default React.memo<Object>(Block);
 

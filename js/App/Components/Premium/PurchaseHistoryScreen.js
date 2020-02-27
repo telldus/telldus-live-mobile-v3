@@ -294,4 +294,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default PurchaseHistoryScreen;
+export default React.memo<Object>(PurchaseHistoryScreen);

@@ -203,4 +203,4 @@ const getStyle = (appLayout: Object): Object => {
 	};
 };
 
-export default PaymentProvidersBlock;
+export default React.memo<Object>(PaymentProvidersBlock);

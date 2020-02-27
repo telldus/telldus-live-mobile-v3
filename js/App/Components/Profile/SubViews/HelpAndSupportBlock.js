@@ -183,4 +183,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default HelpAndSupportBlock;
+export default React.memo<Object>(HelpAndSupportBlock);
