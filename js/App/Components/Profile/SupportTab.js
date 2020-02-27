@@ -67,7 +67,7 @@ const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 	return newData;
 };
 
-const SupportTab = React.memo<Object>((props: Object): Object => {
+const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	const { navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 

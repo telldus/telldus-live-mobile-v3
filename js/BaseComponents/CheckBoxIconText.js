@@ -41,7 +41,7 @@ type Props = {
 	intl: Object,
 };
 
-const CheckBoxIconText = React.memo<Object>((props: Props): Object => {
+const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 
 	const {
 		onToggleCheckBox,
