@@ -137,7 +137,7 @@ const ProfileTab = (props: Object): Object => {
 					style={style}
 					enablePurchase={enable}
 				/>)}
-				{isBasic && <PremiumInfoContent/>}
+				{(isBasic && enable) && <PremiumInfoContent/>}
 				{(isBasic && enable) && <UpgradePremiumButton
 					navigation={navigation}/>}
 				{enable && (
@@ -147,14 +147,16 @@ const ProfileTab = (props: Object): Object => {
 						</Text>
 					</TouchableOpacity>
 				)}
-				<TouchableOpacity onPress={onPressRedeemGift}>
-					<View style={redeemCoverStyle}>
-						<IconTelldus icon={'gift'} style={redeemIconStyle}/>
-						<Text style={redeemTextSyle}>
-							{capitalize(formatMessage(i18n.redeemCard))}
-						</Text>
-					</View>
-				</TouchableOpacity>
+				{enable && (
+					<TouchableOpacity onPress={onPressRedeemGift}>
+						<View style={redeemCoverStyle}>
+							<IconTelldus icon={'gift'} style={redeemIconStyle}/>
+							<Text style={redeemTextSyle}>
+								{capitalize(formatMessage(i18n.redeemCard))}
+							</Text>
+						</View>
+					</TouchableOpacity>
+				)}
 				{!isBasic && (<SMSBlock
 					navigation={navigation}
 					contentCoverStyle={contentCoverStyleENB}
