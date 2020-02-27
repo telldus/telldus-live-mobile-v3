@@ -426,13 +426,13 @@ class Details extends View<Props, State> {
 				localKey = {},
 				websocketConnected,
 			} = location;
-			NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+			NetInfo.getConnectionInfo().then(async (connectionInfo: Object) => {
 				this.infoPressCount = 0;
 				const { type, effectiveType } = connectionInfo;
 				const { ttl = null } = localKey;
 				const tokenExpired = hasTokenExpired(ttl);
-				const deviceName = DeviceInfo.getDeviceName();
-				const deviceUniqueID = DeviceInfo.getUniqueID();
+				const deviceName = await DeviceInfo.getDeviceName();
+				const deviceUniqueID = DeviceInfo.getUniqueId();
 
 				const debugData = {
 					online,

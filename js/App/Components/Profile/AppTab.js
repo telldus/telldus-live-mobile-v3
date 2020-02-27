@@ -134,25 +134,27 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		}
 	}
 
-	function confirmTokenSubmit() {
+	async function confirmTokenSubmit() {
 		setIsPushSubmitLoading(true);
 
-		let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+		let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
 		for (let key in phonesList) {
 			let { deviceId: idInList, token: tokenInList } = phonesList[key];
 			// UUID/deviceId already found among push registered devices list
 			// - If pushToken in the store matches with token in the list, it
 			// must be the same device that is already registered[NO WORRIES THERE]
 			// - But if tokens does not match then most probably, two different devices
-			// seem to give same UUID/DeviceInfo.getUniqueID().
+			// seem to give same UUID/DeviceInfo.getUniqueId().
 			// In that case modify deviceId before re-register.
 			if (idInList === uniqueId && tokenInList !== pushToken) {
 				uniqueId = `${uniqueId}-anomaly`;
 			}
 		}
 		if (pushToken) {
-			let dName = deviceName ? deviceName : DeviceInfo.getDeviceName();
-			dispatch(registerPushToken(pushToken, dName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), uniqueId, pushServiceId)).then((response: Object) => {
+			const _deviceName = await DeviceInfo.getDeviceName();
+			const manufacturer = await DeviceInfo.getManufacturer();
+			let dName = deviceName ? deviceName : _deviceName;
+			dispatch(registerPushToken(pushToken, dName, DeviceInfo.getModel(), manufacturer, DeviceInfo.getSystemVersion(), uniqueId, pushServiceId)).then((response: Object) => {
 				let message = formatMessage(i18n.pushRegisterSuccess);
 				dispatch(showToast(message));
 				dispatch(getPhonesList()).then(() => {

@@ -118,11 +118,13 @@ const Push = {
 	}: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
 			return firebase.messaging().getToken()
-				.then((token: string): string => {
+				.then(async (token: string): string => {
 					if (token && (!pushToken || pushToken !== token || !pushTokenRegistered)) {
 						if (register) {
-							const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-							dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+							const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
+							const deviceName = await DeviceInfo.getDeviceName();
+							const manufacturer = await DeviceInfo.getManufacturer();
+							dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), manufacturer, DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 						}
 						dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 					} else {
@@ -180,11 +182,13 @@ const Push = {
 	},
 	refreshTokenListener: ({ deviceId, register }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Function => {
-			return firebase.messaging().onTokenRefresh((token: string) => {
+			return firebase.messaging().onTokenRefresh(async (token: string) => {
 				if (token) {
 					if (register) {
-						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
-						dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
+						const deviceName = await DeviceInfo.getDeviceName();
+						const manufacturer = await DeviceInfo.getManufacturer();
+						dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), manufacturer, DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 					}
 					dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 				}

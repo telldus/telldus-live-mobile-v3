@@ -23,6 +23,7 @@
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import sectionListGetItemLayout from 'react-native-section-list-get-item-layout';
+import * as RNLocalize from 'react-native-localize';
 
 import { forceLocale } from '../../Config';
 import Theme from '../Theme';
@@ -39,13 +40,16 @@ function getLocale(short: boolean = true): string {
 	if (forceLocale) {
 		return forceLocale;
 	}
-	let localeIdentifier = DeviceInfo.getDeviceLocale();
+
+	const locales = RNLocalize.getLocales();
+	let { languageTag } = locales[0];
+
 	if (!short) {
-		return localeIdentifier.replace('_', '-');
+		return languageTag.replace('_', '-');
 	}
-	let parts = localeIdentifier.includes('-') ? localeIdentifier.split('-') : localeIdentifier.split('_');
+	let parts = languageTag.includes('-') ? languageTag.split('-') : languageTag.split('_');
 	if (parts.length === 0) {
-		return 'en';
+		return parts;
 	}
 	return parts[0];
 }

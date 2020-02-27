@@ -61,6 +61,7 @@ type DefaultProps = {
 
 type State = {
 	keyboard: boolean,
+	hasStatusBar: boolean,
 };
 
 class NavigationHeader extends PureComponent<Props, State> {
@@ -86,6 +87,8 @@ class NavigationHeader extends PureComponent<Props, State> {
 		forceHideStatus: false,
 	}
 
+	_hasStatusBar: () => void;
+
 	constructor(props: Props) {
 		super(props);
 		this.isTablet = DeviceInfo.isTablet();
@@ -95,7 +98,10 @@ class NavigationHeader extends PureComponent<Props, State> {
 
 		this.state = {
 			keyboard: false,
+			hasStatusBar: false,
 		};
+
+		this._hasStatusBar();
 
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
@@ -110,6 +116,13 @@ class NavigationHeader extends PureComponent<Props, State> {
 		  'keyboardDidHide',
 		  this._keyboardDidHide,
 		);
+	}
+
+	_hasStatusBar = async () => {
+		const _hasStatusBar = await hasStatusBar();
+		this.setState({
+			hasStatusBar: _hasStatusBar,
+		});
 	}
 
 	componentWillUnmount() {
@@ -168,7 +181,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
 
-		const statusBarHeight = topMargin && hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0;
+		const statusBarHeight = topMargin && this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0;
 
 		if (height < width && !this.isTablet) {
 			return <View style={{

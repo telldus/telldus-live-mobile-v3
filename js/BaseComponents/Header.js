@@ -28,10 +28,10 @@ import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { hasStatusBar } from '../App/Lib';
 import Theme from '../App/Theme';
 
-import Base from './Base';
 import computeProps from './computeProps';
 import Button from './Button';
 import View from './View';
+import Base from './Base';
 import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
@@ -39,15 +39,15 @@ import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
 
 type Props = {
-	children: Object,
-	logoStyle: Object | number,
-	rounded: number,
-	searchBar: ?Object,
-	rightButton: Object,
+	children?: Object,
+	logoStyle?: Object | number,
+	rounded?: number,
+	searchBar?: ?Object,
+	rightButton?: Object,
 	leftButton: Object,
 	appLayout: Object,
 	showAttentionCapture: boolean,
-	attentionCaptureText: string,
+	attentionCaptureText?: string,
 	forceHideStatus?: boolean,
 };
 
@@ -62,6 +62,9 @@ export default class HeaderComponent extends Base {
 	paddingHorizontal: number;
 	paddingTop: number;
 	props: Props;
+	state: Object;
+
+	getTheme: () => Object;
 
 	static defaultProps: DefaultProps = {
 		showAttentionCapture: false,
@@ -74,6 +77,24 @@ export default class HeaderComponent extends Base {
 	renderRightButton: (Object) => Object;
 	renderLeftButton: (Object) => Object;
 	renderButtonContent: (Object) => Object;
+
+	_hasStatusBar: () => void;
+
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			hasStatusBar: false,
+		};
+
+		this._hasStatusBar();
+	}
+
+	_hasStatusBar = async () => {
+		const _hasStatusBar = await hasStatusBar();
+		this.setState({
+			hasStatusBar: _hasStatusBar,
+		});
+	}
 
 	getInitialStyle(): Object {
 		let { appLayout } = this.props;
@@ -416,7 +437,7 @@ export default class HeaderComponent extends Base {
 		return (
 			<View style={{ flex: 0 }}>
 				{
-					(!forceHideStatus && Platform.OS === 'android' && hasStatusBar()) ? (
+					(!forceHideStatus && Platform.OS === 'android' && this.state.hasStatusBar) ? (
 						<View style={this.getInitialStyle().statusBar}/>
 					) : null
 				}

@@ -40,168 +40,191 @@ import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
 import { hasStatusBar, getDrawerWidth, shouldUpdate } from '../../Lib';
 
 type Props = {
-	gateways: Object,
-	appLayout: Object,
-	isOpen: boolean,
+gateways: Object,
+appLayout: Object,
+isOpen: boolean,
 
-	userProfile: Function,
-	onOpenSetting: Function,
-	addNewLocation: Function,
-	onPressGateway: () => void,
-	dispatch: Function,
+userProfile: Function,
+onOpenSetting: Function,
+addNewLocation: Function,
+onPressGateway: () => void,
+dispatch: Function,
 };
 
-class Drawer extends View<Props, null> {
-	props: Props;
+type State = {
+	hasStatusBar: boolean,
+};
 
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { appLayout, isOpen, ...others } = this.props;
-		const { appLayout: appLayoutN, isOpen: isOpenN, ...othersN } = nextProps;
-		if (isOpenN) {
-			if (!isOpen) {
-				return true;
-			}
+class Drawer extends View<Props, State> {
+props: Props;
+state: State;
 
-			if (appLayout.width !== appLayoutN.width) {
-				return true;
-			}
+_hasStatusBar: () => void;
 
-			const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
-			if (propsChange) {
-				return true;
-			}
+constructor(props: Props) {
+	super(props);
+	this.state = {
+		hasStatusBar: false,
+	};
 
-			return false;
+	this._hasStatusBar();
+}
+
+_hasStatusBar = async () => {
+	const _hasStatusBar = await hasStatusBar();
+	this.setState({
+		hasStatusBar: _hasStatusBar,
+	});
+}
+
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	const { appLayout, isOpen, ...others } = this.props;
+	const { appLayout: appLayoutN, isOpen: isOpenN, ...othersN } = nextProps;
+	if (isOpenN) {
+		if (!isOpen) {
+			return true;
+		}
+
+		if (appLayout.width !== appLayoutN.width) {
+			return true;
+		}
+
+		const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
+		if (propsChange) {
+			return true;
 		}
 
 		return false;
 	}
 
-	render(): Object {
-		const {
-			gateways,
-			userProfile,
-			onOpenSetting,
-			addNewLocation,
-			appLayout,
-			onPressGateway,
-			dispatch,
-		} = this.props;
-		const styles = this.getStyles(appLayout);
+	return false;
+}
 
-		return (
-			<ScrollView
-				style={{ flex: 1 }}
-				contentContainerStyle={{flexGrow: 1}}>
-				<NavigationHeader firstName={userProfile.firstname} appLayout={appLayout} lastName={userProfile.lastname} styles={styles}/>
-				<View style={{
-					flex: 1,
-					backgroundColor: 'white',
-				}}>
-					<ConnectedLocations styles={styles}/>
-					{gateways.allIds.map((id: number, index: number): Object => {
-						return (<Gateway
-							gateway={gateways.byId[id]}
-							key={index} appLayout={appLayout}
-							onPressGateway={onPressGateway}
-							dispatch={dispatch}/>);
-					})}
-					<AddLocation onPress={addNewLocation} styles={styles}/>
-					<SettingsButton onPress={onOpenSetting} styles={styles}/>
-				</View>
-			</ScrollView>
-		);
-	}
+render(): Object {
+	const {
+		gateways,
+		userProfile,
+		onOpenSetting,
+		addNewLocation,
+		appLayout,
+		onPressGateway,
+		dispatch,
+	} = this.props;
+	const styles = this.getStyles(appLayout);
 
-	getStyles(appLayout: Object): Object {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-		const deviceWidth = isPortrait ? width : height;
-		const drawerWidth = getDrawerWidth(deviceWidth);
-
-		const fontSizeHeader = Math.floor(drawerWidth * 0.072);
-		const fontSizeRow = Math.floor(drawerWidth * 0.062);
-		const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
-
-		const ImageWidth = Math.floor(drawerWidth * 0.18);
-		const ImageHeight = Math.floor(drawerWidth * 0.186);
-
-		return {
-			navigationHeader: {
-				height: deviceHeight * 0.197,
-				width: isPortrait ? width * 0.6 : height * 0.6,
-				minWidth: 250,
-				backgroundColor: 'rgba(26,53,92,255)',
-				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-				paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				flexDirection: 'row',
-				justifyContent: 'center',
-				alignItems: 'flex-end',
-				paddingLeft: 10,
-			},
-			navigationHeaderImage: {
-				width: ImageWidth,
-				height: ImageHeight,
-				padding: 5,
-			},
-			navigationHeaderText: {
-				color: '#e26901',
-				fontSize: fontSizeHeader,
-				zIndex: 3,
-				textAlignVertical: 'bottom',
-			},
-			navigationHeaderTextCover: {
+	return (
+		<ScrollView
+			style={{ flex: 1 }}
+			contentContainerStyle={{flexGrow: 1}}>
+			<NavigationHeader firstName={userProfile.firstname} appLayout={appLayout} lastName={userProfile.lastname} styles={styles}/>
+			<View style={{
 				flex: 1,
-				flexDirection: 'row',
-				flexWrap: 'wrap',
-				justifyContent: 'flex-start',
-				alignItems: 'flex-end',
-				paddingLeft: 10,
-			},
-			navigationTitle: {
-				flexDirection: 'row',
-				marginVertical: 5 + (fontSizeRow * 0.5),
-				marginLeft: 10,
-				alignItems: 'center',
-			},
-			settingsCover: {
-				flexDirection: 'row',
-				paddingVertical: 5 + (fontSizeRow * 0.5),
-				marginLeft: 12,
-				alignItems: 'center',
-			},
-			iconAddLocSize: fontSizeAddLocText * 1.2,
-			settingsIconSize: fontSizeRow * 1.6,
-			navigationTextTitle: {
-				color: 'rgba(26,53,92,255)',
-				fontSize: fontSizeRow,
-				marginLeft: 10,
-			},
-			settingsButton: {
-				padding: 6,
-				minWidth: 100,
-			},
-			settingsText: {
-				color: 'white',
-				fontSize: fontSizeRow,
-			},
-			addNewLocationContainer: {
-				flexDirection: 'row',
-				borderBottomWidth: 1,
-				borderBottomColor: '#eeeeef',
-				marginLeft: 16,
-				marginRight: 10,
-				marginVertical: 5 + (fontSizeAddLocText * 0.5),
-				justifyContent: 'flex-start',
-			},
-			addNewLocationText: {
-				fontSize: fontSizeAddLocText,
-				color: '#e26901',
-				marginLeft: 10,
-			},
-		};
-	}
+				backgroundColor: 'white',
+			}}>
+				<ConnectedLocations styles={styles}/>
+				{gateways.allIds.map((id: number, index: number): Object => {
+					return (<Gateway
+						gateway={gateways.byId[id]}
+						key={index} appLayout={appLayout}
+						onPressGateway={onPressGateway}
+						dispatch={dispatch}/>);
+				})}
+				<AddLocation onPress={addNewLocation} styles={styles}/>
+				<SettingsButton onPress={onOpenSetting} styles={styles}/>
+			</View>
+		</ScrollView>
+	);
+}
+
+getStyles(appLayout: Object): Object {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceHeight = isPortrait ? height : width;
+	const deviceWidth = isPortrait ? width : height;
+	const drawerWidth = getDrawerWidth(deviceWidth);
+
+	const fontSizeHeader = Math.floor(drawerWidth * 0.072);
+	const fontSizeRow = Math.floor(drawerWidth * 0.062);
+	const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
+
+	const ImageWidth = Math.floor(drawerWidth * 0.18);
+	const ImageHeight = Math.floor(drawerWidth * 0.186);
+
+	return {
+		navigationHeader: {
+			height: deviceHeight * 0.197,
+			width: isPortrait ? width * 0.6 : height * 0.6,
+			minWidth: 250,
+			backgroundColor: 'rgba(26,53,92,255)',
+			marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
+			paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'flex-end',
+			paddingLeft: 10,
+		},
+		navigationHeaderImage: {
+			width: ImageWidth,
+			height: ImageHeight,
+			padding: 5,
+		},
+		navigationHeaderText: {
+			color: '#e26901',
+			fontSize: fontSizeHeader,
+			zIndex: 3,
+			textAlignVertical: 'bottom',
+		},
+		navigationHeaderTextCover: {
+			flex: 1,
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			justifyContent: 'flex-start',
+			alignItems: 'flex-end',
+			paddingLeft: 10,
+		},
+		navigationTitle: {
+			flexDirection: 'row',
+			marginVertical: 5 + (fontSizeRow * 0.5),
+			marginLeft: 10,
+			alignItems: 'center',
+		},
+		settingsCover: {
+			flexDirection: 'row',
+			paddingVertical: 5 + (fontSizeRow * 0.5),
+			marginLeft: 12,
+			alignItems: 'center',
+		},
+		iconAddLocSize: fontSizeAddLocText * 1.2,
+		settingsIconSize: fontSizeRow * 1.6,
+		navigationTextTitle: {
+			color: 'rgba(26,53,92,255)',
+			fontSize: fontSizeRow,
+			marginLeft: 10,
+		},
+		settingsButton: {
+			padding: 6,
+			minWidth: 100,
+		},
+		settingsText: {
+			color: 'white',
+			fontSize: fontSizeRow,
+		},
+		addNewLocationContainer: {
+			flexDirection: 'row',
+			borderBottomWidth: 1,
+			borderBottomColor: '#eeeeef',
+			marginLeft: 16,
+			marginRight: 10,
+			marginVertical: 5 + (fontSizeAddLocText * 0.5),
+			justifyContent: 'flex-start',
+		},
+		addNewLocationText: {
+			fontSize: fontSizeAddLocText,
+			color: '#e26901',
+			marginLeft: 10,
+		},
+	};
+}
 }
 
 function mapStateToProps(store: Object): Object {

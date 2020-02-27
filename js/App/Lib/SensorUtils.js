@@ -24,7 +24,7 @@
 
 import moment from 'moment';
 import { reportException } from './Analytics';
-import DeviceInfo from 'react-native-device-info';
+import * as RNLocalize from 'react-native-localize';
 
 import { utils } from 'live-shared-data';
 const { sensorUtils, addSensorUtils } = utils;
@@ -307,7 +307,7 @@ function getSensorInfo(name: string, scale: string, value: number = 0, isLarge: 
 	};
 }
 
-const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, gatewayTimezone?: string = DeviceInfo.getTimezone()): string => {
+const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, gatewayTimezone?: string = RNLocalize.getTimeZone()): string => {
 	const timeAgo = time.replace(/[0-9]/g, '').trim();
 	moment.tz.setDefault(gatewayTimezone);
 

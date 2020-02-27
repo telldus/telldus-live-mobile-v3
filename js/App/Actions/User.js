@@ -36,7 +36,7 @@ import { setBoolean } from '../Lib/Analytics';
 
 const prepareDeviceId = (deviceId: string = ''): string => {
 	deviceId = deviceId.trim();
-	return (!deviceId || deviceId.length === 0) ? DeviceInfo.getUniqueID() : deviceId;
+	return (!deviceId || deviceId.length === 0) ? DeviceInfo.getUniqueId() : deviceId;
 };
 
 
