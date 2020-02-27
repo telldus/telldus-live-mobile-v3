@@ -57,7 +57,7 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
-const ProfileTab = (props: Object): Object => {
+const ProfileTab = React.memo<Object>((props: Object): Object => {
 	const { screenProps: {
 		toggleDialogueBox,
 		intl,
@@ -174,7 +174,7 @@ const ProfileTab = (props: Object): Object => {
 			</View>
 		</ScrollView>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
@@ -252,4 +252,4 @@ ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default React.memo<Object>(ProfileTab);
+export default ProfileTab;

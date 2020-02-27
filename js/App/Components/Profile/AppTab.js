@@ -71,7 +71,7 @@ import {
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
-const AppTab = (props: Object): Object => {
+const AppTab = React.memo<Object>((props: Object): Object => {
 	const { screenProps, navigation } = props;
 	const intl = useIntl();
 	const { formatMessage } = intl;
@@ -250,7 +250,7 @@ const AppTab = (props: Object): Object => {
 			</View>
 		</ScrollView>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
@@ -313,4 +313,4 @@ AppTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default React.memo<Object>(AppTab);
+export default AppTab;

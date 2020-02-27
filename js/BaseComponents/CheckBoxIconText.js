@@ -41,7 +41,7 @@ type Props = {
 	intl: Object,
 };
 
-const CheckBoxIconText = (props: Props): Object => {
+const CheckBoxIconText = React.memo<Object>((props: Props): Object => {
 
 	const {
 		onToggleCheckBox,
@@ -135,11 +135,11 @@ const CheckBoxIconText = (props: Props): Object => {
 			},
 		};
 	}
-};
+});
 
 CheckBoxIconText.defaultProps = {
 	isChecked: false,
 	checkBoxColor: '#fff',
 };
 
-export default React.memo<Object>(CheckBoxIconText);
+export default CheckBoxIconText;

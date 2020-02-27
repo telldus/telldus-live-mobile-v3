@@ -67,7 +67,7 @@ const prepareTweetsForList = (data: Array<Object>): Array<Object> => {
 	return newData;
 };
 
-const SupportTab = (props: Object): Object => {
+const SupportTab = React.memo<Object>((props: Object): Object => {
 	const { navigation } = props;
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -193,7 +193,7 @@ const SupportTab = (props: Object): Object => {
 			</View>
 		</ScrollView>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
@@ -264,4 +264,4 @@ SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default React.memo<Object>(SupportTab);
+export default SupportTab;
