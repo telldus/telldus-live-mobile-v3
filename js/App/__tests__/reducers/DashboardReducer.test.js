@@ -2,9 +2,13 @@ import { parseDashboardForListView } from '../../Reducers/Dashboard.js';
 
 jest.useFakeTimers();
 
-describe('Test Dashboard reducers', ()=>{
+describe('Test Dashboard reducers', () => {
 
 	it('check dashboard reducers ', () => {
+
+		const userId = '1';
+		const dashboardId = 'dashboardId';
+
 		const device = { 3: {
 			clientId: 1,
 			id: 3,
@@ -23,8 +27,16 @@ describe('Test Dashboard reducers', ()=>{
 		}};
 
 		const dashboard = {
-			deviceIds: [3],
-			sensorIds: [2],
+			deviceIds: {
+				[userId]: {
+					[dashboardId]: [3],
+				},
+			},
+			sensorIds: {
+				[userId]: {
+					[dashboardId]: [2],
+				},
+			},
 		};
 
 		const devices = {
@@ -49,8 +61,17 @@ describe('Test Dashboard reducers', ()=>{
 			data: sensor[2], key: 2, objectType: 'sensor',
 		}];
 
+		const app = {
+			defaultSettings: {
+				activeDashboardId: dashboardId,
+			},
+		};
 
-		expect(parseDashboardForListView(dashboard, devices, sensors, gateways)).toEqual(state);
+		const user = {
+			userId,
+		};
+
+		expect(parseDashboardForListView(dashboard, devices, sensors, gateways, app, user)).toEqual(state);
 	});
 
 });
