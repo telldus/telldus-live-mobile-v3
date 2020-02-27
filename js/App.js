@@ -138,7 +138,7 @@ class App extends React.Component<Props, State> {
 		}
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
-		setGAUserProperty('deviceUniqueId', deviceId ? deviceId : DeviceInfo.getUniqueID());
+		setGAUserProperty('deviceUniqueId', deviceId ? deviceId : DeviceInfo.getUniqueId());
 	}
 
 	setCalendarLocale() {
