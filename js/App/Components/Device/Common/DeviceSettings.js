@@ -25,7 +25,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
-import isEmpty from 'lodash/isEmpty';
 const isEqual = require('react-fast-compare');
 import {
 	Keyboard,
@@ -50,11 +49,10 @@ import {
 	setWidgetParamUnits,
 	setWidgetParamUnit,
 	setWidgetParamHouse,
-	editDevice433Param,
 	toggleStatusUpdatedViaScan433MHZ,
+	setWidgetParamsValue,
 } from '../../../Actions/AddDevice';
 import {
-	getRandom,
 	prepare433DeviceParamsToStore,
 } from '../../../Lib';
 
@@ -135,7 +133,7 @@ const DeviceSettings = (props: Props): Object => {
 	let DeviceParams433 = {};
 	if (initializeValueFromStore && editingDevice) {
 		const { parameter } = editingDevice;
-		DeviceParams433 = prepare433DeviceParamsToStore(parseInt(widgetId, 10), parameter);
+		DeviceParams433 = prepare433DeviceParamsToStore(parseInt(widgetId, 10), parameter) || {};
 	}
 	let {
 		system: currSystem,
@@ -149,7 +147,12 @@ const DeviceSettings = (props: Props): Object => {
 	useEffect(() => {
 		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
 		if (deviceId && initializeValueFromStore) {
-			dispatch(editDevice433Param(widgetId, deviceId));
+			dispatch(setWidgetParamsValue({
+				id: widgetId,
+				deviceId,
+				edit: true,
+				...DeviceParams433,
+			}));
 		}
 		dispatch(toggleStatusUpdatedViaScan433MHZ(false));
 	}, []);
@@ -196,13 +199,6 @@ const DeviceSettings = (props: Props): Object => {
 				dispatch(setWidgetParamSystem(newValue.toString()));
 			}
 
-			// Stores initial/default settings in store.
-			if (system === 'null' && typeof min !== 'undefined') {
-				const random = getRandom(min, max);
-				const sysInitValue = currSystem || random || min || max;
-				dispatch(setWidgetParamSystem(sysInitValue.toString()));
-			}
-
 			Setting.push(
 				<InputSetting
 					ref={inputRefSystem}
@@ -220,14 +216,9 @@ const DeviceSettings = (props: Props): Object => {
 			);
 		}
 		if (setting === 'v') {
-			let initialSetCode = {};
 
 			const vSetting = Object.keys(settings[setting]).map((vSet: string, index: number): Object => {
 				const { option } = settings[setting][vSet];
-
-				if (isEmpty(code)) {
-					initialSetCode[vSet] = 0;
-				}
 
 				function onPressOne() {
 					dispatch(setWidgetParamCode({
@@ -261,28 +252,15 @@ const DeviceSettings = (props: Props): Object => {
 				);
 			});
 
-			// Stores initial/default settings in store.
-			if (isEmpty(code) && !isEmpty(initialSetCode)) {
-				const initalValue = currCode || initialSetCode;
-				dispatch(setWidgetParamCode({
-					...initalValue,
-				}));
-			}
-
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
 					{vSetting}
 				</View>);
 		}
 		if (setting === 'u') {
-			let initialSetU = {};
 
 			const uSetting = Object.keys(settings[setting]).map((uSet: string, index: number): Object => {
 				const { option } = settings[setting][uSet];
-
-				if (isEmpty(units)) {
-					initialSetU[uSet] = 0;
-				}
 
 				const cUSet = units[uSet] || 0;
 				function onToggleCheckBox() {
@@ -305,14 +283,6 @@ const DeviceSettings = (props: Props): Object => {
 					isSaving433MhzParams={isSaving433MhzParams}/>);
 			});
 
-			// Stores initial/default settings in store.
-			if (isEmpty(units) && !isEmpty(initialSetU)) {
-				const initialValue = currUnits || initialSetU;
-				dispatch(setWidgetParamUnits({
-					...initialValue,
-				}));
-			}
-
 			Setting.push(
 				<View style={uSettingsCover} key={setting}>
 					<Text style={[optionInputLabelStyle, labelStyle]}>
@@ -330,13 +300,8 @@ const DeviceSettings = (props: Props): Object => {
 		}
 		if (setting === 's') {
 			let houseObject = typeof house !== 'object' ? {} : house;
-			let initalSetHouse = {};
 
 			const sSetting = Object.keys(settings[setting]).map((sSet: string, index: number): Object => {
-				if (isEmpty(houseObject)) {
-					initalSetHouse[sSet] = '-';
-				}
-
 				function onPressOne() {
 					dispatch(setWidgetParamHouse({
 						...houseObject,
@@ -378,14 +343,6 @@ const DeviceSettings = (props: Props): Object => {
 				);
 			});
 
-			// Stores initial/default settings in store.
-			if (isEmpty(houseObject) && !isEmpty(initalSetHouse)) {
-				const initialValue = currHouse || initalSetHouse;
-				dispatch(setWidgetParamHouse({
-					...initialValue,
-				}));
-			}
-
 			Setting.push(
 				<View style={radioButtonsCover} key={setting}>
 					{sSetting}
@@ -420,13 +377,6 @@ const DeviceSettings = (props: Props): Object => {
 					dispatch(setWidgetParamHouse(newValue.toString()));
 				}
 
-				const random = getRandom(min, max);
-				const houseInitValue = currHouse || random || min;
-				// Stores initial/default settings in store.
-				if (house === 'null') {
-					dispatch(setWidgetParamHouse(houseInitValue.toString()));
-				}
-
 				Setting.push(
 					<InputSetting
 						ref={inputRefHouse}
@@ -453,11 +403,6 @@ const DeviceSettings = (props: Props): Object => {
 				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
 					const { key } = items[itemIndex] || {};
 					dispatch(setWidgetParamHouse(key));
-				}
-
-				// Stores initial/default settings in store.
-				if (house === 'null') {
-					dispatch(setWidgetParamHouse(currHouse || items[0].key));
 				}
 
 				const ddValue = house === '' ? items[0].key : house;
@@ -506,13 +451,6 @@ const DeviceSettings = (props: Props): Object => {
 					dispatch(setWidgetParamUnit(newValue.toString()));
 				}
 
-				const random = getRandom(min, max);
-				const unitInitValue = currUnit || random || min;
-				// Stores initial/default settings in store.
-				if (unit === 'null') {
-					dispatch(setWidgetParamUnit(unitInitValue.toString()));
-				}
-
 				Setting.push(
 					<InputSetting
 						ref={inputRefUnit}
@@ -539,11 +477,6 @@ const DeviceSettings = (props: Props): Object => {
 				function onValueChange(value: string, itemIndex: number, data: Array<any>) {
 					const { key } = items[itemIndex] || {};
 					dispatch(setWidgetParamUnit(key));
-				}
-
-				// Stores initial/default settings in store.
-				if (unit === 'null') {
-					dispatch(setWidgetParamUnit(currUnit || items[0].key));
 				}
 
 				const ddValue = unit === '' ? items[0].key : unit;
@@ -584,11 +517,6 @@ const DeviceSettings = (props: Props): Object => {
 						isSaving433MhzParams={isSaving433MhzParams}/>
 				);
 			});
-
-			// Stores initial/default settings in store.
-			if (typeof fade === 'undefined') {
-				dispatch(setWidgetParamFade(currFade || false));
-			}
 
 			Setting.push(
 				<View style={optionInputCover} key={setting}>

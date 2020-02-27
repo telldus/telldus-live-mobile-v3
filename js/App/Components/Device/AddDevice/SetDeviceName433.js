@@ -29,7 +29,7 @@ import {
 import {
 	TextField,
 } from 'react-native-material-textfield';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	View,
@@ -41,7 +41,12 @@ import {
 } from '../Common';
 
 import {
+	setWidgetParamsValue,
+} from '../../../Actions/AddDevice';
+
+import {
 	getDeviceSettings,
+	prepare433MHzDeviceDefaultValueForParams,
 } from '../../../Lib';
 import {
 	useDialogueBox,
@@ -74,14 +79,27 @@ const SetDeviceName433 = (props: Object): Object => {
 	const deviceInfo = navigation.getParam('deviceInfo', {});
 	const { widget, configuration, devicetype } = deviceInfo;
 
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.name), formatMessage(i18n.AddZDNameHeaderTwo));
 
-		if (widget && configuration === 'true') {
+		if (widget) {
 			const dSettings = getDeviceSettings(parseInt(widget, 10), formatMessage);
-			setSettings(dSettings);
+			if (configuration === 'true') {
+				setSettings(dSettings);
+			}
+
+			// For devices that does not support configuration, params configuration options
+			// are not shown, so simply set default/initial values for parameters in store.
+			// It will be used while calling API addDevice.
+			const paramsWithDefValues = prepare433MHzDeviceDefaultValueForParams(parseInt(widget, 10), dSettings);
+			dispatch(setWidgetParamsValue({
+				id: widget,
+				...paramsWithDefValues,
+			}));
 		}
-	}, []);
+	}, [widget]);
 
 	function onChangeName(value: string) {
 		setName(value);
