@@ -82,4 +82,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default UpgradePremiumButton;
+export default React.memo<Object>(UpgradePremiumButton);

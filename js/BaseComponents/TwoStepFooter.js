@@ -141,4 +141,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default TwoStepFooter;
+export default React.memo<Object>(TwoStepFooter);

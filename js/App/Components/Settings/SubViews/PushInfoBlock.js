@@ -98,4 +98,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default PushInfoBlock;
+export default React.memo<Object>(PushInfoBlock);

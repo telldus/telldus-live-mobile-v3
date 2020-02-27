@@ -60,4 +60,4 @@ const CampaignIcon = (props: Object): Object => {
 	);
 };
 
-export default CampaignIcon;
+export default React.memo<Object>(CampaignIcon);

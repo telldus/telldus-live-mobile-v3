@@ -42,5 +42,5 @@ const ModeIconBlock = (props: Object): Object => {
 	);
 };
 
-export default ModeIconBlock;
+export default React.memo<Object>(ModeIconBlock);
 

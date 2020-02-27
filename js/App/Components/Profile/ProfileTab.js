@@ -778,4 +778,4 @@ ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default ProfileTab;
+export default React.memo<Object>(ProfileTab);

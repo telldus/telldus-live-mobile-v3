@@ -63,4 +63,4 @@ const LastUpdatedInfo = (props: Object): Object => {
 	);
 };
 
-export default LastUpdatedInfo;
+export default React.memo<Object>(LastUpdatedInfo);

@@ -266,4 +266,4 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 		},
 	};
 };
-export default SensorRow;
+export default React.memo<Object>(SensorRow);

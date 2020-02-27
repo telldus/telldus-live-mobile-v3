@@ -121,4 +121,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default ShortcutRow;
+export default React.memo<Object>(ShortcutRow);

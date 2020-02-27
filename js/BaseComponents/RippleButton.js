@@ -47,4 +47,4 @@ const RippleButton = (props: Object): Object => {
 	);
 };
 
-export default RippleButton;
+export default React.memo<Object>(RippleButton);

@@ -258,4 +258,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default UpdatePasswordScreen;
+export default React.memo<Object>(UpdatePasswordScreen);

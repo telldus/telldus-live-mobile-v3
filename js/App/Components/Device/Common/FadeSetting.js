@@ -122,5 +122,5 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default FadeSetting;
+export default React.memo<Object>(FadeSetting);
 

@@ -149,4 +149,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default DBSortControlBlock;
+export default React.memo<Object>(DBSortControlBlock);

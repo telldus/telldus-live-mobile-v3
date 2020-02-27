@@ -94,5 +94,5 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default TellStickExchangeLink;
+export default React.memo<Object>(TellStickExchangeLink);
 

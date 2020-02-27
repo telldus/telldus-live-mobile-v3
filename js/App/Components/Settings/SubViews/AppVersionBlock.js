@@ -65,4 +65,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default AppVersionBlock;
+export default React.memo<Object>(AppVersionBlock);

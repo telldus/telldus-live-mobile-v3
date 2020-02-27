@@ -408,4 +408,4 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 	};
 };
 
-export default PremiumUpgradeScreen;
+export default React.memo<Object>(PremiumUpgradeScreen);

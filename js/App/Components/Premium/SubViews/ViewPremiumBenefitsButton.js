@@ -103,4 +103,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default ViewPremiumBenefitsButton;
+export default React.memo<Object>(ViewPremiumBenefitsButton);

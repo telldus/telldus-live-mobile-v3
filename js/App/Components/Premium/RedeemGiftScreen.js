@@ -244,4 +244,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default RedeemGiftScreen;
+export default React.memo<Object>(RedeemGiftScreen);

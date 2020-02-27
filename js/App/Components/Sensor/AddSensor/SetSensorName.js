@@ -240,4 +240,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default SetSensorName;
+export default React.memo<Object>(SetSensorName);
