@@ -25,7 +25,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Theme from '../App/Theme';
 
-export default class Base extends Component<Object, void> {
+export default class Base extends Component<Object, Object> {
 
 	static contextTypes = {
 		theme: PropTypes.object,
