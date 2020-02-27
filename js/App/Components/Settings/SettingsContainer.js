@@ -174,14 +174,14 @@ confirmTokenSubmit() {
 	const { screenProps, actions, pushToken, onSubmitPushToken, deviceName, deviceId, phonesList } = this.props;
 	const { formatMessage } = screenProps.intl;
 
-	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
 	for (let key in phonesList) {
 		let { deviceId: idInList, token: tokenInList } = phonesList[key];
 		// UUID/deviceId already found among push registered devices list
 		// - If pushToken in the store matches with token in the list, it
 		// must be the same device that is already registered[NO WORRIES THERE]
 		// - But if tokens does not match then most probably, two different devices
-		// seem to give same UUID/DeviceInfo.getUniqueID().
+		// seem to give same UUID/DeviceInfo.getUniqueId().
 		// In that case modify deviceId before re-register.
 		if (idInList === uniqueId && tokenInList !== pushToken) {
 			uniqueId = `${uniqueId}-anomaly`;
@@ -228,7 +228,7 @@ showPushRegFailedToast(errorCode: string) {
 
 onSubmitDeviceName(token: string, deviceName: string): Promise<any> {
 	const { onSubmitDeviceName, deviceId } = this.props;
-	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+	let uniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
 	return onSubmitDeviceName(token, deviceName, uniqueId);
 }
 
@@ -332,12 +332,16 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getPhonesList,
 			}, dispatch),
 		},
-		onSubmitPushToken: (token: string, deviceName: string, deviceId: string): Promise<any> => {
-			let dName = deviceName ? deviceName : DeviceInfo.getDeviceName();
-			return dispatch(registerPushToken(token, dName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceId, pushServiceId));
+		onSubmitPushToken: async (token: string, deviceName: string, deviceId: string): Promise<any> => {
+			const _deviceName = await DeviceInfo.getDeviceName();
+			const manufacturer = await DeviceInfo.getManufacturer();
+
+			let dName = deviceName ? deviceName : _deviceName;
+			return dispatch(registerPushToken(token, dName, DeviceInfo.getModel(), manufacturer, DeviceInfo.getSystemVersion(), deviceId, pushServiceId));
 		},
-		onSubmitDeviceName: (token: string, deviceName: string, deviceId: string): Promise<any> => {
-			return dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceId, pushServiceId));
+		onSubmitDeviceName: async (token: string, deviceName: string, deviceId: string): Promise<any> => {
+			const manufacturer = await DeviceInfo.getManufacturer();
+			return dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), manufacturer, DeviceInfo.getSystemVersion(), deviceId, pushServiceId));
 		},
 	}
 );

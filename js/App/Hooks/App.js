@@ -24,11 +24,11 @@ import {
 	createIntlCache,
 } from 'react-intl';
 import { useSelector } from 'react-redux';
-import DeviceInfo from 'react-native-device-info';
+import * as RNLocalize from 'react-native-localize';
 
 let relativeIntls = {};
 
-const useRelativeIntl = (gatewayTimezone?: string = DeviceInfo.getTimezone()): Object => {
+const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
 
 	if (relativeIntls[gatewayTimezone]) {
 		return relativeIntls[gatewayTimezone];

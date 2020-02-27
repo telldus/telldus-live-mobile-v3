@@ -46,13 +46,15 @@ const Push = {
 		};
 	},
 	onRegister: (token: string, params: Object): ThunkAction => {
-		return (dispatch: Function, getState: Object): any => {
+		return async (dispatch: Function, getState: Object): any => {
 			const { pushToken, pushTokenRegistered, deviceId, register } = params;
 			if (token && (!pushToken || pushToken !== token || !pushTokenRegistered)) {
-				const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueID();
+				const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
 				if (register) {
 					// stores fcm token in the server
-					dispatch(registerPushToken(token, DeviceInfo.getDeviceName(), DeviceInfo.getModel(), DeviceInfo.getManufacturer(), DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
+					const deviceName = await DeviceInfo.getDeviceName();
+					const manufacturer = await DeviceInfo.getManufacturer();
+					dispatch(registerPushToken(token, deviceName, DeviceInfo.getModel(), manufacturer, DeviceInfo.getSystemVersion(), deviceUniqueId, pushServiceId));
 				}
 				dispatch({ type: 'RECEIVED_PUSH_TOKEN', pushToken: token });
 			}

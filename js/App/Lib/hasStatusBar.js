@@ -21,6 +21,7 @@
 import Platform from 'Platform';
 import DeviceInfo from 'react-native-device-info';
 
-export default function hasStatusBar() {
-	return Platform.OS === 'android' && DeviceInfo.getAPILevel() > 19;
+export default async function hasStatusBar() {
+	const apiLevel = await DeviceInfo.getApiLevel();
+	return Platform.OS === 'android' && apiLevel > 19;
 }

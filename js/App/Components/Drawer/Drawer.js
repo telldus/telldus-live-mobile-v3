@@ -68,39 +68,59 @@ type Props = {
 	showSwitchAccountActionSheet: () => void,
 };
 
-class Drawer extends View<Props, null> {
-	props: Props;
+type State = {
+	hasStatusBar: boolean,
+};
 
-	constructor(props: Props) {
-		super(props);
+class Drawer extends View<Props, State> {
+props: Props;
+state: State;
 
-		const {
-			onOpenSetting,
-		} = props;
+_hasStatusBar: () => void;
 
-		this.SETTINGS = [
-			{
-				icon: 'phone',
-				text: i18n.appSettigs,
-				onPressLink: () => {
-					onOpenSetting('AppTab');
-				},
+constructor(props: Props) {
+	super(props);
+
+	this.state = {
+		hasStatusBar: false,
+	};
+
+	const {
+		onOpenSetting,
+	} = props;
+
+	this.SETTINGS = [
+		{
+			icon: 'phone',
+			text: i18n.appSettigs,
+			onPressLink: () => {
+				onOpenSetting('AppTab');
 			},
-			{
-				icon: 'user',
-				text: i18n.userProfile,
-				onPressLink: () => {
-					onOpenSetting('ProfileTab');
-				},
+		},
+		{
+			icon: 'user',
+			text: i18n.userProfile,
+			onPressLink: () => {
+				onOpenSetting('ProfileTab');
 			},
-			{
-				icon: 'faq',
-				text: i18n.labelHelpAndSupport,
-				onPressLink: () => {
-					onOpenSetting('SupportTab');
-				},
+		},
+		{
+			icon: 'faq',
+			text: i18n.labelHelpAndSupport,
+			onPressLink: () => {
+				onOpenSetting('SupportTab');
 			},
-		];
+		},
+	];
+
+	this._hasStatusBar();
+}
+
+	_hasStatusBar = async () => {
+		const _hasStatusBar = await hasStatusBar();
+		this.setState({
+			hasStatusBar: _hasStatusBar,
+		});
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -230,8 +250,8 @@ class Drawer extends View<Props, null> {
 				width: drawerWidth,
 				minWidth: 250,
 				backgroundColor: brandPrimary,
-				marginTop: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-				paddingBottom: hasStatusBar() ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
+				marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
+				paddingBottom: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',

@@ -46,7 +46,7 @@ import { actions } from 'live-shared-data';
 const { App } = actions;
 
 function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): ThunkAction {
-	return (dispatch: Function, getState: Function): any => {
+	return async (dispatch: Function, getState: Function): any => {
 		const { user, gateways: {byId} } = getState();
 		const { userProfile = {} } = user;
 		const { email, firstname, lastname } = userProfile;
@@ -73,9 +73,10 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 			websocketStatus = 'offline and connected';
 		}
 
-		const deviceUniqueID = DeviceInfo.getUniqueID();
+		const deviceUniqueID = DeviceInfo.getUniqueId();
+		const deviceName = await DeviceInfo.getDeviceName();
 
-		return DeviceInfo.getIPAddress().then((ip: string): any => {
+		return DeviceInfo.getIpAddress().then((ip: string): any => {
 			let data = JSON.stringify({
 				'alert': false,
 				'subject': 'Local control does not work',
@@ -92,7 +93,7 @@ function createSupportTicketLCT(gatewayId: number, ticketData: TicketData): Thun
 				'phoneIP': ip === null ? 'null' : ip,
 				'gatewayIP': address === null ? 'null' : address,
 				'macAddress': macAddress === null ? 'null' : macAddress,
-				'deviceName': DeviceInfo.getDeviceName(),
+				'deviceName': deviceName,
 				'appVersion': DeviceInfo.getReadableVersion(),
 				'deviceUniqueID': deviceUniqueID,
 				'liveAccount': email,
