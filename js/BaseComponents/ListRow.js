@@ -57,7 +57,7 @@ type Props = {
 	appLayout: Object,
 };
 
-const ListRow = (props: Props): Object => {
+const ListRow = React.memo<Object>((props: Props): Object => {
 
 	const {
 		children,
@@ -161,7 +161,7 @@ const ListRow = (props: Props): Object => {
 		};
 	}
 
-};
+});
 
 ListRow.defaultProps = {
 	isFirst: false,
@@ -172,4 +172,4 @@ ListRow.defaultProps = {
 	},
 };
 
-export default React.memo<Object>(ListRow);
+export default ListRow;

@@ -84,7 +84,7 @@ import AddAccountBlock from './SubViews/AddAccountBlock';
 
 import i18n from '../../Translations/common';
 
-const ProfileTab = (props: Object): Object => {
+const ProfileTab = React.memo<Object>((props: Object): Object => {
 	const { screenProps: {
 		toggleDialogueBox,
 		intl,
@@ -573,7 +573,7 @@ const ProfileTab = (props: Object): Object => {
 				onPress={onSelectActionSheet}/>
 		</ScrollView>
 	);
-};
+});
 
 const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object): Object => {
 	const { height, width } = appLayout;
@@ -778,4 +778,4 @@ ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
 	},
 });
 
-export default React.memo<Object>(ProfileTab);
+export default ProfileTab;
