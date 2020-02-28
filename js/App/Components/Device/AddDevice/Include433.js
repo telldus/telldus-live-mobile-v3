@@ -173,34 +173,41 @@ onNext = async (handleLoading?: boolean = true) => {
 		});
 	}
 
-	const { navigation, addDevice } = this.props;
-	const { addDevice433 = {}} = addDevice;
-	const {
-		deviceId,
-	} = addDevice433;
-	const deviceName = navigation.getParam('deviceName', '');
-	// $FlowFixMe
-	let rowData = {[deviceId]: {
-		id: deviceId,
-		name: deviceName,
-		index: 0,
-		mainNode: true,
-	}};
+	const { navigation, addDevice, actions } = this.props;
 
-	if (handleLoading) {
-		this.setState({
-			isLoading: false,
+	try {
+		await actions.getDevices();
+	// eslint-disable-next-line no-empty
+	} catch (e) {
+	} finally {
+		const { addDevice433 = {}} = addDevice;
+		const {
+			deviceId,
+		} = addDevice433;
+		const deviceName = navigation.getParam('deviceName', '');
+		// $FlowFixMe
+		let rowData = {[deviceId]: {
+			id: deviceId,
+			name: deviceName,
+			index: 0,
+			mainNode: true,
+		}};
+
+		if (handleLoading) {
+			this.setState({
+				isLoading: false,
+			});
+		}
+		const gateway = navigation.getParam('gateway', {});
+		navigation.navigate({
+			routeName: 'Devices',
+			key: 'Devices',
+			params: {
+				gateway,
+				newDevices: rowData,
+			},
 		});
 	}
-	const gateway = navigation.getParam('gateway', {});
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-		params: {
-			gateway,
-			newDevices: rowData,
-		},
-	});
 }
 
 render(): Object {
@@ -232,7 +239,7 @@ render(): Object {
 	if (isLoading) {
 		return <FullPageActivityIndicator/>;
 	}
-	if (!isLoading && !deviceId) {
+	if (!isLoading && !deviceId && message) {
 		return <InfoBlock
 			text={message}
 			appLayout={appLayout}
