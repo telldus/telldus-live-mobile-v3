@@ -79,7 +79,7 @@ constructor(props: Props) {
 		isLoading: false,
 	};
 
-	const { navigation, intl } = props;
+	const { navigation, intl, actions } = props;
 	const gateway = navigation.getParam('gateway', {});
 	const { id } = gateway;
 	this.gatewayId = id.toString();
@@ -90,29 +90,20 @@ constructor(props: Props) {
 	} = deviceInfo;
 	this.PostConfigScreenOptions = get433DevicePostConfigScreenOptions(postConfig, intl.formatMessage);
 
-	this.deleteSocketAndTimer = null;
+	let deviceName = navigation.getParam('deviceName', '');
+	this.deleteSocketAndTimer = actions.initiateAdd433MHz(id.toString(), {
+		...deviceInfo,
+		deviceName,
+	}, intl.formatMessage);
 }
 
 componentDidMount() {
 	const {
 		onDidMount,
 		intl,
-		actions,
-		navigation,
 	} = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
-
-	const gateway = navigation.getParam('gateway', {});
-	const { id } = gateway;
-	let deviceInfo = navigation.getParam('deviceInfo', '');
-	let deviceName = navigation.getParam('deviceName', '');
-	deviceInfo = {
-		...deviceInfo,
-		deviceName,
-	};
-
-	this.deleteSocketAndTimer = actions.initiateAdd433MHz(id.toString(), deviceInfo, formatMessage);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
