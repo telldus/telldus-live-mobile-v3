@@ -29,7 +29,6 @@ import {
 
 import {
 	View,
-	FloatingButton,
 	InfoBlock,
 	FullPageActivityIndicator,
 	ProgressBarLinear,
@@ -141,12 +140,15 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		progress,
 	} = this.PostConfigScreenOptions;
 	if (progress) {
-		const disableClose = statusC === 'done'; // TODO: Include statusC === 'receiving' if required.
-		if (showLeftIcon && statusC && (disableClose)) {
+		const scanComplete = statusC === 'done'; // TODO: Include statusC === 'receiving' if required.
+		if (showLeftIcon && statusC && (scanComplete)) {
 			toggleLeftIconVisibilty(false);
 		}
-		if (!showLeftIcon && (!statusC || !disableClose)) {
+		if (!showLeftIcon && (!statusC || !scanComplete)) {
 			toggleLeftIconVisibilty(true);
+		}
+		if (statusC && scanComplete) {
+			this.onNext(false);
 		}
 	}
 }
@@ -203,7 +205,6 @@ onNext = async (handleLoading?: boolean = true) => {
 
 render(): Object {
 	const { intl, appLayout, navigation, addDevice = {} } = this.props;
-	const { isLoading: isLoadingINS } = this.state;
 
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -211,7 +212,6 @@ render(): Object {
 		isLoading = true,
 		progressValue = 0,
 		message,
-		status,
 	} = addDevice433;
 
 	const {
@@ -220,7 +220,6 @@ render(): Object {
 		infoContainer,
 		infoTextStyle,
 		padding,
-		iconStyle,
 		progressWidth,
 		progressBarStyle,
 		progressCover,
@@ -262,8 +261,6 @@ render(): Object {
 	if (deviceBrand === 'Telldus') {
 		img = getTelldusLearnImage(model);
 	}
-
-	const disableNext = progress && status !== 'done';
 
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
 
@@ -322,12 +319,6 @@ render(): Object {
 				{!!Descriptions && Descriptions}
 				{!!Info && Info}
 			</ScrollView>
-			<FloatingButton
-				onPress={isLoadingINS ? null : this.onNext}
-				iconName={isLoadingINS ? false : 'checkmark'}
-				showThrobber={isLoadingINS}
-				iconStyle={iconStyle}
-				disabled={disableNext}/>
 		</View>
 	);
 }
