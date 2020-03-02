@@ -33,6 +33,7 @@ import {
 	FullPageActivityIndicator,
 	ProgressBarLinear,
 	Text,
+	Throbber,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
@@ -212,6 +213,7 @@ render(): Object {
 		isLoading = true,
 		progressValue = 0,
 		message,
+		status,
 	} = addDevice433;
 
 	const {
@@ -224,6 +226,7 @@ render(): Object {
 		progressBarStyle,
 		progressCover,
 		statusStyle,
+		infoIconErrorStyle,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -236,8 +239,11 @@ render(): Object {
 			infoContainer={[infoContainer, {
 				marginVertical: padding,
 			}]}
+			infoIconStyle={infoIconErrorStyle}
 			textStyle={infoTextStyle}/>;
 	}
+
+	const errorInfo = message && (status === 'socket-failed' || status === 'socket-retry');
 
 	const deviceInfo = navigation.getParam('deviceInfo', '');
 	const deviceBrand = navigation.getParam('deviceBrand', '');
@@ -263,6 +269,7 @@ render(): Object {
 	}
 
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
+	const isSocketReconnecting = progress && status === 'socket-retry';
 
 	const Descriptions = descriptions.map((text: string, i: number): Object => {
 		return (<NumberedBlock
@@ -279,9 +286,27 @@ render(): Object {
 			}
 			progress={(progress && (i === (descriptions.length - 1))) &&
 				<View style={progressCover}>
-					<Text style={statusStyle}>
-						{statusText}
-					</Text>
+					{isSocketReconnecting
+						?
+						<View style={{
+							flexDirection: 'row',
+						}}>
+							<Throbber
+								throbberStyle={statusStyle}
+								throbberContainerStyle={{
+									position: 'relative',
+								}}/>
+							<Text style={[statusStyle, {
+								marginLeft: 5,
+							}]}>
+								{'Reconnecting...'}
+							</Text>
+						</View>
+						:
+						<Text style={statusStyle}>
+							{statusText}
+						</Text>
+					}
 					<ProgressBarLinear
 						progress={Math.max(progressValue / 100, 0)}
 						height={4}
@@ -318,6 +343,15 @@ render(): Object {
 			contentContainerStyle={containerStyle}>
 				{!!Descriptions && Descriptions}
 				{!!Info && Info}
+				{!!errorInfo && (
+					<InfoBlock
+						key={'errorInfo'}
+						text={message}
+						appLayout={appLayout}
+						infoContainer={infoContainer}
+						infoIconStyle={infoIconErrorStyle}
+						textStyle={infoTextStyle}/>
+				)}
 			</ScrollView>
 		</View>
 	);
@@ -332,6 +366,7 @@ getStyles(): Object {
 	const {
 		paddingFactor,
 		rowTextColor,
+		red,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -352,7 +387,7 @@ getStyles(): Object {
 		infoContainer: {
 			flex: 0,
 			marginHorizontal: padding,
-			marginBottom: padding * 5,
+			marginBottom: padding / 2,
 		},
 		infoTextStyle: {
 			color: rowTextColor,
@@ -366,6 +401,9 @@ getStyles(): Object {
 		},
 		progressCover: {
 
+		},
+		infoIconErrorStyle: {
+			color: red,
 		},
 		statusStyle: {
 			fontSize: fontSizeStatus,
