@@ -244,7 +244,10 @@ export default function reduceUser(state: State = initialState, action: Action):
 			// Required while upgrading from older version, and already logged in
 			if (isEmpty(accounts)) {
 				newAccounts[email] = {
-					accessToken: state.accessToken,
+					accessToken: {
+						...state.accessToken,
+						userId: action.payload.email, // TODO: Should use user id, once it is available.
+					},
 					...action.payload,
 				};
 			} else {
