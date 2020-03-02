@@ -22,6 +22,7 @@
 'use strict';
 import orderBy from 'lodash/orderBy';
 import { hasTokenExpired } from '../Lib/LocalControl';
+import isEmpty from 'lodash/isEmpty';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
 
@@ -37,6 +38,11 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+
+	const { byId = {} } = gateways;
+	if (isEmpty(byId)) {
+		return [];
+	}
 
 	const deviceItems = deviceIdsInCurrentDb.map((deviceId: number): Object => {
 		let device = devices.byId[deviceId] || {};
