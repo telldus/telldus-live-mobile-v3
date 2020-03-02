@@ -31,6 +31,10 @@
 // @flow
 
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { AppState } from 'react-native';
+import { utils } from 'live-shared-data';
+
+const { socketUtils } = utils;
 
 // Websocket wrapper around ReconnectingWebSocket
 //
@@ -39,9 +43,9 @@ import ReconnectingWebSocket from 'reconnecting-websocket';
 // This allows us to close the connection when the app goes to the background and
 // open the connection again when it goes to the front easily.
 
-import { AppState } from 'react-native';
 import { reportException } from './Analytics';
 import { decryptLocalControlToken } from './RSA';
+
 
 export default class TelldusWebsocket {
 	gatewayId: string;
@@ -71,10 +75,7 @@ export default class TelldusWebsocket {
 			return console.log('socket already opening');
 		}
 
-		const options = {
-			minReconnectionDelay: 10,
-			maxRetries: 20,
-		};
+		const options = socketUtils.getSocketOptions();
 		this.websocket = new ReconnectingWebSocket(this.websocketUrl, [], options);
 
 		// bind any listeners on TelldusWebsocket to this.socket

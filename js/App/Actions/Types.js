@@ -151,6 +151,7 @@ export type Action =
 	| { type: 'CAMPAIGN_VISITED', payload: boolean }
 
 	| { type: 'TOGGLE_DIALOGUE_BOX_STATE', payload: Object }
+	| { type: 'SET_FIREBASE_REMOTE_CONFIG', payload: Object }
 
 	| { type: 'SET_FENCE_AREA', payload: Object }
 	| { type: 'SET_FENCE_ARRIVING_ACTIONS', payload: Object }

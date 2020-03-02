@@ -173,7 +173,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           Array [
             Object {
               "flex": 0,
-              "marginBottom": 13.888499999999999,
+              "marginBottom": 1.38885,
               "marginHorizontal": 2.7777,
             },
             Object {
@@ -212,7 +212,9 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
                   "color": "#e26901",
                   "fontSize": 14.000000000000002,
                 },
-                undefined,
+                Object {
+                  "color": "#D32F2E",
+                },
               ],
               Object {
                 "fontFamily": "telldusicons",
@@ -607,7 +609,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 },
                 Object {
                   "flex": 0,
-                  "marginBottom": 13.888499999999999,
+                  "marginBottom": 1.38885,
                   "marginHorizontal": 2.7777,
                 },
               ]

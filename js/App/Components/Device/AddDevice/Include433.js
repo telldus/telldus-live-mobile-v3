@@ -29,11 +29,11 @@ import {
 
 import {
 	View,
-	FloatingButton,
 	InfoBlock,
 	FullPageActivityIndicator,
 	ProgressBarLinear,
 	Text,
+	Throbber,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
@@ -141,12 +141,15 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		progress,
 	} = this.PostConfigScreenOptions;
 	if (progress) {
-		const disableClose = statusC === 'done'; // TODO: Include statusC === 'receiving' if required.
-		if (showLeftIcon && statusC && (disableClose)) {
+		const scanComplete = statusC === 'done'; // TODO: Include statusC === 'receiving' if required.
+		if (showLeftIcon && statusC && (scanComplete)) {
 			toggleLeftIconVisibilty(false);
 		}
-		if (!showLeftIcon && (!statusC || !disableClose)) {
+		if (!showLeftIcon && (!statusC || !scanComplete)) {
 			toggleLeftIconVisibilty(true);
+		}
+		if (statusC && scanComplete) {
+			this.onNext(false);
 		}
 	}
 }
@@ -203,7 +206,6 @@ onNext = async (handleLoading?: boolean = true) => {
 
 render(): Object {
 	const { intl, appLayout, navigation, addDevice = {} } = this.props;
-	const { isLoading: isLoadingINS } = this.state;
 
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -220,11 +222,11 @@ render(): Object {
 		infoContainer,
 		infoTextStyle,
 		padding,
-		iconStyle,
 		progressWidth,
 		progressBarStyle,
 		progressCover,
 		statusStyle,
+		infoIconErrorStyle,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -237,8 +239,11 @@ render(): Object {
 			infoContainer={[infoContainer, {
 				marginVertical: padding,
 			}]}
+			infoIconStyle={infoIconErrorStyle}
 			textStyle={infoTextStyle}/>;
 	}
+
+	const errorInfo = message && (status === 'socket-failed' || status === 'socket-retry');
 
 	const deviceInfo = navigation.getParam('deviceInfo', '');
 	const deviceBrand = navigation.getParam('deviceBrand', '');
@@ -263,9 +268,8 @@ render(): Object {
 		img = getTelldusLearnImage(model);
 	}
 
-	const disableNext = progress && status !== 'done';
-
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
+	const isSocketReconnecting = progress && status === 'socket-retry';
 
 	const Descriptions = descriptions.map((text: string, i: number): Object => {
 		return (<NumberedBlock
@@ -282,9 +286,27 @@ render(): Object {
 			}
 			progress={(progress && (i === (descriptions.length - 1))) &&
 				<View style={progressCover}>
-					<Text style={statusStyle}>
-						{statusText}
-					</Text>
+					{isSocketReconnecting
+						?
+						<View style={{
+							flexDirection: 'row',
+						}}>
+							<Throbber
+								throbberStyle={statusStyle}
+								throbberContainerStyle={{
+									position: 'relative',
+								}}/>
+							<Text style={[statusStyle, {
+								marginLeft: 5,
+							}]}>
+								{`${intl.formatMessage(i18n.reconnectingTellstick)}...`}
+							</Text>
+						</View>
+						:
+						<Text style={statusStyle}>
+							{statusText}
+						</Text>
+					}
 					<ProgressBarLinear
 						progress={Math.max(progressValue / 100, 0)}
 						height={4}
@@ -321,13 +343,16 @@ render(): Object {
 			contentContainerStyle={containerStyle}>
 				{!!Descriptions && Descriptions}
 				{!!Info && Info}
+				{!!errorInfo && (
+					<InfoBlock
+						key={'errorInfo'}
+						text={message}
+						appLayout={appLayout}
+						infoContainer={infoContainer}
+						infoIconStyle={infoIconErrorStyle}
+						textStyle={infoTextStyle}/>
+				)}
 			</ScrollView>
-			<FloatingButton
-				onPress={isLoadingINS ? null : this.onNext}
-				iconName={isLoadingINS ? false : 'checkmark'}
-				showThrobber={isLoadingINS}
-				iconStyle={iconStyle}
-				disabled={disableNext}/>
 		</View>
 	);
 }
@@ -341,6 +366,7 @@ getStyles(): Object {
 	const {
 		paddingFactor,
 		rowTextColor,
+		red,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -361,7 +387,7 @@ getStyles(): Object {
 		infoContainer: {
 			flex: 0,
 			marginHorizontal: padding,
-			marginBottom: padding * 5,
+			marginBottom: padding / 2,
 		},
 		infoTextStyle: {
 			color: rowTextColor,
@@ -375,6 +401,9 @@ getStyles(): Object {
 		},
 		progressCover: {
 
+		},
+		infoIconErrorStyle: {
+			color: red,
 		},
 		statusStyle: {
 			fontSize: fontSizeStatus,

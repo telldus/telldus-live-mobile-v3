@@ -62,6 +62,7 @@ public class MainApplication extends Application implements ReactApplication {
 			packages.add(new RNFirebaseRemoteConfigPackage());
 			packages.add(new RNFirebaseAnalyticsPackage());
 			packages.add(new WidgetPackage());
+			packages.add(new RNFirebaseRemoteConfigPackage());
 			return packages;
 		}
 

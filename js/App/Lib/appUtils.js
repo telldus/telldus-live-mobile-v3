@@ -96,10 +96,6 @@ function hasTellStickNetGetOne(gatewaysById: Object): boolean {
 	return flag;
 }
 
-function getRandom(min: number, max: number): number {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 const getItemLayout = (appLayout: Object): any => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -143,7 +139,6 @@ module.exports = {
 	isDeviceLanguage,
 	...appUtils,
 	hasTellStickNetGetOne,
-	getRandom,
 	getItemLayout,
 	getSectionHeaderFontSize,
 	getSectionHeaderHeight,
