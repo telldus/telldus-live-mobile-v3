@@ -299,7 +299,7 @@ render(): Object {
 							<Text style={[statusStyle, {
 								marginLeft: 5,
 							}]}>
-								{'Reconnecting...'}
+								{`${intl.formatMessage(i18n.reconnectingTellstick)}...`}
 							</Text>
 						</View>
 						:
