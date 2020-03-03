@@ -26,6 +26,8 @@ import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 import omit from 'lodash/omit';
 
+const defaultDashboardId = 'defaultDashboardId';
+
 export type State = {
 	accessToken: any,
 	isTokenValid: boolean,
@@ -48,6 +50,7 @@ export type State = {
 	firebaseRemoteConfig: Object,
 	accounts: Object,
 	userId: string,
+	activeDashboardId: string,
 };
 
 export const initialState = {
@@ -72,6 +75,7 @@ export const initialState = {
 	firebaseRemoteConfig: {},
 	accounts: {},
 	userId: '',
+	activeDashboardId: defaultDashboardId,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -367,13 +371,14 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS') {
 
-		const { accounts = {}, userId = '' } = state;
+		let { accounts = {}, userId = '' } = state;
 		let newAccounts = {
 			...accounts,
 		};
 
 		const subscriptions = action.payload;
 
+		userId = userId.trim().toLowerCase();
 		const account = accounts[userId] || {};
 
 		const updatedAccount = {
@@ -399,7 +404,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...accounts,
 		};
 
-		const {
+		let {
 			userId,
 			subscriptions,
 		} = action.payload;
@@ -407,6 +412,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			return state;
 		}
 
+		userId = userId.trim().toLowerCase();
 		const account = accounts[userId];
 		if (!account) {
 			return state;
@@ -424,7 +430,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 
 		// Update if the other account is the active one
 		let activeAccountSubscriptions = state.subscriptions;
-		if (userId.trim().toLowerCase() === activeAccUserId.trim().toLowerCase()) {
+		if (userId === activeAccUserId.trim().toLowerCase()) {
 			activeAccountSubscriptions = subscriptions;
 		}
 
@@ -459,6 +465,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 		const existAccount = accounts[userId] || {};
 		const {
 			accessToken,
+			activeDashboardId = defaultDashboardId,
 		} = existAccount;
 
 		if (!accessToken) {
@@ -469,6 +476,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...state,
 			accessToken,
 			userId: accessToken.userId,
+			activeDashboardId,
 		};
 	}
 	if (action.type === 'LOGGED_OUT_SELECTED') {
@@ -478,6 +486,35 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			accounts: omit(accounts, userId),
+		};
+	}
+	if (action.type === 'SELECT_DASHBOARD') {
+		const { payload: { dashboardId } } = action;
+
+		let { accounts = {}, userId = '' } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const subscriptions = action.payload;
+
+		userId = userId.trim().toLowerCase();
+		const account = accounts[userId] || {};
+
+		const updatedAccount = {
+			...account,
+			subscriptions,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
+		return {
+			...state,
+			activeDashboardId: dashboardId,
+			accounts: newAccounts,
 		};
 	}
 	return state;
