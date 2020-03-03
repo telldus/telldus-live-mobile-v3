@@ -99,6 +99,7 @@ import ScrollableNavigationHeaderPoster from './ScrollableNavigationHeaderPoster
 import EmptyView from './EmptyView';
 import ActionSheet from './ActionSheet';
 import CachedImage from './CachedImage';
+import TransparentFullPageLoadingIndicator from './TransparentFullPageLoadingIndicator';
 
 import {
 	AppState,
@@ -189,6 +190,7 @@ module.exports = {
 	EmptyView,
 	ActionSheet,
 	CachedImage,
+	TransparentFullPageLoadingIndicator,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
