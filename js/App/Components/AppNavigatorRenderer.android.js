@@ -302,7 +302,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	renderNavigationView(): Object {
-		const { appLayout} = this.props;
+		const { appLayout, toggleDialogueBox, intl } = this.props;
 
 		return <Drawer
 			addNewLocation={this.addNewLocation}
@@ -312,6 +312,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			onPressGateway={this.onPressGateway}
 			closeDrawer={this.closeDrawer}
 			showSwitchAccountActionSheet={this.showSwitchAccountActionSheet}
+			toggleDialogueBox={toggleDialogueBox}
+			intl={intl}
 		/>;
 	}
 

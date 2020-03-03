@@ -48,6 +48,7 @@ import {
 	getDrawerWidth,
 	shouldUpdate,
 	navigate,
+	getPremiumAccounts,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -58,6 +59,8 @@ type Props = {
 	gateways: Object,
 	appLayout: Object,
 	isOpen: boolean,
+	hasAPremAccount: boolean,
+	enableGeoFenceFeature: boolean,
 
 	userProfile: Function,
 	onOpenSetting: Function,
@@ -66,6 +69,8 @@ type Props = {
 	dispatch: Function,
 	closeDrawer: Function,
 	showSwitchAccountActionSheet: () => void,
+	intl: Object,
+	toggleDialogueBox: (Object) => void,
 };
 
 type State = {
@@ -129,12 +134,58 @@ constructor(props: Props) {
 			'userProfile',
 			'isOpen',
 			'appLayout',
+			'hasAPremAccount',
+			'enableGeoFenceFeature',
 		]);
 	}
 
 	onPressGeoFence = () => {
-		this.props.closeDrawer();
+		const {
+			closeDrawer,
+		} = this.props;
+
+		closeDrawer();
 		navigate('GeoFenceNavigator', {}, 'GeoFenceNavigator');
+	}
+
+	showPurchacePremiumDialogue = () => {
+		const {
+			toggleDialogueBox,
+			intl,
+		} = this.props;
+
+		const {
+			formatMessage,
+		} = intl;
+
+		toggleDialogueBox({
+			show: true,
+			showHeader: true,
+			imageHeader: true,
+			header: formatMessage(i18n.upgradeToPremium),
+			text: 'This is a premium feature. Please buy any of our premium package to enjoy this feature.',
+			showPositive: true,
+			showNegative: true,
+			positiveText: formatMessage(i18n.upgrade).toUpperCase(),
+			onPressPositive: () => {
+				navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+			},
+			closeOnPressPositive: true,
+			timeoutToCallPositive: 200,
+		});
+	}
+
+	_showSwitchAccountActionSheet = () => {
+		const {
+			showSwitchAccountActionSheet,
+			hasAPremAccount,
+		} = this.props;
+
+		if (hasAPremAccount) {
+			showSwitchAccountActionSheet();
+		} else {
+			this.showPurchacePremiumDialogue();
+		}
 	}
 
 	render(): Object {
@@ -146,7 +197,7 @@ constructor(props: Props) {
 			appLayout,
 			onPressGateway,
 			dispatch,
-			showSwitchAccountActionSheet,
+			enableGeoFenceFeature,
 		} = this.props;
 		const {
 			drawerSubHeader,
@@ -172,7 +223,7 @@ constructor(props: Props) {
 					appLayout={appLayout}
 					lastName={userProfile.lastname}
 					styles={styles}
-					onPress={showSwitchAccountActionSheet}/>
+					onPress={this._showSwitchAccountActionSheet}/>
 				<View style={{
 					flex: 1,
 					backgroundColor: 'white',
@@ -183,17 +234,19 @@ constructor(props: Props) {
 							styles={drawerSubHeader}/>
 						{settingLinks}
 					</View>
-					<View style={styles.settingsLinkCover}>
-						<DrawerSubHeader
-							textIntl={i18n.settingsHeader}
-							styles={drawerSubHeader}/>
-						<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
-							<MaterialIcons style={styles.linkIconStyle} name={'location-on'}/>
-							<Text style={styles.linkLabelStyle}>
+					{enableGeoFenceFeature && (
+						<View style={styles.settingsLinkCover}>
+							<DrawerSubHeader
+								textIntl={'GeoFence'}
+								styles={drawerSubHeader}/>
+							<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
+								<MaterialIcons style={styles.linkIconStyle} name={'location-on'}/>
+								<Text style={styles.linkLabelStyle}>
 			GeoFence Settings
-							</Text>
-						</RippleButton>
-					</View>
+								</Text>
+							</RippleButton>
+						</View>
+					)}
 					<DrawerSubHeader
 						textIntl={i18n.locationsLayoutTitle}
 						styles={{
@@ -353,9 +406,19 @@ constructor(props: Props) {
 
 function mapStateToProps(store: Object): Object {
 
+	const { accounts = {}, firebaseRemoteConfig = {} } = store.user;
+
+	const premAccounts = getPremiumAccounts(accounts);
+	const hasAPremAccount = Object.keys(premAccounts).length > 0;
+
+	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
+	const { enable } = JSON.parse(geoFenceFeature);
+
 	return {
 		gateways: store.gateways,
 		userProfile: getUserProfileSelector(store),
+		hasAPremAccount,
+		enableGeoFenceFeature: enable,
 	};
 }
 
