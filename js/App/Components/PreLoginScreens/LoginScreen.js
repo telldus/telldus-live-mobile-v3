@@ -29,6 +29,10 @@ import { intlShape, injectIntl } from 'react-intl';
 import { FormattedMessage, View } from '../../../BaseComponents';
 import { LoginForm, SessionLocked } from './SubViews';
 
+import {
+	clearAppData,
+} from '../../Actions/AppData';
+
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 
@@ -42,6 +46,7 @@ type Props = {
 	styles: Object,
 	accessToken: Object,
 	isTokenValid: boolean,
+	dispatch: Function,
 };
 
 type State = {
@@ -174,6 +179,11 @@ class LoginScreen extends View {
 		this.props.navigation.goBack();
 	}
 
+	_onLoginSuccess = () => {
+		this.props.dispatch(clearAppData());
+		this.goBack();
+	}
+
 	render(): Object {
 		let { appLayout, styles: commonStyles, screenProps, intl } = this.props;
 		let styles = this.getStyles(appLayout);
@@ -203,7 +213,7 @@ class LoginScreen extends View {
 						headerText={headerText}
 						styles={commonStyles}
 						openDialogueBox={this.openDialogueBox}
-						onLoginSuccess={source === 'postlogin' ? this.goBack : undefined}/>
+						onLoginSuccess={source === 'postlogin' ? this._onLoginSuccess : undefined}/>
 				}
 				{this.props.accessToken && !this.props.isTokenValid ?
 					null
@@ -291,4 +301,10 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, null)(injectIntl(LoginScreen));
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		dispatch,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(LoginScreen));

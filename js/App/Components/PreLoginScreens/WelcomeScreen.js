@@ -26,6 +26,11 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { FormattedMessage, View, Text, TouchableButton, H1 } from '../../../BaseComponents';
+
+import {
+	clearAppData,
+} from '../../Actions/AppData';
+
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -43,6 +48,7 @@ type Props = {
 	styles: Object,
 	navigation: Object,
 	screenProps: Object,
+	dispatch: Function,
 };
 
 class WelcomeScreen extends View {
@@ -61,12 +67,14 @@ class WelcomeScreen extends View {
 			screenProps,
 			registeredCredential,
 			onPressOK,
+			dispatch,
 		} = this.props;
 
 		onPressOK(registeredCredential);
 
 		const { source = 'prelogin' } = screenProps;
 		if (source === 'postlogin') {
+			dispatch(clearAppData());
 			this.goBack();
 		}
 	}
@@ -129,6 +137,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 		onPressOK: (accessToken: string) => {
 			dispatch(updateAccessToken(accessToken));
 		},
+		dispatch,
 	};
 }
 
