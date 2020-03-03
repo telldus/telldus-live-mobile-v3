@@ -29,7 +29,10 @@ const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
 
-import { View } from '../../BaseComponents';
+import {
+	View,
+	TransparentFullPageLoadingIndicator,
+} from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
@@ -108,6 +111,8 @@ type Props = {
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	userId: string,
+
+	showLoadingIndicator: boolean,
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -205,6 +210,7 @@ actionsToPerformOnStart = async () => {
 		subscriptions,
 		pro,
 		visibilityProExpireHeadsup,
+		showLoadingIndicator,
 	} = this.props;
 
 	// NOTE : Make sure "fetchRemoteConfig" is called before 'checkPermissionAndInitializeWatcher'.
@@ -229,6 +235,7 @@ actionsToPerformOnStart = async () => {
 			if (
 				!this.state.isDrawerOpen &&
 				!this.props.pushTokenRegistered &&
+				!this.props.showLoadingIndicator &&
 				phonesList.phone &&
 				phonesList.phone.length > 0 &&
 				this.doesAllowsToOverrideScreen()
@@ -270,12 +277,13 @@ actionsToPerformOnStart = async () => {
 		isDrawerOpen,
 		hasTriedAddLocation,
 	} = this.state;
-	if (!isDrawerOpen && addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
+	if (!isDrawerOpen && !showLoadingIndicator && addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
 		this.addNewLocation();
 	}
 
 	if (
 		!isDrawerOpen &&
+		!showLoadingIndicator &&
 		premiumAboutToExpire(subscriptions, pro) &&
 		visibilityProExpireHeadsup !== 'hide_perm' &&
 		this.doesAllowsToOverrideScreen()
@@ -363,6 +371,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showChangeLog',
 		'userId',
 		'screen',
+		'showLoadingIndicator',
 	]);
 	if (propsChange) {
 		return true;
@@ -571,12 +580,15 @@ render(): Object {
 		intl,
 		screenReaderEnabled,
 		showChangeLog,
+		showLoadingIndicator,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
 	const showEulaMdal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen();
+
+	const showLoadingIndicatorFinal = showLoadingIndicator && !showEulaMdal;
 
 	return (
 		<View style={{flex: 1}}>
@@ -608,6 +620,8 @@ render(): Object {
 			<UserAgreement showModal={showEulaMdal} onLayout={this.onLayout}/>
 			<SwitchAccountActionSheet
 				ref={this.setRefSwitchAccountActionSheet}/>
+			<TransparentFullPageLoadingIndicator
+				isVisible={showLoadingIndicatorFinal}/>
 		</View>
 	);
 }
@@ -636,8 +650,14 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		userId,
 	} = state.user;
 
-	const { allIds = [], toActivate } = state.gateways;
+	const { allIds = [], toActivate, didFetch: gDidFetch } = state.gateways;
 	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
+
+	const { didFetch: dDidFetch, allIds: allDs = [] } = state.devices;
+	const { didFetch: sDidFetch, allIds: allSs = [] } = state.sensors;
+	const showLoadingIndicator = (!gDidFetch && allIds.length === 0) ||
+	(!dDidFetch && allDs.length === 0) ||
+	(!sDidFetch && allSs.length === 0);
 
 	return {
 		messageToast,
@@ -661,6 +681,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		visibilityProExpireHeadsup,
 		userId,
 		screen: state.navigation.screen,
+
+		showLoadingIndicator,
 	};
 }
 

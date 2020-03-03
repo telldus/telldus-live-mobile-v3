@@ -324,20 +324,21 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 							setTimeout(() => {
 								const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
 								dispatch(showToast(messageOnSuccesSwitch));
+
+								setSwitchingId(null);
+								dispatch(onSwitchAccount({
+									userId: userIdKey,
+								}));
+
+								if (isLoggingOut) {
+									dispatch(unregisterPushToken(pushToken));
+									setIsLoggingOut(false);
+									dispatch(logoutSelectedFromTelldus({
+										userId,
+									}));
+								}
 							}, 200);
 						});
-						setSwitchingId(null);
-						dispatch(onSwitchAccount({
-							userId: userIdKey,
-						}));
-
-						if (isLoggingOut) {
-							dispatch(unregisterPushToken(pushToken));
-							setIsLoggingOut(false);
-							dispatch(logoutSelectedFromTelldus({
-								userId,
-							}));
-						}
 					}).catch((err: Object) => {
 						closeActionSheet();
 						setSwitchingId(null);
