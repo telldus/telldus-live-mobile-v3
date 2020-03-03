@@ -51,6 +51,7 @@ import * as gatewayUtils from './gatewayUtils';
 import * as rgbUtils from './rgbUtils';
 import * as thermostatUtils from './thermostatUtils';
 import GeoFenceUtils from './GeoFenceUtils';
+import * as dashboardUtils from './dashboardUtils';
 
 module.exports = {
 	getRouteName,
@@ -84,4 +85,5 @@ module.exports = {
 	...rgbUtils,
 	...thermostatUtils,
 	GeoFenceUtils,
+	...dashboardUtils,
 };
