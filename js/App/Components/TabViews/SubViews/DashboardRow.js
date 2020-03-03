@@ -355,7 +355,7 @@ getInfo(): null | string {
 
 	const {
 		THERMOSTAT,
-	} = item.supportedMethods;
+	} = item.supportedMethods || {};
 
 	let info = typeof powerConsumed === 'number' || typeof powerConsumed === 'string' ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W` : null;
 	if (THERMOSTAT && (typeof currentTemp === 'number' || typeof currentTemp === 'string')) {
