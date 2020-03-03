@@ -70,6 +70,16 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
+	if (user && !user.activeDashboardId) {
+		newState = {
+			...newState,
+			user: {
+				...user,
+				activeDashboardId: defaultDashboardId,
+			},
+		};
+	}
+
 	const { userId } = user;
 	if (dashboard && userId) {
 		const {
