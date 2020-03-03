@@ -175,11 +175,12 @@ function logoutFromTelldus(): ThunkAction {
 }
 
 function logoutSelectedFromTelldus(data: Object): ThunkAction {
-	destroyAllConnections();
-	widgetiOSRemoveDataFromKeychain();
+	return (dispatch: Function, getState: Function): Function => {
 
-	return (dispatch: Function): Function => {
+		destroyAllConnections();
+		widgetiOSRemoveDataFromKeychain();
 		dispatch(widgetAndroidDisableAll());
+
 		return dispatch({
 			type: 'LOGGED_OUT_SELECTED',
 			payload: {
@@ -189,11 +190,12 @@ function logoutSelectedFromTelldus(data: Object): ThunkAction {
 	};
 }
 function onSwitchAccount(payload: Object): ThunkAction {
-	destroyAllConnections();
-	widgetiOSRemoveDataFromKeychain();
+	return (dispatch: Function, getState: Function): Function => {
 
-	return (dispatch: Function): Function => {
+		destroyAllConnections();
+		widgetiOSRemoveDataFromKeychain();
 		dispatch(widgetAndroidDisableAll());
+
 		return dispatch({
 			type: 'SWITCH_USER_ACCOUNT',
 			payload,
