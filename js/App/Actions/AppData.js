@@ -22,7 +22,7 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Action } from './Types';
 import { actions } from 'live-shared-data';
 const {DevicesCommon: {getDevices}} = actions;
 const {
@@ -45,6 +45,13 @@ function getAppData(): ThunkAction {
 	};
 }
 
+const clearAppData = (): Action => {
+	return {
+		type: 'CLEAR_APP_DATA',
+	};
+};
+
 module.exports = {
 	getAppData,
+	clearAppData,
 };

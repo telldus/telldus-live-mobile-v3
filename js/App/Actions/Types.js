@@ -172,6 +172,8 @@ export type Action =
 	| { type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 
 	| { type: 'SELECT_DASHBOARD', payload: Object }
+
+	| { type: 'CLEAR_APP_DATA' }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
