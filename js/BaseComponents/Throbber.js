@@ -62,6 +62,7 @@ export default class Throbber extends Component<Props, null> {
 			toValue: this.nextValue,
 			duration: this.props.throbSpeed,
 			delay: 10,
+			useNativeDriver: true,
 		}).start((event: Object) => {
 			if (event.finished) {
 				this.currentValue = this.nextValue;
