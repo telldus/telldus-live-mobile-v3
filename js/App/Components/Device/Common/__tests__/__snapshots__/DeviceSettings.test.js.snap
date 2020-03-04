@@ -97,7 +97,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -173,7 +173,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -284,7 +284,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -360,7 +360,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -501,7 +501,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -577,7 +577,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -688,7 +688,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
@@ -764,7 +764,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         </Text>
         <View
           accessible={true}
-          clickable={true}
+          focusable={true}
           isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}

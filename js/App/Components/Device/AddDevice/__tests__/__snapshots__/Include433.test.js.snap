@@ -43,15 +43,6 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       }
     >
       <View
-        appLayout={
-          Object {
-            "height": 1334,
-            "width": 750,
-          }
-        }
-        forceHideStatus={false}
-        leftButton={null}
-        showAttentionCapture={false}
         style={
           Object {
             "alignItems": "center",
@@ -284,15 +275,6 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
       }
     >
       <View
-        appLayout={
-          Object {
-            "height": 1334,
-            "width": 750,
-          }
-        }
-        forceHideStatus={false}
-        leftButton={null}
-        showAttentionCapture={false}
         style={
           Object {
             "alignItems": "center",
@@ -717,15 +699,6 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
       }
     >
       <View
-        appLayout={
-          Object {
-            "height": 1334,
-            "width": 750,
-          }
-        }
-        forceHideStatus={false}
-        leftButton={null}
-        showAttentionCapture={false}
         style={
           Object {
             "alignItems": "center",

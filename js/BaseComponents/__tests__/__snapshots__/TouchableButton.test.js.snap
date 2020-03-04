@@ -4,7 +4,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
-  clickable={true}
+  focusable={true}
   isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
@@ -73,7 +73,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
-  clickable={true}
+  focusable={true}
   isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
@@ -187,7 +187,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled 1`
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
-  clickable={true}
+  focusable={true}
   isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
@@ -256,7 +256,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
 <View
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
-  clickable={true}
+  focusable={true}
   isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}

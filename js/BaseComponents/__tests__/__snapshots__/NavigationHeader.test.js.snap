@@ -9,31 +9,6 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
   }
 >
   <View
-    appLayout={
-      Object {
-        "height": 1334,
-        "width": 750,
-      }
-    }
-    forceHideStatus={false}
-    leftButton={
-      Object {
-        "accessibilityLabel": "navigational back button .Double tap to activate",
-        "component": <Icon
-          allowFontScaling={false}
-          color="#fff"
-          name="angle-left"
-          size={45}
-          style={
-            Object {
-              "paddingVertical": 10,
-            }
-          }
-        />,
-        "onPress": [Function],
-      }
-    }
-    showAttentionCapture={false}
     style={
       Object {
         "alignItems": "center",
@@ -50,7 +25,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     <View
       accessibilityLabel="navigational back button .Double tap to activate"
       accessible={true}
-      clickable={true}
+      focusable={true}
       isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
@@ -126,31 +101,6 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
   }
 >
   <View
-    appLayout={
-      Object {
-        "height": 1334,
-        "width": 750,
-      }
-    }
-    forceHideStatus={false}
-    leftButton={
-      Object {
-        "accessibilityLabel": "navigational back button .Double tap to activate",
-        "component": <Icon
-          allowFontScaling={false}
-          color="#fff"
-          name="angle-left"
-          size={45}
-          style={
-            Object {
-              "paddingVertical": 10,
-            }
-          }
-        />,
-        "onPress": [Function],
-      }
-    }
-    showAttentionCapture={false}
     style={
       Object {
         "alignItems": "center",
@@ -167,7 +117,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
     <View
       accessibilityLabel="navigational back button .Double tap to activate"
       accessible={true}
-      clickable={true}
+      focusable={true}
       isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}

@@ -29,7 +29,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -96,7 +96,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -153,7 +153,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -223,7 +223,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -280,7 +280,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -337,7 +337,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -417,7 +417,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -474,7 +474,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
@@ -541,7 +541,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     >
       <View
         accessible={true}
-        clickable={true}
+        focusable={true}
         isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}

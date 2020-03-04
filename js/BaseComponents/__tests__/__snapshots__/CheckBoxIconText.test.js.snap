@@ -4,7 +4,7 @@ exports[`renders CheckBoxIconText when checked 1`] = `
 <View
   accessibilityLabel=" CheckBoxIconText, , "
   accessible={true}
-  clickable={true}
+  focusable={true}
   isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
@@ -78,7 +78,7 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
 <View
   accessibilityLabel=" CheckBoxIconText, , "
   accessible={true}
-  clickable={true}
+  focusable={true}
   isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
