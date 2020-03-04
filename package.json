@@ -155,8 +155,8 @@
       "^.+\\.jsx$": "babel-jest",
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
-    "transformIgnorePatterns": [ 
-      "node_modules/(?!((jest-)?react-native|react-navigation|@react-navigation/.*))" 
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|react-navigation|@react-navigation/.*))"
     ]
   }
 }
