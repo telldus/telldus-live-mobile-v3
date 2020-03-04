@@ -141,7 +141,7 @@ contactSupport() {
 		this.setState({
 			isLoading: true,
 		});
-		NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+		NetInfo.fetch().then((connectionInfo: Object) => {
 			const { type, effectiveType } = connectionInfo;
 
 			const failedTests = navigation.getParam('failedTests', 'null');

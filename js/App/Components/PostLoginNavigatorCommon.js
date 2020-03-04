@@ -120,6 +120,8 @@ autoDetectLocalTellStick: () => void;
 handleConnectivityChange: () => void;
 addNewLocation: () => void;
 addNewDevice: () => void;
+
+clearNetInfoListener: any;
 constructor(props: Props) {
 	super(props);
 
@@ -151,6 +153,8 @@ constructor(props: Props) {
 	// sets push notification listeners and returns a method that clears all listeners.
 	this.onNotification = Push.onNotification();
 	this.onNotificationOpened = Push.onNotificationOpened();
+
+	this.clearNetInfoListener = null;
 }
 
 async componentDidMount() {
@@ -198,10 +202,7 @@ async componentDidMount() {
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
 
-	NetInfo.addEventListener(
-		'connectionChange',
-		this.handleConnectivityChange,
-	);
+	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
 
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
@@ -324,11 +325,11 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 componentWillUnmount() {
 	clearTimeout(this.timeOutConfigureLocalControl);
-	NetInfo.removeEventListener(
-		'connectionChange',
-		this.handleConnectivityChange,
-	);
 	closeUDPSocket();
+
+	if (this.clearNetInfoListener) {
+		this.clearNetInfoListener();
+	}
 
 	if (this.onNotification && typeof this.onNotification === 'function') {
 		// Remove Push notification listener.

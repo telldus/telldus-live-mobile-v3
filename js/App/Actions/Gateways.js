@@ -78,7 +78,7 @@ function autoDetectLocalTellStick(): ThunkAction {
 
 				socket.once('listening', () => {
 				// Important to check connectivity right before send.
-					NetInfo.getConnectionInfo().then((connectionInfo: Object) => {
+					NetInfo.fetch().then((connectionInfo: Object) => {
 						if ((socket._id === openSocketID) && (socket._id !== closingSocketID) && (connectionInfo.type !== 'none')) {
 							if ((Platform.OS !== 'android') && (socket._state === STATE.BOUND)) {
 								socket.setBroadcast(true);
