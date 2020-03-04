@@ -31,7 +31,7 @@ type Props = {
 	isEditMode: () => boolean,
 };
 
-const LeavingActions = (props: Props): Object => {
+const LeavingActions = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onDidMount,
@@ -65,6 +65,6 @@ const LeavingActions = (props: Props): Object => {
 			currentScreen={'LeavingActions'}
 			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}/>
 	);
-};
+});
 
 export default LeavingActions;

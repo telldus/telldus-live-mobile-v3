@@ -36,7 +36,7 @@ import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-const LogoutAllAccButton = (props: Object): Object => {
+const LogoutAllAccButton = React.memo<Object>((props: Object): Object => {
 	const { toggleDialogueBox, buttonAccessibleProp = true, label, isLoggingOut } = props;
 	const { formatMessage } = useIntl();
 
@@ -95,7 +95,7 @@ const LogoutAllAccButton = (props: Object): Object => {
 			disabled={isLoggingOut || loading}
 		/>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;

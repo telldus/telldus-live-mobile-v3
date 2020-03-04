@@ -57,7 +57,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const AddEditGeoFence = (props: Props): Object => {
+const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
@@ -161,7 +161,7 @@ const AddEditGeoFence = (props: Props): Object => {
 				imageSource={{uri: 'icon_plus'}}/>
 		</View>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 

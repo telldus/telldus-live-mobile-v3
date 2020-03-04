@@ -33,7 +33,7 @@ import {
 	Image,
 } from '../../../../BaseComponents';
 
-const MapOverlay = (props: Object): Object => {
+const MapOverlay = React.memo<Object>((props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -66,7 +66,8 @@ const MapOverlay = (props: Object): Object => {
 			</View>
 		</View>
 	);
-};
+});
+
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;

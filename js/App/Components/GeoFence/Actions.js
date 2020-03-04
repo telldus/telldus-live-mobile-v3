@@ -70,7 +70,7 @@ type Props = {
 	currentScreen: string,
 };
 
-const Actions = (props: Props): Object => {
+const Actions = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onPressNext,
@@ -385,6 +385,6 @@ const Actions = (props: Props): Object => {
 			/>
 		</View>
 	);
-};
+});
 
 export default Actions;

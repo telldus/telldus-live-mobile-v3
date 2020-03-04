@@ -74,7 +74,7 @@ type Props = {
 	devicetype: string,
 };
 
-const DeviceSettings = (props: Props): Object => {
+const DeviceSettings = React.memo<Object>((props: Props): Object => {
 	const inputRefSystem = useRef(null);
 	const inputRefHouse = useRef(null);
 	const inputRefUnit = useRef(null);
@@ -547,7 +547,7 @@ const DeviceSettings = (props: Props): Object => {
 			}
 		</View>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
@@ -627,5 +627,5 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(DeviceSettings);
+export default DeviceSettings;
 

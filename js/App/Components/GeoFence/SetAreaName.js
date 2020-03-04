@@ -49,7 +49,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SetAreaName = (props: Props): Object => {
+const SetAreaName = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
@@ -116,7 +116,7 @@ const SetAreaName = (props: Props): Object => {
 				iconStyle={iconStyle}/>
 		</View>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;

@@ -65,7 +65,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const EditGeoFence = (props: Props): Object => {
+const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
@@ -275,7 +275,7 @@ const EditGeoFence = (props: Props): Object => {
 			/>
 		</ScrollView>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;

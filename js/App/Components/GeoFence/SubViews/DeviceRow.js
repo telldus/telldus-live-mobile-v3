@@ -61,7 +61,7 @@ import {
 	isValidHexColorCode,
 } from '../../../Lib';
 
-const DeviceRow = (props: Object): Object => {
+const DeviceRow = React.memo<Object>((props: Object): Object => {
 
 	let button = [];
 	const {
@@ -318,7 +318,7 @@ const DeviceRow = (props: Object): Object => {
 		</ListItem>
 	);
 
-};
+});
 
 const getStyles = (appLayout: Object, deviceState: string): Object => {
 	let { height, width } = appLayout;

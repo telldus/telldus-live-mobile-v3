@@ -31,7 +31,7 @@ type Props = {
 	isEditMode: () => boolean,
 };
 
-const ArrivingActions = (props: Props): Object => {
+const ArrivingActions = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		onDidMount,
@@ -65,6 +65,6 @@ const ArrivingActions = (props: Props): Object => {
 			currentScreen={'ArrivingActions'}
 			imageSource={isEdit ? undefined : {uri: 'right_arrow_key'}}/>
 	);
-};
+});
 
 export default ArrivingActions;

@@ -29,7 +29,7 @@ import {
 	Image,
 } from 'react-native';
 
-const CachedImageComponent = (props: Object): Object => {
+const CachedImageComponent = React.memo<Object>((props: Object): Object => {
 	const {
 		style,
 		sourceImg,
@@ -72,7 +72,7 @@ const CachedImageComponent = (props: Object): Object => {
 }
 </>
 	);
-};
+});
 
 export default CachedImageComponent;
 

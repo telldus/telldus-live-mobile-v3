@@ -29,7 +29,7 @@ import {
 	TitledInfoBlock,
 } from '../../../../BaseComponents';
 
-const AddAccountBlock = (props: Object): Object => {
+const AddAccountBlock = React.memo<Object>((props: Object): Object => {
 	const { onPress } = props;
 
 	const {layout} = useSelector((state: Object): Object => state.app);
@@ -48,7 +48,7 @@ const AddAccountBlock = (props: Object): Object => {
 			iconStyle={iconStyle}
 		/>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;

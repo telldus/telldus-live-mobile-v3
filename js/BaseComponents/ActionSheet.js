@@ -100,7 +100,7 @@ const calculateHeight = (props: Object): Object => {
 	};
 };
 
-const ButtonComponent = (props: Object): Object => {
+const ButtonComponent = React.memo<Object>((props: Object): Object => {
 
 	const {
 		buttonUnderlayColor,
@@ -135,7 +135,7 @@ const ButtonComponent = (props: Object): Object => {
 			)}
 		</TouchableOpacity>
 	);
-};
+});
 
 
 type Props = {

@@ -44,7 +44,7 @@ import i18n from '../../../Translations/common';
 
 const weekdayStrs = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-const JobRow = (props: Object): Object => {
+const JobRow = React.memo<Object>((props: Object): Object => {
 
 	const {
 		job,
@@ -158,7 +158,7 @@ const JobRow = (props: Object): Object => {
 		</ListItem>
 	);
 
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	let { height, width } = appLayout;

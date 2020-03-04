@@ -55,7 +55,7 @@ type Props = {
 	gatewayTimezoneOffset: number,
 };
 
-const SensorBlock = (props: Props): Object => {
+const SensorBlock = React.memo<Object>((props: Props): Object => {
 
 	const {
 		name,
@@ -218,6 +218,6 @@ const SensorBlock = (props: Props): Object => {
 			iconSize: updateInfoFontSize * 1.5,
 		};
 	}
-};
+});
 
-export default React.memo<Object>(SensorBlock);
+export default SensorBlock;

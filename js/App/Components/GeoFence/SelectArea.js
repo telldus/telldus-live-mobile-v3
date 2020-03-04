@@ -54,7 +54,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const SelectArea = (props: Props): Object => {
+const SelectArea = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
@@ -124,7 +124,7 @@ const SelectArea = (props: Props): Object => {
 				imageSource={{uri: 'right_arrow_key'}}/>
 		</View>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	return {

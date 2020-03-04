@@ -38,7 +38,7 @@ import {
 import Theme from '../../../Theme';
 
 
-const FenceCallout = (props: Object): Object => {
+const FenceCallout = React.memo<Object>((props: Object): Object => {
 	const {
 		title,
 	} = props;
@@ -66,7 +66,7 @@ const FenceCallout = (props: Object): Object => {
 			</TouchableOpacity>
 		</View>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;

@@ -46,7 +46,7 @@ type Props = {
     onPress?: Function,
 };
 
-const RowWithAngle = (props: Props): Object => {
+const RowWithAngle = React.memo<Object>((props: Props): Object => {
 	const {
 		labelText,
 		showAngleRight,
@@ -81,7 +81,7 @@ const RowWithAngle = (props: Props): Object => {
 			</View>
 		</TouchableOpacity>
 	);
-};
+});
 
 RowWithAngle.defaultProps = {
 	showAngleRight: true,

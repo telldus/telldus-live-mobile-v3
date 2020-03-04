@@ -50,7 +50,7 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 };
 
-const ActiveTime = (props: Props): Object => {
+const ActiveTime = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
@@ -126,7 +126,7 @@ const ActiveTime = (props: Props): Object => {
 		</View>
 
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;

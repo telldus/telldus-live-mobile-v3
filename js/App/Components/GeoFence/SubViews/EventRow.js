@@ -42,7 +42,7 @@ import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-const EventRow = (props: Object): Object => {
+const EventRow = React.memo<Object>((props: Object): Object => {
 
 	const {
 		event,
@@ -146,7 +146,7 @@ const EventRow = (props: Object): Object => {
 		</ListItem>
 	);
 
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	let { height, width } = appLayout;

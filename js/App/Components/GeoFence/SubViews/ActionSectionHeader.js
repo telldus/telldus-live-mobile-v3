@@ -37,7 +37,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import Theme from '../../../Theme';
 
-const ActionSectionHeader = (props: Object): Object => {
+const ActionSectionHeader = React.memo<Object>((props: Object): Object => {
 	const {
 		onToggle,
 		title,
@@ -72,7 +72,7 @@ const ActionSectionHeader = (props: Object): Object => {
 			</View>
 		</TouchableOpacity>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
