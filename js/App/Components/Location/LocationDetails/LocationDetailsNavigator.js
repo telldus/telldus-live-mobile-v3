@@ -24,7 +24,7 @@
 
 import React from 'react';
 import { Easing, Animated } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import LocationDetailsContainer from './LocationDetailsContainer';
 

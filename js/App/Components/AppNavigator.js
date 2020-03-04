@@ -22,7 +22,8 @@
 'use strict';
 import React from 'react';
 import { Easing, Animated } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { Header } from '../../BaseComponents';
@@ -58,7 +59,7 @@ import RegisterForPushScreen from './PushSettings/RegisterForPushScreen';
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
-		navigationOptions: ({screenProps, ...others}: Object): Object => {
+		navigationOptions: ({screenProps, navigation, navigationOptions}: Object): Object => {
 			const { hideHeader } = screenProps;
 			if (hideHeader) { // Android Landscape mode - Custom Header - so return null.
 				return {
@@ -71,7 +72,10 @@ const RouteConfigs = {
 				};
 			}
 			return {
-				header: <Header {...others} {...screenProps}/>,
+				header: <Header
+					navigation={navigation}
+					navigationOptions={navigationOptions}
+					{...screenProps}/>,
 			};
 		},
 	},

@@ -147,7 +147,6 @@ const Push = {
 						}
 					}
 					dispatch({ type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: err.message });
-					throw err;
 				});
 		};
 	},

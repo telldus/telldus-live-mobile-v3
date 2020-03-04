@@ -371,7 +371,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			<DrawerLayoutAndroid
 				ref="drawer"
 				drawerWidth={drawerWidth}
-				drawerPosition={DrawerLayoutAndroid.positions.Left}
+				drawerPosition={'left'}
 				renderNavigationView={this.renderNavigationView}
 				drawerBackgroundColor={'transparent'}
 				onDrawerOpen={this.onOpenDrawer}
