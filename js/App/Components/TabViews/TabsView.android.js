@@ -27,6 +27,7 @@
 import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -59,6 +60,7 @@ const TabNavigatorConfig = {
 		scrollEnabled: true,
 		allowFontScaling: false,
 	},
+	pagerComponent: ViewPagerAdapter,
 };
 
 const TabsView = createMaterialTopTabNavigator(RouteConfigs, TabNavigatorConfig);
