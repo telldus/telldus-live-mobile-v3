@@ -103,7 +103,7 @@
     "@react-native-community/eslint-config": "^0.0.5",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.9.0",
+    "babel-jest": "^25.1.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-polyfill": "~6.26.0",
     "babel-preset-stage-3": "^6.24.1",
@@ -117,7 +117,7 @@
     "fetch-mock": "^7.3.1",
     "flow-bin": "^0.105.0",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "jetifier": "^1.6.3",
     "metro-react-native-babel-preset": "^0.56.0",
     "prompt": "^1.0.0",
@@ -154,6 +154,9 @@
     "transform": {
       "^.+\\.jsx$": "babel-jest",
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
-    }
+    },
+    "transformIgnorePatterns": [ 
+      "node_modules/(?!((jest-)?react-native|react-navigation|@react-navigation/.*))" 
+    ]
   }
 }
