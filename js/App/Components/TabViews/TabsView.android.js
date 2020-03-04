@@ -60,6 +60,13 @@ const TabNavigatorConfig = {
 		scrollEnabled: true,
 		allowFontScaling: false,
 	},
+	// NOTE: The default one has an issue:
+    // From dahsboard did mount, when db is empty we
+    // do navigate to devices tab, with the default pager
+    // component, after navigation device tab contents
+    // are rendered once, but after a flash it gets overridden
+    // by the empty db message, which must be some bug
+    // in the default pager component used by react-navigation-tabs.
 	pagerComponent: ViewPagerAdapter,
 };
 
