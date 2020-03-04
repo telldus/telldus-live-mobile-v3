@@ -46,7 +46,7 @@ type Props = {
     onPress?: Function,
 };
 
-const RowWithAngle = React.memo<Object>((props: Props): Object => {
+const RowWithAngle: Object = React.memo<Object>((props: Props): Object => {
 	const {
 		labelText,
 		showAngleRight,
