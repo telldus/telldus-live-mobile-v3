@@ -265,20 +265,20 @@ class SettingsRow extends Component<Props, null> {
 								/>
 								:
 								<>
-								{!!value && (
-									(typeof value === 'string') || (typeof value === 'number') ?
-										<>
-											{iconValueLeft}
-											<Text style={[valueText, valueTextStyle]}>
-												{value} {valuePostfix}
-											</Text>
-										</>
-										:
-										(typeof value === 'object') ?
-											value
+									{!!value && (
+										(typeof value === 'string') || (typeof value === 'number') ?
+											<>
+												{iconValueLeft}
+												<Text style={[valueText, valueTextStyle]}>
+													{value} {valuePostfix}
+												</Text>
+											</>
 											:
-											null
-								)}
+											(typeof value === 'object') ?
+												value
+												:
+												null
+									)}
 								</>
 							}
 							{!!iconValueRight && (

@@ -558,29 +558,29 @@ render(): Object | null {
 	const showContactSupport = gotFailedTest && supportRSA();
 
 	return (
-			<>
-				<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
-				<View style={testsCover}>
-					{tests}
-				</View>
-				{!!troubleShootHints && (troubleShootHints.length > 0) &&
+		<>
+			<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
+			<View style={testsCover}>
+				{tests}
+			</View>
+			{!!troubleShootHints && (troubleShootHints.length > 0) &&
 					troubleShootHints
-				}
-				{showButtons &&
+			}
+			{showButtons &&
 					<>
-					<TouchableButton
-						text={i18n.labelButtonRunTestsAgain}
-						style={button}
-						onPress={this.onPressReRunTest}/>
-					{showContactSupport && <TouchableButton
-						text={i18n.labelButtonRequestSupport}
-						style={[button, {
-							marginBottom: 20,
-						}]}
-						onPress={this.onPressRequestSupport}/>}
+						<TouchableButton
+							text={i18n.labelButtonRunTestsAgain}
+							style={button}
+							onPress={this.onPressReRunTest}/>
+						{showContactSupport && <TouchableButton
+							text={i18n.labelButtonRequestSupport}
+							style={[button, {
+								marginBottom: 20,
+							}]}
+							onPress={this.onPressRequestSupport}/>}
 					</>
-				}
-			</>
+			}
+		</>
 	);
 }
 

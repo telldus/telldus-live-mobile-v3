@@ -235,73 +235,73 @@ render(testData: Object): Object {
 	const descLen = value.trim().length;
 
 	return (
-			<>
-				<View style={container}>
-					<Text style={title}>
-						{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
-					</Text>
-					<Text style={body}>
-						{formatMessage(i18n.messageCreateSupportTicket)}
-					</Text>
-					<Text style={label}>
-						{formatMessage(i18n.labelMessage)}
-					</Text>
-					<MaterialTextInput
-						value={value}
-						style={textField}
-						onChangeText={this.onChangeText}
-						onSubmitEditing={this.onSubmitEditing}
-						autoCapitalize="sentences"
-						autoCorrect={false}
-						autoFocus={true}
-						baseColor={brandSecondary}
-						tintColor={brandSecondary}
-						returnKeyType={'done'}
-						multiline={true}
-					/>
-					<Text style={label}>
-						{`${formatMessage(i18n.labelInternetRouter)} (${formatMessage(i18n.labelBrandAndModel)})`}
-					</Text>
-					<MaterialTextInput
-						value={routerValue}
-						style={textField}
-						onChangeText={this.onChangeTextRouter}
-						autoCapitalize="sentences"
-						autoCorrect={false}
-						autoFocus={false}
-						baseColor={brandSecondary}
-						tintColor={brandSecondary}
-						returnKeyType={'done'}
-					/>
-					<Text style={label}>
-						{formatMessage(i18n.emailAddress)}
-					</Text>
-					<MaterialTextInput
-						value={emailValue}
-						style={textField}
-						onChangeText={this.onChangeTextEmail}
-						autoCapitalize="none"
-						autoCorrect={false}
-						autoFocus={false}
-						baseColor={brandSecondary}
-						tintColor={brandSecondary}
-						returnKeyType={'done'}
-					/>
-				</View>
-				{descLen < 50 && <View style={infoContainer}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
-						{formatMessage(i18n.supportTicketDescriptionInfo)}
-					</Text>
-				</View>
-				}
-				<TouchableButton
-					text={i18n.labelSend}
-					style={button}
-					onPress={this.contactSupport}
-					disabled={isLoading || descLen < 50}
-					showThrobber={isLoading}/>
-			</>
+		<>
+			<View style={container}>
+				<Text style={title}>
+					{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
+				</Text>
+				<Text style={body}>
+					{formatMessage(i18n.messageCreateSupportTicket)}
+				</Text>
+				<Text style={label}>
+					{formatMessage(i18n.labelMessage)}
+				</Text>
+				<MaterialTextInput
+					value={value}
+					style={textField}
+					onChangeText={this.onChangeText}
+					onSubmitEditing={this.onSubmitEditing}
+					autoCapitalize="sentences"
+					autoCorrect={false}
+					autoFocus={true}
+					baseColor={brandSecondary}
+					tintColor={brandSecondary}
+					returnKeyType={'done'}
+					multiline={true}
+				/>
+				<Text style={label}>
+					{`${formatMessage(i18n.labelInternetRouter)} (${formatMessage(i18n.labelBrandAndModel)})`}
+				</Text>
+				<MaterialTextInput
+					value={routerValue}
+					style={textField}
+					onChangeText={this.onChangeTextRouter}
+					autoCapitalize="sentences"
+					autoCorrect={false}
+					autoFocus={false}
+					baseColor={brandSecondary}
+					tintColor={brandSecondary}
+					returnKeyType={'done'}
+				/>
+				<Text style={label}>
+					{formatMessage(i18n.emailAddress)}
+				</Text>
+				<MaterialTextInput
+					value={emailValue}
+					style={textField}
+					onChangeText={this.onChangeTextEmail}
+					autoCapitalize="none"
+					autoCorrect={false}
+					autoFocus={false}
+					baseColor={brandSecondary}
+					tintColor={brandSecondary}
+					returnKeyType={'done'}
+				/>
+			</View>
+			{descLen < 50 && <View style={infoContainer}>
+				<IconTelldus icon={'info'} style={statusIconStyle}/>
+				<Text style={infoTextStyle}>
+					{formatMessage(i18n.supportTicketDescriptionInfo)}
+				</Text>
+			</View>
+			}
+			<TouchableButton
+				text={i18n.labelSend}
+				style={button}
+				onPress={this.contactSupport}
+				disabled={isLoading || descLen < 50}
+				showThrobber={isLoading}/>
+		</>
 	);
 }
 

@@ -356,15 +356,15 @@ class JobRow extends View<null, Props, null> {
 								}
 							</View>
 							<>
-							{!!label && <Text style={thermostatInfo}>
-								{label.toUpperCase()}
-							</Text>
-							}
-							{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
+								{!!label && <Text style={thermostatInfo}>
+									{label.toUpperCase()}
+								</Text>
+								}
+								{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
 							&& <Text style={thermostatInfo}>
 								{temperature}{scale ? '°F' : '°C'}
 							</Text>
-							}
+								}
 							</>
 						</View>,
 						actionLabel: `${typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel)} ${mode} ${temperature}`,

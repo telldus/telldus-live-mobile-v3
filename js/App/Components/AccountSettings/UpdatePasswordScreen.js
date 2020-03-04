@@ -139,72 +139,72 @@ const UpdatePasswordScreen = (props: Object): Object => {
 	}
 
 	return (
-<>
-<NavigationHeaderPoster
-	h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))} h2={formatMessage(i18n.enterNewPassBelow)}
-	align={'right'}
-	showLeftIcon={true}
-	leftIcon={'close'}
-	navigation={navigation}
-	{...others}/>
-<ScrollView style={container}>
-	<View style={body}>
-		<Text style={titleStyle}>
-			{capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))}
-		</Text>
-		<Text style={bodyStyle}>
-			{formatMessage(i18n.changePassDescription)}
-		</Text>
-		<Text style={currentLabelStyle}>
-			{formatMessage(i18n.currentPassword)}
-		</Text>
-		<MaterialTextInput
-			value={currentPas}
-			style={[textFieldStyle, textFieldStyleCurrent]}
-			onChangeText={onChangeTextCurrent}
-			autoCorrect={false}
-			autoFocus={true}
-			baseColor={Theme.Core.brandSecondary}
-			tintColor={Theme.Core.brandSecondary}
-			returnKeyType={'done'}
-			secureTextEntry={true}
-		/>
-		<MaterialTextInput
-			value={newPass}
-			style={[textFieldStyle, textFieldStyleNew]}
-			onChangeText={onChangeTextNew}
-			autoCorrect={false}
-			autoFocus={false}
-			baseColor={Theme.Core.inactiveGray}
-			tintColor={Theme.Core.inactiveGray}
-			returnKeyType={'done'}
-			placeholder={formatMessage(i18n.newPassword)}
-			placeholderTextColor={Theme.Core.inactiveGray}
-			secureTextEntry={true}
-		/>
-		<MaterialTextInput
-			value={newPassConf}
-			style={[textFieldStyle, textFieldStyleConfirm]}
-			onChangeText={onChangeTextConf}
-			autoCorrect={false}
-			autoFocus={false}
-			baseColor={Theme.Core.inactiveGray}
-			tintColor={Theme.Core.inactiveGray}
-			returnKeyType={'done'}
-			placeholder={formatMessage(i18n.newPasswordConfirm)}
-			placeholderTextColor={Theme.Core.inactiveGray}
-			secureTextEntry={true}
-		/>
-	</View>
-	<TouchableButton
-		onPress={onSubmit}
-		text={isLoading ? `${formatMessage(i18n.labelSending)}...` : formatMessage(i18n.changePassword)}
-		postScript={isLoading ? '...' : null}
-		accessible={true}
-		style={buttonStyle}
-	/>
-</ScrollView>
-</>
+		<>
+			<NavigationHeaderPoster
+				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))} h2={formatMessage(i18n.enterNewPassBelow)}
+				align={'right'}
+				showLeftIcon={true}
+				leftIcon={'close'}
+				navigation={navigation}
+				{...others}/>
+			<ScrollView style={container}>
+				<View style={body}>
+					<Text style={titleStyle}>
+						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.changePassword))}
+					</Text>
+					<Text style={bodyStyle}>
+						{formatMessage(i18n.changePassDescription)}
+					</Text>
+					<Text style={currentLabelStyle}>
+						{formatMessage(i18n.currentPassword)}
+					</Text>
+					<MaterialTextInput
+						value={currentPas}
+						style={[textFieldStyle, textFieldStyleCurrent]}
+						onChangeText={onChangeTextCurrent}
+						autoCorrect={false}
+						autoFocus={true}
+						baseColor={Theme.Core.brandSecondary}
+						tintColor={Theme.Core.brandSecondary}
+						returnKeyType={'done'}
+						secureTextEntry={true}
+					/>
+					<MaterialTextInput
+						value={newPass}
+						style={[textFieldStyle, textFieldStyleNew]}
+						onChangeText={onChangeTextNew}
+						autoCorrect={false}
+						autoFocus={false}
+						baseColor={Theme.Core.inactiveGray}
+						tintColor={Theme.Core.inactiveGray}
+						returnKeyType={'done'}
+						placeholder={formatMessage(i18n.newPassword)}
+						placeholderTextColor={Theme.Core.inactiveGray}
+						secureTextEntry={true}
+					/>
+					<MaterialTextInput
+						value={newPassConf}
+						style={[textFieldStyle, textFieldStyleConfirm]}
+						onChangeText={onChangeTextConf}
+						autoCorrect={false}
+						autoFocus={false}
+						baseColor={Theme.Core.inactiveGray}
+						tintColor={Theme.Core.inactiveGray}
+						returnKeyType={'done'}
+						placeholder={formatMessage(i18n.newPasswordConfirm)}
+						placeholderTextColor={Theme.Core.inactiveGray}
+						secureTextEntry={true}
+					/>
+				</View>
+				<TouchableButton
+					onPress={onSubmit}
+					text={isLoading ? `${formatMessage(i18n.labelSending)}...` : formatMessage(i18n.changePassword)}
+					postScript={isLoading ? '...' : null}
+					accessible={true}
+					style={buttonStyle}
+				/>
+			</ScrollView>
+		</>
 	);
 };
 

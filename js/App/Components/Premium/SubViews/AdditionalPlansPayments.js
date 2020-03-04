@@ -61,18 +61,18 @@ const AdditionalPlansPayments = (props: Object): Object => {
 
 	return (
 		<>
-		{ button ? <TouchableButton
-			onPress={onPress}
-			text={formatMessage(i18n.additionalPaymentOptions)}
-			accessibilityLabel={formatMessage(i18n.additionalPaymentOptions)}
-			accessible={buttonAccessibleProp}
-			style={buttonStyle}
-		/>
-			:
-			<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
-				{formatMessage(i18n.additionalPaymentOptions)}
-			</Text>
-		}
+			{ button ? <TouchableButton
+				onPress={onPress}
+				text={formatMessage(i18n.additionalPaymentOptions)}
+				accessibilityLabel={formatMessage(i18n.additionalPaymentOptions)}
+				accessible={buttonAccessibleProp}
+				style={buttonStyle}
+			/>
+				:
+				<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
+					{formatMessage(i18n.additionalPaymentOptions)}
+				</Text>
+			}
 		</>
 	);
 };

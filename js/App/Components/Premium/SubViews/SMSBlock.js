@@ -81,34 +81,34 @@ const SMSBlock = (props: Object): Object => {
 	} = getStyle(layout);
 
 	return (
-        <>
-		<View style={coverStyle}>
-			<SettingsRow
-				type={'text'}
-				edit={false}
-				inLineEditActive={false}
-				label={formatMessage(i18n.smsCredits)}
-				value={`${credits}`}
-				appLayout={layout}
-				iconValueRight={
-					enablePurchase ?
-						<Text style={buyCreditsStyle}>
-							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
-						</Text>
-						:
-						undefined
-				}
-				onPressIconValueRight={enablePurchase ? onPressBuyCredits : undefined}
-				onPress={false}
-				intl={intl}
-				style={style}
-				contentCoverStyle={contentCoverStyle}
-				valueCoverStyle={valueCoverStyle}
-				textFieldStyle={textFieldStyle}
-				labelTextStyle={labelTextStyle}/>
-		</View>
-        <Text style={linkTextStyle} onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
-        </>
+		<>
+			<View style={coverStyle}>
+				<SettingsRow
+					type={'text'}
+					edit={false}
+					inLineEditActive={false}
+					label={formatMessage(i18n.smsCredits)}
+					value={`${credits}`}
+					appLayout={layout}
+					iconValueRight={
+						enablePurchase ?
+							<Text style={buyCreditsStyle}>
+								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
+							</Text>
+							:
+							undefined
+					}
+					onPressIconValueRight={enablePurchase ? onPressBuyCredits : undefined}
+					onPress={false}
+					intl={intl}
+					style={style}
+					contentCoverStyle={contentCoverStyle}
+					valueCoverStyle={valueCoverStyle}
+					textFieldStyle={textFieldStyle}
+					labelTextStyle={labelTextStyle}/>
+			</View>
+			<Text style={linkTextStyle} onPress={onPressViewHistory}>{formatMessage(i18n.viewSMSHistory)}</Text>
+		</>
 	);
 };
 
