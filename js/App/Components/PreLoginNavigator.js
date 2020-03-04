@@ -21,9 +21,11 @@
 
 'use strict';
 import React from 'react';
+import {
+	Platform,
+} from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Orientation from 'react-native-orientation-locker';
-import Platform from 'Platform';
 
 import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';

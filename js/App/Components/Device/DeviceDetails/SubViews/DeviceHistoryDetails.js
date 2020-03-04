@@ -23,11 +23,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { ScrollView } from 'react-native';
+import { ScrollView, Platform, StatusBar } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { announceForAccessibility } from 'react-native-accessibility';
-import Platform from 'Platform';
-import StatusBar from 'StatusBar';
 
 import { FormattedMessage, View, Text, Icon, Modal, FormattedDate, FormattedTime } from '../../../../../BaseComponents';
 import { states, statusMessage } from '../../../../../Config';

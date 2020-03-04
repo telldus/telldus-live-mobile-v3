@@ -18,7 +18,9 @@
  */
 
 'use strict';
-import Platform from 'Platform';
+import {
+	Platform,
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
 export default async function hasStatusBar() {

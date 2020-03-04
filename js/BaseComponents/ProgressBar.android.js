@@ -21,7 +21,9 @@
 'use strict';
 
 import React from 'react';
-import ProgressBar from 'ProgressBarAndroid';
+import {
+	ProgressBarAndroid,
+} from 'react-native';
 import Base from './Base';
 import computeProps from './computeProps';
 
@@ -50,7 +52,7 @@ export default class SpinnerComponent extends Base {
 
 	render(): React$Element<any> {
 		return (
-			<ProgressBar {...this.prepareRootProps()} styleAttr="Horizontal"
+			<ProgressBarAndroid {...this.prepareRootProps()} styleAttr="Horizontal"
 			             indeterminate={false} progress={this.props.progress ? this.props.progress / 100 : 0.5}
 			             color={this.props.color ? this.props.color : this.props.inverse
 				             ? this.getTheme().inverseProgressColor : this.getTheme().defaultProgressColor}/>

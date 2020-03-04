@@ -22,12 +22,14 @@
 'use strict';
 
 import React from 'react';
-import { FlatList } from 'react-native';
+import {
+	FlatList,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import moment from 'moment';
 import Swiper from 'react-native-swiper';
-import Platform from 'Platform';
 
 import {
 	FullPageActivityIndicator,

@@ -22,10 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import {
+	TouchableOpacity,
+	Platform,
+} from 'react-native';
 import { intlShape } from 'react-intl';
 import _ from 'lodash';
-import Platform from 'Platform';
 const isEqual = require('react-fast-compare');
 
 import {

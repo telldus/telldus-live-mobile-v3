@@ -22,9 +22,8 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, DrawerLayoutAndroid } from 'react-native';
 import { connect } from 'react-redux';
-import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';

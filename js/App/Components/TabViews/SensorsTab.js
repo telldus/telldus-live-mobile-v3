@@ -22,10 +22,15 @@
 'use strict';
 
 import React from 'react';
-import { SectionList, TouchableOpacity, RefreshControl, LayoutAnimation } from 'react-native';
+import {
+	SectionList,
+	TouchableOpacity,
+	RefreshControl,
+	LayoutAnimation,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import Platform from 'Platform';
 import isEmpty from 'lodash/isEmpty';
 
 import { View, IconTelldus, Text } from '../../../BaseComponents';
