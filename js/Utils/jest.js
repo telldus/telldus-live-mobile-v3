@@ -84,7 +84,7 @@ NativeModules.AndroidWidget = {
 	disableAllWidgets: jest.fn(),
 };
 
-jest.mock('@react-native-community/async-storage', () => mockAsyncStorage);
+jest.mock('@react-native-community/async-storage', (): Object => mockAsyncStorage);
 
 jest.mock('@react-native-community/netinfo', (): Object => {
 	return {};
