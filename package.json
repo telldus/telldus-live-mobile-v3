@@ -159,7 +159,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|react-navigation|@react-navigation/.*))"
+      "node_modules/(?!((jest-)?react-native|react-navigation|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
     ]
   }
 }
