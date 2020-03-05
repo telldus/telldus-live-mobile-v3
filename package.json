@@ -89,7 +89,7 @@
     "react-navigation-stack": "~1.7.3",
     "react-navigation-tabs": "~2.8.2",
     "react-redux": "~7.2.0",
-    "reconnecting-websocket": "git+https://github.com/pladaria/reconnecting-websocket.git#3c88e923f30d31a4c6073691f4193522de93782b",
+    "reconnecting-websocket": "^4.4.0",
     "redux": "~4.0.1",
     "redux-logger": "~3.0.6",
     "redux-persist": "~5.10.0",
