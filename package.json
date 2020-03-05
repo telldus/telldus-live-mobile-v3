@@ -92,7 +92,7 @@
     "reconnecting-websocket": "^4.4.0",
     "redux": "~4.0.1",
     "redux-logger": "~3.0.6",
-    "redux-persist": "~5.10.0",
+    "redux-persist": "^6.0.0",
     "reselect": "~4.0.0",
     "svgs": "~4.1.0",
     "url": "~0.11.0",
