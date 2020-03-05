@@ -94,6 +94,7 @@
     "redux": "~4.0.1",
     "redux-logger": "~3.0.6",
     "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
     "reselect": "~4.0.0",
     "svgs": "~4.1.0",
     "url": "~0.11.0",
@@ -114,9 +115,9 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "eslint": "^6.5.1",
-    "eslint-plugin-flowtype": "^3.10.3",
+    "eslint-plugin-flowtype": "^4.6.0",
     "eslint-plugin-react": "^7.12.4",
-    "fetch-mock": "^7.3.1",
+    "fetch-mock": "^9.1.0",
     "flow-bin": "^0.105.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
@@ -127,8 +128,7 @@
     "react-native-clean-project": "^3.3.0",
     "react-native-svg-transformer": "~0.14.3",
     "react-test-renderer": "16.9.0",
-    "redux-mock-store": "^1.5.3",
-    "redux-thunk": "^2.3.0"
+    "redux-mock-store": "^1.5.3"
   },
   "resolutions": {
     "stacktrace-parser": "0.1.4",
