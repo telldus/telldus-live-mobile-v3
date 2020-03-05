@@ -283,6 +283,7 @@ class SensorRow extends View<Props, State> {
 				onRowClose={this.onRowClose}
 				swipeToOpenPercent={20}
 				directionalDistanceChangeThreshold={2}
+				disableHiddenLayoutCalculation={true}
 				shouldItemUpdate={this.shouldUpdateSwipeRow}>
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
