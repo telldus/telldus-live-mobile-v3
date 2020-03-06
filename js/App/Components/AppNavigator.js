@@ -22,7 +22,6 @@
 'use strict';
 import React from 'react';
 import { Easing, Animated } from 'react-native';
-import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
@@ -83,7 +82,7 @@ const RouteConfigs = {
 				};
 			}
 			return {
-				header: (props) => {
+				header: (): Object => {
 					return (
 						<Header
 							navigation={navigation}
