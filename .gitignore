@@ -67,3 +67,6 @@ android/app/bin
 
 #yarn
 yarn-error.log
+
+#others
+package-lock.json
