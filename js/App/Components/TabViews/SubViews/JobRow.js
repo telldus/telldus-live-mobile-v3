@@ -22,10 +22,12 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity } from 'react-native';
+import {
+	TouchableOpacity,
+	Platform,
+} from 'react-native';
 import { intlShape } from 'react-intl';
 import _ from 'lodash';
-import Platform from 'Platform';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -354,15 +356,15 @@ class JobRow extends View<null, Props, null> {
 								}
 							</View>
 							<>
-							{!!label && <Text style={thermostatInfo}>
-								{label.toUpperCase()}
-							</Text>
-							}
-							{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
+								{!!label && <Text style={thermostatInfo}>
+									{label.toUpperCase()}
+								</Text>
+								}
+								{(typeof temperature !== 'undefined' && temperature !== null && temperature !== '')
 							&& <Text style={thermostatInfo}>
 								{temperature}{scale ? '°F' : '°C'}
 							</Text>
-							}
+								}
 							</>
 						</View>,
 						actionLabel: `${typeof action.actionLabel === 'string' ? action.actionLabel : formatMessage(action.actionLabel)} ${mode} ${temperature}`,

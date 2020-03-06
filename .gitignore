@@ -39,7 +39,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-project.xcworkspace
 ios/Podfile.lock
 ios/Pods
 

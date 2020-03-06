@@ -24,9 +24,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
-import { Dimensions, FlatList, RefreshControl, LayoutAnimation } from 'react-native';
+import {
+	Dimensions,
+	FlatList,
+	RefreshControl,
+	LayoutAnimation,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
-import Platform from 'Platform';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {

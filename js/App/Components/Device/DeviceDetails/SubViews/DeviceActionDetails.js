@@ -192,7 +192,7 @@ class DeviceActionDetails extends View {
 
 		return (
 			<>
-			{!!THERMOSTAT &&
+				{!!THERMOSTAT &&
 					<HeatControlWheelModes
 						appLayout={appLayout}
 						modes={supportedModes}
@@ -205,8 +205,8 @@ class DeviceActionDetails extends View {
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						intl={intl}/>
-			}
-			{buttons.length > 0 &&
+				}
+				{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>
 					{!!RGB &&
 					<RGBColorWheel
@@ -240,7 +240,7 @@ class DeviceActionDetails extends View {
 						</View>
 					</View>
 				</View>
-			}
+				}
 			</>
 		);
 	}

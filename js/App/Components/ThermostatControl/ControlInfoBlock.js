@@ -223,19 +223,19 @@ render(): Object {
 					</View>
 				</View>
 				:
-					<>
+				<>
 					{controllingMode === 'off' ?
-					<>
-						{supportResume && <TouchableOpacity onPress={this.onPressResume}>
-							<View style={[box2, offContentCover]}>
-								<IconTelldus icon="play" style={playIconStyle}/>
-								<Text style={offInfoText}>
-									{intl.formatMessage(i18n.clickToResume)}
-								</Text>
-							</View>
-						</TouchableOpacity>
-						}
-					</>
+						<>
+							{supportResume && <TouchableOpacity onPress={this.onPressResume}>
+								<View style={[box2, offContentCover]}>
+									<IconTelldus icon="play" style={playIconStyle}/>
+									<Text style={offInfoText}>
+										{intl.formatMessage(i18n.clickToResume)}
+									</Text>
+								</View>
+							</TouchableOpacity>
+							}
+						</>
 						:
 						controllingMode === 'fan' ?
 							<View style={[box2, offContentCover]}>
@@ -262,22 +262,22 @@ render(): Object {
 								</Text>
 							</View>
 					}
-					</>
+				</>
 			}
 			<View style={box3}>
 				{currentTemp &&
 			<>
-			<Text style={cLabelStyle}>
-				{intl.formatMessage(i18n.labelCurrent)}
-			</Text>
-			<Text>
-				<Text style={cValueStyle}>
-					{intl.formatNumber(currentTemp)}
+				<Text style={cLabelStyle}>
+					{intl.formatMessage(i18n.labelCurrent)}
 				</Text>
-				<Text style={cUnitStyle}>
+				<Text>
+					<Text style={cValueStyle}>
+						{intl.formatNumber(currentTemp)}
+					</Text>
+					<Text style={cUnitStyle}>
 							°C
+					</Text>
 				</Text>
-			</Text>
 			</>
 				}
 				{!!lastUpdated &&

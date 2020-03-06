@@ -21,10 +21,14 @@
 'use strict';
 
 import React from 'react';
-import { AccessibilityInfo, UIManager, Keyboard } from 'react-native';
+import {
+	AccessibilityInfo,
+	UIManager,
+	Keyboard,
+	Platform,
+	StatusBar,
+} from 'react-native';
 import { connect } from 'react-redux';
-import Platform from 'Platform';
-import StatusBar from 'StatusBar';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';

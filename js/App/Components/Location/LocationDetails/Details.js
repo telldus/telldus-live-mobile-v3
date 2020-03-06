@@ -426,7 +426,7 @@ class Details extends View<Props, State> {
 				localKey = {},
 				websocketConnected,
 			} = location;
-			NetInfo.getConnectionInfo().then(async (connectionInfo: Object) => {
+			NetInfo.fetch().then(async (connectionInfo: Object) => {
 				this.infoPressCount = 0;
 				const { type, effectiveType } = connectionInfo;
 				const { ttl = null } = localKey;

@@ -433,7 +433,7 @@ export default class HeaderComponent extends Base {
 
 	render(): Object {
 		const { leftButton, rightButton, showAttentionCapture, forceHideStatus } = this.props;
-
+		const { style } = this.prepareRootProps();
 		return (
 			<View style={{ flex: 0 }}>
 				{
@@ -441,7 +441,7 @@ export default class HeaderComponent extends Base {
 						<View style={this.getInitialStyle().statusBar}/>
 					) : null
 				}
-				<View {...this.prepareRootProps()}>
+				<View style={style}>
 					{!!leftButton && this.renderLeftButton(leftButton)}
 					{this.renderChildren()}
 					{showAttentionCapture && this.renderRightButtonAttentionCapture()}

@@ -211,21 +211,21 @@ render(): Object {
 	const timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
 
 	return (
-<>
-<ZWaveIncludeExcludeUI
-	progress={progress}
-	percent={percent}
-	showThrobber={showThrobber}
-	status={statusText}
-	timer={timerText}
-	intl={intl}
-	appLayout={appLayout}
-	infoText={infoText}
-	deviceImage={deviceImage}/>
-<TouchableButton
-	text={i18n.defaultNegativeText}
-	onPress={this.props.onDoneReplaceFailedNode}/>
-</>
+		<>
+			<ZWaveIncludeExcludeUI
+				progress={progress}
+				percent={percent}
+				showThrobber={showThrobber}
+				status={statusText}
+				timer={timerText}
+				intl={intl}
+				appLayout={appLayout}
+				infoText={infoText}
+				deviceImage={deviceImage}/>
+			<TouchableButton
+				text={i18n.defaultNegativeText}
+				onPress={this.props.onDoneReplaceFailedNode}/>
+		</>
 	);
 }
 

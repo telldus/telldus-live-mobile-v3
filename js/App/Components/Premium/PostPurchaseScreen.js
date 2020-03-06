@@ -161,20 +161,20 @@ const PostPurchaseScreen = (props: Object): Object => {
 					</Text>
 					{success &&
 					<>
-					{product !== 'credits' && <View style={purchaseInfoCover}>
-						<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
-						<Text style={purchaseInfoText}>
-							{getInfo({product, quantity}).toUpperCase()}
-						</Text>
-					</View>
-					}
-					{!!credits && <View style={purchaseInfoCover}>
-						<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
-						<Text style={purchaseInfoText}>
-							{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
-						</Text>
-					</View>
-					}
+						{product !== 'credits' && <View style={purchaseInfoCover}>
+							<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
+							<Text style={purchaseInfoText}>
+								{getInfo({product, quantity}).toUpperCase()}
+							</Text>
+						</View>
+						}
+						{!!credits && <View style={purchaseInfoCover}>
+							<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
+							<Text style={purchaseInfoText}>
+								{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
+							</Text>
+						</View>
+						}
 					</>
 					}
 				</View>
@@ -186,22 +186,22 @@ const PostPurchaseScreen = (props: Object): Object => {
 					style={buttonStyle}
 				/>
 					:
-				<>
-				<TouchableButton
-					onPress={onPressTryAgain}
-					text={formatMessage(i18n.tryAgain)}
-					accessibilityLabel={formatMessage(i18n.tryAgain)}
-					accessible={true}
-					style={buttonStyle}
-				/>
-				<TouchableButton
-					onPress={onPressCancel}
-					text={formatMessage(i18n.defaultNegativeText)}
-					accessibilityLabel={formatMessage(i18n.defaultNegativeText)}
-					accessible={true}
-					style={buttonStyle}
-				/>
-				</>
+					<>
+						<TouchableButton
+							onPress={onPressTryAgain}
+							text={formatMessage(i18n.tryAgain)}
+							accessibilityLabel={formatMessage(i18n.tryAgain)}
+							accessible={true}
+							style={buttonStyle}
+						/>
+						<TouchableButton
+							onPress={onPressCancel}
+							text={formatMessage(i18n.defaultNegativeText)}
+							accessibilityLabel={formatMessage(i18n.defaultNegativeText)}
+							accessible={true}
+							style={buttonStyle}
+						/>
+					</>
 				}
 			</ScrollView>
 		</View>

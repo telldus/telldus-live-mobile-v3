@@ -535,14 +535,14 @@ render(): Object | null {
 
 	return (
 		<>
-		{typeof activeMode !== 'string' ? <InfoBlock
-			text={intl.formatMessage(i18n.infoNoThermostatMode)}
-			appLayout={appLayout}
-			infoContainer={infoContainer}
-			textStyle={infoTextStyle}/>
-			:
-			<EmptyView/>
-		}
+			{typeof activeMode !== 'string' ? <InfoBlock
+				text={intl.formatMessage(i18n.infoNoThermostatMode)}
+				appLayout={appLayout}
+				infoContainer={infoContainer}
+				textStyle={infoTextStyle}/>
+				:
+				<EmptyView/>
+			}
 			{!hideTemperatureControl ?
 				<View style={cover}>
 					{showControlIcons ?

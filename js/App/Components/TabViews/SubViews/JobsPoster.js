@@ -23,8 +23,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Animated, Image, PanResponder } from 'react-native';
-import Platform from 'Platform';
+import {
+	Animated,
+	Image,
+	PanResponder,
+	Platform,
+} from 'react-native';
 
 import {
 	Poster,

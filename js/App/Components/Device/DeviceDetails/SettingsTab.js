@@ -750,15 +750,15 @@ class SettingsTab extends View {
 								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:
 							<>
-							<SettingsRow
-								type={'text'}
-								edit={true}
-								onPress={this.editName}
-								label={formatMessage(i18n.name)}
-								value={name}
-								appLayout={appLayout}
-								intl={intl}
-								keyboardTypeInLineEdit={'default'}/>
+								<SettingsRow
+									type={'text'}
+									edit={true}
+									onPress={this.editName}
+									label={formatMessage(i18n.name)}
+									value={name}
+									appLayout={appLayout}
+									intl={intl}
+									keyboardTypeInLineEdit={'default'}/>
 								<SettingsRow
 									label={formatMessage(i18n.showOnDashborad)}
 									onValueChange={this.onValueChange}
@@ -787,7 +787,7 @@ class SettingsTab extends View {
 										learnButton={learnButton}
 										isSaving433MhzParams={isSaving433MhzParams}
 										devicetype={devicetype}/>
-										{settingsHasChanged &&
+									{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
 											onPress={isSaving433MhzParams ? null : this.onPressSaveParams433MHz}
@@ -796,7 +796,7 @@ class SettingsTab extends View {
 												backgroundColor: isSaving433MhzParams ? btnDisabledBg : brandSecondary,
 											}]}
 											showThrobber={isSaving433MhzParams}/>
-										}
+									}
 								</>
 								}
 								{!settings433MHz && learnButton}

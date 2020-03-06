@@ -23,11 +23,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity } from 'react-native';
+import {
+	TouchableOpacity,
+	Platform,
+} from 'react-native';
 import { connect } from 'react-redux';
 import View from './View';
 import Theme from '../App/Theme';
-import Platform from 'Platform';
 
 type DefaultProps = {
 	importantForAccessibility: string,

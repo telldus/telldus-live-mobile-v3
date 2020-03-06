@@ -27,11 +27,11 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	BackHandler,
+	Platform,
+	StatusBar,
 } from 'react-native';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { announceForAccessibility } from 'react-native-accessibility';
-import Platform from 'Platform';
-import StatusBar from 'StatusBar';
 
 import {
 	FormattedMessage,

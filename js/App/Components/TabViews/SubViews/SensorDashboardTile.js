@@ -160,31 +160,31 @@ class SensorDashboardTile extends View<Props, null> {
 
 		return (
 			<>
-			{isGatewayActive ?
-				<LastUpdatedInfo
-					value={-seconds}
-					numeric="auto"
-					updateIntervalInSeconds={60}
-					gatewayTimezone={gatewayTimezone}
-					timestamp={lastUpdated}
-					textStyle={{
+				{isGatewayActive ?
+					<LastUpdatedInfo
+						value={-seconds}
+						numeric="auto"
+						updateIntervalInSeconds={60}
+						gatewayTimezone={gatewayTimezone}
+						timestamp={lastUpdated}
+						textStyle={{
+							textAlign: 'center',
+							textAlignVertical: 'center',
+							fontSize: Math.floor(this.props.tileWidth / 12),
+							opacity: minutesAgo < 1440 ? 1 : 0.5,
+							color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
+						}} />
+					:
+					<Text style={{
 						textAlign: 'center',
 						textAlignVertical: 'center',
 						fontSize: Math.floor(this.props.tileWidth / 12),
-						opacity: minutesAgo < 1440 ? 1 : 0.5,
-						color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
-					}} />
-				:
-				<Text style={{
-					textAlign: 'center',
-					textAlignVertical: 'center',
-					fontSize: Math.floor(this.props.tileWidth / 12),
-					color: Theme.Core.rowTextColor,
-				}}>
-					{intl.formatMessage(i18n.offline)}
-				</Text>
-			}
-					</>
+						color: Theme.Core.rowTextColor,
+					}}>
+						{intl.formatMessage(i18n.offline)}
+					</Text>
+				}
+			</>
 		);
 	}
 

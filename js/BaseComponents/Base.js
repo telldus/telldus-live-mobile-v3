@@ -53,9 +53,13 @@ export default class Base extends Component<Object, Object> {
 		return this.context.foregroundColor;
 	}
 
+	isValidTheme(theme: any): boolean {
+		return theme && typeof theme === 'object';
+	}
+
 	getTheme(): Object {
-		return this.props && this.props.theme ? this.props.theme :
-			this.context && this.context.theme ? this.context.theme : Theme.Core;
+		return this.props && this.isValidTheme(this.props.theme) ? this.props.theme :
+			this.context && this.isValidTheme(this.context.theme) ? this.context.theme : Theme.Core;
 	}
 
 }

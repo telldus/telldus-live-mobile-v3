@@ -140,8 +140,8 @@ addNewLocation: () => void;
 addNewDevice: () => void;
 
 refSwitchAccountActionSheet: Object;
-
 screensAllowsNavigationOrModalOverride: Array<string>;
+clearNetInfoListener: any;
 
 constructor(props: Props) {
 	super(props);
@@ -186,6 +186,7 @@ constructor(props: Props) {
 	];
 
 	this.refSwitchAccountActionSheet = {};
+	this.clearNetInfoListener = null;
 }
 
 async componentDidMount() {
@@ -273,10 +274,13 @@ actionsToPerformOnStart = async () => {
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
 
+	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
+
 	const {
 		isDrawerOpen,
 		hasTriedAddLocation,
 	} = this.state;
+
 	if (!isDrawerOpen && !showLoadingIndicator && addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
 		this.addNewLocation();
 	}
@@ -407,11 +411,11 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 componentWillUnmount() {
 	clearTimeout(this.timeOutConfigureLocalControl);
-	NetInfo.removeEventListener(
-		'connectionChange',
-		this.handleConnectivityChange,
-	);
 	closeUDPSocket();
+
+	if (this.clearNetInfoListener) {
+		this.clearNetInfoListener();
+	}
 
 	if (this.onNotification && typeof this.onNotification === 'function') {
 		// Remove Push notification listener.

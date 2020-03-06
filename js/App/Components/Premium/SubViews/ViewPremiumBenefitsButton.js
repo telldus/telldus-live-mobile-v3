@@ -63,18 +63,18 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 
 	return (
 		<>
-		{ button ? <TouchableButton
-			onPress={onPress}
-			text={formatMessage(i18n.viewBenefitsPremium)}
-			accessibilityLabel={formatMessage(i18n.viewBenefitsPremium)}
-			accessible={buttonAccessibleProp}
-			style={buttonStyle}
-		/>
-			:
-			<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
-				{formatMessage(i18n.viewBenefitsPremiumTwo)}
-			</Text>
-		}
+			{ button ? <TouchableButton
+				onPress={onPress}
+				text={formatMessage(i18n.viewBenefitsPremium)}
+				accessibilityLabel={formatMessage(i18n.viewBenefitsPremium)}
+				accessible={buttonAccessibleProp}
+				style={buttonStyle}
+			/>
+				:
+				<Text onPress={onPress} style={[textStyle, linkTextStyle]}>
+					{formatMessage(i18n.viewBenefitsPremiumTwo)}
+				</Text>
+			}
 		</>
 	);
 };

@@ -22,9 +22,8 @@
 'use strict';
 
 import React from 'react';
-import { LayoutAnimation } from 'react-native';
+import { LayoutAnimation, DrawerLayoutAndroid } from 'react-native';
 import { connect } from 'react-redux';
-import DrawerLayoutAndroid from 'DrawerLayoutAndroid';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
@@ -404,7 +403,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			<DrawerLayoutAndroid
 				ref="drawer"
 				drawerWidth={drawerWidth}
-				drawerPosition={DrawerLayoutAndroid.positions.Left}
+				drawerPosition={'left'}
 				renderNavigationView={this.renderNavigationView}
 				drawerBackgroundColor={'transparent'}
 				onDrawerOpen={this.onOpenDrawer}
