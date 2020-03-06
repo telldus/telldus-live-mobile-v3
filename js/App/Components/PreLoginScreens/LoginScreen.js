@@ -221,18 +221,18 @@ class LoginScreen extends View {
 					<View style={styles.otherLinks}>
 						{source === 'prelogin' && (
 							<>
-						<TouchableOpacity
-							onPress={this.onForgotPassword}
-							accessibilityLabel={this.labelForgotPassword}>
-							<FormattedMessage {...i18n.forgotPassword} style={styles.textLink}/>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={this.onNeedAccount}
-							accessibilityLabel={this.labelNeedAccount}>
-							<FormattedMessage {...i18n.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
-						</TouchableOpacity>
-						<View style={{ height: 10 }}/>
-						</>
+								<TouchableOpacity
+									onPress={this.onForgotPassword}
+									accessibilityLabel={this.labelForgotPassword}>
+									<FormattedMessage {...i18n.forgotPassword} style={styles.textLink}/>
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={this.onNeedAccount}
+									accessibilityLabel={this.labelNeedAccount}>
+									<FormattedMessage {...i18n.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
+								</TouchableOpacity>
+								<View style={{ height: 10 }}/>
+							</>
 						)}
 						{source === 'postlogin' && (
 							<TouchableOpacity

@@ -144,13 +144,13 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 				{
 					isChecked ? (
 						<>
-						<Text style={switchTextStyle}>
+							<Text style={switchTextStyle}>
 							Active
-						</Text>
-						<Switch
-							style={switchStyle}
-							value={job.active}
-							onValueChange={_toggleActiveState}/>
+							</Text>
+							<Switch
+								style={switchStyle}
+								value={job.active}
+								onValueChange={_toggleActiveState}/>
 						</>
 					) : null
 				}

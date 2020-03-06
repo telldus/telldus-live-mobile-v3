@@ -57,20 +57,20 @@ const CachedImageComponent = React.memo<Object>((props: Object): Object => {
 	}
 
 	return (
-<>
-{errorShowImage ?
-	!!sourceImgFallback && <Image
-		style={style}
-		source={sourceImgFallback}
-		resizeMode={resizeMode}/>
-	:
-	<CachedImage
-		resizeMode={resizeMode}
-		useQueryParamsInCacheKey={true}
-		source={{uri: sourceImg}}
-		renderImage={renderImage}/>
-}
-</>
+		<>
+			{errorShowImage ?
+				!!sourceImgFallback && <Image
+					style={style}
+					source={sourceImgFallback}
+					resizeMode={resizeMode}/>
+				:
+				<CachedImage
+					resizeMode={resizeMode}
+					useQueryParamsInCacheKey={true}
+					source={{uri: sourceImg}}
+					renderImage={renderImage}/>
+			}
+		</>
 	);
 });
 
