@@ -53,7 +53,6 @@
     "react-native-color-wheel": "https://github.com/telldus/react-native-color-wheel.git",
     "react-native-device-info": "~5.5.3",
     "react-native-extra-dimensions-android": "~1.2.5",
-    "react-native-fetch-blob": "https://github.com/telldus/react-native-fetch-blob.git",
     "react-native-firebase": "^5.6.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "~1.4.1",
@@ -96,6 +95,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "reselect": "~4.0.0",
+    "rn-fetch-blob": "^0.12.0",
     "svgs": "~4.1.0",
     "url": "~0.11.0",
     "victory-native": "^34.1.0"
