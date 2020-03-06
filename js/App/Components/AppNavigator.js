@@ -23,7 +23,8 @@
 import React from 'react';
 import { Easing, Animated } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { Header } from '../../BaseComponents';
@@ -78,19 +79,23 @@ const RouteConfigs = {
 						width: 0,
 						borderBottomWidth: 0,
 					},
-					header: null,
+					headerShown: false,
 				};
 			}
 			return {
-				header: <Header
-					navigation={navigation}
-					navigationOptions={navigationOptions}
-					{...screenProps}/>,
+				header: (props) => {
+					return (
+						<Header
+							navigation={navigation}
+							navigationOptions={navigationOptions}
+							{...screenProps}/>
+					);
+				},
 			};
 		},
 	},
 	Settings: {
-		// In addition to 'header: null' If header style is not manually set so, it cause some empty space to show in iPhoneX
+		// In addition to 'header: undefined' If header style is not manually set so, it cause some empty space to show in iPhoneX
 		screen: SettingsNavigator,
 		navigationOptions: {
 			headerStyle: {
@@ -98,7 +103,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	DeviceDetails: {
@@ -109,7 +114,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	SensorDetails: {
@@ -120,7 +125,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	Schedule: {
@@ -131,7 +136,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	AddLocation: {
@@ -142,7 +147,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	LocationDetails: {
@@ -153,7 +158,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	AddDevice: {
@@ -164,7 +169,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	AddSensor: {
@@ -175,7 +180,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	RGBControl: {
@@ -186,7 +191,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	ThermostatControl: {
@@ -197,7 +202,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	Profile: {
@@ -208,7 +213,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	PushSettings: {
@@ -219,7 +224,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	UpdatePasswordScreen: {
@@ -230,7 +235,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	PremiumBenefitsScreen: {
@@ -241,7 +246,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	PremiumUpgradeScreen: {
@@ -252,7 +257,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	RedeemGiftScreen: {
@@ -263,7 +268,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	ManageSubscriptionScreen: {
@@ -274,7 +279,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	AdditionalPlansPaymentsScreen: {
@@ -285,7 +290,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	SMSHistoryScreen: {
@@ -296,7 +301,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	PurchaseHistoryScreen: {
@@ -307,7 +312,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	PostPurchaseScreen: {
@@ -318,7 +323,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	TransactionWebview: {
@@ -329,7 +334,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	RequestSupportScreen: {
@@ -340,7 +345,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	BuySMSCreditsScreen: {
@@ -351,7 +356,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	RegisterForPushScreen: {
@@ -362,7 +367,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	GeoFenceNavigator: {
@@ -373,7 +378,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	LoginScreen: {
@@ -384,7 +389,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	RegisterScreen: {
@@ -395,7 +400,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 	Welcome: {
@@ -406,7 +411,7 @@ const RouteConfigs = {
 				width: 0,
 				borderBottomWidth: 0,
 			},
-			header: null,
+			headerShown: false,
 		},
 	},
 };
@@ -462,6 +467,6 @@ const StackNavigatorConfig = {
 	  }),
 };
 
-const Navigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const Navigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
-export default createAppContainer(Navigator);
+export default Navigator;

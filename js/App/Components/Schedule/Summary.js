@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions } from '@react-navigation/compat';
 import { intlShape, injectIntl } from 'react-intl';
 
 import {

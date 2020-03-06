@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import { View } from '../../../../BaseComponents';
 import History from './HistoryTab';
@@ -32,7 +33,7 @@ import Settings from './SettingsTab';
 import { DeviceDetailsHeaderPoster } from './SubViews';
 import Theme from '../../../Theme';
 
-const DeviceDetailsNavigator = createMaterialTopTabNavigator(
+const DeviceDetailsNavigator = createCompatNavigatorFactory(createMaterialTopTabNavigator)(
 	{
 		Overview: {
 			screen: Overview,

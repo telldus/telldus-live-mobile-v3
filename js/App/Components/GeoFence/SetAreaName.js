@@ -28,7 +28,7 @@ import {
 import {
 	NavigationActions,
 	StackActions,
-} from 'react-navigation';
+} from '@react-navigation/compat';
 
 import {
 	View,

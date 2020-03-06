@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import AddDeviceContainer from './AddDeviceContainer';
 
@@ -110,6 +111,6 @@ const StackNavigatorConfig = {
 	},
 };
 
-const AddDeviceNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const AddDeviceNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default AddDeviceNavigator;

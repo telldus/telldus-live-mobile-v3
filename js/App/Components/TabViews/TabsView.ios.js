@@ -24,8 +24,8 @@
 
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 import DeviceInfo from 'react-native-device-info';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import TabViews from './index';
 
@@ -66,6 +66,6 @@ const TabNavigatorConfig = {
 	},
 };
 
-const TabsView = createBottomTabNavigator(RouteConfigs, TabNavigatorConfig);
+const TabsView = createCompatNavigatorFactory(createBottomTabNavigator)(RouteConfigs, TabNavigatorConfig);
 
 module.exports = TabsView;

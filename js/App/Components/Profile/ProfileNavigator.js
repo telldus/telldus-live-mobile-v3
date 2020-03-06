@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import { View } from '../../../BaseComponents';
 import AppTab from './AppTab';
@@ -32,7 +33,7 @@ import SupportTab from './SupportTab';
 import ProfileHeaderPoster from './SubViews/ProfileHeaderPoster';
 import Theme from '../../Theme';
 
-const ProfileNavigator = createMaterialTopTabNavigator(
+const ProfileNavigator = createCompatNavigatorFactory(createMaterialTopTabNavigator)(
 	{
 		AppTab: {
 			screen: AppTab,

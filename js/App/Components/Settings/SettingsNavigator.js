@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import SettingsContainer from './SettingsContainer';
 
@@ -54,6 +55,6 @@ const StackNavigatorConfig = {
 	},
 };
 
-const SettingsNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const SettingsNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default SettingsNavigator;

@@ -27,7 +27,8 @@ import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions } from '@react-navigation/compat';
+import { NavigationContainer } from '@react-navigation/native';
 
 import {
 	View,
@@ -420,10 +421,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 						attentionCaptureText={intl.formatMessage(i18n.labelAddZWaveD).toUpperCase()}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
-					<Navigator
-						ref={this.setNavigatorRef}
-						onNavigationStateChange={this.onNavigationStateChange}
-						screenProps={screenProps} />
+					<NavigationContainer ref={this.setNavigatorRef}>
+						<Navigator
+							onNavigationStateChange={this.onNavigationStateChange}
+							screenProps={screenProps}/>
+					</NavigationContainer>
 				</View>
 			</DrawerLayoutAndroid>
 		);

@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import ZWaveSettings from './ZWaveSettings';
 import Details from './Details';
@@ -31,7 +32,7 @@ import Theme from '../../../Theme';
 import { View } from '../../../../BaseComponents';
 import LocationDetailsHeaderPoster from './LocationDetailsHeaderPoster';
 
-const DetailsNavigator = createMaterialTopTabNavigator(
+const DetailsNavigator = createCompatNavigatorFactory(createMaterialTopTabNavigator)(
 	{
 		LOverview: {
 			screen: Details,

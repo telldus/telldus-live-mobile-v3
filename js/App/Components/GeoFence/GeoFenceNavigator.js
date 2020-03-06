@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import GeoFenceContainer from './GeoFenceContainer';
 
@@ -81,6 +82,6 @@ const StackNavigatorConfig = {
 	},
 };
 
-const GeoFenceNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const GeoFenceNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default GeoFenceNavigator;

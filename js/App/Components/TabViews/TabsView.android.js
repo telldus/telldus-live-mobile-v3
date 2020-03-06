@@ -26,8 +26,9 @@
 
 import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 const RouteConfigs = {
 	Dashboard: {
@@ -53,10 +54,6 @@ const TabNavigatorConfig = {
 	tabBarComponent: MainTabBarAndroid,
 	tabBarPosition: 'top',
 	tabBarOptions: {
-		activeTintColor: '#fff',
-		indicatorStyle: {
-			backgroundColor: '#fff',
-		},
 		scrollEnabled: true,
 		allowFontScaling: false,
 	},
@@ -66,10 +63,10 @@ const TabNavigatorConfig = {
 	// component, after navigation device tab contents
 	// are rendered once, but after a flash it gets overridden
 	// by the empty db message, which must be some bug
-	// in the default pager component used by react-navigation-tabs.
+	// in the default pager component used by @react-navigation/material-top-tabs.
 	pagerComponent: ViewPagerAdapter,
 };
 
-const TabsView = createMaterialTopTabNavigator(RouteConfigs, TabNavigatorConfig);
+const TabsView = createCompatNavigatorFactory(createMaterialTopTabNavigator)(RouteConfigs, TabNavigatorConfig);
 
 module.exports = TabsView;

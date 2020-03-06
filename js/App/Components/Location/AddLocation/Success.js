@@ -27,7 +27,7 @@ import React from 'react';
 import { Linking } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions } from '@react-navigation/compat';
 
 import Theme from '../../../Theme';
 import {

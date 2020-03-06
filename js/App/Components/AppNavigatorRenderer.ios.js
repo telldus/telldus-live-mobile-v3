@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
+import { NavigationContainer } from '@react-navigation/native';
 
 import {
 	View,
@@ -311,10 +312,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		};
 
 		return (
-			<Navigator
-				ref={this.setNavigatorRef}
-				onNavigationStateChange={this.onNavigationStateChange}
-				screenProps={screenProps} />
+			<NavigationContainer
+				ref={this.setNavigatorRef}>
+				<Navigator
+					onNavigationStateChange={this.onNavigationStateChange}
+					screenProps={screenProps} />
+			</NavigationContainer>
 		);
 	}
 

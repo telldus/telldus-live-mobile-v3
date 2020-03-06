@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import History from './HistoryTab';
 import Overview from './OverviewTab';
@@ -32,7 +33,7 @@ import Theme from '../../Theme';
 import { View } from '../../../BaseComponents';
 import { SensorDetailsHeaderPoster } from './SubViews';
 
-const SensorDetailsNavigator = createMaterialTopTabNavigator(
+const SensorDetailsNavigator = createCompatNavigatorFactory(createMaterialTopTabNavigator)(
 	{
 		SOverview: {
 			screen: Overview,

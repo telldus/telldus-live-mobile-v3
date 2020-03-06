@@ -25,8 +25,10 @@ import {
 	Platform,
 } from 'react-native';
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 import Orientation from 'react-native-orientation-locker';
+import { NavigationContainer } from '@react-navigation/native';
 
 import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
@@ -43,35 +45,24 @@ const renderFormContainer = (navigation: Object, screenProps: Object): renderCon
 const RouteConfigs = {
 	Login: {
 		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(LoginScreen),
-		navigationOptions: {
-			header: null,
-		},
 	},
 	ForgotPassword: {
 		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(ForgotPasswordScreen),
-		navigationOptions: {
-			header: null,
-		},
 	},
 	Register: {
 		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(RegisterScreen),
-		navigationOptions: {
-			header: null,
-		},
 	},
 	Welcome: {
 		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(WelcomeScreen),
-		navigationOptions: {
-			header: null,
-		},
 	},
 };
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Login',
+	headerMode: 'none',
 };
 
-const Navigator = createAppContainer(createStackNavigator(RouteConfigs, StackNavigatorConfig));
+const Navigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 type Props = {
 	toggleDialogueBox: (Object) => null,
@@ -133,10 +124,11 @@ class PreLoginNavigator extends View {
 			toggleDialogueBox: this.props.toggleDialogueBox,
 		};
 		return (
-			<Navigator
-				onNavigationStateChange={this.onNavigationStateChange}
-				screenProps={screenProps}
-			/>
+			<NavigationContainer>
+				<Navigator
+					onNavigationStateChange={this.onNavigationStateChange}
+					screenProps={screenProps}/>
+			</NavigationContainer>
 		);
 	}
 }

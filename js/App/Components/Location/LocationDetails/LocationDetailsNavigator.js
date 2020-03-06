@@ -24,7 +24,8 @@
 
 import React from 'react';
 import { Easing, Animated } from 'react-native';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import LocationDetailsContainer from './LocationDetailsContainer';
 
@@ -119,6 +120,6 @@ const StackNavigatorConfig = {
 	  }),
 };
 
-const LocationDetailsNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const LocationDetailsNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default LocationDetailsNavigator;

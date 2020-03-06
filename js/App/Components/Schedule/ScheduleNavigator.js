@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import ScheduleScreen from './ScheduleScreen';
 
@@ -87,6 +88,6 @@ const StackNavigatorConfig = {
 	},
 };
 
-const ScheduleNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const ScheduleNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default ScheduleNavigator;

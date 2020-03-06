@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import AddLocationContainer from './AddLocationContainer';
 
@@ -85,6 +86,6 @@ const StackNavigatorConfig = {
 	},
 };
 
-const AddLocationNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const AddLocationNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default AddLocationNavigator;

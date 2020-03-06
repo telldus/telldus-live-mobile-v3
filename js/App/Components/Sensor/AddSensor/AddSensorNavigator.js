@@ -23,7 +23,8 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import AddSensorContainer from './AddSensorContainer';
 
@@ -69,6 +70,6 @@ const StackNavigatorConfig = {
 	},
 };
 
-const AddSensorNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const AddSensorNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
 
 export default AddSensorNavigator;
