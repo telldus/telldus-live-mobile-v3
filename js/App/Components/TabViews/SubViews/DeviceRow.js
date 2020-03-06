@@ -419,6 +419,7 @@ class DeviceRow extends View<Props, State> {
 					onRowClose={this.onRowClose}
 					swipeToOpenPercent={20}
 					directionalDistanceChangeThreshold={2}
+					disableHiddenLayoutCalculation={true}
 					shouldItemUpdate={this.shouldUpdateSwipeRow}>
 					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
 						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
