@@ -168,7 +168,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			}
 
 			const { refresh_token } = existAccount;
-			
+
 			newAccounts[userId] = {
 				...existAccount,
 				accessToken: {
@@ -182,7 +182,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			const uId = existAccount.userId || userIdN;
 
 			const refresh_token = existAccount.refresh_token || state.accessToken.refresh_token;
-			
+
 			newAccounts[userId] = {
 				...existAccount,
 				accessToken: {
