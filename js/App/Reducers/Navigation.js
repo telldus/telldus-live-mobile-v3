@@ -28,7 +28,7 @@ type State = {
 };
 
 const initialState: State = {
-	screen: 'Dashboard',
+	screen: '',
 };
 
 function navigation(state: State = initialState, action: Action): State {
@@ -36,11 +36,6 @@ function navigation(state: State = initialState, action: Action): State {
 		return {
 			...state,
 			screen: action.screen,
-		};
-	}
-	if (action.type === 'LOGGED_OUT') {
-		return {
-			...initialState,
 		};
 	}
 	return state;
