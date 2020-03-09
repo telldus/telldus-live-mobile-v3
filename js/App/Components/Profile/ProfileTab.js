@@ -225,7 +225,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 			});
 			if (otherUserId) {
 				let { accessToken } = accounts[otherUserId];
-				dispatch(getUserProfile(accessToken, true)).then((res: Object = {}) => {
+				dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
 					dispatch(onSwitchAccount({
 						userId: otherUserId,
 					}));
@@ -318,7 +318,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						accessToken,
 					} = accounts[userIdKey];
 
-					dispatch(getUserProfile(accessToken, true)).then((res: Object = {}) => {
+					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
 						closeActionSheet(undefined, () => {
 							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
 							setTimeout(() => {
