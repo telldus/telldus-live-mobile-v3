@@ -80,7 +80,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
-	const { userId } = user;
+	const { userId } = user || {};
 	if (dashboard && userId) {
 		const {
 			devicesById = {},
