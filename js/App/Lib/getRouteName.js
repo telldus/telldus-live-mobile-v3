@@ -27,5 +27,5 @@ export default function getRouteName(navigationState: Object): any {
 	if (route.routes) {
 		return getRouteName(route);
 	}
-	return route.routeName;
+	return route.name;
 }

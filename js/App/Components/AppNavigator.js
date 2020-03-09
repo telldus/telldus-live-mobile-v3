@@ -466,6 +466,72 @@ const StackNavigatorConfig = {
 	  }),
 };
 
-const Navigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
+// const Stack = createStackNavigator();
 
-export default Navigator;
+// const AppNavigator = React.memo<Object>((props: Object): Object => {
+
+// 	function onNavigationStateChange() {
+// 		const currentScreen = getRouteName(currentState);
+// 		this.setState({ currentScreen });
+
+// 		this.props.onNavigationStateChange(currentScreen);
+// 	}
+
+// 	const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
+
+// 		const {
+// 			name,
+// 			component,
+// 			options = {},
+// 		} = screenConf;
+
+// 		return (
+// 			<Stack.Screen
+// 				key={`${index}${name}`}
+// 				name={name}
+// 				// eslint-disable-next-line react/jsx-no-bind
+// 				component={(...args: any): Object => {
+// 					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
+// 					const {
+// 						toggleDialogueBoxState,
+// 					} = useDialogueBox();
+
+// 					let props = {};
+// 					args.forEach((arg: Object = {}) => {
+// 						props = {
+// 							...props,
+// 							...arg,
+// 						};
+// 					});
+
+// 					return (
+// 						<FormContainerComponent
+// 							{...props}
+// 							screenProps={{
+// 								...screenProps,
+// 								currentScreen,
+// 								toggleDialogueBox: toggleDialogueBoxState,
+// 							}}>
+// 							{component}
+// 						</FormContainerComponent>
+// 					);
+// 				}}
+// 				{...options}/>
+// 		);
+// 	});
+
+// 	return (
+// 		<NavigationContainer
+// 			onStateChange={onNavigationStateChange}>
+// 			<Stack.Navigator
+// 				{...StackNavigatorConfig}>
+// 				{SCREENS}
+// 			</Stack.Navigator>
+// 		</NavigationContainer>
+// 	);
+// });
+
+
+const AppNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
+
+export default AppNavigator;
