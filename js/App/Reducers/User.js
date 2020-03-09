@@ -162,19 +162,33 @@ export default function reduceUser(state: State = initialState, action: Action):
 			userId = userId.trim().toLowerCase();
 
 			const existAccount = accounts[userId] || {};
+
+			if (!existAccount) {
+				return state;
+			}
+
+			const { refresh_token } = existAccount;
+
 			newAccounts[userId] = {
 				...existAccount,
-				accessToken,
+				accessToken: {
+					...accessToken,
+					refresh_token,
+				},
 			};
 		} else if (userIdN) { // Refreshing access token
 			userId = userIdN.trim().toLowerCase();
 			const existAccount = accounts[userId] || {};
 			const uId = existAccount.userId || userIdN;
+
+			const refresh_token = existAccount.refresh_token || state.accessToken.refresh_token;
+
 			newAccounts[userId] = {
 				...existAccount,
 				accessToken: {
 					...accessToken,
 					userId: uId,
+					refresh_token,
 				},
 			};
 		}
