@@ -198,10 +198,7 @@ async componentDidMount() {
 
 	this.actionsToPerformOnStart();
 
-	NetInfo.addEventListener(
-		'connectionChange',
-		this.handleConnectivityChange,
-	);
+	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
 }
 
 actionsToPerformOnStart = async () => {
@@ -273,8 +270,6 @@ actionsToPerformOnStart = async () => {
 
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
-
-	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
 
 	const {
 		isDrawerOpen,
