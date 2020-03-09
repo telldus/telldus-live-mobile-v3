@@ -35,6 +35,7 @@ type Props = {
 	appLayout: Object,
 	navigation: Object,
 	screenProps: Object,
+	route: Object,
 };
 
 class FormContainerComponent extends View<Props, null> {
@@ -53,6 +54,7 @@ class FormContainerComponent extends View<Props, null> {
 		const {
 			navigation,
 			screenProps,
+			route,
 			children,
 			appLayout,
 		} = this.props;
@@ -82,6 +84,7 @@ class FormContainerComponent extends View<Props, null> {
 										appLayout,
 										navigation,
 										screenProps,
+										route,
 										styles,
 									},
 								)}
