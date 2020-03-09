@@ -90,7 +90,7 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			delete currUserSources[path];
 
 			const { data } = error.response || {};
-			if (!axios.isCancel(error)) {
+			if (axios.isCancel(error)) {// DO not throw axios cancel
 				return error;
 			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
 				return error;
@@ -113,16 +113,18 @@ async function doApiCall(url: string, requestParams: Object, accessToken: Object
 
 		throw new Error(response.error);
 	} catch (err) {
-		const { data } = err.response || {};
+		// Ignore axios cancel
+		if (!axios.isCancel(err)) {
+			const { data } = err.response || {};
 
-		if (data && (data.error !== 'invalid_token' && data.error !== 'expired_token')) {
-			// An error from the API we cannot recover from
-			throw err;
+			if (data && (data.error !== 'invalid_token' && data.error !== 'expired_token')) {
+				// An error from the API we cannot recover from
+				throw err;
+			}
+			let accessTokenRefreshed = await dispatch(refreshAccessToken(url, requestParams, accessToken)); // Token has expired, so we'll try to get a new one.
+
+			return callEndPoint(url, requestParams, accessTokenRefreshed); // retry api call
 		}
-
-		let accessTokenRefreshed = await dispatch(refreshAccessToken(url, requestParams, accessToken)); // Token has expired, so we'll try to get a new one.
-
-		return callEndPoint(url, requestParams, accessTokenRefreshed); // retry api call
 	}
 }
 
