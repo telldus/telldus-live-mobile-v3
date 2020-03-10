@@ -22,8 +22,10 @@
 
 import * as AppHooks from './App';
 import * as DialogueboxHooks from './Dialoguebox';
+import * as iApHooks from './IAP';
 
 module.exports = {
 	...AppHooks,
 	...DialogueboxHooks,
+	...iApHooks,
 };
