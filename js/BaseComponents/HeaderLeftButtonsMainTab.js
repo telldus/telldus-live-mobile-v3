@@ -56,6 +56,7 @@ const HeaderLeftButtonsMainTab = (props: Object): Object => {
 			</TouchableOpacity>
 		);
 	});
+
 	return (
 		<View style={[{
 			position: 'absolute',
@@ -64,7 +65,6 @@ const HeaderLeftButtonsMainTab = (props: Object): Object => {
 			justifyContent: 'flex-start',
 			alignItems: 'center',
 			paddingTop: Theme.Core.navBarTopPadding,
-			paddingHorizontal: 15,
 		}, styleContainer]}>
 			{items}
 		</View>
