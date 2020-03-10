@@ -27,9 +27,11 @@ import {
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
+	Platform,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
+import RNIap from 'react-native-iap';
 
 import {
 	View,
@@ -60,12 +62,19 @@ import {
 	getUserProfile,
 } from '../../Actions/Login';
 
+import {
+	useInAppPurchaseListeners,
+} from '../../Hooks/IAP';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		layout,
+		iapProducts = {},
+	} = useSelector((state: Object): Object => state.app);
 	const {
 		subscriptions,
 		userProfile,
@@ -180,9 +189,24 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		setPaymentProviderIndex(index);
 	}, []);
 
+	React.useEffect((): Function => {
+		const { clearListeners } = useInAppPurchaseListeners();
+		return clearListeners;
+	}, []);
+
+	async function requestIapSubscription(id: string) {
+		try {
+			await RNIap.requestSubscription(id);
+		} catch (err) {
+			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
+		}
+	}
+
 	function onPress() {
-		const product = getSubscriptionPlans()[selectedIndex].product;
-		const credits = getSubscriptionPlans()[selectedIndex].smsCredit;
+		const {
+			product,
+			smsCredit: credits,
+		} = getSubscriptionPlans()[selectedIndex];
 		const quantity = 1;
 		const options = {
 			product,
@@ -191,28 +215,39 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 			paymentProvider,
 			returnUrl: 'telldus-live-mobile-common',
 		};
-		dispatch(createTransaction(options, true)).then((response: Object) => {
-			if (response && response.id && response.url) {
-				navigation.navigate({
-					routeName: 'TransactionWebview',
-					key: 'TransactionWebview',
-					params: {
-						uri: response.url,
-						product,
-						credits,
-						quantity,
-						voucher: false,
-						screensToPop: 4,
-					},
-				});
-			} else {
-				dispatch(showToast(formatMessage(i18n.unknownError)));
+
+		if (Platform.OS === 'ios') {
+			let pid = '';
+			iapProducts.forEach((p: Object) => {
+				if (product === p.product) {// TODO: make sure some attribute of iapProducts matches 'product'
+					pid = p.productId;
+				}
+			});
+			requestIapSubscription(pid);
+		} else {
+			dispatch(createTransaction(options, true)).then((response: Object) => {
+				if (response && response.id && response.url) {
+					navigation.navigate({
+						routeName: 'TransactionWebview',
+						key: 'TransactionWebview',
+						params: {
+							uri: response.url,
+							product,
+							credits,
+							quantity,
+							voucher: false,
+							screensToPop: 4,
+						},
+					});
+				} else {
+					dispatch(showToast(formatMessage(i18n.unknownError)));
+					dispatch(getUserProfile());
+				}
+			}).catch((err: Object) => {
+				dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 				dispatch(getUserProfile());
-			}
-		}).catch((err: Object) => {
-			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
-			dispatch(getUserProfile());
-		});
+			});
+		}
 	}
 
 	function onGoBack() {
