@@ -140,6 +140,8 @@ export type Action =
 
 	| { type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 	| { type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
+
+	| { type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS', payload: Array<Object> }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
