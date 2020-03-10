@@ -309,7 +309,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const buttons = [
 			{
-				style: {},
+				style: styles.settingsButtonStyle,
 				accessibilityLabel: this.menuIcon,
 				onPress: this.openDrawer,
 				iconComponent: <Icon
@@ -319,7 +319,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 					color={'#fff'}/>,
 			},
 			{
-				style: {},
+				style: styles.campaingButtonStyle,
 				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
 				onPress: this.props.navigateToCampaign,
 				iconComponent: <CampaignIcon
@@ -451,6 +451,17 @@ class AppNavigatorRenderer extends View<Props, State> {
 			menuIconStyle: isPortrait ? null : {
 				transform: [{rotateZ: '90deg'}],
 			},
+			campaingButtonStyle: {
+				marginLeft: 4,
+				paddingRight: 15,
+				paddingLeft: 8,
+				paddingVertical: 4,
+			},
+			settingsButtonStyle: {
+				paddingLeft: 15,
+				paddingRight: 8,
+				paddingVertical: 4,
+			},
 			rightButtonStyle: isPortrait ? null : {
 				top: deviceHeight * 0.03666,
 				right: height - 50,
@@ -467,13 +478,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 				top: deviceHeight * 0.0400,
 			},
 			isPortrait,
-			campaingIconStyle: isPortrait ? {
-				marginLeft: 30,
-				padding: 2,
-			} : {
+			campaingIconStyle: isPortrait ? null : {
 				transform: [{rotateZ: '90deg'}],
-				marginLeft: 30,
-				padding: 2,
 			},
 		};
 	}
