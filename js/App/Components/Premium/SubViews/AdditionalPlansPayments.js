@@ -41,6 +41,7 @@ const AdditionalPlansPayments = (props: Object): Object => {
 		navigation,
 		linkTextStyle,
 		button = true,
+		onPressNavigate,
 	} = props;
 
 	const intl = useIntl();
@@ -53,6 +54,9 @@ const AdditionalPlansPayments = (props: Object): Object => {
 		textStyle,
 	} = getStyles(layout);
 	function onPress() {
+		if (onPressNavigate) {
+			onPressNavigate();
+		}
 		navigation.navigate({
 			routeName: 'AdditionalPlansPaymentsScreen',
 			key: 'AdditionalPlansPaymentsScreen',

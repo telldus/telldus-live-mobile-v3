@@ -23,11 +23,12 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
+import RNIap from 'react-native-iap';
 
 import {
 	View,
@@ -58,13 +59,19 @@ import {
 import {
 	getUserProfile,
 } from '../../Actions/Login';
+import {
+	useInAppPurchaseListeners,
+} from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const PremiumUpgradeScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		layout,
+		iapProducts = [],
+	} = useSelector((state: Object): Object => state.app);
 	const {
 		subscriptions,
 		userProfile,
@@ -112,12 +119,42 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		save,
 		prevTotal,
 		newTotal,
+		product,
 	} = getSubscriptionPlans()[index];
 
 	const dispatch = useDispatch();
+
+	let { clearListeners } = React.useMemo((): Object => {
+		return useInAppPurchaseListeners();
+	}, []);
+
+	React.useEffect((): Function => {
+		const didFocusSubscription = navigation.addListener(
+			'didFocus',
+			(payload: Object) => {
+				if (!clearListeners) {
+					const listenerData = useInAppPurchaseListeners();
+					clearListeners = listenerData.clearListeners;
+				}
+			}
+		);
+
+		return () => {
+			clearListenersIAP();
+			didFocusSubscription.remove();
+		};
+	}, [clearListeners]);
+
+	async function requestIapSubscription(id: string) {
+		try {
+			await RNIap.requestSubscription(id);
+		} catch (err) {
+			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
+		}
+	}
+
 	function onPress() {
-		const product = getSubscriptionPlans()[index].product;
-		const credits = getSubscriptionPlans()[index].smsCredit;
+		const credits = smsCredit;
 		const { name: paymentProvider } = getPaymentOptions(formatMessage)[index];
 		const quantity = 1;
 		const options = {
@@ -127,28 +164,39 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			paymentProvider,
 			returnUrl: 'telldus-live-mobile-common',
 		};
-		dispatch(createTransaction(options, true)).then((response: Object) => {
-			if (response && response.id && response.url) {
-				navigation.navigate({
-					routeName: 'TransactionWebview',
-					key: 'TransactionWebview',
-					params: {
-						uri: response.url,
-						product,
-						credits,
-						quantity,
-						voucher: false,
-						screensToPop: 3,
-					},
-				});
-			} else {
-				dispatch(showToast(formatMessage(i18n.unknownError)));
+
+		if (Platform.OS === 'ios') {
+			let pid = '';
+			iapProducts.forEach((p: Object) => {
+				if (product === p.product) {// TODO: make sure some attribute of iapProducts matches 'product'
+					pid = p.productId;
+				}
+			});
+			requestIapSubscription(pid);
+		} else {
+			dispatch(createTransaction(options, true)).then((response: Object) => {
+				if (response && response.id && response.url) {
+					navigation.navigate({
+						routeName: 'TransactionWebview',
+						key: 'TransactionWebview',
+						params: {
+							uri: response.url,
+							product,
+							credits,
+							quantity,
+							voucher: false,
+							screensToPop: 3,
+						},
+					});
+				} else {
+					dispatch(showToast(formatMessage(i18n.unknownError)));
+					dispatch(getUserProfile());
+				}
+			}).catch((err: Object) => {
+				dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 				dispatch(getUserProfile());
-			}
-		}).catch((err: Object) => {
-			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
-			dispatch(getUserProfile());
-		});
+			});
+		}
 	}
 
 	const headerArray = formatMessage(i18n.getMoreWithPremium).split(' ');
@@ -171,6 +219,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		dispatch(toggleVisibilityProExpireHeadsup('hide_temp'));
 		navigation.pop();
 		return true;
+	}
+
+	function clearListenersIAP() {
+		if (clearListeners) {
+			clearListeners();
+			clearListeners = null;
+		}
 	}
 
 	return (
@@ -252,7 +307,8 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				<AdditionalPlansPayments
 					navigation={navigation}
 					button={false}
-					linkTextStyle={linkTextStyle}/>
+					linkTextStyle={linkTextStyle}
+					onPressNavigate={clearListenersIAP}/>
 				<ViewPremiumBenefitsButton
 					navigation={navigation}
 					button={false}
