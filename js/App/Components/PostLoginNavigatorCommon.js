@@ -28,6 +28,7 @@ import { Linking, NativeModules, Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
+import RNIap from 'react-native-iap';
 
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
@@ -58,6 +59,7 @@ import {
 	toggleVisibilityProExpireHeadsup,
 	fetchRemoteConfig,
 	setGatewayRelatedGAProperties,
+	onReceivedInAppPurchaseProducts,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -182,6 +184,19 @@ async componentDidMount() {
 
 	await dispatch(fetchRemoteConfig());
 
+	if (Platform.OS === 'ios') {
+		try {
+			await RNIap.initConnection();
+
+			const subs = Platform.select({
+				ios: ['promonth'],
+			});
+			const products = await RNIap.getSubscriptions(subs);
+			dispatch(onReceivedInAppPurchaseProducts(products));
+		} catch (err) {
+			// Ignore
+		}
+	}
 
 	try {
 		await dispatch(getUserProfile());
