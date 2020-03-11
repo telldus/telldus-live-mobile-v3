@@ -23,7 +23,11 @@
 import React from 'react';
 import { Easing, Animated } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
+import { NavigationContainer } from '@react-navigation/native';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { Header } from '../../BaseComponents';
@@ -66,368 +70,245 @@ import {
 	FormContainerComponent,
 } from './PreLoginScreens/SubViews';
 
-const RouteConfigs = {
-	Tabs: {
-		screen: TabsView,
-		navigationOptions: ({screenProps, navigation, navigationOptions}: Object): Object => {
-			const { hideHeader } = screenProps;
+import {
+	screenChange,
+	syncWithServer,
+} from '../Actions';
+import {
+	useDialogueBox,
+} from '../Hooks/Dialoguebox';
+
+import getRouteName from '../Lib/getRouteName';
+import {
+	navigationRef,
+} from '../Lib/NavigationService';
+
+const ScreenConfigs = [
+	{
+		name: 'Tabs',
+		Component: TabsView,
+		optionsWithScreenProps: ({ screenProps }: Object): Object => {
+			const { hideHeader } = screenProps || {};
 			if (hideHeader) { // Android Landscape mode - Custom Header - so return null.
 				return {
-					headerStyle: {
-						height: 0,
-						width: 0,
-						borderBottomWidth: 0,
-					},
 					headerShown: false,
 				};
 			}
 			return {
-				header: (): Object => {
-					return (
-						<Header
-							navigation={navigation}
-							navigationOptions={navigationOptions}
-							{...screenProps}/>
-					);
-				},
+				headerShown: true,
+				header: (): Object => <Header {...screenProps}/>,
 			};
 		},
 	},
-	Settings: {
-		// In addition to 'header: undefined' If header style is not manually set so, it cause some empty space to show in iPhoneX
-		screen: SettingsNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'Settings',
+		Component: SettingsNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	DeviceDetails: {
-		screen: DeviceDetailsNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'DeviceDetails',
+		Component: DeviceDetailsNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	SensorDetails: {
-		screen: SensorDetailsNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'SensorDetails',
+		Component: SensorDetailsNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	Schedule: {
-		screen: ScheduleNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'Schedule',
+		Component: ScheduleNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	AddLocation: {
-		screen: AddLocationNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'AddLocation',
+		Component: AddLocationNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	LocationDetails: {
-		screen: LocationDetailsNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'LocationDetails',
+		Component: LocationDetailsNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	AddDevice: {
-		screen: AddDeviceNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'AddDevice',
+		Component: AddDeviceNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	AddSensor: {
-		screen: AddSensorNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'AddSensor',
+		Component: AddSensorNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	RGBControl: {
-		screen: RGBControlScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'RGBControl',
+		Component: RGBControlScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	ThermostatControl: {
-		screen: ThermostatControl,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'ThermostatControl',
+		Component: ThermostatControl,
+		options: {
 			headerShown: false,
 		},
 	},
-	Profile: {
-		screen: ProfileNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'Profile',
+		Component: ProfileNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	PushSettings: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(PushSettings, 'PushSettings'),
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'PushSettings',
+		Component: PushSettings,
+		ContainerComponent: SettingsContainer,
+		options: {
 			headerShown: false,
 		},
 	},
-	UpdatePasswordScreen: {
-		screen: UpdatePasswordScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'PremiumBenefitsScreen',
+		Component: PremiumBenefitsScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	PremiumBenefitsScreen: {
-		screen: PremiumBenefitsScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'PremiumUpgradeScreen',
+		Component: PremiumUpgradeScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	PremiumUpgradeScreen: {
-		screen: PremiumUpgradeScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'RedeemGiftScreen',
+		Component: RedeemGiftScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	RedeemGiftScreen: {
-		screen: RedeemGiftScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'ManageSubscriptionScreen',
+		Component: ManageSubscriptionScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	ManageSubscriptionScreen: {
-		screen: ManageSubscriptionScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'AdditionalPlansPaymentsScreen',
+		Component: AdditionalPlansPaymentsScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	AdditionalPlansPaymentsScreen: {
-		screen: AdditionalPlansPaymentsScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'SMSHistoryScreen',
+		Component: SMSHistoryScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	SMSHistoryScreen: {
-		screen: SMSHistoryScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'PurchaseHistoryScreen',
+		Component: PurchaseHistoryScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	PurchaseHistoryScreen: {
-		screen: PurchaseHistoryScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'PostPurchaseScreen',
+		Component: PostPurchaseScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	PostPurchaseScreen: {
-		screen: PostPurchaseScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'TransactionWebview',
+		Component: TransactionWebview,
+		options: {
 			headerShown: false,
 		},
 	},
-	TransactionWebview: {
-		screen: TransactionWebview,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'RequestSupportScreen',
+		Component: RequestSupportScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	RequestSupportScreen: {
-		screen: RequestSupportScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'BuySMSCreditsScreen',
+		Component: BuySMSCreditsScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	BuySMSCreditsScreen: {
-		screen: BuySMSCreditsScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'RegisterForPushScreen',
+		Component: RegisterForPushScreen,
+		options: {
 			headerShown: false,
 		},
 	},
-	RegisterForPushScreen: {
-		screen: RegisterForPushScreen,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'GeoFenceNavigator',
+		Component: GeoFenceNavigator,
+		options: {
 			headerShown: false,
 		},
 	},
-	GeoFenceNavigator: {
-		screen: GeoFenceNavigator,
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'LoginScreen',
+		Component: LoginScreen,
+		ContainerComponent: FormContainerComponent,
+		options: {
 			headerShown: false,
 		},
 	},
-	LoginScreen: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(LoginScreen),
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'RegisterScreen',
+		Component: RegisterScreen,
+		ContainerComponent: FormContainerComponent,
+		options: {
 			headerShown: false,
 		},
 	},
-	RegisterScreen: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(RegisterScreen),
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'Welcome',
+		Component: WelcomeScreen,
+		ContainerComponent: FormContainerComponent,
+		options: {
 			headerShown: false,
 		},
 	},
-	Welcome: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(WelcomeScreen),
-		navigationOptions: {
-			headerStyle: {
-				height: 0,
-				width: 0,
-				borderBottomWidth: 0,
-			},
+	{
+		name: 'UpdatePasswordScreen',
+		Component: UpdatePasswordScreen,
+		ContainerComponent: FormContainerComponent,
+		options: {
 			headerShown: false,
 		},
 	},
-};
-
-type renderContainer = (Object) => Object;
-
-const renderFormContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
-	<FormContainerComponent navigation={navigation} screenProps={screenProps}>
-		<Component/>
-	</FormContainerComponent>
-);
-
-const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
-	<SettingsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</SettingsContainer>
-);
+];
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Tabs',
@@ -466,72 +347,97 @@ const StackNavigatorConfig = {
 	  }),
 };
 
-// const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
-// const AppNavigator = React.memo<Object>((props: Object): Object => {
+const AppNavigator = React.memo<Object>((props: Object): Object => {
+	const { screenProps } = props;
 
-// 	function onNavigationStateChange() {
-// 		const currentScreen = getRouteName(currentState);
-// 		this.setState({ currentScreen });
+	const dispatch = useDispatch();
 
-// 		this.props.onNavigationStateChange(currentScreen);
-// 	}
+	function onNavigationStateChange(currentState: Object) {
+		const currentScreen = getRouteName(currentState);
 
-// 	const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
+		dispatch(syncWithServer(currentScreen));
+		dispatch(screenChange(currentScreen));
+	}
 
-// 		const {
-// 			name,
-// 			component,
-// 			options = {},
-// 		} = screenConf;
+	const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
 
-// 		return (
-// 			<Stack.Screen
-// 				key={`${index}${name}`}
-// 				name={name}
-// 				// eslint-disable-next-line react/jsx-no-bind
-// 				component={(...args: any): Object => {
-// 					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
-// 					const {
-// 						toggleDialogueBoxState,
-// 					} = useDialogueBox();
+		const {
+			name,
+			Component,
+			options,
+			ContainerComponent,
+			optionsWithScreenProps,
+		} = screenConf;
 
-// 					let props = {};
-// 					args.forEach((arg: Object = {}) => {
-// 						props = {
-// 							...props,
-// 							...arg,
-// 						};
-// 					});
+		let _options = options;
+		if (optionsWithScreenProps) {
+			_options = (optionsDefArgs: Object): Object => {
+				return optionsWithScreenProps({
+					...optionsDefArgs,
+					screenProps,
+				});
+			};
+		}
 
-// 					return (
-// 						<FormContainerComponent
-// 							{...props}
-// 							screenProps={{
-// 								...screenProps,
-// 								currentScreen,
-// 								toggleDialogueBox: toggleDialogueBoxState,
-// 							}}>
-// 							{component}
-// 						</FormContainerComponent>
-// 					);
-// 				}}
-// 				{...options}/>
-// 		);
-// 	});
+		return (
+			<Stack.Screen
+				key={`${index}${name}`}
+				name={name}
+				// eslint-disable-next-line react/jsx-no-bind
+				component={(...args: any): Object => {
+					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
+					const {
+						toggleDialogueBoxState,
+					} = useDialogueBox();
 
-// 	return (
-// 		<NavigationContainer
-// 			onStateChange={onNavigationStateChange}>
-// 			<Stack.Navigator
-// 				{...StackNavigatorConfig}>
-// 				{SCREENS}
-// 			</Stack.Navigator>
-// 		</NavigationContainer>
-// 	);
-// });
+					let _props = {};
+					args.forEach((arg: Object = {}) => {
+						_props = {
+							..._props,
+							...arg,
+						};
+					});
 
+					if (!ContainerComponent) {
+						return (
+							<Component
+								{..._props}
+								screenProps={{
+									...screenProps,
+									currentScreen,
+									toggleDialogueBox: toggleDialogueBoxState,
+								}}/>
+						);
+					}
 
-const AppNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
+					return (
+						<ContainerComponent
+							{..._props}
+							screenProps={{
+								...screenProps,
+								currentScreen,
+								toggleDialogueBox: toggleDialogueBoxState,
+							}}>
+							<Component/>
+						</ContainerComponent>
+					);
+				}}
+				options={_options}/>
+		);
+	});
+
+	return (
+		<NavigationContainer
+			ref={navigationRef}
+			onStateChange={onNavigationStateChange}>
+			<Stack.Navigator
+				{...StackNavigatorConfig}>
+				{SCREENS}
+			</Stack.Navigator>
+		</NavigationContainer>
+	);
+});
 
 export default AppNavigator;

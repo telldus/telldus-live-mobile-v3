@@ -27,7 +27,6 @@ import { connect } from 'react-redux';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
-import { NavigationContainer } from '@react-navigation/native';
 
 import {
 	View,
@@ -36,17 +35,13 @@ import {
 	HeaderLeftButtonsMainTab,
 	CampaignIcon,
 } from '../../BaseComponents';
-import Navigator from './AppNavigator';
+import AppNavigator from './AppNavigator';
 
 import {
-	syncWithServer,
-	screenChange,
 	resetSchedule,
 } from '../Actions';
 import {
-	setTopLevelNavigator,
 	navigate,
-	getRouteName,
 	LayoutAnimations,
 } from '../Lib';
 
@@ -58,11 +53,11 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	addingNewLocation: boolean,
+	currentScreen: string,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
-	onNavigationStateChange: (string) => void,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
 	navigateToCampaign: () => void,
@@ -70,7 +65,6 @@ type Props = {
 };
 
 type State = {
-	currentScreen: string,
 	showAttentionCaptureAddDevice: boolean,
 	addNewDevicePressed: boolean,
 };
@@ -80,9 +74,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	setNavigatorRef: (any) => void;
-
-	onNavigationStateChange: (Object, Object) => void;
 	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	newSchedule: () => void;
@@ -95,14 +86,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Dashboard',
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
 		};
 
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-
-		this.setNavigatorRef = this.setNavigatorRef.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
 
 		this.addNewDevice = this.addNewDevice.bind(this);
@@ -165,13 +152,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			key: 'Schedule',
 			params: { editMode: false },
 		}, 'Schedule');
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		this.setState({ currentScreen });
-
-		this.props.onNavigationStateChange(currentScreen);
 	}
 
 	addNewDevice() {
@@ -241,13 +221,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	setNavigatorRef(navigatorRef: any) {
-		setTopLevelNavigator(navigatorRef);
-	}
-
 	showAttentionCapture(): boolean {
-		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		const { currentScreen } = this.props;
+
+		return (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	makeLeftButton(styles: Object): any {
@@ -282,8 +260,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	render(): Object {
-		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
+		const { showAttentionCaptureAddDevice } = this.state;
+		const {
+			intl,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
+			currentScreen: CS,
+		} = this.props;
 
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -312,12 +296,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 		};
 
 		return (
-			<NavigationContainer
-				ref={this.setNavigatorRef}>
-				<Navigator
-					onNavigationStateChange={this.onNavigationStateChange}
-					screenProps={screenProps} />
-			</NavigationContainer>
+			<AppNavigator
+				screenProps={screenProps}/>
 		);
 	}
 
@@ -352,15 +332,12 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
+		currentScreen: state.navigation.screen,
 	};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onNavigationStateChange: (screen: string) => {
-			dispatch(syncWithServer(screen));
-			dispatch(screenChange(screen));
-		},
 		dispatch,
 	};
 }

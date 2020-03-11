@@ -28,7 +28,6 @@ import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
 import { NavigationActions } from '@react-navigation/compat';
-import { NavigationContainer } from '@react-navigation/native';
 
 import {
 	View,
@@ -38,19 +37,16 @@ import {
 	Icon,
 	CampaignIcon,
 } from '../../BaseComponents';
-import Navigator from './AppNavigator';
+import AppNavigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
 import {
 	syncWithServer,
-	screenChange,
 	resetSchedule,
 } from '../Actions';
 import {
-	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
-	getRouteName,
 	LayoutAnimations,
 } from '../Lib';
 import Theme from '../Theme';
@@ -59,12 +55,12 @@ import i18n from '../Translations/common';
 type Props = {
 	screenReaderEnabled: boolean,
 	appLayout: Object,
+	currentScreen: string,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
-	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
@@ -75,7 +71,6 @@ type Props = {
 };
 
 type State = {
-	currentScreen: string,
 	drawer: boolean,
 	showAttentionCaptureAddDevice: boolean,
 	addNewDevicePressed: boolean,
@@ -86,9 +81,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	onNavigationStateChange: (Object, Object) => void;
 	autoDetectLocalTellStick: () => void;
-	setNavigatorRef: (any) => void;
 
 	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
@@ -107,7 +100,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Dashboard',
 			drawer: false,
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
@@ -127,10 +119,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
-
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-
-		this.setNavigatorRef = this.setNavigatorRef.bind(this);
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
@@ -178,10 +166,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	newSchedule() {
 		this.props.dispatch(resetSchedule());
-		navigate('Schedule', {
-			key: 'Schedule',
-			params: { editMode: false },
-		}, 'Schedule');
+		navigate('Schedule', { editMode: false }, 'Schedule');
 	}
 
 	onOpenDrawer = () => {
@@ -229,13 +214,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			});
 		}
 		navigate('Profile', {}, 'Profile', navigateAction);
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		this.setState({ currentScreen });
-
-		this.props.onNavigationStateChange(currentScreen);
 	}
 
 	addNewDevice() {
@@ -290,10 +268,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			default:
 				return null;
 		}
-	}
-
-	setNavigatorRef(navigatorRef: any) {
-		setTopLevelNavigator(navigatorRef);
 	}
 
 	openDrawer() {
@@ -363,13 +337,21 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	showAttentionCapture(): boolean {
-		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		const { currentScreen } = this.props;
+
+		return (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	render(): Object {
-		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
+		const { drawer, showAttentionCaptureAddDevice } = this.state;
+		const {
+			intl,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
+			currentScreen: CS,
+		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
@@ -421,11 +403,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 						attentionCaptureText={intl.formatMessage(i18n.labelAddZWaveD).toUpperCase()}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
-					<NavigationContainer ref={this.setNavigatorRef}>
-						<Navigator
-							onNavigationStateChange={this.onNavigationStateChange}
-							screenProps={screenProps}/>
-					</NavigationContainer>
+					<AppNavigator
+						screenProps={screenProps}/>
 				</View>
 			</DrawerLayoutAndroid>
 		);
@@ -517,6 +496,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
+		currentScreen: state.navigation.screen,
 	};
 }
 
@@ -525,10 +505,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		dispatch,
 		syncGateways: () => {
 			dispatch(syncWithServer('gatewaysTab'));
-		},
-		onNavigationStateChange: (screen: string) => {
-			dispatch(syncWithServer(screen));
-			dispatch(screenChange(screen));
 		},
 	};
 }

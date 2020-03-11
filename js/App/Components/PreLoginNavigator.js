@@ -124,7 +124,7 @@ class PreLoginNavigator extends View {
 			const {
 				name,
 				component,
-				options = {},
+				options,
 			} = screenConf;
 
 			return (
@@ -158,7 +158,7 @@ class PreLoginNavigator extends View {
 							</FormContainerComponent>
 						);
 					}}
-					{...options}/>
+					options={options}/>
 			);
 		});
 
