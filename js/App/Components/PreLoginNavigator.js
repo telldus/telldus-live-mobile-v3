@@ -42,6 +42,7 @@ import {
 import {
 	useDialogueBox,
 } from '../Hooks/Dialoguebox';
+import getRouteName from '../Lib/getRouteName';
 
 let screenProps = {
 	source: 'prelogin',
@@ -79,7 +80,6 @@ type Props = {
 
 class PreLoginNavigator extends View {
 
-	getCurrentRouteName: (navigationState: Object) => string;
 	onNavigationStateChange: (currentState: Object) => void;
 
 	props: Props;
@@ -99,21 +99,8 @@ class PreLoginNavigator extends View {
 		}
 	}
 
-	// gets the current screen from navigation state
-	getCurrentRouteName(navigationState: Object): string {
-		if (!navigationState) {
-			return '';
-		}
-		const route = navigationState.routes[navigationState.index];
-		// dive into nested navigators
-		if (route.routes) {
-			this.getCurrentRouteName(route);
-		}
-		return route.name;
-	}
-
 	onNavigationStateChange = (currentState: Object) => {
-		const currentScreen = this.getCurrentRouteName(currentState);
+		const currentScreen = getRouteName(currentState);
 		this.props.onNavigationStateChange(currentScreen);
 	}
 

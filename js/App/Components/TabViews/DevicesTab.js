@@ -64,6 +64,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	addNewLocation: Function,
 	gatewaysById: Object,
+	route: Object,
 };
 
 type State = {
@@ -213,9 +214,11 @@ class DevicesTab extends View {
 		this.handleAddDeviceAttentionCapture();
 		this.normalizeNewlyAddedUITimeout();
 
-		const { navigation } = this.props;
-		const newDevices = navigation.getParam('newDevices', {});
-		const gateway = navigation.getParam('gateway', {});
+		const { route } = this.props;
+		const {
+			newDevices = {},
+			gateway = {},
+		} = route.params || {};
 		if (gateway && newDevices && !isEmpty(newDevices) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newDevices).map((id: string) => {
 				let gId = gateway.id.toString();
@@ -612,7 +615,7 @@ class DevicesTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, navigation } = this.props;
+		const { screenProps, route } = this.props;
 		const { appLayout } = screenProps;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, screenReaderEnabled } = screenProps;
@@ -627,7 +630,9 @@ class DevicesTab extends View {
 			);
 		}
 
-		const newDevices = navigation.getParam('newDevices', {}) || {};
+		const {
+			newDevices = {},
+		} = route.params || {};
 
 		const sectionLength = section.data.length;
 		const isLast = index === sectionLength - 1;
@@ -662,8 +667,10 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUITimeout() {
-		const { navigation } = this.props;
-		const newDevices = navigation.getParam('newDevices', null);
+		const { route } = this.props;
+		const {
+			newDevices,
+		} = route.params || {};
 		if (newDevices && !this.timeoutNormalizeNewlyAdded ) {
 			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
 				this.normalizeNewlyAddedUI();
@@ -675,8 +682,10 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUI() {
-		const { navigation } = this.props;
-		const newDevices = navigation.getParam('newDevices', null);
+		const { route, navigation } = this.props;
+		const {
+			newDevices,
+		} = route.params || {};
 		if (newDevices) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
 				// Callback only available in iOS
@@ -689,9 +698,11 @@ class DevicesTab extends View {
 	}
 
 	onNewlyAddedDidMount = (id: number, clientId: string) => {
-		const { rowsAndSections, navigation } = this.props;
+		const { rowsAndSections, route } = this.props;
 		const { visibleList } = rowsAndSections;
-		const newDevices = navigation.getParam('newDevices', {});
+		const {
+			newDevices,
+		} = route.params || {};
 		let section = 0, row = 0;
 		let item = newDevices[id];
 

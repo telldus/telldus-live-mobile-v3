@@ -22,38 +22,50 @@
 
 'use strict';
 
+import React from 'react';
+import {
+	useSelector,
+} from 'react-redux';
+
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 import DeviceInfo from 'react-native-device-info';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import TabViews from './index';
 
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
-const RouteConfigs = {
-	Dashboard: {
-		screen: TabViews.Dashboard,
+const TabConfigs = [
+	{
+		name: 'Dashboard',
+		Component: TabViews.Dashboard,
 	},
-	Devices: {
-		screen: TabViews.Devices,
+	{
+		name: 'Devices',
+		Component: TabViews.Devices,
 	},
-	Sensors: {
-		screen: TabViews.Sensors,
+	{
+		name: 'Sensors',
+		Component: TabViews.Sensors,
 	},
-	Scheduler: {
-		screen: TabViews.Scheduler,
+	{
+		name: 'Scheduler',
+		Component: TabViews.Scheduler,
 	},
-	Gateways: {
-		screen: TabViews.Gateways,
+	{
+		name: 'Gateways',
+		Component: TabViews.Gateways,
 	},
-};
+];
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
-	initialRouteKey: 'Dashboard',
-	swipeEnabled: false,
+	initialRouteKey: 'Dashboard', // Check if exist in v5
+	swipeEnabled: false, // Check if exist in v5
 	lazy: true,
-	animationEnabled: false,
+	animationEnabled: false, // Check if exist in v5
 	tabBarOptions: {
 		activeTintColor: '#e26901',
 		style: {
@@ -66,6 +78,85 @@ const TabNavigatorConfig = {
 	},
 };
 
-const TabsView = createCompatNavigatorFactory(createBottomTabNavigator)(RouteConfigs, TabNavigatorConfig);
+const Tab = createBottomTabNavigator();
+
+const TabsView = React.memo<Object>((props: Object): Object => {
+	const {
+		screenProps,
+	} = props;
+
+	const TABS = TabConfigs.map((tabConf: Object, index: number): Object => {
+		const {
+			name,
+			Component,
+			options,
+			ContainerComponent,
+			optionsWithScreenProps,
+		} = tabConf;
+
+		let _options = options;
+		if (optionsWithScreenProps) {
+			_options = (optionsDefArgs: Object): Object => {
+				return optionsWithScreenProps({
+					...optionsDefArgs,
+					screenProps,
+				});
+			};
+		}
+
+		return (
+			<Tab.Screen
+				key={`${index}${name}`}
+				name={name}
+				// eslint-disable-next-line react/jsx-no-bind
+				component={(...args: any): Object => {
+					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
+					const {
+						toggleDialogueBoxState,
+					} = useDialogueBox();
+
+					let _props = {};
+					args.forEach((arg: Object = {}) => {
+						_props = {
+							..._props,
+							...arg,
+						};
+					});
+
+					if (!ContainerComponent) {
+						return (
+							<Component
+								{..._props}
+								screenProps={{
+									...screenProps,
+									currentScreen,
+									toggleDialogueBox: toggleDialogueBoxState,
+								}}/>
+						);
+					}
+
+					return (
+						<ContainerComponent
+							{..._props}
+							screenProps={{
+								...screenProps,
+								currentScreen,
+								toggleDialogueBox: toggleDialogueBoxState,
+							}}>
+							<Component/>
+						</ContainerComponent>
+					);
+				}}
+				options={_options}/>
+		);
+	});
+
+	return (
+		<Tab.Navigator
+			{...TabNavigatorConfig}>
+			{TABS}
+		</Tab.Navigator>
+	);
+});
 
 module.exports = TabsView;

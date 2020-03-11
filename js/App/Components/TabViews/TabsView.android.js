@@ -22,28 +22,38 @@
 
 'use strict';
 
-
+import React from 'react';
+import {
+	useSelector,
+} from 'react-redux';
 
 import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
-const RouteConfigs = {
-	Dashboard: {
-		screen: TabViews.Dashboard,
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
+const TabConfigs = [
+	{
+		name: 'Dashboard',
+		Component: TabViews.Dashboard,
 	},
-	Devices: {
-		screen: TabViews.Devices,
+	{
+		name: 'Devices',
+		Component: TabViews.Devices,
 	},
-	Sensors: {
-		screen: TabViews.Sensors,
+	{
+		name: 'Sensors',
+		Component: TabViews.Sensors,
 	},
-	Scheduler: {
-		screen: TabViews.Scheduler,
+	{
+		name: 'Scheduler',
+		Component: TabViews.Scheduler,
 	},
-};
+];
 
 const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
@@ -51,7 +61,7 @@ const TabNavigatorConfig = {
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
-	tabBarComponent: MainTabBarAndroid,
+	tabBar: (props: Object): Object => <MainTabBarAndroid {...props}/>,
 	tabBarPosition: 'top',
 	tabBarOptions: {
 		scrollEnabled: true,
@@ -67,6 +77,93 @@ const TabNavigatorConfig = {
 	pagerComponent: ViewPagerAdapter,
 };
 
-const TabsView = createCompatNavigatorFactory(createMaterialTopTabNavigator)(RouteConfigs, TabNavigatorConfig);
+const Tab = createMaterialTopTabNavigator();
+
+const TabsView = React.memo<Object>((props: Object): Object => {
+	const {
+		screenProps,
+	} = props;
+
+	const TABS = TabConfigs.map((tabConf: Object, index: number): Object => {
+		const {
+			name,
+			Component,
+			options,
+			ContainerComponent,
+			optionsWithScreenProps,
+		} = tabConf;
+
+		let _options = options;
+		if (optionsWithScreenProps) {
+			_options = (optionsDefArgs: Object): Object => {
+				return optionsWithScreenProps({
+					...optionsDefArgs,
+					screenProps,
+				});
+			};
+		}
+
+		return (
+			<Tab.Screen
+				key={`${index}${name}`}
+				name={name}
+				// eslint-disable-next-line react/jsx-no-bind
+				component={(...args: any): Object => {
+					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
+					const {
+						toggleDialogueBoxState,
+					} = useDialogueBox();
+
+					let _props = {};
+					args.forEach((arg: Object = {}) => {
+						_props = {
+							..._props,
+							...arg,
+						};
+					});
+
+					if (!ContainerComponent) {
+						return (
+							<Component
+								{..._props}
+								screenProps={{
+									...screenProps,
+									currentScreen,
+									toggleDialogueBox: toggleDialogueBoxState,
+								}}/>
+						);
+					}
+
+					return (
+						<ContainerComponent
+							{..._props}
+							screenProps={{
+								...screenProps,
+								currentScreen,
+								toggleDialogueBox: toggleDialogueBoxState,
+							}}>
+							<Component/>
+						</ContainerComponent>
+					);
+				}}
+				options={_options}/>
+		);
+	});
+
+	function tabBar(propsDef: Object): Object {
+		return TabNavigatorConfig.tabBar({
+			...propsDef,
+			screenProps,
+		});
+	}
+
+	return (
+		<Tab.Navigator
+			{...TabNavigatorConfig}
+			tabBar={tabBar}>
+			{TABS}
+		</Tab.Navigator>
+	);
+});
 
 module.exports = TabsView;

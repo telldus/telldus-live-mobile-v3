@@ -212,10 +212,7 @@ class DashboardTab extends View {
 	componentDidMount() {
 		const { isDBEmpty, navigation, screenProps } = this.props;
 		if (isDBEmpty && (screenProps.currentScreen === 'Dashboard' || screenProps.currentScreen === 'Tabs')) {
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
-			});
+			navigation.navigate('Devices');
 		}
 		this.startSensorTimer();
 	}
@@ -306,13 +303,10 @@ class DashboardTab extends View {
 
 	openRGBControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'RGBControl',
-			key: 'RGBControl',
-			params: {
+		navigation.navigate('RGBControl',
+			{
 				id,
-			},
-		});
+			});
 	}
 
 	openDialogueBox(action: string, device: Object) {
@@ -324,13 +318,10 @@ class DashboardTab extends View {
 
 	openThermostatControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'ThermostatControl',
-			key: 'ThermostatControl',
-			params: {
+		navigation.navigate('ThermostatControl',
+			{
 				id,
-			},
-		});
+			});
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {

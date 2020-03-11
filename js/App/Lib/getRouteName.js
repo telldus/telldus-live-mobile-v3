@@ -24,8 +24,8 @@ export default function getRouteName(navigationState: Object): any {
 		return null;
 	}
 	const route = navigationState.routes[navigationState.index];
-	if (route.routes) {
-		return getRouteName(route);
+	if (route.state) {
+		return getRouteName(route.state);
 	}
 	return route.name;
 }
