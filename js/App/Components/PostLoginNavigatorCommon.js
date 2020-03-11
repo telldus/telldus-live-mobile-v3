@@ -189,7 +189,7 @@ async componentDidMount() {
 			await RNIap.initConnection();
 
 			const subs = Platform.select({
-				ios: ['promonth'],
+				ios: ['premium1m'],
 			});
 			const products = await RNIap.getSubscriptions(subs);
 			dispatch(onReceivedInAppPurchaseProducts(products));
