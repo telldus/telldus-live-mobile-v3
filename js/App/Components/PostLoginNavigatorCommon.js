@@ -195,8 +195,10 @@ async componentDidMount() {
 			const products = await RNIap.getSubscriptions(subs);
 			dispatch(onReceivedInAppPurchaseProducts(products));
 
-			const purchases = await RNIap.getAvailablePurchases();
+			const purchases = await RNIap.getAvailablePurchases();// Those not called 'finishTransaction' post-purchase
 			dispatch(onReceivedInAppAvailablePurchases(purchases));
+			// TODO: These are the purchases made successfully but failed to
+			// report at our server(createTransaction not success), may be try to report now?
 		} catch (err) {
 			// Ignore
 		}
