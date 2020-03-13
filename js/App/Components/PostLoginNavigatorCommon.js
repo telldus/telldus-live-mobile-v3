@@ -60,6 +60,7 @@ import {
 	toggleVisibilityProExpireHeadsup,
 	fetchRemoteConfig,
 	onReceivedInAppPurchaseProducts,
+	onReceivedInAppAvailablePurchases,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -175,10 +176,13 @@ async componentDidMount() {
 			await RNIap.initConnection();
 
 			const subs = Platform.select({
-				ios: ['premium1m'],
+				ios: ['premium1m', 'onlytest'],
 			});
 			const products = await RNIap.getSubscriptions(subs);
 			dispatch(onReceivedInAppPurchaseProducts(products));
+
+			const purchases = await RNIap.getAvailablePurchases();
+			dispatch(onReceivedInAppAvailablePurchases(purchases));
 		} catch (err) {
 			// Ignore
 		}
