@@ -188,7 +188,7 @@ async componentDidMount() {
 	if (Platform.OS === 'ios') {
 		try {
 			await RNIap.initConnection();
-
+			// TODO: Get the products(id) from appUtils/getSubscriptionPlans
 			const subs = Platform.select({
 				ios: ['premium1m', 'onlytest'],
 			});
