@@ -31,7 +31,6 @@ import {
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import { Header } from '../../BaseComponents';
-import SettingsNavigator from './Settings/SettingsNavigator';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import SensorDetailsNavigator from './SensorDetails/SensorDetailsNavigator';
 import DeviceDetailsNavigator from './Device/DeviceDetails/DeviceDetailsNavigator';
@@ -98,13 +97,6 @@ const ScreenConfigs = [
 				headerShown: true,
 				header: (): Object => <Header {...screenProps}/>,
 			};
-		},
-	},
-	{
-		name: 'Settings',
-		Component: SettingsNavigator,
-		options: {
-			headerShown: false,
 		},
 	},
 	{
