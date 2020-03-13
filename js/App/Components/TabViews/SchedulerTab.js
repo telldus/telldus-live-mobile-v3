@@ -123,10 +123,8 @@ class SchedulerTab extends View<null, Props, State> {
 		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		navigation.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
-			params: { editMode: true },
+		navigation.navigate('Schedule', {
+			editMode: true,
 		});
 	};
 

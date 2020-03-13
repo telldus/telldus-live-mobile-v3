@@ -259,10 +259,8 @@ class DevicesTab extends View {
 		// Passing only the id(not whole device object) through navigation param, again the device properties
 		// are retrived inside 'DeviceDetails' by matching 'id' with device data from store
 		// It is important to use data from store directly(not through navigation param) to get updates(socket and other)
-		this.props.navigation.navigate({
-			routeName: 'DeviceDetails',
-			key: 'DeviceDetails',
-			params: { id: device.id },
+		this.props.navigation.navigate('DeviceDetails', {
+			id: device.id,
 		});
 	}
 
@@ -359,10 +357,8 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.navigation.navigate({
-						routeName: 'AddLocation',
-						key: 'AddLocation',
-						params: { clients: response.client },
+					this.props.navigation.navigate('AddLocation', {
+						clients: response.client,
 					});
 					this.setState({
 						addGateway: false,
@@ -438,23 +434,15 @@ class DevicesTab extends View {
 
 	openRGBControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'RGBControl',
-			key: 'RGBControl',
-			params: {
-				id,
-			},
+		navigation.navigate('RGBControl', {
+			id,
 		});
 	}
 
 	openThermostatControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'ThermostatControl',
-			key: 'ThermostatControl',
-			params: {
-				id,
-			},
+		navigation.navigate('ThermostatControl', {
+			id,
 		});
 	}
 

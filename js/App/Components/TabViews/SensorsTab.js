@@ -264,10 +264,8 @@ class SensorsTab extends View {
 	}
 
 	openSensorDetail(sensor: Object) {
-		this.props.navigation.navigate({
-			routeName: 'SensorDetails',
-			key: 'SensorDetails',
-			params: { id: sensor.id },
+		this.props.navigation.navigate('SensorDetails', {
+			id: sensor.id,
 		});
 	}
 
