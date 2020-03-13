@@ -105,17 +105,6 @@ class DashboardTab extends View {
 	openRGBControl: (number) => void;
 	openThermostatControl: (number) => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Dashboard' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.dashboard),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'dashboard'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.dashboardTab)}, ${postScript}`,
-		};
-	};
-
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');

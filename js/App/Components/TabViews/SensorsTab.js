@@ -84,17 +84,6 @@ class SensorsTab extends View {
 	noSensorsTitle: string;
 	noSensorsContent: string;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Sensors' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.sensors),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'sensors'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.sensorsTab)}, ${postScript}`,
-		};
-	};
-
 	constructor(props: Props) {
 		super(props);
 

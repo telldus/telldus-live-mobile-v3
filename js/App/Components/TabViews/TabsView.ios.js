@@ -36,27 +36,81 @@ import TabViews from './index';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import { getTabBarIcon } from '../../Lib';
+
+import i18n from '../../Translations/common';
 
 const TabConfigs = [
 	{
 		name: 'Dashboard',
 		Component: TabViews.Dashboard,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Dashboard' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.dashboard),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'dashboard'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.dashboardTab)}, ${postScript}`,
+			};
+		},
 	},
 	{
 		name: 'Devices',
 		Component: TabViews.Devices,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Devices' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.devices),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'devices'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.devicesTab)}, ${postScript}`,
+			};
+		},
 	},
 	{
 		name: 'Sensors',
 		Component: TabViews.Sensors,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Sensors' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.sensors),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'sensors'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.sensorsTab)}, ${postScript}`,
+			};
+
+		},
 	},
 	{
 		name: 'Scheduler',
 		Component: TabViews.Scheduler,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Scheduler' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.scheduler),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'scheduler'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.schedulerTab)}, ${postScript}`,
+			};
+		},
 	},
 	{
 		name: 'Gateways',
 		Component: TabViews.Gateways,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Gateways' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.gateways),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'gateways'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.gatewaysTab)}, ${postScript}`,
+			};
+		},
 	},
 ];
 
