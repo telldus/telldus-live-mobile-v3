@@ -64,6 +64,7 @@ import {
 
 import {
 	useInAppPurchaseListeners,
+	withIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
@@ -78,12 +79,17 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		iapTransationConfig = {},
 	} = useSelector((state: Object): Object => state.user);
 
 	const { pro } = userProfile;
 
 	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
 	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
+
+	const {
+		onGoing = false,
+	} = iapTransationConfig;
 
 	const {
 		container,
@@ -188,20 +194,32 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		setPaymentProviderIndex(index);
 	}
 
+	const {
+		successCallback,
+		errorCallback,
+	} = withIAPSuccessFailureHandle();
+
 	React.useEffect((): Function => {
-		const { clearListeners } = useInAppPurchaseListeners();
+		const { clearListeners } = useInAppPurchaseListeners({
+			successCallback,
+			errorCallback,
+		});
 		return clearListeners;
 	}, []);
 
 	async function requestIapSubscription(id: string) {
 		try {
-			await RNIap.requestSubscription(id);
+			await RNIap.requestSubscription(id, false);
 		} catch (err) {
 			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 		}
 	}
 
 	function onPress() {
+		if (onGoing) {
+			return;
+		}
+
 		const {
 			product,
 			smsCredit: credits,
@@ -309,6 +327,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
+					disabled={onGoing}
 				/>
 				<Text style={backLinkStyle} onPress={onGoBack}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.backLabel))}</Text>
 			</ScrollView>
