@@ -88,10 +88,10 @@ const withIAPSuccessFailureHandle = (): Object => {
 					// in doing the below. It will also be impossible for the user to purchase consumables
 					// again untill you do this.
 					RNIap.finishTransactionIOS(purchaseInfo.transactionId);
+					RNIap.finishTransaction(purchaseInfo, false);
 				} catch (err) {
 					// Ignore
 				} finally {
-					RNIap.finishTransaction(purchaseInfo, false);
 					dispatch(updateStatusIAPTransaction({
 						onGoing: false,
 					}));
