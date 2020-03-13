@@ -73,7 +73,6 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
 	const {
 		layout,
-		iapProducts = {},
 	} = useSelector((state: Object): Object => state.app);
 	const {
 		subscriptions,
@@ -217,13 +216,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		};
 
 		if (Platform.OS === 'ios') {
-			let pid = '';
-			iapProducts.forEach((p: Object) => {
-				if (product === p.product) {// TODO: make sure some attribute of iapProducts matches 'product'
-					pid = p.productId;
-				}
-			});
-			requestIapSubscription(pid);
+			requestIapSubscription(product);
 		} else {
 			dispatch(createTransaction(options, true)).then((response: Object) => {
 				if (response && response.id && response.url) {
