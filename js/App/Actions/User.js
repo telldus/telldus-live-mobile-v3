@@ -319,6 +319,13 @@ function toggleVisibilityProExpireHeadsup(value: 'show' | 'hide_temp' | 'hide_pe
 	};
 }
 
+function updateStatusIAPTransaction(payload: Object): Action {
+	return {
+		type: 'UPDATE_STATUS_IAP_TRANSACTION',
+		payload,
+	};
+}
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -333,4 +340,5 @@ module.exports = {
 	campaignVisited,
 	toggleVisibilityExchangeOffer,
 	toggleVisibilityProExpireHeadsup,
+	updateStatusIAPTransaction,
 };

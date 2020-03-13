@@ -47,6 +47,7 @@ export type State = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	firebaseRemoteConfig: Object,
+	iapTransationConfig: Object,
 };
 
 export const initialState = {
@@ -70,6 +71,7 @@ export const initialState = {
 	generatePushError: '',
 	playServicesInfo: {},
 	firebaseRemoteConfig: {},
+	iapTransationConfig: {},
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -100,6 +102,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			showChangeLog: false,
 			visibilityExchangeOffer: nextVEOValue,
 			visibilityProExpireHeadsup: nextVPEValue,
+			iapTransationConfig: {},
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -268,6 +271,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			firebaseRemoteConfig: action.payload,
+		};
+	}
+	if (action.type === 'UPDATE_STATUS_IAP_TRANSACTION') {
+		return {
+			...state,
+			iapTransationConfig: action.payload,
 		};
 	}
 	return state;
