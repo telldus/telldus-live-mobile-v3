@@ -57,6 +57,7 @@ import {
 import {
 	createTransaction,
 	toggleVisibilityProExpireHeadsup,
+	updateStatusIAPTransaction,
 } from '../../Actions/User';
 import {
 	showToast,
@@ -66,6 +67,7 @@ import {
 } from '../../Actions/Login';
 import {
 	withInAppPurchaseListeners,
+	withIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
@@ -80,11 +82,16 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		iapTransationConfig = {},
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
 	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
 	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
+
+	const {
+		onGoing = false,
+	} = iapTransationConfig;
 
 	const {
 		container,
@@ -128,8 +135,16 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 
 	const dispatch = useDispatch();
 
+	const {
+		successCallback,
+		errorCallback,
+	} = withIAPSuccessFailureHandle();
+
 	let { clearListeners } = React.useMemo((): Object => {
-		return withInAppPurchaseListeners();
+		return withInAppPurchaseListeners({
+			successCallback,
+			errorCallback,
+		});
 	}, []);
 
 	React.useEffect((): Function => {
@@ -137,7 +152,10 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			'didFocus',
 			(payload: Object) => {
 				if (!clearListeners) {
-					const listenerData = withInAppPurchaseListeners();
+					const listenerData = withInAppPurchaseListeners({
+						successCallback,
+						errorCallback,
+					});
 					// eslint-disable-next-line react-hooks/exhaustive-deps
 					clearListeners = listenerData.clearListeners;
 				}
@@ -152,7 +170,10 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 
 	async function requestIapSubscription(id: string) {
 		try {
-			await RNIap.requestSubscription(id);
+			dispatch(updateStatusIAPTransaction({
+				onGoing: true,
+			}));
+			await RNIap.requestSubscription(id, false);
 		} catch (err) {
 			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 		}
@@ -308,6 +329,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
+					disabled={onGoing}
 				/>
 				<AdditionalPlansPayments
 					navigation={navigation}
