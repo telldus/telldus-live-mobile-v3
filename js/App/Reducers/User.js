@@ -45,6 +45,8 @@ export type State = {
 	playServicesInfo: Object,
 	firebaseRemoteConfig: Object,
 	iapTransationConfig: Object,
+	iapProducts: Array<Object>,
+	iapAvailablePurchases: Array<Object>,
 };
 
 export const initialState = {
@@ -68,6 +70,8 @@ export const initialState = {
 	playServicesInfo: {},
 	firebaseRemoteConfig: {},
 	iapTransationConfig: {},
+	iapProducts: [],
+	iapAvailablePurchases: [],
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -255,6 +259,18 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			iapTransationConfig: action.payload,
+		};
+	}
+	if (action.type === 'RECEIVED_IN_APP_PURCHASE_PRODUCTS') {
+		return {
+			...state,
+			iapProducts: action.payload,
+		};
+	}
+	if (action.type === 'RECEIVED_IN_APP_AVAILABLE_PURCHASES') {
+		return {
+			...state,
+			iapAvailablePurchases: action.payload,
 		};
 	}
 	return state;
