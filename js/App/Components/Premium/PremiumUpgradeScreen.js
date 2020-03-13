@@ -77,7 +77,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
-		iapTransationConfig = {},
+		iapTransactionConfig = {},
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
@@ -86,7 +86,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 
 	const {
 		onGoing = false,
-	} = iapTransationConfig;
+	} = iapTransactionConfig;
 
 	const {
 		container,
