@@ -19,6 +19,7 @@
  */
 // @flow
 'use strict';
+import { useDispatch } from 'react-redux';
 
 import RNIap, {
 	purchaseErrorListener,
@@ -29,31 +30,30 @@ import RNIap, {
 	type SubscriptionPurchase,
 } from 'react-native-iap';
 
-const withInAppPurchaseListeners = (): Object => {
+import {
+	createTransaction,
+	updateStatusIAPTransaction,
+} from '../Actions/User';
+
+const withInAppPurchaseListeners = ({
+	successCallback,
+	errorCallback,
+}: {successCallback?: Function, errorCallback?: Function}): Object => {
 	let purchaseUpdateSubscription = purchaseUpdatedListener((purchase: InAppPurchase | SubscriptionPurchase | ProductPurchase ) => {
 		console.log('TEST purchaseUpdatedListener', purchase);
 		const receipt = purchase.transactionReceipt;
 		if (receipt) {
-			// Report at the server/API
-			try {
-				// Tell the store that you have delivered what has been paid for.
-				// Failure to do this will result in the purchase being refunded on Android and
-				// the purchase event will reappear on every relaunch of the app until you succeed
-				// in doing the below. It will also be impossible for the user to purchase consumables
-				// again untill you do this.
-				RNIap.finishTransactionIOS(purchase.transactionId);
-
-				// From react-native-iap@4.1.0 you can simplify above `method`. Try to wrap the statement with `try` and `catch` to also grab the `error` message.
-				// If consumable (can be purchased again)
-				RNIap.finishTransaction(purchase, true);
-			} catch (err) {
-				console.log('TEST finish', err);
+			if (successCallback) {
+				successCallback(purchase);
 			}
 		}
 	});
 
 	let purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
 		console.log('TEST purchaseErrorListener N', error);
+		if (errorCallback) {
+			errorCallback(error);
+		}
 	});
 
 	return {
@@ -70,6 +70,60 @@ const withInAppPurchaseListeners = (): Object => {
 	};
 };
 
+const withIAPSuccessFailureHandle = (): Object => {
+
+	const dispatch = useDispatch();
+
+	async function successCallback(purchaseInfo: Object): Promise<any> {
+		return dispatch(createTransaction({
+			purchaseInfo: JSON.stringify(purchaseInfo),
+			paymentProvider: 'apple',
+		}, true)).then((response: Object): Object => {
+			if (response && response.status && response.status === 'success') {
+				try {
+					// Tell the store that you have delivered what has been paid for.
+					// Failure to do this will result in the purchase being refunded on Android and
+					// the purchase event will reappear on every relaunch of the app until you succeed
+					// in doing the below. It will also be impossible for the user to purchase consumables
+					// again untill you do this.
+					RNIap.finishTransactionIOS(purchaseInfo.transactionId);
+				} catch (err) {
+					// Ignore
+				} finally {
+					RNIap.finishTransaction(purchaseInfo, false);
+					dispatch(updateStatusIAPTransaction({
+						onGoing: false,
+					}));
+					return response;
+				}
+			}
+			dispatch(updateStatusIAPTransaction({
+				onGoing: false,
+			}));
+			RNIap.finishTransaction(purchaseInfo, false);
+			return response;
+		}).catch((err: Object) => {
+			RNIap.finishTransaction(purchaseInfo, false);
+			dispatch(updateStatusIAPTransaction({
+				onGoing: false,
+			}));
+			throw err;
+		});
+	}
+
+	function errorCallback(purchaseErr: Object) {
+		dispatch(updateStatusIAPTransaction({
+			onGoing: false,
+		}));
+	}
+
+	return {
+		successCallback,
+		errorCallback,
+	};
+};
+
 module.exports = {
 	withInAppPurchaseListeners,
+	withIAPSuccessFailureHandle,
 };
