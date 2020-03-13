@@ -248,20 +248,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="faq"
-			tintColor={tintColor}
-			label={i18n.userHelp}
-			accessibilityLabel={i18n.labelAccessibleSupportTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'SupportTab',
-			key: 'SupportTab',
-		});
-	},
-});
-
 export default SupportTab;

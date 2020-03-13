@@ -340,20 +340,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-AppTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="phone"
-			tintColor={tintColor}
-			label={i18n.labelApp}
-			accessibilityLabel={i18n.labelAccessibleAppTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'AppTab',
-			key: 'AppTab',
-		});
-	},
-});
-
 export default AppTab;

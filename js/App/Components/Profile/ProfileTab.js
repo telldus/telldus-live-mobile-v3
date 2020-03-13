@@ -765,20 +765,4 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 	};
 };
 
-ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="user"
-			tintColor={tintColor}
-			label={i18n.labelProfile}
-			accessibilityLabel={i18n.labelAccessibleProfileTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'ProfileTab',
-			key: 'ProfileTab',
-		});
-	},
-});
-
 export default ProfileTab;
