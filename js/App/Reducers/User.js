@@ -44,7 +44,7 @@ export type State = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	firebaseRemoteConfig: Object,
-	iapTransationConfig: Object,
+	iapTransactionConfig: Object,
 	iapProducts: Array<Object>,
 	iapAvailablePurchases: Array<Object>,
 };
@@ -69,7 +69,7 @@ export const initialState = {
 	generatePushError: '',
 	playServicesInfo: {},
 	firebaseRemoteConfig: {},
-	iapTransationConfig: {},
+	iapTransactionConfig: {},
 	iapProducts: [],
 	iapAvailablePurchases: [],
 };
@@ -92,7 +92,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...action.payload.user,
 			showChangeLog: false,
 			visibilityProExpireHeadsup: nextVPEValue,
-			iapTransationConfig: {},
+			iapTransactionConfig: {},
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -258,7 +258,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 	if (action.type === 'UPDATE_STATUS_IAP_TRANSACTION') {
 		return {
 			...state,
-			iapTransationConfig: action.payload,
+			iapTransactionConfig: action.payload,
 		};
 	}
 	if (action.type === 'RECEIVED_IN_APP_PURCHASE_PRODUCTS') {
