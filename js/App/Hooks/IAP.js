@@ -101,10 +101,8 @@ const withIAPSuccessFailureHandle = (): Object => {
 			dispatch(updateStatusIAPTransaction({
 				onGoing: false,
 			}));
-			RNIap.finishTransaction(purchaseInfo, false);
 			return response;
 		}).catch((err: Object) => {
-			RNIap.finishTransaction(purchaseInfo, false);
 			dispatch(updateStatusIAPTransaction({
 				onGoing: false,
 			}));
