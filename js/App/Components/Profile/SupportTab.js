@@ -33,7 +33,6 @@ import {
 	View,
 	Text,
 	TouchableButton,
-	TabBar,
 	IconTelldus,
 } from '../../../BaseComponents';
 import {

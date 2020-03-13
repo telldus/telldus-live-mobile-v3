@@ -41,7 +41,6 @@ import { pushServiceId } from '../../../Config';
 
 import {
 	View,
-	TabBar,
 	SettingsRow,
 	Text,
 } from '../../../BaseComponents';

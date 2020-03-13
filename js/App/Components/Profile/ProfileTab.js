@@ -34,7 +34,6 @@ import { RadioButtonInput } from 'react-native-simple-radio-button';
 
 import {
 	View,
-	TabBar,
 	IconTelldus,
 	Text,
 	ActionSheet,
