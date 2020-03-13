@@ -145,19 +145,11 @@ const setNetworkConnectionInfo = (payload: Object): Action => {
 	};
 };
 
-const onReceivedInAppPurchaseProducts = (products: Array<Object>): Action => {
-	return {
-		type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS',
-		payload: products,
-	};
-};
-
 module.exports = {
 	...App,
 	createSupportTicket,
 	createSupportTicketLCT,
 	createSupportTicketGeneral,
 	setNetworkConnectionInfo,
-	onReceivedInAppPurchaseProducts,
 };
 

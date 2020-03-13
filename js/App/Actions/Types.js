@@ -141,8 +141,8 @@ export type Action =
 	| { type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 
 	| { type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS', payload: Array<Object> }
-
 	| { type: 'UPDATE_STATUS_IAP_TRANSACTION', payload: Object }
+	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

@@ -326,6 +326,20 @@ function updateStatusIAPTransaction(payload: Object): Action {
 	};
 }
 
+const onReceivedInAppPurchaseProducts = (products: Array<Object>): Action => {
+	return {
+		type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS',
+		payload: products,
+	};
+};
+
+const onReceivedInAppAvailablePurchases = (products: Array<Object>): Action => {
+	return {
+		type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES',
+		payload: products,
+	};
+};
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -341,4 +355,6 @@ module.exports = {
 	toggleVisibilityExchangeOffer,
 	toggleVisibilityProExpireHeadsup,
 	updateStatusIAPTransaction,
+	onReceivedInAppPurchaseProducts,
+	onReceivedInAppAvailablePurchases,
 };
