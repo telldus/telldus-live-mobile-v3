@@ -46,7 +46,6 @@ import type { Schedule } from '../../Reducers/Schedule';
 
 import Theme from '../../Theme';
 
-import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
 type Props = {

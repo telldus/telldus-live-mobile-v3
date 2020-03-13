@@ -51,7 +51,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon, LayoutAnimations } from '../../Lib';
+import { LayoutAnimations } from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,

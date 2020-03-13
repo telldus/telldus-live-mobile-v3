@@ -40,7 +40,7 @@ import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actio
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
+import { LayoutAnimations, getItemLayout } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {

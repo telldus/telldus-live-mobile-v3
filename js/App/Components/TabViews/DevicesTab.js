@@ -46,7 +46,7 @@ import { DimmerControlInfo } from './SubViews/Device';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
+import { LayoutAnimations, getItemLayout } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast, getGateways } from '../../Actions';
