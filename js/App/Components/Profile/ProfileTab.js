@@ -23,7 +23,10 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import {
+	ScrollView,
+	TouchableOpacity,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 
@@ -75,8 +78,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 			key: 'RedeemGiftScreen',
 		});
 	}
-
-	const isNotiOS = Platform.OS !== 'ios';
 
 	const {
 		formatMessage,
@@ -138,7 +139,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
 					style={style}
-					enablePurchase={enable && isNotiOS}
+					enablePurchase={enable}
 				/>)}
 				{(isBasic && enable) && <PremiumInfoContent/>}
 				{(isBasic && enable) && <UpgradePremiumButton
