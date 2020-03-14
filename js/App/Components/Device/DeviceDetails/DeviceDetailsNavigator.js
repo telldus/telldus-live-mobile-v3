@@ -111,7 +111,6 @@ const NavigatorConfigs = {
 			fontSize = deviceWidth * 0.03;
 			paddingVertical = 10 + (fontSize * 0.5);
 		}
-		console.log('TEST rest', rest);
 		return (
 			<View style={{flex: 0}}>
 				<DeviceDetailsHeaderPoster {...rest}/>
