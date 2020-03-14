@@ -48,7 +48,15 @@ import { apiServer, publicKey, privateKey } from '../../Config';
 
 export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = false }: {url: string, requestParams: Object, _accessToken?: Object, cancelAllPending?: boolean }): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
-		const { user: { accessToken, userId = '' } } = getState();
+		let { user: { accessToken, userId = '' } } = getState();
+
+		// NOTE: userId is not yet(v3.14) available while logging in.
+		// So user's who upgrade from old app version will not have
+		// 'userId' inside accessToken Object. Inject it here if required.
+		accessToken = {
+			...accessToken,
+			userId: accessToken.userId || userId,
+		};
 
 		const { path } = parse(url);
 		let source = {};
