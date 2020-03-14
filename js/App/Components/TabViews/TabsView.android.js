@@ -30,7 +30,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
 
 import {
-	prepareTabNavigator,
+	prepareNavigator,
 } from '../../Lib/NavigationService';
 
 const ScreenConfigs = [
@@ -77,7 +77,7 @@ const NavigatorConfigs = {
 const Tab = createMaterialTopTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
-	return prepareTabNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 });
 
 module.exports = TabsView;

@@ -54,14 +54,14 @@ type TabConfigs = {
 	NavigatorConfigs?: Object,
 };
 
-function prepareTabNavigator(
-	Tab: Object,
+function prepareNavigator(
+	NavigatorBuilder: Object,
 	{ScreenConfigs, NavigatorConfigs = {}}: TabConfigs,
 	propsFromParent?: Object = {},
 ): Object {
 	const {
 		screenProps,
-		route,
+		route = {},
 	} = propsFromParent;
 
 	const TABS = ScreenConfigs.map((tabConf: Object, index: number): Object => {
@@ -84,7 +84,7 @@ function prepareTabNavigator(
 		}
 
 		return (
-			<Tab.Screen
+			<NavigatorBuilder.Screen
 				key={`${index}${name}`}
 				name={name}
 				// eslint-disable-next-line react/jsx-no-bind
@@ -131,16 +131,16 @@ function prepareTabNavigator(
 	}
 
 	return (
-		<Tab.Navigator
+		<NavigatorBuilder.Navigator
 			{...NavigatorConfigs}
 			tabBar={_tabBar}>
 			{TABS}
-		</Tab.Navigator>
+		</NavigatorBuilder.Navigator>
 	);
 }
 
 module.exports = {
 	navigate,
 	navigationRef,
-	prepareTabNavigator,
+	prepareNavigator,
 };

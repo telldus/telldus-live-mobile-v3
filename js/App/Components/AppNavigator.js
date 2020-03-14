@@ -80,6 +80,7 @@ import {
 import getRouteName from '../Lib/getRouteName';
 import {
 	navigationRef,
+	prepareNavigator,
 } from '../Lib/NavigationService';
 
 const ScreenConfigs = [
@@ -302,7 +303,7 @@ const ScreenConfigs = [
 	},
 ];
 
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName: 'Tabs',
 	initialRouteKey: 'Tabs',
 	cardStyle: {
@@ -342,13 +343,7 @@ const StackNavigatorConfig = {
 const Stack = createStackNavigator();
 
 const AppNavigator = React.memo<Object>((props: Object): Object => {
-	const { screenProps } = props;
-
 	const dispatch = useDispatch();
-
-	const {
-		toggleDialogueBoxState,
-	} = useDialogueBox();
 
 	function onNavigationStateChange(currentState: Object) {
 		const currentScreen = getRouteName(currentState);
@@ -357,74 +352,13 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		dispatch(screenChange(currentScreen));
 	}
 
-	const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
-
-		const {
-			name,
-			Component,
-			options,
-			ContainerComponent,
-			optionsWithScreenProps,
-		} = screenConf;
-
-		let _options = options;
-		if (optionsWithScreenProps) {
-			_options = (optionsDefArgs: Object): Object => {
-				return optionsWithScreenProps({
-					...optionsDefArgs,
-					screenProps,
-				});
-			};
-		}
-
-		return (
-			<Stack.Screen
-				key={`${index}${name}`}
-				name={name}
-				// eslint-disable-next-line react/jsx-no-bind
-				children={(...args: any): Object => {
-					let _props = {};
-					args.forEach((arg: Object = {}) => {
-						_props = {
-							..._props,
-							...arg,
-						};
-					});
-
-					if (!ContainerComponent) {
-						return (
-							<Component
-								{..._props}
-								screenProps={{
-									...screenProps,
-									toggleDialogueBox: toggleDialogueBoxState,
-								}}/>
-						);
-					}
-
-					return (
-						<ContainerComponent
-							{..._props}
-							screenProps={{
-								...screenProps,
-								toggleDialogueBox: toggleDialogueBoxState,
-							}}>
-							<Component/>
-						</ContainerComponent>
-					);
-				}}
-				options={_options}/>
-		);
-	});
+	const Navigator = prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 
 	return (
 		<NavigationContainer
 			ref={navigationRef}
 			onStateChange={onNavigationStateChange}>
-			<Stack.Navigator
-				{...StackNavigatorConfig}>
-				{SCREENS}
-			</Stack.Navigator>
+			{Navigator}
 		</NavigationContainer>
 	);
 });

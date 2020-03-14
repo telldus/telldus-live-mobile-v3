@@ -33,7 +33,7 @@ import TabViews from './index';
 import { getTabBarIcon } from '../../Lib';
 
 import {
-	prepareTabNavigator,
+	prepareNavigator,
 } from '../../Lib/NavigationService';
 
 import i18n from '../../Translations/common';
@@ -133,7 +133,7 @@ const NavigatorConfigs = {
 const Tab = createBottomTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
-	return prepareTabNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 });
 
 module.exports = TabsView;

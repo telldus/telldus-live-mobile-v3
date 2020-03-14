@@ -37,7 +37,7 @@ import ProfileHeaderPoster from './SubViews/ProfileHeaderPoster';
 import Theme from '../../Theme';
 
 import {
-	prepareTabNavigator,
+	prepareNavigator,
 } from '../../Lib/NavigationService';
 
 import i18n from '../../Translations/common';
@@ -151,7 +151,7 @@ const NavigatorConfigs = {
 const Tab = createMaterialTopTabNavigator();
 
 const ProfileNavigator = React.memo<Object>((props: Object): Object => {
-	return prepareTabNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 });
 
 export default ProfileNavigator;

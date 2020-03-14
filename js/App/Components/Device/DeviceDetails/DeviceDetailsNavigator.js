@@ -38,7 +38,7 @@ import Settings from './SettingsTab';
 import { DeviceDetailsHeaderPoster } from './SubViews';
 
 import {
-	prepareTabNavigator,
+	prepareNavigator,
 } from '../../../Lib/NavigationService';
 
 import Theme from '../../../Theme';
@@ -153,7 +153,7 @@ const NavigatorConfigs = {
 const Tab = createMaterialTopTabNavigator();
 
 const DeviceDetailsNavigator = React.memo<Object>((props: Object): Object => {
-	return prepareTabNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 });
 
 export default DeviceDetailsNavigator;
