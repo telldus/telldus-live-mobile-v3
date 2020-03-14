@@ -28,7 +28,7 @@ type State = {
 };
 
 const initialState: State = {
-	screen: '',
+	screen: 'Dashboard',
 };
 
 function navigation(state: State = initialState, action: Action): State {

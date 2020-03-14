@@ -346,6 +346,10 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 
 	const dispatch = useDispatch();
 
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	function onNavigationStateChange(currentState: Object) {
 		const currentScreen = getRouteName(currentState);
 
@@ -378,12 +382,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 				key={`${index}${name}`}
 				name={name}
 				// eslint-disable-next-line react/jsx-no-bind
-				component={(...args: any): Object => {
-					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
-					const {
-						toggleDialogueBoxState,
-					} = useDialogueBox();
-
+				children={(...args: any): Object => {
 					let _props = {};
 					args.forEach((arg: Object = {}) => {
 						_props = {
@@ -398,7 +397,6 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 								{..._props}
 								screenProps={{
 									...screenProps,
-									currentScreen,
 									toggleDialogueBox: toggleDialogueBoxState,
 								}}/>
 						);
@@ -409,7 +407,6 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 							{..._props}
 							screenProps={{
 								...screenProps,
-								currentScreen,
 								toggleDialogueBox: toggleDialogueBoxState,
 							}}>
 							<Component/>

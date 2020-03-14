@@ -88,12 +88,7 @@ function prepareTabNavigator(
 				key={`${index}${name}`}
 				name={name}
 				// eslint-disable-next-line react/jsx-no-bind
-				component={(...args: any): Object => {
-					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
-					const {
-						toggleDialogueBoxState,
-					} = useDialogueBox();
-
+				children={(...args: any): Object => {
 					let _props = {};
 					args.forEach((arg: Object = {}) => {
 						_props = {
@@ -106,22 +101,14 @@ function prepareTabNavigator(
 						return (
 							<Component
 								{..._props}
-								screenProps={{
-									...screenProps,
-									currentScreen,
-									toggleDialogueBox: toggleDialogueBoxState,
-								}}/>
+								screenProps={screenProps}/>
 						);
 					}
 
 					return (
 						<ContainerComponent
 							{..._props}
-							screenProps={{
-								...screenProps,
-								currentScreen,
-								toggleDialogueBox: toggleDialogueBoxState,
-							}}>
+							screenProps={screenProps}>
 							<Component/>
 						</ContainerComponent>
 					);
