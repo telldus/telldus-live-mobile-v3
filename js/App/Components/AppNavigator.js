@@ -25,7 +25,6 @@ import { Easing, Animated } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import {
-	useSelector,
 	useDispatch,
 } from 'react-redux';
 
@@ -73,9 +72,6 @@ import {
 	screenChange,
 	syncWithServer,
 } from '../Actions';
-import {
-	useDialogueBox,
-} from '../Hooks/Dialoguebox';
 
 import getRouteName from '../Lib/getRouteName';
 import {
