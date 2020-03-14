@@ -234,7 +234,7 @@ async componentDidMount() {
 		this.addNewLocation();
 	}
 
-	if (premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
+	if (Platform.OS !== 'ios' && premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
 	}
