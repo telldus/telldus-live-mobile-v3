@@ -56,7 +56,7 @@ const NavigatorConfigs = {
 	initialRouteName: 'Dashboard',
 	initialRouteKey: 'Dashboard',
 	swipeEnabled: false,
-	lazy: false,
+	lazy: true,
 	animationEnabled: true,
 	tabBar: (props: Object): Object => <MainTabBarAndroid {...props}/>,
 	tabBarPosition: 'top',

@@ -97,7 +97,7 @@ const NavigatorConfigs = {
 	initialRouteKey: 'Overview',
 	tabBarPosition: 'top',
 	swipeEnabled: false,
-	lazy: false,
+	lazy: true,
 	animationEnabled: true,
 	tabBar: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
 		let { screenProps } = rest,
