@@ -76,6 +76,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		});
 	}
 
+	const isNotiOS = Platform.OS !== 'ios';
+
 	const {
 		formatMessage,
 	} = intl;
@@ -136,7 +138,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					textFieldStyle={textFieldStyleENB}
 					labelTextStyle={labelTextStyleENB}
 					style={style}
-					enablePurchase={enable}
+					enablePurchase={enable && isNotiOS}
 				/>)}
 				{(isBasic && enable) && <PremiumInfoContent/>}
 				{(isBasic && enable) && <UpgradePremiumButton
