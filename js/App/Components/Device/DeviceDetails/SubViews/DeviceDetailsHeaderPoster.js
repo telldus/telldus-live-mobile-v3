@@ -101,7 +101,8 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const device = store.devices.byId[id] ? store.devices.byId[id] : {};
 	const { name: deviceName, deviceType } = device;
 	return {

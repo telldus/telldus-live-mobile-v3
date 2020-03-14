@@ -28,7 +28,6 @@ import moment from 'moment';
 
 import {
 	View,
-	TabBar,
 	FullPageActivityIndicator,
 } from '../../../BaseComponents';
 import {
@@ -109,22 +108,6 @@ class HistoryTab extends View {
 	onValueChangeGraphView: (string, number, Array<Object>) => void;
 
 	refreshHistoryDataAfterLiveUpdate: () => Promise<any>;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="history"
-				tintColor={tintColor}
-				label={i18n.historyHeader}
-				accessibilityLabel={i18n.deviceHistoryTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'SHistory',
-				key: 'SHistory',
-			});
-		},
-	});
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { screenProps } = props;
@@ -756,7 +739,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const { defaultSensorSettings } = state.sensorsList;
 	const defaultSettings = defaultSensorSettings[id];
 	const { keepHistory, clientId } = state.sensors.byId[id] ? state.sensors.byId[id] : {};

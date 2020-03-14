@@ -32,7 +32,6 @@ const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	TabBar,
 	Text,
 	SettingsRow,
 	TouchableButton,
@@ -100,22 +99,6 @@ class SettingsTab extends View {
 	onConfirmClearHistoryCache: () => void;
 
 	handleBackPress: () => boolean;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="settings"
-				tintColor={tintColor}
-				label={i18n.settingsHeader}
-				accessibilityLabel={i18n.deviceSettingsTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'SSettings',
-				key: 'SSettings',
-			});
-		},
-	});
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { screenProps, sensor } = props;
@@ -682,7 +665,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const sensor = state.sensors.byId[id];
 
 	const {

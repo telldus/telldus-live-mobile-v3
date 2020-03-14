@@ -26,7 +26,7 @@ import { ScrollView, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
-import { View, TabBar, LocationDetails } from '../../../BaseComponents';
+import { View, LocationDetails } from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
 import { getSensorInfo } from '../../Actions';
@@ -58,22 +58,6 @@ class OverviewTab extends View<Props, State> {
 	state: State;
 
 	onRefresh: () => void;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="home"
-				tintColor={tintColor}
-				label={i18n.overviewHeader}
-				accessibilityLabel={i18n.deviceOverviewTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'SOverview',
-				key: 'SOverview',
-			});
-		},
-	});
 
 	constructor(props: Props) {
 		super(props);
@@ -237,7 +221,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const sensor = state.sensors.byId[id];
 	const { clientId } = sensor ? sensor : {};
 

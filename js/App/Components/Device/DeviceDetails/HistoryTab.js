@@ -27,7 +27,7 @@ import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import reduce from 'lodash/reduce';
 import groupBy from 'lodash/groupBy';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../../BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate } from '../../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../../Actions/Devices';
 import { getHistory, storeHistory, getLatestTimestamp } from '../../../Actions/LocalStorage';
@@ -65,25 +65,6 @@ class HistoryTab extends View {
 	getHistoryDataWithLatestTimestamp: () => void;
 	onOriginPress: () => void;
 
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="history"
-				tintColor={tintColor}
-				label={i18n.historyHeader}
-				accessibilityLabel={i18n.deviceHistoryTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			const noOp = () => {};
-			const onPress = navigation.getParam('actionOnHistoryTabPress', noOp);
-			onPress();
-			navigation.navigate({
-				routeName: 'History',
-				key: 'History',
-			});
-		},
-	});
-
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
 		const { screenProps } = props;
 		if (screenProps.currentScreen !== 'History') {
@@ -116,10 +97,6 @@ class HistoryTab extends View {
 	}
 
 	componentDidMount() {
-		let {setParams} = this.props.navigation;
-		setParams({
-			actionOnHistoryTabPress: this.closeHistoryDetailsModal,
-		});
 		this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
 	}
 
@@ -453,7 +430,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const device = state.devices.byId[id];
 	const { clientId } = device ? device : {};
 

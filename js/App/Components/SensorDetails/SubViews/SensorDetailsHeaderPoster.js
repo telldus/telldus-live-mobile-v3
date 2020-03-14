@@ -91,7 +91,8 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const { name: sensorName } = store.sensors.byId[id] ? store.sensors.byId[id] : {};
 	return {
 		sensorName,

@@ -23,7 +23,6 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { NavigationActions } from '@react-navigation/compat';
 
 import { View, Image, LocationDetails } from '../../../../BaseComponents';
 

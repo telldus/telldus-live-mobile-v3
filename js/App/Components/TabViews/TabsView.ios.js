@@ -118,7 +118,7 @@ const TabNavigatorConfig = {
 	initialRouteName: 'Dashboard',
 	initialRouteKey: 'Dashboard', // Check if exist in v5
 	swipeEnabled: false, // Check if exist in v5
-	lazy: true,
+	lazy: false,
 	animationEnabled: false, // Check if exist in v5
 	tabBarOptions: {
 		activeTintColor: '#e26901',

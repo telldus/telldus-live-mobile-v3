@@ -22,6 +22,12 @@
 'use strict';
 
 import React from 'react';
+import {
+	useSelector,
+} from 'react-redux';
+import {
+	useDialogueBox,
+} from '../Hooks/Dialoguebox';
 
 const navigationRef = React.createRef<any>();
 
@@ -43,7 +49,107 @@ function navigate(name: string, params?: Object, key?: string) {
 	}
 }
 
+type TabConfigs = {
+	ScreenConfigs: Array<Object>,
+	NavigatorConfigs?: Object,
+};
+
+function prepareTabNavigator(
+	Tab: Object,
+	{ScreenConfigs, NavigatorConfigs = {}}: TabConfigs,
+	propsFromParent?: Object = {},
+): Object {
+	const {
+		screenProps,
+		route,
+	} = propsFromParent;
+
+	const TABS = ScreenConfigs.map((tabConf: Object, index: number): Object => {
+		const {
+			name,
+			Component,
+			options,
+			ContainerComponent,
+			optionsWithScreenProps,
+		} = tabConf;
+
+		let _options = options;
+		if (optionsWithScreenProps) {
+			_options = (optionsDefArgs: Object): Object => {
+				return optionsWithScreenProps({
+					...optionsDefArgs,
+					screenProps,
+				});
+			};
+		}
+
+		return (
+			<Tab.Screen
+				key={`${index}${name}`}
+				name={name}
+				// eslint-disable-next-line react/jsx-no-bind
+				component={(...args: any): Object => {
+					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
+					const {
+						toggleDialogueBoxState,
+					} = useDialogueBox();
+
+					let _props = {};
+					args.forEach((arg: Object = {}) => {
+						_props = {
+							..._props,
+							...arg,
+						};
+					});
+
+					if (!ContainerComponent) {
+						return (
+							<Component
+								{..._props}
+								screenProps={{
+									...screenProps,
+									currentScreen,
+									toggleDialogueBox: toggleDialogueBoxState,
+								}}/>
+						);
+					}
+
+					return (
+						<ContainerComponent
+							{..._props}
+							screenProps={{
+								...screenProps,
+								currentScreen,
+								toggleDialogueBox: toggleDialogueBoxState,
+							}}>
+							<Component/>
+						</ContainerComponent>
+					);
+				}}
+				options={_options}
+				initialParams={route.params}/>
+		);
+	});
+
+	function tabBar(propsDef: Object): Object {
+		return NavigatorConfigs.tabBar({
+			...propsDef,
+			screenProps,
+			route,
+		});
+	}
+
+	return (
+		<Tab.Navigator
+			{...NavigatorConfigs}
+			tabBar={tabBar}>
+			{TABS}
+		</Tab.Navigator>
+	);
+}
+
 module.exports = {
 	navigate,
 	navigationRef,
+	prepareTabNavigator,
 };
