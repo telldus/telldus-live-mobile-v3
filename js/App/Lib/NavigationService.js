@@ -131,18 +131,22 @@ function prepareTabNavigator(
 		);
 	});
 
-	function tabBar(propsDef: Object): Object {
-		return NavigatorConfigs.tabBar({
-			...propsDef,
-			screenProps,
-			route,
-		});
+	let _tabBar = NavigatorConfigs.tabBar;
+	if (_tabBar) {
+		function tabBar(propsDef: Object): Object {
+			return NavigatorConfigs.tabBar({
+				...propsDef,
+				screenProps,
+				route,
+			});
+		}
+		_tabBar = tabBar;
 	}
 
 	return (
 		<Tab.Navigator
 			{...NavigatorConfigs}
-			tabBar={tabBar}>
+			tabBar={_tabBar}>
 			{TABS}
 		</Tab.Navigator>
 	);
