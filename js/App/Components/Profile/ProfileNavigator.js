@@ -24,9 +24,6 @@
 
 import React from 'react';
 import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
-import {
-	useSelector,
-} from 'react-redux';
 
 import {
 	View,
@@ -37,15 +34,15 @@ import ProfileTab from './ProfileTab';
 import SupportTab from './SupportTab';
 import ProfileHeaderPoster from './SubViews/ProfileHeaderPoster';
 
-import {
-	useDialogueBox,
-} from '../../Hooks/Dialoguebox';
-
 import Theme from '../../Theme';
+
+import {
+	prepareTabNavigator,
+} from '../../Lib/NavigationService';
 
 import i18n from '../../Translations/common';
 
-const TabConfigs = [
+const ScreenConfigs = [
 	{
 		name: 'AppTab',
 		Component: AppTab,
@@ -93,7 +90,7 @@ const TabConfigs = [
 	},
 ];
 
-const TabNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName: 'AppTab',
 	initialRouteKey: 'AppTab',
 	tabBarPosition: 'top',
@@ -154,90 +151,7 @@ const TabNavigatorConfig = {
 const Tab = createMaterialTopTabNavigator();
 
 const ProfileNavigator = React.memo<Object>((props: Object): Object => {
-	const {
-		screenProps,
-	} = props;
-
-	const TABS = TabConfigs.map((tabConf: Object, index: number): Object => {
-		const {
-			name,
-			Component,
-			options,
-			ContainerComponent,
-			optionsWithScreenProps,
-		} = tabConf;
-
-		let _options = options;
-		if (optionsWithScreenProps) {
-			_options = (optionsDefArgs: Object): Object => {
-				return optionsWithScreenProps({
-					...optionsDefArgs,
-					screenProps,
-				});
-			};
-		}
-
-		return (
-			<Tab.Screen
-				key={`${index}${name}`}
-				name={name}
-				// eslint-disable-next-line react/jsx-no-bind
-				component={(...args: any): Object => {
-					const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
-					const {
-						toggleDialogueBoxState,
-					} = useDialogueBox();
-
-					let _props = {};
-					args.forEach((arg: Object = {}) => {
-						_props = {
-							..._props,
-							...arg,
-						};
-					});
-
-					if (!ContainerComponent) {
-						return (
-							<Component
-								{..._props}
-								screenProps={{
-									...screenProps,
-									currentScreen,
-									toggleDialogueBox: toggleDialogueBoxState,
-								}}/>
-						);
-					}
-
-					return (
-						<ContainerComponent
-							{..._props}
-							screenProps={{
-								...screenProps,
-								currentScreen,
-								toggleDialogueBox: toggleDialogueBoxState,
-							}}>
-							<Component/>
-						</ContainerComponent>
-					);
-				}}
-				options={_options}/>
-		);
-	});
-
-	function tabBar(propsDef: Object): Object {
-		return TabNavigatorConfig.tabBar({
-			...propsDef,
-			screenProps,
-		});
-	}
-
-	return (
-		<Tab.Navigator
-			{...TabNavigatorConfig}
-			tabBar={tabBar}>
-			{TABS}
-		</Tab.Navigator>
-	);
+	return prepareTabNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
 });
 
 export default ProfileNavigator;
