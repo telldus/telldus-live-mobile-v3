@@ -26,6 +26,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
+import {
+	Platform,
+} from 'react-native';
 
 import {
 	SettingsRow,
@@ -88,6 +91,8 @@ const AutoRenewalBlock = (props: Object): Object => {
 		fontWeight: 'bold',
 	} : {};
 
+	const isNotiOS = Platform.OS !== 'ios';
+
 	return (
 		<SettingsRow
 			type={'text'}
@@ -100,7 +105,7 @@ const AutoRenewalBlock = (props: Object): Object => {
 			iconValueRight={isAutoRenew ?
 				<IconTelldus icon={'settings'} style={upgradeSyle}/>
 				:
-				enablePurchase ?
+				(enablePurchase && isNotiOS) ?
 					<Text style={upgradeSyle}>{formatMessage(i18n.renew)}</Text>
 					:
 					undefined
@@ -112,7 +117,10 @@ const AutoRenewalBlock = (props: Object): Object => {
 				isAutoRenew ?
 					onPressManageSubscription
 					:
-					onPressUpgrade
+					isNotiOS ?
+						onPressUpgrade
+						:
+						undefined
 			}
 			intl={intl}
 			style={style}
