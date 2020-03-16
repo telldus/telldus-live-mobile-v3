@@ -43,6 +43,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -99,8 +100,10 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+		} = route.params || {};
 		if (continent === 'UTC') {
 			actions.setTimezone(id, continent).then(() => {
 				actions.getGateways();
@@ -121,19 +124,18 @@ class EditTimeZoneContinent extends View {
 				let items = v1.split('/');
 				return !(items[0] === v2);
 			});
-			navigation.navigate({
-				routeName: 'EditTimeZoneCity',
-				key: 'EditTimeZoneCity',
-				params: {
+			navigation.navigate('EditTimeZoneCity',
+				{
 					cities: data, continent, id,
-				},
-			});
+				});
 		}
 	}
 
 	onPressAutodetect() {
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+		} = route.params || {};
 		actions.setTimezone(id, '').then(() => {
 			actions.getGateways();
 			navigation.goBack();
@@ -151,9 +153,11 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onPressAutodetected() {
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+			autodetectedTimezone,
+		} = route.params || {};
 		actions.setTimezone(id, autodetectedTimezone).then(() => {
 			actions.getGateways();
 			navigation.goBack();
@@ -171,8 +175,10 @@ class EditTimeZoneContinent extends View {
 	}
 
 	render(): Object {
-		const { appLayout, navigation } = this.props;
-		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
+		const { appLayout, route } = this.props;
+		const {
+			autodetectedTimezone,
+		} = route.params || {};
 		const styles = this.getStyle(appLayout);
 
 		return (

@@ -23,9 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { Easing, Animated } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 import LocationDetailsContainer from './LocationDetailsContainer';
 
@@ -37,41 +35,73 @@ import EditGeoPosition from './EditGeoPosition';
 import TestLocalControl from './TestLocalControl';
 import RequestSupport from './RequestSupport';
 
+import {
+	prepareNavigator,
+} from '../../../Lib/NavigationService';
+
 const initialRouteName = 'Details';
 
-type renderContainer = (Object, string) => Object;
+const ScreenConfigs = [
+	{
+		name: 'Details',
+		Component: DetailsNavigator,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditName',
+		Component: EditName,
+		ContainerComponent: LocationDetailsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditTimeZoneContinent',
+		Component: EditTimeZoneContinent,
+		ContainerComponent: LocationDetailsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditTimeZoneCity',
+		Component: EditTimeZoneCity,
+		ContainerComponent: LocationDetailsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditGeoPosition',
+		Component: EditGeoPosition,
+		ContainerComponent: LocationDetailsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'TestLocalControl',
+		Component: TestLocalControl,
+		ContainerComponent: LocationDetailsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'RequestSupport',
+		Component: RequestSupport,
+		ContainerComponent: LocationDetailsContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+];
 
-const renderLocationDetailsContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
-	<LocationDetailsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</LocationDetailsContainer>
-);
 
-const RouteConfigs = {
-	Details: {
-		screen: DetailsNavigator,
-	},
-	EditName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditName, 'EditName'),
-	},
-	EditTimeZoneContinent: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneContinent, 'EditTimeZoneContinent'),
-	},
-	EditTimeZoneCity: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditTimeZoneCity, 'EditTimeZoneCity'),
-	},
-	EditGeoPosition: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(EditGeoPosition, 'EditGeoPosition'),
-	},
-	TestLocalControl: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(TestLocalControl, 'TestLocalControl'),
-	},
-	RequestSupport: {
-		screen: ({ navigation, screenProps }: Object): Object => renderLocationDetailsContainer(navigation, screenProps)(RequestSupport, 'RequestSupport'),
-	},
-};
 
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName,
 	initialRouteKey: initialRouteName,
 	headerMode: 'none',
@@ -80,46 +110,21 @@ const StackNavigatorConfig = {
 		shadowOpacity: 0,
 		elevation: 0,
 	},
-	transitionConfig: (): Object => ({
-		transitionSpec: {
-		  duration: 600,
-		  easing: Easing.out(Easing.poly(4)),
-		  timing: Animated.timing,
-		  useNativeDriver: true,
-		},
-		screenInterpolator: (sceneProps: Object): Object => {
-			const { layout, position, scene } = sceneProps;
-			const { index, route } = scene;
-			if (route.routeName === 'TestLocalControl' || route.routeName === 'RequestSupport') {
-				const height = layout.initHeight;
-				const translateY = position.interpolate({
-					inputRange: [index - 1, index, index + 1],
-					outputRange: [height, 0, 0],
-				});
-
-				const opacity = position.interpolate({
-					inputRange: [index - 1, index - 0.99, index],
-					outputRange: [0, 1, 1],
-				});
-
-				return { opacity, transform: [{ translateY }] };
+	screenOptions: {
+		cardStyleInterpolator: (sceneProps: Object): Object => {
+			const { index } = sceneProps;
+			if (index === 5 || index === 6) {
+				return CardStyleInterpolators.forRevealFromBottomAndroid;
 			}
-			const width = layout.initWidth;
-			const translateX = position.interpolate({
-				inputRange: [index - 1, index, index + 1],
-				outputRange: [width, 0, 0],
-			});
-
-			const opacity = position.interpolate({
-				inputRange: [index - 1, index - 0.99, index],
-				outputRange: [0, 1, 1],
-			});
-
-			return { opacity, transform: [{ translateX }] };
+			return CardStyleInterpolators.forHorizontalIOS;
 		},
-	  }),
+	},
 };
 
-const LocationDetailsNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator();
+
+const LocationDetailsNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 export default LocationDetailsNavigator;

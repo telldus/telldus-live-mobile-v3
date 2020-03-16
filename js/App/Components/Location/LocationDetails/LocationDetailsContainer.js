@@ -45,6 +45,7 @@ type Props = {
 	screenProps: Object,
 	location: Object,
 	email: string,
+	route: Object,
 
 	navigation: Object,
 	children: Object,
@@ -121,6 +122,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			navigation,
 			location,
 			email,
+			route,
 		} = this.props;
 		const {
 			appLayout,
@@ -176,6 +178,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 									containerWidth: width - (2 * paddingHorizontal),
 									location,
 									email,
+									route,
 								},
 							)}
 						</View>
@@ -231,7 +234,10 @@ class LocationDetailsContainer extends View<null, Props, State> {
 }
 
 const mapStateToProps = (store: Object, ownProps: Object): Object => {
-	let { id } = ownProps.navigation.getParam('location', {id: null});
+	const {
+		location = {},
+	} = ownProps.route.params || {};
+	const { id } = location;
 
 	const { userProfile = {} } = store.user;
 	const { email } = userProfile;

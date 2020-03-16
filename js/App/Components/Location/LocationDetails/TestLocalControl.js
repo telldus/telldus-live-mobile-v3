@@ -413,15 +413,12 @@ onPressRequestSupport() {
 			failedTests = failedTests ? `${failedTests}, ${test.name}` : test.name;
 		}
 	});
-	navigation.navigate({
-		routeName: 'RequestSupport',
-		key: 'RequestSupport',
-		params: {
+	navigation.navigate('RequestSupport',
+		{
 			location,
 			failedTests: failedTests ? `${failedTests}` : 'null',
 			testCount,
-		},
-	});
+		});
 }
 
 renderTestRow(testData: Object, index: number): Object {

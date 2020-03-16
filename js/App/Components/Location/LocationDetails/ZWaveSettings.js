@@ -28,7 +28,6 @@ import { connect } from 'react-redux';
 
 import {
 	View,
-	TabBar,
 	TouchableButton,
 } from '../../../../BaseComponents';
 import { ExcludeDevice } from '../../Device/Common';
@@ -58,22 +57,6 @@ type State = {
 };
 
 class ZWaveSettings extends View<Props, State> {
-
-static navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="settings"
-			tintColor={tintColor}
-			label={'Z-Wave'}
-			accessibilityLabel={i18n.zWaveSettingsTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'ZWaveSettings',
-			key: 'ZWaveSettings',
-		});
-	},
-});
 
 props: Props;
 state: State;
@@ -200,7 +183,9 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let { id } = ownProps.navigation.getParam('location', {id: null});
+	const {
+		location: {id},
+	} = ownProps.route.params || {};
 	return {
 		location: store.gateways.byId[id],
 	};

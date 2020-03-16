@@ -46,6 +46,7 @@ type Props = {
 	appLayout: Object,
 	location: Object,
 	email: string,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 	onDidMount: Function,
@@ -128,7 +129,7 @@ onChangeTextEmail(emailValue: string) {
 }
 
 contactSupport() {
-	const { actions, location, navigation, intl } = this.props;
+	const { actions, location, intl, route } = this.props;
 	const { formatMessage } = intl;
 	const { id } = location;
 	const { value, isLoading, routerValue, emailValue } = this.state;
@@ -144,8 +145,10 @@ contactSupport() {
 		NetInfo.fetch().then((connectionInfo: Object) => {
 			const { type, effectiveType } = connectionInfo;
 
-			const failedTests = navigation.getParam('failedTests', 'null');
-			const testCount = navigation.getParam('testCount', 1);
+			const {
+				failedTests = null,
+				testCount = 1,
+			} = route.params || {};
 			const ticketData = {
 				message: value,
 				failedTests,

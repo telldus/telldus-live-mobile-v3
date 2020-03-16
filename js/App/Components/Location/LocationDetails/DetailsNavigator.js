@@ -24,97 +24,137 @@
 
 import React from 'react';
 import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import ZWaveSettings from './ZWaveSettings';
 import Details from './Details';
 import Theme from '../../../Theme';
-import { View } from '../../../../BaseComponents';
+import {
+	View,
+	TabBar,
+} from '../../../../BaseComponents';
 import LocationDetailsHeaderPoster from './LocationDetailsHeaderPoster';
 
-const DetailsNavigator = createCompatNavigatorFactory(createMaterialTopTabNavigator)(
+import {
+	prepareNavigator,
+} from '../../../Lib/NavigationService';
+
+import i18n from '../../../Translations/common';
+
+const ScreenConfigs = [
 	{
-		LOverview: {
-			screen: Details,
-		},
-		ZWaveSettings: {
-			screen: ZWaveSettings,
+		name: 'Overview',
+		Component: Details,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			return {
+				tabBarLabel: ({ color }: Object): Object => (
+					<TabBar
+						icon="home"
+						tintColor={color}
+						label={i18n.overviewHeader}
+						accessibilityLabel={i18n.locationOverviewTab}/>
+				),
+			};
 		},
 	},
 	{
-		initialRouteName: 'LOverview',
-		initialRouteKey: 'LOverview',
-		tabBarPosition: 'top',
-		swipeEnabled: false,
-		lazy: true,
-		animationEnabled: true,
-		backBehavior: 'history',
-		tabBarComponent: ({ style, tabStyle, labelStyle, indicatorStyle, ...rest }: Object): Object => {
-			let { screenProps, navigation } = rest, tabHeight,
-				tabWidth = 0, fontSize = 0, paddingVertical = 0;
-
-			const { transports = '' } = navigation.getParam('location', {});
-			const items = transports.split(',');
-			const supportZWave = items.indexOf('zwave') !== -1;
-
-			if (screenProps && screenProps.appLayout) {
-				const { width, height } = screenProps.appLayout;
-				const isPortrait = height > width;
-				const deviceWidth = isPortrait ? width : height;
-
-				tabWidth = supportZWave ? width / 2 : width;
-				fontSize = deviceWidth * 0.03;
-				paddingVertical = 10 + (fontSize * 0.5);
-			}
-			tabHeight = supportZWave ? undefined : 0;
-			return (
-				<View style={{flex: 0}}>
-					<LocationDetailsHeaderPoster {...rest}/>
-					<MaterialTopTabBar {...rest}
-						style={{
-							...style,
-							height: tabHeight,
-						}}
-						tabStyle={{
-							...tabStyle,
-							width: tabWidth,
-							height: tabHeight,
-							paddingVertical,
-						}}
-						labelStyle={{
-							...labelStyle,
-							fontSize,
-							height: tabHeight,
-						}}
-						indicatorStyle={{
-							...indicatorStyle,
-							height: tabHeight,
-						}}
-					/>
-				</View>
-			);
+		name: 'ZWaveSettings',
+		Component: ZWaveSettings,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			return {
+				tabBarLabel: ({ color }: Object): Object => (
+					<TabBar
+						icon="settings"
+						tintColor={color}
+						label={'Z-Wave'}
+						accessibilityLabel={i18n.zWaveSettingsTab}/>
+				),
+			};
 		},
-		tabBarOptions: {
-			indicatorStyle: {
-				backgroundColor: '#fff',
-			},
-			style: {
-				backgroundColor: '#fff',
-				...Theme.Core.shadow,
-				justifyContent: 'center',
-			},
-			tabStyle: {
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
-			upperCaseLabel: false,
-			scrollEnabled: false,
-			activeTintColor: Theme.Core.brandSecondary,
-			inactiveTintColor: Theme.Core.inactiveTintColor,
-			showIcon: false,
-			allowFontScaling: false,
+	},
+];
+
+const NavigatorConfigs = {
+	initialRouteName: 'Overview',
+	initialRouteKey: 'Overview',
+	tabBarPosition: 'top',
+	swipeEnabled: false,
+	lazy: true,
+	animationEnabled: true,
+	backBehavior: 'history',
+	tabBar: ({ style, tabStyle, labelStyle, indicatorStyle, ...rest }: Object): Object => {
+		let { screenProps, route } = rest, tabHeight,
+			tabWidth = 0, fontSize = 0, paddingVertical = 0;
+
+		const {
+			location = {},
+		} = route.params || {};
+		const { transports = '' } = location;
+		const items = transports.split(',');
+		const supportZWave = items.indexOf('zwave') !== -1;
+
+		if (screenProps && screenProps.appLayout) {
+			const { width, height } = screenProps.appLayout;
+			const isPortrait = height > width;
+			const deviceWidth = isPortrait ? width : height;
+
+			tabWidth = supportZWave ? width / 2 : width;
+			fontSize = deviceWidth * 0.03;
+			paddingVertical = 10 + (fontSize * 0.5);
+		}
+		tabHeight = supportZWave ? undefined : 0;
+		return (
+			<View style={{flex: 0}}>
+				<LocationDetailsHeaderPoster {...rest}/>
+				<MaterialTopTabBar {...rest}
+					style={{
+						...style,
+						height: tabHeight,
+					}}
+					tabStyle={{
+						...tabStyle,
+						width: tabWidth,
+						height: tabHeight,
+						paddingVertical,
+					}}
+					labelStyle={{
+						...labelStyle,
+						fontSize,
+						height: tabHeight,
+					}}
+					indicatorStyle={{
+						...indicatorStyle,
+						height: tabHeight,
+					}}
+				/>
+			</View>
+		);
+	},
+	tabBarOptions: {
+		indicatorStyle: {
+			backgroundColor: '#fff',
 		},
-	}
-);
+		style: {
+			backgroundColor: '#fff',
+			...Theme.Core.shadow,
+			justifyContent: 'center',
+		},
+		tabStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		upperCaseLabel: false,
+		scrollEnabled: false,
+		activeTintColor: Theme.Core.brandSecondary,
+		inactiveTintColor: Theme.Core.inactiveTintColor,
+		showIcon: false,
+		allowFontScaling: false,
+	},
+};
+
+const Tab = createMaterialTopTabNavigator();
+
+const DetailsNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 export default DetailsNavigator;

@@ -27,8 +27,6 @@ import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
-import { NavigationActions } from '@react-navigation/compat';
-
 import {
 	View,
 	Header,
@@ -196,24 +194,24 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	onPressGateway(location: Object) {
 		this.closeDrawer();
-		const navigateAction = NavigationActions.navigate({
-			routeName: 'Details',
-			key: 'Details',
-			params: { location },
+		navigate('LocationDetails', {
+			screen: 'Details',
+			params: {
+				location,
+			},
+			location,
 		});
-		navigate('LocationDetails', location, 'LocationDetails', navigateAction);
 	}
 
 	onOpenSetting(tabName?: string) {
 		this.closeDrawer();
-		let navigateAction;
 		if (tabName) {
-			navigateAction = NavigationActions.navigate({
-				routeName: tabName,
-				key: tabName,
+			navigate('Profile', {
+				screen: 'tabName',
 			});
+		} else {
+			navigate('Profile');
 		}
-		navigate('Profile', {}, 'Profile', navigateAction);
 	}
 
 	addNewDevice() {

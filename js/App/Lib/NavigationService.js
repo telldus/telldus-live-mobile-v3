@@ -33,13 +33,9 @@ const navigationRef = React.createRef<any>();
  * Use this method inside any component that does not have the 'navigation' property, where you want to navigate to any registered
  * screen/route.
  */
-function navigate(name: string, params?: Object, key?: string) {
+function navigate(...args: any) {
 	if (navigationRef.current && navigationRef.current.navigate) {
-		navigationRef.current.navigate({
-			name,
-			params,
-			key,
-		});
+		navigationRef.current.navigate(...args);
 	}
 }
 
@@ -58,14 +54,14 @@ function prepareNavigator(
 		route = {},
 	} = propsFromParent;
 
-	const TABS = ScreenConfigs.map((tabConf: Object, index: number): Object => {
+	const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
 		const {
 			name,
 			Component,
 			options,
 			ContainerComponent,
 			optionsWithScreenProps,
-		} = tabConf;
+		} = screenConf;
 
 		let _options = options;
 		if (optionsWithScreenProps) {
@@ -100,15 +96,18 @@ function prepareNavigator(
 						return (
 							<Component
 								{..._props}
-								screenProps={screenProps}/>
+								screenProps={screenProps}
+								ScreenName={name}/>
 						);
 					}
 
 					return (
 						<ContainerComponent
 							{..._props}
-							screenProps={screenProps}>
-							<Component/>
+							screenProps={screenProps}
+							ScreenName={name}>
+							<Component
+								ScreenName={name}/>
 						</ContainerComponent>
 					);
 				}}
@@ -133,7 +132,7 @@ function prepareNavigator(
 		<NavigatorBuilder.Navigator
 			{...NavigatorConfigs}
 			tabBar={_tabBar}>
-			{TABS}
+			{SCREENS}
 		</NavigatorBuilder.Navigator>
 	);
 }

@@ -42,6 +42,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -63,9 +64,11 @@ class EditGeoPosition extends View {
 
 	constructor(props: Props) {
 		super(props);
-		const { navigation } = this.props;
-		const longitude = navigation.getParam('longitude', null);
-		const latitude = navigation.getParam('latitude', null);
+		const { route } = props;
+		const {
+			longitude,
+			latitude,
+		} = route.params || {};
 
 		this.state = {
 			isLoading: false,
@@ -136,8 +139,10 @@ class EditGeoPosition extends View {
 		this.setState({
 			isLoading: true,
 		});
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+		} = route.params || {};
 		actions.setCoordinates(id, longitude, latitude).then((res: Object) => {
 			this.setState({
 				isLoading: false,
