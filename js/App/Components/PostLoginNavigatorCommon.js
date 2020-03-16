@@ -199,9 +199,17 @@ async componentDidMount() {
 			dispatch(onReceivedInAppAvailablePurchases(purchases));
 			// TODO: These are the purchases made successfully but failed to
 			// report at our server(createTransaction not success), may be try to report now?
-			// ISSUE: All transactions of auto-renewable subscription seem to be present
+			
+			// ISSUES when reporting to server from here:
+			
+			// ISSUE 1: All transactions of auto-renewable subscription seem to be present
 			// here even after calling 'finishTransaction' and 'finishTransactionIOS'.
 			// Which will be an issue while reporting!!
+			// ISSUE 2: In future when user log into multiple accounts, there is a
+			// chance for the user to have purchased a subscription from one account,
+			// and report at server from another.(Made purchase from acc. 'A', failed report
+			// at server, hence finishTransaction not called, user switched to acc. 'B', prev. purchase
+			// made from acc 'A' gets reported now from here)
 		} catch (err) {
 			// Ignore
 		}
