@@ -32,7 +32,7 @@ import RNIap, {
 import { useDispatch } from 'react-redux';
 
 import {
-	createTransaction,
+	reportIapAtServer,
 	updateStatusIAPTransaction,
 } from '../Actions/User';
 
@@ -76,28 +76,7 @@ const withIAPSuccessFailureHandle = (): Object => {
 	const dispatch = useDispatch();
 
 	async function successCallback(purchaseInfo: Object): Promise<any> {
-		return dispatch(createTransaction({
-			purchaseInfo: JSON.stringify(purchaseInfo),
-			paymentProvider: 'apple',
-		}, true)).then((response: Object): Object => {
-			if (response && response.status && response.status === 'success') {
-				try {
-					// Tell the store that you have delivered what has been paid for.
-					// Failure to do this will result in the purchase being refunded on Android and
-					// the purchase event will reappear on every relaunch of the app until you succeed
-					// in doing the below. It will also be impossible for the user to purchase consumables
-					// again untill you do this.
-					RNIap.finishTransactionIOS(purchaseInfo.transactionId);
-					RNIap.finishTransaction(purchaseInfo, false);
-				} catch (err) {
-					// Ignore
-				} finally {
-					dispatch(updateStatusIAPTransaction({
-						onGoing: false,
-					}));
-					return response;
-				}
-			}
+		return dispatch(reportIapAtServer(purchaseInfo)).then((response: Object): Object => {
 			dispatch(updateStatusIAPTransaction({
 				onGoing: false,
 			}));
