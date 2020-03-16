@@ -272,8 +272,8 @@ type OPTIONS = {
 	returnUrl: string,
 };
 type OPTIONS_IAP = {
-	paymentProvider: string,// 'apple'
-	purchaseInfo: string,// Stringified JSON response from in-app-purchase updated listener
+	paymentProvider: string, // 'apple'
+	purchaseInfo: string, // Stringified JSON response from in-app-purchase updated listener
 };
 // See https://ca-api.telldus.com/explore/user/createTransaction
 function createTransaction(options: OPTIONS | OPTIONS_IAP, isMobile?: boolean = false): ThunkAction {
