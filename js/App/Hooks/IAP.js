@@ -21,7 +21,7 @@
 'use strict';
 import { useDispatch } from 'react-redux';
 
-import RNIap, {
+import {
 	purchaseErrorListener,
 	purchaseUpdatedListener,
 	type ProductPurchase,
