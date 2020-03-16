@@ -20,7 +20,7 @@
 // @flow
 'use strict';
 
-import RNIap, {
+import {
 	purchaseErrorListener,
 	purchaseUpdatedListener,
 	type ProductPurchase,
