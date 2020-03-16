@@ -24,6 +24,7 @@
 import { format } from 'url';
 import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
+import RNIap from 'react-native-iap';
 
 // User actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -340,6 +341,34 @@ const onReceivedInAppAvailablePurchases = (products: Array<Object>): Action => {
 	};
 };
 
+function reportIapAtServer(purchaseInfo: Object): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return dispatch(createTransaction({
+			purchaseInfo: JSON.stringify(purchaseInfo),
+			paymentProvider: 'apple',
+		}, true)).then((response: Object): Object => {
+			if (response && response.status && response.status === 'success') {
+				try {
+					// Tell the store that you have delivered what has been paid for.
+					// Failure to do this will result in the purchase being refunded on Android and
+					// the purchase event will reappear on every relaunch of the app until you succeed
+					// in doing the below. It will also be impossible for the user to purchase consumables
+					// again untill you do this.
+					RNIap.finishTransactionIOS(purchaseInfo.transactionId);
+					RNIap.finishTransaction(purchaseInfo, false);
+				} catch (err) {
+					// Ignore
+				} finally {
+					return response;
+				}
+			}
+			throw response;
+		}).catch((err: Object) => {
+			throw err;
+		});
+	};
+}
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -357,4 +386,5 @@ module.exports = {
 	updateStatusIAPTransaction,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
+	reportIapAtServer,
 };
