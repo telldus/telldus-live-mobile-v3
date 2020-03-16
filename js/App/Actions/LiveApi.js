@@ -28,6 +28,7 @@ import { getGateways } from './Gateways';
 import { getJobs } from './Jobs';
 import { getDevices } from './Devices';
 import { getSensors } from './Sensors';
+import { getUserProfile } from './Login';
 
 import { AppState } from 'react-native';
 
@@ -38,7 +39,11 @@ function syncLiveApiOnForeground(): ThunkAction {
 		AppState.addEventListener('change', (appState: string) => {
 			if (appState === 'active') {
 				console.log('app active, fetching devices');
+				dispatch(getUserProfile());
+				dispatch(getGateways());
 				dispatch(getDevices());
+				dispatch(getSensors());
+				dispatch(getJobs());
 			}
 		});
 	};
