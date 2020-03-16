@@ -130,16 +130,16 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	}
 
 	const headerArray = formatMessage(i18n.premiumSubscription).split(' ');
-	const header = headerArray.map((word: string): Object => {
+	const header = headerArray.map((word: string, index: number): Object => {
 		if (word.includes('%')) {
 			return (
-				<Text style={titleStyleOne}>
+				<Text style={titleStyleOne} key={`${index}`}>
 					{` ${word.replace(/%/g, '').toUpperCase()}`}
 				</Text>
 			);
 		}
 		return (
-			<Text style={titleStyleTwo}>
+			<Text style={titleStyleTwo} key={`${index}`}>
 				{word.toUpperCase()}
 			</Text>
 		);
