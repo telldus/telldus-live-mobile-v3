@@ -114,6 +114,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(getPhonesList());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	// TODO: Refactor using a hook, handle code repeat(repeat of methods in SettingsContainer).

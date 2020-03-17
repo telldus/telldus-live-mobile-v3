@@ -77,6 +77,7 @@ const SetSensorName = (props: Object): Object => {
 
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.name), formatMessage(i18n.Add433SNameHeaderTwo));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function onChangeName(value: string) {
