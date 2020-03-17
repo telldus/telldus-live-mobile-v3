@@ -86,6 +86,7 @@ const ScanButton = (props: Object): Object => {
 			stopScan = noOp;
 			destroyInstance = noOp;
 		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const {

@@ -88,9 +88,6 @@ const SMSHistoryScreen = (props: Object): Object => {
 		listData: [],
 	});
 	const { isLoading, listData } = screenData;
-	useEffect(() => {
-		getData();
-	}, []);
 
 	function getData() {
 		setScreenData({
@@ -109,6 +106,11 @@ const SMSHistoryScreen = (props: Object): Object => {
 			});
 		});
 	}
+
+	useEffect(() => {
+		getData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function getStatus(n: number): Object {
 		switch (n) {

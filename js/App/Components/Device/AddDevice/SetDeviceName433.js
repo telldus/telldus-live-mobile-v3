@@ -99,7 +99,8 @@ const SetDeviceName433 = (props: Object): Object => {
 				...paramsWithDefValues,
 			}));
 		}
-	}, [widget]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [widget, configuration]);
 
 	function onChangeName(value: string) {
 		setName(value);

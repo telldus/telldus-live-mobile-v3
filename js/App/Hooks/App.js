@@ -29,12 +29,12 @@ import * as RNLocalize from 'react-native-localize';
 let relativeIntls = {};
 
 const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 
 	if (relativeIntls[gatewayTimezone]) {
 		return relativeIntls[gatewayTimezone];
 	}
 
-	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { language = {} } = defaultSettings;
 	let locale = language.code;
 

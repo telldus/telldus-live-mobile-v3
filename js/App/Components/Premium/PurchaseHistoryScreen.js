@@ -86,9 +86,6 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 		listData: [],
 	});
 	const { isLoading, listData } = screenData;
-	useEffect(() => {
-		getData();
-	}, []);
 
 	function getData() {
 		setScreenData({
@@ -107,6 +104,11 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 			});
 		});
 	}
+
+	useEffect(() => {
+		getData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function getTypeAndMonth({type, quantity}: Object): Object {
 		const preS = `${'Premium access'}, `;
