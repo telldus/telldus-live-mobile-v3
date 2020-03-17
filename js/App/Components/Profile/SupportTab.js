@@ -117,6 +117,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 				isLoading: false,
 			});
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function onPress() {

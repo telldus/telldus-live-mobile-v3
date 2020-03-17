@@ -9,7 +9,8 @@ module.exports = {
 
   "plugins": [
   	"flowtype",
-    "react"
+    "react",
+    "react-hooks"
   ],
 
   "settings": {
@@ -326,7 +327,12 @@ module.exports = {
 	  "always"
 	],
 	"flowtype/use-flow-type": 1,
-	"flowtype/valid-syntax": 1
+  "flowtype/valid-syntax": 1,
+  
+  //React Hooks
+  "react-hooks/rules-of-hooks": "error",
+  "react-hooks/exhaustive-deps": "warn"
+
   }
 };
 

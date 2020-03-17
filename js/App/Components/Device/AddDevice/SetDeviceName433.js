@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
 	ScrollView,
 } from 'react-native';
@@ -99,34 +99,38 @@ const SetDeviceName433 = (props: Object): Object => {
 				...paramsWithDefValues,
 			}));
 		}
-	}, [widget]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [widget, configuration]);
 
-	function onChangeName(value: string) {
-		setName(value);
-	}
+	const onChangeName = useCallback((text: string): Function => {
+		setName(text);
+	}, []);
 
-	function submitName() {
-		if (!name || !name.trim()) {
-			toggleDialogueBoxState({
-				show: true,
-				showHeader: true,
-				imageHeader: true,
-				text: formatMessage(i18n.errorNameFieldEmpty),
-				showPositive: true,
+	const submitName = useCallback((): Function => {
+		(() => {
+			if (!name || !name.trim()) {
+				toggleDialogueBoxState({
+					show: true,
+					showHeader: true,
+					imageHeader: true,
+					text: formatMessage(i18n.errorNameFieldEmpty),
+					showPositive: true,
+				});
+				return;
+			}
+			const prevParams = navigation.state.params || {};
+			navigation.navigate({
+				routeName: 'Include433',
+				key: 'Include433',
+				params: {
+					...prevParams,
+					deviceName: name,
+					widgetParams433Device,
+				},
 			});
-			return;
-		}
-		const prevParams = navigation.state.params || {};
-		navigation.navigate({
-			routeName: 'Include433',
-			key: 'Include433',
-			params: {
-				...prevParams,
-				deviceName: name,
-				widgetParams433Device,
-			},
-		});
-	}
+		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [name, widgetParams433Device]);
 
 	const {
 		brandSecondary,
@@ -137,9 +141,11 @@ const SetDeviceName433 = (props: Object): Object => {
 		accessoryiconStyle,
 	} = getStyles(appLayout);
 
-	function renderLeftAccessory(): Object {
-		return <IconTelldus icon={'device-alt'} style={accessoryiconStyle}/>;
-	}
+	const renderLeftAccessory = useCallback((): Function => {
+		return ((): Object => {
+			return <IconTelldus icon={'device-alt'} style={accessoryiconStyle}/>;
+		})();
+	}, [accessoryiconStyle]);
 
 	return (
 		<ScrollView

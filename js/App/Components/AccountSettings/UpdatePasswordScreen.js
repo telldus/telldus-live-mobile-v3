@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -81,40 +81,44 @@ const UpdatePasswordScreen = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
-	function onSubmit() {
-		if (currentPas.trim() === '' || newPass.trim() === '' || newPassConf.trim() === '') {
-			let postF = formatMessage(i18n.fieldEmptyPostfix);
-			let preS = formatMessage(i18n.newPasswordConfirm);
-			if (newPass.trim() === '') {
-				preS = formatMessage(i18n.newPassword);
+	const onSubmit = useCallback((): Function => {
+		function onSubmitCallback() {
+			if (currentPas.trim() === '' || newPass.trim() === '' || newPassConf.trim() === '') {
+				let postF = formatMessage(i18n.fieldEmptyPostfix);
+				let preS = formatMessage(i18n.newPasswordConfirm);
+				if (newPass.trim() === '') {
+					preS = formatMessage(i18n.newPassword);
+				}
+				if (currentPas.trim() === '') {
+					preS = formatMessage(i18n.currentPassword);
+				}
+				const message = `${preS} ${postF}`;
+				showDialogue(message);
+				return;
 			}
-			if (currentPas.trim() === '') {
-				preS = formatMessage(i18n.currentPassword);
+			if (newPass !== newPassConf) {
+				showDialogue(formatMessage(i18n.errorPassWordNotSame));
+				return;
 			}
-			const message = `${preS} ${postF}`;
-			showDialogue(message);
-			return;
-		}
-		if (newPass !== newPassConf) {
-			showDialogue(formatMessage(i18n.errorPassWordNotSame));
-			return;
-		}
-		setLoadingAndChangePassStatus({
-			isLoading: true,
-			changePassWordSuccess: false,
-		});
-		dispatch(changePassword(currentPas, newPass)).then(() => {
-			dispatch(showToast(formatMessage(i18n.successPassUpdate)));
-			props.navigation.goBack();
-		}).catch((err: any) => {
-			const defaultMessage = formatMessage(i18n.errorPassUpdate);
-			dispatch(showToast(err.message || defaultMessage));
 			setLoadingAndChangePassStatus({
-				isLoading: false,
+				isLoading: true,
 				changePassWordSuccess: false,
 			});
-		});
-	}
+			dispatch(changePassword(currentPas, newPass)).then(() => {
+				dispatch(showToast(formatMessage(i18n.successPassUpdate)));
+				props.navigation.goBack();
+			}).catch((err: any) => {
+				const defaultMessage = formatMessage(i18n.errorPassUpdate);
+				dispatch(showToast(err.message || defaultMessage));
+				setLoadingAndChangePassStatus({
+					isLoading: false,
+					changePassWordSuccess: false,
+				});
+			});
+		}
+		onSubmitCallback();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentPas, newPass, newPassConf]);
 
 	function showDialogue(message: string) {
 		toggleDialogueBox({
@@ -126,17 +130,17 @@ const UpdatePasswordScreen = (props: Object): Object => {
 		});
 	}
 
-	function onChangeTextCurrent(text: string) {
+	const onChangeTextCurrent = useCallback((text: string) => {
 		setCurrentPas(text);
-	}
+	}, []);
 
-	function onChangeTextNew(text: string) {
+	const onChangeTextNew = useCallback((text: string): Function => {
 		setNewPass(text);
-	}
+	}, []);
 
-	function onChangeTextConf(text: string) {
+	const onChangeTextConf = useCallback((text: string): Function => {
 		setNewPassConf(text);
-	}
+	}, []);
 
 	return (
 		<>
