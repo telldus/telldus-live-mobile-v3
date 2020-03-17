@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -131,9 +131,9 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 		name: paymentProvider,
 	} = getPaymentOptions(formatMessage)[paymentProviderIndex];
 
-	function onSelect(index: number, provider: string) {
+	const onSelect = useCallback((index: number, provider: string) => {
 		setPaymentProviderIndex(index);
-	}
+	}, []);
 
 	function onPress() {
 		const product = 'credits';
