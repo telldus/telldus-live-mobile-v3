@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -176,9 +176,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		supportAutoRenew,
 	} = getPaymentOptions(formatMessage)[paymentProviderIndex];
 
-	function onSelect(index: number, provider: string) {
+	const onSelect = useCallback((index: number, provider: string) => {
 		setPaymentProviderIndex(index);
-	}
+	}, []);
 
 	function onPress() {
 		const product = getSubscriptionPlans()[selectedIndex].product;
