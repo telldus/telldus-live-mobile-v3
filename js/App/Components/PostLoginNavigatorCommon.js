@@ -185,9 +185,9 @@ async componentDidMount() {
 			dispatch(onReceivedInAppAvailablePurchases(purchases));
 			// TODO: These are the purchases made successfully but failed to
 			// report at our server(createTransaction not success), may be try to report now?
-			
+
 			// ISSUES when reporting to server from here:
-			
+
 			// ISSUE 1: All transactions of auto-renewable subscription seem to be present
 			// here even after calling 'finishTransaction' and 'finishTransactionIOS'.
 			// Which will be an issue while reporting!!
