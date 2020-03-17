@@ -172,9 +172,16 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 				})
 				.catch((err: any) => {
 					const message = err.message;
-					this.showDialogue(message);
+					screenProps.toggleDialogueBox({
+						show: true,
+						showHeader: true,
+						text: message,
+						showPositive: true,
+						closeOnPressPositive: true,
+					});
 				});
 		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
