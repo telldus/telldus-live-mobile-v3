@@ -22,7 +22,10 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, {
+	useState,
+	useMemo,
+} from 'react';
 import { useSelector } from 'react-redux';
 import {
 	TouchableOpacity,
@@ -72,38 +75,44 @@ const PaymentProvidersBlock = (props: Object): Object => {
 
 	const [ selectedIndex, setSeletedIndex ] = useState(0);
 
-	const options = getPaymentOptions(formatMessage).map((option: Object, key: number): Object => {
-		const {
-			name,
-			image,
-		} = option;
+	const options = useMemo((): Object => {
+		return getPaymentOptions(formatMessage).map((option: Object, key: number): Object => {
+			const {
+				name,
+				image,
+			} = option;
 
-		function onSelectOption() {
-			setSeletedIndex(key);
-			onSelect(key, name);
-		}
+			function onSelectOption() {
+				setSeletedIndex(key);
+				onSelect(key, name);
+			}
 
-		const IMAGE = PAYMENT_IMAGES[image];
+			const IMAGE = PAYMENT_IMAGES[image];
 
-		return (
-			<TouchableOpacity key={`${key}`} style={[contentCoverStyle, {
-				marginLeft: (key % 2 === 0) ? 0 : padding / 2,
-			}, selectedIndex === key ? {
-				borderWidth: 3,
-				borderColor: Theme.Core.brandSecondary,
-			} : undefined]}
-			onPress={onSelectOption}>
-				<View style={innerCoverStyle}>
-					<View style={nameCoverStyle}>
-						<Text style={nameStyle} numberOfLines={1}>
-							{name.toUpperCase()}
-						</Text>
+			return (
+				<TouchableOpacity key={`${key}`} style={[contentCoverStyle, {
+					marginLeft: (key % 2 === 0) ? 0 : padding / 2,
+				}, selectedIndex === key ? {
+					borderWidth: 3,
+					borderColor: Theme.Core.brandSecondary,
+				} : undefined]}
+				onPress={onSelectOption}>
+					<View style={innerCoverStyle}>
+						<View style={nameCoverStyle}>
+							<Text style={nameStyle} numberOfLines={1}>
+								{name.toUpperCase()}
+							</Text>
+						</View>
+						<IMAGE width={imageWidth} height={imageHeight}/>
 					</View>
-					<IMAGE width={imageWidth} height={imageHeight}/>
-				</View>
-			</TouchableOpacity>
-		);
-	});
+				</TouchableOpacity>
+			);
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		layout,
+		selectedIndex,
+	]);
 
 	return (
 		<View style={[coverStyle, style]}>
