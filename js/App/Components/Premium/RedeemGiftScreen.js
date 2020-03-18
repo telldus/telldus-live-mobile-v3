@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -115,20 +115,26 @@ const RedeemGiftScreen = (props: Object): Object => {
 	}
 
 	const headerArray = formatMessage(i18n.enterRedeemCode).split(' ');
-	const header = headerArray.map((word: string): Object => {
-		if (word.includes('%')) {
+	const header = useMemo((): Array<Object> => {
+		return headerArray.map((word: string): Object => {
+			if (word.includes('%')) {
+				return (
+					<Text style={titleStyleTwo}>
+						{` ${word.replace(/%/g, '').toUpperCase()}`}
+					</Text>
+				);
+			}
 			return (
-				<Text style={titleStyleTwo}>
-					{` ${word.replace(/%/g, '').toUpperCase()}`}
+				<Text style={titleStyleOne}>
+					{word.toUpperCase()}
 				</Text>
 			);
-		}
-		return (
-			<Text style={titleStyleOne}>
-				{word.toUpperCase()}
-			</Text>
-		);
-	});
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		headerArray,
+		layout,
+	]);
 
 	return (
 		<View style={container}>
