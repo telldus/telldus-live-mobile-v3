@@ -24,7 +24,6 @@
 
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createCompatNavigatorFactory } from '@react-navigation/compat';
 
 import AddLocationContainer from './AddLocationContainer';
 
@@ -37,45 +36,80 @@ import TimeZone from './TimeZone';
 import Success from './Success';
 import Position from './Position';
 
+import {
+	prepareNavigator,
+} from '../../../Lib/NavigationService';
+
 const initialRouteName = 'LocationDetected';
 
-type renderContainer = (Object, string) => Object;
+const ScreenConfigs = [
+	{
+		name: 'LocationDetected',
+		Component: LocationDetected,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'LocationActivationManual',
+		Component: LocationActivationManual,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'LocationName',
+		Component: LocationName,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'TimeZoneContinent',
+		Component: TimeZoneContinent,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'TimeZoneCity',
+		Component: TimeZoneCity,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'TimeZone',
+		Component: TimeZone,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'Position',
+		Component: Position,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'Success',
+		Component: Success,
+		ContainerComponent: AddLocationContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+];
 
-const renderAddLocationContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
-	<AddLocationContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</AddLocationContainer>
-);
-
-
-const RouteConfigs = {
-	LocationDetected: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationDetected, 'LocationDetected'),
-	},
-	LocationActivationManual: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationActivationManual, 'LocationActivationManual'),
-	},
-	LocationName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(LocationName, 'LocationName'),
-	},
-	TimeZoneContinent: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneContinent, 'TimeZoneContinent'),
-	},
-	TimeZoneCity: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZoneCity, 'TimeZoneCity'),
-	},
-	TimeZone: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(TimeZone, 'TimeZone'),
-	},
-	Position: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Position, 'Position'),
-	},
-	Success: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddLocationContainer(navigation, screenProps)(Success, 'Success'),
-	},
-};
-
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName,
 	initialRouteKey: initialRouteName,
 	headerMode: 'none',
@@ -86,6 +120,9 @@ const StackNavigatorConfig = {
 	},
 };
 
-const AddLocationNavigator = createCompatNavigatorFactory(createStackNavigator)(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator();
 
+const AddLocationNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+});
 export default AddLocationNavigator;

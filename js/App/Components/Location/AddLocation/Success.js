@@ -49,6 +49,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 };
 
 type State = {
@@ -124,10 +125,10 @@ class Success extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		const { appLayout, navigation } = this.props;
+		const { appLayout, route } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		const clientInfo = navigation.getParam('clientInfo', {});
+		const { clientInfo } = route.params || {};
 		const locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (

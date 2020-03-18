@@ -39,6 +39,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 };
 
 class TimeZoneCity extends View {
@@ -81,8 +82,8 @@ class TimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		const { navigation } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
+		const { navigation, route } = this.props;
+		let { clientInfo } = route.params || {};
 		clientInfo.timezone = `${clientInfo.continent}/${city}`;
 		clientInfo.autoDetected = false;
 		navigation.navigate({

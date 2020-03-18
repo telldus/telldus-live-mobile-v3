@@ -42,6 +42,7 @@ type Props = {
 	actions?: Object,
 	screenProps: Object,
 	ScreenName: string,
+	route: Object,
 };
 
 type State = {
@@ -119,6 +120,7 @@ class AddLocationContainer extends View<null, Props, State> {
 			actions,
 			screenProps,
 			navigation,
+			route,
 		} = this.props;
 		const { currentScreen, appLayout } = screenProps;
 		const { h1, h2, infoButton } = this.state;
@@ -162,6 +164,7 @@ class AddLocationContainer extends View<null, Props, State> {
 									...screenProps,
 									navigation,
 									paddingHorizontal: padding,
+									route,
 								},
 							)}
 						</View>

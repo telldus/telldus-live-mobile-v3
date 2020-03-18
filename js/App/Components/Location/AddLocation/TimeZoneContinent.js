@@ -84,8 +84,8 @@ class TimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		const { navigation } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
+		const { navigation, route } = this.props;
+		let { clientInfo } = route.params || {};
 		if (continent === 'UTC') {
 			clientInfo.timezone = continent;
 			navigation.navigate({
