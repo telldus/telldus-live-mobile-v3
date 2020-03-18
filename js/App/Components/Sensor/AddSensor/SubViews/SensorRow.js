@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useMemo,
+} from 'react';
 import {
 	TouchableOpacity,
 } from 'react-native';
@@ -86,47 +88,52 @@ const SensorRow = (props: Object): Object => {
 		onSelectSensor(item);
 	}
 
-	function getSensors(): Object {
-		let sensors = {}, sensorAccessibilityInfo = '';
-
-		for (let key in data) {
-			const values = data[key];
-			const { value, scale, name } = values;
-			const isLarge = checkIfLarge(value.toString());
-
-			const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
-
-			let sharedProps = {
-				key,
-				name,
-				value,
-				unit,
-				label,
-				icon,
-				isLarge,
-				valueUnitCoverStyle,
-				valueStyle,
-				unitStyle,
-				labelStyle,
-				sensorValueCoverStyle,
-				formatOptions,
-			};
-			sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
-
-			if (name === 'wdir') {
-				sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
-			}
-			sensors[key] = <GenericSensor {...sharedProps} />;
-		}
-		return { sensors, sensorAccessibilityInfo };
-	}
-
 	const seconds = Math.trunc((new Date().getTime() / 1000) - parseFloat(lastUpdated));
 	const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
 
 	const textOne = `${protocol}, ${formatMessage(i18n.labelId)}: ${sensorId}`;
 
-	const { sensors } = getSensors();
+	const { sensors } = useMemo((): Object => {
+		function getSensors(): Object {
+			let _sensors = {}, sensorAccessibilityInfo = '';
+
+			for (let key in data) {
+				const values = data[key];
+				const { value, scale, name } = values;
+				const isLarge = checkIfLarge(value.toString());
+
+				const { label, unit, icon, sensorInfo, formatOptions } = getSensorInfo(name, scale, value, isLarge, formatMessage);
+
+				let sharedProps = {
+					key,
+					name,
+					value,
+					unit,
+					label,
+					icon,
+					isLarge,
+					valueUnitCoverStyle,
+					valueStyle,
+					unitStyle,
+					labelStyle,
+					sensorValueCoverStyle,
+					formatOptions,
+				};
+				sensorAccessibilityInfo = `${sensorAccessibilityInfo}, ${sensorInfo}`;
+
+				if (name === 'wdir') {
+					sharedProps = { ...sharedProps, value: getWindDirection(value, formatMessage) };
+				}
+				_sensors[key] = <GenericSensor {...sharedProps} />;
+			}
+			return { sensors: _sensors, sensorAccessibilityInfo };
+		}
+		return getSensors();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		data,
+		appLayout,
+	]);
 
 	return (
 		<TouchableOpacity onPress={onPress}>
