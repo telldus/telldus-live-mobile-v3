@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -58,70 +58,84 @@ const PostPurchaseScreen = (props: Object): Object => {
 		purchaseInfoText,
 	} = getStyles(layout);
 
-	function onPress() {
-		goBack();
-	}
-
 	const { formatMessage } = useIntl();
-	function getInfo({product, quantity}: Object): Object {
-		const postS = ` ${'Premium access'}`;
-		switch (product) {
-			case 'pro': {// TODO: check with Johannes
-				const months = 1 * quantity;
-				const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return preS + postS;
-			}
-			case 'promonth': {
-				const months = 1 * quantity;
-				const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return preS + postS;
-			}
-			case 'prohalfyear': {
-				const months = 6 * quantity;
-				const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return preS + postS;
-			}
-			case 'proyear': {
-				const months = 12 * quantity;
-				const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return preS + postS;
-			}
-			default: {
-				const months = 1 * quantity;
-				const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return preS + postS;
-			}
-		}
-	}
 
 	const screensToPop = navigation.getParam('screensToPop', 2);
 
-	function goBack() {
-		const popAction = StackActions.pop({
-			n: screensToPop,
-		});
-		navigation.dispatch(popAction);
-	}
+	const goBack = useCallback(() => {
+		(() => {
+			const popAction = StackActions.pop({
+				n: screensToPop,
+			});
+			navigation.dispatch(popAction);
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [screensToPop]);
 
-	function onPressTryAgain() {
-		const popAction = StackActions.pop({
-			n: 2,
-		});
-		navigation.dispatch(popAction);
-	}
+	const onPress = useCallback(() => {
+		goBack();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	function onPressCancel() {
-		const popAction = StackActions.pop({
-			n: screensToPop,
-		});
-		navigation.dispatch(popAction);
-	}
+	const onPressTryAgain = useCallback(() => {
+		(() => {
+			const popAction = StackActions.pop({
+				n: 2,
+			});
+			navigation.dispatch(popAction);
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const onPressCancel = useCallback(() => {
+		(() => {
+			const popAction = StackActions.pop({
+				n: screensToPop,
+			});
+			navigation.dispatch(popAction);
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const voucher = navigation.getParam('voucher', false);
 	const product = navigation.getParam('product', null);
 	const quantity = navigation.getParam('quantity', 1);
 	const credits = navigation.getParam('credits', false);
 	const success = navigation.getParam('success', false);
+
+	const getInfo = useCallback((): string => {
+		return ((): Object => {
+			const postS = ` ${'Premium access'}`;
+			switch (product) {
+				case 'pro': {// TODO: check with Johannes
+					const months = 1 * quantity;
+					const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+					return preS + postS;
+				}
+				case 'promonth': {
+					const months = 1 * quantity;
+					const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+					return preS + postS;
+				}
+				case 'prohalfyear': {
+					const months = 6 * quantity;
+					const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+					return preS + postS;
+				}
+				case 'proyear': {
+					const months = 12 * quantity;
+					const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+					return preS + postS;
+				}
+				default: {
+					const months = 1 * quantity;
+					const preS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+					return preS + postS;
+				}
+			}
+		})();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [product, quantity]);
 
 	const bodyText = !success ?
 		formatMessage(i18n.paymentFailDescription)
@@ -164,7 +178,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 						{product !== 'credits' && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
 							<Text style={purchaseInfoText}>
-								{getInfo({product, quantity}).toUpperCase()}
+								{getInfo().toUpperCase()}
 							</Text>
 						</View>
 						}

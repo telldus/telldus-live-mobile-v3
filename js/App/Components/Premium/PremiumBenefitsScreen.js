@@ -22,13 +22,16 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, {
+	useState,
+	useMemo,
+	useCallback,
+} from 'react';
 import Swiper from 'react-native-swiper';
 import {
 	ScrollView,
 	Image,
 	TouchableOpacity,
-	Platform,
 	Linking,
 } from 'react-native';
 import { useSelector } from 'react-redux';
@@ -73,7 +76,6 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		labelText,
 		labelsContainer,
 		moreText,
-		swiperStyle,
 	} = getStyles(layout);
 
 	const {
@@ -117,48 +119,70 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		setSelectedIndex(index);
 	}
 
-	const screens = benefits.map((screen: Object): Object => {
-		return (
-			<View style={cover} pointerEvents="box-none">
-				<IconTelldus icon={screen.icon} style={iconStyle}/>
-				<Text style={title}>{screen.title}</Text>
-				<Text style={bodyText}>{screen.body}</Text>
-			</View>
-		);
-	});
-
-	const screenLabels = benefits.map((screen: Object, i: number): Object => {
-		function onChangeSelection() {
-			if (swiperRef.current && i !== selectedIndex) {
-				swiperRef.current.scrollBy(i - selectedIndex);
-			}
-		}
-
-		const color = selectedIndex === i ? Theme.Core.brandSecondary : Theme.Core.rowTextColor;
-		return (
-			<TouchableOpacity onPress={onChangeSelection}>
-				<View style={labelCover}>
-					<IconTelldus icon={screen.icon} style={[labelIcon, {color}]}/>
-					<Text style={[labelText, {color}]}>{screen.title}</Text>
+	const {
+		screens,
+		screenLabels,
+	} = useMemo((): Object => {
+		let _screens = [], _screenLabels = [];
+		benefits.map((screen: Object, i: number): Object => {
+			_screens.push(
+				<View style={cover} pointerEvents="box-none" key={`${i}`}>
+					<IconTelldus icon={screen.icon} style={iconStyle}/>
+					<Text style={title}>{screen.title}</Text>
+					<Text style={bodyText}>{screen.body}</Text>
 				</View>
-			</TouchableOpacity>
-		);
-	});
+			);
 
-	function onPressMore() {
-		let url = 'https://live.telldus.com/profile/premium';
-		Linking.canOpenURL(url)
-			.then((supported: boolean): any => {
-				if (!supported) {
-					return;
+			function onChangeSelection() {
+				if (swiperRef.current && i !== selectedIndex) {
+					swiperRef.current.scrollBy(i - selectedIndex, true);
 				}
-				return Linking.openURL(url);
-			})
-			.catch((err: any) => {
-				const message = err.message;
-				this.showDialogue(message);
-			});
-	}
+			}
+
+			const color = selectedIndex === i ? Theme.Core.brandSecondary : Theme.Core.rowTextColor;
+
+			_screenLabels.push(
+				<TouchableOpacity onPress={onChangeSelection} key={`${i}`}>
+					<View style={labelCover}>
+						<IconTelldus icon={screen.icon} style={[labelIcon, {color}]}/>
+						<Text style={[labelText, {color}]}>{screen.title}</Text>
+					</View>
+				</TouchableOpacity>
+			);
+		});
+		return {
+			screens: _screens,
+			screenLabels: _screenLabels,
+		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		selectedIndex,
+		layout,
+	]);
+
+	const onPressMore = useCallback(() => {
+		(() => {
+			let url = 'https://live.telldus.com/profile/premium';
+			Linking.canOpenURL(url)
+				.then((supported: boolean): any => {
+					if (!supported) {
+						return;
+					}
+					return Linking.openURL(url);
+				})
+				.catch((err: any) => {
+					const message = err.message;
+					screenProps.toggleDialogueBox({
+						show: true,
+						showHeader: true,
+						text: message,
+						showPositive: true,
+						closeOnPressPositive: true,
+					});
+				});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<View style={container}>
@@ -175,7 +199,6 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 					<Swiper
 						ref={swiperRef}
 						containerStyle={containerStyle}
-						style={Platform.OS === 'android' ? swiperStyle : {}}
 						showsButtons={true}
 						loop={false}
 						loadMinimal={true}

@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useMemo,
+} from 'react';
 import {
 	TouchableOpacity,
 	Linking,
@@ -57,55 +59,57 @@ const HelpAndSupportBlock = (props: Object): Object => {
 		formatMessage,
 	} = useIntl();
 
-	const BLOCKS = [
-		{
-			icon: 'faq',
-			text: formatMessage(i18n.labelFAQ),
-			url: 'http://support.telldus.com/kb/index.php',
-		},
-		{
-			icon: 'guide',
-			text: formatMessage(i18n.hyperLintText),
-			url: 'https://live.telldus.com/help/guides',
-		},
-		{
-			icon: 'manual',
-			text: formatMessage(i18n.manuals),
-			url: 'https://live.telldus.com/help/manuals',
-		},
-	];
+	const blocks = useMemo((): Array<Object> => {
+		const BLOCKS = [
+			{
+				icon: 'faq',
+				text: formatMessage(i18n.labelFAQ),
+				url: 'http://support.telldus.com/kb/index.php',
+			},
+			{
+				icon: 'guide',
+				text: formatMessage(i18n.hyperLintText),
+				url: 'https://live.telldus.com/help/guides',
+			},
+			{
+				icon: 'manual',
+				text: formatMessage(i18n.manuals),
+				url: 'https://live.telldus.com/help/manuals',
+			},
+		];
+		return BLOCKS.map((block: Object, i: number): Object => {
+			const {
+				icon,
+				text,
+				url,
+			} = block;
+			function onPress() {
+				Linking.canOpenURL(url).then((supported: boolean): any => {
+					if (!supported) {
+					  console.log(`Can't handle url: ${url}`);
+					} else {
+					  return Linking.openURL(url);
+					}
+				  }).catch((err: Object) => {
+					  console.error('An error occurred', err);
+				  });
+			}
 
-	const blocks = BLOCKS.map((block: Object, i: number): Object => {
-		const {
-			icon,
-			text,
-			url,
-		} = block;
-		function onPress() {
-			Linking.canOpenURL(url).then((supported: boolean): any => {
-				if (!supported) {
-				  console.log(`Can't handle url: ${url}`);
-				} else {
-				  return Linking.openURL(url);
-				}
-			  }).catch((err: Object) => {
-				  console.error('An error occurred', err);
-			  });
-		}
-
-		return (
-			<TouchableOpacity onPress={onPress} key={`${i}`}>
-				<View style={[coverTwoStyle, {
-					marginLeft: i === 0 ? 0 : padding / 2,
-				}]}>
-					<IconTelldus icon={icon} style={iconStyle}/>
-					<Text style={textStyle}>
-						{text}
-					</Text>
-				</View>
-			</TouchableOpacity>
-		);
-	});
+			return (
+				<TouchableOpacity onPress={onPress} key={`${i}`}>
+					<View style={[coverTwoStyle, {
+						marginLeft: i === 0 ? 0 : padding / 2,
+					}]}>
+						<IconTelldus icon={icon} style={iconStyle}/>
+						<Text style={textStyle}>
+							{text}
+						</Text>
+					</View>
+				</TouchableOpacity>
+			);
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [layout]);
 
 	return (
 		<View>

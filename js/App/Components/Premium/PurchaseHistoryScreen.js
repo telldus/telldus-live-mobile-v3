@@ -22,7 +22,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import { SectionList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import groupBy from 'lodash/groupBy';
@@ -87,98 +91,107 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	});
 	const { isLoading, listData } = screenData;
 
-	function getData() {
-		setScreenData({
-			isLoading: true,
-			listData,
-		});
-		dispatch(getUserTransactions()).then((history: Array<Object>) => {
+	const getData = useCallback(() => {
+		(() => {
 			setScreenData({
-				isLoading: false,
-				listData: prepareListData(history),
-			});
-		}).catch(() => {
-			setScreenData({
-				isLoading: false,
+				isLoading: true,
 				listData,
 			});
-		});
-	}
+			dispatch(getUserTransactions()).then((history: Array<Object>) => {
+				setScreenData({
+					isLoading: false,
+					listData: prepareListData(history),
+				});
+			}).catch(() => {
+				setScreenData({
+					isLoading: false,
+					listData,
+				});
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [listData]);
 
 	useEffect(() => {
 		getData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function getTypeAndMonth({type, quantity}: Object): Object {
-		const preS = `${'Premium access'}, `;
-		switch (type) {
-			case 'pro': {// TODO: check with Johannes
-				const months = 1 * quantity;
-				const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return {
-					typeInfo: preS + postS,
-					color: Theme.Core.eulaContentColor,
-				};
+	const renderItem = useCallback(({item, index, section}: Object): Object => {
+		return ((): Object => {
+			function getTypeAndMonth({type, quantity}: Object): Object {
+				const preS = `${'Premium access'}, `;
+				switch (type) {
+					case 'pro': {// TODO: check with Johannes
+						const months = 1 * quantity;
+						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+						return {
+							typeInfo: preS + postS,
+							color: Theme.Core.eulaContentColor,
+						};
+					}
+					case 'promonth': {
+						const months = 1 * quantity;
+						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+						return {
+							typeInfo: preS + postS,
+							color: Theme.Core.eulaContentColor,
+						};
+					}
+					case 'prohalfyear': {
+						const months = 6 * quantity;
+						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+						return {
+							typeInfo: preS + postS,
+							color: Theme.Core.eulaContentColor,
+						};
+					}
+					case 'proyear': {
+						const months = 12 * quantity;
+						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+						return {
+							typeInfo: preS + postS,
+							color: Theme.Core.eulaContentColor,
+						};
+					}
+					default: {
+						const months = 1 * quantity;
+						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
+						return {
+							typeInfo: preS + postS,
+							color: Theme.Core.eulaContentColor,
+						};
+					}
+				}
 			}
-			case 'promonth': {
-				const months = 1 * quantity;
-				const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return {
-					typeInfo: preS + postS,
-					color: Theme.Core.eulaContentColor,
-				};
-			}
-			case 'prohalfyear': {
-				const months = 6 * quantity;
-				const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return {
-					typeInfo: preS + postS,
-					color: Theme.Core.eulaContentColor,
-				};
-			}
-			case 'proyear': {
-				const months = 12 * quantity;
-				const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return {
-					typeInfo: preS + postS,
-					color: Theme.Core.eulaContentColor,
-				};
-			}
-			default: {
-				const months = 1 * quantity;
-				const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
-				return {
-					typeInfo: preS + postS,
-					color: Theme.Core.eulaContentColor,
-				};
-			}
+
+			const { typeInfo, color } = getTypeAndMonth(item);
+
+			return (
+				<View style={rowStyle} key={index}>
+					<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
+					<View style={toBlock}>
+						<Text style={rowTextStyle2}>{typeInfo}</Text>
+					</View>
+					<Text style={[rowTextStyle3, {color}]}>€{formatNumber(item.price)}</Text>
+				</View>);
 		}
-	}
+		)();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [layout]);
 
-	function renderItem({item, index, section}: Object): Object {
-		const { typeInfo, color } = getTypeAndMonth(item);
-		return (
-			<View style={rowStyle} key={index}>
-				<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
-				<View style={toBlock}>
-					<Text style={rowTextStyle2}>{typeInfo}</Text>
-				</View>
-				<Text style={[rowTextStyle3, {color}]}>€{formatNumber(item.price)}</Text>
-			</View>);
-	}
-
-	function renderSectionHeader({section: {key}}: Object): Object {
-		return (
+	const renderSectionHeader = useCallback(({section: {key}}: Object): Object => {
+		return ((): Object => (
 			<View style={sectionStyle} key={key}>
 				<Text style={sectionTextStyle}>{key}</Text>
 			</View>
-		);
-	}
+		))();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [layout]);
 
-	function keyExtractor(item: any, index: any): string {
-		return item.id + index;
-	}
+	const keyExtractor = useCallback((item: any, index: any): string => {
+		return ((): string => (`${item.id}${index}`))();
+	}, []);
 
 	return (
 		<View style={container}>

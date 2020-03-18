@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
@@ -50,24 +50,27 @@ const LogoutButton = (props: Object): Object => {
 		buttonStyle,
 	} = getStyles(layout);
 
-	function onConfirmLogout() {
-		onConfirmLogoutP();
-	}
+	const logout = useCallback(() => {
+		function onConfirmLogout() {
+			onConfirmLogoutP();
+		}
 
-	function logout() {
-		toggleDialogueBox({
-			show: true,
-			showHeader: true,
-			notificationHeader: `${formatMessage(i18n.logout)}?`,
-			text: formatMessage(i18n.contentLogoutConfirm),
-			showPositive: true,
-			showNegative: true,
-			positiveText: formatMessage(i18n.logout).toUpperCase(),
-			onPressPositive: onConfirmLogout,
-			closeOnPressPositive: true,
-			timeoutToCallPositive: 400,
-		});
-	}
+		(() => {
+			toggleDialogueBox({
+				show: true,
+				showHeader: true,
+				notificationHeader: `${formatMessage(i18n.logout)}?`,
+				text: formatMessage(i18n.contentLogoutConfirm),
+				showPositive: true,
+				showNegative: true,
+				positiveText: formatMessage(i18n.logout).toUpperCase(),
+				onPressPositive: onConfirmLogout,
+				closeOnPressPositive: true,
+				timeoutToCallPositive: 400,
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [onConfirmLogoutP]);
 
 	const labelButton = formatMessage(i18n.button);
 	const labelButtondefaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;

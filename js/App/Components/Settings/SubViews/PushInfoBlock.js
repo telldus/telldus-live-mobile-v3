@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
 
@@ -49,12 +51,15 @@ const PushInfoBlock = (props: Object): Object => {
 	const phones = Object.keys(phonesList).length;
 	const labelPush = formatMessage(i18n.labelPushRegistered, {value: phones});
 
-	function onPressPushSettings() {
-		navigation.navigate({
-			routeName: 'PushSettings',
-			key: 'PushSettings',
-		});
-	}
+	const onPressPushSettings = useCallback(() => {
+		(() => {
+			navigation.navigate({
+				routeName: 'PushSettings',
+				key: 'PushSettings',
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const submitButText = isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.pushReRegisterPush);
 

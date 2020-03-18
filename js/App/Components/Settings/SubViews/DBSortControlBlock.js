@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -58,11 +60,14 @@ const DBSortControlBlock = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
-	function saveSortingDB(value: string, itemIndex: number, data: Array<any>) {
-		const { key: sortingDB } = data[itemIndex];
-		const settings = { sortingDB };
-		dispatch(changeSortingDB(settings));
-	}
+	const saveSortingDB = useCallback((value: string, itemIndex: number, data: Array<any>) => {
+		(() => {
+			const { key: sortingDB } = data[itemIndex];
+			const settings = { sortingDB };
+			dispatch(changeSortingDB(settings));
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const alpha = formatMessage(i18n.labelAlphabetical);
 	const chrono = formatMessage(i18n.labelChronological);
