@@ -75,6 +75,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	useEffect(() => {
 		let name = 'area name';
 		onDidMount(`Edit ${name}`, 'Edit or delete geo fence');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const {

@@ -44,7 +44,8 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 		const h = 'Arriving actions';
 		const h1 = `${isEdit ? h : `2. ${h}`}`;
 		onDidMount(h1, 'Select actions for when you arrive');
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isEdit]);
 
 	function onPressNext() {
 		if (isEdit) {

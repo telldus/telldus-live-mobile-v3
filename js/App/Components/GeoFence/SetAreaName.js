@@ -58,6 +58,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 
 	useEffect(() => {
 		onDidMount('5. Name', 'Select a name for your area');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const dispatch = useDispatch();

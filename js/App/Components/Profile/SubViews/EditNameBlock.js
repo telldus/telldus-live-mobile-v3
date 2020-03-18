@@ -76,6 +76,7 @@ const EditNameBlock = (props: Object): Object => {
 		if (prevNameEditValue !== FN) {
 			setNameEditValue(FN);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [FN]);
 
 	function toggleEdit() {

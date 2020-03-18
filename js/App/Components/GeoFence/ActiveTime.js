@@ -61,6 +61,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 
 	useEffect(() => {
 		onDidMount('4. Active time', 'Select time for fence to be active');
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const [ timeInfo, setTimeInfo ] = useState({
