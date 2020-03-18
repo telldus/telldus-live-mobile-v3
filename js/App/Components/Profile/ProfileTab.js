@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	ScrollView,
 	TouchableOpacity,
@@ -212,135 +214,32 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		}
 	}
 
-	function proceedWithLogout() {
-		setIsLoggingOut(true);
-		if (Object.keys(accounts).length === 2) {
-			let otherUserId;
-			Object.keys(accounts).forEach((uid: string) => {
-				const check1 = uid.trim().toLowerCase();
-				if (check1 !== userId.trim().toLowerCase()) {
-					otherUserId = check1;
-				}
-			});
-			if (otherUserId) {
-				let { accessToken } = accounts[otherUserId];
-				dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
-					dispatch(onSwitchAccount({
-						userId: otherUserId,
-					}));
-
-					dispatch(unregisterPushToken(pushToken));
-					setIsLoggingOut(false);
-					dispatch(logoutSelectedFromTelldus({
-						userId,
-					}));
-					const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
-					dispatch(showToast(messageOnSuccesSwitch));
-				}).catch((err: Object) => {
-					setIsLoggingOut(false);
-					toggleDialogueBoxState({
-						show: true,
-						showHeader: true,
-						imageHeader: true,
-						text: err.message || formatMessage(i18n.unknownError),
-						showPositive: true,
-					});
+	const onConfirmLogout = useCallback(() => {
+		function proceedWithLogout() {
+			setIsLoggingOut(true);
+			if (Object.keys(accounts).length === 2) {
+				let otherUserId;
+				Object.keys(accounts).forEach((uid: string) => {
+					const check1 = uid.trim().toLowerCase();
+					if (check1 !== userId.trim().toLowerCase()) {
+						otherUserId = check1;
+					}
 				});
-			}
-
-		} else {
-			showActionSheet();
-		}
-	}
-
-	function onConfirmLogout() {
-		const premAccsCount = Object.keys(premAccounts).length;
-		if (premAccsCount > 1) {
-			proceedWithLogout();
-		} else {
-			const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
-			if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
-				toggleDialogueBoxState({
-					show: true,
-					showHeader: true,
-					imageHeader: true,
-					text: 'You are about to log out from the only premium account. You no longer can access premium features.' +
-					' Hence mulitple accounts feature will be disabled. If you would like to log out any way please select any one ' +
-					'account that you would like to switch to.',
-					showPositive: true,
-					positiveText: formatMessage(i18n.logout).toUpperCase(),
-					onPressPositive: proceedWithLogout,
-					showNegative: true,
-					closeOnPressNegative: true,
-					closeOnPressPositive: true,
-					timeoutToCallPositive: 400,
-				});
-			} else {
-				proceedWithLogout();
-			}
-		}
-	}
-
-	function onSelectActionSheet(index: number) {
-		if (switchingId) {
-			return;
-		}
-		if (showAddNewAccount) {
-			setShowAddNewAccount(false);
-			if (index === 0) {
-				navigation.navigate({
-					routeName: 'LoginScreen',
-					key: 'LoginScreen',
-				});
-			} else if (index === 1) {
-				navigation.navigate({
-					routeName: 'RegisterScreen',
-					key: 'RegisterScreen',
-				});
-			}
-		} else {
-			const addNewIndex = Object.keys(accounts).length;
-			if (index === addNewIndex) {
-				setShowAddNewAccount(true);
-				if (actionSheetRef.current) {
-					actionSheetRef.current.show();
-				}
-			} else {
-				if (index === -1) {
-					setIsLoggingOut(false);
-				}
-				let userIdKey = Object.keys(accounts)[index];
-				if (userIdKey) {
-					userIdKey = userIdKey.trim().toLowerCase();
-					setSwitchingId(userIdKey);
-					const {
-						accessToken,
-					} = accounts[userIdKey];
-
+				if (otherUserId) {
+					let { accessToken } = accounts[otherUserId];
 					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
-						closeActionSheet(undefined, () => {
-							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
-							setTimeout(() => {
-								const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
-								dispatch(showToast(messageOnSuccesSwitch));
+						dispatch(onSwitchAccount({
+							userId: otherUserId,
+						}));
 
-								setSwitchingId(null);
-								dispatch(onSwitchAccount({
-									userId: userIdKey,
-								}));
-
-								if (isLoggingOut) {
-									dispatch(unregisterPushToken(pushToken));
-									setIsLoggingOut(false);
-									dispatch(logoutSelectedFromTelldus({
-										userId,
-									}));
-								}
-							}, 200);
-						});
+						dispatch(unregisterPushToken(pushToken));
+						setIsLoggingOut(false);
+						dispatch(logoutSelectedFromTelldus({
+							userId,
+						}));
+						const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+						dispatch(showToast(messageOnSuccesSwitch));
 					}).catch((err: Object) => {
-						closeActionSheet();
-						setSwitchingId(null);
 						setIsLoggingOut(false);
 						toggleDialogueBoxState({
 							show: true,
@@ -351,9 +250,124 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						});
 					});
 				}
+
+			} else {
+				showActionSheet();
 			}
 		}
-	}
+
+		(() => {
+			const premAccsCount = Object.keys(premAccounts).length;
+			if (premAccsCount > 1) {
+				proceedWithLogout();
+			} else {
+				const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
+				if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
+					toggleDialogueBoxState({
+						show: true,
+						showHeader: true,
+						imageHeader: true,
+						text: 'You are about to log out from the only premium account. You no longer can access premium features.' +
+						' Hence mulitple accounts feature will be disabled. If you would like to log out any way please select any one ' +
+						'account that you would like to switch to.',
+						showPositive: true,
+						positiveText: formatMessage(i18n.logout).toUpperCase(),
+						onPressPositive: proceedWithLogout,
+						showNegative: true,
+						closeOnPressNegative: true,
+						closeOnPressPositive: true,
+						timeoutToCallPositive: 400,
+					});
+				} else {
+					proceedWithLogout();
+				}
+			}
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		accounts,
+		premAccounts,
+		pushToken,
+		userId,
+	]);
+
+	const onSelectActionSheet = useCallback((index: number) => {
+		(() => {
+			if (switchingId) {
+				return;
+			}
+			if (showAddNewAccount) {
+				setShowAddNewAccount(false);
+				if (index === 0) {
+					navigation.navigate('LoginScreen');
+				} else if (index === 1) {
+					navigation.navigate('RegisterScreen');
+				}
+			} else {
+				const addNewIndex = Object.keys(accounts).length;
+				if (index === addNewIndex) {
+					setShowAddNewAccount(true);
+					if (actionSheetRef.current) {
+						actionSheetRef.current.show();
+					}
+				} else {
+					if (index === -1) {
+						setIsLoggingOut(false);
+					}
+					let userIdKey = Object.keys(accounts)[index];
+					if (userIdKey) {
+						userIdKey = userIdKey.trim().toLowerCase();
+						setSwitchingId(userIdKey);
+						const {
+							accessToken,
+						} = accounts[userIdKey];
+
+						dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
+							closeActionSheet(undefined, () => {
+							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
+								setTimeout(() => {
+									const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+									dispatch(showToast(messageOnSuccesSwitch));
+
+									setSwitchingId(null);
+									dispatch(onSwitchAccount({
+										userId: userIdKey,
+									}));
+
+									if (isLoggingOut) {
+										dispatch(unregisterPushToken(pushToken));
+										setIsLoggingOut(false);
+										dispatch(logoutSelectedFromTelldus({
+											userId,
+										}));
+									}
+								}, 200);
+							});
+						}).catch((err: Object) => {
+							closeActionSheet();
+							setSwitchingId(null);
+							setIsLoggingOut(false);
+							toggleDialogueBoxState({
+								show: true,
+								showHeader: true,
+								imageHeader: true,
+								text: err.message || formatMessage(i18n.unknownError),
+								showPositive: true,
+							});
+						});
+					}
+				}
+			}
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		accounts,
+		isLoggingOut,
+		pushToken,
+		showAddNewAccount,
+		switchingId,
+		userId,
+	]);
 
 	let ACCOUNTS = [];
 	const disabledButtonIndexes = [];
