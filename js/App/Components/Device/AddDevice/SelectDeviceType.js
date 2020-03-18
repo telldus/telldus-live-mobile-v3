@@ -68,16 +68,7 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const { navigation, currentScreen, appLayout } = nextProps;
-	const { width } = this.props.appLayout;
-	const selectLocation = navigation.getParam('selectLocation', true);
-	if (!selectLocation && currentScreen === 'InitialScreen' && appLayout.width !== width) {
-		return true;
-	}
-	if (currentScreen === 'SelectDeviceType' && appLayout.width !== width) {
-		return true;
-	}
-	return false;
+	return nextProps.currentScreen === 'SelectDeviceType';
 }
 
 onChooseType({module, action, secure}: Object) {

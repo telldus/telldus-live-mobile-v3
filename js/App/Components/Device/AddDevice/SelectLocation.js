@@ -78,7 +78,7 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'InitialScreen';
+	return nextProps.currentScreen === 'SelectLocation';
 }
 
 keyExtractor(item: Object): string {
