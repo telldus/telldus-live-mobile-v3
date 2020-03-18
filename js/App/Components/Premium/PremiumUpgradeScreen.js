@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useMemo,
+} from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -152,20 +154,26 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	}
 
 	const headerArray = formatMessage(i18n.getMoreWithPremium).split(' ');
-	const header = headerArray.map((word: string, i: number): Object => {
-		if (word.includes('%')) {
+	const header = useMemo((): Array<Object> => {
+		return headerArray.map((word: string, i: number): Object => {
+			if (word.includes('%')) {
+				return (
+					<Text style={titleStyleTwo} key={`${i}`}>
+						{` ${word.replace(/%/g, '').toUpperCase()}`}
+					</Text>
+				);
+			}
 			return (
-				<Text style={titleStyleTwo} key={`${i}`}>
-					{` ${word.replace(/%/g, '').toUpperCase()}`}
+				<Text style={titleStyleOne} key={`${i}`}>
+					{word.toUpperCase()}
 				</Text>
 			);
-		}
-		return (
-			<Text style={titleStyleOne} key={`${i}`}>
-				{word.toUpperCase()}
-			</Text>
-		);
-	});
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		headerArray,
+		layout,
+	]);
 
 	function onPressGoBack(): boolean {
 		dispatch(toggleVisibilityProExpireHeadsup('hide_temp'));

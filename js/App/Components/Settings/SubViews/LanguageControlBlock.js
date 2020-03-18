@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -54,17 +56,20 @@ const LanguageControlBlock = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
-	function changeDeviceLanguage(value: string, itemIndex: number, data: Array<any>) {
-		let language = data[itemIndex];
-		if (isDeviceLanguage(language)) {
-			const { value: cVal } = language;
-			language = {
-				...language,
-				value: cVal.split('(')[0],
-			};
-		}
-		dispatch(setAppLanguage({ ...language }));
-	}
+	const changeDeviceLanguage = useCallback((value: string, itemIndex: number, data: Array<any>) => {
+		(() => {
+			let language = data[itemIndex];
+			if (isDeviceLanguage(language)) {
+				const { value: cVal } = language;
+				language = {
+					...language,
+					value: cVal.split('(')[0],
+				};
+			}
+			dispatch(setAppLanguage({ ...language }));
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const labelLanguage = formatMessage(i18n.labelLanguage);
 

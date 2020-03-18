@@ -22,7 +22,10 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, {
+	useState,
+	useMemo,
+} from 'react';
 import {
 	ScrollView,
 	LayoutAnimation,
@@ -202,85 +205,97 @@ const RegisterForPushScreen = (props: Object): Object => {
 		});
 	}
 
-	function renderBlock({token, name, key, label}: Object): Object {
-		function onPressPushSettings() {
-			onConfirmDeleteToken(token);
-		}
-
-		return (
-			<TitledInfoBlock
-				key={key}
-				label={label}
-				icon={'angle-right'}
-				iconStyle={iconStyle}
-				fontSize={fontSize}
-				valueTextStyle={valueTextStyle}
-				labelTextStyle={labelTextStyle}
-				blockContainerStyle={blockContainerStyle}
-				value={name}
-				onPress={isLoading ? null : onPressPushSettings}
-			/>
-		);
-	}
-
 	const isLoading = isPushSubmitLoading || isDeleteTokenLoading;
 
-	let phones = [];
-	let myPhone;
 	const deviceUniqueId = DeviceInfo.getUniqueId();
 
-	let isMine = false;
-	let nextLabel = formatMessage(i18n.otherPhone);
-	Object.keys(phonesList).map((key: string, i: number): Object => {
-		let { token, name, deviceId: uniqueDeviceId } = phonesList[key];
-		isMine = false;
-		if (deviceUniqueId === uniqueDeviceId) {
-			isMine = true;
+	const PHONES = useMemo((): Array<Object> => {
+
+		function renderBlock({token, name, key, label}: Object): Object {
+			function onPressPushSettings() {
+				onConfirmDeleteToken(token);
+			}
+
+			return (
+				<TitledInfoBlock
+					key={key}
+					label={label}
+					icon={'angle-right'}
+					iconStyle={iconStyle}
+					fontSize={fontSize}
+					valueTextStyle={valueTextStyle}
+					labelTextStyle={labelTextStyle}
+					blockContainerStyle={blockContainerStyle}
+					value={name}
+					onPress={isLoading ? null : onPressPushSettings}
+				/>
+			);
 		}
 
-		if (deletingToken) {
-			if (deletingToken === token) {
-				if (isMine) {
-					myPhone = renderBlock({
-						token,
-						name,
-						key,
-						label: formatMessage(i18n.myPhone),
-					});
-					nextLabel = i === 0 ? formatMessage(i18n.otherPhone) : formatMessage(i18n.yetAnotherPhone);
+		let isMine = false;
+		let myPhone;
+		let nextLabel = formatMessage(i18n.otherPhone);
+		let phones = [];
+
+		Object.keys(phonesList).map((key: string, i: number): Object => {
+			let { token, name, deviceId: uniqueDeviceId } = phonesList[key];
+			isMine = false;
+			if (deviceUniqueId === uniqueDeviceId) {
+				isMine = true;
+			}
+
+			if (deletingToken) {
+				if (deletingToken === token) {
+					if (isMine) {
+						myPhone = renderBlock({
+							token,
+							name,
+							key,
+							label: formatMessage(i18n.myPhone),
+						});
+						nextLabel = i === 0 ? formatMessage(i18n.otherPhone) : formatMessage(i18n.yetAnotherPhone);
+					} else {
+						phones.push(renderBlock({
+							token,
+							name,
+							key,
+							label: nextLabel,
+						}));
+						nextLabel = formatMessage(i18n.yetAnotherPhone);
+					}
 				} else {
-					phones.push(renderBlock({
-						token,
-						name,
-						key,
-						label: nextLabel,
-					}));
 					nextLabel = formatMessage(i18n.yetAnotherPhone);
 				}
+			} else if (isMine) {
+				myPhone = renderBlock({
+					token,
+					name,
+					key,
+					label: formatMessage(i18n.myPhone),
+				});
+				nextLabel = i === 0 ? formatMessage(i18n.otherPhone) : formatMessage(i18n.yetAnotherPhone);
 			} else {
+				phones.push(renderBlock({
+					token,
+					name,
+					key,
+					label: nextLabel,
+				}));
 				nextLabel = formatMessage(i18n.yetAnotherPhone);
 			}
-		} else if (isMine) {
-			myPhone = renderBlock({
-				token,
-				name,
-				key,
-				label: formatMessage(i18n.myPhone),
-			});
-			nextLabel = i === 0 ? formatMessage(i18n.otherPhone) : formatMessage(i18n.yetAnotherPhone);
-		} else {
-			phones.push(renderBlock({
-				token,
-				name,
-				key,
-				label: nextLabel,
-			}));
-			nextLabel = formatMessage(i18n.yetAnotherPhone);
+		});
+		if (myPhone) {
+			phones.unshift(myPhone);
 		}
-	});
-	if (myPhone) {
-		phones.unshift(myPhone);
-	}
+		return phones;
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		phonesList,
+		layout,
+		deviceUniqueId,
+		deletingToken,
+		isLoading,
+	]);
 
 	return (
 		<View style={container}>
@@ -303,7 +318,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 						{formatMessage(i18n.replaceOldDeviceAndRegisterPush)}
 					</Text>
 				</View>
-				{phones}
+				{PHONES}
 				{isDeleteTokenLoading && <View style={loadingInfoCover}>
 					<Throbber throbberContainerStyle={throbberContainerStyle} throbberStyle={throbberStyle}/>
 					<Text style={loadingTextStyle}>

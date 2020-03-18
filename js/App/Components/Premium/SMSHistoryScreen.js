@@ -22,7 +22,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+	useCallback,
+} from 'react';
 import { SectionList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import groupBy from 'lodash/groupBy';
@@ -112,56 +116,61 @@ const SMSHistoryScreen = (props: Object): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function getStatus(n: number): Object {
-		switch (n) {
-			case 0:
-				return {
-					t: formatMessage(i18n.statusPending),
-					c: Theme.Core.brandSecondary,
-					icon: 'arrow-forward',
+	const renderItem = useCallback(({item, index, section}: Object): Object => {
+		return ((): Object => {
+
+			function getStatus(n: number): Object {
+				switch (n) {
+					case 0:
+						return {
+							t: formatMessage(i18n.statusPending),
+							c: Theme.Core.brandSecondary,
+							icon: 'arrow-forward',
+						}
+						;
+					case 1:
+						return {
+							t: formatMessage(i18n.statusDelivered),
+							c: Theme.Core.brandSuccess,
+							icon: 'arrow-forward',
+						};
+					case 2:
+						return {
+							t: formatMessage(i18n.failed),
+							c: Theme.Core.brandDanger,
+							icon: 'close',
+						};
+					default:
+						return {
+							t: formatMessage(i18n.statusPending),
+							c: Theme.Core.brandSecondary,
+							icon: 'arrow-forward',
+						};
 				}
-				;
-			case 1:
-				return {
-					t: formatMessage(i18n.statusDelivered),
-					c: Theme.Core.brandSuccess,
-					icon: 'arrow-forward',
-				};
-			case 2:
-				return {
-					t: formatMessage(i18n.failed),
-					c: Theme.Core.brandDanger,
-					icon: 'close',
-				};
-			default:
-				return {
-					t: formatMessage(i18n.statusPending),
-					c: Theme.Core.brandSecondary,
-					icon: 'arrow-forward',
-				};
-		}
-	}
+			}
 
-	function renderItem({item, index, section}: Object): Object {
-		const { t, c, icon } = getStatus(item.status);
-		return (
-			<View style={rowStyle} key={index}>
-				<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
-				<View style={toBlock}>
-					<Icon name={icon} size={toIconSize} color={c}/>
-					<Text style={rowTextStyle2}>{item.to}</Text>
-				</View>
-				<Text style={[rowTextStyle3, {color: c}]}>{t}</Text>
-			</View>);
-	}
+			const { t, c, icon } = getStatus(item.status);
+			return (
+				<View style={rowStyle} key={index}>
+					<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
+					<View style={toBlock}>
+						<Icon name={icon} size={toIconSize} color={c}/>
+						<Text style={rowTextStyle2}>{item.to}</Text>
+					</View>
+					<Text style={[rowTextStyle3, {color: c}]}>{t}</Text>
+				</View>);
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [layout]);
 
-	function renderSectionHeader({section: {key}}: Object): Object {
-		return (
+	const renderSectionHeader = useCallback(({section: {key}}: Object): Object => {
+		return ((): Object => (
 			<View style={sectionStyle} key={key}>
 				<Text style={sectionTextStyle}>{key}</Text>
 			</View>
-		);
-	}
+		))();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [layout]);
 
 	function keyExtractor(item: any, index: any): string {
 		return item.id + index;

@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -44,12 +46,15 @@ const UpdatePasswordBlock = (props: Object): Object => {
 		iconStyle,
 	} = getStyles(layout);
 
-	function onPress() {
-		navigation.navigate({
-			routeName: 'UpdatePasswordScreen',
-			key: 'UpdatePasswordScreen',
-		});
-	}
+	const onPress = useCallback(() => {
+		(() => {
+			navigation.navigate({
+				routeName: 'UpdatePasswordScreen',
+				key: 'UpdatePasswordScreen',
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<TitledInfoBlock
