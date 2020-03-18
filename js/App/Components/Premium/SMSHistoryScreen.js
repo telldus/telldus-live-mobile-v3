@@ -159,7 +159,7 @@ const SMSHistoryScreen = (props: Object): Object => {
 					</View>
 					<Text style={[rowTextStyle3, {color: c}]}>{t}</Text>
 				</View>);
-		});
+		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [layout]);
 
