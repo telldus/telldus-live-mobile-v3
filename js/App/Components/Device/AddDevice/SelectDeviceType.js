@@ -40,6 +40,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	currentScreen: string,
+	route: Object,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
@@ -72,8 +73,10 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onChooseType({module, action, secure}: Object) {
-	const { navigation } = this.props;
-	const gateway = navigation.getParam('gateway', {});
+	const { navigation, route } = this.props;
+	const {
+		gateway = {},
+	} = route.params || {};
 
 	if (module === 'zwave') {
 		navigation.navigate('IncludeDevice', {
@@ -94,9 +97,11 @@ onChooseType({module, action, secure}: Object) {
 }
 
 getDeviceTypes(): Array<any> {
-	const { navigation, intl } = this.props, types = [];
+	const { route, intl } = this.props, types = [];
 	const { formatMessage, formatNumber } = intl;
-	const gateway = navigation.getParam('gateway', {});
+	const {
+		gateway = {},
+	} = route.params || {};
 	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 

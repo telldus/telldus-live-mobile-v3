@@ -417,10 +417,7 @@ class SettingsTab extends View {
 	}
 
 	goBack() {
-		this.props.navigation.navigate({
-			routeName: 'Devices',
-			key: 'Devices',
-		});
+		this.props.navigation.navigate('Devices');
 	}
 
 	onValueChange(value: boolean) {

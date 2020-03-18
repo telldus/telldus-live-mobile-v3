@@ -720,10 +720,19 @@ class DevicesTab extends View {
 		const gatewaysLen = gateways.length;
 		if (gatewaysLen > 0) {
 			const singleGateway = gatewaysLen === 1;
-			navigation.navigate('AddDevice', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? gateways[0] : null,
-			});
+			if (singleGateway) {
+				navigation.navigate('AddDevice', {
+					gateway: gateways[0],
+					screen: 'SelectDeviceType',
+					params: {
+						gateway: gateways[0],
+					},
+				});
+			} else {
+				navigation.navigate('AddDevice', {
+					screen: 'SelectLocation',
+				});
+			}
 		}
 	}
 

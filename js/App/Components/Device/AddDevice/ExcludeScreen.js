@@ -48,7 +48,8 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -95,10 +96,7 @@ componentDidMount() {
 
 onPressExit() {
 	const { navigation } = this.props;
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-	});
+	navigation.navigate('Devices');
 }
 
 onExcludeSuccessImmediate() {
@@ -117,13 +115,9 @@ onPressCancelExclude() {
 }
 
 onPressInclude() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'IncludeDevice',
-		key: 'IncludeDevice',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('IncludeDevice', {...params});
 }
 
 onExcludeTimedoutImmediate() {
@@ -139,8 +133,10 @@ onCantEnterExclusionTimeout() {
 }
 
 registerForWebSocketEvents = (callbacks: Object): () => Object => {
-	const { navigation, dispatch } = this.props;
-	const gateway = navigation.getParam('gateway', {});
+	const { dispatch, route } = this.props;
+	const {
+		gateway = {},
+	} = route.params || {};
 	return dispatch(registerForWebSocketEvents(gateway.id, callbacks));
 }
 
@@ -149,7 +145,7 @@ render(): Object {
 	const {
 		appLayout,
 		intl,
-		navigation,
+		route,
 	} = this.props;
 	const { excludeSuccess } = this.state;
 
@@ -161,7 +157,9 @@ render(): Object {
 		infoTextStyle,
 	} = this.getStyles();
 
-	const gateway = navigation.getParam('gateway', {});
+	const {
+		gateway = {},
+	} = route.params || {};
 
 	return (
 		<View style={container}>

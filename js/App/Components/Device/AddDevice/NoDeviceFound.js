@@ -39,7 +39,8 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -68,33 +69,21 @@ componentDidMount() {
 }
 
 onPressExit() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('Devices', {...params});
 }
 
 onPressExclude() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'ExcludeScreen',
-		key: 'ExcludeScreen',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('ExcludeScreen', {...params});
 }
 
 onPressTryAgain() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'IncludeDevice',
-		key: 'IncludeDevice',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('IncludeDevice', {...params});
 }
 
 render(): Object {

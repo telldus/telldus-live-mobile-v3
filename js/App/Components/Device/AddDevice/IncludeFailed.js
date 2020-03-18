@@ -67,23 +67,15 @@ componentDidMount() {
 }
 
 onPressExit() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('Devices', {...params});
 }
 
 onPressExclude() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'ExcludeScreen',
-		key: 'ExcludeScreen',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('ExcludeScreen', {...params});
 }
 
 render(): Object {
