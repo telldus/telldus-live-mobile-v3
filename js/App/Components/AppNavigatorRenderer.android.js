@@ -46,6 +46,7 @@ import {
 	navigate,
 	getDrawerWidth,
 	LayoutAnimations,
+	shouldUpdate,
 } from '../Lib';
 import Theme from '../Theme';
 import i18n from '../Translations/common';
@@ -138,15 +139,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout } = this.props;
-		const { appLayout: appLayoutN } = nextProps;
-
-
-		if (appLayout.width !== appLayoutN.width) {
-			return true;
-		}
-
-		return false;
+		return shouldUpdate(this.props, nextProps, [
+			'appLayout',
+			'currentScreen',
+			'screenReaderEnabled',
+		]);
 	}
 
 	componentWillUnmount() {

@@ -43,6 +43,7 @@ import {
 import {
 	navigate,
 	LayoutAnimations,
+	shouldUpdate,
 } from '../Lib';
 
 import Theme from '../Theme';
@@ -132,14 +133,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, addingNewLocation } = this.props;
-		const { appLayout: appLayoutN, addingNewLocation: addingNewLocationN } = nextProps;
-
-		if ((appLayout.width !== appLayoutN.width) || (addingNewLocation !== addingNewLocationN)) {
-			return true;
-		}
-
-		return false;
+		return shouldUpdate(this.props, nextProps, [
+			'appLayout',
+			'currentScreen',
+			'screenReaderEnabled',
+			'addingNewLocation',
+		]);
 	}
 
 	onOpenSetting() {
