@@ -112,7 +112,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 			navigation.goBack();
 		} else {
 			navigation.navigate({
-				routeName: 'Time',
+				name: 'Time',
 				key: 'Time',
 			});
 		}
@@ -123,16 +123,16 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (isEditMode()) {
 			navigation.navigate({
-				routeName: 'ActionDim',
+				name: 'ActionDim',
 				key: 'ActionDim',
 				params: {
-					actionKey: navigation.state.key,
+					actionKey: 'Action',
 					editMode: true,
 				},
 			});
 		} else {
 			navigation.navigate({
-				routeName: 'ActionDim',
+				name: 'ActionDim',
 				key: 'ActionDim',
 			});
 		}
@@ -142,16 +142,16 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (isEditMode()) {
 			navigation.navigate({
-				routeName: 'ActionRGB',
+				name: 'ActionRGB',
 				key: 'ActionRGB',
 				params: {
-					actionKey: navigation.state.key,
+					actionKey: 'Action',
 					editMode: true,
 				},
 			});
 		} else {
 			navigation.navigate({
-				routeName: 'ActionRGB',
+				name: 'ActionRGB',
 				key: 'ActionRGB',
 			});
 		}
@@ -162,16 +162,16 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (isEditMode()) {
 			navigation.navigate({
-				routeName: 'ActionThermostat',
+				name: 'ActionThermostat',
 				key: 'ActionThermostat',
 				params: {
-					actionKey: navigation.state.key,
+					actionKey: 'Action',
 					editMode: true,
 				},
 			});
 		} else {
 			navigation.navigate({
-				routeName: 'ActionThermostat',
+				name: 'ActionThermostat',
 				key: 'ActionThermostat',
 			});
 		}

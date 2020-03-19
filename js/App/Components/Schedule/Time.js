@@ -175,7 +175,7 @@ export default class Time extends View<null, Props, State> {
 			navigation.goBack();
 		} else {
 			navigation.navigate({
-				routeName: 'Days',
+				name: 'Days',
 				key: 'Days',
 			});
 		}

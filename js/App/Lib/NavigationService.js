@@ -27,9 +27,6 @@ const navigationRef = React.createRef<any>();
 
 /**
  *
- * @param {*} name : The route name to navigate to. Must have already added to(/registered at) the navigator route configs.
- * @param {*} params : Any extra parameters need to be added, which can be accessed as 'navigation.state.params'.
- *
  * Use this method inside any component that does not have the 'navigation' property, where you want to navigate to any registered
  * screen/route.
  */

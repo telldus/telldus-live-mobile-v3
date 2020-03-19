@@ -52,7 +52,7 @@ const TransactionWebview = (props: Object): Object => {
 	const dispatch = useDispatch();
 	function onShouldStartLoadWithRequest(request: Object): boolean {
 		if (request.url.includes('telldus-live-mobile-common')) {
-			const { params } = navigation.state;
+			const { params = {} } = route;
 			navigation.navigate({
 				routeName: 'PostPurchaseScreen',
 				key: 'PostPurchaseScreen',

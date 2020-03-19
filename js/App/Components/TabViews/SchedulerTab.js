@@ -125,6 +125,10 @@ class SchedulerTab extends View<null, Props, State> {
 		dispatch(editSchedule(schedule));
 		navigation.navigate('Schedule', {
 			editMode: true,
+			screen: 'Edit',
+			params: {
+				editMode: true,
+			},
 		});
 	};
 

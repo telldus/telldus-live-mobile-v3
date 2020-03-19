@@ -186,7 +186,7 @@ export default class Days extends View<null, Props, State> {
 			navigation.goBack();
 		} else {
 			navigation.navigate({
-				routeName: 'Summary',
+				name: 'Summary',
 				key: 'Summary',
 			});
 		}
