@@ -35,7 +35,6 @@ import {
 } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
-	SettingsButton,
 	DrawerSubHeader,
 	NavigationHeader,
 	AddLocation,
@@ -192,7 +191,6 @@ constructor(props: Props) {
 		const {
 			gateways,
 			userProfile,
-			onOpenSetting,
 			addNewLocation,
 			appLayout,
 			onPressGateway,
@@ -265,7 +263,6 @@ constructor(props: Props) {
 							dispatch={dispatch}/>);
 					})}
 					<AddLocation onPress={addNewLocation} styles={styles}/>
-					<SettingsButton onPress={onOpenSetting} styles={styles}/>
 				</View>
 			</ScrollView>
 		);
