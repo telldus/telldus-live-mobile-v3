@@ -87,6 +87,7 @@ const ScreenConfigs = [
 		ContainerComponent: LocationDetailsContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 		},
 	},
 	{
@@ -95,6 +96,7 @@ const ScreenConfigs = [
 		ContainerComponent: LocationDetailsContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 		},
 	},
 ];
@@ -109,15 +111,6 @@ const NavigatorConfigs = {
 		shadowColor: 'transparent',
 		shadowOpacity: 0,
 		elevation: 0,
-	},
-	screenOptions: {
-		cardStyleInterpolator: (sceneProps: Object): Object => {
-			const { index } = sceneProps;
-			if (index === 5 || index === 6) {
-				return CardStyleInterpolators.forRevealFromBottomAndroid;
-			}
-			return CardStyleInterpolators.forHorizontalIOS;
-		},
 	},
 };
 

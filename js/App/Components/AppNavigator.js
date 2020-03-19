@@ -311,7 +311,7 @@ const NavigatorConfigs = {
 	},
 	headerMode: 'screen',
 	screenOptions: {
-		cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid,
+		cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 	},
 };
 
