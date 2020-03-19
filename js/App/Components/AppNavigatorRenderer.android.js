@@ -27,8 +27,6 @@ import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
-import { NavigationActions } from 'react-navigation';
-
 import {
 	View,
 	Header,
@@ -37,20 +35,18 @@ import {
 	Icon,
 	CampaignIcon,
 } from '../../BaseComponents';
-import Navigator from './AppNavigator';
+import AppNavigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
 import {
 	syncWithServer,
-	screenChange,
 	resetSchedule,
 } from '../Actions';
 import {
-	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
-	getRouteName,
 	LayoutAnimations,
+	shouldUpdate,
 } from '../Lib';
 import Theme from '../Theme';
 import i18n from '../Translations/common';
@@ -58,12 +54,12 @@ import i18n from '../Translations/common';
 type Props = {
 	screenReaderEnabled: boolean,
 	appLayout: Object,
+	currentScreen: string,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
-	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
@@ -74,7 +70,6 @@ type Props = {
 };
 
 type State = {
-	currentScreen: string,
 	drawer: boolean,
 	showAttentionCaptureAddDevice: boolean,
 	addNewDevicePressed: boolean,
@@ -85,9 +80,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	onNavigationStateChange: (Object, Object) => void;
 	autoDetectLocalTellStick: () => void;
-	setNavigatorRef: (any) => void;
 
 	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
@@ -106,7 +99,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Dashboard',
 			drawer: false,
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
@@ -126,10 +118,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
-
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-
-		this.setNavigatorRef = this.setNavigatorRef.bind(this);
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
@@ -151,15 +139,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout } = this.props;
-		const { appLayout: appLayoutN } = nextProps;
-
-
-		if (appLayout.width !== appLayoutN.width) {
-			return true;
-		}
-
-		return false;
+		return shouldUpdate(this.props, nextProps, [
+			'appLayout',
+			'currentScreen',
+			'screenReaderEnabled',
+		]);
 	}
 
 	componentWillUnmount() {
@@ -178,9 +162,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 	newSchedule() {
 		this.props.dispatch(resetSchedule());
 		navigate('Schedule', {
-			key: 'Schedule',
-			params: { editMode: false },
-		}, 'Schedule');
+			editMode: false,
+			screen: 'Device',
+			params: {
+				editMode: false,
+			},
+		});
 	}
 
 	onOpenDrawer = () => {
@@ -210,31 +197,24 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	onPressGateway(location: Object) {
 		this.closeDrawer();
-		const navigateAction = NavigationActions.navigate({
-			routeName: 'Details',
-			key: 'Details',
-			params: { location },
+		navigate('LocationDetails', {
+			screen: 'Details',
+			params: {
+				location,
+			},
+			location,
 		});
-		navigate('LocationDetails', location, 'LocationDetails', navigateAction);
 	}
 
 	onOpenSetting(tabName?: string) {
 		this.closeDrawer();
-		let navigateAction;
 		if (tabName) {
-			navigateAction = NavigationActions.navigate({
-				routeName: tabName,
-				key: tabName,
+			navigate('Profile', {
+				screen: 'tabName',
 			});
+		} else {
+			navigate('Profile');
 		}
-		navigate('Profile', {}, 'Profile', navigateAction);
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		this.setState({ currentScreen });
-
-		this.props.onNavigationStateChange(currentScreen);
 	}
 
 	addNewDevice() {
@@ -289,10 +269,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			default:
 				return null;
 		}
-	}
-
-	setNavigatorRef(navigatorRef: any) {
-		setTopLevelNavigator(navigatorRef);
 	}
 
 	openDrawer() {
@@ -362,13 +338,21 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	showAttentionCapture(): boolean {
-		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		const { currentScreen } = this.props;
+
+		return (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	render(): Object {
-		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
+		const { drawer, showAttentionCaptureAddDevice } = this.state;
+		const {
+			intl,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
+			currentScreen: CS,
+		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
@@ -420,10 +404,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 						attentionCaptureText={intl.formatMessage(i18n.labelAddZWaveD).toUpperCase()}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
-					<Navigator
-						ref={this.setNavigatorRef}
-						onNavigationStateChange={this.onNavigationStateChange}
-						screenProps={screenProps} />
+					<AppNavigator
+						screenProps={screenProps}/>
 				</View>
 			</DrawerLayoutAndroid>
 		);
@@ -450,14 +432,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 			} : {
 				transform: [{rotateZ: '-90deg'}],
 				position: 'absolute',
-				left: -deviceHeight * 0.4444,
-				top: deviceHeight * 0.4444,
+				left: Math.ceil(-deviceHeight * 0.4444),
+				top: Math.ceil(deviceHeight * 0.4444),
 				width: deviceHeight,
-				height: deviceHeight * land,
+				height: Math.ceil(deviceHeight * land),
 			},
 			container: {
 				flex: 1,
-				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
+				marginLeft: isPortrait ? 0 : Math.ceil(deviceHeight * 0.11),
 			},
 			buttonSize,
 			menuButtonStyle: isPortrait ? null : {
@@ -515,6 +497,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
+		currentScreen: state.navigation.screen,
 	};
 }
 
@@ -523,10 +506,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		dispatch,
 		syncGateways: () => {
 			dispatch(syncWithServer('gatewaysTab'));
-		},
-		onNavigationStateChange: (screen: string) => {
-			dispatch(syncWithServer(screen));
-			dispatch(screenChange(screen));
 		},
 	};
 }

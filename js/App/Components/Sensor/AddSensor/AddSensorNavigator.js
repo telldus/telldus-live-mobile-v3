@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import AddSensorContainer from './AddSensorContainer';
 
@@ -31,34 +31,40 @@ import SelectLocationAddSensor from './SelectLocationAddSensor';
 import SensorsListAddSensor from './SensorsListAddSensor';
 import SetSensorName from './SetSensorName';
 
-const initialRouteName = 'InitialScreenAddSensor';
+import {
+	prepareNavigator,
+} from '../../../Lib/NavigationService';
 
-type renderContainer = (Object, string) => Object;
+const initialRouteName = 'SelectLocationAddSensor';
 
-const renderAddSensorContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
-	<AddSensorContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</AddSensorContainer>
-);
-
-const RouteConfigs = {
-	InitialScreenAddSensor: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(
-			navigation.getParam('selectLocation', false) ?
-				SelectLocationAddSensor
-				:
-				SensorsListAddSensor
-			, 'InitialScreenAddSensor'),
+const ScreenConfigs = [
+	{
+		name: 'SelectLocationAddSensor',
+		Component: SelectLocationAddSensor,
+		ContainerComponent: AddSensorContainer,
+		options: {
+			headerShown: false,
+		},
 	},
-	SensorsListAddSensor: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(SensorsListAddSensor, 'SensorsListAddSensor'),
+	{
+		name: 'SensorsListAddSensor',
+		Component: SensorsListAddSensor,
+		ContainerComponent: AddSensorContainer,
+		options: {
+			headerShown: false,
+		},
 	},
-	SetSensorName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddSensorContainer(navigation, screenProps)(SetSensorName, 'SetSensorName'),
+	{
+		name: 'SetSensorName',
+		Component: SetSensorName,
+		ContainerComponent: AddSensorContainer,
+		options: {
+			headerShown: false,
+		},
 	},
-};
+];
 
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName,
 	initialRouteKey: initialRouteName,
 	headerMode: 'none',
@@ -69,6 +75,10 @@ const StackNavigatorConfig = {
 	},
 };
 
-const AddSensorNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator();
+
+const AddSensorNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 export default AddSensorNavigator;

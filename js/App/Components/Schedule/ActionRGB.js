@@ -87,16 +87,16 @@ export default class ActionRGB extends View<null, Props, State> {
 	}
 
 	selectAction = () => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 		const { methodValue } = this.state;
 
 		actions.selectAction(1024, methodValue);
 
 		if (isEditMode()) {
-			navigation.goBack(navigation.state.params.actionKey);
+			navigation.navigate(route.params.actionKey);
 		} else {
 			navigation.navigate({
-				routeName: 'Time',
+				name: 'Time',
 				key: 'Time',
 			});
 		}

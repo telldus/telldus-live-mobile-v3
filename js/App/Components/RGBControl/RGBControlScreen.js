@@ -45,7 +45,8 @@ type Props = {
 	device: Object,
 	deviceName: string,
 	isGatewayActive: boolean,
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
 	openModal: () => void,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
@@ -110,8 +111,11 @@ class RGBControlScreen extends View<Props, State> {
 	}
 
 	_deviceSetStateRGBOverride = (id: number, valueHex: string) => {
-		const { navigation } = this.props;
-		const onPressOverride = navigation.getParam('onPressOverride');
+		const { route } = this.props;
+		const {
+			onPressOverride,
+		} = route.params || {};
+
 		onPressOverride({
 			deviceId: id,
 			method: 1024,
@@ -122,8 +126,10 @@ class RGBControlScreen extends View<Props, State> {
 	}
 
 	renderColorPicker(styles: Object): Object {
-		const { device, appLayout, navigation } = this.props;
-		const deviceSetStateRGBOverride = navigation.getParam('onPressOverride');
+		const { device, appLayout, route } = this.props;
+		const {
+			onPressOverride,
+		} = route.params || {};
 
 		return (
 			<View style={styles.wheelCover}>
@@ -137,15 +143,17 @@ class RGBControlScreen extends View<Props, State> {
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
 					thumbSize={15}
-					deviceSetStateRGBOverride={deviceSetStateRGBOverride ? this._deviceSetStateRGBOverride : undefined}/>
+					deviceSetStateRGBOverride={onPressOverride ? this._deviceSetStateRGBOverride : undefined}/>
 			</View>
 		);
 	}
 
 	_onPressOverride = (params: Object) => {
-		const { navigation } = this.props;
-		const onPressOverride = navigation.getParam('onPressOverride');
-		const id = navigation.getParam('id', null);
+		const { route } = this.props;
+		const {
+			onPressOverride,
+			id = null,
+		} = route.params || {};
 		onPressOverride({
 			deviceId: id,
 			...params,
@@ -153,8 +161,10 @@ class RGBControlScreen extends View<Props, State> {
 	}
 
 	renderSlider(styles: Object): Object {
-		const { device, intl, isGatewayActive, appLayout, navigation } = this.props;
-		const onPressOverride = navigation.getParam('onPressOverride');
+		const { device, intl, isGatewayActive, appLayout, route } = this.props;
+		const {
+			onPressOverride,
+		} = route.params || {};
 
 		return (
 			<View style={styles.sliderCover}>
@@ -343,8 +353,10 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { screenProps, navigation } = ownProps;
-	const id = navigation.getParam('id', null);
+	const { screenProps, route } = ownProps;
+	const {
+		id = null,
+	} = route.params || {};
 	const device = store.devices.byId[id];
 
 	const { clientId } = device ? device : {};

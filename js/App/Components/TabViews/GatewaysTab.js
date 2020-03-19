@@ -32,7 +32,6 @@ import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
-import { getTabBarIcon } from '../../Lib';
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
@@ -63,17 +62,6 @@ class GatewaysTab extends View {
 
 	renderRow: (renderRowProps) => Object;
 	onRefresh: () => void;
-
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Gateways' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.gateways),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'gateways'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.gatewaysTab)}, ${postScript}`,
-		};
-	};
 
 	constructor(props: Props) {
 		super(props);

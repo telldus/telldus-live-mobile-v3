@@ -38,11 +38,6 @@ function navigation(state: State = initialState, action: Action): State {
 			screen: action.screen,
 		};
 	}
-	if (action.type === 'LOGGED_OUT') {
-		return {
-			...initialState,
-		};
-	}
 	return state;
 }
 

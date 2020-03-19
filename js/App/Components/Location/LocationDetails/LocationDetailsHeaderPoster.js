@@ -91,7 +91,10 @@ class LocationDetailsHeaderPoster extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { id } = ownProps.navigation.getParam('location', {});
+	const {
+		location = {},
+	} = ownProps.route.params || {};
+	const { id } = location;
 	const { name: gatewayName } = store.gateways.byId[id] ? store.gateways.byId[id] : {};
 	return {
 		gatewayName,

@@ -75,6 +75,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	useEffect(() => {
 		let name = 'area name';
 		onDidMount(`Edit ${name}`, 'Edit or delete geo fence');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const {
@@ -156,22 +157,14 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	}
 
 	function onEditArriving() {
-		navigation.navigate({
-			routeName: 'ArrivingActions',
-			key: 'ArrivingActions',
-			params: {
-				isEditMode: true,
-			},
+		navigation.navigate('ArrivingActions', {
+			isEditMode: true,
 		});
 	}
 
 	function onEditLeaving() {
-		navigation.navigate({
-			routeName: 'LeavingActions',
-			key: 'LeavingActions',
-			params: {
-				isEditMode: true,
-			},
+		navigation.navigate('LeavingActions', {
+			isEditMode: true,
 		});
 	}
 

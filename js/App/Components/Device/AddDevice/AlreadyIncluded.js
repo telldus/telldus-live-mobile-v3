@@ -43,7 +43,8 @@ import { capitalize } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -69,14 +70,11 @@ componentDidMount() {
 
 onPressNext() {
 	const { navigation } = this.props;
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-	});
+	navigation.navigate('Devices');
 }
 
 render(): Object {
-	const { intl, navigation, appLayout } = this.props;
+	const { intl, appLayout, route } = this.props;
 	const { formatMessage } = intl;
 
 	const {
@@ -90,15 +88,19 @@ render(): Object {
 	} = this.getStyles();
 
 	const {
+		info = {},
+		gateway = {},
+	} = route.params || {};
+	const {
 		deviceImage,
 		deviceModel,
 		name,
 		imageW,
 		imageH,
-	} = navigation.getParam('info', {});
+	} = info;
 	const {
 		name: gName,
-	} = navigation.getParam('gateway', {});
+	} = gateway;
 
 
 	return (

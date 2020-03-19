@@ -37,7 +37,7 @@ import DeviceInfo from 'react-native-device-info';
 import {
 	View, Text, TouchableButton, StyleSheet,
 	FormattedNumber, Icon, TitledInfoBlock,
-	TabBar, Throbber,
+	Throbber,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
@@ -67,6 +67,7 @@ type Props = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	deviceId: string,
+	route: Object,
 };
 
 type State = {
@@ -103,22 +104,6 @@ class Details extends View<Props, State> {
 	onConfirmRemoveLocation: () => void;
 
 	onPressTestLocalControl: () => void;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="home"
-				tintColor={tintColor}
-				label={i18n.overviewHeader}
-				accessibilityLabel={i18n.locationOverviewTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'LOverview',
-				key: 'LOverview',
-			});
-		},
-	});
 
 	handleBackPress: () => boolean;
 
@@ -188,12 +173,12 @@ class Details extends View<Props, State> {
 	}
 
 	componentDidMount() {
-		const { location, navigation, dispatch } = this.props;
+		const { location, navigation, dispatch, route } = this.props;
 		if (location && location.id) {
 			let { id } = location, extras = 'timezoneAutodetect';
 			dispatch(getGatewayInfo({id}, extras)).then((response: Object) => {
 				let { autodetectedTimezone } = response;
-				let { params } = navigation.state;
+				let { params } = route;
 				let newParams = { ...params, autodetectedTimezone };
 				navigation.setParams(newParams);
 			});
@@ -223,20 +208,17 @@ class Details extends View<Props, State> {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.navigate({
-			routeName: 'EditName',
-			key: 'EditName',
-			params: {
+		navigation.navigate('EditName',
+			{
 				id: location.id,
 				name: location.name,
-			},
-		});
+			});
 		this.infoPressCount = 0;
 	}
 
 	onEditTimeZone() {
-		let { navigation, location = {} } = this.props;
-		let { params } = navigation.state;
+		let { navigation, location = {}, route } = this.props;
+		let { params } = route;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
 		navigation.navigate('EditTimeZoneContinent', newParams);
 		this.infoPressCount = 0;
@@ -245,13 +227,10 @@ class Details extends View<Props, State> {
 	onEditGeoPosition() {
 		let { navigation, location = {} } = this.props;
 		let { latitude, longitude, id } = location;
-		navigation.navigate({
-			routeName: 'EditGeoPosition',
-			key: 'EditGeoPosition',
-			params: {
+		navigation.navigate('EditGeoPosition',
+			{
 				id, latitude, longitude,
-			},
-		});
+			});
 		this.infoPressCount = 0;
 	}
 
@@ -273,8 +252,10 @@ class Details extends View<Props, State> {
 	}
 
 	onConfirmRemoveLocation() {
-		const { dispatch, navigation, screenProps } = this.props;
-		const location = navigation.getParam('location', {id: null});
+		const { dispatch, navigation, screenProps, route } = this.props;
+		const {
+			location = {id: null},
+		} = route.params || {};
 		this.setState({
 			isLoading: true,
 		});
@@ -513,13 +494,10 @@ class Details extends View<Props, State> {
 			return;
 		}
 
-		navigation.navigate({
-			routeName: 'TestLocalControl',
-			key: 'TestLocalControl',
-			params: {
+		navigation.navigate('TestLocalControl',
+			{
 				location,
-			},
-		});
+			});
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -787,7 +765,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let { id } = ownProps.navigation.getParam('location', {id: null});
+	const {
+		location = {id: null},
+	} = ownProps.route.params || {};
+	const { id } = location;
 	const {
 		pushToken,
 		generatePushError,

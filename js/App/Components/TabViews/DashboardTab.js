@@ -51,7 +51,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon, LayoutAnimations } from '../../Lib';
+import { LayoutAnimations } from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
@@ -105,16 +105,7 @@ class DashboardTab extends View {
 	openRGBControl: (number) => void;
 	openThermostatControl: (number) => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Dashboard' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.dashboard),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'dashboard'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.dashboardTab)}, ${postScript}`,
-		};
-	};
+	timeoutSwitchTabAndroid: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -152,6 +143,8 @@ class DashboardTab extends View {
 
 		this.openRGBControl = this.openRGBControl.bind(this);
 		this.openThermostatControl = this.openThermostatControl.bind(this);
+
+		this.timeoutSwitchTabAndroid = null;
 	}
 
 	startSensorTimer() {
@@ -212,16 +205,28 @@ class DashboardTab extends View {
 	componentDidMount() {
 		const { isDBEmpty, navigation, screenProps } = this.props;
 		if (isDBEmpty && (screenProps.currentScreen === 'Dashboard' || screenProps.currentScreen === 'Tabs')) {
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
-			});
+			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
+			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
+			// back to Dashboard itself.
+			// No issues in iOS though.
+			if (Platform.OS === 'android') {
+				this.timeoutSwitchTabAndroid = setTimeout(() => {
+					navigation.navigate('Devices');
+					this.timeoutSwitchTabAndroid = null;
+				}, 400);
+			} else {
+				navigation.navigate('Devices');
+			}
 		}
 		this.startSensorTimer();
 	}
 
 	componentWillUnmount() {
 		this.stopSensorTimer();
+		if (this.timeoutSwitchTabAndroid) {
+			clearTimeout(this.timeoutSwitchTabAndroid);
+			this.timeoutSwitchTabAndroid = null;
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -306,13 +311,10 @@ class DashboardTab extends View {
 
 	openRGBControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'RGBControl',
-			key: 'RGBControl',
-			params: {
+		navigation.navigate('RGBControl',
+			{
 				id,
-			},
-		});
+			});
 	}
 
 	openDialogueBox(action: string, device: Object) {
@@ -324,13 +326,10 @@ class DashboardTab extends View {
 
 	openThermostatControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'ThermostatControl',
-			key: 'ThermostatControl',
-			params: {
+		navigation.navigate('ThermostatControl',
+			{
 				id,
-			},
-		});
+			});
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
@@ -508,12 +507,16 @@ class DashboardTab extends View {
 
 		const padding = this.getPadding();
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		return {
 			container: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),

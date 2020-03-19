@@ -83,6 +83,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 
 	useEffect(() => {
 		onDidMount('1. Area', 'Select area');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function onPressNext() {
@@ -92,10 +93,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		} = initialRegion;
 		dispatch(setFenceArea(lat, long, GeoFenceUtils.getRadiusFromRegion(initialRegion), userId));
 
-		navigation.navigate({
-			routeName: 'ArrivingActions',
-			key: 'ArrivingActions',
-		});
+		navigation.navigate('ArrivingActions');
 	}
 
 	const {

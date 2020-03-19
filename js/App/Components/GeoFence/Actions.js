@@ -156,13 +156,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		if (!isSelected) {
 			return;
 		}
-		navigation.navigate({
-			routeName: 'RGBControl',
-			key: 'RGBControl',
-			params: {
-				id,
-				onPressOverride: onDeviceValueChange,
-			},
+		navigation.navigate('RGBControl', {
+			id,
+			onPressOverride: onDeviceValueChange,
 		});
 	}
 
@@ -171,14 +167,10 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		if (!isSelected) {
 			return;
 		}
-		navigation.navigate({
-			routeName: 'ThermostatControl',
-			key: 'ThermostatControl',
-			params: {
-				id,
-				onPressOverride: onDeviceValueChange,
-				timeoutPlusMinus: 0,
-			},
+		navigation.navigate('ThermostatControl', {
+			id,
+			onPressOverride: onDeviceValueChange,
+			timeoutPlusMinus: 0,
 		});
 	}
 

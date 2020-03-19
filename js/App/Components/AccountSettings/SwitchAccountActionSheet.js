@@ -137,9 +137,9 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		if (showAddNewAccount) {
 			setShowAddNewAccount(false);
 			if (index === 0) {
-				navigate('LoginScreen', {}, 'LoginScreen');
+				navigate('LoginScreen');
 			} else if (index === 1) {
-				navigate('RegisterScreen', {}, 'RegisterScreen');
+				navigate('RegisterScreen');
 			}
 		} else {
 			const addNewIndex = Object.keys(accounts).length;

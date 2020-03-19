@@ -46,7 +46,7 @@ import { DimmerControlInfo } from './SubViews/Device';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
+import { LayoutAnimations, getItemLayout } from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast, getGateways } from '../../Actions';
@@ -64,6 +64,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	addNewLocation: Function,
 	gatewaysById: Object,
+	route: Object,
 };
 
 type State = {
@@ -95,7 +96,6 @@ class DevicesTab extends View {
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: (?Object) => void;
 
-	addNewDevice: () => void;
 	showDimInfo: (Object) => void;
 	handleAddDeviceAttentionCapture: () => void;
 
@@ -109,17 +109,6 @@ class DevicesTab extends View {
 	defaultDescriptionButton: string;
 
 	openRGBControl: (number) => void;
-
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Devices' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.devices),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'devices'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.devicesTab)}, ${postScript}`,
-		};
-	};
 
 	constructor(props: Props) {
 		super(props);
@@ -154,7 +143,6 @@ class DevicesTab extends View {
 		this.closeVisibleRows = this.closeVisibleRows.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
-		this.addNewDevice = this.addNewDevice.bind(this);
 
 		const { intl, appLayout } = props.screenProps;
 		let { formatMessage } = intl;
@@ -213,9 +201,11 @@ class DevicesTab extends View {
 		this.handleAddDeviceAttentionCapture();
 		this.normalizeNewlyAddedUITimeout();
 
-		const { navigation } = this.props;
-		const newDevices = navigation.getParam('newDevices', {});
-		const gateway = navigation.getParam('gateway', {});
+		const { route } = this.props;
+		const {
+			newDevices = {},
+			gateway = {},
+		} = route.params || {};
 		if (gateway && newDevices && !isEmpty(newDevices) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newDevices).map((id: string) => {
 				let gId = gateway.id.toString();
@@ -267,10 +257,12 @@ class DevicesTab extends View {
 		// Passing only the id(not whole device object) through navigation param, again the device properties
 		// are retrived inside 'DeviceDetails' by matching 'id' with device data from store
 		// It is important to use data from store directly(not through navigation param) to get updates(socket and other)
-		this.props.navigation.navigate({
-			routeName: 'DeviceDetails',
-			key: 'DeviceDetails',
-			params: { id: device.id },
+		this.props.navigation.navigate('DeviceDetails', {
+			screen: 'Overview',
+			params: {
+				id: device.id,
+			},
+			id: device.id,
 		});
 	}
 
@@ -367,10 +359,8 @@ class DevicesTab extends View {
 		this.props.addNewLocation()
 			.then((response: Object) => {
 				if (response.client) {
-					this.props.navigation.navigate({
-						routeName: 'AddLocation',
-						key: 'AddLocation',
-						params: { clients: response.client },
+					this.props.navigation.navigate('AddLocation', {
+						clients: response.client,
 					});
 					this.setState({
 						addGateway: false,
@@ -446,23 +436,15 @@ class DevicesTab extends View {
 
 	openRGBControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'RGBControl',
-			key: 'RGBControl',
-			params: {
-				id,
-			},
+		navigation.navigate('RGBControl', {
+			id,
 		});
 	}
 
 	openThermostatControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'ThermostatControl',
-			key: 'ThermostatControl',
-			params: {
-				id,
-			},
+		navigation.navigate('ThermostatControl', {
+			id,
 		});
 	}
 
@@ -612,7 +594,7 @@ class DevicesTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, navigation } = this.props;
+		const { screenProps, route } = this.props;
 		const { appLayout } = screenProps;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, screenReaderEnabled } = screenProps;
@@ -627,7 +609,9 @@ class DevicesTab extends View {
 			);
 		}
 
-		const newDevices = navigation.getParam('newDevices', {}) || {};
+		const {
+			newDevices = {},
+		} = route.params || {};
 
 		const sectionLength = section.data.length;
 		const isLast = index === sectionLength - 1;
@@ -662,8 +646,10 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUITimeout() {
-		const { navigation } = this.props;
-		const newDevices = navigation.getParam('newDevices', null);
+		const { route } = this.props;
+		const {
+			newDevices,
+		} = route.params || {};
 		if (newDevices && !this.timeoutNormalizeNewlyAdded ) {
 			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
 				this.normalizeNewlyAddedUI();
@@ -675,8 +661,10 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUI() {
-		const { navigation } = this.props;
-		const newDevices = navigation.getParam('newDevices', null);
+		const { route, navigation } = this.props;
+		const {
+			newDevices,
+		} = route.params || {};
 		if (newDevices) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
 				// Callback only available in iOS
@@ -689,9 +677,11 @@ class DevicesTab extends View {
 	}
 
 	onNewlyAddedDidMount = (id: number, clientId: string) => {
-		const { rowsAndSections, navigation } = this.props;
+		const { rowsAndSections, route } = this.props;
 		const { visibleList } = rowsAndSections;
-		const newDevices = navigation.getParam('newDevices', {});
+		const {
+			newDevices,
+		} = route.params || {};
 		let section = 0, row = 0;
 		let item = newDevices[id];
 
@@ -720,18 +710,6 @@ class DevicesTab extends View {
 					viewPosition: 0.4,
 				});
 			}
-		}
-	}
-
-	addNewDevice() {
-		const { navigation, gateways } = this.props;
-		const gatewaysLen = gateways.length;
-		if (gatewaysLen > 0) {
-			const singleGateway = gatewaysLen === 1;
-			navigation.navigate('AddDevice', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? gateways[0] : null,
-			});
 		}
 	}
 
@@ -812,6 +790,10 @@ class DevicesTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
 		hiddenListTextFontSize = hiddenListTextFontSize > 25 ? 25 : hiddenListTextFontSize;
 
@@ -831,7 +813,7 @@ class DevicesTab extends View {
 			container: {
 				flex: 1,
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			noItemsTitle: {

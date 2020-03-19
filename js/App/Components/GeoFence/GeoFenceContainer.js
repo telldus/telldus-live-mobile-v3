@@ -40,6 +40,7 @@ type Props = {
 	actions?: Object,
 	screenProps: Object,
 	ScreenName: string,
+	route: Object,
 };
 
 type State = {
@@ -174,9 +175,10 @@ export class GeoFenceContainer extends View<Props, State> {
 
 	isEditMode = (): boolean => {
 		const {
-			navigation,
+			route,
 		} = this.props;
-		return navigation.getParam('isEditMode', false);
+		const { isEditMode = false } = route.params || {};
+		return isEditMode;
 	}
 
 	render(): Object {
@@ -185,6 +187,7 @@ export class GeoFenceContainer extends View<Props, State> {
 			actions,
 			screenProps,
 			navigation,
+			route,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
@@ -235,6 +238,7 @@ export class GeoFenceContainer extends View<Props, State> {
 							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
 							showLeftIcon,
 							isEditMode: this.isEditMode,
+							route,
 						},
 					)}
 				</KeyboardAvoidingView>

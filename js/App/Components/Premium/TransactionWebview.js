@@ -38,26 +38,24 @@ import {
 } from '../../Actions/Login';
 
 const TransactionWebview = (props: Object): Object => {
-	const { navigation } = props;
+	const { navigation, route } = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 	} = getStyles(layout);
 
-	const uri = navigation.getParam('uri', '');
+	const {
+		uri = '',
+	} = route.params || {};
 
 	const dispatch = useDispatch();
 	function onShouldStartLoadWithRequest(request: Object): boolean {
 		if (request.url.includes('telldus-live-mobile-common')) {
-			const { params } = navigation.state;
-			navigation.navigate({
-				routeName: 'PostPurchaseScreen',
-				key: 'PostPurchaseScreen',
-				params: {
-					...params,
-					success: request.url.includes('status=success'),
-				},
+			const { params = {} } = route;
+			navigation.navigate('PostPurchaseScreen', {
+				...params,
+				success: request.url.includes('status=success'),
 			});
 			dispatch(getUserProfile());
 			return false;

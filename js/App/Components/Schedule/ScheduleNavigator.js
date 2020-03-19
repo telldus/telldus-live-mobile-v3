@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import ScheduleScreen from './ScheduleScreen';
 
@@ -37,46 +37,88 @@ import Edit from './Edit';
 import ActionThermostat from './ActionThermostat';
 import ActionRGB from './ActionRGB';
 
-const initialRouteName = 'InitialScreen';
+import {
+	prepareNavigator,
+} from '../../Lib/NavigationService';
 
-const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
-	<ScheduleScreen navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</ScheduleScreen>
-);
+const initialRouteName = 'Device';
 
-const RouteConfigs = {
-	InitialScreen: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(
-			navigation.getParam('editMode', false) ?
-				Edit
-				:
-				Device, 'InitialScreen'),
+const ScreenConfigs = [
+	{
+		name: 'Device',
+		Component: Device,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	Action: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Action, 'Action'),
+	{
+		name: 'Edit',
+		Component: Edit,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	ActionDim: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionDim, 'ActionDim'),
+	{
+		name: 'Action',
+		Component: Action,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	Time: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Time, 'Time'),
+	{
+		name: 'ActionDim',
+		Component: ActionDim,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	Days: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Days, 'Days'),
+	{
+		name: 'Time',
+		Component: Time,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	Summary: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(Summary, 'Summary'),
+	{
+		name: 'Days',
+		Component: Days,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	ActionRGB: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionRGB, 'ActionRGB'),
+	{
+		name: 'Summary',
+		Component: Summary,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-	ActionThermostat: {
-		screen: ({ navigation, screenProps }: Object): Object => renderScheduleScreen(navigation, screenProps)(ActionThermostat, 'ActionThermostat'),
+	{
+		name: 'ActionRGB',
+		Component: ActionRGB,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
 	},
-};
+	{
+		name: 'ActionThermostat',
+		Component: ActionThermostat,
+		ContainerComponent: ScheduleScreen,
+		options: {
+			headerShown: false,
+		},
+	},
+];
 
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName,
 	initialRouteKey: initialRouteName,
 	headerMode: 'none',
@@ -87,6 +129,10 @@ const StackNavigatorConfig = {
 	},
 };
 
-const ScheduleNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator();
+
+const ScheduleNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 export default ScheduleNavigator;

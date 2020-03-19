@@ -43,6 +43,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	addDevice: Object,
+	route: Object,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -97,8 +98,10 @@ constructor(props: Props) {
 		cantEnterLearnMode: false,
 	};
 
-	const { navigation } = this.props;
-	const gateway = navigation.getParam('gateway', {});
+	const { route } = this.props;
+	const {
+		gateway = {},
+	} = route.params || {};
 	this.gatewayId = gateway.id;
 
 	this.handleErrorEnterLearnMode = this.handleErrorEnterLearnMode.bind(this);
@@ -216,13 +219,9 @@ startShowThrobberTimeout() {
 }
 
 navigateToCantEnter() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'CantEnterInclusion',
-		key: 'CantEnterInclusion',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('CantEnterInclusion', {...params});
 
 	clearTimeout(this.sleepCheckTimeout);
 	clearTimeout(this.partialInclusionCheckTimeout);
@@ -536,13 +535,9 @@ runInclusionTimer(data?: number = 60) {
 			clearTimeout(this.partialInclusionCheckTimeout);
 			this.clearTimer();
 
-			const { navigation } = this.props;
-			const { params = {}} = navigation.state;
-			navigation.navigate({
-				routeName: 'NoDeviceFound',
-				key: 'NoDeviceFound',
-				params,
-			});
+			const { navigation, route } = this.props;
+			const { params = {}} = route;
+			navigation.navigate('NoDeviceFound', {...params});
 		});
 	}
 }
@@ -609,9 +604,11 @@ getDeviceManufactInfo(routeName: string | null, routeParams?: Object = {}) {
 }
 
 prepareStatusMessage(): Object {
-	const { navigation, intl } = this.props;
+	const { route, intl } = this.props;
 	const { formatMessage } = intl;
-	const secure = navigation.getParam('secure', false);
+	const {
+		secure = false,
+	} = route.params || {};
 
 	if (!secure) {
 		return {};
@@ -636,27 +633,23 @@ prepareStatusMessage(): Object {
 }
 
 navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
-	const { navigation } = this.props;
+	const { navigation, route } = this.props;
 	const { interviewPartialStatusMessage } = this.state;
-	const { params = {}} = navigation.state;
+	const { params = {}} = route;
 	const { statusMessage = null, statusIcon = null } = this.prepareStatusMessage();
 
 	clearTimeout(this.sleepCheckTimeout);
 	clearTimeout(this.partialInclusionCheckTimeout);
 	this.clearTimer();
 
-	navigation.navigate({
-		routeName,
-		key: routeName,
-		params: {
-			...params,
-			devices: this.devices,
-			mainNodeDeviceId: this.mainNodeDeviceId,
-			info: {...deviceManufactInfo},
-			statusMessage,
-			statusIcon,
-			interviewPartialStatusMessage,
-		},
+	navigation.navigate(routeName, {
+		...params,
+		devices: this.devices,
+		mainNodeDeviceId: this.mainNodeDeviceId,
+		info: {...deviceManufactInfo},
+		statusMessage,
+		statusIcon,
+		interviewPartialStatusMessage,
 	});
 }
 
@@ -781,9 +774,11 @@ stopAddDevice() {
 }
 
 startAddDevice() {
-	const { navigation } = this.props;
-	const module = navigation.getParam('module', '');
-	const action = navigation.getParam('action', '');
+	const { route } = this.props;
+	const {
+		module = '',
+		action = '',
+	} = route.params || {};
 
 	const message = JSON.stringify({
 		module: 'client',

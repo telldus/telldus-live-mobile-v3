@@ -27,7 +27,6 @@ import React from 'react';
 import { Linking } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
-import { NavigationActions } from 'react-navigation';
 
 import Theme from '../../../Theme';
 import {
@@ -49,6 +48,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 };
 
 type State = {
@@ -99,15 +99,9 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		const navigateAction = NavigationActions.navigate({
-			routeName: 'Tabs',
-			key: 'Tabs',
-			action: NavigationActions.navigate({
-				routeName: 'Gateways',
-				key: 'Gateways',
-			}),
-		  });
-		this.props.navigation.dispatch(navigateAction);
+		this.props.navigation.navigate('Tabs', {
+			screen: 'Gateways',
+		});
 	}
 
 	onPressHelp() {
@@ -124,10 +118,10 @@ class Success extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		const { appLayout, navigation } = this.props;
+		const { appLayout, route } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		const clientInfo = navigation.getParam('clientInfo', {});
+		const { clientInfo } = route.params || {};
 		const locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (

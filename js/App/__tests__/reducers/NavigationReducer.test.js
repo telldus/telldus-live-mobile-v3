@@ -19,14 +19,6 @@ describe('Test Navigation reducers', ()=>{
 			type: 'CHANGE_SCREEN',
 			screen: 'Sensors',
 		};
-		expect(reducer( {}, action )).toEqual(State);
+		expect(reducer({}, action )).toEqual(State);
 	});
-
-	it('check navigation reducers after logout', () => {
-		const action = {
-			type: 'LOGGED_OUT',
-		};
-		expect(reducer({}, action)).toEqual(initialState);
-	});
-
 });

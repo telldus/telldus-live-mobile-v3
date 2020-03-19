@@ -78,10 +78,7 @@ class RegisterScreen extends View<Props, State> {
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { screenProps, registeredCredential, navigation } = this.props;
 		if (registeredCredential && screenProps.currentScreen !== 'Welcome') {
-			navigation.navigate({
-				routeName: 'Welcome',
-				key: 'Welcome',
-			});
+			navigation.navigate('Welcome');
 		}
 	}
 
@@ -100,10 +97,7 @@ class RegisterScreen extends View<Props, State> {
 
 	goBackToLogin() {
 		this.closeModal();
-		this.props.navigation.navigate({
-			routeName: 'Login',
-			key: 'Login',
-		});
+		this.props.navigation.navigate('Login');
 	}
 
 	openDialogueBox = (body: string, header?: Object) => {
@@ -127,7 +121,7 @@ class RegisterScreen extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
+		if (nextProps.route.name !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;

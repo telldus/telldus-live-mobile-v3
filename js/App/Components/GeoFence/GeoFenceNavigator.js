@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import GeoFenceContainer from './GeoFenceContainer';
 
@@ -37,40 +37,70 @@ import EditGeoFence from './EditGeoFence';
 
 const initialRouteName = 'AddEditGeoFence';
 
-type renderContainer = (Object, string) => Object;
+import {
+	prepareNavigator,
+} from '../../Lib/NavigationService';
 
-const renderGeoFenceContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
-	<GeoFenceContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</GeoFenceContainer>
-);
+const ScreenConfigs = [
+	{
+		name: 'AddEditGeoFence',
+		Component: AddEditGeoFence,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectArea',
+		Component: SelectArea,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'ArrivingActions',
+		Component: ArrivingActions,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'LeavingActions',
+		Component: LeavingActions,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'ActiveTime',
+		Component: ActiveTime,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SetAreaName',
+		Component: SetAreaName,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditGeoFence',
+		Component: EditGeoFence,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+];
 
-
-const RouteConfigs = {
-	AddEditGeoFence: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(AddEditGeoFence, 'AddEditGeoFence'),
-	},
-	SelectArea: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(SelectArea, 'SelectArea'),
-	},
-	ArrivingActions: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(ArrivingActions, 'ArrivingActions'),
-	},
-	LeavingActions: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(LeavingActions, 'LeavingActions'),
-	},
-	ActiveTime: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(ActiveTime, 'ActiveTime'),
-	},
-	SetAreaName: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(SetAreaName, 'SetAreaName'),
-	},
-	EditGeoFence: {
-		screen: ({ navigation, screenProps }: Object): Object => renderGeoFenceContainer(navigation, screenProps)(EditGeoFence, 'EditGeoFence'),
-	},
-};
-
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName,
 	initialRouteKey: initialRouteName,
 	headerMode: 'none',
@@ -81,6 +111,10 @@ const StackNavigatorConfig = {
 	},
 };
 
-const GeoFenceNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator();
+
+const GeoFenceNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 export default GeoFenceNavigator;

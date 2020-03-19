@@ -43,7 +43,8 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -69,8 +70,10 @@ inputRefs: Object;
 constructor(props: Props) {
 	super(props);
 
-	const devices = props.navigation.getParam('devices', []);
-	const mainNodeDeviceId = props.navigation.getParam('mainNodeDeviceId', null);
+	const {
+		devices = [],
+		mainNodeDeviceId = null,
+	} = props.route.params || {};
 	let rowData = {};
 	devices.map(({id, clientDeviceId}: Object, index: number) => {
 		rowData[id] = {
@@ -145,7 +148,7 @@ submitName() {
 }
 
 postSubmitName = async () => {
-	const { navigation, actions } = this.props;
+	const { navigation, actions, route } = this.props;
 	const { rowData } = this.state;
 
 	await actions.getDevices();
@@ -154,14 +157,12 @@ postSubmitName = async () => {
 		isLoading: false,
 	}, () => {
 		InteractionManager.runAfterInteractions(() => {
-			const gateway = navigation.getParam('gateway', {});
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
-				params: {
-					gateway,
-					newDevices: rowData,
-				},
+			const {
+				gateway = {},
+			} = route.params || {};
+			navigation.navigate('Devices', {
+				gateway,
+				newDevices: rowData,
 			});
 		});
 	});
@@ -183,15 +184,18 @@ onChangeName(name: string, id: number) {
 }
 
 getDeviceInfo(styles: Object): Object {
-	const { navigation, intl, appLayout } = this.props;
+	const { intl, appLayout, route } = this.props;
 	const { formatMessage } = intl;
+	const {
+		info = {},
+	} = route.params || {};
 	const {
 		deviceImage,
 		deviceModel,
 		deviceBrand,
 		imageW,
 		imageH,
-	} = navigation.getParam('info', {});
+	} = info;
 
 	return (
 		<DeviceInfoBlock
@@ -228,7 +232,7 @@ getNameRow({key, deviceName, id, label, header, placeholder, containerStyle, aut
 
 render(): Object {
 	const { rowData, isLoading } = this.state;
-	const { intl, navigation } = this.props;
+	const { intl, route } = this.props;
 
 	const {
 		container,
@@ -271,9 +275,11 @@ render(): Object {
 		}
 	}
 
-	const statusMessage = navigation.getParam('statusMessage', null);
-	const statusIcon = navigation.getParam('statusIcon', null);
-	const hintMessage = navigation.getParam('interviewPartialStatusMessage', null);
+	const {
+		statusMessage = null,
+		statusIcon = null,
+		interviewPartialStatusMessage: hintMessage = null,
+	} = route.params || {};
 
 	return (
 		<View style={{ flex: 1 }}>

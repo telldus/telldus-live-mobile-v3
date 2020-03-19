@@ -22,38 +22,102 @@
 
 'use strict';
 
+import React from 'react';
+
 import { ifIphoneX } from 'react-native-iphone-x-helper';
 import DeviceInfo from 'react-native-device-info';
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import TabViews from './index';
 
+import { getTabBarIcon } from '../../Lib';
 
-const RouteConfigs = {
-	Dashboard: {
-		screen: TabViews.Dashboard,
-	},
-	Devices: {
-		screen: TabViews.Devices,
-	},
-	Sensors: {
-		screen: TabViews.Sensors,
-	},
-	Scheduler: {
-		screen: TabViews.Scheduler,
-	},
-	Gateways: {
-		screen: TabViews.Gateways,
-	},
-};
+import {
+	prepareNavigator,
+} from '../../Lib/NavigationService';
 
-const TabNavigatorConfig = {
+import i18n from '../../Translations/common';
+
+const ScreenConfigs = [
+	{
+		name: 'Dashboard',
+		Component: TabViews.Dashboard,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Dashboard' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.dashboard),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'dashboard'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.dashboardTab)}, ${postScript}`,
+			};
+		},
+	},
+	{
+		name: 'Devices',
+		Component: TabViews.Devices,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Devices' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.devices),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'devices'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.devicesTab)}, ${postScript}`,
+			};
+		},
+	},
+	{
+		name: 'Sensors',
+		Component: TabViews.Sensors,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Sensors' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.sensors),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'sensors'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.sensorsTab)}, ${postScript}`,
+			};
+
+		},
+	},
+	{
+		name: 'Scheduler',
+		Component: TabViews.Scheduler,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Scheduler' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.scheduler),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'scheduler'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.schedulerTab)}, ${postScript}`,
+			};
+		},
+	},
+	{
+		name: 'Gateways',
+		Component: TabViews.Gateways,
+		optionsWithScreenProps: ({screenProps}: Object): Object => {
+			const { intl, currentScreen } = screenProps;
+			const { formatMessage } = intl;
+			const postScript = currentScreen === 'Gateways' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+			return {
+				title: formatMessage(i18n.gateways),
+				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'gateways'),
+				tabBarAccessibilityLabel: `${formatMessage(i18n.gatewaysTab)}, ${postScript}`,
+			};
+		},
+	},
+];
+
+const NavigatorConfigs = {
 	initialRouteName: 'Dashboard',
-	initialRouteKey: 'Dashboard',
-	swipeEnabled: false,
+	initialRouteKey: 'Dashboard', // Check if exist in v5
+	swipeEnabled: false, // Check if exist in v5
 	lazy: true,
-	animationEnabled: false,
+	animationEnabled: false, // Check if exist in v5
 	tabBarOptions: {
 		activeTintColor: '#e26901',
 		style: {
@@ -66,6 +130,10 @@ const TabNavigatorConfig = {
 	},
 };
 
-const TabsView = createBottomTabNavigator(RouteConfigs, TabNavigatorConfig);
+const Tab = createBottomTabNavigator();
+
+const TabsView = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 module.exports = TabsView;

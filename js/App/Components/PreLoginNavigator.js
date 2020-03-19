@@ -24,77 +24,69 @@ import React from 'react';
 import {
 	Platform,
 } from 'react-native';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import Orientation from 'react-native-orientation-locker';
+import { NavigationContainer } from '@react-navigation/native';
+import {
+	useSelector,
+} from 'react-redux';
+import { connect } from 'react-redux';
 
 import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
 import { FormContainerComponent } from './PreLoginScreens/SubViews';
 
-type renderContainer = (Object) => Object;
+import {
+	screenChange,
+} from '../Actions/Navigation';
+import {
+	useDialogueBox,
+} from '../Hooks/Dialoguebox';
+import getRouteName from '../Lib/getRouteName';
 
-const renderFormContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object): Object => (
-	<FormContainerComponent navigation={navigation} screenProps={screenProps}>
-		<Component/>
-	</FormContainerComponent>
-);
-
-const RouteConfigs = {
-	Login: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(LoginScreen),
-		navigationOptions: {
-			header: null,
-		},
-	},
-	ForgotPassword: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(ForgotPasswordScreen),
-		navigationOptions: {
-			header: null,
-		},
-	},
-	Register: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(RegisterScreen),
-		navigationOptions: {
-			header: null,
-		},
-	},
-	Welcome: {
-		screen: ({ navigation, screenProps }: Object): Object => renderFormContainer(navigation, screenProps)(WelcomeScreen),
-		navigationOptions: {
-			header: null,
-		},
-	},
+let screenProps = {
+	source: 'prelogin',
 };
+
+const ScreenConfigs = [
+	{
+		name: 'Login',
+		component: <LoginScreen/>,
+	},
+	{
+		name: 'ForgotPassword',
+		component: <ForgotPasswordScreen/>,
+	},
+	{
+		name: 'Register',
+		component: <RegisterScreen/>,
+	},
+	{
+		name: 'Welcome',
+		component: <WelcomeScreen/>,
+	},
+];
 
 const StackNavigatorConfig = {
 	initialRouteName: 'Login',
+	headerMode: 'none',
 };
 
-const Navigator = createAppContainer(createStackNavigator(RouteConfigs, StackNavigatorConfig));
+const Stack = createStackNavigator();
 
 type Props = {
-	toggleDialogueBox: (Object) => null,
-};
-
-type State = {
-	currentScreen: string,
+	onNavigationStateChange: (string) => void,
 };
 
 class PreLoginNavigator extends View {
 
-	getCurrentRouteName: (navigationState: Object) => void;
-	onNavigationStateChange: (prevState: Object, currentState: Object) => void;
+	onNavigationStateChange: (currentState: Object) => void;
 
 	props: Props;
-	state: State;
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			currentScreen: 'Login',
-		};
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
 	}
+
 	componentDidMount() {
 		if (Platform.OS !== 'android') {
 			Orientation.lockToPortrait();
@@ -107,38 +99,74 @@ class PreLoginNavigator extends View {
 		}
 	}
 
-	// gets the current screen from navigation state
-	getCurrentRouteName(navigationState: Object): any {
-		if (!navigationState) {
-			return null;
-		}
-		const route = navigationState.routes[navigationState.index];
-		// dive into nested navigators
-		if (route.routes) {
-			this.getCurrentRouteName(route);
-		}
-		return route.routeName;
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = this.getCurrentRouteName(currentState);
-		this.setState({
-			currentScreen,
-		});
+	onNavigationStateChange = (currentState: Object) => {
+		const currentScreen = getRouteName(currentState);
+		this.props.onNavigationStateChange(currentScreen);
 	}
 
 	render(): React$Element<any> {
-		let screenProps = {
-			currentScreen: this.state.currentScreen,
-			toggleDialogueBox: this.props.toggleDialogueBox,
-		};
+
+		const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
+
+			const {
+				name,
+				component,
+				options,
+			} = screenConf;
+
+			return (
+				<Stack.Screen
+					key={`${index}${name}`}
+					name={name}
+					// eslint-disable-next-line react/jsx-no-bind
+					component={(...args: any): Object => {
+						const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
+						const {
+							toggleDialogueBoxState,
+						} = useDialogueBox();
+
+						let props = {};
+						args.forEach((arg: Object = {}) => {
+							props = {
+								...props,
+								...arg,
+							};
+						});
+
+						return (
+							<FormContainerComponent
+								{...props}
+								screenProps={{
+									...screenProps,
+									currentScreen,
+									toggleDialogueBox: toggleDialogueBoxState,
+								}}>
+								{component}
+							</FormContainerComponent>
+						);
+					}}
+					options={options}/>
+			);
+		});
+
 		return (
-			<Navigator
-				onNavigationStateChange={this.onNavigationStateChange}
-				screenProps={screenProps}
-			/>
+			<NavigationContainer
+				onStateChange={this.onNavigationStateChange}>
+				<Stack.Navigator
+					{...StackNavigatorConfig}>
+					{SCREENS}
+				</Stack.Navigator>
+			</NavigationContainer>
 		);
 	}
 }
 
-module.exports = PreLoginNavigator;
+function mapDispatchToProps(dispatch: Function): Object {
+	return {
+		onNavigationStateChange: (screen: string) => {
+			dispatch(screenChange(screen));
+		},
+	};
+}
+
+module.exports = connect(null, mapDispatchToProps)(PreLoginNavigator);

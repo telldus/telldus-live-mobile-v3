@@ -40,7 +40,7 @@ import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actio
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
+import { LayoutAnimations, getItemLayout } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
@@ -52,6 +52,7 @@ type Props = {
 	sensors: Array<any>,
 	sensorsDidFetch: boolean,
 	gatewaysById: Object,
+	route: Object,
 };
 
 type State = {
@@ -83,17 +84,6 @@ class SensorsTab extends View {
 
 	noSensorsTitle: string;
 	noSensorsContent: string;
-
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Sensors' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.sensors),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'sensors'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.sensorsTab)}, ${postScript}`,
-		};
-	};
 
 	constructor(props: Props) {
 		super(props);
@@ -156,9 +146,11 @@ class SensorsTab extends View {
 	componentDidUpdate() {
 		this.normalizeNewlyAddedUITimeout();
 
-		const { navigation } = this.props;
-		const newSensors = navigation.getParam('newSensors', {});
-		const gateway = navigation.getParam('gateway', {});
+		const { route } = this.props;
+		const {
+			newSensors = {},
+			gateway = {},
+		} = route.params || {};
 		if (gateway && newSensors && !isEmpty(newSensors) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newSensors).map((id: string) => {
 				let gId = gateway.id.toString();
@@ -275,10 +267,8 @@ class SensorsTab extends View {
 	}
 
 	openSensorDetail(sensor: Object) {
-		this.props.navigation.navigate({
-			routeName: 'SensorDetails',
-			key: 'SensorDetails',
-			params: { id: sensor.id },
+		this.props.navigation.navigate('SensorDetails', {
+			id: sensor.id,
 		});
 	}
 
@@ -425,7 +415,7 @@ class SensorsTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, navigation } = this.props;
+		const { screenProps, route } = this.props;
 		const { propsSwipeRow } = this.state;
 		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
 		const { item, section, index } = row;
@@ -442,7 +432,9 @@ class SensorsTab extends View {
 		const sectionLength = section.data.length;
 		const isLast = index === sectionLength - 1;
 
-		const newSensors = navigation.getParam('newSensors', {}) || {};
+		const {
+			newSensors = {},
+		} = route.params || {};
 
 		return (
 			<SensorRow
@@ -463,9 +455,11 @@ class SensorsTab extends View {
 	}
 
 	onNewlyAddedDidMount = (id: number, clientId: string) => {
-		const { rowsAndSections, navigation } = this.props;
+		const { rowsAndSections, route } = this.props;
 		const { visibleList } = rowsAndSections;
-		const newSensors = navigation.getParam('newSensors', {});
+		const {
+			newSensors = {},
+		} = route.params || {};
 		let section = 0, row = 0;
 		let item = newSensors[id];
 		if (item && item.mainNode) {
@@ -497,8 +491,10 @@ class SensorsTab extends View {
 	}
 
 	normalizeNewlyAddedUITimeout = () => {
-		const { navigation } = this.props;
-		const newSensors = navigation.getParam('newSensors', null);
+		const { route } = this.props;
+		const {
+			newSensors,
+		} = route.params || {};
 		if (newSensors && !this.timeoutNormalizeNewlyAdded ) {
 			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
 				this.normalizeNewlyAddedUI();
@@ -510,8 +506,10 @@ class SensorsTab extends View {
 	}
 
 	normalizeNewlyAddedUI = () => {
-		const { navigation } = this.props;
-		const newSensors = navigation.getParam('newSensors', null);
+		const { navigation, route } = this.props;
+		const {
+			newSensors,
+		} = route.params || {};
 		if (newSensors) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
 				// Callback only available in iOS
@@ -537,6 +535,10 @@ class SensorsTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
 		hiddenListTextFontSize = hiddenListTextFontSize > 25 ? 25 : hiddenListTextFontSize;
 
@@ -546,7 +548,7 @@ class SensorsTab extends View {
 		return {
 			container: {
 				flex: 1,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			toggleHiddenListButton: {

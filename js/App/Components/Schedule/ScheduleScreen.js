@@ -46,6 +46,7 @@ type Props = {
 	devices: Object,
 	screenProps: Object,
 	ScreenName: string,
+	route: Object,
 
 	navigation: Object,
 	children: Object,
@@ -66,6 +67,7 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
+	route: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -163,9 +165,11 @@ class ScheduleScreen extends View<null, Props, State> {
 			schedule,
 			screenProps,
 			gateways,
+			route,
 		} = this.props;
 		const {
 			appLayout,
+			currentScreen,
 		} = screenProps;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style } = this._getStyle(appLayout);
@@ -188,7 +192,8 @@ class ScheduleScreen extends View<null, Props, State> {
 						align={'right'}
 						navigation={navigation}
 						{...screenProps}
-						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}/>
+						leftIcon={(currentScreen === 'Device' || currentScreen === 'Edit')
+							? 'close' : undefined}/>
 					<KeyboardAvoidingView
 						behavior="padding"
 						style={{flex: 1}}
@@ -208,6 +213,7 @@ class ScheduleScreen extends View<null, Props, State> {
 									isEditMode: this._isEditMode,
 									...screenProps,
 									gateways,
+									route,
 								},
 							)}
 						</View>
@@ -218,8 +224,8 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	_isEditMode = (): boolean => {
-		const { navigation } = this.props;
-		const editMode = navigation.getParam('editMode', false);
+		const { route } = this.props;
+		const { editMode = false } = route.params || {};
 		return editMode;
 	};
 
@@ -232,7 +238,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { screenProps } = this.props;
 		const { currentScreen } = screenProps;
 
-		const screenDontPad = ['InitialScreen', 'ActionThermostat', 'ActionThermostatTwo'];
+		const screenDontPad = ['Device', 'Edit', 'ActionThermostat', 'ActionThermostatTwo'];
 		const doPad = screenDontPad.indexOf(currentScreen) === -1;
 		return {
 			style: {

@@ -44,7 +44,6 @@ class MainTabBarAndroid extends Component<Props, null> {
 
 	constructor(props: Props) {
 		super(props);
-
 		this.renderTabs = this.renderTabs.bind(this);
 		this.scrollToTab = this.scrollToTab.bind(this);
 	}

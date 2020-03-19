@@ -49,6 +49,7 @@ type Props = {
 	dialogueOpen: boolean,
 	onSubmit: (string) => void,
 	isLoading: boolean,
+	route: Object,
 };
 
 class Name extends View {
@@ -62,7 +63,9 @@ class Name extends View {
 
 	constructor(props: Props) {
 		super(props);
-		const locationName = props.navigation.getParam('name', '');
+		const {
+			name: locationName = '',
+		} = props.route.params || {};
 		this.state = {
 			locationName,
 			isKeyboardShown: false,

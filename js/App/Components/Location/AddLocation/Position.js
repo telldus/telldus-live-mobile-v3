@@ -41,6 +41,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -158,16 +159,12 @@ class Position extends View {
 		this.setState({
 			isLoading: true,
 		});
-		const { navigation, actions } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
+		const { navigation, actions, route } = this.props;
+		let { clientInfo } = route.params || {};
 		clientInfo.coordinates = { latitude, longitude };
 		actions.activateGateway(clientInfo)
 			.then((response: Object) => {
-				navigation.navigate({
-					routeName: 'Success',
-					key: 'Success',
-					params: {clientInfo},
-				});
+				navigation.navigate('Success', {clientInfo});
 				this.setState({
 					isLoading: false,
 				});

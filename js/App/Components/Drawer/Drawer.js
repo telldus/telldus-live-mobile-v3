@@ -144,7 +144,7 @@ constructor(props: Props) {
 		} = this.props;
 
 		closeDrawer();
-		navigate('GeoFenceNavigator', {}, 'GeoFenceNavigator');
+		navigate('GeoFenceNavigator');
 	}
 
 	showPurchacePremiumDialogue = () => {
@@ -167,7 +167,7 @@ constructor(props: Props) {
 			showNegative: true,
 			positiveText: formatMessage(i18n.upgrade).toUpperCase(),
 			onPressPositive: () => {
-				navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+				navigate('PremiumUpgradeScreen');
 			},
 			closeOnPressPositive: true,
 			timeoutToCallPositive: 200,

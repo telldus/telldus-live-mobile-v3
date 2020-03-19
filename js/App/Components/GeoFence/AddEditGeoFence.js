@@ -72,10 +72,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	function onPressNext() {
 		dispatch(resetFence());
-		navigation.navigate({
-			routeName: 'SelectArea',
-			key: 'SelectArea',
-		});
+		navigation.navigate('SelectArea');
 	}
 
 	const [ activeFenceIndex, setActiveFenceIndex ] = useState(0);
@@ -102,10 +99,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	function onEditFence(index: number) {
 		dispatch(setEditFence(index, userId));
 		setActiveFenceIndex(0);
-		navigation.navigate({
-			routeName: 'EditGeoFence',
-			key: 'EditGeoFence',
-		});
+		navigation.navigate('EditGeoFence');
 	}
 
 	function renderMarker(fence: Object, index: number): Object {

@@ -33,7 +33,6 @@ import {
 	View,
 	Text,
 	TouchableButton,
-	TabBar,
 	IconTelldus,
 } from '../../../BaseComponents';
 import {
@@ -121,10 +120,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	}, []);
 
 	function onPress() {
-		navigation.navigate({
-			routeName: 'RequestSupportScreen',
-			key: 'RequestSupportScreen',
-		});
+		navigation.navigate('RequestSupportScreen');
 	}
 
 	function openLink(url: string) {
@@ -248,21 +244,5 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-
-SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="faq"
-			tintColor={tintColor}
-			label={i18n.userHelp}
-			accessibilityLabel={i18n.labelAccessibleSupportTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'SupportTab',
-			key: 'SupportTab',
-		});
-	},
-});
 
 export default SupportTab;

@@ -58,19 +58,16 @@ const onDidMount = jest.fn();
 const deviceName = 'Device name';
 const navigation = {
 	...NAVIGATION_PROP,
-	getParam: (paramName, defaultValue) => {
-		return navigation.state.params[paramName] || defaultValue;
-	},
-	state: {
-		params: {
-			gateway: {
-				id: DUMMY_DEVICE_433.client,
-			},
-			deviceInfo: {
-				...DEVICE_MANU_INFO_433,
-			},
-			deviceName,
+};
+const route = {
+	params: {
+		gateway: {
+			id: DUMMY_DEVICE_433.client,
 		},
+		deviceInfo: {
+			...DEVICE_MANU_INFO_433,
+		},
+		deviceName,
 	},
 };
 const currentScreen = 'Include433';
@@ -114,6 +111,7 @@ describe('<Include433 />', () => {
 			component = rendererWithIntlAndRedux(
 				<Include433
 					navigation={navigation}
+					route={route}
 					intl={intl}
 					appLayout={appLayout}
 					onDidMount={onDidMount}
@@ -204,6 +202,7 @@ describe('<Include433 /> with container component', () => {
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
+					route={route}
 					children={
 						<Include433/>
 					}
@@ -285,6 +284,7 @@ describe('<Include433 /> on success with container component', () => {
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
+					route={route}
 					children={
 						<Include433/>
 					}
@@ -370,6 +370,7 @@ describe('<Include433 /> on error with container component', () => {
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
+					route={route}
 					children={
 						<Include433/>
 					}

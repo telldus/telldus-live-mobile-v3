@@ -100,7 +100,7 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.currentScreen === 'InitialScreen';
+		return nextProps.currentScreen === 'Device';
 	}
 
 	onRefresh = () => {
@@ -121,7 +121,7 @@ export default class Device extends View<void, Props, State> {
 	selectDevice = (row: Object) => {
 		const { actions, navigation } = this.props;
 		navigation.navigate({
-			routeName: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
+			name: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
 			key: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
 		});
 		actions.selectDevice(row.id);

@@ -29,7 +29,7 @@ import { utils } from 'live-shared-data';
 
 const { images: {DEVICES} } = utils;
 
-import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
+import { View, LocationDetails } from '../../../../BaseComponents';
 
 import {
 	getDeviceManufacturerInfo,
@@ -74,22 +74,6 @@ type Props = {
 
 class OverviewTab extends View<Props, null> {
 	props: Props;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="home"
-				tintColor={tintColor}
-				label={i18n.overviewHeader}
-				accessibilityLabel={i18n.deviceOverviewTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'Overview',
-				key: 'Overview',
-			});
-		},
-	});
 
 	constructor(props: Props) {
 		super(props);
@@ -285,7 +269,9 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	console.log('TEST OT ownProps', ownProps);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const device = state.devices.byId[id];
 	const { clientId, clientDeviceId } = device ? device : {};
 

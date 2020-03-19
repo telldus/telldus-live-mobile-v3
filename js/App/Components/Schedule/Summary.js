@@ -23,7 +23,6 @@
 
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import { intlShape, injectIntl } from 'react-intl';
 
 import {
@@ -126,13 +125,7 @@ class Summary extends View<null, Props, State> {
 
 	resetNavigation = () => {
 		const { navigation } = this.props;
-		// There are issue while RESETTING the route and navigating/popping back(cannot set params and so) https://github.com/react-navigation/react-navigation/issues/2404
-		// Also we do not have to push the screen on top of the stack once again, so 'navigate' seem to be the best option.
-		const action = NavigationActions.navigate({
-			routeName: 'Scheduler',
-			key: 'Scheduler',
-		});
-		navigation.dispatch(action);
+		navigation.navigate('Scheduler');
 	}
 
 	onToggleAdvanced(state: boolean) {

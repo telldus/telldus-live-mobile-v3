@@ -117,7 +117,7 @@ class LoginScreen extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
+		if (nextProps.route.name !== nextProps.screenProps.currentScreen) {
 			return false;
 		}
 		return true;
@@ -279,18 +279,12 @@ class LoginScreen extends View {
 
 	onNeedAccount() {
 		this.closeModal();
-		this.props.navigation.navigate({
-			routeName: 'Register',
-			key: 'Register',
-		});
+		this.props.navigation.navigate('Register');
 	}
 
 	onForgotPassword() {
 		this.closeModal();
-		this.props.navigation.navigate({
-			routeName: 'ForgotPassword',
-			key: 'ForgotPassword',
-		});
+		this.props.navigation.navigate('ForgotPassword');
 	}
 }
 

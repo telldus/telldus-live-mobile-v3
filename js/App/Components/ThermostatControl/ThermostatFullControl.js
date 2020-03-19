@@ -47,6 +47,7 @@ type Props = {
 	lastUpdated: number,
 	currentTemp: string,
 	gatewayTimezone: string,
+	route: Object,
 
 	navigation: Object,
 	intl: Object,
@@ -74,10 +75,10 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 _deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale: 0 | 1 = 0, changeMode: 1 | 0, requestedState: number) => {
 	const {
 		deviceSetStateThermostat: dSetState,
-		navigation,
+		route,
 	} = this.props;
 
-	const onPressOverride = navigation.getParam('onPressOverride');
+	const { onPressOverride } = route.params || {};
 	if (onPressOverride) {
 		onPressOverride({
 			deviceId,
@@ -109,6 +110,7 @@ render(): Object | null {
 		intl,
 		currentTemp,
 		gatewayTimezone,
+		route,
 	} = this.props;
 
 	if (!device || !device.id) {
@@ -137,7 +139,7 @@ render(): Object | null {
 
 	const supportedModes = getSupportedModes(parameter, setpoint, intl);
 
-	const timeoutPlusMinus = navigation.getParam('timeoutPlusMinus', undefined);
+	const { timeoutPlusMinus } = route.params || {};
 
 	return (
 		<View style={{
@@ -197,8 +199,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { screenProps, navigation } = ownProps;
-	const id = navigation.getParam('id', null);
+	const { screenProps, route } = ownProps;
+	const { id = null } = route.params || {};
 
 	const device = store.devices.byId[id];
 	const { clientDeviceId, clientId } = device ? device : {};

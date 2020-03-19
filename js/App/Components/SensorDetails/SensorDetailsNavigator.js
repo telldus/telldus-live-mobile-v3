@@ -23,84 +23,134 @@
 'use strict';
 
 import React from 'react';
-import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
 
 import History from './HistoryTab';
 import Overview from './OverviewTab';
 import Settings from './SettingsTab';
 import Theme from '../../Theme';
-import { View } from '../../../BaseComponents';
+import {
+	View,
+	TabBar,
+} from '../../../BaseComponents';
 import { SensorDetailsHeaderPoster } from './SubViews';
 
-const SensorDetailsNavigator = createMaterialTopTabNavigator(
+import {
+	prepareNavigator,
+} from '../../Lib/NavigationService';
+
+import i18n from '../../Translations/common';
+
+const ScreenConfigs = [
 	{
-		SOverview: {
-			screen: Overview,
-		},
-		SHistory: {
-			screen: History,
-		},
-		SSettings: {
-			screen: Settings,
+		name: 'SOverview',
+		Component: Overview,
+		optionsWithScreenProps: ({screenProps, navigation}: Object): Object => {
+			return {
+				tabBarLabel: ({ color }: Object): Object => (
+					<TabBar
+						icon="home"
+						tintColor={color}
+						label={i18n.overviewHeader}
+						accessibilityLabel={i18n.deviceOverviewTab}/>
+				),
+			};
 		},
 	},
 	{
-		initialRouteName: 'SOverview',
-		initialRouteKey: 'SOverview',
-		tabBarPosition: 'top',
-		swipeEnabled: false,
-		lazy: true,
-		animationEnabled: true,
-		tabBarComponent: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
-			let { screenProps } = rest,
-				tabWidth = 0, fontSize = 0, paddingVertical = 0;
-			if (screenProps && screenProps.appLayout) {
-				const { width, height } = screenProps.appLayout;
-				const isPortrait = height > width;
-				const deviceWidth = isPortrait ? width : height;
+		name: 'SHistory',
+		Component: History,
+		optionsWithScreenProps: ({screenProps, navigation}: Object): Object => {
+			return {
+				tabBarLabel: ({ color }: Object): Object => (
+					<TabBar
+						icon="history"
+						tintColor={color}
+						label={i18n.historyHeader}
+						accessibilityLabel={i18n.deviceHistoryTab}/>
+				),
+			};
+		},
+	},
+	{
+		name: 'SSettings',
+		Component: Settings,
+		optionsWithScreenProps: ({screenProps, navigation}: Object): Object => {
+			return {
+				tabBarLabel: ({ color }: Object): Object => (
+					<TabBar
+						icon="settings"
+						tintColor={color}
+						label={i18n.settingsHeader}
+						accessibilityLabel={i18n.deviceSettingsTab}/>
+				),
+			};
+		},
+	},
+];
 
-				tabWidth = width / 3;
-				fontSize = deviceWidth * 0.03;
-				paddingVertical = 10 + (fontSize * 0.5);
-			}
-			return (
-				<View style={{flex: 0}}>
-					<SensorDetailsHeaderPoster {...rest}/>
-					<MaterialTopTabBar {...rest}
-						tabStyle={{
-							...tabStyle,
-							width: tabWidth,
-							paddingVertical,
-						}}
-						labelStyle={{
-							...labelStyle,
-							fontSize,
-						}}
-					/>
-				</View>
-			);
+const NavigatorConfigs = {
+	initialRouteName: 'SOverview',
+	initialRouteKey: 'SOverview',
+	tabBarPosition: 'top',
+	swipeEnabled: false,
+	lazy: true,
+	animationEnabled: true,
+	tabBar: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
+		let { screenProps } = rest,
+			tabWidth = 0, fontSize = 0, paddingVertical = 0;
+		if (screenProps && screenProps.appLayout) {
+			const { width, height } = screenProps.appLayout;
+			const isPortrait = height > width;
+			const deviceWidth = isPortrait ? width : height;
+
+			tabWidth = width / 3;
+			fontSize = deviceWidth * 0.03;
+			paddingVertical = 10 + (fontSize * 0.5);
+		}
+		return (
+			<View style={{flex: 0}}>
+				<SensorDetailsHeaderPoster {...rest}/>
+				<MaterialTopTabBar {...rest}
+					tabStyle={{
+						...tabStyle,
+						width: tabWidth,
+						paddingVertical,
+					}}
+					labelStyle={{
+						...labelStyle,
+						fontSize,
+					}}
+				/>
+			</View>
+		);
+	},
+	tabBarOptions: {
+		indicatorStyle: {
+			backgroundColor: '#fff',
 		},
-		tabBarOptions: {
-			indicatorStyle: {
-				backgroundColor: '#fff',
-			},
-			style: {
-				backgroundColor: '#fff',
-				...Theme.Core.shadow,
-				justifyContent: 'center',
-			},
-			tabStyle: {
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
-			upperCaseLabel: false,
-			scrollEnabled: true,
-			activeTintColor: Theme.Core.brandSecondary,
-			inactiveTintColor: Theme.Core.inactiveTintColor,
-			showIcon: false,
-			allowFontScaling: false,
+		style: {
+			backgroundColor: '#fff',
+			...Theme.Core.shadow,
+			justifyContent: 'center',
 		},
-	}
-);
+		tabStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		upperCaseLabel: false,
+		scrollEnabled: true,
+		activeTintColor: Theme.Core.brandSecondary,
+		inactiveTintColor: Theme.Core.inactiveTintColor,
+		showIcon: false,
+		allowFontScaling: false,
+	},
+};
+
+const Tab = createMaterialTopTabNavigator();
+
+const SensorDetailsNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+});
 
 export default SensorDetailsNavigator;

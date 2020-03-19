@@ -131,17 +131,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		};
 		dispatch(createTransaction(options, true)).then((response: Object) => {
 			if (response && response.id && response.url) {
-				navigation.navigate({
-					routeName: 'TransactionWebview',
-					key: 'TransactionWebview',
-					params: {
-						uri: response.url,
-						product,
-						credits,
-						quantity,
-						voucher: false,
-						screensToPop: 3,
-					},
+				navigation.navigate('TransactionWebview', {
+					uri: response.url,
+					product,
+					credits,
+					quantity,
+					voucher: false,
+					screensToPop: 3,
 				});
 			} else {
 				dispatch(showToast(formatMessage(i18n.unknownError)));

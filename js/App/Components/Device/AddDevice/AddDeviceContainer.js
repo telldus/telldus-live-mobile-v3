@@ -59,6 +59,7 @@ type Props = {
 	ScreenName: string,
 	locale: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
+	route: Object,
 };
 
 type State = {
@@ -179,7 +180,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = ['InitialScreen', 'Include433'];
+		const SCNS = ['SelectLocation', 'SelectDeviceType', 'Include433'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
@@ -190,10 +191,7 @@ export class AddDeviceContainer extends View<Props, State> {
 
 	closeAdd433MHz = () => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'Devices',
-			key: 'Devices',
-		});
+		navigation.navigate('Devices');
 	}
 
 	render(): Object {
@@ -205,6 +203,7 @@ export class AddDeviceContainer extends View<Props, State> {
 			addDevice,
 			locale,
 			sessionId,
+			route,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
@@ -256,6 +255,7 @@ export class AddDeviceContainer extends View<Props, State> {
 							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
 							sessionId,
 							showLeftIcon,
+							route,
 						},
 					)}
 				</KeyboardAvoidingView>

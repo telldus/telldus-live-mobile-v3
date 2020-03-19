@@ -41,6 +41,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 };
 
 class TimeZoneContinent extends View {
@@ -84,28 +85,20 @@ class TimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		const { navigation } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
+		const { navigation, route } = this.props;
+		let { clientInfo } = route.params || {};
 		if (continent === 'UTC') {
 			clientInfo.timezone = continent;
-			navigation.navigate({
-				routeName: 'Position',
-				key: 'Position',
-				params: {clientInfo},
-			});
+			navigation.navigate('Position', {clientInfo});
 		} else {
 			let data = differenceWith(timeZone, [continent], (v1: string, v2: string): boolean => {
 				let items = v1.split('/');
 				return !(items[0] === v2);
 			});
 			clientInfo.continent = continent;
-			navigation.navigate({
-				routeName: 'TimeZoneCity',
-				key: 'TimeZoneCity',
-				params: {
-					clientInfo,
-					cities: data,
-				},
+			navigation.navigate('TimeZoneCity', {
+				clientInfo,
+				cities: data,
 			});
 		}
 	}

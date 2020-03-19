@@ -46,7 +46,6 @@ import type { Schedule } from '../../Reducers/Schedule';
 
 import Theme from '../../Theme';
 
-import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -68,17 +67,6 @@ class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
-
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Scheduler' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.scheduler),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'scheduler'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.schedulerTab)}, ${postScript}`,
-		};
-	};
 
 	constructor(props: Props) {
 		super(props);
@@ -135,10 +123,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		navigation.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
-			params: { editMode: true },
+		navigation.navigate('Schedule', {
+			editMode: true,
+			screen: 'Edit',
+			params: {
+				editMode: true,
+			},
 		});
 	};
 
@@ -203,8 +193,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.05) + (height * 0.13) : 0;
-		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * 0.07303) : 0;
+		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * androidLandMarginLeftFactor) : 0;
 
 		const fontSizeNoData = deviceWidth * 0.03;
 		const iconSize = deviceWidth * 0.05;

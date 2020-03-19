@@ -28,7 +28,6 @@ const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	TabBar,
 	SettingsRow,
 	TouchableButton,
 	EditBox,
@@ -116,22 +115,6 @@ class SettingsTab extends View {
 	onDoneReplaceFailedNode: () => void;
 
 	onConfirmRemoveFailedNode: () => void;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="settings"
-				tintColor={tintColor}
-				label={i18n.settingsHeader}
-				accessibilityLabel={i18n.deviceSettingsTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'Settings',
-				key: 'Settings',
-			});
-		},
-	});
 
 	constructor(props: Props) {
 		super(props);
@@ -434,10 +417,7 @@ class SettingsTab extends View {
 	}
 
 	goBack() {
-		this.props.navigation.navigate({
-			routeName: 'Devices',
-			key: 'Devices',
-		});
+		this.props.navigation.navigate('Devices');
 	}
 
 	onValueChange(value: boolean) {
@@ -940,7 +920,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	let device = state.devices.byId[id];
 	device = device ? device : {};
 

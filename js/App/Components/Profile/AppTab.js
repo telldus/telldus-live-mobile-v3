@@ -35,13 +35,11 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
-import { NavigationActions } from 'react-navigation';
 
 import { pushServiceId } from '../../../Config';
 
 import {
 	View,
-	TabBar,
 	SettingsRow,
 	Text,
 } from '../../../BaseComponents';
@@ -221,20 +219,11 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	function onPressGeoFence() {
 		if (!currentAccFences || currentAccFences.length === 0) {
 			dispatch(resetFence());
-			const navigateAction = NavigationActions.navigate({
-				routeName: 'GeoFenceNavigator',
-				key: 'GeoFenceNavigator',
-				action: NavigationActions.navigate({
-					routeName: 'SelectArea',
-					key: 'SelectArea',
-				}),
-			  });
-			navigation.dispatch(navigateAction);
-		} else {
-			navigation.navigate({
-				routeName: 'GeoFenceNavigator',
-				key: 'GeoFenceNavigator',
+			navigation.navigate('GeoFenceNavigator', {
+				screen: 'SelectArea',
 			});
+		} else {
+			navigation.navigate('GeoFenceNavigator');
 		}
 	}
 
@@ -340,21 +329,5 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-
-AppTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="phone"
-			tintColor={tintColor}
-			label={i18n.labelApp}
-			accessibilityLabel={i18n.labelAccessibleAppTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'AppTab',
-			key: 'AppTab',
-		});
-	},
-});
 
 export default AppTab;
