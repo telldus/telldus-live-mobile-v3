@@ -132,13 +132,6 @@ const setAppLayoutInStore = () => {
 };
 
 const NAVIGATION_PROP = {
-	getParam: (paramName, defaultValue) => {
-		return NAVIGATION_PROP.state.params[paramName] || defaultValue;
-	},
-	state: {
-		params: {
-		},
-	},
 };
 
 const setDeviceListInStore = () => {
