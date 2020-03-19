@@ -26,7 +26,7 @@ import React, { useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
-import { StackActions } from '@react-navigation/compat';
+import { StackActions } from '@react-navigation/native';
 
 import {
 	View,
