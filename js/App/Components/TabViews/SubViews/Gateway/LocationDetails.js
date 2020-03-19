@@ -41,6 +41,7 @@ type Props = {
 	h1Style?: number | Object | Array<any>,
 	h2Style?: number | Object | Array<any>,
 	info2?: Object,
+	resizeMode?: string,
 };
 
 type State = {
@@ -73,7 +74,9 @@ class LocationDetails extends View {
 	render(): Object {
 
 		let { title, H1, H2, image, style, appLayout, accessible, info,
-			imageStyle, descriptionContainerStyle, h1Style, h2Style, onPress, info2 } = this.props;
+			imageStyle, descriptionContainerStyle, h1Style, h2Style, onPress, info2,
+			resizeMode = 'contain',
+		} = this.props;
 
 		let {
 			locationTextContainer,
@@ -90,7 +93,11 @@ class LocationDetails extends View {
 					</Text>)
 				}
 				<View style={styles.imageHeaderContainer}>
-					<Image style={[locationImage, imageStyle]} source={{ uri: image, isStatic: true }} />
+					<Image
+						style={[locationImage, imageStyle]}
+						source={{ uri: image, isStatic: true }}
+						resizeMode={resizeMode}
+					/>
 					<TouchableOpacity disabled={!onPress} onPress={this.onPress} accessible={accessible}>
 						<View style={[locationTextContainer, descriptionContainerStyle]}>
 							<Text numberOfLines={1} style={[textHSH, h1Style]}>

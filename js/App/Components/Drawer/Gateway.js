@@ -101,7 +101,8 @@ class Gateway extends PureComponent<Props, null> {
 					descriptionContainerStyle={descriptionContainer}
 					h1Style={h1Style}
 					h2Style={h2Style}
-					onPress={this.onPress}/>
+					onPress={this.onPress}
+					resizeMode={'stretch'}/>
 				<View style={iconSettingsContainer} pointerEvents="none">
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
