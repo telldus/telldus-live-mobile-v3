@@ -105,6 +105,8 @@ class DashboardTab extends View {
 	openRGBControl: (number) => void;
 	openThermostatControl: (number) => void;
 
+	timeoutSwitchTabAndroid: any;
+
 	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
@@ -141,6 +143,8 @@ class DashboardTab extends View {
 
 		this.openRGBControl = this.openRGBControl.bind(this);
 		this.openThermostatControl = this.openThermostatControl.bind(this);
+
+		this.timeoutSwitchTabAndroid = null;
 	}
 
 	startSensorTimer() {
@@ -201,13 +205,28 @@ class DashboardTab extends View {
 	componentDidMount() {
 		const { isDBEmpty, navigation, screenProps } = this.props;
 		if (isDBEmpty && (screenProps.currentScreen === 'Dashboard' || screenProps.currentScreen === 'Tabs')) {
-			navigation.navigate('Devices');
+			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
+			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
+			// back to Dashboard itself.
+			// No issues in iOS though.
+			if (Platform.OS === 'android') {
+				this.timeoutSwitchTabAndroid = setTimeout(() => {
+					navigation.navigate('Devices');
+					this.timeoutSwitchTabAndroid = null;
+				}, 400);
+			} else {
+				navigation.navigate('Devices');
+			}
 		}
 		this.startSensorTimer();
 	}
 
 	componentWillUnmount() {
 		this.stopSensorTimer();
+		if (this.timeoutSwitchTabAndroid) {
+			clearTimeout(this.timeoutSwitchTabAndroid);
+			this.timeoutSwitchTabAndroid = null;
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

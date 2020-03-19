@@ -27,7 +27,6 @@ import React from 'react';
 import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
 
 import {
 	prepareNavigator,
@@ -54,7 +53,6 @@ const ScreenConfigs = [
 
 const NavigatorConfigs = {
 	initialRouteName: 'Dashboard',
-	initialRouteKey: 'Dashboard',
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
@@ -64,14 +62,6 @@ const NavigatorConfigs = {
 		scrollEnabled: true,
 		allowFontScaling: false,
 	},
-	// NOTE: The default one has an issue:
-	// From dahsboard did mount, when db is empty we
-	// do navigate to devices tab, with the default pager
-	// component, after navigation device tab contents
-	// are rendered once, but after a flash it gets overridden
-	// by the empty db message, which must be some bug
-	// in the default pager component used by @react-navigation/material-top-tabs.
-	pagerComponent: ViewPagerAdapter,
 };
 
 const Tab = createMaterialTopTabNavigator();
