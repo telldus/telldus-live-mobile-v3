@@ -38,14 +38,16 @@ import {
 } from '../../Actions/Login';
 
 const TransactionWebview = (props: Object): Object => {
-	const { navigation } = props;
+	const { navigation, route } = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 	} = getStyles(layout);
 
-	const uri = navigation.getParam('uri', '');
+	const {
+		uri = '',
+	} = route.params || {};
 
 	const dispatch = useDispatch();
 	function onShouldStartLoadWithRequest(request: Object): boolean {

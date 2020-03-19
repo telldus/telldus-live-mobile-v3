@@ -44,7 +44,7 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const PostPurchaseScreen = (props: Object): Object => {
-	const { navigation, screenProps } = props;
+	const { navigation, screenProps, route } = props;
 	const { app: {layout} } = useSelector((state: Object): Object => state);
 	const {
 		container,
@@ -60,7 +60,7 @@ const PostPurchaseScreen = (props: Object): Object => {
 
 	const { formatMessage } = useIntl();
 
-	const screensToPop = navigation.getParam('screensToPop', 2);
+	const { screensToPop = 2 } = route.params || {};
 
 	const goBack = useCallback(() => {
 		(() => {
@@ -97,11 +97,13 @@ const PostPurchaseScreen = (props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const voucher = navigation.getParam('voucher', false);
-	const product = navigation.getParam('product', null);
-	const quantity = navigation.getParam('quantity', 1);
-	const credits = navigation.getParam('credits', false);
-	const success = navigation.getParam('success', false);
+	const {
+		voucher = false,
+		product = null,
+		quantity = 1,
+		credits = false,
+		success = false,
+	} = route.params || {};
 
 	const getInfo = useCallback((): string => {
 		return ((): Object => {
