@@ -21,6 +21,6 @@
 
 export default function getDrawerWidth(deviceWidth: number): number {
 	let minWidth = 250;
-	let width = deviceWidth * 0.7;
+	let width = deviceWidth * 0.85;
 	return width < minWidth ? minWidth : width;
 }
