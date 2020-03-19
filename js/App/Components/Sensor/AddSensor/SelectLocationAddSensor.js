@@ -41,6 +41,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	rows: Array<Object>,
 	currentScreen: string,
+	route: Object,
 
     navigation: Object,
     appLayout: Object,
