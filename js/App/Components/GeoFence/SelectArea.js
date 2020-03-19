@@ -93,10 +93,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		} = initialRegion;
 		dispatch(setFenceArea(lat, long, GeoFenceUtils.getRadiusFromRegion(initialRegion), userId));
 
-		navigation.navigate({
-			routeName: 'ArrivingActions',
-			key: 'ArrivingActions',
-		});
+		navigation.navigate('ArrivingActions');
 	}
 
 	const {

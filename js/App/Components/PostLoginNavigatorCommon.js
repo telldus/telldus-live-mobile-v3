@@ -460,12 +460,19 @@ addNewDevice() {
 
 	if (gatewaysLen > 0) {
 		const singleGateway = gatewaysLen === 1;
-		navigate('AddDevice', {
-			selectLocation: !singleGateway,
-			gateway: singleGateway ? {
-				...byId[Object.keys(byId)[0]],
-			} : null,
-		});
+		if (singleGateway) {
+			navigate('AddDevice', {
+				gateway: byId[Object.keys(byId)[0]],
+				screen: 'SelectDeviceType',
+				params: {
+					gateway: byId[Object.keys(byId)[0]],
+				},
+			});
+		} else {
+			navigate('AddDevice', {
+				screen: 'SelectLocation',
+			});
+		}
 	}
 }
 
@@ -481,10 +488,19 @@ addNewSensor = () => {
 
 		if (gatewaysLen > 0) {
 			const singleGateway = gatewaysLen === 1;
-			navigate('AddSensor', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
-			});
+			if (singleGateway) {
+				navigate('AddSensor', {
+					gateway: filteredGateways[filteredAllIds[0]],
+					screen: 'SensorsListAddSensor',
+					params: {
+						gateway: filteredGateways[filteredAllIds[0]],
+					},
+				});
+			} else {
+				navigate('AddSensor', {
+					screen: 'SelectLocationAddSensor',
+				});
+			}
 		}
 	}
 }

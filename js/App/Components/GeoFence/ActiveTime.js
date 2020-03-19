@@ -81,10 +81,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 
 	function onPressNext() {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
-		navigation.navigate({
-			routeName: 'SetAreaName',
-			key: 'SetAreaName',
-		});
+		navigation.navigate('SetAreaName');
 	}
 
 	const {

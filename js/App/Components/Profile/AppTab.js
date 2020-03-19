@@ -92,8 +92,8 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	} = useSelector((state: Object): Object => state.user);
 
 	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
-	const { enable } = JSON.parse(geoFenceFeature);
-
+	let { enable } = JSON.parse(geoFenceFeature);
+	enable = true;
 	const { dbCarousel = true, reportCrash = true } = defaultSettings;
 
 	const {
@@ -220,20 +220,11 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	function onPressGeoFence() {
 		if (!currentAccFences || currentAccFences.length === 0) {
 			dispatch(resetFence());
-			const navigateAction = NavigationActions.navigate({
-				routeName: 'GeoFenceNavigator',
-				key: 'GeoFenceNavigator',
-				action: NavigationActions.navigate({
-					routeName: 'SelectArea',
-					key: 'SelectArea',
-				}),
-			  });
-			navigation.dispatch(navigateAction);
-		} else {
-			navigation.navigate({
-				routeName: 'GeoFenceNavigator',
-				key: 'GeoFenceNavigator',
+			navigation.navigate('GeoFenceNavigator', {
+				screen: 'SelectArea',
 			});
+		} else {
+			navigation.navigate('GeoFenceNavigator');
 		}
 	}
 

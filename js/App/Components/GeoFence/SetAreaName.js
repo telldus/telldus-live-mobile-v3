@@ -25,10 +25,7 @@ import React, { useEffect, useState } from 'react';
 import {
 	useDispatch,
 } from 'react-redux';
-import {
-	NavigationActions,
-	StackActions,
-} from '@react-navigation/compat';
+import { CommonActions } from '@react-navigation/native';
 
 import {
 	View,
@@ -67,21 +64,12 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	function onPressNext() {
 		dispatch(setFenceTitle(name));
 		dispatch(saveFence());
-		navigation.dispatch(StackActions.reset({
+		navigation.dispatch(CommonActions.reset({
 			index: 2,
-			actions: [
-				NavigationActions.navigate({
-					routeName: 'Tabs',
-					key: 'Tabs',
-				}),
-				NavigationActions.navigate({
-					routeName: 'Profile',
-					key: 'Profile',
-				}),
-				NavigationActions.navigate({
-					routeName: 'GeoFenceNavigator',
-					key: 'GeoFenceNavigator',
-				}),
+			routes: [
+				{name: 'Tabs'},
+				{name: 'Profile'},
+				{name: 'GeoFenceNavigator'},
 			],
 		}));
 	}

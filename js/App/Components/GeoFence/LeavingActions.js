@@ -51,10 +51,7 @@ const LeavingActions = React.memo<Object>((props: Props): Object => {
 		if (isEdit) {
 			navigation.goBack();
 		} else {
-			navigation.navigate({
-				routeName: 'ActiveTime',
-				key: 'ActiveTime',
-			});
+			navigation.navigate('ActiveTime');
 		}
 	}
 
