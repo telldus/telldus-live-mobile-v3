@@ -91,8 +91,8 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	} = useSelector((state: Object): Object => state.user);
 
 	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
-	let { enable } = JSON.parse(geoFenceFeature);
-	enable = true;
+	const { enable } = JSON.parse(geoFenceFeature);
+
 	const { dbCarousel = true, reportCrash = true } = defaultSettings;
 
 	const {
