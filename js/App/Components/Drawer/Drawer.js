@@ -32,12 +32,12 @@ import {
 	View,
 	RippleButton,
 	Text,
+	Icon,
 } from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
 	DrawerSubHeader,
 	NavigationHeader,
-	AddLocation,
 	SettingsLink,
 } from './DrawerSubComponents';
 
@@ -238,9 +238,14 @@ constructor(props: Props) {
 								textIntl={'GeoFence'}
 								styles={drawerSubHeader}/>
 							<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
-								<MaterialIcons style={styles.linkIconStyle} name={'location-on'}/>
+								<MaterialIcons
+									style={{
+										...styles.linkIconStyle,
+										paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
+									}}
+									name={'location-on'}/>
 								<Text style={styles.linkLabelStyle}>
-			GeoFence Settings
+									GeoFence Settings
 								</Text>
 							</RippleButton>
 						</View>
@@ -262,7 +267,16 @@ constructor(props: Props) {
 							onPressGateway={onPressGateway}
 							dispatch={dispatch}/>);
 					})}
-					<AddLocation onPress={addNewLocation} styles={styles}/>
+					<SettingsLink
+						styles={styles}
+						textIntl={i18n.addNewLocation}
+						iconComponent={<Icon
+							style={{
+								...styles.linkIconStyle,
+								paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
+							}}
+							name={'plus-circle'}/>}
+						onPressLink={addNewLocation}/>
 				</View>
 			</ScrollView>
 		);
@@ -366,12 +380,11 @@ constructor(props: Props) {
 			},
 			addNewLocationContainer: {
 				flexDirection: 'row',
-				borderBottomWidth: 1,
-				borderBottomColor: '#eeeeef',
 				marginLeft: 16,
 				marginRight: 10,
 				marginVertical: 5 + (fontSizeAddLocText * 0.5),
 				justifyContent: 'flex-start',
+				marginBottom: 5,
 			},
 			addNewLocationText: {
 				fontSize: fontSizeAddLocText,
@@ -392,6 +405,7 @@ constructor(props: Props) {
 				color: brandSecondary,
 				marginRight: 8,
 				marginLeft: 10,
+				textAlign: 'left',
 			},
 			linkLabelStyle: {
 				fontSize: fontSizeAddLocText,

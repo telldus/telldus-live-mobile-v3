@@ -28,7 +28,6 @@ import {
 	FormattedMessage,
 	Text,
 	View,
-	Icon,
 	CachedImage,
 	IconTelldus,
 	RippleButton,
@@ -36,17 +35,6 @@ import {
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
-
-const AddLocation = ({onPress, styles}: Object): Object => {
-	return (
-		<RippleButton
-			style={styles.addNewLocationContainer}
-			onPress={onPress}>
-			<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
-			<FormattedMessage {...i18n.addNewLocation} style={styles.addNewLocationText}/>
-		</RippleButton>
-	);
-};
 
 const NavigationHeader = ({ firstName, lastName, email, styles, onPress }: Object): Object => {
 
@@ -99,9 +87,10 @@ const DrawerSubHeader = ({styles, textIntl}: Object): Object => (
 	</View>
 );
 
-const SettingsLink = ({styles, textIntl, iconName, onPressLink}: Object): Object => (
+const SettingsLink = ({styles, textIntl, iconName, iconComponent, onPressLink}: Object): Object => (
 	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
-		<IconTelldus style={styles.linkIconStyle} icon={iconName}/>
+		{!!iconName && <IconTelldus style={styles.linkIconStyle} icon={iconName}/>}
+		{!!iconComponent && iconComponent}
 		<Text style={styles.linkLabelStyle}><FormattedMessage {...textIntl} style={styles.linkLabelStyle}/></Text>
 	</RippleButton>
 );
@@ -119,6 +108,5 @@ module.exports = {
 	SettingsButton,
 	DrawerSubHeader,
 	NavigationHeader,
-	AddLocation,
 	SettingsLink,
 };
