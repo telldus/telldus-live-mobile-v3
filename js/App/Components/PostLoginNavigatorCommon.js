@@ -238,7 +238,7 @@ actionsToPerformOnStart = async () => {
 				phonesList.phone.length > 0 &&
 				this.doesAllowsToOverrideScreen()
 			) {
-				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
+				navigate('RegisterForPushScreen');
 			}
 		}).catch(() => {
 			this.pushConf(false);
@@ -288,7 +288,7 @@ actionsToPerformOnStart = async () => {
 		this.doesAllowsToOverrideScreen()
 	) {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
-		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+		navigate('PremiumUpgradeScreen');
 	}
 
 }
@@ -324,7 +324,7 @@ checkIfOpenPurchase = async () => {
 		const openPurchase = await AndroidWidget.checkIfOpenPurchase();
 		if (openPurchase) {
 			AndroidWidget.setOpenPurchase(false);
-			navigate('AdditionalPlansPaymentsScreen', {}, 'AdditionalPlansPaymentsScreen');
+			navigate('AdditionalPlansPaymentsScreen');
 		}
 	}
 }
@@ -337,7 +337,7 @@ checkIfOpenThermostatControl = async () => {
 			AndroidWidget.setOpenThermostatControl(-1);
 			navigate('ThermostatControl', {
 				id,
-			}, 'ThermostatControl');
+			});
 		}
 	}
 }
@@ -442,7 +442,7 @@ addNewLocation() {
 				addingNewLocation: false,
 			});
 			if (response.client) {
-				navigate('AddLocation', {clients: response.client}, 'AddLocation');
+				navigate('AddLocation', {clients: response.client});
 			}
 		}).catch((error: Object) => {
 			this.setState({
@@ -465,7 +465,7 @@ addNewDevice() {
 			gateway: singleGateway ? {
 				...byId[Object.keys(byId)[0]],
 			} : null,
-		}, 'AddDevice');
+		});
 	}
 }
 
@@ -484,7 +484,7 @@ addNewSensor = () => {
 			navigate('AddSensor', {
 				selectLocation: !singleGateway,
 				gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
-			}, 'AddSensor');
+			});
 		}
 	}
 }

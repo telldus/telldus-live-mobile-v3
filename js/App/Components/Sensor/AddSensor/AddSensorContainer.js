@@ -52,6 +52,7 @@ type Props = {
 	screenProps: Object,
 	ScreenName: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
+	route: Object,
 };
 
 type State = {
@@ -158,6 +159,7 @@ class AddSensorContainer extends View<Props, State> {
 			screenProps,
 			navigation,
 			addDevice,
+			route,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
 		const { h1, h2, infoButton } = this.state;
@@ -202,6 +204,7 @@ class AddSensorContainer extends View<Props, State> {
 							paddingHorizontal: padding,
 							addDevice,
 							processWebsocketMessage: this.props.processWebsocketMessage,
+							route,
 						},
 					)}
 				</KeyboardAvoidingView>

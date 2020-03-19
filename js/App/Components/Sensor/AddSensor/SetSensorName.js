@@ -59,10 +59,11 @@ const SetSensorName = (props: Object): Object => {
 		appLayout,
 		navigation,
 		toggleDialogueBox,
+		route,
 	} = props;
 	const { formatMessage } = intl;
 
-	const sensor = navigation.getParam('sensor', {});
+	const { sensor = {}} = route.params || {};
 
 	const [nameConf, setNameConf] = useState({
 		isLoading: false,
@@ -124,14 +125,10 @@ const SetSensorName = (props: Object): Object => {
 					mainNode: true,
 					clientDeviceId: sensor.clientDeviceId,
 				}};
-				const prevParams = navigation.state.params || {};
-				navigation.navigate({
-					routeName: 'Sensors',
-					key: 'Sensors',
-					params: {
-						newSensors: sensorData,
-						...prevParams,
-					},
+				const prevParams = route.params || {};
+				navigation.navigate('Sensors', {
+					newSensors: sensorData,
+					...prevParams,
 				});
 			}
 		}).catch((err: Object) => {

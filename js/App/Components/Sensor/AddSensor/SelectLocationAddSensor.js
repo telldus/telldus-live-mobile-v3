@@ -110,8 +110,8 @@ getPadding(): number {
 }
 
 onChooseLocation(gateway: Object) {
-	const { navigation } = this.props;
-	const prevParams = navigation.state.params || {};
+	const { navigation, route } = this.props;
+	const prevParams = route.params || {};
 	navigation.navigate('SensorsListAddSensor', {
 		...prevParams,
 		gateway,

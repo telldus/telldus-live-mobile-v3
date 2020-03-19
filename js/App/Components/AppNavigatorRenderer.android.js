@@ -161,7 +161,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	newSchedule() {
 		this.props.dispatch(resetSchedule());
-		navigate('Schedule', { editMode: false }, 'Schedule');
+		navigate('Schedule', { editMode: false });
 	}
 
 	onOpenDrawer = () => {

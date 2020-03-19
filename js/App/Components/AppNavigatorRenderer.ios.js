@@ -142,15 +142,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	onOpenSetting() {
-		navigate('Profile', {}, 'Profile');
+		navigate('Profile');
 	}
 
 	newSchedule() {
 		this.props.dispatch(resetSchedule());
-		navigate('Schedule', {
-			key: 'Schedule',
-			params: { editMode: false },
-		}, 'Schedule');
+		navigate('Schedule', { editMode: false });
 	}
 
 	addNewDevice() {
