@@ -96,7 +96,6 @@ class DevicesTab extends View {
 	onDismissDialogueHide: () => void;
 	onConfirmDialogueHide: (?Object) => void;
 
-	addNewDevice: () => void;
 	showDimInfo: (Object) => void;
 	handleAddDeviceAttentionCapture: () => void;
 
@@ -144,7 +143,6 @@ class DevicesTab extends View {
 		this.closeVisibleRows = this.closeVisibleRows.bind(this);
 		this.onDismissDialogueHide = this.onDismissDialogueHide.bind(this);
 		this.onConfirmDialogueHide = this.onConfirmDialogueHide.bind(this);
-		this.addNewDevice = this.addNewDevice.bind(this);
 
 		const { intl, appLayout } = props.screenProps;
 		let { formatMessage } = intl;
@@ -710,27 +708,6 @@ class DevicesTab extends View {
 					sectionIndex: section,
 					itemIndex: row,
 					viewPosition: 0.4,
-				});
-			}
-		}
-	}
-
-	addNewDevice() {
-		const { navigation, gateways } = this.props;
-		const gatewaysLen = gateways.length;
-		if (gatewaysLen > 0) {
-			const singleGateway = gatewaysLen === 1;
-			if (singleGateway) {
-				navigation.navigate('AddDevice', {
-					gateway: gateways[0],
-					screen: 'SelectDeviceType',
-					params: {
-						gateway: gateways[0],
-					},
-				});
-			} else {
-				navigation.navigate('AddDevice', {
-					screen: 'SelectLocation',
 				});
 			}
 		}
