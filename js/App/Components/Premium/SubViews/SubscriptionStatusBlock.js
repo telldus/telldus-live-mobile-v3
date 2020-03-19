@@ -64,10 +64,7 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	const { pro } = userProfile;
 
 	function onPressUpgrade() {
-		navigation.navigate({
-			routeName: 'PremiumUpgradeScreen',
-			key: 'PremiumUpgradeScreen',
-		});
+		navigation.navigate('PremiumUpgradeScreen');
 	}
 
 	const {

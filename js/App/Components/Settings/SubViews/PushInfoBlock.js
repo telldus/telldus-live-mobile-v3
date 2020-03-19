@@ -53,10 +53,7 @@ const PushInfoBlock = (props: Object): Object => {
 
 	const onPressPushSettings = useCallback(() => {
 		(() => {
-			navigation.navigate({
-				routeName: 'PushSettings',
-				key: 'PushSettings',
-			});
+			navigation.navigate('PushSettings');
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

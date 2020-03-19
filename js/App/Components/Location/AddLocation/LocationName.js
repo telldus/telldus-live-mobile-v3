@@ -97,11 +97,7 @@ class LocationName extends View {
 			Keyboard.dismiss();
 			let { clientInfo } = route.params || {};
 			clientInfo.name = locationName;
-			this.props.navigation.navigate({
-				routeName: 'TimeZone',
-				key: 'TimeZone',
-				params: {clientInfo},
-			});
+			this.props.navigation.navigate('TimeZone', {clientInfo});
 		} else {
 			let message = intl.formatMessage(i18n.invalidLocationName);
 			const dialogueData = {

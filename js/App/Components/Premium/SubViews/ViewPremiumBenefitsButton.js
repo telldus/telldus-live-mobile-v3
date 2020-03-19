@@ -55,10 +55,7 @@ const ViewPremiumBenefitsButton = (props: Object): Object => {
 		textStyle,
 	} = getStyles(layout);
 	function onPress() {
-		navigation.navigate({
-			routeName: 'PremiumBenefitsScreen',
-			key: 'PremiumBenefitsScreen',
-		});
+		navigation.navigate('PremiumBenefitsScreen');
 	}
 
 	return (

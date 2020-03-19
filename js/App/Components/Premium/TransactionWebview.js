@@ -53,13 +53,9 @@ const TransactionWebview = (props: Object): Object => {
 	function onShouldStartLoadWithRequest(request: Object): boolean {
 		if (request.url.includes('telldus-live-mobile-common')) {
 			const { params = {} } = route;
-			navigation.navigate({
-				routeName: 'PostPurchaseScreen',
-				key: 'PostPurchaseScreen',
-				params: {
-					...params,
-					success: request.url.includes('status=success'),
-				},
+			navigation.navigate('PostPurchaseScreen', {
+				...params,
+				success: request.url.includes('status=success'),
 			});
 			dispatch(getUserProfile());
 			return false;

@@ -180,7 +180,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = ['InitialScreen', 'Include433'];
+		const SCNS = ['SelectLocation', 'SelectDeviceType', 'Include433'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 

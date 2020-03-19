@@ -61,17 +61,11 @@ const AutoRenewalBlock = (props: Object): Object => {
 	const { pro } = userProfile;
 
 	function onPressManageSubscription() {
-		navigation.navigate({
-			routeName: 'ManageSubscriptionScreen',
-			key: 'ManageSubscriptionScreen',
-		});
+		navigation.navigate('ManageSubscriptionScreen');
 	}
 
 	function onPressUpgrade() {
-		navigation.navigate({
-			routeName: 'PremiumUpgradeScreen',
-			key: 'PremiumUpgradeScreen',
-		});
+		navigation.navigate('PremiumUpgradeScreen');
 	}
 
 	let isAutoRenew = isAutoRenewMeth(subscriptions);

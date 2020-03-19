@@ -53,10 +53,7 @@ const AdditionalPlansPayments = (props: Object): Object => {
 		textStyle,
 	} = getStyles(layout);
 	function onPress() {
-		navigation.navigate({
-			routeName: 'AdditionalPlansPaymentsScreen',
-			key: 'AdditionalPlansPaymentsScreen',
-		});
+		navigation.navigate('AdditionalPlansPaymentsScreen');
 	}
 
 	return (

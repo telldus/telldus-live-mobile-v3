@@ -79,7 +79,7 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'InitialScreenAddSensor' || nextProps.currentScreen === 'SensorsListAddSensor';
+	return nextProps.currentScreen === 'SelectLocationAddSensor';
 }
 
 keyExtractor(item: Object): string {

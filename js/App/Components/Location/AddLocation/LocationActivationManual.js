@@ -155,11 +155,7 @@ class LocationActivationManual extends View {
 						timezone: response.timezone,
 						autoDetected: true,
 					};
-					this.props.navigation.navigate({
-						routeName: 'LocationName',
-						key: 'LocationName',
-						params: {clientInfo},
-					});
+					this.props.navigation.navigate('LocationName', {clientInfo});
 				} else if (response && response.activated === true) {
 					this.openDialogueBox({
 						text: this.messageAlreadyActivated,

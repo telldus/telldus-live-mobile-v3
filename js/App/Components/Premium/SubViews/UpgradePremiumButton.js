@@ -48,10 +48,7 @@ const UpgradePremiumButton = (props: Object): Object => {
 		buttonStyle,
 	} = getStyles(layout);
 	function onPress() {
-		navigation.navigate({
-			routeName: 'PremiumUpgradeScreen',
-			key: 'PremiumUpgradeScreen',
-		});
+		navigation.navigate('PremiumUpgradeScreen');
 	}
 
 	return (

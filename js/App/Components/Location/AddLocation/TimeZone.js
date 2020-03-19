@@ -127,11 +127,7 @@ class TimeZone extends View<void, Props, State> {
 			clientInfo.coordinates = {};
 			actions.activateGateway(clientInfo)
 				.then((response: Object) => {
-					navigation.navigate({
-						routeName: 'Success',
-						key: 'Success',
-						params: {clientInfo},
-					});
+					navigation.navigate('Success', {clientInfo});
 					this.setState({
 						isLoading: false,
 					});
@@ -141,22 +137,14 @@ class TimeZone extends View<void, Props, State> {
 					});
 				});
 		} else {
-			navigation.navigate({
-				routeName: 'Position',
-				key: 'Position',
-				params: {clientInfo},
-			});
+			navigation.navigate('Position', {clientInfo});
 		}
 	}
 
 	onEditTimeZone() {
 		let { navigation, route } = this.props;
 		let { clientInfo } = route.params || {};
-		navigation.navigate({
-			routeName: 'TimeZoneContinent',
-			key: 'TimeZoneContinent',
-			params: {clientInfo},
-		});
+		navigation.navigate('TimeZoneContinent', {clientInfo});
 	}
 
 	render(): Object {

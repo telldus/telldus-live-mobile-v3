@@ -120,10 +120,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	}, []);
 
 	function onPress() {
-		navigation.navigate({
-			routeName: 'RequestSupportScreen',
-			key: 'RequestSupportScreen',
-		});
+		navigation.navigate('RequestSupportScreen');
 	}
 
 	function openLink(url: string) {

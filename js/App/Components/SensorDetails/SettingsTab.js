@@ -404,10 +404,7 @@ class SettingsTab extends View {
 			clearHistory('sensor', sensor.id);
 			dispatch(removeSensorHistory(sensor.id));
 
-			navigation.navigate({
-				routeName: 'Sensors',
-				key: 'Sensors',
-			});
+			navigation.navigate('Sensors');
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			dispatch(showToast(message));

@@ -184,7 +184,8 @@ class AddSensorContainer extends View<Props, State> {
 					align={'right'}
 					navigation={navigation}
 					showLeftIcon={showLeftIcon}
-					leftIcon={currentScreen === 'InitialScreenAddSensor' ? 'close' : undefined}
+					leftIcon={(currentScreen === 'SelectLocationAddSensor' || currentScreen === 'SensorsListAddSensor') ?
+						'close' : undefined}
 					{...screenProps}/>
 				<KeyboardAvoidingView
 					behavior="padding"

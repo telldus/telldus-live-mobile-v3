@@ -61,17 +61,11 @@ const SMSBlock = (props: Object): Object => {
 	const { credits = 0 } = userProfile;
 
 	function onPressViewHistory() {
-		navigation.navigate({
-			routeName: 'SMSHistoryScreen',
-			key: 'SMSHistoryScreen',
-		});
+		navigation.navigate('SMSHistoryScreen');
 	}
 
 	function onPressBuyCredits() {
-		navigation.navigate({
-			routeName: 'BuySMSCreditsScreen',
-			key: 'BuySMSCreditsScreen',
-		});
+		navigation.navigate('BuySMSCreditsScreen');
 	}
 
 	const {

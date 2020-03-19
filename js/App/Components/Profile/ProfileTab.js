@@ -107,10 +107,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	const { enable } = JSON.parse(premiumPurchase);
 
 	function onPressRedeemGift() {
-		navigation.navigate({
-			routeName: 'RedeemGiftScreen',
-			key: 'RedeemGiftScreen',
-		});
+		navigation.navigate('RedeemGiftScreen');
 	}
 
 	const dispatch = useDispatch();
@@ -171,10 +168,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	const hasAPremAccount = Object.keys(premAccounts).length > 0;
 
 	function onPressViewPurchaseHistory() {
-		navigation.navigate({
-			routeName: 'PurchaseHistoryScreen',
-			key: 'PurchaseHistoryScreen',
-		});
+		navigation.navigate('PurchaseHistoryScreen');
 	}
 
 	function showActionSheet() {
@@ -195,7 +189,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				showNegative: true,
 				positiveText: formatMessage(i18n.upgrade).toUpperCase(),
 				onPressPositive: () => {
-					navigation.navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+					navigation.navigate('PremiumUpgradeScreen');
 				},
 				closeOnPressPositive: true,
 				timeoutToCallPositive: 200,

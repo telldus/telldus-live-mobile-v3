@@ -48,10 +48,7 @@ const UpdatePasswordBlock = (props: Object): Object => {
 
 	const onPress = useCallback(() => {
 		(() => {
-			navigation.navigate({
-				routeName: 'UpdatePasswordScreen',
-				key: 'UpdatePasswordScreen',
-			});
+			navigation.navigate('UpdatePasswordScreen');
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);

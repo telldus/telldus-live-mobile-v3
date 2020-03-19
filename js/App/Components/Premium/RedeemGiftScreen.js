@@ -94,15 +94,11 @@ const RedeemGiftScreen = (props: Object): Object => {
 		dispatch(activateCoupon(code)).then((response: Object) => {
 			if (response && response.status === 'success') {
 				dispatch(getUserProfile());
-				navigation.navigate({
-					routeName: 'PostPurchaseScreen',
-					key: 'PostPurchaseScreen',
-					params: {
-						...response,
-						voucher: true,
-						success: true,
-						screensToPop: 2,
-					},
+				navigation.navigate('PostPurchaseScreen', {
+					...response,
+					voucher: true,
+					success: true,
+					screensToPop: 2,
 				});
 			} else {
 				dispatch(showToast(formatMessage(i18n.errorRedeemFailed)));
