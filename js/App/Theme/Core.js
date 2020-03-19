@@ -151,6 +151,10 @@ export default {
 		};
 	},
 
+	get androidLandMarginLeftFactor() {
+		return 0.068;
+	},
+
 	get editBoxPaddingFactor() {
 		return 0.05;
 	},

@@ -432,14 +432,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 			} : {
 				transform: [{rotateZ: '-90deg'}],
 				position: 'absolute',
-				left: -deviceHeight * 0.4444,
-				top: deviceHeight * 0.4444,
+				left: Math.ceil(-deviceHeight * 0.4444),
+				top: Math.ceil(deviceHeight * 0.4444),
 				width: deviceHeight,
-				height: deviceHeight * land,
+				height: Math.ceil(deviceHeight * land),
 			},
 			container: {
 				flex: 1,
-				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
+				marginLeft: isPortrait ? 0 : Math.ceil(deviceHeight * 0.11),
 			},
 			buttonSize,
 			menuButtonStyle: isPortrait ? null : {

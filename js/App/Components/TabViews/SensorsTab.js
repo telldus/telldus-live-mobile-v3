@@ -535,6 +535,10 @@ class SensorsTab extends View {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
 		hiddenListTextFontSize = hiddenListTextFontSize > 25 ? 25 : hiddenListTextFontSize;
 
@@ -544,7 +548,7 @@ class SensorsTab extends View {
 		return {
 			container: {
 				flex: 1,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			toggleHiddenListButton: {

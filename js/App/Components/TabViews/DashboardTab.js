@@ -507,12 +507,16 @@ class DashboardTab extends View {
 
 		const padding = this.getPadding();
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		return {
 			container: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 				backgroundColor: Theme.Core.appBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
