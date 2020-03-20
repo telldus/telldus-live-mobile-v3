@@ -28,7 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from react-navigation, this fix issue https://github.com/facebook/react-native/issues/18177.
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Text, StyleSheet, Poster, NavigationHeader } from '../../../BaseComponents';
+import { View, Text, StyleSheet, PosterWithText, NavigationHeader } from '../../../BaseComponents';
 import Block from './SubViews/Block';
 
 import Theme from '../../Theme';
@@ -154,16 +154,11 @@ render(): Object | null {
 					<ScrollView
 						style={styles.scrollView}
 						contentContainerStyle={styles.SVContentContainerStyle}>
-						<Poster>
-							<View style={styles.hContainer}>
-								<Text style={[styles.h, styles.h1]}>
-									{this.h1}
-								</Text>
-								<Text style={[styles.h, styles.h2]}>
-									{this.h2}
-								</Text>
-							</View>
-						</Poster>
+						<PosterWithText
+							appLayout={appLayout}
+							align={'right'}
+							h1={this.h1}
+							h2={this.h2}/>
 						{blocks}
 					</ScrollView>
 					<View style={styles.footersCover}>
