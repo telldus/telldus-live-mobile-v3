@@ -210,7 +210,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.closeDrawer();
 		if (tabName) {
 			navigate('Profile', {
-				screen: 'tabName',
+				screen: tabName,
 			});
 		} else {
 			navigate('Profile');
