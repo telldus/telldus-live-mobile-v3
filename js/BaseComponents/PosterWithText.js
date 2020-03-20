@@ -342,11 +342,13 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH1,
 			color: '#fff',
+			fontWeight: '500',
 		},
 		h2StyleDef: {
 			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH2,
 			color: '#fff',
+			fontWeight: '400',
 		},
 		posterHeight,
 	};
