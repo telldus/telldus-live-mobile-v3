@@ -23,21 +23,11 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, TouchableOpacity, BackHandler, Platform, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import DeviceInfo from 'react-native-device-info';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { StyleSheet, BackHandler, Platform, ScrollView } from 'react-native';
 
-import Text from './Text';
 import View from './View';
-import Poster from './Poster';
-import BlockIcon from './BlockIcon';
 import NavigationHeader from './NavigationHeader';
-import RoundedInfoButton from './RoundedInfoButton';
-
-import Theme from '../App/Theme';
-
-import i18n from '../App/Translations/common';
+import PosterWithText from './PosterWithText';
 
 type InfoButton = {
 	onPress?: Function,
@@ -71,14 +61,8 @@ type DefaultProps = {
 	leftIcon: string,
 };
 
-type State = {
-	isHeaderLong: boolean,
-	isHeaderTwoLong: boolean,
-};
-
-class ScrollableNavigationHeaderPoster extends React.Component<Props, State> {
+class ScrollableNavigationHeaderPoster extends React.Component<Props, null> {
 props: Props;
-state: State;
 
 static defaultProps: DefaultProps = {
 	showBackButton: true,
@@ -89,39 +73,12 @@ static defaultProps: DefaultProps = {
 
 goBack: () => void;
 handleBackPress: () => boolean;
-onLayoutHeaderOne: (Object) => void;
-onLayoutHeaderTwo: (Object) => void;
-
-noName: string;
-defaultDescription: string;
-labelLeftIcon: string;
-isTablet: boolean;
 
 constructor(props: Props) {
 	super(props);
-
-	this.state = {
-		isHeaderLong: false,
-		isHeaderTwoLong: false,
-	};
-
-	this.isTablet = DeviceInfo.isTablet();
-
-	let { formatMessage } = props.intl;
-
-	this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
-	this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
-
-	this.noName = formatMessage(i18n.noName);
-
-	this.goBack = this.goBack.bind(this);
-	this.handleBackPress = this.handleBackPress.bind(this);
-
-	this.onLayoutHeaderOne = this.onLayoutHeaderOne.bind(this);
-	this.onLayoutHeaderTwo = this.onLayoutHeaderTwo.bind(this);
 }
 
-goBack() {
+goBack = () => {
 	this.props.navigation.pop();
 }
 
@@ -133,43 +90,13 @@ componentWillUnmount() {
 	BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 }
 
-handleBackPress(): boolean {
+handleBackPress = (): boolean => {
 	let { handleBackPress } = this.props;
 	if (handleBackPress) {
 		return handleBackPress();
 	}
 	return false;
 }
-
-onLayoutHeaderOne(ev: Object) {
-	const { width } = this.props.appLayout;
-	const { layout } = ev.nativeEvent;
-	const posterWidth = width * 0.8;
-	const headerWidth = layout.width + layout.x + 5;
-	if (headerWidth >= posterWidth) {
-		this.setState({
-			isHeaderLong: true,
-		});
-	}
-}
-
-onLayoutHeaderTwo(ev: Object) {
-	const { width } = this.props.appLayout;
-	const { layout } = ev.nativeEvent;
-	const posterWidth = width * 0.8;
-	const headerWidth = layout.width + layout.x + 5;
-	if (headerWidth >= posterWidth) {
-		this.setState({
-			isHeaderTwoLong: true,
-		});
-	}
-}
-
-_renderInfoButton = (button: Object): Object => {
-	return (
-		<RoundedInfoButton buttonProps={button}/>
-	);
-};
 
 render(): Object {
 	const {
@@ -184,21 +111,8 @@ render(): Object {
 		leftIcon,
 		goBack,
 		children,
+		align,
 	} = this.props;
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-
-	const adjustItems = !this.isTablet && !isPortrait;
-
-	const {
-		posterCover,
-		iconBackground,
-		iconStyle,
-		h1Style,
-		h2Style,
-		posterHeight,
-		posterItemsContainer,
-	} = this.getStyles(appLayout, adjustItems);
 
 	return (
 		<View style={styles.container}>
@@ -210,41 +124,18 @@ render(): Object {
 			<ScrollView
 				style={{flex: 1}}
 				contentContainerStyle={{flexGrow: 1}}>
-				<Poster posterHeight={posterHeight}>
-					<View style={[posterCover, posterCoverStyle]}>
-						<View style={posterItemsContainer}>
-							{!!icon && (
-								<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
-							)}
-							{!!h1 && (
-								<ScrollView
-									horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
-									<Text style={h1Style} onLayout={this.onLayoutHeaderOne}>
-										{h1}
-									</Text>
-								</ScrollView>
-							)}
-							{!!h2 && (
-								<Text style={h2Style} onLayout={this.onLayoutHeaderTwo}>
-									{h2}
-								</Text>
-							)}
-						</View>
-						{adjustItems && showBackButton && showLeftIcon && (
-							<TouchableOpacity
-								style={styles.backButtonLand}
-								onPress={this.goBack}
-								accessibilityLabel={this.labelLeftIcon}>
-								{Platform.OS === 'ios' && leftIcon !== 'close' ?
-									<FontAwesome name={leftIcon} size={width * 0.047} color="#fff"/>
-									:
-									<Icon name={leftIcon} size={width * 0.047} color="#fff"/>
-								}
-							</TouchableOpacity>
-						)}
-						{!!infoButton && this._renderInfoButton(infoButton)}
-					</View>
-				</Poster>
+				<PosterWithText
+					appLayout={appLayout}
+					align={align}
+					icon={icon}
+					h1={h1}
+					h2={h2}
+					showBackButton={showBackButton}
+					showLeftIcon={showLeftIcon}
+					navigation={navigation}
+					infoButton={infoButton}
+					leftIcon={leftIcon}
+					posterCoverStyle={posterCoverStyle}/>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
 						if (React.isValidElement(child)) {
@@ -257,102 +148,11 @@ render(): Object {
 		</View>
 	);
 }
-
-getStyles(appLayout: Object, adjustItems: boolean): Object {
-	const { isHeaderLong, isHeaderTwoLong } = this.state;
-	const { align, icon, h1 } = this.props;
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-
-	const posterHeight = adjustItems ? deviceWidth * 0.155 : deviceWidth * 0.311;
-	const iconBackgroundSize = posterHeight * 0.55;
-	const fontSizeIcon = posterHeight * 0.4;
-
-	const fontSizeH1 = adjustItems ? posterHeight * 0.42
-		:
-		(isHeaderLong ? posterHeight * 0.2
-			:
-			posterHeight * 0.23);
-	const fontSizeH2 = adjustItems ? (icon ? posterHeight * 0.29
-		:
-		posterHeight * 0.25)
-		:
-		(h1 ? ((isHeaderLong || isHeaderTwoLong) ? posterHeight * 0.13
-			:
-			posterHeight * 0.15)
-			:
-			posterHeight * 0.17);
-
-	return {
-		posterCover: {
-			position: 'absolute',
-			left: 0,
-			bottom: 0,
-			top: 0,
-			right: 0,
-			alignItems: 'center',
-			justifyContent: 'center',
-			flexDirection: 'row',
-		},
-		posterItemsContainer: align === 'center' ?
-			{
-				flex: 1,
-				position: 'absolute',
-				alignItems: 'center',
-				justifyContent: 'center',
-				flexDirection: adjustItems ? 'row' : 'column',
-			}
-			:
-			{
-				flex: 1,
-				width: width * 0.8,
-				position: 'absolute',
-				right: deviceWidth * 0.124,
-				alignItems: 'flex-end',
-				justifyContent: 'center',
-				flexDirection: 'column',
-			},
-		iconBackground: {
-			backgroundColor: '#fff',
-			alignItems: 'center',
-			justifyContent: 'center',
-			width: iconBackgroundSize,
-			height: iconBackgroundSize,
-			borderRadius: iconBackgroundSize / 2,
-			marginRight: isPortrait ? 0 : 10,
-			marginBottom: 3,
-		},
-		iconStyle: {
-			fontSize: fontSizeIcon,
-			color: '#F06F0C',
-		},
-		h1Style: {
-			fontFamily: Theme.Core.fonts.robotoLight,
-			fontSize: fontSizeH1,
-			color: '#fff',
-		},
-		h2Style: {
-			fontFamily: Theme.Core.fonts.robotoLight,
-			fontSize: fontSizeH2,
-			color: '#fff',
-		},
-		posterHeight,
-	};
-}
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-	},
-	backButtonLand: {
-		position: 'absolute',
-		alignItems: 'flex-start',
-		justifyContent: 'center',
-		backgroundColor: 'transparent',
-		left: 10,
-		top: 10,
 	},
 });
 
