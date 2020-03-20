@@ -76,11 +76,6 @@ function prepareNavigator(
 				name={name}
 				// eslint-disable-next-line react/jsx-no-bind
 				children={(...args: any): Object => {
-					// TODO: Check the behaviour(Esp Android)
-					// Make sure that all screens are re-rendered on
-					// screenProps update(Esp currentScreen and appLayout)
-					// If not use 'useSelector' from here and merge it along with
-					// screenProps from parent.
 					let _props = {};
 					args.forEach((arg: Object = {}) => {
 						_props = {
