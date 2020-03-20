@@ -42,6 +42,7 @@ type Props = {
 	appLayout: Object,
 	styles: Object,
 	screenProps: Object,
+	ScreenName: string,
 };
 
 type State = {
@@ -96,7 +97,6 @@ class RegisterScreen extends View<Props, State> {
 	}
 
 	goBackToLogin() {
-		this.closeModal();
 		this.props.navigation.navigate('Login');
 	}
 
@@ -121,10 +121,7 @@ class RegisterScreen extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.route.name !== nextProps.screenProps.currentScreen) {
-			return false;
-		}
-		return true;
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
 	}
 
 	goBack = () => {

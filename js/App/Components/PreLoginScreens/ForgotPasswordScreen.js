@@ -43,6 +43,7 @@ type Props = {
 	validationMessage?: string,
 	validationMessageHeader?: string,
 	showModal: boolean,
+	ScreenName: string,
 };
 
 class ForgotPasswordScreen extends View<Props, null> {
@@ -64,6 +65,10 @@ class ForgotPasswordScreen extends View<Props, null> {
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
 		this.labelBackToLogin = `${this.labelLink} ${this.backToLogin} ${this.labelButtondefaultDescription}`;
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
 	}
 
 	goBackToLogin() {

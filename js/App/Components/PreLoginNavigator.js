@@ -27,9 +27,6 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import Orientation from 'react-native-orientation-locker';
 import { NavigationContainer } from '@react-navigation/native';
-import {
-	useSelector,
-} from 'react-redux';
 import { connect } from 'react-redux';
 
 import { View } from '../../BaseComponents';
@@ -39,35 +36,35 @@ import { FormContainerComponent } from './PreLoginScreens/SubViews';
 import {
 	screenChange,
 } from '../Actions/Navigation';
-import {
-	useDialogueBox,
-} from '../Hooks/Dialoguebox';
 import getRouteName from '../Lib/getRouteName';
-
-let screenProps = {
-	source: 'prelogin',
-};
+import {
+	prepareNavigator,
+} from '../Lib/NavigationService';
 
 const ScreenConfigs = [
 	{
 		name: 'Login',
-		component: <LoginScreen/>,
+		Component: LoginScreen,
+		ContainerComponent: FormContainerComponent,
 	},
 	{
 		name: 'ForgotPassword',
-		component: <ForgotPasswordScreen/>,
+		Component: ForgotPasswordScreen,
+		ContainerComponent: FormContainerComponent,
 	},
 	{
 		name: 'Register',
-		component: <RegisterScreen/>,
+		Component: RegisterScreen,
+		ContainerComponent: FormContainerComponent,
 	},
 	{
 		name: 'Welcome',
-		component: <WelcomeScreen/>,
+		Component: WelcomeScreen,
+		ContainerComponent: FormContainerComponent,
 	},
 ];
 
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName: 'Login',
 	headerMode: 'none',
 };
@@ -76,6 +73,8 @@ const Stack = createStackNavigator();
 
 type Props = {
 	onNavigationStateChange: (string) => void,
+	screenProps: Object,
+	currentScreen: string,
 };
 
 class PreLoginNavigator extends View {
@@ -106,56 +105,24 @@ class PreLoginNavigator extends View {
 
 	render(): React$Element<any> {
 
-		const SCREENS = ScreenConfigs.map((screenConf: Object, index: number): Object => {
+		const {
+			screenProps,
+			currentScreen,
+		} = this.props;
+		const props = {
+			...this.props,
+			screenProps: {
+				...screenProps,
+				currentScreen,
+			},
+		};
 
-			const {
-				name,
-				component,
-				options,
-			} = screenConf;
-
-			return (
-				<Stack.Screen
-					key={`${index}${name}`}
-					name={name}
-					// eslint-disable-next-line react/jsx-no-bind
-					component={(...args: any): Object => {
-						const { screen: currentScreen } = useSelector((state: Object): Object => state.navigation);
-						const {
-							toggleDialogueBoxState,
-						} = useDialogueBox();
-
-						let props = {};
-						args.forEach((arg: Object = {}) => {
-							props = {
-								...props,
-								...arg,
-							};
-						});
-
-						return (
-							<FormContainerComponent
-								{...props}
-								screenProps={{
-									...screenProps,
-									currentScreen,
-									toggleDialogueBox: toggleDialogueBoxState,
-								}}>
-								{component}
-							</FormContainerComponent>
-						);
-					}}
-					options={options}/>
-			);
-		});
+		const Navigator = prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 
 		return (
 			<NavigationContainer
 				onStateChange={this.onNavigationStateChange}>
-				<Stack.Navigator
-					{...StackNavigatorConfig}>
-					{SCREENS}
-				</Stack.Navigator>
+				{Navigator}
 			</NavigationContainer>
 		);
 	}
@@ -169,4 +136,10 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(null, mapDispatchToProps)(PreLoginNavigator);
+function mapStateToProps(store: Object): Object {
+	return {
+		currentScreen: store.navigation.screen,
+	};
+}
+
+module.exports = connect(mapStateToProps, mapDispatchToProps)(PreLoginNavigator);

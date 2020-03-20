@@ -47,6 +47,7 @@ type Props = {
 	accessToken: Object,
 	isTokenValid: boolean,
 	dispatch: Function,
+	ScreenName: string,
 };
 
 type State = {
@@ -117,10 +118,7 @@ class LoginScreen extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.route.name !== nextProps.screenProps.currentScreen) {
-			return false;
-		}
-		return true;
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
 	}
 
 	getRelativeData(): Object {
@@ -278,12 +276,10 @@ class LoginScreen extends View {
 	}
 
 	onNeedAccount() {
-		this.closeModal();
 		this.props.navigation.navigate('Register');
 	}
 
 	onForgotPassword() {
-		this.closeModal();
 		this.props.navigation.navigate('ForgotPassword');
 	}
 }

@@ -49,6 +49,7 @@ type Props = {
 	navigation: Object,
 	screenProps: Object,
 	dispatch: Function,
+	ScreenName: string,
 };
 
 class WelcomeScreen extends View {
@@ -77,6 +78,10 @@ class WelcomeScreen extends View {
 			dispatch(clearAppData());
 			this.goBack();
 		}
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
 	}
 
 	goBack = () => {

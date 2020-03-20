@@ -260,7 +260,11 @@ class App extends React.Component<Props> {
 		return (
 			<SafeAreaView onLayout={this.onLayout} backgroundColor={Theme.Core.appBackground}>
 				{hasNotLoggedIn ?
-					<PreLoginNavigator toggleDialogueBox={this.toggleDialogueBox}/>
+					<PreLoginNavigator
+						screenProps={{
+							source: 'prelogin',
+							toggleDialogueBox: this.toggleDialogueBox,
+						}}/>
 					:
 					<PostLoginNavigatorCommon
 						{...this.props}
