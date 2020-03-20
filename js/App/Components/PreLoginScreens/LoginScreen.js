@@ -224,8 +224,13 @@ class LoginScreen extends View {
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
 
+		const {
+			maxSizeTextButton,
+			baseColorPreloginScreen,
+		} = Theme.Core;
+
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		let maxFontSize = maxSizeTextButton - 2;
 		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
@@ -236,7 +241,7 @@ class LoginScreen extends View {
 				marginHorizontal: 10,
 			},
 			textLink: {
-				color: '#bbb',
+				color: baseColorPreloginScreen,
 				fontSize: infoFontSize,
 				marginHorizontal: infoFontSize * 0.2,
 				marginBottom: 5,

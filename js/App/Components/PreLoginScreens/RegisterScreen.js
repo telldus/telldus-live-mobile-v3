@@ -165,8 +165,13 @@ class RegisterScreen extends View<Props, State> {
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
 
+		const {
+			maxSizeTextButton,
+			baseColorPreloginScreen,
+		} = Theme.Core;
+
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		let maxFontSize = maxSizeTextButton - 2;
 		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
@@ -174,7 +179,7 @@ class RegisterScreen extends View<Props, State> {
 				fontSize: infoFontSize,
 				marginHorizontal: infoFontSize * 0.2,
 				marginVertical: infoFontSize * 0.8,
-				color: '#bbb',
+				color: baseColorPreloginScreen,
 				padding: 5,
 			},
 		};

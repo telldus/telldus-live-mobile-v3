@@ -79,13 +79,18 @@ class WelcomeScreen extends View {
 		const isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
 
+		const {
+			maxSizeTextButton,
+			baseColorPreloginScreen,
+		} = Theme.Core;
+
 		let infoFontSize = Math.floor(deviceWidth * 0.039);
-		let maxFontSize = Theme.Core.maxSizeTextButton - 2;
+		let maxFontSize = maxSizeTextButton - 2;
 		infoFontSize = infoFontSize > maxFontSize ? maxFontSize : infoFontSize;
 
 		return {
 			textBody: {
-				color: '#ffffff80',
+				color: baseColorPreloginScreen,
 				marginTop: infoFontSize,
 				textAlign: 'center',
 				fontSize: infoFontSize,

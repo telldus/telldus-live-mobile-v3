@@ -71,6 +71,8 @@ export default {
 	inactiveTintColor: '#A59F9A',
 	gatewayInactive: '#a2a2a2',
 
+	baseColorPreloginScreen: '#ffffff',
+
 	rippleColor: '#efefef',
 	rippleOpacity: 0.9,
 	rippleDuration: 600,
