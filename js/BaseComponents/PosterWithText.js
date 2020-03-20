@@ -55,9 +55,12 @@ type Props = {
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
+	scrollableH1?: boolean,
 
 	navigation: Object,
 	posterCoverStyle?: Array<any> | Object | number,
+	h1Style?: Array<any> | Object | number,
+	posterItemsContainerStyle?: Array<any> | Object | number,
 };
 
 type DefaultProps = {
@@ -81,6 +84,7 @@ static defaultProps: DefaultProps = {
 	align: 'center',
 	showLeftIcon: true,
 	leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
+	scrollableH1: true,
 };
 
 goBack: () => void;
@@ -122,7 +126,15 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon']);
+	const propsChange = shouldUpdate(others, othersN, [
+		'icon',
+		'showBackButton',
+		'showLeftIcon',
+		'align',
+		'infoButton',
+		'leftIcon',
+		'scrollableH1',
+	]);
 	if (propsChange) {
 		return true;
 	}
@@ -170,6 +182,9 @@ render(): Object {
 		infoButton,
 		showLeftIcon,
 		leftIcon,
+		h1Style,
+		posterItemsContainerStyle,
+		scrollableH1,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -180,30 +195,40 @@ render(): Object {
 		posterCover,
 		iconBackground,
 		iconStyle,
-		h1Style,
-		h2Style,
+		h1StyleDef,
+		h2StyleDef,
 		posterHeight,
-		posterItemsContainer,
+		posterItemsContainerDef,
+		scolllViewCCStyle,
 	} = this.getStyles(appLayout, adjustItems);
 
 	return (
 		<View style={styles.container}>
 			<Poster posterHeight={posterHeight}>
 				<View style={[posterCover, posterCoverStyle]}>
-					<View style={posterItemsContainer}>
+					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
 							<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
 						)}
 						{!!h1 && (
-							<ScrollView
-								horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
-								<Text style={h1Style} onLayout={this.onLayoutHeaderOne}>
+							scrollableH1 ?
+								<ScrollView
+									nestedScrollEnabled={true}
+									horizontal={true}
+									bounces={false}
+									showsHorizontalScrollIndicator={false}
+									contentContainerStyle={scolllViewCCStyle}>
+									<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
+										{h1}
+									</Text>
+								</ScrollView>
+								:
+								<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
 									{h1}
 								</Text>
-							</ScrollView>
 						)}
 						{!!h2 && (
-							<Text style={h2Style} onLayout={this.onLayoutHeaderTwo}>
+							<Text style={h2StyleDef} onLayout={this.onLayoutHeaderTwo}>
 								{h2}
 							</Text>
 						)}
@@ -255,6 +280,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 
 	return {
 		posterCover: {
+			flex: 1,
 			position: 'absolute',
 			left: 0,
 			bottom: 0,
@@ -264,20 +290,18 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			justifyContent: 'center',
 			flexDirection: 'row',
 		},
-		posterItemsContainer: align === 'center' ?
+		posterItemsContainerDef: align === 'center' ?
 			{
-				flex: 1,
-				position: 'absolute',
+				flex: 0,
 				alignItems: 'center',
 				justifyContent: 'center',
 				flexDirection: adjustItems ? 'row' : 'column',
 			}
 			:
 			{
-				flex: 1,
+				flex: 0,
 				width: width * 0.8,
-				position: 'absolute',
-				right: deviceWidth * 0.124,
+				marginRight: deviceWidth * 0.124,
 				alignItems: 'flex-end',
 				justifyContent: 'center',
 				flexDirection: 'column',
@@ -292,16 +316,21 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			marginRight: isPortrait ? 0 : 10,
 			marginBottom: 3,
 		},
+		scolllViewCCStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+			flex: 0,
+		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
 			color: '#F06F0C',
 		},
-		h1Style: {
+		h1StyleDef: {
 			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH1,
 			color: '#fff',
 		},
-		h2Style: {
+		h2StyleDef: {
 			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH2,
 			color: '#fff',
