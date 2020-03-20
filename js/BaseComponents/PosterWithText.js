@@ -56,6 +56,7 @@ type Props = {
 	showLeftIcon?: boolean,
 	leftIcon: string,
 	scrollableH1?: boolean,
+	posterWidth?: number,
 
 	navigation: Object,
 	posterCoverStyle?: Array<any> | Object | number,
@@ -134,6 +135,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'infoButton',
 		'leftIcon',
 		'scrollableH1',
+		'posterWidth',
 	]);
 	if (propsChange) {
 		return true;
@@ -185,6 +187,7 @@ render(): Object {
 		h1Style,
 		posterItemsContainerStyle,
 		scrollableH1,
+		posterWidth,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -205,7 +208,9 @@ render(): Object {
 
 	return (
 		<View style={styles.container}>
-			<Poster posterHeight={posterHeight}>
+			<Poster
+				posterHeight={posterHeight}
+				posterWidth={posterWidth}>
 				<View style={[posterCover, posterCoverStyle]}>
 					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
