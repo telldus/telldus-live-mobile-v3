@@ -320,14 +320,17 @@ const Stack = createStackNavigator();
 const AppNavigator = React.memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 
-	function onNavigationStateChange(currentState: Object) {
+	const onNavigationStateChange = React.useCallback((currentState: Object) => {
 		const currentScreen = getRouteName(currentState);
 
 		dispatch(syncWithServer(currentScreen));
 		dispatch(screenChange(currentScreen));
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	const Navigator = prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+	const Navigator = React.useMemo((): Object => {
+		return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+	}, [props]);
 
 	return (
 		<NavigationContainer
