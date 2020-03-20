@@ -3,7 +3,7 @@ jest.useFakeTimers();
 
 
 const initialState = {
-	screen: 'Dashboard',
+	screen: 'Login',
 };
 
 
