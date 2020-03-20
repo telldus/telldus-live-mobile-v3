@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		alignSelf: 'center',
 		left: 5,
+		fontWeight: '700',
 	},
 	iconStyle: {
 		position: 'absolute',
