@@ -156,7 +156,7 @@ render(): Object {
 				autoCapitalize="characters"
 				autoCorrect={false}
 				keyboardType={this.keyboardType}
-				ref={this.setRef}
+				setRef={this.setRef}
 				onFocus={this.onFocus}
 				blurOnSubmit={true}
 				onSubmitEditing={this.onSubmitEditing}
