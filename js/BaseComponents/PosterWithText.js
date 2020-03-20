@@ -200,6 +200,7 @@ render(): Object {
 		posterHeight,
 		posterItemsContainerDef,
 		scolllViewCCStyle,
+		scolllViewStyle,
 	} = this.getStyles(appLayout, adjustItems);
 
 	return (
@@ -217,6 +218,7 @@ render(): Object {
 									horizontal={true}
 									bounces={false}
 									showsHorizontalScrollIndicator={false}
+									style={scolllViewStyle}
 									contentContainerStyle={scolllViewCCStyle}>
 									<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
 										{h1}
@@ -320,12 +322,18 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			alignItems: 'center',
 			justifyContent: 'center',
 			flex: 0,
+			flexGrow: 0,
+		},
+		scolllViewStyle: {
+			flex: 0,
+			flexGrow: 0,
 		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
 			color: '#F06F0C',
 		},
 		h1StyleDef: {
+			flex: 0,
 			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH1,
 			color: '#fff',
