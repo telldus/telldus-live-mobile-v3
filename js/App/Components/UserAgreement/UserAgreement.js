@@ -29,7 +29,13 @@ import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from reac
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import Markdown from 'react-native-markdown-renderer';
 
-import { View, Text, StyleSheet, Poster, NavigationHeader } from '../../../BaseComponents';
+import {
+	View,
+	Text,
+	StyleSheet,
+	PosterWithText,
+	NavigationHeader,
+} from '../../../BaseComponents';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import {
@@ -152,14 +158,17 @@ class UserAgreement extends View<Props, State> {
 						<NavigationHeader showLeftIcon={false} topMargin={false} forceHideStatus/>
 						<ScrollView
 							style={styles.scrollView}
-							contentContainerStyle={styles.SVContentContainerStyle}>
-							<Poster>
-								<View style={styles.posterItems}>
-									<Text style={styles.headerText}>
-										{this.header}
-									</Text>
-								</View>
-							</Poster>
+							contentContainerStyle={styles.SVContentContainerStyle}
+							nestedScrollEnabled={true}>
+							<PosterWithText
+								appLayout={appLayout}
+								align={'center'}
+								h1={this.header}
+								showBackButton={false}
+								showLeftIcon={false}
+								h1Style={styles.headerText}
+								posterCoverStyle={styles.posterCover}
+								scrollableH1={false}/>
 							<View style={styles.contentContainerStyle}>
 								<Text/>
 								<Markdown style={styles.markupStyle}>
@@ -191,14 +200,7 @@ class UserAgreement extends View<Props, State> {
 				flex: 1,
 				backgroundColor: '#fff',
 			},
-			posterItems: {
-				position: 'absolute',
-				top: 0,
-				bottom: 0,
-				left: 0,
-				right: 0,
-				alignItems: 'center',
-				justifyContent: 'center',
+			posterCover: {
 				paddingHorizontal: 20,
 			},
 			scrollView: {
@@ -214,7 +216,6 @@ class UserAgreement extends View<Props, State> {
 			},
 			headerText: {
 				fontSize: Math.floor(deviceWidth * 0.047),
-				color: '#fff',
 				textAlign: 'center',
 			},
 			footer: {
