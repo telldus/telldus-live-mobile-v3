@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
 	StyleSheet,
 } from 'react-native';
@@ -130,7 +132,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		}
 	}
 
-	function onSelectActionSheet(index: number) {
+	const onSelectActionSheet = useCallback((index: number) => {
 		if (switchingId) {
 			return;
 		}
@@ -195,7 +197,15 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				}
 			}
 		}
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		accounts,
+		isLoggingOut,
+		pushToken,
+		showAddNewAccount,
+		switchingId,
+		userId,
+	]);
 
 	let ACCOUNTS = [];
 	const disabledButtonIndexes = [];
