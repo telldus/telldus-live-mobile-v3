@@ -24,9 +24,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { View, Text, Poster } from '../../../../BaseComponents';
-
-import Theme from '../../../Theme';
+import { View, PosterWithText } from '../../../../BaseComponents';
 
 type Props = {
 	h1: string,
@@ -48,46 +46,14 @@ class ChangeLogPoster extends View {
 
 	render(): Object {
 		const { h1, h2, appLayout } = this.props;
-		const styles = this.getStyle(appLayout);
 
 		return (
-			<Poster>
-				<View style={styles.hContainer}>
-					<Text style={[styles.h, styles.h1]}>
-						{!!h1 && h1}
-					</Text>
-					<Text style={[styles.h, styles.h2]}>
-						{!!h2 && h2}
-					</Text>
-				</View>
-			</Poster>
+			<PosterWithText
+				appLayout={appLayout}
+				align={'right'}
+				h1={h1}
+				h2={h2}/>
 		);
-	}
-
-	getStyle = (appLayout: Object): Object => {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-
-		return {
-			hContainer: {
-				position: 'absolute',
-				right: isPortrait ? width * 0.1 : height * 0.1,
-				top: isPortrait ? width * 0.088 : height * 0.088,
-				flex: 1,
-				alignItems: 'flex-end',
-			},
-			h: {
-				color: '#fff',
-				backgroundColor: 'transparent',
-				fontFamily: Theme.Core.fonts.robotoLight,
-			},
-			h1: {
-				fontSize: isPortrait ? width * 0.08 : height * 0.08,
-			},
-			h2: {
-				fontSize: isPortrait ? width * 0.053333333 : height * 0.053333333,
-			},
-		};
 	}
 }
 
