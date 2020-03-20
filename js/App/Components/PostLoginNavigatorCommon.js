@@ -42,7 +42,6 @@ import SwitchAccountActionSheet from './AccountSettings/SwitchAccountActionSheet
 const { AndroidWidget } = NativeModules;
 
 import {
-	setAppLayout,
 	getUserProfile,
 	appStart,
 	appState,
@@ -119,6 +118,7 @@ type Props = {
 	addNewLocation: () => any,
 	locale: string,
 	toggleDialogueBox: (Object) => null,
+	onLayout: Function,
 };
 
 type State = {
@@ -132,7 +132,6 @@ class PostLoginNavigatorCommon extends View<Props, State> {
 props: Props;
 state: State;
 
-onLayout: (Object) => void;
 onDoneDimming: (Object) => void;
 autoDetectLocalTellStick: () => void;
 handleConnectivityChange: () => void;
@@ -154,7 +153,6 @@ constructor(props: Props) {
 
 	this.timeOutConfigureLocalControl = null;
 
-	this.onLayout = this.onLayout.bind(this);
 	this.onDoneDimming = this.onDoneDimming.bind(this);
 	this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
 
@@ -560,10 +558,6 @@ showDialogue(message: string) {
 	});
 }
 
-onLayout(ev: Object) {
-	this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
-}
-
 onDoneDimming() {
 	this.props.dispatch(hideDimmerStep());
 }
@@ -596,6 +590,7 @@ render(): Object {
 		screenReaderEnabled,
 		showChangeLog,
 		showLoadingIndicator,
+		onLayout,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
@@ -632,7 +627,7 @@ render(): Object {
 					intl={intl}
 				/>
 			)}
-			<UserAgreement showModal={showEulaMdal} onLayout={this.onLayout}/>
+			<UserAgreement showModal={showEulaMdal} onLayout={onLayout}/>
 			<SwitchAccountActionSheet
 				ref={this.setRefSwitchAccountActionSheet}/>
 			<TransparentFullPageLoadingIndicator
