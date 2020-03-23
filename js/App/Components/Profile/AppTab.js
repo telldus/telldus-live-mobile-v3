@@ -125,7 +125,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 						show: true,
 						showHeader: true,
 						text: message,
-						notificationHeader: formatMessage(i18n.pushPermissionHeader),
+						header: formatMessage(i18n.pushPermissionHeader),
 						showPositive: true,
 						positiveText: null,
 						showNegative: false,
