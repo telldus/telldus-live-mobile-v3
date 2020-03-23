@@ -339,13 +339,11 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 		},
 		h1StyleDef: {
 			flex: 0,
-			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH1,
 			color: '#fff',
 			fontWeight: '500',
 		},
 		h2StyleDef: {
-			fontFamily: Theme.Core.fonts.robotoLight,
 			fontSize: fontSizeH2,
 			color: '#fff',
 			fontWeight: '400',
