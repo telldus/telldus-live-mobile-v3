@@ -286,7 +286,8 @@ class SensorDashboardTile extends View<Props, null> {
 			},
 			labelStyle: {
 				fontSize: tileWidth * 0.09,
-				height: tileWidth * 0.12,
+				height: tileWidth * 0.13,
+				textAlignVertical: 'center',
 			},
 			sensorValueCoverStyle: {
 				marginBottom: Object.keys(data).length <= 1 ? 0 : tileWidth * 0.1,
