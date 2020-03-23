@@ -107,10 +107,10 @@ const SetSensorName = (props: Object): Object => {
 				if (sensor.ignored) {
 					await dispatch(setIgnoreSensor(sensor.id, 0));
 				}
+				await dispatch(getSensorInfo(sensor.id));
 			} catch (e) {
 				// Not imp
 			} finally {
-				dispatch(getSensorInfo(sensor.id));
 				setNameConf({
 					name,
 					isLoading: false,
