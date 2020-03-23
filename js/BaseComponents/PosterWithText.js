@@ -37,8 +37,6 @@ import RoundedInfoButton from './RoundedInfoButton';
 
 import { shouldUpdate } from '../App/Lib';
 
-import Theme from '../App/Theme';
-
 type InfoButton = {
 	onPress?: Function,
 	infoButtonContainerStyle?: Array<any> | Object | number,

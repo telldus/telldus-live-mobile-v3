@@ -26,15 +26,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import {
 	ScrollView,
 } from 'react-native';
-import {
-	TextField,
-} from 'react-native-material-textfield';
 import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	View,
 	FloatingButton,
 	IconTelldus,
+	MaterialTextInput,
 } from '../../../../BaseComponents';
 import {
 	DeviceSettings,
@@ -157,7 +155,7 @@ const SetDeviceName433 = (props: Object): Object => {
 			}}
 			keyboardShouldPersistTaps={'always'}>
 			<View style={coverStyle}>
-				<TextField
+				<MaterialTextInput
 					value={name}
 					label={formatMessage(i18n.name)}
 					labelTextStyle={labelStyle}

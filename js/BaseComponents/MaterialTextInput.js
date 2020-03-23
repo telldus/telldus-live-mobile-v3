@@ -30,11 +30,31 @@ import {
 
 import Theme from '../App/Theme';
 
+function getFontSize(style: Object | Array<Object>): ?number {
+	if (!style) {
+		return undefined;
+	}
+	if (style.fontSize && typeof style.fontSize === 'number') {
+		return style.fontSize;
+	}
+	let fs;
+	if (Array.isArray(style)) {
+		style.forEach((s: Object) => {
+			if (s && s.fontSize) {
+				fs = s.fontSize;
+			}
+		});
+	}
+	return fs;
+}
+
 const MaterialTextInput = (props: Object = {}): Object => {
 	const {
 		containerStyle,
 		renderLeftAccessory,
 		setRef,
+		style,
+		fontSize,
 		...others
 	} = props;
 
@@ -47,6 +67,8 @@ const MaterialTextInput = (props: Object = {}): Object => {
 		return null;
 	}
 
+	const _fontSize = fontSize || getFontSize(style);
+
 	const {
 		containerStyleDef,
 	} = getStyles();
@@ -54,6 +76,8 @@ const MaterialTextInput = (props: Object = {}): Object => {
 	return (
 		<TextField
 			{...others}
+			style={style}
+			fontSize={_fontSize}
 			containerStyle={[containerStyleDef, containerStyle]}
 			renderLeftAccessory={_renderLeftAccessory}
 			ref={setRef}/>
@@ -84,4 +108,4 @@ const getStyles = (): Object => {
 	};
 };
 
-export default MaterialTextInput;
+export default React.memo<Object>(MaterialTextInput);

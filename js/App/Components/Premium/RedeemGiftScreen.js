@@ -26,9 +26,6 @@ import React, { useState, useMemo } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
-import {
-	TextField,
-} from 'react-native-material-textfield';
 
 import {
 	View,
@@ -36,6 +33,7 @@ import {
 	Text,
 	IconTelldus,
 	TouchableButton,
+	MaterialTextInput,
 } from '../../../BaseComponents';
 
 import {
@@ -154,7 +152,7 @@ const RedeemGiftScreen = (props: Object): Object => {
 					<Text style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
 					</Text>
-					<TextField
+					<MaterialTextInput
 						value={code}
 						label={formatMessage(i18n.labelVoucherCode)}
 						labelTextStyle={labelStyle}

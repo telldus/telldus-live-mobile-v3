@@ -136,7 +136,7 @@ render(): Object {
 					value={value}
 					label={label}
 					labelFontSize={styles.label.fontSize}
-					labelTextStyle={[styles.label, {labelStyle}]}
+					labelTextStyle={[styles.label, labelStyle]}
 					style={[styles.textField, textStyle]}
 					onChangeText={this.onChangeText}
 					onSubmitEditing={this.onSubmitEditing}
