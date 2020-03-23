@@ -26,6 +26,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { createSelector } from 'reselect';
 
 import { View } from '../../../BaseComponents';
 import Gateway from './Gateway';
@@ -36,11 +37,12 @@ import {
 	AddLocation,
 } from './DrawerSubComponents';
 
+import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
 import { hasStatusBar, getDrawerWidth, shouldUpdate } from '../../Lib';
 
 type Props = {
-gateways: Object,
+gateways: Array<Object>,
 appLayout: Object,
 isOpen: boolean,
 
@@ -122,10 +124,11 @@ render(): Object {
 				backgroundColor: 'white',
 			}}>
 				<ConnectedLocations styles={styles}/>
-				{gateways.allIds.map((id: number, index: number): Object => {
+				{gateways.map((gateway: number, index: number): Object => {
 					return (<Gateway
-						gateway={gateways.byId[id]}
-						key={index} appLayout={appLayout}
+						gateway={gateway}
+						key={index}
+						appLayout={appLayout}
 						onPressGateway={onPressGateway}
 						dispatch={dispatch}/>);
 				})}
@@ -227,10 +230,17 @@ getStyles(appLayout: Object): Object {
 }
 }
 
+const getRows = createSelector(
+	[
+		({ gateways }: Object): Object => gateways,
+	],
+	(gateways: Object): Array<any> => parseGatewaysForListView(gateways)
+);
+
 function mapStateToProps(store: Object): Object {
 
 	return {
-		gateways: store.gateways,
+		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
 	};
 }
