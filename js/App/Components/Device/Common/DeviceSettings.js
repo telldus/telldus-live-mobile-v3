@@ -72,6 +72,7 @@ type Props = {
 	learnButton?: Object,
 	isSaving433MhzParams?: boolean,
 	devicetype: string,
+	renderExtraSettingsTop?: Function,
 };
 
 const DeviceSettings = (props: Props): Object => {
@@ -91,6 +92,7 @@ const DeviceSettings = (props: Props): Object => {
 		learnButton,
 		isSaving433MhzParams = false,
 		devicetype,
+		renderExtraSettingsTop,
 	} = props;
 
 	function _keyboardDidHide() {
@@ -147,11 +149,17 @@ const DeviceSettings = (props: Props): Object => {
 	useEffect(() => {
 		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
 		if (deviceId && initializeValueFromStore) {
+			const {
+				model,
+				protocol,
+			} = editingDevice;
 			dispatch(setWidgetParamsValue({
 				id: widgetId,
 				deviceId,
 				edit: true,
 				...DeviceParams433,
+				model,
+				protocol,
 			}));
 		}
 		dispatch(toggleStatusUpdatedViaScan433MHZ(false));
@@ -577,6 +585,7 @@ const DeviceSettings = (props: Props): Object => {
 			<Text style={titleStyle}>
 				{formatMessage(i18n.deviceSettings)}
 			</Text>
+			{!!renderExtraSettingsTop && renderExtraSettingsTop()}
 			{Setting}
 			{(showScan && clientId) &&
 			<View style={scanLearnCover}>
