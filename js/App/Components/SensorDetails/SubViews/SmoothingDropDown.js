@@ -58,7 +58,7 @@ export default class SmoothingDropDown extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { appLayout, smoothing, onValueChange } = this.props;
+		const { appLayout, smoothing, onValueChange, intl } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -73,6 +73,7 @@ export default class SmoothingDropDown extends View<Props, null> {
 				label={this.DDLabel}
 				onValueChange={onValueChange}
 				appLayout={appLayout}
+				intl={intl}
 				dropDownContainerStyle={{
 					marginLeft: padding / 2,
 				}}

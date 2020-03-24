@@ -134,6 +134,7 @@ const DropDownSetting = (props: Object): Object => {
 				disabled={isScanning || isSaving433MhzParams}
 				onValueChange={onValueChange}
 				appLayout={layout}
+				intl={intl}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerStyle={pickerStyle}
 				baseColor={inactiveTintColor}

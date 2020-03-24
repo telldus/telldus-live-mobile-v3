@@ -23,7 +23,7 @@
 
 import React, { Component } from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
-import { intlShape, injectIntl } from 'react-intl';
+import { intlShape } from 'react-intl';
 
 import View from './View';
 import Text from './Text';
@@ -72,6 +72,10 @@ type Props = {
 	animationDuration?: number,
 	pickerBaseTextStyle?: Array<any> | number | Object,
 	iconLeftPickerBase?: Object,
+	renderItem?: Function,
+	valueExtractor?: Function,
+	labelExtractor?: Function,
+	itemSize?: number,
 };
 
 type DefaultProps = {
@@ -107,6 +111,9 @@ static defaultProps: DefaultProps = {
 	phraseOne: string;
 	phraseTwo: string;
 	phraseThree: string;
+
+	blur: Function;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -121,7 +128,7 @@ static defaultProps: DefaultProps = {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'value', 'appLayout', 'label', 'extraData', 'disabled']);
+			'value', 'appLayout', 'label', 'extraData', 'disabled', 'itemSize']);
 		if (propsChange) {
 			return true;
 		}
@@ -133,6 +140,10 @@ static defaultProps: DefaultProps = {
 
 	onPressPicker() {
 		this.refs.dropdown.focus();
+	}
+
+	blur = () => {
+		this.refs.dropdown.blur();
 	}
 
 	renderBase(items: Object): Object {
@@ -198,6 +209,10 @@ static defaultProps: DefaultProps = {
 			textColor,
 			animationDuration,
 			disabled,
+			renderItem,
+			valueExtractor,
+			labelExtractor,
+			itemSize,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -207,9 +222,9 @@ static defaultProps: DefaultProps = {
 			dropDownListsContainerStyleDef,
 			pickerStyleDef,
 		} = this.getStyle(appLayout);
-		const itemSize = Math.ceil(fontSize * 1.5 + itemPadding * 2);
+		const _itemSize = itemSize || Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = items.length < itemCount ? items.length : itemCount;
-		const dropdownTop = -(iCount * itemSize);
+		const dropdownTop = -(iCount * _itemSize);
 
 		return (
 			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>
@@ -243,6 +258,10 @@ static defaultProps: DefaultProps = {
 						dropdownMargins={dropdownMargins}
 						textColor={textColor}
 						animationDuration={animationDuration}
+						useNativeDriver={true}
+						renderItem={renderItem}
+						valueExtractor={valueExtractor}
+						labelExtractor={labelExtractor}
 					/>
 				</View>
 			</View>
@@ -299,6 +318,7 @@ static defaultProps: DefaultProps = {
 				fontSize: fontSizeText,
 				color: rowTextColor,
 				marginRight: fontSizeText,
+				textAlignVertical: 'center',
 			},
 			rightIconStyle: {
 				fontSize: fontSizeRightIcon,
@@ -312,4 +332,4 @@ static defaultProps: DefaultProps = {
 	}
 }
 
-export default injectIntl(DropDown);
+export default DropDown;

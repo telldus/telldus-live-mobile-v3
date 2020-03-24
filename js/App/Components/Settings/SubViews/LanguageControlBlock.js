@@ -44,7 +44,8 @@ import {
 import i18n from '../../../Translations/common';
 
 const LanguageControlBlock = (props: Object): Object => {
-	const { formatMessage } = useIntl();
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { language: languageProp = {} } = defaultSettings;
@@ -100,6 +101,7 @@ const LanguageControlBlock = (props: Object): Object => {
 			dropDownContainerStyle={dropDownContainerStyle}
 			dropDownHeaderStyle={dropDownHeaderStyle}
 			baseColor={'#000'}
+			intl={intl}
 			fontSize={fontSize}
 			itemCount={LANGUAGES.length}
 			accessibilityLabelPrefix={labelLanguage}

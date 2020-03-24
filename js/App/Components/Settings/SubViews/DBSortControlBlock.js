@@ -44,7 +44,8 @@ const DBSortControlBlock = (props: Object): Object => {
 	const {
 		dropDownContainerStyle,
 	} = props;
-	const { formatMessage } = useIntl();
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { sortingDB: sortingDBProp } = defaultSettings;
@@ -87,6 +88,7 @@ const DBSortControlBlock = (props: Object): Object => {
 				value={sortingDBProp === 'Alphabetical' ? alpha : chrono}
 				onValueChange={saveSortingDB}
 				appLayout={layout}
+				intl={intl}
 				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
 				dropDownHeaderStyle={dropDownHeaderStyle}
 				baseColor={'#000'}
