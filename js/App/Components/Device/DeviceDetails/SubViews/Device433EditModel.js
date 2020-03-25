@@ -73,7 +73,7 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 	const { model: modelC } = widgetParams433Device;
 
 	const {
-		dropDownContainerStyleDef,
+		dropDownContainerStyle,
 		fontSize,
 		pickerContainerStyle,
 		coverStyle,
@@ -223,7 +223,7 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 				value={modelC}
 				appLayout={layout}
 				intl={intl}
-				dropDownContainerStyle={dropDownContainerStyleDef}
+				dropDownContainerStyle={dropDownContainerStyle}
 				baseColor={rowTextColor}
 				fontSize={fontSize}
 				pickerContainerStyle={pickerContainerStyle}
@@ -261,7 +261,7 @@ const getStyles = (appLayout: Object): Object => {
 		brandSecondary,
 		rowTextColor,
 		itemSize,
-		dropDownContainerStyleDef: {
+		dropDownContainerStyle: {
 			flex: 1,
 			flexDirection: 'row',
 			alignItems: 'center',
