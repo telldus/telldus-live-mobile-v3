@@ -128,7 +128,9 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 
 		if (key === 'section_header') {
 			return (
-				<View style={style}>
+				<View style={[style, {
+					justifyContent: 'center',
+				}]}>
 					<Text style={sectionHeaderStyle}>
 						{value}
 					</Text>
@@ -147,7 +149,9 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 		} = value;
 
 		return (
-			<RippleButton style={style} onPress={onPress}>
+			<RippleButton style={[style, {
+				justifyContent: 'center',
+			}]} onPress={onPress}>
 				<Text style={[sectionRowStyle, {
 					color: model === _model ? brandSecondary : '#000',
 				}]}>
