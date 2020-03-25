@@ -87,7 +87,7 @@ class RGBPalette extends View<Props, null> {
 				backgroundColor: mainColor,
 			}]}>
 				{
-					methodRequested === 'DIM' ?
+					methodRequested === 'DIM' || methodRequested === 'RGB' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
