@@ -138,17 +138,25 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         </View>
       </View>
       <View
+        accessible={true}
+        focusable={false}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "flex-end",
-              "paddingVertical": 8,
-            },
-            undefined,
-          ]
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "opacity": 1,
+            "paddingVertical": 8,
+          }
         }
       >
         <Text
@@ -325,17 +333,25 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         </View>
       </View>
       <View
+        accessible={true}
+        focusable={false}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "flex-end",
-              "paddingVertical": 8,
-            },
-            undefined,
-          ]
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "opacity": 1,
+            "paddingVertical": 8,
+          }
         }
       >
         <Text
@@ -542,17 +558,25 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         </View>
       </View>
       <View
+        accessible={true}
+        focusable={false}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "flex-end",
-              "paddingVertical": 8,
-            },
-            undefined,
-          ]
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "opacity": 1,
+            "paddingVertical": 8,
+          }
         }
       >
         <Text
@@ -729,17 +753,25 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         </View>
       </View>
       <View
+        accessible={true}
+        focusable={false}
+        isTVSelectable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
         style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flex": 1,
-              "flexDirection": "row",
-              "justifyContent": "flex-end",
-              "paddingVertical": 8,
-            },
-            undefined,
-          ]
+          Object {
+            "alignItems": "center",
+            "flex": 1,
+            "flexDirection": "row",
+            "justifyContent": "flex-end",
+            "opacity": 1,
+            "paddingVertical": 8,
+          }
         }
       >
         <Text
