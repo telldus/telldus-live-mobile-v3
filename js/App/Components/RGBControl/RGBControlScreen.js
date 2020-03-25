@@ -29,6 +29,7 @@ import {
 	View,
 	LocationDetails,
 } from '../../../BaseComponents';
+import ButtonLoadingIndicator from '../TabViews/SubViews/ButtonLoadingIndicator';
 import SliderDetails from '../Device/DeviceDetails/SubViews/SliderDetails';
 import RGBColorWheel from './RGBColorWheel';
 
@@ -122,16 +123,25 @@ class RGBControlScreen extends View<Props, State> {
 					swatchesCover={styles.swatchesCover}
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
-					thumbSize={15}/>
+					thumbSize={15}
+					showActionIndicator={true}/>
 			</View>
 		);
 	}
 
 	renderSlider(styles: Object): Object {
 		const { device, intl, isGatewayActive, appLayout } = this.props;
+		const {
+			methodRequested,
+		} = device;
 
 		return (
 			<View style={styles.sliderCover}>
+				{
+					methodRequested === 'DIM' ?
+						<ButtonLoadingIndicator style={styles.dot} color={Theme.Core.brandSecondary}/>
+						: null
+				}
 				<SliderDetails
 					device={device}
 					intl={intl}
@@ -304,6 +314,12 @@ class RGBControlScreen extends View<Props, State> {
 				flex: 0,
 				marginTop: (padding / 2),
 				marginHorizontal: padding,
+			},
+			dot: {
+				zIndex: 3,
+				position: 'absolute',
+				top: 6,
+				left: 6,
 			},
 		};
 	}

@@ -36,6 +36,7 @@ import DownButton from '../../../TabViews/SubViews/Navigational/DownButton';
 import StopButton from '../../../TabViews/SubViews/Navigational/StopButton';
 import RGBColorWheel from '../../../RGBControl/RGBColorWheel';
 import HeatControlWheelModes from '../../../ThermostatControl/HeatControlWheelModes';
+import ButtonLoadingIndicator from '../../../TabViews/SubViews/ButtonLoadingIndicator';
 
 import { getDeviceActionIcon } from '../../../../Lib/DeviceUtils';
 import { getSupportedModes } from '../../../../Lib/thermostatUtils';
@@ -79,6 +80,7 @@ class DeviceActionDetails extends View {
 			isInState,
 			stateValues = {},
 			parameter = [],
+			methodRequested,
 		} = device;
 		const {
 			TURNON,
@@ -103,6 +105,7 @@ class DeviceActionDetails extends View {
 			colorWheelCover,
 			swatchWheelCover,
 			modesCoverStyle,
+			dot,
 		} = this.getStyles(appLayout);
 		const sharedProps = {
 			...device,
@@ -209,16 +212,24 @@ class DeviceActionDetails extends View {
 				{buttons.length > 0 &&
 				<View style={[container, containerStyle]}>
 					{!!RGB &&
-					<RGBColorWheel
-						device={device}
-						appLayout={appLayout}
-						style={colorWheel}
-						thumStyle={thumStyle}
-						swatchStyle={swatchStyle}
-						swatchesCover={swatchesCover}
-						colorWheelCover={colorWheelCover}
-						swatchWheelCover={swatchWheelCover}
-						thumbSize={15}/>
+					<>
+						{
+							(methodRequested === 'RGB' || methodRequested === 'DIM') ?
+								<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+								: null
+						}
+						<RGBColorWheel
+							device={device}
+							appLayout={appLayout}
+							style={colorWheel}
+							thumStyle={thumStyle}
+							swatchStyle={swatchStyle}
+							swatchesCover={swatchesCover}
+							colorWheelCover={colorWheelCover}
+							swatchWheelCover={swatchWheelCover}
+							thumbSize={15}
+							showActionIndicator={false}/>
+					</>
 					}
 					{!!DIM && !THERMOSTAT && (
 						<SliderDetails
@@ -334,6 +345,11 @@ class DeviceActionDetails extends View {
 				marginVertical: 0,
 				marginTop: padding,
 				marginBottom: padding / 2,
+			},
+			dot: {
+				position: 'absolute',
+				top: 6,
+				left: 6,
 			},
 		};
 	}
