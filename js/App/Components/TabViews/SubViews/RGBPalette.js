@@ -26,6 +26,7 @@ import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
 import { View, IconTelldus } from '../../../../BaseComponents';
+import ButtonLoadingIndicator from './ButtonLoadingIndicator';
 
 import {
 	getMainColorRGB,
@@ -41,6 +42,7 @@ type Props = {
 	fontSizeIcon?: number,
 	offColorMultiplier: number,
 	onColorMultiplier: number,
+	methodRequested: string,
 };
 
 type DefaultProps = {
@@ -69,6 +71,7 @@ class RGBPalette extends View<Props, null> {
 			fontSizeIcon,
 			isGatewayActive,
 			onColorMultiplier,
+			methodRequested,
 		} = this.props;
 
 		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb), onColorMultiplier) : '#eeeeee';
@@ -77,10 +80,17 @@ class RGBPalette extends View<Props, null> {
 		mainColor = isGatewayActive ? mainColor : '#eeeeee';
 		iconColor = isGatewayActive ? iconColor : '#a2a2a2';
 
+		let dotColor = iconColor;
+
 		return (
 			<View style={[styles.palette, {
 				backgroundColor: mainColor,
 			}]}>
+				{
+					methodRequested === 'DIM' ?
+						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
+						: null
+				}
 				<IconTelldus icon="palette" size={fontSizeIcon} color={iconColor} />
 				<Text style={[styles.lbl, { fontSize: fontSize, color: iconColor }]}>{`${displayedValue}%`}</Text>
 			</View>
@@ -96,6 +106,11 @@ const styles = StyleSheet.create({
 	},
 	lbl: {
 		marginTop: 3,
+	},
+	dot: {
+		position: 'absolute',
+		top: 3,
+		left: 3,
 	},
 });
 
