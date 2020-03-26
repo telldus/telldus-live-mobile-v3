@@ -193,6 +193,7 @@ class TouchableButton extends Component<Props, void> {
 			},
 			throbberStyleDef: {
 				color: '#ffffff',
+				fontSize,
 			},
 			throbberContainerStyleDef: {
 				position: 'relative',
