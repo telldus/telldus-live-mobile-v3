@@ -65,4 +65,15 @@ module.exports = {
 			release: 24,
 		},
 	},
+	GatewayTypes: {
+		'tellstick net': 'N1',
+		'tellstick net v2': 'N2',
+		'tellstick znet lite': 'Z1',
+		'tellstick znet lite v2': 'Z2',
+		'tellstick v3': 'T3',
+	},
+	GatewayTransports: {
+		'zwave': 'ZW',
+		'zigbee': 'ZG',
+	},
 };
