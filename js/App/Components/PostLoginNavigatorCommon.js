@@ -299,6 +299,10 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
+	if (gateways.didFetch !== gatewaysN.didFetch) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -473,6 +477,7 @@ render(): Object {
 		intl,
 		screenReaderEnabled,
 		showChangeLog,
+		gateways,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
@@ -487,7 +492,8 @@ render(): Object {
 					addingNewLocation={this.state.addingNewLocation}
 					addNewDevice={this.addNewDevice}
 					addNewSensor={this.addNewSensor}
-					navigateToCampaign={this.navigateToCampaign}/>
+					navigateToCampaign={this.navigateToCampaign}
+					hasGateways={gateways.didFetch && gateways.allIds.length > 0}/>
 			</View>
 
 			<DimmerPopup

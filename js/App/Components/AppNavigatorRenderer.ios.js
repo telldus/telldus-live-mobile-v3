@@ -47,6 +47,7 @@ import {
 	navigate,
 	getRouteName,
 	LayoutAnimations,
+	shouldUpdate,
 } from '../Lib';
 
 import Theme from '../Theme';
@@ -57,6 +58,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	addingNewLocation: boolean,
+	hasGateways: boolean,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -144,14 +146,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 			return true;
 		}
 
-		const { appLayout, addingNewLocation } = this.props;
-		const { appLayout: appLayoutN, addingNewLocation: addingNewLocationN } = nextProps;
-
-		if ((appLayout.width !== appLayoutN.width) || (addingNewLocation !== addingNewLocationN)) {
-			return true;
-		}
-
-		return false;
+		return shouldUpdate(this.props, nextProps, [
+			'appLayout',
+			'hasGateways',
+			'addingNewLocation',
+		]);
 	}
 
 	onOpenSetting() {
@@ -190,16 +189,22 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	makeRightButton(CS: string, styles: Object): Object | null {
-		const { intl } = this.props;
+		const { intl, hasGateways } = this.props;
 		const { formatMessage } = intl;
 		switch (CS) {
 			case 'Devices':
+				if (!hasGateways) {
+					return null;
+				}
 				return {
 					...this.AddButton,
 					onPress: this.addNewDevice,
 					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Sensors':
+				if (!hasGateways) {
+					return null;
+				}
 				return {
 					...this.AddButton,
 					onPress: this.addNewSensor,
@@ -217,6 +222,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Scheduler':
+				if (!hasGateways) {
+					return null;
+				}
 				return {
 					...this.AddButton,
 					onPress: this.newSchedule,
@@ -306,7 +314,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
-			attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
+			attentionCaptureText: intl.formatMessage(i18n.iconAddPhraseOneD).toUpperCase(),
 		};
 
 		return (
