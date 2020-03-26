@@ -28,6 +28,10 @@ import { createSelector } from 'reselect';
 
 import { View } from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
+import {
+	NoGateways,
+} from './SubViews/EmptyInfo';
+
 import { getGateways, addNewGateway } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
@@ -43,6 +47,8 @@ type Props = {
 	navigation: Object,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
+	gatewaysDidFetch: boolean,
+	gateways: Array<any>,
 };
 
 type State = {
@@ -133,7 +139,15 @@ class GatewaysTab extends View {
 
 	render(): Object {
 		const padding = this.getPadding();
-		const { rows } = this.props;
+		const {
+			rows,
+			gateways,
+			gatewaysDidFetch,
+		} = this.props;
+
+		if (gateways.length === 0 && gatewaysDidFetch) {
+			return <NoGateways/>;
+		}
 
 		return (
 			<View style={{
@@ -165,6 +179,8 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	return {
 		rows: getRows(state),
+		gateways: state.gateways.allIds,
+		gatewaysDidFetch: state.gateways.didFetch,
 	};
 }
 

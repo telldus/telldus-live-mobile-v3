@@ -39,6 +39,10 @@ import {
 	Icon,
 } from '../../../BaseComponents';
 import { JobRow, JobsPoster } from './SubViews';
+import {
+	NoGateways,
+} from './SubViews/EmptyInfo';
+
 import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
@@ -56,6 +60,8 @@ type Props = {
 	screenProps: Object,
 	dispatch: Function,
 	gatewayTimezone: string,
+	gatewaysDidFetch: boolean,
+	gateways: Array<any>,
 };
 
 type State = {
@@ -158,13 +164,23 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	render(): React$Element<any> {
-		const { rowsAndSections, screenProps, showInactive } = this.props;
+		const {
+			rowsAndSections,
+			screenProps,
+			showInactive,
+			gatewaysDidFetch,
+			gateways,
+		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
 		if (isLoading) {
 			return <FullPageActivityIndicator/>;
+		}
+
+		if (gateways.length === 0 && gatewaysDidFetch) {
+			return <NoGateways/>;
 		}
 
 		const { swiperContainer } = this.getStyles(appLayout);
@@ -361,6 +377,8 @@ const mapStateToProps = (store: Object): MapStateToPropsType => {
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		showInactive,
+		gateways: store.gateways.allIds,
+		gatewaysDidFetch: store.gateways.didFetch,
 	};
 };
 

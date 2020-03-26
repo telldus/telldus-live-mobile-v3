@@ -39,6 +39,10 @@ import {
 	View,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
+import {
+	NoGateways,
+} from './SubViews/EmptyInfo';
+
 import { getDevices, getSensors, getGateways } from '../../Actions';
 import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
 
@@ -58,6 +62,8 @@ type Props = {
 	isDBEmpty: boolean,
 	screenProps: Object,
 	dbCarousel: boolean,
+	gatewaysDidFetch: boolean,
+	gateways: Array<any>,
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number) => void,
@@ -372,11 +378,21 @@ class DashboardTab extends View {
 	}
 
 	render(): Object {
-		const { screenProps, isDBEmpty, rows } = this.props;
+		const {
+			screenProps,
+			isDBEmpty,
+			rows,
+			gateways,
+			gatewaysDidFetch,
+		} = this.props;
 		const { appLayout } = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles(appLayout);
+
+		if (gateways.length === 0 && gatewaysDidFetch) {
+			return <NoGateways/>;
+		}
 
 		if (isDBEmpty) {
 			return this.noItemsMessage(style);
@@ -585,6 +601,8 @@ function mapStateToProps(state: Object, props: Object): Object {
 		rows: getRows(state),
 		isDBEmpty: (deviceIds.length === 0) && (sensorIds.length === 0),
 		dbCarousel,
+		gateways: state.gateways.allIds,
+		gatewaysDidFetch: state.gateways.didFetch,
 	};
 }
 
