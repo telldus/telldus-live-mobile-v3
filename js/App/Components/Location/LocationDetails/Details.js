@@ -278,15 +278,20 @@ class Details extends View<Props, State> {
 		this.setState({
 			isLoading: true,
 		});
-		dispatch(removeGateway(location.id)).then((res: Object) => {
-			dispatch(getGateways()).then(() => {
-				dispatch(getAppData());
-			});
-			this.setState({
-				isLoading: false,
-			}, () => {
-				navigation.pop();
-			});
+		dispatch(removeGateway(location.id)).then(async (res: Object) => {
+			try {
+				await dispatch(getGateways()).then(() => {
+					dispatch(getAppData());
+				});
+			} catch (e) {
+				// Ignore
+			} finally {
+				this.setState({
+					isLoading: false,
+				}, () => {
+					navigation.pop();
+				});
+			}
 		}).catch(() => {
 			this.setState({
 				isLoading: false,
