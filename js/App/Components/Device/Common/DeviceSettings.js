@@ -608,6 +608,7 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
+		subHeader,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -625,7 +626,7 @@ const getStyles = (appLayout: Object): Object => {
 		titleStyle: {
 			marginTop: padding / 2,
 			marginBottom: 5,
-			color: '#b5b5b5',
+			color: subHeader,
 			fontSize,
 		},
 		radioButtonsCover: {

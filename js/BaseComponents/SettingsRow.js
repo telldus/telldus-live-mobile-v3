@@ -302,7 +302,11 @@ class SettingsRow extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { inactiveTintColor, paddingFactor, brandSecondary } = Theme.Core;
+		const {
+			rowTextColor,
+			paddingFactor,
+			brandSecondary,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
@@ -345,7 +349,7 @@ class SettingsRow extends Component<Props, null> {
 			valueText: {
 				flex: 1,
 				fontSize,
-				color: inactiveTintColor,
+				color: rowTextColor,
 				textAlign: 'right',
 				textAlignVertical: 'center',
 			},
@@ -369,7 +373,7 @@ class SettingsRow extends Component<Props, null> {
 			},
 			textField: {
 				flex: 1,
-				color: inactiveTintColor,
+				color: rowTextColor,
 				paddingBottom: 0,
 				paddingTop: 0,
 				fontSize,

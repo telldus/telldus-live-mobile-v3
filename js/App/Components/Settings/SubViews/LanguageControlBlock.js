@@ -42,6 +42,7 @@ import {
 } from '../../../Lib/appUtils';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 const LanguageControlBlock = (props: Object): Object => {
 	const intl = useIntl();
@@ -121,7 +122,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		dropDownHeaderStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: '#b5b5b5',
+			color: Theme.Core.subHeader,
 		},
 		fontSize,
 	};

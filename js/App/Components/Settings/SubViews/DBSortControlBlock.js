@@ -110,6 +110,7 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
+		subHeader,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -120,7 +121,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		dropDownHeaderStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: '#b5b5b5',
+			color: subHeader,
 		},
 		fontSize,
 		pickerContainerStyle: {

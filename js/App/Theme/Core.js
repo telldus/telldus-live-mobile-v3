@@ -80,6 +80,8 @@ export default {
 	offlineColor: '#b5b5b5',
 
 	subtitleColor: '#8e8e93',
+	textDark: '#4C4C4C',
+	subHeader: '#777777',
 
 	rowHeight: 60,
 

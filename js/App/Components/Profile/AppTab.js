@@ -259,7 +259,13 @@ const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const {
+		subHeader,
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
@@ -290,7 +296,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: '#b5b5b5',
+			color: subHeader,
 			fontSize,
 		},
 		bBSortDropDownContainerStyle: {
