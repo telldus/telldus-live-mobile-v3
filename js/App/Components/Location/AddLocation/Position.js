@@ -162,15 +162,21 @@ class Position extends View {
 		let clientInfo = navigation.getParam('clientInfo', {});
 		clientInfo.coordinates = { latitude, longitude };
 		actions.activateGateway(clientInfo)
-			.then((response: Object) => {
-				navigation.navigate({
-					routeName: 'Success',
-					key: 'Success',
-					params: {clientInfo},
-				});
-				this.setState({
-					isLoading: false,
-				});
+			.then(async (response: Object) => {
+				try {
+					await actions.getGateways();
+				} catch (e) {
+					// Ignore
+				} finally {
+					navigation.navigate({
+						routeName: 'Success',
+						key: 'Success',
+						params: {clientInfo},
+					});
+					this.setState({
+						isLoading: false,
+					});
+				}
 			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message) :
 					error.error ? error.error : this.unknownError;
