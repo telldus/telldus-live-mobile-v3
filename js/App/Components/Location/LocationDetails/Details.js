@@ -424,6 +424,7 @@ class Details extends View<Props, State> {
 				playServicesInfo = {},
 				deviceId,
 				screenProps,
+				firebaseRemoteConfig,
 			} = this.props;
 			const {
 				online,
@@ -455,6 +456,7 @@ class Details extends View<Props, State> {
 					playServicesInfo,
 					RSAKeysAreGenerated: this.RSAKeysAreGenerated,
 					RSAKeysRetrievableFromLocal: this.RSAKeysRetrievableFromLocal,
+					firebaseRemoteConfig,
 				};
 				const dialogueData = {
 					show: true,
@@ -786,6 +788,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		generatePushError,
 		playServicesInfo,
 		deviceId,
+		firebaseRemoteConfig,
 	} = store.user;
 	const { networkInfo } = store.app;
 
@@ -796,6 +799,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		generatePushError,
 		playServicesInfo,
 		deviceId,
+		firebaseRemoteConfig,
 	};
 }
 
