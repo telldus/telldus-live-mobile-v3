@@ -68,3 +68,11 @@ export function setUserName(uname?: string | null) {
 	// 	firebase.crashlytics().setUserName(uName);
 	// }
 }
+
+export const setGAUserProperty = (key: Object, value: string) => {
+	firebase.analytics().setUserProperty(key, value);
+};
+
+export const setGAUserProperties = (properties: Object) => {
+	firebase.analytics().setUserProperties(properties);
+};
