@@ -26,6 +26,11 @@ import { Platform } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
 import {
+	GatewayTypes,
+	GatewayTransports,
+} from '../../Constants';
+
+import {
 	reportException,
 	setGAUserProperties,
 } from '../Lib/Analytics';
@@ -231,18 +236,27 @@ const setGatewayRelatedGAProperties = (): ThunkAction => {
 			return;
 		}
 
+		const transportsToExclude = ['egroup', 'group'];
+
 		let setGTy = new Set();
 		let setGTr = new Set();
 		Object.keys(byId).forEach((id: Object) => {
 			const {
 				transports = '',
-				type,
+				type = '',
 			} = byId[id];
-			setGTy.add(type);
-			const ts = transports.split(',');
-			ts.forEach((t: string) => {
-				setGTr.add(t);
-			});
+			const typeConstant = GatewayTypes[type.trim().toLowerCase()];
+			if (typeConstant) {
+				setGTy.add(typeConstant);
+				const ts = transports.split(',');
+				ts.forEach((t: string = '') => {
+					const exclude = transportsToExclude.indexOf(t.trim().toLowerCase()) !== -1;
+					if (!exclude) {
+						const transportConstant = GatewayTransports[t.trim().toLowerCase()];
+						setGTr.add(transportConstant || t);
+					}
+				});
+			}
 		});
 
 		let gatewayTypes = '', gatewayTransports = '';
