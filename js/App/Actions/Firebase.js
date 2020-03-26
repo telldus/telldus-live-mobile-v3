@@ -30,6 +30,7 @@ const remoteConfigs = [
 	'geoFenceFeature',
 	'premiumPurchase',
 	'rgb',
+	'appDrawerBanner',
 ];
 
 const fetchRemoteConfig = (): ThunkAction => {
@@ -49,6 +50,8 @@ const fetchRemoteConfig = (): ThunkAction => {
 			rgb: {
 				onColorMultiplier: 0.7,
 				offColorMultiplier: 0.55,
+			},
+			appDrawerBanner: {
 			},
 		});
 
