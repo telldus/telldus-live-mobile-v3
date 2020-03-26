@@ -67,6 +67,7 @@ type Props = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	deviceId: string,
+	firebaseRemoteConfig: Object,
 };
 
 type State = {
