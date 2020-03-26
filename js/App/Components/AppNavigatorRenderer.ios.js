@@ -55,6 +55,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	addingNewLocation: boolean,
 	currentScreen: string,
+	hasGateways: boolean,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
@@ -137,6 +138,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'appLayout',
 			'currentScreen',
 			'screenReaderEnabled',
+			'hasGateways',
 			'addingNewLocation',
 		]);
 	}
@@ -173,16 +175,22 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	makeRightButton(CS: string, styles: Object): Object | null {
-		const { intl } = this.props;
+		const { intl, hasGateways } = this.props;
 		const { formatMessage } = intl;
 		switch (CS) {
 			case 'Devices':
+				if (!hasGateways) {
+					return null;
+				}
 				return {
 					...this.AddButton,
 					onPress: this.addNewDevice,
 					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Sensors':
+				if (!hasGateways) {
+					return null;
+				}
 				return {
 					...this.AddButton,
 					onPress: this.addNewSensor,
@@ -200,6 +208,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
 			case 'Scheduler':
+				if (!hasGateways) {
+					return null;
+				}
 				return {
 					...this.AddButton,
 					onPress: this.newSchedule,
@@ -293,8 +304,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
-			attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
 			source: 'postlogin',
+			attentionCaptureText: intl.formatMessage(i18n.iconAddPhraseOneD).toUpperCase(),
 		};
 
 		return (

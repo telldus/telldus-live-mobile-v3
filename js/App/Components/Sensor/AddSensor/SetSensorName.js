@@ -26,15 +26,13 @@ import React, { useEffect, useState } from 'react';
 import {
 	ScrollView,
 } from 'react-native';
-import {
-	TextField,
-} from 'react-native-material-textfield';
 import { useDispatch } from 'react-redux';
 
 import {
 	View,
 	FloatingButton,
 	IconTelldus,
+	MaterialTextInput,
 } from '../../../../BaseComponents';
 
 import {
@@ -108,10 +106,10 @@ const SetSensorName = (props: Object): Object => {
 				if (sensor.ignored) {
 					await dispatch(setIgnoreSensor(sensor.id, 0));
 				}
+				await dispatch(getSensorInfo(sensor.id));
 			} catch (e) {
 				// Not imp
 			} finally {
-				dispatch(getSensorInfo(sensor.id));
 				setNameConf({
 					name,
 					isLoading: false,
@@ -165,7 +163,7 @@ const SetSensorName = (props: Object): Object => {
 			}}
 			keyboardShouldPersistTaps={'always'}>
 			<View style={coverStyle}>
-				<TextField
+				<MaterialTextInput
 					value={name}
 					label={formatMessage(i18n.name)}
 					labelTextStyle={labelStyle}

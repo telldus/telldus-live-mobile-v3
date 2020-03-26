@@ -38,7 +38,10 @@ import {
 	ExcludeDevice,
 	DeviceSettings,
 } from '../Common';
-import { ReplaceFailedNode } from './SubViews';
+import {
+	ReplaceFailedNode,
+	Device433EditModel,
+} from './SubViews';
 
 import { getDevices, setIgnoreDevice } from '../../../Actions/Devices';
 import { requestNodeInfo } from '../../../Actions/Websockets';
@@ -53,6 +56,8 @@ import {
 	getDeviceInfoCommon,
 	toggleStatusUpdatedViaScan433MHZ,
 	setDeviceName,
+	setDeviceModel,
+	setDeviceProtocol,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -465,49 +470,66 @@ class SettingsTab extends View {
 
 		const {
 			parameter,
+			model,
+			protocol,
 			id,
 		} = device;
 
 		const { widgetParams433Device = {} } = addDevice433;
-		const parameters = prepareDeviceParameters(parseInt(widget433MHz, 10), widgetParams433Device);
-		if (!parameters) {
-			return;
-		}
 
-		const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
-		if (!settings) {
-			return;
-		}
-
-		let availableSettings = {};
-		Object.keys(settings).map((s: string) => {
-			if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
-				availableSettings[s] = settings[s];
-			}
-		});
+		const {
+			model: _model,
+			protocol: _protocol,
+		} = widgetParams433Device;
 
 		let promises = [];
-		Object.keys(parameters).map((p: string) => {
-			if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
-				promises.push(
-					dispatch(setDeviceParameter(id, p, parameters[p]))
-				);
+		const hasProtocolChanged = protocol !== _protocol;
+		if (hasProtocolChanged) {
+			promises.push(
+				dispatch(setDeviceProtocol(id, _protocol))
+			);
+		}
+		const hasModelChanged = model !== _model;
+		if (hasModelChanged) {
+			promises.push(
+				dispatch(setDeviceModel(id, _model))
+			);
+		}
+
+		const parameters = prepareDeviceParameters(parseInt(widget433MHz, 10), widgetParams433Device);
+		if (parameters) {
+			const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
+			if (settings) {
+				let availableSettings = {};
+				Object.keys(settings).map((s: string) => {
+					if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
+						availableSettings[s] = settings[s];
+					}
+				});
+
+				Object.keys(parameters).map((p: string) => {
+					if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
+						promises.push(
+							dispatch(setDeviceParameter(id, p, parameters[p]))
+						);
+					}
+				});
+
+				this.setState({
+					isSaving433MhzParams: true,
+				});
+
+				Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+					return promise.then((res: any): any => res).catch((err: any): any => err);
+				})).then(() => {
+					this.postSaveParams433MHz(id, true);
+					dispatch(toggleStatusUpdatedViaScan433MHZ(false));
+				}).catch(() => {
+					// TODO: Show message on error saving new params!
+					this.postSaveParams433MHz(id, false);
+				});
 			}
-		});
-
-		this.setState({
-			isSaving433MhzParams: true,
-		});
-
-		Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
-			return promise.then((res: any): any => res).catch((err: any): any => err);
-		})).then(() => {
-			this.postSaveParams433MHz(id, true);
-			dispatch(toggleStatusUpdatedViaScan433MHZ(false));
-		}).catch(() => {
-			// TODO: Show message on error saving new params!
-			this.postSaveParams433MHz(id, false);
-		});
+		}
 	}
 
 	postSaveParams433MHz = (deviceId: string, success: boolean = true) => {
@@ -532,9 +554,23 @@ class SettingsTab extends View {
 		} = this.props;
 		const {
 			parameter,
+			model,
+			protocol,
 		} = device;
 
 		const { widgetParams433Device = {} } = addDevice433;
+
+		const {
+			model: _model,
+			protocol: _protocol,
+		} = widgetParams433Device;
+		const hasProtocolChanged = protocol !== _protocol;
+		const hasModelChanged = model !== _model;
+
+		if (hasProtocolChanged || hasModelChanged) {
+			return true;
+		}
+
 		const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
 		if (!settings) {
 			return false;
@@ -554,6 +590,7 @@ class SettingsTab extends View {
 				break;
 			}
 		}
+
 		return hasChanged;
 	}
 
@@ -618,6 +655,14 @@ class SettingsTab extends View {
 			const	message = err.message ? err.message : null;
 			dispatch(showToast(message));
 		});
+	}
+
+	renderExtraSettingsTop = (): Object => {
+		const { device } = this.props;
+		return (
+			<Device433EditModel
+				device={device}/>
+		);
 	}
 
 	render(): Object | null {
@@ -766,7 +811,8 @@ class SettingsTab extends View {
 										clientId={clientId}
 										learnButton={learnButton}
 										isSaving433MhzParams={isSaving433MhzParams}
-										devicetype={devicetype}/>
+										devicetype={devicetype}
+										renderExtraSettingsTop={this.renderExtraSettingsTop}/>
 									{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}

@@ -28,6 +28,7 @@ import { intlShape, injectIntl } from 'react-intl';
 import {
 	IconTelldus,
 	View,
+	RippleButton,
 } from '../../../BaseComponents';
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
@@ -94,7 +95,7 @@ class Gateway extends PureComponent<Props, null> {
 		};
 
 		return (
-			<View style={gatewayContainer}>
+			<RippleButton style={gatewayContainer} onPress={this.onPress}>
 				<LocationDetails {...locationData}
 					style={detailsContainer}
 					imageStyle={image}
@@ -103,10 +104,10 @@ class Gateway extends PureComponent<Props, null> {
 					h2Style={h2Style}
 					onPress={this.onPress}
 					resizeMode={'stretch'}/>
-				<View style={iconSettingsContainer} pointerEvents="none">
+				<View style={iconSettingsContainer} pointerEvents="none">/>
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
-			</View>
+			</RippleButton>
 		);
 	}
 	getStyles(drawerWidth: number): Object {

@@ -23,6 +23,7 @@ import { ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { ColorWheel } from 'react-native-color-wheel';
 const colorsys = require('colorsys');
+import ButtonLoadingIndicator from '../TabViews/SubViews/ButtonLoadingIndicator';
 
 import {
 	View,
@@ -31,6 +32,7 @@ import {
 
 import { deviceSetStateRGB, requestDeviceAction } from '../../Actions/Devices';
 import { getMainColorRGB } from '../../Lib/rgbUtils';
+import Theme from '../../Theme';
 
 type Props = {
 	device: Object,
@@ -47,10 +49,12 @@ type Props = {
 	thumbSize?: number,
 	setScrollEnabled?: (boolean) => void,
 	deviceSetStateRGBOverride?: (id: number, value: string) => void,
+	showActionIndicator?: boolean,
 };
 
 type DefaultProps = {
-    thumbSize: number,
+	thumbSize: number,
+	showActionIndicator: boolean,
 };
 
 type State = {
@@ -58,12 +62,14 @@ type State = {
 	isLoading: boolean,
 	mainColorRGB: string,
 	methodRequested: string,
+	controlSource: string,
 };
 
 class RGBColorWheel extends View<Props, State> {
 props: Props;
 static defaultProps: DefaultProps = {
 	thumbSize: 15,
+	showActionIndicator: false,
 };
 
 onColorChangeComplete: string => void;
@@ -113,9 +119,8 @@ constructor(props: Props) {
 		mainColorRGB,
 		rgbValue,
 		methodRequested,
+		controlSource: '',
 	};
-
-	this.onChooseColor = this.onChooseColor.bind(this);
 }
 
 onColorChangeComplete(color: string) {
@@ -130,6 +135,7 @@ onColorChangeComplete(color: string) {
 	const hex = colorsys.hsvToHex(color);
 	this.setState({
 		mainColorRGB: hex,
+		controlSource: 'wheel',
 	}, () => {
 		if (deviceSetStateRGBOverride) {
 			deviceSetStateRGBOverride(device.id, hex);
@@ -193,7 +199,7 @@ getSwatches(color: string, key: number): Object {
 	);
 }
 
-onChooseColor(item: string) {
+onChooseColor = (item: string) => {
 	if (!item) {
 		return;
 	}
@@ -202,6 +208,7 @@ onChooseColor(item: string) {
 	const { r, g, b } = rgb;
 	this.setState({
 		mainColorRGB: item,
+		controlSource: 'swatch',
 	}, () => {
 		if (deviceSetStateRGBOverride) {
 			deviceSetStateRGBOverride(device.id, item);
@@ -212,7 +219,11 @@ onChooseColor(item: string) {
 }
 
 render(): Object {
-	const { isLoading, mainColorRGB } = this.state;
+	const {
+		isLoading,
+		mainColorRGB,
+		controlSource,
+	} = this.state;
 	const {
 		thumStyle,
 		style,
@@ -220,15 +231,29 @@ render(): Object {
 		swatchesCover,
 		colorWheelCover,
 		swatchWheelCover,
+		device,
+		showActionIndicator,
 	} = this.props;
 
 	const colorSwatches = this.COLOR_SWATCHES.map((color: string, i: number): any => {
 		return this.getSwatches(color, i);
 	});
 
+	const {
+		methodRequested,
+	} = device;
+
+	const {
+		dot,
+	} = this.getStyles();
+
 	return (
 		<View style={swatchWheelCover}>
 			<View style={colorWheelCover}>
+				{(showActionIndicator && controlSource === 'wheel' && methodRequested === 'RGB') ?
+					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+					: null
+				}
 				{isLoading ?
 					<View style={{
 						flex: 1,
@@ -249,6 +274,10 @@ render(): Object {
 				}
 			</View>
 			<View style={swatchesCover}>
+				{(showActionIndicator && controlSource === 'swatch' && methodRequested === 'RGB') ?
+					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
+					: null
+				}
 				{colorSwatches}
 			</View>
 		</View>
@@ -257,6 +286,11 @@ render(): Object {
 
 getStyles(): Object {
 	return {
+		dot: {
+			position: 'absolute',
+			top: 6,
+			left: 6,
+		},
 	};
 }
 }

@@ -72,13 +72,21 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+	const {
+		subHeader,
+		paddingFactor,
+		shadow,
+		brandSecondary,
+		rowTextColor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 
 	return {
 		padding,
 		coverOneStyle: {
 			backgroundColor: '#fff',
-			...Theme.Core.shadow,
+			...shadow,
 			justifyContent: 'center',
 			alignItems: 'center',
 			paddingHorizontal: padding,
@@ -86,19 +94,19 @@ const getStyles = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 		},
 		labelStyle: {
-			color: '#b5b5b5',
+			color: subHeader,
 			fontSize: Math.floor(deviceWidth * 0.045),
 			marginTop: padding * 1.5,
 		},
 		titleStyle: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.brandSecondary,
+			color: brandSecondary,
 			textAlign: 'center',
 		},
 		bodyStyle: {
 			fontSize,
 			textAlign: 'center',
-			color: Theme.Core.rowTextColor,
+			color: rowTextColor,
 			marginTop: 10,
 		},
 	};

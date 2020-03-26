@@ -59,7 +59,7 @@ const LogoutButton = (props: Object): Object => {
 			toggleDialogueBox({
 				show: true,
 				showHeader: true,
-				notificationHeader: `${formatMessage(i18n.logout)}?`,
+				header: `${formatMessage(i18n.logout)}?`,
 				text: formatMessage(i18n.contentLogoutConfirm),
 				showPositive: true,
 				showNegative: true,

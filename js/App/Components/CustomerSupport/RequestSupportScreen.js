@@ -308,6 +308,7 @@ render(testData: Object): Object {
 					value={valueDD}
 					onValueChange={this.onChoosegateway}
 					appLayout={appLayout}
+					intl={intl}
 					dropDownContainerStyle={dropDownContainerStyle}
 					pickerContainerStyle={pickerContainerStyle}
 					baseColor={rowTextColor}

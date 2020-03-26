@@ -174,7 +174,12 @@ getStyles(appLayout: Object): Object {
 
 	const fontSizeLabel = Math.floor(deviceWidth * 0.045);
 
-	const { paddingFactor, brandSecondary, eulaContentColor } = Theme.Core;
+	const {
+		paddingFactor,
+		brandSecondary,
+		eulaContentColor,
+		subHeader,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -184,7 +189,7 @@ getStyles(appLayout: Object): Object {
 		},
 		labelStyle: {
 			fontSize: fontSizeLabel,
-			color: '#b5b5b5',
+			color: subHeader,
 			marginBottom: 3,
 		},
 		labelStyleTwo: {

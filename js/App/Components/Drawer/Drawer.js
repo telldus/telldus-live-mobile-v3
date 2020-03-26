@@ -27,6 +27,7 @@ import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { createSelector } from 'reselect';
 
 import {
 	View,
@@ -41,6 +42,7 @@ import {
 	SettingsLink,
 } from './DrawerSubComponents';
 
+import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
 import {
 	hasStatusBar,
@@ -415,6 +417,13 @@ constructor(props: Props) {
 	}
 }
 
+const getRows = createSelector(
+	[
+		({ gateways }: Object): Object => gateways,
+	],
+	(gateways: Object): Array<any> => parseGatewaysForListView(gateways)
+);
+
 function mapStateToProps(store: Object): Object {
 
 	const { accounts = {}, firebaseRemoteConfig = {} } = store.user;
@@ -426,7 +435,7 @@ function mapStateToProps(store: Object): Object {
 	const { enable } = JSON.parse(geoFenceFeature);
 
 	return {
-		gateways: store.gateways,
+		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,

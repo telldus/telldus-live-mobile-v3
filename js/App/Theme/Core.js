@@ -73,6 +73,8 @@ export default {
 	angleTintColor: '#A59F9A90',
 	angledRowBorderColor: '#BBB',
 
+	baseColorPreloginScreen: '#ffffff',
+
 	rippleColor: '#efefef',
 	rippleOpacity: 0.9,
 	rippleDuration: 600,
@@ -80,6 +82,8 @@ export default {
 	offlineColor: '#b5b5b5',
 
 	subtitleColor: '#8e8e93',
+	textDark: '#4C4C4C',
+	subHeader: '#777777',
 
 	rowHeight: 60,
 

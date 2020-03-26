@@ -29,7 +29,7 @@ export function parseGatewaysForListView(gateways: Object = {}, filterZWave?: bo
 	}
 	const list = map(gatewaysById, (item: Object): Array<Object> => gatewaysById[item.id]);
 	const orderedList = orderBy(list, [(gateway: Object): any => {
-		let { name } = gateway;
+		let { name } = gateway || {};
 		return name ? name.toLowerCase() : null;
 	}], ['asc']);
 	return orderedList;

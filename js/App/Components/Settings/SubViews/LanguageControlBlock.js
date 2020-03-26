@@ -42,9 +42,11 @@ import {
 } from '../../../Lib/appUtils';
 
 import i18n from '../../../Translations/common';
+import Theme from '../../../Theme';
 
 const LanguageControlBlock = (props: Object): Object => {
-	const { formatMessage } = useIntl();
+	const intl = useIntl();
+	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { language: languageProp = {} } = defaultSettings;
@@ -100,6 +102,7 @@ const LanguageControlBlock = (props: Object): Object => {
 			dropDownContainerStyle={dropDownContainerStyle}
 			dropDownHeaderStyle={dropDownHeaderStyle}
 			baseColor={'#000'}
+			intl={intl}
 			fontSize={fontSize}
 			itemCount={LANGUAGES.length}
 			accessibilityLabelPrefix={labelLanguage}
@@ -119,7 +122,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		dropDownHeaderStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: '#b5b5b5',
+			color: Theme.Core.subHeader,
 		},
 		fontSize,
 	};

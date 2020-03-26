@@ -163,11 +163,17 @@ class Position extends View {
 		let { clientInfo } = route.params || {};
 		clientInfo.coordinates = { latitude, longitude };
 		actions.activateGateway(clientInfo)
-			.then((response: Object) => {
-				navigation.navigate('Success', {clientInfo});
-				this.setState({
-					isLoading: false,
-				});
+			.then(async (response: Object) => {
+				try {
+					await actions.getGateways();
+				} catch (e) {
+					// Ignore
+				} finally {
+					navigation.navigate('Success', {clientInfo});
+					this.setState({
+						isLoading: false,
+					});
+				}
 			}).catch((error: Object) => {
 				let message = error.message ? (error.message === 'Network request failed' ? this.networkFailed : error.message) :
 					error.error ? error.error : this.unknownError;

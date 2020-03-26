@@ -23,9 +23,7 @@
 
 import React from 'react';
 import {
-	Image,
 	TouchableOpacity,
-	Linking,
 	SectionList,
 	RefreshControl,
 	LayoutAnimation,
@@ -38,11 +36,14 @@ import isEmpty from 'lodash/isEmpty';
 import {
 	Text,
 	View,
-	TouchableButton,
 	IconTelldus,
 } from '../../../BaseComponents';
 import { DeviceRow, DeviceHeader } from './SubViews';
 import { DimmerControlInfo } from './SubViews/Device';
+import {
+	NoGateways,
+	NoDevices,
+} from './SubViews/EmptyInfo';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
@@ -65,11 +66,11 @@ type Props = {
 	addNewLocation: Function,
 	gatewaysById: Object,
 	route: Object,
+	gatewaysDidFetch: boolean,
 };
 
 type State = {
 	dimmer: boolean,
-	addGateway: boolean,
 	isRefreshing: boolean,
 	showHiddenList: boolean,
 	propsSwipeRow: Object,
@@ -88,8 +89,6 @@ class DevicesTab extends View {
 	renderSectionHeader: (sectionData: Object) => Object;
 	renderRow: (Object) => Object;
 	onRefresh: () => void;
-	onPressAddLocation: () => void;
-	onPressAddDevice: () => void;
 	toggleHiddenList: () => void;
 	setIgnoreDevice: (Object) => void;
 	closeVisibleRows: (string) => void;
@@ -115,7 +114,6 @@ class DevicesTab extends View {
 
 		this.state = {
 			dimmer: false,
-			addGateway: false,
 			isRefreshing: false,
 			showHiddenList: false,
 			propsSwipeRow: {
@@ -135,8 +133,6 @@ class DevicesTab extends View {
 		this.renderSectionHeader = this.renderSectionHeader.bind(this);
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
-		this.onPressAddLocation = this.onPressAddLocation.bind(this);
-		this.onPressAddDevice = this.onPressAddDevice.bind(this);
 		this.setIgnoreDevice = this.setIgnoreDevice.bind(this);
 
 		this.toggleHiddenList = this.toggleHiddenList.bind(this);
@@ -153,12 +149,6 @@ class DevicesTab extends View {
 
 		this.addedToHiddenList = formatMessage(i18n.deviceAddedToHiddenList);
 		this.removedFromHiddenList = formatMessage(i18n.deviceRemovedFromHiddenList);
-
-		this.url = 'http://live.telldus.com/';
-		this.noDeviceTitle = formatMessage(i18n.messageNoDeviceTitle);
-		this.noGatewayTitle = formatMessage(i18n.messageNoGatewayTitle);
-		this.noDeviceContent = formatMessage(i18n.messageNoDeviceContentAddZ);
-		this.noGatewayContent = formatMessage(i18n.messageNoGatewayContent);
 
 		const labelDevice = formatMessage(i18n.labelDevice).toLowerCase();
 		this.headerOnHide = formatMessage(i18n.headerOnHide, { type: labelDevice });
@@ -226,11 +216,24 @@ class DevicesTab extends View {
 	}
 
 	handleAddDeviceAttentionCapture() {
-		const { devicesDidFetch, devices, screenProps } = this.props;
+		const {
+			devicesDidFetch,
+			devices,
+			screenProps,
+			gatewaysDidFetch,
+			gateways,
+		} = this.props;
 		const { toggleAttentionCapture, showAttentionCaptureAddDevice } = screenProps;
 
 		const allowToggleLocal = !this.attentionCapture;
-		if (devices.length === 0 && devicesDidFetch && toggleAttentionCapture && !showAttentionCaptureAddDevice && allowToggleLocal) {
+		const isDevicesEmpty = devices.length === 0 && devicesDidFetch;
+		const hasGateways = gateways.length > 0 && gatewaysDidFetch;
+		if (hasGateways &&
+			(isDevicesEmpty &&
+			toggleAttentionCapture &&
+			!showAttentionCaptureAddDevice &&
+			allowToggleLocal)
+		) {
 			this.attentionCapture = true;
 			toggleAttentionCapture(true);
 			this.startHideAttentionCaptureTimeout();
@@ -355,39 +358,6 @@ class DevicesTab extends View {
 		return item.id;
 	}
 
-	onPressAddLocation() {
-		this.props.addNewLocation()
-			.then((response: Object) => {
-				if (response.client) {
-					this.props.navigation.navigate('AddLocation', {
-						clients: response.client,
-					});
-					this.setState({
-						addGateway: false,
-					});
-				}
-			});
-	}
-
-	onPressAddDevice() {
-		if (!(this.props.gateways.length > 0)) {
-			this.setState({
-				addGateway: true,
-			});
-		} else {
-			let url = this.url;
-			Linking.canOpenURL(url).then((supported: boolean): any => {
-				if (!supported) {
-				  console.log(`Can't handle url: ${url}`);
-				} else {
-				  return Linking.openURL(url);
-				}
-			  }).catch((err: Object) => {
-				  console.error('An error occurred', err);
-			  });
-		}
-	}
-
 	toggleHiddenList() {
 		const { rowsAndSections } = this.props;
 		const { hiddenList, visibleList } = rowsAndSections;
@@ -499,46 +469,6 @@ class DevicesTab extends View {
 			};
 		}
 		return data;
-	}
-
-	noDeviceMessage(style: Object): Object {
-		return (
-			<View style={style.noItemsContainer}>
-				<Text style={style.noItemsTitle}>
-					{this.noDeviceTitle}
-				</Text>
-				<Text style={style.noItemsContent}>
-					{'\n'}
-					{this.noDeviceContent}
-				</Text>
-				<TouchableOpacity style={style.linkCover} onPress={this.onPressAddDevice}>
-					<Image source={{uri: 'telldus'}} style={style.image}/>
-					<Text style={style.link}>
-						live.telldus.com
-					</Text>
-					<Image source={{uri: 'right_arrow_key'}} style={style.rightArrow}/>
-				</TouchableOpacity>
-			</View>
-		);
-	}
-
-	noGatewayMessage(style: Object): Object {
-		return (
-			<View style={style.noItemsContainer}>
-				<Text style={style.noItemsTitle}>
-					{this.noGatewayTitle}
-				</Text>
-				<Text style={style.noItemsContent}>
-					{'\n'}
-					{this.noGatewayContent}
-					{'\n\n'}
-				</Text>
-				<TouchableButton
-					onPress={this.onPressAddLocation}
-					text={i18n.addLocation}
-				/>
-			</View>
-		);
 	}
 
 	toggleHiddenListButton(): Object {
@@ -730,11 +660,12 @@ class DevicesTab extends View {
 			rowsAndSections,
 			screenProps,
 			screenReaderEnabled,
+			gatewaysDidFetch,
+			gateways,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const {
 			isRefreshing,
-			addGateway,
 			propsSwipeRow,
 			scrollEnabled,
 			showRefresh,
@@ -742,12 +673,13 @@ class DevicesTab extends View {
 
 		const style = this.getStyles(appLayout);
 
-		if (addGateway) {
-			return this.noGatewayMessage(style);
+		if (gateways.length === 0 && gatewaysDidFetch) {
+			return <NoGateways/>;
 		}
 
-		if (devices.length === 0 && devicesDidFetch) {
-			return this.noDeviceMessage(style);
+		const hasGateways = gateways.length > 0 && gatewaysDidFetch;
+		if (hasGateways && devices.length === 0 && devicesDidFetch) {
+			return <NoDevices/>;
 		}
 
 		let makeRowAccessible = 0;
@@ -815,39 +747,6 @@ class DevicesTab extends View {
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 				backgroundColor: Theme.Core.appBackground,
-			},
-			noItemsTitle: {
-				textAlign: 'center',
-				color: '#4C4C4C',
-				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
-				paddingTop: 15,
-			},
-			noItemsContent: {
-				textAlign: 'center',
-				color: '#4C4C4C',
-				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
-			},
-			linkCover: {
-				flexDirection: 'row',
-				marginTop: 20,
-				alignItems: 'center',
-			},
-			image: {
-				height: isPortrait ? Math.floor(width * 0.074) : Math.floor(height * 0.074),
-				width: isPortrait ? Math.floor(width * 0.074) : Math.floor(height * 0.074),
-			},
-			link: {
-				textAlign: 'center',
-				textAlignVertical: 'center',
-				color: '#4C4C4C',
-				marginLeft: 10,
-				fontSize: isPortrait ? Math.floor(width * 0.06) : Math.floor(height * 0.06),
-			},
-			rightArrow: {
-				marginLeft: 5,
-				height: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
-				width: isPortrait ? Math.floor(width * 0.03) : Math.floor(height * 0.03),
-				tintColor: '#e26901',
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -917,6 +816,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		devicesDidFetch: state.devices.didFetch,
 		gateways: state.gateways.allIds,
 		gatewaysById: state.gateways.byId,
+		gatewaysDidFetch: state.gateways.didFetch,
 		screenReaderEnabled,
 	};
 }

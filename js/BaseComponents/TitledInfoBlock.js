@@ -114,6 +114,12 @@ getStyles(appLayout: Object): Object {
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
+	const {
+		subHeader,
+		shadow,
+		rowTextColor,
+	} = Theme.Core;
+
 	return {
 		iconSize: Math.floor(deviceWidth * 0.08),
 		blockContainer: {
@@ -124,7 +130,7 @@ getStyles(appLayout: Object): Object {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: '#b5b5b5',
+			color: subHeader,
 			fontSize,
 		},
 		infoCover: {
@@ -132,7 +138,7 @@ getStyles(appLayout: Object): Object {
 			alignItems: 'center',
 			justifyContent: 'space-between',
 			backgroundColor: '#fff',
-			...Theme.Core.shadow,
+			...shadow,
 			padding: fontSize,
 		},
 		infoLabel: {
@@ -140,7 +146,7 @@ getStyles(appLayout: Object): Object {
 			fontSize,
 		},
 		infoValue: {
-			color: '#8e8e93',
+			color: rowTextColor,
 			fontSize,
 			flexWrap: 'wrap',
 		},

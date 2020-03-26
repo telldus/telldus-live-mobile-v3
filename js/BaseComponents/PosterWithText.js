@@ -37,8 +37,6 @@ import RoundedInfoButton from './RoundedInfoButton';
 
 import { shouldUpdate } from '../App/Lib';
 
-import Theme from '../App/Theme';
-
 type InfoButton = {
 	onPress?: Function,
 	infoButtonContainerStyle?: Array<any> | Object | number,
@@ -55,9 +53,13 @@ type Props = {
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
+	scrollableH1?: boolean,
+	posterWidth?: number,
 
 	navigation: Object,
 	posterCoverStyle?: Array<any> | Object | number,
+	h1Style?: Array<any> | Object | number,
+	posterItemsContainerStyle?: Array<any> | Object | number,
 };
 
 type DefaultProps = {
@@ -81,6 +83,7 @@ static defaultProps: DefaultProps = {
 	align: 'center',
 	showLeftIcon: true,
 	leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
+	scrollableH1: true,
 };
 
 goBack: () => void;
@@ -122,7 +125,16 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		return true;
 	}
 
-	const propsChange = shouldUpdate(others, othersN, ['icon', 'showBackButton', 'showLeftIcon', 'align', 'infoButton', 'leftIcon']);
+	const propsChange = shouldUpdate(others, othersN, [
+		'icon',
+		'showBackButton',
+		'showLeftIcon',
+		'align',
+		'infoButton',
+		'leftIcon',
+		'scrollableH1',
+		'posterWidth',
+	]);
 	if (propsChange) {
 		return true;
 	}
@@ -170,6 +182,10 @@ render(): Object {
 		infoButton,
 		showLeftIcon,
 		leftIcon,
+		h1Style,
+		posterItemsContainerStyle,
+		scrollableH1,
+		posterWidth,
 	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -180,30 +196,44 @@ render(): Object {
 		posterCover,
 		iconBackground,
 		iconStyle,
-		h1Style,
-		h2Style,
+		h1StyleDef,
+		h2StyleDef,
 		posterHeight,
-		posterItemsContainer,
+		posterItemsContainerDef,
+		scolllViewCCStyle,
+		scolllViewStyle,
 	} = this.getStyles(appLayout, adjustItems);
 
 	return (
 		<View style={styles.container}>
-			<Poster posterHeight={posterHeight}>
+			<Poster
+				posterHeight={posterHeight}
+				posterWidth={posterWidth}>
 				<View style={[posterCover, posterCoverStyle]}>
-					<View style={posterItemsContainer}>
+					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
 							<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
 						)}
 						{!!h1 && (
-							<ScrollView
-								horizontal={true} bounces={false} showsHorizontalScrollIndicator={false}>
-								<Text style={h1Style} onLayout={this.onLayoutHeaderOne}>
+							scrollableH1 ?
+								<ScrollView
+									nestedScrollEnabled={true}
+									horizontal={true}
+									bounces={false}
+									showsHorizontalScrollIndicator={false}
+									style={scolllViewStyle}
+									contentContainerStyle={scolllViewCCStyle}>
+									<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
+										{h1}
+									</Text>
+								</ScrollView>
+								:
+								<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
 									{h1}
 								</Text>
-							</ScrollView>
 						)}
 						{!!h2 && (
-							<Text style={h2Style} onLayout={this.onLayoutHeaderTwo}>
+							<Text style={h2StyleDef} onLayout={this.onLayoutHeaderTwo}>
 								{h2}
 							</Text>
 						)}
@@ -255,6 +285,7 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 
 	return {
 		posterCover: {
+			flex: 1,
 			position: 'absolute',
 			left: 0,
 			bottom: 0,
@@ -264,20 +295,18 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			justifyContent: 'center',
 			flexDirection: 'row',
 		},
-		posterItemsContainer: align === 'center' ?
+		posterItemsContainerDef: align === 'center' ?
 			{
-				flex: 1,
-				position: 'absolute',
+				flex: 0,
 				alignItems: 'center',
 				justifyContent: 'center',
 				flexDirection: adjustItems ? 'row' : 'column',
 			}
 			:
 			{
-				flex: 1,
+				flex: 0,
 				width: width * 0.8,
-				position: 'absolute',
-				right: deviceWidth * 0.124,
+				marginRight: deviceWidth * 0.124,
 				alignItems: 'flex-end',
 				justifyContent: 'center',
 				flexDirection: 'column',
@@ -292,19 +321,30 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 			marginRight: isPortrait ? 0 : 10,
 			marginBottom: 3,
 		},
+		scolllViewCCStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+			flex: 0,
+			flexGrow: 0,
+		},
+		scolllViewStyle: {
+			flex: 0,
+			flexGrow: 0,
+		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
 			color: '#F06F0C',
 		},
-		h1Style: {
-			fontFamily: Theme.Core.fonts.robotoLight,
+		h1StyleDef: {
+			flex: 0,
 			fontSize: fontSizeH1,
 			color: '#fff',
+			fontWeight: '500',
 		},
-		h2Style: {
-			fontFamily: Theme.Core.fonts.robotoLight,
+		h2StyleDef: {
 			fontSize: fontSizeH2,
 			color: '#fff',
+			fontWeight: '400',
 		},
 		posterHeight,
 	};

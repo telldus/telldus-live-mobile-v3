@@ -111,7 +111,16 @@ const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const {
+		subHeader,
+		paddingFactor,
+		brandSecondary,
+		rowTextColor,
+		twine,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 	const fontSize = deviceWidth * 0.04;
 
 	return {
@@ -119,23 +128,23 @@ const getStyle = (appLayout: Object): Object => {
 			marginTop: padding,
 		},
 		upgradeSyle: {
-			color: Theme.Core.brandSecondary,
+			color: brandSecondary,
 			fontSize: deviceWidth * 0.04,
 		},
 		labelStyle: {
-			color: '#b5b5b5',
+			color: subHeader,
 			fontSize: Math.floor(deviceWidth * 0.045),
 		},
 		valueText: {
 			fontSize,
-			color: Theme.Core.inactiveTintColor,
+			color: rowTextColor,
 			textAlign: 'right',
 			marginLeft: 5,
 			textAlignVertical: 'center',
 		},
 		premIconStyle: {
 			fontSize: fontSize * 1.3,
-			color: Theme.Core.twine,
+			color: twine,
 			textAlignVertical: 'center',
 			textAlign: 'right',
 		},

@@ -67,6 +67,7 @@ type Props = {
 	valueTextStyle?: Object | Array<any> | number,
 	touchableStyle?: Object | Array<any> | number,
 	switchStyle?: Object | Array<any> | number,
+	onPressRHS?: Function,
 };
 
 type DefaultProps = {
@@ -83,7 +84,6 @@ class SettingsRow extends Component<Props, null> {
 
 	onPress: () => void;
 	onPressIconLabelRight: () => void;
-	onPressIconValueRight: () => void;
 
 	onChangeText: (string) => void;
 	onSubmitEditing: () => void;
@@ -101,7 +101,6 @@ class SettingsRow extends Component<Props, null> {
 
 		this.onPress = this.onPress.bind(this);
 		this.onPressIconLabelRight = this.onPressIconLabelRight.bind(this);
-		this.onPressIconValueRight = this.onPressIconValueRight.bind(this);
 
 		this.onChangeText = this.onChangeText.bind(this);
 		this.onSubmitEditing = this.onSubmitEditing.bind(this);
@@ -127,13 +126,6 @@ class SettingsRow extends Component<Props, null> {
 		const { onPressIconLabelRight } = this.props;
 		if (onPressIconLabelRight) {
 			onPressIconLabelRight();
-		}
-	}
-
-	onPressIconValueRight() {
-		const { onPressIconValueRight } = this.props;
-		if (onPressIconValueRight) {
-			onPressIconValueRight();
 		}
 	}
 
@@ -174,6 +166,8 @@ class SettingsRow extends Component<Props, null> {
 			touchableStyle,
 			switchStyle,
 			iconValueLeft,
+			onPressRHS,
+			onPressIconValueRight,
 		} = this.props;
 
 		const {
@@ -251,7 +245,10 @@ class SettingsRow extends Component<Props, null> {
 								</TouchableOpacity>
 							)}
 						</View>
-						<View style={[valueCover, valueCoverStyle]}>
+						<TouchableOpacity
+							onPress={onPressRHS}
+							disabled={!onPressRHS}
+							style={[valueCover, valueCoverStyle]}>
 							{inLineEditActive ?
 								<TextInput
 									value={value.toString()}
@@ -282,11 +279,14 @@ class SettingsRow extends Component<Props, null> {
 								</>
 							}
 							{!!iconValueRight && (
-								<TouchableOpacity onPress={this.onPressIconValueRight} style={iconValueRightCover}>
+								<TouchableOpacity
+									onPress={onPressIconValueRight}
+									style={iconValueRightCover}
+									disabled={!onPressIconValueRight}>
 									{typeof iconValueRight === 'string' ? <Icon name={iconValueRight} size={iconValueRightSize} color={Theme.Core.brandSecondary}/> : iconValueRight}
 								</TouchableOpacity>
 							)}
-						</View>
+						</TouchableOpacity>
 						{edit && (
 							<Image source={{uri: 'right_arrow_key'}} style={arrowStyle}/>
 						)}
@@ -302,7 +302,11 @@ class SettingsRow extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { inactiveTintColor, paddingFactor, brandSecondary } = Theme.Core;
+		const {
+			rowTextColor,
+			paddingFactor,
+			brandSecondary,
+		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
@@ -345,7 +349,7 @@ class SettingsRow extends Component<Props, null> {
 			valueText: {
 				flex: 1,
 				fontSize,
-				color: inactiveTintColor,
+				color: rowTextColor,
 				textAlign: 'right',
 				textAlignVertical: 'center',
 			},
@@ -369,7 +373,7 @@ class SettingsRow extends Component<Props, null> {
 			},
 			textField: {
 				flex: 1,
-				color: inactiveTintColor,
+				color: rowTextColor,
 				paddingBottom: 0,
 				paddingTop: 0,
 				fontSize,

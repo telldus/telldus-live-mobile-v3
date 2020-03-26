@@ -67,7 +67,7 @@ export default class GraphViewDropDown extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { appLayout, graphView, onValueChange } = this.props;
+		const { appLayout, graphView, onValueChange, intl } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -82,6 +82,7 @@ export default class GraphViewDropDown extends View<Props, null> {
 				label={this.DDLabel}
 				onValueChange={onValueChange}
 				appLayout={appLayout}
+				intl={intl}
 				dropDownContainerStyle={{
 					marginLeft: padding / 2,
 				}}

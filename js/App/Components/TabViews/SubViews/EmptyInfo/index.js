@@ -21,40 +21,14 @@
 
 'use strict';
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import EmptyTabTemplate from './EmptyTabTemplate';
+import NoGateways from './NoGateways';
+import NoDevices from './NoDevices';
+import NoSensors from './NoSensors';
 
-import { View, PosterWithText } from '../../../../BaseComponents';
-
-type Props = {
-	h1: string,
-	h2: string,
-	appLayout: Object,
+module.exports = {
+	NoGateways,
+	EmptyTabTemplate,
+	NoDevices,
+	NoSensors,
 };
-
-class ChangeLogPoster extends View {
-	props: Props;
-
-	static propTypes = {
-		h1: PropTypes.string,
-		h2: PropTypes.string,
-	};
-
-	constructor(props: Props) {
-		super(props);
-	}
-
-	render(): Object {
-		const { h1, h2, appLayout } = this.props;
-
-		return (
-			<PosterWithText
-				appLayout={appLayout}
-				align={'right'}
-				h1={h1}
-				h2={h2}/>
-		);
-	}
-}
-
-export default ChangeLogPoster;

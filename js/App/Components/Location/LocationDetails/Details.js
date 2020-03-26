@@ -37,7 +37,6 @@ import DeviceInfo from 'react-native-device-info';
 import {
 	View, Text, TouchableButton, StyleSheet,
 	FormattedNumber, Icon, TitledInfoBlock,
-	Throbber,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
@@ -259,15 +258,20 @@ class Details extends View<Props, State> {
 		this.setState({
 			isLoading: true,
 		});
-		dispatch(removeGateway(location.id)).then((res: Object) => {
-			dispatch(getGateways()).then(() => {
-				dispatch(getAppData());
-			});
-			this.setState({
-				isLoading: false,
-			}, () => {
-				navigation.pop();
-			});
+		dispatch(removeGateway(location.id)).then(async (res: Object) => {
+			try {
+				await dispatch(getGateways()).then(() => {
+					dispatch(getAppData());
+				});
+			} catch (e) {
+				// Ignore
+			} finally {
+				this.setState({
+					isLoading: false,
+				}, () => {
+					navigation.pop();
+				});
+			}
 		}).catch(() => {
 			this.setState({
 				isLoading: false,
@@ -543,10 +547,7 @@ class Details extends View<Props, State> {
 			boxItemsCover,
 			padding,
 			container,
-			throbberContainer,
 			minWidthButton,
-			inactiveSwitchBackground,
-			btnPrimaryBg,
 		} = this.getStyles(appLayout);
 
 		let info = this.getLocationStatus(online, websocketOnline, localKey);
@@ -561,7 +562,7 @@ class Details extends View<Props, State> {
 
 		const isAcceptableNetType = this.ACCEPTABLE.indexOf(netType) !== -1;
 
-		const disableButton = !isAcceptableNetType;
+		const disableButtonContactSup = !isAcceptableNetType || isContactingSupport || isLoading;
 
 		return (
 			<ScrollView style={{
@@ -645,24 +646,18 @@ class Details extends View<Props, State> {
 							style={{
 								marginTop: padding,
 								minWidth: minWidthButton,
-								backgroundColor: disableButton ? inactiveSwitchBackground : btnPrimaryBg,
 							}}
-							disabled={isContactingSupport}
+							disabled={disableButtonContactSup}
 							onPress={this.onPressTestLocalControl}/>
 					)}
 					<View style={styles.buttonCover}>
 						<TouchableButton
-							disabled={isContactingSupport}
+							disabled={isContactingSupport || isLoading}
 							text={this.labelDelete} style={[styles.button, {
 								minWidth: minWidthButton,
 							}]}
-							onPress={isLoading ? null : this.onPressRemoveLocation}/>
-						{isLoading &&
-					(
-						<Throbber
-							throbberContainerStyle={throbberContainer}
-						/>
-					)}
+							onPress={isLoading ? null : this.onPressRemoveLocation}
+							showThrobber={isLoading}/>
 					</View>
 				</View>
 			</ScrollView>
@@ -723,9 +718,6 @@ class Details extends View<Props, State> {
 			locationInfo: {
 				fontSize: Math.floor(deviceWidth * 0.045),
 				color: Theme.Core.rowTextColor,
-			},
-			throbberContainer: {
-				right: (deviceWidth * 0.12),
 			},
 			padding,
 			minWidthButton,

@@ -34,6 +34,7 @@ import {
 	ProgressBarLinear,
 	Text,
 	Throbber,
+	FloatingButton,
 } from '../../../../BaseComponents';
 import {
 	NumberedBlock,
@@ -233,6 +234,8 @@ render(): Object {
 		progressCover,
 		statusStyle,
 		infoIconErrorStyle,
+		iconSize,
+		iconStyle,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -276,6 +279,8 @@ render(): Object {
 	if (deviceBrand === 'Telldus') {
 		img = getTelldusLearnImage(model);
 	}
+
+	const showDoneIcon = learnButtonIndex && learnButtonIndex !== -1;
 
 	const statusText = `(${progressValue}% ${intl.formatMessage(i18n.done).toLowerCase()})`;
 	const isSocketReconnecting = progress && status === 'socket-retry';
@@ -362,6 +367,14 @@ render(): Object {
 						textStyle={infoTextStyle}/>
 				)}
 			</ScrollView>
+			{showDoneIcon && <FloatingButton
+				onPress={this.onNext}
+				iconName={this.state.isLoading ? false : 'checkmark'}
+				showThrobber={this.state.isLoading}
+				iconSize={iconSize}
+				iconStyle={iconStyle}
+				disabled={this.state.isLoading}/>
+			}
 		</View>
 	);
 }
@@ -402,6 +415,7 @@ getStyles(): Object {
 			color: rowTextColor,
 			fontSize: fontSizeText,
 		},
+		iconSize: deviceWidth * 0.050666667,
 		iconStyle: {
 			color: '#fff',
 		},

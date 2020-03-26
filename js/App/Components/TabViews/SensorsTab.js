@@ -35,6 +35,10 @@ import isEmpty from 'lodash/isEmpty';
 
 import { View, IconTelldus, Text } from '../../../BaseComponents';
 import { DeviceHeader, SensorRow } from './SubViews';
+import {
+	NoSensors,
+	NoGateways,
+} from './SubViews/EmptyInfo';
 
 import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actions';
 
@@ -53,6 +57,8 @@ type Props = {
 	sensorsDidFetch: boolean,
 	gatewaysById: Object,
 	route: Object,
+	gatewaysDidFetch: boolean,
+	gateways: Array<any>,
 };
 
 type State = {
@@ -343,6 +349,8 @@ class SensorsTab extends View {
 			screenProps,
 			sensorsDidFetch,
 			sensors,
+			gateways,
+			gatewaysDidFetch,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const {
@@ -352,8 +360,13 @@ class SensorsTab extends View {
 
 		const style = this.getStyles(appLayout);
 
-		if (sensors.length === 0 && sensorsDidFetch) {
-			return this.noSensorsMessage(style);
+		if (gateways.length === 0 && gatewaysDidFetch) {
+			return <NoGateways/>;
+		}
+
+		const hasGateways = gateways.length > 0 && gatewaysDidFetch;
+		if (hasGateways && sensors.length === 0 && sensorsDidFetch) {
+			return <NoSensors/>;
 		}
 
 		let makeRowAccessible = 0;
@@ -632,6 +645,8 @@ function mapStateToProps(store: Object): Object {
 		sensors: store.sensors.allIds,
 		sensorsDidFetch: store.sensors.didFetch,
 		gatewaysById: store.gateways.byId,
+		gateways: store.gateways.allIds,
+		gatewaysDidFetch: store.gateways.didFetch,
 	};
 }
 

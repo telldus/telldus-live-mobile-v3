@@ -102,12 +102,17 @@ class FormContainerComponent extends View<Props, null> {
 		let deviceWidth = isPortrait ? width : height;
 		let deviceHeight = isPortrait ? height : width;
 
+		const {
+			maxSizeTextButton,
+			baseColorPreloginScreen,
+		} = Theme.Core;
+
 		let headerFontSize = Math.floor(deviceWidth * 0.05);
-		let maxFontSize = Theme.Core.maxSizeTextButton + 4;
+		let maxFontSize = maxSizeTextButton + 4;
 		headerFontSize = headerFontSize > maxFontSize ? maxFontSize : headerFontSize;
 
 		let textFieldFontSize = Math.floor(deviceWidth * 0.04);
-		let maxTextFieldFontSize = Theme.Core.maxSizeTextButton - 4;
+		let maxTextFieldFontSize = maxSizeTextButton - 4;
 		textFieldFontSize = textFieldFontSize > maxTextFieldFontSize ? maxTextFieldFontSize : textFieldFontSize;
 
 		return {
@@ -135,7 +140,7 @@ class FormContainerComponent extends View<Props, null> {
 			headerTextStyle: {
 				margin: headerFontSize * 0.5,
 				fontSize: headerFontSize,
-				color: Theme.Core.inputBaseColor,
+				color: baseColorPreloginScreen,
 				textAlign: 'center',
 			},
 			formCover: {
@@ -178,7 +183,7 @@ class FormContainerComponent extends View<Props, null> {
 				paddingBottom: Platform.OS === 'android' ? 10 : 0,
 
 				fontSize: textFieldFontSize,
-				color: Theme.Core.inputBaseColor,
+				color: Theme.Core.baseColorPreloginScreen,
 				textAlign: 'left',
 				textAlignVertical: 'bottom',
 			},

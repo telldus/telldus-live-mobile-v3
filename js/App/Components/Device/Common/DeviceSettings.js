@@ -72,6 +72,7 @@ type Props = {
 	learnButton?: Object,
 	isSaving433MhzParams?: boolean,
 	devicetype: string,
+	renderExtraSettingsTop?: Function,
 };
 
 const DeviceSettings = React.memo<Object>((props: Props): Object => {
@@ -91,6 +92,7 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 		learnButton,
 		isSaving433MhzParams = false,
 		devicetype,
+		renderExtraSettingsTop,
 	} = props;
 
 	function _keyboardDidHide() {
@@ -147,11 +149,17 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 	useEffect(() => {
 		// Reset reducer addDevice.addDevice433.widgetParams433Device once before editing.
 		if (deviceId && initializeValueFromStore) {
+			const {
+				model,
+				protocol,
+			} = editingDevice;
 			dispatch(setWidgetParamsValue({
 				id: widgetId,
 				deviceId,
 				edit: true,
 				...DeviceParams433,
+				model,
+				protocol,
 			}));
 		}
 		dispatch(toggleStatusUpdatedViaScan433MHZ(false));
@@ -496,6 +504,47 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 					isSaving433MhzParams={isSaving433MhzParams}/>);
 			}
 		}
+		if (setting === 'home:unit') {
+			const {
+				optionValues,
+			} = settings[setting];
+
+			const ddValueMatch = `${house}:${unit}`;
+			let ddValue = 'A1';
+			const currValue = `${currHouse}:${currUnit}`;
+
+			const items = Object.keys(optionValues).map((pv: string): Object => {
+				if (ddValueMatch === optionValues[pv]) {
+					ddValue = pv;
+				}
+				return {
+					key: pv,
+					value: pv,
+				};
+			});
+
+			function onValueChange(value: string, itemIndex: number, data: Array<any>) {
+				const { key } = items[itemIndex] || {};
+				const homeAndUnit = optionValues[key];
+				const [h, u] = homeAndUnit.split(':');
+				dispatch(setWidgetParamHouse(h));
+				dispatch(setWidgetParamUnit(u));
+			}
+
+			Setting.push(<DropDownSetting
+				labelStyle={labelStyle}
+				items={items}
+				value={ddValue}
+				textOnPressHelp={formatMessage(i18n.infoAddDevice433Settings)}
+				headerOnPressHelp={formatMessage(i18n.unitCode)}
+				onValueChange={onValueChange}
+				label={formatMessage(i18n.unitCode)}
+				key={setting}
+				paramUpdatedViaScan={paramUpdatedViaScan}
+				isCodeEqual={isEqual(ddValueMatch, currValue)}
+				isScanning={isScanning}
+				isSaving433MhzParams={isSaving433MhzParams}/>);
+		}
 		if (setting === 'fade') {
 			const { optionValues } = settings[setting];
 
@@ -536,6 +585,7 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 			<Text style={titleStyle}>
 				{formatMessage(i18n.deviceSettings)}
 			</Text>
+			{!!renderExtraSettingsTop && renderExtraSettingsTop()}
 			{Setting}
 			{(showScan && clientId) &&
 			<View style={scanLearnCover}>
@@ -558,6 +608,7 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
+		subHeader,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -575,7 +626,7 @@ const getStyles = (appLayout: Object): Object => {
 		titleStyle: {
 			marginTop: padding / 2,
 			marginBottom: 5,
-			color: '#b5b5b5',
+			color: subHeader,
 			fontSize,
 		},
 		radioButtonsCover: {
