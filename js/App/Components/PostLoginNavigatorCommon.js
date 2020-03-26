@@ -57,6 +57,7 @@ import {
 	campaignVisited,
 	toggleVisibilityProExpireHeadsup,
 	fetchRemoteConfig,
+	setGatewayRelatedGAProperties,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -170,6 +171,10 @@ async componentDidMount() {
 
 	try {
 		await dispatch(getUserProfile());
+		await dispatch(getGateways());
+
+		dispatch(widgetAndroidConfigure());
+		dispatch(widgetiOSConfigure());
 	} catch (e) {
 		// Nothing much to do here
 	} finally {
@@ -183,13 +188,11 @@ async componentDidMount() {
 			this.pushConf(false);
 		});
 
-		dispatch(widgetAndroidConfigure());
-		dispatch(widgetiOSConfigure());
 		dispatch(syncLiveApiOnForeground());
-		dispatch(getGateways());
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
+		dispatch(setGatewayRelatedGAProperties());// NOTE: Make sure is called resolving getGateways
 		dispatch(getUserSubscriptions());
 
 		// test gateway local control end-point on app restart.
