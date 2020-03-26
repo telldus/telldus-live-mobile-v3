@@ -18,7 +18,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     style={
       Object {
         "backgroundColor": "transparent",
-        "color": "#b5b5b5",
+        "color": "#777777",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -164,7 +164,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           style={
             Array [
               Object {
-                "color": "#A59F9A",
+                "color": "#8e8e93",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
@@ -359,7 +359,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           style={
             Array [
               Object {
-                "color": "#A59F9A",
+                "color": "#8e8e93",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
@@ -438,7 +438,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     style={
       Object {
         "backgroundColor": "transparent",
-        "color": "#b5b5b5",
+        "color": "#777777",
         "fontSize": 33,
         "marginBottom": 5,
         "marginTop": 10.416375,
@@ -584,7 +584,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           style={
             Array [
               Object {
-                "color": "#A59F9A",
+                "color": "#8e8e93",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
@@ -779,7 +779,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           style={
             Array [
               Object {
-                "color": "#A59F9A",
+                "color": "#8e8e93",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",

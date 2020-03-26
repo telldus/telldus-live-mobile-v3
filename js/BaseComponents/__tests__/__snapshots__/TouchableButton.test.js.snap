@@ -163,7 +163,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
             },
             Object {
               "color": "#ffffff",
-              "fontSize": 25,
+              "fontSize": 26,
               "transform": Array [
                 Object {
                   "rotate": "0deg",
@@ -346,7 +346,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
             },
             Object {
               "color": "#ffffff",
-              "fontSize": 25,
+              "fontSize": 26,
               "transform": Array [
                 Object {
                   "rotate": "0deg",
