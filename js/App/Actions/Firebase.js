@@ -31,6 +31,7 @@ const remoteConfigs = [
 	'premiumPurchase',
 	'rgb',
 	'appDrawerBanner',
+	'webshop',
 ];
 
 const fetchRemoteConfig = (): ThunkAction => {
@@ -52,6 +53,9 @@ const fetchRemoteConfig = (): ThunkAction => {
 				offColorMultiplier: 0.55,
 			},
 			appDrawerBanner: {
+			},
+			webshop: {
+				enable: false,
 			},
 		});
 
