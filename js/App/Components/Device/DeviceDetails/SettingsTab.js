@@ -776,6 +776,7 @@ class SettingsTab extends View {
 			learnButtonWithScan,
 			labelStyle,
 			editBoxStyle,
+			inactiveSwitchBackground,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -939,10 +940,10 @@ class SettingsTab extends View {
 										<TouchableButton
 											text={formatMessage(i18n.delete).toUpperCase()}
 											onPress={this.onPressDelete433Device}
-											disabled={isDeleting433MHz}
+											disabled={isDeleting433MHz || isSaving433MhzParams}
 											showThrobber={isDeleting433MHz}
 											style={[touchableButtonCommon, {
-												backgroundColor: brandDanger,
+												backgroundColor: (isDeleting433MHz || isSaving433MhzParams) ? inactiveSwitchBackground : brandDanger,
 											}]}/>
 									)
 								}
@@ -964,6 +965,7 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
+			inactiveSwitchBackground,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -977,6 +979,7 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
+			inactiveSwitchBackground,
 			container: {
 				flex: 0,
 				paddingHorizontal: padding,

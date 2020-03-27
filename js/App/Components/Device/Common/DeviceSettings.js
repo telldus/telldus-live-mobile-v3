@@ -593,7 +593,8 @@ const DeviceSettings = (props: Props): Object => {
 				<ScanButton
 					clientId={clientId}
 					deviceId={deviceId}
-					devicetype={devicetype}/>
+					devicetype={devicetype}
+					disabled={isSaving433MhzParams}/>
 			</View>
 			}
 		</View>
