@@ -295,6 +295,10 @@ const RegisterForPushScreen = (props: Object): Object => {
 		deviceUniqueId,
 		deletingToken,
 		isLoading,
+		phonesList,
+		pushToken,
+		deviceName,
+		deviceId,
 	]);
 
 	return (
