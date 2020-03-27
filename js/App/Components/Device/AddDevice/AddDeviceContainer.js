@@ -48,6 +48,8 @@ import {
 	deviceAdded,
 	registerForWebSocketEvents,
 	getDeviceInfoCommon,
+	sensorAdded,
+	getSensors,
 } from '../../../Actions';
 
 type Props = {
@@ -295,6 +297,8 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 				registerForWebSocketEvents,
 				deviceAdded,
 				getDeviceInfoCommon,
+				sensorAdded,
+				getSensors,
 			}, dispatch),
 		},
 		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),

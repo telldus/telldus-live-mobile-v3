@@ -148,23 +148,59 @@ postSubmitName = async () => {
 	const { navigation, actions } = this.props;
 	const { rowData } = this.state;
 
-	await actions.getDevices();
+	try {
+		await actions.getDevices();
+		await actions.getSensors();
+	} catch (e) {
+		// Ignore
+	} finally {
+		this.setState({
+			isLoading: false,
+		}, () => {
+			InteractionManager.runAfterInteractions(() => {
 
-	this.setState({
-		isLoading: false,
-	}, () => {
-		InteractionManager.runAfterInteractions(() => {
-			const gateway = navigation.getParam('gateway', {});
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
-				params: {
-					gateway,
-					newDevices: rowData,
-				},
+				const gateway = navigation.getParam('gateway', {});
+				const parentScreen = navigation.getParam('parent', '');
+
+				if (parentScreen === 'sensors_tab') {
+					const sensors = navigation.getParam('sensors', []);
+					if (sensors.length > 0) {
+
+						let newSensors = {};
+						sensors.map(({id, clientDeviceId}: Object, index: number) => {
+							newSensors[id] = {
+								id,
+								name: '',
+								index,
+								mainNode: true,
+								clientDeviceId,
+							};
+						});
+
+						navigation.navigate({
+							routeName: 'Sensors',
+							key: 'Sensors',
+							params: {
+								gateway,
+								newSensors,
+							},
+						});
+
+						return;
+					}
+				}
+
+				navigation.navigate({
+					routeName: 'Devices',
+					key: 'Devices',
+					params: {
+						gateway,
+						newDevices: rowData,
+					},
+				});
 			});
 		});
-	});
+	}
 }
 
 onChangeName(name: string, id: number) {

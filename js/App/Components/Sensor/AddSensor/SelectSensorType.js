@@ -89,6 +89,7 @@ onChooseType({module, action, secure}: Object) {
 			module,
 			action,
 			secure,
+			parent: 'sensors_tab',
 		});
 	} else if (module === 'rf433') {
 		const prevParams = navigation.state.params || {};

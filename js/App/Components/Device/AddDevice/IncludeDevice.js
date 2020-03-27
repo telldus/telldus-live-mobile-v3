@@ -111,6 +111,7 @@ constructor(props: Props) {
 	this.zwaveId = null;
 	this.mainNodeDeviceId = null;
 	this.devices = [];
+	this.sensors = [];
 	this.commandClasses = null;
 	this.deviceManufactInfo = {};
 	this.deviceProdInfo = {};
@@ -170,6 +171,7 @@ getNodesList() {
 
 callbackOnOpen = () => {
 	this.sendFilter('device', 'added');
+	this.sendFilter('sensor', 'added');
 	this.sendFilter('zwave', 'removeNodeFromNetwork');
 	this.sendFilter('zwave', 'removeNodeFromNetworkStartTimeout');
 	this.sendFilter('zwave', 'addNodeToNetwork');
@@ -469,6 +471,15 @@ callbackOnMessage = (msg: Object) => {
 					});
 					actions.deviceAdded(data);
 				}
+			} else if (module === 'sensor') {
+				if (action === 'added') {
+					const { clientDeviceId, id } = data;
+					this.sensors.push({
+						id,
+						clientDeviceId,
+					});
+					actions.sensorAdded(data);
+				}
 			}
 		}
 	}
@@ -656,6 +667,7 @@ navigateToNext(deviceManufactInfo: Object, routeName: string | null) {
 			statusMessage,
 			statusIcon,
 			interviewPartialStatusMessage,
+			sensors: this.sensors,
 		},
 	});
 }
@@ -695,6 +707,7 @@ cleanAllClassVariables() {
 	clearTimeout(this.sleepCheckTimeout);
 	clearTimeout(this.partialInclusionCheckTimeout);
 	this.devices = [];
+	this.sensors = [];
 	this.zwaveId = null;
 	this.mainNodeDeviceId = null;
 	this.commandClasses = null;
