@@ -59,6 +59,7 @@ import {
 	setDeviceName,
 	setDeviceModel,
 	setDeviceProtocol,
+	setWidgetParamsValue,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -69,6 +70,7 @@ import {
 	prepare433DeviceParamsToStore,
 	prepareDeviceParameters,
 	supportsScan,
+	prepare433MHzDeviceDefaultValueForParams,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -225,8 +227,7 @@ class SettingsTab extends View {
 	}
 
 	get433MHzDeviceSettings(): Object {
-		const { screenProps, device } = this.props;
-		const { formatMessage } = screenProps.intl;
+		const { device } = this.props;
 		const { protocol, model, transport } = device;
 
 		if (!is433MHzTransport(transport)) {
@@ -239,6 +240,11 @@ class SettingsTab extends View {
 		const {
 			widget,
 		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
+		return this.getWidgetAndSettings(widget);
+	}
+
+	getWidgetAndSettings = (widget: string): Object => {
+		const { formatMessage } = this.props.screenProps.intl;
 		if (widget) {
 			return {
 				widget433MHz: widget,
@@ -516,10 +522,12 @@ class SettingsTab extends View {
 			);
 		}
 
+		const updateAllParamsFromLocal = hasModelChanged || hasProtocolChanged;
+
 		const parameters = prepareDeviceParameters(parseInt(widget433MHz, 10), widgetParams433Device);
 		if (parameters) {
 			const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
-			if (settings) {
+			if (settings || updateAllParamsFromLocal) {
 				let availableSettings = {};
 				Object.keys(settings).map((s: string) => {
 					if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
@@ -528,7 +536,11 @@ class SettingsTab extends View {
 				});
 
 				Object.keys(parameters).map((p: string) => {
-					if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
+					if (updateAllParamsFromLocal) {
+						promises.push(
+							dispatch(setDeviceParameter(id, p, parameters[p]))
+						);
+					} else if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
 						promises.push(
 							dispatch(setDeviceParameter(id, p, parameters[p]))
 						);
@@ -677,11 +689,43 @@ class SettingsTab extends View {
 		});
 	}
 
+	_onSelectModel = ({
+		widget,
+		protocol,
+		model,
+	}: Object) => {
+		this.DeviceVendorInfo433MHz = getDeviceVendorInfo433MHz(protocol, model);
+		const {
+			widget433MHz = null,
+			settings433MHz = null,
+		} = this.getWidgetAndSettings(widget);
+		this.setState({
+			widget433MHz,
+			settings433MHz,
+		}, () => {
+
+			const {
+				device,
+				dispatch,
+			} = this.props;
+
+			dispatch(setWidgetParamsValue({
+				id: widget433MHz,
+				deviceId: device.id,
+				edit: true,
+				...prepare433MHzDeviceDefaultValueForParams(parseInt(widget, 10)),
+				model,
+				protocol,
+			}));
+		});
+	}
+
 	renderExtraSettingsTop = (): Object => {
 		const { device } = this.props;
 		return (
 			<Device433EditModel
-				device={device}/>
+				device={device}
+				onSelectModel={this._onSelectModel}/>
 		);
 	}
 
