@@ -42,6 +42,12 @@ import {
 	getDeviceManufacturerInfo,
 	showToast,
 	processWebsocketMessage,
+	addDevice as addDeviceAction,
+	setWidgetParamId,
+	initiateAdd433MHz,
+	deviceAdded,
+	registerForWebSocketEvents,
+	getDeviceInfoCommon,
 } from '../../../Actions';
 
 type Props = {
@@ -51,6 +57,8 @@ type Props = {
 	actions?: Object,
 	screenProps: Object,
 	ScreenName: string,
+	locale: string,
+	enableWebshop: boolean,
 	processWebsocketMessage: (string, string, string, Object) => any,
 };
 
@@ -60,9 +68,10 @@ type State = {
 	infoButton: null | Object,
 	loading: boolean,
 	keyboardShown: boolean,
+	forceLeftIconVisibilty: boolean,
 };
 
-class AddSensorContainer extends View<Props, State> {
+export class AddSensorContainer extends View<Props, State> {
 
 	handleBackPress: () => boolean;
 	_keyboardDidShow: () => void;
@@ -73,6 +82,7 @@ class AddSensorContainer extends View<Props, State> {
 		h2: '',
 		infoButton: null,
 		keyboardShown: false,
+		forceLeftIconVisibilty: false,
 	};
 
 	constructor(props: Props) {
@@ -128,10 +138,14 @@ class AddSensorContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let { navigation } = this.props;
-		if (this.disAllowBackNavigation()) {
+		const { navigation } = this.props;
+		const { forceLeftIconVisibilty } = this.state;
+
+		const allowBacknavigation = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
+		if (!allowBacknavigation) {
 			return true;
 		}
+
 		navigation.pop();
 		return true;
 	}
@@ -151,6 +165,17 @@ class AddSensorContainer extends View<Props, State> {
 		});
 	};
 
+	toggleLeftIconVisibilty = (forceLeftIconVisibilty: boolean) => {
+		this.setState({
+			forceLeftIconVisibilty,
+		});
+	}
+
+	getLeftIcon = (CS: string): ?string => {
+		const SCNS = ['InitialScreenAddSensor'];
+		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -158,9 +183,11 @@ class AddSensorContainer extends View<Props, State> {
 			screenProps,
 			navigation,
 			addDevice,
+			locale,
+			sessionId,
 		} = this.props;
 		const { appLayout, currentScreen } = screenProps;
-		const { h1, h2, infoButton } = this.state;
+		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
@@ -168,7 +195,8 @@ class AddSensorContainer extends View<Props, State> {
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const showLeftIcon = !this.disAllowBackNavigation();
+		const showLeftIcon = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
+		const leftIcon = this.getLeftIcon(currentScreen);
 
 		return (
 			<View
@@ -182,7 +210,7 @@ class AddSensorContainer extends View<Props, State> {
 					align={'right'}
 					navigation={navigation}
 					showLeftIcon={showLeftIcon}
-					leftIcon={currentScreen === 'InitialScreenAddSensor' ? 'close' : undefined}
+					leftIcon={leftIcon}
 					{...screenProps}/>
 				<KeyboardAvoidingView
 					behavior="padding"
@@ -202,6 +230,10 @@ class AddSensorContainer extends View<Props, State> {
 							paddingHorizontal: padding,
 							addDevice,
 							processWebsocketMessage: this.props.processWebsocketMessage,
+							locale,
+							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
+							sessionId,
+							showLeftIcon,
 						},
 					)}
 				</KeyboardAvoidingView>
@@ -210,13 +242,25 @@ class AddSensorContainer extends View<Props, State> {
 	}
 }
 
-const mapStateToProps = (store: Object): Object => {
+export const mapStateToProps = (store: Object): Object => {
+	const { defaultSettings } = store.app;
+	const { language = {} } = defaultSettings || {};
+	const locale = language.code;
+
+	const { websockets: { session: { id: sessionId } }, user: { firebaseRemoteConfig = {} } } = store;
+
+	const { webshop = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
+	const { enable: enableWebshop } = JSON.parse(webshop);
+
 	return {
 		addDevice: store.addDevice,
+		locale,
+		sessionId,
+		enableWebshop,
 	};
 };
 
-const mapDispatchToProps = (dispatch: Function): Object => (
+export const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
 			...bindActionCreators({
@@ -227,6 +271,12 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 				getDevices,
 				getDeviceManufacturerInfo,
 				showToast,
+				addDeviceAction,
+				setWidgetParamId,
+				initiateAdd433MHz,
+				registerForWebSocketEvents,
+				deviceAdded,
+				getDeviceInfoCommon,
 			}, dispatch),
 		},
 		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),
