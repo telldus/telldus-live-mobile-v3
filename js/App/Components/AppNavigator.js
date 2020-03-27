@@ -56,6 +56,15 @@ import RequestSupportScreen from './CustomerSupport/RequestSupportScreen';
 import BuySMSCreditsScreen from './Premium/BuySMSCreditsScreen';
 import RegisterForPushScreen from './PushSettings/RegisterForPushScreen';
 
+import AddDeviceContainer from './Device/AddDevice/AddDeviceContainer';
+import IncludeDevice from './Device/AddDevice/IncludeDevice';
+import DeviceName from './Device/AddDevice/DeviceName';
+import AlreadyIncluded from './Device/AddDevice/AlreadyIncluded';
+import NoDeviceFound from './Device/AddDevice/NoDeviceFound';
+import ExcludeScreen from './Device/AddDevice/ExcludeScreen';
+import IncludeFailed from './Device/AddDevice/IncludeFailed';
+import CantEnterInclusion from './Device/AddDevice/CantEnterInclusion';
+
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
@@ -355,12 +364,97 @@ const RouteConfigs = {
 			header: null,
 		},
 	},
+	IncludeDevice: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeDevice, 'IncludeDevice'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	DeviceName: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(DeviceName, 'DeviceName'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	AlreadyIncluded: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(AlreadyIncluded, 'AlreadyIncluded'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	NoDeviceFound: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(NoDeviceFound, 'NoDeviceFound'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	ExcludeScreen: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(ExcludeScreen, 'ExcludeScreen'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	IncludeFailed: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(IncludeFailed, 'IncludeFailed'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	CantEnterInclusion: {
+		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(CantEnterInclusion, 'CantEnterInclusion'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
 };
 
 const renderScheduleScreen = (navigation: Object, screenProps: Object): Function => (Component: Object, ScreenName: string): Object => (
 	<SettingsContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
 		<Component/>
 	</SettingsContainer>
+);
+
+type renderContainer = (Object, string) => Object;
+
+const renderAddDeviceContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
+	<AddDeviceContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
+		<Component/>
+	</AddDeviceContainer>
 );
 
 const StackNavigatorConfig = {
