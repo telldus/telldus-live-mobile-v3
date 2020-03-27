@@ -75,5 +75,7 @@ module.exports = {
 	GatewayTransports: {
 		'zwave': 'ZW',
 		'zigbee': 'ZG',
+		'e433': '433',
+		'433': '433',
 	},
 };
