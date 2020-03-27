@@ -95,10 +95,7 @@ componentDidMount() {
 
 onPressExit() {
 	const { navigation } = this.props;
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-	});
+	navigation.popToTop();
 }
 
 onExcludeSuccessImmediate() {

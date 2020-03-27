@@ -69,10 +69,7 @@ componentDidMount() {
 
 onPressNext() {
 	const { navigation } = this.props;
-	navigation.navigate({
-		routeName: 'Devices',
-		key: 'Devices',
-	});
+	navigation.popToTop();
 }
 
 render(): Object {
