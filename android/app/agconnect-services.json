@@ -1,0 +1,12 @@
+{
+	"client":{
+		"cp_id":"**************",
+		"product_id":"**************",
+		"client_id":"**************",
+		"client_secret":"**************",
+		"app_id":"**************",
+		"package_name":"com.telldus.live.mobile",
+		"api_key":"**************"
+	},
+	"configuration_version":"1.0"
+}
