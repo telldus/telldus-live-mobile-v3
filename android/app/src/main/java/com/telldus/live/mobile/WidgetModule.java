@@ -345,16 +345,14 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     promise.resolve(openThermostatControl);
   }
 
-  @ReactMethod
-  public void checkIfHuaweiMobileServicesAvailable(Promise promise) {
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public Boolean checkIfHuaweiMobileServicesAvailable() {
     int result = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(getReactApplicationContext());
     if (result == ConnectionResult.SUCCESS || result == ConnectionResult.SERVICE_UPDATING) {
       // "HuaweiMobileServices is available:"
-      promise.resolve(true);
-    } else {
-      // "HuaweiMobileServices is not available:"
-      promise.resolve(false);
+      return true;
     }
+    return false;
   }
 
 }
