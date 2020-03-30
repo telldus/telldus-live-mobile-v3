@@ -34,6 +34,7 @@ TELLDUS_REACT_NATIVE_LOCAL_KEY_PASSWORD=${ANDROID_KEY_PASSWORD}
 GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
 PUSH_SENDER_ID=${PUSH_SENDER_ID}
 TELLDUS_API_SERVER="${TELLDUS_API_SERVER}"
+DEPLOY_STORE="${DEPLOY_STORE}"
 
 android.useAndroidX=true
 android.enableJetifier=true
@@ -53,6 +54,24 @@ if [ "${DEPLOY_KEY}" != "" ]; then
 fi
 
 git clone git@code.telldus.com:telldus/android-signing.git
+
+# Need only those modules required by HMS
+if [ "${DEPLOY_STORE}" == "huawei" ]; then
+
+# Use react-native-hms-map instead of react-native-maps for Huawei
+cat > ../react-native-maps/index.js <<EOF
+import * as Maps from 'react-native-hms-map';
+module.exports = {
+    ...Maps,
+};
+EOF
+
+	yarn add react-native-hms-map "file:./react-native-hms-map"
+    yarn add react-native-maps "file:./react-native-maps"
+
+fi
+# Confirm and update the module name - "react-native-hms-map".
+# As of now it is a different module available by this name at NPM
 
 ./gradlew clean
 ./gradlew assembleRelease
