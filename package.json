@@ -54,6 +54,7 @@
     "react-native-i18n": "~2.0.15",
     "react-native-iap": "^4.4.2",
     "react-native-iphone-x-helper": "~1.2.0",
+    "react-native-hms-map": "file:./empty-module",
     "react-native-maps": "0.25.0",
     "react-native-markdown-renderer": "~3.2.8",
     "react-native-material-dropdown": "https://github.com/rimzici/react-native-material-dropdown.git",
