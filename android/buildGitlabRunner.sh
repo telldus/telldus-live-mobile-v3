@@ -57,18 +57,14 @@ git clone git@code.telldus.com:telldus/android-signing.git
 
 # Need only those modules required by HMS
 if [ "${DEPLOY_STORE}" == "huawei" ]; then
-
 # Use react-native-hms-map instead of react-native-maps for Huawei
+mkdir ../react-native-maps
 cat > ../react-native-maps/index.js <<EOF
-import * as Maps from 'react-native-hms-map';
-module.exports = {
-    ...Maps,
-};
+module.exports = require('react-native-hms-map');
 EOF
 
-	yarn add react-native-hms-map "file:./react-native-hms-map"
-    yarn add react-native-maps "file:./react-native-maps"
-
+yarn add react-native-hms-map "file:./react-native-hms-map"
+yarn add react-native-maps "file:./react-native-maps"
 fi
 # Confirm and update the module name - "react-native-hms-map".
 # As of now it is a different module available by this name at NPM
