@@ -58,6 +58,8 @@ git clone git@code.telldus.com:telldus/android-signing.git
 
 # Need only those modules required by HMS
 if [ "${DEPLOY_STORE}" == "huawei" ]; then
+    cp "${AGCONNECT_SERVICES}" > app/agconnect-services.json
+
 	# Use react-native-hms-map instead of react-native-maps for Huawei
 	mkdir ../react-native-maps
 	echo "module.exports = require('react-native-hms-map');" > ../react-native-maps/index.js
