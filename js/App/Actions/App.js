@@ -21,10 +21,6 @@
 // @flow
 
 'use strict';
-import {
-	PermissionsAndroid,
-	Platform,
-} from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
