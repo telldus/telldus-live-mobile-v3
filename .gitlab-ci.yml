@@ -31,9 +31,11 @@ jest:
     - yarn install --quiet
     - yarn test
 
-android: &android-ubuntu
+android: &android
   image: telldus/react-native-android:27-alpine
   stage: build
+  variables:
+    DEPLOY_STORE: ${CI_JOB_NAME}
   cache:
     paths:
       - node_modules
@@ -55,6 +57,9 @@ android: &android-ubuntu
     - /^v\d+\.\d+.*$/ # Version branches
   tags:
     - android
+
+huawei:
+  <<: *android
 
 ios:
   stage: build
@@ -96,6 +101,22 @@ google_play:
     - echo ${GOOGLE_KEY} > play_key.json
     - bundle install
     - fastlane android alpha --verbose
+
+huawei_app_gallery:
+  image: ruby:2
+  stage: release
+  tags:
+    - docker
+  dependencies:
+    - android
+  environment:
+    name: huawei_app_gallery
+    url: https://huaweimobileservices.com/appgallery/
+  only:
+    - tags
+  script:
+    - bundle install
+    - fastlane android huawei --verbose
 
 testflight:
   stage: release

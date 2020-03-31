@@ -41,6 +41,9 @@ import com.telldus.live.mobile.Database.MyDBHandler;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 
+import com.huawei.hms.api.ConnectionResult;
+import com.huawei.hms.api.HuaweiApiAvailability;
+
 public class WidgetModule extends ReactContextBaseJavaModule {
 
   private PrefManager prefManager;
@@ -341,4 +344,15 @@ public class WidgetModule extends ReactContextBaseJavaModule {
   public void checkIfOpenThermostatControl(Promise promise) {
     promise.resolve(openThermostatControl);
   }
+
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public Boolean checkIfHuaweiMobileServicesAvailable() {
+    int result = HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(getReactApplicationContext());
+    if (result == ConnectionResult.SUCCESS || result == ConnectionResult.SERVICE_UPDATING) {
+      // "HuaweiMobileServices is available:"
+      return true;
+    }
+    return false;
+  }
+
 }

@@ -40,6 +40,7 @@ import {
 	setAccessibilityInfo,
 	widgetAndroidConfigure,
 	networkConnection,
+	requestAppPermissions,
 } from './App/Actions';
 import {
 	getTranslatableDayNames,
@@ -138,6 +139,8 @@ class App extends React.Component<Props, State> {
 		}
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
+
+		dispatch(requestAppPermissions());
 	}
 
 	setCalendarLocale() {

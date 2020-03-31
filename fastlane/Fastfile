@@ -40,9 +40,30 @@ platform :android do
         Version: ENV["APP_VERSION"]
       }
     )
+  end
 
+  desc "Deploy a new alpha version to the Huawei App Gallery Connect"
+  lane :huawei do
+    huawei_appgallery_connect(
+      client_id: ENV["HUAWEI_CLIENT_ID"],
+      client_secret: ENV["HUAWEI_CLIENT_SECRET"],
+      app_id: ENV["HUAWEI_APP_ID"],
+      apk_path: "android/app/build/outputs/apk/release/app-release.apk",
+
+      # Optional, Parameter beyond this are optional
+      # For phase wise release: set these parameters
+      phase_wise_release: true,
+      phase_release_percent: "10.00",
+    )
+    slack(
+      message: "Successfully deployed new App Update to Huawei App Gallery Connect.",
+      payload: {
+        Version: ENV["APP_VERSION"]
+      }
+    )
   end
 end
+
 
 platform :ios do
   before_all do
