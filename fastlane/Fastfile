@@ -40,21 +40,10 @@ platform :android do
         Version: ENV["APP_VERSION"]
       }
     )
-
-  end
-end
-
-platform :android do
-  before_all do
-  end
-
-  desc "Runs all the tests"
-  lane :test do
-    gradle(project_dir: "./android", task: "test")
   end
 
   desc "Deploy a new alpha version to the Huawei App Gallery Connect"
-  lane :alpha do
+  lane :huawei do
     huawei_appgallery_connect(
       client_id: ENV["HUAWEI_CLIENT_ID"],
       client_secret: ENV["HUAWEI_CLIENT_SECRET"],
@@ -72,9 +61,9 @@ platform :android do
         Version: ENV["APP_VERSION"]
       }
     )
-
   end
 end
+
 
 platform :ios do
   before_all do
