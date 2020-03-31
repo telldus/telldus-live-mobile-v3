@@ -21,10 +21,6 @@
 // @flow
 
 'use strict';
-import {
-	PermissionsAndroid,
-	Platform,
-} from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 import axios from 'axios';
@@ -149,23 +145,11 @@ const setNetworkConnectionInfo = (payload: Object): Action => {
 	};
 };
 
-const requestAppPermissions = (): ThunkAction => {
-	return async (dispatch: Function, getState: Object): any => {
-		if (Platform.OS === 'android') {
-			return await PermissionsAndroid.requestMultiple([
-				PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-			]);
-		}
-	};
-};
-
 module.exports = {
 	...App,
 	createSupportTicket,
 	createSupportTicketLCT,
 	createSupportTicketGeneral,
 	setNetworkConnectionInfo,
-	requestAppPermissions,
 };
 
