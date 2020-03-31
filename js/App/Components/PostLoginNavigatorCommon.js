@@ -33,7 +33,6 @@ import RNIap from 'react-native-iap';
 import { View } from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
-import ExchangeOffer from './ExchangeOffer/ExchangeOffer';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
 
@@ -100,7 +99,6 @@ type Props = {
 
 	showChangeLog: boolean,
 
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
@@ -334,7 +332,6 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	}
 
 	const propsChange = shouldUpdate(others, othersN, [
-		'visibilityExchangeOffer',
 		'pushTokenRegistered',
 		'pushToken',
 		'deviceId',
@@ -512,7 +509,6 @@ render(): Object {
 		dimmer,
 		intl,
 		screenReaderEnabled,
-		visibilityExchangeOffer,
 		gateways,
 		locale,
 		showChangeLog,
@@ -523,7 +519,6 @@ render(): Object {
 
 	const showEO = !showEULA
 	&& locale === 'sv'
-	&& (!visibilityExchangeOffer || visibilityExchangeOffer === 'show' || visibilityExchangeOffer === 'force_show')
 	&& hasTellStickNetGetOne(gateways.byId);
 
 	return (
@@ -551,7 +546,6 @@ render(): Object {
 				/>
 			)}
 			<UserAgreement showModal={showEULA && !showChangeLog} onLayout={this.onLayout}/>
-			<ExchangeOffer showModal={showEO && !showChangeLog} onLayout={this.onLayout}/>
 		</View>
 	);
 }
@@ -571,7 +565,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	let locale = language.code;
 
 	const {
-		visibilityExchangeOffer,
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
@@ -603,7 +596,6 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pushTokenRegistered,
 		pushToken,
 		deviceId,
-		visibilityExchangeOffer,
 		subscriptions,
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,
