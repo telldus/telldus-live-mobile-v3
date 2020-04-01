@@ -66,8 +66,8 @@ function prepareNo433MHzSupportDialogueData(formatMessage: (Object) => string = 
 }
 
 function goToWebShop(locale: string): any {
-	const linkEN = 'http://telld.us/buyznetlitev2';
-	const linkSWE = 'http://telld.us/kopznetlitev2';
+	const linkEN = 'https://telld.us/buyznetlitev2';
+	const linkSWE = 'https://telld.us/kopznetlitev2';
 	if (locale === 'sv') {
 		return openURL(linkSWE);
 	}
