@@ -38,6 +38,9 @@ import {
 	TouchableButton,
 	EditBox,
 } from '../../../BaseComponents';
+import {
+	ExcludeDevice,
+} from '../Device/Common';
 
 import {
 	addToDashboard,
@@ -49,6 +52,7 @@ import {
 	setSensorName,
 	removeSensorHistory,
 	resetSensorMaxMin,
+	registerForWebSocketEvents,
 } from '../../Actions';
 import { clearHistory } from '../../Actions/LocalStorage';
 import { shouldUpdate, LayoutAnimations } from '../../Lib';
@@ -62,6 +66,7 @@ type Props = {
 	sensor: Object,
 	inDashboard: boolean,
 	navigation: Object,
+	isGatewayReachable: boolean,
 
 	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
@@ -77,6 +82,7 @@ type State = {
 		transition: boolean,
 		source: string,
 	},
+	excludeActive: boolean,
 };
 
 
@@ -150,6 +156,7 @@ class SettingsTab extends View {
 				transition: false,
 				source: '',
 			},
+			excludeActive: false,
 		};
 
 		const { formatMessage } = props.screenProps.intl;
@@ -200,7 +207,7 @@ class SettingsTab extends View {
 				return true;
 			}
 
-			const propsChange = shouldUpdate(others, othersN, ['sensor']);
+			const propsChange = shouldUpdate(others, othersN, ['sensor', 'isGatewayReachable']);
 			if (propsChange) {
 				return true;
 			}
@@ -484,16 +491,59 @@ class SettingsTab extends View {
 		};
 	}
 
-	render(): Object | null {
-		const { keepHistory, isHidden, editName, sensorName } = this.state;
-		const { inDashboard, sensor } = this.props;
+	onPressExcludeDevice = () => {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		this.setState({
+			excludeActive: true,
+		});
+	}
 
-		if (!sensor.sensorId) {
+	onPressCancelExclude = () => {
+		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		this.setState({
+			excludeActive: false,
+		});
+	}
+
+	_showToast = (message: string) => {
+		const { dispatch } = this.props;
+		dispatch(showToast(message));
+	}
+
+	goBack = () => {
+		this.props.navigation.navigate({
+			routeName: 'Sensors',
+			key: 'Sensors',
+		});
+	}
+
+	registerForWebSocketEvents = (callbacks: Object): () => Object => {
+		const { sensor, dispatch } = this.props;
+		return dispatch(registerForWebSocketEvents(sensor.clientId, callbacks));
+	}
+
+	render(): Object | null {
+		const {
+			keepHistory,
+			isHidden,
+			editName,
+			sensorName,
+			excludeActive,
+		} = this.state;
+		const {
+			inDashboard,
+			sensor,
+			isGatewayReachable,
+			screenProps,
+		} = this.props;
+
+		const { model, protocol = '', sensorId, name, clientId, id } = sensor;
+
+		if (!id && !excludeActive) {
 			return null;
 		}
 
-		const { model, protocol = '', sensorId, name } = sensor;
-		const { appLayout, intl } = this.props.screenProps;
+		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
 
 		const {
@@ -503,6 +553,7 @@ class SettingsTab extends View {
 			editBoxStyle,
 			clearCacheHintStyle,
 			brandDanger,
+			btnDisabledBg,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -530,89 +581,109 @@ class SettingsTab extends View {
 					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={{flexGrow: 1}}>
-				<View style={container}>
-					<SettingsRow
-						type={'text'}
-						edit={true}
-						onPress={this.editName}
-						label={formatMessage(i18n.name)}
-						value={name}
+				{excludeActive ?
+					<ExcludeDevice
+						clientId={clientId}
 						appLayout={appLayout}
 						intl={intl}
-						keyboardTypeInLineEdit={'default'}
-					/>
-					<SettingsRow
-						label={formatMessage(i18n.showOnDashborad)}
-						onValueChange={this.onValueChange}
-						value={inDashboard}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-					<SettingsRow
-						label={formatMessage(i18n.hideFromListS)}
-						onValueChange={this.setIgnoreSensor}
-						value={isHidden}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-					<SettingsRow
-						label={formatMessage(i18n.labelStoreHistory)}
-						onValueChange={this.setKeepHistory}
-						value={keepHistory}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-					<TouchableButton
-						text={formatMessage(i18n.clearHistory).toUpperCase()}
-						onPress={this.clearHistory}
-						style={buttonStyle}
-						accessible={true}/>
-					<TouchableButton
-						text={formatMessage(i18n.resetMaxMin).toUpperCase()}
-						onPress={this.resetMaxMin}
-						style={buttonStyle}
-						accessible={true}/>
-					<TouchableButton
-						text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
-						onPress={this.clearHistoryCache}
-						style={buttonStyle}
-						accessible={true}/>
-					{!isZWave && <TouchableButton
-						text={formatMessage(i18n.deleteSensor).toUpperCase()}
-						onPress={this.deleteSensor}
-						style={[buttonStyle, {
-							backgroundColor: brandDanger,
-						}]}
-						accessible={true}/>
-					}
-					<Text style={clearCacheHintStyle}>
-						{formatMessage(i18n.hintHistoryCache)}.
-					</Text>
-					<Text style={infoHeaderText}>
-						{formatMessage(i18n.labelTechnicalInfo)}
-					</Text>
-					<SettingsRow
-						type={'text'}
-						label={formatMessage(i18n.labelProtocol)}
-						value={this.formatProtocol(protocol)}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-					<SettingsRow
-						type={'text'}
-						label={formatMessage(i18n.labelModel)}
-						value={model}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-					<SettingsRow
-						type={'text'}
-						label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
-						value={sensorId}
-						appLayout={appLayout}
-						intl={intl}
-					/>
-				</View>
+						showToast={this._showToast}
+						onExcludeSuccess={this.goBack}
+						onPressCancelExclude={this.onPressCancelExclude}
+						registerForWebSocketEvents={this.registerForWebSocketEvents}/>
+					:
+					<View style={container}>
+						<SettingsRow
+							type={'text'}
+							edit={true}
+							onPress={this.editName}
+							label={formatMessage(i18n.name)}
+							value={name}
+							appLayout={appLayout}
+							intl={intl}
+							keyboardTypeInLineEdit={'default'}
+						/>
+						<SettingsRow
+							label={formatMessage(i18n.showOnDashborad)}
+							onValueChange={this.onValueChange}
+							value={inDashboard}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<SettingsRow
+							label={formatMessage(i18n.hideFromListS)}
+							onValueChange={this.setIgnoreSensor}
+							value={isHidden}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<SettingsRow
+							label={formatMessage(i18n.labelStoreHistory)}
+							onValueChange={this.setKeepHistory}
+							value={keepHistory}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<TouchableButton
+							text={formatMessage(i18n.clearHistory).toUpperCase()}
+							onPress={this.clearHistory}
+							style={buttonStyle}
+							accessible={true}/>
+						<TouchableButton
+							text={formatMessage(i18n.resetMaxMin).toUpperCase()}
+							onPress={this.resetMaxMin}
+							style={buttonStyle}
+							accessible={true}/>
+						<TouchableButton
+							text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
+							onPress={this.clearHistoryCache}
+							style={buttonStyle}
+							accessible={true}/>
+						{isZWave ?
+							<TouchableButton
+								text={formatMessage(i18n.headerExclude).toUpperCase()}
+								onPress={this.onPressExcludeDevice}
+								disabled={!isGatewayReachable}
+								style={[buttonStyle, {
+									backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+								}]}/>
+							:
+							<TouchableButton
+								text={formatMessage(i18n.deleteSensor).toUpperCase()}
+								onPress={this.deleteSensor}
+								style={[buttonStyle, {
+									backgroundColor: brandDanger,
+								}]}
+								accessible={true}/>
+						}
+						<Text style={clearCacheHintStyle}>
+							{formatMessage(i18n.hintHistoryCache)}.
+						</Text>
+						<Text style={infoHeaderText}>
+							{formatMessage(i18n.labelTechnicalInfo)}
+						</Text>
+						<SettingsRow
+							type={'text'}
+							label={formatMessage(i18n.labelProtocol)}
+							value={this.formatProtocol(protocol)}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<SettingsRow
+							type={'text'}
+							label={formatMessage(i18n.labelModel)}
+							value={model}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+						<SettingsRow
+							type={'text'}
+							label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
+							value={sensorId}
+							appLayout={appLayout}
+							intl={intl}
+						/>
+					</View>
+				}
 			</ScrollView>
 		);
 	}
@@ -627,12 +698,14 @@ class SettingsTab extends View {
 			paddingFactor,
 			eulaContentColor,
 			brandDanger,
+			btnDisabledBg,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 		const fontSize = deviceWidth * 0.04;
 
 		return {
+			btnDisabledBg,
 			brandDanger,
 			container: {
 				flex: 1,
@@ -683,10 +756,15 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const id = ownProps.navigation.getParam('id', null);
-	const sensor = state.sensors.byId[id];
+	const sensor = state.sensors.byId[id] || {};
+
+	const { clientId } = sensor;
+	const { online = false, websocketOnline = false } = state.gateways.byId[clientId] || {};
+
 	return {
-		sensor: sensor ? sensor : {},
+		sensor,
 		inDashboard: !!state.dashboard.sensorsById[id],
+		isGatewayReachable: online && websocketOnline,
 	};
 }
 
