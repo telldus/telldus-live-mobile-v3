@@ -23,7 +23,9 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+} from 'react-native';
 
 import {
 	View,
@@ -37,6 +39,7 @@ import {
 import { getAvailableSensorsTypesAndInfo } from '../../../Lib/SensorUtils';
 import {
 	is433MHzTransport,
+	goToWebShop,
 } from '../../../Lib/DeviceUtils';
 
 import Theme from '../../../Theme';
@@ -47,6 +50,7 @@ type Props = {
 	appLayout: Object,
 	currentScreen: string,
 	enableWebshop: boolean,
+	locale: string,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
@@ -101,23 +105,37 @@ onChooseType({module, action, secure}: Object) {
 }
 
 getDeviceTypes(): Object {
-	const { navigation, intl } = this.props, types = [];
+	const { navigation, intl } = this.props;
 	const { formatMessage, formatNumber } = intl;
 	const gateway = navigation.getParam('gateway', {});
 	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 
-	let support433 = false;
+	let support433 = false, types = {};
 	const availableSensorsTypesAndInfo = getAvailableSensorsTypesAndInfo(formatMessage, formatNumber, true);
-	transportsAsArray.forEach((ts: string) => {
-		const availableTypes = availableSensorsTypesAndInfo[ts];
+	transportsAsArray.forEach((ts: string = '') => {
+		const availableTypes = availableSensorsTypesAndInfo[ts.trim()];
 		if (availableTypes) {
-			types.push(...availableTypes);
+			types = {
+				...types,
+				...availableTypes.reduce((acc: Object, item: Object): Object => {
+					acc[item.id] = item;
+					return acc;
+				}, {}),
+			};
 		}
 		if (!support433) {
-			support433 = is433MHzTransport(ts);
+			support433 = is433MHzTransport(ts.trim(), ['433', 'e433']);
 		}
 	});
+
+	if (!support433) {
+		types[availableSensorsTypesAndInfo['433'][0].id] = {
+			...availableSensorsTypesAndInfo['433'][0],
+			enabled: false,
+			h2: formatMessage(i18n.notSupportedByTellstick),
+		};
+	}
 
 	return {
 		types,
@@ -125,11 +143,12 @@ getDeviceTypes(): Object {
 	};
 }
 
-getDeviceTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
-	return types.map((type: Object, i: number): Object => {
+getDeviceTypesToRender(types: Object, appLayout: Object): Array<Object> {
+	return Object.keys(types).map((t: Object): Object => {
+		const type = types[t];
 		return (
 			<DeviceTypeBlock
-				key={i}
+				key={type.id}
 				{...type}
 				appLayout={appLayout}
 				onPress={this.onChooseType}
@@ -138,16 +157,29 @@ getDeviceTypesToRender(types: Array<any>, appLayout: Object): Array<Object> {
 	});
 }
 
+onPressWebshop = () => {
+	const {
+		locale,
+	} = this.props;
+
+	goToWebShop(locale);
+}
+
 render(): Object {
 	const {
 		appLayout,
 		enableWebshop,
+		intl,
 	} = this.props;
 	const {
 		types,
 		support433,
 	 } = this.getDeviceTypes();
 	const typesToRender = this.getDeviceTypesToRender(types, appLayout);
+
+	const {
+		formatMessage,
+	} = intl;
 
 	const {
 		container,
@@ -170,18 +202,22 @@ render(): Object {
 			<>
 				<View style={no433Cover}>
 					<Text style={no433Header}>
-					433 MHz sensors not supported
+						{formatMessage(i18n.gatewayNoSupport433Header)}
 					</Text>
 					<Text style={no433Body}>
-					This gateway does not support 433 MHz sensors. If you would like to add that
-					functionality, please have a look at our current TellStick range.
+						{enableWebshop ?
+							formatMessage(i18n.gatewayNoSupport433InfoTwo)
+							:
+							formatMessage(i18n.gatewayNoSupport433InfoOne)
+						}
 					</Text>
 				</View>
 				{
 					enableWebshop && (
 						<TouchableButton
+							onPress={this.onPressWebshop}
 							preScript={webShopIcon}
-							text={'Visit webshop'}
+							text={formatMessage(i18n.visitWebShop)}
 							style={buttonStyle}/>
 					)}
 			</>
