@@ -820,6 +820,26 @@ clearTimer() {
 	clearInterval(this.interviewTimer);
 }
 
+onPressCancel = () => {
+	this.setState({
+		timer: null,
+		showThrobber: false,
+		cantEnterLearnMode: false,
+	}, () => {
+		clearTimeout(this.sleepCheckTimeout);
+		clearTimeout(this.partialInclusionCheckTimeout);
+		this.clearTimer();
+
+		const { navigation } = this.props;
+		const { params = {}} = navigation.state;
+		navigation.navigate({
+			routeName: 'NoDeviceFound',
+			key: 'NoDeviceFound',
+			params,
+		});
+	});
+}
+
 render(): Object {
 	const { intl, appLayout } = this.props;
 	const { timer, status, percent, showTimer, showThrobber, hintMessage, deviceImage } = this.state;
@@ -843,7 +863,8 @@ render(): Object {
 				intl={intl}
 				appLayout={appLayout}
 				infoText={hintMessage}
-				deviceImage={deviceImage}/>
+				deviceImage={deviceImage}
+				onPressCancel={timerText === ' ' ? undefined : this.onPressCancel}/>
 		</ScrollView>
 	);
 }

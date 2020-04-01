@@ -23,7 +23,10 @@
 'use strict';
 
 import React from 'react';
-import { Platform } from 'react-native';
+import {
+	Platform,
+	TouchableOpacity,
+} from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import {
@@ -33,6 +36,7 @@ import {
 	BlockIcon,
 	ProgressBarLinear,
 	Throbber,
+	Icon,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -115,7 +119,16 @@ onLayout(ev: Object) {
 }
 
 render(): Object {
-	const { intl, timer, status, progress, showThrobber, infoText, deviceImage } = this.props;
+	const {
+		intl,
+		timer,
+		status,
+		progress,
+		showThrobber,
+		infoText,
+		deviceImage,
+		onPressCancel,
+	} = this.props;
 	const { width } = this.state;
 	const {
 		container,
@@ -133,11 +146,16 @@ render(): Object {
 		infoOneContainer,
 		headerTextStyle,
 		throbberContainerStyle,
+		iconCancelStyle,
+		iconCancelSize,
+		iconCancelColor,
 	} = this.getStyles();
 
 	const { formatMessage } = intl;
 
 	const showInfo = this.isInclude && !!infoText;
+
+	const showIconCancel = !!onPressCancel;
 
 	return (
 		<View style={container}>
@@ -174,14 +192,28 @@ render(): Object {
 					{showThrobber ?
 						<Throbber throbberContainerStyle={throbberContainerStyle} thorbberStyle={timerStyle}/>
 						:
-						[
-							<Text style={timerStyle} key={'0'}>
-								{timer}
-							</Text>,
+						<>
+							<View style={{
+								flexDirection: 'row',
+								alignItems: 'center',
+							}}>
+								<Text style={timerStyle} key={'0'}>
+									{timer}
+								</Text>
+								{showIconCancel && <TouchableOpacity
+									onPress={onPressCancel}>
+									<Icon
+										style={iconCancelStyle}
+										name={'times-circle'}
+										size={iconCancelSize}
+										color={iconCancelColor}/>
+								</TouchableOpacity>
+								}
+							</View>
 							<Text style={statusStyle} key={'1'}>
 								{status}
-							</Text>,
-						]
+							</Text>
+						</>
 					}
 					<ProgressBarLinear
 						progress={progress}
@@ -217,7 +249,14 @@ getStyles(): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { paddingFactor, shadow, rowTextColor, brandSecondary, brandPrimary } = Theme.Core;
+	const {
+		paddingFactor,
+		shadow,
+		rowTextColor,
+		brandSecondary,
+		brandPrimary,
+		inactiveSwitchBackground,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -229,6 +268,9 @@ getStyles(): Object {
 	const markerHeight = deviceWidth * 0.075;
 
 	const contOneTop = markerHeight - contPadding;
+
+	const iconCancelSize = fontSizeText * 1.3;
+	const iconCancelColor = inactiveSwitchBackground;
 
 	return {
 		innerPadding: contPadding,
@@ -308,6 +350,8 @@ getStyles(): Object {
 		timerStyle: {
 			fontSize: deviceWidth * 0.045,
 			color: brandSecondary,
+			textAlignVertical: 'center',
+			marginRight: 5,
 		},
 		throbberContainerStyle: {
 			position: 'relative',
@@ -324,6 +368,13 @@ getStyles(): Object {
 			justifyContent: 'center',
 			alignItems: 'center',
 		},
+		iconCancelStyle: {
+			paddingHorizontal: 4,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		iconCancelSize,
+		iconCancelColor,
 	};
 }
 }
