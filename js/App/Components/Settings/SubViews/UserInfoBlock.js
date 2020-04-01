@@ -31,6 +31,10 @@ import {
 	TitledInfoBlock,
 } from '../../../../BaseComponents';
 
+import {
+	deployStore,
+} from '../../../../Config';
+
 import i18n from '../../../Translations/common';
 
 const UserInfoBlock = (props: Object): Object => {
@@ -44,7 +48,9 @@ const UserInfoBlock = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const testCrash = () => {
-		firebase.crashlytics().crash();
+		if (deployStore !== 'huawei') {
+			firebase.crashlytics().crash();
+		}
 	};
 
 	const titleUserInfo = `${formatMessage(i18n.titleUserInfo)}:`;

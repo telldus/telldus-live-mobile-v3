@@ -26,6 +26,10 @@ import firebase from 'react-native-firebase';
 
 import type { ThunkAction, Action } from './Types';
 
+import {
+	deployStore,
+} from '../../Config';
+
 const remoteConfigs = [
 	'geoFenceFeature',
 	'premiumPurchase',
@@ -33,6 +37,10 @@ const remoteConfigs = [
 
 const fetchRemoteConfig = (): ThunkAction => {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
+		if (deployStore === 'huawei') {
+			return;
+		}
+
 		if (__DEV__) {
 			firebase.config().enableDeveloperMode();
 		}

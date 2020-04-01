@@ -23,15 +23,20 @@
 'use strict';
 
 import firebase from 'react-native-firebase';
+import {
+	deployStore,
+} from '../../Config';
+
+const enableAnalytics = deployStore !== 'huawei' && !__DEV__;
 
 export function reportError(msg: string) {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().recordError(101, msg);
 	}
 }
 
 export function reportException(e: Error | string) {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		if (e instanceof Error) {
 			// Log the stack trace
 			firebase.crashlytics().log(e.stack);
@@ -43,26 +48,26 @@ export function reportException(e: Error | string) {
 }
 
 export function setBoolean(key: string, value: boolean) {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().setBoolValue(key, value);
 	}
 }
 
 export function setUserIdentifier(userId: string = '') {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().setUserIdentifier(userId);
 	}
 }
 
 export function enableCrashlyticsCollection() {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().enableCrashlyticsCollection();
 	}
 }
 
 export function setUserName(uname: string) {
 	// TODO: Enable once the method is supported. rn-firebase v6
-	// if (!__DEV__) {
+	// if (enableAnalytics) {
 	// 	firebase.crashlytics().setUserName(uname);
 	// }
 }

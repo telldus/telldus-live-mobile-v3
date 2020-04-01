@@ -27,7 +27,11 @@ import type { Notification, NotificationOpen } from 'react-native-firebase';
 import DeviceInfo from 'react-native-device-info';
 
 import type { ThunkAction } from '../Actions/Types';
-import { pushSenderId, pushServiceId } from '../../Config';
+import {
+	pushSenderId,
+	pushServiceId,
+	deployStore,
+} from '../../Config';
 import { registerPushToken } from '../Actions/User';
 import { reportException } from '../Lib/Analytics';
 
@@ -43,6 +47,10 @@ const Push = {
 					playServicesInfo = {},
 				},
 			} = getState();
+
+			if (deployStore === 'huawei') {
+				return;
+			}
 
 			const { isAvailable, ...others } = Push.checkPlayServices();
 			if (isAvailable) {
@@ -151,6 +159,9 @@ const Push = {
 	},
 	// Remote notification listerner. Returns a function that clears the listener.
 	onNotification: (): any => {
+		if (deployStore === 'huawei') {
+			return;
+		}
 		return firebase.notifications().onNotification((notification: Notification): any => {
 			// Remote Notification received when app is in foreground is handled here.
 			Push.createLocalNotification(notification);
@@ -180,6 +191,9 @@ const Push = {
 	},
 	refreshTokenListener: ({ deviceId, register }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Function => {
+			if (deployStore === 'huawei') {
+				return;
+			}
 			return firebase.messaging().onTokenRefresh((token: string) => {
 				if (token) {
 					if (register) {
@@ -192,6 +206,9 @@ const Push = {
 		};
 	},
 	onNotificationOpened: (): any => {
+		if (deployStore === 'huawei') {
+			return;
+		}
 		return firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
 			if (Push.isPremiumExpireHeadsup(notificationOpen)) {
 				Push.navigateToPurchasePremium();
