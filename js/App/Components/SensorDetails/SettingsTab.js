@@ -78,6 +78,7 @@ type Props = {
 	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
 	onRemoveFromDashboard: (id: number) => void,
+	sendSocketMessage: (number, string, string, Object) => any,
 };
 
 type State = {
