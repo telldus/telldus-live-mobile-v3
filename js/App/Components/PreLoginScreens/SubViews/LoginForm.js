@@ -40,6 +40,7 @@ import {
 	testPassword,
 	webClientId,
 	iosClientId,
+	deployStore,
 } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
@@ -183,12 +184,13 @@ class LoginForm extends View {
 					accessible={buttonAccessible}
 				/>
 				<View style={{ height: 10 }}/>
-				<GoogleSigninButton
+				{deployStore !== 'huawei' && (<GoogleSigninButton
 					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}
 					color={GoogleSigninButton.Color.Dark}
 					onPress={this.signIn}
 					disabled={this.state.isSigninInProgress} />
+				)}
 				<View style={{ height: 10 }}/>
 			</View>
 		);
