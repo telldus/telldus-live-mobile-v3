@@ -41,6 +41,9 @@ import {
 import {
 	ExcludeDevice,
 } from '../Device/Common';
+import {
+	ReplaceFailedNode,
+} from '../Device/DeviceDetails/SubViews';
 
 import {
 	addToDashboard,
@@ -53,8 +56,12 @@ import {
 	removeSensorHistory,
 	resetSensorMaxMin,
 	registerForWebSocketEvents,
+	sendSocketMessage,
 } from '../../Actions';
 import { clearHistory } from '../../Actions/LocalStorage';
+
+import { requestNodeInfo } from '../../Actions/Websockets';
+
 import { shouldUpdate, LayoutAnimations } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -83,6 +90,8 @@ type State = {
 		source: string,
 	},
 	excludeActive: boolean,
+	isReplacing: boolean,
+	isMarking: boolean,
 };
 
 
@@ -157,6 +166,8 @@ class SettingsTab extends View {
 				source: '',
 			},
 			excludeActive: false,
+			isReplacing: false,
+			isMarking: false,
 		};
 
 		const { formatMessage } = props.screenProps.intl;
@@ -179,6 +190,9 @@ class SettingsTab extends View {
 		this.onConfirmClearHistoryCache = this.onConfirmClearHistoryCache.bind(this);
 
 		this.handleBackPress = this.handleBackPress.bind(this);
+
+		this.markAsFailedTimeoutOne = null;
+		this.markAsFailedTimeoutTwo = null;
 	}
 
 	componentDidMount() {
@@ -186,6 +200,8 @@ class SettingsTab extends View {
 	}
 
 	componentWillUnmount() {
+		clearTimeout(this.markAsFailedTimeoutOne);
+		clearTimeout(this.markAsFailedTimeoutTwo);
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 	}
 
@@ -409,6 +425,21 @@ class SettingsTab extends View {
 		}
 	}
 
+	onPressReplaceFailedNode = () => {
+		this.setState({
+			isReplacing: true,
+		});
+	}
+
+	onDoneReplaceFailedNode = () => {
+		const { dispatch, sensor } = this.props;
+		const { clientId, sensorId } = sensor;
+		dispatch(requestNodeInfo(clientId, sensorId));
+		this.setState({
+			isReplacing: false,
+		});
+	}
+
 	openDialogueBox(action: string) {
 		const { screenProps } = this.props;
 		const { toggleDialogueBox } = screenProps;
@@ -522,6 +553,101 @@ class SettingsTab extends View {
 		return dispatch(registerForWebSocketEvents(sensor.clientId, callbacks));
 	}
 
+	onPressRemoveFailedNode = () => {
+		const { toggleDialogueBox, intl } = this.props.screenProps;
+		const { formatMessage } = intl;
+
+		const dialogueData = {
+			show: true,
+			showPositive: true,
+			positiveText: formatMessage(i18n.remove).toUpperCase(),
+			showNegative: true,
+			header: `${formatMessage(i18n.labelRemoveFailed)}?`,
+			imageHeader: true,
+			text: formatMessage(i18n.messageOnRemoveFailedNode),
+			showHeader: true,
+			closeOnPressPositive: true,
+			onPressPositive: this.onConfirmRemoveFailedNode,
+			capitalizeHeader: false,
+		};
+		toggleDialogueBox(dialogueData);
+	}
+
+	onConfirmRemoveFailedNode = () => {
+		const { clientId, sensorId } = this.props.sensor;
+		this.sendSocketMessage(clientId, 'removeFailedNode', sensorId);
+	}
+
+	sendSocketMessage = (clientId: number, action: string, clientDeviceId: number) => {
+		const { sendSocketMessage: SSM } = this.props;
+		SSM(clientId, 'client', 'forward', {
+			'module': 'zwave',
+			'action': action,
+			'device': clientDeviceId,
+		});
+	}
+
+	onPressMarkAsFailed = () => {
+		const { screenProps, sensor } = this.props;
+		const { formatMessage } = screenProps.intl;
+		const { clientId, sensorId } = sensor;
+		this.setState({
+			isMarking: true,
+		});
+		this.sendSocketMessage(clientId, 'markNodeAsFailed', sensorId);
+
+		const that = this;
+		this.markAsFailedTimeoutOne = setTimeout(() => {
+			// Request for latest node info
+			that.sendSocketMessage(clientId, 'nodeInfo', sensorId);
+
+			// Can take some time to receive, so the second timeout
+			that.markAsFailedTimeoutTwo = setTimeout(() => {
+				const { nodeInfo = {} } = that.props.sensor;
+				const { isFailed = false } = nodeInfo;
+				this.setState({
+					isMarking: false,
+				});
+				if (!isFailed) {
+					const dialogueData = {
+						show: true,
+						showPositive: true,
+						header: formatMessage(i18n.messageCouldNotMarkFailedH),
+						imageHeader: true,
+						text: formatMessage(i18n.messageCouldNotMarkFailedB),
+						showHeader: true,
+						closeOnPressPositive: true,
+						capitalizeHeader: false,
+					};
+					screenProps.toggleDialogueBox(dialogueData);
+				} else {
+					const dialogueData = {
+						show: true,
+						showPositive: true,
+						positiveText: formatMessage(i18n.remove).toUpperCase(),
+						onPressPositive: this.onPressRemoveFailedNode,
+						closeOnPressPositive: true,
+						showNegative: true,
+						negativeText: formatMessage(i18n.labelReplace).toUpperCase(),
+						onPressNegative: this.onPressReplaceFailedNode,
+						closeOnPressNegative: true,
+						negTextColor: Theme.Core.brandSecondary,
+						showHeader: true,
+						header: formatMessage(i18n.messageMarkedFailedH),
+						imageHeader: true,
+						showIconOnHeader: true,
+						closeOnPressHeader: true,
+						capitalizeHeader: false,
+						text: formatMessage(i18n.messageMarkedFailedB),
+						timeoutToCallPositive: 400,
+						timeoutToCallNegative: 200,
+					};
+					screenProps.toggleDialogueBox(dialogueData);
+				}
+			}, 1000);
+		}, 8000);
+	}
+
 	render(): Object | null {
 		const {
 			keepHistory,
@@ -529,6 +655,8 @@ class SettingsTab extends View {
 			editName,
 			sensorName,
 			excludeActive,
+			isReplacing,
+			isMarking,
 		} = this.state;
 		const {
 			inDashboard,
@@ -537,7 +665,15 @@ class SettingsTab extends View {
 			screenProps,
 		} = this.props;
 
-		const { model, protocol = '', sensorId, name, clientId, id } = sensor;
+		const {
+			model,
+			protocol = '',
+			sensorId,
+			name,
+			clientId,
+			id,
+			nodeInfo = {},
+		} = sensor;
 
 		if (!id && !excludeActive) {
 			return null;
@@ -573,6 +709,7 @@ class SettingsTab extends View {
 		}
 
 		const isZWave = protocol.trim().toLowerCase() === 'zwave';
+		const { isFailed = false } = nodeInfo;
 
 		return (
 			<ScrollView
@@ -592,96 +729,142 @@ class SettingsTab extends View {
 						registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 					:
 					<View style={container}>
-						<SettingsRow
-							type={'text'}
-							edit={true}
-							onPress={this.editName}
-							label={formatMessage(i18n.name)}
-							value={name}
-							appLayout={appLayout}
-							intl={intl}
-							keyboardTypeInLineEdit={'default'}
-						/>
-						<SettingsRow
-							label={formatMessage(i18n.showOnDashborad)}
-							onValueChange={this.onValueChange}
-							value={inDashboard}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<SettingsRow
-							label={formatMessage(i18n.hideFromListS)}
-							onValueChange={this.setIgnoreSensor}
-							value={isHidden}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<SettingsRow
-							label={formatMessage(i18n.labelStoreHistory)}
-							onValueChange={this.setKeepHistory}
-							value={keepHistory}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<TouchableButton
-							text={formatMessage(i18n.clearHistory).toUpperCase()}
-							onPress={this.clearHistory}
-							style={buttonStyle}
-							accessible={true}/>
-						<TouchableButton
-							text={formatMessage(i18n.resetMaxMin).toUpperCase()}
-							onPress={this.resetMaxMin}
-							style={buttonStyle}
-							accessible={true}/>
-						<TouchableButton
-							text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
-							onPress={this.clearHistoryCache}
-							style={buttonStyle}
-							accessible={true}/>
-						{isZWave ?
-							<TouchableButton
-								text={formatMessage(i18n.headerExclude).toUpperCase()}
-								onPress={this.onPressExcludeDevice}
-								disabled={!isGatewayReachable}
-								style={[buttonStyle, {
-									backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
-								}]}/>
+						{isReplacing ?
+							<ReplaceFailedNode
+								intl={intl}
+								appLayout={appLayout}
+								idToReplace={sensorId}
+								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}
+								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:
-							<TouchableButton
-								text={formatMessage(i18n.deleteSensor).toUpperCase()}
-								onPress={this.deleteSensor}
-								style={[buttonStyle, {
-									backgroundColor: brandDanger,
-								}]}
-								accessible={true}/>
+							<>
+								<SettingsRow
+									type={'text'}
+									edit={true}
+									onPress={this.editName}
+									label={formatMessage(i18n.name)}
+									value={name}
+									appLayout={appLayout}
+									intl={intl}
+									keyboardTypeInLineEdit={'default'}
+								/>
+								<SettingsRow
+									label={formatMessage(i18n.showOnDashborad)}
+									onValueChange={this.onValueChange}
+									value={inDashboard}
+									appLayout={appLayout}
+									intl={intl}
+								/>
+								<SettingsRow
+									label={formatMessage(i18n.hideFromListS)}
+									onValueChange={this.setIgnoreSensor}
+									value={isHidden}
+									appLayout={appLayout}
+									intl={intl}
+								/>
+								<SettingsRow
+									label={formatMessage(i18n.labelStoreHistory)}
+									onValueChange={this.setKeepHistory}
+									value={keepHistory}
+									appLayout={appLayout}
+									intl={intl}
+								/>
+								<TouchableButton
+									text={formatMessage(i18n.clearHistory).toUpperCase()}
+									onPress={this.clearHistory}
+									style={buttonStyle}
+									accessible={true}/>
+								<TouchableButton
+									text={formatMessage(i18n.resetMaxMin).toUpperCase()}
+									onPress={this.resetMaxMin}
+									style={buttonStyle}
+									accessible={true}/>
+								<TouchableButton
+									text={formatMessage(i18n.clearHistoryCache).toUpperCase()}
+									onPress={this.clearHistoryCache}
+									style={buttonStyle}
+									accessible={true}/>
+								{isZWave ?
+									<>
+										{isFailed ?
+											<>
+												{!isReplacing &&
+											<>
+												<TouchableButton
+													text={i18n.labelRemoveFailed}
+													onPress={this.onPressRemoveFailedNode}
+													disabled={!isGatewayReachable}
+													style={[buttonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}/>
+												<TouchableButton
+													text={i18n.labelReplaceFailed}
+													onPress={this.onPressReplaceFailedNode}
+													disabled={!isGatewayReachable}
+													style={[buttonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}/>
+											</>
+												}
+											</>
+											:
+											<>
+												<TouchableButton
+													text={i18n.labelMarkAsFailed}
+													onPress={this.onPressMarkAsFailed}
+													disabled={!isGatewayReachable || isMarking}
+													style={[buttonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}
+													showThrobber={isMarking}/>
+												<TouchableButton
+													text={formatMessage(i18n.headerExclude).toUpperCase()}
+													onPress={this.onPressExcludeDevice}
+													disabled={!isGatewayReachable}
+													style={[buttonStyle, {
+														backgroundColor: isGatewayReachable ? brandDanger : btnDisabledBg,
+													}]}/>
+											</>
+										}
+									</>
+									:
+									<TouchableButton
+										text={formatMessage(i18n.deleteSensor).toUpperCase()}
+										onPress={this.deleteSensor}
+										style={[buttonStyle, {
+											backgroundColor: brandDanger,
+										}]}
+										accessible={true}/>
+								}
+								<Text style={clearCacheHintStyle}>
+									{formatMessage(i18n.hintHistoryCache)}.
+								</Text>
+								<Text style={infoHeaderText}>
+									{formatMessage(i18n.labelTechnicalInfo)}
+								</Text>
+								<SettingsRow
+									type={'text'}
+									label={formatMessage(i18n.labelProtocol)}
+									value={this.formatProtocol(protocol)}
+									appLayout={appLayout}
+									intl={intl}
+								/>
+								<SettingsRow
+									type={'text'}
+									label={formatMessage(i18n.labelModel)}
+									value={model}
+									appLayout={appLayout}
+									intl={intl}
+								/>
+								<SettingsRow
+									type={'text'}
+									label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
+									value={sensorId}
+									appLayout={appLayout}
+									intl={intl}
+								/>
+							</>
 						}
-						<Text style={clearCacheHintStyle}>
-							{formatMessage(i18n.hintHistoryCache)}.
-						</Text>
-						<Text style={infoHeaderText}>
-							{formatMessage(i18n.labelTechnicalInfo)}
-						</Text>
-						<SettingsRow
-							type={'text'}
-							label={formatMessage(i18n.labelProtocol)}
-							value={this.formatProtocol(protocol)}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<SettingsRow
-							type={'text'}
-							label={formatMessage(i18n.labelModel)}
-							value={model}
-							appLayout={appLayout}
-							intl={intl}
-						/>
-						<SettingsRow
-							type={'text'}
-							label={`${formatMessage(i18n.labelSensor)} ${formatMessage(i18n.labelId)}`}
-							value={sensorId}
-							appLayout={appLayout}
-							intl={intl}
-						/>
 					</View>
 				}
 			</ScrollView>
@@ -751,6 +934,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onAddToDashboard: (id: number): any => dispatch(addToDashboard('sensor', id)),
 		onRemoveFromDashboard: (id: number): any => dispatch(removeFromDashboard('sensor', id)),
+		sendSocketMessage: (id: number, module: string, action: string, data: Object): any => dispatch(sendSocketMessage(id, module, action, data)),
 		dispatch,
 	};
 }

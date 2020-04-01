@@ -758,6 +758,7 @@ class SettingsTab extends View {
 			transport,
 			nodeInfo = {},
 			name,
+			clientDeviceId,
 		} = device;
 
 		if (!id && !excludeActive) {
@@ -835,7 +836,7 @@ class SettingsTab extends View {
 							<ReplaceFailedNode
 								intl={intl}
 								appLayout={appLayout}
-								device={device}
+								device={clientDeviceId}
 								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}
 								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:

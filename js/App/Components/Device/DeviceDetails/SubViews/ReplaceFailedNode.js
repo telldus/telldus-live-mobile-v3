@@ -34,7 +34,7 @@ import i18n from '../../../../Translations/common';
 
 type Props = {
     appLayout: Object,
-    device: Object,
+    idToReplace: number,
 
     intl: Object,
 	onDoneReplaceFailedNode: () => void,
@@ -121,9 +121,8 @@ sendSocketMessage = (message: string) => {
 callbackOnMessage = (msg: Object) => {
 	const {
 		onDoneReplaceFailedNode,
-		device,
+		idToReplace,
 	} = this.props;
-	const { clientDeviceId } = device;
 
 	let message = {};
 	try {
@@ -139,7 +138,7 @@ callbackOnMessage = (msg: Object) => {
 				data: {
 					'module': 'zwave',
 					'action': 'replaceFailedNode',
-					'device': clientDeviceId,
+					'device': idToReplace,
 				},
 			});
 			this.sendSocketMessage(replaceMessage);
