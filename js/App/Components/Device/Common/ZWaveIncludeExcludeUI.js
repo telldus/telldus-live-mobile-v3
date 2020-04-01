@@ -56,6 +56,7 @@ type Props = {
 
     action: 'include' | 'exclude',
 	intl: Object,
+	onPressCancel?: Function,
 };
 
 type State = {
