@@ -68,7 +68,6 @@ import {
 	getRSAKey,
 	shouldUpdate,
 	navigate,
-	prepareNo433MHzSupportDialogueData,
 	premiumAboutToExpire,
 } from '../Lib';
 
@@ -391,12 +390,9 @@ addNewDevice() {
 }
 
 addNewSensor = () => {
-	const { gateways, toggleDialogueBox, intl, locale } = this.props;
+	const { gateways } = this.props;
 	const filteredGateways = gateways.byId;
-	if (Object.keys(filteredGateways).length === 0) {
-		const dialogueData = prepareNo433MHzSupportDialogueData(intl.formatMessage, locale);
-		toggleDialogueBox(dialogueData);
-	} else {
+	if (Object.keys(filteredGateways).length > 0) {
 		const filteredAllIds = Object.keys(filteredGateways);
 		const gatewaysLen = filteredAllIds.length;
 
