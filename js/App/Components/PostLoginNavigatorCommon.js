@@ -138,7 +138,6 @@ constructor(props: Props) {
 
 	this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
-	this.addNewLocation = this.addNewLocation.bind(this);
 	this.addNewDevice = this.addNewDevice.bind(this);
 
 	getRSAKey(true);
@@ -208,7 +207,13 @@ async componentDidMount() {
 
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
-		this.addNewLocation();
+		navigate(
+			'InfoScreen',
+			{
+				info: 'add_gateway',
+			},
+			'InfoScreen',
+		);
 	}
 
 	if (premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
@@ -357,7 +362,7 @@ componentWillUnmount() {
 	}
 }
 
-addNewLocation() {
+addNewLocation = () => {
 	this.setState({
 		addingNewLocation: true,
 		hasTriedAddLocation: true,
