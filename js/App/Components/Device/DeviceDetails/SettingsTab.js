@@ -71,6 +71,7 @@ import {
 	prepareDeviceParameters,
 	supportsScan,
 	prepare433MHzDeviceDefaultValueForParams,
+	get433DevicePostConfigScreenOptions,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -795,15 +796,33 @@ class SettingsTab extends View {
 			);
 		}
 
+		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
+		const {
+			scannable,
+			devicetype,
+			postConfig,
+		} = deviceInfo;
+
 		const { LEARN } = supportedMethods;
 
 		let learnButton = null;
-
 		if (LEARN) {
 			learnButton = <LearnButton
 				id={id}
 				style={!settings433MHz ? touchableButtonCommon : learnButtonWithScan}
 				labelStyle={!settings433MHz ? {} : labelStyle}/>;
+		}
+		if (settings433MHz) {
+			learnButton = null;
+			const {
+				learnButtonIndex,
+			} = get433DevicePostConfigScreenOptions(postConfig, intl.formatMessage);
+			if (learnButtonIndex && learnButtonIndex !== -1) {
+				learnButton = <LearnButton
+					id={id}
+					style={learnButtonWithScan}
+					labelStyle={labelStyle}/>;
+			}
 		}
 
 		const isZWave = transport === 'zwave';
@@ -812,8 +831,6 @@ class SettingsTab extends View {
 
 		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
 
-		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
-		const { scannable, devicetype } = deviceInfo;
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
 
