@@ -523,12 +523,21 @@ class SettingsTab extends View {
 			);
 		}
 
+		const {
+			devicetype,
+		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
+
 		const updateAllParamsFromLocal = hasModelChanged || hasProtocolChanged;
 
 		const parameters = prepareDeviceParameters(parseInt(widget433MHz, 10), widgetParams433Device);
 		if (parameters) {
 			const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
 			if (settings || updateAllParamsFromLocal) {
+
+				promises.push(
+					dispatch(setDeviceParameter(id, 'devicetype', devicetype))
+				);
+
 				let availableSettings = {};
 				Object.keys(settings).map((s: string) => {
 					if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
@@ -537,15 +546,9 @@ class SettingsTab extends View {
 				});
 
 				Object.keys(parameters).map((p: string) => {
-					if (updateAllParamsFromLocal) {
-						promises.push(
-							dispatch(setDeviceParameter(id, p, parameters[p]))
-						);
-					} else if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
-						promises.push(
-							dispatch(setDeviceParameter(id, p, parameters[p]))
-						);
-					}
+					promises.push(
+						dispatch(setDeviceParameter(id, p, parameters[p]))
+					);
 				});
 
 				this.setState({
