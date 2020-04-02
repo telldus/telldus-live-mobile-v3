@@ -23,7 +23,7 @@ module.exports = {
     webClientId: '${GOOGLE_WEB_CLIENT_ID}',
     osTicketKey: '${OSTICKET_KEY}',
     twitterAuth: ${TWITTER_AUTH},
-    deployStore: ${DEPLOY_STORE}
+    deployStore: '${DEPLOY_STORE}'
 };
 EOF
 
