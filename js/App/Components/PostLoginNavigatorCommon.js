@@ -325,7 +325,13 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
-		this.addNewLocation();
+		navigate(
+			'InfoScreen',
+			{
+				info: 'add_gateway',
+			},
+			'InfoScreen',
+		);
 	}
 }
 
@@ -482,6 +488,8 @@ render(): Object {
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
+	const showUA = showEULA && !showChangeLog;
+
 	return (
 		<View style={{flex: 1}}>
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
@@ -502,13 +510,13 @@ render(): Object {
 			/>
 			{screenReaderEnabled && (
 				<DimmerStep
-					showModal={showStep && !showEULA && !showChangeLog}
+					showModal={showStep && !showUA}
 					deviceId={deviceStep}
 					onDoneDimming={this.onDoneDimming}
 					intl={intl}
 				/>
 			)}
-			<UserAgreement showModal={showEULA && !showChangeLog} onLayout={this.onLayout}/>
+			<UserAgreement showModal={showUA} onLayout={this.onLayout}/>
 		</View>
 	);
 }

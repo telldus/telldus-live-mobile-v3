@@ -65,6 +65,8 @@ import ExcludeScreen from './Device/AddDevice/ExcludeScreen';
 import IncludeFailed from './Device/AddDevice/IncludeFailed';
 import CantEnterInclusion from './Device/AddDevice/CantEnterInclusion';
 
+import InfoScreen from './Info/InfoScreen';
+
 const RouteConfigs = {
 	Tabs: {
 		screen: TabsView,
@@ -432,6 +434,17 @@ const RouteConfigs = {
 	},
 	CantEnterInclusion: {
 		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(CantEnterInclusion, 'CantEnterInclusion'),
+		navigationOptions: {
+			headerStyle: {
+				height: 0,
+				width: 0,
+				borderBottomWidth: 0,
+			},
+			header: null,
+		},
+	},
+	InfoScreen: {
+		screen: InfoScreen,
 		navigationOptions: {
 			headerStyle: {
 				height: 0,
