@@ -806,6 +806,8 @@ class SettingsTab extends View {
 			postConfig,
 		} = deviceInfo;
 
+		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
+
 		const { LEARN } = supportedMethods;
 
 		let learnButton = null;
@@ -824,15 +826,14 @@ class SettingsTab extends View {
 				learnButton = <LearnButton
 					id={id}
 					style={learnButtonWithScan}
-					labelStyle={labelStyle}/>;
+					labelStyle={labelStyle}
+					disabled={settingsHasChanged}/>;
 			}
 		}
 
 		const isZWave = transport === 'zwave';
 		const is433MHz = is433MHzTransport(transport);
 		const { isFailed = false } = nodeInfo;
-
-		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
 
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
