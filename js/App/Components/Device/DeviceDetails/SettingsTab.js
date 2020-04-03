@@ -71,7 +71,6 @@ import {
 	prepareDeviceParameters,
 	supportsScan,
 	prepare433MHzDeviceDefaultValueForParams,
-	get433DevicePostConfigScreenOptions,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -538,17 +537,12 @@ class SettingsTab extends View {
 					dispatch(setDeviceParameter(id, 'devicetype', devicetype))
 				);
 
-				let availableSettings = {};
-				Object.keys(settings).map((s: string) => {
-					if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
-						availableSettings[s] = settings[s];
-					}
-				});
-
 				Object.keys(parameters).map((p: string) => {
-					promises.push(
-						dispatch(setDeviceParameter(id, p, parameters[p]))
-					);
+					if (typeof parameters[p] !== 'undefined' && parameters[p] !== null) {
+						promises.push(
+							dispatch(setDeviceParameter(id, p, parameters[p]))
+						);
+					}
 				});
 
 				this.setState({
@@ -642,9 +636,11 @@ class SettingsTab extends View {
 
 		let hasChanged = false;
 		for (let s in availableSettings) {
-			hasChanged = !isEqual(availableSettings[s], widgetParams433Device[s]);
-			if (hasChanged) {
-				break;
+			if (widgetParams433Device[s]) {
+				hasChanged = !isEqual(availableSettings[s], widgetParams433Device[s]);
+				if (hasChanged) {
+					break;
+				}
 			}
 		}
 
@@ -823,7 +819,6 @@ class SettingsTab extends View {
 		const {
 			scannable,
 			devicetype,
-			postConfig,
 		} = deviceInfo;
 
 		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
@@ -835,20 +830,8 @@ class SettingsTab extends View {
 			learnButton = <LearnButton
 				id={id}
 				style={!settings433MHz ? touchableButtonCommon : learnButtonWithScan}
-				labelStyle={!settings433MHz ? {} : labelStyle}/>;
-		}
-		if (settings433MHz) {
-			learnButton = null;
-			const {
-				learnButtonIndex,
-			} = get433DevicePostConfigScreenOptions(postConfig, intl.formatMessage);
-			if (learnButtonIndex && learnButtonIndex !== -1) {
-				learnButton = <LearnButton
-					id={id}
-					style={learnButtonWithScan}
-					labelStyle={labelStyle}
-					disabled={settingsHasChanged}/>;
-			}
+				labelStyle={!settings433MHz ? {} : labelStyle}
+				disabled={settingsHasChanged}/>;
 		}
 
 		const isZWave = transport === 'zwave';

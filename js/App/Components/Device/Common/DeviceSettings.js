@@ -510,7 +510,7 @@ const DeviceSettings = (props: Props): Object => {
 					isSaving433MhzParams={isSaving433MhzParams}/>);
 			}
 		}
-		if (setting === 'home:unit') {
+		if (setting === 'house:unit') {
 			const {
 				optionValues,
 			} = settings[setting];
@@ -593,14 +593,15 @@ const DeviceSettings = (props: Props): Object => {
 			</Text>
 			{!!renderExtraSettingsTop && renderExtraSettingsTop()}
 			{Setting}
-			{(showScan && clientId) &&
+			{((showScan || !!learnButton) && clientId) &&
 			<View style={scanLearnCover}>
 				{!!learnButton && learnButton}
-				<ScanButton
+				{showScan && <ScanButton
 					clientId={clientId}
 					deviceId={deviceId}
 					devicetype={devicetype}
 					disabled={isSaving433MhzParams}/>
+				}
 			</View>
 			}
 		</View>
