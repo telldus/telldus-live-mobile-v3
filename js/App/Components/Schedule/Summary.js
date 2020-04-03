@@ -77,6 +77,8 @@ class Summary extends View<null, Props, State> {
 		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
 		this.setRefScroll = this.setRefScroll.bind(this);
 		this.scrollView = null;
+
+		this.messageOnUpdateFail = formatMessage(i18n.updateScheduleFailure);
 	}
 
 	componentDidMount() {
@@ -105,7 +107,7 @@ class Summary extends View<null, Props, State> {
 			this.setState({
 				isLoading: false,
 			});
-			let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
+			let message = error.message ? error.message : this.messageOnUpdateFail;
 			this.openDialogueBox({
 				text: message,
 			});
