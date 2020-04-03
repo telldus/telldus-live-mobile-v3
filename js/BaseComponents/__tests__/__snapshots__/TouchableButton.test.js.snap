@@ -17,7 +17,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1
     Object {
       "alignItems": "center",
       "alignSelf": "center",
-      "backgroundColor": "#cccccc",
+      "backgroundColor": "#b5b5b5",
       "borderRadius": 44,
       "elevation": 2,
       "flexDirection": "row",
@@ -86,7 +86,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
     Object {
       "alignItems": "center",
       "alignSelf": "center",
-      "backgroundColor": "#cccccc",
+      "backgroundColor": "#b5b5b5",
       "borderRadius": 44,
       "elevation": 2,
       "flexDirection": "row",
