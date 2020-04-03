@@ -688,7 +688,7 @@ class SettingsTab extends View {
 				editName: false,
 				deviceName: device.name,
 			});
-			const	message = err.message ? err.message : null;
+			const message = err.message ? err.message : null;
 			dispatch(showToast(message));
 		});
 	}

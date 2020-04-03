@@ -173,8 +173,7 @@ render(): Object | null {
 				showLeftIcon={true}
 				topMargin={false}
 				leftIcon={'close'}
-				navigation={navigation}
-				forceHideStatus/>
+				navigation={navigation}/>
 			<ScrollView
 				style={styles.scrollView}
 				contentContainerStyle={styles.SVContentContainerStyle}
