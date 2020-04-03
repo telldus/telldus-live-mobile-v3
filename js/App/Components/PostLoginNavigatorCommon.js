@@ -92,6 +92,8 @@ type Props = {
 
 	showChangeLog: boolean,
 
+	screen: string,
+
 	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
@@ -154,10 +156,24 @@ constructor(props: Props) {
 	this.onNotificationOpened = Push.onNotificationOpened();
 
 	this.clearNetInfoListener = null;
+
+	this.screensAllowsNavigationOrModalOverride = [
+		'Tabs',
+		'Dashboard',
+		'Devices',
+		'Sensors',
+		'Scheduler',
+		'Gateways',
+	];
+}
+
+doesAllowsToOverrideScreen = (): boolean => {
+	const { screen } = this.props;
+	return this.screensAllowsNavigationOrModalOverride.indexOf(screen) !== -1;
 }
 
 async componentDidMount() {
-	const { dispatch, addNewGatewayBool, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
+	const { dispatch, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
 	dispatch(appStart());
 	dispatch(appState());
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
@@ -179,7 +195,11 @@ async componentDidMount() {
 		dispatch(getPhonesList()).then((phonesList: Object) => {
 			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
 			this.pushConf(register);
-			if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
+			if (
+				!pushTokenRegistered &&
+				phonesList.phone &&
+				phonesList.phone.length > 0 &&
+				this.doesAllowsToOverrideScreen()) {
 				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
 			}
 		}).catch(() => {
@@ -205,10 +225,7 @@ async componentDidMount() {
 
 	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
 
-	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && !hasTriedAddLocation) {
-		this._askIfAddNewLocation();
-	}
+	this._askIfAddNewLocation();
 
 	if (premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
@@ -291,6 +308,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showEULA',
 		'addNewGatewayBool',
 		'showChangeLog',
+		'screen',
 	]);
 	if (propsChange) {
 		return true;
@@ -314,7 +332,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		durationToast,
 		positionToast,
 		intl,
-		addNewGatewayBool,
 	} = this.props;
 	if (showToastBool && !prevProps.showToast) {
 		const { formatMessage } = intl;
@@ -322,24 +339,27 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		this._showToast(message, durationToast, positionToast);
 	}
 
-	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && !hasTriedAddLocation) {
-		this._askIfAddNewLocation();
-	}
+	this._askIfAddNewLocation();
 }
 
 _askIfAddNewLocation = () => {
-	this.setState({
-		hasTriedAddLocation: true,
-	}, () => {
-		navigate(
-			'InfoScreen',
-			{
-				info: 'add_gateway',
-			},
-			'InfoScreen',
-		);
-	});
+	const {
+		addNewGatewayBool,
+	} = this.props;
+	const { hasTriedAddLocation } = this.state;
+	if (addNewGatewayBool && this.doesAllowsToOverrideScreen() && !hasTriedAddLocation) {
+		this.setState({
+			hasTriedAddLocation: true,
+		}, () => {
+			navigate(
+				'InfoScreen',
+				{
+					info: 'add_gateway',
+				},
+				'InfoScreen',
+			);
+		});
+	}
 }
 
 componentWillUnmount() {
@@ -577,6 +597,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		subscriptions,
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,
+		screen: state.navigation.screen,
 	};
 }
 
