@@ -207,13 +207,7 @@ async componentDidMount() {
 
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
-		navigate(
-			'InfoScreen',
-			{
-				info: 'add_gateway',
-			},
-			'InfoScreen',
-		);
+		this._askIfAddNewLocation();
 	}
 
 	if (premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
@@ -330,6 +324,14 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 
 	const { hasTriedAddLocation } = this.state;
 	if (addNewGatewayBool && !hasTriedAddLocation) {
+		this._askIfAddNewLocation();
+	}
+}
+
+_askIfAddNewLocation = () => {
+	this.setState({
+		hasTriedAddLocation: true,
+	}, () => {
 		navigate(
 			'InfoScreen',
 			{
@@ -337,7 +339,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			},
 			'InfoScreen',
 		);
-	}
+	});
 }
 
 componentWillUnmount() {

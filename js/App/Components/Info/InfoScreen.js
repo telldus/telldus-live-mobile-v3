@@ -41,7 +41,8 @@ import {
 } from '../../Actions';
 
 type Props = {
-    screenProps: Object,
+	screenProps: Object,
+	gateways: Object,
 
     navigation: Object,
     dispatch: Function,
@@ -90,10 +91,15 @@ addNewLocation = () => {
 				isLoading: false,
 			});
 			if (response.client) {
+				// TODO: refactor in app v3.15(RNavigation v5)
 				navigation.navigate(
-					'AddLocation',
-					{clients: response.client},
-					'AddLocation',
+					{
+						routeName: 'AddLocation',
+						key: 'AddLocation',
+						params: {
+							clients: response.client,
+						},
+					}
 				);
 			}
 		}).catch((error: Object) => {
@@ -103,6 +109,30 @@ addNewLocation = () => {
 			let message = error.message && error.message === 'Network request failed' ? this.networkFailed : this.addNewLocationFailed;
 			dispatch(showToast(message));
 		});
+}
+
+addNewDevice = () => {
+	const { gateways, navigation } = this.props;
+	const gatewaysLen = Object.keys(gateways).length;
+
+	if (gatewaysLen > 0) {
+		const singleGateway = gatewaysLen === 1;
+		// TODO: refactor in app v3.15(RNavigation v5)
+		navigation.navigate(
+			{
+				routeName: 'AddDevice',
+				key: 'AddDevice',
+				params: {
+					selectLocation: !singleGateway,
+					gateway: singleGateway ? {
+						...gateways[Object.keys(gateways)[0]],
+					} : null,
+				},
+			});
+	}
+}
+
+addNewSchedule = () => {
 }
 
 getContents = (): Object => {
@@ -116,8 +146,8 @@ getContents = (): Object => {
 
 	const info = navigation.getParam('info', '');
 
-	const posterH1 = 'Get started',
-		cancelLabel = 'Not Now'.toUpperCase(),
+	const posterH1 = formatMessage(i18n.getStarted),
+		cancelLabel = formatMessage(i18n.labelNotNow).toUpperCase(),
 		cancelOnPress = this.goBack;
 
 	switch (info) {
@@ -126,12 +156,46 @@ getContents = (): Object => {
 				posterH1,
 				posterH2: formatMessage(i18n.gatewayAdd),
 				icon: 'location',
-				h1: 'Welcome to your smart home!',
-				body: 'The next step to get started is to add your gateway to your account. ' +
-                'Click below if you want to do that now. If you want to do it later you can find ' +
-                'it on the Gateways tab.',
+				h1: `${formatMessage(i18n.messageTitle)}!`,
+				body: formatMessage(i18n.askAddGatewayInfo),
 				buttonLabel: formatMessage(i18n.gatewayAdd),
 				buttonOnPress: this.addNewLocation,
+				cancelLabel,
+				cancelOnPress,
+			};
+		case 'add_device':
+			return {
+				posterH1,
+				posterH2: formatMessage(i18n.iconAddPhraseOneD),
+				icon: 'outlet',
+				h1: formatMessage(i18n.askAddDevice),
+				body: formatMessage(i18n.askAddDeviceInfo),
+				buttonLabel: formatMessage(i18n.iconAddPhraseOneD),
+				buttonOnPress: this.addNewDevice,
+				cancelLabel,
+				cancelOnPress,
+			};
+		case 'add_schedule':
+			return {
+				posterH1,
+				posterH2: formatMessage(i18n.scheduleDevice),
+				icon: 'time',
+				h1: formatMessage(i18n.askAddSchedule),
+				body: formatMessage(i18n.askAddScheduleInfo),
+				buttonLabel: formatMessage(i18n.scheduleMyDevice),
+				buttonOnPress: this.addNewSchedule,
+				cancelLabel,
+				cancelOnPress,
+			};
+		case 'add_schedule_another':
+			return {
+				posterH1,
+				posterH2: formatMessage(i18n.scheduleDevice),
+				icon: 'time',
+				h1: formatMessage(i18n.askAddScheduleAnother),
+				body: formatMessage(i18n.askAddScheduleAnotherInfo),
+				buttonLabel: formatMessage(i18n.scheduleMyDevice),
+				buttonOnPress: this.addNewSchedule,
 				cancelLabel,
 				cancelOnPress,
 			};
@@ -286,10 +350,17 @@ noOP() {
 }
 }
 
+function mapStateToProps(state: Object, ownProps: Object): Object {
+	const { byId } = state.gateways;
+	return {
+		gateways: byId,
+	};
+}
+
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-export default connect(null, mapDispatchToProps)(InfoScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoScreen);

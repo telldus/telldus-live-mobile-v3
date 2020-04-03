@@ -24,10 +24,10 @@
 'use strict';
 
 import React from 'react';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 
 import Theme from '../../../Theme';
 import {
@@ -99,15 +99,37 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		const navigateAction = NavigationActions.navigate({
+		// TODO: refactor in app v3.15(RNavigation v5)
+		let navigateAction = NavigationActions.navigate({
 			routeName: 'Tabs',
 			key: 'Tabs',
-			action: NavigationActions.navigate({
-				routeName: 'Gateways',
-				key: 'Gateways',
-			}),
-		  });
-		this.props.navigation.dispatch(navigateAction);
+		});
+		if (Platform.OS === 'ios') {
+			navigateAction = NavigationActions.navigate({
+				routeName: 'Tabs',
+				key: 'Tabs',
+				action: NavigationActions.navigate({
+					routeName: 'Gateways',
+					key: 'Gateways',
+				}),
+			});
+		}
+		let actions = [
+				navigateAction,
+				NavigationActions.navigate({
+					routeName: 'InfoScreen',
+					key: 'InfoScreen',
+					params: {
+						info: 'add_device',
+					},
+				}),
+			],
+			index = 1;
+		const resetAction = StackActions.reset({
+			index,
+			actions,
+		});
+		this.props.navigation.dispatch(resetAction);
 	}
 
 	onPressHelp() {
