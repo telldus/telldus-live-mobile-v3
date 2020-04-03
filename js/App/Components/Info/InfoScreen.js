@@ -336,6 +336,7 @@ getStyles(appLayout: Object): Object {
 		},
 		buttonStyle: {
 			marginTop: padding * 2,
+			width: width * 0.8,
 		},
 		cancelStyle: {
 			marginTop: padding * 2,

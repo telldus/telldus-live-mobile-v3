@@ -611,6 +611,13 @@ class DevicesTab extends View {
 			navigation.setParams({
 				newDevices: undefined,
 			});
+			navigation.navigate({
+				routeName: 'InfoScreen',
+				key: 'InfoScreen',
+				params: {
+					info: 'add_schedule',
+				},
+			});
 		}
 	}
 
