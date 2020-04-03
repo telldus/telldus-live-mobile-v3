@@ -128,7 +128,7 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 		paddingFactor,
 		brandSecondary,
 		shadow,
-		inactiveSwitchBackground,
+		btnDisabledBg,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -138,7 +138,7 @@ const getStyles = (appLayout: Object, disabled: boolean): Object => {
 
 	return {
 		scanButtonCoverDef: {
-			backgroundColor: disabled ? inactiveSwitchBackground : brandSecondary,
+			backgroundColor: disabled ? btnDisabledBg : brandSecondary,
 			height: heightCover,
 			...shadow,
 			borderRadius: heightCover / 2,

@@ -781,7 +781,6 @@ class SettingsTab extends View {
 			learnButtonWithScan,
 			labelStyle,
 			editBoxStyle,
-			inactiveSwitchBackground,
 		} = this.getStyle(appLayout);
 
 		if (editName) {
@@ -965,7 +964,7 @@ class SettingsTab extends View {
 											disabled={isDeleting433MHz || isSaving433MhzParams}
 											showThrobber={isDeleting433MHz}
 											style={[touchableButtonCommon, {
-												backgroundColor: (isDeleting433MHz || isSaving433MhzParams) ? inactiveSwitchBackground : brandDanger,
+												backgroundColor: (isDeleting433MHz || isSaving433MhzParams) ? btnDisabledBg : brandDanger,
 											}]}/>
 									)
 								}
@@ -987,7 +986,6 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
-			inactiveSwitchBackground,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
@@ -1001,7 +999,6 @@ class SettingsTab extends View {
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
-			inactiveSwitchBackground,
 			container: {
 				flex: 0,
 				paddingHorizontal: padding,

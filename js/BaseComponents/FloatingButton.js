@@ -148,7 +148,7 @@ class FloatingButton extends Component<Props, null> {
 			shadow: themeShadow,
 			brandSecondary,
 			maxSizeFloatingButton,
-			inactiveSwitchBackground,
+			btnDisabledBg,
 		} = Theme.Core;
 		const height = appLayout.height;
 		const width = appLayout.width;
@@ -178,7 +178,7 @@ class FloatingButton extends Component<Props, null> {
 
 		return {
 			container: {
-				backgroundColor: disabled ? inactiveSwitchBackground : brandSecondary,
+				backgroundColor: disabled ? btnDisabledBg : brandSecondary,
 				borderRadius: buttonSize / 2,
 				position: 'absolute',
 				height: buttonSize,

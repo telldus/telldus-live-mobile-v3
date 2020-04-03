@@ -148,7 +148,7 @@ class TouchableButton extends Component<Props, void> {
 		const {
 			maxSizeTextButton,
 			btnPrimaryBg,
-			inactiveSwitchBackground,
+			btnDisabledBg,
 			textDisabled,
 			shadow,
 		} = Theme.Core;
@@ -165,7 +165,7 @@ class TouchableButton extends Component<Props, void> {
 
 		return {
 			buttonContainer: {
-				backgroundColor: disabled ? inactiveSwitchBackground : btnPrimaryBg,
+				backgroundColor: disabled ? btnDisabledBg : btnPrimaryBg,
 				paddingVertical: borderRadius / 2,
 				paddingHorizontal: borderRadius / 2,
 				maxWidth: width * 0.9,
