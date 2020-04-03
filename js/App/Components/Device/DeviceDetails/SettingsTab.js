@@ -485,7 +485,7 @@ class SettingsTab extends View {
 		return dispatch(registerForWebSocketEvents(device.clientId, callbacks));
 	}
 
-	onPressSaveParams433MHz = () => {
+	onPressSaveParams433MHz = async () => {
 		const {
 			addDevice433,
 			device,
@@ -555,20 +555,41 @@ class SettingsTab extends View {
 					isSaving433MhzParams: true,
 				});
 
-				Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
-					return promise.then((res: any): any => res).catch((err: any): any => err);
-				})).then(() => {
-					this.postSaveParams433MHz(id, true);
-					dispatch(toggleStatusUpdatedViaScan433MHZ(false));
-				}).catch(() => {
-					// TODO: Show message on error saving new params!
-					this.postSaveParams433MHz(id, false);
-				});
+				let isAllGood = true;
+				try {
+					await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+						return promise.then((res: any): any => {
+							if (!res || !res.status || res.status !== 'success') {
+								isAllGood = false;
+							}
+							return res;
+						}).catch((err: any): any => {
+							isAllGood = false;
+							return err;
+						});
+					}));
+				} catch (e) {
+					isAllGood = false;
+				} finally {
+					this.postSaveParams433MHz(id, isAllGood);
+				}
 			}
 		}
 	}
 
 	postSaveParams433MHz = (deviceId: string, success: boolean = true) => {
+		const {
+			dispatch,
+			screenProps,
+		} = this.props;
+		const { formatMessage } = screenProps.intl;
+
+		if (success) {
+			dispatch(toggleStatusUpdatedViaScan433MHZ(false));
+		} else {
+			this.props.showToast(formatMessage(i18n.settingsNotSaved));
+		}
+
 		this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
 			this.setState({
 				isSaving433MhzParams: false,
