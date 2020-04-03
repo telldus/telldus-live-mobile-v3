@@ -587,7 +587,7 @@ class DevicesTab extends View {
 		this.normalizeNewlyAddedUI();
 	}
 
-	normalizeNewlyAddedUITimeout() {
+	normalizeNewlyAddedUITimeout = () => {
 		const { navigation } = this.props;
 		const newDevices = navigation.getParam('newDevices', null);
 		if (newDevices && !this.timeoutNormalizeNewlyAdded ) {
@@ -600,7 +600,7 @@ class DevicesTab extends View {
 		}
 	}
 
-	normalizeNewlyAddedUI() {
+	normalizeNewlyAddedUI = () => {
 		const { navigation } = this.props;
 		const newDevices = navigation.getParam('newDevices', null);
 		if (newDevices) {
@@ -611,11 +611,18 @@ class DevicesTab extends View {
 			navigation.setParams({
 				newDevices: undefined,
 			});
+			let mainNodeId = '';
+			Object.keys(newDevices).forEach((id: string) => {
+				if (newDevices[id].mainNode) {
+					mainNodeId = id;
+				}
+			});
 			navigation.navigate({
 				routeName: 'InfoScreen',
 				key: 'InfoScreen',
 				params: {
 					info: 'add_schedule',
+					deviceId: mainNodeId,
 				},
 			});
 		}

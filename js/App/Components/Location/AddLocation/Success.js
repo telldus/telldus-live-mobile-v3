@@ -99,6 +99,9 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
+		const { navigation } = this.props;
+		const clientInfo = navigation.getParam('clientInfo', {});
+
 		// TODO: refactor in app v3.15(RNavigation v5)
 		let navigateAction = NavigationActions.navigate({
 			routeName: 'Tabs',
@@ -121,6 +124,7 @@ class Success extends View<void, Props, State> {
 					key: 'InfoScreen',
 					params: {
 						info: 'add_device',
+						clientId: clientInfo.clientId,
 					},
 				}),
 			],

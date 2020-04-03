@@ -23,6 +23,7 @@
 import React from 'react';
 import { TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import {
 	View,
@@ -38,11 +39,13 @@ import i18n from '../../Translations/common';
 import {
 	showToast,
 	addNewGateway,
+	selectDevice,
 } from '../../Actions';
 
 type Props = {
 	screenProps: Object,
 	gateways: Object,
+	devices: Object,
 
     navigation: Object,
     dispatch: Function,
@@ -115,8 +118,16 @@ addNewDevice = () => {
 	const { gateways, navigation } = this.props;
 	const gatewaysLen = Object.keys(gateways).length;
 
+	const clientId = navigation.getParam('clientId', '');
+	const client = gateways[clientId];
+
 	if (gatewaysLen > 0) {
 		const singleGateway = gatewaysLen === 1;
+		const gateway = singleGateway ? {
+			...gateways[Object.keys(gateways)[0]],
+		} : client ? {
+			...client,
+		} : null;
 		// TODO: refactor in app v3.15(RNavigation v5)
 		navigation.navigate(
 			{
@@ -124,15 +135,46 @@ addNewDevice = () => {
 				key: 'AddDevice',
 				params: {
 					selectLocation: !singleGateway,
-					gateway: singleGateway ? {
-						...gateways[Object.keys(gateways)[0]],
-					} : null,
+					gateway,
 				},
 			});
 	}
 }
 
 addNewSchedule = () => {
+	const { navigation, dispatch, devices } = this.props;
+
+	const deviceId = navigation.getParam('deviceId', '');
+	const {
+		supportedMethods = {},
+		id,
+	} = devices[deviceId] || {};
+
+	// TODO: refactor in app v3.15(RNavigation v5)
+	if (id) {
+		dispatch(selectDevice(id));
+
+		const routeName = supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action';
+		const key = supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action';
+
+		let navigateAction = NavigationActions.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: false },
+			action: NavigationActions.navigate({
+				routeName,
+				key,
+				params: { editMode: false },
+			}),
+		});
+		navigation.dispatch(navigateAction);
+	} else {
+		navigation.navigate({
+			routeName: 'Schedule',
+			key: 'Schedule',
+			params: { editMode: false },
+		});
+	}
 }
 
 getContents = (): Object => {
@@ -352,9 +394,11 @@ noOP() {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const { byId } = state.gateways;
+	const { byId: gateways = {} } = state.gateways;
+	const { byId: devices = {} } = state.devices;
 	return {
-		gateways: byId,
+		gateways,
+		devices,
 	};
 }
 
