@@ -60,19 +60,19 @@ const PushInfoBlock = (props: Object): Object => {
 
 	return (
 		<>
-		<TitledInfoBlock
-			title={formatMessage(i18n.titlePush)}
-			label={labelPush}
-			icon={'angle-right'}
-			iconStyle={iconStyle}
-			fontSize={fontSize}
-			onPress={onPressPushSettings}
-		/>
-		{!(phones > 0) && (
-			<Text onPress={submitPushToken} style={buttonResubmit}>
-				{submitButText}
-			</Text>
-		)}
+			<TitledInfoBlock
+				title={formatMessage(i18n.titlePush)}
+				label={labelPush}
+				icon={'angle-right'}
+				iconStyle={iconStyle}
+				fontSize={fontSize}
+				onPress={onPressPushSettings}
+			/>
+			{!(phones > 0) && (
+				<Text onPress={submitPushToken} style={buttonResubmit}>
+					{submitButText}
+				</Text>
+			)}
 		</>
 	);
 };

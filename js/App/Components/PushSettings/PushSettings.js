@@ -36,6 +36,10 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
+import {
+	deployStore,
+} from '../../../Config';
+
 type Props = {
 	appLayout: Object,
 	phonesList: Object,
@@ -133,6 +137,8 @@ render(): Object {
 
 	const submitButText = isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.pushReRegisterPush);
 
+	const isHuaweiBuild = deployStore === 'huawei';
+
 	return (
 		<View style={container}>
 			<Text style={labelStyle}>
@@ -143,15 +149,16 @@ render(): Object {
 				:
 				<View style={pushDisabledContentStyle}>
 					<Text style={pushDisabledTextStyle}>
-						{formatMessage(i18n.labelPushDisabled)}
+						{isHuaweiBuild ? formatMessage(i18n.labelPushDisabledInfoHuawei) : formatMessage(i18n.labelPushDisabled)}
 					</Text>
 					<TouchableButton
 						text={isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.registerDevicePush)}
 						onPress={isPushSubmitLoading ? null : this.props.submitPushToken}
-						style={touchableButtonStyle}/>
+						style={touchableButtonStyle}
+						disabled={isHuaweiBuild}/>
 				</View>
 			}
-			{!!current && (
+			{(!!current && isHuaweiBuild) && (
 				<Text onPress={this.props.submitPushToken} style={buttonResubmit}>
 					{submitButText}
 				</Text>

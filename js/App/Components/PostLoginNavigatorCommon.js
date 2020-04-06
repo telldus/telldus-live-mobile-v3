@@ -66,6 +66,9 @@ import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
 import { widgetAndroidConfigure, widgetAndroidRefresh, widgetiOSConfigure } from '../Actions/Widget';
 import Push from './Push';
+import {
+	deployStore,
+} from '../../Config';
 
 import {
 	getRSAKey,
@@ -223,15 +226,17 @@ async componentDidMount() {
 	} catch (e) {
 		// Nothing much to do here
 	} finally {
-		dispatch(getPhonesList()).then((phonesList: Object) => {
-			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
-			this.pushConf(register);
-			if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
-				navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
-			}
-		}).catch(() => {
-			this.pushConf(false);
-		});
+		if (deployStore !== 'huawei') {
+			dispatch(getPhonesList()).then((phonesList: Object) => {
+				const register = (!phonesList.phone) || (phonesList.phone.length === 0);
+				this.pushConf(register);
+				if (!pushTokenRegistered && phonesList.phone && phonesList.phone.length > 0) {
+					navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
+				}
+			}).catch(() => {
+				this.pushConf(false);
+			});
+		}
 
 		dispatch(widgetAndroidConfigure());
 		dispatch(widgetiOSConfigure());
