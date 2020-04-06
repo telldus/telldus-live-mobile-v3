@@ -63,7 +63,7 @@ import {
 } from '../../Actions/Login';
 
 import {
-	useInAppPurchaseListeners,
+	withInAppPurchaseListeners,
 } from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
@@ -190,7 +190,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	}, []);
 
 	React.useEffect((): Function => {
-		const { clearListeners } = useInAppPurchaseListeners();
+		const { clearListeners } = withInAppPurchaseListeners();
 		return clearListeners;
 	}, []);
 

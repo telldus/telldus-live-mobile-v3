@@ -29,7 +29,7 @@ import RNIap, {
 	type SubscriptionPurchase,
 } from 'react-native-iap';
 
-const useInAppPurchaseListeners = (): Object => {
+const withInAppPurchaseListeners = (): Object => {
 	let purchaseUpdateSubscription = purchaseUpdatedListener((purchase: InAppPurchase | SubscriptionPurchase | ProductPurchase ) => {
 		console.log('TEST purchaseUpdatedListener', purchase);
 		const receipt = purchase.transactionReceipt;
@@ -71,5 +71,5 @@ const useInAppPurchaseListeners = (): Object => {
 };
 
 module.exports = {
-	useInAppPurchaseListeners,
+	withInAppPurchaseListeners,
 };

@@ -65,7 +65,7 @@ import {
 	getUserProfile,
 } from '../../Actions/Login';
 import {
-	useInAppPurchaseListeners,
+	withInAppPurchaseListeners,
 } from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
@@ -130,7 +130,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	const dispatch = useDispatch();
 
 	let { clearListeners } = React.useMemo((): Object => {
-		return useInAppPurchaseListeners();
+		return withInAppPurchaseListeners();
 	}, []);
 
 	React.useEffect((): Function => {
@@ -138,7 +138,8 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			'didFocus',
 			(payload: Object) => {
 				if (!clearListeners) {
-					const listenerData = useInAppPurchaseListeners();
+					const listenerData = withInAppPurchaseListeners();
+					// eslint-disable-next-line react-hooks/exhaustive-deps
 					clearListeners = listenerData.clearListeners;
 				}
 			}
