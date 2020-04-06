@@ -58,6 +58,7 @@ import {
 	setDeviceName,
 	setDeviceModel,
 	setDeviceProtocol,
+	setWidgetParamsValue,
 } from '../../../Actions';
 import {
 	shouldUpdate,
@@ -68,6 +69,7 @@ import {
 	prepare433DeviceParamsToStore,
 	prepareDeviceParameters,
 	supportsScan,
+	prepare433MHzDeviceDefaultValueForParams,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -208,8 +210,7 @@ class SettingsTab extends View {
 	}
 
 	get433MHzDeviceSettings(): Object {
-		const { screenProps, device } = this.props;
-		const { formatMessage } = screenProps.intl;
+		const { device } = this.props;
 		const { protocol, model, transport } = device;
 
 		if (!is433MHzTransport(transport)) {
@@ -222,6 +223,11 @@ class SettingsTab extends View {
 		const {
 			widget,
 		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
+		return this.getWidgetAndSettings(widget);
+	}
+
+	getWidgetAndSettings = (widget: string): Object => {
+		const { formatMessage } = this.props.screenProps.intl;
 		if (widget) {
 			return {
 				widget433MHz: widget,
@@ -458,7 +464,7 @@ class SettingsTab extends View {
 		return dispatch(registerForWebSocketEvents(device.clientId, callbacks));
 	}
 
-	onPressSaveParams433MHz = () => {
+	onPressSaveParams433MHz = async () => {
 		const {
 			addDevice433,
 			device,
@@ -496,19 +502,23 @@ class SettingsTab extends View {
 			);
 		}
 
+		const {
+			devicetype,
+		} = this.DeviceVendorInfo433MHz.deviceInfo || {};
+
+		const updateAllParamsFromLocal = hasModelChanged || hasProtocolChanged;
+
 		const parameters = prepareDeviceParameters(parseInt(widget433MHz, 10), widgetParams433Device);
 		if (parameters) {
 			const settings = prepare433DeviceParamsToStore(parseInt(widget433MHz, 10), parameter) || {};
-			if (settings) {
-				let availableSettings = {};
-				Object.keys(settings).map((s: string) => {
-					if (typeof settings[s] !== 'undefined' && settings[s] !== null) {
-						availableSettings[s] = settings[s];
-					}
-				});
+			if (settings || updateAllParamsFromLocal) {
+
+				promises.push(
+					dispatch(setDeviceParameter(id, 'devicetype', devicetype))
+				);
 
 				Object.keys(parameters).map((p: string) => {
-					if (!isEqual(availableSettings[p], widgetParams433Device[p])) {
+					if (typeof parameters[p] !== 'undefined' && parameters[p] !== null) {
 						promises.push(
 							dispatch(setDeviceParameter(id, p, parameters[p]))
 						);
@@ -519,20 +529,41 @@ class SettingsTab extends View {
 					isSaving433MhzParams: true,
 				});
 
-				Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
-					return promise.then((res: any): any => res).catch((err: any): any => err);
-				})).then(() => {
-					this.postSaveParams433MHz(id, true);
-					dispatch(toggleStatusUpdatedViaScan433MHZ(false));
-				}).catch(() => {
-					// TODO: Show message on error saving new params!
-					this.postSaveParams433MHz(id, false);
-				});
+				let isAllGood = true;
+				try {
+					await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+						return promise.then((res: any): any => {
+							if (!res || !res.status || res.status !== 'success') {
+								isAllGood = false;
+							}
+							return res;
+						}).catch((err: any): any => {
+							isAllGood = false;
+							return err;
+						});
+					}));
+				} catch (e) {
+					isAllGood = false;
+				} finally {
+					this.postSaveParams433MHz(id, isAllGood);
+				}
 			}
 		}
 	}
 
 	postSaveParams433MHz = (deviceId: string, success: boolean = true) => {
+		const {
+			dispatch,
+			screenProps,
+		} = this.props;
+		const { formatMessage } = screenProps.intl;
+
+		if (success) {
+			dispatch(toggleStatusUpdatedViaScan433MHZ(false));
+		} else {
+			this.props.showToast(formatMessage(i18n.settingsNotSaved));
+		}
+
 		this.props.dispatch(getDeviceInfoCommon(deviceId)).then(() => {
 			this.setState({
 				isSaving433MhzParams: false,
@@ -585,9 +616,11 @@ class SettingsTab extends View {
 
 		let hasChanged = false;
 		for (let s in availableSettings) {
-			hasChanged = !isEqual(availableSettings[s], widgetParams433Device[s]);
-			if (hasChanged) {
-				break;
+			if (widgetParams433Device[s]) {
+				hasChanged = !isEqual(availableSettings[s], widgetParams433Device[s]);
+				if (hasChanged) {
+					break;
+				}
 			}
 		}
 
@@ -652,8 +685,39 @@ class SettingsTab extends View {
 				editName: false,
 				deviceName: device.name,
 			});
-			const	message = err.message ? err.message : null;
+			const message = err.message ? err.message : null;
 			dispatch(showToast(message));
+		});
+	}
+
+	_onSelectModel = ({
+		widget,
+		protocol,
+		model,
+	}: Object) => {
+		this.DeviceVendorInfo433MHz = getDeviceVendorInfo433MHz(protocol, model);
+		const {
+			widget433MHz = null,
+			settings433MHz = null,
+		} = this.getWidgetAndSettings(widget);
+		this.setState({
+			widget433MHz,
+			settings433MHz,
+		}, () => {
+
+			const {
+				device,
+				dispatch,
+			} = this.props;
+
+			dispatch(setWidgetParamsValue({
+				id: widget433MHz,
+				deviceId: device.id,
+				edit: true,
+				...prepare433MHzDeviceDefaultValueForParams(parseInt(widget, 10)),
+				model,
+				protocol,
+			}));
 		});
 	}
 
@@ -661,7 +725,8 @@ class SettingsTab extends View {
 		const { device } = this.props;
 		return (
 			<Device433EditModel
-				device={device}/>
+				device={device}
+				onSelectModel={this._onSelectModel}/>
 		);
 	}
 
@@ -694,6 +759,7 @@ class SettingsTab extends View {
 			transport,
 			nodeInfo = {},
 			name,
+			clientDeviceId,
 		} = device;
 
 		if (!id && !excludeActive) {
@@ -729,25 +795,29 @@ class SettingsTab extends View {
 			);
 		}
 
+		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
+		const {
+			scannable,
+			devicetype,
+		} = deviceInfo;
+
+		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
+
 		const { LEARN } = supportedMethods;
 
 		let learnButton = null;
-
 		if (LEARN) {
 			learnButton = <LearnButton
 				id={id}
 				style={!settings433MHz ? touchableButtonCommon : learnButtonWithScan}
-				labelStyle={!settings433MHz ? {} : labelStyle}/>;
+				labelStyle={!settings433MHz ? {} : labelStyle}
+				disabled={settingsHasChanged}/>;
 		}
 
 		const isZWave = transport === 'zwave';
 		const is433MHz = is433MHzTransport(transport);
 		const { isFailed = false } = nodeInfo;
 
-		const settingsHasChanged = this.hasSettingsChanged(widget433MHz);
-
-		const { deviceInfo = {}} = this.DeviceVendorInfo433MHz || {};
-		const { scannable, devicetype } = deviceInfo;
 		const transportsArray = transports.split(',');
 		const showScan = supportsScan(transportsArray) && scannable;
 
@@ -770,7 +840,7 @@ class SettingsTab extends View {
 							<ReplaceFailedNode
 								intl={intl}
 								appLayout={appLayout}
-								device={device}
+								device={clientDeviceId}
 								onDoneReplaceFailedNode={this.onDoneReplaceFailedNode}
 								registerForWebSocketEvents={this.registerForWebSocketEvents}/>
 							:
@@ -875,10 +945,10 @@ class SettingsTab extends View {
 										<TouchableButton
 											text={formatMessage(i18n.delete).toUpperCase()}
 											onPress={this.onPressDelete433Device}
-											disabled={isDeleting433MHz}
+											disabled={isDeleting433MHz || isSaving433MhzParams}
 											showThrobber={isDeleting433MHz}
 											style={[touchableButtonCommon, {
-												backgroundColor: brandDanger,
+												backgroundColor: (isDeleting433MHz || isSaving433MhzParams) ? btnDisabledBg : brandDanger,
 											}]}/>
 									)
 								}

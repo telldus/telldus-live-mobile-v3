@@ -23,15 +23,20 @@
 'use strict';
 
 import firebase from 'react-native-firebase';
+import {
+	deployStore,
+} from '../../Config';
+
+const enableAnalytics = deployStore !== 'huawei' && !__DEV__;
 
 export function reportError(msg: string) {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().recordError(101, msg);
 	}
 }
 
 export function reportException(e: Error | string) {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		if (e instanceof Error) {
 			// Log the stack trace
 			firebase.crashlytics().log(e.stack);
@@ -43,36 +48,40 @@ export function reportException(e: Error | string) {
 }
 
 export function setBoolean(key: string, value: boolean) {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().setBoolValue(key, value);
 	}
 }
 
-export function setUserIdentifier(userId?: string | null) {
-	if (!__DEV__) {
+export function setUserIdentifier(userId: string = '') {
+	if (enableAnalytics) {
 		const uid = typeof userId !== 'string' ? '' : userId;
 		firebase.crashlytics().setUserIdentifier(uid);
 	}
 }
 
 export function enableCrashlyticsCollection() {
-	if (!__DEV__) {
+	if (enableAnalytics) {
 		firebase.crashlytics().enableCrashlyticsCollection();
 	}
 }
 
 export function setUserName(uname?: string | null) {
 	// TODO: Enable once the method is supported. rn-firebase v6
-	// if (!__DEV__) {
+	// if (enableAnalytics) {
 	//  const uName = typeof uname !== 'string' ? 'anonymous' : uname;
 	// 	firebase.crashlytics().setUserName(uName);
 	// }
 }
 
 export const setGAUserProperty = (key: Object, value: string) => {
-	firebase.analytics().setUserProperty(key, value);
+	if (deployStore !== 'huawei') {
+		firebase.analytics().setUserProperty(key, value);
+	}
 };
 
 export const setGAUserProperties = (properties: Object) => {
-	firebase.analytics().setUserProperties(properties);
+	if (deployStore !== 'huawei') {
+		firebase.analytics().setUserProperties(properties);
+	}
 };

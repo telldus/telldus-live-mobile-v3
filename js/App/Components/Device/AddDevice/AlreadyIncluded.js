@@ -70,7 +70,7 @@ componentDidMount() {
 
 onPressNext() {
 	const { navigation } = this.props;
-	navigation.navigate('Devices');
+	navigation.popToTop();
 }
 
 render(): Object {

@@ -27,9 +27,11 @@ import {
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
+	Platform,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
+import RNIap from 'react-native-iap';
 
 import {
 	View,
@@ -60,22 +62,34 @@ import {
 	getUserProfile,
 } from '../../Actions/Login';
 
+import {
+	withInAppPurchaseListeners,
+	useIAPSuccessFailureHandle,
+} from '../../Hooks/IAP';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		layout,
+	} = useSelector((state: Object): Object => state.app);
 	const {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		iapTransactionConfig = {},
 	} = useSelector((state: Object): Object => state.user);
 
 	const { pro } = userProfile;
 
 	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
 	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
+
+	const {
+		onGoing = false,
+	} = iapTransactionConfig;
 
 	const {
 		container,
@@ -180,9 +194,37 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		setPaymentProviderIndex(index);
 	}, []);
 
+	const {
+		successCallback,
+		errorCallback,
+	} = useIAPSuccessFailureHandle();
+
+	React.useEffect((): Function => {
+		const { clearListeners } = withInAppPurchaseListeners({
+			successCallback,
+			errorCallback,
+		});
+		return clearListeners;
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	async function requestIapSubscription(id: string) {
+		try {
+			await RNIap.requestSubscription(id, false);
+		} catch (err) {
+			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
+		}
+	}
+
 	function onPress() {
-		const product = getSubscriptionPlans()[selectedIndex].product;
-		const credits = getSubscriptionPlans()[selectedIndex].smsCredit;
+		if (onGoing) {
+			return;
+		}
+
+		const {
+			product,
+			smsCredit: credits,
+		} = getSubscriptionPlans()[selectedIndex];
 		const quantity = 1;
 		const options = {
 			product,
@@ -191,24 +233,29 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 			paymentProvider,
 			returnUrl: 'telldus-live-mobile-common',
 		};
-		dispatch(createTransaction(options, true)).then((response: Object) => {
-			if (response && response.id && response.url) {
-				navigation.navigate('TransactionWebview', {
-					uri: response.url,
-					product,
-					credits,
-					quantity,
-					voucher: false,
-					screensToPop: 4,
-				});
-			} else {
-				dispatch(showToast(formatMessage(i18n.unknownError)));
+
+		if (Platform.OS === 'ios') {
+			requestIapSubscription(product);
+		} else {
+			dispatch(createTransaction(options, true)).then((response: Object) => {
+				if (response && response.id && response.url) {
+					navigation.navigate('TransactionWebview', {
+						uri: response.url,
+						product,
+						credits,
+						quantity,
+						voucher: false,
+						screensToPop: 4,
+					});
+				} else {
+					dispatch(showToast(formatMessage(i18n.unknownError)));
+					dispatch(getUserProfile());
+				}
+			}).catch((err: Object) => {
+				dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 				dispatch(getUserProfile());
-			}
-		}).catch((err: Object) => {
-			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
-			dispatch(getUserProfile());
-		});
+			});
+		}
 	}
 
 	function onGoBack() {
@@ -277,6 +324,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
+					disabled={onGoing}
 				/>
 				<Text style={backLinkStyle} onPress={onGoBack}>{capitalizeFirstLetterOfEachWord(formatMessage(i18n.backLabel))}</Text>
 			</ScrollView>

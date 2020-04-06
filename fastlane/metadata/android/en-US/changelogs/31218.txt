@@ -1,0 +1,3 @@
+- Fix local control issue in some Android devices
+- Fix thermostat control when no modes available
+

@@ -26,14 +26,24 @@ import firebase from 'react-native-firebase';
 
 import type { ThunkAction, Action } from './Types';
 
+import {
+	deployStore,
+} from '../../Config';
+
 const remoteConfigs = [
 	'geoFenceFeature',
 	'premiumPurchase',
 	'rgb',
+	'appDrawerBanner',
+	'webshop',
 ];
 
 const fetchRemoteConfig = (): ThunkAction => {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
+		if (deployStore === 'huawei') {
+			return;
+		}
+
 		if (__DEV__) {
 			firebase.config().enableDeveloperMode();
 		}
@@ -49,6 +59,11 @@ const fetchRemoteConfig = (): ThunkAction => {
 			rgb: {
 				onColorMultiplier: 0.7,
 				offColorMultiplier: 0.55,
+			},
+			appDrawerBanner: {
+			},
+			webshop: {
+				enable: false,
 			},
 		});
 

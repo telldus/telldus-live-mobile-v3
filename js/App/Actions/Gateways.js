@@ -25,7 +25,15 @@
 import { Platform } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 
-import { reportException } from '../Lib/Analytics';
+import {
+	GatewayTypes,
+	GatewayTransports,
+} from '../../Constants';
+
+import {
+	reportException,
+	setGAUserProperties,
+} from '../Lib/Analytics';
 import { getTokenForLocalControl, hasTokenExpired } from '../Lib/LocalControl';
 import { supportRSA } from '../Lib/appUtils';
 import type { ThunkAction, Action } from './Types';
@@ -218,6 +226,57 @@ const toggleSupportLocal = (gatewayId: number, supportLocal: boolean): Action =>
 	};
 };
 
+const setGatewayRelatedGAProperties = (): ThunkAction => {
+	return (dispatch: Function, getState: Function) => {
+		const {
+			gateways: { byId },
+		} = getState();
+
+		if (!byId || Object.keys(byId).length < 1) {
+			return;
+		}
+
+		const transportsToExclude = ['egroup', 'group'];
+
+		let setGTy = new Set();
+		let setGTr = new Set();
+		Object.keys(byId).forEach((id: Object) => {
+			const {
+				transports = '',
+				type = '',
+			} = byId[id];
+			const typeConstant = GatewayTypes[type.trim().toLowerCase()];
+			if (typeConstant) {
+				setGTy.add(typeConstant);
+				const ts = transports.split(',');
+				ts.forEach((t: string = '') => {
+					const exclude = transportsToExclude.indexOf(t.trim().toLowerCase()) !== -1;
+					if (!exclude) {
+						const transportConstant = GatewayTransports[t.trim().toLowerCase()];
+						setGTr.add(transportConstant || t);
+					}
+				});
+			}
+		});
+
+		let gatewayTypes = '', gatewayTransports = '';
+		setGTy.forEach((ty: string) => {
+			gatewayTypes += `${ty},`;
+		});
+		setGTr.forEach((tr: string) => {
+			gatewayTransports += `${tr},`;
+		});
+		gatewayTypes = gatewayTypes.replace(/.$/, '');
+		gatewayTransports = gatewayTransports.replace(/.$/, '');
+
+		const data = {
+			gatewayTypes,
+			gatewayTransports,
+		};
+		setGAUserProperties(data);
+	};
+};
+
 module.exports = {
 	...Gateways,
 	...GatewaysCommon,
@@ -227,4 +286,5 @@ module.exports = {
 	validateLocalControlSupport,
 	resetLocalControlAddress,
 	toggleSupportLocal,
+	setGatewayRelatedGAProperties,
 };

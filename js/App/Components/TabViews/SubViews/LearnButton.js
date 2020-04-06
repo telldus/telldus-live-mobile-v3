@@ -33,6 +33,7 @@ type Props = {
 	style?: Object | number | Array<any>,
 	onLearn: (string, number) => void,
 	labelStyle?: Object | number | Array<any>,
+	disabled?: boolean,
 };
 
 class LearnButton extends View<Props, null> {
@@ -52,13 +53,14 @@ class LearnButton extends View<Props, null> {
 	}
 
 	render(): Object {
-		const { style, labelStyle } = this.props;
+		const { style, labelStyle, disabled } = this.props;
 		return (
 			<TouchableButton
 				style={style}
 				onPress={this.onLearn}
 				text={i18n.learn}
 				labelStyle={labelStyle}
+				disabled={disabled}
 			/>
 		);
 	}

@@ -30,6 +30,7 @@ import AddSensorContainer from './AddSensorContainer';
 import SelectLocationAddSensor from './SelectLocationAddSensor';
 import SensorsListAddSensor from './SensorsListAddSensor';
 import SetSensorName from './SetSensorName';
+import SelectSensorType from './SelectSensorType';
 
 import {
 	prepareNavigator,
@@ -57,6 +58,14 @@ const ScreenConfigs = [
 	{
 		name: 'SetSensorName',
 		Component: SetSensorName,
+		ContainerComponent: AddSensorContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectSensorType',
+		Component: SelectSensorType,
 		ContainerComponent: AddSensorContainer,
 		options: {
 			headerShown: false,

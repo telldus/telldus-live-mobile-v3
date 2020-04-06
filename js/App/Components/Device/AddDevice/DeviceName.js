@@ -151,21 +151,53 @@ postSubmitName = async () => {
 	const { navigation, actions, route } = this.props;
 	const { rowData } = this.state;
 
-	await actions.getDevices();
+	try {
+		await actions.getDevices();
+		await actions.getSensors();
+	} catch (e) {
+		// Ignore
+	} finally {
+		this.setState({
+			isLoading: false,
+		}, () => {
+			InteractionManager.runAfterInteractions(() => {
 
-	this.setState({
-		isLoading: false,
-	}, () => {
-		InteractionManager.runAfterInteractions(() => {
-			const {
-				gateway = {},
-			} = route.params || {};
-			navigation.navigate('Devices', {
-				gateway,
-				newDevices: rowData,
+				const {
+					gateway = {},
+					parent: parentScreen = '',
+					sensors = [],
+				} = route.params || {};
+
+				if (parentScreen === 'sensors_tab') {
+					if (sensors.length > 0) {
+
+						let newSensors = {};
+						sensors.map(({id, clientDeviceId}: Object, index: number) => {
+							newSensors[id] = {
+								id,
+								name: '',
+								index,
+								mainNode: true,
+								clientDeviceId,
+							};
+						});
+
+						navigation.navigate('Sensors', {
+							gateway,
+							newSensors,
+						});
+
+						return;
+					}
+				}
+
+				navigation.navigate('Devices', {
+					gateway,
+					newDevices: rowData,
+				});
 			});
 		});
-	});
+	}
 }
 
 onChangeName(name: string, id: number) {

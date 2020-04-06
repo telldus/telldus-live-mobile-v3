@@ -23,7 +23,11 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	Linking,
+	Platform,
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -78,24 +82,34 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 
 	const dispatch = useDispatch();
 	function onConfirm() {
-		dispatch(cancelSubscription('premium')).then((response: Object) => {
-			if (response && response.status === 'success') {
-				dispatch(getUserProfile());
-				navigation.goBack();
+
+		if (Platform.OS === 'ios') {
+			const majorVersionIOS = parseInt(Platform.Version, 10);
+			if (majorVersionIOS >= 12) {
+				Linking.openURL('https://apps.apple.com/account/subscriptions');
 			} else {
-				dispatch(showToast(formatMessage(i18n.unknownError)));
+				Linking.openURL('https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions');
+			}
+		} else {
+			dispatch(cancelSubscription('premium')).then((response: Object) => {
+				if (response && response.status === 'success') {
+					dispatch(getUserProfile());
+					navigation.goBack();
+				} else {
+					dispatch(showToast(formatMessage(i18n.unknownError)));
+					dispatch(getUserProfile());
+				}
+			}).catch((err: Object) => {
+				if (err.message === 'b9e1223e-4ea4-4cdf-97f7-0e23292ef40e') {
+					dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorOne)));
+				} else if (err.message === '91dedfc0-809d-4335-a1c6-2b5da68d0ad8') {
+					dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorTwo)));
+				} else {
+					dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
+				}
 				dispatch(getUserProfile());
-			}
-		}).catch((err: Object) => {
-			if (err.message === 'b9e1223e-4ea4-4cdf-97f7-0e23292ef40e') {
-				dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorOne)));
-			} else if (err.message === '91dedfc0-809d-4335-a1c6-2b5da68d0ad8') {
-				dispatch(showToast(formatMessage(i18n.cancelSubscriptionErrorTwo)));
-			} else {
-				dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
-			}
-			dispatch(getUserProfile());
-		});
+			});
+		}
 	}
 
 	function onPress() {
@@ -108,7 +122,7 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 			text,
 			showPositive: true,
 			showNegative: true,
-			positiveText: formatMessage(i18n.confirm),
+			positiveText: formatMessage(i18n.confirm).toUpperCase(),
 			closeOnPressPositive: true,
 			closeOnPressNegative: true,
 			onPressPositive: onConfirm,
@@ -116,16 +130,16 @@ const ManageSubscriptionScreen = (props: Object): Object => {
 	}
 
 	const headerArray = formatMessage(i18n.premiumSubscription).split(' ');
-	const header = headerArray.map((word: string): Object => {
+	const header = headerArray.map((word: string, index: number): Object => {
 		if (word.includes('%')) {
 			return (
-				<Text style={titleStyleOne}>
+				<Text style={titleStyleOne} key={`${index}`}>
 					{` ${word.replace(/%/g, '').toUpperCase()}`}
 				</Text>
 			);
 		}
 		return (
-			<Text style={titleStyleTwo}>
+			<Text style={titleStyleTwo} key={`${index}`}>
 				{word.toUpperCase()}
 			</Text>
 		);

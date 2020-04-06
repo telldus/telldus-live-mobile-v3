@@ -61,6 +61,17 @@ import RequestSupportScreen from './CustomerSupport/RequestSupportScreen';
 import BuySMSCreditsScreen from './Premium/BuySMSCreditsScreen';
 import RegisterForPushScreen from './PushSettings/RegisterForPushScreen';
 
+import AddDeviceContainer from './Device/AddDevice/AddDeviceContainer';
+import IncludeDevice from './Device/AddDevice/IncludeDevice';
+import DeviceName from './Device/AddDevice/DeviceName';
+import AlreadyIncluded from './Device/AddDevice/AlreadyIncluded';
+import NoDeviceFound from './Device/AddDevice/NoDeviceFound';
+import ExcludeScreen from './Device/AddDevice/ExcludeScreen';
+import IncludeFailed from './Device/AddDevice/IncludeFailed';
+import CantEnterInclusion from './Device/AddDevice/CantEnterInclusion';
+
+import InfoScreen from './Info/InfoScreen';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -299,6 +310,69 @@ const ScreenConfigs = [
 			headerShown: false,
 		},
 	},
+	{
+		name: 'IncludeDevice',
+		Component: IncludeDevice,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'DeviceName',
+		Component: DeviceName,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'AlreadyIncluded',
+		Component: AlreadyIncluded,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'NoDeviceFound',
+		Component: NoDeviceFound,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'ExcludeScreen',
+		Component: ExcludeScreen,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'IncludeFailed',
+		Component: IncludeFailed,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'CantEnterInclusion',
+		Component: CantEnterInclusion,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'InfoScreen',
+		Component: InfoScreen,
+		options: {
+			headerShown: false,
+		},
+	},
 ];
 
 const NavigatorConfigs = {
@@ -311,7 +385,7 @@ const NavigatorConfigs = {
 	},
 	headerMode: 'screen',
 	screenOptions: {
-		cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+		cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS, // TODO: Handle animation of zwave include screens
 	},
 };
 

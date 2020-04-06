@@ -96,7 +96,7 @@ componentDidMount() {
 
 onPressExit() {
 	const { navigation } = this.props;
-	navigation.navigate('Devices');
+	navigation.popToTop();
 }
 
 onExcludeSuccessImmediate() {

@@ -24,9 +24,13 @@
 'use strict';
 
 import React from 'react';
-import { Linking } from 'react-native';
+import { Linking, Platform } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+
+import {
+	CommonActions,
+} from '@react-navigation/native';
 
 import Theme from '../../../Theme';
 import {
@@ -99,9 +103,40 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		this.props.navigation.navigate('Tabs', {
-			screen: 'Gateways',
+		const { navigation, route } = this.props;
+		const { clientInfo } = route.params || {};
+
+		let routes = [{ name: 'Tabs' }];
+		if (Platform.OS === 'ios') {
+			routes = [
+				{
+					name: 'Tabs',
+					state: {
+						index: 4,
+						routes: [
+							{
+								name: 'Gateways',
+							},
+						],
+					},
+				},
+			];
+		}
+		routes = [
+			...routes,
+			{
+				name: 'InfoScreen',
+				params: {
+					info: 'add_device',
+					clientId: clientInfo.clientId,
+				},
+			},
+		];
+		const resetAction = CommonActions.reset({
+			index: 1,
+			routes,
 		});
+		navigation.dispatch(resetAction);
 	}
 
 	onPressHelp() {

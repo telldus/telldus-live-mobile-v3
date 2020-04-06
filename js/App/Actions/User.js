@@ -24,6 +24,7 @@
 import { format } from 'url';
 import axios from 'axios';
 import DeviceInfo from 'react-native-device-info';
+import RNIap from 'react-native-iap';
 
 // User actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -280,8 +281,12 @@ type OPTIONS = {
 	paymentProvider: string,
 	returnUrl: string,
 };
+type OPTIONS_IAP = {
+	paymentProvider: string, // 'apple'
+	purchaseInfo: string, // Stringified JSON response from in-app-purchase updated listener
+};
 // See https://ca-api.telldus.com/explore/user/createTransaction
-function createTransaction(options: OPTIONS, isMobile?: boolean = false): ThunkAction {
+function createTransaction(options: OPTIONS | OPTIONS_IAP, isMobile?: boolean = false): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		let formData = new FormData();
 		Object.keys(options).map((key: string) => {
@@ -349,6 +354,55 @@ function updateAllAccountsInfo(): ThunkAction {
 	};
 }
 
+function updateStatusIAPTransaction(payload: Object): Action {
+	return {
+		type: 'UPDATE_STATUS_IAP_TRANSACTION',
+		payload,
+	};
+}
+
+const onReceivedInAppPurchaseProducts = (products: Array<Object>): Action => {
+	return {
+		type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS',
+		payload: products,
+	};
+};
+
+const onReceivedInAppAvailablePurchases = (products: Array<Object>): Action => {
+	return {
+		type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES',
+		payload: products,
+	};
+};
+
+function reportIapAtServer(purchaseInfo: Object): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return dispatch(createTransaction({
+			purchaseInfo: JSON.stringify(purchaseInfo),
+			paymentProvider: 'apple',
+		}, true)).then((response: Object): Object => {
+			if (response && response.status && response.status === 'success') {
+				try {
+					// Tell the store that you have delivered what has been paid for.
+					// Failure to do this will result in the purchase being refunded on Android and
+					// the purchase event will reappear on every relaunch of the app until you succeed
+					// in doing the below. It will also be impossible for the user to purchase consumables
+					// again untill you do this.
+					RNIap.finishTransactionIOS(purchaseInfo.transactionId);
+					RNIap.finishTransaction(purchaseInfo, false);
+				} catch (err) {
+					// Ignore
+				} finally {
+					return response;
+				}
+			}
+			throw response;
+		}).catch((err: Object) => {
+			throw err;
+		});
+	};
+}
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -364,4 +418,8 @@ module.exports = {
 	toggleVisibilityExchangeOffer,
 	toggleVisibilityProExpireHeadsup,
 	updateAllAccountsInfo,
+	updateStatusIAPTransaction,
+	onReceivedInAppPurchaseProducts,
+	onReceivedInAppAvailablePurchases,
+	reportIapAtServer,
 };

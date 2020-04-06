@@ -23,6 +23,8 @@
 import React from 'react';
 import {
 	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 const isEqual = require('react-fast-compare');
@@ -272,85 +274,91 @@ render(testData: Object): Object {
 	const descLen = value.trim().length;
 
 	return (
-		<ScrollableNavigationHeaderPoster
-			h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
-			align={'right'}
-			showLeftIcon={true}
-			leftIcon={'close'}
-			navigation={navigation}
-			{...screenProps}>
-			<View style={container}>
-				<Text style={title}>
-					{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
-				</Text>
-				<Text style={body}>
-					{formatMessage(i18n.contactSupportDescription)}
-				</Text>
-				<Text style={label}>
-					{formatMessage(i18n.emailAddress)}
-				</Text>
-				<MaterialTextInput
-					value={emailValue}
-					style={textField}
-					onChangeText={this.onChangeTextEmail}
-					autoCapitalize="none"
-					autoCorrect={false}
-					autoFocus={true}
-					baseColor={brandSecondary}
-					tintColor={brandSecondary}
-					returnKeyType={'done'}
-				/>
-				<Text style={label}>
-					{`${capitalize(formatMessage(i18n.gateway))}`}
-				</Text>
-				<DropDown
-					items={LIST}
-					value={valueDD}
-					onValueChange={this.onChoosegateway}
-					appLayout={appLayout}
-					intl={intl}
-					dropDownContainerStyle={dropDownContainerStyle}
-					pickerContainerStyle={pickerContainerStyle}
-					baseColor={rowTextColor}
-					fontSize={fontSizeText}
-					accessibilityLabelPrefix={formatMessage(i18n.gateway)}
-					textColor={rowTextColor}
-					pickerBaseCoverStyle={pickerBaseCoverStyle}
-				/>
-				<View>
+		<KeyboardAvoidingView
+			style={{ flex: 1 }}
+			behavior="padding"
+			keyboardVerticalOffset={Platform.OS === 'android' ? -500 : 0}>
+
+			<ScrollableNavigationHeaderPoster
+				h1={formatMessage(i18n.labelHelpAndSupport)} h2={formatMessage(i18n.weCanHelpYou)}
+				align={'right'}
+				showLeftIcon={true}
+				leftIcon={'close'}
+				navigation={navigation}
+				{...screenProps}>
+				<View style={container}>
+					<Text style={title}>
+						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
+					</Text>
+					<Text style={body}>
+						{formatMessage(i18n.contactSupportDescription)}
+					</Text>
 					<Text style={label}>
-						{formatMessage(i18n.labelMessage)}
+						{formatMessage(i18n.emailAddress)}
 					</Text>
 					<MaterialTextInput
-						value={value}
-						style={[textField, textFieldMessage]}
-						containerStyle={textFieldContainerStyle}
-						onChangeText={this.onChangeText}
-						onSubmitEditing={this.onSubmitEditing}
-						autoCapitalize="sentences"
+						value={emailValue}
+						style={textField}
+						onChangeText={this.onChangeTextEmail}
+						autoCapitalize="none"
 						autoCorrect={false}
-						autoFocus={false}
+						autoFocus={true}
 						baseColor={brandSecondary}
 						tintColor={brandSecondary}
 						returnKeyType={'done'}
-						multiline={true}
 					/>
+					<Text style={label}>
+						{`${capitalize(formatMessage(i18n.gateway))}`}
+					</Text>
+					<DropDown
+						items={LIST}
+						value={valueDD}
+						onValueChange={this.onChoosegateway}
+						appLayout={appLayout}
+						intl={intl}
+						dropDownContainerStyle={dropDownContainerStyle}
+						pickerContainerStyle={pickerContainerStyle}
+						baseColor={rowTextColor}
+						fontSize={fontSizeText}
+						accessibilityLabelPrefix={formatMessage(i18n.gateway)}
+						textColor={rowTextColor}
+						pickerBaseCoverStyle={pickerBaseCoverStyle}
+					/>
+					<View>
+						<Text style={label}>
+							{formatMessage(i18n.labelMessage)}
+						</Text>
+						<MaterialTextInput
+							value={value}
+							style={[textField, textFieldMessage]}
+							containerStyle={textFieldContainerStyle}
+							onChangeText={this.onChangeText}
+							onSubmitEditing={this.onSubmitEditing}
+							autoCapitalize="sentences"
+							autoCorrect={false}
+							autoFocus={false}
+							baseColor={brandSecondary}
+							tintColor={brandSecondary}
+							returnKeyType={'done'}
+							multiline={true}
+						/>
+					</View>
 				</View>
-			</View>
-			{descLen < 50 && <View style={infoContainer}>
-				<IconTelldus icon={'info'} style={statusIconStyle}/>
-				<Text style={infoTextStyle}>
-					{formatMessage(i18n.supportTicketDescriptionInfo)}
-				</Text>
-			</View>
-			}
-			<TouchableButton
-				text={i18n.labelSend}
-				style={button}
-				onPress={this.contactSupport}
-				disabled={isLoading || descLen < 50}
-				showThrobber={isLoading}/>
-		</ScrollableNavigationHeaderPoster>
+				{descLen < 50 && <View style={infoContainer}>
+					<IconTelldus icon={'info'} style={statusIconStyle}/>
+					<Text style={infoTextStyle}>
+						{formatMessage(i18n.supportTicketDescriptionInfo)}
+					</Text>
+				</View>
+				}
+				<TouchableButton
+					text={i18n.labelSend}
+					style={button}
+					onPress={this.contactSupport}
+					disabled={isLoading || descLen < 50}
+					showThrobber={isLoading}/>
+			</ScrollableNavigationHeaderPoster>
+		</KeyboardAvoidingView>
 	);
 }
 

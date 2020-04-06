@@ -104,7 +104,7 @@ class Gateway extends PureComponent<Props, null> {
 					h2Style={h2Style}
 					onPress={this.onPress}
 					resizeMode={'stretch'}/>
-				<View style={iconSettingsContainer} pointerEvents="none">/>
+				<View style={iconSettingsContainer} pointerEvents="none">
 					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
 				</View>
 			</RippleButton>

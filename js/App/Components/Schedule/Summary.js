@@ -24,6 +24,9 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
+import {
+	CommonActions,
+} from '@react-navigation/native';
 
 import {
 	FloatingButton,
@@ -76,6 +79,8 @@ class Summary extends View<null, Props, State> {
 		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
 		this.setRefScroll = this.setRefScroll.bind(this);
 		this.scrollView = null;
+
+		this.messageOnUpdateFail = formatMessage(i18n.updateScheduleFailure);
 	}
 
 	componentDidMount() {
@@ -104,7 +109,7 @@ class Summary extends View<null, Props, State> {
 			this.setState({
 				isLoading: false,
 			});
-			let message = error.message ? error.message : 'Could not save the shedule. Please try again later.';
+			let message = error.message ? error.message : this.messageOnUpdateFail;
 			this.openDialogueBox({
 				text: message,
 			});
@@ -124,8 +129,34 @@ class Summary extends View<null, Props, State> {
 	}
 
 	resetNavigation = () => {
-		const { navigation } = this.props;
-		navigation.navigate('Scheduler');
+		const { navigation, schedule } = this.props;
+
+		let routes = [
+			{
+				name: 'Tabs',
+				state: {
+					index: 3,
+					routes: [
+						{
+							name: 'Scheduler',
+						},
+					],
+				},
+			},
+			{
+				name: 'InfoScreen',
+				params: {
+					info: 'add_schedule_another',
+					deviceId: schedule.deviceId,
+				},
+			},
+		];
+
+		const resetAction = CommonActions.reset({
+			index: 1,
+			routes,
+		});
+		navigation.dispatch(resetAction);
 	}
 
 	onToggleAdvanced(state: boolean) {

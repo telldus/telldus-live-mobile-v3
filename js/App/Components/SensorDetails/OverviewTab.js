@@ -30,6 +30,7 @@ import { View, LocationDetails } from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
 import { getSensorInfo } from '../../Actions';
+import { requestNodeInfo } from '../../Actions/Websockets';
 import {
 	getLocationImageUrl,
 	shouldUpdate,
@@ -47,6 +48,7 @@ type Props = {
 
 	screenProps: Object,
 	getSensorInfo: (id: number, includeUnit: 1 | 0) => Promise<any>,
+	dispatch: Function,
 };
 
 type State = {
@@ -84,6 +86,12 @@ class OverviewTab extends View<Props, State> {
 				isRefreshing: false,
 			});
 		});
+	}
+
+	componentDidMount() {
+		const { dispatch, sensor } = this.props;
+		const { clientId, sensorId } = sensor;
+		dispatch(requestNodeInfo(clientId, sensorId));
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -217,6 +225,7 @@ function mapDispatchToProps(dispatch: Function): Object {
 		getSensorInfo: (id: number, includeUnit: 1 | 0): Promise<any> => {
 			return dispatch(getSensorInfo(id, includeUnit));
 		},
+		dispatch,
 	};
 }
 

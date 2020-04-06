@@ -30,7 +30,7 @@ import React, {
 	useRef,
 } from 'react';
 import { useIntl } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	DropDown,
@@ -44,7 +44,7 @@ import {
 	prepare433ModelName,
 } from '../../../../Lib/DeviceUtils';
 import {
-	setWidgetParamsValue,
+	resetAddDeviceCache433MHz,
 } from '../../../../Actions/AddDevice';
 
 import Theme from '../../../../Theme';
@@ -53,12 +53,13 @@ import i18n from '../../../../Translations/common';
 const Device433EditModel = (props: Object, ref: Object): Object => {
 
 	const {
-		device,
+		onSelectModel,
 	} = props;
 
-	const dispatch = useDispatch();
 	const intl = useIntl();
 	const ddRef = useRef(null);
+
+	const dispatch = useDispatch();
 
 	const {
 		formatMessage,
@@ -93,26 +94,13 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 			const {
 				value,
 			} = item;
-			const {
-				model: _model,
-				protocol,
-			} = value;
-			if (protocol || _model) {
-				dispatch(setWidgetParamsValue({
-					...widgetParams433Device,
-					model: _model,
-					protocol,
-				}));
-			}
+			dispatch(resetAddDeviceCache433MHz());
+			onSelectModel(value);
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		widgetParams433Device,
 	]);
-
-	const {
-		model,
-	} = device;
 
 	const _renderItem = useCallback((rowProps: Object): Object => {
 		const {
@@ -153,7 +141,7 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 				justifyContent: 'center',
 			}]} onPress={onPress}>
 				<Text style={[sectionRowStyle, {
-					color: model === _model ? brandSecondary : '#000',
+					color: modelC === _model ? brandSecondary : '#000',
 				}]}>
 					{prepare433ModelName(locale, lang, modelName)}
 				</Text>
@@ -162,7 +150,6 @@ const Device433EditModel = (props: Object, ref: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		locale,
-		model,
 		widgetParams433Device,
 	]);
 

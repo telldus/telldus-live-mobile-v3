@@ -29,13 +29,6 @@ import AddDeviceContainer from './AddDeviceContainer';
 
 import SelectLocation from './SelectLocation';
 import SelectDeviceType from './SelectDeviceType';
-import IncludeDevice from './IncludeDevice';
-import DeviceName from './DeviceName';
-import AlreadyIncluded from './AlreadyIncluded';
-import NoDeviceFound from './NoDeviceFound';
-import ExcludeScreen from './ExcludeScreen';
-import IncludeFailed from './IncludeFailed';
-import CantEnterInclusion from './CantEnterInclusion';
 import SelectBrand433 from './SelectBrand433';
 import SelectModel433 from './SelectModel433';
 import Include433 from './Include433';
@@ -59,62 +52,6 @@ const ScreenConfigs = [
 	{
 		name: 'SelectDeviceType',
 		Component: SelectDeviceType,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'IncludeDevice',
-		Component: IncludeDevice,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'DeviceName',
-		Component: DeviceName,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'AlreadyIncluded',
-		Component: AlreadyIncluded,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'NoDeviceFound',
-		Component: NoDeviceFound,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'ExcludeScreen',
-		Component: ExcludeScreen,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'IncludeFailed',
-		Component: IncludeFailed,
-		ContainerComponent: AddDeviceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'CantEnterInclusion',
-		Component: CantEnterInclusion,
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,

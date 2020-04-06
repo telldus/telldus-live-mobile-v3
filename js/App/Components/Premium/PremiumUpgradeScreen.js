@@ -25,11 +25,15 @@
 import React, {
 	useMemo,
 } from 'react';
-import { ScrollView } from 'react-native';
+import {
+	ScrollView,
+	Platform,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
+import RNIap from 'react-native-iap';
 
 import {
 	View,
@@ -53,6 +57,7 @@ import {
 import {
 	createTransaction,
 	toggleVisibilityProExpireHeadsup,
+	updateStatusIAPTransaction,
 } from '../../Actions/User';
 import {
 	showToast,
@@ -60,22 +65,33 @@ import {
 import {
 	getUserProfile,
 } from '../../Actions/Login';
+import {
+	withInAppPurchaseListeners,
+	useIAPSuccessFailureHandle,
+} from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 const PremiumUpgradeScreen = (props: Object): Object => {
 	const { navigation, screenProps } = props;
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		layout,
+	} = useSelector((state: Object): Object => state.app);
 	const {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		iapTransactionConfig = {},
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
 	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
 	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
+
+	const {
+		onGoing = false,
+	} = iapTransactionConfig;
 
 	const {
 		container,
@@ -114,12 +130,58 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		save,
 		prevTotal,
 		newTotal,
+		product,
 	} = getSubscriptionPlans()[index];
 
 	const dispatch = useDispatch();
+
+	const {
+		successCallback,
+		errorCallback,
+	} = useIAPSuccessFailureHandle();
+
+	let { clearListeners } = React.useMemo((): Object => {
+		return withInAppPurchaseListeners({
+			successCallback,
+			errorCallback,
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	React.useEffect((): Function => {
+		const didFocusSubscription = navigation.addListener(
+			'didFocus',
+			(payload: Object) => {
+				if (!clearListeners) {
+					const listenerData = withInAppPurchaseListeners({
+						successCallback,
+						errorCallback,
+					});
+					// eslint-disable-next-line react-hooks/exhaustive-deps
+					clearListeners = listenerData.clearListeners;
+				}
+			}
+		);
+
+		return () => {
+			clearListenersIAP();
+			didFocusSubscription.remove();
+		};
+	}, [clearListeners]);
+
+	async function requestIapSubscription(id: string) {
+		try {
+			dispatch(updateStatusIAPTransaction({
+				onGoing: true,
+			}));
+			await RNIap.requestSubscription(id, false);
+		} catch (err) {
+			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
+		}
+	}
+
 	function onPress() {
-		const product = getSubscriptionPlans()[index].product;
-		const credits = getSubscriptionPlans()[index].smsCredit;
+		const credits = smsCredit;
 		const { name: paymentProvider } = getPaymentOptions(formatMessage)[index];
 		const quantity = 1;
 		const options = {
@@ -129,24 +191,29 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			paymentProvider,
 			returnUrl: 'telldus-live-mobile-common',
 		};
-		dispatch(createTransaction(options, true)).then((response: Object) => {
-			if (response && response.id && response.url) {
-				navigation.navigate('TransactionWebview', {
-					uri: response.url,
-					product,
-					credits,
-					quantity,
-					voucher: false,
-					screensToPop: 3,
-				});
-			} else {
-				dispatch(showToast(formatMessage(i18n.unknownError)));
+
+		if (Platform.OS === 'ios') {
+			requestIapSubscription(product);
+		} else {
+			dispatch(createTransaction(options, true)).then((response: Object) => {
+				if (response && response.id && response.url) {
+					navigation.navigate('TransactionWebview', {
+						uri: response.url,
+						product,
+						credits,
+						quantity,
+						voucher: false,
+						screensToPop: 3,
+					});
+				} else {
+					dispatch(showToast(formatMessage(i18n.unknownError)));
+					dispatch(getUserProfile());
+				}
+			}).catch((err: Object) => {
+				dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 				dispatch(getUserProfile());
-			}
-		}).catch((err: Object) => {
-			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
-			dispatch(getUserProfile());
-		});
+			});
+		}
 	}
 
 	const headerArray = formatMessage(i18n.getMoreWithPremium).split(' ');
@@ -175,6 +242,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		dispatch(toggleVisibilityProExpireHeadsup('hide_temp'));
 		navigation.pop();
 		return true;
+	}
+
+	function clearListenersIAP() {
+		if (clearListeners) {
+			clearListeners();
+			clearListeners = null;
+		}
 	}
 
 	return (
@@ -252,11 +326,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
+					disabled={onGoing}
 				/>
 				<AdditionalPlansPayments
 					navigation={navigation}
 					button={false}
-					linkTextStyle={linkTextStyle}/>
+					linkTextStyle={linkTextStyle}
+					onPressNavigate={clearListenersIAP}/>
 				<ViewPremiumBenefitsButton
 					navigation={navigation}
 					button={false}

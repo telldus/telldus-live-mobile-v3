@@ -135,9 +135,10 @@ render(): Object {
 
 	return (
 		<View style={container}>
-			<Text style={labelStyle}>
+			{current && <Text style={labelStyle}>
 				{formatMessage(i18n.labelThisDevice)}
 			</Text>
+			}
 			{current ?
 				current
 				:

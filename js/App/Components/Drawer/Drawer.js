@@ -57,7 +57,7 @@ import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
-	gateways: Object,
+	gateways: Array<Object>,
 	appLayout: Object,
 	isOpen: boolean,
 	hasAPremAccount: boolean,
@@ -261,13 +261,13 @@ constructor(props: Props) {
 								marginBottom: 0,
 							},
 						}}/>
-					{gateways.allIds.map((id: number, index: number): Object => {
-						return (<Gateway
-							gateway={gateways.byId[id]}
+					{gateways.map((gateway: number, index: number): Object => {
+						return <Gateway
+							gateway={gateway}
 							key={index}
 							appLayout={appLayout}
 							onPressGateway={onPressGateway}
-							dispatch={dispatch}/>);
+							dispatch={dispatch}/>;
 					})}
 					<SettingsLink
 						styles={styles}

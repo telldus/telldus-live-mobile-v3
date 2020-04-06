@@ -246,7 +246,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const buttons = [
 			{
-				style: {},
+				style: styles.settingsButtonStyle,
 				accessibilityLabel: `${intl.formatMessage(i18n.settingsHeader)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`,
 				onPress: this.onOpenSetting,
 				iconComponent: <IconTelldus icon={'settings'} style={{
@@ -255,12 +255,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 				}}/>,
 			},
 			{
-				style: {},
+				style: styles.campaingButtonStyle,
 				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
 				onPress: this.props.navigateToCampaign,
 				iconComponent: <CampaignIcon
 					size={styles.fontSizeIcon}
-					style={styles.campaingIconStyle}
 				/>,
 			},
 		];
@@ -327,9 +326,16 @@ class AppNavigatorRenderer extends View<Props, State> {
 				height: fontSizeIcon,
 				width: fontSizeIcon,
 			},
-			campaingIconStyle: {
-				marginLeft: 25,
-				padding: 2,
+			campaingButtonStyle: {
+				marginLeft: 4,
+				paddingRight: 15,
+				paddingLeft: 5,
+				paddingVertical: 4,
+			},
+			settingsButtonStyle: {
+				paddingLeft: 15,
+				paddingRight: 5,
+				paddingVertical: 4,
 			},
 			fontSizeIcon,
 		};

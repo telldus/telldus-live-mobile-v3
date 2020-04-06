@@ -28,6 +28,7 @@ import { Linking, NativeModules, Platform } from 'react-native';
 const isEqual = require('react-fast-compare');
 import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
+import RNIap from 'react-native-iap';
 
 import {
 	View,
@@ -63,6 +64,10 @@ import {
 	fetchRemoteConfig,
 	prepareGAPremiumProperties,
 	updateAllAccountsInfo,
+	setGatewayRelatedGAProperties,
+	onReceivedInAppPurchaseProducts,
+	onReceivedInAppAvailablePurchases,
+	reportIapAtServer,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -77,7 +82,6 @@ import {
 	getRSAKey,
 	shouldUpdate,
 	navigate,
-	prepareNo433MHzSupportDialogueData,
 	premiumAboutToExpire,
 	setGAUserProperties,
 } from '../Lib';
@@ -105,7 +109,6 @@ type Props = {
 
 	screen: string,
 
-	visibilityExchangeOffer: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
@@ -158,7 +161,6 @@ constructor(props: Props) {
 
 	this.handleConnectivityChange = this.handleConnectivityChange.bind(this);
 
-	this.addNewLocation = this.addNewLocation.bind(this);
 	this.addNewDevice = this.addNewDevice.bind(this);
 
 	getRSAKey(true);
@@ -185,6 +187,15 @@ constructor(props: Props) {
 
 	this.refSwitchAccountActionSheet = {};
 	this.clearNetInfoListener = null;
+
+	this.screensAllowsNavigationOrModalOverride = [
+		'Tabs',
+		'Dashboard',
+		'Devices',
+		'Sensors',
+		'Scheduler',
+		'Gateways',
+	];
 }
 
 async componentDidMount() {
@@ -197,6 +208,8 @@ async componentDidMount() {
 	this.actionsToPerformOnStart();
 
 	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
+
+	this._askIfAddNewLocation();
 }
 
 actionsToPerformOnStart = async () => {
@@ -219,9 +232,60 @@ actionsToPerformOnStart = async () => {
 
 	await dispatch(fetchRemoteConfig());
 
+	if (Platform.OS === 'ios') {
+		try {
+			await RNIap.initConnection();
+			// TODO: Get the products(id) from appUtils/getSubscriptionPlans
+			const subs = Platform.select({
+				ios: ['premium1m', 'onlytest'],
+			});
+			const products = await RNIap.getSubscriptions(subs);
+			dispatch(onReceivedInAppPurchaseProducts(products));
+
+			const purchases = await RNIap.getAvailablePurchases() || [];// Those not called 'finishTransaction' post-purchase
+			dispatch(onReceivedInAppAvailablePurchases(purchases));
+			purchases.forEach((purchase: Object) => {
+				const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
+				const {
+					productId,
+				} = purchase;
+
+				// Fix for ISSUE 1 reported below. But with a cost one unnecessary
+				// API call/report(auto renewing subscription).
+				const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
+				if (!isAutoRenewing) {
+					dispatch(reportIapAtServer(purchase));
+				}
+				// TODO: If auto renewing subscription:
+				// 1- Take the one with latest 'originTransactionDateIOS'
+				// 2- Report that alone at the server
+				// Even after reporting and calling 'finishTransaction' and 'finishTransactionIOS',
+				// Unlike non-renew, it will still be present in this list.
+			});
+			// TODO: These are the purchases made successfully but failed to
+			// report at our server(createTransaction not success), may be try to report now?
+
+			// ISSUES when reporting to server from here:
+
+			// ISSUE 1: All transactions of auto-renewable subscription seem to be present
+			// here even after calling 'finishTransaction' and 'finishTransactionIOS'.
+			// Which will be an issue while reporting!!
+			// ISSUE 2: In future when user log into multiple accounts, there is a
+			// chance for the user to have purchased a subscription from one account,
+			// and report at server from another.(Made purchase from acc. 'A', failed report
+			// at server, hence finishTransaction not called, user switched to acc. 'B', prev. purchase
+			// made from acc 'A' gets reported now from here)
+		} catch (err) {
+			// Ignore
+		}
+	}
 
 	try {
 		await dispatch(getUserProfile());
+		await dispatch(getGateways());
+
+		dispatch(widgetAndroidConfigure());
+		dispatch(widgetiOSConfigure());
 	} catch (e) {
 		// Nothing much to do here
 	} finally {
@@ -242,10 +306,7 @@ actionsToPerformOnStart = async () => {
 			this.pushConf(false);
 		});
 
-		dispatch(widgetAndroidConfigure());
-		dispatch(widgetiOSConfigure());
 		dispatch(syncLiveApiOnForeground());
-		dispatch(getGateways());
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
@@ -258,6 +319,7 @@ actionsToPerformOnStart = async () => {
 			const gAPremProps = dispatch(prepareGAPremiumProperties());
 			setGAUserProperties(gAPremProps);
 		}
+		dispatch(setGatewayRelatedGAProperties());// NOTE: Make sure is called resolving getGateways
 
 		// test gateway local control end-point on app restart.
 		dispatch(initiateGatewayLocalTest());
@@ -274,17 +336,7 @@ actionsToPerformOnStart = async () => {
 		hasTriedAddLocation,
 	} = this.state;
 
-	if (!isDrawerOpen && !showLoadingIndicator && addNewGatewayBool && !hasTriedAddLocation && this.doesAllowsToOverrideScreen()) {
-		this.addNewLocation();
-	}
-
-	if (
-		!isDrawerOpen &&
-		!showLoadingIndicator &&
-		premiumAboutToExpire(subscriptions, pro) &&
-		visibilityProExpireHeadsup !== 'hide_perm' &&
-		this.doesAllowsToOverrideScreen()
-	) {
+	if (Platform.OS !== 'ios' && premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen');
 	}
@@ -369,6 +421,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'userId',
 		'screen',
 		'showLoadingIndicator',
+		'screen',
 	]);
 	if (propsChange) {
 		return true;
@@ -404,6 +457,27 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 	if (userId && prevProps.userId && (userId.trim().toLowerCase() !== prevProps.userId.trim().toLowerCase())) {
 		this.actionsToPerformOnStart();
 	}
+	this._askIfAddNewLocation();
+}
+
+_askIfAddNewLocation = () => {
+	const {
+		addNewGatewayBool,
+	} = this.props;
+	const { hasTriedAddLocation } = this.state;
+	if (addNewGatewayBool && this.doesAllowsToOverrideScreen() && !hasTriedAddLocation) {
+		this.setState({
+			hasTriedAddLocation: true,
+		}, () => {
+			navigate(
+				'InfoScreen',
+				{
+					info: 'add_gateway',
+				},
+				'InfoScreen',
+			);
+		});
+	}
 }
 
 componentWillUnmount() {
@@ -433,7 +507,7 @@ doesAllowsToOverrideScreen = (): boolean => {
 	return this.screensAllowsNavigationOrModalOverride.indexOf(screen) !== -1;
 }
 
-addNewLocation() {
+addNewLocation = () => {
 	this.setState({
 		addingNewLocation: true,
 		hasTriedAddLocation: true,
@@ -479,12 +553,9 @@ addNewDevice() {
 }
 
 addNewSensor = () => {
-	const { gateways, toggleDialogueBox, intl, locale } = this.props;
+	const { gateways } = this.props;
 	const filteredGateways = gateways.byId;
-	if (Object.keys(filteredGateways).length === 0) {
-		const dialogueData = prepareNo433MHzSupportDialogueData(intl.formatMessage, locale);
-		toggleDialogueBox(dialogueData);
-	} else {
+	if (Object.keys(filteredGateways).length > 0) {
 		const filteredAllIds = Object.keys(filteredGateways);
 		const gatewaysLen = filteredAllIds.length;
 
@@ -601,9 +672,10 @@ render(): Object {
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEulaMdal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen();
+	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen();
+	const showUA = showEulaModal && !showChangeLog;
 
-	const showLoadingIndicatorFinal = showLoadingIndicator && !showEulaMdal;
+	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA;
 
 	return (
 		<View style={{flex: 1}}>
@@ -616,7 +688,7 @@ render(): Object {
 					addNewDevice={this.addNewDevice}
 					addNewSensor={this.addNewSensor}
 					navigateToCampaign={this.navigateToCampaign}
-					toggleDrawerState={this.toggleDrawerState}/>
+					toggleDrawerState={this.toggleDrawerState}
 					hasGateways={gateways.didFetch && gateways.allIds.length > 0}/>
 			</View>
 
@@ -627,17 +699,17 @@ render(): Object {
 			/>
 			{screenReaderEnabled && (
 				<DimmerStep
-					showModal={showStep && !showEULA && !showChangeLog}
+					showModal={showStep && !showUA}
 					deviceId={deviceStep}
 					onDoneDimming={this.onDoneDimming}
 					intl={intl}
 				/>
 			)}
-			<UserAgreement showModal={showEulaMdal} onLayout={onLayout}/>
 			<SwitchAccountActionSheet
 				ref={this.setRefSwitchAccountActionSheet}/>
 			<TransparentFullPageLoadingIndicator
 				isVisible={showLoadingIndicatorFinal}/>
+			<UserAgreement showModal={showUA} onLayout={onLayout}/>
 		</View>
 	);
 }

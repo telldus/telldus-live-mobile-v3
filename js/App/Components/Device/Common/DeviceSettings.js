@@ -230,16 +230,18 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 				const { option } = settings[setting][vSet];
 
 				function onPressOne() {
-					dispatch(setWidgetParamCode({
+					let next = {
 						...code,
-						[vSet]: 1,
-					}));
+					};
+					next[vSet] = 1;
+					dispatch(setWidgetParamCode(next));
 				}
 				function onPressTwo() {
-					dispatch(setWidgetParamCode({
+					let next = {
 						...code,
-						[vSet]: 0,
-					}));
+					};
+					next[vSet] = 0;
+					dispatch(setWidgetParamCode(next));
 				}
 
 				const isOneSelected = code[vSet] === 1 || false;
@@ -273,10 +275,11 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 
 				const cUSet = units[uSet] || 0;
 				function onToggleCheckBox() {
-					dispatch(setWidgetParamUnits({
+					let next = {
 						...units,
-						[uSet]: cUSet === 1 ? 0 : 1,
-					}));
+					};
+					next[uSet] = cUSet === 1 ? 0 : 1;
+					dispatch(setWidgetParamUnits(next));
 				}
 
 				return (<USetting
@@ -312,22 +315,25 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 
 			const sSetting = Object.keys(settings[setting]).map((sSet: string, index: number): Object => {
 				function onPressOne() {
-					dispatch(setWidgetParamHouse({
+					let next = {
 						...houseObject,
-						[sSet]: '1',
-					}));
+					};
+					next[sSet] = '1';
+					dispatch(setWidgetParamHouse(next));
 				}
 				function onPressTwo() {
-					dispatch(setWidgetParamHouse({
+					let next = {
 						...houseObject,
-						[sSet]: '-',
-					}));
+					};
+					next[sSet] = '-';
+					dispatch(setWidgetParamHouse(next));
 				}
 				function onPressThree() {
-					dispatch(setWidgetParamHouse({
+					let next = {
 						...houseObject,
-						[sSet]: '0',
-					}));
+					};
+					next[sSet] = '0';
+					dispatch(setWidgetParamHouse(next));
 				}
 
 				const one = houseObject[sSet] || '-';
@@ -504,7 +510,7 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 					isSaving433MhzParams={isSaving433MhzParams}/>);
 			}
 		}
-		if (setting === 'home:unit') {
+		if (setting === 'house:unit') {
 			const {
 				optionValues,
 			} = settings[setting];
@@ -587,13 +593,15 @@ const DeviceSettings = React.memo<Object>((props: Props): Object => {
 			</Text>
 			{!!renderExtraSettingsTop && renderExtraSettingsTop()}
 			{Setting}
-			{(showScan && clientId) &&
+			{((showScan || !!learnButton) && clientId) &&
 			<View style={scanLearnCover}>
 				{!!learnButton && learnButton}
-				<ScanButton
+				{showScan && <ScanButton
 					clientId={clientId}
 					deviceId={deviceId}
-					devicetype={devicetype}/>
+					devicetype={devicetype}
+					disabled={isSaving433MhzParams}/>
+				}
 			</View>
 			}
 		</View>

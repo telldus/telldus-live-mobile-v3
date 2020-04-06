@@ -59,11 +59,8 @@ componentDidMount() {
 }
 
 onPressExit() {
-	const { navigation, route } = this.props;
-	const { params = {}} = route;
-	navigation.navigate('Devices', {
-		...params,
-	});
+	const { navigation } = this.props;
+	navigation.popToTop();
 }
 
 render(): Object {

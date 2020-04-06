@@ -84,6 +84,7 @@ onChooseType({module, action, secure}: Object) {
 			module,
 			action,
 			secure,
+			parent: 'devices_tab',
 		});
 	} else if (module === 'rf433') {
 		navigation.navigate('SelectModel433', {

@@ -174,6 +174,9 @@ export type Action =
 	| { type: 'SELECT_DASHBOARD', payload: Object }
 
 	| { type: 'CLEAR_APP_DATA' }
+	| { type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS', payload: Array<Object> }
+	| { type: 'UPDATE_STATUS_IAP_TRANSACTION', payload: Object }
+	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

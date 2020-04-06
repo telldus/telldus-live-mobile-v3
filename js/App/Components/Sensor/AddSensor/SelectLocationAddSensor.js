@@ -113,7 +113,7 @@ getPadding(): number {
 onChooseLocation(gateway: Object) {
 	const { navigation, route } = this.props;
 	const prevParams = route.params || {};
-	navigation.navigate('SensorsListAddSensor', {
+	navigation.navigate('SelectSensorType', {
 		...prevParams,
 		gateway,
 	});
@@ -142,7 +142,8 @@ render(): Object {
 			refreshing={this.state.isRefreshing}
 			keyExtractor={this.keyExtractor}
 			contentContainerStyle={{
-				marginVertical: padding - (padding / 4),
+				paddingTop: padding - (padding / 4),
+				paddingBottom: padding,
 			}}
 		/>
 	);

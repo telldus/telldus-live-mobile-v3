@@ -30,17 +30,11 @@ import { useSelector } from 'react-redux';
 
 import EmptyTabTemplate from './EmptyTabTemplate';
 
-import {
-	useDialogueBox,
-} from '../../../../Hooks/Dialoguebox';
 import i18n from '../../../../Translations/common';
 
 import {
 	navigate,
 } from '../../../../Lib/NavigationService';
-import {
-	prepareNo433MHzSupportDialogueData,
-} from '../../../../Lib/DeviceUtils';
 
 type Props = {
 };
@@ -58,16 +52,9 @@ const NoSensors = (props: Props): Object => {
 		formatMessage,
 	} = intl;
 
-	const {
-		toggleDialogueBoxState,
-	} = useDialogueBox();
-
 	const onPress = useCallback(() => {
 		const filteredGateways = byId;
-		if (Object.keys(filteredGateways).length === 0) {
-			const dialogueData = prepareNo433MHzSupportDialogueData(intl.formatMessage, locale);
-			toggleDialogueBoxState(dialogueData);
-		} else {
+		if (Object.keys(filteredGateways).length > 0) {
 			const filteredAllIds = Object.keys(filteredGateways);
 			const gatewaysLen = filteredAllIds.length;
 

@@ -62,6 +62,7 @@ const ScanButton = (props: Object): Object => {
 		deviceId,
 		callbackOnParamUpdate,
 		devicetype,
+		disabled,
 	} = props;
 
 	const intl = useIntl();
@@ -93,7 +94,7 @@ const ScanButton = (props: Object): Object => {
 		scanButtonCoverDef,
 		scanButtonTextDefStyle,
 		touchableStyleDef,
-	} = getStyles(layout);
+	} = getStyles(layout, disabled);
 
 	function onPress() {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
@@ -108,7 +109,7 @@ const ScanButton = (props: Object): Object => {
 		getScanButtonLabel(devicetype, formatMessage);
 
 	return (
-		<TouchableOpacity onPress={onPress} style={touchableStyleDef}>
+		<TouchableOpacity onPress={onPress} style={touchableStyleDef} disabled={disabled}>
 			<View style={[scanButtonCoverDef, scanButtonCover]}>
 				<Text style={[scanButtonTextDefStyle, scanButtonTextStyle]}>
 					{text.toUpperCase()}
@@ -118,7 +119,7 @@ const ScanButton = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, disabled: boolean): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -127,6 +128,7 @@ const getStyles = (appLayout: Object): Object => {
 		paddingFactor,
 		brandSecondary,
 		shadow,
+		btnDisabledBg,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -136,7 +138,7 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		scanButtonCoverDef: {
-			backgroundColor: brandSecondary,
+			backgroundColor: disabled ? btnDisabledBg : brandSecondary,
 			height: heightCover,
 			...shadow,
 			borderRadius: heightCover / 2,

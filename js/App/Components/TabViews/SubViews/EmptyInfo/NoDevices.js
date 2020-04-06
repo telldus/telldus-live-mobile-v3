@@ -66,7 +66,7 @@ const NoDevices = (props: Props): Object => {
 			headerText={formatMessage(i18n.messageNoDeviceTitle)}
 			bodyText={formatMessage(i18n.messageNoDeviceContentAddZ)}
 			isLoading={false}
-			icon={'device-alt'}/>
+			icon={'outlet'}/>
 	);
 };
 

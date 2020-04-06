@@ -51,6 +51,9 @@ export type State = {
 	accounts: Object,
 	userId: string,
 	activeDashboardId: string,
+	iapTransactionConfig: Object,
+	iapProducts: Array<Object>,
+	iapAvailablePurchases: Array<Object>,
 };
 
 export const initialState = {
@@ -76,6 +79,9 @@ export const initialState = {
 	accounts: {},
 	userId: '',
 	activeDashboardId: defaultDashboardId,
+	iapTransactionConfig: {},
+	iapProducts: [],
+	iapAvailablePurchases: [],
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -96,6 +102,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...action.payload.user,
 			showChangeLog: false,
 			visibilityProExpireHeadsup: nextVPEValue,
+			iapTransactionConfig: {},
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -529,6 +536,24 @@ export default function reduceUser(state: State = initialState, action: Action):
 			...state,
 			activeDashboardId: dashboardId,
 			accounts: newAccounts,
+		};
+	}
+	if (action.type === 'UPDATE_STATUS_IAP_TRANSACTION') {
+		return {
+			...state,
+			iapTransactionConfig: action.payload,
+		};
+	}
+	if (action.type === 'RECEIVED_IN_APP_PURCHASE_PRODUCTS') {
+		return {
+			...state,
+			iapProducts: action.payload,
+		};
+	}
+	if (action.type === 'RECEIVED_IN_APP_AVAILABLE_PURCHASES') {
+		return {
+			...state,
+			iapAvailablePurchases: action.payload,
 		};
 	}
 	return state;
