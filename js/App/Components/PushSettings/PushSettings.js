@@ -158,7 +158,7 @@ render(): Object {
 						disabled={isHuaweiBuild}/>
 				</View>
 			}
-			{(!!current && isHuaweiBuild) && (
+			{(!!current && !isHuaweiBuild) && (
 				<Text onPress={this.props.submitPushToken} style={buttonResubmit}>
 					{submitButText}
 				</Text>
