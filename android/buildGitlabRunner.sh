@@ -61,7 +61,7 @@ if [ "${DEPLOY_STORE}" == "huawei" ]; then
     cp "${AGCONNECT_SERVICES}" app/agconnect-services.json
 
 	# Use react-native-hms-map instead of react-native-maps for Huawei
-	git clone git@code.telldus.com:3rd-party/react-native-hms-map.git
+	git -C ../ clone react-native-maps@git@code.telldus.com:3rd-party/react-native-hms-map.git
 	yarn add react-native-maps "file:./react-native-hms-map"
 fi
 # TODO: Confirm and update the module link - "react-native-hms-map" Once it is open sourced
