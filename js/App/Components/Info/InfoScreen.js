@@ -45,6 +45,7 @@ type Props = {
 	screenProps: Object,
 	gateways: Object,
 	devices: Object,
+	route: Object,
 
     navigation: Object,
     dispatch: Function,
