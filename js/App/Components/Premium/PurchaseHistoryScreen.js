@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { SectionList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import groupBy from 'lodash/groupBy';
@@ -86,27 +86,33 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 		listData: [],
 	});
 	const { isLoading, listData } = screenData;
-	useEffect(() => {
-		getData();
-	}, []);
 
-	function getData() {
-		setScreenData({
-			isLoading: true,
-			listData,
-		});
-		dispatch(getUserTransactions()).then((history: Array<Object>) => {
+	const getData = useCallback(() => {
+		(() => {
 			setScreenData({
-				isLoading: false,
-				listData: prepareListData(history),
-			});
-		}).catch(() => {
-			setScreenData({
-				isLoading: false,
+				isLoading: true,
 				listData,
 			});
-		});
-	}
+			dispatch(getUserTransactions()).then((history: Array<Object>) => {
+				setScreenData({
+					isLoading: false,
+					listData: prepareListData(history),
+				});
+			}).catch(() => {
+				setScreenData({
+					isLoading: false,
+					listData,
+				});
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [listData]);
+
+
+	useEffect(() => {
+		getData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function getTypeAndMonth({type, quantity}: Object): Object {
 		const preS = `${'Premium access'}, `;

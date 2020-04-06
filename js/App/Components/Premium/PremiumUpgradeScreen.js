@@ -140,6 +140,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			successCallback,
 			errorCallback,
 		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	React.useEffect((): Function => {
