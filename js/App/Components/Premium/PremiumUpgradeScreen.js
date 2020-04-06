@@ -67,7 +67,7 @@ import {
 } from '../../Actions/Login';
 import {
 	withInAppPurchaseListeners,
-	withIAPSuccessFailureHandle,
+	useIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
@@ -138,13 +138,14 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	const {
 		successCallback,
 		errorCallback,
-	} = withIAPSuccessFailureHandle();
+	} = useIAPSuccessFailureHandle();
 
 	let { clearListeners } = React.useMemo((): Object => {
 		return withInAppPurchaseListeners({
 			successCallback,
 			errorCallback,
 		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	React.useEffect((): Function => {
