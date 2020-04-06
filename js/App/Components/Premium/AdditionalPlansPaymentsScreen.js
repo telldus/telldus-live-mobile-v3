@@ -63,7 +63,7 @@ import {
 } from '../../Actions/Login';
 
 import {
-	useInAppPurchaseListeners,
+	withInAppPurchaseListeners,
 	withIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
@@ -200,7 +200,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	} = withIAPSuccessFailureHandle();
 
 	React.useEffect((): Function => {
-		const { clearListeners } = useInAppPurchaseListeners({
+		const { clearListeners } = withInAppPurchaseListeners({
 			successCallback,
 			errorCallback,
 		});

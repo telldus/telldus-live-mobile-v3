@@ -61,7 +61,7 @@ import {
 	getUserProfile,
 } from '../../Actions/Login';
 import {
-	useInAppPurchaseListeners,
+	withInAppPurchaseListeners,
 	withIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
@@ -136,7 +136,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	} = withIAPSuccessFailureHandle();
 
 	let { clearListeners } = React.useMemo((): Object => {
-		return useInAppPurchaseListeners({
+		return withInAppPurchaseListeners({
 			successCallback,
 			errorCallback,
 		});
@@ -147,10 +147,11 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			'didFocus',
 			(payload: Object) => {
 				if (!clearListeners) {
-					const listenerData = useInAppPurchaseListeners({
+					const listenerData = withInAppPurchaseListeners({
 						successCallback,
 						errorCallback,
 					});
+					// eslint-disable-next-line react-hooks/exhaustive-deps
 					clearListeners = listenerData.clearListeners;
 				}
 			}

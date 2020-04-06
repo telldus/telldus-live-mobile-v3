@@ -36,7 +36,7 @@ import {
 	updateStatusIAPTransaction,
 } from '../Actions/User';
 
-const useInAppPurchaseListeners = ({
+const withInAppPurchaseListeners = ({
 	successCallback,
 	errorCallback,
 }: {successCallback?: Function, errorCallback?: Function}): Object => {
@@ -102,6 +102,6 @@ const withIAPSuccessFailureHandle = (): Object => {
 };
 
 module.exports = {
-	useInAppPurchaseListeners,
+	withInAppPurchaseListeners,
 	withIAPSuccessFailureHandle,
 };
