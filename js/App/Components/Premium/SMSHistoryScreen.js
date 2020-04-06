@@ -110,7 +110,7 @@ const SMSHistoryScreen = (props: Object): Object => {
 	useEffect(() => {
 		getData();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [listData]);
+	}, []);
 
 	function getStatus(n: number): Object {
 		switch (n) {
