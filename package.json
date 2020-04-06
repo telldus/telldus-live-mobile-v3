@@ -105,6 +105,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-flowtype": "^3.10.3",
     "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^3.0.0",
     "fetch-mock": "^7.3.1",
     "flow-bin": "^0.98.0",
     "identity-obj-proxy": "^3.0.0",
