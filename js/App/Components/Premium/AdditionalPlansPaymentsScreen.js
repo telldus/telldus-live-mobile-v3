@@ -64,7 +64,6 @@ import {
 
 import {
 	withInAppPurchaseListeners,
-	useInAppPurchaseListeners,
 	withIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
@@ -206,6 +205,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 			errorCallback,
 		});
 		return clearListeners;
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	async function requestIapSubscription(id: string) {

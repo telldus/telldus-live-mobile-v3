@@ -37,7 +37,7 @@ function setUserIdentifierFirebaseCrashlytics(): ThunkAction {
 
 		let id = email;
 		if (!reportCrash) {
-			id = null;
+			id = '';
 		}
 		setUserIdentifier(id);
 	};
