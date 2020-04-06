@@ -215,7 +215,6 @@ async componentDidMount() {
 actionsToPerformOnStart = async () => {
 	const {
 		dispatch,
-		addNewGatewayBool,
 		subscriptions,
 		pro,
 		visibilityProExpireHeadsup,
@@ -333,10 +332,16 @@ actionsToPerformOnStart = async () => {
 
 	const {
 		isDrawerOpen,
-		hasTriedAddLocation,
 	} = this.state;
 
-	if (Platform.OS !== 'ios' && premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
+	if (
+		Platform.OS !== 'ios' &&
+		!isDrawerOpen &&
+		!showLoadingIndicator &&
+		premiumAboutToExpire(subscriptions, pro) &&
+		visibilityProExpireHeadsup !== 'hide_perm' &&
+		this.doesAllowsToOverrideScreen()
+	) {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
 		navigate('PremiumUpgradeScreen');
 	}
@@ -463,9 +468,15 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 _askIfAddNewLocation = () => {
 	const {
 		addNewGatewayBool,
+		showLoadingIndicator,
 	} = this.props;
 	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && this.doesAllowsToOverrideScreen() && !hasTriedAddLocation) {
+	if (
+		addNewGatewayBool &&
+		this.doesAllowsToOverrideScreen() &&
+		!hasTriedAddLocation &&
+		!showLoadingIndicator
+	) {
 		this.setState({
 			hasTriedAddLocation: true,
 		}, () => {
