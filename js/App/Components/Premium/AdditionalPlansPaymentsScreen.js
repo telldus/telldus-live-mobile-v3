@@ -64,7 +64,7 @@ import {
 
 import {
 	withInAppPurchaseListeners,
-	withIAPSuccessFailureHandle,
+	useIAPSuccessFailureHandle,
 } from '../../Hooks/IAP';
 
 import Theme from '../../Theme';
@@ -197,7 +197,7 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const {
 		successCallback,
 		errorCallback,
-	} = withIAPSuccessFailureHandle();
+	} = useIAPSuccessFailureHandle();
 
 	React.useEffect((): Function => {
 		const { clearListeners } = withInAppPurchaseListeners({

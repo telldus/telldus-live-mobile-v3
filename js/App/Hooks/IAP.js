@@ -71,7 +71,7 @@ const withInAppPurchaseListeners = ({
 	};
 };
 
-const withIAPSuccessFailureHandle = (): Object => {
+const useIAPSuccessFailureHandle = (): Object => {
 
 	const dispatch = useDispatch();
 
@@ -103,5 +103,5 @@ const withIAPSuccessFailureHandle = (): Object => {
 
 module.exports = {
 	withInAppPurchaseListeners,
-	withIAPSuccessFailureHandle,
+	useIAPSuccessFailureHandle,
 };
