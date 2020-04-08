@@ -67,9 +67,9 @@ class FormContainerComponent extends View<Props, null> {
 						style={{ flex: 1 }}
 						contentContainerStyle={styles.contentContainerStyle}>
 						<KeyboardAvoidingView
-							behavior="padding"
+							behavior="position"
 							style={{ justifyContent: 'center', alignItems: 'center' }}
-							contentContainerStyle={{ paddingTop: 20, justifyContent: 'center' }}>
+							contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}>
 							<Image
 								source={this.logo}
 								style={styles.logoStyle}
