@@ -251,15 +251,19 @@ class GeoPosition extends View {
 			};
 			this.props.toggleDialogueBox(dialogueData);
 		}
-		this.setState({
-			showList: false,
-		});
+		if (this.state.showList) {
+			this.setState({
+				showList: false,
+			});
+		}
 	}
 
-	onChangeTextCity() {
-		this.setState({
-			showList: true,
-		});
+	onChangeTextCity = () => {
+		if (!this.state.showList) {
+			this.setState({
+				showList: true,
+			});
+		}
 	}
 
 	render(): Object {
@@ -273,7 +277,9 @@ class GeoPosition extends View {
 					placeholder=""
 					minLength={2} // minimum length of text to search
 					autoFocus={false}
-					onChangeText={this.onChangeTextCity}
+					textInputProps={{
+						onChangeText: this.onChangeTextCity,
+					}}
 					listViewDisplayed={showList}
 					returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
 					fetchDetails={true}
