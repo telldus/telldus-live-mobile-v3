@@ -104,22 +104,32 @@ onChooseType({module, action, secure}: Object) {
 }
 
 getDeviceTypes(): Array<any> {
-	const { navigation, intl } = this.props, types = [];
+	const { navigation, intl } = this.props;
 	const { formatMessage, formatNumber } = intl;
 	const gateway = navigation.getParam('gateway', {});
 	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 
-	transportsAsArray.map((ts: string) => {
-		const availableTypes = getAvailableDeviceTypesAndInfo(formatMessage, formatNumber, true)[ts];
+	let types = {};
+	const availableDeviceTypes = getAvailableDeviceTypesAndInfo(formatMessage, formatNumber, true);
+	transportsAsArray.map((ts: string = '') => {
+		const availableTypes = availableDeviceTypes[ts.trim()];
 		if (availableTypes) {
-			types.push(...availableTypes);
+			types = {
+				...types,
+				...availableTypes.reduce((acc: Object, item: Object): Object => {
+					acc[item.id] = item;
+					return acc;
+				}, {}),
+			};
 		}
 	});
 	let finalTypes = [];
-	types.map((i: Object) => {
-		if (i.type !== 'sensor') {
-			finalTypes.push(i);
+	Object.keys(types).forEach((i: Object) => {
+		if (types[i].type !== 'sensor') {
+			finalTypes.push({
+				...types[i],
+			});
 		}
 	});
 	return finalTypes;
