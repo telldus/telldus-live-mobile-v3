@@ -82,7 +82,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
-	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
+	const isIos = Platform.OS === 'ios';
+
+	const premAboutExpire = premiumAboutToExpire(subscriptions, pro) && !isIos;
 	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
 
 	const {
@@ -118,8 +120,6 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		formatNumber,
 		formatDate,
 	} = useIntl();
-
-	const isIos = Platform.OS === 'ios';
 
 	const index = isIos ? 2 : 0;
 	const {
