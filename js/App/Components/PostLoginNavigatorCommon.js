@@ -61,7 +61,6 @@ import {
 	setGatewayRelatedGAProperties,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
-	reportIapAtServer,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
