@@ -27,6 +27,10 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import {
+	Platform,
+} from 'react-native';
+
+import {
 	SettingsRow,
 	Text,
 	View,
@@ -50,6 +54,8 @@ const SMSBlock = (props: Object): Object => {
 		navigation,
 		enablePurchase,
 	} = props;
+
+	const isIos = Platform.OS === 'ios';
 
 	const intl = useIntl();
 	const {
@@ -91,14 +97,14 @@ const SMSBlock = (props: Object): Object => {
 					value={`${credits}`}
 					appLayout={layout}
 					iconValueRight={
-						enablePurchase ?
+						(enablePurchase && !isIos) ?
 							<Text style={buyCreditsStyle}>
 								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.buyCredits))}
 							</Text>
 							:
 							undefined
 					}
-					onPressIconValueRight={enablePurchase ? onPressBuyCredits : undefined}
+					onPressIconValueRight={(enablePurchase && !isIos) ? onPressBuyCredits : undefined}
 					onPress={false}
 					intl={intl}
 					style={style}
