@@ -177,7 +177,7 @@ async componentDidMount() {
 		try {
 			await RNIap.initConnection();
 			let productIds = [];
-			getSubscriptionPlans().forEach((plans: Object): string => {
+			getSubscriptionPlans().forEach((plans: Object) => {
 				if (plans.productIdIap) {
 					productIds.push(plans.productIdIap);
 				}

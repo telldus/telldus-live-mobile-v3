@@ -258,7 +258,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	const {
 		renewalText,
 		smsCreditText,
-	 } = React.useMemo((): string => {
+	 } = React.useMemo((): Object => {
 		if (isIos) {
 			if (product === 'promonth') {
 				return {
