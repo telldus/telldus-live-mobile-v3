@@ -175,6 +175,8 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		}
 	}
 
+	const isIos = Platform.OS === 'ios';
+
 	function onPress() {
 		const credits = smsCredit;
 		const { name: paymentProvider } = getPaymentOptions(formatMessage)[index];
@@ -187,7 +189,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			returnUrl: 'telldus-live-mobile-common',
 		};
 
-		if (Platform.OS === 'ios') {
+		if (isIos) {
 			requestIapSubscription(product);
 		} else {
 			dispatch(createTransaction(options, true)).then((response: Object) => {
@@ -321,11 +323,12 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					style={buttonStyle}
 					disabled={onGoing}
 				/>
-				<AdditionalPlansPayments
+				{!isIos && <AdditionalPlansPayments
 					navigation={navigation}
 					button={false}
 					linkTextStyle={linkTextStyle}
 					onPressNavigate={clearListenersIAP}/>
+				}
 				<ViewPremiumBenefitsButton
 					navigation={navigation}
 					button={false}
