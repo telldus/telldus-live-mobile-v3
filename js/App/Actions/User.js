@@ -32,7 +32,7 @@ const { User } = actions;
 
 import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
-import { LiveApi } from '../Lib';
+import { LiveApi, getSubscriptionPlans } from '../Lib';
 import { setBoolean } from '../Lib/Analytics';
 
 const prepareDeviceId = (deviceId: string = ''): string => {
@@ -345,21 +345,37 @@ const onReceivedInAppAvailablePurchases = (products: Array<Object>): Action => {
 	};
 };
 
-function reportIapAtServer(purchaseInfo: Object): ThunkAction {
+function reportIapAtServer(purchaseInfoIap: Object, otherInfo?: Object = {}): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
+
+		let product = '';
+		getSubscriptionPlans().forEach((plans: Object) => {
+			const {
+				productIdIap,
+			} = plans;
+			if (productIdIap && productIdIap.trim() === purchaseInfoIap.productId) {
+				product = plans.product;
+			}
+		});
+
 		return dispatch(createTransaction({
-			purchaseInfo: JSON.stringify(purchaseInfo),
+			purchaseInfo: JSON.stringify(purchaseInfoIap),
 			paymentProvider: 'apple',
+			quantity: 1,
+			returnUrl: 'telldus-live-mobile-common',
+			product,
+			subscription: purchaseInfoIap.productId === 'credits' ? 0 : 1,
+			...otherInfo,
 		}, true)).then((response: Object): Object => {
-			if (response && response.status && response.status === 'success') {
+			if (response && response.id) {
 				try {
 					// Tell the store that you have delivered what has been paid for.
 					// Failure to do this will result in the purchase being refunded on Android and
 					// the purchase event will reappear on every relaunch of the app until you succeed
 					// in doing the below. It will also be impossible for the user to purchase consumables
 					// again untill you do this.
-					RNIap.finishTransactionIOS(purchaseInfo.transactionId);
-					RNIap.finishTransaction(purchaseInfo, false);
+					RNIap.finishTransactionIOS(purchaseInfoIap.transactionId);
+					RNIap.finishTransaction(purchaseInfoIap, false);
 				} catch (err) {
 					// Ignore
 				} finally {

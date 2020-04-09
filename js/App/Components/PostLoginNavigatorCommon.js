@@ -76,6 +76,7 @@ import {
 	shouldUpdate,
 	navigate,
 	premiumAboutToExpire,
+	getSubscriptionPlans,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -191,9 +192,14 @@ async componentDidMount() {
 	if (Platform.OS === 'ios') {
 		try {
 			await RNIap.initConnection();
-			// TODO: Get the products(id) from appUtils/getSubscriptionPlans
+			let productIds = [];
+			getSubscriptionPlans().forEach((plans: Object): string => {
+				if (plans.productIdIap) {
+					productIds.push(plans.productIdIap);
+				}
+			});
 			const subs = Platform.select({
-				ios: ['premium1m', 'onlytest'],
+				ios: productIds,
 			});
 			const products = await RNIap.getSubscriptions(subs);
 			dispatch(onReceivedInAppPurchaseProducts(products));
@@ -201,17 +207,17 @@ async componentDidMount() {
 			const purchases = await RNIap.getAvailablePurchases() || [];// Those not called 'finishTransaction' post-purchase
 			dispatch(onReceivedInAppAvailablePurchases(purchases));
 			purchases.forEach((purchase: Object) => {
-				const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
-				const {
-					productId,
-				} = purchase;
+				// const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
+				// const {
+				// 	productId,
+				// } = purchase;
 
 				// Fix for ISSUE 1 reported below. But with a cost one unnecessary
 				// API call/report(auto renewing subscription).
-				const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
-				if (!isAutoRenewing) {
-					dispatch(reportIapAtServer(purchase));
-				}
+				// const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
+				// if (!isAutoRenewing) {
+				// 	dispatch(reportIapAtServer(purchase));
+				// }
 				// TODO: If auto renewing subscription:
 				// 1- Take the one with latest 'originTransactionDateIOS'
 				// 2- Report that alone at the server
