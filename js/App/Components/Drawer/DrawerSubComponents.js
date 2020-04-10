@@ -22,6 +22,9 @@
 
 'use strict';
 import React from 'react';
+import {
+	Linking,
+} from 'react-native';
 
 import {
 	FormattedMessage,
@@ -31,6 +34,7 @@ import {
 	Image,
 	IconTelldus,
 	RippleButton,
+	EmptyView,
 } from '../../../BaseComponents';
 import Theme from '../../Theme';
 
@@ -84,9 +88,46 @@ const SettingsButton = ({ onPress, styles }: Object): Object => (
 	</RippleButton>
 );
 
+const TestIapLink = ({styles, appDrawerBanner}: Object): Object => {
+	const {
+		image = 'https://cdn.live.telldus.com/campaigns/20200121_premium15.jpg',
+		link = 'https://live.telldus.com/profile/campaigns',
+	} = appDrawerBanner ? appDrawerBanner : {};
+
+	const onPress = React.useCallback(() => {
+		Linking.canOpenURL(link)
+			.then((supported: boolean): any => {
+				if (!supported) {
+					console.error('Error open link', link);
+				} else {
+					return Linking.openURL(link);
+				}
+			})
+			.catch((err: any) => {
+				console.error(err);
+			});
+	}, [link]);
+
+	if (!link) {
+		return <EmptyView/>;
+	}
+
+	return (
+		<RippleButton
+			style={styles.iapTestCoverStyle}
+			onPress={onPress}>
+			<Image
+				style={styles.iapTestImageStyle}
+				source={{uri: image}}
+				resizeMode={'contain'}/>
+		</RippleButton>
+	);
+};
+
 module.exports = {
 	SettingsButton,
 	ConnectedLocations,
 	NavigationHeader,
 	AddLocation,
+	TestIapLink,
 };

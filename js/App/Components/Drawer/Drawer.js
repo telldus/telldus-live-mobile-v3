@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { createSelector } from 'reselect';
@@ -35,6 +35,7 @@ import {
 	ConnectedLocations,
 	NavigationHeader,
 	AddLocation,
+	TestIapLink,
 } from './DrawerSubComponents';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
@@ -45,6 +46,7 @@ type Props = {
 gateways: Array<Object>,
 appLayout: Object,
 isOpen: boolean,
+appDrawerBanner?: Object,
 
 userProfile: Function,
 onOpenSetting: Function,
@@ -55,6 +57,8 @@ dispatch: Function,
 
 type State = {
 	hasStatusBar: boolean,
+	iapTestImageWidth: number,
+	iapTestImageheight: number,
 };
 
 class Drawer extends View<Props, State> {
@@ -67,9 +71,12 @@ constructor(props: Props) {
 	super(props);
 	this.state = {
 		hasStatusBar: false,
+		iapTestImageWidth: 0,
+		iapTestImageheight: 0,
 	};
 
 	this._hasStatusBar();
+	this.setBannerImageDimensions();
 }
 
 _hasStatusBar = async () => {
@@ -77,6 +84,42 @@ _hasStatusBar = async () => {
 	this.setState({
 		hasStatusBar: _hasStatusBar,
 	});
+}
+
+setBannerImageDimensions = () => {
+	const {
+		appLayout,
+	} = this.props;
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const drawerWidth = getDrawerWidth(deviceWidth);
+
+	let iapTestImageWidth = drawerWidth - 25;
+	let iapTestImageheight = iapTestImageWidth * 0.3;
+	const {
+		appDrawerBanner,
+	} = this.props;
+	const {
+		image = 'https://cdn.live.telldus.com/campaigns/20200121_premium15.jpg',
+	} = appDrawerBanner ? appDrawerBanner : {};
+	if (image) {
+		Image.getSize(image, (w: number, h: number) => {
+			if (w && h) {
+				const ratio = w / h;
+				iapTestImageheight = iapTestImageWidth / ratio;
+			}
+			this.setState({
+				iapTestImageWidth,
+				iapTestImageheight,
+			});
+		}, () => {
+			this.setState({
+				iapTestImageWidth,
+				iapTestImageheight,
+			});
+		});
+	}
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -91,7 +134,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile']);
+		const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile', 'appDrawerBanner']);
 		if (propsChange) {
 			return true;
 		}
@@ -111,6 +154,7 @@ render(): Object {
 		appLayout,
 		onPressGateway,
 		dispatch,
+		appDrawerBanner,
 	} = this.props;
 	const styles = this.getStyles(appLayout);
 
@@ -134,6 +178,9 @@ render(): Object {
 				})}
 				<AddLocation onPress={addNewLocation} styles={styles}/>
 				<SettingsButton onPress={onOpenSetting} styles={styles}/>
+				<TestIapLink
+					appDrawerBanner={appDrawerBanner}
+					styles={styles}/>
 			</View>
 		</ScrollView>
 	);
@@ -156,7 +203,7 @@ getStyles(appLayout: Object): Object {
 	return {
 		navigationHeader: {
 			height: deviceHeight * 0.197,
-			width: isPortrait ? width * 0.6 : height * 0.6,
+			width: drawerWidth,
 			minWidth: 250,
 			backgroundColor: 'rgba(26,53,92,255)',
 			marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
@@ -194,7 +241,7 @@ getStyles(appLayout: Object): Object {
 		settingsCover: {
 			flexDirection: 'row',
 			paddingVertical: 5 + (fontSizeRow * 0.5),
-			marginLeft: 12,
+			marginLeft: 15,
 			alignItems: 'center',
 		},
 		iconAddLocSize: fontSizeAddLocText * 1.2,
@@ -226,6 +273,16 @@ getStyles(appLayout: Object): Object {
 			color: '#e26901',
 			marginLeft: 10,
 		},
+		iapTestCoverStyle: {
+			flexDirection: 'row',
+			marginBottom: 5 + (fontSizeRow * 0.5),
+			marginLeft: 15,
+			alignItems: 'center',
+		},
+		iapTestImageStyle: {
+			width: this.state.iapTestImageWidth,
+			height: this.state.iapTestImageheight,
+		},
 	};
 }
 }
@@ -238,10 +295,14 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
+	const {
+		appDrawerBanner,
+	} = store.user;
 
 	return {
 		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
+		appDrawerBanner,
 	};
 }
 
