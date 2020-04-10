@@ -118,7 +118,7 @@ getDeviceTypes(): Array<any> {
 			types = {
 				...types,
 				...availableTypes.reduce((acc: Object, item: Object): Object => {
-					acc[item.id] = item;
+					acc[item.uuid] = item;
 					return acc;
 				}, {}),
 			};
