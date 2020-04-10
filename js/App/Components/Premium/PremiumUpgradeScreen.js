@@ -83,10 +83,13 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		userProfile,
 		visibilityProExpireHeadsup,
 		iapTransactionConfig = {},
+		iapProducts = [],
 	} = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
-	const premAboutExpire = premiumAboutToExpire(subscriptions, pro);
+	const isIos = Platform.OS === 'ios';
+
+	const premAboutExpire = premiumAboutToExpire(subscriptions, pro) && !isIos;
 	const isHeadsUp = visibilityProExpireHeadsup === 'show' && premAboutExpire;
 
 	const {
@@ -123,7 +126,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		formatDate,
 	} = useIntl();
 
-	const index = 0;
+	const index = isIos ? 2 : 0;
 	const {
 		cPerMonth,
 		smsCredit,
@@ -131,7 +134,15 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		prevTotal,
 		newTotal,
 		product,
+		productIdIap,
 	} = getSubscriptionPlans()[index];
+
+	let iapPrice;
+	iapProducts.forEach((p: Object) => {
+		if (productIdIap && p.productId === productIdIap) {
+			iapPrice = p.localizedPrice;
+		}
+	});
 
 	const dispatch = useDispatch();
 
@@ -181,20 +192,20 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	}
 
 	function onPress() {
-		const credits = smsCredit;
-		const { name: paymentProvider } = getPaymentOptions(formatMessage)[index];
-		const quantity = 1;
-		const options = {
-			product,
-			quantity,
-			subscription: 1,
-			paymentProvider,
-			returnUrl: 'telldus-live-mobile-common',
-		};
-
-		if (Platform.OS === 'ios') {
-			requestIapSubscription(product);
+		if (isIos) {
+			requestIapSubscription(productIdIap);
 		} else {
+			const credits = smsCredit;
+			const { name: paymentProvider } = getPaymentOptions(formatMessage)[0];
+			const quantity = 1;
+			const options = {
+				product,
+				quantity,
+				subscription: 1,
+				paymentProvider,
+				returnUrl: 'telldus-live-mobile-common',
+			};
+
 			dispatch(createTransaction(options, true)).then((response: Object) => {
 				if (response && response.id && response.url) {
 					navigation.navigate('TransactionWebview', {
@@ -251,6 +262,33 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		}
 	}
 
+	const {
+		renewalText,
+		smsCreditText,
+	 } = React.useMemo((): Object => {
+		if (isIos) {
+			if (product === 'promonth') {
+				return {
+					renewalText: formatMessage(i18n.automaticallyRenewMonth),
+					smsCreditText: formatMessage(i18n.includingSMSPM, {
+						value: smsCredit,
+					}),
+				};
+			}
+		}
+		return {
+			renewalText: formatMessage(i18n.automaticallyRenew),
+			smsCreditText: formatMessage(i18n.includingSMS, {
+				value: smsCredit,
+			}),
+		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [product, isIos, smsCredit]);
+
+	const pricePerMon = isIos && iapPrice ? iapPrice : `€${formatNumber(cPerMonth, {
+		minimumFractionDigits: cPerMonth === 3 ? 0 : 2,
+	})}`;
+
 	return (
 		<View style={container}>
 			<NavigationHeaderPoster
@@ -287,36 +325,34 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						{header}
 					</View>
 					<Text style={pMonthTextStyle}>
-						{`€${formatNumber(cPerMonth, {
-							minimumFractionDigits: cPerMonth === 3 ? 0 : 2,
-						})}/${formatMessage(i18n.month)}`}
+						{`${pricePerMon}/${formatMessage(i18n.month)}`}
 					</Text>
-					<Text style={annualChargeTextStyle}>
+					{cPerMonth !== newTotal && <Text style={annualChargeTextStyle}>
 						{formatMessage(i18n.billedAnnually, {
 							value: `€${formatNumber(newTotal)}`,
 						})}
 					</Text>
+					}
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
 						<Text style={smsCreditTextStyle}>
-							{formatMessage(i18n.includingSMS, {
-								value: smsCredit,
-							})}
+							{smsCreditText}
 						</Text>
 					</View>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8}}>
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
 							{`€${formatNumber(prevTotal)}`}
 						</Text>}
-						<Text style={newChargeTextStyle}>
+						{cPerMonth !== newTotal && <Text style={newChargeTextStyle}>
 							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
+						}
 					</View>
 					{!!save && <Text style={saveTextStyle}>
 						{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
 					</Text>}
 					<Text style={autoRenewInfoStyle}>
-						{formatMessage(i18n.automaticallyRenew)}
+						{renewalText}
 					</Text>
 				</View>
 				<TouchableButton
@@ -328,11 +364,12 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					style={buttonStyle}
 					disabled={onGoing}
 				/>
-				<AdditionalPlansPayments
+				{!isIos && <AdditionalPlansPayments
 					navigation={navigation}
 					button={false}
 					linkTextStyle={linkTextStyle}
 					onPressNavigate={clearListenersIAP}/>
+				}
 				<ViewPremiumBenefitsButton
 					navigation={navigation}
 					button={false}

@@ -61,13 +61,10 @@ if [ "${DEPLOY_STORE}" == "huawei" ]; then
     cp "${AGCONNECT_SERVICES}" app/agconnect-services.json
 
 	# Use react-native-hms-map instead of react-native-maps for Huawei
-	mkdir ../react-native-maps
-	echo "module.exports = require('react-native-hms-map');" > ../react-native-maps/index.js
-
-	yarn add react-native-hms-map "file:./react-native-hms-map"
-	yarn add react-native-maps "file:./react-native-maps"
+	git -C ../ clone git@code.telldus.com:3rd-party/react-native-hms-map.git
+	yarn add react-native-maps@"file:./react-native-hms-map"
 fi
-# Confirm and update the module name - "react-native-hms-map".
+# TODO: Confirm and update the module link - "react-native-hms-map" Once it is open sourced
 # As of now it is a different module available by this name at NPM
 
 ./gradlew clean

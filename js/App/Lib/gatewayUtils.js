@@ -24,6 +24,9 @@
 import Theme from '../Theme';
 import i18n from '../Translations/common';
 
+import { utils } from 'live-shared-data';
+const { gatewayUtils } = utils;
+
 function getControlIconColorLabel(isOnline: boolean, websocketOnline: boolean, supportLocalControl: boolean, formatMessage: Function): Object {
 	const { locationOffline, locationOnline, locationNoLiveUpdates } = Theme.Core;
 
@@ -66,4 +69,5 @@ function getControlIconColorLabel(isOnline: boolean, websocketOnline: boolean, s
 
 module.exports = {
 	getControlIconColorLabel,
+	...gatewayUtils,
 };

@@ -67,7 +67,6 @@ import {
 	setGatewayRelatedGAProperties,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
-	reportIapAtServer,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -77,6 +76,9 @@ import {
 	widgetiOSConfigure,
 } from '../Actions/Widget';
 import Push from './Push';
+import {
+	deployStore,
+} from '../../Config';
 
 import {
 	getRSAKey,
@@ -84,6 +86,7 @@ import {
 	navigate,
 	premiumAboutToExpire,
 	setGAUserProperties,
+	getSubscriptionPlans,
 } from '../Lib';
 
 import i18n from '../Translations/common';
@@ -234,9 +237,14 @@ actionsToPerformOnStart = async () => {
 	if (Platform.OS === 'ios') {
 		try {
 			await RNIap.initConnection();
-			// TODO: Get the products(id) from appUtils/getSubscriptionPlans
+			let productIds = [];
+			getSubscriptionPlans().forEach((plans: Object) => {
+				if (plans.productIdIap) {
+					productIds.push(plans.productIdIap);
+				}
+			});
 			const subs = Platform.select({
-				ios: ['premium1m', 'onlytest'],
+				ios: productIds,
 			});
 			const products = await RNIap.getSubscriptions(subs);
 			dispatch(onReceivedInAppPurchaseProducts(products));
@@ -244,17 +252,17 @@ actionsToPerformOnStart = async () => {
 			const purchases = await RNIap.getAvailablePurchases() || [];// Those not called 'finishTransaction' post-purchase
 			dispatch(onReceivedInAppAvailablePurchases(purchases));
 			purchases.forEach((purchase: Object) => {
-				const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
-				const {
-					productId,
-				} = purchase;
+				// const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
+				// const {
+				// 	productId,
+				// } = purchase;
 
 				// Fix for ISSUE 1 reported below. But with a cost one unnecessary
 				// API call/report(auto renewing subscription).
-				const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
-				if (!isAutoRenewing) {
-					dispatch(reportIapAtServer(purchase));
-				}
+				// const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
+				// if (!isAutoRenewing) {
+				// 	dispatch(reportIapAtServer(purchase));
+				// }
 				// TODO: If auto renewing subscription:
 				// 1- Take the one with latest 'originTransactionDateIOS'
 				// 2- Report that alone at the server
@@ -288,22 +296,24 @@ actionsToPerformOnStart = async () => {
 	} catch (e) {
 		// Nothing much to do here
 	} finally {
-		dispatch(getPhonesList()).then((phonesList: Object) => {
-			const register = (!phonesList.phone) || (phonesList.phone.length === 0);
-			this.pushConf(register);
-			if (
-				!this.state.isDrawerOpen &&
-				!this.props.pushTokenRegistered &&
-				!this.props.showLoadingIndicator &&
-				phonesList.phone &&
-				phonesList.phone.length > 0 &&
-				this.doesAllowsToOverrideScreen()
-			) {
-				navigate('RegisterForPushScreen');
-			}
-		}).catch(() => {
-			this.pushConf(false);
-		});
+		if (deployStore !== 'huawei') {
+			dispatch(getPhonesList()).then((phonesList: Object) => {
+				const register = (!phonesList.phone) || (phonesList.phone.length === 0);
+				this.pushConf(register);
+				if (
+					!this.state.isDrawerOpen &&
+					!this.props.pushTokenRegistered &&
+					!this.props.showLoadingIndicator &&
+					phonesList.phone &&
+					phonesList.phone.length > 0 &&
+					this.doesAllowsToOverrideScreen()
+				) {
+					navigate('RegisterForPushScreen');
+				}
+			}).catch(() => {
+				this.pushConf(false);
+			});
+		}
 
 		dispatch(syncLiveApiOnForeground());
 		dispatch(getAppData()).then(() => {

@@ -129,7 +129,7 @@ export default class TelldusLocalStorage {
 				description = '', color = '', icon = '', deviceClass = '' } = history[key];
 
 			stateValue = stateValue.toString();
-			stateValue = stateValue.replace(/"/g, '').replace(/ /g, '').trim();
+			stateValue = stateValue.replace(/"/g, '\'').replace(/ /g, '').trim();
 
 			query.push(`${'REPLACE INTO DeviceHistory1_1 '
 			+ '( ts, '

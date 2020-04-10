@@ -105,6 +105,7 @@ google_play:
 huawei_app_gallery:
   image: ruby:2
   stage: release
+  when: manual
   tags:
     - docker
   dependencies:
@@ -112,8 +113,6 @@ huawei_app_gallery:
   environment:
     name: huawei_app_gallery
     url: https://huaweimobileservices.com/appgallery/
-  only:
-    - tags
   script:
     - bundle install
     - fastlane android huawei --verbose

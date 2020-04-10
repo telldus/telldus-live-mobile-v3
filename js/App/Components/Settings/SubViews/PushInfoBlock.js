@@ -36,6 +36,10 @@ import {
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
 
+import {
+	deployStore,
+} from '../../../../Config';
+
 const PushInfoBlock = (props: Object): Object => {
 	const { navigation, submitPushToken, isPushSubmitLoading } = props;
 	const { formatMessage } = useIntl();
@@ -58,6 +62,8 @@ const PushInfoBlock = (props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const isHuaweiBuild = deployStore === 'huawei';
+
 	const submitButText = isPushSubmitLoading ? `${formatMessage(i18n.pushRegisters)}...` : formatMessage(i18n.pushReRegisterPush);
 
 	return (
@@ -70,7 +76,7 @@ const PushInfoBlock = (props: Object): Object => {
 				fontSize={fontSize}
 				onPress={onPressPushSettings}
 			/>
-			{!(phones > 0) && (
+			{(!(phones > 0) && !isHuaweiBuild) && (
 				<Text onPress={submitPushToken} style={buttonResubmit}>
 					{submitButText}
 				</Text>

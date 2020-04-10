@@ -21,7 +21,7 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, ScrollView } from 'react-native';
+import { TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
@@ -177,7 +177,8 @@ getContents = (): Object => {
 				posterH2: formatMessage(i18n.gatewayAdd),
 				icon: 'location',
 				h1: `${formatMessage(i18n.messageTitle)}!`,
-				body: formatMessage(i18n.askAddGatewayInfo),
+				body: Platform.OS === 'android' ? formatMessage(i18n.askAddGatewayInfoAndroid) :
+					formatMessage(i18n.askAddGatewayInfo),
 				buttonLabel: formatMessage(i18n.gatewayAdd),
 				buttonOnPress: this.addNewLocation,
 				cancelLabel,

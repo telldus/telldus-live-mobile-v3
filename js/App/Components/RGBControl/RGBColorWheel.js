@@ -19,7 +19,6 @@
 
 // @flow
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { ColorWheel } from 'react-native-color-wheel';
 const colorsys = require('colorsys');
@@ -59,7 +58,6 @@ type DefaultProps = {
 
 type State = {
 	rgbValue: string,
-	isLoading: boolean,
 	mainColorRGB: string,
 	methodRequested: string,
 	controlSource: string,
@@ -81,14 +79,12 @@ static getDerivedStateFromProps(props: Object, state: Object): Object | null {
 	if (state.rgbValue !== rgbValue) {
 		return {
 			rgbValue,
-			isLoading: true,
 			methodRequested,
 		};
 	}
 	if (methodRequested !== state.methodRequested && (methodRequested !== 'DIM' && methodRequested !== 'TURNON' && methodRequested !== 'TURNOFF')) {
 		return {
 			methodRequested,
-			isLoading: methodRequested === '' && state.methodRequested === 'RGB',
 		};
 	}
 	return null;
@@ -115,11 +111,11 @@ constructor(props: Props) {
 	const mainColorRGB = getMainColorRGB(rgbValue);
 
 	this.state = {
-		isLoading: false,
 		mainColorRGB,
 		rgbValue,
 		methodRequested,
 		controlSource: '',
+		toggleMeToforceUpdateInitialColor: 0,
 	};
 }
 
@@ -155,29 +151,29 @@ onColorChange = () => {
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
-	const { rgbValue, isLoading, methodRequested, mainColorRGB } = this.state;
+	const {
+		rgbValue,
+		methodRequested,
+		mainColorRGB,
+		toggleMeToforceUpdateInitialColor,
+	} = this.state;
 	const { rgbValue: rgbValuePrev } = prevState;
-	if (rgbValue !== rgbValuePrev && isLoading) {// device set state
+	if (rgbValue !== rgbValuePrev) {// device set state
 		const mainColorRGBN = getMainColorRGB(rgbValue);
 		this.setState({
 			mainColorRGB: mainColorRGBN,
-			isLoading: false,
+			toggleMeToforceUpdateInitialColor: toggleMeToforceUpdateInitialColor ? 0 : 1,
 		});
-	} else if (isLoading && methodRequested === 'RGB' && prevState.methodRequested === '') {
+	} else if (methodRequested === 'RGB' && prevState.methodRequested === '') {
 		this.setState({
 			mainColorRGB,
-			isLoading: false,
+			toggleMeToforceUpdateInitialColor: toggleMeToforceUpdateInitialColor ? 0 : 1,
 		});
-	} else if (isLoading && methodRequested === '' && prevState.methodRequested === 'RGB') {
+	} else if (methodRequested === '' && prevState.methodRequested === 'RGB') {
 		const mainColorRGBN = getMainColorRGB(rgbValue);
 		this.setState({
 			mainColorRGB: mainColorRGBN,
-			isLoading: false,
-		});
-	} else if (isLoading) {
-		this.setState({
-			mainColorRGB,
-			isLoading: false,
+			toggleMeToforceUpdateInitialColor: toggleMeToforceUpdateInitialColor ? 0 : 1,
 		});
 	}
 }
@@ -209,6 +205,7 @@ onChooseColor = (item: string) => {
 	this.setState({
 		mainColorRGB: item,
 		controlSource: 'swatch',
+		toggleMeToforceUpdateInitialColor: this.state.toggleMeToforceUpdateInitialColor ? 0 : 1,
 	}, () => {
 		if (deviceSetStateRGBOverride) {
 			deviceSetStateRGBOverride(device.id, item);
@@ -220,9 +217,9 @@ onChooseColor = (item: string) => {
 
 render(): Object {
 	const {
-		isLoading,
 		mainColorRGB,
 		controlSource,
+		toggleMeToforceUpdateInitialColor,
 	} = this.state;
 	const {
 		thumStyle,
@@ -254,24 +251,15 @@ render(): Object {
 					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
 					: null
 				}
-				{isLoading ?
-					<View style={{
-						flex: 1,
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-						<ActivityIndicator animating={true} color={'#cccccc'} size={'small'}/>
-					</View>
-					:
-					<ColorWheel
-						initialColor={mainColorRGB}
-						onColorChangeComplete={this.onColorChangeComplete}
-						style={style}
-						onColorChange={this.onColorChange}
-						thumbStyle={thumStyle}
-						thumbSize={thumbSize}
-					/>
-				}
+				<ColorWheel
+					initialColor={mainColorRGB}
+					onColorChangeComplete={this.onColorChangeComplete}
+					style={style}
+					onColorChange={this.onColorChange}
+					thumbStyle={thumStyle}
+					thumbSize={thumbSize}
+					toggleMeToforceUpdateInitialColor={toggleMeToforceUpdateInitialColor}
+				/>
 			</View>
 			<View style={swatchesCover}>
 				{(showActionIndicator && controlSource === 'swatch' && methodRequested === 'RGB') ?

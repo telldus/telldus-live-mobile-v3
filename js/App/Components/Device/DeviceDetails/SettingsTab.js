@@ -70,6 +70,7 @@ import {
 	prepareDeviceParameters,
 	supportsScan,
 	prepare433MHzDeviceDefaultValueForParams,
+	doesSupportEditModel,
 } from '../../../Lib';
 
 import Theme from '../../../Theme';
@@ -82,6 +83,7 @@ type Props = {
 	inDashboard: boolean,
 	addDevice433: Object,
 	transports: string,
+	gatewaySupportEditModel: boolean,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -186,6 +188,7 @@ class SettingsTab extends View {
 				'isGatewayReachable',
 				'addDevice433',
 				'transports',
+				'gatewaySupportEditModel',
 			]);
 			if (propsChange) {
 				return true;
@@ -749,6 +752,7 @@ class SettingsTab extends View {
 			inDashboard,
 			isGatewayReachable,
 			transports,
+			gatewaySupportEditModel,
 		} = this.props;
 		const { appLayout, intl } = screenProps;
 		const { formatMessage } = intl;
@@ -882,7 +886,7 @@ class SettingsTab extends View {
 										learnButton={learnButton}
 										isSaving433MhzParams={isSaving433MhzParams}
 										devicetype={devicetype}
-										renderExtraSettingsTop={this.renderExtraSettingsTop}/>
+										renderExtraSettingsTop={gatewaySupportEditModel ? this.renderExtraSettingsTop : undefined}/>
 									{settingsHasChanged &&
 										<TouchableButton
 											text={i18n.saveLabel}
@@ -1042,8 +1046,9 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	device = device ? device : {};
 
 	const { clientId } = device;
-	const { online = false, websocketOnline = false, transports = '' } = state.gateways.byId[clientId] || {};
+	const { online = false, websocketOnline = false, transports = '', type } = state.gateways.byId[clientId] || {};
 
+	const gatewaySupportEditModel = doesSupportEditModel(type);
 	const { addDevice433 = {}} = state.addDevice;
 
 	const {
@@ -1064,6 +1069,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		isGatewayReachable: online && websocketOnline,
 		addDevice433,
 		transports,
+		gatewaySupportEditModel,
 	};
 }
 

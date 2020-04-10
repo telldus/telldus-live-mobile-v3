@@ -31,6 +31,7 @@ import {
 	getDeviceActionIcon,
 	getMainColorRGB,
 	toSliderValue,
+	getKnownModes,
 } from '../../../../Lib';
 import i18n from '../../../../Translations/common';
 
@@ -171,6 +172,12 @@ class HistoryRow extends React.PureComponent<Props, null> {
 		return accessibilityLabel;
 	}
 
+	getBGColor = (item: Object, deviceState: string): string => {
+		return deviceState === 'RGB' ? getMainColorRGB(item.stateValue) :
+			this.BGPrimaryActions.indexOf(item.state) !== -1 || (deviceState === 'DIM' && item.stateValue === 0)
+				? '#1b365d' : '#F06F0C';
+	}
+
 	render(): Object {
 
 		let {
@@ -197,6 +204,7 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			statusValueText,
 			iconBackgroundMaskStyle,
 			rowWithTriangleContainer,
+			stateValSecStyle,
 		} = this.getStyle();
 
 		let time = new Date(item.ts * 1000);
@@ -233,13 +241,56 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			originInfo = `${this.labelOrigin}, ${origin}`;
 		}
 
+		let bGColor = this.getBGColor(item, deviceState);
+
+		let Icon, currentModeLabel = '', stateValSec;
+		if (deviceState === 'THERMOSTAT') {
+			let thermoStateValue = {};
+			let sv = item.stateValue.replace(/'/g, '"');
+			try {
+				thermoStateValue = JSON.parse(sv);
+			} catch (e) {
+				// Ignore
+			}
+			const {
+				mode,
+				temperature,
+				changeMode,
+			} = thermoStateValue;
+			stateValSec = temperature;
+
+			const knownModes = getKnownModes(intl.formatMessage);
+
+			if (mode && changeMode && typeof temperature !== 'undefined') {
+				originText = intl.formatMessage(i18n.modeAndTemp);
+				originInfo = intl.formatMessage(i18n.modeAndTemp);
+			} else if (mode && changeMode) {
+				originText = intl.formatMessage(i18n.modeOnly);
+				originInfo = intl.formatMessage(i18n.modeOnly);
+			} else {
+				originText = intl.formatMessage(i18n.tempOnly);
+				originInfo = intl.formatMessage(i18n.tempOnly);
+			}
+
+			if (mode && changeMode) {
+				knownModes.map((km: Object) => {
+					if (mode === km.mode) {
+						Icon = km.IconActive;
+						currentModeLabel = km.label;
+					}
+				});
+			}
+
+			if (mode && mode === 'off') {
+				bGColor = '#1b365d';
+				icon = 'off';
+			}
+		}
+
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
-		accessibilityLabel = `${accessibilityLabel}. ${originInfo}`;
+		accessibilityLabel = `${accessibilityLabel}. ${currentModeLabel}, ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
 
-		let bGColor = deviceState === 'RGB' ? getMainColorRGB(item.stateValue) :
-			this.BGPrimaryActions.indexOf(item.state) !== -1 || (deviceState === 'DIM' && item.stateValue === 0)
-				? '#1b365d' : '#F06F0C';
 		let roundIcon = item.successStatus !== 0 ? 'info' : '';
 
 		return (
@@ -275,7 +326,23 @@ class HistoryRow extends React.PureComponent<Props, null> {
 							{deviceState === 'DIM' ?
 								<Text style={statusValueText}>{this.getPercentage(item.stateValue)}%</Text>
 								:
-								<IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />
+								<>
+									{Icon ?
+										<Icon
+											height={statusIconSize * 1.2}
+											width={statusIconSize * 1.2}
+										/>
+										:
+										<>
+											{!!icon && <IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />}
+										</>
+									}
+									{typeof stateValSec !== 'undefined' &&
+								<Text style={stateValSecStyle}>{intl.formatNumber(stateValSec, {
+									minimumFractionDigits: 1,
+								})}°C</Text>
+									}
+								</>
 							}
 						</View>
 					}
@@ -362,7 +429,10 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				color: '#ffffff',
 				fontSize: Math.floor(deviceWidth * 0.047),
 			},
-
+			stateValSecStyle: {
+				color: '#ffffff',
+				fontSize: Math.floor(deviceWidth * 0.031),
+			},
 		};
 	}
 }

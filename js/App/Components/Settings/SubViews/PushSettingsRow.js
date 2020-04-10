@@ -39,6 +39,10 @@ import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
+import {
+	deployStore,
+} from '../../../../Config';
+
 type Props = {
     name: string,
     model: string,
@@ -225,6 +229,8 @@ render(): Object {
 		throbberStyle,
 	} = this.getStyles(appLayout);
 
+	const isHuaweiBuild = deployStore === 'huawei';
+
 	return (
 		<Row
 			style={rowStyle}
@@ -258,7 +264,7 @@ render(): Object {
 						throbberContainerStyle={{
 							position: 'relative',
 						}}/>}
-					{(!isPushSubmitLoading && editName) &&
+					{(!isPushSubmitLoading && editName && !isHuaweiBuild) &&
 							<Icon
 								name={editNameAcive ? 'done' : 'edit'}
 								size={editIconSize}
@@ -270,7 +276,7 @@ render(): Object {
 					{model}
 				</Text>
 			</View>
-			{(!isDeleteTokenLoading && !editNameAcive) && (
+			{(!isDeleteTokenLoading && !editNameAcive && !isHuaweiBuild) && (
 				<Icon
 					name={'close'}
 					size={closeIconSize}
