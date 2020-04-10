@@ -27,6 +27,7 @@ import { ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { createSelector } from 'reselect';
+const isEqual = require('react-fast-compare');
 
 import { View } from '../../../BaseComponents';
 import Gateway from './Gateway';
@@ -101,7 +102,7 @@ setBannerImageDimensions = () => {
 		appDrawerBanner,
 	} = this.props;
 	const {
-		image = 'https://cdn.live.telldus.com/campaigns/20200121_premium15.jpg',
+		image,
 	} = appDrawerBanner ? appDrawerBanner : {};
 	if (image) {
 		Image.getSize(image, (w: number, h: number) => {
@@ -123,26 +124,11 @@ setBannerImageDimensions = () => {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const { appLayout, isOpen, ...others } = this.props;
-	const { appLayout: appLayoutN, isOpen: isOpenN, ...othersN } = nextProps;
-	if (isOpenN) {
-		if (!isOpen) {
-			return true;
-		}
-
-		if (appLayout.width !== appLayoutN.width) {
-			return true;
-		}
-
-		const propsChange = shouldUpdate(others, othersN, ['gateways', 'userProfile', 'appDrawerBanner']);
-		if (propsChange) {
-			return true;
-		}
-
-		return false;
-	}
-
-	return false;
+	return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
+		'gateways',
+		'userProfile',
+		'appDrawerBanner',
+		'appLayout']);
 }
 
 render(): Object {

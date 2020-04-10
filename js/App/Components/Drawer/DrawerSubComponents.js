@@ -90,8 +90,8 @@ const SettingsButton = ({ onPress, styles }: Object): Object => (
 
 const TestIapLink = ({styles, appDrawerBanner}: Object): Object => {
 	const {
-		image = 'https://cdn.live.telldus.com/campaigns/20200121_premium15.jpg',
-		link = 'https://live.telldus.com/profile/campaigns',
+		image,
+		link,
 	} = appDrawerBanner ? appDrawerBanner : {};
 
 	const onPress = React.useCallback(() => {
