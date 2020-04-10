@@ -198,6 +198,7 @@ onChooseColor(item: string) {
 	const { r, g, b } = rgb;
 	this.setState({
 		mainColorRGB: item,
+		toggleMeToforceUpdateInitialColor: this.state.toggleMeToforceUpdateInitialColor ? 0 : 1,
 	}, () => {
 		if (deviceSetStateRGBOverride) {
 			deviceSetStateRGBOverride(device.id, item);
