@@ -315,7 +315,7 @@ class DeviceRow extends View<Props, State> {
 			iconOnColor = colorDeviceIconBack;
 			iconOnBGColor = colorDeviceIconBack;
 
-			colorDeviceIconBack = isInState === 'TURNOFF' ? Theme.Core.brandPrimary : colorDeviceIconBack;
+			colorDeviceIconBack = isInState === 'TURNOFF' ? iconOffColor : colorDeviceIconBack;
 		}
 		colorDeviceIconBack = colorDeviceIconBack ? colorDeviceIconBack : styles.iconContainerStyle.backgroundColor;
 
@@ -374,7 +374,7 @@ class DeviceRow extends View<Props, State> {
 					onSlideActive={this.onSlideActive}
 					onSlideComplete={this.onSlideComplete}
 					key={7}
-					offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
+					offButtonColor={isInState === 'TURNOFF' ? iconOffColor : undefined}
 					onButtonColor={isInState === 'TURNON' ? iconOnBGColor : undefined}
 					iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 					iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}

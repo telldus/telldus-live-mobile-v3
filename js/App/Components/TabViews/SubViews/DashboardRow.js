@@ -216,7 +216,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const showSlider = !BELL && !UP && !DOWN && !STOP;
 		const width = showSlider ? tileWidth : tileWidth * (2 / 3);
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : {
-			backgroundColor: isInState === 'TURNOFF' ? Theme.Core.brandPrimary : colorDeviceIconBack,
+			backgroundColor: isInState === 'TURNOFF' ? iconOffColor : colorDeviceIconBack,
 		};
 
 		buttons.unshift(
@@ -229,7 +229,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 				onSlideActive={this.onSlideActive}
 				onSlideComplete={this.onSlideComplete}
 				key={7}
-				offButtonColor={isInState === 'TURNOFF' ? Theme.Core.brandPrimary : undefined}
+				offButtonColor={isInState === 'TURNOFF' ? iconOffColor : undefined}
 				onButtonColor={isInState === 'TURNON' ? colorDeviceIconBack : undefined}
 				iconOffColor={isInState === 'TURNOFF' ? undefined : iconOffColor}
 				iconOnColor={isInState === 'TURNON' ? undefined : iconOnColor}
