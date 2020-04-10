@@ -327,22 +327,22 @@ class HistoryRow extends React.PureComponent<Props, null> {
 								<Text style={statusValueText}>{this.getPercentage(item.stateValue)}%</Text>
 								:
 								<>
-								{Icon ?
-									<Icon
-										height={statusIconSize * 1.2}
-										width={statusIconSize * 1.2}
-									/>
-									:
-									<>
-									{!!icon && <IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />}
-									</>
-								}
-								{typeof stateValSec !== 'undefined' &&
+									{Icon ?
+										<Icon
+											height={statusIconSize * 1.2}
+											width={statusIconSize * 1.2}
+										/>
+										:
+										<>
+											{!!icon && <IconTelldus icon={icon} size={statusIconSize} color="#ffffff" />}
+										</>
+									}
+									{typeof stateValSec !== 'undefined' &&
 								<Text style={stateValSecStyle}>{intl.formatNumber(stateValSec, {
 									minimumFractionDigits: 1,
 								})}°C</Text>
-								}
-							</>
+									}
+								</>
 							}
 						</View>
 					}
