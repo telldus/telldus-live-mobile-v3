@@ -205,6 +205,7 @@ onChooseColor = (item: string) => {
 	this.setState({
 		mainColorRGB: item,
 		controlSource: 'swatch',
+		toggleMeToforceUpdateInitialColor: this.state.toggleMeToforceUpdateInitialColor ? 0 : 1,
 	}, () => {
 		if (deviceSetStateRGBOverride) {
 			deviceSetStateRGBOverride(device.id, item);
