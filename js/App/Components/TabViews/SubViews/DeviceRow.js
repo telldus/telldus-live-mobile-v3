@@ -670,6 +670,7 @@ class DeviceRow extends View<Props, State> {
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 				marginLeft: 6,
+				marginRight: 6,
 				marginTop: infoFontSize * 0.411,
 			},
 		};
