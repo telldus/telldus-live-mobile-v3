@@ -324,7 +324,7 @@ getStyles(): Object {
 			fontSize: deviceWidth * 0.045,
 		},
 		box2: {
-			height: '25%',
+			height: '26%',
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
