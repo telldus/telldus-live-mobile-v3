@@ -74,7 +74,7 @@
     "react-native-section-list-get-item-layout": "~2.2.3",
     "react-native-sensitive-info": "https://github.com/telldus/react-native-sensitive-info.git",
     "react-native-simple-radio-button": "^2.7.4",
-    "react-native-simple-toast": "^1.0.0",
+    "react-native-simple-toast": "1.0.0",
     "react-native-slider": "~0.11.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-sqlite-storage": "^4.1.0",
