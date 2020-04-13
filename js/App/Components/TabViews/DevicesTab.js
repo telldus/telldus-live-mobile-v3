@@ -601,7 +601,7 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUI = () => {
-		const { navigation } = this.props;
+		const { navigation, screenProps } = this.props;
 		const newDevices = navigation.getParam('newDevices', null);
 		if (newDevices) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
@@ -617,14 +617,20 @@ class DevicesTab extends View {
 					mainNodeId = id;
 				}
 			});
-			navigation.navigate({
-				routeName: 'InfoScreen',
-				key: 'InfoScreen',
-				params: {
-					info: 'add_schedule',
-					deviceId: mainNodeId,
-				},
-			});
+
+			const {
+				currentScreen,
+			} = screenProps;
+			if (currentScreen === 'Devices') {
+				navigation.navigate({
+					routeName: 'InfoScreen',
+					key: 'InfoScreen',
+					params: {
+						info: 'add_schedule',
+						deviceId: mainNodeId,
+					},
+				});
+			}
 		}
 	}
 
