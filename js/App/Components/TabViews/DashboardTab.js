@@ -377,6 +377,13 @@ class DashboardTab extends View {
 		return data;
 	}
 
+	_keyExtractor = (item: Object, index: number): string => {
+		const {
+			data = {},
+		} = item || {};
+		return `${data.id}-${index}`;
+	}
+
 	render(): Object {
 		const {
 			screenProps,
@@ -427,6 +434,7 @@ class DashboardTab extends View {
 					}}
 					scrollEnabled={scrollEnabled}
 					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
+					keyExtractor={this._keyExtractor}
 				/>
 			</View>
 		);

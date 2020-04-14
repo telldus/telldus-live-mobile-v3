@@ -50,7 +50,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			key: deviceId,
 			data,
 		};
-	});
+	}) || [];
 
 	const sensorItems = [];
 	dashboard.sensorIds.map((sensorId: number) => {
