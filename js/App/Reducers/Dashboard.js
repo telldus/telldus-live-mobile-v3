@@ -50,7 +50,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			key: deviceId,
 			data,
 		};
-	});
+	}) || [];
 
 	const sensorItems = dashboard.sensorIds.map((sensorId: number): Object => {
 		let sensor = sensors.byId[sensorId] || {};
@@ -78,7 +78,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			key: sensorId,
 			data,
 		};
-	});
+	}) || [];
 	const { defaultSettings = {} } = app;
 	const { sortingDB } = defaultSettings;
 	let orderedList = [...deviceItems, ...sensorItems];
