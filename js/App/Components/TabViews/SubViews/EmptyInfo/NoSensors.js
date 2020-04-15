@@ -60,10 +60,19 @@ const NoSensors = (props: Props): Object => {
 
 			if (gatewaysLen > 0) {
 				const singleGateway = gatewaysLen === 1;
-				navigate('AddSensor', {
-					selectLocation: !singleGateway,
-					gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
-				}, 'AddSensor');
+				if (singleGateway) {
+					navigate('AddSensor', {
+						gateway: filteredGateways[filteredAllIds[0]],
+						screen: 'SelectSensorType',
+						params: {
+							gateway: filteredGateways[filteredAllIds[0]],
+						},
+					});
+				} else {
+					navigate('AddSensor', {
+						screen: 'SelectLocationAddSensor',
+					});
+				}
 			}
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps

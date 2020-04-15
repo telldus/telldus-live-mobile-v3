@@ -51,12 +51,19 @@ const NoDevices = (props: Props): Object => {
 	const onPress = useCallback(() => {
 		const gatewaysLen = Object.keys(byId).length;
 		const singleGateway = gatewaysLen === 1;
-		navigate('AddDevice', {
-			selectLocation: !singleGateway,
-			gateway: singleGateway ? {
-				...byId[Object.keys(byId)[0]],
-			} : null,
-		}, 'AddDevice');
+		if (singleGateway) {
+			navigate('AddDevice', {
+				gateway: byId[Object.keys(byId)[0]],
+				screen: 'SelectDeviceType',
+				params: {
+					gateway: byId[Object.keys(byId)[0]],
+				},
+			});
+		} else {
+			navigate('AddDevice', {
+				screen: 'SelectLocation',
+			});
+		}
 	}, [byId]);
 
 	return (

@@ -585,7 +585,7 @@ addNewSensor = () => {
 			if (singleGateway) {
 				navigate('AddSensor', {
 					gateway: filteredGateways[filteredAllIds[0]],
-					screen: 'SensorsListAddSensor',
+					screen: 'SelectSensorType',
 					params: {
 						gateway: filteredGateways[filteredAllIds[0]],
 					},
