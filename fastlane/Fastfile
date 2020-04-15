@@ -13,9 +13,6 @@
 # Update this, if you use features of a newer version
 fastlane_version "2.133.0"
 
-release_start_time = Time.now.utc.iso8601(10)
-release_end_time = (Time.now.utc + 3 * (24 * 60 * 60)).iso8601(10)
-
 ENV["APP_VERSION"] = JSON.parse(IO.read("../package.json"))["version"]
 
 default_platform :android
@@ -52,11 +49,7 @@ platform :android do
       client_secret: ENV["HUAWEI_CLIENT_SECRET"],
       app_id: ENV["HUAWEI_APP_ID"],
       apk_path: "android/app/build/outputs/apk/release/app-release.apk",
-      phase_wise_release: true,
-      phase_release_start_time: release_start_time,
-      phase_release_end_time: release_end_time,
-      phase_release_percent: "10.00",
-      phase_release_description: "DESCRIPTION"
+      submit_for_review: false
     )
     slack(
       message: "Successfully deployed new App Update to Huawei App Gallery Connect.",
