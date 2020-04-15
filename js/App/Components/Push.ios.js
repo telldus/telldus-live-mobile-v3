@@ -39,9 +39,9 @@ const Push = {
 				return dispatch(Push.onRegister(token, params));
 			});
 			PushNotificationIOS.getInitialNotification().then((notification: Object) => {
-				if (Push.isPremiumExpireHeadsup(notification)) {
-					Push.navigateToPurchasePremium();
-				}
+				// if (Push.isPremiumExpireHeadsup(notification)) {
+				// Push.navigateToPurchasePremium();
+				// }
 			});
 		};
 	},
@@ -73,26 +73,26 @@ const Push = {
 		// On iOS, if the app is in foreground the local notification is not shown.
 		// We use normal alert instead
 		if (Push.isPremiumExpireHeadsup(notification)) {
-			Alert.alert(
-				'Alert Title',
-				'My Alert Msg',
-				[
-				    {
-						text: 'Take me to purchase screen', // TODO: translate
-						onPress: () => {
-							Push.navigateToPurchasePremium();
-						},
-						style: 'default',
-					},
-				    {
-						text: 'Cancel', // TODO: translate
-						onPress: {
-						},
-						style: 'cancel',
-					},
-				],
-				{cancelable: true},
-			  );
+		// 	Alert.alert(
+		// 		'Alert Title',
+		// 		'My Alert Msg',
+		// 		[
+		// 		    {
+		// 				text: 'Take me to purchase screen', // TODO: translate
+		// 				onPress: () => {
+		// 					Push.navigateToPurchasePremium();
+		// 				},
+		// 				style: 'default',
+		// 			},
+		// 		    {
+		// 				text: 'Cancel', // TODO: translate
+		// 				onPress: {
+		// 				},
+		// 				style: 'cancel',
+		// 			},
+		// 		],
+		// 		{cancelable: true},
+		// 	  );
 		} else {
 			Alert.alert('Telldus Live!', notification.getMessage());
 		}
