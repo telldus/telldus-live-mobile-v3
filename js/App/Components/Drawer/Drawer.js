@@ -23,11 +23,12 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
+const isEqual = require('react-fast-compare');
 
 import {
 	View,
@@ -40,6 +41,8 @@ import {
 	DrawerSubHeader,
 	NavigationHeader,
 	SettingsLink,
+	AddLocation,
+	TestIapLink,
 } from './DrawerSubComponents';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
@@ -72,10 +75,13 @@ type Props = {
 	showSwitchAccountActionSheet: () => void,
 	intl: Object,
 	toggleDialogueBox: (Object) => void,
+	appDrawerBanner?: Object,
 };
 
 type State = {
 	hasStatusBar: boolean,
+	iapTestImageWidth: number,
+	iapTestImageheight: number,
 };
 
 class Drawer extends View<Props, State> {
@@ -89,6 +95,8 @@ constructor(props: Props) {
 
 	this.state = {
 		hasStatusBar: false,
+		iapTestImageWidth: 0,
+		iapTestImageheight: 0,
 	};
 
 	const {
@@ -120,6 +128,7 @@ constructor(props: Props) {
 	];
 
 	this._hasStatusBar();
+	this.setBannerImageDimensions();
 }
 
 	_hasStatusBar = async () => {
@@ -137,6 +146,7 @@ constructor(props: Props) {
 			'appLayout',
 			'hasAPremAccount',
 			'enableGeoFenceFeature',
+			'appDrawerBanner',
 		]);
 	}
 
@@ -189,6 +199,42 @@ constructor(props: Props) {
 		}
 	}
 
+	setBannerImageDimensions = () => {
+		const {
+			appLayout,
+		} = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const drawerWidth = getDrawerWidth(deviceWidth);
+
+		let iapTestImageWidth = drawerWidth - 25;
+		let iapTestImageheight = iapTestImageWidth * 0.3;
+		const {
+			appDrawerBanner,
+		} = this.props;
+		const {
+			image,
+		} = appDrawerBanner ? appDrawerBanner : {};
+		if (image) {
+			Image.getSize(image, (w: number, h: number) => {
+				if (w && h) {
+					const ratio = w / h;
+					iapTestImageheight = iapTestImageWidth / ratio;
+				}
+				this.setState({
+					iapTestImageWidth,
+					iapTestImageheight,
+				});
+			}, () => {
+				this.setState({
+					iapTestImageWidth,
+					iapTestImageheight,
+				});
+			});
+		}
+	}
+
 	render(): Object {
 		const {
 			gateways,
@@ -198,6 +244,7 @@ constructor(props: Props) {
 			onPressGateway,
 			dispatch,
 			enableGeoFenceFeature,
+			appDrawerBanner,
 		} = this.props;
 		const {
 			drawerSubHeader,
@@ -279,6 +326,9 @@ constructor(props: Props) {
 							}}
 							name={'plus-circle'}/>}
 						onPressLink={addNewLocation}/>
+					<TestIapLink
+						appDrawerBanner={appDrawerBanner}
+						styles={styles}/>
 				</View>
 			</ScrollView>
 		);
@@ -413,6 +463,16 @@ constructor(props: Props) {
 				fontSize: fontSizeAddLocText,
 				color: eulaContentColor,
 			},
+			iapTestCoverStyle: {
+				flexDirection: 'row',
+				marginBottom: 5 + (fontSizeRow * 0.5),
+				marginLeft: 15,
+				alignItems: 'center',
+			},
+			iapTestImageStyle: {
+				width: this.state.iapTestImageWidth,
+				height: this.state.iapTestImageheight,
+			},
 		};
 	}
 }
@@ -425,6 +485,9 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
+	const {
+		appDrawerBanner,
+	} = store.user;
 
 	const { accounts = {}, firebaseRemoteConfig = {} } = store.user;
 
@@ -439,6 +502,7 @@ function mapStateToProps(store: Object): Object {
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
+		appDrawerBanner,
 	};
 }
 

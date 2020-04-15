@@ -212,6 +212,16 @@ class FormContainerComponent extends View<Props, null> {
 			containerStyle: {
 				height: '100%',
 			},
+			loginButtonStyleA: {
+				maxWidth: 300,
+				maxHeight: 80,
+				width: Math.floor(deviceWidth * 0.6),
+				height: Math.floor(deviceWidth * 0.1),
+				marginBottom: 8,
+				alignSelf: 'center',
+				alignItems: 'center',
+				justifyContent: 'center',
+			},
 		};
 	}
 }

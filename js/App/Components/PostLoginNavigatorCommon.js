@@ -251,24 +251,24 @@ actionsToPerformOnStart = async () => {
 
 			const purchases = await RNIap.getAvailablePurchases() || [];// Those not called 'finishTransaction' post-purchase
 			dispatch(onReceivedInAppAvailablePurchases(purchases));
-			purchases.forEach((purchase: Object) => {
-				// const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
-				// const {
-				// 	productId,
-				// } = purchase;
+			// purchases.forEach((purchase: Object) => {
+			// const idsAutoRenewing = ['premiumauto'];// TODO update with the actual auto renewing susbscriptions
+			// const {
+			// 	productId,
+			// } = purchase;
 
-				// Fix for ISSUE 1 reported below. But with a cost one unnecessary
-				// API call/report(auto renewing subscription).
-				// const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
-				// if (!isAutoRenewing) {
-				// 	dispatch(reportIapAtServer(purchase));
-				// }
-				// TODO: If auto renewing subscription:
-				// 1- Take the one with latest 'originTransactionDateIOS'
-				// 2- Report that alone at the server
-				// Even after reporting and calling 'finishTransaction' and 'finishTransactionIOS',
-				// Unlike non-renew, it will still be present in this list.
-			});
+			// Fix for ISSUE 1 reported below. But with a cost one unnecessary
+			// API call/report(auto renewing subscription).
+			// const isAutoRenewing = idsAutoRenewing.indexOf(productId) === -1;
+			// if (!isAutoRenewing) {
+			// 	dispatch(reportIapAtServer(purchase));
+			// }
+			// TODO: If auto renewing subscription:
+			// 1- Take the one with latest 'originTransactionDateIOS'
+			// 2- Report that alone at the server
+			// Even after reporting and calling 'finishTransaction' and 'finishTransactionIOS',
+			// Unlike non-renew, it will still be present in this list.
+			// });
 			// TODO: These are the purchases made successfully but failed to
 			// report at our server(createTransaction not success), may be try to report now?
 

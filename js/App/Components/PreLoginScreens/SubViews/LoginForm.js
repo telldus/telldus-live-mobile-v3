@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
+import { AppleButton } from '@invertase/react-native-apple-authentication';
 
 import {
 	TouchableButton,
@@ -116,6 +117,9 @@ class LoginForm extends View {
 		});
 	}
 
+	onPressSignInApple = () => {
+	}
+
 	render(): Object {
 		let { dialogueOpen, styles, headerText } = this.props;
 		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
@@ -185,6 +189,13 @@ class LoginForm extends View {
 					accessible={buttonAccessible}
 				/>
 				<View style={{ height: 10 }}/>
+				{Platform.OS === 'ios' && <AppleButton
+					buttonStyle={AppleButton.Style.WHITE}
+					buttonType={AppleButton.Type.SIGN_IN}
+					style={styles.loginButtonStyleA}
+					onPress={this.onPressSignInApple}
+				/>
+				}
 				{deployStore !== 'huawei' && (<GoogleSigninButton
 					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}

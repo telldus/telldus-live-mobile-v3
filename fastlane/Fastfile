@@ -49,11 +49,7 @@ platform :android do
       client_secret: ENV["HUAWEI_CLIENT_SECRET"],
       app_id: ENV["HUAWEI_APP_ID"],
       apk_path: "android/app/build/outputs/apk/release/app-release.apk",
-
-      # Optional, Parameter beyond this are optional
-      # For phase wise release: set these parameters
-      phase_wise_release: true,
-      phase_release_percent: "10.00",
+      submit_for_review: false
     )
     slack(
       message: "Successfully deployed new App Update to Huawei App Gallery Connect.",

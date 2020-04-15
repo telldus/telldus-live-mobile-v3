@@ -110,7 +110,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 							}
 
 							const { gateways: gatewaysLat } = getState();
-							const { localKey: localKeyLat = {} } = gatewaysLat.byId[clientId];
+							const { localKey: localKeyLat = {} } = gatewaysLat.byId[clientId] || {};
 							const { address: addressLat } = localKeyLat;
 							if (addressLat) {
 								// Final device/info call, to reset the device state.
@@ -136,7 +136,7 @@ function deviceSetState(deviceId: number, state: number, stateValue: number | nu
 								if (nextState === isInState) {
 									clearTimers(clientDeviceId);
 								} else {
-									const { localKey: localKeyLat = {} } = gatewaysLat.byId[clientId];
+									const { localKey: localKeyLat = {} } = gatewaysLat.byId[clientId] || {};
 									const { address: addressLat } = localKeyLat;
 									if (addressLat) {
 										dispatch(getDeviceInfoLocal(deviceId, clientDeviceId, addressLat, token, state, false));

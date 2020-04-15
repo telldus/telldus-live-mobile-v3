@@ -23,6 +23,7 @@
   "dependencies": {
     "@formatjs/intl-pluralrules": "^1.5.2",
     "@formatjs/intl-relativetimeformat": "^4.5.9",
+    "@invertase/react-native-apple-authentication": "^0.2.0",
     "@react-native-community/async-storage": "^1.8.1",
     "@react-native-community/datetimepicker": "~2.2.2",
     "@react-native-community/google-signin": "~3.0.4",
@@ -82,7 +83,7 @@
     "react-native-section-list-get-item-layout": "~2.2.3",
     "react-native-sensitive-info": "https://github.com/telldus/react-native-sensitive-info.git",
     "react-native-simple-radio-button": "^2.7.4",
-    "react-native-simple-toast": "^1.0.0",
+    "react-native-simple-toast": "1.0.0",
     "react-native-slider": "~0.11.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-sqlite-storage": "^4.1.0",
@@ -172,7 +173,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|react-navigation|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
+      "node_modules/(?!((jest-)?react-native|react-navigation|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
     ]
   }
 }
