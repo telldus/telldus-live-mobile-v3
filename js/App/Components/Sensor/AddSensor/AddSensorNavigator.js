@@ -48,7 +48,7 @@ const RouteConfigs = {
 			navigation.getParam('selectLocation', false) ?
 				SelectLocationAddSensor
 				:
-				SensorsListAddSensor
+				SelectSensorType
 			, 'InitialScreenAddSensor'),
 	},
 	SensorsListAddSensor: {
