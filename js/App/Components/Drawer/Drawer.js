@@ -41,7 +41,6 @@ import {
 	DrawerSubHeader,
 	NavigationHeader,
 	SettingsLink,
-	AddLocation,
 	TestIapLink,
 } from './DrawerSubComponents';
 
@@ -139,7 +138,7 @@ constructor(props: Props) {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, [
+		return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
 			'gateways',
 			'userProfile',
 			'isOpen',
