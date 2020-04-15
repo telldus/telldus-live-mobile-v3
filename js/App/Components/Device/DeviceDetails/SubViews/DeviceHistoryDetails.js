@@ -45,7 +45,11 @@ import {
 } from '../../../../../BaseComponents';
 import { states, statusMessage } from '../../../../../Config';
 
-import { getOriginString } from '../../../../Lib';
+import {
+	getOriginString,
+	getDeviceStateMethod,
+	getKnownModes,
+} from '../../../../Lib';
 
 let statusBarHeight = ExtraDimensions.get('STATUS_BAR_HEIGHT');
 
@@ -200,6 +204,48 @@ class DeviceHistoryDetails extends View {
 		}
 
 		let accessible = currentScreen === 'History';
+
+		let deviceState = getDeviceStateMethod(detailsData.state);
+		if (deviceState === 'THERMOSTAT') {
+			let thermoStateValue = {};
+			let sv = detailsData.stateValue.replace(/'/g, '"');
+			try {
+				thermoStateValue = JSON.parse(sv);
+			} catch (e) {
+				// Ignore
+			}
+			const {
+				mode,
+				temperature,
+				changeMode,
+			} = thermoStateValue;
+
+			let modeValue = '';
+			const knownModes = getKnownModes(intl.formatMessage);
+			if (mode) {
+				knownModes.map((km: Object) => {
+					if (mode === km.mode) {
+						modeValue = km.label.toLowerCase();
+					}
+				});
+			}
+
+			if (mode && changeMode && typeof temperature !== 'undefined') {
+				textState = intl.formatMessage(i18n.modeAndTempLarge, {
+					mode: modeValue,
+					tempAndUnit: `${temperature}°C`,
+				});
+			} else if (mode && changeMode) {
+				textState = intl.formatMessage(i18n.modeOnlyLarge, {
+					mode: modeValue,
+				});
+			} else {
+				textState = intl.formatMessage(i18n.tempOnlyLarge, {
+					mode: modeValue,
+					tempAndUnit: `${temperature}°C`,
+				});
+			}
+		}
 
 		return (
 			<Modal
@@ -392,15 +438,15 @@ class DeviceHistoryDetails extends View {
 			},
 			detailsLabelCover: {
 				alignItems: 'flex-start',
-				width: '30%',
+				width: '20%',
 			},
 			detailsValueCover: {
 				alignItems: 'flex-end',
-				width: '70%',
+				width: '80%',
 			},
 			timeCover: {
 				justifyContent: 'flex-end',
-				width: '70%',
+				width: '80%',
 				flexDirection: 'row',
 			},
 			titleText: {
