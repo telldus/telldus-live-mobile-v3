@@ -121,11 +121,24 @@ addNewDevice = () => {
 		} : client ? {
 			...client,
 		} : null;
-		// TODO: refactor in app v3.15(RNavigation v5)
-		navigation.navigate('AddDevice', {
-			selectLocation: !singleGateway,
-			gateway,
-		});
+
+		if (singleGateway) {
+			navigation.navigate('AddDevice', {
+				gateway,
+				screen: 'SelectDeviceType',
+				params: {
+					gateway,
+					singleGateway,
+				},
+			});
+		} else {
+			navigation.navigate('AddDevice', {
+				screen: 'SelectLocation',
+				params: {
+					singleGateway,
+				},
+			});
+		}
 	}
 }
 
@@ -139,7 +152,6 @@ addNewSchedule = () => {
 		id,
 	} = devices[deviceId] || {};
 
-	// TODO: refactor in app v3.15(RNavigation v5)
 	if (id) {
 		dispatch(selectDevice(id));
 

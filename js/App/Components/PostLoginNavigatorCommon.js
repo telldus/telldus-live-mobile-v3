@@ -560,9 +560,11 @@ addNewDevice() {
 		if (singleGateway) {
 			navigate('AddDevice', {
 				gateway: byId[Object.keys(byId)[0]],
+				singleGateway,
 				screen: 'SelectDeviceType',
 				params: {
 					gateway: byId[Object.keys(byId)[0]],
+					singleGateway,
 				},
 			});
 		} else {
@@ -585,9 +587,11 @@ addNewSensor = () => {
 			if (singleGateway) {
 				navigate('AddSensor', {
 					gateway: filteredGateways[filteredAllIds[0]],
+					singleGateway,
 					screen: 'SelectSensorType',
 					params: {
 						gateway: filteredGateways[filteredAllIds[0]],
+						singleGateway,
 					},
 				});
 			} else {

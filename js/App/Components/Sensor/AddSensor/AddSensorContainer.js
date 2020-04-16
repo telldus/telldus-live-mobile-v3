@@ -173,7 +173,15 @@ export class AddSensorContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = ['SelectLocationAddSensor', 'SensorsListAddSensor'];
+		if (CS === 'SelectSensorType') {
+			const {
+				route,
+			} = this.props;
+			if (route.params && route.params.singleGateway) {
+				return 'close';
+			}
+		}
+		const SCNS = ['SelectLocationAddSensor'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 

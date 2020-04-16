@@ -54,9 +54,11 @@ const NoDevices = (props: Props): Object => {
 		if (singleGateway) {
 			navigate('AddDevice', {
 				gateway: byId[Object.keys(byId)[0]],
+				singleGateway,
 				screen: 'SelectDeviceType',
 				params: {
 					gateway: byId[Object.keys(byId)[0]],
+					singleGateway,
 				},
 			});
 		} else {

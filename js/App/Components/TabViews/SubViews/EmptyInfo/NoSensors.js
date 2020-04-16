@@ -63,9 +63,11 @@ const NoSensors = (props: Props): Object => {
 				if (singleGateway) {
 					navigate('AddSensor', {
 						gateway: filteredGateways[filteredAllIds[0]],
+						singleGateway,
 						screen: 'SelectSensorType',
 						params: {
 							gateway: filteredGateways[filteredAllIds[0]],
+							singleGateway,
 						},
 					});
 				} else {

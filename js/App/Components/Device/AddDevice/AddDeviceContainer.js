@@ -182,7 +182,15 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = ['SelectLocation', 'SelectDeviceType', 'Include433'];
+		if (CS === 'SelectDeviceType') {
+			const {
+				route,
+			} = this.props;
+			if (route.params && route.params.singleGateway) {
+				return 'close';
+			}
+		}
+		const SCNS = ['SelectLocation', 'Include433'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
