@@ -369,7 +369,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
-			attentionCaptureText: intl.formatMessage(i18n.labelAddZWaveD).toUpperCase(),
 		};
 
 		return (
@@ -389,8 +388,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 						leftButton={leftButton}
 						rightButton={rightButton}
 						appLayout={appLayout}
-						showAttentionCapture={showAttentionCapture}
-						attentionCaptureText={intl.formatMessage(i18n.iconAddPhraseOneD).toUpperCase()}/>
+						intl={intl}
+						showAttentionCapture={showAttentionCapture}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
 					<Navigator

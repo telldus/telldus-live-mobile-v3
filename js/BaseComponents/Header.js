@@ -37,6 +37,7 @@ import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
 import AttentionCatcher from './AttentionCatcher';
 import _ from 'lodash';
+import i18n from '../App/Translations/common';
 
 type Props = {
 	children?: Object,
@@ -47,7 +48,7 @@ type Props = {
 	leftButton: Object,
 	appLayout: Object,
 	showAttentionCapture: boolean,
-	attentionCaptureText?: string,
+	intl: Object,
 	forceHideStatus?: boolean,
 };
 
@@ -355,7 +356,7 @@ export default class HeaderComponent extends Base {
 	};
 
 	getPropsAttentionCatcher(): Object {
-		const { appLayout, attentionCaptureText } = this.props;
+		const { appLayout, intl } = this.props;
 		let top = Theme.Core.navBarTopPadding, pos = 'right', right = 35, left;
 
 		if (Platform.OS === 'android') {
@@ -369,7 +370,7 @@ export default class HeaderComponent extends Base {
 				left = height - 35;
 			}
 		}
-		return {top, right, left, pos, text: attentionCaptureText};
+		return {top, right, left, pos, text: intl.formatMessage(i18n.labelAddNewDevice).toUpperCase()};
 	}
 
 	renderRightButtonAttentionCapture = (): Object => {
