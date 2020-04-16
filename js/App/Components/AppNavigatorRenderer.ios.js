@@ -27,6 +27,7 @@ import { connect } from 'react-redux';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
+import appleAuth from '@invertase/react-native-apple-authentication';
 
 import {
 	View,
@@ -41,6 +42,7 @@ import {
 	syncWithServer,
 	screenChange,
 	resetSchedule,
+	logoutAfterUnregister,
 } from '../Actions';
 import {
 	setTopLevelNavigator,
@@ -92,6 +94,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 	addNewDevice: () => void;
 	addNewSensor: () => void;
 
+	clearAppleCredentialRevokedListener: any;
+
 	constructor(props: Props) {
 		super(props);
 
@@ -138,6 +142,21 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.newSchedule = this.newSchedule.bind(this);
 		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
+
+		this.clearAppleCredentialRevokedListener = null;
+	}
+
+	componentDidMount() {
+		this.clearAppleCredentialRevokedListener = appleAuth.onCredentialRevoked(() => {
+			this.props.dispatch(logoutAfterUnregister());
+		});
+	}
+
+	componentWillUnmount() {
+		if (this.clearAppleCredentialRevokedListener) {
+			this.clearAppleCredentialRevokedListener();
+			this.clearAppleCredentialRevokedListener = null;
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
