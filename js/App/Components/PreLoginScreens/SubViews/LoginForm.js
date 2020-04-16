@@ -27,7 +27,13 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
-import { AppleButton } from '@invertase/react-native-apple-authentication';
+import appleAuth, {
+	AppleButton,
+	AppleAuthRequestOperation,
+	AppleAuthRequestScope,
+	AppleAuthCredentialState,
+	AppleAuthError,
+} from '@invertase/react-native-apple-authentication';
 
 import {
 	TouchableButton,
@@ -65,6 +71,7 @@ type State = {
 	username: string,
 	password: string,
 	isSigninInProgress: boolean,
+	isAppleSigningInProgress: boolean,
 };
 
 class LoginForm extends View {
@@ -88,6 +95,7 @@ class LoginForm extends View {
 			password: testPassword,
 			isLoading: false,
 			isSigninInProgress: false,
+			isAppleSigningInProgress: false,
 		};
 
 		this.onChangeUsername = this.onChangeUsername.bind(this);
@@ -117,13 +125,63 @@ class LoginForm extends View {
 		});
 	}
 
-	onPressSignInApple = () => {
+	onPressSignInApple = async () => {
+		this.setState({
+			isAppleSigningInProgress: true,
+		});
+		try {
+			// performs login request
+			const appleAuthRequestResponse = await appleAuth.performRequest({
+				requestedOperation: AppleAuthRequestOperation.LOGIN,
+				requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+			});
+			// get current authentication state for user
+			const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+			// use credentialState response to ensure the user is authenticated
+			if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+				// user is authenticated
+				Keyboard.dismiss();
+				InteractionManager.runAfterInteractions(() => {
+					const credential = {
+						idToken: appleAuthRequestResponse.identityToken,
+						authCode: appleAuthRequestResponse.authorizationCode,
+					};
+					this.props.loginToTelldus(credential, 'apple')
+						.catch((err: Object) => {
+							this.setState({
+								isAppleSigningInProgress: false,
+							});
+							this.handleLoginError(err);
+						});
+				});
+			} else {
+				this.props.openDialogueBox(this.unknownError);
+				this.setState({
+					isAppleSigningInProgress: false,
+				});
+			}
+		} catch (e) {
+			if (e.code !== AppleAuthError.CANCELED) {
+				this.props.openDialogueBox(this.unknownError);
+			}
+			this.setState({
+				isAppleSigningInProgress: false,
+			});
+		}
 	}
 
 	render(): Object {
+		const {
+			isSigninInProgress,
+			isLoading,
+			isAppleSigningInProgress,
+		} = this.state;
+
 		let { dialogueOpen, styles, headerText } = this.props;
-		let buttonAccessible = !this.state.isLoading && !dialogueOpen;
+		let buttonAccessible = !isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
+
+		const disableAllSignin = isLoading || isSigninInProgress || isAppleSigningInProgress;
 
 		return (
 			<View
@@ -187,21 +245,25 @@ class LoginForm extends View {
 					text={this.state.isLoading ? i18n.loggingin : i18n.login}
 					postScript={this.state.isLoading ? '...' : null}
 					accessible={buttonAccessible}
+					disabled={disableAllSignin}
 				/>
 				<View style={{ height: 10 }}/>
-				{Platform.OS === 'ios' && <AppleButton
-					buttonStyle={AppleButton.Style.WHITE}
-					buttonType={AppleButton.Type.SIGN_IN}
-					style={styles.loginButtonStyleA}
-					onPress={this.onPressSignInApple}
-				/>
+				{(Platform.OS === 'ios' && appleAuth.isSupported) &&
+				(
+					<AppleButton
+						buttonStyle={AppleButton.Style.WHITE}
+						buttonType={AppleButton.Type.SIGN_IN}
+						style={styles.loginButtonStyleA}
+						onPress={disableAllSignin ? undefined : this.onPressSignInApple}
+					/>
+				)
 				}
 				{deployStore !== 'huawei' && (<GoogleSigninButton
 					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}
 					color={GoogleSigninButton.Color.Dark}
 					onPress={this.signIn}
-					disabled={this.state.isSigninInProgress} />
+					disabled={disableAllSignin} />
 				)}
 				<View style={{ height: 10 }}/>
 			</View>

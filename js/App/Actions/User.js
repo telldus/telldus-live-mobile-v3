@@ -36,6 +36,9 @@ import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
 import { LiveApi, getSubscriptionPlans } from '../Lib';
 import { setBoolean } from '../Lib/Analytics';
+import {
+	logoutFromTelldus,
+} from './Login';
 
 import {
 	getUserProfile,
@@ -419,6 +422,14 @@ function reportIapAtServer(purchaseInfoIap: Object, otherInfo?: Object = {}): Th
 	};
 }
 
+const logoutAfterUnregister = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const { user: { pushToken } } = getState();
+		dispatch(unregisterPushToken(pushToken));
+		return dispatch(logoutFromTelldus());
+	};
+};
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -438,4 +449,5 @@ module.exports = {
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
 	reportIapAtServer,
+	logoutAfterUnregister,
 };
