@@ -33,29 +33,31 @@ const HeaderLeftButtonsMainTab = (props: Object): Object => {
 		buttons,
 		style: styleContainer,
 	} = props;
-	const items = buttons.map((button: Object, i: number): Object => {
-		const {
-			style,
-			accessibilityLabel,
-			onPress,
-			iconComponent,
-		} = button;
-		return (
-			<TouchableOpacity
-				key={`${i}`}
-				onPress={onPress}
-				accessibilityLabel={accessibilityLabel}
-				style={[
-					{
-						backgroundColor: 'transparent',
-					},
-					style,
-				]}
-			>
-				{iconComponent}
-			</TouchableOpacity>
-		);
-	});
+	const items = React.useMemo((): Array<Object> => {
+		return buttons.map((button: Object, i: number): Object => {
+			const {
+				style,
+				accessibilityLabel,
+				onPress,
+				iconComponent,
+			} = button;
+			return (
+				<TouchableOpacity
+					key={`${i}`}
+					onPress={onPress}
+					accessibilityLabel={accessibilityLabel}
+					style={[
+						{
+							backgroundColor: 'transparent',
+						},
+						style,
+					]}
+				>
+					{iconComponent}
+				</TouchableOpacity>
+			);
+		});
+	}, [buttons]);
 
 	return (
 		<View style={[{
