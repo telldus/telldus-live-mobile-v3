@@ -135,9 +135,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 	}
 
 	componentDidMount() {
-		this.clearAppleCredentialRevokedListener = appleAuth.onCredentialRevoked(() => {
-			this.props.dispatch(logoutAfterUnregister());
-		});
+		if (appleAuth.isSupported) {
+			this.clearAppleCredentialRevokedListener = appleAuth.onCredentialRevoked(() => {
+				this.props.dispatch(logoutAfterUnregister());
+			});
+		}
 	}
 
 	componentWillUnmount() {
