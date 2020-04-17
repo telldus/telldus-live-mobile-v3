@@ -23,7 +23,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
@@ -63,9 +65,10 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
 	const { pro } = userProfile;
 
-	function onPressUpgrade() {
+	const onPressUpgrade = useCallback(() => {
 		navigation.navigate('PremiumUpgradeScreen');
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const {
 		upgradeSyle,
