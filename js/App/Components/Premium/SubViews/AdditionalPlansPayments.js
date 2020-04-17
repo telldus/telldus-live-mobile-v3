@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -53,12 +55,14 @@ const AdditionalPlansPayments = (props: Object): Object => {
 		buttonStyle,
 		textStyle,
 	} = getStyles(layout);
-	function onPress() {
+
+	const onPress = useCallback(() => {
 		if (onPressNavigate) {
 			onPressNavigate();
 		}
 		navigation.navigate('AdditionalPlansPaymentsScreen');
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [onPressNavigate]);
 
 	return (
 		<>
