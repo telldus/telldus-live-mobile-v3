@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -43,21 +45,23 @@ const Footer = (props: Object): Object => {
 	} = props;
 
 	const dispatch = useDispatch();
-	function onPressF1() {
+	const onPressF1 = useCallback(() => {
 		if (onPressPurchase) {
 			onPressPurchase();
 		}
-	}
+	}, [onPressPurchase]);
 
-	function onPressF2() {
+	const onPressF2 = useCallback(() => {
 		dispatch(toggleVisibilityProExpireHeadsup('hide_perm'));
 		navigation.popToTop();
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	function onPressF3() {
+	const onPressF3 = useCallback(() => {
 		dispatch(toggleVisibilityProExpireHeadsup('hide_temp'));
 		navigation.popToTop();
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const { formatMessage } = useIntl();
 
