@@ -47,6 +47,12 @@ function navigation(state: State = initialState, action: Action): State {
 			screen: 'Dashboard',
 		};
 	}
+	if (action.type === 'LOGGED_OUT') {
+		return {
+			...state,
+			screen: 'Login',
+		};
+	}
 	return state;
 }
 
