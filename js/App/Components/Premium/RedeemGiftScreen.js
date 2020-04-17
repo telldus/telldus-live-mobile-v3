@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -69,18 +69,22 @@ const RedeemGiftScreen = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const {
+		toggleDialogueBox,
+	} = screenProps;
+
+	const {
 		formatMessage,
 	} = useIntl();
 
 	const [ code, setCode ] = useState('');
-	function onChangeText(text: string) {
+	const onChangeText = useCallback((text: string) => {
 		setCode(text);
-	}
+	}, []);
 
 	const dispatch = useDispatch();
-	function onPress() {
+	const onPress = useCallback(() => {
 		if (!code || code.trim() === '') {
-			screenProps.toggleDialogueBox({
+			toggleDialogueBox({
 				show: true,
 				showHeader: true,
 				text: formatMessage(i18n.errorInvalidCode),
@@ -106,7 +110,8 @@ const RedeemGiftScreen = (props: Object): Object => {
 			dispatch(showToast(err.message || formatMessage(i18n.errorRedeemFailed)));
 			dispatch(getUserProfile());
 		});
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [code]);
 
 	const headerArray = formatMessage(i18n.enterRedeemCode).split(' ');
 	const header = useMemo((): Array<Object> => {
