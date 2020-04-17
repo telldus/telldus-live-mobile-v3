@@ -47,9 +47,13 @@ const LastUpdatedInfo = (props: Object): Object => {
 	} = props;
 
 	const intl = useRelativeIntl(gatewayTimezone);
-	function formatSensorLastUpdateFunc(time: string): string {
+	const formatSensorLastUpdateFunc = React.useCallback((time: string): string => {
 		return formatSensorLastUpdate(time, intl, timestamp, gatewayTimezone);
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		gatewayTimezone,
+		timestamp,
+	]);
 
 	return (
 		<RawIntlProvider value={intl}>
