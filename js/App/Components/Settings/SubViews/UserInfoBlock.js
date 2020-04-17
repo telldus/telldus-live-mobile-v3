@@ -47,11 +47,11 @@ const UserInfoBlock = (props: Object): Object => {
 		fontSize,
 	} = getStyles(layout);
 
-	const testCrash = () => {
+	const testCrash = React.useCallback(() => {
 		if (deployStore !== 'huawei') {
 			firebase.crashlytics().crash();
 		}
-	};
+	}, []);
 
 	const titleUserInfo = `${formatMessage(i18n.titleUserInfo)}:`;
 	const labelLoggedUser = formatMessage(i18n.labelLoggedUser);
