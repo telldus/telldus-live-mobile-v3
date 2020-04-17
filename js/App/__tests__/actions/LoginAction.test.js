@@ -1,4 +1,4 @@
-import {updateAccessToken} from '../../Actions/auth';
+import {updateAccessToken} from '../../Actions/Auth';
 import { configureStore } from '../../Store/ConfigureStore';
 jest.useFakeTimers();
 import fetchMock from 'fetch-mock';
