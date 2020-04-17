@@ -92,11 +92,14 @@ const DrawerSubHeader = ({styles, textIntl}: Object): Object => (
 	</View>
 );
 
-const SettingsLink = ({styles, textIntl, iconName, iconComponent, onPressLink}: Object): Object => (
+const SettingsLink = ({styles, textIntl, text, iconName, iconComponent, onPressLink}: Object): Object => (
 	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
 		{!!iconName && <IconTelldus style={styles.linkIconStyle} icon={iconName}/>}
 		{!!iconComponent && iconComponent}
-		<Text style={styles.linkLabelStyle}><FormattedMessage {...textIntl} style={styles.linkLabelStyle}/></Text>
+		<Text style={styles.linkLabelStyle}>
+			{!!text && text}
+			{!!textIntl && <FormattedMessage {...textIntl} style={styles.linkLabelStyle}/>}
+		</Text>
 	</RippleButton>
 );
 
