@@ -30,7 +30,10 @@ import {
 import max from 'lodash/max';
 import min from 'lodash/min';
 
-import type { Action, ThunkAction, GrantType } from './Types';
+import {
+	updateAccessToken,
+} from './Auth';
+import type { ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 
 import {LiveApi} from '../Lib/LiveApi';
@@ -92,13 +95,6 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial, gra
 			throw error;
 		});
 };
-
-function updateAccessToken(accessToken: Object): Action {
-	return {
-		type: 'RECEIVED_ACCESS_TOKEN',
-		accessToken: accessToken,
-	};
-}
 
 /**
  *
@@ -249,7 +245,6 @@ module.exports = {
 	loginToTelldus,
 	logoutFromTelldus,
 	getUserProfile,
-	updateAccessToken,
 	logoutSelectedFromTelldus,
 	onSwitchAccount,
 	prepareGAPremiumProperties,

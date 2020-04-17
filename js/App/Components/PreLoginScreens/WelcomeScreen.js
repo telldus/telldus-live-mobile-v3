@@ -37,7 +37,7 @@ import i18n from '../../Translations/common';
 
 import {
 	updateAccessToken,
-} from '../../Actions/Login';
+} from '../../Actions/Auth';
 
 type Props = {
 	accessToken: Object,

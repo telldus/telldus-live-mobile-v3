@@ -30,6 +30,7 @@ let axiosSources = {};
 
 import {
 	updateAccessTokenOtherAccount,
+	updateAccessToken,
 } from '../Actions/Auth';
 
 import type { ThunkAction } from '../Actions/Types';
@@ -205,15 +206,10 @@ export function refreshAccessToken(url?: string = '', requestParams?: Object = {
 				}
 
 				if (isRequestMadeByTheActiveAccount) {
-					// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
-				// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
-					dispatch({
-						type: 'RECEIVED_ACCESS_TOKEN',
-						accessToken: {
-							...response,
-							userId, // TODO: No need to override once userId is available via API response
-						},
-					});
+					dispatch(updateAccessToken({
+						...response,
+						userId, // TODO: No need to override once userId is available via API response
+					}));
 				} else {
 					dispatch(updateAccessTokenOtherAccount({
 						...response,

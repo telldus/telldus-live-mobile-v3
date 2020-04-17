@@ -30,6 +30,14 @@ function updateAccessTokenOtherAccount(accessToken: Object): Action {
 	};
 }
 
+function updateAccessToken(accessToken: Object): Action {
+	return {
+		type: 'RECEIVED_ACCESS_TOKEN',
+		accessToken: accessToken,
+	};
+}
+
 module.exports = {
+	updateAccessToken,
 	updateAccessTokenOtherAccount,
 };
