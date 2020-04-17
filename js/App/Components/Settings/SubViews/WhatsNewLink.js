@@ -45,9 +45,10 @@ const WhatsNewLink = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
-	function onPressWhatsNew() {
+	const onPressWhatsNew = React.useCallback(() => {
 		dispatch(showChangeLog());
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<Text onPress={onPressWhatsNew} style={buttonResubmit}>
