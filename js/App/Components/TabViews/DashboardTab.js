@@ -210,7 +210,8 @@ class DashboardTab extends View {
 
 	componentDidMount() {
 		const { isDBEmpty, navigation, screenProps } = this.props;
-		if (isDBEmpty && (screenProps.currentScreen === 'Dashboard' || screenProps.currentScreen === 'Tabs')) {
+		const possibleScreen = ['Dashboard', 'Tabs', 'Login'];
+		if (isDBEmpty && possibleScreen.indexOf(screenProps.currentScreen) !== -1) {
 			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
 			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
 			// back to Dashboard itself.
