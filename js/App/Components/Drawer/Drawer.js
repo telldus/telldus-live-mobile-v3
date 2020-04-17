@@ -244,11 +244,16 @@ constructor(props: Props) {
 			dispatch,
 			enableGeoFenceFeature,
 			appDrawerBanner,
+			intl,
 		} = this.props;
 		const {
 			drawerSubHeader,
 			...styles
-		 } = this.getStyles(appLayout);
+		} = this.getStyles(appLayout);
+
+		const {
+			formatMessage,
+		} = intl;
 
 		const settingLinks = this.SETTINGS.map((s: Object, index: number): Object => {
 			return <SettingsLink
@@ -283,7 +288,7 @@ constructor(props: Props) {
 					{enableGeoFenceFeature && (
 						<View style={styles.settingsLinkCover}>
 							<DrawerSubHeader
-								textIntl={'GeoFence'}
+								textIntl={i18n.geoFence}
 								styles={drawerSubHeader}/>
 							<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
 								<MaterialIcons
@@ -293,7 +298,7 @@ constructor(props: Props) {
 									}}
 									name={'location-on'}/>
 								<Text style={styles.linkLabelStyle}>
-									GeoFence Settings
+									{formatMessage(i18n.geoFenceSettings)}
 								</Text>
 							</RippleButton>
 						</View>
