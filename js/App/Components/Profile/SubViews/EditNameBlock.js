@@ -23,7 +23,7 @@
 
 'use strict';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -79,19 +79,8 @@ const EditNameBlock = (props: Object): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [FN]);
 
-	function toggleEdit() {
-		if (inLineEditActive) {
-			setUserNameConfirm();
-		}
-		setInLineEditActive(!inLineEditActive);
-	}
-
-	function onDoneEdit() {
-		setInLineEditActive(false);
-		setUserNameConfirm();
-	}
 	const dispatch = useDispatch();
-	function setUserNameConfirm() {
+	const setUserNameConfirm = useCallback(() => {
 		if (!nameEditValue || nameEditValue.trim() === '') {
 			toggleDialogueBox({
 				show: true,
@@ -110,11 +99,24 @@ const EditNameBlock = (props: Object): Object => {
 			dispatch(showToast(error.message || formatMessage(i18n.updateFailed)));
 			dispatch(getUserProfile());
 		});
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [nameEditValue]);
 
-	function onChangeText(text: string) {
+	const toggleEdit = useCallback(() => {
+		if (inLineEditActive) {
+			setUserNameConfirm();
+		}
+		setInLineEditActive(!inLineEditActive);
+	}, [inLineEditActive, setUserNameConfirm]);
+
+	const onDoneEdit = useCallback(() => {
+		setInLineEditActive(false);
+		setUserNameConfirm();
+	}, [setUserNameConfirm]);
+
+	const onChangeText = useCallback((text: string) => {
 		setNameEditValue(text);
-	}
+	}, []);
 
 	const {
 		iconValueRightSize,
