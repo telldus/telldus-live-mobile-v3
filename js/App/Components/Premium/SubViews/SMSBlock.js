@@ -23,7 +23,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 import {
@@ -66,13 +68,15 @@ const SMSBlock = (props: Object): Object => {
 	const { userProfile = {} } = useSelector((state: Object): Object => state.user);
 	const { credits = 0 } = userProfile;
 
-	function onPressViewHistory() {
+	const onPressViewHistory = useCallback(() => {
 		navigation.navigate('SMSHistoryScreen');
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	function onPressBuyCredits() {
+	const onPressBuyCredits = useCallback(() => {
 		navigation.navigate('BuySMSCreditsScreen');
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const {
 		coverStyle,
