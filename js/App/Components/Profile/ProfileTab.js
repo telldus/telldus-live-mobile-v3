@@ -261,8 +261,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						show: true,
 						showHeader: true,
 						imageHeader: true,
+						header: `${formatMessage(i18n.logout)}?`,
 						text: 'You are about to log out from the only premium account. You no longer can access premium features.' +
-						' Hence mulitple accounts feature will be disabled. If you would like to log out any way please select any one ' +
+						' Hence multiple accounts feature will be disabled. If you would like to log out any way please select any one ' +
 						'account that you would like to switch to.',
 						showPositive: true,
 						positiveText: formatMessage(i18n.logout).toUpperCase(),
