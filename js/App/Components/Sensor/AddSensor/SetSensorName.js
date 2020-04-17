@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
 	ScrollView,
 } from 'react-native';
@@ -79,12 +79,12 @@ const SetSensorName = (props: Object): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function onChangeName(value: string) {
+	const onChangeName = useCallback((value: string) => {
 		setNameConf({
 			name: value,
 			isLoading,
 		});
-	}
+	}, [isLoading]);
 
 	function submitName() {
 		if (!name || !name.trim()) {
@@ -149,9 +149,9 @@ const SetSensorName = (props: Object): Object => {
 		accessoryiconStyle,
 	} = getStyles(appLayout);
 
-	function renderLeftAccessory(): Object {
+	const renderLeftAccessory = useCallback((): Object => {
 		return <IconTelldus icon={'sensor'} style={accessoryiconStyle}/>;
-	}
+	}, [accessoryiconStyle]);
 
 	return (
 		<ScrollView
