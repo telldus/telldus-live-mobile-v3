@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { WebView } from 'react-native-webview';
 
@@ -45,14 +47,14 @@ const TransactionWebview = (props: Object): Object => {
 		container,
 	} = getStyles(layout);
 
+	const { params = {} } = route;
 	const {
 		uri = '',
-	} = route.params || {};
+	} = params;
 
 	const dispatch = useDispatch();
-	function onShouldStartLoadWithRequest(request: Object): boolean {
+	const onShouldStartLoadWithRequest = useCallback((request: Object): boolean => {
 		if (request.url.includes('telldus-live-mobile-common')) {
-			const { params = {} } = route;
 			navigation.navigate('PostPurchaseScreen', {
 				...params,
 				success: request.url.includes('status=success'),
@@ -61,7 +63,8 @@ const TransactionWebview = (props: Object): Object => {
 			return false;
 		}
 		return true;
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [params]);
 
 	return (
 		<View style={container}>
