@@ -51,6 +51,7 @@ import {
 	unregisterPushToken,
 	logoutSelectedFromTelldus,
 	showToast,
+	toggleVisibilitySwitchAccountAS,
 } from '../../Actions';
 import {
 	capitalizeFirstLetterOfEachWord,
@@ -70,11 +71,15 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		accounts = {},
 		userId = '',
 		pushToken,
+		switchAccountConf = {},
 	} = useSelector((state: Object): Object => state.user);
+	const {
+		isLoggingOut = false,
+	} = switchAccountConf;
 
 	const intl = useIntl();
 
-	const actionSheetRef = React.useRef();
+	const actionSheetRef: Object = React.useRef();
 
 	function showActionSheet() {
 		if (actionSheetRef.current) {
@@ -95,7 +100,6 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 
 	const [ showAddNewAccount, setShowAddNewAccount ] = React.useState(false);
 	const [ switchingId, setSwitchingId ] = React.useState(null);
-	const [ isLoggingOut, setIsLoggingOut ] = React.useState(false);
 
 	const {
 		formatMessage,
@@ -131,6 +135,10 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 
 	function closeActionSheet(index?: number, callback?: Function) {
 		if (actionSheetRef.current) {
+			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
 			actionSheetRef.current.hide(index, callback);
 		}
 	}
@@ -140,6 +148,10 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			return;
 		}
 		if (showAddNewAccount) {
+			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
 			setShowAddNewAccount(false);
 			if (index === 0) {
 				navigate('LoginScreen');
@@ -155,7 +167,10 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				}
 			} else {
 				if (index === -1) {
-					setIsLoggingOut(false);
+					dispatch(toggleVisibilitySwitchAccountAS({
+						showAS: false,
+						isLoggingOut: false,
+					}));
 				}
 				let userIdKey = Object.keys(accounts)[index];
 				if (userIdKey) {
@@ -182,7 +197,6 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 
 						if (isLoggingOut) {
 							dispatch(unregisterPushToken(pushToken));
-							setIsLoggingOut(false);
 							dispatch(logoutSelectedFromTelldus({
 								userId,
 							}));
@@ -190,7 +204,6 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 					}).catch((err: Object) => {
 						closeActionSheet();
 						setSwitchingId(null);
-						setIsLoggingOut(false);
 						toggleDialogueBoxState({
 							show: true,
 							showHeader: true,
@@ -199,6 +212,8 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 							showPositive: true,
 						});
 					});
+				} else {
+					closeActionSheet();
 				}
 			}
 		}

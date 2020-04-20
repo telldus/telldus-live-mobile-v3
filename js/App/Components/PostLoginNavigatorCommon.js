@@ -112,6 +112,8 @@ type Props = {
 
 	screen: string,
 
+	showSwitchAccountAS: boolean,
+
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
@@ -437,6 +439,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'screen',
 		'showLoadingIndicator',
 		'screen',
+		'showSwitchAccountAS',
 	]);
 	if (propsChange) {
 		return true;
@@ -461,6 +464,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		positionToast,
 		intl,
 		userId,
+		showSwitchAccountAS,
 	} = this.props;
 	if (showToastBool && !prevProps.showToast) {
 		const { formatMessage } = intl;
@@ -473,6 +477,10 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		this.actionsToPerformOnStart();
 	}
 	this._askIfAddNewLocation();
+
+	if (showSwitchAccountAS && !prevProps.showSwitchAccountAS) {
+		this.showSwitchAccountActionSheet();
+	}
 }
 
 _askIfAddNewLocation = () => {
@@ -761,6 +769,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		pushTokenRegistered,
 		deviceId = null,
 		userId,
+		switchAccountConf = {},
 	} = state.user;
 
 	const { allIds = [], toActivate, didFetch: gDidFetch } = state.gateways;
@@ -794,6 +803,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		visibilityProExpireHeadsup,
 		userId,
 		screen: state.navigation.screen,
+		showSwitchAccountAS: switchAccountConf.showAS,
 
 		showLoadingIndicator,
 	};

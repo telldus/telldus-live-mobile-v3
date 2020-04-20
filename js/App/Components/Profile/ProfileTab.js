@@ -28,22 +28,13 @@ import React, {
 import {
 	ScrollView,
 	TouchableOpacity,
-	StyleSheet,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-const gravatar = require('gravatar-api');
-import { RadioButtonInput } from 'react-native-simple-radio-button';
 
 import {
 	View,
 	IconTelldus,
 	Text,
-	ActionSheet,
-	Image,
-	Throbber,
-	EmptyView,
-	RippleButton,
-	CachedImage,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -66,7 +57,6 @@ import {
 	isAutoRenew,
 	isBasicUser,
 	getPremiumAccounts,
-	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 import Theme from '../../Theme';
@@ -77,6 +67,7 @@ import {
 	unregisterPushToken,
 	logoutSelectedFromTelldus,
 	showToast,
+	toggleVisibilitySwitchAccountAS,
 } from '../../Actions';
 import {
 	useDialogueBox,
@@ -99,10 +90,13 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		userId = '',
 		firebaseRemoteConfig = {},
 		pushToken,
+		switchAccountConf = {},
 	} = useSelector((state: Object): Object => state.user);
 	const { pro, firstname: fn, lastname: ln } = userProfile;
-
-	const actionSheetRef = React.useRef();
+	const {
+		isLoggingOut = false,
+		...otherSAConfs
+	} = switchAccountConf;
 
 	const { premiumPurchase = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
@@ -115,10 +109,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
-
-	const [ showAddNewAccount, setShowAddNewAccount ] = React.useState(false);
-	const [ switchingId, setSwitchingId ] = React.useState(null);
-	const [ isLoggingOut, setIsLoggingOut ] = React.useState(false);
 
 	const {
 		formatMessage,
@@ -136,30 +126,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		redeemIconStyle,
 		redeemTextSyle,
 		pHistoryCStyle,
-		actionSheetTitle,
-		actionSheetTitleCover,
-		actionSheetOverlay,
-		actionSheetTitleBox,
-		actionSheetMessageBox,
-		actionSheetButtonBox,
-		actionSheetButtonOne,
-		actionSheetButtonTwo,
-		actionSheetButtonOneCover,
-		actionSheetButtonTwoCover,
-		actionSheetButtonAccCover,
-		actionSheetButtonAccText,
-		addIconStyle,
-		addIconCoverStyle,
-		gravatarStyle,
-		brandSecondary,
-		rbSize,
-		rbOuterSize,
-		throbberContainerStyle,
-		throbberStyle,
-		actionSheetButtonAccEmailText,
-		actionSheetTextCover,
 	} = getStyles(layout, {
-		showAddNewAccount,
 		isLoggingOut,
 	});
 
@@ -170,12 +137,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 
 	function onPressViewPurchaseHistory() {
 		navigation.navigate('PurchaseHistoryScreen');
-	}
-
-	function showActionSheet() {
-		if (actionSheetRef.current) {
-			actionSheetRef.current.show();
-		}
 	}
 
 	function onPressAddAccount() {
@@ -200,19 +161,19 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		if (isLoggingOut) {
 			return;
 		}
-		showActionSheet();
-	}
-
-	function closeActionSheet(index?: number, callback?: Function) {
-		if (actionSheetRef.current) {
-			actionSheetRef.current.hide(index, callback);
-		}
+		dispatch(toggleVisibilitySwitchAccountAS({
+			showAS: true,
+			isLoggingOut: false,
+		}));
 	}
 
 	const onConfirmLogout = useCallback(() => {
 		function proceedWithLogout() {
-			setIsLoggingOut(true);
 			if (Object.keys(accounts).length === 2) {
+				dispatch(toggleVisibilitySwitchAccountAS({
+					...otherSAConfs,
+					isLoggingOut: true,
+				}));
 				let otherUserId;
 				Object.keys(accounts).forEach((uid: string) => {
 					const check1 = uid.trim().toLowerCase();
@@ -228,7 +189,10 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						}));
 
 						dispatch(unregisterPushToken(pushToken));
-						setIsLoggingOut(false);
+						dispatch(toggleVisibilitySwitchAccountAS({
+							...otherSAConfs,
+							isLoggingOut: false,
+						}));
 						dispatch(logoutSelectedFromTelldus({
 							userId,
 						}));
@@ -237,7 +201,10 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						});
 						dispatch(showToast(messageOnSuccesSwitch));
 					}).catch((err: Object) => {
-						setIsLoggingOut(false);
+						dispatch(toggleVisibilitySwitchAccountAS({
+							...otherSAConfs,
+							isLoggingOut: false,
+						}));
 						toggleDialogueBoxState({
 							show: true,
 							showHeader: true,
@@ -249,7 +216,10 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				}
 
 			} else {
-				showActionSheet();
+				dispatch(toggleVisibilitySwitchAccountAS({
+					showAS: true,
+					isLoggingOut: true,
+				}));
 			}
 		}
 
@@ -287,170 +257,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		userId,
 	]);
 
-	const onSelectActionSheet = useCallback((index: number) => {
-		(() => {
-			if (switchingId) {
-				return;
-			}
-			if (showAddNewAccount) {
-				setShowAddNewAccount(false);
-				if (index === 0) {
-					navigation.navigate('LoginScreen');
-				} else if (index === 1) {
-					navigation.navigate('RegisterScreen');
-				}
-			} else {
-				const addNewIndex = Object.keys(accounts).length;
-				if (index === addNewIndex) {
-					setShowAddNewAccount(true);
-					if (actionSheetRef.current) {
-						actionSheetRef.current.show();
-					}
-				} else {
-					if (index === -1) {
-						setIsLoggingOut(false);
-					}
-					let userIdKey = Object.keys(accounts)[index];
-					if (userIdKey) {
-						userIdKey = userIdKey.trim().toLowerCase();
-						setSwitchingId(userIdKey);
-						const {
-							accessToken,
-						} = accounts[userIdKey];
-
-						dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
-							closeActionSheet(undefined, () => {
-							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
-								setTimeout(() => {
-									const messageOnSuccesSwitch = formatMessage(i18n.switchedToAccount, {
-										value: `${res.firstname} ${res.lastname}`,
-									});
-									dispatch(showToast(messageOnSuccesSwitch));
-
-									setSwitchingId(null);
-									dispatch(onSwitchAccount({
-										userId: userIdKey,
-									}));
-
-									if (isLoggingOut) {
-										dispatch(unregisterPushToken(pushToken));
-										setIsLoggingOut(false);
-										dispatch(logoutSelectedFromTelldus({
-											userId,
-										}));
-									}
-								}, 200);
-							});
-						}).catch((err: Object) => {
-							closeActionSheet();
-							setSwitchingId(null);
-							setIsLoggingOut(false);
-							toggleDialogueBoxState({
-								show: true,
-								showHeader: true,
-								imageHeader: true,
-								text: err.message || formatMessage(i18n.unknownError),
-								showPositive: true,
-							});
-						});
-					}
-				}
-			}
-		})();
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		accounts,
-		isLoggingOut,
-		pushToken,
-		showAddNewAccount,
-		switchingId,
-		userId,
-	]);
-
-	let ACCOUNTS = [];
-	const disabledButtonIndexes = [];
-	Object.keys(accounts).map((un: string, index: number) => {
-		if (!showAddNewAccount) {
-			disabledButtonIndexes.push(index);
-		}
-		const {
-			email,
-			firstname = '',
-			lastname = '',
-			accessToken = {},
-		} = accounts[un];
-		const nameInfo = `${firstname} ${lastname}`;
-
-		let options = {
-			email,
-			parameters: { 'size': '200', 'd': 'mm' },
-			secure: true,
-		};
-		let avatar = gravatar.imageUrl(options);
-
-		const uid = accessToken.userId || '';
-		const isSelected = uid.trim().toLowerCase() === userId.trim().toLowerCase();
-
-		function onPressRB() {
-			if (isSelected) {
-				return;
-			}
-			onSelectActionSheet(index);
-		}
-		if (isLoggingOut && isSelected) {
-			return;
-		}
-		ACCOUNTS.push(
-			<RippleButton onPress={onPressRB} style={actionSheetButtonAccCover}>
-				<CachedImage
-					resizeMode={'cover'}
-					useQueryParamsInCacheKey={true}
-					sourceImg={avatar}
-					style={gravatarStyle}/>
-				<View style={actionSheetTextCover}>
-					<Text style={actionSheetButtonAccText}>
-						{nameInfo.trim()}
-					</Text>
-					<Text style={actionSheetButtonAccEmailText}>
-						{email}
-					</Text>
-				</View>
-				{
-					switchingId === uid.trim().toLowerCase() ?
-						<Throbber
-							throbberContainerStyle={throbberContainerStyle}
-							throbberStyle={throbberStyle}/>
-						:
-						isLoggingOut ?
-							<EmptyView/>
-							:
-							<RadioButtonInput
-								isSelected={isSelected}
-								buttonSize={rbSize}
-								buttonOuterSize={rbOuterSize}
-								borderWidth={3}
-								buttonInnerColor={brandSecondary}
-								buttonOuterColor={brandSecondary}
-								onPress={onPressRB}
-								obj={{userId: accessToken.userId}}
-								index={index}/>
-				}
-			</RippleButton>
-		);
-	});
-
 	const hasMultipleAccounts = Object.keys(accounts).length > 1;
-
-	const moreButtons = isLoggingOut ? []
-		:
-		[<View style={actionSheetButtonAccCover}>
-			<View style={addIconCoverStyle}>
-				<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
-			</View>
-			<Text style={actionSheetButtonAccText}>
-				{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
-			</Text>
-		</View>];
 
 	return (
 		<ScrollView style={container}>
@@ -534,92 +341,25 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					isLoggingOut={isLoggingOut}
 				/>
 			</View>
-			<ActionSheet
-				ref={actionSheetRef}
-				extraData={{
-					showAddNewAccount,
-					items: Object.keys(accounts),
-					isLoggingOut,
-				}}
-				disabledButtonIndexes={disabledButtonIndexes}
-				styles={{
-					overlay: actionSheetOverlay,
-					body: actionSheetOverlay,
-					titleBox: actionSheetTitleBox,
-					messageBox: actionSheetMessageBox,
-					buttonBox: actionSheetButtonBox,
-				}}
-				title={showAddNewAccount ?
-					<View style={actionSheetTitleCover}>
-						<Text style={actionSheetTitle} onPress={closeActionSheet}>
-							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
-						</Text>
-					</View>
-					:
-					isLoggingOut ?
-						<View style={actionSheetTitleCover}>
-							<Text style={actionSheetTitle} onPress={closeActionSheet}>
-								{formatMessage(i18n.chooseAccToSwitch)}
-							</Text>
-						</View>
-						:
-						undefined
-				}
-				options={showAddNewAccount ?
-					[
-						<View style={actionSheetButtonOneCover}>
-							<Text style={actionSheetButtonOne}>
-								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.logIntoExisting))}
-							</Text>
-						</View>,
-						<View style={actionSheetButtonTwoCover}>
-							<Text style={actionSheetButtonTwo}>
-								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.createNewAccount))}
-							</Text>
-						</View>,
-					]
-					:
-					[
-						...ACCOUNTS,
-						...moreButtons,
-					]
-				}
-				onPress={onSelectActionSheet}/>
 		</ScrollView>
 	);
 });
 
-const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object): Object => {
+const getStyles = (appLayout: Object, {isLoggingOut}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
 		paddingFactor,
-		brandSecondary,
-		rowTextColor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const paddingEditNameBlock = Math.floor(deviceWidth * 0.045);
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
-	const fontSizeActionSheetTitle = Math.floor(deviceWidth * 0.05);
-
-	const addIconSize = Math.floor(deviceWidth * 0.07);
-	const addIconCoverSize = addIconSize + 15;
-
-	const butBoxHeight = (showAddNewAccount || isLoggingOut) ? (fontSize * 2.2) + (padding * 2) : addIconCoverSize * 2;
-	const titleBoxHeight = (showAddNewAccount || isLoggingOut) ? (fontSizeActionSheetTitle * 3) + 8 : undefined;
-
-	const rbOuterSize = Math.floor(deviceWidth * 0.055);
-	const rbSize = rbOuterSize * 0.5;
 
 	return {
-		rbOuterSize,
-		rbSize,
-		brandSecondary,
 		style: {
 			marginBottom: padding / 2,
 		},
@@ -666,112 +406,6 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			fontSize: fontSize,
 			color: Theme.Core.brandSecondary,
 			marginRight: 5,
-		},
-		actionSheetOverlay: {
-			borderTopLeftRadius: 8,
-			borderTopRightRadius: 8,
-			overflow: 'hidden',
-		},
-		actionSheetTitleCover: {
-			paddingHorizontal: padding,
-		},
-		actionSheetTitle: {
-			fontSize: fontSizeActionSheetTitle,
-			color: '#000',
-		},
-		actionSheetMessageBox: {
-			height: undefined,
-		},
-		actionSheetButtonBox: {
-			height: butBoxHeight,
-			paddingHorizontal: padding,
-			alignItems: 'stretch',
-			justifyContent: 'center',
-			backgroundColor: '#fff',
-		},
-		actionSheetTitleBox: {
-			height: titleBoxHeight,
-			marginBottom: StyleSheet.hairlineWidth,
-		},
-		actionSheetButtonOneCover: {
-			flex: 1,
-			backgroundColor: brandSecondary,
-			alignItems: 'center',
-			justifyContent: 'center',
-			borderRadius: 8,
-			marginTop: 8,
-		},
-		actionSheetButtonTwoCover: {
-			flex: 1,
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		actionSheetButtonOne: {
-			fontSize,
-			color: '#fff',
-			textAlignVertical: 'center',
-			textAlign: 'center',
-		},
-		actionSheetButtonTwo: {
-			fontSize,
-			color: brandSecondary,
-			textAlignVertical: 'center',
-			textAlign: 'center',
-		},
-		actionSheetButtonAccCover: {
-			padding,
-			flexDirection: 'row',
-			alignItems: 'center',
-		},
-		actionSheetButtonAccText: {
-			fontSize,
-			color: '#000',
-			textAlignVertical: 'center',
-			textAlign: 'left',
-			marginHorizontal: padding,
-			flex: 1,
-			fontWeight: 'bold',
-		},
-		actionSheetButtonAccEmailText: {
-			fontSize: fontSize * 0.9,
-			color: '#000',
-			textAlignVertical: 'center',
-			textAlign: 'left',
-			marginHorizontal: padding,
-		},
-		actionSheetTextCover: {
-			flex: 1,
-			alignItems: 'flex-start',
-			justifyContent: 'center',
-		},
-		addIconCoverStyle: {
-			borderRadius: addIconCoverSize / 2,
-			height: addIconCoverSize,
-			width: addIconCoverSize,
-			borderWidth: 0.5,
-			borderColor: rowTextColor,
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		gravatarStyle: {
-			borderRadius: addIconCoverSize / 2,
-			height: addIconCoverSize,
-			width: addIconCoverSize,
-			borderWidth: 0.5,
-			borderColor: rowTextColor,
-		},
-		addIconStyle: {
-			height: addIconSize,
-			width: addIconSize,
-			tintColor: eulaContentColor,
-		},
-		throbberContainerStyle: {
-			backgroundColor: 'transparent',
-			position: 'relative',
-		},
-		throbberStyle: {
-			fontSize: rbOuterSize,
-			color: brandSecondary,
 		},
 	};
 };
