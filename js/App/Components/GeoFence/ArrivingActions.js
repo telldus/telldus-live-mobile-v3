@@ -22,7 +22,11 @@
 'use strict';
 
 import React, { useEffect } from 'react';
+import { useIntl } from 'react-intl';
+
 import Actions from './Actions';
+
+import i18n from '../../Translations/common';
 
 type Props = {
 	navigation: Object,
@@ -38,12 +42,17 @@ const ArrivingActions = React.memo<Object>((props: Props): Object => {
 		isEditMode,
 	} = props;
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	const isEdit = isEditMode();
 
 	useEffect(() => {
-		const h = 'Arriving actions';
+		const h = formatMessage(i18n.arrivingActions);
 		const h1 = `${isEdit ? h : `2. ${h}`}`;
-		onDidMount(h1, 'Select actions for when you arrive');
+		onDidMount(h1, formatMessage(i18n.selectActionArrive));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isEdit]);
 

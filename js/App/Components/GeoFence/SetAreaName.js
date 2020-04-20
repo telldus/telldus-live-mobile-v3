@@ -26,6 +26,7 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -40,6 +41,8 @@ import {
 
 import Theme from '../../Theme';
 
+import i18n from '../../Translations/common';
+
 type Props = {
 	navigation: Object,
 	appLayout: Object,
@@ -53,8 +56,13 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	useEffect(() => {
-		onDidMount('5. Name', 'Select a name for your area');
+		onDidMount(`5. ${formatMessage(i18n.name)}`, formatMessage(i18n.selectNameForArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -89,7 +97,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	return (
 		<View style={container}>
 			<MaterialTextInput
-				label={'Name'}
+				label={formatMessage(i18n.name)}
 				containerStyle={containerStyleTF}
 				style={textField}
 				baseColor={brandSecondary}

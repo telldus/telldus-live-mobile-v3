@@ -33,6 +33,7 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -72,11 +73,26 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
+	let { fence } = useSelector((state: Object): Object => state.fences);
+
+	const {
+		latitude,
+		longitude,
+		radius,
+		title,
+	} = fence;
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	useEffect(() => {
-		let name = 'area name';
-		onDidMount(`Edit ${name}`, 'Edit or delete geo fence');
+		onDidMount(formatMessage(i18n.editValue, {
+			value: title,
+		}), formatMessage(i18n.editDeleteGF));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [title]);
 
 	const {
 		container,
@@ -93,13 +109,6 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		rightItemStyle,
 	} = getStyles(appLayout);
 
-	let { fence } = useSelector((state: Object): Object => state.fences);
-
-	const {
-		latitude,
-		longitude,
-		radius,
-	} = fence;
 	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
 	const region = {
 		latitude,
@@ -204,7 +213,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 
 				<View style={rowStyle}>
 					<Text style={leftItemStyle}>
-						Name
+						{formatMessage(i18n.name)}
 					</Text>
 					{editName ?
 						<TextInput
@@ -225,10 +234,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 					}
 				</View>
 				<RowWithAngle
-					labelText={'Arriving actions'}
+					labelText={formatMessage(i18n.arrivingActions)}
 					onPress={onEditArriving}/>
 				<RowWithAngle
-					labelText={'Leaving actions'}
+					labelText={formatMessage(i18n.leavingActions)}
 					onPress={onEditLeaving}/>
 				<TimePicker
 					onChange={onChangeTime}
@@ -241,7 +250,8 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 					}}
 					labelStyle={leftItemStyle}
 					rowStyle={rowStyle}
-					appLayout={appLayout}/>
+					appLayout={appLayout}
+					intl={intl}/>
 			</View>
 			<View style={mapCover}>
 				<MapView.Animated

@@ -28,6 +28,7 @@ import {
 import {
 	useDispatch,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	FloatingButton,
@@ -44,6 +45,8 @@ import {
 	setFenceActiveTime,
 } from '../../Actions/Fences';
 
+import i18n from '../../Translations/common';
+
 type Props = {
 	navigation: Object,
 	appLayout: Object,
@@ -57,10 +60,15 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		onDidMount('4. Active time', 'Select time for fence to be active');
+		onDidMount(`4. ${formatMessage(i18n.activeTime)}`, formatMessage(i18n.selectTimeForFence));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -116,7 +124,8 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 					onChange={onChangeTime}
 					appLayout={appLayout}
 					labelStyle={leftItemStyle}
-					rowStyle={rowStyle}/>
+					rowStyle={rowStyle}
+					intl={intl}/>
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}

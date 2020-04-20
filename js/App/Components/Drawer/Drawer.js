@@ -174,7 +174,7 @@ constructor(props: Props) {
 			showHeader: true,
 			imageHeader: true,
 			header: formatMessage(i18n.upgradeToPremium),
-			text: 'This is a premium feature. Please buy any of our premium package to enjoy this feature.',
+			text: formatMessage(i18n.switchAccountBasicInfo),
 			showPositive: true,
 			showNegative: true,
 			positiveText: formatMessage(i18n.upgrade).toUpperCase(),

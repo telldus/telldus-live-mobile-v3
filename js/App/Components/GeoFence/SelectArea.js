@@ -34,6 +34,7 @@ import {
 	useSelector,
 	useDispatch,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	FloatingButton,
@@ -47,6 +48,8 @@ import {
 	setFenceArea,
 } from '../../Actions/Fences';
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
+
+import i18n from '../../Translations/common';
 
 type Props = {
 	navigation: Object,
@@ -62,6 +65,11 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 	} = props;
 
 	const dispatch = useDispatch();
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 
 	const { userId } = useSelector((state: Object): Object => state.user);
 	let { location } = useSelector((state: Object): Object => state.fences);
@@ -82,7 +90,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 	const [initialRegion, setInitialRegion] = useState(region);
 
 	useEffect(() => {
-		onDidMount('1. Area', 'Select area');
+		onDidMount(`1. ${formatMessage(i18n.area)}`, formatMessage(i18n.selectArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

@@ -115,7 +115,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 			<MapView.Marker
 				key={`${index}`}
 				image={{uri: 'marker'}}
-				title={'Home'}
 				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}>
 				<MapView.Callout onPress={onEditFenceInner}>
 					<FenceCallout

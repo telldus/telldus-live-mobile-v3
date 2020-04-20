@@ -42,6 +42,8 @@ import {
 	LayoutAnimations,
 } from '../../../Lib';
 
+import i18n from '../../../Translations/common';
+
 type Props = {
 	value: Object,
 	appLayout: Object,
@@ -53,6 +55,7 @@ type Props = {
 
 	labelStyle?: number | Object | Array<any>,
 	rowStyle?: number | Object | Array<any>,
+	intl: Object,
 };
 
 type State = {
@@ -139,14 +142,19 @@ class TimePicker extends View<Props, State> {
 			labelStyle,
 			rowStyle,
 			appLayout,
+			intl,
 		} = this.props;
+
+		const {
+			formatMessage,
+		} = intl;
 
 		const styles = getStyles(appLayout);
 
 		return (
 			<View style={styles.container}>
 				<View style={[styles.switchHeader, rowStyle]}>
-					<Text style={[styles.switchLabel, labelStyle]}>Always Active</Text>
+					<Text style={[styles.switchLabel, labelStyle]}>{formatMessage(i18n.alwaysActive)}</Text>
 					<Switch
 						value={this.state.alwaysActive}
 						onValueChange={this.onSwitch}/>
@@ -158,7 +166,9 @@ class TimePicker extends View<Props, State> {
 						(
 
 							<View style={styles.body}>
-								<Text style={styles.sectionLabel}>{'Active from:'}</Text>
+								<Text style={styles.sectionLabel}>
+									{`${formatMessage(i18n.activeFrom)}:`}
+								</Text>
 								<View
 									style={styles.pickers}
 								>
@@ -185,7 +195,9 @@ class TimePicker extends View<Props, State> {
 										}
 									</Picker>
 								</View>
-								<Text style={styles.sectionLabel}>{'Active to:'}</Text>
+								<Text style={styles.sectionLabel}>
+									{`${formatMessage(i18n.activeTo)}:`}
+								</Text>
 								<View
 									style={styles.pickers}
 								>
