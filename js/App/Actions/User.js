@@ -430,6 +430,13 @@ const logoutAfterUnregister = (): ThunkAction => {
 	};
 };
 
+function toggleVisibilitySwitchAccountAS(payload: Object): Action {
+	return {
+		type: 'TOGGLE_VISIBILITY_SWITCH_ACCOUNT_AS',
+		payload,
+	};
+}
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -450,4 +457,5 @@ module.exports = {
 	onReceivedInAppAvailablePurchases,
 	reportIapAtServer,
 	logoutAfterUnregister,
+	toggleVisibilitySwitchAccountAS,
 };
