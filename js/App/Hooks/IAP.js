@@ -20,6 +20,7 @@
 // @flow
 'use strict';
 import { useDispatch } from 'react-redux';
+import { Platform } from 'react-native';
 
 import {
 	purchaseErrorListener,
@@ -39,22 +40,26 @@ const withInAppPurchaseListeners = ({
 	successCallback,
 	errorCallback,
 }: {successCallback?: Function, errorCallback?: Function}): Object => {
-	let purchaseUpdateSubscription = purchaseUpdatedListener((purchase: InAppPurchase | SubscriptionPurchase | ProductPurchase ) => {
-		console.log('TEST purchaseUpdatedListener', purchase);
-		const receipt = purchase.transactionReceipt;
-		if (receipt) {
-			if (successCallback) {
-				successCallback(purchase);
-			}
-		}
-	});
 
-	let purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
-		console.log('TEST purchaseErrorListener N', error);
-		if (errorCallback) {
-			errorCallback(error);
-		}
-	});
+	const isIos = Platform.OS === 'ios';
+
+	let purchaseUpdateSubscription, purchaseErrorSubscription;
+	if (isIos) {
+		purchaseUpdateSubscription = purchaseUpdatedListener((purchase: InAppPurchase | SubscriptionPurchase | ProductPurchase ) => {
+			const receipt = purchase.transactionReceipt;
+			if (receipt) {
+				if (successCallback) {
+					successCallback(purchase);
+				}
+			}
+		});
+
+		purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
+			if (errorCallback) {
+				errorCallback(error);
+			}
+		});
+	}
 
 	return {
 		clearListeners: () => {
