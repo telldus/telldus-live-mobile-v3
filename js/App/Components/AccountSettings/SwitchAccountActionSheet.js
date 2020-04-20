@@ -53,6 +53,9 @@ import {
 	showToast,
 } from '../../Actions';
 import {
+	capitalizeFirstLetterOfEachWord,
+} from '../../Lib/appUtils';
+import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
 import {
@@ -166,7 +169,9 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						closeActionSheet(undefined, () => {
 							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
 							setTimeout(() => {
-								const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+								const messageOnSuccesSwitch = formatMessage(i18n.switchedToAccount, {
+									value: `${res.firstname} ${res.lastname}`,
+								});
 								dispatch(showToast(messageOnSuccesSwitch));
 							}, 200);
 						});
@@ -286,7 +291,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
 			</View>
 			<Text style={actionSheetButtonAccText}>
-	Add Account
+				{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
 			</Text>
 		</View>];
 
@@ -309,14 +314,14 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			title={showAddNewAccount ?
 				<View style={actionSheetTitleCover}>
 					<Text style={actionSheetTitle} onPress={closeActionSheet}>
-							Add Account
+						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
 					</Text>
 				</View>
 				:
 				isLoggingOut ?
 					<View style={actionSheetTitleCover}>
 						<Text style={actionSheetTitle} onPress={closeActionSheet}>
-							Choose account to switch to
+							{formatMessage(i18n.chooseAccToSwitch)}
 						</Text>
 					</View>
 					:
@@ -326,12 +331,12 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				[
 					<View style={actionSheetButtonOneCover}>
 						<Text style={actionSheetButtonOne}>
-							Log Into Existing Account
+							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.logIntoExisting))}
 						</Text>
 					</View>,
 					<View style={actionSheetButtonTwoCover}>
 						<Text style={actionSheetButtonTwo}>
-						Create New Account
+							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.createNewAccount))}
 						</Text>
 					</View>,
 				]

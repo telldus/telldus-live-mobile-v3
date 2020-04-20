@@ -66,6 +66,7 @@ import {
 	isAutoRenew,
 	isBasicUser,
 	getPremiumAccounts,
+	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 import Theme from '../../Theme';
@@ -231,7 +232,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						dispatch(logoutSelectedFromTelldus({
 							userId,
 						}));
-						const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+						const messageOnSuccesSwitch = formatMessage(i18n.switchedToAccount, {
+							value: `${res.firstname} ${res.lastname}`,
+						});
 						dispatch(showToast(messageOnSuccesSwitch));
 					}).catch((err: Object) => {
 						setIsLoggingOut(false);
@@ -262,9 +265,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						showHeader: true,
 						imageHeader: true,
 						header: `${formatMessage(i18n.logout)}?`,
-						text: 'You are about to log out from the only premium account. You no longer can access premium features.' +
-						' Hence multiple accounts feature will be disabled. If you would like to log out any way please select any one ' +
-						'account that you would like to switch to.',
+						text: formatMessage(i18n.infoLogoutOnlyPremAccount),
 						showPositive: true,
 						positiveText: formatMessage(i18n.logout).toUpperCase(),
 						onPressPositive: proceedWithLogout,
@@ -321,7 +322,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 							closeActionSheet(undefined, () => {
 							// Timeout required to wait for the actions sheet modal to close compeletly. Else toast will disappear
 								setTimeout(() => {
-									const messageOnSuccesSwitch = `Switched to ${res.firstname} ${res.lastname}`;
+									const messageOnSuccesSwitch = formatMessage(i18n.switchedToAccount, {
+										value: `${res.firstname} ${res.lastname}`,
+									});
 									dispatch(showToast(messageOnSuccesSwitch));
 
 									setSwitchingId(null);
@@ -445,7 +448,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				<Image source={{uri: 'icon_plus'}} style={addIconStyle}/>
 			</View>
 			<Text style={actionSheetButtonAccText}>
-	Add Account
+				{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
 			</Text>
 		</View>];
 
@@ -527,7 +530,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				<LogoutAllAccButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
-					label={hasMultipleAccounts ? 'Log out from all accounts' : formatMessage(i18n.labelLogOut)}
+					label={hasMultipleAccounts ? formatMessage(i18n.logoutFromAllAccnts) : formatMessage(i18n.labelLogOut)}
 					isLoggingOut={isLoggingOut}
 				/>
 			</View>
@@ -549,14 +552,14 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				title={showAddNewAccount ?
 					<View style={actionSheetTitleCover}>
 						<Text style={actionSheetTitle} onPress={closeActionSheet}>
-							Add Account
+							{capitalizeFirstLetterOfEachWord(formatMessage(i18n.addAccount))}
 						</Text>
 					</View>
 					:
 					isLoggingOut ?
 						<View style={actionSheetTitleCover}>
 							<Text style={actionSheetTitle} onPress={closeActionSheet}>
-							Choose account to switch to
+								{formatMessage(i18n.chooseAccToSwitch)}
 							</Text>
 						</View>
 						:
@@ -566,12 +569,12 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					[
 						<View style={actionSheetButtonOneCover}>
 							<Text style={actionSheetButtonOne}>
-							Log Into Existing Account
+								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.logIntoExisting))}
 							</Text>
 						</View>,
 						<View style={actionSheetButtonTwoCover}>
 							<Text style={actionSheetButtonTwo}>
-						Create New Account
+								{capitalizeFirstLetterOfEachWord(formatMessage(i18n.createNewAccount))}
 							</Text>
 						</View>,
 					]
