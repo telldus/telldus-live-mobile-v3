@@ -109,7 +109,7 @@ class App extends React.Component<Props> {
 
 	componentDidMount() {
 		let { dispatch, deviceId } = this.props;
-		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
+		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
