@@ -39,7 +39,7 @@ DEPLOY_STORE="${DEPLOY_STORE}"
 
 android.useAndroidX=true
 android.enableJetifier=true
-org.gradle.jvmargs=-Xmx4608M
+org.gradle.jvmargs=-Xms512M
 FLIPPER_VERSION=0.33.1
 EOF
 

@@ -10,6 +10,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		264F3394244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
+		264F3395244F459A0042BDEE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264F3393244F459A0042BDEE /* File.swift */; };
 		266B41D5234B03A200095747 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 266B41D4234B03A200095747 /* libRNGoogleSignin.a */; };
 		269003392269BCBA00699DE0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		26AE96182226874F00AC557A /* DisplayMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96162226874E00AC557A /* DisplayMode.m */; };
@@ -55,6 +57,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = TelldusLiveApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TelldusLiveApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TelldusLiveApp/main.m; sourceTree = "<group>"; };
+		26117534244F315500731FA7 /* Widget-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Widget-Bridging-Header.h"; sourceTree = "<group>"; };
+		264F3393244F459A0042BDEE /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TelldusLiveApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		266B41D4234B03A200095747 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		26AD3A7722322C350043A56E /* Widget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Widget.entitlements; sourceTree = "<group>"; };
@@ -131,10 +135,12 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				264F3393244F459A0042BDEE /* File.swift */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				265B40BC244F07D100446DE2 /* TelldusLiveApp-Bridging-Header.h */,
+				26117534244F315500731FA7 /* Widget-Bridging-Header.h */,
 			);
 			name = TelldusLiveApp;
 			sourceTree = "<group>";
@@ -310,6 +316,7 @@
 					26EDB67F22266ACF003EF9E3 = {
 						CreatedOnToolsVersion = 10.1;
 						DevelopmentTeam = M2879GJ5VD;
+						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -511,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				264F3394244F459A0042BDEE /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -520,6 +528,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26AE96192226874F00AC557A /* Linking.m in Sources */,
+				264F3395244F459A0042BDEE /* File.swift in Sources */,
 				26EDB68622266AD0003EF9E3 /* TodayViewController.m in Sources */,
 				26AE96182226874F00AC557A /* DisplayMode.m in Sources */,
 			);
@@ -538,14 +547,18 @@
 				CODE_SIGN_ENTITLEMENTS = TelldusLiveApp/TelldusLiveApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = M2879GJ5VD;
+				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
 					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
 					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
 					"$(PROJECT_DIR)/../node_modules/react-native-google-signin/ios/GoogleSdk",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"FB_SONARKIT_ENABLED=1",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -555,7 +568,7 @@
 					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -599,7 +612,7 @@
 					"$(SRCROOT)/../node_modules/react-native-pixel-color/ios/**",
 				);
 				INFOPLIST_FILE = TelldusLiveApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -622,6 +635,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -647,6 +661,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Widget-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -657,6 +674,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
@@ -682,6 +700,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.telldus.live.mobile.Widget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Widget-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -735,7 +755,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -784,7 +809,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

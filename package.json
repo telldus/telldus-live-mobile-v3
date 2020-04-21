@@ -132,7 +132,7 @@
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-react-hooks": "^2.5.0",
     "fetch-mock": "^9.1.0",
-    "flow-bin": "^0.105.0",
+    "flow-bin": "^0.113.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^25.3.0",
     "jetifier": "^1.6.3",
