@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina5_5" orientation="portrait" appearance="light"/>
+    <device id="ipad12_9" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
@@ -13,28 +13,29 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.AspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="iK7-8z-2oa">
-                                <rect key="frame" x="-44" y="-44" width="502" height="814"/>
+                                <rect key="frame" x="-44" y="-44" width="1112" height="1444"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchScreen.Logo" translatesAutoresizingMaskIntoConstraints="NO" id="sj6-WD-cxW">
+                                <rect key="frame" x="30" y="161" width="964" height="133.5"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_loading_icon" translatesAutoresizingMaskIntoConstraints="NO" id="uAO-hS-cOi">
-                                <rect key="frame" x="89" y="347" width="236.33333333333337" height="57"/>
-                            </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="telldus_logo_pi.Logo" translatesAutoresizingMaskIntoConstraints="NO" id="dmX-ub-vuZ">
-                                <rect key="frame" x="73.666666666666657" y="20" width="266.66666666666674" height="244"/>
+                                <rect key="frame" x="373" y="655" width="278" height="56.5"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="dmX-ub-vuZ" firstAttribute="height" secondItem="iK7-8z-2oa" secondAttribute="height" multiplier="0.3" id="ELI-tp-hXy"/>
+                            <constraint firstItem="uAO-hS-cOi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6s2-Bg-sSn"/>
+                            <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="sj6-WD-cxW" secondAttribute="bottom" constant="240" id="C8T-sz-rOY"/>
+                            <constraint firstItem="uAO-hS-cOi" firstAttribute="width" secondItem="iK7-8z-2oa" secondAttribute="width" multiplier="0.25" id="CZR-8b-KxY"/>
                             <constraint firstItem="7Sf-lc-mH7" firstAttribute="bottom" secondItem="iK7-8z-2oa" secondAttribute="bottom" constant="-34" id="FyH-TW-3Xv"/>
-                            <constraint firstItem="dmX-ub-vuZ" firstAttribute="centerX" secondItem="iK7-8z-2oa" secondAttribute="centerX" id="Mlb-a9-NMw"/>
-                            <constraint firstItem="uAO-hS-cOi" firstAttribute="top" secondItem="dmX-ub-vuZ" secondAttribute="bottom" multiplier="1.2" constant="30" id="RSN-gG-IpJ"/>
+                            <constraint firstItem="sj6-WD-cxW" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" multiplier="1/2" constant="20" id="Nra-Iw-aBU"/>
                             <constraint firstItem="iK7-8z-2oa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-64" id="UHq-v6-VDS"/>
-                            <constraint firstItem="dmX-ub-vuZ" firstAttribute="top" secondItem="iK7-8z-2oa" secondAttribute="top" multiplier="0.001" constant="20" id="hEp-oa-z8w"/>
-                            <constraint firstItem="uAO-hS-cOi" firstAttribute="height" secondItem="iK7-8z-2oa" secondAttribute="height" multiplier="0.07" id="o3O-RU-rxE"/>
+                            <constraint firstItem="sj6-WD-cxW" firstAttribute="centerX" secondItem="7Sf-lc-mH7" secondAttribute="centerX" id="ZV1-So-Suw"/>
+                            <constraint firstItem="sj6-WD-cxW" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" multiplier="1/3" id="lSH-Lz-fXM"/>
                             <constraint firstItem="uAO-hS-cOi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="vsx-9D-OTg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iK7-8z-2oa" secondAttribute="trailing" constant="-64" id="wyA-Ln-azv"/>
                             <constraint firstItem="iK7-8z-2oa" firstAttribute="top" secondItem="7Sf-lc-mH7" secondAttribute="top" constant="-44" id="ydZ-Tl-G57"/>
@@ -48,8 +49,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LaunchScreen.AspectFill" width="736" height="736"/>
-        <image name="splash_loading_icon" width="236.33332824707031" height="71"/>
-        <image name="telldus_logo_pi.Logo" width="266.66665649414062" height="333.33334350585938"/>
+        <image name="LaunchScreen.AspectFill" width="1024" height="1024"/>
+        <image name="LaunchScreen.Logo" width="667" height="133.5"/>
+        <image name="splash_loading_icon" width="188" height="56.5"/>
     </resources>
 </document>
