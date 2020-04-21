@@ -40,6 +40,7 @@ DEPLOY_STORE="${DEPLOY_STORE}"
 android.useAndroidX=true
 android.enableJetifier=true
 org.gradle.jvmargs=-Xmx4608M
+FLIPPER_VERSION=0.33.1
 EOF
 
 echo "${GOOGLE_SERVICES}" > app/google-services.json
