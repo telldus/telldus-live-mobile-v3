@@ -52,7 +52,7 @@ import {
 	shouldUpdate,
 	navigate,
 	getPremiumAccounts,
-	capitalizeFirstLetterOfEachWord,
+	capitalize,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -323,7 +323,7 @@ constructor(props: Props) {
 					})}
 					<SettingsLink
 						styles={styles}
-						text={capitalizeFirstLetterOfEachWord(formatMessage(i18n.addNewGatway))}
+						text={capitalize(formatMessage(i18n.addNewGatway))}
 						iconComponent={<Icon
 							style={{
 								...styles.linkIconStyle,
