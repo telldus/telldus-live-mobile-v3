@@ -294,4 +294,9 @@ export default {
 			},
 		};
 	},
+
+	textColorOneLT: '#4C4C4C',
+	borderColorOneLT: '#C9C9CE',
+	backgroundColorOneLT: '#fff',
+	backgroundColorTwoLT: this.brandPrimary,
 };

@@ -19,12 +19,15 @@
  */
 // @flow
 'use strict';
+import React from 'react';
 import {
 	createIntl,
 	createIntlCache,
 } from 'react-intl';
 import { useSelector } from 'react-redux';
 import * as RNLocalize from 'react-native-localize';
+
+import Theme from '../Theme';
 
 let relativeIntls = {};
 
@@ -49,6 +52,50 @@ const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): O
 	return relativeIntls[gatewayTimezone];
 };
 
+const useAppTheme = (colorScheme?: 'light' | 'dark' | null): Object => {
+	const { themeInApp } = useSelector((state: Object): Object => state.app);
+	return React.useMemo((): Object => {
+		if (colorScheme === 'dark') {
+			return {
+				colorScheme,
+				dark: true,
+				...getThemeData(themeInApp),
+			};
+		}
+		return {
+			colorScheme,
+			dark: false,
+			...getThemeData(themeInApp),
+		};
+	}, [
+		colorScheme,
+		themeInApp,
+	]);
+};
+
+const getThemeData = (themeInApp: string | null): Object => {
+	const {
+		brandPrimary,
+		textColorOneLT,
+		borderColorOneLT,
+		backgroundColorOneLT,
+	} = Theme.Core;
+	switch (themeInApp) {
+		default: {
+			return {
+				colors: {
+					primary: brandPrimary,
+					text: textColorOneLT,
+					border: borderColorOneLT,
+					background: backgroundColorOneLT,
+					card: backgroundColorOneLT,
+				},
+			};
+		}
+	}
+};
+
 module.exports = {
 	useRelativeIntl,
+	useAppTheme,
 };
