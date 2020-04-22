@@ -30,7 +30,7 @@ type Props = {
 	icon: string | Object,
 	iconSize: number,
 	iconColor: string,
-	iconStyle: Array<any> | Object | number,
+	iconStyle: Array<any> | Object,
 };
 
 export default class WizardOne extends PureComponent<Props, null> {

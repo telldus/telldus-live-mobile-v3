@@ -30,7 +30,7 @@ import Theme from '../../../Theme';
 
 type Props = {
 	color?: string,
-	style?: Object | number | Array<any>,
+	style?: Array<any> | Object,
 };
 
 type DefaultProps = {

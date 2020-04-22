@@ -55,7 +55,7 @@ type Props = {
 	requestDeviceAction: (number) => any,
 	intl: Object,
 	isGatewayActive: boolean,
-	style: Object | number | Array<any>,
+	style: Array<any> | Object,
 	appLayout: Object,
 	onPressOverride?: (Object) => void,
 };

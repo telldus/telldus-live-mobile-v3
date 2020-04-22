@@ -32,7 +32,7 @@ type Props = {
 	onValueChange: Function,
 	appLayout: Object,
 	label: string,
-	containerStyle: Array<any> | number | Object,
+	containerStyle: Array<any> | Object,
 };
 
 export default class ScheduleSwitch extends View<null, Props, null> {

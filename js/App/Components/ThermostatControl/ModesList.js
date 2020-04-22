@@ -44,7 +44,7 @@ type Props = {
 	setpointValueLocal: string,
 	hideTemperatureControl: boolean,
 
-	modesCoverStyle: number | Array<any> | Object,
+	modesCoverStyle: Array<any> | Object,
 	onPressRow: (mode: string, changeMode: 0 | 1, callback: Function) => void,
 	intl: intlShape,
 	onControlThermostat: (mode: string, temperature?: number | null, changeMode: 1 | 0, requestedState: number) => void,

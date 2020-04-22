@@ -52,7 +52,7 @@ type Props = {
 	currentTemp?: string,
 	gatewayTimezone: string,
 
-	containerStyle?: Object | Array<any> | number,
+	containerStyle?: Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 

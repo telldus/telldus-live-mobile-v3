@@ -34,8 +34,8 @@ import { shouldUpdate } from '../App/Lib';
 
 type InfoButton = {
 	onPress?: Function,
-	infoButtonContainerStyle?: Array<any> | Object | number,
-	infoButtonStyle?: Array<any> | Object | number,
+	infoButtonContainerStyle?: Array<any> | Object,
+	infoButtonStyle?: Array<any> | Object,
 };
 
 type Props = {
@@ -52,7 +52,7 @@ type Props = {
 	navigation: Object,
     handleBackPress: () => boolean,
     intl: Object,
-	posterCoverStyle?: Array<any> | Object | number,
+	posterCoverStyle?: Array<any> | Object,
 	goBack: () => void,
 	showPoster?: boolean,
 };

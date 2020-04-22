@@ -35,7 +35,7 @@ import Theme from '../App/Theme';
 
 type Props = {
 	title?: any,
-	image: string,
+	image: Object,
 	H1: string,
 	H2: string,
 	style: any,
@@ -46,7 +46,7 @@ type Props = {
 	infoContainerStyle?: any,
 	fromJS?: boolean,
 	info2?: Object,
-	resizeMode?: string,
+	resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center',
 };
 
 type DefaultProps = {

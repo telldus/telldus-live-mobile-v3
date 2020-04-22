@@ -33,7 +33,7 @@ type Props = {
 	intl: Object,
 	name: string,
 	style: Object | Array<any>,
-	dotStyle: Object | number | Array<any>,
+	dotStyle: Array<any> | Object,
 };
 
 export default class ShowMoreButton extends View<Props, null> {

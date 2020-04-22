@@ -34,7 +34,7 @@ import i18n from '../App/Translations/common';
 type Props = {
     style?: Array<any> | Object,
     iconStyle?: Object,
-    textStyle?: Array<any> | Object | number,
+    textStyle?: Array<any> | Object,
     onToggleCheckBox: () => void,
     isChecked: boolean,
     text?: string,

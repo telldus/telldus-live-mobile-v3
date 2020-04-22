@@ -30,7 +30,7 @@ type Props = {
     swatch: string,
 
     onPress: (string) => void,
-    style: Array<any> | Object | number,
+    style: Array<any> | Object,
 };
 
 export default class Swatches extends Base {

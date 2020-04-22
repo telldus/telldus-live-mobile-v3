@@ -62,8 +62,8 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	settings: Object,
-	coverStyle?: Array<any> | number | Object,
-	labelStyle?: Array<any> | number | Object,
+	coverStyle?: Array<any> | Object,
+	labelStyle?: Array<any> | Object,
 	widgetId?: string | null,
 	deviceId?: string,
 	initializeValueFromStore?: boolean,

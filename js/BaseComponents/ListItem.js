@@ -24,20 +24,27 @@
 import React from 'react';
 import { View } from 'react-native';
 import Base from './Base';
+import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
 
-type Props = {
-	padder: boolean,
-};
+type NewProps = {|padder?: boolean, style: Object | Array<any>|};
+type Props = {|...NewProps, ...ViewProps|};
 
 export default class ListItemComponent extends Base {
 	props: Props;
 
 	render(): React$Element<any> {
+		const {
+			style,
+			padder,
+			...rest
+		} = this.props;
 		return (
-			<View style={{
-				padding: (this.props.padder) ? this.getTheme().contentPadding : 0,
-				flex: 1,
-			}} {...this.props} />
+			<View
+				{...rest}
+				style={style || {
+					padding: (padder) ? this.getTheme().contentPadding : 0,
+					flex: 1,
+				}} />
 		);
 	}
 }

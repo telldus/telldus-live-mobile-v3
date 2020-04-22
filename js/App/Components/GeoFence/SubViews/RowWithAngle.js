@@ -40,9 +40,9 @@ import Theme from '../../../Theme';
 type Props = {
     labelText?: string,
     showAngleRight?: boolean,
-    rowCoverStyle?: Array<any> | number | Object,
-    labelStyle?: Array<any> | number | Object,
-    imgStyle?: Array<any> | number | Object,
+    rowCoverStyle?: Array<any> | Object,
+    labelStyle?: Array<any> | Object,
+    imgStyle?: Array<any> | Object,
     onPress?: Function,
 };
 

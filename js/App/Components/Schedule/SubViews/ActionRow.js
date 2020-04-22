@@ -159,7 +159,7 @@ type Props = {
 	appLayout: Object,
 	intl: Object,
 	labelPostScript?: string,
-	iconContainerStyle?: Array<any> | Object | number,
+	iconContainerStyle?: Array<any> | Object,
 };
 
 export default class ActionRow extends View<DefaultProps, Props, null> {

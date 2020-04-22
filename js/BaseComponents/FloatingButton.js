@@ -55,7 +55,7 @@ type Props = {
 	iconName?: string,
 	customComponent?: Object,
 	disabled?: boolean,
-	innerContainer?: number | Array<any> | Object,
+	innerContainer?: Array<any> | Object,
 };
 
 class FloatingButton extends Component<Props, null> {

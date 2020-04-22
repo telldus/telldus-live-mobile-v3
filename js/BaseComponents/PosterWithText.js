@@ -39,8 +39,8 @@ import { shouldUpdate } from '../App/Lib';
 
 type InfoButton = {
 	onPress?: Function,
-	infoButtonContainerStyle?: Array<any> | Object | number,
-	infoButtonStyle?: Array<any> | Object | number,
+	infoButtonContainerStyle?: Array<any> | Object,
+	infoButtonStyle?: Array<any> | Object,
 };
 
 type Props = {
@@ -57,9 +57,9 @@ type Props = {
 	posterWidth?: number,
 
 	navigation: Object,
-	posterCoverStyle?: Array<any> | Object | number,
-	h1Style?: Array<any> | Object | number,
-	posterItemsContainerStyle?: Array<any> | Object | number,
+	posterCoverStyle?: Array<any> | Object,
+	h1Style?: Array<any> | Object,
+	posterItemsContainerStyle?: Array<any> | Object,
 };
 
 type DefaultProps = {

@@ -27,8 +27,8 @@ import { TouchableOpacity, Image } from 'react-native';
 
 type ButtonProps = {
 	onPress?: Function,
-	infoButtonContainerStyle?: Array<any> | Object | number,
-	infoButtonStyle?: Array<any> | Object | number,
+	infoButtonContainerStyle?: Array<any> | Object,
+	infoButtonStyle?: Array<any> | Object,
 };
 
 type Props = {

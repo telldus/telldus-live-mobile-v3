@@ -64,7 +64,7 @@ type Props = {
 	capitalizeHeader?: boolean,
 	negTextColor?: string,
 	posTextColor?: string,
-	notificationModalFooterPositiveTextCoverStyle: number | Object | Array<any>,
+	notificationModalFooterPositiveTextCoverStyle: Object | Array<any>,
 	notificationModalFooterStyle: number | Object | Array<any>,
 };
 

@@ -60,7 +60,7 @@ type Props = {
 	gradientColorToOverride?: string,
 
 	intl: Object,
-	modesCoverStyle: number | Array<any> | Object,
+	modesCoverStyle: Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 

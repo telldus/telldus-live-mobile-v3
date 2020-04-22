@@ -32,11 +32,11 @@ import View from './View';
 import Theme from '../App/Theme';
 
 type Props = {
-	style?: Object | number | Array<any>,
+	style?: Array<any> | Object,
 	text: string | Object,
-	labelStyle?: Object | number | Array<any>,
-	throbberStyle?: Object | number | Array<any>,
-	throbberContainerStyle?: Object | number | Array<any>,
+	labelStyle?: Array<any> | Object,
+	throbberStyle?: Array<any> | Object,
+	throbberContainerStyle?: Array<any> | Object,
 	onPress: Function,
 	intl: intlShape.isRequired,
 	postScript?: any,

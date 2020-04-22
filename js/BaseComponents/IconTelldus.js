@@ -40,7 +40,7 @@ type Props = {
 	icon?: string,
 	size?: number,
 	color?: string,
-	style?: Object | number | Array<any>,
+	style?: Array<any> | Object,
 	accessible?: boolean,
 	importantForAccessibility: string,
 };

@@ -37,10 +37,10 @@ import {
 type Props = {
 	defaultType?: string,
 
-    style: Array<any> | number | Object,
-	valueCoverStyle: Array<any> | number | Object,
+    style: Array<any> | Object,
+	valueCoverStyle: Array<any> | Object,
 	dotStyle: Object,
-	dotCoverStyle: Array<any> | number | Object,
+	dotCoverStyle: Array<any> | Object,
     sensors: Object,
     onLayout: Function,
     changeDefaultDisplayType: Function,

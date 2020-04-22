@@ -42,7 +42,7 @@ type Props = {
 	offButtonColor?: string,
 	iconOffColor?: string,
 
-	style: Object | number | Array<any>,
+	style: Array<any> | Object,
 	onPress: () => void,
 	intl: Object,
 	iconStyle: Object | Array<any>,

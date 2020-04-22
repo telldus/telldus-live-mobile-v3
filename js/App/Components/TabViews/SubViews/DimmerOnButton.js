@@ -34,7 +34,7 @@ import Theme from '../../../Theme';
 
 type Props = {
 	isInState: string,
-	style: Object | number | Array<any>,
+	style: Array<any> | Object,
 	iconStyle: Object | Array<any>,
 	methodRequested: string,
 	name: string,
