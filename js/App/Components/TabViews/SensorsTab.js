@@ -206,7 +206,8 @@ class SensorsTab extends View {
 	toggleHiddenList() {
 		const { rowsAndSections } = this.props;
 		const { hiddenList, visibleList } = rowsAndSections;
-
+		// TODO: Due to this crash https://github.com/facebook/react-native/issues/25832
+		// On hiding layout animation is not invoked
 		if (!this.state.showHiddenList) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 		}
