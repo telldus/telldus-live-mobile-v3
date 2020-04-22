@@ -103,7 +103,7 @@ class DashboardTab extends View {
 	stopSensorTimer: () => void;
 	changeDisplayType: (number) => void;
 	onRefresh: () => void;
-	_renderRow: (number) => Object;
+	_renderRow: (Object) => Object;
 	onDismissDialogueHide: () => void;
 
 	showDimInfo: (Object) => void;

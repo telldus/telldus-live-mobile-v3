@@ -80,7 +80,7 @@ bounceToDest() {
 		{
 			toValue: toVal,
 			duration: 800,
-			useNativeDriver: true,
+			useNativeDriver: false,
 		}).start((event: Object) => {
 		if (event.finished) {
 			this.bounceFromDest();
@@ -96,7 +96,7 @@ bounceFromDest() {
 		{
 			toValue: toVal + distance,
 			duration: 800,
-			useNativeDriver: true,
+			useNativeDriver: false,
 		}).start((event: Object) => {
 		if (event.finished) {
 			this.bounceToDest();

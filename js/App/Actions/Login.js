@@ -53,14 +53,14 @@ import {
 	setUserNameFirebaseCrashlytics,
 } from './Analytics';
 
-type loginCredential = {
+type loginCredential = {|
 	username: string,
 	password: string,
-};
+|};
 
-type loginCredentialSocial = {
+type loginCredentialSocial = {|
 	idToken: string,
-};
+|};
 
 const loginToTelldus = (credential: loginCredential | loginCredentialSocial, grantType?: GrantType = 'password'): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	return axios({

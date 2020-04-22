@@ -54,19 +54,12 @@ type State = {
 	isRefreshing: boolean,
 };
 
-type renderRowProps = {
-	name: string,
-	online: boolean,
-	websocketOnline: boolean,
-	appLayout: Object,
-};
-
 class GatewaysTab extends View {
 
 	props: Props;
 	state: State;
 
-	renderRow: (renderRowProps) => Object;
+	renderRow: (renderRowProps: Object) => Object;
 	onRefresh: () => void;
 
 	constructor(props: Props) {

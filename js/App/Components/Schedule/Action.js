@@ -189,7 +189,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		return index.toString();
 	}
 
-	render(): React$Element<FlatList> {
+	render(): Object {
 		const padding = this.getPadding();
 		return (
 			<FlatList

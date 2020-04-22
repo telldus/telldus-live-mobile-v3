@@ -453,9 +453,8 @@ class SensorHistoryLineChart extends View<Props, State> {
 
 		return (
 			<Modal
-				isVisible={show}
+				visible={show}
 				transparent={false}
-				backdropColor={'#fff'}
 				animationType={'none'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}

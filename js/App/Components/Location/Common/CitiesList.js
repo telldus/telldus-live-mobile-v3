@@ -43,7 +43,7 @@ type Props = {
 class CitiesList extends View {
 	props: Props;
 
-	renderRow: (string) => void;
+	renderRow: (Object) => Object;
 	onCityChoose: () => void;
 	keyExtractor: (string) => string;
 

@@ -187,7 +187,7 @@ class AddLocationContainer extends View<null, Props, State> {
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions, ...gatewayActions}, dispatch),
+			...bindActionCreators({...gatewayActions, ...modalActions}, dispatch),
 		},
 	}
 );

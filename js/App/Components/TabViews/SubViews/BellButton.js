@@ -42,7 +42,7 @@ type Props = {
 	isGatewayActive: boolean,
 	intl: Object,
 	style: Object,
-	bellButtonStyle: number | Object,
+	bellButtonStyle: Array<any> | Object,
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,

@@ -70,10 +70,10 @@ class TimePicker extends View<Props, State> {
 	state: State;
 
 	onSwitch: (boolean) => void;
-	onChangeFromHr: (boolean) => void;
-	onChangeFromMin: (boolean) => void;
-	onChangeToHr: (boolean) => void;
-	onChangeToMin: (boolean) => void;
+	onChangeFromHr: (string | number) => void;
+	onChangeFromMin: (string | number) => void;
+	onChangeToHr: (string | number) => void;
+	onChangeToMin: (string | number) => void;
 
 	constructor(props: Props) {
 		super(props);
@@ -113,25 +113,25 @@ class TimePicker extends View<Props, State> {
 		}
 	}
 
-	onChangeFromHr(value: boolean) {
+	onChangeFromHr(value: string | number) {
 		const { fromMin, toHr, toMin} = this.state;
 		this.setState({fromHr: value});
 		this.props.onChange(false, value, fromMin, toHr, toMin);
 	}
 
-	onChangeFromMin(value: boolean) {
+	onChangeFromMin(value: string | number) {
 		const {fromHr, toHr, toMin} = this.state;
 		this.setState({fromMin: value});
 		this.props.onChange(false, fromHr, value, toHr, toMin);
 	}
 
-	onChangeToHr(value: boolean) {
+	onChangeToHr(value: string | number) {
 		const {fromHr, fromMin, toMin} = this.state;
 		this.setState({toHr: value});
 		this.props.onChange(false, fromHr, fromMin, value, toMin);
 	}
 
-	onChangeToMin(value: boolean) {
+	onChangeToMin(value: string | number) {
 		const {fromHr, fromMin, toHr} = this.state;
 		this.setState({toMin: value});
 		this.props.onChange(false, fromHr, fromMin, toHr, value);

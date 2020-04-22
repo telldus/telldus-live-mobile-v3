@@ -23,7 +23,6 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Image, Platform, TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 

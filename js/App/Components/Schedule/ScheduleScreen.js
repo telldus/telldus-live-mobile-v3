@@ -269,7 +269,7 @@ const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateTo
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({getJobs, showToast, ...scheduleActions, ...modalActions}, dispatch),
+			...bindActionCreators({...scheduleActions, ...modalActions, getJobs, showToast}, dispatch),
 			getDevices: (): Object => dispatch(getDevices()),
 		},
 	}

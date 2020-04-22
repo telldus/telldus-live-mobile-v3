@@ -131,7 +131,7 @@ export default class Device extends View<void, Props, State> {
 		return index.toString();
 	}
 
-	render(): React$Element<SectionList> | null {
+	render(): Object | null {
 		const { dataSource, refreshing } = this.state;
 		if (!dataSource || dataSource.length <= 0) {
 			return null;

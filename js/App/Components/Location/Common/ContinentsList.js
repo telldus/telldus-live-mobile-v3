@@ -42,7 +42,7 @@ class ContinentsList extends View {
 	props: Props;
 
 	keyExtractor: (string) => string;
-	renderRow: (string) => void;
+	renderRow: (Object) => Object;
 	onContinentChoose: (string) => void;
 
 	constructor(props: Props) {

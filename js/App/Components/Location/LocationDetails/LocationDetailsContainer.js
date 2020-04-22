@@ -252,8 +252,8 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
 			...bindActionCreators({
-				...modalActions,
 				...gatewayActions,
+				...modalActions,
 				...appDataActions,
 				getTokenForLocalControl,
 				createSupportTicketLCT,

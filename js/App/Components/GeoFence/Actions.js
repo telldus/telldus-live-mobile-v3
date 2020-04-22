@@ -267,18 +267,23 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	}
 
 	const [ isRefreshing, setIsRefreshing ] = useState(false);
-	async function onRefresh() {
-		setIsRefreshing(true);
-		try {
-			await dispatch(getDevices());
-			await dispatch(getEvents());
-			await dispatch(getJobs());
-		} catch (e) {
-			// None
-		} finally {
-			setIsRefreshing(false);
+
+	const onRefresh = React.useCallback(() => {
+		async function _onRefresh() {
+			setIsRefreshing(true);
+			try {
+				await dispatch(getDevices());
+				await dispatch(getEvents());
+				await dispatch(getJobs());
+			} catch (e) {
+				// None
+			} finally {
+				setIsRefreshing(false);
+			}
 		}
-	}
+		_onRefresh();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function renderRow(rowData: Object): Object {
 		const isEHeader = rowData.section.header === Theme.Core.GeoFenceEventsHeaderKey;

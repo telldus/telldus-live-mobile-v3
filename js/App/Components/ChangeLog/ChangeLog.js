@@ -79,9 +79,9 @@ class ChangeLogNavigator extends View {
 	animatedX: Object;
 	animatedOpacity: Object;
 
-	startAnimationX: (number) => void;
+	startAnimationX: (number) => Object;
 	startAnimationParallel: (number) => void;
-	startAnimationOpacity: () => void;
+	startAnimationOpacity: () => Object;
 
 	onRequestClose: () => void;
 
@@ -182,17 +182,19 @@ class ChangeLogNavigator extends View {
 		]).start();
 	}
 
-	startAnimationX(value: number) {
-		Animated.timing(this.animatedX, {
+	startAnimationX(value: number): Object {
+		return Animated.timing(this.animatedX, {
 			toValue: value,
 			duration: 300,
+			useNativeDriver: true,
 		}).start();
 	}
 
-	startAnimationOpacity() {
-		Animated.timing(this.animatedOpacity, {
+	startAnimationOpacity(): Object {
+		return Animated.timing(this.animatedOpacity, {
 			toValue: 1,
 			duration: 300,
+			useNativeDriver: true,
 		}).start();
 	}
 

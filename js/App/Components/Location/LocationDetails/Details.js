@@ -575,7 +575,7 @@ class Details extends View<Props, State> {
 				<View style={container}>
 					<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
-						<TouchableWithoutFeedback style={{flex: 1}} onPress={this.onPressGatewayInfo}>
+						<TouchableWithoutFeedback onPress={this.onPressGatewayInfo}>
 							<View style={boxItemsCover}>
 								<Text style={[textName]}>
 									{type}

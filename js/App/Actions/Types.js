@@ -187,7 +187,7 @@ export type PromiseAction = Promise<Action>;
 
 export type GrantType = 'password' | 'google' | 'refresh_token';
 
-export type TicketData = {
+export type TicketData = {|
 	email: string,
 	message: string,
 	failedTests: string,
@@ -195,4 +195,4 @@ export type TicketData = {
 	connectionType: string,
 	connectionEffectiveType: string,
 	testCount: number,
-};
+|};
