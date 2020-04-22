@@ -354,18 +354,17 @@ class DevicesTab extends View {
 		});
 	}
 
-	keyExtractor(item: Object): number {
-		return item.id;
+	keyExtractor(item: Object): string {
+		return `${item.id}`;
 	}
 
 	toggleHiddenList() {
 		const { rowsAndSections } = this.props;
 		const { hiddenList, visibleList } = rowsAndSections;
+		if (!this.state.showHiddenList) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		}
 
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
-			// Callback only available in iOS
-			LayoutAnimation.configureNext(null);
-		});
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
 		}, () => {
@@ -381,10 +380,6 @@ class DevicesTab extends View {
 						});
 					}
 				}, 500);
-			}
-			if (Platform.OS === 'android') {
-				// Since LayoutAnimationEnd Callback only available in iOS
-				LayoutAnimation.configureNext(null);
 			}
 		});
 	}
@@ -596,10 +591,7 @@ class DevicesTab extends View {
 			newDevices,
 		} = route.params || {};
 		if (newDevices) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
-				// Callback only available in iOS
-				LayoutAnimation.configureNext(null);
-			});
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			navigation.setParams({
 				newDevices: undefined,
 			});

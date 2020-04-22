@@ -207,7 +207,10 @@ class SensorsTab extends View {
 		const { rowsAndSections } = this.props;
 		const { hiddenList, visibleList } = rowsAndSections;
 
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		if (!this.state.showHiddenList) {
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		}
+
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
 		}, () => {
@@ -524,10 +527,7 @@ class SensorsTab extends View {
 			newSensors,
 		} = route.params || {};
 		if (newSensors) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
-				// Callback only available in iOS
-				LayoutAnimation.configureNext(null);
-			});
+			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			navigation.setParams({
 				newSensors: undefined,
 			});
