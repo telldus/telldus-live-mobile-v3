@@ -65,6 +65,7 @@ type Props = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	deviceId: string,
+	firebaseRemoteConfig: Object,
 };
 
 type State = {
@@ -308,6 +309,7 @@ class Details extends View<Props, State> {
 				generatePushError,
 				playServicesInfo,
 				deviceId,
+				firebaseRemoteConfig,
 			} = this.props;
 			const {
 				online,
@@ -338,6 +340,7 @@ class Details extends View<Props, State> {
 					playServicesInfo,
 					RSAKeysAreGenerated: this.RSAKeysAreGenerated,
 					RSAKeysRetrievableFromLocal: this.RSAKeysRetrievableFromLocal,
+					firebaseRemoteConfig,
 				};
 				Alert.alert('Gateway && Network Info', JSON.stringify(debugData));
 			});
@@ -652,6 +655,9 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		deviceId,
 	} = store.user;
 	const { networkInfo } = store.app;
+	const {
+		firebaseRemoteConfig = {},
+	} = store.user;
 
 	return {
 		location: store.gateways.byId[id],
@@ -660,6 +666,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		generatePushError,
 		playServicesInfo,
 		deviceId,
+		firebaseRemoteConfig,
 	};
 }
 
