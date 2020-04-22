@@ -38,9 +38,9 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	style: Object,
-	containerStyle?: number | Object | Array<any>,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
+	containerStyle?: Array<any> | Object,
+	offButtonStyle?: Array<any> | Object,
+	onButtonStyle?: Array<any> | Object,
 };
 
 class ToggleDashboardTile extends View<Props, null> {

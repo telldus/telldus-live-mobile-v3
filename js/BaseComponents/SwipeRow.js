@@ -193,6 +193,7 @@ class SwipeRow extends Component<Props, State> {
 				duration: this.props.previewDuration,
 				toValue,
 				delay,
+				useNativeDriver: true,
 			}
 		);
 	}
@@ -204,6 +205,7 @@ class SwipeRow extends Component<Props, State> {
 				duration: this.props.slideDuration,
 				toValue,
 				delay,
+				useNativeDriver: true,
 			}
 		);
 	}
@@ -320,6 +322,7 @@ class SwipeRow extends Component<Props, State> {
 				toValue,
 				friction: this.props.friction,
 				tension: this.props.tension,
+				useNativeDriver: true,
 			}
 		).start();
 

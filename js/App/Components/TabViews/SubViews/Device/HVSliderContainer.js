@@ -395,6 +395,7 @@ class HVSliderContainer extends View {
 		}
 
 		return (
+			// $FlowFixMe
 			<Parent
 				style={[this.props.style, styleBackground, {opacity: screenReaderEnabled ? undefined : this.buttonOpacity}]}
 				/** TODO: Remove once RN is upgraded, and after making sure onLayout getting called

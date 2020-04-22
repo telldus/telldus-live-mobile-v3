@@ -44,7 +44,7 @@ type Props = {
 	style?: any,
 	containerStyle?: any,
 	appLayout: Object,
-	importantForAccessibility?: string,
+	importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants',
 	accessibilityLabel?: string,
 	accessible?: boolean,
 };
@@ -86,7 +86,6 @@ class Row extends Component<Props, null> {
 				accessible={accessible}
 				onPress={this.onPress}
 				style={[defaultStyle.container, containerStyle]}
-				outlineProvider="bounds"
 				disabled={!onPress}
 				importantForAccessibility={importantForAccessibility}
 				accessibilityLabel={accessibilityLabel}

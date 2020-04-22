@@ -38,10 +38,10 @@ type Props = {
 	size?: number,
 	color?: string,
 	bgColor?: string,
-	style?: number | Object | Array<any>,
-	containerStyle?: number | Object | Array<any>,
+	style?: Array<any> | Object,
+	containerStyle?: Array<any> | Object,
 	backgroundMask?: boolean,
-	backgroundMaskStyle?: number | Object | Array<any>,
+	backgroundMaskStyle?: Array<any> | Object,
 };
 
 export default class BlockIcon extends Component<Props, null> {

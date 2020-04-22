@@ -53,8 +53,8 @@ type Props = {
 	onChangeToHr: (boolean, number, number, number, number) => void,
 	onChangeToMin: (boolean, number, number, number, number) => void,
 
-	labelStyle?: number | Object | Array<any>,
-	rowStyle?: number | Object | Array<any>,
+	labelStyle?: Array<any> | Object,
+	rowStyle?: Array<any> | Object,
 	intl: Object,
 };
 

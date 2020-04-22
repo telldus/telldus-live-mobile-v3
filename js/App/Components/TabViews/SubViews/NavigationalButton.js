@@ -38,9 +38,9 @@ type Props = {
 	isOpen: boolean,
 
 	isGatewayActive: boolean,
-	upButtonStyle?: number | Object | Array<any>,
-	downButtonStyle?: number | Object | Array<any>,
-	stopButtonStyle?: number | Object | Array<any>,
+	upButtonStyle?: Array<any> | Object,
+	downButtonStyle?: Array<any> | Object,
+	stopButtonStyle?: Array<any> | Object,
 	style: Object,
 	intl: Object,
 	closeSwipeRow: () => void,

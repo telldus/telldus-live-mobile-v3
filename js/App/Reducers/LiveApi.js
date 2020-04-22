@@ -38,7 +38,7 @@ function reduceRefetchLiveApi(state: Object = initialState, action: Action): Obj
 	}
 	if (action.type === 'LIVEAPI_REFETCH') {
 		return {
-			...state,
+			...state, // $FlowFixMe
 			[action.endpoint]: true,
 		};
 	}

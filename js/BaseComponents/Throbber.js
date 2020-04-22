@@ -29,8 +29,8 @@ import Theme from '../App/Theme';
 const AnimatedIconTelldus = Animated.createAnimatedComponent(IconTelldus);
 
 type Props = {
-	throbberContainerStyle?: number | Object | Array<any>,
-	throbberStyle?: number | Object | Array<any>,
+	throbberContainerStyle?: Array<any> | Object,
+	throbberStyle?: Array<any> | Object,
 	throbSpeed?: number,
 };
 

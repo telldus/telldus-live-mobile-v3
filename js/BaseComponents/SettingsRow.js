@@ -57,7 +57,11 @@ type Props = {
 	onPressIconValueRight: () => void,
 	onChangeText?: (string) => void,
 	onSubmitEditing?: () => void,
-	keyboardTypeInLineEdit?: string,
+	keyboardTypeInLineEdit?: 'default' |
+		'numeric' |
+		'phone-pad' |
+		'number-pad' |
+		'decimal-pad',
 	style?: Array<any> | Object,
 	intl: Object,
 	contentCoverStyle?: Array<any> | Object,

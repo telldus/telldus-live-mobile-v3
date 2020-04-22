@@ -41,8 +41,8 @@ type Props = {
 
 	intl: Object,
 	style?: Object | number,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
+	offButtonStyle?: Array<any> | Object,
+	onButtonStyle?: Array<any> | Object,
 	closeSwipeRow: () => void,
 	onTurnOff: number => void,
 	onTurnOn: number => void,

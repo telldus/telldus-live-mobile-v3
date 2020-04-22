@@ -58,14 +58,14 @@ type Props = {
 	onPressNegative?: () => void,
 	intl: intlShape.isRequired,
 	accessibilityLabel?: string,
-	style?: number | Object | Array<any>,
+	style?: Array<any> | Object,
 	showHeader?: boolean,
 	backdropColor?: string,
 	capitalizeHeader?: boolean,
 	negTextColor?: string,
 	posTextColor?: string,
 	notificationModalFooterPositiveTextCoverStyle: Object | Array<any>,
-	notificationModalFooterStyle: number | Object | Array<any>,
+	notificationModalFooterStyle: Array<any> | Object,
 };
 
 type defaultProps = {

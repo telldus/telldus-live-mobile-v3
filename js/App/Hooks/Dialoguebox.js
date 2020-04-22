@@ -44,7 +44,7 @@ type DialogueData = {
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
 	accessibilityLabel?: string,
-	style?: number | Object | Array<any>,
+	style?: Array<any> | Object,
 	backdropColor?: string,
 	capitalizeHeader?: boolean,
 	negTextColor?: string,
