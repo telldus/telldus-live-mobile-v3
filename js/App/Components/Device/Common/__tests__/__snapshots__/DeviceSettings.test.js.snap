@@ -98,7 +98,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -140,7 +139,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       <View
         accessible={true}
         focusable={false}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -182,7 +180,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -293,7 +290,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -335,7 +331,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       <View
         accessible={true}
         focusable={false}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -377,7 +372,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -518,7 +512,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -560,7 +553,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       <View
         accessible={true}
         focusable={false}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -602,7 +594,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -713,7 +704,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}
@@ -755,7 +745,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       <View
         accessible={true}
         focusable={false}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -797,7 +786,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
         <View
           accessible={true}
           focusable={true}
-          isTVSelectable={true}
           onClick={[Function]}
           onResponderGrant={[Function]}
           onResponderMove={[Function]}

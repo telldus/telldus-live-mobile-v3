@@ -546,9 +546,6 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 (0% )
               </Text>
               <View
-                animated={true}
-                indeterminate={false}
-                progress={0}
                 style={
                   Array [
                     Object {

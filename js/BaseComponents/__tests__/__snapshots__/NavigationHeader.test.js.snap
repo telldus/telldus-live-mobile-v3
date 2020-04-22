@@ -26,7 +26,6 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
       accessibilityLabel="navigational back button .Double tap to activate"
       accessible={true}
       focusable={true}
-      isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -118,7 +117,6 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
       accessibilityLabel="navigational back button .Double tap to activate"
       accessible={true}
       focusable={true}
-      isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
