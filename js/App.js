@@ -27,6 +27,7 @@ import Platform from 'Platform';
 import StatusBar from 'StatusBar';
 import { LocaleConfig } from 'react-native-calendars';
 import { injectIntl } from 'react-intl';
+import DeviceInfo from 'react-native-device-info';
 
 import {
 	PreLoginNavigator,
@@ -44,6 +45,7 @@ import {
 import {
 	getTranslatableDayNames,
 	getTranslatableMonthNames,
+	setGAUserProperty,
 } from './App/Lib';
 
 import Theme from './App/Theme';
@@ -125,7 +127,7 @@ class App extends React.Component<Props, State> {
 	}
 
 	componentDidMount() {
-		let { dispatch } = this.props;
+		let { dispatch, deviceId } = this.props;
 		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
@@ -138,6 +140,7 @@ class App extends React.Component<Props, State> {
 		}
 
 		this.clearListenerNetWorkInfo = dispatch(networkConnection());
+		setGAUserProperty('deviceUniqueId', deviceId ? deviceId : DeviceInfo.getUniqueID());
 	}
 
 	setCalendarLocale() {
