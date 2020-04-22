@@ -71,3 +71,15 @@ export function setUserName(uname: string) {
 	// 	firebase.crashlytics().setUserName(uname);
 	// }
 }
+
+export const setGAUserProperty = (key: Object, value: string) => {
+	if (deployStore !== 'huawei') {
+		firebase.analytics().setUserProperty(key, value);
+	}
+};
+
+export const setGAUserProperties = (properties: Object) => {
+	if (deployStore !== 'huawei') {
+		firebase.analytics().setUserProperties(properties);
+	}
+};
