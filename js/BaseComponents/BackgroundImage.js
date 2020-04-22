@@ -36,13 +36,15 @@ export default class BackgroundImage extends Component<Props, void> {
 	render(): React$Element<any> {
 		const { source, children, style, ...props } = this.props;
 		return (
-			<ImageBackground source={source}
+			<ImageBackground
+				{...props}
+				source={source}
 			       style={{
 				       flex: 1,
 				       width: null,
-				       height: null, ...style,
-			       }}
-			       {...props}>
+					   height: null,
+					   ...style,
+			       }}>
 				{ children }
 			</ImageBackground>
 		);

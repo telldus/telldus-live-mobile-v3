@@ -45,7 +45,7 @@ type Props = {
 	style: Object | number | Array<any>,
 	onPress: () => void,
 	intl: Object,
-	iconStyle: Object | number | Array<any>,
+	iconStyle: Object | Array<any>,
 };
 
 type State = {
@@ -133,11 +133,11 @@ class DimmerOffButton extends View {
 	}
 
 	fadeIn() {
-		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100, useNativeDriver: true }).start();
 	}
 
 	fadeOut() {
-		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100, useNativeDriver: true }).start();
 	}
 }
 

@@ -80,6 +80,7 @@ bounceToDest() {
 		{
 			toValue: toVal,
 			duration: 800,
+			useNativeDriver: true,
 		}).start((event: Object) => {
 		if (event.finished) {
 			this.bounceFromDest();
@@ -95,6 +96,7 @@ bounceFromDest() {
 		{
 			toValue: toVal + distance,
 			duration: 800,
+			useNativeDriver: true,
 		}).start((event: Object) => {
 		if (event.finished) {
 			this.bounceToDest();
@@ -137,8 +139,7 @@ render(): Object {
 				{arrowPos === 'left' && (
 					<Image
 						source={{uri: 'triangle'}}
-						style={[triangleCommon]}
-						tintColor={Theme.Core.brandSecondary}
+						style={triangleCommon}
 						resizeMode={'stretch'}
 					/>
 				)}
@@ -163,7 +164,6 @@ render(): Object {
 								{rotate: '180deg'},
 							],
 						}]}
-						tintColor={Theme.Core.brandSecondary}
 						resizeMode={'stretch'}
 					/>
 				)}
@@ -187,6 +187,7 @@ getStyles(): Object {
 		triangleCommon: {
 			height: 15,
 			width: 10,
+			tintColor: Theme.Core.brandSecondary,
 		},
 	};
 }

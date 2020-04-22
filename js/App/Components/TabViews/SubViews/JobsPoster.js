@@ -164,6 +164,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				let config = {
 					toValue: toVal,
 					duration: 10,
+					useNativeDriver: true,
 				};
 				this.animate(config);
 			}
@@ -183,6 +184,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				let config = {
 					toValue: toVal,
 					duration: 10,
+					useNativeDriver: true,
 				};
 				this.animate(config);
 			}
@@ -221,6 +223,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			let config = {
 				toValue: 1,
 				duration: 400,
+				useNativeDriver: true,
 			};
 			Animated
 				.timing(this.scrollDays, config)
@@ -265,6 +268,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			const config = {
 				toValue: this.scrollRight ? 0 : 2,
 				duration: 600,
+				useNativeDriver: true,
 			};
 
 			Animated
@@ -375,11 +379,11 @@ export default class JobsPoster extends View<null, Props, State> {
 		);
 	}
 
-	_renderDays = (): React$Element<Animated.View>[] => {
+	_renderDays = (): React$Element<typeof Animated.View>[] => {
 
 		const { todayIndex } = this.state;
 
-		return this.props.days.map((day: Object, i: number): React$Element<Animated.View> => {
+		return this.props.days.map((day: Object, i: number): React$Element<typeof Animated.View> => {
 			const animation = this._getDayAnimation(i, day.day);
 
 			const accessible = i === todayIndex || i === todayIndex - 1 || i === todayIndex + 1;
@@ -400,9 +404,9 @@ export default class JobsPoster extends View<null, Props, State> {
 		});
 	};
 
-	_renderDate = (): React$Element<Animated.Text>[] => {
+	_renderDate = (): React$Element<typeof Animated.Text>[] => {
 		const { todayIndex } = this.state;
-		return this.props.days.map((day: Object, i: number): React$Element<Animated.Text> => {
+		return this.props.days.map((day: Object, i: number): React$Element<typeof Animated.Text> => {
 			const animation = this._getDateAnimation(i);
 
 			const accessible = i === todayIndex;

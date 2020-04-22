@@ -44,7 +44,7 @@ type Props = {
 	supportedMethod: string,
 	id: number,
 	iconSize: number,
-	style: Object | Array<any> | number,
+	style: Object | Array<any>,
 	local: boolean,
 	isOpen: boolean,
 	closeSwipeRow: () => void,

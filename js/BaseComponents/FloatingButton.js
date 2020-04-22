@@ -41,17 +41,17 @@ type DefaultProps = {
 
 type Props = {
 	onPress?: Function,
-	imageSource?: number | boolean | Object,
+	imageSource?: Object,
 	tabs: boolean,
 	iconSize: number,
 	paddingRight: number,
 	showThrobber: boolean,
-	buttonStyle: number | Array<any> | Object,
+	buttonStyle: Array<any> | Object,
 	appLayout: Object,
 	accessible: boolean,
 	accessibilityLabel?: string,
 	intl: intlShape.isRequired,
-	iconStyle?: Object | number,
+	iconStyle?: Object,
 	iconName?: string,
 	customComponent?: Object,
 	disabled?: boolean,
@@ -63,15 +63,6 @@ class FloatingButton extends Component<Props, null> {
 	labelButton: string;
 	defaultLabel: string;
 	props: Props;
-
-	static propTypes = {
-		imageSource: PropTypes.oneOfType([PropTypes.number, PropTypes.bool, PropTypes.object]),
-		tabs: PropTypes.bool,
-		iconSize: PropTypes.number,
-		paddingRight: PropTypes.number,
-		showThrobber: PropTypes.bool,
-		buttonStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array, PropTypes.object]),
-	};
 
 	static defaultProps: DefaultProps = {
 		tabs: false,

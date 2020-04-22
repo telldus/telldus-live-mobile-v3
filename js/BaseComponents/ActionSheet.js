@@ -103,7 +103,6 @@ const calculateHeight = (props: Object): Object => {
 const ButtonComponent = React.memo<Object>((props: Object): Object => {
 
 	const {
-		buttonUnderlayColor,
 		cancelButtonIndex,
 		destructiveButtonIndex,
 		tintColor,
@@ -127,7 +126,6 @@ const ButtonComponent = React.memo<Object>((props: Object): Object => {
 		<TouchableOpacity
 			disabled={disabledButtonIndexes.indexOf(index) !== -1}
 			activeOpacity={1}
-			underlayColor={buttonUnderlayColor}
 			style={buttonBoxStyle}
 			onPress={onPress}>
 			{React.isValidElement(title) ? title : (
@@ -140,7 +138,6 @@ const ButtonComponent = React.memo<Object>((props: Object): Object => {
 
 type Props = {
     tintColor?: string,
-	buttonUnderlayColor?: string,
 	onPress: Function,
     styles: Object,
     title: Object | string,
@@ -163,7 +160,6 @@ type State = {
 class ActionSheet extends React.Component<Props, State> {
 static defaultProps = {
 	tintColor: '#007AFF',
-	buttonUnderlayColor: '#F4F4F4',
 	onPress: () => {},
 	styles: {},
 	disabledButtonIndexes: [],

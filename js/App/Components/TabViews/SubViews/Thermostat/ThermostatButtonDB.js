@@ -42,7 +42,7 @@ type Props = {
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
-	containerStyle?: number | Object | Array<any>,
+	containerStyle?: Object | Array<any>,
 	controlButtonStyle?: number | Object | Array<any>,
 	infoBlockStyle?: number | Object | Array<any>,
 	moreActionsStyle?: number | Object | Array<any>,

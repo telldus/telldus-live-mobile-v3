@@ -35,7 +35,7 @@ import Theme from '../../../Theme';
 type Props = {
 	isInState: string,
 	style: Object | number | Array<any>,
-	iconStyle: Object | number | Array<any>,
+	iconStyle: Object | Array<any>,
 	methodRequested: string,
 	name: string,
 	isGatewayActive: boolean,
@@ -132,11 +132,11 @@ class DimmerOnButton extends View {
 	}
 
 	fadeIn() {
-		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100, useNativeDriver: true }).start();
 	}
 
 	fadeOut() {
-		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100, useNativeDriver: true }).start();
 	}
 }
 

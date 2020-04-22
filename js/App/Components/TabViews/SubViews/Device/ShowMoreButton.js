@@ -32,7 +32,7 @@ type Props = {
 	onPress: () => void,
 	intl: Object,
 	name: string,
-	style: Object | number | Array<any>,
+	style: Object | Array<any>,
 	dotStyle: Object | number | Array<any>,
 };
 

@@ -181,7 +181,7 @@ export default class InputGroup extends Base {
 		if (Array.isArray(this.props.children)) {
 
 			if (this.props.iconRight) {
-				newChildren.push(<Input key="inp" {...inputProps} style={{
+				newChildren.push(<Input {...inputProps} key="inp" style={{
 					height: this.props.toolbar ? 30 : undefined,
 					fontSize: this.props.toolbar ? 15 : undefined,
 				}}/>);
@@ -194,7 +194,7 @@ export default class InputGroup extends Base {
 						key: 'icon0',
 					}
 				));
-				newChildren.push(<Input key="inp" {...inputProps} style={{
+				newChildren.push(<Input {...inputProps} key="inp" style={{
 					height: this.props.toolbar ? 30 : undefined,
 					fontSize: this.props.toolbar ? 15 : undefined,
 				}}/>);
@@ -213,7 +213,7 @@ export default class InputGroup extends Base {
 						key: 'icon0',
 					}
 				));
-				newChildren.push(<Input key="inp" {...inputProps} style={{
+				newChildren.push(<Input {...inputProps} key="inp" style={{
 					height: this.props.toolbar ? 30 : undefined,
 					fontSize: this.props.toolbar ? 15 : undefined,
 				}}/>);
@@ -226,13 +226,13 @@ export default class InputGroup extends Base {
 				));
 			} else {
 				newChildren.push(React.cloneElement(iconElement[0], this.getIconProps(iconElement[0])));
-				newChildren.push(<Input key="inp" {...inputProps} style={{
+				newChildren.push(<Input {...inputProps} key="inp" style={{
 					height: this.props.toolbar ? 30 : undefined,
 					fontSize: this.props.toolbar ? 15 : undefined,
 				}}/>);
 			}
 		} else {
-			newChildren.push(<Input key="inp" {...inputProps} style={{
+			newChildren.push(<Input {...inputProps} key="inp" style={{
 				height: this.props.toolbar ? 30 : undefined,
 				fontSize: this.props.toolbar ? 15 : undefined,
 			}}/>);

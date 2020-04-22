@@ -32,7 +32,7 @@ import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
 type Props = {
-    style?: Array<any> | Object | number,
+    style?: Array<any> | Object,
     iconStyle?: Object,
     textStyle?: Array<any> | Object | number,
     onToggleCheckBox: () => void,

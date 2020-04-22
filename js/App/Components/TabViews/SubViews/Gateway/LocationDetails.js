@@ -41,7 +41,7 @@ type Props = {
 	h1Style?: number | Object | Array<any>,
 	h2Style?: number | Object | Array<any>,
 	info2?: Object,
-	resizeMode?: string,
+	resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center',
 };
 
 type State = {

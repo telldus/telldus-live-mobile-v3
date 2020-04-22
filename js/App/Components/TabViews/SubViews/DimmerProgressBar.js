@@ -71,6 +71,7 @@ const animate = (animationValue: any) => {
 		duration: 1000,
 		easing: Easing.linear,
 		isInteraction: false,
+		useNativeDriver: true,
 	}).start((endState: Object) => {
 		if (endState.finished) {
 			animate(animationValue);
@@ -91,6 +92,7 @@ class DimmerProgressBar extends Component<Props, State> {
 			} else {
 				Animated.spring(state.animationValue, {
 					toValue: BAR_WIDTH_ZERO_POSITION,
+					useNativeDriver: true,
 				}).start();
 			}
 		}
@@ -104,6 +106,7 @@ class DimmerProgressBar extends Component<Props, State> {
 				Animated.spring(state.progress, {
 					toValue: progress,
 					bounciness: 0,
+					useNativeDriver: true,
 				}).start();
 			} else {
 				state.progress.setValue(progress);
@@ -149,7 +152,7 @@ class DimmerProgressBar extends Component<Props, State> {
 		this.state.progress._value = Math.max(0.0001, this.state.progress._value); // fix a bug in android :
 	                                                                               // https://github.com/facebook/react-native/issues/6278
 
-		const { borderColor, borderRadius, borderWidth, color, height, style, unfilledColor, width, ...restProps } = this.props;
+		const { borderColor, borderRadius, borderWidth, color, height, style, unfilledColor, width } = this.props;
 
 		const innerWidth = width - (borderWidth * 2);
 		const containerStyle = {
@@ -197,8 +200,7 @@ class DimmerProgressBar extends Component<Props, State> {
 		return (
 			<View
 				onLayout={this.layoutView}
-				style={[containerStyle, style]}
-				{...restProps}>
+				style={[containerStyle, style]}>
 				<Animated.View style={progressStyle}/>
 				<View style={[
 					styles.textContainer, {

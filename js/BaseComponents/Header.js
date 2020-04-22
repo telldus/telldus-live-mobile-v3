@@ -41,7 +41,7 @@ import i18n from '../App/Translations/common';
 
 type Props = {
 	children?: Object,
-	logoStyle?: Object | number,
+	logoStyle?: Object,
 	rounded?: number,
 	searchBar?: ?Object,
 	rightButton?: Object,
