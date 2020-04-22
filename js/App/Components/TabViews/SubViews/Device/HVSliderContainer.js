@@ -103,11 +103,11 @@ class HVSliderContainer extends View {
 			containerHeight: 0,
 			scaleWidth: 0,
 			scaleHeight: 0,
-			value: new Animated.Value(this.props.value),
+			value: new Animated.Value(0),
 			minimumValue: 0,
 			maximumValue: 100,
 			step: 1,
-			displayedValue: getSliderLabel(this.props.value, this.props.intl),
+			displayedValue: getSliderLabel(0, this.props.intl),
 			DimmerStep: false,
 		};
 		this.activeSlider = false;
