@@ -19,7 +19,7 @@
  */
 // @flow
 'use strict';
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 
 import {
 	purchaseErrorListener,
@@ -47,6 +47,7 @@ const withInAppPurchaseListeners = ({
 	let purchaseUpdateSubscription, purchaseErrorSubscription;
 	if (isIos) {
 		purchaseUpdateSubscription = purchaseUpdatedListener((purchase: InAppPurchase | SubscriptionPurchase | ProductPurchase ) => {
+			Alert.alert('TEST purchase listener: ', JSON.stringify(purchase));
 			const receipt = purchase.transactionReceipt;
 			if (receipt) {
 				if (successCallback) {
@@ -56,6 +57,7 @@ const withInAppPurchaseListeners = ({
 		});
 
 		purchaseErrorSubscription = purchaseErrorListener((error: PurchaseError) => {
+			Alert.alert('TEST purchase error listener: ', JSON.stringify(error));
 			if (errorCallback) {
 				errorCallback(error);
 			}
@@ -85,11 +87,13 @@ const useIAPSuccessFailureHandle = (): Object => {
 			dispatch(updateStatusIAPTransaction({
 				onGoing: false,
 			}));
+			Alert.alert('TEST reportIapAtServer success: ', JSON.stringify(response));
 			return response;
 		}).catch((err: Object) => {
 			dispatch(updateStatusIAPTransaction({
 				onGoing: false,
 			}));
+			Alert.alert('TEST reportIapAtServer Error: ', err.message || JSON.stringify(err));
 			throw err;
 		});
 	}
