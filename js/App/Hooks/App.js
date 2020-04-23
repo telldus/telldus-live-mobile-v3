@@ -21,6 +21,9 @@
 'use strict';
 import React from 'react';
 import {
+	useColorScheme,
+} from 'react-native';
+import {
 	createIntl,
 	createIntlCache,
 } from 'react-intl';
@@ -52,7 +55,8 @@ const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): O
 	return relativeIntls[gatewayTimezone];
 };
 
-const useAppTheme = (colorScheme?: 'light' | 'dark' | null): Object => {
+const useAppTheme = (): Object => {
+	const colorScheme = useColorScheme();
 	const { themeInApp } = useSelector((state: Object): Object => state.app);
 	return React.useMemo((): Object => {
 		if (colorScheme === 'dark') {

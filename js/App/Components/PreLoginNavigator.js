@@ -42,6 +42,10 @@ import {
 	prepareNavigator,
 } from '../Lib/NavigationService';
 
+import {
+	useAppTheme,
+} from '../Hooks/App';
+
 const ScreenConfigs = [
 	{
 		name: 'Login',
@@ -89,6 +93,8 @@ const PreLoginNavigator = (props: Props): Object => {
 		}
 	}, []);
 
+	const theme = useAppTheme();
+
 	const onNavigationStateChange = React.useCallback((currentState: Object) => {
 		const currentScreen = getRouteName(currentState);
 		dispatch(screenChange(currentScreen));
@@ -103,7 +109,8 @@ const PreLoginNavigator = (props: Props): Object => {
 
 	return (
 		<NavigationContainer
-			onStateChange={onNavigationStateChange}>
+			onStateChange={onNavigationStateChange}
+			theme={theme}>
 			{Navigator}
 		</NavigationContainer>
 	);

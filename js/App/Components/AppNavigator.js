@@ -22,9 +22,6 @@
 'use strict';
 import React from 'react';
 import {
-	useColorScheme,
-} from 'react-native';
-import {
 	createStackNavigator,
 	CardStyleInterpolators,
 } from '@react-navigation/stack';
@@ -401,8 +398,7 @@ const Stack = createStackNavigator();
 const AppNavigator = React.memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 
-	const colorScheme = useColorScheme();
-	const theme = useAppTheme(colorScheme);
+	const theme = useAppTheme();
 
 	const onNavigationStateChange = React.useCallback((currentState: Object) => {
 		const currentScreen = getRouteName(currentState);
