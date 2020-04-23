@@ -267,7 +267,9 @@ export default {
 	listNoteColor: '#808080',
 	listNoteSize: 13,
 
-	iconFontSize: this.fontSizeBase,
+	get iconFontSize() {
+		return this.fontSizeBase;
+	},
 
 	badgeColor: '#fff',
 	badgeBg: '#ED1727',
@@ -295,8 +297,14 @@ export default {
 		};
 	},
 
-	textColorOneLT: '#4C4C4C',
+	textColorOneLT: '#A59F9A',
 	borderColorOneLT: '#C9C9CE',
 	backgroundColorOneLT: '#fff',
-	backgroundColorTwoLT: this.brandPrimary,
+	get backgroundColorTwoLT() {
+		return this.brandPrimary;
+	},
+	get activeTintOneLT() {
+		return this.brandSecondary;
+	},
+	inActiveTintOneLT: '#C9C9CE',
 };

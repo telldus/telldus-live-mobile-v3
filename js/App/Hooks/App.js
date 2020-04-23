@@ -83,6 +83,8 @@ const getThemeData = (themeInApp: string | null): Object => {
 		textColorOneLT,
 		borderColorOneLT,
 		backgroundColorOneLT,
+		activeTintOneLT,
+		inActiveTintOneLT,
 	} = Theme.Core;
 	switch (themeInApp) {
 		default: {
@@ -93,6 +95,8 @@ const getThemeData = (themeInApp: string | null): Object => {
 					border: borderColorOneLT,
 					background: backgroundColorOneLT,
 					card: backgroundColorOneLT,
+					activeTintOne: activeTintOneLT,
+					inActiveTintOne: inActiveTintOneLT,
 				},
 			};
 		}
