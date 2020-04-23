@@ -25,12 +25,12 @@
 import React from 'react';
 
 import { ifIphoneX } from 'react-native-iphone-x-helper';
-import DeviceInfo from 'react-native-device-info';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import TabViews from './index';
-
-import { getTabBarIcon } from '../../Lib';
+import {
+	MainTabBarIOS,
+} from '../../../BaseComponents';
 
 import {
 	prepareNavigator,
@@ -42,42 +42,51 @@ const ScreenConfigs = [
 	{
 		name: 'Dashboard',
 		Component: TabViews.Dashboard,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
-			const { intl, currentScreen } = screenProps;
-			const { formatMessage } = intl;
-			const postScript = currentScreen === 'Dashboard' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		options: (): Object => {
 			return {
-				title: formatMessage(i18n.dashboard),
-				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'dashboard'),
-				tabBarAccessibilityLabel: `${formatMessage(i18n.dashboardTab)}, ${postScript}`,
+				tabBarLabel: ({ color, focused }: Object): Object => (
+					<MainTabBarIOS
+						iconHint={'dashboard'}
+						labelIntl={i18n.dashboard}
+						focused={focused}
+						screenName={'Dashboard'}
+						tabBarAccesibilityLabelIntl={i18n.dashboardTab}
+					/>
+				),
 			};
 		},
 	},
 	{
 		name: 'Devices',
 		Component: TabViews.Devices,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
-			const { intl, currentScreen } = screenProps;
-			const { formatMessage } = intl;
-			const postScript = currentScreen === 'Devices' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		options: (): Object => {
 			return {
-				title: formatMessage(i18n.devices),
-				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'devices'),
-				tabBarAccessibilityLabel: `${formatMessage(i18n.devicesTab)}, ${postScript}`,
+				tabBarLabel: ({ color, focused }: Object): Object => (
+					<MainTabBarIOS
+						iconHint={'devices'}
+						labelIntl={i18n.devices}
+						focused={focused}
+						screenName={'Devices'}
+						tabBarAccesibilityLabelIntl={i18n.devicesTab}
+					/>
+				),
 			};
 		},
 	},
 	{
 		name: 'Sensors',
 		Component: TabViews.Sensors,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
-			const { intl, currentScreen } = screenProps;
-			const { formatMessage } = intl;
-			const postScript = currentScreen === 'Sensors' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		options: (): Object => {
 			return {
-				title: formatMessage(i18n.sensors),
-				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'sensors'),
-				tabBarAccessibilityLabel: `${formatMessage(i18n.sensorsTab)}, ${postScript}`,
+				tabBarLabel: ({ color, focused }: Object): Object => (
+					<MainTabBarIOS
+						iconHint={'sensors'}
+						labelIntl={i18n.sensors}
+						focused={focused}
+						screenName={'Sensors'}
+						tabBarAccesibilityLabelIntl={i18n.sensorsTab}
+					/>
+				),
 			};
 
 		},
@@ -85,28 +94,34 @@ const ScreenConfigs = [
 	{
 		name: 'Scheduler',
 		Component: TabViews.Scheduler,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
-			const { intl, currentScreen } = screenProps;
-			const { formatMessage } = intl;
-			const postScript = currentScreen === 'Scheduler' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		options: (): Object => {
 			return {
-				title: formatMessage(i18n.scheduler),
-				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'scheduler'),
-				tabBarAccessibilityLabel: `${formatMessage(i18n.schedulerTab)}, ${postScript}`,
+				tabBarLabel: ({ color, focused }: Object): Object => (
+					<MainTabBarIOS
+						iconHint={'scheduler'}
+						labelIntl={i18n.scheduler}
+						focused={focused}
+						screenName={'Scheduler'}
+						tabBarAccesibilityLabelIntl={i18n.schedulerTab}
+					/>
+				),
 			};
 		},
 	},
 	{
 		name: 'Gateways',
 		Component: TabViews.Gateways,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
-			const { intl, currentScreen } = screenProps;
-			const { formatMessage } = intl;
-			const postScript = currentScreen === 'Gateways' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		options: (): Object => {
 			return {
-				title: formatMessage(i18n.gateways),
-				tabBarIcon: ({ focused, color }: Object): Object => getTabBarIcon(focused, color, 'gateways'),
-				tabBarAccessibilityLabel: `${formatMessage(i18n.gatewaysTab)}, ${postScript}`,
+				tabBarLabel: ({ color, focused }: Object): Object => (
+					<MainTabBarIOS
+						iconHint={'gateways'}
+						labelIntl={i18n.gateways}
+						focused={focused}
+						screenName={'Gateways'}
+						tabBarAccesibilityLabelIntl={i18n.gatewaysTab}
+					/>
+				),
 			};
 		},
 	},
@@ -119,12 +134,8 @@ const NavigatorConfigs = {
 	lazy: true,
 	animationEnabled: false, // Check if exist in v5
 	tabBarOptions: {
-		activeTintColor: '#e26901',
 		style: {
 			...ifIphoneX({height: 20}),
-		},
-		labelStyle: {
-			fontSize: DeviceInfo.isTablet() ? 18 : 12,
 		},
 		allowFontScaling: false,
 	},
