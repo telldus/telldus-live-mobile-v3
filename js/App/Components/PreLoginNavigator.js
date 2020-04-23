@@ -27,9 +27,10 @@ import {
 import { createStackNavigator } from '@react-navigation/stack';
 import Orientation from 'react-native-orientation-locker';
 import { NavigationContainer } from '@react-navigation/native';
-import { connect } from 'react-redux';
+import {
+	useDispatch,
+} from 'react-redux';
 
-import { View } from '../../BaseComponents';
 import { LoginScreen, RegisterScreen, ForgotPasswordScreen, WelcomeScreen } from './PreLoginScreens';
 import { FormContainerComponent } from './PreLoginScreens/SubViews';
 
@@ -72,74 +73,40 @@ const NavigatorConfigs = {
 const Stack = createStackNavigator();
 
 type Props = {
-	onNavigationStateChange: (string) => void,
 	screenProps: Object,
-	currentScreen: string,
 };
 
-class PreLoginNavigator extends View {
+const PreLoginNavigator = (props: Props): Object => {
 
-	onNavigationStateChange: (currentState: Object) => void;
+	const dispatch = useDispatch();
 
-	props: Props;
-	constructor(props: Props) {
-		super(props);
-	}
-
-	componentDidMount() {
+	React.useEffect((): Function => {
 		if (Platform.OS !== 'android') {
 			Orientation.lockToPortrait();
+			return () => {
+				Orientation.unlockAllOrientations();
+			};
 		}
-	}
+	}, []);
 
-	componentWillUnmount() {
-		if (Platform.OS !== 'android') {
-			Orientation.unlockAllOrientations();
-		}
-	}
-
-	onNavigationStateChange = (currentState: Object) => {
+	const onNavigationStateChange = React.useCallback((currentState: Object) => {
 		const currentScreen = getRouteName(currentState);
-		this.props.onNavigationStateChange(currentScreen);
-	}
+		dispatch(screenChange(currentScreen));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	render(): React$Element<any> {
+	const Navigator = React.useMemo((): Object => {
+		return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+		// NOTE: No 'props' passed to PreLoginNavigator from App is dynamically changed.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-		const {
-			screenProps,
-			currentScreen,
-		} = this.props;
-		const props = {
-			...this.props,
-			screenProps: {
-				...screenProps,
-				currentScreen,
-			},
-		};
+	return (
+		<NavigationContainer
+			onStateChange={onNavigationStateChange}>
+			{Navigator}
+		</NavigationContainer>
+	);
+};
 
-		const Navigator = prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-
-		return (
-			<NavigationContainer
-				onStateChange={this.onNavigationStateChange}>
-				{Navigator}
-			</NavigationContainer>
-		);
-	}
-}
-
-function mapDispatchToProps(dispatch: Function): Object {
-	return {
-		onNavigationStateChange: (screen: string) => {
-			dispatch(screenChange(screen));
-		},
-	};
-}
-
-function mapStateToProps(store: Object): Object {
-	return {
-		currentScreen: store.navigation.screen,
-	};
-}
-
-module.exports = connect(mapStateToProps, mapDispatchToProps)(PreLoginNavigator);
+module.exports = PreLoginNavigator;

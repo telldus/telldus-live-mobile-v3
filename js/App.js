@@ -96,7 +96,6 @@ class App extends React.Component<Props> {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		}
 
-		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
 		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
 		this.onPressDialogueNegative = this.onPressDialogueNegative.bind(this);
@@ -178,7 +177,7 @@ class App extends React.Component<Props> {
 		}
 	}
 
-	toggleDialogueBox(dialogueData: Object) {
+	toggleDialogueBox = (dialogueData: Object) => {
 		const {
 			show,
 			...others
