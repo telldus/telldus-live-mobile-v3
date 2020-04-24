@@ -168,7 +168,6 @@ function createSupportInAppDebugData(debugData: Object): ThunkAction {
 
 function createSupportTicket(data: string): ThunkAction {
 	return (dispatch: Function, getState: Object): any => {
-		console.log('TEST data', data);
 		return axios({
 			method: 'post',
 			headers: {
@@ -183,8 +182,6 @@ function createSupportTicket(data: string): ThunkAction {
 			.then((response: Object): Object => {
 				return response.data;
 			}).catch((error: any) => {
-				console.log('TEST error', error);
-				console.log('TEST error.res', error.response);
 				throw error;
 			});
 	};

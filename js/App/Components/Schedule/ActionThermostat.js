@@ -189,8 +189,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			data.changeTemp = false;
 			delete data.temperature;
 		}
-		console.log('TEST isEditMode()', isEditMode());
-		console.log('TEST route', route);
+
 		if (isEditMode()) {
 			actions.selectAction(2048, JSON.stringify(data));
 			navigation.navigate(route.params.actionKey);
