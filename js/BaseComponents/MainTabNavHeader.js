@@ -23,18 +23,39 @@
 
 import React, {
 	memo,
+	useMemo,
+	useCallback,
 } from 'react';
 import {
 	Platform,
+	Linking,
 } from 'react-native';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import Header from './Header';
+import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
+import CampaignIcon from './CampaignIcon';
+import Icon from './Icon';
+import IconTelldus from './IconTelldus';
+
+import {
+	campaignVisited,
+} from '../App/Actions/User';
+import {
+	useDialogueBox,
+} from '../App/Hooks/Dialoguebox';
+import {
+	navigate,
+} from '../App/Lib/NavigationService';
 
 import Theme from '../App/Theme';
+
+import i18n from '../App/Translations/common';
 
 type Props = {
 	children?: Object,
@@ -46,14 +67,18 @@ type Props = {
 	showAttentionCapture: boolean,
 	intl: Object,
 	forceHideStatus?: boolean,
-	style: Object | Array<any>,
-	parent?: string,
+    style: Object | Array<any>,
+    openDrawer?: Function, // Required in Android
+    screenReaderEnabled?: boolean,
+    drawer?: boolean, // Required in Android
 };
 
 const MainTabNavHeader = memo<Object>((props: Props): Object => {
 
 	const {
-		parent,
+		drawer,
+		screenReaderEnabled,
+		openDrawer,
 	} = props;
 
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
@@ -61,19 +86,118 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 	const {
 		style,
 		logoStyle,
-	} = getStyles(appLayout, {parent});
+	} = useMemo((): Object => getStyles(appLayout), [appLayout]);
+
+	const dispatch = useDispatch();
+
+	const intl = useIntl();
+	const { formatMessage } = intl;
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const showDialogue = useCallback((message: string) => {
+		toggleDialogueBoxState({
+			show: true,
+			showHeader: true,
+			text: message,
+			showPositive: true,
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const leftButton = useMemo((): Object | null => {
+
+		const {
+			settingsButtonStyle,
+			buttonSize,
+			menuIconStyle,
+			campaingButtonStyle,
+			campaingIconStyle,
+			menuButtonStyle,
+			fontSizeIcon,
+		} = getStyles(appLayout);
+
+		const labelButton = formatMessage(i18n.button);
+		const labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
+
+		const navigateToCampaign = () => {
+			let url = 'https://live.telldus.com/profile/campaigns';
+			const defaultMessage = formatMessage(i18n.errorMessageOpenCampaign);
+			Linking.canOpenURL(url)
+				.then((supported: boolean): any => {
+					if (!supported) {
+						showDialogue(defaultMessage);
+					} else {
+						dispatch(campaignVisited(true));
+						return Linking.openURL(url);
+					}
+				})
+				.catch((err: any) => {
+					const message = err.message || defaultMessage;
+					showDialogue(message);
+				});
+		};
+
+		const onOpenSetting = () => {
+			navigate('Profile');
+		};
+
+		const buttons = [
+			Platform.select({
+				android: {
+					style: settingsButtonStyle,
+					accessibilityLabel: `${formatMessage(i18n.menuIcon)} ${labelButton}. ${labelButtondefaultDescription}`,
+					onPress: openDrawer,
+					iconComponent: <Icon
+						name="bars"
+						size={buttonSize > 22 ? buttonSize : 22}
+						style={menuIconStyle}
+						color={'#fff'}/>,
+				},
+				ios: {
+					style: settingsButtonStyle,
+					accessibilityLabel: `${formatMessage(i18n.settingsHeader)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+					onPress: onOpenSetting,
+					iconComponent: <IconTelldus icon={'settings'} style={{
+						fontSize: fontSizeIcon,
+						color: '#fff',
+					}}/>,
+				},
+			}),
+			{
+				style: campaingButtonStyle,
+				accessibilityLabel: formatMessage(i18n.linkToCampaigns),
+				onPress: navigateToCampaign,
+				iconComponent: <CampaignIcon
+					size={buttonSize > 22 ? buttonSize : 22}
+					style={campaingIconStyle}/>,
+			},
+		];
+
+		const customComponent = <HeaderLeftButtonsMainTab style={menuButtonStyle} buttons={buttons}/>;
+
+		return (drawer && screenReaderEnabled) ? null : {
+			customComponent,
+		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		drawer,
+		appLayout,
+		screenReaderEnabled,
+	]);
 
 	return (
 		<Header
 			{...props}
 			style={style}
-			logoStyle={logoStyle}/>
+			logoStyle={logoStyle}
+			leftButton={leftButton}/>
 	);
 });
 
-const getStyles = (appLayout: Object, {
-	parent,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -81,11 +205,17 @@ const getStyles = (appLayout: Object, {
 
 	const {
 		headerHeightFactor,
-	 } = Theme.Core;
+	} = Theme.Core;
 
-	 const { land, port } = headerHeightFactor;
+	const { land, port } = headerHeightFactor;
+
+	const buttonSize = isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04);
+	const size = Math.floor(deviceHeight * 0.025);
+	const fontSizeIcon = size < 20 ? 20 : size;
 
 	return {
+		buttonSize,
+		fontSizeIcon,
 		style: {
 			...Platform.select({
 				ios: {
@@ -95,22 +225,20 @@ const getStyles = (appLayout: Object, {
 					isPortrait ? {
 						height: deviceHeight * port,
 						alignItems: 'center',
-					} : parent === 'Tabs' ? {
+					} : {
 						transform: [{rotateZ: '-90deg'}],
 						position: 'absolute',
 						left: Math.ceil(-deviceHeight * 0.4444),
 						top: Math.ceil(deviceHeight * 0.4444),
 						width: deviceHeight,
 						height: Math.ceil(deviceHeight * land),
-					}
-						:
-						{},
+					},
 			}),
 		},
 		logoStyle: {
 			...Platform.select({
 				android:
-					(!isPortrait && parent === 'Tabs') ? {
+					(!isPortrait) ? {
 						position: 'absolute',
 						left: deviceHeight * 0.6255,
 						top: deviceHeight * 0.0400,
@@ -118,6 +246,40 @@ const getStyles = (appLayout: Object, {
 						:
 						{},
 			}),
+		},
+		settingsButtonStyle: {
+			paddingLeft: 15,
+			paddingRight: 8,
+			paddingVertical: 4,
+		},
+		menuIconStyle: {
+			...Platform.select({
+				android: isPortrait ? null :
+					{
+						transform: [{rotateZ: '90deg'}],
+					},
+			}),
+		},
+		campaingButtonStyle: {
+			marginLeft: 4,
+			paddingRight: 15,
+			paddingLeft: 8,
+			paddingVertical: 4,
+		},
+		campaingIconStyle: {
+			...Platform.select({
+				android: isPortrait ? null : {
+					transform: [{rotateZ: '90deg'}],
+				},
+			}),
+		},
+		menuButtonStyle: isPortrait ? null : {
+			position: 'absolute',
+			left: undefined,
+			right: 50,
+			top: deviceHeight * 0.03666,
+			paddingTop: 0,
+			paddingHorizontal: 0,
 		},
 	};
 };

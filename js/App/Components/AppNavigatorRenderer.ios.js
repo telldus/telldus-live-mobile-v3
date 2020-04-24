@@ -30,10 +30,7 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 
 import {
 	View,
-	IconTelldus,
 	Throbber,
-	HeaderLeftButtonsMainTab,
-	CampaignIcon,
 } from '../../BaseComponents';
 import AppNavigator from './AppNavigator';
 
@@ -76,7 +73,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	onOpenSetting: () => void;
 	onCloseSetting: () => void;
 	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
@@ -93,8 +89,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
 		};
-
-		this.onOpenSetting = this.onOpenSetting.bind(this);
 
 		this.addNewDevice = this.addNewDevice.bind(this);
 
@@ -160,10 +154,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			'hasGateways',
 			'addingNewLocation',
 		]);
-	}
-
-	onOpenSetting() {
-		navigate('Profile');
 	}
 
 	newSchedule() {
@@ -256,36 +246,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		return (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
-	makeLeftButton(styles: Object): any {
-		const { intl } = this.props;
-
-		const buttons = [
-			{
-				style: styles.settingsButtonStyle,
-				accessibilityLabel: `${intl.formatMessage(i18n.settingsHeader)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`,
-				onPress: this.onOpenSetting,
-				iconComponent: <IconTelldus icon={'settings'} style={{
-					fontSize: styles.fontSizeIcon,
-					color: '#fff',
-				}}/>,
-			},
-			{
-				style: styles.campaingButtonStyle,
-				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
-				onPress: this.props.navigateToCampaign,
-				iconComponent: <CampaignIcon
-					size={styles.fontSizeIcon}
-				/>,
-			},
-		];
-
-		const customComponent = <HeaderLeftButtonsMainTab buttons={buttons}/>;
-
-		return {
-			customComponent,
-		};
-	}
-
 	render(): Object {
 		const { showAttentionCaptureAddDevice } = this.state;
 		const {
@@ -306,7 +266,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
-			leftButton: this.makeLeftButton(styles),
 			rightButton,
 			hideHeader: false,
 			toggleAttentionCapture: this.toggleAttentionCapture,
@@ -333,17 +292,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			addIconStyle: {
 				height: fontSizeIcon,
 				width: fontSizeIcon,
-			},
-			campaingButtonStyle: {
-				marginLeft: 4,
-				paddingRight: 15,
-				paddingLeft: 5,
-				paddingVertical: 4,
-			},
-			settingsButtonStyle: {
-				paddingLeft: 15,
-				paddingRight: 5,
-				paddingVertical: 4,
 			},
 			fontSizeIcon,
 		};

@@ -110,9 +110,7 @@ const ScreenConfigs = [
 			}
 			return {
 				headerShown: true,
-				header: (): Object => <MainTabNavHeader
-					{...screenProps}
-					parent="Tabs"/>,
+				header: (): Object => <MainTabNavHeader {...screenProps}/>,
 			};
 		},
 	},

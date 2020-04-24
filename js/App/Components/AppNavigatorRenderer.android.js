@@ -29,11 +29,8 @@ const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
 import {
 	View,
-	Header,
+	MainTabNavHeader,
 	Image,
-	HeaderLeftButtonsMainTab,
-	Icon,
-	CampaignIcon,
 } from '../../BaseComponents';
 import AppNavigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
@@ -110,7 +107,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.labelButton = formatMessage(i18n.button);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
-		this.menuIcon = `${formatMessage(i18n.menuIcon)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
 		this.starIconShowDevices = `${formatMessage(i18n.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
 		this.starIconHideDevices = `${formatMessage(i18n.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
 		this.starIconShowSensors = `${formatMessage(i18n.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
@@ -122,7 +118,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		this.renderNavigationView = this.renderNavigationView.bind(this);
 		this.onOpenSetting = this.onOpenSetting.bind(this);
-		this.openDrawer = this.openDrawer.bind(this);
 		this.addNewLocation = this.addNewLocation.bind(this);
 		this.onPressGateway = this.onPressGateway.bind(this);
 
@@ -282,7 +277,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 	}
 
-	openDrawer() {
+	openDrawer = () => {
 		this.refs.drawer.openDrawer();
 		this.props.syncGateways();
 	}
@@ -316,38 +311,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeLeftButton(styles: Object): any {
-		const { drawer } = this.state;
-		const { screenReaderEnabled, intl } = this.props;
-
-		const buttons = [
-			{
-				style: styles.settingsButtonStyle,
-				accessibilityLabel: this.menuIcon,
-				onPress: this.openDrawer,
-				iconComponent: <Icon
-					name="bars"
-					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
-					style={styles.menuIconStyle}
-					color={'#fff'}/>,
-			},
-			{
-				style: styles.campaingButtonStyle,
-				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
-				onPress: this.props.navigateToCampaign,
-				iconComponent: <CampaignIcon
-					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
-					style={styles.campaingIconStyle}/>,
-			},
-		];
-
-		const customComponent = <HeaderLeftButtonsMainTab style={styles.menuButtonStyle} buttons={buttons}/>;
-
-		return (drawer && screenReaderEnabled) ? null : {
-			customComponent,
-		};
-	}
-
 	showAttentionCapture(): boolean {
 		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
 		const { currentScreen } = this.props;
@@ -367,7 +330,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const styles = this.getStyles(appLayout);
 
-		const leftButton = this.makeLeftButton(styles);
 		const rightButton = this.makeRightButton(CS, styles);
 		const drawerWidth = getDrawerWidth(styles.deviceWidth);
 
@@ -382,13 +344,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
-			leftButton,
 			rightButton,
 			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
 			source: 'postlogin',
+			openDrawer: this.openDrawer,
 		};
 
 		return (
@@ -402,12 +364,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onDrawerClose={this.onCloseDrawer}
 			>
 				{showHeader && !styles.isPortrait && (
-					<Header
-						style={styles.header}
-						logoStyle={styles.logoStyle}
-						leftButton={leftButton}
+					<MainTabNavHeader
 						rightButton={rightButton}
-						showAttentionCapture={showAttentionCapture}/>
+						showAttentionCapture={showAttentionCapture}
+						openDrawer={this.openDrawer}
+						drawer={drawer}
+						screenReaderEnabled={screenReaderEnabled}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
 					<AppNavigator
@@ -428,8 +390,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const { port, land } = Theme.Core.headerHeightFactor;
 
-		const buttonSize = isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04);
-
 		return {
 			deviceWidth,
 			header: isPortrait ? {
@@ -447,35 +407,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 				flex: 1,
 				marginLeft: isPortrait ? 0 : Math.ceil(deviceHeight * 0.11),
 			},
-			buttonSize,
-			menuButtonStyle: isPortrait ? null : {
-				position: 'absolute',
-				left: undefined,
-				right: 50,
-				top: deviceHeight * 0.03666,
-				paddingTop: 0,
-				paddingHorizontal: 0,
-			},
 			starButtonStyle: isPortrait ? null : {
 				position: 'absolute',
 				right: height - 50,
 				top: deviceHeight * 0.03666,
 				paddingTop: 0,
 				paddingHorizontal: 0,
-			},
-			menuIconStyle: isPortrait ? null : {
-				transform: [{rotateZ: '90deg'}],
-			},
-			campaingButtonStyle: {
-				marginLeft: 4,
-				paddingRight: 15,
-				paddingLeft: 8,
-				paddingVertical: 4,
-			},
-			settingsButtonStyle: {
-				paddingLeft: 15,
-				paddingRight: 8,
-				paddingVertical: 4,
 			},
 			rightButtonStyle: isPortrait ? null : {
 				top: deviceHeight * 0.03666,
@@ -493,9 +430,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 				top: deviceHeight * 0.0400,
 			},
 			isPortrait,
-			campaingIconStyle: isPortrait ? null : {
-				transform: [{rotateZ: '90deg'}],
-			},
 		};
 	}
 }
