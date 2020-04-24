@@ -41,7 +41,7 @@ import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
-const NavigationHeader = ({ firstName, lastName, email, styles, onPress }: Object): Object => {
+const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwitchAccount }: Object): Object => {
 
 	let options = {
 		email,
@@ -55,7 +55,7 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress }: Objec
 			style={styles.navigationHeader}
 			onPress={onPress}>
 			<View style={{
-				flex: 0,
+				flex: 1,
 				flexDirection: 'row',
 				alignItems: 'center',
 			}}>
@@ -78,7 +78,7 @@ const NavigationHeader = ({ firstName, lastName, email, styles, onPress }: Objec
 						}
 					</View>
 					<Text style={styles.switchOrAdd}>
-						Switch or add new account
+						{textSwitchAccount}
 					</Text>
 				</View>
 			</View>

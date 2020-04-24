@@ -275,6 +275,7 @@ constructor(props: Props) {
 					appLayout={appLayout}
 					lastName={userProfile.lastname}
 					styles={styles}
+					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
 					onPress={this._showSwitchAccountActionSheet}/>
 				<View style={{
 					flex: 1,
