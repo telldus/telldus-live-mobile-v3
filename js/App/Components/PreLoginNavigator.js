@@ -81,7 +81,7 @@ type Props = {
 	screenProps: Object,
 };
 
-const PreLoginNavigator = React.memo((props: Props): Object => {
+const PreLoginNavigator = React.memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
