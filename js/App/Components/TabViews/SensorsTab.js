@@ -221,9 +221,9 @@ class SensorsTab extends View {
 					if (this.listView) {
 						this.listView.scrollToLocation({
 							animated: true,
-							sectionIndex: visibleList.length - 1,
+							sectionIndex: visibleList.length,
 							itemIndex: 0,
-							viewPosition: 0.7,
+							viewPosition: 0.8,
 						});
 					}
 				}, 500);
