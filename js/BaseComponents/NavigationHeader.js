@@ -176,7 +176,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		let { appLayout, showLeftIcon, topMargin, forceHideStatus, intl } = this.props;
+		let { appLayout, showLeftIcon, topMargin, forceHideStatus } = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
@@ -202,8 +202,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 			<Header
 				forceHideStatus={forceHideStatus}
 				leftButton={leftIcon}
-				appLayout={appLayout}
-				intl={intl}
 				style={{
 					height: Platform.OS === 'android' ?
 						deviceHeight * 0.08
