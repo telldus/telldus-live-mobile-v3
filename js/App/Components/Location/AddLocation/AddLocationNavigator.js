@@ -38,6 +38,7 @@ import Position from './Position';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../../Lib/NavigationService';
 
 const initialRouteName = 'LocationDetected';
@@ -124,5 +125,5 @@ const Stack = createStackNavigator();
 
 const AddLocationNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 export default AddLocationNavigator;

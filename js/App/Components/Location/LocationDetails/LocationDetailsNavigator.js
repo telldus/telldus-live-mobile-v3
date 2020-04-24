@@ -37,6 +37,7 @@ import RequestSupport from './RequestSupport';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../../Lib/NavigationService';
 
 const initialRouteName = 'Details';
@@ -118,6 +119,6 @@ const Stack = createStackNavigator();
 
 const LocationDetailsNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 
 export default LocationDetailsNavigator;

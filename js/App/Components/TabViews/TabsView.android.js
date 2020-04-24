@@ -30,6 +30,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
 const ScreenConfigs = [
@@ -68,6 +69,11 @@ const Tab = createMaterialTopTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
+	'hideHeader',
+	'showAttentionCapture',
+	'showAttentionCaptureAddDevice',
+	'rightButton',
+]));
 
 module.exports = TabsView;

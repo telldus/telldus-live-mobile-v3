@@ -34,6 +34,7 @@ import SelectSensorType from './SelectSensorType';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../../Lib/NavigationService';
 
 const initialRouteName = 'SelectLocationAddSensor';
@@ -88,6 +89,6 @@ const Stack = createStackNavigator();
 
 const AddSensorNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 
 export default AddSensorNavigator;

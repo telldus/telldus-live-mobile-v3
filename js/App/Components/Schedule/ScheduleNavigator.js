@@ -39,6 +39,7 @@ import ActionRGB from './ActionRGB';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
 const initialRouteName = 'Device';
@@ -133,6 +134,6 @@ const Stack = createStackNavigator();
 
 const ScheduleNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 
 export default ScheduleNavigator;

@@ -37,6 +37,7 @@ import { SensorDetailsHeaderPoster } from './SubViews';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
 import i18n from '../../Translations/common';
@@ -151,6 +152,6 @@ const Tab = createMaterialTopTabNavigator();
 
 const SensorDetailsNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 
 export default SensorDetailsNavigator;

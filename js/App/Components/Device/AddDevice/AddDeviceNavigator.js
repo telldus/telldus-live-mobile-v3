@@ -36,6 +36,7 @@ import SetDeviceName433 from './SetDeviceName433';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../../Lib/NavigationService';
 
 const initialRouteName = 'SelectLocation';
@@ -106,5 +107,5 @@ const Stack = createStackNavigator();
 
 const AddDeviceNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 export default AddDeviceNavigator;

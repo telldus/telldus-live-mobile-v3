@@ -34,6 +34,7 @@ import {
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
 import i18n from '../../Translations/common';
@@ -145,6 +146,11 @@ const Tab = createBottomTabNavigator();
 
 const TabsView = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
+	'hideHeader',
+	'showAttentionCapture',
+	'showAttentionCaptureAddDevice',
+	'rightButton',
+]));
 
 module.exports = TabsView;

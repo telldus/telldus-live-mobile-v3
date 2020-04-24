@@ -40,6 +40,7 @@ import {
 import getRouteName from '../Lib/getRouteName';
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../Lib/NavigationService';
 
 import {
@@ -80,7 +81,7 @@ type Props = {
 	screenProps: Object,
 };
 
-const PreLoginNavigator = (props: Props): Object => {
+const PreLoginNavigator = React.memo((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
@@ -114,6 +115,6 @@ const PreLoginNavigator = (props: Props): Object => {
 			{Navigator}
 		</NavigationContainer>
 	);
-};
+}, shouldNavigatorUpdate);
 
 module.exports = PreLoginNavigator;

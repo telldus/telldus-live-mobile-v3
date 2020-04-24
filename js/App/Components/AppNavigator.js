@@ -91,6 +91,7 @@ import getRouteName from '../Lib/getRouteName';
 import {
 	navigationRef,
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../Lib/NavigationService';
 
 import {
@@ -444,6 +445,11 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 			{Navigator}
 		</NavigationContainer>
 	);
-});
+}, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
+	'hideHeader',
+	'showAttentionCapture',
+	'showAttentionCaptureAddDevice',
+	'rightButton',
+]));
 
 export default AppNavigator;

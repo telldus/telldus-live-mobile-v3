@@ -39,6 +39,7 @@ const initialRouteName = 'AddEditGeoFence';
 
 import {
 	prepareNavigator,
+	shouldNavigatorUpdate,
 } from '../../Lib/NavigationService';
 
 const ScreenConfigs = [
@@ -115,6 +116,6 @@ const Stack = createStackNavigator();
 
 const GeoFenceNavigator = React.memo<Object>((props: Object): Object => {
 	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-});
+}, shouldNavigatorUpdate);
 
 export default GeoFenceNavigator;
