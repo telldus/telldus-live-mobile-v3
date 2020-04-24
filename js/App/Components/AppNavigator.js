@@ -30,8 +30,9 @@ import {
 	useDispatch,
 } from 'react-redux';
 
+import { MainTabNavHeader } from '../../BaseComponents';
+
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
-import { Header } from '../../BaseComponents';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
 import SensorDetailsNavigator from './SensorDetails/SensorDetailsNavigator';
 import DeviceDetailsNavigator from './Device/DeviceDetails/DeviceDetailsNavigator';
@@ -109,7 +110,9 @@ const ScreenConfigs = [
 			}
 			return {
 				headerShown: true,
-				header: (): Object => <Header {...screenProps}/>,
+				header: (): Object => <MainTabNavHeader
+					{...screenProps}
+					parent="Tabs"/>,
 			};
 		},
 	},

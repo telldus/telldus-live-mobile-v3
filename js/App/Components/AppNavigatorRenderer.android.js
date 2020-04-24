@@ -385,8 +385,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			leftButton,
 			rightButton,
 			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
-			style: styles.header,
-			logoStyle: styles.logoStyle,
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
@@ -409,8 +407,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 						logoStyle={styles.logoStyle}
 						leftButton={leftButton}
 						rightButton={rightButton}
-						appLayout={appLayout}
-						intl={intl}
 						showAttentionCapture={showAttentionCapture}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>

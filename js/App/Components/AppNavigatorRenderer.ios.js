@@ -24,7 +24,6 @@
 import React from 'react';
 import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 import appleAuth from '@invertase/react-native-apple-authentication';
@@ -48,7 +47,6 @@ import {
 	shouldUpdate,
 } from '../Lib';
 
-import Theme from '../Theme';
 import i18n from '../Translations/common';
 import { Image } from 'react-native-animatable';
 
@@ -298,13 +296,8 @@ class AppNavigatorRenderer extends View<Props, State> {
 			currentScreen: CS,
 		} = this.props;
 
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-
 		const styles = this.getStyles(appLayout);
 
-		const { land } = Theme.Core.headerHeightFactor;
 		const rightButton = this.makeRightButton(CS, styles);
 		const showAttentionCapture = this.showAttentionCapture() && rightButton;
 		let screenProps = {
@@ -316,7 +309,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			leftButton: this.makeLeftButton(styles),
 			rightButton,
 			hideHeader: false,
-			style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
