@@ -101,6 +101,7 @@ import ActionSheet from './ActionSheet';
 import CachedImage from './CachedImage';
 import TransparentFullPageLoadingIndicator from './TransparentFullPageLoadingIndicator';
 import MainTabBarIOS from './MainTabBarIOS';
+import MainTabNavHeader from './MainTabNavHeader';
 
 import {
 	AppState,
@@ -193,6 +194,7 @@ module.exports = {
 	CachedImage,
 	TransparentFullPageLoadingIndicator,
 	MainTabBarIOS,
+	MainTabNavHeader,
 
 	AppState: AppState,
 	Dimensions: Dimensions,
