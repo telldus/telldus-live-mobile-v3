@@ -373,7 +373,6 @@ constructor(props: Props) {
 				minWidth: 250,
 				backgroundColor: brandPrimary,
 				marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-				paddingBottom: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
