@@ -323,7 +323,10 @@ constructor(props: Props) {
 							dispatch={dispatch}/>;
 					})}
 					<SettingsLink
-						styles={styles}
+						styles={{
+							...styles,
+							linkCoverStyle: styles.linkCoverStyleAddNewGateway,
+						}}
 						text={capitalize(formatMessage(i18n.addNewGatway))}
 						iconComponent={<Icon
 							style={{
@@ -456,6 +459,12 @@ constructor(props: Props) {
 				paddingHorizontal: 10,
 				alignItems: 'center',
 				paddingVertical: padding * 0.9,
+			},
+			linkCoverStyleAddNewGateway: {
+				flexDirection: 'row',
+				paddingHorizontal: 10,
+				alignItems: 'center',
+				paddingVertical: padding * 1.5,
 			},
 			linkIconStyle: {
 				fontSize: fontSizeSettingsIcon,
