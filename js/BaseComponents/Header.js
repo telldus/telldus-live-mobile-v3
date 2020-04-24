@@ -32,8 +32,13 @@ import {
 	Text,
 	TouchableOpacity,
 } from 'react-native';
+import {
+	useSelector,
+} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
+import { useIntl } from 'react-intl';
+
 import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
 import Theme from '../App/Theme';
 
@@ -53,9 +58,7 @@ type Props = {
 	searchBar?: ?Object,
 	rightButton?: Object,
 	leftButton: Object,
-	appLayout: Object,
 	showAttentionCapture: boolean,
-	intl: Object,
 	forceHideStatus?: boolean,
 	style: Object | Array<any>,
 };
@@ -63,27 +66,29 @@ type Props = {
 const HeaderComponent = (props: Props): Object => {
 
 	const {
-		appLayout,
 		children,
 		rounded,
 		logoStyle,
 		searchBar,
-		intl,
 		leftButton,
 		rightButton,
 		showAttentionCapture,
 		forceHideStatus,
 		style,
 	} = props;
-	const {
-		height,
-		width,
-	} = appLayout;
+
 	const {
 		iosToolbarBtnColor,
 		toolbarTextColor,
 	 } = Theme.Core;
 
+	 const intl = useIntl();
+
+	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
+	const {
+		height,
+		width,
+	} = appLayout;
 	const {
 		navbar,
 		logoImage,
