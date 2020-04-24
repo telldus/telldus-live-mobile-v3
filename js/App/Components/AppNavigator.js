@@ -409,9 +409,32 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const {
+		currentScreen,
+		drawer,
+		appLayout,
+		screenReaderEnabled,
+		hideHeader, // Hide Stack Nav Header, show custom Header
+		showAttentionCapture,
+		showAttentionCaptureAddDevice,
+		source,
+		rightButton,
+	} = props.screenProps;
+
 	const Navigator = React.useMemo((): Object => {
 		return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
-	}, [props]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		currentScreen,
+		drawer,
+		appLayout,
+		screenReaderEnabled,
+		hideHeader,
+		showAttentionCapture,
+		showAttentionCaptureAddDevice,
+		source,
+		rightButton,
+	]);
 
 	return (
 		<NavigationContainer
