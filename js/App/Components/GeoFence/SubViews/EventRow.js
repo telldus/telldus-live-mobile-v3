@@ -132,7 +132,7 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 					isChecked ? (
 						<>
 							<Text style={switchTextStyle}>
-							Active
+								{intl.formatMessage(i18n.labelActive)}
 							</Text>
 							<Switch
 								style={switchStyle}

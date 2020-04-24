@@ -100,7 +100,9 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 					{deviceName}
 				</Text>
 				<Text style = {textTwoStyle} numberOfLines={1}>
-					At {job.hour}:{job.minute} - {daysStr}
+					{intl.formatMessage(i18n.atWithValue, {
+						value: `${job.hour}:${job.minute} - ${daysStr}`,
+					})}
 				</Text>
 			</View>
 		);
@@ -145,7 +147,7 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 					isChecked ? (
 						<>
 							<Text style={switchTextStyle}>
-							Active
+								{intl.formatMessage(i18n.labelActive)}
 							</Text>
 							<Switch
 								style={switchStyle}
