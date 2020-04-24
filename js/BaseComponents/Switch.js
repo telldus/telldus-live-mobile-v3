@@ -65,18 +65,18 @@ export default class SwitchComponent extends Base {
 
 	render(): React$Element<any> {
 		const { onTintColor, tintColor, value, style } = this.props;
-		const trackColor = value ? onTintColor : tintColor;
+		const thumbColor = value ? Theme.Core.brandSecondary : Theme.Core.inactiveSwitch;
 
 		return (
 			<Switch
 				value={value}
 				onValueChange={this.onValueChange}
 				style={style}
-				thumbColor={{
-					false: Theme.Core.inactiveSwitch,
-					true: Theme.Core.brandSecondary,
-				}}
-				trackColor={trackColor}/>
+				thumbColor={thumbColor}
+				trackColor={{
+					false: tintColor,
+					true: onTintColor,
+				}}/>
 		);
 	}
 }
