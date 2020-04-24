@@ -269,7 +269,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	console.log('TEST OT ownProps', ownProps);
 	const { route } = ownProps;
 	const { id } = route.params || {};
 	const device = state.devices.byId[id];
