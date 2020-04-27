@@ -27,9 +27,12 @@ import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
+const isEqual = require('react-fast-compare');
+import { connect } from 'react-redux';
 
 import View from './View';
 import Text from './Text';
+import shouldUpdate from '../App/Lib/shouldUpdate';
 
 type Props = {
 	tab: Object,
@@ -46,7 +49,7 @@ type State = {
 	heightLand: any,
 };
 
-export default class MainTabsAndroid extends Component<Props, State> {
+class MainTabsAndroid extends Component<Props, State> {
 	props: Props;
 	state: State;
 
@@ -100,6 +103,14 @@ export default class MainTabsAndroid extends Component<Props, State> {
 		this.setState({
 			layout: ev.nativeEvent.layout,
 		});
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
+			'tab',
+			'appLayout',
+			'currentScreen',
+		]);
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -214,6 +225,17 @@ export default class MainTabsAndroid extends Component<Props, State> {
 		};
 	}
 }
+
+function mapStateToProps(state: Object, ownprops: Object): Object {
+
+	const { screen: currentScreen } = state.navigation;
+
+	return {
+		currentScreen,
+	};
+}
+
+export default connect(mapStateToProps, null)(MainTabsAndroid);
 
 const styles = StyleSheet.create({
 	tabBar: {
