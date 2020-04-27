@@ -48,6 +48,7 @@ type Props = {
 	addNewLocation: () => Promise<any>,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 };
 
 type State = {
@@ -79,7 +80,7 @@ class GatewaysTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
+		const { currentScreen } = nextProps;
 		return currentScreen === 'Gateways';
 	}
 
@@ -158,10 +159,14 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
+
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		rows: getRows(state),
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
+		currentScreen,
 	};
 }
 

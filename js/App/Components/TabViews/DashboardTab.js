@@ -64,6 +64,7 @@ type Props = {
 	dbCarousel: boolean,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number) => void,
@@ -209,9 +210,9 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		const { isDBEmpty, navigation, screenProps } = this.props;
+		const { isDBEmpty, navigation, currentScreen } = this.props;
 		const possibleScreen = ['Dashboard', 'Tabs', 'Login'];
-		if (isDBEmpty && possibleScreen.indexOf(screenProps.currentScreen) !== -1) {
+		if (isDBEmpty && possibleScreen.indexOf(currentScreen) !== -1) {
 			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
 			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
 			// back to Dashboard itself.
@@ -237,7 +238,7 @@ class DashboardTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
+		const { currentScreen } = nextProps;
 		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
 		}
@@ -245,8 +246,8 @@ class DashboardTab extends View {
 	}
 
 	componentDidUpdate(prevProps: Object) {
-		const { currentScreen } = this.props.screenProps;
-		if (currentScreen === 'Dashboard' && prevProps.screenProps.currentScreen !== 'Dashboard' && !this.timer) {
+		const { currentScreen } = this.props;
+		if (currentScreen === 'Dashboard' && prevProps.currentScreen !== 'Dashboard' && !this.timer) {
 			this.startSensorTimer();
 		}
 	}
@@ -617,12 +618,15 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		rows: getRows(state),
 		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0),
 		dbCarousel,
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
+		currentScreen,
 	};
 }
 

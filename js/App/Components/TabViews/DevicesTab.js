@@ -61,6 +61,7 @@ type Props = {
 	devicesDidFetch: boolean,
 	dispatch: Function,
 	screenProps: Object,
+	currentScreen: string,
 	navigation: Object,
 	screenReaderEnabled: boolean,
 	addNewLocation: Function,
@@ -182,8 +183,8 @@ class DevicesTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
-		const { currentScreen: prevScreen } = this.props.screenProps;
+		const { currentScreen } = nextProps;
+		const { currentScreen: prevScreen } = this.props;
 		return (currentScreen === 'Devices') || (currentScreen !== 'Devices' && prevScreen === 'Devices');
 	}
 
@@ -466,8 +467,8 @@ class DevicesTab extends View {
 	}
 
 	toggleHiddenListButton(): Object {
-		const { screenProps } = this.props;
-		const accessible = screenProps.currentScreen === 'Devices';
+		const { screenProps, currentScreen } = this.props;
+		const accessible = currentScreen === 'Devices';
 		const style = this.getStyles(screenProps.appLayout);
 
 		const { showHiddenList } = this.state;
@@ -500,7 +501,7 @@ class DevicesTab extends View {
 			return null;
 		}
 
-		const { screenProps, gatewaysById } = this.props;
+		const { screenProps, gatewaysById, currentScreen } = this.props;
 
 		const { name } = gatewaysById[sectionData.section.header] || {};
 
@@ -512,22 +513,21 @@ class DevicesTab extends View {
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
-				accessible={screenProps.currentScreen === 'Devices'}
+				accessible={currentScreen === 'Devices'}
 			/>
 		);
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, route } = this.props;
-		const { appLayout } = screenProps;
+		const { screenProps, route, currentScreen } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen, screenReaderEnabled } = screenProps;
+		const { intl, screenReaderEnabled, appLayout } = screenProps;
 		const { item, section, index } = row;
 		const { isOnline, supportLocalControl, buttonRow, id } = item;
 
 		if (buttonRow) {
 			return (
-				<View importantForAccessibility={screenProps.currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
+				<View importantForAccessibility={currentScreen === 'Devices' ? 'no' : 'no-hide-descendants'}>
 					{this.toggleHiddenListButton()}
 				</View>
 			);
@@ -585,7 +585,7 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUI = () => {
-		const { route, navigation, screenProps } = this.props;
+		const { route, navigation, currentScreen } = this.props;
 		const {
 			newDevices,
 		} = route.params || {};
@@ -601,9 +601,6 @@ class DevicesTab extends View {
 				}
 			});
 
-			const {
-				currentScreen,
-			} = screenProps;
 			if (currentScreen === 'Devices') {
 				navigation.navigate('InfoScreen', {
 					info: 'add_schedule',
@@ -669,6 +666,7 @@ class DevicesTab extends View {
 			screenReaderEnabled,
 			gatewaysDidFetch,
 			gateways,
+			currentScreen,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const {
@@ -690,7 +688,7 @@ class DevicesTab extends View {
 		}
 
 		let makeRowAccessible = 0;
-		if (screenReaderEnabled && screenProps.currentScreen === 'Devices') {
+		if (screenReaderEnabled && currentScreen === 'Devices') {
 			makeRowAccessible = 1;
 		}
 		const extraData = {
@@ -816,7 +814,10 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(state: Object, ownprops: Object): Object {
+
 	const { screenReaderEnabled } = state.app;
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		rowsAndSections: getRowsAndSections(state),
 		devices: state.devices.allIds,
@@ -825,6 +826,7 @@ function mapStateToProps(state: Object, ownprops: Object): Object {
 		gatewaysById: state.gateways.byId,
 		gatewaysDidFetch: state.gateways.didFetch,
 		screenReaderEnabled,
+		currentScreen,
 	};
 }
 

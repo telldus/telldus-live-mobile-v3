@@ -61,6 +61,7 @@ type Props = {
 	gatewayTimezone: string,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 };
 
 type State = {
@@ -92,13 +93,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen, screenReaderEnabled } = nextProps.screenProps;
-		const { currentScreen: prevScreen } = this.props.screenProps;
+		const { currentScreen, screenProps } = nextProps;
+		const { screenReaderEnabled } = screenProps;
+		const { currentScreen: prevScreen } = this.props;
 		return (currentScreen === 'Scheduler') || (currentScreen !== 'Scheduler' && prevScreen === 'Scheduler' && screenReaderEnabled);
 	}
 
 	componentDidMount() {
-		const { currentScreen } = this.props.screenProps;
+		const { currentScreen } = this.props;
 		if (currentScreen === 'Scheduler') {
 			this.refreshJobs();
 		}
@@ -160,8 +162,9 @@ class SchedulerTab extends View<null, Props, State> {
 			showInactive,
 			gatewaysDidFetch,
 			gateways,
+			currentScreen,
 		} = this.props;
-		const { appLayout, currentScreen } = screenProps;
+		const { appLayout } = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -365,14 +368,17 @@ type MapStateToPropsType = {
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
-	const { jobsList = {} } = store;
+	const { jobsList = {}, navigation } = store;
 	const { userOptions = {} } = jobsList;
 	const { showInactive = true } = userOptions;
+	const { screen: currentScreen } = navigation;
+
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		showInactive,
 		gateways: store.gateways.allIds,
 		gatewaysDidFetch: store.gateways.didFetch,
+		currentScreen,
 	};
 };
 

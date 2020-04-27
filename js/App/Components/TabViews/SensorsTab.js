@@ -59,6 +59,7 @@ type Props = {
 	route: Object,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 };
 
 type State = {
@@ -166,8 +167,8 @@ class SensorsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
-		const { currentScreen: prevScreen } = this.props.screenProps;
+		const { currentScreen } = nextProps;
+		const { currentScreen: prevScreen } = this.props;
 		return (currentScreen === 'Sensors') || (currentScreen !== 'Sensors' && prevScreen === 'Sensors');
 	}
 
@@ -290,8 +291,8 @@ class SensorsTab extends View {
 	}
 
 	toggleHiddenListButton(): Object {
-		const { screenProps } = this.props;
-		const accessible = screenProps.currentScreen === 'Sensors';
+		const { screenProps, currentScreen } = this.props;
+		const accessible = currentScreen === 'Sensors';
 		const style = this.getStyles(screenProps.appLayout);
 
 		const { showHiddenList } = this.state;
@@ -352,6 +353,7 @@ class SensorsTab extends View {
 			sensors,
 			gateways,
 			gatewaysDidFetch,
+			currentScreen,
 		} = this.props;
 		const { appLayout } = screenProps;
 		const {
@@ -371,7 +373,7 @@ class SensorsTab extends View {
 		}
 
 		let makeRowAccessible = 0;
-		if (screenReaderEnabled && screenProps.currentScreen === 'Sensors') {
+		if (screenReaderEnabled && currentScreen === 'Sensors') {
 			makeRowAccessible = 1;
 		}
 
@@ -411,7 +413,7 @@ class SensorsTab extends View {
 			return null;
 		}
 
-		const { screenProps, gatewaysById } = this.props;
+		const { screenProps, gatewaysById, currentScreen } = this.props;
 
 		const { name } = gatewaysById[sectionData.section.header] || {};
 
@@ -423,21 +425,21 @@ class SensorsTab extends View {
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
-				accessible={screenProps.currentScreen === 'Sensors'}
+				accessible={currentScreen === 'Sensors'}
 			/>
 		);
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, route } = this.props;
+		const { screenProps, route, currentScreen } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
+		const { intl, appLayout, screenReaderEnabled } = screenProps;
 		const { item, section, index } = row;
 		const { isOnline, buttonRow, id } = item;
 
 		if (buttonRow) {
 			return (
-				<View importantForAccessibility={screenProps.currentScreen === 'Sensors' ? 'no' : 'no-hide-descendants'}>
+				<View importantForAccessibility={currentScreen === 'Sensors' ? 'no' : 'no-hide-descendants'}>
 					{this.toggleHiddenListButton()}
 				</View>
 			);
@@ -636,7 +638,10 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
+
 	const { screenReaderEnabled } = store.app;
+	const { screen: currentScreen } = store.navigation;
+
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		screenReaderEnabled,
@@ -645,6 +650,7 @@ function mapStateToProps(store: Object): Object {
 		gatewaysById: store.gateways.byId,
 		gateways: store.gateways.allIds,
 		gatewaysDidFetch: store.gateways.didFetch,
+		currentScreen,
 	};
 }
 
