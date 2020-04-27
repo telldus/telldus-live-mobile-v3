@@ -72,8 +72,12 @@ public class NewSensorWidget extends AppWidgetProvider {
 
     private static final String API_TAG = "SensorApi";
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    static void updateAppWidget(
+            Context context,
+            AppWidgetManager appWidgetManager,
+            int appWidgetId,
+            Map extraArgs
+            ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
         // On log out, only prefManager is cleared and not DB, so we do not want sensor to show back again during the timed interval
@@ -153,6 +157,9 @@ public class NewSensorWidget extends AppWidgetProvider {
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
+
+        Object normalizeUIO = extraArgs.get("normalizeUI");
+        Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
 
         RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.configurable_sensor_widget);
 
@@ -275,6 +282,10 @@ public class NewSensorWidget extends AppWidgetProvider {
             view.setTextColor(R.id.txtHistoryInfo, ContextCompat.getColor(context, R.color.brightRed));
         }
 
+        if (normalizeUI) {
+            hideFlashIndicator(view, R.id.flashing_indicator_sensor);
+        }
+
         if (isBasicUser) {
             view.setViewVisibility(R.id.premiumRequiredInfo, View.VISIBLE);
             view.setOnClickPendingIntent(R.id.premiumRequiredInfo, getPendingSelf(context, ACTION_PURCHASE_PRO, appWidgetId));
@@ -312,7 +323,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        updateAppWidget(context, appWidgetManager, appWidgetId);
+        updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
@@ -325,7 +336,7 @@ public class NewSensorWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         }
     }
 
@@ -395,11 +406,11 @@ public class NewSensorWidget extends AppWidgetProvider {
             if (isUpdating != null && isUpdating.equals("true")) {
                 AndroidNetworking.cancel(API_TAG);
                 db.updateSensorIsUpdating(widgetId, "false");
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
 
             db.updateSensorIsUpdating(widgetId, "true");
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createSensorApi(sensorId, widgetId, db, context);
         }
@@ -438,7 +449,7 @@ public class NewSensorWidget extends AppWidgetProvider {
                                 database.updateSensorIdSensorWidget(-1, widgetId);
 
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                updateAppWidget(context, widgetManager, widgetId);
+                                updateAppWidget(context, widgetManager, widgetId, new HashMap());
                             }
                             return;
                         }
@@ -476,19 +487,19 @@ public class NewSensorWidget extends AppWidgetProvider {
                     database.updateSensorIsUpdating(widgetId, "false");
 
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                    updateAppWidget(context, widgetManager, widgetId);
+                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 } catch (JSONException e) {
                     e.printStackTrace();
                     database.updateSensorIsUpdating(widgetId, "false");
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                    updateAppWidget(context, widgetManager, widgetId);
+                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
             @Override
             public void onError(ANError error) {
                 database.updateSensorIsUpdating(widgetId, "false");
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
         });
     }
@@ -523,7 +534,7 @@ public class NewSensorWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(JSONObject response) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
-                wUpdater.updateAllWidgets(context);
+                wUpdater.updateAllWidgets(context, new HashMap());
             }
             @Override
             public void onError(ANError error) {

@@ -92,8 +92,12 @@ public class NewAppWidget extends AppWidgetProvider {
     private Handler handlerResetDeviceStateToNull;
     private Runnable runnableResetDeviceStateToNull;
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    static void updateAppWidget(
+            Context context,
+            AppWidgetManager appWidgetManager,
+            int appWidgetId,
+            Map extraArgs
+            ) {
 
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
@@ -209,6 +213,9 @@ public class NewAppWidget extends AppWidgetProvider {
         int maxButtonsOnWidget = 5;
         Boolean showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
 
+        Object normalizeUIO = extraArgs.get("normalizeUI");
+        Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
+
         transparent = transparent == null ? "" : transparent;
         if (transparent.equals("dark") || transparent.equals("light") || transparent.equals("true")) {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
@@ -288,6 +295,10 @@ public class NewAppWidget extends AppWidgetProvider {
                 );
             }
 
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_bell);
+            }
+
             renderedButtonsCount++;
         }
 
@@ -364,6 +375,11 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_up);
+            }
+
             renderedButtonsCount++;
         }
 
@@ -440,6 +456,11 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_down);
+            }
+
             renderedButtonsCount++;
         }
 
@@ -517,6 +538,11 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_stop);
+            }
+
             renderedButtonsCount++;
         }
 
@@ -596,6 +622,11 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_off);
+            }
+
             renderedButtonsCount++;
         }
 
@@ -878,6 +909,12 @@ public class NewAppWidget extends AppWidgetProvider {
                 }
                 renderedButtonsCount++;
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_dim25);
+                hideFlashIndicator(views, R.id.flashing_indicator_dim50);
+                hideFlashIndicator(views, R.id.flashing_indicator_dim75);
+            }
         }
 
         showMoreActions = (renderedButtonsCount == 4 ) && (buttonsCount > 5);
@@ -954,6 +991,11 @@ public class NewAppWidget extends AppWidgetProvider {
                     context
                 );
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_on);
+            }
+
             renderedButtonsCount++;
         }
 
@@ -1218,7 +1260,7 @@ public class NewAppWidget extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        updateAppWidget(context, appWidgetManager, appWidgetId);
+        updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
@@ -1226,7 +1268,7 @@ public class NewAppWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         }
     }
 
@@ -1285,7 +1327,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createDeviceApi(deviceId, 4, 0, widgetId, context);
         }
@@ -1294,7 +1336,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createDeviceApi(deviceId, 128, 0, widgetId, context);
         }
@@ -1303,7 +1345,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createDeviceApi(deviceId, 256, 0, widgetId, context);
         }
@@ -1312,7 +1354,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createDeviceApi(deviceId, 512, 0, widgetId, context);
         }
@@ -1321,7 +1363,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createDeviceApi(deviceId, 2, 0, widgetId, context);
         }
@@ -1330,7 +1372,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             DevicesUtilities deviceUtils = new DevicesUtilities();
             int value = deviceUtils.toDimmerValue(25);
@@ -1341,7 +1383,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             DevicesUtilities deviceUtils = new DevicesUtilities();
             int value = deviceUtils.toDimmerValue(50);
@@ -1352,7 +1394,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             DevicesUtilities deviceUtils = new DevicesUtilities();
             int value = deviceUtils.toDimmerValue(75);
@@ -1363,7 +1405,7 @@ public class NewAppWidget extends AppWidgetProvider {
             removeHandlerResetDeviceStateToNull();
 
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             createDeviceApi(deviceId, 1, 0, widgetId, context);
         }
@@ -1412,7 +1454,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
             @Override
             public void onError(ANError error) {
@@ -1420,7 +1462,7 @@ public class NewAppWidget extends AppWidgetProvider {
                 resetDeviceStateToNull(deviceId, widgetId, context);
 
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
         });
     }
@@ -1437,7 +1479,7 @@ public class NewAppWidget extends AppWidgetProvider {
                     String stateValue = widgetInfo.getDeviceStateValue();
                     db.updateDeviceInfo(null, null, stateValue, 0, secondaryStateValue, widgetId);
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                    updateAppWidget(context, widgetManager, widgetId);
+                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
         };
@@ -1476,7 +1518,7 @@ public class NewAppWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(JSONObject response) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
-                wUpdater.updateAllWidgets(context);
+                wUpdater.updateAllWidgets(context, new HashMap());
             }
             @Override
             public void onError(ANError error) {

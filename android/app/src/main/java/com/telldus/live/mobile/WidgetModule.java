@@ -25,13 +25,17 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
@@ -64,7 +68,23 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   public WidgetModule(ReactApplicationContext reactContext) {
     super(reactContext);
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(Intent.ACTION_SCREEN_ON);
+    reactContext.registerReceiver(mReceiver, filter);
   }
+
+  private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      String key = intent.getAction();
+      if (key.equals(Intent.ACTION_SCREEN_ON)) {
+        WidgetsUpdater wUpdater = new WidgetsUpdater();
+        Map extraArgs = new HashMap();
+        extraArgs.put("normalizeUI", true);
+        wUpdater.updateAllWidgets(context, extraArgs);
+      }
+    }
+  };
 
   @Override
   public String getName() {
@@ -80,23 +100,23 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     prefManager.setUserId(userId, pro);
     int widgetIdsSensor[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewSensorWidget.class));
     for (int widgetId : widgetIdsSensor) {
-      wUpdater.updateUIWidgetSensor(widgetId, context);
+      wUpdater.updateUIWidgetSensor(widgetId, context, new HashMap());
     }
     int widgetIdsDevice2By1[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewOnOffWidget.class));
     for (int widgetId : widgetIdsDevice2By1) {
-      wUpdater.updateUIWidgetDevice2By1(widgetId, context);
+      wUpdater.updateUIWidgetDevice2By1(widgetId, context, new HashMap());
     }
     int widgetIdsDevice3By1[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewAppWidget.class));
     for (int widgetId : widgetIdsDevice3By1) {
-      wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+      wUpdater.updateUIWidgetDevice3By1(widgetId, context, new HashMap());
     }
     int widgetIdsDeviceThermo[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewThermostatWidget.class));
     for (int widgetId : widgetIdsDeviceThermo) {
-      wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
+      wUpdater.updateUIWidgetDeviceThermo(widgetId, context, new HashMap());
     }
     int widgetIdsDeviceRGB[] = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewRGBWidget.class));
     for (int widgetId : widgetIdsDeviceRGB) {
-      wUpdater.updateUIWidgetDeviceRGB(widgetId, context);
+      wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
     }
   }
 
@@ -115,7 +135,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           db.updateSensorIdSensorWidget(-1, wId);
 
           AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-          NewSensorWidget.updateAppWidget(context, widgetManager, wId);
+          NewSensorWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
         }
       }
     }
@@ -131,8 +151,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
           AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
           NewOnOffWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
-          NewAppWidget.updateAppWidget(context, widgetManager, wId);
-          NewThermostatWidget.updateAppWidget(context, widgetManager, wId);
+          NewAppWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
+          NewThermostatWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
           NewRGBWidget.updateAppWidget(context, widgetManager, wId, new HashMap());
         }
       }
@@ -165,19 +185,19 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     for (int widgetId : widgetIds) {
 
       if (widgetType.equals(widgetSensor)) {
-        wUpdater.updateUIWidgetSensor(widgetId, context);
+        wUpdater.updateUIWidgetSensor(widgetId, context, new HashMap());
       }
       if (widgetType.equals(widgetDevice2By1)) {
-        wUpdater.updateUIWidgetDevice2By1(widgetId, context);
+        wUpdater.updateUIWidgetDevice2By1(widgetId, context, new HashMap());
       }
       if (widgetType.equals(widgetDevice3By1)) {
-        wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+        wUpdater.updateUIWidgetDevice3By1(widgetId, context, new HashMap());
       }
       if (widgetType.equals(widgetDeviceThermo)) {
-        wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
+        wUpdater.updateUIWidgetDeviceThermo(widgetId, context, new HashMap());
       }
       if (widgetType.equals(widgetDeviceRGB)) {
-        wUpdater.updateUIWidgetDeviceRGB(widgetId, context);
+        wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
       }
     }
   }
@@ -256,16 +276,16 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           if (deviceIdCurrent.intValue() != -1) {// If not already nullified
             db.setDeviceIdDeviceWidget(widgetId, -1);
             if (widgetType.equals(widgetDevice2By1)) {
-              wUpdater.updateUIWidgetDevice2By1(widgetId, context);
+              wUpdater.updateUIWidgetDevice2By1(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDevice3By1)) {
-              wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+              wUpdater.updateUIWidgetDevice3By1(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDeviceRGB)) {
-                wUpdater.updateUIWidgetDeviceRGB(widgetId, context);
+                wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDeviceThermo)) {
-              wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
+              wUpdater.updateUIWidgetDeviceThermo(widgetId, context, new HashMap());
             }
           }
         }
@@ -275,16 +295,16 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           if (newName != null && !newName.equals(currentName) && deviceIdCurrent.intValue() != -1) {
             db.updateDeviceName(newName, deviceIdCurrent);
             if (widgetType.equals(widgetDevice2By1)) {
-              wUpdater.updateUIWidgetDevice2By1(widgetId, context);
+              wUpdater.updateUIWidgetDevice2By1(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDevice3By1)) {
-              wUpdater.updateUIWidgetDevice3By1(widgetId, context);
+              wUpdater.updateUIWidgetDevice3By1(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDeviceThermo)) {
-              wUpdater.updateUIWidgetDeviceThermo(widgetId, context);
+              wUpdater.updateUIWidgetDeviceThermo(widgetId, context, new HashMap());
             }
             if (widgetType.equals(widgetDeviceRGB)) {
-              wUpdater.updateUIWidgetDeviceRGB(widgetId, context);
+              wUpdater.updateUIWidgetDeviceRGB(widgetId, context, new HashMap());
             }
           }
         }
@@ -335,7 +355,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
         if (!isInList && isSameAccount) {
           if (sensorIdCurrent.intValue() != -1) {// If not already nullified
             db.setSensorIdSensorWidget(widgetId, -1);
-            wUpdater.updateUIWidgetSensor(widgetId, context);
+            wUpdater.updateUIWidgetSensor(widgetId, context, new HashMap());
           }
         }
 
@@ -343,7 +363,7 @@ public class WidgetModule extends ReactContextBaseJavaModule {
           String newName = sensorData.getString("name");
           if (newName != null && !newName.equals(currentName) && sensorIdCurrent.intValue() != -1) {
             db.updateSensorName(newName, sensorIdCurrent);
-            wUpdater.updateUIWidgetSensor(widgetId, context);
+            wUpdater.updateUIWidgetSensor(widgetId, context, new HashMap());
           }
         }
       }

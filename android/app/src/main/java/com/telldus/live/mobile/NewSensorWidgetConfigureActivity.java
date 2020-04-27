@@ -303,7 +303,7 @@ public class NewSensorWidgetConfigureActivity extends Activity {
                         );
                     database.addWidgetSensor(mSensorInfo);
 
-                    NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId);
+                    NewSensorWidget.updateAppWidget(getApplicationContext(), widgetManager, appWidgetId, new HashMap());
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

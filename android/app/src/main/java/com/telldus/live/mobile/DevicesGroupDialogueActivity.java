@@ -233,7 +233,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                     createDeviceApi(deviceId, 4, 0, widgetId, context);
                 }
@@ -304,7 +304,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                     createDeviceApi(deviceId, 128, 0, widgetId, context);
                 }
@@ -375,7 +375,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                     createDeviceApi(deviceId, 256, 0, widgetId, context);
                 }
@@ -446,7 +446,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                     createDeviceApi(deviceId, 512, 0, widgetId, context);
                 }
@@ -517,7 +517,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                     createDeviceApi(deviceId, 2, 0, widgetId, context);
                 }
@@ -618,7 +618,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateUI(widgetId);
                                 if (!hasRGB) {
-                                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else {
                                     if (primarySetting.equalsIgnoreCase("full")) {
                                         NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
@@ -665,7 +665,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                     removeHandlerResetDeviceStateToNull();
                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                     updateUI(widgetId);
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                     createDeviceApi(deviceId, 1, 0, widgetId, context);
                 }
@@ -966,7 +966,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     }
                 } else {
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
             @Override
@@ -984,7 +984,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                         NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     }
                 } else {
-                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                    NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                 }
             }
         });
@@ -1061,7 +1061,7 @@ public class DevicesGroupDialogueActivity extends Activity {
                             NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                         }
                     } else {
-                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+                        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                     }
                 }
             }
