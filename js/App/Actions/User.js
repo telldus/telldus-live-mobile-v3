@@ -293,10 +293,7 @@ function createTransaction(options: OPTIONS | OPTIONS_IAP, isMobile?: boolean = 
 			url: `${apiServer}/oauth2/user/createTransaction`,
 			data: formData,
 		}).then((response: Object): Object => {
-			if (response.data && response.data.id) {
-				return response.data;
-			}
-			throw response;
+			return response.data;
 		}).catch((err: Object): Object => {
 			throw err;
 		});
@@ -366,8 +363,9 @@ function reportIapAtServer(purchaseInfoIap: Object, otherInfo?: Object = {}): Th
 			product,
 			subscription: purchaseInfoIap.productId === 'credits' ? 0 : 1,
 			...otherInfo,
-		}, true)).then((response: Object): Object => {
-			if (response && response.id) {
+		}, true)).then((response: Object = {}): Object => {
+			const allowSandbox = response.error && response.subcode === 'cf88b4ce-8be5-4808-adb1-e51fc5372256';
+			if (response.id || allowSandbox) {
 				try {
 					// Tell the store that you have delivered what has been paid for.
 					// Failure to do this will result in the purchase being refunded on Android and
