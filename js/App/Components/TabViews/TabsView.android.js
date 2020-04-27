@@ -73,7 +73,7 @@ const TabsView = React.memo<Object>((props: Object): Object => {
 	'hideHeader',
 	'showAttentionCapture',
 	'showAttentionCaptureAddDevice',
-	'rightButton',
+	'addingNewLocation',
 ]));
 
 module.exports = TabsView;
