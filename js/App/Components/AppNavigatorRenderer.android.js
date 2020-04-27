@@ -30,14 +30,12 @@ import { intlShape } from 'react-intl';
 import {
 	View,
 	MainTabNavHeader,
-	Image,
 } from '../../BaseComponents';
 import AppNavigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
 import {
 	syncWithServer,
-	resetSchedule,
 } from '../Actions';
 import {
 	navigate,
@@ -45,7 +43,6 @@ import {
 	LayoutAnimations,
 	shouldUpdate,
 } from '../Lib';
-import Theme from '../Theme';
 import i18n from '../Translations/common';
 
 type Props = {
@@ -85,7 +82,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	openDrawer: () => void;
 	addNewLocation: () => void;
 	onPressGateway: (Object) => void;
-	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
 	addNewDevice: () => void;
@@ -107,24 +103,10 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.labelButton = formatMessage(i18n.button);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
-		this.starIconShowDevices = `${formatMessage(i18n.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
-		this.starIconHideDevices = `${formatMessage(i18n.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
-		this.starIconShowSensors = `${formatMessage(i18n.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
-		this.starIconHideSensors = `${formatMessage(i18n.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
 		this.messageCloseMenu = `${formatMessage(i18n.messageCloseMenu)}`;
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
-
-		this.renderNavigationView = this.renderNavigationView.bind(this);
-		this.onOpenSetting = this.onOpenSetting.bind(this);
-		this.addNewLocation = this.addNewLocation.bind(this);
-		this.onPressGateway = this.onPressGateway.bind(this);
-
-		this.addNewDevice = this.addNewDevice.bind(this);
-
-		this.newSchedule = this.newSchedule.bind(this);
-		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 
 		this.timeoutCloseDrawer = null;
 	}
@@ -149,22 +131,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 	}
 
-	addNewLocation() {
+	addNewLocation = () => {
 		if (this.state.drawer) {
 			this.closeDrawer();
 		}
 		this.props.addNewLocation();
-	}
-
-	newSchedule() {
-		this.props.dispatch(resetSchedule());
-		navigate('Schedule', {
-			editMode: false,
-			screen: 'Device',
-			params: {
-				editMode: false,
-			},
-		});
 	}
 
 	onOpenDrawer = () => {
@@ -192,7 +163,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.setState({ drawer: false });
 	}
 
-	onPressGateway(location: Object) {
+	onPressGateway = (location: Object) => {
 		this.closeDrawer();
 		navigate('LocationDetails', {
 			screen: 'Details',
@@ -203,7 +174,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	onOpenSetting(tabName?: string) {
+	onOpenSetting = (tabName?: string) => {
 		this.closeDrawer();
 		if (tabName) {
 			navigate('Profile', {
@@ -214,7 +185,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		}
 	}
 
-	addNewDevice() {
+	addNewDevice = () => {
 		this.setState({
 			addNewDevicePressed: true,
 		}, () => {
@@ -230,59 +201,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeRightButton(CS: string, styles: Object): Object | null {
-		this.AddButton = {
-			component: <Image source={{uri: 'icon_plus'}} style={styles.addIconStyle}/>,
-			style: styles.rightButtonStyle,
-			onPress: () => {},
-		};
-		const { intl, hasGateways } = this.props;
-		const { formatMessage } = intl;
-		switch (CS) {
-			case 'Devices':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewDevice,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Sensors':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewSensor,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Gateways':
-				return {
-					...this.AddButton,
-					onPress: this.addNewLocation,
-					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Scheduler':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.newSchedule,
-					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			default:
-				return null;
-		}
-	}
-
 	openDrawer = () => {
 		this.refs.drawer.openDrawer();
 		this.props.syncGateways();
 	}
 
-	renderNavigationView(): Object {
+	renderNavigationView = (): Object => {
 		const { appLayout, toggleDialogueBox, intl } = this.props;
 
 		return <Drawer
@@ -298,7 +222,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		/>;
 	}
 
-	toggleAttentionCapture(value: boolean) {
+	toggleAttentionCapture = (value: boolean) => {
 		if (!this.state.addNewDevicePressed) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500));
 		}
@@ -313,9 +237,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	showAttentionCapture(): boolean {
 		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		const { currentScreen } = this.props;
+		const { currentScreen, hasGateways } = this.props;
 
-		return (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		return (currentScreen === 'Devices') && hasGateways && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	render(): Object {
@@ -330,27 +254,33 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		const styles = this.getStyles(appLayout);
 
-		const rightButton = this.makeRightButton(CS, styles);
 		const drawerWidth = getDrawerWidth(styles.deviceWidth);
 
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
 		const showAttentionCapture = this.showAttentionCapture();
+
+		const MainNavHeaderProps = {
+			addNewSensor: this.addNewSensor,
+			addNewDevice: this.addNewDevice,
+			addNewLocation: this.addNewLocation,
+			showAttentionCapture,
+			openDrawer: this.openDrawer,
+			drawer,
+			screenReaderEnabled,
+		};
+
 		let screenProps = {
 			currentScreen: CS,
 			intl,
-			drawer,
 			appLayout,
-			screenReaderEnabled,
 			toggleDialogueBox,
-			rightButton,
 			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
 			toggleAttentionCapture: this.toggleAttentionCapture,
-			showAttentionCapture,
 			showAttentionCaptureAddDevice,
 			source: 'postlogin',
-			openDrawer: this.openDrawer,
+			...MainNavHeaderProps,
 		};
 
 		return (
@@ -365,11 +295,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 			>
 				{showHeader && !styles.isPortrait && (
 					<MainTabNavHeader
-						rightButton={rightButton}
-						showAttentionCapture={showAttentionCapture}
-						openDrawer={this.openDrawer}
-						drawer={drawer}
-						screenReaderEnabled={screenReaderEnabled}/>
+						{...MainNavHeaderProps}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
 					<AppNavigator
@@ -385,49 +311,11 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const size = Math.floor(deviceHeight * 0.025);
-		const fontSizeIcon = size < 20 ? 20 : size;
-
-		const { port, land } = Theme.Core.headerHeightFactor;
-
 		return {
 			deviceWidth,
-			header: isPortrait ? {
-				height: deviceHeight * port,
-				alignItems: 'center',
-			} : {
-				transform: [{rotateZ: '-90deg'}],
-				position: 'absolute',
-				left: Math.ceil(-deviceHeight * 0.4444),
-				top: Math.ceil(deviceHeight * 0.4444),
-				width: deviceHeight,
-				height: Math.ceil(deviceHeight * land),
-			},
 			container: {
 				flex: 1,
 				marginLeft: isPortrait ? 0 : Math.ceil(deviceHeight * 0.11),
-			},
-			starButtonStyle: isPortrait ? null : {
-				position: 'absolute',
-				right: height - 50,
-				top: deviceHeight * 0.03666,
-				paddingTop: 0,
-				paddingHorizontal: 0,
-			},
-			rightButtonStyle: isPortrait ? null : {
-				top: deviceHeight * 0.03666,
-				right: height - 50,
-				paddingTop: 0,
-				paddingHorizontal: 0,
-			},
-			addIconStyle: {
-				height: fontSizeIcon,
-				width: fontSizeIcon,
-			},
-			logoStyle: isPortrait ? null : {
-				position: 'absolute',
-				left: deviceHeight * 0.6255,
-				top: deviceHeight * 0.0400,
 			},
 			isPortrait,
 		};

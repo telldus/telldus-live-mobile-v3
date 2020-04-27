@@ -30,22 +30,16 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 
 import {
 	View,
-	Throbber,
 } from '../../BaseComponents';
 import AppNavigator from './AppNavigator';
 
 import {
-	resetSchedule,
 	logoutAfterUnregister,
 } from '../Actions';
 import {
-	navigate,
 	LayoutAnimations,
 	shouldUpdate,
 } from '../Lib';
-
-import i18n from '../Translations/common';
-import { Image } from 'react-native-animatable';
 
 type Props = {
 	appLayout: Object,
@@ -74,7 +68,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 	state: State;
 
 	onCloseSetting: () => void;
-	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
 	addNewDevice: () => void;
@@ -89,39 +82,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
 		};
-
-		this.addNewDevice = this.addNewDevice.bind(this);
-
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-		const size = Math.floor(deviceHeight * 0.03);
-
-		let fontSize = size < 20 ? 20 : size;
-
-		this.AddButton = {
-			component: <Image source={{uri: 'icon_plus'}} style={{
-				height: fontSize * 0.85,
-				width: fontSize * 0.85,
-			}}/>,
-			onPress: () => {},
-		};
-
-		this.throbber = {
-			component: <Throbber
-				throbberStyle={{
-					fontSize,
-					color: '#fff',
-				}}
-				throbberContainerStyle={{
-					position: 'relative',
-				}}/>,
-			onPress: () => {},
-		};
-
-		this.newSchedule = this.newSchedule.bind(this);
-		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 
 		this.clearAppleCredentialRevokedListener = null;
 	}
@@ -156,18 +116,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		]);
 	}
 
-	newSchedule() {
-		this.props.dispatch(resetSchedule());
-		navigate('Schedule', {
-			editMode: false,
-			screen: 'Device',
-			params: {
-				editMode: false,
-			},
-		});
-	}
-
-	addNewDevice() {
+	addNewDevice = () => {
 		this.setState({
 			addNewDevicePressed: true,
 		}, () => {
@@ -183,54 +132,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeRightButton(CS: string, styles: Object): Object | null {
-		const { intl, hasGateways } = this.props;
-		const { formatMessage } = intl;
-		switch (CS) {
-			case 'Devices':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewDevice,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Sensors':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewSensor,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Gateways':
-				if (this.props.addingNewLocation) {
-					return {
-						...this.throbber,
-					};
-				}
-				return {
-					...this.AddButton,
-					onPress: this.props.addNewLocation,
-					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Scheduler':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.newSchedule,
-					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			default:
-				return null;
-		}
-	}
-
-	toggleAttentionCapture(value: boolean) {
+	toggleAttentionCapture = (value: boolean) => {
 		if (!this.state.addNewDevicePressed) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500));
 		}
@@ -241,9 +143,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	showAttentionCapture(): boolean {
 		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		const { currentScreen } = this.props;
+		const { currentScreen, hasGateways } = this.props;
 
-		return (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		return hasGateways && (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	render(): Object {
@@ -254,47 +156,32 @@ class AppNavigatorRenderer extends View<Props, State> {
 			screenReaderEnabled,
 			toggleDialogueBox,
 			currentScreen: CS,
+			addingNewLocation,
+			addNewLocation,
 		} = this.props;
 
-		const styles = this.getStyles(appLayout);
-
-		const rightButton = this.makeRightButton(CS, styles);
-		const showAttentionCapture = this.showAttentionCapture() && rightButton;
+		const showAttentionCapture = this.showAttentionCapture();
 		let screenProps = {
 			currentScreen: CS,
 			intl,
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
-			rightButton,
 			hideHeader: false,
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
 			source: 'postlogin',
+			addingNewLocation,
+			addNewSensor: this.addNewSensor,
+			addNewDevice: this.addNewDevice,
+			addNewLocation,
 		};
 
 		return (
 			<AppNavigator
 				screenProps={screenProps}/>
 		);
-	}
-
-	getStyles(appLayout: Object): Object {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-
-		const size = Math.floor(deviceHeight * 0.025);
-		const fontSizeIcon = size < 20 ? 20 : size;
-
-		return {
-			addIconStyle: {
-				height: fontSizeIcon,
-				width: fontSizeIcon,
-			},
-			fontSizeIcon,
-		};
 	}
 }
 

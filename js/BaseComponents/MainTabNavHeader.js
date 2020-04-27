@@ -29,6 +29,7 @@ import React, {
 import {
 	Platform,
 	Linking,
+	Image,
 } from 'react-native';
 import { isIphoneX } from 'react-native-iphone-x-helper';
 import {
@@ -42,10 +43,12 @@ import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import Icon from './Icon';
 import IconTelldus from './IconTelldus';
+import Throbber from './Throbber';
 
 import {
 	campaignVisited,
-} from '../App/Actions/User';
+	resetSchedule,
+} from '../App/Actions';
 import {
 	useDialogueBox,
 } from '../App/Hooks/Dialoguebox';
@@ -62,15 +65,17 @@ type Props = {
 	logoStyle?: Object,
 	rounded?: number,
 	searchBar?: ?Object,
-	rightButton?: Object,
-	leftButton: Object,
 	showAttentionCapture: boolean,
-	intl: Object,
 	forceHideStatus?: boolean,
     style: Object | Array<any>,
     openDrawer?: Function, // Required in Android
     screenReaderEnabled?: boolean,
-    drawer?: boolean, // Required in Android
+	drawer?: boolean, // Required in Android
+	addingNewLocation?: boolean,
+
+	addNewDevice: Function,
+	addNewSensor: Function,
+	addNewLocation: Function,
 };
 
 const MainTabNavHeader = memo<Object>((props: Props): Object => {
@@ -79,9 +84,16 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		drawer,
 		screenReaderEnabled,
 		openDrawer,
+		addingNewLocation,
+		addNewDevice,
+		addNewSensor,
+		addNewLocation,
 	} = props;
 
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
+	const { screen } = useSelector((state: Object): Object => state.navigation);
+	const { didFetch: gDidFetch, allIds: gAllIds } = useSelector((state: Object): Object => state.gateways);
+	const hasGateways = gDidFetch && gAllIds.length > 0;
 
 	const {
 		style,
@@ -188,12 +200,100 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		screenReaderEnabled,
 	]);
 
+	const rightButton = useMemo((): Object | null => {
+
+		const {
+			addIconStyle,
+			rightButtonStyle,
+			fontSizeIcon,
+		} = getStyles(appLayout);
+
+		const newSchedule = () => {
+			dispatch(resetSchedule());
+			navigate('Schedule', {
+				editMode: false,
+				screen: 'Device',
+				params: {
+					editMode: false,
+				},
+			});
+		};
+
+		const AddButton = {
+			component: <Image source={{uri: 'icon_plus'}} style={addIconStyle}/>,
+			style: rightButtonStyle,
+			onPress: () => {},
+		};
+
+		const throbber = {
+			component: <Throbber
+				throbberStyle={{
+					fontSize: fontSizeIcon,
+					color: '#fff',
+				}}
+				throbberContainerStyle={{
+					position: 'relative',
+				}}/>,
+			onPress: () => {},
+		};
+
+		switch (screen) {
+			case 'Devices':
+				if (!hasGateways) {
+					return null;
+				}
+				return {
+					...AddButton,
+					onPress: addNewDevice,
+					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			case 'Sensors':
+				if (!hasGateways) {
+					return null;
+				}
+				return {
+					...AddButton,
+					onPress: addNewSensor,
+					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			case 'Gateways':
+				if (addingNewLocation) {
+					return {
+						...throbber,
+					};
+				}
+				return {
+					...AddButton,
+					onPress: addNewLocation,
+					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			case 'Scheduler':
+				if (!hasGateways) {
+					return null;
+				}
+				return {
+					...AddButton,
+					onPress: newSchedule,
+					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+				};
+			default:
+				return null;
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		screen,
+		hasGateways,
+		appLayout,
+		addingNewLocation,
+	]);
+
 	return (
 		<Header
 			{...props}
 			style={style}
 			logoStyle={logoStyle}
-			leftButton={leftButton}/>
+			leftButton={leftButton}
+			rightButton={rightButton}/>
 	);
 });
 
@@ -281,6 +381,19 @@ const getStyles = (appLayout: Object): Object => {
 			paddingTop: 0,
 			paddingHorizontal: 0,
 		},
+		addIconStyle: {
+			height: fontSizeIcon,
+			width: fontSizeIcon,
+		},
+		rightButtonStyle:
+		Platform.select({
+			android: isPortrait ? null : {
+				top: deviceHeight * 0.03666,
+				right: height - 50,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+		}),
 	};
 };
 

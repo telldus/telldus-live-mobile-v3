@@ -419,7 +419,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		showAttentionCapture,
 		showAttentionCaptureAddDevice,
 		source,
-		rightButton,
+		addingNewLocation,
 	} = props.screenProps;
 
 	const Navigator = React.useMemo((): Object => {
@@ -434,7 +434,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		showAttentionCapture,
 		showAttentionCaptureAddDevice,
 		source,
-		rightButton,
+		addingNewLocation,
 	]);
 
 	return (
@@ -449,7 +449,7 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 	'hideHeader',
 	'showAttentionCapture',
 	'showAttentionCaptureAddDevice',
-	'rightButton',
+	'addingNewLocation',
 ]));
 
 export default AppNavigator;
