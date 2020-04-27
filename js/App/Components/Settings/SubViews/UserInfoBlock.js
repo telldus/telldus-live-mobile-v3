@@ -25,7 +25,6 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { useSelector } from 'react-redux';
-import firebase from 'react-native-firebase';
 
 import {
 	TitledInfoBlock,
@@ -49,7 +48,8 @@ const UserInfoBlock = (props: Object): Object => {
 
 	const testCrash = React.useCallback(() => {
 		if (deployStore !== 'huawei') {
-			firebase.crashlytics().crash();
+			// $FlowFixMe
+			firebase.crashlytics().crash();// eslint-disable-line no-undef
 		}
 	}, []);
 
