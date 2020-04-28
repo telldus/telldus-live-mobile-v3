@@ -36,6 +36,7 @@ type Props = {
 	screenProps: Object,
 	isModalOpen: boolean,
 	navigation: Object,
+	currentScreen: string,
 };
 
 class ProfileHeaderPoster extends View<Props, null> {
@@ -55,8 +56,7 @@ class ProfileHeaderPoster extends View<Props, null> {
 	}
 
 	handleBackPress(): boolean {
-		let { isModalOpen, hideModal: hideModalProp, screenProps } = this.props;
-		let { currentScreen } = screenProps;
+		let { isModalOpen, hideModal: hideModalProp, currentScreen } = this.props;
 		if (isModalOpen) {
 			hideModalProp();
 			return true;
@@ -88,8 +88,14 @@ class ProfileHeaderPoster extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
+
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		isModalOpen: store.modal.openModal,
+		currentScreen,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {
