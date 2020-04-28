@@ -48,6 +48,7 @@ type Props = {
 	isGatewayActive: boolean,
 	appLayout: Object,
 	route: Object,
+	currentScreen: string,
 
 	openModal: () => void,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
@@ -379,12 +380,17 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const gateway = store.gateways.byId[clientId];
 	const { online: isGatewayActive, name: gatewayName, type: gatewayType } = gateway ? gateway : {};
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		...screenProps,
 		device: device ? device : {},
 		isGatewayActive,
 		gatewayName,
 		gatewayType,
+		currentScreen,
 	};
 }
 
