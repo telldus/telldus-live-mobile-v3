@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { ScrollView, Platform } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -146,9 +148,16 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		errorCallback,
 	} = useIAPSuccessFailureHandle();
 
+	const _successCallback = useCallback((...data: Object) => {
+		successCallback(...data).then(() => {
+			navigation.pop();
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	let { clearListeners } = React.useMemo((): Object => {
 		return withInAppPurchaseListeners({
-			successCallback,
+			successCallback: _successCallback,
 			errorCallback,
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,7 +169,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			(payload: Object) => {
 				if (!clearListeners) {
 					const listenerData = withInAppPurchaseListeners({
-						successCallback,
+						_successCallback,
 						errorCallback,
 					});
 					// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -355,6 +364,7 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					accessibilityLabel={formatMessage(i18n.upgradeNow)}
 					accessible={true}
 					style={buttonStyle}
+					showThrobber={onGoing}
 					disabled={onGoing}
 				/>
 				{!isIos && <AdditionalPlansPayments

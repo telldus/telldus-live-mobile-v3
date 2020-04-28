@@ -22,7 +22,10 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, {
+	useState,
+	useCallback,
+} from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -32,6 +35,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import RNIap from 'react-native-iap';
+import { StackActions } from 'react-navigation';// TODO: Update import in 3.15
 
 import {
 	View,
@@ -199,9 +203,19 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		errorCallback,
 	} = useIAPSuccessFailureHandle();
 
+	const _successCallback = useCallback((...data: Object) => {
+		successCallback(...data).then(() => {
+			const popAction = StackActions.pop({
+				n: 2,
+			});
+			navigation.dispatch(popAction);
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	React.useEffect((): Function => {
 		const { clearListeners } = withInAppPurchaseListeners({
-			successCallback,
+			successCallback: _successCallback,
 			errorCallback,
 		});
 		return clearListeners;
