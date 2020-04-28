@@ -36,6 +36,7 @@ import { LiveApi, getSubscriptionPlans } from '../Lib';
 import { setBoolean } from '../Lib/Analytics';
 import {
 	logoutFromTelldus,
+	getUserProfile,
 } from './Login';
 
 const prepareDeviceId = (deviceId: string = ''): string => {
@@ -366,7 +367,7 @@ function reportIapAtServer(purchaseInfoIap: Object, otherInfo?: Object = {}): Th
 			product,
 			subscription: purchaseInfoIap.productId === 'credits' ? 0 : 1,
 			...otherInfo,
-		}, true)).then((response: Object = {}): Object => {
+		}, true)).then(async (response: Object = {}): Object => {
 			const allowSandbox = response.error && response.subcode === 'cf88b4ce-8be5-4808-adb1-e51fc5372256';
 			if (response.id || allowSandbox) {
 				try {
@@ -377,6 +378,8 @@ function reportIapAtServer(purchaseInfoIap: Object, otherInfo?: Object = {}): Th
 					// again untill you do this.
 					RNIap.finishTransactionIOS(purchaseInfoIap.transactionId);
 					RNIap.finishTransaction(purchaseInfoIap, false);
+
+					await dispatch(getUserProfile());
 				} catch (err) {
 					// Ignore
 				} finally {
