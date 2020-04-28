@@ -66,8 +66,8 @@ class HistoryTab extends View {
 	onOriginPress: () => void;
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { screenProps } = props;
-		if (screenProps.currentScreen !== 'History') {
+		const { currentScreen } = props;
+		if (currentScreen !== 'History') {
 			return {
 				hasRefreshed: false,
 			};
@@ -159,9 +159,9 @@ class HistoryTab extends View {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { screenProps } = this.props;
+		const { currentScreen } = this.props;
 		const { hasRefreshed } = this.state;
-		if (screenProps.currentScreen === 'History' && !hasRefreshed) {
+		if (currentScreen === 'History' && !hasRefreshed) {
 			this.refreshHistoryData();
 			this.setState({
 				hasRefreshed: true,
@@ -217,8 +217,8 @@ class HistoryTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, device, gatewayTimezone } = this.props;
-		const { intl, currentScreen, appLayout } = screenProps;
+		const { screenProps, device, gatewayTimezone, currentScreen } = this.props;
+		const { intl, appLayout } = screenProps;
 		const { deviceType } = device;
 		const { historyDetails } = this.state;
 
@@ -272,7 +272,7 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'History';
+		return nextProps.currentScreen === 'History';
 	}
 
 	_onRefresh() {
@@ -283,9 +283,9 @@ class HistoryTab extends View {
 	}
 
 	render(): Object | null {
-		let { screenProps, device } = this.props;
+		let { screenProps, device, currentScreen } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections, historyDetails } = this.state;
-		let { intl, currentScreen, appLayout } = screenProps;
+		let { intl, appLayout } = screenProps;
 		let { brandPrimary } = Theme.Core;
 
 		if (!device.id) {
@@ -440,9 +440,14 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		timezone: gatewayTimezone,
 	} = gateway ? gateway : {};
 
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		device: device ? device : {},
 		gatewayTimezone,
+		currentScreen,
 	};
 }
 

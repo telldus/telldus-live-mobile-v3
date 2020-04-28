@@ -50,7 +50,7 @@ const ScreenConfigs = [
 	{
 		name: 'Overview',
 		Component: Overview,
-		optionsWithScreenProps: ({screenProps, navigation}: Object): Object => {
+		options: (): Object => {
 			return {
 				tabBarLabel: ({ color }: Object): Object => (
 					<TabBar
@@ -65,7 +65,7 @@ const ScreenConfigs = [
 	{
 		name: 'History',
 		Component: History,
-		optionsWithScreenProps: ({screenProps, navigation}: Object): Object => {
+		options: (): Object => {
 			return {
 				tabBarLabel: ({ color }: Object): Object => (
 					<TabBar
@@ -80,7 +80,7 @@ const ScreenConfigs = [
 	{
 		name: 'Settings',
 		Component: Settings,
-		optionsWithScreenProps: ({screenProps, navigation}: Object): Object => {
+		options: (): Object => {
 			return {
 				tabBarLabel: ({ color }: Object): Object => (
 					<TabBar

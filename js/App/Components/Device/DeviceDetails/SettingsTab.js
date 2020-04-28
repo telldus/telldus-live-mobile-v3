@@ -84,6 +84,7 @@ type Props = {
 	addDevice433: Object,
 	transports: string,
 	gatewaySupportEditModel: boolean,
+	currentScreen: string,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -170,8 +171,8 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { screenProps: screenPropsN, currentScreen, inDashboard: inDashboardN, ...othersN } = nextProps;
+		const { appLayout } = screenPropsN;
 		if (currentScreen === 'Settings') {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
@@ -1063,6 +1064,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const userDbsAndDevicesById = devicesById[userId] || {};
 	const devicesByIdInCurrentDb = userDbsAndDevicesById[activeDashboardId] || {};
 
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		device: device ? device : {},
 		inDashboard: !!devicesByIdInCurrentDb[id],
@@ -1070,6 +1075,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		addDevice433,
 		transports,
 		gatewaySupportEditModel,
+		currentScreen,
 	};
 }
 

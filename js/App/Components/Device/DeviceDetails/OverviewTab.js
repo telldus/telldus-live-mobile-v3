@@ -66,6 +66,7 @@ type Props = {
 	currentTemp?: string,
 	gatewayTimezone: string,
 	locale: string,
+	currentScreen: string,
 
 	screenProps: Object,
 	dispatch: Function,
@@ -110,9 +111,8 @@ class OverviewTab extends View<Props, null> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const {
-			screenProps,
+			currentScreen,
 		} = nextProps;
-		const { currentScreen } = screenProps;
 		if (currentScreen === 'Overview') {
 			return shouldUpdate(this.props, nextProps, [
 				'screenProps',
@@ -286,6 +286,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { language = {} } = defaultSettings || {};
 	const locale = language.code;
 
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		device,
 		gatewayType,
@@ -295,6 +299,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		currentTemp: getThermostatValue(state.sensors.byId, clientDeviceId, clientId),
 		gatewayTimezone,
 		locale,
+		currentScreen,
 	};
 }
 

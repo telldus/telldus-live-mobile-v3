@@ -195,13 +195,13 @@ describe('<Include433 /> with container component', () => {
 
 			const screenProps = {
 				appLayout,
-				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
+					currentScreen={currentScreen}
 					route={route}
 					children={
 						<Include433/>
@@ -277,12 +277,12 @@ describe('<Include433 /> on success with container component', () => {
 
 			const screenProps = {
 				appLayout,
-				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
+					currentScreen={currentScreen}
 					navigation={navigation}
 					route={route}
 					children={
@@ -363,12 +363,12 @@ describe('<Include433 /> on error with container component', () => {
 
 			const screenProps = {
 				appLayout,
-				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
+					currentScreen={currentScreen}
 					navigation={navigation}
 					route={route}
 					children={

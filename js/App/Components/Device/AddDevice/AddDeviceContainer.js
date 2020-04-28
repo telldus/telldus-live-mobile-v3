@@ -58,6 +58,7 @@ type Props = {
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
+	currentScreen: string,
 	ScreenName: string,
 	locale: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
@@ -107,7 +108,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -140,10 +141,9 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		const { navigation, screenProps } = this.props;
+		const { navigation, currentScreen } = this.props;
 		const { forceLeftIconVisibilty } = this.state;
 
-		const { currentScreen } = screenProps;
 		const onLeftPress = this.getLeftIconPressAction(currentScreen);
 
 		const allowBacknavigation = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
@@ -161,8 +161,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	disAllowBackNavigation(): boolean {
-		const {screenProps} = this.props;
-		const { currentScreen } = screenProps;
+		const {currentScreen} = this.props;
 		const screens = ['AlreadyIncluded', 'IncludeFailed', 'DeviceName', 'NoDeviceFound', 'ExcludeScreen', 'CantEnterInclusion', 'Include433'];
 		return screens.indexOf(currentScreen) !== -1;
 	}
@@ -214,8 +213,9 @@ export class AddDeviceContainer extends View<Props, State> {
 			locale,
 			sessionId,
 			route,
+			currentScreen,
 		} = this.props;
-		const { appLayout, currentScreen } = screenProps;
+		const { appLayout } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -257,6 +257,7 @@ export class AddDeviceContainer extends View<Props, State> {
 							onDidMount: this.onChildDidMount,
 							actions,
 							...screenProps,
+							currentScreen,
 							navigation,
 							paddingHorizontal: padding,
 							addDevice,
@@ -281,10 +282,15 @@ export const mapStateToProps = (store: Object): Object => {
 
 	const { websockets: { session: { id: sessionId } } } = store;
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		addDevice: store.addDevice,
 		locale,
 		sessionId,
+		currentScreen,
 	};
 };
 
