@@ -109,17 +109,17 @@ class ScheduleScreen extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
-			const { gateways, devices, screenProps, ...otherProps } = this.props;
-			const { gateways: gatewaysN, devices: devicesN, screenProps: screenPropsN, ...otherPropsN } = nextProps;
+			const { gateways, devices, currentScreen, ...otherProps } = this.props;
+			const { gateways: gatewaysN, devices: devicesN, ...otherPropsN } = nextProps;
 			if ((Object.keys(gateways.byId).length !== Object.keys(gatewaysN.byId).length) || (Object.keys(devices.byId).length !== Object.keys(devicesN.byId).length)) {
 				return true;
 			}
-			if (screenProps.currentScreen !== screenPropsN.currentScreen) {
+			if (currentScreen !== nextProps.currentScreen) {
 				return true;
 			}
 			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule']);
@@ -164,12 +164,12 @@ class ScheduleScreen extends View<null, Props, State> {
 			devices,
 			schedule,
 			screenProps,
+			currentScreen,
 			gateways,
 			route,
 		} = this.props;
 		const {
 			appLayout,
-			currentScreen,
 		} = screenProps;
 		const { h1, h2, infoButton, loading } = this.state;
 		const { style } = this._getStyle(appLayout);
@@ -192,6 +192,7 @@ class ScheduleScreen extends View<null, Props, State> {
 						align={'right'}
 						navigation={navigation}
 						{...screenProps}
+						currentScreen={currentScreen}
 						leftIcon={(currentScreen === 'Device' || currentScreen === 'Edit')
 							? 'close' : undefined}/>
 					<KeyboardAvoidingView
@@ -212,6 +213,7 @@ class ScheduleScreen extends View<null, Props, State> {
 									loading: this.loading,
 									isEditMode: this._isEditMode,
 									...screenProps,
+									currentScreen,
 									gateways,
 									route,
 								},
@@ -235,8 +237,7 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const { screenProps } = this.props;
-		const { currentScreen } = screenProps;
+		const { currentScreen } = this.props;
 
 		const screenDontPad = ['Device', 'Edit', 'ActionThermostat', 'ActionThermostatTwo'];
 		const doPad = screenDontPad.indexOf(currentScreen) === -1;
@@ -258,13 +259,19 @@ type mapStateToPropsType = {
 	gateways: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateToPropsType): Object => (
-	{
+const mapStateToProps = ({ schedule, devices, modal, app, gateways, navigation }: mapStateToPropsType): Object => {
+
+	const {
+		screen: currentScreen,
+	} = navigation;
+
+	return {
 		schedule,
 		devices,
 		gateways,
-	}
-);
+		currentScreen,
+	};
+};
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
