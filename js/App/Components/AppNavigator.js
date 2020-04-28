@@ -322,6 +322,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -330,6 +331,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -338,6 +340,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -346,6 +349,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -354,6 +358,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -362,6 +367,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -370,6 +376,7 @@ const ScreenConfigs = [
 		ContainerComponent: AddDeviceContainer,
 		options: {
 			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 	{
@@ -391,7 +398,7 @@ const NavigatorConfigs = {
 	},
 	headerMode: 'screen',
 	screenOptions: {
-		cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS, // TODO: Handle animation of zwave include screens
+		cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
 	},
 };
 
