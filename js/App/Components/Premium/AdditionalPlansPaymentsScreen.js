@@ -35,7 +35,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import RNIap from 'react-native-iap';
-import { StackActions } from 'react-navigation';// TODO: Update import in 3.15
+import { StackActions } from '@react-navigation/native';
 
 import {
 	View,
