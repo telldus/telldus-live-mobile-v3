@@ -63,9 +63,6 @@ export default class ActionRGB extends View<null, Props, State> {
 
 		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
 		this.h2 = formatMessage(i18n.posterChooseAction);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		this.device = devices.byId[schedule.deviceId];
 
@@ -75,8 +72,8 @@ export default class ActionRGB extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

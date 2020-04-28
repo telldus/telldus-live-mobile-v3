@@ -82,10 +82,6 @@ export default class Time extends View<null, Props, State> {
 		this.labelEditTime = formatMessage(i18n.editTime);
 		this.labelEditTimeAccessible = formatMessage(i18n.editTimeAccessible);
 
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
-
 		const { type, offset, randomInterval, hour, minute } = schedule;
 
 		this.state = {
@@ -103,8 +99,8 @@ export default class Time extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

@@ -54,9 +54,6 @@ export default class Action extends View<null, ScheduleProps, State> {
 		const { formatMessage } = intl;
 		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
 		this.h2 = formatMessage(i18n.posterChooseAction);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		let { type } = this.getDeviceInfo(schedule.deviceId), methods = [];
 
@@ -95,8 +92,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

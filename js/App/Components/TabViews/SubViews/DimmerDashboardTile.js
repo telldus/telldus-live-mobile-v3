@@ -209,7 +209,6 @@ class DimmerDashboardTile extends View<Props, void> {
 			screenReaderEnabled,
 		};
 
-		// TODO: refactor writing a higher order component
 		const onButton =
 		<HVSliderContainer
 			{...sliderProps}

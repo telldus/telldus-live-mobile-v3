@@ -71,9 +71,6 @@ class Summary extends View<null, Props, State> {
 		this.h1 = formatMessage(i18n.summary);
 		this.h2 = formatMessage(i18n.posterSummary);
 		this.messageOnAdd = formatMessage(i18n.addScheduleSuccess);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 		this.device = this._getDeviceById(schedule.deviceId);
 
 		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
@@ -84,8 +81,8 @@ class Summary extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {

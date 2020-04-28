@@ -273,7 +273,7 @@ class RGBDashboardTile extends View<Props, null> {
 			name: deviceName,
 			enabled: false,
 		};
-		// TODO: refactor writing a higher order component
+
 		const onButton = (
 			<HVSliderContainer
 				{...sliderProps}
