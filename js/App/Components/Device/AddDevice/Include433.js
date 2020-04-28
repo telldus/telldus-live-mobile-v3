@@ -57,6 +57,8 @@ type Props = {
 	addDevice: Object,
 	showLeftIcon: boolean,
 	route: Object,
+	currentScreen: string,
+	ScreenName: string,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -112,7 +114,7 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'Include433';
+	return nextProps.currentScreen === nextProps.ScreenName;
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
