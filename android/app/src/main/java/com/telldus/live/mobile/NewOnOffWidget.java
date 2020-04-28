@@ -184,6 +184,9 @@ public class NewOnOffWidget extends AppWidgetProvider {
             views.setInt(R.id.iconWidget, "setBackgroundColor", Color.TRANSPARENT);
         }
 
+        Object normalizeUIO = extraArgs.get("normalizeUI");
+        Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
+
         // Bell
         if (supportedMethods.get("BELL") != null && supportedMethods.get("BELL")) {
 
@@ -276,6 +279,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.onCover, "setBackgroundResource", R.drawable.shape_border_round_white_fill);
                 }
+            }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_on);
             }
         }
 
@@ -376,6 +383,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
             }
 
             views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
+            }
         }
 
         // ON
@@ -473,8 +484,11 @@ public class NewOnOffWidget extends AppWidgetProvider {
                 } else if (transparent.equals("light") || transparent.equals("true")) {
                     views.setInt(R.id.onCover, "setBackgroundResource",
                     hasOff ? R.drawable.shape_border_right_round_white_fill : R.drawable.shape_border_round_white_fill);
-                } else {
                 }
+            }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_on);
             }
         }
 
@@ -575,6 +589,10 @@ public class NewOnOffWidget extends AppWidgetProvider {
                     views.setInt(R.id.offCover, "setBackgroundResource",
                     hasOn ? R.drawable.shape_left_white_round_fill : R.drawable.shape_border_round_white_fill);
                 }
+            }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_off);
             }
         }
 
@@ -819,7 +837,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(JSONObject response) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
-                wUpdater.updateAllWidgets(context);
+                wUpdater.updateAllWidgets(context, new HashMap());
             }
             @Override
             public void onError(ANError error) {

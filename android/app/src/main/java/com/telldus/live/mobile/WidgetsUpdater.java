@@ -24,6 +24,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class WidgetsUpdater  {
 
@@ -47,51 +48,51 @@ public class WidgetsUpdater  {
         return AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, NewRGBWidget.class));
     }
 
-    public void updateUIWidgetSensor(int widgetId, Context context) {
+    public void updateUIWidgetSensor(int widgetId, Context context, Map extraArgs) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewSensorWidget.updateAppWidget(context, widgetManager, widgetId);
+        NewSensorWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
     }
 
-    public void updateUIWidgetDevice2By1(int widgetId, Context context) {
+    public void updateUIWidgetDevice2By1(int widgetId, Context context, Map extraArgs) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+        NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
     }
 
-    public void updateUIWidgetDevice3By1(int widgetId, Context context) {
+    public void updateUIWidgetDevice3By1(int widgetId, Context context, Map extraArgs) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewAppWidget.updateAppWidget(context, widgetManager, widgetId);
+        NewAppWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
     }
 
-    public void updateUIWidgetDeviceThermo(int widgetId, Context context) {
+    public void updateUIWidgetDeviceThermo(int widgetId, Context context, Map extraArgs) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewThermostatWidget.updateAppWidget(context, widgetManager, widgetId);
+        NewThermostatWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
     }
 
-    public void updateUIWidgetDeviceRGB(int widgetId, Context context) {
+    public void updateUIWidgetDeviceRGB(int widgetId, Context context, Map extraArgs) {
         AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+        NewRGBWidget.updateAppWidget(context, widgetManager, widgetId, extraArgs);
     }
 
-    public void updateAllWidgets(Context context) {
+    public void updateAllWidgets(Context context, Map extraArgs) {
         int widgetIdsSensor[] = getAllWidgetsSensor(context);
         for (int widgetId : widgetIdsSensor) {
-            updateUIWidgetSensor(widgetId, context);
+            updateUIWidgetSensor(widgetId, context, extraArgs);
         }
         int widgetIdsDevice2By1[] = getAllWidgetsDevice2By1(context);
         for (int widgetId : widgetIdsDevice2By1) {
-            updateUIWidgetDevice2By1(widgetId, context);
+            updateUIWidgetDevice2By1(widgetId, context, extraArgs);
         }
         int widgetIdsDevice3By1[] = getAllWidgetsDevice3By1(context);
         for (int widgetId : widgetIdsDevice3By1) {
-            updateUIWidgetDevice3By1(widgetId, context);
+            updateUIWidgetDevice3By1(widgetId, context, extraArgs);
         }
         int widgetIdsDeviceThermo[] = getAllThermostatWidgets(context);
         for (int widgetId : widgetIdsDeviceThermo) {
-            updateUIWidgetDeviceThermo(widgetId, context);
+            updateUIWidgetDeviceThermo(widgetId, context, extraArgs);
         }
         int widgetIdsDeviceRGB[] = getAllRGBWidgets(context);
         for (int widgetId : widgetIdsDeviceRGB) {
-            updateUIWidgetDeviceRGB(widgetId, context);
+            updateUIWidgetDeviceRGB(widgetId, context, extraArgs);
         }
     }
 }

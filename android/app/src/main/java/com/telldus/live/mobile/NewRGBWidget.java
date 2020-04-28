@@ -180,6 +180,9 @@ public class NewRGBWidget extends AppWidgetProvider {
 
         views.setViewVisibility(R.id.widget_content_cover, View.VISIBLE);
 
+        Object normalizeUIO = extraArgs.get("normalizeUI");
+        Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
+
         if (hasRGB) {
             views.setViewVisibility(R.id.rgbActionCover, View.VISIBLE);
 
@@ -304,6 +307,10 @@ public class NewRGBWidget extends AppWidgetProvider {
                 views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_MORE_ACTIONS, appWidgetId));
             } else {
                 views.setOnClickPendingIntent(R.id.rgbActionCover, getPendingSelf(context, ACTION_RGB_SINGLE, appWidgetId));
+            }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_rgb);
             }
             
             renderedButtonsCount++;
@@ -586,7 +593,7 @@ public class NewRGBWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(JSONObject response) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
-                wUpdater.updateAllWidgets(context);
+                wUpdater.updateAllWidgets(context, new HashMap());
             }
             @Override
             public void onError(ANError error) {

@@ -287,7 +287,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
                             null // As of now set only for RGB[control option]
                     );
                     db.addWidgetDevice(mInsert);
-                    NewAppWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                    NewAppWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

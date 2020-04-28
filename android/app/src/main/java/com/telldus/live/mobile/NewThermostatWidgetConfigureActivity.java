@@ -313,7 +313,7 @@ public class NewThermostatWidgetConfigureActivity extends Activity {
                         );
                     db.addWidgetDevice(mInsert);
 
-                    NewThermostatWidget.updateAppWidget(getApplicationContext(),widgetManager,mAppWidgetId);
+                    NewThermostatWidget.updateAppWidget(getApplicationContext(), widgetManager, mAppWidgetId, new HashMap());
 
                     Intent resultValue = new Intent();
                     // Set the results as expected from a 'configure activity'.

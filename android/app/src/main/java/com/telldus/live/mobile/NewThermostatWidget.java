@@ -76,7 +76,8 @@ public class NewThermostatWidget extends AppWidgetProvider {
     static void updateAppWidget(
         Context context,
         AppWidgetManager appWidgetManager,
-        int appWidgetId
+        int appWidgetId,
+        Map extraArgs
     ) {
         PrefManager prefManager = new PrefManager(context);
         String accessToken = prefManager.getAccessToken();
@@ -173,6 +174,9 @@ public class NewThermostatWidget extends AppWidgetProvider {
         int pro = prefManager.getPro();
         long now = new Date().getTime() / 1000;
         Boolean isBasicUser = pro == -1 || pro < now;
+
+        Object normalizeUIO = extraArgs.get("normalizeUI");
+        Boolean normalizeUI = normalizeUIO == null ? false : (Boolean) normalizeUIO;
 
         transparent = transparent == null ? "" : transparent;
         if (transparent.equals("dark") || transparent.equals("light") || transparent.equals("true")) {
@@ -309,6 +313,10 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
                 views.setViewVisibility(R.id.info_block_cover, View.GONE);
             }
+
+            if (normalizeUI) {
+                hideFlashIndicator(views, R.id.flashing_indicator_thermo);
+            }
         }
 
         if (isBasicUser) {
@@ -384,7 +392,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
     @Override
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle newOptions) {
-        updateAppWidget(context, appWidgetManager, appWidgetId);
+        updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
     }
 
@@ -392,7 +400,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId, new HashMap());
         }
     }
 
@@ -487,7 +495,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
 
             db.updateDeviceInfo(methReq, state, stateValue, 1, secStateValue, widgetId);
             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-            updateAppWidget(context, widgetManager, widgetId);
+            updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
             updateThermostat(context, deviceId, widgetId, db);
         }
@@ -499,7 +507,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(JSONObject response) {
                 WidgetsUpdater wUpdater = new WidgetsUpdater();
-                wUpdater.updateAllWidgets(context);
+                wUpdater.updateAllWidgets(context, new HashMap());
             }
             @Override
             public void onError(ANError error) {
@@ -601,22 +609,22 @@ public class NewThermostatWidget extends AppWidgetProvider {
                                         catch (Exception e) {
                                             db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
                                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                            updateAppWidget(context, widgetManager, widgetId);
+                                            updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                         }
                                     }
 
                                     db.updateDeviceInfo(methReq, state2, stateValue2, 0, secStateValue2, widgetId);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                    updateAppWidget(context, widgetManager, widgetId);
+                                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else {
                                     db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue2, widgetId);
                                     AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                    updateAppWidget(context, widgetManager, widgetId);
+                                    updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 }
                             } catch (JSONException e) {
                                 db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                                updateAppWidget(context, widgetManager, widgetId);
+                                updateAppWidget(context, widgetManager, widgetId, new HashMap());
 
                                 e.printStackTrace();
                             }
@@ -626,7 +634,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
                         public void onError(ANError result) {
                             db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
                             AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                            updateAppWidget(context, widgetManager, widgetId);
+                            updateAppWidget(context, widgetManager, widgetId, new HashMap());
                         }
                     });
             }
@@ -634,7 +642,7 @@ public class NewThermostatWidget extends AppWidgetProvider {
             public void onError(ANError error) {
                 db.updateDeviceInfo(methReq, state, stateValue, 0, secStateValue, widgetId);
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
-                updateAppWidget(context, widgetManager, widgetId);
+                updateAppWidget(context, widgetManager, widgetId, new HashMap());
             }
         });
     }
