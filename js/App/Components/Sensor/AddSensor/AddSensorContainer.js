@@ -56,6 +56,7 @@ type Props = {
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
+	currentScreen: string,
 	ScreenName: string,
 	locale: string,
 	enableWebshop: boolean,
@@ -106,7 +107,7 @@ export class AddSensorContainer extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -152,8 +153,7 @@ export class AddSensorContainer extends View<Props, State> {
 	}
 
 	disAllowBackNavigation(): boolean {
-		const {screenProps} = this.props;
-		const { currentScreen } = screenProps;
+		const {currentScreen} = this.props;
 		const screens = ['AlreadyIncluded', 'IncludeFailed', 'DeviceName', 'NoDeviceFound', 'ExcludeScreen', 'CantEnterInclusion'];
 		return screens.indexOf(currentScreen) !== -1;
 	}
@@ -190,13 +190,14 @@ export class AddSensorContainer extends View<Props, State> {
 			children,
 			actions,
 			screenProps,
+			currentScreen,
 			navigation,
 			addDevice,
 			route,
 			locale,
 			sessionId,
 		} = this.props;
-		const { appLayout, currentScreen } = screenProps;
+		const { appLayout } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -221,7 +222,8 @@ export class AddSensorContainer extends View<Props, State> {
 					navigation={navigation}
 					showLeftIcon={showLeftIcon}
 					leftIcon={leftIcon}
-					{...screenProps}/>
+					{...screenProps}
+					currentScreen={currentScreen}/>
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={{flex: 1}}
@@ -236,6 +238,7 @@ export class AddSensorContainer extends View<Props, State> {
 							onDidMount: this.onChildDidMount,
 							actions,
 							...screenProps,
+							currentScreen,
 							navigation,
 							paddingHorizontal: padding,
 							addDevice,
@@ -263,11 +266,16 @@ export const mapStateToProps = (store: Object): Object => {
 	const { webshop = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 	const { enable: enableWebshop } = JSON.parse(webshop);
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		addDevice: store.addDevice,
 		locale,
 		sessionId,
 		enableWebshop,
+		currentScreen,
 	};
 };
 
