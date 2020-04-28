@@ -272,7 +272,6 @@ class AppNavigatorRenderer extends View<Props, State> {
 		};
 
 		let screenProps = {
-			currentScreen: CS,
 			intl,
 			appLayout,
 			toggleDialogueBox,

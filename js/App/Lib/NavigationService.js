@@ -133,7 +133,6 @@ function prepareNavigator(
 
 const shouldNavigatorUpdate = (prevProps: Object, nextProps: Object, additionalScreenProps?: Array<string> = []): boolean => {
 	const flag1 = shouldUpdate(prevProps.screenProps, nextProps.screenProps, [
-		'currentScreen',
 		'drawer',
 		'appLayout',
 		'screenReaderEnabled',
@@ -141,7 +140,6 @@ const shouldNavigatorUpdate = (prevProps: Object, nextProps: Object, additionalS
 		...additionalScreenProps,
 	]);
 	const flag2 = shouldUpdate(prevProps, nextProps, [
-		'ScreenName',
 		'route',
 	]);
 	return !flag1 && !flag2;

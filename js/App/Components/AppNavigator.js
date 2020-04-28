@@ -411,7 +411,6 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 	}, []);
 
 	const {
-		currentScreen,
 		drawer,
 		appLayout,
 		screenReaderEnabled,
@@ -426,7 +425,6 @@ const AppNavigator = React.memo<Object>((props: Object): Object => {
 		return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
-		currentScreen,
 		drawer,
 		appLayout,
 		screenReaderEnabled,

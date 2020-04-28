@@ -155,14 +155,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
-			currentScreen: CS,
 			addingNewLocation,
 			addNewLocation,
 		} = this.props;
 
 		const showAttentionCapture = this.showAttentionCapture();
 		let screenProps = {
-			currentScreen: CS,
 			intl,
 			appLayout,
 			screenReaderEnabled,
