@@ -45,6 +45,7 @@ type Props = {
 	gatewayName: string,
 	gatewayTimezone: string,
 	gatewayTimezoneOffset: number,
+	currentScreen: string,
 
 	screenProps: Object,
 	getSensorInfo: (id: number, includeUnit: 1 | 0) => Promise<any>,
@@ -95,10 +96,10 @@ class OverviewTab extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN, ...othersN } = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { currentScreen, screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN, ...othersN } = nextProps;
+		const { appLayout } = screenPropsN;
 		if (currentScreen === 'SOverview') {
-			if (this.props.screenProps.currentScreen !== 'SOverview') {
+			if (this.props.currentScreen !== 'SOverview') {
 				return true;
 			}
 
@@ -243,12 +244,15 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		tzoffset: gatewayTimezoneOffset,
 	} = gateway ? gateway : {};
 
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		sensor,
 		gatewayType,
 		gatewayName,
 		gatewayTimezone,
 		gatewayTimezoneOffset,
+		currentScreen,
 	};
 }
 

@@ -33,6 +33,7 @@ type Props = {
 	sensorName: string,
 	screenProps: Object,
 	navigation: Object,
+	currentScreen: string,
 };
 
 class SensorDetailsHeaderPoster extends View<Props, null> {
@@ -56,8 +57,7 @@ class SensorDetailsHeaderPoster extends View<Props, null> {
 	}
 
 	handleBackPress(): boolean {
-		let { screenProps } = this.props;
-		let { currentScreen } = screenProps;
+		let { currentScreen } = this.props;
 		if (currentScreen === 'SOverview') {
 			this.goBack();
 			return true;
@@ -94,8 +94,12 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const { route } = ownProps;
 	const { id } = route.params || {};
 	const { name: sensorName } = store.sensors.byId[id] ? store.sensors.byId[id] : {};
+
+	const { screen: currentScreen } = store.navigation;
+
 	return {
 		sensorName,
+		currentScreen,
 	};
 }
 

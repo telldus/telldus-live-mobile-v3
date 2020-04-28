@@ -73,6 +73,7 @@ type Props = {
 	inDashboard: boolean,
 	navigation: Object,
 	isGatewayReachable: boolean,
+	currentScreen: string,
 
 	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
@@ -117,13 +118,13 @@ class SettingsTab extends View {
 	handleBackPress: () => boolean;
 
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { screenProps, sensor } = props;
+		const { currentScreen, sensor } = props;
 		const { switchConf } = state;
 		const { transition, source } = switchConf;
 
 		// This is required to make the 'keepHistory' prop update when changed from history tab
 		// also while toggling switch prevent update in between API response.
-		if (screenProps.currentScreen === 'SSettings' &&
+		if (currentScreen === 'SSettings' &&
 			state.keepHistory !== sensor.keepHistory &&
 			source !== 'keepHistory' && !transition
 		) {
@@ -190,10 +191,10 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { currentScreen, screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
+		const { appLayout } = screenPropsN;
 		if (currentScreen === 'SSettings') {
-			if (this.props.screenProps.currentScreen !== 'SSettings') {
+			if (this.props.currentScreen !== 'SSettings') {
 				return true;
 			}
 
@@ -936,10 +937,13 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { clientId } = sensor;
 	const { online = false, websocketOnline = false } = state.gateways.byId[clientId] || {};
 
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		sensor: sensor ? sensor : {},
 		inDashboard: !!sensorsByIdInCurrentDb[id],
 		isGatewayReachable: online && websocketOnline,
+		currentScreen,
 	};
 }
 
