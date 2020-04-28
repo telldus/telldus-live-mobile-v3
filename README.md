@@ -19,7 +19,7 @@ All commands are assumed to be ran from project root.
 - install [nodejs >= 10](https://nodejs.org/en/)
 - install [yarn](https://yarnpkg.com/en/)
 - install local deps: `yarn install`
-- install global deps: `npm install -g react-native-cli`
+- install global deps: `npm install -g react-native-cli`**(NO MORE REQUIRED: If already installed shall remove)**
 - install [fastlane](https://docs.fastlane.tools/#choose-your-installation-method)
 
 ### iOS
@@ -30,7 +30,7 @@ All commands are assumed to be ran from project root.
 
 ### Android
 
-- find all the instructions you need for setting up your Android development environment on [React Native Official - Android Setup](https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html)
+- find all the instructions you need for setting up your Android development environment on [React Native Official - Setup](https://reactnative.dev/docs/environment-setup)
 - **install dependencies with Android Studio**:
   - Android SDK Manager is no longer available as a separate GUI (run `android`), but integrated in [Android Studio](https://developer.android.com/studio/install.html). Install it, go through default setup. When you get to chose your project (new, use existing, etc.), choose `Configure` -> `SDK Manager` on the bottom. This pretty much looks like the old GUI, only now it's split over 3 tabs. Use `Show Package Details` checkbox in the bottom, to expand the dependencies.
   - When you run the app, the `react-native` will use the `ANDROID_HOME` environment variable to find the SDK. So, if you install with Android Studio, use `export ANDROID_HOME=/Users/elbow/Library/Android/sdk` (add it to your `~/.bash_profile`).
@@ -45,8 +45,8 @@ All commands are assumed to be ran from project root.
   `sdkmanager "build-tools;23.0.1" "platforms;android-23" "system-images;android-23;google_apis;x86_64" "system-images;android-23;google_apis;x86" --verbose`
   - we need some general Android deps:
   `sdkmanager "tools" "platform-tools" "extras;android;m2repository" "extras;google;m2repository" --verbose`
-- you need a `android/app/google-services.json` file, see [instructions](#google-servicesjson)
-- to run the app on your device, check out [React Native: Running On Device](https://facebook.github.io/react-native/releases/0.23/docs/running-on-device-android.html#content). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
+- you need a `android/app/google-services.json`(agconnect-services.json for Huawei) file, see [instructions](#google-servicesjson)
+- to run the app on your device, check out [React Native: Running On Device](https://reactnative.dev/docs/running-on-device). When your (virtual) device is connected, you can see it show up when you run `adb devices`. run `react-native run-android` to launch the app on your phone
 - use `adb logcat` to look at the Android log file
 - when the app launches on your (virtual) device, it will send you to the Settings screen for "Apps that can draw over other apps". Enable this for the Telldus app and launch the app again from your app drawer.
 
@@ -116,7 +116,7 @@ There can be situation where device dimension is required to set style attribute
 
 **Example:**
 ```javascript
-const {layout} = store.App;
+const {layout} = store.app;
 const {height, width} = layout;
 ```
 
@@ -159,11 +159,14 @@ module.exports = {
  - `googleMapsAPIKey`: string - Used to access Google Maps and Maps Geocode APIs
  - `webClientId`: string - Used for google authentication
  - `iosClientId`: string - Used for google authentication(only iOS)
+ - `twitterAuth`: Object - Token, secret and key used for twitter authentication
+ - `osTicketKey`: string - Used for creating support ticket from the app
+ - `deployStore`: string - 'android' or 'huawei'(Only Android)
 
 ### Docker
 
-The CI system builds the app in a Docker image. The `Dockerfile` is placed in the `android/` subfolder. To build it run:  
-`docker build android/ -t telldus/react-native-android:26`
+The CI system builds the app in a Docker image. The `Dockerfile` is placed in the root of the project. To build it run:  
+`docker build . -f Dockerfile.alpine -t react-native-android:29-alpine`
 
 ## Run
 
@@ -232,7 +235,7 @@ You can access the developer menu by shaking your device or by selecting "Shake 
 
 Before commiting code. Please make sure tests pass. Test the code:  
 `yarn run lint`  
-`yarn run flow`
+`yarn run flow`  
 `yarn run test`
 
 ## Naming convention branches, commits and pull requests
@@ -296,6 +299,14 @@ For more info, from the man himself @dan_ambramov: https://github.com/reactjs/re
 Redux by itself is conceptually interesting but it starts flying when it's coupled with React. These two courses should do the trick to get you up to speed with Redux in React:
 - [Part 1: Getting Started with Redux](https://egghead.io/series/getting-started-with-redux) (30 free videos)
 - [Part 2: Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux) (27 free videos)
+
+## Hooks
+
+Though the app may contain mix of functional and class components, Try to use functional components as much as possible, as that is the only way to access hooks.
+
+### Learn Hooks
+
+- [Official React doc on hooks](https://reactjs.org/docs/hooks-intro.html)
 
 ## Backend
 
