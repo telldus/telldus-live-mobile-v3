@@ -58,6 +58,8 @@ type Props = {
 	byId: Object,
 	email: string,
 	screenProps: Object,
+	currentScreen: string,
+	ScreenName: string,
 
 	toggleDialogueBox: (Object) => void,
 	onDidMount: Function,
@@ -107,22 +109,21 @@ constructor(props: Props) {
 	this.onChangeTextEmail = this.onChangeTextEmail.bind(this);
 }
 
-componentDidMount() {
-}
-
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const isStateEqual = isEqual(this.state, nextState);
-	if (!isStateEqual) {
-		return true;
-	}
-	const screenPropsChange = shouldUpdate(this.props.screenProps, nextProps.screenProps,
-		['appLayout', 'currentScreen', 'screenReaderEnabled']);
-	if (screenPropsChange) {
-		return true;
-	}
-	const propsChange = shouldUpdate(this.props, nextProps, ['byId']);
-	if (propsChange) {
-		return true;
+	if (nextProps.currentScreen === nextProps.ScreenName) {
+		const isStateEqual = isEqual(this.state, nextState);
+		if (!isStateEqual) {
+			return true;
+		}
+		const screenPropsChange = shouldUpdate(this.props.screenProps, nextProps.screenProps,
+			['appLayout', 'screenReaderEnabled']);
+		if (screenPropsChange) {
+			return true;
+		}
+		const propsChange = shouldUpdate(this.props, nextProps, ['byId']);
+		if (propsChange) {
+			return true;
+		}
 	}
 	return false;
 }
@@ -477,9 +478,14 @@ const mapStateToProps = (store: Object, ownProps: Object): Object => {
 	const { userProfile = {} } = store.user;
 	const { email } = userProfile;
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		byId: store.gateways.byId,
 		email,
+		currentScreen,
 	};
 };
 
