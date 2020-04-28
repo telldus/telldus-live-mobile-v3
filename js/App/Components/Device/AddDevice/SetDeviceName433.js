@@ -158,10 +158,11 @@ const SetDeviceName433 = (props: Object): Object => {
 				<MaterialTextInput
 					value={name}
 					label={formatMessage(i18n.name)}
-					labelTextStyle={labelStyle}
 					baseColor={brandSecondary}
 					tintColor={brandSecondary}
-					style={textFieldStyle}
+					textColor={textFieldStyle.color}
+					fontSize={textFieldStyle.fontSize}
+					labelFontSize={labelStyle.fontSize}
 					containerStyle={textFieldCoverStyle}
 					onChangeText={onChangeName}
 					onSubmitEditing={submitName}
