@@ -306,7 +306,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		if (isDHeader || isEHeader || isJHeader) {
 			return (
 				<ActionSectionHeader
-					title={sectionData.section.headerText}
+					title={intl.formatMessage(sectionData.section.headerText)}
 					onToggle={isDHeader ? toggleShowDevices : isEHeader ? toggleShowEvents : toggleShowJobs}/>
 			);
 		}

@@ -32,6 +32,8 @@ import {
 	methods,
 } from '../../Constants';
 
+import i18n from '../Translations/common';
+
 function prepareSectionRow(paramOne: Array<any> | Object, gateways: Array<any> | Object): Array<any> {
 	let modifiedData = paramOne.map((item: Object, index: number): Object => {
 		let gateway = gateways[item.clientId];
@@ -70,7 +72,7 @@ function parseDevicesForListView(devices: Object = {}, gateways: Object = {}): O
 	let devicesList = [];
 	const GeoFenceDevicesHeaderRow = {
 		header: Theme.Core.GeoFenceDevicesHeaderKey,
-		headerText: 'Devices', // TODO: translate
+		headerText: i18n.devices,
 		data: [],
 	};
 	devicesList.push(GeoFenceDevicesHeaderRow);
@@ -97,7 +99,7 @@ function parseEventsForListView(events: Object): Array<Object> {
 	}
 	const GeoFenceEventsHeaderRow = {
 		header: Theme.Core.GeoFenceEventsHeaderKey,
-		headerText: 'Events', // TODO: translate
+		headerText: i18n.events,
 		data,
 	};
 	eventsList.push(GeoFenceEventsHeaderRow);
@@ -114,7 +116,7 @@ function parseJobsForListView(jobs: Object): Array<Object> {
 	}
 	const GeoFenceJobsHeaderRow = {
 		header: Theme.Core.GeoFenceJobsHeaderKey,
-		headerText: 'Schedules', // TODO: translate
+		headerText: i18n.schedules,
 		data,
 	};
 	jobsList.push(GeoFenceJobsHeaderRow);
