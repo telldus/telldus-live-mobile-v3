@@ -68,6 +68,7 @@ type Props = {
 	deviceId: string,
 	route: Object,
 	firebaseRemoteConfig: Object,
+	currentScreen: string,
 };
 
 type State = {
@@ -187,7 +188,7 @@ class Details extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'LOverview';
+		return nextProps.currentScreen === 'LOverview';
 	}
 
 	componentWillUnmount() {
@@ -198,8 +199,8 @@ class Details extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let { navigation, screenProps } = this.props;
-		if (screenProps.currentScreen === 'LOverview') {
+		let { navigation, currentScreen } = this.props;
+		if (currentScreen === 'LOverview') {
 			navigation.pop();
 			return true;
 		}
@@ -773,6 +774,10 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	} = store.user;
 	const { networkInfo } = store.app;
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		location: store.gateways.byId[id],
 		pushToken,
@@ -781,6 +786,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		playServicesInfo,
 		deviceId,
 		firebaseRemoteConfig,
+		currentScreen,
 	};
 }
 

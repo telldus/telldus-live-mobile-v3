@@ -46,6 +46,7 @@ type Props = {
 	location: Object,
 	email: string,
 	route: Object,
+	currentScreen: string,
 
 	navigation: Object,
 	children: Object,
@@ -95,7 +96,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = _.isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -119,6 +120,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			children,
 			actions,
 			screenProps,
+			currentScreen,
 			navigation,
 			location,
 			email,
@@ -126,7 +128,6 @@ class LocationDetailsContainer extends View<null, Props, State> {
 		} = this.props;
 		const {
 			appLayout,
-			currentScreen,
 		} = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const styles = this.getStyle(appLayout);
@@ -174,6 +175,7 @@ class LocationDetailsContainer extends View<null, Props, State> {
 									onDidMount: this.onChildDidMount,
 									actions,
 									...screenProps,
+									currentScreen,
 									navigation,
 									containerWidth: width - (2 * paddingHorizontal),
 									location,
@@ -242,9 +244,14 @@ const mapStateToProps = (store: Object, ownProps: Object): Object => {
 	const { userProfile = {} } = store.user;
 	const { email } = userProfile;
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		location: store.gateways.byId[id],
 		email,
+		currentScreen,
 	};
 };
 

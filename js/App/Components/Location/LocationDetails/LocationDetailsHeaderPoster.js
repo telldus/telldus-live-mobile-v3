@@ -33,6 +33,7 @@ type Props = {
 	gatewayName: string,
 	screenProps: Object,
 	navigation: Object,
+	currentScreen: string,
 };
 
 class LocationDetailsHeaderPoster extends View<Props, null> {
@@ -56,8 +57,7 @@ class LocationDetailsHeaderPoster extends View<Props, null> {
 	}
 
 	handleBackPress(): boolean {
-		let { screenProps } = this.props;
-		let { currentScreen } = screenProps;
+		let { currentScreen } = this.props;
 		if (currentScreen === 'LOverview') {
 			this.goBack();
 			return true;
@@ -96,8 +96,14 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	} = ownProps.route.params || {};
 	const { id } = location;
 	const { name: gatewayName } = store.gateways.byId[id] ? store.gateways.byId[id] : {};
+
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		gatewayName,
+		currentScreen,
 	};
 }
 

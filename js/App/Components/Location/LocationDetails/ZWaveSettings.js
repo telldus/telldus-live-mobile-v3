@@ -46,6 +46,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	screenProps: Object,
 	location: Object,
+	currentScreen: string,
 
 	navigation: Object,
 	showToast: (?string) => void,
@@ -77,7 +78,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.screenProps.currentScreen === 'ZWaveSettings';
+	return nextProps.currentScreen === 'ZWaveSettings';
 }
 
 onPressExcludeDevice() {
@@ -186,8 +187,13 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	const {
 		location: {id},
 	} = ownProps.route.params || {};
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		location: store.gateways.byId[id],
+		currentScreen,
 	};
 }
 

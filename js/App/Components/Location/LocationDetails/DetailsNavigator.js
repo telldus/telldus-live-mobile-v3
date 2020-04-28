@@ -45,7 +45,7 @@ const ScreenConfigs = [
 	{
 		name: 'Overview',
 		Component: Details,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
+		options: (): Object => {
 			return {
 				tabBarLabel: ({ color }: Object): Object => (
 					<TabBar
@@ -60,7 +60,7 @@ const ScreenConfigs = [
 	{
 		name: 'ZWaveSettings',
 		Component: ZWaveSettings,
-		optionsWithScreenProps: ({screenProps}: Object): Object => {
+		options: (): Object => {
 			return {
 				tabBarLabel: ({ color }: Object): Object => (
 					<TabBar
