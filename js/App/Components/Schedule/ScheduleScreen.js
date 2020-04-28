@@ -47,6 +47,7 @@ type Props = {
 	screenProps: Object,
 	ScreenName: string,
 	route: Object,
+	currentScreen: string,
 
 	navigation: Object,
 	children: Object,
@@ -257,6 +258,7 @@ type mapStateToPropsType = {
 	modal: Object,
 	app: Object,
 	gateways: Object,
+	navigation: Object,
 };
 
 const mapStateToProps = ({ schedule, devices, modal, app, gateways, navigation }: mapStateToPropsType): Object => {
