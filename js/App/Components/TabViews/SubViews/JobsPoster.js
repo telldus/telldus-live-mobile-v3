@@ -164,7 +164,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				let config = {
 					toValue: toVal,
 					duration: 10,
-					useNativeDriver: true,
+					useNativeDriver: false,
 				};
 				this.animate(config);
 			}
@@ -184,7 +184,7 @@ export default class JobsPoster extends View<null, Props, State> {
 				let config = {
 					toValue: toVal,
 					duration: 10,
-					useNativeDriver: true,
+					useNativeDriver: false,
 				};
 				this.animate(config);
 			}
@@ -223,7 +223,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			let config = {
 				toValue: 1,
 				duration: 400,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			};
 			Animated
 				.timing(this.scrollDays, config)
@@ -268,7 +268,7 @@ export default class JobsPoster extends View<null, Props, State> {
 			const config = {
 				toValue: this.scrollRight ? 0 : 2,
 				duration: 600,
-				useNativeDriver: true,
+				useNativeDriver: false,
 			};
 
 			Animated
