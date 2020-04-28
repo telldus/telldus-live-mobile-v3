@@ -46,6 +46,7 @@ type Props = {
 	gateways: Object,
 	devices: Object,
 	route: Object,
+	currentScreen: string,
 
     navigation: Object,
     dispatch: Function,
@@ -72,7 +73,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const { currentScreen } = nextProps.screenProps;
+	const { currentScreen } = nextProps;
 	return currentScreen === 'InfoScreen';
 }
 
@@ -387,9 +388,15 @@ noOP() {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { byId: gateways = {} } = state.gateways;
 	const { byId: devices = {} } = state.devices;
+
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		gateways,
 		devices,
+		currentScreen,
 	};
 }
 

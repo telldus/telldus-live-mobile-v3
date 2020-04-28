@@ -41,6 +41,7 @@ type Props = {
 	screenProps: Object,
 	ScreenName: string,
 	route: Object,
+	currentScreen: string,
 };
 
 type State = {
@@ -81,7 +82,7 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -114,10 +115,9 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		const { navigation, screenProps } = this.props;
+		const { navigation, currentScreen } = this.props;
 		const { forceLeftIconVisibilty } = this.state;
 
-		const { currentScreen } = screenProps;
 		const onLeftPress = this.getLeftIconPressAction(currentScreen);
 
 		const allowBacknavigation = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
@@ -135,8 +135,7 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	disAllowBackNavigation(): boolean {
-		const {screenProps} = this.props;
-		const { currentScreen } = screenProps;
+		const {currentScreen} = this.props;
 		const screens = [];
 		return screens.indexOf(currentScreen) !== -1;
 	}
@@ -249,7 +248,12 @@ export class GeoFenceContainer extends View<Props, State> {
 
 export const mapStateToProps = (store: Object): Object => {
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
+		currentScreen,
 	};
 };
 
