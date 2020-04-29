@@ -45,7 +45,11 @@ type loginCredentialSocial = {
 	idToken: string,
 };
 
-const loginToTelldus = (credential: loginCredential | loginCredentialSocial, grantType?: GrantType = 'password'): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
+type loginCredentialApple = {|
+	id_token: string,
+|};
+
+const loginToTelldus = (credential: loginCredential | loginCredentialSocial | loginCredentialApple, grantType?: GrantType = 'password'): ThunkAction => (dispatch: Function, getState: Function): Promise<any> => {
 	return axios({
 		method: 'post',
 		headers: {
