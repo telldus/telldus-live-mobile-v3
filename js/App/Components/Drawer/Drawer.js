@@ -509,6 +509,7 @@ function mapStateToProps(store: Object): Object {
 		geoFenceFeature = JSON.stringify({enable: false}),
 		appDrawerBanner = JSON.stringify({}),
 	} = firebaseRemoteConfig;
+
 	const { enable } = JSON.parse(geoFenceFeature);
 
 	return {
@@ -516,7 +517,7 @@ function mapStateToProps(store: Object): Object {
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
-		appDrawerBanner: appDrawerBanner === "" ? {} : JSON.parse(appDrawerBanner),
+		appDrawerBanner: appDrawerBanner === '' ? {} : JSON.parse(appDrawerBanner),
 	};
 }
 

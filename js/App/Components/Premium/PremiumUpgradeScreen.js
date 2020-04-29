@@ -33,7 +33,9 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 import moment from 'moment';
-import RNIap from 'react-native-iap';
+import RNIap, {
+	IAPErrorCode,
+} from 'react-native-iap';
 
 import {
 	View,
@@ -194,6 +196,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 			}));
 			await RNIap.requestSubscription(id, false);
 		} catch (err) {
+			if (err.code && err.code === IAPErrorCode.E_USER_CANCELLED) {
+				return;
+			}
 			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 		}
 	}
@@ -500,6 +505,7 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		buttonStyle: {
 			paddingHorizontal: 10,
 			marginTop: padding * 3,
+			width: width * 0.7,
 		},
 		cartIconStyle: {
 			fontSize: fontSize * 2.2,

@@ -34,7 +34,9 @@ import {
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
-import RNIap from 'react-native-iap';
+import RNIap, {
+	IAPErrorCode,
+} from 'react-native-iap';
 import { StackActions } from '@react-navigation/native';
 
 import {
@@ -226,6 +228,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		try {
 			await RNIap.requestSubscription(id, false);
 		} catch (err) {
+			if (err.code && err.code === IAPErrorCode.E_USER_CANCELLED) {
+				return;
+			}
 			dispatch(showToast(err.message || formatMessage(i18n.unknownError)));
 		}
 	}
