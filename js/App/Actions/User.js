@@ -41,10 +41,6 @@ import {
 	getUserProfile,
 } from './Login';
 
-import {
-	getUserProfile,
-} from './Login';
-
 const prepareDeviceId = (deviceId: string = ''): string => {
 	deviceId = deviceId.trim();
 	return (!deviceId || deviceId.length === 0) ? DeviceInfo.getUniqueId() : deviceId;
