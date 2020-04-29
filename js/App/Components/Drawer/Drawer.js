@@ -282,13 +282,15 @@ const getRows = createSelector(
 
 function mapStateToProps(store: Object): Object {
 	const {
-		appDrawerBanner,
+		firebaseRemoteConfig = {},
 	} = store.user;
+
+	const { appDrawerBanner = JSON.stringify({}) } = firebaseRemoteConfig;
 
 	return {
 		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
-		appDrawerBanner,
+		appDrawerBanner: appDrawerBanner === "" ? {} : JSON.parse(appDrawerBanner),
 	};
 }
 
