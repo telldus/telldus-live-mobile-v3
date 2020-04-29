@@ -143,8 +143,7 @@ class LoginForm extends View {
 				Keyboard.dismiss();
 				InteractionManager.runAfterInteractions(() => {
 					const credential = {
-						idToken: appleAuthRequestResponse.identityToken,
-						authCode: appleAuthRequestResponse.authorizationCode,
+						id_token: appleAuthRequestResponse.identityToken,
 					};
 					this.props.loginToTelldus(credential, 'apple')
 						.catch((err: Object) => {
