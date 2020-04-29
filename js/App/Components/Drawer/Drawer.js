@@ -516,7 +516,7 @@ function mapStateToProps(store: Object): Object {
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
-		appDrawerBanner: JSON.parse(appDrawerBanner),
+		appDrawerBanner: appDrawerBanner === "" ? {} : JSON.parse(appDrawerBanner),
 	};
 }
 
