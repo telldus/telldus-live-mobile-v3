@@ -290,7 +290,7 @@ function mapStateToProps(store: Object): Object {
 	return {
 		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
-		appDrawerBanner: appDrawerBanner === "" ? {} : JSON.parse(appDrawerBanner),
+		appDrawerBanner: appDrawerBanner === '' ? {} : JSON.parse(appDrawerBanner),
 	};
 }
 
