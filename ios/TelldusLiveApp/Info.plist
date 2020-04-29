@@ -47,8 +47,6 @@
 	<string>3.0.0.1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>firebase_crashlytics_collection_enabled</key>
-	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -64,11 +62,11 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>UIAppFonts</key>
 	<array>
@@ -90,6 +88,7 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -106,6 +105,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>firebase_crashlytics_collection_enabled</key>
 	<false/>
 </dict>
 </plist>
