@@ -499,16 +499,16 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
-	const {
-		appDrawerBanner,
-	} = store.user;
 
 	const { accounts = {}, firebaseRemoteConfig = {} } = store.user;
 
 	const premAccounts = getPremiumAccounts(accounts);
 	const hasAPremAccount = Object.keys(premAccounts).length > 0;
 
-	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
+	const {
+		geoFenceFeature = JSON.stringify({enable: false}),
+		appDrawerBanner = JSON.stringify({}),
+	} = firebaseRemoteConfig;
 	const { enable } = JSON.parse(geoFenceFeature);
 
 	return {
@@ -516,7 +516,7 @@ function mapStateToProps(store: Object): Object {
 		userProfile: getUserProfileSelector(store),
 		hasAPremAccount,
 		enableGeoFenceFeature: enable,
-		appDrawerBanner,
+		appDrawerBanner: JSON.parse(appDrawerBanner),
 	};
 }
 
