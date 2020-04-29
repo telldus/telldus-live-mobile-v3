@@ -504,6 +504,7 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		buttonStyle: {
 			paddingHorizontal: 10,
 			marginTop: padding * 3,
+			width: width * 0.7,
 		},
 		cartIconStyle: {
 			fontSize: fontSize * 2.2,
