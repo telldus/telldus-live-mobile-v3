@@ -64,24 +64,22 @@ const hasLocationPermission = async (): Promise<boolean> => {
 	);
 
 	if (hasPermission) {
-		return true;
+		const hasPermissionBG = await PermissionsAndroid.check(
+			PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
+		);
+		if (hasPermissionBG) {
+			return true;
+		}
 	}
+	const allPermissions = await PermissionsAndroid.requestMultiple([
+		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+		PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+	]);
 
-	const status = await PermissionsAndroid.request(
-		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-	);
+	const permissionFine = allPermissions[PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION];
+	const permissionFineBG = allPermissions[PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION];
 
-	if (status === PermissionsAndroid.RESULTS.GRANTED) {
-		return true;
-	}
-
-	if (status === PermissionsAndroid.RESULTS.DENIED) {
-		// Location permission denied by user
-	} else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-		// Location permission revoked by user
-	}
-
-	return false;
+	return permissionFine === PermissionsAndroid.RESULTS.GRANTED || permissionFineBG === PermissionsAndroid.RESULTS.GRANTED;
 };
 
 function checkPermissionAndInitializeWatcher(): ThunkAction {
