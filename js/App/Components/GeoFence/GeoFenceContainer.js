@@ -187,8 +187,9 @@ export class GeoFenceContainer extends View<Props, State> {
 			screenProps,
 			navigation,
 			route,
+			currentScreen,
 		} = this.props;
-		const { appLayout, currentScreen } = screenProps;
+		const { appLayout } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
