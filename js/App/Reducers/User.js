@@ -47,6 +47,7 @@ export type State = {
 	iapTransactionConfig: Object,
 	iapProducts: Array<Object>,
 	iapAvailablePurchases: Array<Object>,
+	socialAuthConfig: Object,
 };
 
 export const initialState = {
@@ -72,6 +73,7 @@ export const initialState = {
 	iapTransactionConfig: {},
 	iapProducts: [],
 	iapAvailablePurchases: [],
+	socialAuthConfig: {},
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -93,6 +95,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			showChangeLog: false,
 			visibilityProExpireHeadsup: nextVPEValue,
 			iapTransactionConfig: {},
+			socialAuthConfig: {},
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -271,6 +274,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			iapAvailablePurchases: action.payload,
+		};
+	}
+	if (action.type === 'SET_SOCIAL_AUTH_CONFIG') {
+		return {
+			...state,
+			socialAuthConfig: action.payload,
 		};
 	}
 	return state;

@@ -401,6 +401,13 @@ const logoutAfterUnregister = (): ThunkAction => {
 	};
 };
 
+const setSocialAuthConfig = (payload: Object): Action => {
+	return {
+		type: 'SET_SOCIAL_AUTH_CONFIG',
+		payload,
+	};
+};
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -420,4 +427,5 @@ module.exports = {
 	onReceivedInAppAvailablePurchases,
 	reportIapAtServer,
 	logoutAfterUnregister,
+	setSocialAuthConfig,
 };

@@ -132,6 +132,7 @@ export type Action =
 	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 
 	| { type: 'RECEIVED_USER_SUBSCRIPTIONS', payload: Object }
+	| { type: 'SET_SOCIAL_AUTH_CONFIG', payload: Object }
 
 	| { type: 'CAMPAIGN_VISITED', payload: boolean }
 
