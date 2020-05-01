@@ -143,6 +143,7 @@ function initializeWatcher(): ThunkAction {
 				distanceFilter: 5,
 				interval: 30000,
 				fastestInterval: 10000,
+				enableBackgroundUpdate: true,
 			},
 		);
 	};
