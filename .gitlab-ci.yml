@@ -121,7 +121,7 @@ huawei_app_gallery:
     - export LANGUAGE=en_US:en
     - export LC_ALL=en_US.UTF-8
     - bundle install
-    - fastlane android huawei --verbose
+    - bundle exec fastlane android huawei --verbose
 
 testflight:
   stage: release
