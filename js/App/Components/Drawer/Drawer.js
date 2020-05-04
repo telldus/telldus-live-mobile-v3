@@ -77,7 +77,6 @@ constructor(props: Props) {
 	};
 
 	this._hasStatusBar();
-	this.setBannerImageDimensions();
 }
 
 _hasStatusBar = async () => {
@@ -123,12 +122,22 @@ setBannerImageDimensions = () => {
 	}
 }
 
+componentDidMount() {
+	this.setBannerImageDimensions();
+}
+
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
 		'gateways',
 		'userProfile',
 		'appDrawerBanner',
 		'appLayout']);
+}
+
+componentDidUpdate(prevProps: Object, prevState: Object) {
+	if (!isEqual(this.props.appDrawerBanner, prevProps.appDrawerBanner)) {
+		this.setBannerImageDimensions();
+	}
 }
 
 render(): Object {
