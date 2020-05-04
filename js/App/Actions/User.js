@@ -30,6 +30,10 @@ import RNIap from 'react-native-iap';
 import { actions } from 'live-shared-data';
 const { User } = actions;
 
+const {
+	linkedAccountAdd,
+} = User;
+
 import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
 import { LiveApi, getSubscriptionPlans } from '../Lib';
@@ -408,6 +412,34 @@ const setSocialAuthConfig = (payload: Object): Action => {
 	};
 };
 
+const checkAndLinkAccountIfRequired = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			user: {
+				socialAuthConfig = {},
+			},
+		} = getState();
+
+		const {
+			idToken,
+			provider,
+		} = socialAuthConfig;
+
+		if (!idToken || !provider) {
+			return Promise.resolve();
+		}
+
+		return dispatch(linkedAccountAdd({
+			idToken,
+			provider,
+		})).then((res: Object = {}) => {
+			if (res.status && res.status === 'success') {
+				dispatch(setSocialAuthConfig({}));
+			}
+		});
+	};
+};
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -428,4 +460,5 @@ module.exports = {
 	reportIapAtServer,
 	logoutAfterUnregister,
 	setSocialAuthConfig,
+	checkAndLinkAccountIfRequired,
 };

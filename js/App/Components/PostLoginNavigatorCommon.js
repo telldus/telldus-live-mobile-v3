@@ -61,6 +61,7 @@ import {
 	setGatewayRelatedGAProperties,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
+	checkAndLinkAccountIfRequired,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -286,6 +287,8 @@ async componentDidMount() {
 	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
 
 	this._askIfAddNewLocation();
+
+	dispatch(checkAndLinkAccountIfRequired());
 
 	if (Platform.OS !== 'ios' && premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
