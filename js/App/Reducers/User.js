@@ -58,6 +58,7 @@ export type State = {
 		showAS: boolean,
 		isLoggingOut: boolean,
 	},
+	socialAuthConfig: Object,
 };
 
 export const initialState = {
@@ -90,6 +91,7 @@ export const initialState = {
 		showAS: false,
 		isLoggingOut: false,
 	},
+	socialAuthConfig: {},
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -115,6 +117,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 				showAS: false,
 				isLoggingOut: false,
 			},
+			socialAuthConfig: {},
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -572,6 +575,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			switchAccountConf: action.payload,
+		};
+	}
+	if (action.type === 'SET_SOCIAL_AUTH_CONFIG') {
+		return {
+			...state,
+			socialAuthConfig: action.payload,
 		};
 	}
 	return state;

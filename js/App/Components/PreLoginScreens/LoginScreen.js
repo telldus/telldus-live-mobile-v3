@@ -33,6 +33,10 @@ import {
 	clearAppData,
 } from '../../Actions/AppData';
 
+import {
+	setSocialAuthConfig,
+} from './../../Actions/User';
+
 import Theme from './../../Theme';
 import i18n from './../../Translations/common';
 
@@ -121,10 +125,20 @@ class LoginScreen extends View {
 		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
 	}
 
-	getRelativeData(): Object {
-		let headerText = this.props.intl.formatMessage(i18n.login), notificationHeader = false,
-			positiveText = false, onPressPositive = this.closeModal, onPressNegative = false,
-			showNegative = false, showPositive = true;
+	getRelativeData(extras?: Object): Object {
+		let headerText = this.props.intl.formatMessage(i18n.login),
+			notificationHeader = false,
+			positiveText = false,
+			onPressPositive = this.closeModal,
+			onPressNegative = false,
+			showNegative = false, showPositive = true,
+			negativeText,
+			timeoutToCallPositive,
+			timeoutToCallNegative,
+			showIconOnHeader = false,
+			onPressHeader,
+			closeOnPressNegative,
+			closeOnPressPositive;
 		if (this.props.accessToken && !this.props.isTokenValid) {
 			headerText = this.props.intl.formatMessage(i18n.headerSessionLocked);
 			positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase();
@@ -132,39 +146,46 @@ class LoginScreen extends View {
 			onPressPositive = this.onPressPositive;
 			onPressNegative = this.closeModal;
 			showNegative = true;
+		} else if (extras && extras.type === 'social_login_fail') {
+			positiveText = 'Login'.toUpperCase();
+			negativeText = 'Register'.toUpperCase();
+			notificationHeader = 'Login or Register ?';
+			onPressPositive = this.loginPostSocialLoginFail;
+			onPressNegative = this.registerPostSocialLoginFail;
+			showNegative = true;
+			timeoutToCallPositive = 200;
+			showIconOnHeader = true;
+			onPressHeader = this.closeDialoguePostSocialLoginFail;
+			closeOnPressNegative = true;
+			closeOnPressPositive = true;
 		}
 		return {
 			headerText,
-			notificationHeader,
+			header: notificationHeader,
 			showPositive,
 			showNegative,
 			positiveText,
 			onPressPositive,
 			onPressNegative,
+			negativeText,
+			timeoutToCallPositive,
+			timeoutToCallNegative,
+			showIconOnHeader,
+			onPressHeader,
+			closeOnPressNegative,
+			closeOnPressPositive,
 		};
 	}
 
-	openDialogueBox = (body: string, header?: Object) => {
+	openDialogueBox = (body: string, extras?: Object = {}) => {
 		const { screenProps } = this.props;
 		const { toggleDialogueBox } = screenProps;
-		let {
-			notificationHeader,
-			positiveText,
-			onPressPositive,
-			onPressNegative,
-			showPositive,
-			showNegative,
-		} = this.getRelativeData();
+		let dialogueBoxData = this.getRelativeData(extras);
 		const dialogueData = {
 			show: true,
 			showHeader: true,
-			header: notificationHeader,
 			text: body,
-			positiveText,
-			onPressPositive,
-			onPressNegative,
-			showPositive,
-			showNegative,
+			...dialogueBoxData,
 		};
 		this.setState({
 			showModal: true,
@@ -180,6 +201,28 @@ class LoginScreen extends View {
 	_onLoginSuccess = () => {
 		this.props.dispatch(clearAppData());
 		this.goBack();
+	}
+
+	loginPostSocialLoginFail = () => {
+		this.setState({
+			showModal: false,
+		});
+	}
+
+	registerPostSocialLoginFail = () => {
+		this.setState({
+			showModal: false,
+		}, () => {
+			const {
+				navigation,
+			} = this.props;
+			navigation.navigate('Register');
+		});
+	}
+
+	closeDialoguePostSocialLoginFail = () => {
+		this.closeModal();
+		this.props.dispatch(setSocialAuthConfig({}));
 	}
 
 	render(): Object {

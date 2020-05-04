@@ -41,7 +41,10 @@ import {
 	H1,
 	MaterialTextInput,
 } from '../../../../BaseComponents';
-import { loginToTelldus } from '../../../Actions';
+import {
+	loginToTelldus,
+	setSocialAuthConfig,
+} from '../../../Actions';
 import {
 	testUsername,
 	testPassword,
@@ -62,8 +65,8 @@ type Props = {
 	styles: Object,
 	headerText: string,
 
-	openDialogueBox: (string, ?string) => void,
 	onLoginSuccess?: () => void,
+	openDialogueBox: (string, ?Object) => void,
 };
 
 type State = {
@@ -135,6 +138,7 @@ class LoginForm extends View {
 				requestedOperation: AppleAuthRequestOperation.LOGIN,
 				requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
 			});
+
 			// get current authentication state for user
 			const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
 			// use credentialState response to ensure the user is authenticated
@@ -145,11 +149,30 @@ class LoginForm extends View {
 					const credential = {
 						id_token: appleAuthRequestResponse.identityToken,
 					};
-					this.props.loginToTelldus(credential, 'apple')
+					const provider = 'apple';
+					this.props.loginToTelldus(credential, provider)
 						.catch((err: Object) => {
 							this.setState({
 								isAppleSigningInProgress: false,
 							});
+							if (err.response && err.response.status === 404 && appleAuthRequestResponse.identityToken) {
+								const {
+									identityToken,
+									email,
+									fullName = {},
+								} = appleAuthRequestResponse;
+								const _fullName = {
+									fn: fullName.givenName,
+									ln: fullName.familyName || fullName.middleName,
+								};
+								this.onSocialLoginFail404({
+									idToken: identityToken,
+									provider,
+									fullName: _fullName,
+									email,
+								});
+								return;
+							}
 							this.handleLoginError(err);
 						});
 				});
@@ -282,12 +305,28 @@ class LoginForm extends View {
 		  }
 	}
 
+	onSocialLoginFail404 = (authConfig: Object) => {
+		const {
+			dispatch,
+			openDialogueBox,
+		} = this.props;
+		dispatch(setSocialAuthConfig({
+			...authConfig,
+			accountLinked: false,
+		}));
+		openDialogueBox('Login or Register ?',
+			{
+				type: 'social_login_fail',
+			});
+	}
+
 	async signIn(): any {
 		const { openDialogueBox, intl, onLoginSuccess } = this.props;
 		this.setState({ isSigninInProgress: true });
 		try {
 			await GoogleSignin.hasPlayServices();
-			const data = await GoogleSignin.signIn();
+			const data: Object = await GoogleSignin.signIn();
+
 			const { idToken } = data;
 			if (idToken) {
 				Keyboard.dismiss();
@@ -295,18 +334,43 @@ class LoginForm extends View {
 					const credential = {
 						idToken,
 					};
-					this.props.loginToTelldus(credential, 'google')
-						.then(() => {
-							if (onLoginSuccess) {
-								onLoginSuccess();
-							}
-						})
-						.catch((err: Object) => {
-							this.setState({
-								isSigninInProgress: false,
-							});
-							this.handleLoginError(err);
+					const provider = 'google';
+					this.props.loginToTelldus(credential, provider).then(() => {
+						if (onLoginSuccess) {
+							onLoginSuccess();
+						}
+					}).catch((err: Object = {}) => {
+						this.setState({
+							isSigninInProgress: false,
 						});
+						if (err.response && err.response.status === 404 && idToken) {
+
+							const {
+								user = {},
+							} = data || {};
+							const {
+								email,
+								givenName,
+								familyName,
+								name = '',
+							} = user;
+							const [fn, ln] = name.split(' ');
+
+							const _fullName = {
+								fn: fn || givenName,
+								ln: ln || familyName,
+							};
+
+							this.onSocialLoginFail404({
+								idToken,
+								provider,
+								email,
+								fullName: _fullName,
+							});
+							return;
+						}
+						this.handleLoginError(err);
+					});
 				});
 			} else {
 				openDialogueBox(this.unknownError);

@@ -49,6 +49,7 @@ type Props = {
 	styles: Object,
 	headerText: string,
 	openDialogueBox: (string, ?string) => void,
+	socialAuthConfig: Object,
 };
 
 class RegisterForm extends View {
@@ -64,11 +65,21 @@ class RegisterForm extends View {
 
 	constructor(props: Props) {
 		super(props);
+
+		const {
+			email,
+			fullName = {},
+		} = props.socialAuthConfig;
+		const {
+			fn = '',
+			ln = '',
+		} = fullName;
+
 		this.state = {
-			firstName: '',
-			lastName: '',
-			email: '',
-			confirmEmail: '',
+			firstName: fn,
+			lastName: ln,
+			email: email || '',
+			confirmEmail: email || '',
 			isLoading: false,
 		};
 
@@ -298,8 +309,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object): Object {
+	const {
+		socialAuthConfig = {},
+	} = store.user;
+
 	return {
 		validationMessage: store.modal.data,
+		socialAuthConfig,
 	};
 }
 

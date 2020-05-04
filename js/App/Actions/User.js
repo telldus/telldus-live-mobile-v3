@@ -30,7 +30,10 @@ import RNIap from 'react-native-iap';
 import { actions } from 'live-shared-data';
 const { User } = actions;
 
-const { getUserSubscriptions } = User;
+const {
+	linkedAccountAdd,
+	getUserSubscriptions,
+} = User;
 
 import type { ThunkAction, Action } from './Types';
 import { publicKey, privateKey, apiServer } from '../../Config';
@@ -434,6 +437,41 @@ function toggleVisibilitySwitchAccountAS(payload: Object): Action {
 	};
 }
 
+const setSocialAuthConfig = (payload: Object): Action => {
+	return {
+		type: 'SET_SOCIAL_AUTH_CONFIG',
+		payload,
+	};
+};
+
+const checkAndLinkAccountIfRequired = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			user: {
+				socialAuthConfig = {},
+			},
+		} = getState();
+
+		const {
+			idToken,
+			provider,
+		} = socialAuthConfig;
+
+		if (!idToken || !provider) {
+			return Promise.resolve();
+		}
+
+		return dispatch(linkedAccountAdd({
+			idToken,
+			provider,
+		})).then((res: Object = {}) => {
+			if (res.status && res.status === 'success') {
+				dispatch(setSocialAuthConfig({}));
+			}
+		});
+	};
+};
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -455,4 +493,6 @@ module.exports = {
 	reportIapAtServer,
 	logoutAfterUnregister,
 	toggleVisibilitySwitchAccountAS,
+	setSocialAuthConfig,
+	checkAndLinkAccountIfRequired,
 };

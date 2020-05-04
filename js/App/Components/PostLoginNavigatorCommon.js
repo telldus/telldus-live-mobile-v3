@@ -67,6 +67,7 @@ import {
 	setGatewayRelatedGAProperties,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
+	checkAndLinkAccountIfRequired,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -341,6 +342,8 @@ actionsToPerformOnStart = async () => {
 
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
+
+	dispatch(checkAndLinkAccountIfRequired());
 
 	const {
 		isDrawerOpen,
