@@ -629,6 +629,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		visibilityEula,
 	} = state.user;
 
 	const { allIds = [], toActivate } = state.gateways;
@@ -650,7 +651,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		addNewGatewayBool,
 		gateways: state.gateways,
 
-		showEULA: !getUserProfileSelector(state).eula,
+		showEULA: !getUserProfileSelector(state).eula || visibilityEula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
 
