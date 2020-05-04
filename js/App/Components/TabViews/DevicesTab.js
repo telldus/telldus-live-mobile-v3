@@ -47,7 +47,12 @@ import {
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
+import {
+	getTabBarIcon,
+	LayoutAnimations,
+	getItemLayout,
+	askAddScheduleOnDevice,
+} from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast, getGateways } from '../../Actions';
@@ -601,7 +606,7 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUI = () => {
-		const { navigation, screenProps } = this.props;
+		const { navigation, screenProps, rowsAndSections } = this.props;
 		const newDevices = navigation.getParam('newDevices', null);
 		if (newDevices) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
@@ -621,7 +626,27 @@ class DevicesTab extends View {
 			const {
 				currentScreen,
 			} = screenProps;
-			if (currentScreen === 'Devices') {
+			const { visibleList } = rowsAndSections;
+			let device = null;
+			for (let i = 0; i < visibleList.length; i++) {
+				const list = visibleList[i];
+				for (let j = 0; j < list.data.length; j++) {
+					if (list.data[j].id && parseInt(list.data[j].id, 10) === parseInt(mainNodeId, 10)) {
+						device = list.data[j];
+						break;
+					}
+				}
+				if (device) {
+					break;
+				}
+			}
+
+			if (!device) {
+				device = {};
+			}
+
+			const canAddSchedule = askAddScheduleOnDevice(device.deviceType);
+			if (currentScreen === 'Devices' && canAddSchedule) {
 				navigation.navigate({
 					routeName: 'InfoScreen',
 					key: 'InfoScreen',
