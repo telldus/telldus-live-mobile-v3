@@ -39,7 +39,7 @@
     "intl": "~1.2.5",
     "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#ccc17f7e166a8cf9553bb80857d2702d31dd6b18",
     "lodash": "~4.17.11",
-    "moment": "~2.24.0",
+    "moment": "~2.25.1",
     "moment-timezone": "~0.5.23",
     "node-forge": "~0.9.1",
     "react": "16.9.0",
