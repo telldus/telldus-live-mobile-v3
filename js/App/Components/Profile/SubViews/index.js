@@ -26,10 +26,14 @@ import EditNameBlock from './EditNameBlock';
 import UpdatePasswordBlock from './UpdatePasswordBlock';
 import HelpAndSupportBlock from './HelpAndSupportBlock';
 import ContactSupportBlock from './ContactSupportBlock';
+import PrivacyPolicyLink from './PrivacyPolicyLink';
+import EulaLink from './EulaLink';
 
 module.exports = {
 	EditNameBlock,
 	UpdatePasswordBlock,
 	HelpAndSupportBlock,
 	ContactSupportBlock,
+	PrivacyPolicyLink,
+	EulaLink,
 };
