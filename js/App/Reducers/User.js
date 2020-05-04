@@ -48,6 +48,7 @@ export type State = {
 	iapProducts: Array<Object>,
 	iapAvailablePurchases: Array<Object>,
 	socialAuthConfig: Object,
+	visibilityEula: boolean,
 };
 
 export const initialState = {
@@ -74,6 +75,7 @@ export const initialState = {
 	iapProducts: [],
 	iapAvailablePurchases: [],
 	socialAuthConfig: {},
+	visibilityEula: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -96,6 +98,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			visibilityProExpireHeadsup: nextVPEValue,
 			iapTransactionConfig: {},
 			socialAuthConfig: {},
+			visibilityEula: false,
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -280,6 +283,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			socialAuthConfig: action.payload,
+		};
+	}
+	if (action.type === 'TOGGLE_VISIBILITY_EULA') {
+		return {
+			...state,
+			visibilityEula: action.payload,
 		};
 	}
 	return state;

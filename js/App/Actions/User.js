@@ -440,6 +440,13 @@ const checkAndLinkAccountIfRequired = (): ThunkAction => {
 	};
 };
 
+const toggleVisibilityEula = (payload: boolean): Action => {
+	return {
+		type: 'TOGGLE_VISIBILITY_EULA',
+		payload,
+	};
+};
+
 module.exports = {
 	...User,
 	registerPushToken,
@@ -461,4 +468,5 @@ module.exports = {
 	logoutAfterUnregister,
 	setSocialAuthConfig,
 	checkAndLinkAccountIfRequired,
+	toggleVisibilityEula,
 };
