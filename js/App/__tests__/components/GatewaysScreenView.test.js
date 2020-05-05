@@ -4,10 +4,10 @@ import { IntlProvider } from 'react-intl';
 import { shallow } from '../../../Utils/TelldusTestSuite';
 import { configureStore } from '../../Store/ConfigureStore';
 
-import GatewaysTab from '../../Components/TabViews/GatewaysTab';
+import GatewaysScreen from '../../Components/TabViews/GatewaysScreen';
 import { getGateways } from '../../Actions';
 
-describe('<GatewaysTab />', () => {
+describe('<GatewaysScreen />', () => {
 	let store;
 	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
 
@@ -29,16 +29,16 @@ describe('<GatewaysTab />', () => {
 		wrapper = shallow(
 			<Provider store={store}>
 				<IntlProvider>
-					<GatewaysTab />
+					<GatewaysScreen />
 				</IntlProvider>
 			</Provider>
 		);
 		expect(wrapper).toBeTruthy();
 	});
 
-	it(' render the connected(GatewaysTab) component', () => {
+	it(' render the connected(GatewaysScreen) component', () => {
 		const Tab = wrapper.props().children.props.children.type.displayName;
-		expect(Tab).toEqual('Connect(GatewaysTab)');
+		expect(Tab).toEqual('Connect(GatewaysScreen)');
 	});
 
 	it(' check toggleEditMode action on dispatching ', () => {
