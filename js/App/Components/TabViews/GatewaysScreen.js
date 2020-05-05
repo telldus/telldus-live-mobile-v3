@@ -204,8 +204,13 @@ class GatewaysScreen extends View {
 			navigation,
 			screenProps,
 		} = this.props;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 
-		const styles = this.getStyles(screenProps.appLayout);
+		const styles = this.getStyles(appLayout);
 
 		const rightButton = this.getRightButton(styles);
 		const leftButton = this.getLeftButton(styles);
@@ -220,7 +225,9 @@ class GatewaysScreen extends View {
 					navigation={navigation}
 					rightButton={rightButton}/>
 				{gateways.length === 0 && gatewaysDidFetch ?
-					<NoGateways/>
+					<NoGateways
+						disabled={addingNewLocation}
+						onPress={addNewLocation}/>
 					:
 					<FlatList
 						data={rows}

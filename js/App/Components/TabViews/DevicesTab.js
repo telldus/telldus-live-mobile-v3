@@ -698,7 +698,11 @@ class DevicesTab extends View {
 			gateways,
 			currentScreen,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 		const {
 			isRefreshing,
 			propsSwipeRow,
@@ -709,7 +713,9 @@ class DevicesTab extends View {
 		const style = this.getStyles(appLayout);
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
+			return <NoGateways
+				disabled={addingNewLocation}
+				onPress={addNewLocation}/>;
 		}
 
 		const hasGateways = gateways.length > 0 && gatewaysDidFetch;

@@ -45,9 +45,15 @@ import {
 } from '../../../../Lib/NavigationService';
 
 type Props = {
+	disabled?: boolean,
+	onPress?: Function,
 };
 
 const NoGateways = (props: Props): Object => {
+	const {
+		disabled,
+		onPress,
+	} = props;
 
 	const [ isLoading, setIsLoading ] = useState(false);
 
@@ -58,7 +64,7 @@ const NoGateways = (props: Props): Object => {
 		formatMessage,
 	} = intl;
 
-	const onPress = useCallback(() => {
+	const _onPress = useCallback(() => {
 		setIsLoading(true);
 		dispatch(addNewGateway())
 			.then((response: Object) => {
@@ -80,11 +86,11 @@ const NoGateways = (props: Props): Object => {
 
 	return (
 		<EmptyTabTemplate
-			onPress={isLoading ? undefined : onPress}
+			onPress={isLoading || disabled ? undefined : onPress || _onPress}
 			bottonLabel={formatMessage(i18n.gatewayAdd)}
 			headerText={formatMessage(i18n.messageNoGatewayTitle)}
 			bodyText={formatMessage(i18n.messageNoGatewayContent)}
-			isLoading={isLoading}
+			isLoading={isLoading || disabled}
 			icon={'location'}/>
 	);
 };

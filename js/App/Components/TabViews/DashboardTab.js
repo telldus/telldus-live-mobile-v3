@@ -393,13 +393,19 @@ class DashboardTab extends View {
 			gateways,
 			gatewaysDidFetch,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles(appLayout);
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
+			return <NoGateways
+				disabled={addingNewLocation}
+				onPress={addNewLocation}/>;
 		}
 
 		if (isDBEmpty) {

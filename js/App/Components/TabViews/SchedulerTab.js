@@ -164,7 +164,11 @@ class SchedulerTab extends View<null, Props, State> {
 			gateways,
 			currentScreen,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -173,7 +177,9 @@ class SchedulerTab extends View<null, Props, State> {
 		}
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
+			return <NoGateways
+				disabled={addingNewLocation}
+				onPress={addNewLocation}/>;
 		}
 
 		const { swiperContainer } = this.getStyles(appLayout);
