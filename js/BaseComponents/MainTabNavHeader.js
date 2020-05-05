@@ -40,7 +40,6 @@ import Header from './Header';
 import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import Icon from './Icon';
-import Throbber from './Throbber';
 
 import {
 	resetSchedule,
@@ -67,11 +66,9 @@ type Props = {
     openDrawer?: Function, // Required in Android
     screenReaderEnabled?: boolean,
 	drawer?: boolean, // Required in Android
-	addingNewLocation?: boolean,
 
 	addNewDevice: Function,
 	addNewSensor: Function,
-	addNewLocation: Function,
 };
 
 const MainTabNavHeader = memo<Object>((props: Props): Object => {
@@ -80,10 +77,8 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		drawer,
 		screenReaderEnabled,
 		openDrawer,
-		addingNewLocation,
 		addNewDevice,
 		addNewSensor,
-		addNewLocation,
 	} = props;
 
 	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
@@ -160,7 +155,6 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		const {
 			addIconStyle,
 			rightButtonStyle,
-			fontSizeIcon,
 		} = getStyles(appLayout);
 
 		const newSchedule = () => {
@@ -177,18 +171,6 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		const AddButton = {
 			component: <Image source={{uri: 'icon_plus'}} style={addIconStyle}/>,
 			style: rightButtonStyle,
-			onPress: () => {},
-		};
-
-		const throbber = {
-			component: <Throbber
-				throbberStyle={{
-					fontSize: fontSizeIcon,
-					color: '#fff',
-				}}
-				throbberContainerStyle={{
-					position: 'relative',
-				}}/>,
 			onPress: () => {},
 		};
 
@@ -211,17 +193,6 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 					onPress: addNewSensor,
 					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
 				};
-			case 'Gateways':
-				if (addingNewLocation) {
-					return {
-						...throbber,
-					};
-				}
-				return {
-					...AddButton,
-					onPress: addNewLocation,
-					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
 			case 'Scheduler':
 				if (!hasGateways) {
 					return null;
@@ -239,7 +210,6 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		screen,
 		hasGateways,
 		appLayout,
-		addingNewLocation,
 	]);
 
 	return (

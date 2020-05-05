@@ -120,10 +120,18 @@ const MoreOptionsTab = (props: Props): Object => {
 				enable: true,
 			},
 			{
+				iconComponent: <MaterialIcons
+					style={iconStyle}
+					name={'group-add'}/>,
+				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.switchOrAddAccount)),
+				onPress: performAddOrSwitch,
+				enable: true,
+			},
+			{
 				icon: 'location',
 				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.manageGateways)),
 				onPress: () => {
-					onOpenSetting('SupportTab');
+					navigation.navigate('Gateways');
 				},
 				enable: true,
 			},
@@ -142,14 +150,6 @@ const MoreOptionsTab = (props: Props): Object => {
 					navigation.navigate('GeoFenceNavigator');
 				},
 				enable: enableGeoFenceFeature,
-			},
-			{
-				iconComponent: <MaterialIcons
-					style={iconStyle}
-					name={'group-add'}/>,
-				text: capitalizeFirstLetterOfEachWord(formatMessage(i18n.switchOrAddAccount)),
-				onPress: performAddOrSwitch,
-				enable: true,
 			},
 			{
 				icon: 'faq',

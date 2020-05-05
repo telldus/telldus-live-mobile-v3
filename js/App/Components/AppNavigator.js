@@ -30,7 +30,9 @@ import {
 	useDispatch,
 } from 'react-redux';
 
-import { MainTabNavHeader } from '../../BaseComponents';
+import {
+	MainTabNavHeader,
+} from '../../BaseComponents';
 
 import AddDeviceNavigator from './Device/AddDevice/AddDeviceNavigator';
 import ScheduleNavigator from './Schedule/ScheduleNavigator';
@@ -73,6 +75,8 @@ import CantEnterInclusion from './Device/AddDevice/CantEnterInclusion';
 
 import InfoScreen from './Info/InfoScreen';
 
+import GatewaysScreen from './TabViews/GatewaysScreen';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -113,6 +117,13 @@ const ScreenConfigs = [
 				headerShown: true,
 				header: (): Object => <MainTabNavHeader {...screenProps}/>,
 			};
+		},
+	},
+	{
+		name: 'Gateways',
+		Component: GatewaysScreen,
+		options: {
+			headerShown: false,
 		},
 	},
 	{

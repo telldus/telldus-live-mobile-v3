@@ -25,14 +25,20 @@ import React from 'react';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { View } from '../../../BaseComponents';
+import {
+	View,
+	Header,
+	Image,
+	Throbber,
+} from '../../../BaseComponents';
 import { GatewayRow } from './SubViews';
 import {
 	NoGateways,
 } from './SubViews/EmptyInfo';
 
-import { getGateways, addNewGateway } from '../../Actions';
+import { getGateways } from '../../Actions';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 
@@ -55,7 +61,7 @@ type State = {
 	isRefreshing: boolean,
 };
 
-class GatewaysTab extends View {
+class GatewaysScreen extends View {
 
 	props: Props;
 	state: State;
@@ -77,6 +83,9 @@ class GatewaysTab extends View {
 
 		this.renderRow = this.renderRow.bind(this);
 		this.onRefresh = this.onRefresh.bind(this);
+
+		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
+		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -119,35 +128,137 @@ class GatewaysTab extends View {
 		return deviceWidth * Theme.Core.paddingFactor;
 	}
 
+	getRightButton = (styles: Object): Object => {
+		const {
+			addNewLocation,
+			intl,
+			addingNewLocation,
+		} = this.props.screenProps;
+		const {
+			addIconStyle,
+			fontSizeIcon,
+		} = styles;
+
+		const {
+			formatMessage,
+		} = intl;
+
+		const throbber = {
+			component: <Throbber
+				throbberStyle={{
+					fontSize: fontSizeIcon,
+					color: '#fff',
+				}}
+				throbberContainerStyle={{
+					position: 'relative',
+				}}/>,
+			onPress: () => {},
+		};
+
+		if (addingNewLocation) {
+			return {
+				...throbber,
+			};
+		}
+
+		const AddButton = {
+			component: <Image source={{uri: 'icon_plus'}} style={addIconStyle}/>,
+			onPress: () => {},
+		};
+
+		return {
+			...AddButton,
+			onPress: addNewLocation,
+			accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
+		};
+	}
+
+	goBack = () => {
+		this.props.navigation.pop();
+	}
+
+	getLeftButton = (styles: Object): Object => {
+		const {
+			iconLeftStyle,
+			leftIconSize,
+		} = styles;
+
+		return {
+			component: <MaterialIcons
+				name={'close'}
+				size={leftIconSize}
+				color="#fff"
+				style={iconLeftStyle}/>,
+			onPress: this.goBack,
+			accessibilityLabel: this.labelLeftIcon,
+		};
+	}
+
+
 	render(): Object {
 		const padding = this.getPadding();
 		const {
 			rows,
 			gateways,
 			gatewaysDidFetch,
+			navigation,
+			screenProps,
 		} = this.props;
 
-		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
-		}
+		const styles = this.getStyles(screenProps.appLayout);
+
+		const rightButton = this.getRightButton(styles);
+		const leftButton = this.getLeftButton(styles);
 
 		return (
 			<View style={{
 				flex: 1,
 				backgroundColor: Theme.Core.appBackground,
 			}}>
-				<FlatList
-					data={rows}
-					renderItem={this.renderRow}
-					onRefresh={this.onRefresh}
-					refreshing={this.state.isRefreshing}
-					keyExtractor={this.keyExtractor}
-					contentContainerStyle={{
-						marginVertical: padding - (padding / 4),
-					}}
-				/>
+				<Header
+					leftButton={leftButton}
+					navigation={navigation}
+					rightButton={rightButton}/>
+				{gateways.length === 0 && gatewaysDidFetch ?
+					<NoGateways/>
+					:
+					<FlatList
+						data={rows}
+						renderItem={this.renderRow}
+						onRefresh={this.onRefresh}
+						refreshing={this.state.isRefreshing}
+						keyExtractor={this.keyExtractor}
+						contentContainerStyle={{
+							marginVertical: padding - (padding / 4),
+						}}
+					/>
+				}
 			</View>
 		);
+	}
+
+	getStyles = (appLayout: Object): Object => {
+
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceHeight = isPortrait ? height : width;
+
+		const size = Math.floor(deviceHeight * 0.025);
+		const fontSizeIcon = size < 20 ? 20 : size;
+
+		let leftIconSize = isPortrait ? width * 0.06 : height * 0.06;
+
+		return {
+			fontSizeIcon,
+			addIconStyle: {
+				height: fontSizeIcon,
+				width: fontSizeIcon,
+			},
+			iconLeftStyle: {
+				paddingVertical: 10,
+			},
+			leftIconSize,
+		};
 	}
 }
 
@@ -172,11 +283,8 @@ function mapStateToProps(state: Object, props: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		addNewLocation: (): any => {
-			return dispatch(addNewGateway());
-		},
 		dispatch,
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(GatewaysTab);
+module.exports = connect(mapStateToProps, mapDispatchToProps)(GatewaysScreen);

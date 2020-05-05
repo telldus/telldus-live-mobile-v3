@@ -115,10 +115,13 @@ class Success extends View<void, Props, State> {
 						index: 4,
 						routes: [
 							{
-								name: 'Gateways',
+								name: 'MoreOptionsTab',
 							},
 						],
 					},
+				},
+				{
+					name: 'Gateways',
 				},
 			];
 		}
