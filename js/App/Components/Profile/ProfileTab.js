@@ -75,8 +75,6 @@ import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
 
-import AddAccountBlock from './SubViews/AddAccountBlock';
-
 import i18n from '../../Translations/common';
 
 const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
@@ -139,34 +137,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 
 	function onPressViewPurchaseHistory() {
 		navigation.navigate('PurchaseHistoryScreen');
-	}
-
-	function onPressAddAccount() {
-		if (!hasAPremAccount) {
-			toggleDialogueBoxState({
-				show: true,
-				showHeader: true,
-				imageHeader: true,
-				header: formatMessage(i18n.upgradeToPremium),
-				text: formatMessage(i18n.switchAccountBasicInfo),
-				showPositive: true,
-				showNegative: true,
-				positiveText: formatMessage(i18n.upgrade).toUpperCase(),
-				onPressPositive: () => {
-					navigation.navigate('PremiumUpgradeScreen');
-				},
-				closeOnPressPositive: true,
-				timeoutToCallPositive: 200,
-			});
-			return;
-		}
-		if (isLoggingOut) {
-			return;
-		}
-		dispatch(toggleVisibilitySwitchAccountAS({
-			showAS: true,
-			isLoggingOut: false,
-		}));
 	}
 
 	const onConfirmLogout = useCallback(() => {
@@ -277,9 +247,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					userProfile={userProfile}/>
 				<UpdatePasswordBlock
 					navigation={navigation}/>
-				<AddAccountBlock
-					navigation={navigation}
-					onPress={onPressAddAccount}/>
 				<EulaLink/>
 				<PrivacyPolicyLink/>
 				<SubscriptionStatusBlock
