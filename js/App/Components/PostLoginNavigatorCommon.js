@@ -188,20 +188,11 @@ constructor(props: Props) {
 		'Devices',
 		'Sensors',
 		'Scheduler',
-		'Gateways',
+		'MoreOptionsTab',
 	];
 
 	this.refSwitchAccountActionSheet = {};
 	this.clearNetInfoListener = null;
-
-	this.screensAllowsNavigationOrModalOverride = [
-		'Tabs',
-		'Dashboard',
-		'Devices',
-		'Sensors',
-		'Scheduler',
-		'Gateways',
-	];
 }
 
 async componentDidMount() {
