@@ -185,7 +185,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 
 		return () => {
 			clearListenersIAP();
-			didFocusSubscription.remove();
+			if (didFocusSubscription && didFocusSubscription.remove) {
+				didFocusSubscription.remove();
+			}
 		};
 	}, [clearListeners]);
 
