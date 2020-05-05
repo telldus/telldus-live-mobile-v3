@@ -24,11 +24,9 @@
 import React, {
 	memo,
 	useMemo,
-	useCallback,
 } from 'react';
 import {
 	Platform,
-	Linking,
 	Image,
 } from 'react-native';
 import { isIphoneX } from 'react-native-iphone-x-helper';
@@ -42,16 +40,14 @@ import Header from './Header';
 import HeaderLeftButtonsMainTab from './HeaderLeftButtonsMainTab';
 import CampaignIcon from './CampaignIcon';
 import Icon from './Icon';
-import IconTelldus from './IconTelldus';
 import Throbber from './Throbber';
 
 import {
-	campaignVisited,
 	resetSchedule,
 } from '../App/Actions';
 import {
-	useDialogueBox,
-} from '../App/Hooks/Dialoguebox';
+	useCampaignAction,
+} from '../App/Hooks';
 import {
 	navigate,
 } from '../App/Lib/NavigationService';
@@ -100,24 +96,14 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		logoStyle,
 	} = useMemo((): Object => getStyles(appLayout), [appLayout]);
 
+	const {
+		navigateToCampaign,
+	} = useCampaignAction();
+
 	const dispatch = useDispatch();
 
 	const intl = useIntl();
 	const { formatMessage } = intl;
-
-	const {
-		toggleDialogueBoxState,
-	} = useDialogueBox();
-
-	const showDialogue = useCallback((message: string) => {
-		toggleDialogueBoxState({
-			show: true,
-			showHeader: true,
-			text: message,
-			showPositive: true,
-		});
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	const leftButton = useMemo((): Object | null => {
 
@@ -128,33 +114,10 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 			campaingButtonStyle,
 			campaingIconStyle,
 			menuButtonStyle,
-			fontSizeIcon,
 		} = getStyles(appLayout);
 
 		const labelButton = formatMessage(i18n.button);
 		const labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
-
-		const navigateToCampaign = () => {
-			let url = 'https://live.telldus.com/profile/campaigns';
-			const defaultMessage = formatMessage(i18n.errorMessageOpenCampaign);
-			Linking.canOpenURL(url)
-				.then((supported: boolean): any => {
-					if (!supported) {
-						showDialogue(defaultMessage);
-					} else {
-						dispatch(campaignVisited(true));
-						return Linking.openURL(url);
-					}
-				})
-				.catch((err: any) => {
-					const message = err.message || defaultMessage;
-					showDialogue(message);
-				});
-		};
-
-		const onOpenSetting = () => {
-			navigate('Profile');
-		};
 
 		const buttons = [
 			Platform.select({
@@ -168,15 +131,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 						style={menuIconStyle}
 						color={'#fff'}/>,
 				},
-				ios: {
-					style: settingsButtonStyle,
-					accessibilityLabel: `${formatMessage(i18n.settingsHeader)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-					onPress: onOpenSetting,
-					iconComponent: <IconTelldus icon={'settings'} style={{
-						fontSize: fontSizeIcon,
-						color: '#fff',
-					}}/>,
-				},
+				ios: {},
 			}),
 			{
 				style: campaingButtonStyle,
