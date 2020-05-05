@@ -25,6 +25,7 @@ import DevicesTab from './DevicesTab';
 import GatewaysTab from './GatewaysTab';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
+import MoreOptionsTab from './MoreOptionsTab';
 
 module.exports = {
 	Dashboard: DashboardTab,
@@ -32,4 +33,5 @@ module.exports = {
 	Gateways: GatewaysTab,
 	Scheduler: SchedulerTab,
 	Sensors: SensorsTab,
+	MoreOptionsTab,
 };
