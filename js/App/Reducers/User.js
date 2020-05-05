@@ -59,6 +59,7 @@ export type State = {
 		isLoggingOut: boolean,
 	},
 	socialAuthConfig: Object,
+	visibilityEula: boolean,
 };
 
 export const initialState = {
@@ -92,6 +93,7 @@ export const initialState = {
 		isLoggingOut: false,
 	},
 	socialAuthConfig: {},
+	visibilityEula: false,
 };
 
 export default function reduceUser(state: State = initialState, action: Action): State {
@@ -118,6 +120,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 				isLoggingOut: false,
 			},
 			socialAuthConfig: {},
+			visibilityEula: false,
 		};
 	}
 	if (action.type === 'USER_REGISTER') {
@@ -581,6 +584,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			socialAuthConfig: action.payload,
+		};
+	}
+	if (action.type === 'TOGGLE_VISIBILITY_EULA') {
+		return {
+			...state,
+			visibilityEula: action.payload,
 		};
 	}
 	return state;

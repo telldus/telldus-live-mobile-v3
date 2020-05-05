@@ -128,7 +128,6 @@ constructor(props: Props) {
 	];
 
 	this._hasStatusBar();
-	this.setBannerImageDimensions();
 }
 
 	_hasStatusBar = async () => {
@@ -136,6 +135,10 @@ constructor(props: Props) {
 		this.setState({
 			hasStatusBar: _hasStatusBar,
 		});
+	}
+
+	componentDidMount() {
+		this.setBannerImageDimensions();
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -148,6 +151,12 @@ constructor(props: Props) {
 			'enableGeoFenceFeature',
 			'appDrawerBanner',
 		]);
+	}
+
+	componentDidUpdate(prevProps: Object, prevState: Object) {
+		if (!isEqual(this.props.appDrawerBanner, prevProps.appDrawerBanner)) {
+			this.setBannerImageDimensions();
+		}
 	}
 
 	onPressGeoFence = () => {

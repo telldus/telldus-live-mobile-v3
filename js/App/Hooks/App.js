@@ -29,6 +29,13 @@ import {
 } from 'react-intl';
 import { useSelector } from 'react-redux';
 import * as RNLocalize from 'react-native-localize';
+import { useIntl } from 'react-intl';
+
+import {
+	useDialogueBox,
+} from './Dialoguebox';
+
+import i18n from '../Translations/common';
 
 import Theme from '../Theme';
 
@@ -103,7 +110,33 @@ const getThemeData = (themeInApp: string | null): Object => {
 	}
 };
 
+const useNoInternetDialogue = (): Object => {
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
+	return {
+		showDialogue: (dialogueHeaderIntl: string) => {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: formatMessage(i18n.contentCannotAccessInfo),
+				header: formatMessage(dialogueHeaderIntl),
+				showPositive: true,
+			});
+		},
+	};
+};
+
 module.exports = {
 	useRelativeIntl,
 	useAppTheme,
+	useNoInternetDialogue,
 };

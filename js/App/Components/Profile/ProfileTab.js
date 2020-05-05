@@ -44,6 +44,8 @@ import {
 import {
 	EditNameBlock,
 	UpdatePasswordBlock,
+	PrivacyPolicyLink,
+	EulaLink,
 } from './SubViews';
 import {
 	ViewPremiumBenefitsButton,
@@ -278,6 +280,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				<AddAccountBlock
 					navigation={navigation}
 					onPress={onPressAddAccount}/>
+				<EulaLink/>
+				<PrivacyPolicyLink/>
 				<SubscriptionStatusBlock
 					navigation={navigation}
 					enable={enable}

@@ -47,7 +47,11 @@ import {
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
 
-import { LayoutAnimations, getItemLayout } from '../../Lib';
+import {
+	LayoutAnimations,
+	getItemLayout,
+	askAddScheduleOnDevice,
+} from '../../Lib';
 
 import { parseDevicesForListView } from '../../Reducers/Devices';
 import { addNewGateway, showToast, getGateways } from '../../Actions';
@@ -585,10 +589,16 @@ class DevicesTab extends View {
 	}
 
 	normalizeNewlyAddedUI = () => {
-		const { route, navigation, currentScreen } = this.props;
+		const {
+			route,
+			navigation,
+			currentScreen,
+			rowsAndSections,
+		} = this.props;
 		const {
 			newDevices,
 		} = route.params || {};
+
 		if (newDevices) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
 			navigation.setParams({
@@ -601,7 +611,27 @@ class DevicesTab extends View {
 				}
 			});
 
-			if (currentScreen === 'Devices') {
+			const { visibleList } = rowsAndSections;
+			let device = null;
+			for (let i = 0; i < visibleList.length; i++) {
+				const list = visibleList[i];
+				for (let j = 0; j < list.data.length; j++) {
+					if (list.data[j].id && parseInt(list.data[j].id, 10) === parseInt(mainNodeId, 10)) {
+						device = list.data[j];
+						break;
+					}
+				}
+				if (device) {
+					break;
+				}
+			}
+
+			if (!device) {
+				device = {};
+			}
+
+			const canAddSchedule = askAddScheduleOnDevice(device.deviceType);
+			if (currentScreen === 'Devices' && canAddSchedule) {
 				navigation.navigate('InfoScreen', {
 					info: 'add_schedule',
 					deviceId: mainNodeId,

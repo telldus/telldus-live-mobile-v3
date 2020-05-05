@@ -764,10 +764,11 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	let { language = {} } = defaultSettings || {};
 	let locale = language.code;
 
-	const {
+	let {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
+		visibilityEula,
 		pushToken,
 		pushTokenRegistered,
 		deviceId = null,
@@ -794,7 +795,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		addNewGatewayBool,
 		gateways: state.gateways,
 
-		showEULA: !getUserProfileSelector(state).eula,
+		showEULA: !getUserProfileSelector(state).eula || visibilityEula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
 

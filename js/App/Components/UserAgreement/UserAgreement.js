@@ -21,7 +21,11 @@
 'use strict';
 
 import React from 'react';
-import { TouchableOpacity, Modal, ScrollView } from 'react-native';
+import {
+	TouchableOpacity,
+	Modal,
+	ScrollView,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { intlShape, injectIntl } from 'react-intl';
@@ -35,15 +39,16 @@ import {
 	StyleSheet,
 	PosterWithText,
 	NavigationHeader,
+	FullPageActivityIndicator,
 } from '../../../BaseComponents';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 import {
 	getEULA,
 	acceptEULA,
+	toggleVisibilityEula,
 } from '../../Actions';
 import shouldUpdate from '../../Lib/shouldUpdate';
-
 const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
@@ -53,11 +58,14 @@ type Props = {
 	appLayout: Object,
 	getEULA: any,
 	acceptEULA: any,
+	visibilityEula: boolean,
+	toggleVisibilityEula: Function,
 };
 
 type State = {
 	eulaContent: string | null,
 	eulaVersion: number | null,
+	isLoading: boolean,
 };
 
 class UserAgreement extends View<Props, State> {
@@ -67,6 +75,7 @@ class UserAgreement extends View<Props, State> {
 	state: State = {
 		eulaContent: null,
 		eulaVersion: null,
+		isLoading: true,
 	};
 
 	constructor(props: Props) {
@@ -101,7 +110,11 @@ class UserAgreement extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(this.props, nextProps, ['showModal', 'appLayout']);
+		const propsChange = shouldUpdate(this.props, nextProps, [
+			'showModal',
+			'appLayout',
+			'visibilityEula',
+		]);
 		if (propsChange) {
 			return true;
 		}
@@ -116,17 +129,20 @@ class UserAgreement extends View<Props, State> {
 				this.setState({
 					eulaContent,
 					eulaVersion,
+					isLoading: false,
 				});
 			} else {
 				this.setState({
 					eulaContent: null,
 					eulaVersion: null,
+					isLoading: false,
 				});
 			}
 		}).catch(() => {
 			this.setState({
 				eulaContent: null,
 				eulaVersion: null,
+				isLoading: false,
 			});
 		});
 	}
@@ -134,14 +150,25 @@ class UserAgreement extends View<Props, State> {
 	onAgree() {
 		let { eulaVersion } = this.state;
 		this.props.acceptEULA(eulaVersion);
+		if (this.props.visibilityEula) {
+			this.props.toggleVisibilityEula(false);
+		}
+	}
+
+	closeEula = () => {
+		this.props.toggleVisibilityEula(false);
 	}
 
 	render(): Object | null {
-		const { showModal, appLayout } = this.props;
-		const { eulaContent } = this.state;
-		if (!eulaContent) {
-			return null;
-		}
+		const {
+			showModal,
+			appLayout,
+			visibilityEula,
+		} = this.props;
+		const {
+			eulaContent,
+			isLoading,
+		} = this.state;
 
 		const styles = this.getStyles(appLayout);
 
@@ -154,13 +181,19 @@ class UserAgreement extends View<Props, State> {
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
 				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
+
 					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
-						<NavigationHeader showLeftIcon={false} topMargin={false} forceHideStatus/>
+						<NavigationHeader
+							showLeftIcon={visibilityEula}
+							leftIcon={visibilityEula ? 'close' : undefined}
+							topMargin={false}
+							forceHideStatus
+							goBack={visibilityEula ? this.closeEula : undefined}/>
 						<ScrollView
 							style={styles.scrollView}
 							contentContainerStyle={styles.SVContentContainerStyle}
 							nestedScrollEnabled={true}>
-							<PosterWithText
+							{!visibilityEula && <PosterWithText
 								appLayout={appLayout}
 								align={'center'}
 								h1={this.header}
@@ -169,20 +202,27 @@ class UserAgreement extends View<Props, State> {
 								h1Style={styles.headerText}
 								posterCoverStyle={styles.posterCover}
 								scrollableH1={false}/>
-							<View style={styles.contentContainerStyle}>
-								<Text/>
-								<Markdown style={styles.markupStyle}>
-									{eulaContent}
-								</Markdown>
-							</View>
+							}
+							{isLoading && !eulaContent ?
+								<FullPageActivityIndicator/>
+								:
+								<View style={styles.contentContainerStyle}>
+									<Text/>
+									{!!eulaContent && <Markdown style={styles.markupStyle}>
+										{eulaContent}
+									</Markdown>
+									}
+								</View>
+							}
 						</ScrollView>
-						<View style={styles.footer}>
+						{!visibilityEula && <View style={styles.footer}>
 							<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
 								<Text style={styles.footerText}>
 									{this.footer}
 								</Text>
 							</TouchableOpacity>
 						</View>
+						}
 					</View>
 				</ViewX>
 			</Modal>
@@ -190,6 +230,9 @@ class UserAgreement extends View<Props, State> {
 	}
 
 	getStyles(appLayout: Object): Object {
+		const {
+			visibilityEula,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -205,7 +248,7 @@ class UserAgreement extends View<Props, State> {
 			},
 			scrollView: {
 				flex: 1,
-				marginBottom: footerHeight,
+				marginBottom: visibilityEula ? 0 : footerHeight,
 			},
 			SVContentContainerStyle: {
 				flexGrow: 1,
@@ -255,19 +298,27 @@ class UserAgreement extends View<Props, State> {
 		};
 	}
 
-	noOP() {
+	noOP = () => {
+		if (this.props.visibilityEula) {
+			this.closeEula();
+		}
 	}
 }
 
 function mapDispatchToProps(dispatch: Function, ownProps: Object): Object {
 	return {
-		...bindActionCreators({ getEULA, acceptEULA }, dispatch),
+		...bindActionCreators({
+			getEULA,
+			acceptEULA,
+			toggleVisibilityEula,
+		}, dispatch),
 	};
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
 	return {
 		appLayout: store.app.layout,
+		visibilityEula: store.user.visibilityEula,
 	};
 }
 

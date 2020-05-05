@@ -46,7 +46,7 @@
     "intl": "~1.2.5",
     "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#multiple-dashboard",
     "lodash": "~4.17.11",
-    "moment": "~2.24.0",
+    "moment": "~2.25.1",
     "moment-timezone": "~0.5.23",
     "node-forge": "~0.9.1",
     "react": "16.11.0",
