@@ -17,9 +17,14 @@
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @flow
+
 import React from 'react';
 import { Image, Dimensions } from 'react-native';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
+
+import EmptyView from '../../BaseComponents/EmptyView';
+import IconTelldus from '../../BaseComponents/IconTelldus';
 
 const icons = {
 	dashboard: {
@@ -44,10 +49,25 @@ const icons = {
 	},
 };
 
-export default function getTabBarIcon(focused, tintColor, sourceName) {
-	const icon = icons[sourceName];
+export default function getTabBarIcon(focused: boolean, tintColor: string, sourceName: string, iconName?: string): Object {
 	let {height, width} = Dimensions.get('window');
 	let isPortrait = height > width;
+
+	if (iconName) {
+		return <IconTelldus
+			style={{
+				color: tintColor,
+				...ifIphoneX({marginTop: isPortrait ? 60 : 5}),
+				fontSize: 30,
+			}}
+			icon={iconName}/>;
+	}
+
+	const icon = icons[sourceName];
+	if (!icon) {
+		return <EmptyView/>;
+	}
+
 	return (
 		<Image
 			source={focused ? icon.active : icon.inactive}

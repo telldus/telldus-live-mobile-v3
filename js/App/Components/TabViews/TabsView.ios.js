@@ -110,17 +110,17 @@ const ScreenConfigs = [
 		},
 	},
 	{
-		name: 'Gateways',
-		Component: TabViews.Gateways,
+		name: 'MoreOptionsTab',
+		Component: TabViews.MoreOptionsTab,
 		options: (): Object => {
 			return {
 				tabBarLabel: ({ color, focused }: Object): Object => (
 					<MainTabBarIOS
-						iconHint={'gateways'}
-						labelIntl={i18n.gateways}
+						iconName={'overflow'}
+						labelIntl={i18n.more}
 						focused={focused}
-						screenName={'Gateways'}
-						tabBarAccesibilityLabelIntl={i18n.gatewaysTab}
+						screenName={'MoreOptionsTab'}
+						tabBarAccesibilityLabelIntl={i18n.more}
 					/>
 				),
 			};

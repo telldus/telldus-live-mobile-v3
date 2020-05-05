@@ -42,6 +42,7 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 		screenName,
 		tabBarAccesibilityLabelIntl,
 		iconHint,
+		iconName,
 	} = props;
 
 	const { colors } = useTheme();
@@ -56,23 +57,26 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 	const {
 		containerStyle,
 		labelStyle,
-	} = getStyles(colors);
+	} = getStyles(colors, {
+		iconName,
+	});
 
 	const tintColor = focused ? colors.activeTintOne : colors.text;
 
 	const accessibilityLabel = `${formatMessage(tabBarAccesibilityLabelIntl)}, ${postScript}`;
 
-	const icon = React.useMemo((): Object => {
-		return getTabBarIcon(focused, tintColor, iconHint);
+	let icon = React.useMemo((): Object => {
+		return getTabBarIcon(focused, tintColor, iconHint, iconName);
 	}, [
 		focused,
 		tintColor,
 		iconHint,
+		iconName,
 	]);
 
 	return (
 		<View style={containerStyle} accessibilityLabel={accessibilityLabel}>
-			{icon}
+			{!!icon && icon}
 			<Text style={[labelStyle, {color: tintColor}]}>
 				{formatMessage(labelIntl)}
 			</Text>
@@ -80,7 +84,9 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-const getStyles = (colors: Object): Object => {
+const getStyles = (colors: Object, {
+	iconName,
+}: Object): Object => {
 	return {
 		containerStyle: {
 			flex: 1,
@@ -89,7 +95,7 @@ const getStyles = (colors: Object): Object => {
 			padding: 2,
 		},
 		labelStyle: {
-			marginTop: 5,
+			marginTop: iconName ? 0 : 5,
 			fontSize: DeviceInfo.isTablet() ? 18 : 12,
 			color: colors.text,
 		},
