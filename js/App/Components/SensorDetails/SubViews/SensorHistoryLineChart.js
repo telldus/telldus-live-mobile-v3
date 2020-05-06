@@ -30,7 +30,11 @@ const isEqual = require('react-fast-compare');
 import maxBy from 'lodash/maxBy';
 import minBy from 'lodash/minBy';
 
-import { View, FullPageActivityIndicator } from '../../../../BaseComponents';
+import {
+	View,
+	FullPageActivityIndicator,
+	SafeAreaView,
+} from '../../../../BaseComponents';
 import ChartLegend from './ChartLegend';
 import LineChartDetailed from './LineChartDetailed';
 import LineChart from './LineChart';
@@ -127,24 +131,20 @@ class SensorHistoryLineChart extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(this.props, nextProps, ['showOne', 'showTwo', 'isChartLoading', 'smoothing', 'graphView', 'liveData']);
+		const propsChange = shouldUpdate(this.props, nextProps, [
+			'showOne',
+			'showTwo',
+			'isChartLoading',
+			'smoothing',
+			'graphView',
+			'liveData',
+			'timestamp',
+			'selectedOne',
+			'selectedTwo',
+			'appLayout']);
+
 		if (propsChange) {
 			return propsChange;
-		}
-
-		const { selectedOne, selectedTwo } = this.props;
-		const isSelectedEqual = isEqual(selectedOne, nextProps.selectedOne) && isEqual(selectedTwo, nextProps.selectedTwo);
-		if (!isSelectedEqual) {
-			return true;
-		}
-		const { timestamp } = this.props;
-		const isTimestampEqual = isEqual(timestamp, nextProps.timestamp);
-		if (!isTimestampEqual) {
-			return true;
-		}
-		const isLayoutEqual = nextProps.appLayout.width === this.props.appLayout.width;
-		if (!isLayoutEqual) {
-			return true;
 		}
 
 		const isDataOneEqual = nextProps.chartDataOne.length === this.props.chartDataOne.length;
@@ -443,6 +443,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 		const { fullscreen, orientation } = this.state;
 		const { show } = fullscreen;
 		const chart = this.renderChart();
+
 		if (!show) {
 			return chart;
 		}
@@ -459,16 +460,18 @@ class SensorHistoryLineChart extends View<Props, State> {
 				animationType={'none'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
-				supportedOrientations={[supportedOrientations]}
+				supportedOrientations={['portrait', supportedOrientations]}
 				hardwareAccelerated={true}
 				onShow={this.onShow}>
-				<View style={{
-					flex: 1,
-					alignItems: 'center',
-					justifyContent: 'center',
-				}}>
-					{chart}
-				</View>
+				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
+					<View style={{
+						flex: 1,
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						{chart}
+					</View>
+				</SafeAreaView>
 			</Modal>
 		);
 	}
