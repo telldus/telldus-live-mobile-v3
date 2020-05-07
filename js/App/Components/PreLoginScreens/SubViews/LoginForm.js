@@ -308,12 +308,13 @@ class LoginForm extends View {
 		const {
 			dispatch,
 			openDialogueBox,
+			intl,
 		} = this.props;
 		dispatch(setSocialAuthConfig({
 			...authConfig,
 			accountLinked: false,
 		}));
-		openDialogueBox('Login or Register ?',
+		openDialogueBox(intl.formatMessage(i18n.noLinkedAccountInfo),
 			{
 				type: 'social_login_fail',
 			});
