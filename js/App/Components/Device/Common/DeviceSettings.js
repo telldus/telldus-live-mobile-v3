@@ -33,6 +33,7 @@ import {
 import {
 	View,
 	Text,
+	EmptyView,
 } from '../../../../BaseComponents';
 import VSetting from './VSetting';
 import USetting from './USetting';
@@ -121,7 +122,11 @@ const DeviceSettings = (props: Props): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
-	const { widgetParams433Device = {}, isScanning = false, paramUpdatedViaScan = false } = addDevice433;
+	const {
+		widgetParams433Device = {},
+		isScanning = false,
+		paramUpdatedViaScan = false,
+	} = addDevice433;
 	const {
 		system = 'null',
 		house = 'null',
@@ -129,6 +134,7 @@ const DeviceSettings = (props: Props): Object => {
 		fade,
 		units = {},
 		code = {},
+		deviceId: deviceIdToWhichSettingsBelong,
 	} = widgetParams433Device;
 
 	const editingDevice = useSelector((state: Object): Object => state.devices.byId[deviceId]);
@@ -165,6 +171,10 @@ const DeviceSettings = (props: Props): Object => {
 		dispatch(toggleStatusUpdatedViaScan433MHZ(false));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	if (deviceId && deviceId !== deviceIdToWhichSettingsBelong) {
+		return <EmptyView/>;
+	}
 
 	const {
 		coverStyleDef,
