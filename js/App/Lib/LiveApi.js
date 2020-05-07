@@ -93,7 +93,9 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			if (axios.isCancel(error)) {// DO not throw axios cancel
 				return error;
 			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
-				return error;
+				return dispatch({
+					type: 'LOCK_SESSION',
+				});
 			}
 
 			throw error;
@@ -113,18 +115,19 @@ async function doApiCall(url: string, requestParams: Object, accessToken: Object
 
 		throw new Error(response.error);
 	} catch (err) {
-		// Ignore axios cancel
 		if (!axios.isCancel(err)) {
 			const { data } = err.response || {};
 
-			if (data && (data.error !== 'invalid_token' && data.error !== 'expired_token')) {
-				// An error from the API we cannot recover from
-				throw err;
-			}
-			let accessTokenRefreshed = await dispatch(refreshAccessToken(url, requestParams, accessToken)); // Token has expired, so we'll try to get a new one.
+			if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
+				let accessTokenRefreshed = await dispatch(refreshAccessToken(url, requestParams, accessToken)); // Token has expired, so we'll try to get a new one.
 
-			return callEndPoint(url, requestParams, accessTokenRefreshed); // retry api call
+				return await callEndPoint(url, requestParams, accessTokenRefreshed); // retry api call
+			}
+
+			// An error from the API we cannot recover from
+			throw err;
 		}
+		throw err;
 	}
 }
 
