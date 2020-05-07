@@ -153,7 +153,7 @@ class LoginScreen extends View {
 			showNegative = true;
 		} else if (extras && extras.type === 'social_login_fail') {
 			positiveText = formatMessage(i18n.signIn).toUpperCase();
-			negativeText = formatMessage(i18n.createNewAccount).toUpperCase();
+			negativeText = formatMessage(i18n.createAccount).toUpperCase();
 			notificationHeader = formatMessage(i18n.noLinkedAccount);
 			onPressPositive = this.loginPostSocialLoginFail;
 			onPressNegative = this.registerPostSocialLoginFail;
