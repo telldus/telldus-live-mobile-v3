@@ -30,6 +30,9 @@ import { utils } from 'live-shared-data';
 const { images: {DEVICES} } = utils;
 
 import { View, LocationDetails } from '../../../../BaseComponents';
+import {
+	SupportedCommandClasses,
+} from '../ZWave';
 
 import {
 	getDeviceManufacturerInfo,
@@ -227,6 +230,8 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
+				<SupportedCommandClasses
+					id={device.id}/>
 			</ScrollView>
 		);
 	}
@@ -243,6 +248,7 @@ class OverviewTab extends View<Props, null> {
 			itemsContainer: {
 				flexGrow: 1,
 				marginTop: padding,
+				paddingBottom: padding * 2,
 			},
 			LocationDetail: {
 				flex: 0,
