@@ -126,6 +126,9 @@ class SettingsTab extends View {
 
 	onConfirmRemoveFailedNode: () => void;
 
+	timeoutConfirmDeviceRemove: any;
+	isMount: boolean;
+
 	constructor(props: Props) {
 		super(props);
 		this.onValueChange = this.onValueChange.bind(this);
@@ -166,6 +169,8 @@ class SettingsTab extends View {
 
 		this.markAsFailedTimeoutOne = null;
 		this.markAsFailedTimeoutTwo = null;
+
+		this.timeoutConfirmDeviceRemove = null;
 
 		this.onConfirmRemoveFailedNode = this.onConfirmRemoveFailedNode.bind(this);
 	}
@@ -211,6 +216,11 @@ class SettingsTab extends View {
 		clearTimeout(this.markAsFailedTimeoutOne);
 		clearTimeout(this.markAsFailedTimeoutTwo);
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+		if (this.timeoutConfirmDeviceRemove) {
+			clearTimeout(this.timeoutConfirmDeviceRemove);
+			this.timeoutConfirmDeviceRemove = null;
+		}
+		this.isMount = false;
 	}
 
 	get433MHzDeviceSettings(): Object {
@@ -395,6 +405,48 @@ class SettingsTab extends View {
 						this.goBack();
 					});
 				}
+			} else if (res.status && res.status === 'pending') {
+				this.timeoutConfirmDeviceRemove = setTimeout(async () => {
+					try {
+
+						if (!this.isMount) {
+							return;
+						}
+
+						const response = await dispatch(getDevices()) || {};
+
+						if (!this.isMount) {
+							return;
+						}
+
+						if (!response || !response.device) {
+							this.onErrorDelete433();
+						}
+
+						let isRemoved = true;
+						for (let i = 0; i < response.device.length; i++) {
+							if (response.device[i].id && parseInt(response.device[i].id, 10) === device.id) {
+								isRemoved = false;
+								break;
+							}
+						}
+
+						if (isRemoved && this.isMount) {
+							this.setState({
+								isDeleting433MHz: false,
+							}, () => {
+								this.goBack();
+							});
+						} else if (this.isMount) {
+							this.onErrorDelete433();
+						}
+
+					} catch (err) {
+						if (this.isMount) {
+							this.onErrorDelete433();
+						}
+					}
+				}, 1000);
 			} else {
 				this.onErrorDelete433();
 			}
@@ -633,6 +685,7 @@ class SettingsTab extends View {
 
 	componentDidMount() {
 		BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+		this.isMount = true;
 	}
 
 	handleBackPress = (): boolean => {

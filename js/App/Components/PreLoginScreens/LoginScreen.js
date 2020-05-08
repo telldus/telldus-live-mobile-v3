@@ -126,7 +126,14 @@ class LoginScreen extends View {
 	}
 
 	getRelativeData(extras?: Object): Object {
-		let headerText = this.props.intl.formatMessage(i18n.login),
+		const {
+			intl,
+		} = this.props;
+		const {
+			formatMessage,
+		} = intl;
+
+		let headerText = formatMessage(i18n.login),
 			notificationHeader = false,
 			positiveText = false,
 			onPressPositive = this.closeModal,
@@ -140,16 +147,16 @@ class LoginScreen extends View {
 			closeOnPressNegative,
 			closeOnPressPositive;
 		if (this.props.accessToken && !this.props.isTokenValid) {
-			headerText = this.props.intl.formatMessage(i18n.headerSessionLocked);
-			positiveText = this.props.intl.formatMessage(i18n.logout).toUpperCase();
-			notificationHeader = `${this.props.intl.formatMessage(i18n.logout)}?`;
+			headerText = formatMessage(i18n.headerSessionLocked);
+			positiveText = formatMessage(i18n.logout).toUpperCase();
+			notificationHeader = `${formatMessage(i18n.logout)}?`;
 			onPressPositive = this.onPressPositive;
 			onPressNegative = this.closeModal;
 			showNegative = true;
 		} else if (extras && extras.type === 'social_login_fail') {
-			positiveText = 'Login'.toUpperCase();
-			negativeText = 'Register'.toUpperCase();
-			notificationHeader = 'Login or Register ?';
+			positiveText = formatMessage(i18n.signIn).toUpperCase();
+			negativeText = formatMessage(i18n.createAccount).toUpperCase();
+			notificationHeader = formatMessage(i18n.noLinkedAccount);
 			onPressPositive = this.loginPostSocialLoginFail;
 			onPressNegative = this.registerPostSocialLoginFail;
 			showNegative = true;

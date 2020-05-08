@@ -254,7 +254,7 @@ render(): Object {
 			textStyle={infoTextStyle}/>;
 	}
 
-	const errorInfo = message && (status === 'socket-failed' || status === 'socket-retry');
+	const errorInfo = message && (status === 'socket-failed' || status === 'socket-retry' || status === 'idle');
 
 	const {
 		deviceInfo = {},

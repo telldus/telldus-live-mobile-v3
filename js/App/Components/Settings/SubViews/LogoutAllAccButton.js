@@ -50,7 +50,7 @@ const LogoutAllAccButton = React.memo<Object>((props: Object): Object => {
 	const [ loadingAndPushRegStatus, setLoadingAndPushRegStatus ] = useState({loading: false, pushRegStatus: true});
 	function onConfirmLogout() {
 		setLoadingAndPushRegStatus({loading: true, pushRegStatus: true});
-		dispatch(unregisterPushToken(pushToken)).then(() => {
+		dispatch(unregisterPushToken(pushToken, true)).then(() => {
 			setLoadingAndPushRegStatus({loading: false, pushRegStatus: false});
 		}).catch(() => {
 			setLoadingAndPushRegStatus({loading: false, pushRegStatus: false});

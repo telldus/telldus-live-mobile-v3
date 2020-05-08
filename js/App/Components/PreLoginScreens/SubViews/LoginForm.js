@@ -64,6 +64,7 @@ type Props = {
 	dialogueOpen: Object,
 	styles: Object,
 	headerText: string,
+	socialAuthConfig: Object,
 
 	onLoginSuccess?: () => void,
 	openDialogueBox: (string, ?Object) => void,
@@ -199,11 +200,22 @@ class LoginForm extends View {
 			isAppleSigningInProgress,
 		} = this.state;
 
-		let { dialogueOpen, styles, headerText } = this.props;
+		let {
+			dialogueOpen,
+			styles,
+			headerText,
+			socialAuthConfig,
+		} = this.props;
 		let buttonAccessible = !isLoading && !dialogueOpen;
 		let importantForAccessibility = dialogueOpen ? 'no-hide-descendants' : 'yes';
 
 		const disableAllSignin = isLoading || isSigninInProgress || isAppleSigningInProgress;
+
+		const {
+			accountLinked = true,
+		} = socialAuthConfig;
+
+		const showSocialAuth = accountLinked;
 
 		return (
 			<View
@@ -270,7 +282,7 @@ class LoginForm extends View {
 					disabled={disableAllSignin}
 				/>
 				<View style={{ height: 10 }}/>
-				{(Platform.OS === 'ios' && appleAuth.isSupported) &&
+				{(Platform.OS === 'ios' && appleAuth.isSupported && showSocialAuth) &&
 				(
 					<AppleButton
 						buttonStyle={AppleButton.Style.WHITE}
@@ -280,7 +292,7 @@ class LoginForm extends View {
 					/>
 				)
 				}
-				{deployStore !== 'huawei' && (<GoogleSigninButton
+				{deployStore !== 'huawei' && showSocialAuth && (<GoogleSigninButton
 					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}
 					color={GoogleSigninButton.Color.Dark}
@@ -309,12 +321,13 @@ class LoginForm extends View {
 		const {
 			dispatch,
 			openDialogueBox,
+			intl,
 		} = this.props;
 		dispatch(setSocialAuthConfig({
 			...authConfig,
 			accountLinked: false,
 		}));
-		openDialogueBox('Login or Register ?',
+		openDialogueBox(intl.formatMessage(i18n.noLinkedAccountInfo),
 			{
 				type: 'social_login_fail',
 			});
@@ -463,6 +476,7 @@ class LoginForm extends View {
 function mapStateToProps(store: Object): Object {
 	return {
 		accessToken: store.user.accessToken,
+		socialAuthConfig: store.user.socialAuthConfig || {},
 	};
 }
 
