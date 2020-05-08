@@ -441,7 +441,7 @@ class SettingsTab extends View {
 
 						let isRemoved = true;
 						for (let i = 0; i < response.device.length; i++) {
-							if (response.device[i].id === device.id) {
+							if (response.device[i].id && parseInt(response.device[i].id, 10) === device.id) {
 								isRemoved = false;
 								break;
 							}
