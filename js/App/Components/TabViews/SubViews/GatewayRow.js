@@ -25,7 +25,12 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
-import { View, Image, LocationDetails } from '../../../../BaseComponents';
+import {
+	View,
+	Image,
+	LocationDetails,
+	IconTelldus,
+} from '../../../../BaseComponents';
 
 import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
@@ -43,6 +48,7 @@ type Props = {
 	navigation: Object,
 	onPress: (Object) => void,
 	dispatch: Function,
+	disabled?: boolean,
 };
 
 type State = {
@@ -61,7 +67,10 @@ class GatewayRow extends PureComponent<Props, State> {
 	}
 
 	onPressGateway() {
-		let { location, onPress } = this.props;
+		let { location, onPress, disabled = false } = this.props;
+		if (disabled) {
+			return;
+		}
 		if (onPress) {
 			onPress(location);
 		} else {
@@ -91,6 +100,7 @@ class GatewayRow extends PureComponent<Props, State> {
 			appLayout,
 			intl,
 			screenReaderEnabled,
+			disabled,
 		} = this.props;
 		let { name, type, online, websocketOnline, localKey = {} } = location;
 
@@ -136,22 +146,40 @@ class GatewayRow extends PureComponent<Props, State> {
 				accessibilityLabel={accessibilityLabel}>
 				<LocationDetails {...locationData}
 					style={styles.locationDetails}
-					onPress={this.onPressGateway}/>
+					h1Style={styles.h1Style}
+					h2Style={styles.h2Style}
+					onPress={disabled ? undefined : this.onPressGateway}/>
 				<View style={styles.arrowCover} pointerEvents={'none'}>
-					<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
+					{
+						disabled ?
+							<IconTelldus icon={'notavailable'} style={styles.notAvailableIcon}/>
+							:
+							<Image source={{uri: 'right_arrow_key'}} style={styles.arrow}/>
+					}
 				</View>
 			</View>
 		);
 	}
 
 	getStyles(appLayout: Object): Object {
+		const {
+			disabled = false,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const padding = deviceWidth * Theme.Core.paddingFactor;
+		const {
+			paddingFactor,
+			brandSecondary,
+		} = Theme.Core;
+
+		const padding = deviceWidth * paddingFactor;
 		const rowWidth = width - (padding * 2);
 		const rowHeight = deviceWidth * 0.34;
+
+		const colorBackground = disabled ? '#f5f5f5' : '#fff';
+		const colorHeaderOneText = disabled ? '#999999' : brandSecondary;
 
 		return {
 			rowItemsCover: {
@@ -162,6 +190,7 @@ class GatewayRow extends PureComponent<Props, State> {
 				width: rowWidth,
 				height: rowHeight,
 				marginVertical: padding / 4,
+				backgroundColor: colorBackground,
 			},
 			arrowCover: {
 				flex: 0,
@@ -177,6 +206,16 @@ class GatewayRow extends PureComponent<Props, State> {
 			},
 			coverStyle: {
 				paddingVertical: 5,
+			},
+			h1Style: {
+				color: colorHeaderOneText,
+			},
+			h2Style: {
+				color: colorHeaderOneText,
+			},
+			notAvailableIcon: {
+				fontSize: rowHeight * 0.25,
+				color: '#bdbdbd',
 			},
 		};
 	}
