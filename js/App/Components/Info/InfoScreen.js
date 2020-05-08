@@ -122,7 +122,7 @@ addNewDevice = () => {
 	const client = gateways[clientId];
 
 	if (gatewaysLen > 0) {
-		const singleGateway = gatewaysLen === 1;
+		const singleGateway = gatewaysLen === 1 || !!client;
 		const gateway = singleGateway ? {
 			...gateways[Object.keys(gateways)[0]],
 		} : client ? {
