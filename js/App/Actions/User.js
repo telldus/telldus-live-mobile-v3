@@ -107,7 +107,7 @@ const registerPushToken = (token: string, name: string, model: string, manufactu
 /*
  * unregisters the app at the telldus server from receiving push notification, with the registered push token.
  */
-const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function): Promise<any> => {
+const unregisterPushToken = (token: string, cancelAllPending?: boolean = false): ThunkAction => (dispatch: Function): Promise<any> => {
 	const url = format({
 		pathname: '/user/unregisterPushToken',
 		query: {
@@ -119,6 +119,7 @@ const unregisterPushToken = (token: string): ThunkAction => (dispatch: Function)
 		requestParams: {
 			method: 'GET',
 		},
+		cancelAllPending,
 	};
 	return dispatch(LiveApi(payload)).then((response: Object): any => {
 		if ((!response.error) && (response.status === 'success')) {
@@ -425,7 +426,7 @@ function reportIapAtServer(purchaseInfoIap: Object, otherInfo?: Object = {}): Th
 const logoutAfterUnregister = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const { user: { pushToken } } = getState();
-		dispatch(unregisterPushToken(pushToken));
+		dispatch(unregisterPushToken(pushToken, true));
 		return dispatch(logoutFromTelldus());
 	};
 };
