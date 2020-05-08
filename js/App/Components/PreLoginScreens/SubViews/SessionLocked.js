@@ -203,7 +203,7 @@ function mapStateToProps(store: Object): Object {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		logoutFromTelldus: (pushToken: string): Promise<any> => {
-			return dispatch(unregisterPushToken(pushToken)).then((res: Object): Promise<any> => {
+			return dispatch(unregisterPushToken(pushToken, true)).then((res: Object): Promise<any> => {
 				return dispatch(logoutFromTelldus());
 			}).catch((): Promise<any> => {
 				return dispatch(logoutFromTelldus());
