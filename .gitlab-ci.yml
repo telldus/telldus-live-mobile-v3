@@ -114,7 +114,7 @@ huawei_app_gallery:
     url: https://huaweimobileservices.com/appgallery/
   only:
     - tags
-    script:
+  script:
     - apt-get update && apt-get install -y locales >/dev/null
     - echo "en_US UTF-8" > /etc/locale.gen
     - locale-gen en_US.UTF-8
