@@ -105,7 +105,6 @@ google_play:
 huawei_app_gallery:
   image: ruby:2
   stage: release
-  when: manual
   tags:
     - docker
   dependencies:
@@ -113,7 +112,9 @@ huawei_app_gallery:
   environment:
     name: huawei_app_gallery
     url: https://huaweimobileservices.com/appgallery/
-  script:
+  only:
+    - tags
+    script:
     - apt-get update && apt-get install -y locales >/dev/null
     - echo "en_US UTF-8" > /etc/locale.gen
     - locale-gen en_US.UTF-8
