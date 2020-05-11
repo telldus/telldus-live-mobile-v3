@@ -357,9 +357,16 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		appLayout,
 	};
 
+	const {
+		style,
+		contentContainerStyle,
+	} = getStyles(appLayout);
+
 	return (
 		<View style={{flex: 1}}>
 			<SectionList
+				style={style}
+				contentContainerStyle={contentContainerStyle}
 				sections={listData}
 				renderItem={renderRow}
 				renderSectionHeader={renderSectionHeader}
@@ -383,5 +390,28 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		</View>
 	);
 });
+
+const getStyles = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	return {
+		style: {
+			flex: 1,
+		},
+		contentContainerStyle: {
+			flexGrow: 1,
+			paddingBottom: padding * 6,
+		},
+	};
+};
+
 
 export default Actions;
