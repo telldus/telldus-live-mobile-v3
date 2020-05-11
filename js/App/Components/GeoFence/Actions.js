@@ -175,17 +175,17 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	}
 
 	function toggleShowDevices(collapsed: boolean) {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowDevices(collapsed);
 	}
 
 	function toggleShowEvents(collapsed: boolean) {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowEvents(collapsed);
 	}
 
 	function toggleShowJobs(collapsed: boolean) {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowJobs(collapsed);
 	}
 
