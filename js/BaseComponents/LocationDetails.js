@@ -47,6 +47,8 @@ type Props = {
 	fromJS?: boolean,
 	info2?: Object,
 	resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center',
+	h1Style: Object,
+	h2Style: Object,
 };
 
 type DefaultProps = {
@@ -129,6 +131,8 @@ class LocationDetails extends Component<Props, State> {
 			info2,
 			fromJS,
 			resizeMode,
+			h1Style,
+			h2Style,
 		} = this.props;
 
 		const {
@@ -173,10 +177,10 @@ class LocationDetails extends Component<Props, State> {
 						}
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
-						<Text numberOfLines={1} style={textHSH}>
+						<Text numberOfLines={1} style={[textHSH, h1Style]}>
 							{!!H1 && H1}
 						</Text>
-						<Text numberOfLines={1} style={textLocation}>
+						<Text numberOfLines={1} style={[textLocation, h2Style]}>
 							{!!H2 && H2}
 						</Text>
 						{!!info && (
@@ -234,7 +238,7 @@ class LocationDetails extends Component<Props, State> {
 				fontSize: textLocationSize,
 			},
 			textHSH: {
-				color: '#F06F0C',
+				color: Theme.Core.brandSecondary,
 				fontSize: textHSHSize,
 			},
 			locationIcon: {

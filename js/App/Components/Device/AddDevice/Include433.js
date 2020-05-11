@@ -76,6 +76,8 @@ class Include433 extends View<Props, State> {
 props: Props;
 state: State;
 
+timeoutAddDeviceFailed: any;
+
 constructor(props: Props) {
 	super(props);
 
@@ -102,15 +104,35 @@ constructor(props: Props) {
 		...deviceInfo,
 		deviceName,
 	}, intl.formatMessage);
+
+	this.timeoutAddDeviceFailed = null;
 }
 
 componentDidMount() {
 	const {
 		onDidMount,
 		intl,
+		actions,
 	} = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
+
+	this.timeoutAddDeviceFailed = setTimeout(() => {
+		const {
+			addDevice,
+		} = this.props;
+		const { addDevice433 = {}} = addDevice;
+		const {
+			deviceId,
+			isLoading,
+		} = addDevice433;
+		if (isLoading && !deviceId) {
+			actions.addDevice433Failed(formatMessage(i18n.messageAdd433Failed));
+			if (this.deleteSocketAndTimer) {
+				this.deleteSocketAndTimer();
+			}
+		}
+	}, 15000);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -161,11 +183,32 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			this.onNext(false);
 		}
 	}
+
+	if (deviceId) {
+		this.clearTimeoutAddDeviceFailed();
+	}
+	const {
+		addDevice: { addDevice433: prevAddDevice433 = {}},
+	} = prevProps;
+	const {
+		isLoading: prevIsLoading,
+	} = prevAddDevice433;
+	if (prevIsLoading && !isLoading) {
+		this.clearTimeoutAddDeviceFailed();
+	}
 }
 
 componentWillUnmount() {
 	if (this.deleteSocketAndTimer) {
 		this.deleteSocketAndTimer();
+	}
+	this.clearTimeoutAddDeviceFailed();
+}
+
+clearTimeoutAddDeviceFailed = () => {
+	if (this.timeoutAddDeviceFailed) {
+		clearTimeout(this.timeoutAddDeviceFailed);
+		this.timeoutAddDeviceFailed = null;
 	}
 }
 
