@@ -64,7 +64,7 @@ huawei:
 ios:
   stage: build
   tags:
-    - osx
+    - macos
     - xcode-11.2
   cache:
     paths:
@@ -126,7 +126,7 @@ huawei_app_gallery:
 testflight:
   stage: release
   tags:
-    - osx
+    - macos
   dependencies:
     - ios
   environment:
