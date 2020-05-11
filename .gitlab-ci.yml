@@ -109,7 +109,7 @@ huawei_app_gallery:
   tags:
     - docker
   dependencies:
-    - android
+    - huawei
   environment:
     name: huawei_app_gallery
     url: https://huaweimobileservices.com/appgallery/
