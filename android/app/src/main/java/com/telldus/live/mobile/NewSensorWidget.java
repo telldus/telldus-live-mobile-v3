@@ -191,7 +191,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         String formattedDate = dMWY.format(date);
         String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
 
-        String formattedDT = formattedDate + " " + formattedTime;
+        String formattedDT = isNearly1By1 ? formattedTime : formattedDate + " " + formattedTime;
 
         transparent = transparent == null ? "" : transparent;
         int color = ContextCompat.getColor(context, R.color.white);
