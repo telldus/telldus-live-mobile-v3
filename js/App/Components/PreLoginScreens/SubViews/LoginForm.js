@@ -34,6 +34,7 @@ import appleAuth, {
 	AppleAuthCredentialState,
 	AppleAuthError,
 } from '@invertase/react-native-apple-authentication';
+const jwtDecode = require('jwt-decode');
 
 import {
 	TouchableButton,
@@ -165,13 +166,13 @@ class LoginForm extends View {
 									fn: fullName.givenName,
 									ln: fullName.familyName || fullName.middleName,
 								};
-								let _email = email ? email : '';
-								_email = _email.includes('@privaterelay.appleid.com') ? '' : _email;
+								const tokenJSON = jwtDecode(identityToken) || {};
+								const isPvtEmail = Boolean(tokenJSON.is_private_email);
 								this.onSocialLoginFail404({
 									idToken: identityToken,
 									provider,
 									fullName: _fullName,
-									email: _email,
+									email: isPvtEmail ? '' : email,
 								});
 								return;
 							}
