@@ -39,6 +39,10 @@ import android.util.TypedValue;
 import java.util.HashMap;
 
 public class CommonUtilities  {
+
+    final static Double BASE_FONT_SIZE_FACTOR = 0.12;
+    final static Double BASE_ICON_SIZE_FACTOR = 0.7;
+
     public static Bitmap buildTelldusIcon(String icon, int color, int width, int height, int fontSize, Context context) {
         Bitmap myBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         Canvas myCanvas = new Canvas(myBitmap);
@@ -140,24 +144,34 @@ public class CommonUtilities  {
         int width = Integer.parseInt(dimensions.get("width").toString());
         int height = Integer.parseInt(dimensions.get("height").toString());
         int attribute = height < width ? height : width;
-        return attribute;
+        return width;
     }
 
     public static int getBaseFontSize(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         int attribute = getAttributeForStyling(context, appWidgetManager, appWidgetId);
-        return (int) (attribute * 0.32);
+        return (int) (attribute * BASE_FONT_SIZE_FACTOR);
     }
 
     public static int getBaseIconWidth(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         float density = context.getResources().getDisplayMetrics().density;
         int attribute = getAttributeForStyling(context, appWidgetManager, appWidgetId);
-        return (int) (attribute * 2);
+        return (int) (attribute * BASE_ICON_SIZE_FACTOR);
     }
 
     public static boolean isNearly1By1(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         HashMap dimensions = getWidgetDimensions(appWidgetManager, appWidgetId);
         Double width = Double.parseDouble(dimensions.get("width").toString());
         Double height = Double.parseDouble(dimensions.get("height").toString());
+
+        int minWidth = 50;
+        Double ratioW = width / minWidth;
+        Double ratioH = height / minWidth;
+
+        Boolean flagOne = (ratioW <= 1.5 && ratioW >= 0.5) && (ratioH <= 1.5 && ratioH >= 0.5);
+
+        if (!flagOne) {
+            return flagOne;
+        }
 
         Double max = Math.max(width, height);
         Double min = Math.min(width, height);

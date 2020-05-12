@@ -110,6 +110,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
         int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
+        fontSize = isNearly1By1 ? (int) (fontSize * 1.8) : fontSize;
         int fontSizeOne = (int) (fontSize * 1.2);
         int fontSizeTwo = (int) (fontSize * 0.88);
         int fontSizeFour = (int) (fontSize * 0.9);
