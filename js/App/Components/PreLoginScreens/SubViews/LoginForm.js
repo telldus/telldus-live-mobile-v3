@@ -165,11 +165,13 @@ class LoginForm extends View {
 									fn: fullName.givenName,
 									ln: fullName.familyName || fullName.middleName,
 								};
+								let _email = email ? email : '';
+								_email = _email.includes('@privaterelay.appleid.com') ? '' : _email;
 								this.onSocialLoginFail404({
 									idToken: identityToken,
 									provider,
 									fullName: _fullName,
-									email,
+									email: _email,
 								});
 								return;
 							}
