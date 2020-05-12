@@ -153,4 +153,17 @@ public class CommonUtilities  {
         int attribute = getAttributeForStyling(context, appWidgetManager, appWidgetId);
         return (int) (attribute * 2);
     }
+
+    public static boolean isNearly1By1(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+        HashMap dimensions = getWidgetDimensions(appWidgetManager, appWidgetId);
+        Double width = Double.parseDouble(dimensions.get("width").toString());
+        Double height = Double.parseDouble(dimensions.get("height").toString());
+
+        Double max = Math.max(width, height);
+        Double min = Math.min(width, height);
+
+        Double ratio = max / min;
+
+        return ratio <= 1.5 && ratio >= 0.5;
+    }
 }
