@@ -106,6 +106,8 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        Boolean isNearly1By1 = CommonUtilities.isNearly1By1(context, appWidgetManager, appWidgetId);
+
         int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
         int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
         int fontSizeOne = (int) (fontSize * 1.2);
@@ -251,13 +253,19 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
 
-        view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
-                sensorIcon,
-                color,
-                (int) (iconWidth * 0.8),
-                (int) (iconWidth * 0.8),
-                (int) (iconWidth * 0.8),
-                context));
+        if (isNearly1By1) {
+            view.setViewVisibility(R.id.iconSensor, View.GONE);
+        } else {
+            view.setViewVisibility(R.id.iconSensor, View.VISIBLE);
+            view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
+                    sensorIcon,
+                    color,
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
+                    context));
+        }
+
         view.setTextColor(R.id.txtSensorType, colorTitle);
         view.setTextColor(R.id.txtHistoryInfo, color);
         view.setTextColor(R.id.txtSensorValue, color);
