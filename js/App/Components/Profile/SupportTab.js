@@ -105,7 +105,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 		const { consumer_key, consumer_secret } = twitterAuth; // TODO: RFC 1738 encode both key and secret(right now with/without it is same)
 		const keySecret = forge.util.encode64(`${consumer_key}:${consumer_secret}`);
 		dispatch(getSupportTweets(keySecret, 10)).then((response: Object) => {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			setListInfo({
 				listData: prepareTweetsForList(response),
 				isLoading: false,

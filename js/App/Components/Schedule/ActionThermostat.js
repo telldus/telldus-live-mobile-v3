@@ -222,7 +222,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			...methodValue,
 			...newMethodValue,
 		};
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			methodValue: methodValueN,
 		});

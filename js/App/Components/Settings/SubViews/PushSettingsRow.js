@@ -124,7 +124,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onPressEditName() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		editNameAcive: true,
 	});
@@ -132,7 +132,7 @@ onPressEditName() {
 
 onSubmitEditing() {
 	const { onSubmitDeviceName, name: prevName = '' } = this.props;
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		editNameAcive: false,
 	});
@@ -177,7 +177,7 @@ onConfirmDeleteToken() {
 			isDeleteTokenLoading: false,
 		});
 		actions.getPhonesList().then(() => {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		});
 	}).catch(() => {
 		this.setState({
@@ -197,7 +197,7 @@ onSubmitDeviceName(name: string) {
 			this.setState({
 				isPushSubmitLoading: false,
 			});
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		}).catch(() => {
 			this.setState({
 				isPushSubmitLoading: false,

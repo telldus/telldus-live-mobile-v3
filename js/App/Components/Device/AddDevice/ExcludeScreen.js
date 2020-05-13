@@ -100,7 +100,7 @@ onPressExit() {
 }
 
 onExcludeSuccessImmediate() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		excludeSuccess: true,
 	});

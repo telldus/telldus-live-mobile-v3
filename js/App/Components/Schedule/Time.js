@@ -121,7 +121,7 @@ export default class Time extends View<null, Props, State> {
 
 	toggleEdit(type: string) {
 		const { offsetEdit, intervalEdit } = this.state;
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		if (type === 'OFFSET') {
 			this.setState({
 				offsetEdit: !offsetEdit,

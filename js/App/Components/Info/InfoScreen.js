@@ -284,7 +284,8 @@ render(): Object | null {
 					showLeftIcon={true}
 					showBackButton={true}
 					leftIcon={'close'}
-					scrollableH1={true}/>
+					scrollableH1={true}
+					navigation={navigation}/>
 				<View style={styles.contentContainerStyle}>
 					<IconTelldus
 						icon={icon}

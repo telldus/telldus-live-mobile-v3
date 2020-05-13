@@ -224,7 +224,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	toggleAttentionCapture = (value: boolean) => {
 		if (!this.state.addNewDevicePressed) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(500));
 		}
 		this.setState({
 			showAttentionCaptureAddDevice: value,

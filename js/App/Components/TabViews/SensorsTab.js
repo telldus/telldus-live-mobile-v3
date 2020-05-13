@@ -209,7 +209,6 @@ class SensorsTab extends View {
 		const { hiddenList, visibleList } = rowsAndSections;
 
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
-
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
 		}, () => {
@@ -533,7 +532,7 @@ class SensorsTab extends View {
 			newSensors,
 		} = route.params || {};
 		if (newSensors) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			navigation.setParams({
 				newSensors: undefined,
 			});

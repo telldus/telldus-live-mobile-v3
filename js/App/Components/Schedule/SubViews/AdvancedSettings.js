@@ -146,7 +146,7 @@ onPressRepeatsInfo() {
 }
 
 animate() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 }
 
 onPressRetriesEdit() {

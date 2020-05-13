@@ -600,7 +600,7 @@ class DevicesTab extends View {
 		} = route.params || {};
 
 		if (newDevices) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			navigation.setParams({
 				newDevices: undefined,
 			});

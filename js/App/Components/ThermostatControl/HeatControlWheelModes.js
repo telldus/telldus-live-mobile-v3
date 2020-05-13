@@ -378,7 +378,7 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 			callback();
 		}
 	});
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 }
 
 onEndSlide = () => {
