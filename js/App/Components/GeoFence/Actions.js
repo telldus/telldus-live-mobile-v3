@@ -195,19 +195,25 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			if (selectedDevices[id]) {
 				delete newSelected.selectedDevices[id];
 			} else {
-				newSelected.selectedDevices[id] = data;
+				newSelected.selectedDevices[id] = {
+					...data,
+				};
 			}
 		} else if (type === 'schedule') {
 			if (selectedSchedules[id]) {
 				delete newSelected.selectedSchedules[id];
 			} else {
-				newSelected.selectedSchedules[id] = data;
+				newSelected.selectedSchedules[id] = {
+					...data,
+				};
 			}
 		} else if (type === 'event') {
 			if (selectedEvents[id]) {
 				delete newSelected.selectedEvents[id];
 			} else {
-				newSelected.selectedEvents[id] = data;
+				newSelected.selectedEvents[id] = {
+					...data,
+				};
 			}
 		}
 		setSelectedItems(newSelected);

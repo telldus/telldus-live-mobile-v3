@@ -49,11 +49,17 @@ import {
 
 import {
 	setFenceActiveTime,
-	deleteFence,
-	updateFence,
 	setFenceArea,
 	setFenceTitle,
 } from '../../Actions/Fences';
+import {
+	removeGeofence,
+	addGeofence,
+} from '../../Actions/GeoFence';
+
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
@@ -80,6 +86,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		longitude,
 		radius,
 		title,
+		identifier,
 	} = fence;
 
 	const intl = useIntl();
@@ -143,6 +150,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const { userId } = useSelector((state: Object): Object => state.user);
 
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	function onSave() {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		const {
@@ -156,12 +167,21 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			userId,
 		));
 		dispatch(setFenceTitle(areaName));
-		dispatch(updateFence());
-		navigation.goBack();
+		dispatch(addGeofence(true)).then(() => {
+			navigation.goBack();
+		}).catch((err: Object = {}) => {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: 'Could not save fence. Please try again later.', // TODO: Translate
+				showPositive: true,
+			});
+		});
 	}
 
 	function onDelete() {
-		dispatch(deleteFence());
+		dispatch(removeGeofence(identifier));
 		navigation.goBack();
 	}
 

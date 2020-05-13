@@ -97,18 +97,13 @@ const setCurrentLocation = (state: Object, action: Object): Object => ({
 
 const setEditFence = (state: Object, action: Object): Object => {
 	const {
-		index: editIndex,
 		userId,
 	} = action.payload;
 
-	const userFences = state.fences[userId] || {};
-	const fence = userFences[editIndex];
-
 	return {
 		...state,
-		editIndex,
+		fence: action.payload,
 		userId,
-		fence,
 	};
 };
 

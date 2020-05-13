@@ -23,6 +23,7 @@
 
 import React, {
 	useState,
+	useEffect,
 } from 'react';
 import {
 	StyleSheet,
@@ -48,6 +49,9 @@ import {
 	setEditFence,
 	resetFence,
 } from '../../Actions/Fences';
+import {
+	getCurrentAccountsFences,
+} from '../../Actions/GeoFence';
 
 import Theme from '../../Theme';
 
@@ -65,9 +69,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
-	const { userId } = useSelector((state: Object): Object => state.user);
-	let { fences = {}, location } = useSelector((state: Object): Object => state.fences);
-	const currentAccFences = fences[userId] || [];
+	let { location } = useSelector((state: Object): Object => state.fences);
 	location = location ? location : {};
 
 	function onPressNext() {
@@ -76,6 +78,15 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	}
 
 	const [ activeFenceIndex, setActiveFenceIndex ] = useState(0);
+	const [ currentAccFences, setCurrentAccFences ] = useState([]);
+
+	useEffect(() => {
+		(async () => {
+			const geofences = await dispatch(getCurrentAccountsFences());
+			setCurrentAccFences(geofences);
+		})();// TODO : Do render after deleting(now the fences are not in redux)
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const {
 		container,
@@ -96,8 +107,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		longitudeDelta,
 	});
 
-	function onEditFence(index: number) {
-		dispatch(setEditFence(index, userId));
+	function onEditFence(fence: Object) {
+		dispatch(setEditFence(fence));
 		setActiveFenceIndex(0);
 		navigation.navigate('EditGeoFence');
 	}
@@ -107,18 +118,27 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 			return;
 		}
 
+		const {
+			extras = {},
+			...others
+		} = fence;
+
 		function onEditFenceInner() {
-			onEditFence(index);
+			const _fence = {
+				...extras,
+				...others,
+			};
+			onEditFence(_fence);
 		}
 
 		return (
 			<MapView.Marker
 				key={`${index}`}
 				image={{uri: 'marker'}}
-				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}>
+				coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
 				<MapView.Callout onPress={onEditFenceInner}>
 					<FenceCallout
-						title={fence.title}/>
+						title={extras.title}/>
 				</MapView.Callout>
 			</MapView.Marker>
 		);

@@ -60,7 +60,7 @@ import {
 	getUserSubscriptions,
 	campaignVisited,
 	toggleVisibilityProExpireHeadsup,
-	checkPermissionAndInitializeWatcher,
+	setupGeoFence,
 	fetchRemoteConfig,
 	prepareGAPremiumProperties,
 	updateAllAccountsInfo,
@@ -218,9 +218,9 @@ actionsToPerformOnStart = async () => {
 		showLoadingIndicator,
 	} = this.props;
 
-	// NOTE : Make sure "fetchRemoteConfig" is called before 'checkPermissionAndInitializeWatcher'.
+	// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
 	await dispatch(fetchRemoteConfig());
-	dispatch(checkPermissionAndInitializeWatcher());
+	dispatch(setupGeoFence());
 
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,

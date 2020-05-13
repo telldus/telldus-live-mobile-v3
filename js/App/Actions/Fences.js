@@ -67,12 +67,9 @@ export const setCurrentLocation = (location: Object): Object => ({
 	payload: location,
 });
 
-export const setEditFence = (index: number, userId: string): Object => ({
+export const setEditFence = (fence: Object): Object => ({
 	type: 'SET_EDIT_FENCE',
-	payload: {
-		index,
-		userId,
-	},
+	payload: fence,
 });
 
 export const deleteFence = (): Object => ({

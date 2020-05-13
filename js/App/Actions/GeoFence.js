@@ -21,13 +21,8 @@
 // @flow
 
 'use strict';
-
-import {
-	Platform,
-	PermissionsAndroid,
-} from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
 const colorsys = require('colorsys');
+import BackgroundGeolocation from 'react-native-background-geolocation';
 
 import {
 	deviceSetState,
@@ -49,41 +44,10 @@ import {
 } from './Fences';
 import GeoFenceUtils from '../Lib/GeoFenceUtils';
 
-const hasLocationPermission = async (): Promise<boolean> => {
-	if (Platform.OS === 'ios' ||
-        (Platform.OS === 'android' && Platform.Version < 23)) {
-		if (Platform.OS === 'ios') {
-			Geolocation.setRNConfiguration({ authorizationLevel: 'always' });
-			Geolocation.requestAuthorization();
-		}
-		return true;
-	}
+const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 
-	const hasPermission = await PermissionsAndroid.check(
-		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-	);
-
-	if (hasPermission) {
-		const hasPermissionBG = await PermissionsAndroid.check(
-			PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
-		);
-		if (hasPermissionBG) {
-			return true;
-		}
-	}
-	const allPermissions = await PermissionsAndroid.requestMultiple([
-		PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-		PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
-	]);
-
-	const permissionFine = allPermissions[PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION];
-	const permissionFineBG = allPermissions[PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION];
-
-	return permissionFine === PermissionsAndroid.RESULTS.GRANTED || permissionFineBG === PermissionsAndroid.RESULTS.GRANTED;
-};
-
-function checkPermissionAndInitializeWatcher(): ThunkAction {
-	return async (dispatch: Function, getState: Function) => {
+function setupGeoFence(): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
 
 		const { user: { firebaseRemoteConfig = {} } } = getState();
 		const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
@@ -93,85 +57,92 @@ function checkPermissionAndInitializeWatcher(): ThunkAction {
 			return;
 		}
 
-		const _hasLocationPermission = await hasLocationPermission();
+		BackgroundGeolocation.onGeofence((geofence: Object) => {
+			dispatch(handleFence(geofence));
+		});
 
-		if (!_hasLocationPermission) {
+		BackgroundGeolocation.ready({
+			// Geolocation Config
+			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+			distanceFilter: 10,
+			// Activity Recognition
+			stopTimeout: 1,
+			// Application config
+			debug: true, // <-- enable this hear sounds for background-geolocation life-cycle.
+			logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
+			stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
+			startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+			// HTTP / SQLite config
+			batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
+			autoSync: false, // <-- [Default: true] Set true to sync each location to server as it arrives.
+			// Android: Foreground service
+			foregroundService: true,
+			notification: {
+				title: 'Telldus Live! Mobile',
+				text: 'GeoFence Tracking',
+				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
+				largeIcon: 'drawable/icon_notif',
+			},
+		}, async (state: Object) => {
+			if (!state.enabled) {
+				state = await BackgroundGeolocation.startGeofences();
+			}
+			if (state.enabled) {
+				try {
+					let location = await BackgroundGeolocation.getCurrentPosition({
+						timeout: 30,
+						maximumAge: 5000,
+						desiredAccuracy: 10,
+						samples: 3,
+					}) || {};
+					const {
+						latitude,
+						longitude,
+					} = location.coords || {};
+					dispatch(setCurrentLocation({
+						latitude,
+						longitude,
+					}));
+				} catch (e) {
+					// Ignore
+				}
+			}
+		});
+	};
+}
+
+
+function handleFence(fence: Object): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+		if (!fence) {
 			return;
 		}
 
-		dispatch(initializeWatcher());
-	};
-}
+		const {
+			action,
+			extras = {},
+		} = fence;
+		const {
+			isAlwaysActive,
+			arriving,
+			leaving,
+			fromHr,
+			fromMin,
+			toHr,
+			toMin,
+			userId,
+		} = extras;
+		if (isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
+			let actions = null;
+			if (action === 'ENTER') {
+				actions = arriving;
+			} else if (action === 'EXIT') {
+				actions = leaving;
+			}
 
-function initializeWatcher(): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
-		Geolocation.getCurrentPosition(
-			(position: Object) => {
-				const {
-					latitude,
-					longitude,
-				} = position.coords || {};
-				dispatch(setCurrentLocation({
-					latitude,
-					longitude,
-				}));
-			},
-			(error: Object) => {
-			},
-			{
-				enableHighAccuracy: true,
-				timeout: 15000,
-				maximumAge: 10000,
-			},
-		);
-		Geolocation.watchPosition(
-			(position: Object) => {
-				dispatch(checkFences(position.coords));
-				const {
-					latitude,
-					longitude,
-				} = position.coords || {};
-				dispatch(setCurrentLocation({
-					latitude,
-					longitude,
-				}));
-			},
-			(error: Object) => {
-			},
-			{
-				enableHighAccuracy: true,
-				distanceFilter: 5,
-				interval: 30000,
-				fastestInterval: 10000,
-				enableBackgroundUpdate: true,
-			},
-		);
-	};
-}
-
-function checkFences(newLocation: Object): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
-		const { fences: { fences, location: oldLocation } } = getState();
-		if (oldLocation) {
-			Object.keys(fences).forEach((userId: string) => {
-				fences[userId].forEach((fence: Object) => {
-					const {fromHr, fromMin, toHr, toMin} = fence;
-					if (fence.isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
-						let inFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, newLocation.latitude, newLocation.longitude) < fence.radius);
-						let wasInFence = (GeoFenceUtils.getDistanceFromLatLonInKm(fence.latitude, fence.longitude, oldLocation.latitude, oldLocation.longitude) < fence.radius);
-						let actions = null;
-						if (inFence && !wasInFence) { // arrive fence
-							actions = fence.arriving;
-						} else if (!inFence && wasInFence) { // leave fence
-							actions = fence.leaving;
-						}
-
-						if (actions) {
-							dispatch(handleActions(actions, userId));
-						}
-					}
-				});
-			});
+			if (actions) {
+				dispatch(handleActions(actions, userId));
+			}
 		}
 	};
 }
@@ -248,7 +219,140 @@ function handleActionSchedule(action: Object, accessToken: Object): ThunkAction 
 	};
 }
 
+type TYPE_ADD_GEO_FENCE_DATA = {
+	identifier: string,
+	radius: number, // The minimum reliable radius is 200 meters. Anything less will likely not cause a geofence to trigger. This is documented by Apple.
+	latitude: number,
+	longitude: number,
+	notifyOnEntry?: boolean,
+	notifyOnExit?: boolean,
+	extras?: Object,
+};
+
+const hasEntry = (item: Object = {}): boolean => {
+	return Object.keys(item).length > 0;
+};
+
+function addGeofence(override?: boolean = false): ThunkAction {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
+
+		const {
+			fences:
+			{
+				fence,
+			},
+			user: {
+				userId,
+			},
+		} = getState();
+		const {
+			title: cTitle = '',
+			radius,
+			latitude,
+			longitude,
+			arriving = {},
+			leaving = {},
+		} = fence;
+
+		const { devices: ad = {}, schedules: as = {}, events: aa = {} } = arriving;
+		const { devices: ld = {}, schedules: ls = {}, events: la = {} } = leaving;
+
+		const notifyOnEntry = hasEntry(ad) || hasEntry(as) || hasEntry(aa);
+		const notifyOnExit = hasEntry(ld) || hasEntry(ls) || hasEntry(la);
+
+		const data: TYPE_ADD_GEO_FENCE_DATA = {
+			identifier: `${userId}-${cTitle}`,
+			radius,
+			latitude,
+			longitude,
+			notifyOnEntry,
+			notifyOnExit,
+			extras: {
+				...fence,
+				userId,
+			},
+		};
+
+		let hasFenceBySameName = false;
+		const geofences = await dispatch(getCurrentAccountsFences());
+
+		if (!override && (geofences && geofences.length > 0)) {
+			for (let i = 0; i < geofences.length; i++) {
+				const {
+					extras: {
+						title = '',
+					},
+				} = geofences[i];
+				if (title.trim().toLowerCase() === cTitle.trim().toLowerCase()) {
+					hasFenceBySameName = true;
+					break;
+				}
+			}
+		}
+
+		if (hasFenceBySameName) {
+			return Promise.reject({
+				code: ERROR_CODE_FENCE_ID_EXIST,
+				message: 'Fence by the same name already exist',
+			});
+		}
+
+		return BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
+			return success;
+		}).catch((error: any) => {
+			throw error;
+		});
+	};
+}
+
+function getGeofences(): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return BackgroundGeolocation.getGeofences().then((geofences: Array<Object>): Array<Object> => {
+			return geofences;
+		});
+	};
+}
+
+function getCurrentAccountsFences(): ThunkAction {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
+
+		const {
+			user: {
+				userId: userIdC = '',
+			},
+		} = getState();
+
+		const fences = await dispatch(getGeofences()) || [];
+		let currFences = [];
+		for (let i = 0; i < fences.length; i++) {
+			const {
+				extras: {
+					userId,
+				},
+			} = fences[i];
+			if (userId === userIdC) {
+				currFences.push(fences[i]);
+			}
+		}
+		return Promise.resolve(currFences);
+	};
+}
+
+function removeGeofence(identifier: string): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return BackgroundGeolocation.removeGeofence(identifier).then((success: any): any => {
+			return success;
+		}).catch((error: Object) => {
+			throw error;
+		});
+	};
+}
+
 module.exports = {
-	initializeWatcher,
-	checkPermissionAndInitializeWatcher,
+	setupGeoFence,
+	addGeofence,
+	getGeofences,
+	ERROR_CODE_FENCE_ID_EXIST,
+	getCurrentAccountsFences,
+	removeGeofence,
 };

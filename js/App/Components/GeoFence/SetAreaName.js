@@ -23,6 +23,9 @@
 
 import React, { useEffect, useState } from 'react';
 import {
+	Platform,
+} from 'react-native';
+import {
 	useDispatch,
 } from 'react-redux';
 import { CommonActions } from '@react-navigation/native';
@@ -38,6 +41,13 @@ import {
 	saveFence,
 	setFenceTitle,
 } from '../../Actions/Fences';
+import {
+	addGeofence,
+	ERROR_CODE_FENCE_ID_EXIST,
+} from '../../Actions/GeoFence';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import Theme from '../../Theme';
 
@@ -61,6 +71,10 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		formatMessage,
 	} = intl;
 
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	useEffect(() => {
 		onDidMount(`5. ${formatMessage(i18n.name)}`, formatMessage(i18n.selectNameForArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,15 +85,36 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 
 	function onPressNext() {
 		dispatch(setFenceTitle(name));
-		dispatch(saveFence());
-		navigation.dispatch(CommonActions.reset({
-			index: 2,
-			routes: [
-				{name: 'Tabs'},
-				{name: 'Profile'},
-				{name: 'GeoFenceNavigator'},
-			],
-		}));
+		dispatch(addGeofence()).then(() => {
+			dispatch(saveFence());
+			navigation.dispatch(CommonActions.reset({
+				index: 2,
+				routes: [
+					{name: 'Tabs',
+						state: {
+							index: 4,
+							routes: [
+								{
+									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
+								},
+							],
+						}},
+					{name: 'GeoFenceNavigator'},
+				],
+			}));
+		}).catch((err: Object = {}) => {
+			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
+			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
+				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
+			}
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: message,
+				showPositive: true,
+			});
+		});
 	}
 
 	const {
