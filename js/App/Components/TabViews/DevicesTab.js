@@ -373,7 +373,7 @@ class DevicesTab extends View {
 		const { rowsAndSections } = this.props;
 		const { hiddenList, visibleList } = rowsAndSections;
 
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300), () => {
 			// Callback only available in iOS
 			LayoutAnimation.configureNext(null);
 		});
@@ -609,7 +609,7 @@ class DevicesTab extends View {
 		const { navigation, screenProps, rowsAndSections } = this.props;
 		const newDevices = navigation.getParam('newDevices', null);
 		if (newDevices) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300), () => {
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300), () => {
 				// Callback only available in iOS
 				LayoutAnimation.configureNext(null);
 			});

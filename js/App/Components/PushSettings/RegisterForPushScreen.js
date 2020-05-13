@@ -56,7 +56,7 @@ import {
 } from '../../Actions/App';
 
 import {
-	linearCUD,
+	linearU,
 } from '../../Lib/LayoutAnimations';
 
 import { pushServiceId } from '../../../Config';
@@ -183,14 +183,14 @@ const RegisterForPushScreen = (props: Object): Object => {
 			isDeleteTokenLoading: true,
 			deletingToken: token,
 		});
-		LayoutAnimation.configureNext(linearCUD(300));
+		LayoutAnimation.configureNext(linearU(300));
 		dispatch(deletePushToken(token)).then(() => {
 			setIsDeleteTokenLoading({
 				isDeleteTokenLoading: false,
 				deletingToken: null,
 			});
 			dispatch(getPhonesList()).then(() => {
-				LayoutAnimation.configureNext(linearCUD(300));
+				LayoutAnimation.configureNext(linearU(300));
 			});
 			submitPushToken();
 		}).catch(() => {
@@ -199,7 +199,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 					isDeleteTokenLoading: false,
 					deletingToken: null,
 				});
-				LayoutAnimation.configureNext(linearCUD(300));
+				LayoutAnimation.configureNext(linearU(300));
 				dispatch(showToast());
 			}, 5000);
 		});

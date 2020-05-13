@@ -80,7 +80,7 @@ onPressEdit = () => {
 		this.setState({
 			editValue: true,
 		});
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	}
 }
 
@@ -99,7 +99,7 @@ onSubmitEditing = () => {
 
 	if (!this.props.currentValueInScreen || this.props.currentValueInScreen === '') {
 		this.props.updateCurrentValueInScreen(fallbackValue);
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		return;
 	}
 
@@ -107,14 +107,14 @@ onSubmitEditing = () => {
 	const { controllingMode } = this.props;
 	if (isNaN(value) || value > parseFloat(maxVal) || value < parseFloat(minVal)) {
 		this.props.updateCurrentValueInScreen(fallbackValue);
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		return;
 	}
 
 	if (value !== null) {
 		this.props.onEditSubmitValue(value, value);
 	}
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.props.onControlThermostat(controllingMode, value, 1, 1);
 }
 

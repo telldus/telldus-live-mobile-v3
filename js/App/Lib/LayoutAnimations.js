@@ -52,7 +52,18 @@ const linearCUD = (duration?: number = 300): Object => (
 	}
 );
 
+const linearU = (duration?: number = 300): Object => (
+	{
+		duration,
+		update: {
+			type: LayoutAnimation.Types.linear,
+			property: LayoutAnimation.Properties.scaleXY,
+		},
+	}
+);
+
 module.exports = {
 	SensorChangeDisplay,
 	linearCUD,
+	linearU,
 };

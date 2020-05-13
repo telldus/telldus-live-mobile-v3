@@ -97,7 +97,7 @@ const ScanButton = (props: Object): Object => {
 	} = getStyles(layout, disabled);
 
 	function onPress() {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		if (isScanning) {
 			stopScan();
 		} else {

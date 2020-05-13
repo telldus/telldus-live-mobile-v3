@@ -98,14 +98,14 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onPressExcludeDevice() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		excludeActive: true,
 	});
 }
 
 onPressCancelExclude() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		excludeActive: false,
 	});

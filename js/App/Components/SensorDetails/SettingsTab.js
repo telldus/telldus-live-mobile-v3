@@ -237,7 +237,7 @@ class SettingsTab extends View {
 	handleBackPress(): boolean {
 		const { editName } = this.state;
 		if (editName) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			this.setState({
 				editName: false,
 				sensorName: this.props.sensor.name,
@@ -248,7 +248,7 @@ class SettingsTab extends View {
 	}
 
 	editName() {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			editName: true,
 		});
@@ -277,13 +277,13 @@ class SettingsTab extends View {
 		}
 
 		dispatch(setSensorName(sensor.id, sensorName)).then(() => {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			dispatch(getSensorInfo(sensor.id));
 			this.setState({
 				editName: false,
 			});
 		}).catch((err: Object) => {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			this.setState({
 				editName: false,
 				sensorName: sensor.name,
@@ -524,14 +524,14 @@ class SettingsTab extends View {
 	}
 
 	onPressExcludeDevice = () => {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			excludeActive: true,
 		});
 	}
 
 	onPressCancelExclude = () => {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			excludeActive: false,
 		});

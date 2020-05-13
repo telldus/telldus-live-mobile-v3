@@ -268,14 +268,14 @@ class SettingsTab extends View {
 	}
 
 	onPressExcludeDevice() {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			excludeActive: true,
 		});
 	}
 
 	onPressCancelExclude() {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			excludeActive: false,
 		});
@@ -710,7 +710,7 @@ class SettingsTab extends View {
 	handleBackPress = (): boolean => {
 		const { editName } = this.state;
 		if (editName) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			this.setState({
 				editName: false,
 				deviceName: this.props.device.name,
@@ -721,7 +721,7 @@ class SettingsTab extends View {
 	}
 
 	editName = () => {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			editName: true,
 		});
@@ -750,13 +750,13 @@ class SettingsTab extends View {
 		}
 
 		dispatch(setDeviceName(device.id, deviceName)).then(() => {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			dispatch(getDeviceInfoCommon(device.id));
 			this.setState({
 				editName: false,
 			});
 		}).catch((err: Object) => {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			this.setState({
 				editName: false,
 				deviceName: device.name,

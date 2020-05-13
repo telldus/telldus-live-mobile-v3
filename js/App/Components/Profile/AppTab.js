@@ -160,10 +160,10 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				dispatch(showToast(message));
 				dispatch(getPhonesList()).then(() => {
 					setIsPushSubmitLoading(false);
-					LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+					LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 				}).catch(() => {
 					setIsPushSubmitLoading(false);
-					LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+					LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 				});
 			}).catch((error: Object) => {
 				let errorCode = !error.error_description && error.message === 'Network request failed' ?

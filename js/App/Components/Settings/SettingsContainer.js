@@ -195,12 +195,12 @@ confirmTokenSubmit() {
 				this.setState({
 					isPushSubmitLoading: false,
 				});
-				LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+				LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			}).catch(() => {
 				this.setState({
 					isPushSubmitLoading: false,
 				});
-				LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+				LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			});
 		}).catch((error: Object) => {
 			let errorCode = !error.error_description && error.message === 'Network request failed' ?

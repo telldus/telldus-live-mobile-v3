@@ -258,7 +258,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	toggleAttentionCapture(value: boolean) {
 		if (!this.state.addNewDevicePressed) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500), () => {
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(500), () => {
 				// This is to prevent same layout animation occuring on navigation(next layout)
 				// Callback only available in iOS
 				LayoutAnimation.configureNext(null);
