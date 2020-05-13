@@ -11,6 +11,8 @@ buildscript {
         androidMapsUtilsVersion = "0.5+"
         googlePlayServicesAuthVersion = "17.0.0"
         googlePlayServicesIidVersion = "16.0.1"
+        googlePlayServicesLocationVersion = "17.0.0"
+        appCompatVersion = "1.0.2" // IMPORTANT:  For new AndroidX compatibility.
     }
     repositories {
         google()

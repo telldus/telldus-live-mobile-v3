@@ -29,6 +29,9 @@
 #import "Orientation.h"
 #import "RNSplashScreen.h"
 
+// IMPORTANT:  Paste import ABOVE the DEBUG macro
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -77,6 +80,11 @@ static void InitializeFlipper(UIApplication *application) {
 	if (@available(iOS 13, *)) {
 		self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
 	}
+  
+  // NOTE: Deprecated iOS Background Fetch API for devices running < iOS 13
+  // part is not enabled.
+  // [REQUIRED] Register BackgroundFetch
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   
 	return YES;
 }

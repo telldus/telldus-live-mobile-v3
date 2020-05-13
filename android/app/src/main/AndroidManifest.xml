@@ -204,6 +204,8 @@
             android:name="com.agontuk.RNFusedLocation.RNFusedBackgroundLocationService"
             android:exported="false"
             android:foregroundServiceType="location"></service>
+
+        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
     </application>
 
 </manifest>
