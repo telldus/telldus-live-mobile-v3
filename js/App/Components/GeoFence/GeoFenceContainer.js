@@ -155,7 +155,7 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = [];
+		const SCNS = ['AddEditGeoFence'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
