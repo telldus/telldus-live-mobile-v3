@@ -90,7 +90,7 @@ jest.mock('@react-native-community/netinfo', (): Object => {
 	return {};
 });
 
-jest.mock('@react-native-community/geolocation', (): Object => {
+jest.mock('react-native-background-geolocation', (): Object => {
 	return {};
 });
 
