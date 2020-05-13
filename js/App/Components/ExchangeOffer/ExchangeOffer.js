@@ -49,6 +49,7 @@ type Props = {
 	onLayout: (Object) => void,
 	appLayout: Object,
 	toggleVisibilityExchangeOffer: ('show' | 'hide_temp' | 'hide_perm' | 'force_show') => void,
+	navigation: Object,
 };
 
 class ExchangeOffer extends View<Props, null> {
@@ -132,7 +133,7 @@ hideTemp = () => {
 }
 
 render(): Object | null {
-	const { showModal, appLayout } = this.props;
+	const { showModal, appLayout, navigation } = this.props;
 
 	const styles = this.getStyles(appLayout);
 
@@ -158,7 +159,8 @@ render(): Object | null {
 							appLayout={appLayout}
 							align={'right'}
 							h1={this.h1}
-							h2={this.h2}/>
+							h2={this.h2}
+							navigation={navigation}/>
 						{blocks}
 					</ScrollView>
 					<View style={styles.footersCover}>
