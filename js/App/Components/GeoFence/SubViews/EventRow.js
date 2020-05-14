@@ -50,6 +50,7 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		isChecked,
 		checkBoxId,
 		toggleActiveState,
+		isLast,
 	} = props;
 	const {
 		description,
@@ -71,7 +72,9 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 		checkIconInActiveStyle,
 		switchStyle,
 		switchTextStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		isLast,
+	});
 
 	function noOp() {}
 
@@ -148,7 +151,9 @@ const EventRow = React.memo<Object>((props: Object): Object => {
 
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	isLast,
+}: Object): Object => {
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
 	let deviceWidth = isPortrait ? width : height;
@@ -177,7 +182,7 @@ const getStyles = (appLayout: Object): Object => {
 		row: {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
-			marginBottom: padding,
+			marginBottom: isLast ? padding : 0,
 			backgroundColor: '#FFFFFF',
 			height: rowHeight,
 			borderRadius: 2,

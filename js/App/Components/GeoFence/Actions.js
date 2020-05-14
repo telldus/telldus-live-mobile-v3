@@ -238,12 +238,17 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		setSelectedItems(newSelected);
 	}
 
-	function renderDevice({item, index}: Object): Object {
+	function renderDevice({item, index, section}: Object): Object {
 		const checkBoxId = item.id;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
+
 		return (
 			<DeviceRow
 				key={`${item.id}${index}`}
 				device={item}
+				isLast={isLast}
 				onDeviceValueChange={onDeviceValueChange}
 				openRGBControl={openRGBControl}
 				openThermostatControl={openThermostatControl}
@@ -254,11 +259,16 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		);
 	}
 
-	function renderEvent({item}: Object): Object {
+	function renderEvent({item, index, section}: Object): Object {
 		const { id } = item;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<EventRow
+				key={`${item.id}${index}`}
+				isLast={isLast}
 				event={selectedEvents[id] || item}
 				onChangeSelection={onChangeSelection}
 				checkBoxId={id}
@@ -267,11 +277,16 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		);
 	}
 
-	function renderJob({item}: Object): Object {
+	function renderJob({item, index, section}: Object): Object {
 		const { id } = item;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<JobRow
+				key={`${item.id}${index}`}
+				isLast={isLast}
 				job={selectedSchedules[id] || item}
 				device={devices[item.deviceId]}
 				onChangeSelection={onChangeSelection}
