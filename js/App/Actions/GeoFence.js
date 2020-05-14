@@ -290,6 +290,7 @@ function addGeofence(override?: boolean = false): ThunkAction {
 			notifyOnExit,
 			extras: {
 				...fence,
+				radius: radius * 1000,
 				userId,
 			},
 		};

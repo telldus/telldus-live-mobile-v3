@@ -132,15 +132,25 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		}
 
 		return (
-			<MapView.Marker
-				key={`${index}`}
-				image={{uri: 'marker'}}
-				coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
-				<MapView.Callout onPress={onEditFenceInner}>
-					<FenceCallout
-						title={extras.title}/>
-				</MapView.Callout>
-			</MapView.Marker>
+			<React.Fragment
+				key={`${index}`}>
+				<MapView.Marker
+					image={{uri: 'marker'}}
+					coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
+					<MapView.Callout onPress={onEditFenceInner}>
+						<FenceCallout
+							title={extras.title}/>
+					</MapView.Callout>
+				</MapView.Marker>
+				<MapView.Circle
+					center={{
+						latitude: extras.latitude,
+						longitude: extras.longitude,
+					}}
+					radius={extras.radius}
+					fillColor="rgba(226, 105, 1, 0.3)"
+					strokeColor={Theme.Core.brandSecondary}/>
+			</React.Fragment>
 		);
 	}
 
@@ -156,16 +166,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
 						})
-					}
-					{currentAccFences.length > 0 && <MapView.Circle
-						key={`fence-${activeFenceIndex}`}
-						center={{
-							latitude: currentAccFences[activeFenceIndex].latitude,
-							longitude: currentAccFences[activeFenceIndex].longitude,
-						}}
-						radius={currentAccFences[activeFenceIndex].radius}
-						fillColor="rgba(226, 105, 1, 0.3)"
-						strokeColor={Theme.Core.brandSecondary}/>
 					}
 				</MapView.Animated>
 			</ScrollView>
