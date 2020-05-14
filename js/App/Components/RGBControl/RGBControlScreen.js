@@ -145,7 +145,7 @@ class RGBControlScreen extends View<Props, State> {
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
 					thumbSize={15}
-					deviceSetStateRGBOverride={onPressOverride ? this._deviceSetStateRGBOverride : undefined}/>
+					deviceSetStateRGBOverride={onPressOverride ? this._deviceSetStateRGBOverride : undefined}
 					showActionIndicator={true}/>
 			</View>
 		);
