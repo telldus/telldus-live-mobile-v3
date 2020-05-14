@@ -48,6 +48,10 @@ import {
 } from '../../TabViews/SubViews';
 import ShowMoreButton from '../../TabViews/SubViews/Device/ShowMoreButton';
 
+import {
+	GeoFenceUtils,
+} from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -268,7 +272,11 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	}
 
 	function _onChangeSelection() {
-		const data = {}; // For a device need to choose some action. So now pass empty.
+		const data = {
+			checkBoxId,
+			deviceId: id,
+			...GeoFenceUtils.prepareInitialActionFromDeviceState(device),
+		};
 		onChangeSelection('device', checkBoxId, data);
 	}
 
