@@ -77,7 +77,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		navigation.navigate('SelectArea');
 	}
 
-	const [ activeFenceIndex, setActiveFenceIndex ] = useState(0);
 	const [ currentAccFences, setCurrentAccFences ] = useState([]);
 
 	useEffect(() => {
@@ -109,7 +108,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	function onEditFence(fenceToEdit: Object) {
 		dispatch(setEditFence(fenceToEdit));
-		setActiveFenceIndex(0);
 		navigation.navigate('EditGeoFence');
 	}
 
