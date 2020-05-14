@@ -49,7 +49,6 @@ import {
 
 import {
 	setFenceActiveTime,
-	setFenceArea,
 	setFenceTitle,
 	setEditFence,
 } from '../../Actions/Fences';
@@ -115,19 +114,19 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		labelStyle,
 		textFieldStyle,
 		rightItemStyle,
+		overlayWidth,
 	} = getStyles(appLayout);
 
-	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius / 1000);
+	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
 	const region = {
 		latitude,
 		longitude,
 		latitudeDelta: lngDelta / 2,
 		longitudeDelta: lngDelta,
 	};
-	const [initialRegion, setInitialRegion] = useState(region);
 
-	function onRegionChangeComplete(reg: Object) {
-		setInitialRegion(reg);
+	function onPress(reg: Object) {
+		navigation.navigate('EditGeoFenceAreaFull');
 	}
 
 	const [ timeInfo, setTimeInfo ] = useState({
@@ -149,24 +148,12 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	const [ areaName, setAreaName ] = useState(fence.title);
 	const [ editName, setEditName ] = useState(false);
 
-	const { userId } = useSelector((state: Object): Object => state.user);
-
 	const {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
 	function onSave() {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
-		const {
-			latitude: lat,
-			longitude: long,
-		} = initialRegion;
-		dispatch(setFenceArea(
-			lat,
-			long,
-			GeoFenceUtils.getRadiusFromRegion(initialRegion),
-			userId,
-		));
 		dispatch(setFenceTitle(areaName));
 		dispatch(addGeofence(true)).then(() => {
 			navigation.goBack();
@@ -278,9 +265,12 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			<View style={mapCover}>
 				<MapView.Animated
 					style={mapStyle}
-					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}/>
-				<MapOverlay/>
+					scrollEnabled={false}
+					initialRegion={new MapView.AnimatedRegion(region)}
+					region={new MapView.AnimatedRegion(region)}
+					onPress={onPress}/>
+				<MapOverlay
+					overlayWidth={overlayWidth}/>
 			</View>
 			<TouchableButton
 				text={i18n.confirmAndSave}
@@ -321,6 +311,7 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSizeButtonLabel = deviceWidth * 0.033;
 
 	return {
+		overlayWidth: deviceWidth - (2 * padding),
 		container: {
 			flex: 1,
 		},
@@ -334,6 +325,9 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: padding,
 			height: deviceWidth * 1.2,
 			width: deviceWidth - (2 * padding),
+			overflow: 'hidden',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		mapStyle: {
 			borderRadius: 5,

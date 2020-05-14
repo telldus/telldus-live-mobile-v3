@@ -127,6 +127,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 			const _fence = {
 				...extras,
 				...others,
+				radius: extras.radius / 1000,
 			};
 			onEditFence(_fence);
 		}

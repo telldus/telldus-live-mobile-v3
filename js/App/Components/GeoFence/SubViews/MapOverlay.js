@@ -34,18 +34,21 @@ import {
 } from '../../../../BaseComponents';
 
 const MapOverlay = React.memo<Object>((props: Object): Object => {
+	const {
+		overlayWidth,
+	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
-		overlayWidth,
+		overlayWidth: _overlayWidth,
 		mapOverlay,
 		mapSpacer,
 		markerOverlay,
 		marker,
 	} = getStyles(layout);
 
-	let overlaySize = overlayWidth;
+	let overlaySize = overlayWidth || _overlayWidth;
 
 	return (
 		<View
