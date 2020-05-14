@@ -22,7 +22,10 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+} from 'react';
 import {
 	ScrollView,
 	Platform,
@@ -50,6 +53,10 @@ import {
 	DBSortControlBlock,
 	LanguageControlBlock,
 } from '../Settings/SubViews';
+import {
+	WidgetFontSizeSetting,
+} from './SubViews';
+
 import { LayoutAnimations } from '../../Lib';
 import {
 	getPhonesList,
@@ -250,6 +257,11 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					touchableStyle={touchableStyle}
 					switchStyle={switchStyle}
 					style={contentCoverStyle}/>
+				{Platform.OS === 'android' &&
+					<WidgetFontSizeSetting
+						appLayout={layout}
+						intl={intl}/>
+				}
 			</View>
 		</ScrollView>
 	);
