@@ -60,7 +60,7 @@ function setupGeoFence(): ThunkAction {
 		}
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
-			Toast.showWithGravity(`onGeofence ${AppState.currentState} ${geofence.action}`, Toast.LONG, Toast.TOP);
+			Toast.showWithGravity(`onGeofence ${AppState.currentState || ''} ${geofence.action}`, Toast.LONG, Toast.TOP);
 			if (AppState.currentState === 'active') {
 				dispatch(handleFence(geofence));
 			} else {
@@ -219,6 +219,7 @@ function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
 			} = action;
 			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
 		}
+		return Promise.resolve('done');
 	};
 }
 
