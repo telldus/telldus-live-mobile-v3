@@ -160,7 +160,11 @@ android {
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
-        manifestPlaceholders = [googleMapsAPIKey: GOOGLE_MAPS_API_KEY, pushSenderId: PUSH_SENDER_ID]
+        manifestPlaceholders = [
+            googleMapsAPIKey: GOOGLE_MAPS_API_KEY,
+            pushSenderId: PUSH_SENDER_ID,
+            geolocationApplicationKey: GEOLOCATION_APPLICATION_KEY
+        ]
     }
     signingConfigs {
         debug {
