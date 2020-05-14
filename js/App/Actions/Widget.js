@@ -133,7 +133,7 @@ const getWidgetTextFontSizeFactor = (): number => {
 	return 0;
 };
 
-const setWidgetTextFontSizeFactor = (factor: number): number => {
+const setWidgetTextFontSizeFactor = (factor: number): Promise<number> => {
 	if (Platform.OS === 'android') {
 		const { AndroidWidget } = NativeModules;
 		return AndroidWidget.setTextFontSizeFactor(factor);
