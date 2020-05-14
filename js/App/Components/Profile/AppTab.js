@@ -65,9 +65,6 @@ import {
 	setUserNameFirebaseCrashlytics,
 } from '../../Actions/Analytics';
 import {
-	resetFence,
-} from '../../Actions/Fences';
-import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
 
@@ -86,12 +83,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		pushToken,
 		deviceName,
 		deviceId,
-		firebaseRemoteConfig = {},
-		userId,
 	} = useSelector((state: Object): Object => state.user);
-
-	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
-	const { enable } = JSON.parse(geoFenceFeature);
 
 	const { dbCarousel = true, reportCrash = true } = defaultSettings;
 
@@ -214,33 +206,11 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		});
 	}
 
-	const { fences } = useSelector((state: Object): Object => state.fences);
-	const currentAccFences = fences[userId] || [];
-	function onPressGeoFence() {
-		if (!currentAccFences || currentAccFences.length === 0) {
-			dispatch(resetFence());
-			navigation.navigate('GeoFenceNavigator', {
-				screen: 'SelectArea',
-			});
-		} else {
-			navigation.navigate('GeoFenceNavigator');
-		}
-	}
-
 	return (
 		<ScrollView style={container}>
 			<View style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
-				{enable && <Text style={{
-					padding: 10,
-					color: 'red',
-					alignSelf: 'center',
-					margin: 10,
-				}} onPress={onPressGeoFence}>
-				Add or Edit Geo Fence
-				</Text>
-				}
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}
