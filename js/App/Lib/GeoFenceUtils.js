@@ -206,6 +206,71 @@ const GeoFenceUtils = {
 			...updatedDevices,
 		};
 	},
+	prepareInitialActionFromDeviceState: (device: Object): Object => {
+		const {
+			stateValues = {},
+			isInState,
+			value,
+			supportedMethods = {},
+		} = device;
+
+		const {
+			RGB,
+			THERMOSTAT,
+		} = supportedMethods;
+
+		let action = {};
+
+		// Must explicitly select an action
+		if (THERMOSTAT || RGB) {
+			return action;
+		}
+
+		let method = null;
+		for (let i = 0; i < Object.keys(methods).length; i++) {
+			const key = Object.keys(methods)[i];
+			if (methods[key] === isInState) {
+				method = key;
+			}
+		}
+
+		if (!method) {
+			return action;
+		}
+
+		action = {
+			method,
+		};
+
+		if (!stateValues || Object.keys(stateValues).length === 0) {
+			if (!value) {
+				return action;
+			}
+
+			action = {
+				...action,
+				stateValues: {
+					[method]: value,
+				},
+			};
+			return action;
+		}
+
+		const currentStateValue = stateValues[isInState];
+
+		if (!currentStateValue) {
+			return action;
+		}
+
+		action = {
+			...action,
+			stateValues: {
+				[method]: currentStateValue,
+			},
+		};
+
+		return action;
+	},
 };
 
 
