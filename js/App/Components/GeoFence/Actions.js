@@ -21,7 +21,10 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, {
+	useState,
+	useEffect,
+} from 'react';
 import {
 	SectionList,
 	RefreshControl,
@@ -62,6 +65,7 @@ import {
 	getJobs,
 	setFenceArrivingActions,
 	setFenceLeavingActions,
+	getGateways,
 } from '../../Actions';
 
 import Theme from '../../Theme';
@@ -121,6 +125,12 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	const [ showJobs, setShowJobs ] = useState(false);
 
 	const [ devices, setDevices ] = useState(GeoFenceUtils.prepareDevicesWithNewStateValues(byId, selectedDevices));
+
+	const devicesListLength = Object.keys(byId).length;
+	useEffect(() => {
+		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(byId, selectedDevices));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [devicesListLength]);
 
 	function onDeviceValueChange(args: Object) {
 		const {
@@ -302,6 +312,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		async function _onRefresh() {
 			setIsRefreshing(true);
 			try {
+				await dispatch(getGateways());
 				await dispatch(getDevices());
 				await dispatch(getEvents());
 				await dispatch(getJobs());
