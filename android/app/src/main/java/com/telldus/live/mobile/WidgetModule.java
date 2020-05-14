@@ -19,6 +19,7 @@
 
 package com.telldus.live.mobile;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -37,6 +38,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.facebook.react.bridge.WritableMap;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.Model.SensorInfo;
 import com.telldus.live.mobile.WidgetsUpdater;
@@ -48,6 +50,9 @@ import com.facebook.react.bridge.ReadableMap;
 
 import com.huawei.hms.api.ConnectionResult;
 import com.huawei.hms.api.HuaweiApiAvailability;
+
+import static com.telldus.live.mobile.Utility.Constants.BASE_FONT_SIZE_FACTOR_MAX;
+import static com.telldus.live.mobile.Utility.Constants.BASE_FONT_SIZE_FACTOR_MIN;
 
 public class WidgetModule extends ReactContextBaseJavaModule {
 
@@ -400,4 +405,25 @@ public class WidgetModule extends ReactContextBaseJavaModule {
     return false;
   }
 
+  @ReactMethod
+  public void setTextFontSizeFactor(Float factor, Promise promise) {
+    prefManager.setTextFontSizeFactor(factor);
+    WidgetsUpdater wUpdater = new WidgetsUpdater();
+    Map extraArgs = new HashMap();
+    wUpdater.updateAllWidgets(getReactApplicationContext(), extraArgs);
+    promise.resolve(1);
+  }
+
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public Float getTextFontSizeFactor() {
+    return prefManager.getTextFontSizeFactor();
+  }
+
+  @ReactMethod(isBlockingSynchronousMethod = true)
+  public WritableMap getAllConstants() {
+    WritableMap constants = Arguments.createMap();
+    constants.putDouble("BASE_FONT_SIZE_FACTOR_MAX", BASE_FONT_SIZE_FACTOR_MAX);
+    constants.putDouble("BASE_FONT_SIZE_FACTOR_MIN", BASE_FONT_SIZE_FACTOR_MIN);
+    return constants;
+  }
 }

@@ -23,6 +23,8 @@ package com.telldus.live.mobile.Database;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import static com.telldus.live.mobile.Utility.Constants.BASE_FONT_SIZE_FACTOR;
+
 public class PrefManager {
     SharedPreferences pref;
     SharedPreferences.Editor editor;
@@ -83,5 +85,14 @@ public class PrefManager {
     public void clear() {
         editor.clear();
         editor.apply();
+    }
+
+    public void setTextFontSizeFactor(Float factor) {
+        editor.putFloat("fontSizeFactor", factor);
+        editor.apply();
+    }
+
+    public Float getTextFontSizeFactor() {
+        return pref.getFloat("fontSizeFactor", BASE_FONT_SIZE_FACTOR);
     }
 }

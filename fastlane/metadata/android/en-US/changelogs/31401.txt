@@ -1,0 +1,4 @@
+- Allow 1x1 sensor widgets
+- Fix sensor widget font size
+- Crashfixes
+

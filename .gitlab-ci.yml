@@ -105,6 +105,8 @@ google_play:
 huawei_app_gallery:
   image: ruby:2
   stage: release
+  variables:
+    DEPLOY_STORE: huawei
   tags:
     - docker
   dependencies:

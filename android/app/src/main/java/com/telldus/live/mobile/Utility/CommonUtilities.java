@@ -36,12 +36,13 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
+import com.telldus.live.mobile.Database.PrefManager;
+
 import java.util.HashMap;
 
-public class CommonUtilities  {
+import static com.telldus.live.mobile.Utility.Constants.BASE_ICON_SIZE_FACTOR;
 
-    final static Double BASE_FONT_SIZE_FACTOR = 0.12;
-    final static Double BASE_ICON_SIZE_FACTOR = 0.7;
+public class CommonUtilities  {
 
     public static Bitmap buildTelldusIcon(String icon, int color, int width, int height, int fontSize, Context context) {
         Bitmap myBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -149,7 +150,8 @@ public class CommonUtilities  {
 
     public static int getBaseFontSize(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         int attribute = getAttributeForStyling(context, appWidgetManager, appWidgetId);
-        return (int) (attribute * BASE_FONT_SIZE_FACTOR);
+        PrefManager prefManager = new PrefManager(context);
+        return (int) (attribute * prefManager.getTextFontSizeFactor());
     }
 
     public static int getBaseIconWidth(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
