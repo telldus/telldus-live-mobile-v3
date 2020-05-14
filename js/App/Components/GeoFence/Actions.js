@@ -48,6 +48,10 @@ import {
 } from '../TabViews/SubViews';
 
 import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
+import {
 	LayoutAnimations,
 	GeoFenceUtils,
 } from '../../Lib';
@@ -61,6 +65,7 @@ import {
 } from '../../Actions';
 
 import Theme from '../../Theme';
+import isEmpty from 'lodash/isEmpty';
 
 type Props = {
 	navigation: Object,
@@ -82,6 +87,10 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	const intl = useIntl();
 
 	const dispatch = useDispatch();
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	let { fence = {}} = useSelector((state: Object): Object => state.fences);
 	const {
@@ -334,6 +343,28 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	}
 
 	function _onPressNext() {
+		let deviceInvalidAction = null;
+		for (let i = 0; i < Object.keys(selectedDevices).length; i++) {
+			const key = Object.keys(selectedDevices)[i];
+			const dAction = selectedDevices[key];
+			if (!dAction || isEmpty(dAction) || !dAction.method) {
+				deviceInvalidAction = key;
+			}
+		}
+		if (deviceInvalidAction) {
+			const {
+				name,
+			} = byId[deviceInvalidAction];
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: 'No action selected', // TODO: Translate
+				text: `Please select any action to perform on the device ${name}.`,
+				showPositive: true,
+			});
+			return;
+		}
 		if (currentScreen === 'ArrivingActions') {
 			dispatch(setFenceArrivingActions({
 				devices: selectedDevices,
