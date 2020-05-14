@@ -90,7 +90,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				routes: [
 					{name: 'Tabs',
 						state: {
-							index: 4,
+							index: Platform.OS === 'android' ? 1 : 4,
 							routes: [
 								{
 									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
