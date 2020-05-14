@@ -23,6 +23,8 @@
 'use strict';
 const colorsys = require('colorsys');
 import BackgroundGeolocation from 'react-native-background-geolocation';
+import { AppState } from 'react-native';
+import Toast from 'react-native-simple-toast';
 
 import {
 	deviceSetState,
@@ -58,7 +60,20 @@ function setupGeoFence(): ThunkAction {
 		}
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
-			dispatch(handleFence(geofence));
+			Toast.showWithGravity(`onGeofence ${AppState.currentState} ${geofence.action}`, Toast.LONG, Toast.TOP);
+			if (AppState.currentState === 'active') {
+				dispatch(handleFence(geofence));
+			} else {
+				BackgroundGeolocation.startBackgroundTask().then((taskId: number) => {
+					dispatch(handleFence(geofence)).then(() => {
+						BackgroundGeolocation.stopBackgroundTask(taskId);
+					});
+				}).catch((error: Object) => {
+					// Be sure to catch errors:  never leave you background-task hanging.
+					console.error(error);
+					BackgroundGeolocation.stopBackgroundTask();
+				});
+			}
 		});
 
 		BackgroundGeolocation.ready({
@@ -113,9 +128,9 @@ function setupGeoFence(): ThunkAction {
 
 
 function handleFence(fence: Object): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
 		if (!fence) {
-			return;
+			return Promise.resolve('done');
 		}
 
 		const {
@@ -141,25 +156,27 @@ function handleFence(fence: Object): ThunkAction {
 			}
 
 			if (actions) {
-				dispatch(handleActions(actions, userId));
+				return dispatch(handleActions(actions, userId));
 			}
+			return Promise.resolve('done');
 		}
+		return Promise.resolve('done');
 	};
 }
 
 function handleActions(actions: Object, userId: string): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
 		const { devices = {}, schedules = {}, events = {} } = actions;
 
 		if (!userId) {
-			return;
+			return Promise.resolve('done');
 		}
 
 		const { user: { accounts = {} } } = getState();
 		const { accessToken } = accounts[userId.trim().toLowerCase()];
 
 		if (!accessToken) {
-			return;
+			return Promise.resolve('done');
 		}
 
 		for (let id in devices) {
@@ -171,25 +188,29 @@ function handleActions(actions: Object, userId: string): ThunkAction {
 		for (let id in schedules) {
 			dispatch(handleActionSchedule(schedules[id], accessToken));
 		}
+		// NOTE: Not using Promise.all to resolve as BG task started using BackgroundGeolocation.startBackgroundTask
+		// Will only last for 30secs in Android and 180secs in iOS. If any promise gets stuck we do not want the
+		// preceeding requests/actions to be not fires/ignored.
+		return Promise.resolve('done');
 	};
 }
 
 function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
 		const { deviceId, method, stateValues = {} } = action;
 		if (!deviceId) {
-			return;
+			return Promise.resolve('done');
 		}
 
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
-			dispatch(deviceSetState(deviceId, method, dimValue, accessToken));
+			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken));
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
-			dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken));
+			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken));
 		} else if (method === 2048) {
 			const {
 				changeMode,
@@ -197,7 +218,7 @@ function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
 				mode,
 				temp,
 			} = action;
-			dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
+			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
 		}
 	};
 }
