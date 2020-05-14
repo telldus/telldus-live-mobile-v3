@@ -262,7 +262,7 @@ function addGeofence(override?: boolean = false): ThunkAction {
 
 		const data: TYPE_ADD_GEO_FENCE_DATA = {
 			identifier: `${userId}-${cTitle}`,
-			radius,
+			radius: radius * 1000, // In meters
 			latitude,
 			longitude,
 			notifyOnEntry,
