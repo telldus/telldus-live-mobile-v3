@@ -117,7 +117,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		rightItemStyle,
 	} = getStyles(appLayout);
 
-	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
+	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius / 1000);
 	const region = {
 		latitude,
 		longitude,
