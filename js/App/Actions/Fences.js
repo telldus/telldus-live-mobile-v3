@@ -58,10 +58,6 @@ export const setFenceTitle = (title: string): Object => ({
 	payload: title,
 });
 
-export const saveFence = (): Object => ({
-	type: 'SAVE_FENCE',
-});
-
 export const setCurrentLocation = (location: Object): Object => ({
 	type: 'SET_CURRENT_LOCATION',
 	payload: location,
@@ -72,18 +68,6 @@ export const setEditFence = (fence: Object): Object => ({
 	payload: fence,
 });
 
-export const deleteFence = (): Object => ({
-	type: 'DELETE_FENCE',
-});
-
-export const updateFence = (): Object => ({
-	type: 'UPDATE_FENCE',
-});
-
 export const resetFence = (): Object => ({
 	type: 'RESET_FENCE',
-});
-
-export const clearFences = (): Object => ({
-	type: 'CLEAR_FENCES',
 });

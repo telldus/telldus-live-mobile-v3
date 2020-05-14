@@ -38,7 +38,6 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	saveFence,
 	setFenceTitle,
 } from '../../Actions/Fences';
 import {
@@ -86,7 +85,6 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	function onPressNext() {
 		dispatch(setFenceTitle(name));
 		dispatch(addGeofence()).then(() => {
-			dispatch(saveFence());
 			navigation.dispatch(CommonActions.reset({
 				index: 2,
 				routes: [
