@@ -94,6 +94,10 @@ jest.mock('react-native-background-geolocation', (): Object => {
 	return {};
 });
 
+jest.mock('react-native-simple-toast', (): Object => {
+	return {};
+});
+
 jest.mock('axios', (): Object => {
 	let mockAxios: Object = jest.fn((url: string, params?: Object): Promise<any> => Promise.resolve({ data: {} }));
 	mockAxios.CancelToken = {
