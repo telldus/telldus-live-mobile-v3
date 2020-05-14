@@ -69,7 +69,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
-	let { location } = useSelector((state: Object): Object => state.fences);
+	let { location, fence } = useSelector((state: Object): Object => state.fences);
 	location = location ? location : {};
 
 	function onPressNext() {
@@ -84,9 +84,9 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		(async () => {
 			const geofences = await dispatch(getCurrentAccountsFences());
 			setCurrentAccFences(geofences);
-		})();// TODO : Do render after deleting(now the fences are not in redux)
+		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [fence]);
 
 	const {
 		container,
@@ -107,21 +107,21 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		longitudeDelta,
 	});
 
-	function onEditFence(fence: Object) {
-		dispatch(setEditFence(fence));
+	function onEditFence(fenceToEdit: Object) {
+		dispatch(setEditFence(fenceToEdit));
 		setActiveFenceIndex(0);
 		navigation.navigate('EditGeoFence');
 	}
 
-	function renderMarker(fence: Object, index: number): Object {
-		if (!fence) {
+	function renderMarker(fenceC: Object, index: number): Object {
+		if (!fenceC) {
 			return;
 		}
 
 		const {
 			extras = {},
 			...others
-		} = fence;
+		} = fenceC;
 
 		function onEditFenceInner() {
 			const _fence = {
@@ -153,8 +153,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					style={mapStyle}
 					initialRegion={region}>
 					{
-						currentAccFences.map((fence: Object, index: number): () => Object => {
-							return renderMarker(fence, index);
+						currentAccFences.map((fenceC: Object, index: number): () => Object => {
+							return renderMarker(fenceC, index);
 						})
 					}
 					{currentAccFences.length > 0 && <MapView.Circle

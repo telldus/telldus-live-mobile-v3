@@ -51,6 +51,7 @@ import {
 	setFenceActiveTime,
 	setFenceArea,
 	setFenceTitle,
+	setEditFence,
 } from '../../Actions/Fences';
 import {
 	removeGeofence,
@@ -183,6 +184,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	function onDelete() {
 		dispatch(removeGeofence(identifier));
 		navigation.goBack();
+		dispatch(setEditFence({}));
 	}
 
 	function onEditArriving() {
