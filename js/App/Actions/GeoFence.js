@@ -70,7 +70,6 @@ function setupGeoFence(): ThunkAction {
 					});
 				}).catch((error: Object) => {
 					// Be sure to catch errors:  never leave you background-task hanging.
-					console.error(error);
 					BackgroundGeolocation.stopBackgroundTask();
 				});
 			}
