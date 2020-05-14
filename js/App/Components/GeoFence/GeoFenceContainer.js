@@ -136,7 +136,7 @@ export class GeoFenceContainer extends View<Props, State> {
 
 	disAllowBackNavigation(): boolean {
 		const {currentScreen} = this.props;
-		const screens = [];
+		const screens = ['EditGeoFenceAreaFull'];
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
