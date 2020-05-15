@@ -43,6 +43,7 @@ import {
 import {
 	addGeofence,
 	ERROR_CODE_FENCE_ID_EXIST,
+	ERROR_CODE_FENCE_NO_ACTION,
 } from '../../Actions/GeoFence';
 import {
 	useDialogueBox,
@@ -83,6 +84,17 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	const [ name, setName ] = useState('');
 
 	function onPressNext() {
+		if (!name || name.trim() === '') {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: 'Please enter a unique name for the fence.',
+				showPositive: true,
+			});
+			return;
+		}
+
 		dispatch(setFenceTitle(name));
 		dispatch(addGeofence()).then(() => {
 			navigation.dispatch(CommonActions.reset({
@@ -104,6 +116,8 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
 			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
 				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
+			} else if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
+				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
 			}
 			toggleDialogueBoxState({
 				show: true,

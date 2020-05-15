@@ -47,6 +47,7 @@ import {
 import GeoFenceUtils from '../Lib/GeoFenceUtils';
 
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
+const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
 
 function setupGeoFence(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
@@ -281,6 +282,13 @@ function addGeofence(override?: boolean = false): ThunkAction {
 		const notifyOnEntry = hasEntry(ad) || hasEntry(as) || hasEntry(aa);
 		const notifyOnExit = hasEntry(ld) || hasEntry(ls) || hasEntry(la);
 
+		if (!notifyOnEntry && !notifyOnExit) {
+			return Promise.reject({
+				code: ERROR_CODE_FENCE_NO_ACTION,
+				message: 'No actions are selected to execute on Entry/Exit. Please select any action to perform.',
+			});
+		}
+
 		const data: TYPE_ADD_GEO_FENCE_DATA = {
 			identifier: `${userId}-${cTitle}`,
 			radius: radius * 1000, // In meters
@@ -374,7 +382,9 @@ module.exports = {
 	setupGeoFence,
 	addGeofence,
 	getGeofences,
-	ERROR_CODE_FENCE_ID_EXIST,
 	getCurrentAccountsFences,
 	removeGeofence,
+
+	ERROR_CODE_FENCE_ID_EXIST,
+	ERROR_CODE_FENCE_NO_ACTION,
 };

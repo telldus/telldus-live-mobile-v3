@@ -55,6 +55,7 @@ import {
 import {
 	removeGeofence,
 	addGeofence,
+	ERROR_CODE_FENCE_NO_ACTION,
 } from '../../Actions/GeoFence';
 
 import {
@@ -158,11 +159,15 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		dispatch(addGeofence(true)).then(() => {
 			navigation.goBack();
 		}).catch((err: Object = {}) => {
+			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
+			if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
+				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
+			}
 			toggleDialogueBoxState({
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				text: 'Could not save fence. Please try again later.', // TODO: Translate
+				text: message,
 				showPositive: true,
 			});
 		});
