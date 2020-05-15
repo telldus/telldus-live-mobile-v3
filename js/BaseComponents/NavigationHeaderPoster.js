@@ -61,6 +61,8 @@ type Props = {
 	posterCoverStyle?: Array<any> | Object,
 	goBack: () => void,
 	showPoster?: boolean,
+	rightButton?: Object,
+	extraData?: Object,
 };
 
 type DefaultProps = {
@@ -114,6 +116,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'h1',
 		'appLayout',
 		'showPoster',
+		'extraData',
 	]);
 }
 
@@ -145,6 +148,7 @@ render(): Object {
 		showPoster,
 		align,
 		onPressPoster,
+		rightButton,
 	} = this.props;
 
 	return (
@@ -153,7 +157,8 @@ render(): Object {
 				navigation={navigation}
 				showLeftIcon={showLeftIcon}
 				leftIcon={leftIcon}
-				goBack={goBack}/>
+				goBack={goBack}
+				rightButton={rightButton}/>
 			{showPoster && (
 				<TouchableOpacity
 					onPress={onPressPoster}
