@@ -33,6 +33,7 @@ type Props = {
 	onTintColor?: any,
 	tintColor?: any,
 	style?: Array<any> | Object,
+	thumbColor: string,
 };
 
 type DefaultProps = {
@@ -64,15 +65,15 @@ export default class SwitchComponent extends Base {
 	}
 
 	render(): React$Element<any> {
-		const { onTintColor, tintColor, value, style } = this.props;
-		const thumbColor = value ? Theme.Core.brandSecondary : Theme.Core.inactiveSwitch;
+		const { onTintColor, tintColor, value, style, thumbColor } = this.props;
+		const _thumbColor = thumbColor || (value ? Theme.Core.brandSecondary : Theme.Core.inactiveSwitch);
 
 		return (
 			<Switch
 				value={value}
 				onValueChange={this.onValueChange}
 				style={style}
-				thumbColor={thumbColor}
+				thumbColor={_thumbColor}
 				trackColor={{
 					false: tintColor,
 					true: onTintColor,
