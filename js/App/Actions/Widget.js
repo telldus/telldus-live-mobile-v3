@@ -118,6 +118,11 @@ const widgetiOSRemoveDataFromKeychain = () => {
 };
 
 const getWidgetConstants = (): Object => {
+	// NOTE: Calling synchronous native methods not supported while debugging in chrome
+	if (typeof atob !== 'undefined') {
+		return {};
+	}
+
 	if (Platform.OS === 'android') {
 		const { AndroidWidget } = NativeModules;
 		return AndroidWidget.getAllConstants();
@@ -126,6 +131,10 @@ const getWidgetConstants = (): Object => {
 };
 
 const getWidgetTextFontSizeFactor = (): number => {
+	// NOTE: Calling synchronous native methods not supported while debugging in chrome
+	if (typeof atob !== 'undefined') {
+		return 0;
+	}
 	if (Platform.OS === 'android') {
 		const { AndroidWidget } = NativeModules;
 		return AndroidWidget.getTextFontSizeFactor();
