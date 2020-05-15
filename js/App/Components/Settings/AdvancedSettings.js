@@ -23,16 +23,20 @@
 
 import React, {
 	memo,
+	useCallback,
 } from 'react';
 import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import {
 	useSelector,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
 	NavigationHeader,
 	PosterWithText,
+	SettingsRow,
+	Text,
 } from '../../../BaseComponents';
 
 import Theme from '../../Theme';
@@ -47,7 +51,22 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		navigation,
 	} = props;
 
+	const intl = useIntl();
+
 	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const {
+		itemsContainer,
+		headerMainStyle,
+		labelTextStyle,
+		touchableStyle,
+		contentCoverStyle,
+	} = getStyles(layout);
+
+	const showOnGeoFenceLog = useCallback(() => {
+		navigation.navigate('GeoFenceEventsLogScreen');
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<View style={{
@@ -76,10 +95,66 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 						align={'center'}
 						h2={'Advanced settings'}
 						navigation={navigation}/>
+					<View style={itemsContainer}>
+						<Text style={headerMainStyle}>
+							GeoFence
+						</Text>
+						<SettingsRow
+							label={'View Fences Event Log'}
+							onPress={showOnGeoFenceLog}
+							appLayout={layout}
+							intl={intl}
+							type={'text'}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}/>
+					</View>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>
 	);
 });
+
+const getStyles = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		subHeader,
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = Math.floor(deviceWidth * 0.045);
+
+	return {
+		itemsContainer: {
+			flex: 1,
+			paddingHorizontal: padding,
+			paddingBottom: padding,
+			paddingTop: padding * 1.5,
+		},
+		headerMainStyle: {
+			marginBottom: 5,
+			color: subHeader,
+			fontSize,
+		},
+		labelTextStyle: {
+			fontSize,
+			color: '#000',
+			justifyContent: 'center',
+		},
+		touchableStyle: {
+			height: fontSize * 3.1,
+		},
+		contentCoverStyle: {
+			marginBottom: fontSize / 2,
+		},
+	};
+};
 
 export default AdvancedSettings;
