@@ -39,6 +39,7 @@ import {
 	View,
 	Text,
 	TouchableButton,
+	EmptyView,
 } from '../../../BaseComponents';
 
 import {
@@ -80,7 +81,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
-	let { fence } = useSelector((state: Object): Object => state.fences);
+	let { fence = {} } = useSelector((state: Object): Object => state.fences);
 
 	const {
 		latitude,
@@ -175,8 +176,8 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	function onDelete() {
 		dispatch(removeGeofence(identifier));
-		navigation.goBack();
 		dispatch(setEditFence({}));
+		navigation.goBack();
 	}
 
 	function onEditArriving() {
@@ -217,6 +218,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	function onChangeText(value: string) {
 		setAreaName(value);
+	}
+
+	if (typeof fence.latitude === 'undefined') {
+		return <EmptyView/>;
 	}
 
 	return (
@@ -282,8 +287,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 				style={buttonStyle}
 				labelStyle={labelStyle}
 				onPress={onSave}
-				accessible={true}
-			/>
+				accessible={true}/>
 			<TouchableButton
 				text={i18n.delete}
 				style={[buttonStyle, {
