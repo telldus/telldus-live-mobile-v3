@@ -284,7 +284,7 @@ class LoginForm extends View {
 					accessible={buttonAccessible}
 					disabled={disableAllSignin}
 				/>
-				<View style={{ height: 10 }}/>
+				<View style={{ height: 20 }}/>
 				{(Platform.OS === 'ios' && appleAuth.isSupported && showSocialAuth) &&
 				(
 					<AppleButton
