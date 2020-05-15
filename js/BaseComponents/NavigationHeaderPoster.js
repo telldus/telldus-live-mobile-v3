@@ -23,7 +23,12 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, BackHandler, Platform } from 'react-native';
+import {
+	StyleSheet,
+	BackHandler,
+	Platform,
+	TouchableOpacity,
+} from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import View from './View';
@@ -48,6 +53,7 @@ type Props = {
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
+	onPressPoster?: Function,
 
 	navigation: Object,
     handleBackPress: () => boolean,
@@ -138,6 +144,7 @@ render(): Object {
 		goBack,
 		showPoster,
 		align,
+		onPressPoster,
 	} = this.props;
 
 	return (
@@ -148,18 +155,23 @@ render(): Object {
 				leftIcon={leftIcon}
 				goBack={goBack}/>
 			{showPoster && (
-				<PosterWithText
-					appLayout={appLayout}
-					align={align}
-					icon={icon}
-					h1={h1}
-					h2={h2}
-					showBackButton={showBackButton}
-					showLeftIcon={showLeftIcon}
-					navigation={navigation}
-					infoButton={infoButton}
-					leftIcon={leftIcon}
-					posterCoverStyle={posterCoverStyle}/>
+				<TouchableOpacity
+					onPress={onPressPoster}
+					disabled={!onPressPoster}
+					activeOpacity={1}>
+					<PosterWithText
+						appLayout={appLayout}
+						align={align}
+						icon={icon}
+						h1={h1}
+						h2={h2}
+						showBackButton={showBackButton}
+						showLeftIcon={showLeftIcon}
+						navigation={navigation}
+						infoButton={infoButton}
+						leftIcon={leftIcon}
+						posterCoverStyle={posterCoverStyle}/>
+				</TouchableOpacity>
 			)}
 		</View>
 	);
