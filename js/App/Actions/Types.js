@@ -180,6 +180,8 @@ export type Action =
 	| { type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS', payload: Array<Object> }
 	| { type: 'UPDATE_STATUS_IAP_TRANSACTION', payload: Object }
 	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
+
+	| { type: 'DEBUG_GF_EVENT_ONGEOFENCE', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

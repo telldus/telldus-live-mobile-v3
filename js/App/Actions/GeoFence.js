@@ -49,6 +49,8 @@ import GeoFenceUtils from '../Lib/GeoFenceUtils';
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
 
+import type { Action } from './Types';
+
 function setupGeoFence(): ThunkAction {
 	return (dispatch: Function, getState: Function) => {
 
@@ -62,6 +64,10 @@ function setupGeoFence(): ThunkAction {
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
 			Toast.showWithGravity(`onGeofence ${AppState.currentState || ''} ${geofence.action}`, Toast.LONG, Toast.TOP);
+			dispatch(debugGFOnGeofence({
+				...geofence,
+				AppState: AppState.currentState,
+			}));
 			if (AppState.currentState === 'active') {
 				dispatch(handleFence(geofence));
 			} else {
@@ -378,6 +384,13 @@ function removeGeofence(identifier: string): ThunkAction {
 	};
 }
 
+const debugGFOnGeofence = (payload: Object): Action => {
+	return {
+		type: 'DEBUG_GF_EVENT_ONGEOFENCE',
+		payload,
+	};
+};
+
 module.exports = {
 	setupGeoFence,
 	addGeofence,
@@ -387,4 +400,6 @@ module.exports = {
 
 	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
+
+	debugGFOnGeofence,
 };
