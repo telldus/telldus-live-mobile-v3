@@ -77,6 +77,8 @@ import InfoScreen from './Info/InfoScreen';
 
 import GatewaysScreen from './TabViews/GatewaysScreen';
 
+import AdvancedSettings from './Settings/AdvancedSettings';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -393,6 +395,13 @@ const ScreenConfigs = [
 	{
 		name: 'InfoScreen',
 		Component: InfoScreen,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'AdvancedSettings',
+		Component: AdvancedSettings,
 		options: {
 			headerShown: false,
 		},
