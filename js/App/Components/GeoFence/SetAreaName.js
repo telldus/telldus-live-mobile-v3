@@ -23,12 +23,8 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-	Platform,
-} from 'react-native';
-import {
 	useDispatch,
 } from 'react-redux';
-import { CommonActions } from '@react-navigation/native';
 import { useIntl } from 'react-intl';
 
 import {
@@ -40,11 +36,6 @@ import {
 import {
 	setFenceTitle,
 } from '../../Actions/Fences';
-import {
-	addGeofence,
-	ERROR_CODE_FENCE_ID_EXIST,
-	ERROR_CODE_FENCE_NO_ACTION,
-} from '../../Actions/GeoFence';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
@@ -96,37 +87,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		}
 
 		dispatch(setFenceTitle(name));
-		dispatch(addGeofence()).then(() => {
-			navigation.dispatch(CommonActions.reset({
-				index: 2,
-				routes: [
-					{name: 'Tabs',
-						state: {
-							index: Platform.OS === 'android' ? 1 : 4,
-							routes: [
-								{
-									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
-								},
-							],
-						}},
-					{name: 'GeoFenceNavigator'},
-				],
-			}));
-		}).catch((err: Object = {}) => {
-			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
-			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
-				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
-			} else if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
-				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
-			}
-			toggleDialogueBoxState({
-				show: true,
-				showHeader: true,
-				imageHeader: true,
-				text: message,
-				showPositive: true,
-			});
-		});
+		navigation.navigate('ArrivingActions');
 	}
 
 	const {
@@ -134,7 +95,6 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		textField,
 		containerStyleTF,
 		brandSecondary,
-		iconStyle,
 	} = getStyles(appLayout);
 
 	function onChangeText(value: string) {
@@ -156,8 +116,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				value={name}/>
 			<FloatingButton
 				onPress={onPressNext}
-				iconName={'checkmark'}
-				iconStyle={iconStyle}/>
+				imageSource={{uri: 'right_arrow_key'}}/>
 		</View>
 	);
 });
@@ -195,9 +154,6 @@ const getStyles = (appLayout: Object): Object => {
 		textField: {
 			fontSize: fontSize * 1.3,
 			color: rowTextColor,
-		},
-		iconStyle: {
-			color: '#fff',
 		},
 	};
 };

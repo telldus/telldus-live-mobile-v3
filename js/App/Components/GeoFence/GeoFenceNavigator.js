@@ -61,6 +61,14 @@ const ScreenConfigs = [
 		},
 	},
 	{
+		name: 'SetAreaName',
+		Component: SetAreaName,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
 		name: 'ArrivingActions',
 		Component: ArrivingActions,
 		ContainerComponent: GeoFenceContainer,
@@ -79,14 +87,6 @@ const ScreenConfigs = [
 	{
 		name: 'ActiveTime',
 		Component: ActiveTime,
-		ContainerComponent: GeoFenceContainer,
-		options: {
-			headerShown: false,
-		},
-	},
-	{
-		name: 'SetAreaName',
-		Component: SetAreaName,
 		ContainerComponent: GeoFenceContainer,
 		options: {
 			headerShown: false,

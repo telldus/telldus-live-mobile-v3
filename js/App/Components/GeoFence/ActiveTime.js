@@ -24,11 +24,13 @@
 import React, { useEffect, useState } from 'react';
 import {
 	ScrollView,
+	Platform,
 } from 'react-native';
 import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+import { CommonActions } from '@react-navigation/native';
 
 import {
 	FloatingButton,
@@ -39,12 +41,20 @@ import {
 	TimePicker,
 } from './SubViews';
 
-import Theme from '../../Theme';
-
 import {
 	setFenceActiveTime,
 } from '../../Actions/Fences';
 
+import {
+	addGeofence,
+	ERROR_CODE_FENCE_ID_EXIST,
+	ERROR_CODE_FENCE_NO_ACTION,
+} from '../../Actions/GeoFence';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
+import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -87,9 +97,44 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		toMin: tM,
 	} = timeInfo;
 
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	function onPressNext() {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
-		navigation.navigate('SetAreaName');
+		dispatch(addGeofence()).then(() => {
+			navigation.dispatch(CommonActions.reset({
+				index: 2,
+				routes: [
+					{name: 'Tabs',
+						state: {
+							index: Platform.OS === 'android' ? 1 : 4,
+							routes: [
+								{
+									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
+								},
+							],
+						}},
+					{name: 'GeoFenceNavigator'},
+				],
+			}));
+		}).catch((err: Object = {}) => {
+			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
+			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
+				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
+			} else if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
+				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
+			}
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: message,
+				showPositive: true,
+			});
+		});
 	}
 
 	const {
@@ -97,6 +142,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		contentContainerStyle,
 		rowStyle,
 		leftItemStyle,
+		iconStyle,
 	} = getStyles(appLayout);
 
 	function onChangeTime(
@@ -129,7 +175,8 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
+				iconName={'checkmark'}
+				iconStyle={iconStyle}/>
 		</View>
 
 	);
@@ -167,6 +214,9 @@ const getStyles = (appLayout: Object): Object => {
 		leftItemStyle: {
 			color: eulaContentColor,
 			fontSize,
+		},
+		iconStyle: {
+			color: '#fff',
 		},
 	};
 };
