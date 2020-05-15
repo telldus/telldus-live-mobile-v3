@@ -81,64 +81,81 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       </View>
     </View>
     <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "flex": 0,
+          "opacity": 1,
         }
       }
     >
       <View
         style={
           Object {
-            "borderWidth": 0,
-            "height": 15.5,
-            "overflow": "hidden",
-            "width": 750,
+            "flex": 0,
           }
         }
       >
         <View
-          height={313}
           style={
             Object {
-              "marginTop": -2,
+              "borderWidth": 0,
+              "height": 15.5,
+              "overflow": "hidden",
+              "width": 750,
             }
           }
-          width={750}
-        />
-        <View
-          style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "bottom": 0,
-                "flex": 1,
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              undefined,
-            ]
-          }
         >
+          <View
+            height={313}
+            style={
+              Object {
+                "marginTop": -2,
+              }
+            }
+            width={750}
+          />
           <View
             style={
               Array [
                 Object {
-                  "alignItems": "flex-end",
-                  "flex": 0,
-                  "flexDirection": "column",
+                  "alignItems": "center",
+                  "bottom": 0,
+                  "flex": 1,
+                  "flexDirection": "row",
                   "justifyContent": "center",
-                  "marginRight": 12.4,
-                  "width": 80,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
                 },
                 undefined,
               ]
             }
-          />
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "alignItems": "flex-end",
+                    "flex": 0,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "marginRight": 12.4,
+                    "width": 80,
+                  },
+                  undefined,
+                ]
+              }
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -329,64 +346,81 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
       </View>
     </View>
     <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "flex": 0,
+          "opacity": 1,
         }
       }
     >
       <View
         style={
           Object {
-            "borderWidth": 0,
-            "height": 15.5,
-            "overflow": "hidden",
-            "width": 750,
+            "flex": 0,
           }
         }
       >
         <View
-          height={313}
           style={
             Object {
-              "marginTop": -2,
+              "borderWidth": 0,
+              "height": 15.5,
+              "overflow": "hidden",
+              "width": 750,
             }
           }
-          width={750}
-        />
-        <View
-          style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "bottom": 0,
-                "flex": 1,
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              undefined,
-            ]
-          }
         >
+          <View
+            height={313}
+            style={
+              Object {
+                "marginTop": -2,
+              }
+            }
+            width={750}
+          />
           <View
             style={
               Array [
                 Object {
-                  "alignItems": "flex-end",
-                  "flex": 0,
-                  "flexDirection": "column",
+                  "alignItems": "center",
+                  "bottom": 0,
+                  "flex": 1,
+                  "flexDirection": "row",
                   "justifyContent": "center",
-                  "marginRight": 12.4,
-                  "width": 80,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
                 },
                 undefined,
               ]
             }
-          />
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "alignItems": "flex-end",
+                    "flex": 0,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "marginRight": 12.4,
+                    "width": 80,
+                  },
+                  undefined,
+                ]
+              }
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -766,64 +800,81 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
       </View>
     </View>
     <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "flex": 0,
+          "opacity": 1,
         }
       }
     >
       <View
         style={
           Object {
-            "borderWidth": 0,
-            "height": 15.5,
-            "overflow": "hidden",
-            "width": 750,
+            "flex": 0,
           }
         }
       >
         <View
-          height={313}
           style={
             Object {
-              "marginTop": -2,
+              "borderWidth": 0,
+              "height": 15.5,
+              "overflow": "hidden",
+              "width": 750,
             }
           }
-          width={750}
-        />
-        <View
-          style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "bottom": 0,
-                "flex": 1,
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              undefined,
-            ]
-          }
         >
+          <View
+            height={313}
+            style={
+              Object {
+                "marginTop": -2,
+              }
+            }
+            width={750}
+          />
           <View
             style={
               Array [
                 Object {
-                  "alignItems": "flex-end",
-                  "flex": 0,
-                  "flexDirection": "column",
+                  "alignItems": "center",
+                  "bottom": 0,
+                  "flex": 1,
+                  "flexDirection": "row",
                   "justifyContent": "center",
-                  "marginRight": 12.4,
-                  "width": 80,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
                 },
                 undefined,
               ]
             }
-          />
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "alignItems": "flex-end",
+                    "flex": 0,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "marginRight": 12.4,
+                    "width": 80,
+                  },
+                  undefined,
+                ]
+              }
+            />
+          </View>
         </View>
       </View>
     </View>
