@@ -161,6 +161,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					initialRegion={region}>
+					<MapView.Marker
+						title="Current Location"
+						coordinate={{ latitude: latitude, longitude: longitude }}
+						pinColor={Theme.Core.brandSecondary}/>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
