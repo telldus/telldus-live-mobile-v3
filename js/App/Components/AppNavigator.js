@@ -78,6 +78,7 @@ import InfoScreen from './Info/InfoScreen';
 import GatewaysScreen from './TabViews/GatewaysScreen';
 
 import AdvancedSettings from './Settings/AdvancedSettings';
+import GeoFenceEventsLogScreen from './Settings/GeoFenceEventsLogScreen';
 
 import {
 	RegisterScreen,
@@ -402,6 +403,13 @@ const ScreenConfigs = [
 	{
 		name: 'AdvancedSettings',
 		Component: AdvancedSettings,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'GeoFenceEventsLogScreen',
+		Component: GeoFenceEventsLogScreen,
 		options: {
 			headerShown: false,
 		},
