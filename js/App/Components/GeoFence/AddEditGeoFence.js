@@ -59,12 +59,14 @@ type Props = {
     navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	enableGeoFence: boolean,
 };
 
 const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
+		enableGeoFence,
 	} = props;
 
 	const dispatch = useDispatch();
@@ -122,6 +124,9 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		} = fenceC;
 
 		function onEditFenceInner() {
+			if (!enableGeoFence) {
+				return;
+			}
 			const _fence = {
 				...extras,
 				...others,
@@ -160,7 +165,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
 					style={mapStyle}
-					initialRegion={region}>
+					initialRegion={region}
+					scrollEnabled={enableGeoFence}>
 					<MapView.Marker
 						title="Current Location"
 						coordinate={{ latitude: latitude, longitude: longitude }}
@@ -174,7 +180,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'icon_plus'}}/>
+				imageSource={{uri: 'icon_plus'}}
+				disabled={!enableGeoFence}/>
 		</View>
 	);
 });

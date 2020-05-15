@@ -122,6 +122,8 @@ type Props = {
 
 	showLoadingIndicator: boolean,
 
+	enableGeoFence: boolean,
+
     intl: intlShape.isRequired,
     dispatch: Function,
 	addNewLocation: () => any,
@@ -216,11 +218,15 @@ actionsToPerformOnStart = async () => {
 		pro,
 		visibilityProExpireHeadsup,
 		showLoadingIndicator,
+		enableGeoFence,
 	} = this.props;
 
 	// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
 	await dispatch(fetchRemoteConfig());
-	dispatch(setupGeoFence());
+
+	if (enableGeoFence) {
+		dispatch(setupGeoFence());
+	}
 
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
@@ -434,6 +440,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showLoadingIndicator',
 		'screen',
 		'showSwitchAccountAS',
+		'enableGeoFence',
 	]);
 	if (propsChange) {
 		return true;
@@ -752,7 +759,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		defaultSettings,
 	} = state.app;
 
-	let { language = {} } = defaultSettings || {};
+	let { language = {}, enableGeoFence } = defaultSettings || {};
 	let locale = language.code;
 
 	let {
@@ -801,6 +808,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showSwitchAccountAS: switchAccountConf.showAS,
 
 		showLoadingIndicator,
+
+		enableGeoFence: typeof enableGeoFence === 'undefined' ? true : enableGeoFence,
 	};
 }
 

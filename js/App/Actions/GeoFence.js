@@ -49,17 +49,21 @@ import GeoFenceUtils from '../Lib/GeoFenceUtils';
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
 
+const ERROR_CODE_GF_RC_DISABLED = 'GF_REMOTE_CONFIG_DISABLED';
+
 import type { Action } from './Types';
 
 function setupGeoFence(): ThunkAction {
-	return (dispatch: Function, getState: Function) => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
 
 		const { user: { firebaseRemoteConfig = {} } } = getState();
 		const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 		const { enable } = JSON.parse(geoFenceFeature);
 
 		if (!enable) {
-			return;
+			return Promise.reject({
+				code: ERROR_CODE_GF_RC_DISABLED,
+			});
 		}
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
@@ -82,7 +86,7 @@ function setupGeoFence(): ThunkAction {
 			}
 		});
 
-		BackgroundGeolocation.ready({
+		return BackgroundGeolocation.ready({
 			// Geolocation Config
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
 			distanceFilter: 10,
@@ -104,7 +108,7 @@ function setupGeoFence(): ThunkAction {
 				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
 				largeIcon: 'drawable/icon_notif',
 			},
-		}, async (state: Object) => {
+		}).then(async (state: Object): Object => {
 			if (!state.enabled) {
 				state = await BackgroundGeolocation.startGeofences();
 			}
@@ -128,10 +132,16 @@ function setupGeoFence(): ThunkAction {
 					// Ignore
 				}
 			}
+			return state;
 		});
 	};
 }
 
+const stopGeoFence = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		return BackgroundGeolocation.stop();
+	};
+};
 
 function handleFence(fence: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
@@ -397,6 +407,7 @@ module.exports = {
 	getGeofences,
 	getCurrentAccountsFences,
 	removeGeofence,
+	stopGeoFence,
 
 	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,

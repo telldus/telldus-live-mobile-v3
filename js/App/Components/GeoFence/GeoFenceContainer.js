@@ -30,8 +30,19 @@ const isEqual = require('react-fast-compare');
 import {
 	View,
 	NavigationHeaderPoster,
+	Switch,
+	Throbber,
 } from '../../../BaseComponents';
+
+import {
+	toggleFeatureGeoFence,
+	stopGeoFence,
+	setupGeoFence,
+	showToast,
+} from '../../Actions';
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 type Props = {
 	addDevice: Object,
@@ -42,6 +53,7 @@ type Props = {
 	ScreenName: string,
 	route: Object,
 	currentScreen: string,
+	enableGeoFence: boolean,
 };
 
 type State = {
@@ -51,6 +63,7 @@ type State = {
 	loading: boolean,
 	keyboardShown: boolean,
 	forceLeftIconVisibilty: boolean,
+	isGeoFenceLoadingStatus: boolean,
 };
 
 export class GeoFenceContainer extends View<Props, State> {
@@ -65,6 +78,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		infoButton: null,
 		keyboardShown: false,
 		forceLeftIconVisibilty: false,
+		isGeoFenceLoadingStatus: false,
 	};
 
 	constructor(props: Props) {
@@ -180,6 +194,52 @@ export class GeoFenceContainer extends View<Props, State> {
 		return isEditMode;
 	}
 
+	onValueChange = (enableGeoFence: boolean) => {
+		const {
+			actions,
+			screenProps,
+		} = this.props;
+		const { formatMessage } = screenProps.intl;
+
+		const messageOnFail = formatMessage(i18n.errortoast);
+		if (!enableGeoFence) {
+			actions.stopGeoFence().then((res: Object) => {
+				if (!res.enabled) {
+					actions.toggleFeatureGeoFence({
+						enableGeoFence,
+					});
+					actions.showToast('GeoFence is now turned off');
+				} else {
+					actions.showToast(messageOnFail);
+				}
+			}).catch(() => {
+				actions.showToast(messageOnFail);
+			});
+		} else {
+			this.setState({
+				isGeoFenceLoadingStatus: true,
+			});
+			actions.setupGeoFence().then((res: Object) => {
+				if (res.enabled) {
+					actions.toggleFeatureGeoFence({
+						enableGeoFence,
+					});
+					actions.showToast('GeoFence is now turned on');
+				} else {
+					actions.showToast(messageOnFail);
+				}
+				this.setState({
+					isGeoFenceLoadingStatus: false,
+				});
+			}).catch(() => {
+				this.setState({
+					isGeoFenceLoadingStatus: false,
+				});
+				actions.showToast(messageOnFail);
+			});
+		}
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -188,9 +248,10 @@ export class GeoFenceContainer extends View<Props, State> {
 			navigation,
 			route,
 			currentScreen,
+			enableGeoFence,
 		} = this.props;
 		const { appLayout } = screenProps;
-		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
+		const { h1, h2, infoButton, forceLeftIconVisibilty, isGeoFenceLoadingStatus } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
@@ -202,6 +263,24 @@ export class GeoFenceContainer extends View<Props, State> {
 		const leftIcon = this.getLeftIcon(currentScreen);
 		const goBack = this.getLeftIconPressAction(currentScreen);
 		const showPoster = this.shouldShowPoster(currentScreen);
+
+		const rightButton = {
+			component: isGeoFenceLoadingStatus ? <Throbber
+				throbberContainerStyle={{
+					position: 'relative',
+				}}
+				throbberStyle={{
+					color: '#fff',
+				}}/> :
+				<Switch
+					onValueChange={this.onValueChange}
+					thumbColor={enableGeoFence ? Theme.Core.brandSecondary : Theme.Core.btnDisabledBg}
+					tintColor={'#fff'}
+					onTintColor={'#fff'}
+					value={enableGeoFence}
+				/>,
+			onPress: () => {},
+		};
 
 		return (
 			<View
@@ -218,7 +297,12 @@ export class GeoFenceContainer extends View<Props, State> {
 					leftIcon={leftIcon}
 					goBack={goBack}
 					showPoster={showPoster}
-					{...screenProps}/>
+					extraData={{
+						enableGeoFence,
+						isGeoFenceLoadingStatus,
+					}}
+					{...screenProps}
+					rightButton={currentScreen === 'AddEditGeoFence' ? rightButton : undefined}/>
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={{flex: 1}}
@@ -239,7 +323,8 @@ export class GeoFenceContainer extends View<Props, State> {
 							showLeftIcon,
 							isEditMode: this.isEditMode,
 							route,
-						},
+							enableGeoFence,
+						}
 					)}
 				</KeyboardAvoidingView>
 			</View>
@@ -253,8 +338,14 @@ export const mapStateToProps = (store: Object): Object => {
 		screen: currentScreen,
 	} = store.navigation;
 
+	const {
+		defaultSettings = {},
+	} = store.app;
+
 	return {
 		currentScreen,
+		toggleFeatureGeoFence,
+		enableGeoFence: typeof defaultSettings.enableGeoFence === 'undefined' ? true : defaultSettings.enableGeoFence,
 	};
 };
 
@@ -262,6 +353,10 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
 			...bindActionCreators({
+				toggleFeatureGeoFence,
+				stopGeoFence,
+				setupGeoFence,
+				showToast,
 			}, dispatch),
 		},
 	}
