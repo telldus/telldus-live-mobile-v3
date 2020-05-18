@@ -146,6 +146,7 @@ getStyles(appLayout: Object): Object {
 			fontSize,
 		},
 		infoValue: {
+			marginLeft: 8,
 			color: rowTextColor,
 			fontSize,
 			flexWrap: 'wrap',
