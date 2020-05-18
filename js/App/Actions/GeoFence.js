@@ -110,7 +110,7 @@ function setupGeoFence(): ThunkAction {
 			},
 		}).then(async (state: Object): Object => {
 			if (!state.enabled) {
-				state = await BackgroundGeolocation.startGeofences();
+				state = await dispatch(startGeofences());
 			}
 			if (state.enabled) {
 				try {
@@ -140,6 +140,12 @@ function setupGeoFence(): ThunkAction {
 const stopGeoFence = (): ThunkAction => {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		return BackgroundGeolocation.stop();
+	};
+};
+
+const startGeofences = (): ThunkAction => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
+		return await BackgroundGeolocation.startGeofences();
 	};
 };
 
@@ -344,6 +350,7 @@ function addGeofence(override?: boolean = false): ThunkAction {
 		}
 
 		return BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
+			dispatch(startGeofences());
 			return success;
 		}).catch((error: any) => {
 			throw error;
@@ -408,6 +415,7 @@ module.exports = {
 	getCurrentAccountsFences,
 	removeGeofence,
 	stopGeoFence,
+	startGeofences,
 
 	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
