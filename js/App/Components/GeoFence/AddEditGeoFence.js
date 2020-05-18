@@ -93,6 +93,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		container,
 		mapStyle,
 		contentContainerStyle,
+		currentLocMarkerStyle,
+		currentLocMarkerOuterStyle,
 	} = getStyles(appLayout);
 
 	const {
@@ -170,7 +172,11 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					<MapView.Marker
 						title="Current Location"
 						coordinate={{ latitude: latitude, longitude: longitude }}
-						pinColor={Theme.Core.brandSecondary}/>
+						pinColor={Theme.Core.brandSecondary}>
+						<View style={currentLocMarkerOuterStyle}>
+							<View style={currentLocMarkerStyle}/>
+						</View>
+					</MapView.Marker>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
@@ -188,6 +194,11 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 const getStyles = (appLayout: Object): Object => {
 
+	const {
+		inactiveSwitchBackground,
+		iosToolbarBtnColor,
+	} = Theme.Core;
+
 	return {
 		container: {
 			flex: 1,
@@ -197,6 +208,22 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
+		},
+		currentLocMarkerOuterStyle: {
+			borderWidth: 1,
+			borderColor: inactiveSwitchBackground,
+			backgroundColor: '#fff',
+			height: 20,
+			width: 20,
+			borderRadius: 10,
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		currentLocMarkerStyle: {
+			backgroundColor: iosToolbarBtnColor,
+			height: 16,
+			width: 16,
+			borderRadius: 8,
 		},
 	};
 };
