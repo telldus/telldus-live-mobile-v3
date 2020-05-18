@@ -27,6 +27,9 @@ import {
 	Linking,
 } from 'react-native';
 import {
+	useMemo,
+} from 'react';
+import {
 	createIntl,
 	createIntlCache,
 } from 'react-intl';
@@ -57,27 +60,24 @@ import i18n from '../Translations/common';
 
 import Theme from '../Theme';
 
-let relativeIntls = {};
+import * as Translations from '../Translations';
 
 const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-
-	if (relativeIntls[gatewayTimezone]) {
-		return relativeIntls[gatewayTimezone];
-	}
-
 	let { language = {} } = defaultSettings;
 	let locale = language.code;
 
-	gatewayTimezone = gatewayTimezone;
-
-	const cache = createIntlCache();
-	relativeIntls[gatewayTimezone] = createIntl({
+	return useMemo((): Object => {
+		const cache = createIntlCache();
+		return createIntl({
+			locale,
+			timeZone: gatewayTimezone,
+			messages: Translations[locale] || Translations.en,
+		}, cache);
+	}, [
 		locale,
-		timeZone: gatewayTimezone,
-	}, cache);
-
-	return relativeIntls[gatewayTimezone];
+		gatewayTimezone,
+	]);
 };
 
 const useAppTheme = (): Object => {

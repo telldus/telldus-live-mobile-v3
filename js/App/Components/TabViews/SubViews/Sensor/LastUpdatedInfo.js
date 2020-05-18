@@ -21,8 +21,11 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { RawIntlProvider } from 'react-intl';
+import { useSelector } from 'react-redux';
 
 import {
 	FormattedRelative,
@@ -46,13 +49,20 @@ const LastUpdatedInfo = (props: Object): Object => {
 		timestamp,
 	} = props;
 
+	const {
+		defaultSettings = {},
+	} = useSelector((state: Object): Object => state.app);
+	const { language = {} } = defaultSettings || {};
+	const locale = language.code;
+
 	const intl = useRelativeIntl(gatewayTimezone);
-	const formatSensorLastUpdateFunc = React.useCallback((time: string): string => {
+	const formatSensorLastUpdateFunc = useCallback((time: string): string => {
 		return formatSensorLastUpdate(time, intl, timestamp, gatewayTimezone);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		gatewayTimezone,
 		timestamp,
+		locale,
 	]);
 
 	return (
