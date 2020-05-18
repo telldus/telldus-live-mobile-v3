@@ -280,7 +280,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setTextViewTextSize(R.id.txtSensorValue, COMPLEX_UNIT_SP, fontSizeOne);
         view.setTextViewTextSize(R.id.txtSensorUnit, COMPLEX_UNIT_SP, fontSizeTwo);
         view.setTextViewTextSize(R.id.txtHistoryInfo, COMPLEX_UNIT_SP, fontSizeFive);
-        view.setTextViewTextSize(R.id.txtSensorType, COMPLEX_UNIT_SP, fontSizeFour);
+        view.setTextViewTextSize(R.id.txtSensorType, COMPLEX_UNIT_SP, 14);
 
         long currentTime = new Date().getTime();
         long timeAgo = currentTime - time;

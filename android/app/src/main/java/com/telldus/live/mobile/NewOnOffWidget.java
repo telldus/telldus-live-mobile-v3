@@ -611,7 +611,7 @@ public class NewOnOffWidget extends AppWidgetProvider {
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
-        views.setTextViewTextSize(R.id.txtWidgetTitle, COMPLEX_UNIT_SP, fontSizeFour);
+        views.setTextViewTextSize(R.id.txtWidgetTitle, COMPLEX_UNIT_SP, 14);
         if (transparent.equals("dark")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
         } else if (transparent.equals("light") || transparent.equals("true")) {
