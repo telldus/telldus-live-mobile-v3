@@ -53,3 +53,7 @@ export function configureStore(onComplete: () => void): Object {
 	}
 	return store;
 }
+
+export function getStore(): Object {
+	return store;
+}

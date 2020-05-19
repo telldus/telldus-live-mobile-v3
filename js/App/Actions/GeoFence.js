@@ -89,9 +89,9 @@ function setupGeoFence(): ThunkAction {
 		return BackgroundGeolocation.ready({
 			// Geolocation Config
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-			distanceFilter: 10,
+			distanceFilter: 1,
 			// Activity Recognition
-			stopTimeout: 1,
+			stopTimeout: 5,
 			// Application config
 			debug: __DEV__, // <-- enable this hear sounds for background-geolocation life-cycle.
 			logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
@@ -100,16 +100,10 @@ function setupGeoFence(): ThunkAction {
 			// HTTP / SQLite config
 			batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
 			autoSync: false, // <-- [Default: true] Set true to sync each location to server as it arrives.
-			// Android: Foreground service
-			foregroundService: true,
-			notification: {
-				title: 'Telldus Live! Mobile',
-				text: 'GeoFence Tracking',
-				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
-				largeIcon: 'drawable/icon_notif',
-			},
+			// Android
+			enableHeadless: true,
 		}).then(async (state: Object): Object => {
-			if (!state.enabled) {
+			if (!state.enabled || state.trackingMode !== 0) {
 				state = await dispatch(startGeofences());
 			}
 			if (state.enabled) {
@@ -147,6 +141,54 @@ const startGeofences = (): ThunkAction => {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
 		return await BackgroundGeolocation.startGeofences();
 	};
+};
+
+let queue = {};
+const GeoFenceHeadlessTask = async (store: Object, event: Object): Promise<any> => {
+	const {
+		params = {},
+		name,
+	} = event;
+
+	const paramss = JSON.stringify(params);
+	Toast.showWithGravity(`GeoFenceHeadlessTask ${name} ${paramss}`, Toast.LONG, Toast.TOP);
+	if (name === 'geofence') {
+		const {
+			location = {},
+		} = params;
+		const {
+			uuid,
+		} = location;
+
+		queue[uuid] = true;
+
+		return new Promise(async (resolve: Function) => {
+			const removeSubscriber = store.subscribe(async () => {
+				const { _persist: persist = {} } = store.getState();
+				if (persist.rehydrated && queue[uuid]) {
+					delete queue[uuid];
+					store.dispatch(debugGFOnGeofence({
+						...params,
+					}));
+					await store.dispatch(handleFence(params));
+					removeSubscriber();
+					Promise.resolve();
+				}
+			});
+
+			const { _persist = {} } = store.getState() || {};
+			if (_persist.rehydrated && queue[uuid]) {
+				removeSubscriber();
+				delete queue[uuid];
+				store.dispatch(debugGFOnGeofence({
+					...params,
+				}));
+				await store.dispatch(handleFence(params));
+				Promise.resolve();
+			}
+		});
+	}
+	return Promise.resolve();
 };
 
 function handleFence(fence: Object): ThunkAction {
@@ -408,6 +450,13 @@ const debugGFOnGeofence = (payload: Object): Action => {
 	};
 };
 
+const updateGeoFenceConfig = (payload: Object): Action => {
+	return {
+		type: 'UPDATE_GEOFENCE_CONFIG',
+		payload,
+	};
+};
+
 module.exports = {
 	setupGeoFence,
 	addGeofence,
@@ -416,6 +465,8 @@ module.exports = {
 	removeGeofence,
 	stopGeoFence,
 	startGeofences,
+	GeoFenceHeadlessTask,
+	updateGeoFenceConfig,
 
 	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
