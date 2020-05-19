@@ -388,7 +388,12 @@ function addGeofence(override?: boolean = false): ThunkAction {
 		};
 
 		let hasFenceBySameName = false;
-		const geofences = await dispatch(getCurrentAccountsFences());
+		let geofences = [];
+		try {
+			geofences = await dispatch(getCurrentAccountsFences());
+		} catch (e) {
+			// Ignore
+		}
 
 		if (!override && (geofences && geofences.length > 0)) {
 			for (let i = 0; i < geofences.length; i++) {
@@ -412,8 +417,13 @@ function addGeofence(override?: boolean = false): ThunkAction {
 		}
 
 		return BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
-			dispatch(startGeofences());
-			return success;
+			try {
+				dispatch(startGeofences());
+			} catch (e) {
+				// ignore
+			} finally {
+				return success;
+			}
 		}).catch((error: any) => {
 			throw error;
 		});

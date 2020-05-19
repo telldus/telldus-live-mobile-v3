@@ -82,6 +82,8 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	const [ isLoading, setIsLoading ] = useState(false);
+
 	const [ timeInfo, setTimeInfo ] = useState({
 		alwaysActive: true,
 		fromHr: 0,
@@ -103,8 +105,10 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 	} = useDialogueBox();
 
 	function onPressNext() {
+		setIsLoading(true);
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(addGeofence()).then(() => {
+			setIsLoading(false);
 			navigation.dispatch(CommonActions.reset({
 				index: 2,
 				routes: [
@@ -121,6 +125,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 				],
 			}));
 		}).catch((err: Object = {}) => {
+			setIsLoading(false);
 			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
 			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
 				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
@@ -175,8 +180,10 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				iconName={'checkmark'}
-				iconStyle={iconStyle}/>
+				iconName={isLoading ? undefined : 'checkmark'}
+				iconStyle={iconStyle}
+				disabled={isLoading}
+				showThrobber={isLoading}/>
 		</View>
 
 	);
