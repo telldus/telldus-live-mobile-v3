@@ -182,6 +182,7 @@ export type Action =
 	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
 
 	| { type: 'DEBUG_GF_EVENT_ONGEOFENCE', payload: Object }
+	| { type: 'UPDATE_GEOFENCE_CONFIG', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

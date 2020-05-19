@@ -26,6 +26,15 @@ export type State = ?Object;
 
 export const initialState = {
 	onGeofence: [],
+	config: {
+		distanceFilter: 5,
+		stopTimeout: 5,
+		stopOnTerminate: false,
+		startOnBoot: true,
+		enableHeadless: true,
+		geofenceModeHighAccuracy: false,
+		preventSuspend: false,
+	},
 };
 
 const geoFence = (state: Object = initialState, action: Object): State => {
@@ -47,6 +56,19 @@ const geoFence = (state: Object = initialState, action: Object): State => {
 		return {
 			...state,
 			onGeofence: onGeofence.concat(action.payload),
+		};
+	}
+	if (action.type === 'UPDATE_GEOFENCE_CONFIG') {
+		const {
+			config = {},
+		} = state;
+
+		return {
+			...state,
+			config: {
+				...config,
+				...action.payload,
+			},
 		};
 	}
 	return state;

@@ -56,7 +56,10 @@ import type { Action } from './Types';
 function setupGeoFence(): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 
-		const { user: { firebaseRemoteConfig = {} } } = getState();
+		const {
+			user: { firebaseRemoteConfig = {} },
+			geoFence = {},
+		} = getState();
 		const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 		const { enable } = JSON.parse(geoFenceFeature);
 
@@ -65,6 +68,16 @@ function setupGeoFence(): ThunkAction {
 				code: ERROR_CODE_GF_RC_DISABLED,
 			});
 		}
+
+		const {
+			distanceFilter = 5,
+			stopTimeout = 5,
+			stopOnTerminate = false,
+			startOnBoot = true,
+			enableHeadless = true,
+			geofenceModeHighAccuracy = false,
+			preventSuspend = false,
+		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
 			Toast.showWithGravity(`onGeofence ${AppState.currentState || ''} ${geofence.action}`, Toast.LONG, Toast.TOP);
@@ -89,19 +102,22 @@ function setupGeoFence(): ThunkAction {
 		return BackgroundGeolocation.ready({
 			// Geolocation Config
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-			distanceFilter: 1,
+			distanceFilter,
 			// Activity Recognition
-			stopTimeout: 5,
+			stopTimeout,
 			// Application config
 			debug: __DEV__, // <-- enable this hear sounds for background-geolocation life-cycle.
 			logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE,
-			stopOnTerminate: false, // <-- Allow the background-service to continue tracking when user closes the app.
-			startOnBoot: true, // <-- Auto start tracking when device is powered-up.
+			stopOnTerminate, // <-- Allow the background-service to continue tracking when user closes the app.
+			startOnBoot, // <-- Auto start tracking when device is powered-up.
 			// HTTP / SQLite config
 			batchSync: false, // <-- [Default: false] Set true to sync locations to server in a single HTTP request.
 			autoSync: false, // <-- [Default: true] Set true to sync each location to server as it arrives.
 			// Android
-			enableHeadless: true,
+			enableHeadless,
+			geofenceModeHighAccuracy,
+			// iOS
+			preventSuspend,
 		}).then(async (state: Object): Object => {
 			if (!state.enabled || state.trackingMode !== 0) {
 				state = await dispatch(startGeofences());

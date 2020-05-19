@@ -24,10 +24,16 @@
 import React, {
 	memo,
 	useCallback,
+	useState,
 } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import {
+	ScrollView,
+	KeyboardAvoidingView,
+	Platform,
+} from 'react-native';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -38,6 +44,11 @@ import {
 	SettingsRow,
 	Text,
 } from '../../../BaseComponents';
+
+import {
+	updateGeoFenceConfig,
+	setupGeoFence,
+} from '../../Actions/GeoFence';
 
 import Theme from '../../Theme';
 
@@ -53,7 +64,26 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 
 	const intl = useIntl();
 
+	const dispatch = useDispatch();
+
 	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const { config = {} } = useSelector((state: Object): Object => state.geoFence) || {};
+	const {
+		distanceFilter = 5,
+		stopTimeout = 5,
+		stopOnTerminate = false,
+		startOnBoot = true,
+		enableHeadless = true,
+		geofenceModeHighAccuracy = false,
+		preventSuspend = false,
+	} = config;
+
+	const [ inLineEditActiveDF, setInLineEditActiveDF ] = useState();
+	const [ inLineEditActiveST, setInLineEditActiveST ] = useState();
+
+	const [ df, setDf ] = useState(distanceFilter);
+	const [ st, setSt ] = useState(stopTimeout);
 
 	const {
 		itemsContainer,
@@ -63,10 +93,97 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		contentCoverStyle,
 	} = getStyles(layout);
 
+	const onUpdateGeoFenceConfig = useCallback((conf: Object) => {
+		dispatch(updateGeoFenceConfig({
+			...config,
+			...conf,
+		}));
+		dispatch(setupGeoFence());
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [config]);
+
 	const showOnGeoFenceLog = useCallback(() => {
 		navigation.navigate('GeoFenceEventsLogScreen');
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const onPressEditDF = useCallback(() => {
+		if (inLineEditActiveDF) {
+			if (!df) {
+				return;
+			}
+			const _df = parseInt(df, 10);
+			if (isNaN(_df)) {
+				return;
+			}
+			onUpdateGeoFenceConfig({
+				distanceFilter: _df,
+			});
+		}
+		setInLineEditActiveDF(!inLineEditActiveDF);
+	}, [
+		onUpdateGeoFenceConfig,
+		inLineEditActiveDF,
+		df,
+	]);
+
+	const onPressEditST = useCallback(() => {
+		if (inLineEditActiveST) {
+			if (!st) {
+				return;
+			}
+			const _st = parseInt(st, 10);
+			if (isNaN(_st)) {
+				return;
+			}
+			onUpdateGeoFenceConfig({
+				stopTimeout: _st,
+			});
+		}
+		setInLineEditActiveST(!inLineEditActiveST);
+	}, [
+		onUpdateGeoFenceConfig,
+		inLineEditActiveST,
+		st,
+	]);
+
+	const onChangeTextDF = useCallback((value: string) => {
+		setDf(value);
+	}, []);
+
+	const onChangeTextST = useCallback((value: string) => {
+		setSt(value);
+	}, []);
+
+	const onValueChangeSOT = useCallback((value: boolean) => {
+		onUpdateGeoFenceConfig({
+			stopOnTerminate: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
+	const onValueChangeSOB = useCallback((value: string) => {
+		onUpdateGeoFenceConfig({
+			startOnBoot: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
+	const onValueChangeEH = useCallback((value: string) => {
+		onUpdateGeoFenceConfig({
+			enableHeadless: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
+	const onValueChangeHA = useCallback((value: string) => {
+		onUpdateGeoFenceConfig({
+			geofenceModeHighAccuracy: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
+	const onValueChangePS = useCallback((value: string) => {
+		onUpdateGeoFenceConfig({
+			preventSuspend: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
 
 	return (
 		<View style={{
@@ -99,6 +216,103 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 						<Text style={headerMainStyle}>
 							GeoFence
 						</Text>
+						<SettingsRow
+							label={'Distance Filter(number in meters): '}
+							value={df}
+							iconValueRight={inLineEditActiveDF ? 'done' : 'edit'}
+							inLineEditActive={inLineEditActiveDF}
+							onPressIconValueRight={onPressEditDF}
+							onChangeText={onChangeTextDF}
+							onSubmitEditing={onPressEditDF}
+							appLayout={layout}
+							intl={intl}
+							type={'text'}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Stop timeout(number in minutes): '}
+							value={st}
+							iconValueRight={inLineEditActiveST ? 'done' : 'edit'}
+							inLineEditActive={inLineEditActiveST}
+							onPressIconValueRight={onPressEditST}
+							onChangeText={onChangeTextST}
+							onSubmitEditing={onPressEditST}
+							appLayout={layout}
+							intl={intl}
+							type={'text'}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Stop on terminate: '}
+							onValueChange={onValueChangeSOT}
+							value={stopOnTerminate}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Start on boot: '}
+							onValueChange={onValueChangeSOB}
+							value={startOnBoot}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						{Platform.OS === 'android' && <SettingsRow
+							label={'Enable headless: '}
+							onValueChange={onValueChangeEH}
+							value={enableHeadless}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						}
+						{Platform.OS === 'android' && <SettingsRow
+							label={'High accuracy: \n(Slightly more battery)'}
+							onValueChange={onValueChangeHA}
+							value={geofenceModeHighAccuracy}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						}
+						{Platform.OS === 'ios' && <SettingsRow
+							label={'Prevent suspend: \n(Battery Caution!) '}
+							onValueChange={onValueChangePS}
+							value={preventSuspend}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						}
 						<SettingsRow
 							label={'View Fences Event Log'}
 							onPress={showOnGeoFenceLog}
