@@ -71,6 +71,12 @@ const geoFence = (state: Object = initialState, action: Object): State => {
 			},
 		};
 	}
+	if (action.type === 'CLEAR_ON_GEOFENCE_LOG') {
+		return {
+			...state,
+			onGeofence: [],
+		};
+	}
 	return state;
 };
 

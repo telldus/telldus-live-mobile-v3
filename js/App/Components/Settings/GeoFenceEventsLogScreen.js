@@ -32,6 +32,7 @@ import {
 } from 'react-native';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -40,7 +41,15 @@ import {
 	NavigationHeader,
 	PosterWithText,
 	Text,
+	TouchableButton,
 } from '../../../BaseComponents';
+
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+import {
+	clearAllOnGeoFencesLog,
+} from '../../Actions/GeoFence';
 
 import Theme from '../../Theme';
 
@@ -125,6 +134,7 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 		sectionLabel,
 		rowValue,
 		contentContainerStyle,
+		emptyTextStyle,
 	} = getStyles(layout);
 
 	const listData = prepareListData(onGeofence, {
@@ -168,6 +178,29 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 		return data.key;
 	}, []);
 
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+	const dispatch = useDispatch();
+	const onPressClear = useCallback(() => {
+		toggleDialogueBoxState({
+			show: true,
+			showPositive: true,
+			showNegative: true,
+			positiveText: 'CLEAR',
+			showHeader: true,
+			header: 'Clear?',
+			text: 'All logs will be lost forever!',
+			onPressPositive: () => {
+				dispatch(clearAllOnGeoFencesLog());
+				toggleDialogueBoxState({
+					show: false,
+				});
+			},
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<View style={{
 			flex: 1,
@@ -189,17 +222,25 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 					h2={'Events Log'}
 					navigation={navigation}/>
 				{listData.length === 0 ?
-					<Text style={sectionLabel}>
+					<Text style={emptyTextStyle}>
                 Empty
 					</Text>
 					:
-					<SectionList
-						sections={listData}
-						renderItem={renderRow}
-						renderSectionHeader={renderSectionHeader}
-						stickySectionHeadersEnabled={true}
-						keyExtractor={keyExtractor}
-						contentContainerStyle={contentContainerStyle}/>
+					<>
+						<SectionList
+							sections={listData}
+							renderItem={renderRow}
+							renderSectionHeader={renderSectionHeader}
+							stickySectionHeadersEnabled={true}
+							keyExtractor={keyExtractor}
+							contentContainerStyle={contentContainerStyle}/>
+						<TouchableButton
+							text={'CLEAR LOG'}
+							onPress={onPressClear}
+							style={{
+								marginBottom: 10,
+							}}/>
+					</>
 				}
 			</KeyboardAvoidingView>
 		</View>
@@ -265,6 +306,12 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			justifyContent: 'center',
 			marginLeft: 5,
+		},
+		emptyTextStyle: {
+			marginTop: 10,
+			color: rowTextColor,
+			fontSize,
+			alignSelf: 'center',
 		},
 	};
 };
