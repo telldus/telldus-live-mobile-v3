@@ -473,6 +473,12 @@ const updateGeoFenceConfig = (payload: Object): Action => {
 	};
 };
 
+const clearAllOnGeoFencesLog = (): Action => {
+	return {
+		type: 'CLEAR_ON_GEOFENCE_LOG',
+	};
+};
+
 module.exports = {
 	setupGeoFence,
 	addGeofence,
@@ -488,4 +494,5 @@ module.exports = {
 	ERROR_CODE_FENCE_NO_ACTION,
 
 	debugGFOnGeofence,
+	clearAllOnGeoFencesLog,
 };
