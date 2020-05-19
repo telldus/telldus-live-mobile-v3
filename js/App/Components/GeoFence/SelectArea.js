@@ -42,6 +42,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	MapOverlay,
+	CurrentPositionMarker,
 } from './SubViews';
 
 import {
@@ -121,7 +122,13 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}/>
+					onRegionChangeComplete={onRegionChangeComplete}>
+					<CurrentPositionMarker
+						latitude={latitude}
+						longitude={longitude}
+						appLayout={appLayout}
+						tracksViewChanges={false}/>
+				</MapView.Animated>
 				<MapOverlay/>
 			</ScrollView>
 			<FloatingButton

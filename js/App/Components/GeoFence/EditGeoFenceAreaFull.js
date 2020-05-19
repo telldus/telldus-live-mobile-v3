@@ -40,6 +40,7 @@ import {
 
 import {
 	MapOverlay,
+	CurrentPositionMarker,
 } from './SubViews';
 
 import {
@@ -64,7 +65,12 @@ const EditGeoFenceAreaFull = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
-	let { fence } = useSelector((state: Object): Object => state.fences);
+	let { fence, location } = useSelector((state: Object): Object => state.fences);
+	location = location ? location : {};
+	const {
+		latitude: latitudeC = 55.70584,
+		longitude: longitudeC = 13.19321,
+	} = location;
 
 	const {
 		latitude,
@@ -131,7 +137,13 @@ const EditGeoFenceAreaFull = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}/>
+					onRegionChangeComplete={onRegionChangeComplete}>
+					<CurrentPositionMarker
+						latitude={latitudeC}
+						longitude={longitudeC}
+						appLayout={appLayout}
+						tracksViewChanges={false}/>
+				</MapView.Animated>
 				<MapOverlay/>
 			</ScrollView>
 			<FloatingButton
