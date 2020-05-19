@@ -116,6 +116,10 @@ function setupGeoFence(): ThunkAction {
 			// Android
 			enableHeadless,
 			geofenceModeHighAccuracy,
+			notification: {
+				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
+				largeIcon: 'drawable/icon_notif',
+			},
 			// iOS
 			preventSuspend,
 		}).then(async (state: Object): Object => {
