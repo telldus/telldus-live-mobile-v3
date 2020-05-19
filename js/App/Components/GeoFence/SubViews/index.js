@@ -29,6 +29,7 @@ import JobRow from './JobRow';
 import EventRow from './EventRow';
 import TimePicker from './TimePicker';
 import RowWithAngle from './RowWithAngle';
+import CurrentPositionMarker from './CurrentPositionMarker';
 
 module.exports = {
 	FenceCallout,
@@ -39,4 +40,5 @@ module.exports = {
 	EventRow,
 	TimePicker,
 	RowWithAngle,
+	CurrentPositionMarker,
 };
