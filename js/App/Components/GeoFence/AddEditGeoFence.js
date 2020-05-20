@@ -24,6 +24,7 @@
 import React, {
 	useState,
 	useEffect,
+	useCallback,
 } from 'react';
 import {
 	StyleSheet,
@@ -42,7 +43,7 @@ import {
 	View,
 } from '../../../BaseComponents';
 import {
-	FenceCallout,
+	FenceCalloutWithMarker,
 	CurrentPositionMarker,
 } from './SubViews';
 
@@ -109,10 +110,11 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		longitudeDelta,
 	});
 
-	function onEditFence(fenceToEdit: Object) {
+	const onEditFence = useCallback((fenceToEdit: Object) => {
 		dispatch(setEditFence(fenceToEdit));
 		navigation.navigate('EditGeoFence');
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	function renderMarker(fenceC: Object, index: number): Object {
 		if (!fenceC) {
@@ -121,32 +123,15 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 		const {
 			extras = {},
-			...others
 		} = fenceC;
-
-		function onEditFenceInner() {
-			if (!enableGeoFence) {
-				return;
-			}
-			const _fence = {
-				...extras,
-				...others,
-				radius: extras.radius / 1000,
-			};
-			onEditFence(_fence);
-		}
 
 		return (
 			<React.Fragment
 				key={`${index}`}>
-				<MapView.Marker
-					image={{uri: 'marker'}}
-					coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
-					<MapView.Callout onPress={onEditFenceInner}>
-						<FenceCallout
-							title={extras.title}/>
-					</MapView.Callout>
-				</MapView.Marker>
+				<FenceCalloutWithMarker
+					fence={fenceC}
+					enableGeoFence={enableGeoFence}
+					onPress={onEditFence}/>
 				<MapView.Circle
 					center={{
 						latitude: extras.latitude,

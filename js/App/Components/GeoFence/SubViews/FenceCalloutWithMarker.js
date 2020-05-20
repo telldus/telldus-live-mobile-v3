@@ -21,7 +21,10 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useRef,
+	useCallback,
+} from 'react';
 import {
 	TouchableOpacity,
 } from 'react-native';
@@ -29,6 +32,7 @@ import {
 	useSelector,
 } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MapView from 'react-native-maps';
 
 import {
 	View,
@@ -38,12 +42,36 @@ import {
 import Theme from '../../../Theme';
 
 
-const FenceCallout = React.memo<Object>((props: Object): Object => {
+const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	const {
-		title,
+		onPress,
+		fence,
+		enableGeoFence,
 	} = props;
 
+	const markerRef = useRef(null);
+
+	const {
+		extras = {},
+		...others
+	} = fence;
+
 	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const _onPress = useCallback(() => {
+		if (!enableGeoFence) {
+			return;
+		}
+		const _fence = {
+			...extras,
+			...others,
+			radius: extras.radius / 1000,
+		};
+		if (markerRef && markerRef.current && markerRef.current.showCallout) {
+			markerRef.current.hideCallout();
+		}
+		onPress(_fence);
+	}, [enableGeoFence, extras, onPress, others]);
 
 	const {
 		container,
@@ -53,18 +81,25 @@ const FenceCallout = React.memo<Object>((props: Object): Object => {
 	} = getStyles(layout);
 
 	return (
-		<View style={container}>
-			<Text
-				style={titleStyle}>
-				{title}
-			</Text>
-			<TouchableOpacity
-				style={editBtn}>
-				<Icon
-					style={editIcon}
-					name="mode-edit"/>
-			</TouchableOpacity>
-		</View>
+		<MapView.Marker
+			ref={markerRef}
+			image={{uri: 'marker'}}
+			coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
+			<MapView.Callout onPress={_onPress}>
+				<View style={container}>
+					<Text
+						style={titleStyle}>
+						{extras.title}
+					</Text>
+					<TouchableOpacity
+						style={editBtn}>
+						<Icon
+							style={editIcon}
+							name="mode-edit"/>
+					</TouchableOpacity>
+				</View>
+			</MapView.Callout>
+		</MapView.Marker>
 	);
 });
 
@@ -99,4 +134,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default FenceCallout;
+export default FenceCalloutWithMarker;
