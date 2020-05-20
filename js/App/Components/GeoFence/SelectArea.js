@@ -42,7 +42,6 @@ import {
 } from '../../../BaseComponents';
 import {
 	MapOverlay,
-	CurrentPositionMarker,
 } from './SubViews';
 
 import {

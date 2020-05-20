@@ -76,8 +76,6 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const fontSize = deviceWidth * 0.04;
-
 	return {
 		overlayWidth: deviceWidth,
 		mapOverlay: {

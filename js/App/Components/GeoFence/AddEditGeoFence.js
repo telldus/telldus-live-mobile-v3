@@ -44,7 +44,6 @@ import {
 } from '../../../BaseComponents';
 import {
 	FenceCalloutWithMarker,
-	CurrentPositionMarker,
 } from './SubViews';
 
 import {

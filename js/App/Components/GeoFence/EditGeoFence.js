@@ -46,7 +46,6 @@ import {
 	RowWithAngle,
 	TimePicker,
 	MapOverlay,
-	CurrentPositionMarker,
 } from './SubViews';
 
 import {
@@ -82,12 +81,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
-	let { fence = {}, location } = useSelector((state: Object): Object => state.fences);
-	location = location ? location : {};
-	const {
-		latitude: latitudeC = 55.70584,
-		longitude: longitudeC = 13.19321,
-	} = location;
+	let { fence = {} } = useSelector((state: Object): Object => state.fences);
 
 	const {
 		latitude,
