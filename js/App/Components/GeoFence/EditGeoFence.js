@@ -284,13 +284,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 					scrollEnabled={false}
 					initialRegion={new MapView.AnimatedRegion(region)}
 					region={new MapView.AnimatedRegion(region)}
-					onPress={onPress}>
-					<CurrentPositionMarker
-						latitude={latitudeC}
-						longitude={longitudeC}
-						appLayout={appLayout}
-						tracksViewChanges={false}/>
-				</MapView.Animated>
+					onPress={onPress}
+					loadingEnabled={true}
+					showsTraffic={false}
+					showsUserLocation={true}/>
 				<MapOverlay
 					overlayWidth={overlayWidth}/>
 			</View>

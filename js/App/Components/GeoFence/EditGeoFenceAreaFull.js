@@ -137,13 +137,10 @@ const EditGeoFenceAreaFull = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}>
-					<CurrentPositionMarker
-						latitude={latitudeC}
-						longitude={longitudeC}
-						appLayout={appLayout}
-						tracksViewChanges={false}/>
-				</MapView.Animated>
+					onRegionChangeComplete={onRegionChangeComplete}
+					loadingEnabled={true}
+					showsTraffic={false}
+					showsUserLocation={true}/>
 				<MapOverlay/>
 			</ScrollView>
 			<FloatingButton

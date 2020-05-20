@@ -121,14 +121,11 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
 					style={mapStyle}
+					loadingEnabled={true}
+					showsTraffic={false}
+					showsUserLocation={true}
 					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}>
-					<CurrentPositionMarker
-						latitude={latitude}
-						longitude={longitude}
-						appLayout={appLayout}
-						tracksViewChanges={false}/>
-				</MapView.Animated>
+					onRegionChangeComplete={onRegionChangeComplete}/>
 				<MapOverlay/>
 			</ScrollView>
 			<FloatingButton

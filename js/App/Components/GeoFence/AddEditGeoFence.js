@@ -152,12 +152,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				<MapView.Animated
 					style={mapStyle}
 					initialRegion={region}
-					scrollEnabled={enableGeoFence}>
-					<CurrentPositionMarker
-						latitude={latitude}
-						longitude={longitude}
-						appLayout={appLayout}
-						tracksViewChanges={false}/>
+					scrollEnabled={enableGeoFence}
+					loadingEnabled={true}
+					showsTraffic={false}
+					showsUserLocation={true}>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
