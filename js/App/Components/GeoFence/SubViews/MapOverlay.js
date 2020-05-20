@@ -98,7 +98,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		marker: {
 			color: '#1B365D',
-			fontSize: fontSize,
+			fontSize: 28,
 			backgroundColor: 'rgba(0,0,0,0)',
 		},
 		mapCircle: {
