@@ -27,15 +27,13 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
-import {
-	Switch,
-} from 'react-native';
 
 import {
 	Text,
 	View,
 	ListItem,
 	CheckBoxIconText,
+	Switch,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';

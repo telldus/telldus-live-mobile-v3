@@ -26,7 +26,6 @@
 import React from 'react';
 import {
 	StyleSheet,
-	Switch,
 	Picker,
 	LayoutAnimation,
 } from 'react-native';
@@ -34,6 +33,7 @@ import {
 	View,
 	Text,
 	EmptyView,
+	Switch,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
