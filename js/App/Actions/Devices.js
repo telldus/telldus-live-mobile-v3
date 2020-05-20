@@ -34,7 +34,8 @@ import { validateLocalControlSupport } from './Gateways';
 import { actions } from 'live-shared-data';
 const { Devices, App, DevicesCommon } = actions;
 const { deviceSetState: deviceSetStateShared, ...otherActions } = Devices;
-const { deviceSetStateSuccess, deviceResetState, requestDeviceAction, getDeviceInfo } = otherActions;
+const { deviceResetState, requestDeviceAction, getDeviceInfo } = otherActions;
+const { deviceSetStateSuccess } = DevicesCommon;
 const { showToast } = App;
 
 let setStateTimeout = {};
