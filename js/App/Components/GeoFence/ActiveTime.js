@@ -31,6 +31,7 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { CommonActions } from '@react-navigation/native';
+let uuid = require('react-native-uuid');
 
 import {
 	FloatingButton,
@@ -43,6 +44,7 @@ import {
 
 import {
 	setFenceActiveTime,
+	setFenceIdentifier,
 } from '../../Actions/Fences';
 
 import {
@@ -106,6 +108,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 
 	function onPressNext() {
 		setIsLoading(true);
+		dispatch(setFenceIdentifier(uuid.v1()));
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(addGeofence()).then(() => {
 			setIsLoading(false);

@@ -121,7 +121,6 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		buttonStyle,
 		labelStyle,
 		textFieldStyle,
-		rightItemStyle,
 		overlayWidth,
 	} = getStyles(appLayout);
 
@@ -236,7 +235,10 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			contentContainerStyle={contentContainerStyle}>
 			<View style={rowContainer}>
 
-				<View style={rowStyle}>
+				<TouchableOpacity
+					onPress={onEditName}
+					disabled={editName}
+					style={rowStyle}>
 					<Text style={leftItemStyle}>
 						{formatMessage(i18n.name)}
 					</Text>
@@ -251,13 +253,11 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 							returnKeyType={'done'}
 						/>
 						:
-						<TouchableOpacity onPress={onEditName} style={rightItemStyle}>
-							<Text style={rightTextItemStyle}>
-								{areaName}
-							</Text>
-						</TouchableOpacity>
+						<Text style={rightTextItemStyle}>
+							{areaName}
+						</Text>
 					}
-				</View>
+				</TouchableOpacity>
 				<RowWithAngle
 					labelText={formatMessage(i18n.arrivingActions)}
 					onPress={onEditArriving}/>
@@ -383,13 +383,10 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSizeButtonLabel,
 		},
 		textFieldStyle: {
+			flex: 1,
 			color: eulaContentColor,
 			fontSize,
 			textAlign: 'right',
-		},
-		rightItemStyle: {
-			alignItems: 'flex-end',
-			justifyContent: 'center',
 		},
 	};
 };

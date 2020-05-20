@@ -352,7 +352,7 @@ function addGeofence(override?: boolean = false): ThunkAction {
 			},
 		} = getState();
 		const {
-			title: cTitle = '',
+			identifier,
 			radius,
 			latitude,
 			longitude,
@@ -374,7 +374,7 @@ function addGeofence(override?: boolean = false): ThunkAction {
 		}
 
 		const data: TYPE_ADD_GEO_FENCE_DATA = {
-			identifier: `${userId}-${cTitle}`,
+			identifier,
 			radius: radius * 1000, // In meters
 			latitude,
 			longitude,
@@ -386,35 +386,6 @@ function addGeofence(override?: boolean = false): ThunkAction {
 				userId,
 			},
 		};
-
-		let hasFenceBySameName = false;
-		let geofences = [];
-		try {
-			geofences = await dispatch(getCurrentAccountsFences());
-		} catch (e) {
-			// Ignore
-		}
-
-		if (!override && (geofences && geofences.length > 0)) {
-			for (let i = 0; i < geofences.length; i++) {
-				const {
-					extras: {
-						title = '',
-					},
-				} = geofences[i];
-				if (title.trim().toLowerCase() === cTitle.trim().toLowerCase()) {
-					hasFenceBySameName = true;
-					break;
-				}
-			}
-		}
-
-		if (hasFenceBySameName) {
-			return Promise.reject({
-				code: ERROR_CODE_FENCE_ID_EXIST,
-				message: 'Fence by the same name already exist',
-			});
-		}
 
 		return BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
 			try {
