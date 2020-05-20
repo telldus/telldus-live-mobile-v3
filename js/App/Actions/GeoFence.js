@@ -75,7 +75,7 @@ function setupGeoFence(): ThunkAction {
 			stopOnTerminate = false,
 			startOnBoot = true,
 			enableHeadless = true,
-			geofenceModeHighAccuracy = false,
+			geofenceModeHighAccuracy = true,
 			preventSuspend = false,
 		} = geoFence.config || {};
 

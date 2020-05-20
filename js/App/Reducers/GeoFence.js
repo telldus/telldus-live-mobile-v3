@@ -32,7 +32,7 @@ export const initialState = {
 		stopOnTerminate: false,
 		startOnBoot: true,
 		enableHeadless: true,
-		geofenceModeHighAccuracy: false,
+		geofenceModeHighAccuracy: true,
 		preventSuspend: false,
 	},
 };

@@ -75,7 +75,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		stopOnTerminate = false,
 		startOnBoot = true,
 		enableHeadless = true,
-		geofenceModeHighAccuracy = false,
+		geofenceModeHighAccuracy = true,
 		preventSuspend = false,
 	} = config;
 
