@@ -150,7 +150,7 @@ export class GeoFenceContainer extends View<Props, State> {
 
 	disAllowBackNavigation(): boolean {
 		const {currentScreen} = this.props;
-		const screens = ['EditGeoFenceAreaFull'];
+		const screens = [];
 		return screens.indexOf(currentScreen) !== -1;
 	}
 
@@ -169,7 +169,7 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = ['AddEditGeoFence'];
+		const SCNS = ['AddEditGeoFence', 'EditGeoFenceAreaFull'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
