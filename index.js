@@ -22,16 +22,16 @@
 import 'react-native-gesture-handler';
 
 import { AppRegistry } from 'react-native';
-import Bootstrap from './js/Bootstrap';
+import {
+	Bootstrap,
+	store,
+} from './js/Bootstrap';
 
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {
 	GeoFenceHeadlessTask,
 } from './js/App/Actions/GeoFence';
-import {
-	getStore,
-} from './js/App/Store/ConfigureStore';
 
 AppRegistry.registerComponent('TelldusLiveApp', Bootstrap);
 
-BackgroundGeolocation.registerHeadlessTask(GeoFenceHeadlessTask.bind(null, getStore()));
+BackgroundGeolocation.registerHeadlessTask(GeoFenceHeadlessTask.bind(null, store));

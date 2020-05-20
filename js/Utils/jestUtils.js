@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 
 import { configureStore } from '../App/Store/ConfigureStore';
-const store = configureStore();
+const store = configureStore().store;
 import {
 	setAppLayout,
 	deviceInfoSuccess,
