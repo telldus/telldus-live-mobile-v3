@@ -71,3 +71,8 @@ export const setEditFence = (fence: Object): Object => ({
 export const resetFence = (): Object => ({
 	type: 'RESET_FENCE',
 });
+
+export const setFenceIdentifier = (identifier: string): Object => ({
+	type: 'SET_FENCE_IDENTIFIER',
+	payload: identifier,
+});

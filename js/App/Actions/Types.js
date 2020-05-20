@@ -165,6 +165,7 @@ export type Action =
 	| { type: 'SET_EDIT_FENCE', payload: Object }
 	| { type: 'DELETE_FENCE', payload: Object }
 	| { type: 'UPDATE_FENCE', payload: Object }
+	| { type: 'SET_FENCE_IDENTIFIER', payload: string }
 	| { type: 'RESET_FENCE', payload: Object }
 	| { type: 'CLEAR_FENCES', payload: Object }
 

@@ -98,6 +98,16 @@ const resetFence = (state: Object, action: Object): Object => ({
 	fence: {},
 });
 
+const setFenceIdentifier = (state: Object, action: Object): Object => {
+	return {
+		...state,
+		fence: {
+			...state.fence,
+			identifier: action.payload,
+		},
+	};
+};
+
 const rehydrateFence = (state: Object, action: Object): Object => {
 	if (action.payload && action.payload.fences) {
 		return {
@@ -118,9 +128,9 @@ const actionHandlers = {
 	['SET_FENCE_TITLE']: setTitle,
 	['SET_CURRENT_LOCATION']: setCurrentLocation,
 	['SET_EDIT_FENCE']: setEditFence,
+	['SET_FENCE_IDENTIFIER']: setFenceIdentifier,
 	['RESET_FENCE']: resetFence,
 	['persist/REHYDRATE']: rehydrateFence,
-
 };
 
 export default createReducer(initialState, actionHandlers);
