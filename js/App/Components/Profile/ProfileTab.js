@@ -46,6 +46,7 @@ import {
 	UpdatePasswordBlock,
 	PrivacyPolicyLink,
 	EulaLink,
+	SwitchOrAddAccountButton,
 } from './SubViews';
 import {
 	ViewPremiumBenefitsButton,
@@ -98,7 +99,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		...otherSAConfs
 	} = switchAccountConf;
 
-	const { premiumPurchase = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
+	const {
+		premiumPurchase = JSON.stringify({enable: false}),
+	} = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
 
 	function onPressRedeemGift() {
@@ -311,6 +314,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					label={hasMultipleAccounts ? formatMessage(i18n.logoutFromAllAccnts) : formatMessage(i18n.labelLogOut)}
 					isLoggingOut={isLoggingOut}
 				/>
+				<SwitchOrAddAccountButton
+					disabled={isLoggingOut}/>
 			</View>
 		</ScrollView>
 	);
