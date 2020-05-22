@@ -24,7 +24,7 @@ import React from 'react';
 import { Modal, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Orientation from 'react-native-orientation-locker';
 const isEqual = require('react-fast-compare');
 import maxBy from 'lodash/maxBy';

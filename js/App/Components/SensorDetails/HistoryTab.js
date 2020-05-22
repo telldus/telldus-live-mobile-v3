@@ -24,7 +24,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import {
 	View,
