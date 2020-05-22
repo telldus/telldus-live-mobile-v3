@@ -55,6 +55,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,
+	disableActionIndicator?: boolean,
 };
 
 class HeatInfoBlock extends View {
@@ -98,6 +99,7 @@ class HeatInfoBlock extends View {
 			textThreeStyle,
 			intl,
 			iconSize,
+			disableActionIndicator,
 		} = this.props;
 		let { methodRequested, name, local } = device;
 
@@ -146,7 +148,7 @@ class HeatInfoBlock extends View {
 					}
 				</View>
 				{
-					methodRequested === 'THERMOSTAT' ?
+					!disableActionIndicator && methodRequested === 'THERMOSTAT' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null

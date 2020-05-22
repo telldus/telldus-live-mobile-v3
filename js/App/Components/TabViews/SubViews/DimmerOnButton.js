@@ -21,7 +21,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
@@ -45,6 +44,7 @@ type Props = {
 	local: boolean,
 	onButtonColor?: string,
 	iconOnColor?: string,
+	disableActionIndicator?: boolean,
 };
 
 type State = {
@@ -105,6 +105,7 @@ class DimmerOnButton extends View {
 			local,
 			onButtonColor,
 			iconOnColor,
+			disableActionIndicator,
 		} = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
@@ -123,7 +124,7 @@ class DimmerOnButton extends View {
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="on" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
-					methodRequested === 'TURNON' ?
+					!disableActionIndicator && methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
@@ -172,15 +173,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-DimmerOnButton.propTypes = {
-	isInState: PropTypes.string,
-	enabled: PropTypes.bool,
-	fontSize: PropTypes.number,
-	methodRequested: PropTypes.string,
-};
-
 DimmerOnButton.defaultProps = {
 	enabled: true,
+	disableActionIndicator: false,
 };
 
 module.exports = DimmerOnButton;

@@ -164,6 +164,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		appLayout: layout,
 		actionIcons,
 		onPressOverride,
+		disableActionIndicator: true,
 	};
 
 	if (BELL) {

@@ -49,6 +49,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class DownButton extends View {
@@ -95,7 +96,7 @@ class DownButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local } = this.props;
+			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
 
 
 		let downButtonStyle = !isGatewayActive ?
@@ -115,7 +116,7 @@ class DownButton extends View {
 					}}
 				/>
 				{
-					methodRequested === 'DOWN' ?
+					!disableActionIndicator && methodRequested === 'DOWN' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -127,6 +128,7 @@ class DownButton extends View {
 
 DownButton.defaultProps = {
 	commandDown: 256,
+	disableActionIndicator: false,
 };
 
 const styles = StyleSheet.create({

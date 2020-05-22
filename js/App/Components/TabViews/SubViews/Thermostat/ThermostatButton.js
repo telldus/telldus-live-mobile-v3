@@ -49,10 +49,12 @@ type Props = {
 	openThermostatControl: (number) => void,
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
+	disableActionIndicator?: boolean,
 };
 
 type DefaultProps = {
 	showStopButton: boolean,
+	disableActionIndicator: boolean,
 };
 
 type State = {
@@ -64,6 +66,7 @@ class ThermostatButton extends View<Props, State> {
 
 	static defaultProps: DefaultProps = {
 		showStopButton: true,
+		disableActionIndicator: false,
 	};
 
 	constructor(props: Props) {
@@ -114,6 +117,7 @@ class ThermostatButton extends View<Props, State> {
 			isGatewayActive,
 			infoBlockStyle,
 			style,
+			disableActionIndicator,
 		} = this.props;
 
 		const { stateValues = {} } = device;
@@ -137,7 +141,8 @@ class ThermostatButton extends View<Props, State> {
 			iconStyle={styles.iconStyle}
 			textOneStyle={styles.textOneStyle}
 			textTwoStyle={styles.textTwoStyle}
-			textThreeStyle={styles.textThreeStyle}/>;
+			textThreeStyle={styles.textThreeStyle}
+			disableActionIndicator={disableActionIndicator}/>;
 
 		const bGColor = !isGatewayActive ? Theme.Core.gatewayInactive :
 			mode === 'off' ? Theme.Core.brandPrimary : Theme.Core.brandSecondary;

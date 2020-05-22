@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
@@ -48,6 +47,7 @@ type Props = {
 	onTurnOn: number => void,
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class ToggleButton extends View {
@@ -86,6 +86,7 @@ class ToggleButton extends View {
 			actionIcons = {},
 			onPressDeviceAction,
 			onPressOverride,
+			disableActionIndicator,
 		} = this.props;
 		const { id, isInState, methodRequested, name, local, supportedMethods = {} } = device;
 		const { TURNON, TURNOFF } = supportedMethods;
@@ -103,6 +104,7 @@ class ToggleButton extends View {
 			intl,
 			onPressDeviceAction,
 			onPressOverride,
+			disableActionIndicator,
 		};
 
 		const onButton = <OnButton
@@ -145,13 +147,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-ToggleButton.propTypes = {
-	device: PropTypes.object,
-	enabled: PropTypes.bool,
-};
-
 ToggleButton.defaultProps = {
 	enabled: true,
+	disableActionIndicator: false,
 };
 
 module.exports = ToggleButton;
