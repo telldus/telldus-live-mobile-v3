@@ -25,7 +25,6 @@
 import React from 'react';
 import { ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
 const isEqual = require('react-fast-compare');
