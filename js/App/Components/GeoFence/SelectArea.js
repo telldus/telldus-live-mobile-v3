@@ -24,6 +24,7 @@
 import React, {
 	useEffect,
 	useState,
+	useCallback,
 } from 'react';
 import {
 	StyleSheet,
@@ -42,6 +43,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	MapOverlay,
+	MyLocation,
 } from './SubViews';
 
 import {
@@ -55,6 +57,7 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	route: Object,
 };
 
 const SelectArea = React.memo<Object>((props: Props): Object => {
@@ -62,7 +65,12 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		route,
 	} = props;
+
+	const {
+		params = {},
+	} = route;
 
 	const dispatch = useDispatch();
 
@@ -73,7 +81,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 
 	const { userId } = useSelector((state: Object): Object => state.user);
 	let { location } = useSelector((state: Object): Object => state.fences);
-	location = location ? location : {};
+	location = params.region || location || {};
 
 	const {
 		latitude = 55.70584,
@@ -109,9 +117,18 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		contentContainerStyle,
 	} = getStyles(appLayout);
 
-	function onRegionChangeComplete(reg: Object) {
+	const onRegionChangeComplete = useCallback((reg: Object) => {
 		setInitialRegion(reg);
-	}
+	}, []);
+
+	const onPressFocusMyLocation = useCallback(() => {
+		setInitialRegion({
+			latitude,
+			longitude,
+			latitudeDelta,
+			longitudeDelta,
+		});
+	}, [latitude, latitudeDelta, longitude, longitudeDelta]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -123,10 +140,13 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 					loadingEnabled={true}
 					showsTraffic={false}
 					showsUserLocation={true}
-					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}/>
+					region={new MapView.AnimatedRegion(initialRegion)}
+					onRegionChangeComplete={onRegionChangeComplete}
+					showsMyLocationButton={false}/>
 				<MapOverlay/>
 			</ScrollView>
+			<MyLocation
+				onPress={onPressFocusMyLocation}/>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}/>

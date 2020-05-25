@@ -44,6 +44,7 @@ import {
 } from '../../../BaseComponents';
 import {
 	FenceCalloutWithMarker,
+	MyLocation,
 } from './SubViews';
 
 import {
@@ -75,11 +76,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	let { location, fence } = useSelector((state: Object): Object => state.fences);
 	location = location ? location : {};
 
-	function onPressNext() {
-		dispatch(resetFence());
-		navigation.navigate('SelectArea');
-	}
-
 	const [ currentAccFences, setCurrentAccFences ] = useState([]);
 
 	useEffect(() => {
@@ -102,17 +98,37 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		latitudeDelta = 0.1,
 		longitudeDelta = 0.1,
 	} = location;
-	const region = new AnimatedRegion({
+	const [ region, setRegion ] = useState({
 		latitude,
 		longitude,
 		latitudeDelta,
 		longitudeDelta,
 	});
 
+	function onPressNext() {
+		dispatch(resetFence());
+		navigation.navigate('SelectArea', {
+			region,
+		});
+	}
+
 	const onEditFence = useCallback((fenceToEdit: Object) => {
 		dispatch(setEditFence(fenceToEdit));
 		navigation.navigate('EditGeoFence');
 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const onPressFocusMyLocation = useCallback(() => {
+		setRegion({
+			latitude,
+			longitude,
+			latitudeDelta,
+			longitudeDelta,
+		});
+	}, [latitude, latitudeDelta, longitude, longitudeDelta]);
+
+	const onRegionChangeComplete = useCallback((reg: Object) => {
+		setRegion(reg);
 	}, []);
 
 	function renderMarker(fenceC: Object, index: number): Object {
@@ -150,11 +166,13 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
 					style={mapStyle}
-					initialRegion={region}
+					region={new AnimatedRegion(region)}
 					scrollEnabled={enableGeoFence}
 					loadingEnabled={true}
 					showsTraffic={false}
-					showsUserLocation={true}>
+					showsUserLocation={true}
+					showsMyLocationButton={false}
+					onRegionChangeComplete={onRegionChangeComplete}>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
@@ -162,6 +180,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					}
 				</MapView.Animated>
 			</ScrollView>
+			<MyLocation
+				onPress={onPressFocusMyLocation}/>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}
