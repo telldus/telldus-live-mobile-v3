@@ -60,6 +60,8 @@ function autoDetectLocalTellStick(): ThunkAction {
 		// No need to do local discovery if the platform is iOS 9 or less, as it does not support RSAAlgorithm
 		if (supportRSA()) {
 
+			// TODO: Better handle : Do not use any attributes of socket, that starts with '_'.
+
 			// Establish new UDP socket only after closing the existing socket completely.
 			closeUDPSocket(() => {
 			// $FlowFixMe
