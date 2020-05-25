@@ -22,12 +22,9 @@
 'use strict';
 
 import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Theme from '../App/Theme';
 import View from './View';
-
-const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	children: Object | Array<Object>,
@@ -39,11 +36,11 @@ export default class SafeAreaViewComponent extends React.Component<Props, null> 
 	props: Props;
 
 	render(): Object {
-		let { children, onLayout, backgroundColor, ...otherProperties } = this.props;
+		let { children, onLayout, backgroundColor = Theme.Core.appBackground, ...otherProperties } = this.props;
 
 		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor }) }} onLayout={onLayout}>
+			<SafeAreaView style={{ flex: 1, backgroundColor: Theme.Core.brandPrimary }}>
+				<View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
 					{
 						React.Children.map(children, (child: Object): Object | null => {
 							if (React.isValidElement(child)) {
@@ -53,7 +50,7 @@ export default class SafeAreaViewComponent extends React.Component<Props, null> 
 						})
 					}
 				</View>
-			</ViewX>
+			</SafeAreaView>
 		);
 	}
 }

@@ -462,7 +462,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 				supportedOrientations={['portrait', supportedOrientations]}
 				hardwareAccelerated={true}
 				onShow={this.onShow}>
-				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
+				<SafeAreaView>
 					<View style={{
 						flex: 1,
 						alignItems: 'center',

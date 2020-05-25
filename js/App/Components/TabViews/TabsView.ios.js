@@ -24,7 +24,6 @@
 
 import React from 'react';
 
-import { ifIphoneX } from 'react-native-iphone-x-helper';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import TabViews from './index';
@@ -135,9 +134,6 @@ const NavigatorConfigs = {
 	lazy: true,
 	animationEnabled: false, // Check if exist in v5
 	tabBarOptions: {
-		style: {
-			...ifIphoneX({height: 20}),
-		},
 		allowFontScaling: false,
 	},
 };

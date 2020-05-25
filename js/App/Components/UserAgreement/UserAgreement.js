@@ -29,8 +29,6 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from react-navigation, this fix issue https://github.com/facebook/react-native/issues/18177.
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 import Markdown from 'react-native-markdown-renderer';
 
 import {
@@ -40,6 +38,7 @@ import {
 	PosterWithText,
 	NavigationHeader,
 	FullPageActivityIndicator,
+	SafeAreaView,
 } from '../../../BaseComponents';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -49,7 +48,6 @@ import {
 	toggleVisibilityEula,
 } from '../../Actions';
 import shouldUpdate from '../../Lib/shouldUpdate';
-const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	showModal: boolean,
@@ -180,51 +178,48 @@ class UserAgreement extends View<Props, State> {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.noOP}
 				supportedOrientations={['portrait', 'landscape']}>
-				<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
-
-					<View style={styles.modalContainer} onLayout={this.props.onLayout}>
-						<NavigationHeader
-							showLeftIcon={visibilityEula}
-							leftIcon={visibilityEula ? 'close' : undefined}
-							topMargin={false}
-							forceHideStatus
-							goBack={visibilityEula ? this.closeEula : undefined}/>
-						<ScrollView
-							style={styles.scrollView}
-							contentContainerStyle={styles.SVContentContainerStyle}
-							nestedScrollEnabled={true}>
-							{!visibilityEula && <PosterWithText
-								appLayout={appLayout}
-								align={'center'}
-								h1={this.header}
-								showBackButton={false}
-								showLeftIcon={false}
-								h1Style={styles.headerText}
-								posterCoverStyle={styles.posterCover}
-								scrollableH1={false}/>
-							}
-							{isLoading && !eulaContent ?
-								<FullPageActivityIndicator/>
-								:
-								<View style={styles.contentContainerStyle}>
-									<Text/>
-									{!!eulaContent && <Markdown style={styles.markupStyle}>
-										{eulaContent}
-									</Markdown>
-									}
-								</View>
-							}
-						</ScrollView>
-						{!visibilityEula && <View style={styles.footer}>
-							<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
-								<Text style={styles.footerText}>
-									{this.footer}
-								</Text>
-							</TouchableOpacity>
-						</View>
+				<SafeAreaView onLayout={this.props.onLayout}>
+					<NavigationHeader
+						showLeftIcon={visibilityEula}
+						leftIcon={visibilityEula ? 'close' : undefined}
+						topMargin={false}
+						forceHideStatus
+						goBack={visibilityEula ? this.closeEula : undefined}/>
+					<ScrollView
+						style={styles.scrollView}
+						contentContainerStyle={styles.SVContentContainerStyle}
+						nestedScrollEnabled={true}>
+						{!visibilityEula && <PosterWithText
+							appLayout={appLayout}
+							align={'center'}
+							h1={this.header}
+							showBackButton={false}
+							showLeftIcon={false}
+							h1Style={styles.headerText}
+							posterCoverStyle={styles.posterCover}
+							scrollableH1={false}/>
 						}
+						{isLoading && !eulaContent ?
+							<FullPageActivityIndicator/>
+							:
+							<View style={styles.contentContainerStyle}>
+								<Text/>
+								{!!eulaContent && <Markdown style={styles.markupStyle}>
+									{eulaContent}
+								</Markdown>
+								}
+							</View>
+						}
+					</ScrollView>
+					{!visibilityEula && <View style={styles.footer}>
+						<TouchableOpacity style={styles.footerItem} onPress={this.onAgree}>
+							<Text style={styles.footerText}>
+								{this.footer}
+							</Text>
+						</TouchableOpacity>
 					</View>
-				</ViewX>
+					}
+				</SafeAreaView>
 			</Modal>
 		);
 	}
