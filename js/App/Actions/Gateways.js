@@ -76,6 +76,14 @@ function autoDetectLocalTellStick(): ThunkAction {
 					reportException(error);
 				});
 
+				if (// $FlowFixMe
+					closingSocketID === socket._id ||// $FlowFixMe
+					socket._destroying ||// $FlowFixMe
+					socket._destroyed ||
+					openSocketID === null) {
+					return;
+				}
+
 				// $FlowFixMe
 				try {
 					socket.bind(aPort);
