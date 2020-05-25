@@ -296,7 +296,7 @@ public class SensorsUtilities {
 
     public String getWindDirection(String value) {
         Double index = Math.floor(Float.parseFloat(value) / 22.5);
-        if (index.intValue() <= WIND_DIR.length - 1) {
+        if (index.intValue() >= 0 && index.intValue() <= WIND_DIR.length - 1) {
             return WIND_DIR[index.intValue()];
         }
         return "";

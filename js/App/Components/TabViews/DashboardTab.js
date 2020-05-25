@@ -37,6 +37,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 	Text,
 	View,
+	EmptyView,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -468,6 +469,9 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(row: Object): Object {
+		if (!row || !row.item) {
+			return <EmptyView/>;
+		}
 		const { screenProps } = this.props;
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;

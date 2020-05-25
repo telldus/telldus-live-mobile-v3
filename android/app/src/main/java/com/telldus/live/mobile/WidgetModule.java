@@ -407,6 +407,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void setTextFontSizeFactor(Float factor, Promise promise) {
+    prefManager = new PrefManager(getReactApplicationContext());
+
     prefManager.setTextFontSizeFactor(factor);
     WidgetsUpdater wUpdater = new WidgetsUpdater();
     Map extraArgs = new HashMap();
@@ -416,6 +418,8 @@ public class WidgetModule extends ReactContextBaseJavaModule {
 
   @ReactMethod(isBlockingSynchronousMethod = true)
   public Float getTextFontSizeFactor() {
+    prefManager = new PrefManager(getReactApplicationContext());
+  
     return prefManager.getTextFontSizeFactor();
   }
 
