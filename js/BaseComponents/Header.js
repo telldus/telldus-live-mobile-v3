@@ -22,8 +22,6 @@
 'use strict';
 
 import React, {
-	useEffect,
-	useState,
 	useCallback,
 } from 'react';
 import {
@@ -39,7 +37,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { useIntl } from 'react-intl';
 
-import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
 import Theme from '../App/Theme';
 
 import Button from './Button';
@@ -73,7 +70,6 @@ const HeaderComponent = (props: Props): Object => {
 		leftButton,
 		rightButton,
 		showAttentionCapture,
-		forceHideStatus,
 		style,
 	} = props;
 
@@ -96,19 +92,10 @@ const HeaderComponent = (props: Props): Object => {
 		toolbarButton,
 		androidToolbarSearch,
 		headerButton,
-		statusBar,
 	} = getStyles(appLayout, {
 		rounded,
 		children,
 	});
-
-	const [ hasStatusBar, setHasStatusBar ] = useState(false);
-	useEffect(() => {
-		(async () => {
-			const _hasStatusBar = await hasStatusBarMeth();
-			setHasStatusBar(_hasStatusBar);
-		})();
-	}, []);
 
 	const renderChildren = useCallback((): ?Object | ?Array<any> => {
 		if (!children) {
@@ -390,11 +377,6 @@ const HeaderComponent = (props: Props): Object => {
 
 	return (
 		<View style={{ flex: 0 }}>
-			{
-				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
-					<View style={statusBar}/>
-				) : null
-			}
 			<View style={[navbar, style]}>
 				{!!leftButton && renderLeftButton(leftButton)}
 				{renderChildren()}

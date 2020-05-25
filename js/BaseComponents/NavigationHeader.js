@@ -34,7 +34,6 @@ import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import View from './View';
 import Header from './Header';
-import { hasStatusBar } from '../App/Lib';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
@@ -88,8 +87,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 		forceHideStatus: false,
 	}
 
-	_hasStatusBar: () => void;
-
 	constructor(props: Props) {
 		super(props);
 		this.isTablet = DeviceInfo.isTablet();
@@ -101,8 +98,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 			keyboard: false,
 			hasStatusBar: false,
 		};
-
-		this._hasStatusBar();
 
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
@@ -117,13 +112,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 		  'keyboardDidHide',
 		  this._keyboardDidHide,
 		);
-	}
-
-	_hasStatusBar = async () => {
-		const _hasStatusBar = await hasStatusBar();
-		this.setState({
-			hasStatusBar: _hasStatusBar,
-		});
 	}
 
 	componentWillUnmount() {
