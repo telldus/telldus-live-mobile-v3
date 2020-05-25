@@ -30,6 +30,7 @@ import PrivacyPolicyLink from './PrivacyPolicyLink';
 import EulaLink from './EulaLink';
 import WidgetFontSizeSetting from './WidgetFontSizeSetting';
 import SwitchOrAddAccountButton from './SwitchOrAddAccountButton';
+import ThemesBlock from './ThemesBlock';
 
 module.exports = {
 	EditNameBlock,
@@ -40,4 +41,5 @@ module.exports = {
 	EulaLink,
 	WidgetFontSizeSetting,
 	SwitchOrAddAccountButton,
+	ThemesBlock,
 };
