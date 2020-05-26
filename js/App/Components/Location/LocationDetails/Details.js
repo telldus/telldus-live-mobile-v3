@@ -43,6 +43,9 @@ import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
 
 import {
+	prepareDeviceId,
+} from '../../../Actions/User';
+import {
 	createSupportInAppDebugData,
 } from '../../../Actions/App';
 import { getGatewayInfo, getGateways, removeGateway } from '../../../Actions/Gateways';
@@ -452,6 +455,7 @@ class Details extends View<Props, State> {
 					deviceName,
 					deviceUniqueID,
 					deviceUniqueIDCached: deviceId,
+					preparedDeviceUniqueID: prepareDeviceId(deviceId),
 					pushToken,
 					generatePushError,
 					playServicesInfo,
