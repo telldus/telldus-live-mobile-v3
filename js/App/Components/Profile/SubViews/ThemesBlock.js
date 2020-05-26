@@ -24,6 +24,8 @@
 
 import React, {
 	useCallback,
+	useRef,
+	forwardRef,
 } from 'react';
 import {
 	useSelector,
@@ -39,6 +41,7 @@ import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
+import ThemesRow from './ThemesRow';
 
 import {
 	changThemeInApp,
@@ -55,6 +58,7 @@ type Props = {
 const ThemesBlock = (props: Props): Object => {
 
 	const intl = useIntl();
+	const ddRef = useRef(null);
 
 	const colorScheme = useColorScheme();
 	const items = colorShades(colorScheme);
@@ -73,13 +77,15 @@ const ThemesBlock = (props: Props): Object => {
 	} = getStyles(layout);
 
 	const dispatch = useDispatch();
-
-	const onValueChange = useCallback((value: string, itemIndex: number, data: Array<any>) => {
-		const { key } = items[itemIndex];
-		const settings = { themeInApp: key };
+	const onValueChange = useCallback((item: Object) => {
+		if (ddRef.current && ddRef.current.blur) {
+			ddRef.current.blur();
+		}
+		const { value } = item;
+		const settings = { themeInApp: value };
 		dispatch(changThemeInApp(settings));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [items]);
+	}, []);
 
 	const renderItem = useCallback((data: Object): Object => {
 		const {
@@ -90,39 +96,17 @@ const ThemesBlock = (props: Props): Object => {
 
 		const boxSize = textStyle.fontSize * 2;
 
-		console.log('TEST data', data);
 		return (
-			<View style={[...style, {
-				flexDirection: 'row',
-				justifyContent: 'space-between',
-				alignItems: 'center',
-				width: '100%',
-			}]}>
-				<Text style={textStyle}>
-					{item.value}
-				</Text>
-				<View style={{
-					flex: 1,
-					flexDirection: 'row',
-					justifyContent: 'flex-end',
-					alignItems: 'center',
-				}}>
-					{item.shades.map((s: string): Object => {
-						return (
-							<View style={{
-								backgroundColor: s,
-								height: boxSize,
-								width: boxSize,
-								borderRadius: 5,
-								marginLeft: 5,
-							}}/>
-						);
-					})
-					}
-				</View>
-			</View>
+			<ThemesRow
+				onValueChange={onValueChange}
+				key={item.value}
+				style={style}
+				item={item}
+				boxSize={boxSize}
+				textStyle={textStyle}
+			/>
 		);
-	}, []);
+	}, [onValueChange]);
 
 	return (
 		<View style={coverStyle}>
@@ -130,9 +114,9 @@ const ThemesBlock = (props: Props): Object => {
 				Color shade
 			</Text>
 			<DropDown
+				ref={ddRef}
 				items={items}
 				value={themeInApp}
-				onValueChange={onValueChange}
 				appLayout={layout}
 				intl={intl}
 				dropDownContainerStyle={dropDownContainerStyleDef}
@@ -141,8 +125,7 @@ const ThemesBlock = (props: Props): Object => {
 				fontSize={fontSize}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
-				renderItem={renderItem}
-			/>
+				renderItem={renderItem}/>
 		</View>
 	);
 };
@@ -204,4 +187,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(ThemesBlock);
+export default React.memo<Object>(forwardRef<Object, Object>(ThemesBlock));

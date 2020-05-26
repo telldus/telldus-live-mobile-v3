@@ -55,6 +55,7 @@ import {
 } from '../Settings/SubViews';
 import {
 	WidgetFontSizeSetting,
+	ThemesBlock,
 } from './SubViews';
 
 import { LayoutAnimations } from '../../Lib';
@@ -218,6 +219,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 			<View style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
+				<ThemesBlock/>
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}
