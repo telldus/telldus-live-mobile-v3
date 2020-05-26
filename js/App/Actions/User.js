@@ -46,9 +46,8 @@ import {
 
 const prepareDeviceId = (deviceId: string = ''): string => {
 	deviceId = deviceId.trim();
-	return (!deviceId || deviceId.length === 0) ? DeviceInfo.getUniqueId() : deviceId;
+	return (!deviceId || deviceId === '' || deviceId.length === 0) ? DeviceInfo.getUniqueId() : deviceId;
 };
-
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
@@ -504,4 +503,5 @@ module.exports = {
 	setSocialAuthConfig,
 	checkAndLinkAccountIfRequired,
 	toggleVisibilityEula,
+	prepareDeviceId,
 };
