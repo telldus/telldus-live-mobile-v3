@@ -456,6 +456,7 @@ class Details extends View<Props, State> {
 					deviceUniqueID,
 					deviceUniqueIDCached: deviceId,
 					preparedDeviceUniqueID: prepareDeviceId(deviceId),
+					appVersion: DeviceInfo.getVersion(),
 					pushToken,
 					generatePushError,
 					playServicesInfo,
