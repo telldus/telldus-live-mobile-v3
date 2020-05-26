@@ -51,7 +51,7 @@ const LanguageControlBlock = (props: Object): Object => {
 	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	let { language: languageProp = {} } = defaultSettings;
+	let { language: languageProp = {}, themeInApp } = defaultSettings;
 
 	const {
 		colors,
@@ -114,6 +114,9 @@ const LanguageControlBlock = (props: Object): Object => {
 			fontSize={fontSize}
 			itemCount={LANGUAGES.length}
 			accessibilityLabelPrefix={labelLanguage}
+			extraData={{
+				themeInApp,
+			}}
 		/>
 	);
 };
