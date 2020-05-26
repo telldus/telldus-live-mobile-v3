@@ -128,20 +128,7 @@ function setupGeoFence(): ThunkAction {
 			}
 			if (state.enabled) {
 				try {
-					let location = await BackgroundGeolocation.getCurrentPosition({
-						timeout: 30,
-						maximumAge: 5000,
-						desiredAccuracy: 10,
-						samples: 3,
-					}) || {};
-					const {
-						latitude,
-						longitude,
-					} = location.coords || {};
-					dispatch(setCurrentLocation({
-						latitude,
-						longitude,
-					}));
+					dispatch(getCurrentLocation());
 				} catch (e) {
 					// Ignore
 				}
@@ -160,6 +147,26 @@ const stopGeoFence = (): ThunkAction => {
 const startGeofences = (): ThunkAction => {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
 		return await BackgroundGeolocation.startGeofences();
+	};
+};
+
+const getCurrentLocation = (): ThunkAction => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
+		const location = await BackgroundGeolocation.getCurrentPosition({
+			timeout: 30,
+			maximumAge: 5000,
+			desiredAccuracy: 10,
+			samples: 3,
+		}) || {};
+		const {
+			latitude,
+			longitude,
+		} = location.coords || {};
+		dispatch(setCurrentLocation({
+			latitude,
+			longitude,
+		}));
+		return location;
 	};
 };
 
@@ -474,6 +481,7 @@ module.exports = {
 	startGeofences,
 	GeoFenceHeadlessTask,
 	updateGeoFenceConfig,
+	getCurrentLocation,
 
 	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
