@@ -307,4 +307,14 @@ export default {
 		return this.brandSecondary;
 	},
 	inActiveTintOneLT: '#C9C9CE',
+
+	get themeGrayShadeOne() {
+		return this.appBackground;
+	},
+	get themeGrayShadeTwo() {
+		return this.btnDisabledBg;
+	},
+	get themeGrayShadeThree() {
+		return this.rowTextColor;
+	},
 };
