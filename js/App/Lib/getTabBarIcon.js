@@ -20,8 +20,7 @@
 // @flow
 
 import React from 'react';
-import { Image, Dimensions } from 'react-native';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
+import { Image } from 'react-native';
 
 import EmptyView from '../../BaseComponents/EmptyView';
 import IconTelldus from '../../BaseComponents/IconTelldus';
@@ -50,14 +49,11 @@ const icons = {
 };
 
 export default function getTabBarIcon(focused: boolean, tintColor: string, sourceName: string, iconName?: string): Object {
-	let {height, width} = Dimensions.get('window');
-	let isPortrait = height > width;
-
 	if (iconName) {
 		return <IconTelldus
 			style={{
 				color: tintColor,
-				...ifIphoneX({marginTop: isPortrait ? 60 : 5}),
+				marginTop: 5,
 				fontSize: 30,
 			}}
 			icon={iconName}/>;
@@ -71,7 +67,7 @@ export default function getTabBarIcon(focused: boolean, tintColor: string, sourc
 	return (
 		<Image
 			source={focused ? icon.active : icon.inactive}
-			style={{ tintColor, ...ifIphoneX({marginTop: isPortrait ? 60 : 5}) }}
+			style={{ tintColor, marginTop: 5 }}
 		/>
 	);
 }
