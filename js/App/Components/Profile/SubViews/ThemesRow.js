@@ -25,6 +25,9 @@
 import React, {
 	useCallback,
 } from 'react';
+import {
+	StyleSheet,
+} from 'react-native';
 
 import {
 	View,
@@ -32,7 +35,14 @@ import {
 	RippleButton,
 } from '../../../../BaseComponents';
 
+import Theme from '../../../Theme';
+
 type Props = {
+	style: Array<Object>,
+	item: Object,
+	textStyle: Object,
+	boxSize: number,
+	onValueChange: Function,
 };
 
 const ThemesRow = (props: Props): Object => {
@@ -74,6 +84,8 @@ const ThemesRow = (props: Props): Object => {
 							width: boxSize,
 							borderRadius: 5,
 							marginLeft: 5,
+							borderWidth: StyleSheet.hairlineWidth,
+							borderColor: Theme.Core.subtitleColor,
 						}}/>
 					);
 				})

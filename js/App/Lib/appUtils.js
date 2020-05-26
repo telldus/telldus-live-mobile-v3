@@ -142,11 +142,11 @@ const colorShades = (): Array<Object> => {
 			],
 		},
 		{
-			value: 'Gray2',
+			value: 'Blue',
 			shades: [
-				Theme.Core.themeGrayShadeOne,
-				Theme.Core.themeGrayShadeTwo,
-				Theme.Core.themeGrayShadeThree,
+				Theme.Core.themeBlueShadeOne,
+				Theme.Core.themeBlueShadeTwo,
+				Theme.Core.themeBlueShadeThree,
 			],
 		},
 	];

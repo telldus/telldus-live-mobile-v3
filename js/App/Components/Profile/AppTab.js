@@ -75,6 +75,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useAppTheme,
+} from '../../Hooks/App';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -84,6 +87,10 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	const intl = useIntl();
 	const { formatMessage } = intl;
 	const [ isPushSubmitLoading, setIsPushSubmitLoading ] = useState(false);
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const { layout, defaultSettings } = useSelector((state: Object): Object => state.app);
 	const {
@@ -104,7 +111,9 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		titleStyle,
 		contentCoverStyle,
 		bBSortDropDownContainerStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const {
 		toggleDialogueBoxState,
@@ -269,13 +278,19 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
+		screenBackground,
+		textTwo,
+	} = colors;
+
+	const {
 		paddingFactor,
 	} = Theme.Core;
 
@@ -286,7 +301,7 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
+			backgroundColor: screenBackground,
 		},
 		body: {
 			flex: 1,
@@ -310,7 +325,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: subHeader,
+			color: textTwo,
 			fontSize,
 		},
 		bBSortDropDownContainerStyle: {

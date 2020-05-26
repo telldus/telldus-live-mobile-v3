@@ -40,9 +40,11 @@ import {
 	isDeviceLanguageAndHasChanged,
 	isDeviceLanguage,
 } from '../../../Lib/appUtils';
+import {
+	useAppTheme,
+} from '../../..//Hooks/App';
 
 import i18n from '../../../Translations/common';
-import Theme from '../../../Theme';
 
 const LanguageControlBlock = (props: Object): Object => {
 	const intl = useIntl();
@@ -52,10 +54,16 @@ const LanguageControlBlock = (props: Object): Object => {
 	let { language: languageProp = {} } = defaultSettings;
 
 	const {
+		colors,
+	} = useAppTheme();
+
+	const {
 		dropDownContainerStyle,
 		dropDownHeaderStyle,
 		fontSize,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const dispatch = useDispatch();
 	const changeDeviceLanguage = useCallback((value: string, itemIndex: number, data: Array<any>) => {
@@ -110,11 +118,17 @@ const LanguageControlBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
+
+	const {
+		textTwo,
+	} = colors;
 
 	return {
 		dropDownContainerStyle: {
@@ -122,7 +136,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		dropDownHeaderStyle: {
 			fontSize: Math.floor(deviceWidth * 0.045),
-			color: Theme.Core.subHeader,
+			color: textTwo,
 		},
 		fontSize,
 	};

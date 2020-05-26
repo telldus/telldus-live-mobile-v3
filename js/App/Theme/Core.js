@@ -297,17 +297,22 @@ export default {
 		};
 	},
 
-	textColorOneLT: '#A59F9A',
-	borderColorOneLT: '#C9C9CE',
-	backgroundColorOneLT: '#fff',
-	get backgroundColorTwoLT() {
+	textColorOneThemeGray: '#A59F9A',
+	get textColorTwoThemeGray() {
+		return this.subHeader;
+	},
+	borderColorOneThemeGray: '#C9C9CE',
+	get screenBackgroundThemeGray() {
+		return this.appBackground;
+	},
+	backgroundColorOneThemeGray: '#fff',
+	get backgroundColorTwoThemeGray() {
 		return this.brandPrimary;
 	},
-	get activeTintOneLT() {
+	get activeTintOneThemeGray() {
 		return this.brandSecondary;
 	},
-	inActiveTintOneLT: '#C9C9CE',
-
+	inActiveTintOneThemeGray: '#C9C9CE',
 	get themeGrayShadeOne() {
 		return this.appBackground;
 	},
@@ -316,5 +321,31 @@ export default {
 	},
 	get themeGrayShadeThree() {
 		return this.rowTextColor;
+	},
+
+	textColorOneThemeBlue: '#A59F9A',
+	get textColorTwoThemeBlue() {
+		return '#fff';
+	},
+	borderColorOneThemeBlue: '#C9C9CE',
+	get screenBackgroundThemeBlue() {
+		return '#1b365d95';
+	},
+	backgroundColorOneThemeBlue: '#fff',
+	get backgroundColorTwoThemeBlue() {
+		return this.brandPrimary;
+	},
+	get activeTintOneThemeBlue() {
+		return this.brandSecondary;
+	},
+	inActiveTintOneThemeBlue: '#C9C9CE',
+	get themeBlueShadeOne() {
+		return this.brandPrimary;
+	},
+	get themeBlueShadeTwo() {
+		return this.screenBackgroundThemeBlue;
+	},
+	get themeBlueShadeThree() {
+		return this.textColorTwoThemeBlue;
 	},
 };

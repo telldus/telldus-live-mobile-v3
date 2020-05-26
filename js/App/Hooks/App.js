@@ -82,7 +82,10 @@ const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): O
 
 const useAppTheme = (): Object => {
 	const colorScheme = useColorScheme();
-	const { themeInApp } = useSelector((state: Object): Object => state.app);
+	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const {
+		themeInApp,
+	} = defaultSettings;
 	return React.useMemo((): Object => {
 		if (colorScheme === 'dark') {
 			return {
@@ -105,23 +108,65 @@ const useAppTheme = (): Object => {
 const getThemeData = (themeInApp: string | null): Object => {
 	const {
 		brandPrimary,
-		textColorOneLT,
-		borderColorOneLT,
-		backgroundColorOneLT,
-		activeTintOneLT,
-		inActiveTintOneLT,
+		textColorOneThemeGray,
+		borderColorOneThemeGray,
+		backgroundColorOneThemeGray,
+		activeTintOneThemeGray,
+		inActiveTintOneThemeGray,
+		screenBackgroundThemeGray,
+		textColorTwoThemeGray,
+
+		textColorOneThemeBlue,
+		borderColorOneThemeBlue,
+		backgroundColorOneThemeBlue,
+		screenBackgroundThemeBlue,
+		activeTintOneThemeBlue,
+		inActiveTintOneThemeBlue,
+		textColorTwoThemeBlue,
 	} = Theme.Core;
 	switch (themeInApp) {
+		case 'Gray': {
+			return {
+				colors: {
+					primary: brandPrimary,
+					text: textColorOneThemeGray,
+					textTwo: textColorTwoThemeGray,
+					border: borderColorOneThemeGray,
+					background: backgroundColorOneThemeGray,
+					card: backgroundColorOneThemeGray,
+					screenBackground: screenBackgroundThemeGray,
+					activeTintOne: activeTintOneThemeGray,
+					inActiveTintOne: inActiveTintOneThemeGray,
+				},
+			};
+		}
+		case 'Blue': {
+			return {
+				colors: {
+					primary: brandPrimary,
+					text: textColorOneThemeBlue,
+					textTwo: textColorTwoThemeBlue,
+					border: borderColorOneThemeBlue,
+					background: backgroundColorOneThemeBlue,
+					card: backgroundColorOneThemeBlue,
+					screenBackground: screenBackgroundThemeBlue,
+					activeTintOne: activeTintOneThemeBlue,
+					inActiveTintOne: inActiveTintOneThemeBlue,
+				},
+			};
+		}
 		default: {
 			return {
 				colors: {
 					primary: brandPrimary,
-					text: textColorOneLT,
-					border: borderColorOneLT,
-					background: backgroundColorOneLT,
-					card: backgroundColorOneLT,
-					activeTintOne: activeTintOneLT,
-					inActiveTintOne: inActiveTintOneLT,
+					text: textColorOneThemeGray,
+					textTwo: textColorTwoThemeGray,
+					border: borderColorOneThemeGray,
+					background: backgroundColorOneThemeGray,
+					card: backgroundColorOneThemeGray,
+					screenBackground: screenBackgroundThemeGray,
+					activeTintOne: activeTintOneThemeGray,
+					inActiveTintOne: inActiveTintOneThemeGray,
 				},
 			};
 		}
