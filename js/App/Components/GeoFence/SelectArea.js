@@ -49,6 +49,9 @@ import {
 import {
 	setFenceArea,
 } from '../../Actions/Fences';
+import {
+	getCurrentLocation,
+} from '../../Actions/GeoFence';
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
 import i18n from '../../Translations/common';
@@ -80,15 +83,14 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 	} = intl;
 
 	const { userId } = useSelector((state: Object): Object => state.user);
-	let { location } = useSelector((state: Object): Object => state.fences);
-	location = params.region || location || {};
+	const { location } = useSelector((state: Object): Object => state.fences);
 
 	const {
 		latitude = 55.70584,
 		longitude = 13.19321,
 		latitudeDelta = 0.1,
 		longitudeDelta = 0.1,
-	} = location;
+	} = params.region || location || {};
 	const region = {
 		latitude,
 		longitude,
@@ -122,13 +124,17 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 	}, []);
 
 	const onPressFocusMyLocation = useCallback(() => {
-		setInitialRegion({
-			latitude,
-			longitude,
-			latitudeDelta,
-			longitudeDelta,
-		});
-	}, [latitude, latitudeDelta, longitude, longitudeDelta]);
+		(async () => {
+			dispatch(getCurrentLocation());
+			setInitialRegion({
+				latitude: location.latitude,
+				longitude: location.longitude,
+				latitudeDelta: location.latitudeDelta || 0.1,
+				longitudeDelta: location.longitudeDelta || 0.1,
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [location]);
 
 	return (
 		<View style={{flex: 1}}>

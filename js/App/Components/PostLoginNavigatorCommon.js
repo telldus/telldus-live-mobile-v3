@@ -221,11 +221,15 @@ actionsToPerformOnStart = async () => {
 		enableGeoFence,
 	} = this.props;
 
-	// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
-	await dispatch(fetchRemoteConfig());
+	try {
+		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
+		await dispatch(fetchRemoteConfig());
 
-	if (enableGeoFence) {
-		dispatch(setupGeoFence());
+		if (enableGeoFence) {
+			await dispatch(setupGeoFence());
+		}
+	} catch (e) {
+		// Ignore
 	}
 
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where

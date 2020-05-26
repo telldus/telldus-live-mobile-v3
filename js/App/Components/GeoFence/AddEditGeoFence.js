@@ -53,6 +53,7 @@ import {
 } from '../../Actions/Fences';
 import {
 	getCurrentAccountsFences,
+	getCurrentLocation,
 } from '../../Actions/GeoFence';
 
 import Theme from '../../Theme';
@@ -119,12 +120,16 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	}, []);
 
 	const onPressFocusMyLocation = useCallback(() => {
-		setRegion({
-			latitude,
-			longitude,
-			latitudeDelta,
-			longitudeDelta,
-		});
+		(async () => {
+			dispatch(getCurrentLocation());
+			setRegion({
+				latitude,
+				longitude,
+				latitudeDelta,
+				longitudeDelta,
+			});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [latitude, latitudeDelta, longitude, longitudeDelta]);
 
 	const onRegionChangeComplete = useCallback((reg: Object) => {
