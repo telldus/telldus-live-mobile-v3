@@ -75,6 +75,9 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
+import {
+	useAppTheme,
+} from '../../Hooks/App';
 
 import i18n from '../../Translations/common';
 
@@ -83,6 +86,11 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		toggleDialogueBox,
 		intl,
 	}, navigation } = props;
+
+	const {
+		colors,
+	} = useAppTheme();
+
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		userProfile = {},
@@ -131,6 +139,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		pHistoryCStyle,
 	} = getStyles(layout, {
 		isLoggingOut,
+		colors,
 	});
 
 	let showAuto = isAutoRenew(subscriptions);
@@ -321,10 +330,17 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object, {isLoggingOut}: Object): Object => {
+const getStyles = (appLayout: Object, {
+	isLoggingOut,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		screenBackground,
+	} = colors;
 
 	const {
 		paddingFactor,
@@ -353,7 +369,7 @@ const getStyles = (appLayout: Object, {isLoggingOut}: Object): Object => {
 		},
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
+			backgroundColor: screenBackground,
 		},
 		body: {
 			flex: 1,

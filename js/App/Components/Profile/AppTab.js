@@ -311,7 +311,6 @@ const getStyles = (appLayout: Object, {
 		},
 		labelTextStyle: {
 			fontSize,
-			color: '#000',
 			justifyContent: 'center',
 		},
 		touchableStyle: {

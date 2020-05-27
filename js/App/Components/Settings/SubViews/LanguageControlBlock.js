@@ -109,7 +109,7 @@ const LanguageControlBlock = (props: Object): Object => {
 			appLayout={layout}
 			dropDownContainerStyle={dropDownContainerStyle}
 			dropDownHeaderStyle={dropDownHeaderStyle}
-			baseColor={'#000'}
+			baseColor={colors.textThree}
 			intl={intl}
 			fontSize={fontSize}
 			itemCount={LANGUAGES.length}

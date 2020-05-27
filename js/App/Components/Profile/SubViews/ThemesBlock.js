@@ -49,6 +49,9 @@ import {
 import {
 	colorShades,
 } from '../../../Lib/appUtils';
+import {
+	useAppTheme,
+} from '../../../Hooks/App';
 
 import Theme from '../../../Theme';
 
@@ -59,6 +62,10 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 
 	const intl = useIntl();
 	const ddRef = useRef(null);
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const colorScheme = useColorScheme();
 	const items = colorShades(colorScheme);
@@ -74,7 +81,9 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 		coverStyle,
 		labelStyle,
 		pickerBaseTextStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const dispatch = useDispatch();
 	const onValueChange = useCallback((item: Object) => {
@@ -85,7 +94,7 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 		const settings = { themeInApp: value };
 		dispatch(changThemeInApp(settings));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [ddRef]);
 
 	const renderItem = useCallback((data: Object): Object => {
 		const {
@@ -99,14 +108,19 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 		return (
 			<ThemesRow
 				onValueChange={onValueChange}
+				selected={themeInApp}
 				key={item.value}
 				style={style}
 				item={item}
 				boxSize={boxSize}
-				textStyle={textStyle}
+				textStyle={{
+					...textStyle,
+					color: themeInApp === item.value ? colors.inActiveTintOne : colors.textThree,
+				}}
+				backgroundColor={colors.card}
 			/>
 		);
-	}, [onValueChange]);
+	}, [colors.card, colors.inActiveTintOne, colors.textThree, onValueChange, themeInApp]);
 
 	return (
 		<View style={coverStyle}>
@@ -121,7 +135,7 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 				intl={intl}
 				dropDownContainerStyle={dropDownContainerStyleDef}
 				dropDownHeaderStyle={dropDownHeaderStyle}
-				baseColor={'#000'}
+				baseColor={colors.textThree}
 				fontSize={fontSize}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
@@ -130,11 +144,18 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
+
+	const {
+		card,
+		textThree,
+	} = colors;
 
 	const {
 		paddingFactor,
@@ -157,6 +178,7 @@ const getStyles = (appLayout: Object): Object => {
 		pickerContainerStyle: {
 			elevation: 0,
 			shadowColor: 'transparent',
+			backgroundColor: 'transparent',
 			shadowRadius: 0,
 			shadowOpacity: 0,
 			shadowOffset: {
@@ -174,12 +196,12 @@ const getStyles = (appLayout: Object): Object => {
 			width: width - (padding * 2),
 			justifyContent: 'space-between',
 			...shadow,
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			marginBottom: padding / 2,
 		},
 		labelStyle: {
 			flex: 0,
-			color: '#000',
+			color: textThree,
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: fontSize,

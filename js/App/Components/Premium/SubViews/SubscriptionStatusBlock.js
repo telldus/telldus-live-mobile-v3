@@ -40,6 +40,9 @@ import {
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../../Lib/appUtils';
+import {
+	useAppTheme,
+} from '../../../Hooks/App';
 
 import i18n from '../../../Translations/common';
 
@@ -55,6 +58,10 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		navigation,
 		enable,
 	} = props;
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const intl = useIntl();
 	const {
@@ -77,7 +84,9 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		valueText,
 		premIconStyle,
 		valueCompCoverStyle,
-	} = getStyle(layout);
+	} = getStyle(layout, {
+		colors,
+	});
 
 	const isBasic = moment().unix() > pro;
 
@@ -110,16 +119,21 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	);
 };
 
-const getStyle = (appLayout: Object): Object => {
+const getStyle = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
+		textTwo,
+		textThree,
+	} = colors;
+
+	const {
 		paddingFactor,
 		brandSecondary,
-		rowTextColor,
 		twine,
 	} = Theme.Core;
 
@@ -135,12 +149,12 @@ const getStyle = (appLayout: Object): Object => {
 			fontSize: deviceWidth * 0.04,
 		},
 		labelStyle: {
-			color: subHeader,
+			color: textTwo,
 			fontSize: Math.floor(deviceWidth * 0.045),
 		},
 		valueText: {
 			fontSize,
-			color: rowTextColor,
+			color: textThree,
 			textAlign: 'right',
 			marginLeft: 5,
 			textAlignVertical: 'center',

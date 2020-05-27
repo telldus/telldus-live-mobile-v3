@@ -132,8 +132,6 @@ const NavigatorConfigs = {
 			backgroundColor: '#fff',
 		},
 		style: {
-			backgroundColor: '#fff',
-			...Theme.Core.shadow,
 			justifyContent: 'center',
 		},
 		tabStyle: {

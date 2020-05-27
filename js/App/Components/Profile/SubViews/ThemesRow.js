@@ -52,6 +52,7 @@ const ThemesRow = (props: Props): Object => {
 		textStyle,
 		boxSize,
 		onValueChange,
+		backgroundColor,
 	} = props;
 
 	const _onValueChange = useCallback(() => {
@@ -66,6 +67,7 @@ const ThemesRow = (props: Props): Object => {
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				width: '100%',
+				backgroundColor,
 			}]}>
 			<Text style={textStyle}>
 				{item.value}
@@ -76,7 +78,7 @@ const ThemesRow = (props: Props): Object => {
 				justifyContent: 'flex-end',
 				alignItems: 'center',
 			}}>
-				{item.shades.map((s: string): Object => {
+				{item.shades.map((s: string, i: number): Object => {
 					return (
 						<View style={{
 							backgroundColor: s,
@@ -86,7 +88,8 @@ const ThemesRow = (props: Props): Object => {
 							marginLeft: 5,
 							borderWidth: StyleSheet.hairlineWidth,
 							borderColor: Theme.Core.subtitleColor,
-						}}/>
+						}}
+						key={`${i}`}/>
 					);
 				})
 				}
