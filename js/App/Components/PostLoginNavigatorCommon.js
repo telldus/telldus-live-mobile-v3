@@ -100,6 +100,7 @@ type Props = {
 	pushTokenRegistered: boolean,
 	deviceId: string,
 	pushToken: string,
+	visibilityEula: boolean,
 
     showToast: boolean,
 	messageToast: string,
@@ -445,6 +446,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'screen',
 		'showSwitchAccountAS',
 		'enableGeoFence',
+		'visibilityEula',
 	]);
 	if (propsChange) {
 		return true;
@@ -536,9 +538,9 @@ componentWillUnmount() {
 	}
 }
 
-doesAllowsToOverrideScreen = (): boolean => {
+doesAllowsToOverrideScreen = (extraScreens?: Object = []): boolean => {
 	const { screen } = this.props;
-	return this.screensAllowsNavigationOrModalOverride.indexOf(screen) !== -1;
+	return this.screensAllowsNavigationOrModalOverride.concat(extraScreens).indexOf(screen) !== -1;
 }
 
 addNewLocation = () => {
@@ -705,12 +707,13 @@ render(): Object {
 		showLoadingIndicator,
 		onLayout,
 		gateways,
+		visibilityEula,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen();
+	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
 	const showUA = showEulaModal && !showChangeLog;
 
 	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA;
@@ -798,6 +801,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gateways: state.gateways,
 
 		showEULA: !getUserProfileSelector(state).eula || visibilityEula,
+		visibilityEula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
 
