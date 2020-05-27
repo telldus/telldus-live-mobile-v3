@@ -55,7 +55,7 @@ import Theme from '../../../Theme';
 type Props = {
 };
 
-const ThemesBlock = (props: Props): Object => {
+const ThemesBlock = (props: Props, ref: Object): Object => {
 
 	const intl = useIntl();
 	const ddRef = useRef(null);
