@@ -303,6 +303,9 @@ export default {
 	get textColorTwoThemeGray() {
 		return this.subHeader;
 	},
+	get textColorThreeThemeGray() {
+		return '#000';
+	},
 	borderColorOneThemeGray: '#C9C9CE',
 	get screenBackgroundThemeGray() {
 		return this.appBackground;
@@ -329,11 +332,16 @@ export default {
 	get textColorTwoThemeBlue() {
 		return '#fff';
 	},
+	get textColorThreeThemeBlue() {
+		return '#fff';
+	},
 	borderColorOneThemeBlue: '#C9C9CE',
 	get screenBackgroundThemeBlue() {
-		return '#1b365d95';
+		return '#4972ad';
 	},
-	backgroundColorOneThemeBlue: '#fff',
+	get backgroundColorOneThemeBlue() {
+		return this.brandPrimary;
+	},
 	get backgroundColorTwoThemeBlue() {
 		return this.brandPrimary;
 	},

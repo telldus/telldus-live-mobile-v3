@@ -91,12 +91,14 @@ const useAppTheme = (): Object => {
 			return {
 				colorScheme,
 				dark: true,
+				themeInApp,
 				...getThemeData(themeInApp),
 			};
 		}
 		return {
 			colorScheme,
 			dark: false,
+			themeInApp,
 			...getThemeData(themeInApp),
 		};
 	}, [
@@ -115,6 +117,7 @@ const getThemeData = (themeInApp: string | null): Object => {
 		inActiveTintOneThemeGray,
 		screenBackgroundThemeGray,
 		textColorTwoThemeGray,
+		textColorThreeThemeGray,
 
 		textColorOneThemeBlue,
 		borderColorOneThemeBlue,
@@ -123,6 +126,7 @@ const getThemeData = (themeInApp: string | null): Object => {
 		activeTintOneThemeBlue,
 		inActiveTintOneThemeBlue,
 		textColorTwoThemeBlue,
+		textColorThreeThemeBlue,
 	} = Theme.Core;
 	switch (themeInApp) {
 		case 'Gray': {
@@ -131,6 +135,7 @@ const getThemeData = (themeInApp: string | null): Object => {
 					primary: brandPrimary,
 					text: textColorOneThemeGray,
 					textTwo: textColorTwoThemeGray,
+					textThree: textColorThreeThemeGray,
 					border: borderColorOneThemeGray,
 					background: backgroundColorOneThemeGray,
 					card: backgroundColorOneThemeGray,
@@ -146,6 +151,7 @@ const getThemeData = (themeInApp: string | null): Object => {
 					primary: brandPrimary,
 					text: textColorOneThemeBlue,
 					textTwo: textColorTwoThemeBlue,
+					textThree: textColorThreeThemeBlue,
 					border: borderColorOneThemeBlue,
 					background: backgroundColorOneThemeBlue,
 					card: backgroundColorOneThemeBlue,
@@ -161,6 +167,7 @@ const getThemeData = (themeInApp: string | null): Object => {
 					primary: brandPrimary,
 					text: textColorOneThemeGray,
 					textTwo: textColorTwoThemeGray,
+					textThree: textColorThreeThemeGray,
 					border: borderColorOneThemeGray,
 					background: backgroundColorOneThemeGray,
 					card: backgroundColorOneThemeGray,
