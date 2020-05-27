@@ -323,7 +323,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
-		const { rowsAndSections, screenProps } = this.props;
+		const { rowsAndSections, screenProps, currentScreen } = this.props;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -338,6 +338,7 @@ class SchedulerTab extends View<null, Props, State> {
 				editJob={this.editJob}
 				isFirst={props.index === 0}
 				gatewayTimezone={item.gatewayTimezone}
+				currentScreen={currentScreen}
 				{...screenProps}/>
 		);
 	};
