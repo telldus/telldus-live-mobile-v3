@@ -195,6 +195,7 @@ const MoreOptionsTab = (props: Props): Object => {
 			<PosterWithText
 				appLayout={layout}
 				align={'right'}
+				showBackButton={false}
 				h1={formatMessage(i18n.more)}
 				h2={formatMessage(i18n.featuresAndSettings)}/>
 			<ScrollView
