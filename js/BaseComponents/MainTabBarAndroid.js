@@ -108,6 +108,11 @@ class MainTabBarAndroid extends Component<Props, null> {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
+		const {
+			androidLandTabbarHeightFactor,
+			brandPrimary,
+		} = Theme.Core;
+
 		return {
 			container: {
 				flex: 0,
@@ -122,7 +127,7 @@ class MainTabBarAndroid extends Component<Props, null> {
 				flexDirection: isPortrait ? 'row' : 'column-reverse',
 				alignItems: 'center',
 				justifyContent: 'flex-start',
-				width: isPortrait ? undefined : height * 0.13,
+				width: isPortrait ? undefined : height * androidLandTabbarHeightFactor,
 				height: isPortrait ? height * 0.086 : undefined,
 				zIndex: 1,
 			},

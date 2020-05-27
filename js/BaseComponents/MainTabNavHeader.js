@@ -252,10 +252,10 @@ const getStyles = (appLayout: Object): Object => {
 					} : {
 						transform: [{rotateZ: '-90deg'}],
 						position: 'absolute',
-						left: Math.ceil(-deviceHeight * 0.4444),
-						top: Math.ceil(deviceHeight * 0.4444),
+						left: -(deviceHeight * 0.459931204),
+						top: deviceHeight * 0.459,
 						width: deviceHeight,
-						height: Math.ceil(deviceHeight * land),
+						height: deviceHeight * land,
 					},
 			}),
 		},
@@ -301,7 +301,7 @@ const getStyles = (appLayout: Object): Object => {
 			android: {
 				position: 'absolute',
 				left: undefined,
-				right: 50,
+				right: 20,
 				top: deviceHeight * 0.03666,
 				paddingTop: 0,
 				paddingHorizontal: 0,

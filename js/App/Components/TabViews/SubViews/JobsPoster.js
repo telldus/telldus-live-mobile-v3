@@ -309,7 +309,13 @@ export default class JobsPoster extends View<null, Props, State> {
 		const { appLayout } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
-		return (Platform.OS === 'android' && !isPortrait) ? (width - ((width * 0.11) + (height * 0.13))) : width;
+		const deviceHeight = isPortrait ? height : width;
+
+		const {
+			androidLandTabbarHeightFactor,
+			headerHeightFactor,
+		} = Theme.Core;
+		return (Platform.OS === 'android' && !isPortrait) ? (width - ((deviceHeight * headerHeightFactor.land) + (height * androidLandTabbarHeightFactor))) : width;
 	}
 
 	onToggleVisibilty() {

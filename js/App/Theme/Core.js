@@ -155,7 +155,10 @@ export default {
 	},
 
 	get androidLandMarginLeftFactor() {
-		return 0.068;
+		return 0.0635;
+	},
+	get androidLandTabbarHeightFactor() {
+		return 0.13;
 	},
 
 	get editBoxPaddingFactor() {
