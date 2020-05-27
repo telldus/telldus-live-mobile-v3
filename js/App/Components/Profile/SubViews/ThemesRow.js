@@ -43,6 +43,7 @@ type Props = {
 	textStyle: Object,
 	boxSize: number,
 	onValueChange: Function,
+	backgroundColor: string,
 };
 
 const ThemesRow = (props: Props): Object => {
