@@ -21,7 +21,11 @@
 
 'use strict';
 
-import React, { Component } from 'react';
+import React, {
+	Component,
+	memo,
+	forwardRef,
+} from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
 import { intlShape } from 'react-intl';
 
@@ -33,6 +37,10 @@ import RippleButton from './RippleButton';
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
 import Theme from '../App/Theme';
+
+import {
+	useAppTheme,
+} from '../App/Hooks/App';
 
 import i18n from '../App/Translations/common';
 
@@ -78,6 +86,14 @@ type Props = {
 	itemSize?: number,
 };
 
+type Extras = {
+	themeInApp: string,
+	colorScheme?: string,
+	colors: Object,
+};
+
+type PropsDropDownComponent = Props & Extras;
+
 type DefaultProps = {
 	baseLeftIcon: string | Object,
 	baseColor: string,
@@ -92,8 +108,17 @@ type DefaultProps = {
 type State = {
 };
 
-class DropDown extends Component<Props, State> {
-props: Props;
+const DropDown = (props: Props, ref: Object): Object => {
+
+	const theme = useAppTheme();
+
+	return <DropDownComponent
+		ref={ref}
+		{...theme}
+		{...props}/>;
+};
+class DropDownComponent extends Component<PropsDropDownComponent, State> {
+props: PropsDropDownComponent;
 state: State = {
 };
 static defaultProps: DefaultProps = {
@@ -114,7 +139,7 @@ static defaultProps: DefaultProps = {
 
 	blur: Function;
 
-	constructor(props: Props) {
+	constructor(props: PropsDropDownComponent) {
 		super(props);
 
 		this.renderBase = this.renderBase.bind(this);
@@ -128,7 +153,15 @@ static defaultProps: DefaultProps = {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'value', 'appLayout', 'label', 'extraData', 'disabled', 'itemSize']);
+			'value',
+			'appLayout',
+			'label',
+			'extraData',
+			'disabled',
+			'itemSize',
+			'colorScheme',
+			'themeInApp',
+		]);
 		if (propsChange) {
 			return true;
 		}
@@ -268,10 +301,14 @@ static defaultProps: DefaultProps = {
 		);
 	}
 	getStyle(appLayout: Object): Object {
-		const { fontSize } = this.props;
+		const { fontSize, colors } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			card,
+		} = colors;
 
 		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
 
@@ -284,6 +321,7 @@ static defaultProps: DefaultProps = {
 			pickerStyleDef: {
 				width: width - (2 * padding),
 				left: padding,
+				backgroundColor: card,
 			},
 			dropDownContainerStyleDef: {
 				flex: 0,
@@ -304,7 +342,7 @@ static defaultProps: DefaultProps = {
 				flex: 1,
 				...shadow,
 				marginBottom: padding / 2,
-				backgroundColor: '#fff',
+				backgroundColor: card,
 			},
 			pickerBaseCoverStyleDef: {
 				flex: 1,
@@ -332,4 +370,4 @@ static defaultProps: DefaultProps = {
 	}
 }
 
-export default DropDown;
+export default memo<Object>(forwardRef<Object, Object>(DropDown));

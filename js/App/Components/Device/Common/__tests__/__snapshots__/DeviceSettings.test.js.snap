@@ -162,7 +162,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           style={
             Array [
               Object {
-                "color": "#8e8e93",
+                "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
@@ -354,7 +354,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           style={
             Array [
               Object {
-                "color": "#8e8e93",
+                "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
@@ -576,7 +576,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           style={
             Array [
               Object {
-                "color": "#8e8e93",
+                "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",
@@ -768,7 +768,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           style={
             Array [
               Object {
-                "color": "#8e8e93",
+                "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
                 "textAlign": "right",

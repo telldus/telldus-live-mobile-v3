@@ -128,12 +128,13 @@ const getStyles = (appLayout: Object, {
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
+		card,
 		textTwo,
+		textThree,
 	} = colors;
 
 	const {
 		shadow,
-		rowTextColor,
 	} = Theme.Core;
 
 	return {
@@ -153,17 +154,17 @@ const getStyles = (appLayout: Object, {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...shadow,
 			padding: fontSize,
 		},
 		infoLabel: {
-			color: '#000',
+			color: textThree,
 			fontSize,
 		},
 		infoValue: {
 			marginLeft: 8,
-			color: rowTextColor,
+			color: textThree,
 			fontSize,
 			flexWrap: 'wrap',
 		},
