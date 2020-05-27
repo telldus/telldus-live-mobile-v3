@@ -172,7 +172,7 @@ class App extends React.Component<Props> {
 		// Only when orientation changes.
 		// This conditional check will prevent layout update when keyboard
 		// is shown or any other event.
-		if (layout.height !== height && layout.width !== width) {
+		if (layout.width !== width) {
 			dispatch(setAppLayout(ev.nativeEvent.layout));
 		}
 	}
