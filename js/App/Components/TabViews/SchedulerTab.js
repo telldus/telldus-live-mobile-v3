@@ -297,6 +297,7 @@ class SchedulerTab extends View<null, Props, State> {
 								// if there is any expired schedule)
 								extraData={{
 									todayIndex,
+									appLayout,
 								}}
 							/>
 						</View>

@@ -29,7 +29,6 @@ import {
 	Platform,
 	Image,
 } from 'react-native';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import {
 	useSelector,
 	useDispatch,
@@ -244,7 +243,7 @@ const getStyles = (appLayout: Object): Object => {
 		style: {
 			...Platform.select({
 				ios: {
-					height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land ),
+					height: deviceHeight * land,
 				},
 				android:
 					isPortrait ? {
@@ -298,14 +297,16 @@ const getStyles = (appLayout: Object): Object => {
 				},
 			}),
 		},
-		menuButtonStyle: isPortrait ? null : {
-			position: 'absolute',
-			left: undefined,
-			right: 50,
-			top: deviceHeight * 0.03666,
-			paddingTop: 0,
-			paddingHorizontal: 0,
-		},
+		menuButtonStyle: isPortrait ? null : Platform.select({
+			android: {
+				position: 'absolute',
+				left: undefined,
+				right: 50,
+				top: deviceHeight * 0.03666,
+				paddingTop: 0,
+				paddingHorizontal: 0,
+			},
+		}),
 		addIconStyle: {
 			height: fontSizeIcon,
 			width: fontSizeIcon,

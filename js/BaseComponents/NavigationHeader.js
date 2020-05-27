@@ -30,7 +30,6 @@ import ExtraDimensions from 'react-native-extra-dimensions-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { intlShape, injectIntl } from 'react-intl';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import View from './View';
 import Header from './Header';
@@ -196,7 +195,7 @@ class NavigationHeader extends PureComponent<Props, State> {
 					height: Platform.OS === 'android' ?
 						deviceHeight * 0.08
 						:
-						(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land ),
+						deviceHeight * land,
 				}}/>
 		);
 	}

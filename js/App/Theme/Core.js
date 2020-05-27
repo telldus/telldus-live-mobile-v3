@@ -20,7 +20,6 @@
 import Color from 'color';
 
 import { Platform } from 'react-native';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 export default {
 	brandPrimary: '#1b365d',
@@ -61,7 +60,7 @@ export default {
 	},
 
 	get navBarTopPadding() {
-		return (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 10;
+		return (Platform.OS === 'ios') ? 0 : 10;
 	},
 
 	appBackground: '#eeeeee',
@@ -151,7 +150,7 @@ export default {
 	get headerHeightFactor() {
 		return {
 			port: 0.05,
-			land: 0.1111,
+			land: 0.08,
 		};
 	},
 
