@@ -18,11 +18,11 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "height": 64,
           "justifyContent": "center",
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "relative",
         },
         Object {
-          "height": 148.2074,
+          "height": 106.72,
         },
       ]
     }
@@ -47,7 +47,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "left": 0,
           "opacity": 1,
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "absolute",
         }
       }
@@ -114,11 +114,11 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "height": 64,
           "justifyContent": "center",
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "relative",
         },
         Object {
-          "height": 148.2074,
+          "height": 106.72,
         },
       ]
     }
@@ -143,7 +143,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "left": 0,
           "opacity": 1,
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "absolute",
         }
       }

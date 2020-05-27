@@ -52,11 +52,11 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
               "height": 64,
               "justifyContent": "center",
               "paddingHorizontal": 15,
-              "paddingTop": 15,
+              "paddingTop": 0,
               "position": "relative",
             },
             Object {
-              "height": 148.2074,
+              "height": 106.72,
             },
           ]
         }
@@ -109,7 +109,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
               "borderWidth": 0,
               "height": 15.5,
               "overflow": "hidden",
-              "width": 750,
+              "width": "100%",
             }
           }
         >
@@ -317,11 +317,11 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               "height": 64,
               "justifyContent": "center",
               "paddingHorizontal": 15,
-              "paddingTop": 15,
+              "paddingTop": 0,
               "position": "relative",
             },
             Object {
-              "height": 148.2074,
+              "height": 106.72,
             },
           ]
         }
@@ -374,7 +374,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               "borderWidth": 0,
               "height": 15.5,
               "overflow": "hidden",
-              "width": 750,
+              "width": "100%",
             }
           }
         >
@@ -771,11 +771,11 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
               "height": 64,
               "justifyContent": "center",
               "paddingHorizontal": 15,
-              "paddingTop": 15,
+              "paddingTop": 0,
               "position": "relative",
             },
             Object {
-              "height": 148.2074,
+              "height": 106.72,
             },
           ]
         }
@@ -828,7 +828,7 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
               "borderWidth": 0,
               "height": 15.5,
               "overflow": "hidden",
-              "width": 750,
+              "width": "100%",
             }
           }
         >
