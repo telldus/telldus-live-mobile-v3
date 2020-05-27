@@ -110,7 +110,6 @@ class MainTabBarAndroid extends Component<Props, null> {
 
 		const {
 			androidLandTabbarHeightFactor,
-			brandPrimary,
 		} = Theme.Core;
 
 		return {

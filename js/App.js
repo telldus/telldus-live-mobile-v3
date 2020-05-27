@@ -160,7 +160,7 @@ class App extends React.Component<Props> {
 
 	onLayout = (ev: Object) => {
 		const { cachedLayout, dispatch } = this.props;
-		const { width, height } = cachedLayout;
+		const { width } = cachedLayout;
 
 		const { layout } = ev.nativeEvent;
 

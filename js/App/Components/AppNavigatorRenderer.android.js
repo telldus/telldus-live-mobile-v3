@@ -314,7 +314,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const {
 			headerHeightFactor,
 		} = Theme.Core;
-	
+
 		const { land } = headerHeightFactor;
 
 		return {
