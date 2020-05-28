@@ -42,7 +42,7 @@ import {
 } from '../../../Lib/appUtils';
 import {
 	useAppTheme,
-} from '../../../Hooks/App';
+} from '../../../Hooks/Theme';
 
 import i18n from '../../../Translations/common';
 

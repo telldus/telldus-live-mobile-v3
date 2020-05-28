@@ -19,11 +19,10 @@
  */
 // @flow
 'use strict';
-import React, {
+import {
 	useCallback,
 } from 'react';
 import {
-	useColorScheme,
 	Linking,
 } from 'react-native';
 import {
@@ -58,8 +57,6 @@ import {
 
 import i18n from '../Translations/common';
 
-import Theme from '../Theme';
-
 import * as Translations from '../Translations';
 
 const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
@@ -78,106 +75,6 @@ const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): O
 		locale,
 		gatewayTimezone,
 	]);
-};
-
-const useAppTheme = (): Object => {
-	const colorScheme = useColorScheme();
-	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const {
-		themeInApp,
-	} = defaultSettings;
-	return React.useMemo((): Object => {
-		if (colorScheme === 'dark') {
-			return {
-				colorScheme,
-				dark: true,
-				themeInApp,
-				...getThemeData(themeInApp),
-			};
-		}
-		return {
-			colorScheme,
-			dark: false,
-			themeInApp,
-			...getThemeData(themeInApp),
-		};
-	}, [
-		colorScheme,
-		themeInApp,
-	]);
-};
-
-const getThemeData = (themeInApp: string | null): Object => {
-	const {
-		brandPrimary,
-		textColorOneThemeGray,
-		borderColorOneThemeGray,
-		backgroundColorOneThemeGray,
-		activeTintOneThemeGray,
-		inActiveTintOneThemeGray,
-		screenBackgroundThemeGray,
-		textColorTwoThemeGray,
-		textColorThreeThemeGray,
-
-		textColorOneThemeBlue,
-		borderColorOneThemeBlue,
-		backgroundColorOneThemeBlue,
-		screenBackgroundThemeBlue,
-		activeTintOneThemeBlue,
-		inActiveTintOneThemeBlue,
-		textColorTwoThemeBlue,
-		textColorThreeThemeBlue,
-	} = Theme.Core;
-	switch (themeInApp) {
-		case 'Gray': {
-			return {
-				colors: {
-					primary: brandPrimary,
-					text: textColorOneThemeGray,
-					textTwo: textColorTwoThemeGray,
-					textThree: textColorThreeThemeGray,
-					border: borderColorOneThemeGray,
-					background: backgroundColorOneThemeGray,
-					card: backgroundColorOneThemeGray,
-					screenBackground: screenBackgroundThemeGray,
-					activeTintOne: activeTintOneThemeGray,
-					inActiveTintOne: inActiveTintOneThemeGray,
-				},
-			};
-		}
-		case 'Blue': {
-			return {
-				colors: {
-					primary: brandPrimary,
-					text: textColorOneThemeBlue,
-					textTwo: textColorTwoThemeBlue,
-					textThree: textColorThreeThemeBlue,
-					border: borderColorOneThemeBlue,
-					background: backgroundColorOneThemeBlue,
-					card: backgroundColorOneThemeBlue,
-					screenBackground: screenBackgroundThemeBlue,
-					activeTintOne: activeTintOneThemeBlue,
-					inActiveTintOne: inActiveTintOneThemeBlue,
-				},
-			};
-		}
-		default: {
-			return {
-				colors: {
-					primary: brandPrimary,
-					text: textColorOneThemeGray,
-					textTwo: textColorTwoThemeGray,
-					textThree: textColorThreeThemeGray,
-					border: borderColorOneThemeGray,
-					background: backgroundColorOneThemeGray,
-					card: backgroundColorOneThemeGray,
-					screenBackground: screenBackgroundThemeGray,
-					activeTintOne: activeTintOneThemeGray,
-					inActiveTintOne: inActiveTintOneThemeGray,
-				},
-			};
-		}
-	}
 };
 
 const useNoInternetDialogue = (): Object => {
@@ -309,7 +206,6 @@ const useSwitchOrAddAccountAction = (): Object => {
 
 module.exports = {
 	useRelativeIntl,
-	useAppTheme,
 	useNoInternetDialogue,
 	useCampaignAction,
 	useSwitchOrAddAccountAction,

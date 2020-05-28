@@ -29,7 +29,7 @@ import { useSelector } from 'react-redux';
 import { TouchableOpacity } from 'react-native';
 import {
 	useAppTheme,
-} from '../App/Hooks/App';
+} from '../App/Hooks/Theme';
 
 import Text from './Text';
 import View from './View';

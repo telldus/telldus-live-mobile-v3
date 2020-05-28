@@ -51,7 +51,7 @@ import {
 } from '../../../Lib/appUtils';
 import {
 	useAppTheme,
-} from '../../../Hooks/App';
+} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 

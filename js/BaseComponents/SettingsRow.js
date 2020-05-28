@@ -38,7 +38,7 @@ import i18n from '../App/Translations/common';
 
 import {
 	useAppTheme,
-} from '../App/Hooks/App';
+} from '../App/Hooks/Theme';
 
 type Props = {
     value: any,

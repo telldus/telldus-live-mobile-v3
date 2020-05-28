@@ -23,9 +23,11 @@
 import Core from './Core';
 import Forms from './Forms';
 import Styles from './Styles';
+import Colors from './Colors';
 
 module.exports = {
-	Core: Core,
-	Forms: Forms,
-	Styles: Styles,
+	Core,
+	Forms,
+	Styles,
+	Colors,
 };

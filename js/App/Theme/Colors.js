@@ -1,0 +1,106 @@
+/**
+ * Copyright 2016-present Telldus Technologies AB.
+ *
+ * This file is part of the Telldus Live! app.
+ *
+ * Telldus Live! app is free : you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Telldus Live! app is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+import Core from './Core';
+
+export default {
+	Gray: {
+		get primary() {
+			return Core.brandPrimary;
+		},
+		get text() {
+			return '#A59F9A';
+		},
+		get textTwo() {
+			return Core.subHeader;
+		},
+		get textThree() {
+			return '#000';
+		},
+		get border() {
+			return '#C9C9CE';
+		},
+		get background() {
+			return '#fff';
+		},
+		get card() {
+			return '#fff';
+		},
+		get screenBackground() {
+			return Core.appBackground;
+		},
+		get activeTintOne() {
+			return Core.brandSecondary;
+		},
+		get inActiveTintOne() {
+			return Core.brandSecondary;
+		},
+		get themeGrayShadeOne() {
+			return Core.appBackground;
+		},
+		get themeGrayShadeTwo() {
+			return Core.btnDisabledBg;
+		},
+		get themeGrayShadeThree() {
+			return Core.rowTextColor;
+		},
+	},
+
+	Blue: {
+		get primary() {
+			return Core.brandPrimary;
+		},
+		get text() {
+			return '#A59F9A';
+		},
+		get textTwo() {
+			return '#fff';
+		},
+		get textThree() {
+			return '#fff';
+		},
+		get border() {
+			return '#C9C9CE';
+		},
+		get background() {
+			return Core.brandPrimary;
+		},
+		get card() {
+			return Core.brandPrimary;
+		},
+		get screenBackground() {
+			return '#4972ad';
+		},
+		get activeTintOne() {
+			return Core.brandSecondary;
+		},
+		get inActiveTintOne() {
+			return Core.brandSecondary;
+		},
+		get themeBlueShadeOne() {
+			return Core.brandPrimary;
+		},
+		get themeBlueShadeTwo() {
+			return this.screenBackgroundThemeBlue;
+		},
+		get themeBlueShadeThree() {
+			return this.textColorTwoThemeBlue;
+		},
+	},
+};

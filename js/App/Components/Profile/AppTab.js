@@ -77,7 +77,7 @@ import {
 } from '../../Hooks/Dialoguebox';
 import {
 	useAppTheme,
-} from '../../Hooks/App';
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';

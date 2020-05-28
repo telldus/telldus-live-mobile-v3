@@ -37,7 +37,7 @@ import {
 import { changeSortingDB } from '../../../Actions';
 import {
 	useAppTheme,
-} from '../../../Hooks/App';
+} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 

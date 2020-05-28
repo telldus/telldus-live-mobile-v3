@@ -33,7 +33,7 @@ import IconTelldus from './IconTelldus';
 
 import {
 	useAppTheme,
-} from '../App/Hooks/App';
+} from '../App/Hooks/Theme';
 
 type Props = {
 	icon: string,
