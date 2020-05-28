@@ -62,14 +62,19 @@ const ContactSupportBlock = (props: Object): Object => {
 
 	return (
 		<View>
-			<Text style={labelStyle}>
+			<Text
+				style={labelStyle}
+				level={2}>
 				{formatMessage(i18n.labelContactSupport)}
 			</Text>
 			<View style={coverOneStyle}>
-				<Text style={titleStyle}>
+				<Text
+					style={titleStyle}>
 					{formatMessage(i18n.titleContactSupportBlock)}
 				</Text>
-				<Text style={bodyStyle}>
+				<Text
+					style={bodyStyle}
+					level={3}>
 					{formatMessage(i18n.contentContactSupportBlock)}
 				</Text>
 			</View>
@@ -86,8 +91,6 @@ const getStyles = (appLayout: Object, {
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	const {
-		textTwo,
-		textThree,
 		card,
 	} = colors;
 
@@ -111,7 +114,6 @@ const getStyles = (appLayout: Object, {
 			marginTop: padding / 2,
 		},
 		labelStyle: {
-			color: textTwo,
 			fontSize: Math.floor(deviceWidth * 0.045),
 			marginTop: padding * 1.5,
 		},
@@ -123,7 +125,6 @@ const getStyles = (appLayout: Object, {
 		bodyStyle: {
 			fontSize,
 			textAlign: 'center',
-			color: textThree,
 			marginTop: 10,
 		},
 	};
