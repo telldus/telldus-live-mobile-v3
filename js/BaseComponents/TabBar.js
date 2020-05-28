@@ -31,10 +31,6 @@ import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
 
-import {
-	useAppTheme,
-} from '../App/Hooks/Theme';
-
 type Props = {
 	icon: string,
 	tintColor: string,
@@ -54,19 +50,13 @@ const TabBar = (props: Props): Object => {
 	const intl = useIntl();
 	accessibilityLabel = typeof accessibilityLabel === 'string' ? accessibilityLabel : intl.formatMessage(accessibilityLabel);
 
-	const {
-		colors,
-	} = useAppTheme();
-
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
 		iconSize,
 		container,
 		labelStyle,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	label = typeof label === 'string' ? label : intl.formatMessage(label);
 
@@ -80,9 +70,7 @@ const TabBar = (props: Props): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { width, height } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;

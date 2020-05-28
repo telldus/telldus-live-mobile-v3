@@ -26,14 +26,11 @@ import React, {
 	useCallback,
 } from 'react';
 import { useSelector } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
-import {
-	useAppTheme,
-} from '../App/Hooks/Theme';
 
 import Text from './Text';
 import View from './View';
 import Icon from './Icon';
+import TouchableOpacity from './TouchableOpacity';
 
 import Theme from '../App/Theme';
 
@@ -68,10 +65,6 @@ const TitledInfoBlock = (props: Props): Object => {
 		onPress,
 	} = props;
 
-	const {
-		colors,
-	} = useAppTheme();
-
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const _onPress = useCallback(() => {
@@ -84,20 +77,26 @@ const TitledInfoBlock = (props: Props): Object => {
 		}
 	}, [onPress]);
 
-	let styles = getStyles(layout, {
-		colors,
-	});
+	let styles = getStyles(layout);
 	iconSize = iconSize ? iconSize : styles.iconSize;
 
 	return (
 		<View style={[styles.blockContainer, blockContainerStyle]}>
 			{!!title && (
-				<Text style={[styles.titleStyle, titleTextStyle]}>
+				<Text
+					level={2}
+					style={[styles.titleStyle, titleTextStyle]}>
 					{title}
 				</Text>
 			)}
-			<TouchableOpacity style={styles.infoCover} onPress={_onPress} disabled={!onPress}>
-				<Text style={[styles.infoLabel, labelTextStyle]} numberOfLines={1}>
+			<TouchableOpacity
+				level={2}
+				style={styles.infoCover}
+				onPress={_onPress}
+				disabled={!onPress}>
+				<Text
+					level={3}
+					style={[styles.infoLabel, labelTextStyle]} numberOfLines={1}>
 					{label}
 				</Text>
 				<View style={{
@@ -107,7 +106,9 @@ const TitledInfoBlock = (props: Props): Object => {
 					alignItems: 'center',
 					justifyContent: 'flex-end',
 				}}>
-					<Text style={[ styles.infoValue, valueTextStyle]} numberOfLines={1}>
+					<Text
+						level={3}
+						style={[ styles.infoValue, valueTextStyle]} numberOfLines={1}>
 						{value}
 					</Text>
 				</View>
@@ -119,19 +120,11 @@ const TitledInfoBlock = (props: Props): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
-
-	const {
-		card,
-		textTwo,
-		textThree,
-	} = colors;
 
 	const {
 		shadow,
@@ -147,24 +140,20 @@ const getStyles = (appLayout: Object, {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: textTwo,
 			fontSize,
 		},
 		infoCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			backgroundColor: card,
 			...shadow,
 			padding: fontSize,
 		},
 		infoLabel: {
-			color: textThree,
 			fontSize,
 		},
 		infoValue: {
 			marginLeft: 8,
-			color: textThree,
 			fontSize,
 			flexWrap: 'wrap',
 		},

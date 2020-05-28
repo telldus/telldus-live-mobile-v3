@@ -36,10 +36,6 @@ import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
-import {
-	useAppTheme,
-} from '../App/Hooks/Theme';
-
 type Props = {
     value: any,
     label: string,
@@ -134,10 +130,6 @@ const SettingsRow = (props: Props): Object => {
 	}, [onChangeText]);
 
 	const {
-		colors,
-	} = useAppTheme();
-
-	const {
 		ShowOnDashCover,
 		touchableStyleDef,
 		switchStyleDef,
@@ -154,7 +146,6 @@ const SettingsRow = (props: Props): Object => {
 	} = getStyle({
 		appLayout,
 		iconValueRightSize,
-		colors,
 	});
 
 	let Parent = View, parentProps = {
@@ -176,14 +167,18 @@ const SettingsRow = (props: Props): Object => {
 	let accessibilityLabel = `${label}, ${value ? value : ''} ${valuePostfix ? valuePostfix : ''}, ${accessibilityLabelTwo}`;
 
 	return (
-		<View style={[ShowOnDashCover, style]} accessible={accessible} accessibilityLabel={accessibilityLabel} importantForAccessibility={'yes'}>
+		<View
+			level={2}
+			style={[ShowOnDashCover, style]} accessible={accessible} accessibilityLabel={accessibilityLabel} importantForAccessibility={'yes'}>
 			{type === 'switch' ?
 				<View
 					style={[touchableStyleDef, touchableStyle]}>
 					<View style={textShowOnDashCover}>
 						{!!label && (
 							typeof label === 'string' ?
-								<Text style={[textShowOnDash, labelTextStyle]}>
+								<Text
+									level={3}
+									style={[textShowOnDash, labelTextStyle]}>
 									{label}
 								</Text>
 								:
@@ -205,7 +200,9 @@ const SettingsRow = (props: Props): Object => {
 				<Parent {...parentProps}>
 					<View style={textShowOnDashCover}>
 						{!!label && (
-							typeof label === 'string' ? <Text style={[textShowOnDash, labelTextStyle]}>
+							typeof label === 'string' ? <Text
+								level={3}
+								style={[textShowOnDash, labelTextStyle]}>
 								{label}
 							</Text>
 								:
@@ -238,7 +235,9 @@ const SettingsRow = (props: Props): Object => {
 									(typeof value === 'string') || (typeof value === 'number') ?
 										<>
 											{iconValueLeft}
-											<Text style={[valueText, valueTextStyle]}>
+											<Text
+												level={3}
+												style={[valueText, valueTextStyle]}>
 												{value} {valuePostfix}
 											</Text>
 										</>
@@ -271,7 +270,6 @@ const SettingsRow = (props: Props): Object => {
 const getStyle = ({
 	appLayout,
 	iconValueRightSize,
-	colors,
 }: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -283,17 +281,11 @@ const getStyle = ({
 		brandSecondary,
 	} = Theme.Core;
 
-	const {
-		card,
-		textThree,
-	} = colors;
-
 	const padding = deviceWidth * paddingFactor;
 	const fontSize = deviceWidth * 0.04;
 
 	return {
 		ShowOnDashCover: {
-			backgroundColor: card,
 			marginTop: padding / 2,
 			...Theme.Core.shadow,
 			borderRadius: 2,
@@ -315,7 +307,6 @@ const getStyle = ({
 			flexDirection: 'row',
 		},
 		textShowOnDash: {
-			color: textThree,
 			fontSize,
 			justifyContent: 'center',
 		},
@@ -329,7 +320,6 @@ const getStyle = ({
 		valueText: {
 			flex: 1,
 			fontSize,
-			color: textThree,
 			textAlign: 'right',
 			textAlignVertical: 'center',
 		},
