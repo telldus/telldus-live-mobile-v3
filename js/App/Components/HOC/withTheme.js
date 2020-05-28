@@ -25,6 +25,8 @@ import React, {
 	memo,
 } from 'react';
 
+import Base from '../../../BaseComponents/Base';
+
 import {
 	useAppTheme,
 } from '../../Hooks/Theme';
@@ -35,14 +37,25 @@ export interface PropsThemedComponent {
 	colors: Object,
 }
 
-const withTheme = (Component: Object): Object => {
-	return memo<Object>((props: Object): Object => {
+const withTheme = (Component: Object, returnClassComponent?: boolean = false): Object => {
+	const ThemedComponent = memo<Object>((props: Object): Object => {
 		return (
 			<Component
 				{...props}
 				{...useAppTheme()}/>
 		);
 	});
+	if (!returnClassComponent) {
+		return ThemedComponent;
+	}
+	return class extends Base {
+		render(): Object {
+			return (
+				<ThemedComponent
+					{...this.props}/>
+			);
+		}
+	};
 };
 
 module.exports = {
