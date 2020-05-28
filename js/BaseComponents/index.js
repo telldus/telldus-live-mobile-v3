@@ -102,6 +102,7 @@ import CachedImage from './CachedImage';
 import TransparentFullPageLoadingIndicator from './TransparentFullPageLoadingIndicator';
 import MainTabBarIOS from './MainTabBarIOS';
 import MainTabNavHeader from './MainTabNavHeader';
+import TouchableOpacity from './TouchableOpacity';
 
 import {
 	AppState,
@@ -196,12 +197,13 @@ module.exports = {
 	MainTabBarIOS,
 	MainTabNavHeader,
 
-	AppState: AppState,
-	Dimensions: Dimensions,
-	PixelRatio: PixelRatio,
-	StatusBar: StatusBar,
-	StyleSheet: StyleSheet,
-	TabBarIOS: TabBarIOS,
-	Gravatar: Gravatar,
-	Image: Image,
+	AppState,
+	Dimensions,
+	PixelRatio,
+	StatusBar,
+	StyleSheet,
+	TabBarIOS,
+	Gravatar,
+	Image,
+	TouchableOpacity,
 };
