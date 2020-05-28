@@ -27,7 +27,6 @@ import React, {
 } from 'react';
 import {
 	TouchableOpacity,
-	Image,
 } from 'react-native';
 import {
 	useSelector,
@@ -84,30 +83,23 @@ const FenceCalloutWithMarker = React.memo<Object>((props: Object): Object => {
 	return (
 		<MapView.Marker.Animated
 			ref={markerRef}
+			image={{uri: 'marker'}}
 			coordinate={{ latitude: extras.latitude, longitude: extras.longitude }}>
-			<View>
-				<Image
-					source={{uri: 'marker'}}
-					resizeMode="contain"
-					style={{
-						height: 25,
-						width: 25,
-					}}/>
-				<MapView.Callout onPress={_onPress}>
-					<View style={container}>
-						<Text
-							style={titleStyle}>
-							{extras.title}
-						</Text>
-						<TouchableOpacity
-							style={editBtn}>
-							<Icon
-								style={editIcon}
-								name="mode-edit"/>
-						</TouchableOpacity>
-					</View>
-				</MapView.Callout>
-			</View>
+			<MapView.Callout
+				onPress={_onPress}>
+				<View style={container}>
+					<Text
+						style={titleStyle}>
+						{extras.title}
+					</Text>
+					<TouchableOpacity
+						style={editBtn}>
+						<Icon
+							style={editIcon}
+							name="mode-edit"/>
+					</TouchableOpacity>
+				</View>
+			</MapView.Callout>
 		</MapView.Marker.Animated>
 	);
 });
@@ -128,6 +120,7 @@ const getStyles = (appLayout: Object): Object => {
 		container: {
 			flexDirection: 'row',
 			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		titleStyle: {
 			fontSize,
