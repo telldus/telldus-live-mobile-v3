@@ -23,6 +23,7 @@
 
 import React, {
 	memo,
+	forwardRef,
 } from 'react';
 
 import Base from '../../../BaseComponents/Base';
@@ -38,13 +39,14 @@ export interface PropsThemedComponent {
 }
 
 const withTheme = (Component: Object, returnClassComponent?: boolean = false): Object => {
-	const ThemedComponent = memo<Object>((props: Object): Object => {
+	const ThemedComponent = memo<Object>(forwardRef<Object, Object>((props: Object, ref: Object): Object => {
 		return (
 			<Component
+				ref={ref}
 				{...props}
 				{...useAppTheme()}/>
 		);
-	});
+	}));
 	if (!returnClassComponent) {
 		return ThemedComponent;
 	}
