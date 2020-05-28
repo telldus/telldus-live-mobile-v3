@@ -109,4 +109,4 @@ class ViewComponent extends Base {
 	}
 }
 
-export default withTheme(ViewComponent);
+export default withTheme(ViewComponent, true);
