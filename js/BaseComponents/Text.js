@@ -53,11 +53,17 @@ class TextComponent extends Base {
 			style: type,
 		};
 
+		if (this.props.style && Array.isArray(this.props.style)) {
+			defaultProps = {
+				style: [type],
+			};
+		}
+
 		return computeProps(this.props, defaultProps);
 
 	}
 
-	getTextColor = () => {
+	getTextColor = (): ?string => {
 		const {
 			level,
 			colors,
