@@ -34,6 +34,7 @@ import {
 type Props = {
 	children: Object,
 	level?: number,
+	style?: Object | Array<Object>,
 };
 
 type PropsThemedTextComponent = Props & PropsThemedComponent;
