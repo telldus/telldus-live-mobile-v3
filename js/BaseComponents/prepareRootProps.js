@@ -21,16 +21,16 @@
 
 'use strict';
 
+import CoreTheme from '../App/Theme/Core';
 import computeProps from './computeProps';
 
 
-const prepareRootPropsView = (props: Object = {}, defaultPropsAdditional?: Object = {}): Object => {
+const prepareRootPropsView = (props: Object = {}, defaultPropsOverride?: Object = {}): Object => {
 	const backgroundColor = getBGColor(props);
 	let defaultProps = {
 		style: {
 			backgroundColor,
 		},
-		...defaultPropsAdditional,
 	};
 	if (!props.style) {
 		defaultProps = {
@@ -46,6 +46,8 @@ const prepareRootPropsView = (props: Object = {}, defaultPropsAdditional?: Objec
 			}],
 		};
 	}
+
+	defaultProps = computeProps(defaultProps, defaultPropsOverride);
 
 	return computeProps(props, defaultProps);
 
@@ -75,7 +77,62 @@ const getBGColor = (props: Object): ?string => {
 	}
 };
 
+const prepareRootPropsText = (props: Object = {}, defaultPropsOverride?: Object = {}): Object => {
+	const {
+		style,
+	} = props;
+
+	let type = {
+		color: getTextColor(props),
+		backgroundColor: 'transparent',
+		fontSize: CoreTheme.fontSizeBase,
+	};
+
+	let defaultProps = {
+		style: type,
+	};
+
+	if (style && Array.isArray(style)) {
+		defaultProps = {
+			style: [type],
+		};
+	}
+
+	defaultProps = computeProps(defaultProps, defaultPropsOverride);
+
+	return computeProps(props, defaultProps);
+};
+
+const getTextColor = (props: Object): ?string => {
+	const {
+		level,
+		colors,
+	} = props;
+	if (!level) {
+		return;
+	}
+	switch (level) {
+		case 1: {
+			return colors.text;
+		}
+		case 2: {
+			return colors.textTwo;
+		}
+		case 3: {
+			return colors.textThree;
+		}
+		case 4: {
+			return colors.textFour;
+		}
+		case 5: {
+			return colors.textFive;
+		}
+		default:
+			return;
+	}
+};
 
 module.exports = {
 	prepareRootPropsView,
+	prepareRootPropsText,
 };
