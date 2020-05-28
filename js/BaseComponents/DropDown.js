@@ -54,6 +54,7 @@ type Props = {
 	label: string,
 	extraData?: Object,
 	disabled?: boolean,
+	dropDownPosition: 'top' | 'bottom',
 
 	fontSize?: number,
 	baseColor?: string,
@@ -95,6 +96,7 @@ type DefaultProps = {
 	itemCount: number,
 	itemPadding: number,
 	disabled: boolean,
+	dropDownPosition: 'top' | 'bottom',
 };
 
 type State = {
@@ -112,6 +114,7 @@ static defaultProps: DefaultProps = {
 	itemCount: 4,
 	itemPadding: 8,
 	disabled: false,
+	dropDownPosition: 'top',
 };
 	renderBase: () => Object;
 	onPressPicker: () => void;
@@ -228,6 +231,7 @@ static defaultProps: DefaultProps = {
 			valueExtractor,
 			labelExtractor,
 			itemSize,
+			dropDownPosition,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -239,7 +243,7 @@ static defaultProps: DefaultProps = {
 		} = this.getStyle(appLayout);
 		const _itemSize = itemSize || Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = items.length < itemCount ? items.length : itemCount;
-		const dropdownTop = -(iCount * _itemSize);
+		let dropdownTop = dropDownPosition === 'bottom' ? ((iCount * _itemSize) - itemPadding) : -(iCount * _itemSize);
 
 		return (
 			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>
