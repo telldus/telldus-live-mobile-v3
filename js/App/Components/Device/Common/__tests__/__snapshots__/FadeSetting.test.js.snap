@@ -93,6 +93,7 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
     <Text
       accessible={true}
       allowFontScaling={false}
+      color="#999"
       colorScheme="light"
       colors={
         Object {
@@ -115,31 +116,23 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
       }
       dark={false}
       importantForAccessibility="yes"
+      size={30}
       style={
-        Array [
-          Object {
-            "backgroundColor": "transparent",
-            "color": "#999",
-            "fontSize": 30,
-          },
-          Object {
-            "backgroundColor": "#1b365d",
-            "borderColor": "#1b365d",
-            "borderRadius": 2,
-            "borderWidth": 1,
-            "color": "#fff",
-            "fontSize": 41,
-            "marginLeft": 20.83275,
-            "marginTop": 20.83275,
-            "overflow": "hidden",
-            "padding": 2,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-          },
-          Object {
-            "fontFamily": "telldusicons",
-          },
-        ]
+        Object {
+          "backgroundColor": "#1b365d",
+          "borderColor": "#1b365d",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "#fff",
+          "fontFamily": "telldusicons",
+          "fontSize": 41,
+          "marginLeft": 20.83275,
+          "marginTop": 20.83275,
+          "overflow": "hidden",
+          "padding": 2,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        }
       }
     >
       checkmark
@@ -241,6 +234,7 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
     <Text
       accessible={true}
       allowFontScaling={false}
+      color="#999"
       colorScheme="light"
       colors={
         Object {
@@ -263,31 +257,23 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
       }
       dark={false}
       importantForAccessibility="yes"
+      size={30}
       style={
-        Array [
-          Object {
-            "backgroundColor": "transparent",
-            "color": "#999",
-            "fontSize": 30,
-          },
-          Object {
-            "backgroundColor": "#fff",
-            "borderColor": "#1b365d",
-            "borderRadius": 2,
-            "borderWidth": 1,
-            "color": "transparent",
-            "fontSize": 41,
-            "marginLeft": 20.83275,
-            "marginTop": 20.83275,
-            "overflow": "hidden",
-            "padding": 2,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-          },
-          Object {
-            "fontFamily": "telldusicons",
-          },
-        ]
+        Object {
+          "backgroundColor": "#fff",
+          "borderColor": "#1b365d",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "transparent",
+          "fontFamily": "telldusicons",
+          "fontSize": 41,
+          "marginLeft": 20.83275,
+          "marginTop": 20.83275,
+          "overflow": "hidden",
+          "padding": 2,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        }
       }
     >
       checkmark

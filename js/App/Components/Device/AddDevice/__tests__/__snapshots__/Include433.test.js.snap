@@ -462,6 +462,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
         <Text
           accessible={true}
           allowFontScaling={false}
+          color="#fff"
           colorScheme="light"
           colors={
             Object {
@@ -484,26 +485,22 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           }
           dark={false}
           importantForAccessibility="yes"
+          size={30}
           style={
-            Array [
-              Object {
+            Object {
+              "0": Object {
                 "backgroundColor": "transparent",
-                "color": "#fff",
-                "fontSize": 30,
+                "color": "#e26901",
+                "fontSize": 14.000000000000002,
               },
-              Array [
-                Object {
-                  "color": "#e26901",
-                  "fontSize": 14.000000000000002,
-                },
-                Object {
-                  "color": "#D32F2E",
-                },
-              ],
-              Object {
-                "fontFamily": "telldusicons",
+              "1": Object {
+                "color": "#D32F2E",
               },
-            ]
+              "backgroundColor": "transparent",
+              "color": undefined,
+              "fontFamily": "telldusicons",
+              "fontSize": 12,
+            }
           }
         >
           info
@@ -1437,6 +1434,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               <Text
                 accessible={true}
                 allowFontScaling={false}
+                color="#fff"
                 colorScheme="light"
                 colors={
                   Object {
@@ -1459,24 +1457,20 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 }
                 dark={false}
                 importantForAccessibility="yes"
+                size={30}
                 style={
-                  Array [
-                    Object {
+                  Object {
+                    "0": Object {
                       "backgroundColor": "transparent",
-                      "color": "#fff",
-                      "fontSize": 30,
+                      "color": "#e26901",
+                      "fontSize": 14.000000000000002,
                     },
-                    Array [
-                      Object {
-                        "color": "#e26901",
-                        "fontSize": 14.000000000000002,
-                      },
-                      undefined,
-                    ],
-                    Object {
-                      "fontFamily": "telldusicons",
-                    },
-                  ]
+                    "1": undefined,
+                    "backgroundColor": "transparent",
+                    "color": undefined,
+                    "fontFamily": "telldusicons",
+                    "fontSize": 12,
+                  }
                 }
               >
                 info

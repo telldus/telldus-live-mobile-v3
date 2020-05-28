@@ -27,6 +27,7 @@ exports[`renders CheckBoxIconText when checked 1`] = `
   <Text
     accessible={true}
     allowFontScaling={false}
+    color="#999"
     colorScheme="light"
     colors={
       Object {
@@ -49,29 +50,21 @@ exports[`renders CheckBoxIconText when checked 1`] = `
     }
     dark={false}
     importantForAccessibility="yes"
+    size={30}
     style={
-      Array [
-        Object {
-          "backgroundColor": "transparent",
-          "color": "#999",
-          "fontSize": 30,
-        },
-        Object {
-          "backgroundColor": "#fff",
-          "borderColor": "#e26901",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "#e26901",
-          "fontSize": 28,
-          "overflow": "hidden",
-          "padding": 1.4000000000000001,
-          "textAlign": "center",
-          "textAlignVertical": "center",
-        },
-        Object {
-          "fontFamily": "telldusicons",
-        },
-      ]
+      Object {
+        "backgroundColor": "#fff",
+        "borderColor": "#e26901",
+        "borderRadius": 2,
+        "borderWidth": 1,
+        "color": "#e26901",
+        "fontFamily": "telldusicons",
+        "fontSize": 28,
+        "overflow": "hidden",
+        "padding": 1.4000000000000001,
+        "textAlign": "center",
+        "textAlignVertical": "center",
+      }
     }
   >
     checkmark
@@ -144,6 +137,7 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
   <Text
     accessible={true}
     allowFontScaling={false}
+    color="#999"
     colorScheme="light"
     colors={
       Object {
@@ -166,29 +160,21 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
     }
     dark={false}
     importantForAccessibility="yes"
+    size={30}
     style={
-      Array [
-        Object {
-          "backgroundColor": "transparent",
-          "color": "#999",
-          "fontSize": 30,
-        },
-        Object {
-          "backgroundColor": "transparent",
-          "borderColor": "#fff",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "transparent",
-          "fontSize": 28,
-          "overflow": "hidden",
-          "padding": 1.4000000000000001,
-          "textAlign": "center",
-          "textAlignVertical": "center",
-        },
-        Object {
-          "fontFamily": "telldusicons",
-        },
-      ]
+      Object {
+        "backgroundColor": "transparent",
+        "borderColor": "#fff",
+        "borderRadius": 2,
+        "borderWidth": 1,
+        "color": "transparent",
+        "fontFamily": "telldusicons",
+        "fontSize": 28,
+        "overflow": "hidden",
+        "padding": 1.4000000000000001,
+        "textAlign": "center",
+        "textAlignVertical": "center",
+      }
     }
   >
     checkmark

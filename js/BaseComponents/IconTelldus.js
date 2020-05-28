@@ -27,6 +27,15 @@ import { Dimensions } from 'react-native';
 import Text from './Text';
 import Theme from '../App/Theme';
 
+import {
+	prepareRootPropsText,
+} from './prepareRootProps';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
 const deviceWidth = Dimensions.get('window').width;
 
 type DefaultProps = {
@@ -43,17 +52,13 @@ type Props = {
 	style?: Array<any> | Object,
 	accessible?: boolean,
 	importantForAccessibility: string,
+	level?: number,
 };
 
-export default class IconTelldus extends Component<Props, null> {
-	props: Props;
+type PropsThemedIconTelldusComponent = Props & PropsThemedComponent;
 
-	static propTypes = {
-		icon: PropTypes.string.isRequired,
-		size: PropTypes.number,
-		color: PropTypes.string,
-		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-	};
+class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
+	props: PropsThemedIconTelldusComponent;
 
 	static defaultProps: DefaultProps = {
 		color: '#999',
@@ -63,14 +68,25 @@ export default class IconTelldus extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { icon, style, accessible, importantForAccessibility } = this.props;
-		const defaultStyle = this._getDefaultStyle();
+		const { icon, ...others } = this.props;
+
+		const defaultProps = {
+			style: this._getDefaultStyle(),
+		};
+
+		const {
+			style,
+			...otherProps
+		} = prepareRootPropsText(others, defaultProps);
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}
-				allowFontScaling={false}
-				importantForAccessibility={importantForAccessibility}
-				accessible={accessible}>
+			<Text
+				{...otherProps}
+				style={{
+					...style,
+					fontFamily: Theme.Core.fonts.telldusIconFont,
+				}}
+				allowFontScaling={false}>
 				{icon}
 			</Text>
 		);
@@ -86,3 +102,5 @@ export default class IconTelldus extends Component<Props, null> {
 	};
 
 }
+
+export default withTheme(IconTelldus);

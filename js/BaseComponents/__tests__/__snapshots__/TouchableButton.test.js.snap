@@ -264,6 +264,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
       <Text
         accessible={true}
         allowFontScaling={false}
+        color="#999"
         colorScheme="light"
         colors={
           Object {
@@ -286,26 +287,19 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
         }
         dark={false}
         importantForAccessibility="yes"
+        size={30}
         style={
-          Array [
-            Object {
-              "backgroundColor": "transparent",
-              "color": "#999",
-              "fontSize": 30,
-            },
-            Object {
-              "color": "#ffffff",
-              "fontSize": 26,
-              "transform": Array [
-                Object {
-                  "rotate": "0deg",
-                },
-              ],
-            },
-            Object {
-              "fontFamily": "telldusicons",
-            },
-          ]
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#ffffff",
+            "fontFamily": "telldusicons",
+            "fontSize": 26,
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          }
         }
       >
         loading
@@ -579,6 +573,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
       <Text
         accessible={true}
         allowFontScaling={false}
+        color="#999"
         colorScheme="light"
         colors={
           Object {
@@ -601,26 +596,19 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
         }
         dark={false}
         importantForAccessibility="yes"
+        size={30}
         style={
-          Array [
-            Object {
-              "backgroundColor": "transparent",
-              "color": "#999",
-              "fontSize": 30,
-            },
-            Object {
-              "color": "#ffffff",
-              "fontSize": 26,
-              "transform": Array [
-                Object {
-                  "rotate": "0deg",
-                },
-              ],
-            },
-            Object {
-              "fontFamily": "telldusicons",
-            },
-          ]
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#ffffff",
+            "fontFamily": "telldusicons",
+            "fontSize": 26,
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          }
         }
       >
         loading

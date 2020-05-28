@@ -95,6 +95,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     }
     dark={false}
     importantForAccessibility="yes"
+    level={2}
     style={
       Array [
         Object {
@@ -211,6 +212,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -245,6 +247,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           <Text
             accessible={true}
             allowFontScaling={false}
+            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -267,21 +270,14 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
             dark={false}
             importantForAccessibility="yes"
+            size={30}
             style={
-              Array [
-                Object {
-                  "backgroundColor": "transparent",
-                  "color": "#999",
-                  "fontSize": 30,
-                },
-                Object {
-                  "color": "#e26901",
-                  "fontSize": 30,
-                },
-                Object {
-                  "fontFamily": "telldusicons",
-                },
-              ]
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#e26901",
+                "fontFamily": "telldusicons",
+                "fontSize": 30,
+              }
             }
           >
             help
@@ -332,6 +328,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -418,6 +415,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     }
     dark={false}
     importantForAccessibility="yes"
+    level={2}
     style={
       Array [
         Object {
@@ -534,6 +532,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -568,6 +567,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           <Text
             accessible={true}
             allowFontScaling={false}
+            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -590,21 +590,14 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
             dark={false}
             importantForAccessibility="yes"
+            size={30}
             style={
-              Array [
-                Object {
-                  "backgroundColor": "transparent",
-                  "color": "#999",
-                  "fontSize": 30,
-                },
-                Object {
-                  "color": "#e26901",
-                  "fontSize": 30,
-                },
-                Object {
-                  "fontFamily": "telldusicons",
-                },
-              ]
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#e26901",
+                "fontFamily": "telldusicons",
+                "fontSize": 30,
+              }
             }
           >
             help
@@ -655,6 +648,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -814,6 +808,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     }
     dark={false}
     importantForAccessibility="yes"
+    level={2}
     style={
       Array [
         Object {
@@ -930,6 +925,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -964,6 +960,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           <Text
             accessible={true}
             allowFontScaling={false}
+            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -986,21 +983,14 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
             dark={false}
             importantForAccessibility="yes"
+            size={30}
             style={
-              Array [
-                Object {
-                  "backgroundColor": "transparent",
-                  "color": "#999",
-                  "fontSize": 30,
-                },
-                Object {
-                  "color": "#e26901",
-                  "fontSize": 30,
-                },
-                Object {
-                  "fontFamily": "telldusicons",
-                },
-              ]
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#e26901",
+                "fontFamily": "telldusicons",
+                "fontSize": 30,
+              }
             }
           >
             help
@@ -1051,6 +1041,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -1137,6 +1128,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     }
     dark={false}
     importantForAccessibility="yes"
+    level={2}
     style={
       Array [
         Object {
@@ -1253,6 +1245,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
@@ -1287,6 +1280,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           <Text
             accessible={true}
             allowFontScaling={false}
+            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -1309,21 +1303,14 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
             dark={false}
             importantForAccessibility="yes"
+            size={30}
             style={
-              Array [
-                Object {
-                  "backgroundColor": "transparent",
-                  "color": "#999",
-                  "fontSize": 30,
-                },
-                Object {
-                  "color": "#e26901",
-                  "fontSize": 30,
-                },
-                Object {
-                  "fontFamily": "telldusicons",
-                },
-              ]
+              Object {
+                "backgroundColor": "transparent",
+                "color": "#e26901",
+                "fontFamily": "telldusicons",
+                "fontSize": 30,
+              }
             }
           >
             help
@@ -1374,6 +1361,7 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
           }
           dark={false}
+          level={3}
           style={
             Array [
               Object {
