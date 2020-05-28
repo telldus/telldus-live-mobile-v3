@@ -25,26 +25,88 @@ import React from 'react';
 import { View } from 'react-native';
 import Base from './Base';
 import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
+import computeProps from './computeProps';
 
-type NewProps = {|padder?: boolean, style: Object | Array<any>|};
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
+type NewProps = {|padder?: boolean, level?: number, style: Object | Array<any>|};
 type Props = {|...NewProps, ...ViewProps|};
 
-export default class ViewComponent extends Base {
-	props: Props;
+
+type PropsThemedViewComponent = Props & PropsThemedComponent;
+class ViewComponent extends Base {
+	props: PropsThemedViewComponent;
+
+	prepareRootProps = (props: Object = {}): Object => {
+		const {
+			padder,
+		} = props;
+
+		let defaultProps = {
+			style: {
+				backgroundColor: this.getBGColor(),
+			},
+		};
+		if (!props.style) {
+			defaultProps = {
+				style: {
+					padding: (padder) ? this.getTheme().contentPadding : 0,
+					flex: 1,
+					backgroundColor: this.getBGColor(),
+				},
+			};
+		} else if (Array.isArray(props.style)) {
+			defaultProps = {
+				style: [{
+					backgroundColor: this.getBGColor(),
+				}],
+			};
+		}
+
+		return computeProps(props, defaultProps);
+
+	}
+
+	getBGColor = (): ?string => {
+		const {
+			level,
+			colors,
+		} = this.props;
+
+		if (!level) {
+			return 'transparent';
+		}
+		switch (level) {
+			case 1: {
+				return colors.background;
+			}
+			case 2: {
+				return colors.card;
+			}
+			case 3: {
+				return colors.screenBackground;
+			}
+			default:
+				return 'transparent';
+		}
+	}
 
 	render(): React$Element<any> {
 		const {
-			style,
-			padder,
-			...rest
+			children,
+			...others
 		} = this.props;
+
 		return (
 			<View
-				{...rest}
-				style={style || {
-					padding: (padder) ? this.getTheme().contentPadding : 0,
-					flex: 1,
-				}} />
+				{...this.prepareRootProps(others)}>
+				{children}
+			</View>
 		);
 	}
 }
+
+export default withTheme(ViewComponent);
