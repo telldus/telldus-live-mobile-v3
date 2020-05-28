@@ -25,8 +25,10 @@ import React from 'react';
 import { View } from 'react-native';
 import Base from './Base';
 import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
-import computeProps from './computeProps';
 
+import {
+	prepareRootPropsView,
+} from './prepareRootProps';
 import {
 	withTheme,
 	PropsThemedComponent,
@@ -40,60 +42,6 @@ type PropsThemedViewComponent = Props & PropsThemedComponent;
 class ViewComponent extends Base {
 	props: PropsThemedViewComponent;
 
-	prepareRootProps = (props: Object = {}): Object => {
-		const {
-			padder,
-		} = props;
-
-		let defaultProps = {
-			style: {
-				backgroundColor: this.getBGColor(),
-			},
-		};
-		if (!props.style) {
-			defaultProps = {
-				style: {
-					padding: (padder) ? this.getTheme().contentPadding : 0,
-					flex: 1,
-					backgroundColor: this.getBGColor(),
-				},
-			};
-		} else if (Array.isArray(props.style)) {
-			defaultProps = {
-				style: [{
-					backgroundColor: this.getBGColor(),
-				}],
-			};
-		}
-
-		return computeProps(props, defaultProps);
-
-	}
-
-	getBGColor = (): ?string => {
-		const {
-			level,
-			colors,
-		} = this.props;
-
-		if (!level) {
-			return 'transparent';
-		}
-		switch (level) {
-			case 1: {
-				return colors.background;
-			}
-			case 2: {
-				return colors.card;
-			}
-			case 3: {
-				return colors.screenBackground;
-			}
-			default:
-				return 'transparent';
-		}
-	}
-
 	render(): React$Element<any> {
 		const {
 			children,
@@ -102,7 +50,7 @@ class ViewComponent extends Base {
 
 		return (
 			<View
-				{...this.prepareRootProps(others)}>
+				{...prepareRootPropsView(others)}>
 				{children}
 			</View>
 		);
