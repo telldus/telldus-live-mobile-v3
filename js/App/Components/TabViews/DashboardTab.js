@@ -675,11 +675,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 const ConnectedDashboardTabComponent = connect(mapStateToProps, mapDispatchToProps)(DashboardTabComponent);
 
-const DashboardTab = memo<Object>((props: Props): Object => {
+const DashboardTab = (props: Props): Object => {
 	const theme = useAppTheme();
 	return <ConnectedDashboardTabComponent
 		{...props}
 		{...theme}/>;
-});
+};
 
-export default DashboardTab;
+DashboardTab.displayName = 'DashboardTab';
+
+export default memo<Object>(DashboardTab);

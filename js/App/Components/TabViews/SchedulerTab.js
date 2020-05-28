@@ -427,11 +427,13 @@ const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 
 const ConnectedSchedulerTabComponent = connect(mapStateToProps, mapDispatchToProps)(SchedulerTabComponent);
 
-const SchedulerTab = memo<Object>((props: Props): Object => {
+const SchedulerTab = (props: Props): Object => {
 	const theme = useAppTheme();
 	return <ConnectedSchedulerTabComponent
 		{...props}
 		{...theme}/>;
-});
+};
 
-export default SchedulerTab;
+SchedulerTab.displayName = 'SchedulerTab';
+
+export default memo<Object>(SchedulerTab);

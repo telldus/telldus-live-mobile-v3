@@ -35,9 +35,9 @@ describe('<SchedulerTab />', () => {
 		expect(wrapper).toBeTruthy();
 	});
 
-	it(' render the connected(SchedulerTab) component', () => {
-		const Tab = wrapper.props().children.props.children.type.displayName;
-		expect(Tab).toEqual('Connect(SchedulerTab)');
+	it(' render the SchedulerTab component', () => {
+		const Tab = wrapper.props().children.props.children.type.type.displayName;
+		expect(Tab).toEqual('SchedulerTab');
 	});
 
 	it(' check getjobs action on dispatching ', () => {

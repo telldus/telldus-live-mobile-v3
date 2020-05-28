@@ -697,11 +697,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 const ConnectedSensorsTabComponent = connect(mapStateToProps, mapDispatchToProps)(SensorsTabComponent);
 
-const SensorsTab = memo<Object>((props: Props): Object => {
+const SensorsTab = (props: Props): Object => {
 	const theme = useAppTheme();
 	return <ConnectedSensorsTabComponent
 		{...props}
 		{...theme}/>;
-});
+};
 
-export default SensorsTab;
+SensorsTab.displayName = 'SensorsTab';
+
+export default memo<Object>(SensorsTab);

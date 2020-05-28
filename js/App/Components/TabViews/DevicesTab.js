@@ -907,11 +907,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 
 const ConnectedDevicesTabComponent = connect(mapStateToProps, mapDispatchToProps)(DevicesTabComponent);
 
-const DevicesTab = memo<Object>((props: Props): Object => {
+const DevicesTab = (props: Props): Object => {
 	const theme = useAppTheme();
 	return <ConnectedDevicesTabComponent
 		{...props}
 		{...theme}/>;
-});
+};
 
-export default DevicesTab;
+DevicesTab.displayName = 'DevicesTab';
+
+export default memo<Object>(DevicesTab);
