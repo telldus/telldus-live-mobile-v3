@@ -103,10 +103,10 @@ export default {
 			return Core.brandPrimary;
 		},
 		get themeBlueShadeTwo() {
-			return this.screenBackgroundThemeBlue;
+			return this.screenBackground;
 		},
 		get themeBlueShadeThree() {
-			return this.textColorTwoThemeBlue;
+			return this.textTwo;
 		},
 	},
 };

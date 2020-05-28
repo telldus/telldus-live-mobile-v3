@@ -132,21 +132,25 @@ const getSectionHeaderFontSize = (deviceWidth: number): number => {
 const getSectionHeaderHeight = (sectionHeaderFontSize: number): number => sectionHeaderFontSize * 1.8;
 
 const colorShades = (): Array<Object> => {
+	const {
+		Colors,
+	} = Theme;
+
 	return [
 		{
 			value: 'Gray',
 			shades: [
-				Theme.Core.themeGrayShadeOne,
-				Theme.Core.themeGrayShadeTwo,
-				Theme.Core.themeGrayShadeThree,
+				Colors.Gray.themeGrayShadeOne,
+				Colors.Gray.themeGrayShadeTwo,
+				Colors.Gray.themeGrayShadeThree,
 			],
 		},
 		{
 			value: 'Blue',
 			shades: [
-				Theme.Core.themeBlueShadeOne,
-				Theme.Core.themeBlueShadeTwo,
-				Theme.Core.themeBlueShadeThree,
+				Colors.Blue.themeBlueShadeOne,
+				Colors.Blue.themeBlueShadeTwo,
+				Colors.Blue.themeBlueShadeThree,
 			],
 		},
 	];
