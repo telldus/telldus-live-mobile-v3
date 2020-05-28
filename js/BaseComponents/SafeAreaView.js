@@ -25,7 +25,6 @@ import React, {
 	memo,
 } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Theme from '../App/Theme';
 import View from './View';
 
 import {
