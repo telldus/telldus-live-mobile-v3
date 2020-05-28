@@ -23,8 +23,6 @@
 
 import React, {
 	Component,
-	memo,
-	forwardRef,
 } from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
 import { intlShape } from 'react-intl';
@@ -37,10 +35,10 @@ import RippleButton from './RippleButton';
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
 import Theme from '../App/Theme';
-
 import {
-	useAppTheme,
-} from '../App/Hooks/Theme';
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
 import i18n from '../App/Translations/common';
 
@@ -86,13 +84,7 @@ type Props = {
 	itemSize?: number,
 };
 
-type Extras = {
-	themeInApp: string,
-	colorScheme?: string,
-	colors: Object,
-};
-
-type PropsDropDownComponent = Props & Extras;
+type PropsDropDownComponent = Props & PropsThemedComponent;
 
 type DefaultProps = {
 	baseLeftIcon: string | Object,
@@ -107,17 +99,7 @@ type DefaultProps = {
 
 type State = {
 };
-
-const DropDown = (props: Props, ref: Object): Object => {
-
-	const theme = useAppTheme();
-
-	return <DropDownComponent
-		ref={ref}
-		{...theme}
-		{...props}/>;
-};
-class DropDownComponent extends Component<PropsDropDownComponent, State> {
+class DropDown extends Component<PropsDropDownComponent, State> {
 props: PropsDropDownComponent;
 state: State = {
 };
@@ -370,4 +352,4 @@ static defaultProps: DefaultProps = {
 	}
 }
 
-export default memo<Object>(forwardRef<Object, Object>(DropDown));
+export default withTheme(DropDown);
