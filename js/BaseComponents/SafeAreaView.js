@@ -21,10 +21,16 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Theme from '../App/Theme';
 import View from './View';
+
+import {
+	useAppTheme,
+} from '../App/Hooks/Theme';
 
 type Props = {
 	children: Object | Array<Object>,
@@ -32,25 +38,33 @@ type Props = {
 	backgroundColor?: string,
 };
 
-export default class SafeAreaViewComponent extends React.Component<Props, null> {
-	props: Props;
+const SafeAreaViewComponent = (props: Props): Object => {
 
-	render(): Object {
-		let { children, onLayout, backgroundColor = Theme.Core.appBackground, ...otherProperties } = this.props;
+	const {
+		colors,
+	} = useAppTheme();
 
-		return (
-			<SafeAreaView style={{ flex: 1, backgroundColor: Theme.Core.brandPrimary }}>
-				<View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
-					{
-						React.Children.map(children, (child: Object): Object | null => {
-							if (React.isValidElement(child)) {
-								return React.cloneElement(child, {...otherProperties});
-							}
-							return null;
-						})
-					}
-				</View>
-			</SafeAreaView>
-		);
-	}
-}
+	let {
+		children,
+		onLayout,
+		backgroundColor = colors.screenBackground,
+		...otherProperties
+	} = props;
+
+	return (
+		<SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
+			<View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
+				{
+					React.Children.map(children, (child: Object): Object | null => {
+						if (React.isValidElement(child)) {
+							return React.cloneElement(child, {...otherProperties});
+						}
+						return null;
+					})
+				}
+			</View>
+		</SafeAreaView>
+	);
+};
+
+export default memo<Object>(SafeAreaViewComponent);
