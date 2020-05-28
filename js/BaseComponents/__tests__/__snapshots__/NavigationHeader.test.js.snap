@@ -2,13 +2,56 @@
 
 exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftIcon is false 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
+      "backgroundColor": "transparent",
       "flex": 0,
     }
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Array [
         Object {
@@ -98,13 +141,56 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
 
 exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftIcon is true 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
+      "backgroundColor": "transparent",
       "flex": 0,
     }
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Array [
         Object {

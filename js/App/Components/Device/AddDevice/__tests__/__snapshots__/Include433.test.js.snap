@@ -2,9 +2,31 @@
 
 exports[`<Include433 /> Should initiateAdd433MHz and show activity indicator 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flex": 1,
       "justifyContent": "center",
     }
@@ -21,6 +43,27 @@ exports[`<Include433 /> Should initiateAdd433MHz and show activity indicator 1`]
 
 exports[`<Include433 /> on error with container component Should initiateAdd433MHz and show error screen with container, also call deleteSocketAndTimer when unmount 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "backgroundColor": "#eeeeee",
@@ -29,20 +72,85 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
+        "backgroundColor": "transparent",
         "flex": 0,
       }
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 0,
         }
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Array [
             Object {
@@ -97,15 +205,59 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
+            "backgroundColor": "transparent",
             "flex": 0,
           }
         }
       >
         <View
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Object {
+              "backgroundColor": "transparent",
               "borderWidth": 0,
               "height": 15.5,
               "overflow": "hidden",
@@ -123,10 +275,32 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
             width={750}
           />
           <View
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             style={
               Array [
                 Object {
                   "alignItems": "center",
+                  "backgroundColor": "transparent",
                   "bottom": 0,
                   "flex": 1,
                   "flexDirection": "row",
@@ -141,10 +315,32 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
             }
           >
             <View
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
               style={
                 Array [
                   Object {
                     "alignItems": "flex-end",
+                    "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
                     "justifyContent": "center",
@@ -174,6 +370,27 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Array [
           Object {
@@ -208,6 +425,27 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Array [
             Object {
@@ -224,10 +462,32 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
         <Text
           accessible={true}
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           importantForAccessibility="yes"
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#fff",
                 "fontSize": 30,
               },
@@ -250,8 +510,30 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
         </Text>
       </View>
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
+            "backgroundColor": "transparent",
             "flex": 1,
             "flexDirection": "row",
             "flexWrap": "wrap",
@@ -260,9 +542,31 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#555555",
                 "flex": 1,
                 "flexWrap": "wrap",
@@ -286,6 +590,27 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
 
 exports[`<Include433 /> on success with container component Should initiateAdd433MHz and show success screen with container, also call deleteSocketAndTimer when unmount 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "backgroundColor": "#eeeeee",
@@ -294,20 +619,85 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
+        "backgroundColor": "transparent",
         "flex": 0,
       }
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 0,
         }
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Array [
             Object {
@@ -362,15 +752,59 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
+            "backgroundColor": "transparent",
             "flex": 0,
           }
         }
       >
         <View
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Object {
+              "backgroundColor": "transparent",
               "borderWidth": 0,
               "height": 15.5,
               "overflow": "hidden",
@@ -388,10 +822,32 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             width={750}
           />
           <View
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             style={
               Array [
                 Object {
                   "alignItems": "center",
+                  "backgroundColor": "transparent",
                   "bottom": 0,
                   "flex": 1,
                   "flexDirection": "row",
@@ -406,10 +862,32 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             }
           >
             <View
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
               style={
                 Array [
                   Object {
                     "alignItems": "flex-end",
+                    "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
                     "justifyContent": "center",
@@ -439,8 +917,30 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 1,
         }
       }
@@ -460,6 +960,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
       >
         <View>
           <View
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             style={
               Array [
                 Object {
@@ -483,10 +1004,32 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             }
           >
             <View
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
               style={
                 Array [
                   Object {
                     "alignItems": "stretch",
+                    "backgroundColor": "transparent",
                     "flexDirection": "row",
                     "justifyContent": "space-between",
                   },
@@ -495,9 +1038,31 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               }
             >
               <View
+                colorScheme="light"
+                colors={
+                  Object {
+                    "ShadeOne": "#eeeeee",
+                    "ShadeThree": "#8e8e93",
+                    "ShadeTwo": "#b5b5b5",
+                    "activeTintOne": "#e26901",
+                    "background": "#fff",
+                    "border": "#C9C9CE",
+                    "card": "#fff",
+                    "inActiveTintOne": "#e26901",
+                    "primary": "#1b365d",
+                    "screenBackground": "#eeeeee",
+                    "text": "#A59F9A",
+                    "textFive": "#555555",
+                    "textFour": "#4C4C4C",
+                    "textThree": "#000",
+                    "textTwo": "#777777",
+                  }
+                }
+                dark={false}
                 style={
                   Object {
                     "alignItems": "flex-start",
+                    "backgroundColor": "transparent",
                     "flex": 1,
                     "flexDirection": "column",
                     "justifyContent": "center",
@@ -506,6 +1071,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 }
               >
                 <View
+                  colorScheme="light"
+                  colors={
+                    Object {
+                      "ShadeOne": "#eeeeee",
+                      "ShadeThree": "#8e8e93",
+                      "ShadeTwo": "#b5b5b5",
+                      "activeTintOne": "#e26901",
+                      "background": "#fff",
+                      "border": "#C9C9CE",
+                      "card": "#fff",
+                      "inActiveTintOne": "#e26901",
+                      "primary": "#1b365d",
+                      "screenBackground": "#eeeeee",
+                      "text": "#A59F9A",
+                      "textFive": "#555555",
+                      "textFour": "#4C4C4C",
+                      "textThree": "#000",
+                      "textTwo": "#777777",
+                    }
+                  }
+                  dark={false}
                   style={
                     Object {
                       "backgroundColor": "transparent",
@@ -525,6 +1111,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 />
                 <Text
                   allowFontScaling={false}
+                  colorScheme="light"
+                  colors={
+                    Object {
+                      "ShadeOne": "#eeeeee",
+                      "ShadeThree": "#8e8e93",
+                      "ShadeTwo": "#b5b5b5",
+                      "activeTintOne": "#e26901",
+                      "background": "#fff",
+                      "border": "#C9C9CE",
+                      "card": "#fff",
+                      "inActiveTintOne": "#e26901",
+                      "primary": "#1b365d",
+                      "screenBackground": "#eeeeee",
+                      "text": "#A59F9A",
+                      "textFive": "#555555",
+                      "textFour": "#4C4C4C",
+                      "textThree": "#000",
+                      "textTwo": "#777777",
+                    }
+                  }
+                  dark={false}
                   style={
                     Object {
                       "backgroundColor": "transparent",
@@ -539,8 +1146,30 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                   1.
                 </Text>
                 <View
+                  colorScheme="light"
+                  colors={
+                    Object {
+                      "ShadeOne": "#eeeeee",
+                      "ShadeThree": "#8e8e93",
+                      "ShadeTwo": "#b5b5b5",
+                      "activeTintOne": "#e26901",
+                      "background": "#fff",
+                      "border": "#C9C9CE",
+                      "card": "#fff",
+                      "inActiveTintOne": "#e26901",
+                      "primary": "#1b365d",
+                      "screenBackground": "#eeeeee",
+                      "text": "#A59F9A",
+                      "textFive": "#555555",
+                      "textFour": "#4C4C4C",
+                      "textThree": "#000",
+                      "textTwo": "#777777",
+                    }
+                  }
+                  dark={false}
                   style={
                     Object {
+                      "backgroundColor": "transparent",
                       "height": 0,
                       "width": 0,
                     }
@@ -548,9 +1177,31 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 />
               </View>
               <View
+                colorScheme="light"
+                colors={
+                  Object {
+                    "ShadeOne": "#eeeeee",
+                    "ShadeThree": "#8e8e93",
+                    "ShadeTwo": "#b5b5b5",
+                    "activeTintOne": "#e26901",
+                    "background": "#fff",
+                    "border": "#C9C9CE",
+                    "card": "#fff",
+                    "inActiveTintOne": "#e26901",
+                    "primary": "#1b365d",
+                    "screenBackground": "#eeeeee",
+                    "text": "#A59F9A",
+                    "textFive": "#555555",
+                    "textFour": "#4C4C4C",
+                    "textThree": "#000",
+                    "textTwo": "#777777",
+                  }
+                }
+                dark={false}
                 style={
                   Object {
                     "alignItems": "flex-start",
+                    "backgroundColor": "transparent",
                     "justifyContent": "center",
                     "paddingHorizontal": 20.83275,
                     "paddingVertical": 41.6655,
@@ -560,6 +1211,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               >
                 <Text
                   allowFontScaling={false}
+                  colorScheme="light"
+                  colors={
+                    Object {
+                      "ShadeOne": "#eeeeee",
+                      "ShadeThree": "#8e8e93",
+                      "ShadeTwo": "#b5b5b5",
+                      "activeTintOne": "#e26901",
+                      "background": "#fff",
+                      "border": "#C9C9CE",
+                      "card": "#fff",
+                      "inActiveTintOne": "#e26901",
+                      "primary": "#1b365d",
+                      "screenBackground": "#eeeeee",
+                      "text": "#A59F9A",
+                      "textFive": "#555555",
+                      "textFour": "#4C4C4C",
+                      "textThree": "#000",
+                      "textTwo": "#777777",
+                    }
+                  }
+                  dark={false}
                   style={
                     Object {
                       "backgroundColor": "transparent",
@@ -574,10 +1246,56 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               </View>
             </View>
             <View
-              style={Object {}}
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
+              style={
+                Object {
+                  "backgroundColor": "transparent",
+                }
+              }
             >
               <Text
                 allowFontScaling={false}
+                colorScheme="light"
+                colors={
+                  Object {
+                    "ShadeOne": "#eeeeee",
+                    "ShadeThree": "#8e8e93",
+                    "ShadeTwo": "#b5b5b5",
+                    "activeTintOne": "#e26901",
+                    "background": "#fff",
+                    "border": "#C9C9CE",
+                    "card": "#fff",
+                    "inActiveTintOne": "#e26901",
+                    "primary": "#1b365d",
+                    "screenBackground": "#eeeeee",
+                    "text": "#A59F9A",
+                    "textFive": "#555555",
+                    "textFour": "#4C4C4C",
+                    "textThree": "#000",
+                    "textTwo": "#777777",
+                  }
+                }
+                dark={false}
                 style={
                   Object {
                     "backgroundColor": "transparent",
@@ -632,6 +1350,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             </View>
           </View>
           <View
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             style={
               Array [
                 Object {
@@ -661,6 +1400,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             }
           >
             <View
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
               style={
                 Array [
                   Object {
@@ -677,10 +1437,32 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               <Text
                 accessible={true}
                 allowFontScaling={false}
+                colorScheme="light"
+                colors={
+                  Object {
+                    "ShadeOne": "#eeeeee",
+                    "ShadeThree": "#8e8e93",
+                    "ShadeTwo": "#b5b5b5",
+                    "activeTintOne": "#e26901",
+                    "background": "#fff",
+                    "border": "#C9C9CE",
+                    "card": "#fff",
+                    "inActiveTintOne": "#e26901",
+                    "primary": "#1b365d",
+                    "screenBackground": "#eeeeee",
+                    "text": "#A59F9A",
+                    "textFive": "#555555",
+                    "textFour": "#4C4C4C",
+                    "textThree": "#000",
+                    "textTwo": "#777777",
+                  }
+                }
+                dark={false}
                 importantForAccessibility="yes"
                 style={
                   Array [
                     Object {
+                      "backgroundColor": "transparent",
                       "color": "#fff",
                       "fontSize": 30,
                     },
@@ -701,8 +1483,30 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               </Text>
             </View>
             <View
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
               style={
                 Object {
+                  "backgroundColor": "transparent",
                   "flex": 1,
                   "flexDirection": "row",
                   "flexWrap": "wrap",
@@ -711,9 +1515,31 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             >
               <Text
                 allowFontScaling={false}
+                colorScheme="light"
+                colors={
+                  Object {
+                    "ShadeOne": "#eeeeee",
+                    "ShadeThree": "#8e8e93",
+                    "ShadeTwo": "#b5b5b5",
+                    "activeTintOne": "#e26901",
+                    "background": "#fff",
+                    "border": "#C9C9CE",
+                    "card": "#fff",
+                    "inActiveTintOne": "#e26901",
+                    "primary": "#1b365d",
+                    "screenBackground": "#eeeeee",
+                    "text": "#A59F9A",
+                    "textFive": "#555555",
+                    "textFour": "#4C4C4C",
+                    "textThree": "#000",
+                    "textTwo": "#777777",
+                  }
+                }
+                dark={false}
                 style={
                   Array [
                     Object {
+                      "backgroundColor": "transparent",
                       "color": "#555555",
                       "flex": 1,
                       "flexWrap": "wrap",
@@ -740,6 +1566,27 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
 
 exports[`<Include433 /> with container component Should initiateAdd433MHz and show activity indicator with container 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "backgroundColor": "#eeeeee",
@@ -748,20 +1595,85 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
+        "backgroundColor": "transparent",
         "flex": 0,
       }
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 0,
         }
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Array [
             Object {
@@ -816,15 +1728,59 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
+            "backgroundColor": "transparent",
             "flex": 0,
           }
         }
       >
         <View
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Object {
+              "backgroundColor": "transparent",
               "borderWidth": 0,
               "height": 15.5,
               "overflow": "hidden",
@@ -842,10 +1798,32 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
             width={750}
           />
           <View
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             style={
               Array [
                 Object {
                   "alignItems": "center",
+                  "backgroundColor": "transparent",
                   "bottom": 0,
                   "flex": 1,
                   "flexDirection": "row",
@@ -860,10 +1838,32 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
             }
           >
             <View
+              colorScheme="light"
+              colors={
+                Object {
+                  "ShadeOne": "#eeeeee",
+                  "ShadeThree": "#8e8e93",
+                  "ShadeTwo": "#b5b5b5",
+                  "activeTintOne": "#e26901",
+                  "background": "#fff",
+                  "border": "#C9C9CE",
+                  "card": "#fff",
+                  "inActiveTintOne": "#e26901",
+                  "primary": "#1b365d",
+                  "screenBackground": "#eeeeee",
+                  "text": "#A59F9A",
+                  "textFive": "#555555",
+                  "textFour": "#4C4C4C",
+                  "textThree": "#000",
+                  "textTwo": "#777777",
+                }
+              }
+              dark={false}
               style={
                 Array [
                   Object {
                     "alignItems": "flex-end",
+                    "backgroundColor": "transparent",
                     "flex": 0,
                     "flexDirection": "column",
                     "justifyContent": "center",
@@ -893,9 +1893,31 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Object {
           "alignItems": "center",
+          "backgroundColor": "transparent",
           "flex": 1,
           "justifyContent": "center",
         }

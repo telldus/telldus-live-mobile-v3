@@ -2,9 +2,31 @@
 
 exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeValueFromStore 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Array [
       Object {
+        "backgroundColor": "transparent",
         "marginHorizontal": 20.83275,
         "marginTop": 10.416375,
         "width": 708.3345,
@@ -15,6 +37,27 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
 >
   <Text
     allowFontScaling={false}
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "backgroundColor": "transparent",
@@ -30,6 +73,27 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
   <View
     accessibilityLabel="House code, 12 , "
     accessible={true}
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     importantForAccessibility="yes"
     style={
       Array [
@@ -55,10 +119,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "borderRadius": 2,
             "flexDirection": "row",
             "justifyContent": "space-between",
@@ -72,9 +158,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "flexDirection": "row",
             "justifyContent": "flex-start",
           }
@@ -82,9 +190,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "fontSize": 30,
                 "justifyContent": "center",
@@ -115,10 +245,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           <Text
             accessible={true}
             allowFontScaling={false}
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             importantForAccessibility="yes"
             style={
               Array [
                 Object {
+                  "backgroundColor": "transparent",
                   "color": "#999",
                   "fontSize": 30,
                 },
@@ -159,9 +311,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
@@ -222,6 +396,27 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
   <View
     accessibilityLabel="Unit code, 4 , "
     accessible={true}
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     importantForAccessibility="yes"
     style={
       Array [
@@ -247,10 +442,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "borderRadius": 2,
             "flexDirection": "row",
             "justifyContent": "space-between",
@@ -264,9 +481,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "flexDirection": "row",
             "justifyContent": "flex-start",
           }
@@ -274,9 +513,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "fontSize": 30,
                 "justifyContent": "center",
@@ -307,10 +568,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           <Text
             accessible={true}
             allowFontScaling={false}
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             importantForAccessibility="yes"
             style={
               Array [
                 Object {
+                  "backgroundColor": "transparent",
                   "color": "#999",
                   "fontSize": 30,
                 },
@@ -351,9 +634,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
@@ -416,9 +721,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
 
 exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializeValueFromStore 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Array [
       Object {
+        "backgroundColor": "transparent",
         "marginHorizontal": 20.83275,
         "marginTop": 10.416375,
         "width": 708.3345,
@@ -429,6 +756,27 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
 >
   <Text
     allowFontScaling={false}
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "backgroundColor": "transparent",
@@ -444,6 +792,27 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
   <View
     accessibilityLabel="House code, 13 , "
     accessible={true}
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     importantForAccessibility="yes"
     style={
       Array [
@@ -469,10 +838,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "borderRadius": 2,
             "flexDirection": "row",
             "justifyContent": "space-between",
@@ -486,9 +877,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "flexDirection": "row",
             "justifyContent": "flex-start",
           }
@@ -496,9 +909,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "fontSize": 30,
                 "justifyContent": "center",
@@ -529,10 +964,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           <Text
             accessible={true}
             allowFontScaling={false}
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             importantForAccessibility="yes"
             style={
               Array [
                 Object {
+                  "backgroundColor": "transparent",
                   "color": "#999",
                   "fontSize": 30,
                 },
@@ -573,9 +1030,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "flex": 1,
                 "fontSize": 30,
@@ -636,6 +1115,27 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
   <View
     accessibilityLabel="Unit code, 5 , "
     accessible={true}
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     importantForAccessibility="yes"
     style={
       Array [
@@ -661,10 +1161,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
     }
   >
     <View
+      colorScheme="light"
+      colors={
+        Object {
+          "ShadeOne": "#eeeeee",
+          "ShadeThree": "#8e8e93",
+          "ShadeTwo": "#b5b5b5",
+          "activeTintOne": "#e26901",
+          "background": "#fff",
+          "border": "#C9C9CE",
+          "card": "#fff",
+          "inActiveTintOne": "#e26901",
+          "primary": "#1b365d",
+          "screenBackground": "#eeeeee",
+          "text": "#A59F9A",
+          "textFive": "#555555",
+          "textFour": "#4C4C4C",
+          "textThree": "#000",
+          "textTwo": "#777777",
+        }
+      }
+      dark={false}
       style={
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "borderRadius": 2,
             "flexDirection": "row",
             "justifyContent": "space-between",
@@ -678,9 +1200,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       }
     >
       <View
+        colorScheme="light"
+        colors={
+          Object {
+            "ShadeOne": "#eeeeee",
+            "ShadeThree": "#8e8e93",
+            "ShadeTwo": "#b5b5b5",
+            "activeTintOne": "#e26901",
+            "background": "#fff",
+            "border": "#C9C9CE",
+            "card": "#fff",
+            "inActiveTintOne": "#e26901",
+            "primary": "#1b365d",
+            "screenBackground": "#eeeeee",
+            "text": "#A59F9A",
+            "textFive": "#555555",
+            "textFour": "#4C4C4C",
+            "textThree": "#000",
+            "textTwo": "#777777",
+          }
+        }
+        dark={false}
         style={
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "flexDirection": "row",
             "justifyContent": "flex-start",
           }
@@ -688,9 +1232,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "fontSize": 30,
                 "justifyContent": "center",
@@ -721,10 +1287,32 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           <Text
             accessible={true}
             allowFontScaling={false}
+            colorScheme="light"
+            colors={
+              Object {
+                "ShadeOne": "#eeeeee",
+                "ShadeThree": "#8e8e93",
+                "ShadeTwo": "#b5b5b5",
+                "activeTintOne": "#e26901",
+                "background": "#fff",
+                "border": "#C9C9CE",
+                "card": "#fff",
+                "inActiveTintOne": "#e26901",
+                "primary": "#1b365d",
+                "screenBackground": "#eeeeee",
+                "text": "#A59F9A",
+                "textFive": "#555555",
+                "textFour": "#4C4C4C",
+                "textThree": "#000",
+                "textTwo": "#777777",
+              }
+            }
+            dark={false}
             importantForAccessibility="yes"
             style={
               Array [
                 Object {
+                  "backgroundColor": "transparent",
                   "color": "#999",
                   "fontSize": 30,
                 },
@@ -765,9 +1353,31 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
       >
         <Text
           allowFontScaling={false}
+          colorScheme="light"
+          colors={
+            Object {
+              "ShadeOne": "#eeeeee",
+              "ShadeThree": "#8e8e93",
+              "ShadeTwo": "#b5b5b5",
+              "activeTintOne": "#e26901",
+              "background": "#fff",
+              "border": "#C9C9CE",
+              "card": "#fff",
+              "inActiveTintOne": "#e26901",
+              "primary": "#1b365d",
+              "screenBackground": "#eeeeee",
+              "text": "#A59F9A",
+              "textFive": "#555555",
+              "textFour": "#4C4C4C",
+              "textThree": "#000",
+              "textTwo": "#777777",
+            }
+          }
+          dark={false}
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#000",
                 "flex": 1,
                 "fontSize": 30,

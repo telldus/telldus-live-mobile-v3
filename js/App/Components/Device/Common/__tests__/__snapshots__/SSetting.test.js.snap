@@ -2,18 +2,62 @@
 
 exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -77,9 +121,31 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     </View>
   </View>
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -133,9 +199,31 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     </View>
   </View>
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -193,18 +281,62 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
 
 exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -258,9 +390,31 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     </View>
   </View>
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -314,9 +468,31 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     </View>
   </View>
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -384,18 +560,62 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
 
 exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
 <View
+  colorScheme="light"
+  colors={
+    Object {
+      "ShadeOne": "#eeeeee",
+      "ShadeThree": "#8e8e93",
+      "ShadeTwo": "#b5b5b5",
+      "activeTintOne": "#e26901",
+      "background": "#fff",
+      "border": "#C9C9CE",
+      "card": "#fff",
+      "inActiveTintOne": "#e26901",
+      "primary": "#1b365d",
+      "screenBackground": "#eeeeee",
+      "text": "#A59F9A",
+      "textFive": "#555555",
+      "textFour": "#4C4C4C",
+      "textThree": "#000",
+      "textTwo": "#777777",
+    }
+  }
+  dark={false}
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
   }
 >
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -449,9 +669,31 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     </View>
   </View>
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -515,9 +757,31 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     </View>
   </View>
   <View
+    colorScheme="light"
+    colors={
+      Object {
+        "ShadeOne": "#eeeeee",
+        "ShadeThree": "#8e8e93",
+        "ShadeTwo": "#b5b5b5",
+        "activeTintOne": "#e26901",
+        "background": "#fff",
+        "border": "#C9C9CE",
+        "card": "#fff",
+        "inActiveTintOne": "#e26901",
+        "primary": "#1b365d",
+        "screenBackground": "#eeeeee",
+        "text": "#A59F9A",
+        "textFive": "#555555",
+        "textFour": "#4C4C4C",
+        "textThree": "#000",
+        "textTwo": "#777777",
+      }
+    }
+    dark={false}
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
