@@ -83,6 +83,7 @@ const MoreOptionsTab = (props: Props): Object => {
 
 	const {
 		colors,
+		themeInApp,
 	} = useAppTheme();
 
 	const {
@@ -197,10 +198,11 @@ const MoreOptionsTab = (props: Props): Object => {
 	}, [
 		layout,
 		enableGeoFenceFeature,
+		themeInApp,
 	]);
 
 	return (
-		<View style={outerCoverStyle}>
+		<View style={outerCoverStyle} level={3}>
 			<PosterWithText
 				appLayout={layout}
 				align={'right'}
@@ -224,7 +226,6 @@ const getStyles = (appLayout: Object, {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		screenBackground,
 		card,
 	} = colors;
 
@@ -241,7 +242,6 @@ const getStyles = (appLayout: Object, {
 	return {
 		outerCoverStyle: {
 			flex: 1,
-			backgroundColor: screenBackground,
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
