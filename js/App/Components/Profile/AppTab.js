@@ -228,6 +228,9 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 			<View style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
+				<Text style={titleStyle}>
+					Theme
+				</Text>
 				<ThemesBlock/>
 				<PushInfoBlock
 					navigation={navigation}

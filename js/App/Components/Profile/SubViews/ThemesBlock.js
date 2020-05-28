@@ -125,10 +125,11 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 	return (
 		<View style={coverStyle}>
 			<Text style={labelStyle} numberOfLine={1}>
-				Color shade
+				Select theme
 			</Text>
 			<DropDown
 				ref={ddRef}
+				dropDownPosition={'bottom'}
 				items={items}
 				value={themeInApp}
 				appLayout={layout}
