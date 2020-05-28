@@ -135,25 +135,17 @@ const colorShades = (): Array<Object> => {
 	const {
 		Colors,
 	} = Theme;
-
-	return [
-		{
-			value: 'Gray',
+	const themes = Object.keys(Colors);
+	return themes.map((value: string): Object => {
+		return {
+			value,
 			shades: [
-				Colors.Gray.themeGrayShadeOne,
-				Colors.Gray.themeGrayShadeTwo,
-				Colors.Gray.themeGrayShadeThree,
+				Colors[value].ShadeOne,
+				Colors[value].ShadeTwo,
+				Colors[value].ShadeThree,
 			],
-		},
-		{
-			value: 'Blue',
-			shades: [
-				Colors.Blue.themeBlueShadeOne,
-				Colors.Blue.themeBlueShadeTwo,
-				Colors.Blue.themeBlueShadeThree,
-			],
-		},
-	];
+		};
+	});
 };
 
 module.exports = {

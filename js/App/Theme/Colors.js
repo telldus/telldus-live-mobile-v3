@@ -54,13 +54,13 @@ export default {
 		get inActiveTintOne() {
 			return Core.brandSecondary;
 		},
-		get themeGrayShadeOne() {
+		get ShadeOne() {
 			return Core.appBackground;
 		},
-		get themeGrayShadeTwo() {
+		get ShadeTwo() {
 			return Core.btnDisabledBg;
 		},
-		get themeGrayShadeThree() {
+		get ShadeThree() {
 			return Core.rowTextColor;
 		},
 	},
@@ -99,13 +99,13 @@ export default {
 		get inActiveTintOne() {
 			return Core.brandSecondary;
 		},
-		get themeBlueShadeOne() {
+		get ShadeOne() {
 			return Core.brandPrimary;
 		},
-		get themeBlueShadeTwo() {
+		get ShadeTwo() {
 			return this.screenBackground;
 		},
-		get themeBlueShadeThree() {
+		get ShadeThree() {
 			return this.textTwo;
 		},
 	},
