@@ -21,9 +21,7 @@
 
 'use strict';
 
-import React, {
-	memo,
-} from 'react';
+import React from 'react';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
@@ -57,10 +55,6 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import {
-	useAppTheme,
-} from '../../Hooks/Theme';
-
 import { LayoutAnimations } from '../../Lib';
 
 type Props = {
@@ -85,14 +79,6 @@ type Props = {
 	onStop: (number) => void,
 };
 
-type Extras = {
-	themeInApp: string,
-	colorScheme?: string,
-	colors: Object,
-};
-
-type TypeDashboardTabComponent = Props & Extras;
-
 type State = {
 	tileWidth: number,
 	listWidth: number,
@@ -104,9 +90,9 @@ type State = {
 	dialogueBoxConf: Object,
 };
 
-class DashboardTabComponent extends View {
+class DashboardTab extends View {
 
-	props: TypeDashboardTabComponent;
+	props: Props;
 	state: State;
 
 	_onLayout: (Object) => void;
@@ -128,7 +114,7 @@ class DashboardTabComponent extends View {
 
 	timeoutSwitchTabAndroid: any;
 
-	constructor(props: TypeDashboardTabComponent) {
+	constructor(props: Props) {
 		super(props);
 		const { width } = Dimensions.get('window');
 		const { tileWidth, numColumns } = this.calculateTileWidth(width);
@@ -295,14 +281,20 @@ class DashboardTabComponent extends View {
 
 	noItemsMessage(style: Object): Object {
 		return (
-			<View style={[style.container, {
-				paddingHorizontal: 20,
-			}]}>
+			<View
+				level={3}
+				style={[style.container, {
+					paddingHorizontal: 20,
+				}]}>
 				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
-				<Text style={style.noItemsTitle}>
+				<Text
+					level={4}
+					style={style.noItemsTitle}>
 					{this.noItemsTitle}
 				</Text>
-				<Text style={style.noItemsContent}>
+				<Text
+					level={4}
+					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}
 				</Text>
@@ -355,11 +347,10 @@ class DashboardTabComponent extends View {
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
-		const { screenProps, colors } = this.props;
+		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
 		const style = this.getStyles({
 			appLayout,
-			colors,
 		});
 
 		let data = {
@@ -409,7 +400,6 @@ class DashboardTabComponent extends View {
 			rows,
 			gateways,
 			gatewaysDidFetch,
-			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -420,7 +410,6 @@ class DashboardTabComponent extends View {
 
 		const style = this.getStyles({
 			appLayout,
-			colors,
 		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
@@ -439,7 +428,10 @@ class DashboardTabComponent extends View {
 		};
 
 		return (
-			<View onLayout={this._onLayout} style={style.container}>
+			<View
+				level={3}
+				onLayout={this._onLayout}
+				style={style.container}>
 				<FlatList
 					ref="list"
 					data={rows}
@@ -558,18 +550,12 @@ class DashboardTabComponent extends View {
 
 	getStyles({
 		appLayout,
-		colors,
 	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = this.getPadding();
-
-		const {
-			screenBackground,
-			textFour,
-		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -581,18 +567,15 @@ class DashboardTabComponent extends View {
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: screenBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
 			noItemsTitle: {
 				textAlign: 'center',
-				color: textFour,
 				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: textFour,
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
@@ -673,15 +656,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-const ConnectedDashboardTabComponent = connect(mapStateToProps, mapDispatchToProps)(DashboardTabComponent);
-
-const DashboardTab = (props: Props): Object => {
-	const theme = useAppTheme();
-	return <ConnectedDashboardTabComponent
-		{...props}
-		{...theme}/>;
-};
-
-DashboardTab.displayName = 'DashboardTab';
-
-export default memo<Object>(DashboardTab);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardTab);

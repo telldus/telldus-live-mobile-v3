@@ -21,9 +21,7 @@
 
 'use strict';
 
-import React, {
-	memo,
-} from 'react';
+import React from 'react';
 import {
 	TouchableOpacity,
 	SectionList,
@@ -48,9 +46,6 @@ import {
 } from './SubViews/EmptyInfo';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-import {
-	useAppTheme,
-} from '../../Hooks/Theme';
 import {
 	LayoutAnimations,
 	getItemLayout,
@@ -78,14 +73,6 @@ type Props = {
 	gatewaysDidFetch: boolean,
 };
 
-type Extras = {
-	themeInApp: string,
-	colorScheme?: string,
-	colors: Object,
-};
-
-type TypeDevicesTabComponent = Props & Extras;
-
 type State = {
 	dimmer: boolean,
 	isRefreshing: boolean,
@@ -96,9 +83,9 @@ type State = {
 	dialogueBoxConf: Object,
 };
 
-class DevicesTabComponent extends View {
+class DevicesTab extends View {
 
-	props: TypeDevicesTabComponent;
+	props: Props;
 	state: State;
 
 	openDeviceDetail: (number) => void;
@@ -126,7 +113,7 @@ class DevicesTabComponent extends View {
 
 	openRGBControl: (number) => void;
 
-	constructor(props: TypeDevicesTabComponent) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -430,11 +417,10 @@ class DevicesTabComponent extends View {
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
-		const { screenProps, colors } = this.props;
+		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
 		const style = this.getStyles({
 			appLayout,
-			colors,
 		});
 
 		let data = {
@@ -486,11 +472,10 @@ class DevicesTabComponent extends View {
 	}
 
 	toggleHiddenListButton(): Object {
-		const { screenProps, currentScreen, colors } = this.props;
+		const { screenProps, currentScreen } = this.props;
 		const accessible = currentScreen === 'Devices';
 		const style = this.getStyles({
 			appLayout: screenProps.appLayout,
-			colors,
 		});
 
 		const { showHiddenList } = this.state;
@@ -504,9 +489,16 @@ class DevicesTabComponent extends View {
 				accessible={accessible}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 				accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
-					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={false}>
+				<IconTelldus
+					level={2}
+					icon="hidden"
+					style={style.toggleHiddenListIcon}
+					importantForAccessibility="no"
+					accessible={false}/>
+				<Text
+					level={2}
+					style={style.toggleHiddenListText}
+					accessible={false}>
 					{showHiddenList ?
 						this.hideHidden
 						:
@@ -715,7 +707,6 @@ class DevicesTabComponent extends View {
 			gatewaysDidFetch,
 			gateways,
 			currentScreen,
-			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -731,7 +722,6 @@ class DevicesTabComponent extends View {
 
 		const style = this.getStyles({
 			appLayout,
-			colors,
 		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
@@ -756,7 +746,9 @@ class DevicesTabComponent extends View {
 		};
 		const listData = this.prepareFinalListData(rowsAndSections);
 		return (
-			<View style={style.container}>
+			<View
+				level={3}
+				style={style.container}>
 				<SectionList
 					sections={listData}
 					renderItem={this.renderRow}
@@ -782,16 +774,10 @@ class DevicesTabComponent extends View {
 
 	getStyles({
 		appLayout,
-		colors,
 	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-
-		const {
-			screenBackground,
-			textTwo,
-		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -804,20 +790,10 @@ class DevicesTabComponent extends View {
 		hiddenListIconFontSize = hiddenListIconFontSize > 50 ? 50 : hiddenListIconFontSize;
 
 		return {
-			noItemsContainer: {
-				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
-				paddingHorizontal: 30,
-				paddingTop: 10,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-				backgroundColor: screenBackground,
-			},
 			container: {
 				flex: 1,
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: screenBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -829,13 +805,11 @@ class DevicesTabComponent extends View {
 			toggleHiddenListIcon: {
 				marginTop: 4,
 				fontSize: hiddenListIconFontSize,
-				color: textTwo,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
 				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
-				color: textTwo,
 			},
 			headerWidth: deviceWidth * 0.75,
 			headerHeight: deviceWidth * 0.1,
@@ -905,15 +879,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-const ConnectedDevicesTabComponent = connect(mapStateToProps, mapDispatchToProps)(DevicesTabComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(DevicesTab);
 
-const DevicesTab = (props: Props): Object => {
-	const theme = useAppTheme();
-	return <ConnectedDevicesTabComponent
-		{...props}
-		{...theme}/>;
-};
-
-DevicesTab.displayName = 'DevicesTab';
-
-export default memo<Object>(DevicesTab);

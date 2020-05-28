@@ -20,8 +20,8 @@ describe('<DashboardTab />', () => {
 		expect(wrapper).toBeTruthy();
 	});
 
-	it(' render the DashboardTab component', () => {
-		const Tab = wrapper.props().children.props.children.type.type.displayName;
-		expect(Tab).toEqual('DashboardTab');
+	it(' render the Connected (DashboardTab) component', () => {
+		const Tab = wrapper.props().children.props.children.type.displayName;
+		expect(Tab).toEqual('Connect(DashboardTab)');
 	});
 });

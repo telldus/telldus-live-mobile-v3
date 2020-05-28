@@ -20,8 +20,8 @@ describe('<DevicesTab />', () => {
 		expect(wrapper).toBeTruthy();
 	});
 
-	it(' render the DevicesTab component', () => {
-		const Tab = wrapper.props().children.props.children.type.type.displayName;
-		expect(Tab).toEqual('DevicesTab');
+	it(' render the Connected DevicesTab component', () => {
+		const Tab = wrapper.props().children.props.children.type.displayName;
+		expect(Tab).toEqual('Connect(DevicesTab)');
 	});
 });

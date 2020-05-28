@@ -21,9 +21,9 @@ describe('<SensorsTab />', () => {
 		expect(wrapper).toBeTruthy();
 	});
 
-	it(' render the SensorsTab functional component', () => {
+	it(' render the Connected SensorsTab functional component', () => {
 		expect(wrapper.find(SensorsTab).length).toEqual(1);
-		const Tab = wrapper.props().children.props.children.type.type.displayName;
-		expect(Tab).toEqual('SensorsTab');
+		const Tab = wrapper.props().children.props.children.type.displayName;
+		expect(Tab).toEqual('Connect(SensorsTab)');
 	});
 });

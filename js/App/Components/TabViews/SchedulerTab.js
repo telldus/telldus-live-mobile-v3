@@ -21,9 +21,7 @@
 
 'use strict';
 
-import React, {
-	memo,
-} from 'react';
+import React from 'react';
 import {
 	FlatList,
 	Platform,
@@ -48,9 +46,6 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
-import {
-	useAppTheme,
-} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 
@@ -68,26 +63,18 @@ type Props = {
 	currentScreen: string,
 };
 
-type Extras = {
-	themeInApp: string,
-	colorScheme?: string,
-	colors: Object,
-};
-
-type TypeSchedulerTabComponent = Props & Extras;
-
 type State = {
 	todayIndex?: number,
 	isRefreshing: boolean,
 	loading: boolean,
 };
 
-class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State> {
+class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
 
-	constructor(props: TypeSchedulerTabComponent) {
+	constructor(props: Props) {
 		super(props);
 
 		this.noScheduleMessage = props.screenProps.intl.formatMessage(i18n.noUpcommingSchedule);
@@ -175,7 +162,6 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 			gatewaysDidFetch,
 			gateways,
 			currentScreen,
-			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -197,7 +183,6 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 
 		const { swiperContainer } = this.getStyles({
 			appLayout,
-			colors,
 		});
 
 		return (
@@ -231,15 +216,10 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 
 	getStyles({
 		appLayout,
-		colors,
 	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
-
-		const {
-			screenBackground,
-		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -254,7 +234,6 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 		return {
 			container: {
 				flex: 1,
-				backgroundColor: screenBackground,
 			},
 			containerWhenNoData: {
 				flexDirection: 'row',
@@ -298,7 +277,7 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 
 	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
 		let days = [], daysToRender = [];
-		let { screenProps, colors } = this.props;
+		let { screenProps } = this.props;
 		let { todayIndex } = this.state;
 		let { formatDate } = screenProps.intl;
 
@@ -315,10 +294,12 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 				containerWhenNoData,
 			} = this.getStyles({
 				appLayout,
-				colors,
 			});
 			daysToRender.push(
-				<View style={container} key={key}>
+				<View
+					level={3}
+					style={container}
+					key={key}>
 					{isEmpty ?
 						<View style={containerWhenNoData}>
 							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
@@ -327,7 +308,9 @@ class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State>
 							</Text>
 						</View>
 						:
-						<View style={container}>
+						<View
+							level={3}
+							style={container}>
 							<View style={line}/>
 							<FlatList
 								data={schedules}
@@ -425,15 +408,5 @@ const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 	};
 };
 
-const ConnectedSchedulerTabComponent = connect(mapStateToProps, mapDispatchToProps)(SchedulerTabComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
 
-const SchedulerTab = (props: Props): Object => {
-	const theme = useAppTheme();
-	return <ConnectedSchedulerTabComponent
-		{...props}
-		{...theme}/>;
-};
-
-SchedulerTab.displayName = 'SchedulerTab';
-
-export default memo<Object>(SchedulerTab);
