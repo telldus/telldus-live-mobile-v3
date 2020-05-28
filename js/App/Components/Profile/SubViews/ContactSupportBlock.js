@@ -30,6 +30,11 @@ import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
+
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -39,11 +44,17 @@ const ContactSupportBlock = (props: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
+		colors,
+	} = useAppTheme();
+
+	const {
 		coverOneStyle,
 		titleStyle,
 		bodyStyle,
 		labelStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const {
 		formatMessage,
@@ -66,18 +77,24 @@ const ContactSupportBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	const {
-		subHeader,
+		textTwo,
+		textThree,
+		card,
+	} = colors;
+
+	const {
 		paddingFactor,
 		shadow,
 		brandSecondary,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -85,7 +102,7 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		padding,
 		coverOneStyle: {
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...shadow,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -94,7 +111,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 		},
 		labelStyle: {
-			color: subHeader,
+			color: textTwo,
 			fontSize: Math.floor(deviceWidth * 0.045),
 			marginTop: padding * 1.5,
 		},
@@ -106,7 +123,7 @@ const getStyles = (appLayout: Object): Object => {
 		bodyStyle: {
 			fontSize,
 			textAlign: 'center',
-			color: rowTextColor,
+			color: textThree,
 			marginTop: 10,
 		},
 	};

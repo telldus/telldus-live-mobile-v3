@@ -37,12 +37,21 @@ import {
 	Text,
 	IconTelldus,
 } from '../../../../BaseComponents';
+
+import {
+	useAppTheme,
+} from '../../../Hooks/Theme';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const HelpAndSupportBlock = (props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const {
+		colors,
+	} = useAppTheme();
 
 	const {
 		coverOneStyle,
@@ -53,7 +62,9 @@ const HelpAndSupportBlock = (props: Object): Object => {
 		textStyle,
 		padding,
 		blocksCoverStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const {
 		formatMessage,
@@ -128,7 +139,9 @@ const HelpAndSupportBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -138,10 +151,15 @@ const getStyles = (appLayout: Object): Object => {
 
 	const blockWidth = (width - (padding * 3)) / 3;
 
+	const {
+		textThree,
+		card,
+	} = colors;
+
 	return {
 		padding,
 		coverOneStyle: {
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...Theme.Core.shadow,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -157,7 +175,7 @@ const getStyles = (appLayout: Object): Object => {
 		bodyStyle: {
 			fontSize,
 			textAlign: 'center',
-			color: Theme.Core.rowTextColor,
+			color: textThree,
 			marginTop: 10,
 		},
 		blocksCoverStyle: {
@@ -165,7 +183,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		coverTwoStyle: {
 			width: blockWidth,
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...Theme.Core.shadow,
 			justifyContent: 'center',
 			alignItems: 'center',

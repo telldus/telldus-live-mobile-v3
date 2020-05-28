@@ -44,7 +44,9 @@ import {
 } from '../../../Config';
 import Theme from '../../Theme';
 import LayoutAnimations from '../../Lib/LayoutAnimations';
-
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 import {
 	getSupportTweets,
 } from '../../Actions/App';
@@ -77,6 +79,10 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	} = useIntl();
 
 	const {
+		colors,
+	} = useAppTheme();
+
+	const {
 		container,
 		body,
 		buttonStyle,
@@ -86,7 +92,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 		tweetDateStyle,
 		tweetTextStyle,
 		padding,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const [listInfo, setListInfo] = useState({
 		isLoading: true,
@@ -192,7 +200,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -200,11 +210,17 @@ const getStyles = (appLayout: Object): Object => {
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
+	const {
+		screenBackground,
+		textThree,
+		card,
+	} = colors;
+
 	return {
 		padding,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
+			backgroundColor: screenBackground,
 		},
 		body: {
 			flex: 1,
@@ -219,7 +235,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		tweetCoverStyle: {
 			flexDirection: 'row',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...Theme.Core.shadow,
 			padding: padding * 2,
 			justifyContent: 'space-between',
@@ -232,7 +248,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginRight: padding * 2,
 		},
 		tweetTextStyle: {
-			color: Theme.Core.rowTextColor,
+			color: textThree,
 			fontSize: fontSize * 0.8,
 		},
 		tweetTextCover: {
