@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import {
 	SectionList,
 	TouchableOpacity,
@@ -47,6 +49,10 @@ import { parseSensorsForListView } from '../../Reducers/Sensors';
 import { LayoutAnimations, getItemLayout } from '../../Lib';
 import Theme from '../../Theme';
 
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
+
 type Props = {
 	rowsAndSections: Object,
 	screenProps: Object,
@@ -62,6 +68,14 @@ type Props = {
 	currentScreen: string,
 };
 
+type Extras = {
+	themeInApp: string,
+	colorScheme?: string,
+	colors: Object,
+};
+
+type TypeSensorsTabComponent = Props & Extras;
+
 type State = {
 	isRefreshing: boolean,
 	showHiddenList: boolean,
@@ -69,9 +83,9 @@ type State = {
 	sensorToHide: Object,
 };
 
-class SensorsTab extends View {
+class SensorsTabComponent extends View {
 
-	props: Props;
+	props: TypeSensorsTabComponent;
 	state: State;
 
 	renderSectionHeader: (sectionData: Object) => Object | null;
@@ -92,7 +106,7 @@ class SensorsTab extends View {
 	noSensorsTitle: string;
 	noSensorsContent: string;
 
-	constructor(props: Props) {
+	constructor(props: TypeSensorsTabComponent) {
 		super(props);
 
 		this.state = {
@@ -290,9 +304,12 @@ class SensorsTab extends View {
 	}
 
 	toggleHiddenListButton(): Object {
-		const { screenProps, currentScreen } = this.props;
+		const { screenProps, currentScreen, colors } = this.props;
 		const accessible = currentScreen === 'Sensors';
-		const style = this.getStyles(screenProps.appLayout);
+		const style = this.getStyles({
+			appLayout: screenProps.appLayout,
+			colors,
+		});
 
 		const { showHiddenList } = this.state;
 		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
@@ -353,6 +370,7 @@ class SensorsTab extends View {
 			gateways,
 			gatewaysDidFetch,
 			currentScreen,
+			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -364,7 +382,10 @@ class SensorsTab extends View {
 			propsSwipeRow,
 		} = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+			colors,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
 			return <NoGateways
@@ -548,10 +569,19 @@ class SensorsTab extends View {
 		});
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+		colors,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			screenBackground,
+			textTwo,
+			textFour,
+		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -567,7 +597,7 @@ class SensorsTab extends View {
 			container: {
 				flex: 1,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: screenBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -579,13 +609,13 @@ class SensorsTab extends View {
 			toggleHiddenListIcon: {
 				marginTop: 4,
 				fontSize: hiddenListIconFontSize,
-				color: Theme.Core.rowTextColor,
+				color: textTwo,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
 				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
-				color: Theme.Core.rowTextColor,
+				color: textTwo,
 			},
 			dialogueHeaderStyle: {
 				paddingVertical: 10,
@@ -611,17 +641,17 @@ class SensorsTab extends View {
 				paddingHorizontal: 30,
 				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: screenBackground,
 			},
 			noItemsTitle: {
 				textAlign: 'center',
-				color: '#4C4C4C',
+				color: textFour,
 				fontSize: Math.floor(deviceWidth * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: '#4C4C4C',
+				color: textFour,
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			sensorIconStyle: {
@@ -665,4 +695,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
+const ConnectedSensorsTabComponent = connect(mapStateToProps, mapDispatchToProps)(SensorsTabComponent);
+
+const SensorsTab = memo<Object>((props: Props): Object => {
+	const theme = useAppTheme();
+	return <ConnectedSensorsTabComponent
+		{...props}
+		{...theme}/>;
+});
+
+export default SensorsTab;

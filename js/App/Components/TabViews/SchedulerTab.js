@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import {
 	FlatList,
 	Platform,
@@ -34,7 +36,6 @@ import Swiper from 'react-native-swiper';
 import {
 	FullPageActivityIndicator,
 	View,
-	StyleSheet,
 	Text,
 	Icon,
 } from '../../../BaseComponents';
@@ -47,6 +48,9 @@ import { editSchedule, getJobs, toggleInactive } from '../../Actions';
 
 import { parseJobsForListView } from '../../Reducers/Jobs';
 import type { Schedule } from '../../Reducers/Schedule';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 
@@ -64,18 +68,26 @@ type Props = {
 	currentScreen: string,
 };
 
+type Extras = {
+	themeInApp: string,
+	colorScheme?: string,
+	colors: Object,
+};
+
+type TypeSchedulerTabComponent = Props & Extras;
+
 type State = {
 	todayIndex?: number,
 	isRefreshing: boolean,
 	loading: boolean,
 };
 
-class SchedulerTab extends View<null, Props, State> {
+class SchedulerTabComponent extends View<null, TypeSchedulerTabComponent, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
 
-	constructor(props: Props) {
+	constructor(props: TypeSchedulerTabComponent) {
 		super(props);
 
 		this.noScheduleMessage = props.screenProps.intl.formatMessage(i18n.noUpcommingSchedule);
@@ -163,6 +175,7 @@ class SchedulerTab extends View<null, Props, State> {
 			gatewaysDidFetch,
 			gateways,
 			currentScreen,
+			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -182,7 +195,10 @@ class SchedulerTab extends View<null, Props, State> {
 				onPress={addNewLocation}/>;
 		}
 
-		const { swiperContainer } = this.getStyles(appLayout);
+		const { swiperContainer } = this.getStyles({
+			appLayout,
+			colors,
+		});
 
 		return (
 			<View style={swiperContainer}
@@ -213,10 +229,17 @@ class SchedulerTab extends View<null, Props, State> {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+		colors,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			screenBackground,
+		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -229,6 +252,16 @@ class SchedulerTab extends View<null, Props, State> {
 		const iconSize = deviceWidth * 0.05;
 
 		return {
+			container: {
+				flex: 1,
+				backgroundColor: screenBackground,
+			},
+			containerWhenNoData: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginTop: 20,
+			},
 			line: {
 				backgroundColor: '#929292',
 				height: '100%',
@@ -265,7 +298,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_getDaysToRender = (dataArray: Object, appLayout: Object): Object => {
 		let days = [], daysToRender = [];
-		let { screenProps } = this.props;
+		let { screenProps, colors } = this.props;
 		let { todayIndex } = this.state;
 		let { formatDate } = screenProps.intl;
 
@@ -274,18 +307,27 @@ class SchedulerTab extends View<null, Props, State> {
 
 			let isEmpty = !schedules || schedules.length === 0;
 
-			const { line, textWhenNoData, iconSize } = this.getStyles(appLayout);
+			const {
+				line,
+				textWhenNoData,
+				iconSize,
+				container,
+				containerWhenNoData,
+			} = this.getStyles({
+				appLayout,
+				colors,
+			});
 			daysToRender.push(
-				<View style={styles.container} key={key}>
+				<View style={container} key={key}>
 					{isEmpty ?
-						<View style={styles.containerWhenNoData}>
+						<View style={containerWhenNoData}>
 							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
 							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
 						</View>
 						:
-						<View style={styles.container}>
+						<View style={container}>
 							<View style={line}/>
 							<FlatList
 								data={schedules}
@@ -358,19 +400,6 @@ const getRowsAndSections = createSelector(
 	},
 );
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Theme.Core.appBackground,
-	},
-	containerWhenNoData: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: 20,
-	},
-});
-
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
 };
@@ -396,4 +425,13 @@ const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 	};
 };
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+const ConnectedSchedulerTabComponent = connect(mapStateToProps, mapDispatchToProps)(SchedulerTabComponent);
+
+const SchedulerTab = memo<Object>((props: Props): Object => {
+	const theme = useAppTheme();
+	return <ConnectedSchedulerTabComponent
+		{...props}
+		{...theme}/>;
+});
+
+export default SchedulerTab;

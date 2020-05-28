@@ -21,8 +21,9 @@
 
 'use strict';
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {
+	memo,
+} from 'react';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
@@ -56,6 +57,10 @@ import {
 	DashboardRow,
 } from './SubViews';
 
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
+
 import { LayoutAnimations } from '../../Lib';
 
 type Props = {
@@ -80,6 +85,14 @@ type Props = {
 	onStop: (number) => void,
 };
 
+type Extras = {
+	themeInApp: string,
+	colorScheme?: string,
+	colors: Object,
+};
+
+type TypeDashboardTabComponent = Props & Extras;
+
 type State = {
 	tileWidth: number,
 	listWidth: number,
@@ -91,9 +104,9 @@ type State = {
 	dialogueBoxConf: Object,
 };
 
-class DashboardTab extends View {
+class DashboardTabComponent extends View {
 
-	props: Props;
+	props: TypeDashboardTabComponent;
 	state: State;
 
 	_onLayout: (Object) => void;
@@ -115,7 +128,7 @@ class DashboardTab extends View {
 
 	timeoutSwitchTabAndroid: any;
 
-	constructor(props: Props) {
+	constructor(props: TypeDashboardTabComponent) {
 		super(props);
 		const { width } = Dimensions.get('window');
 		const { tileWidth, numColumns } = this.calculateTileWidth(width);
@@ -342,9 +355,12 @@ class DashboardTab extends View {
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
-		const { screenProps } = this.props;
+		const { screenProps, colors } = this.props;
 		const { appLayout, intl } = screenProps;
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+			colors,
+		});
 
 		let data = {
 			show: true,
@@ -393,6 +409,7 @@ class DashboardTab extends View {
 			rows,
 			gateways,
 			gatewaysDidFetch,
+			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -401,7 +418,10 @@ class DashboardTab extends View {
 		} = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+			colors,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
 			return <NoGateways
@@ -536,12 +556,20 @@ class DashboardTab extends View {
 		return deviceWidth * Theme.Core.paddingFactor;
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+		colors,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = this.getPadding();
+
+		const {
+			screenBackground,
+			textFour,
+		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -553,18 +581,18 @@ class DashboardTab extends View {
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: screenBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
 			noItemsTitle: {
 				textAlign: 'center',
-				color: '#4C4C4C',
+				color: textFour,
 				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: '#4C4C4C',
+				color: textFour,
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
@@ -599,10 +627,6 @@ class DashboardTab extends View {
 		};
 	}
 }
-
-DashboardTab.propTypes = {
-	rows: PropTypes.array,
-};
 
 const getRows = createSelector(
 	[
@@ -649,4 +673,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DashboardTab);
+const ConnectedDashboardTabComponent = connect(mapStateToProps, mapDispatchToProps)(DashboardTabComponent);
+
+const DashboardTab = memo<Object>((props: Props): Object => {
+	const theme = useAppTheme();
+	return <ConnectedDashboardTabComponent
+		{...props}
+		{...theme}/>;
+});
+
+export default DashboardTab;

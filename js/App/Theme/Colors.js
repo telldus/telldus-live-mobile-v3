@@ -33,6 +33,9 @@ export default {
 		get textThree() {
 			return '#000';
 		},
+		get textFour() {
+			return Core.textDark;
+		},
 		get border() {
 			return '#C9C9CE';
 		},
@@ -73,6 +76,9 @@ export default {
 			return '#fff';
 		},
 		get textThree() {
+			return '#fff';
+		},
+		get textFour() {
 			return '#fff';
 		},
 		get border() {

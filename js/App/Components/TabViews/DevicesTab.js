@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	memo,
+} from 'react';
 import {
 	TouchableOpacity,
 	SectionList,
@@ -46,7 +48,9 @@ import {
 } from './SubViews/EmptyInfo';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 import {
 	LayoutAnimations,
 	getItemLayout,
@@ -74,6 +78,14 @@ type Props = {
 	gatewaysDidFetch: boolean,
 };
 
+type Extras = {
+	themeInApp: string,
+	colorScheme?: string,
+	colors: Object,
+};
+
+type TypeDevicesTabComponent = Props & Extras;
+
 type State = {
 	dimmer: boolean,
 	isRefreshing: boolean,
@@ -84,9 +96,9 @@ type State = {
 	dialogueBoxConf: Object,
 };
 
-class DevicesTab extends View {
+class DevicesTabComponent extends View {
 
-	props: Props;
+	props: TypeDevicesTabComponent;
 	state: State;
 
 	openDeviceDetail: (number) => void;
@@ -114,7 +126,7 @@ class DevicesTab extends View {
 
 	openRGBControl: (number) => void;
 
-	constructor(props: Props) {
+	constructor(props: TypeDevicesTabComponent) {
 		super(props);
 
 		this.state = {
@@ -418,9 +430,12 @@ class DevicesTab extends View {
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
-		const { screenProps } = this.props;
+		const { screenProps, colors } = this.props;
 		const { appLayout, intl } = screenProps;
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+			colors,
+		});
 
 		let data = {
 			show: true,
@@ -471,9 +486,12 @@ class DevicesTab extends View {
 	}
 
 	toggleHiddenListButton(): Object {
-		const { screenProps, currentScreen } = this.props;
+		const { screenProps, currentScreen, colors } = this.props;
 		const accessible = currentScreen === 'Devices';
-		const style = this.getStyles(screenProps.appLayout);
+		const style = this.getStyles({
+			appLayout: screenProps.appLayout,
+			colors,
+		});
 
 		const { showHiddenList } = this.state;
 		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
@@ -697,6 +715,7 @@ class DevicesTab extends View {
 			gatewaysDidFetch,
 			gateways,
 			currentScreen,
+			colors,
 		} = this.props;
 		const {
 			appLayout,
@@ -710,7 +729,10 @@ class DevicesTab extends View {
 			showRefresh,
 		} = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+			colors,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
 			return <NoGateways
@@ -758,10 +780,18 @@ class DevicesTab extends View {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+		colors,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			screenBackground,
+			textTwo,
+		} = colors;
 
 		const {
 			androidLandMarginLeftFactor,
@@ -781,13 +811,13 @@ class DevicesTab extends View {
 				paddingHorizontal: 30,
 				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: screenBackground,
 			},
 			container: {
 				flex: 1,
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: Theme.Core.appBackground,
+				backgroundColor: screenBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -799,13 +829,13 @@ class DevicesTab extends View {
 			toggleHiddenListIcon: {
 				marginTop: 4,
 				fontSize: hiddenListIconFontSize,
-				color: Theme.Core.rowTextColor,
+				color: textTwo,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
 				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
-				color: Theme.Core.rowTextColor,
+				color: textTwo,
 			},
 			headerWidth: deviceWidth * 0.75,
 			headerHeight: deviceWidth * 0.1,
@@ -875,4 +905,13 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DevicesTab);
+const ConnectedDevicesTabComponent = connect(mapStateToProps, mapDispatchToProps)(DevicesTabComponent);
+
+const DevicesTab = memo<Object>((props: Props): Object => {
+	const theme = useAppTheme();
+	return <ConnectedDevicesTabComponent
+		{...props}
+		{...theme}/>;
+});
+
+export default DevicesTab;

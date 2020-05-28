@@ -44,6 +44,9 @@ import {
 } from '../../../BaseComponents';
 
 import {
+	useAppTheme,
+} from '../../Hooks/Theme';
+import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import {
@@ -79,12 +82,18 @@ const MoreOptionsTab = (props: Props): Object => {
 	const { enable: enableGeoFenceFeature } = JSON.parse(geoFenceFeature);
 
 	const {
+		colors,
+	} = useAppTheme();
+
+	const {
 		outerCoverStyle,
 		contentContainerStyle,
 		rowCoverStyle,
 		iconStyle,
 		labelStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		colors,
+	});
 
 	const {
 		navigateToCampaign,
@@ -207,13 +216,19 @@ const MoreOptionsTab = (props: Props): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		appBackground,
+		screenBackground,
+		card,
+	} = colors;
+
+	const {
 		paddingFactor,
 		brandSecondary,
 		shadow,
@@ -226,7 +241,7 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		outerCoverStyle: {
 			flex: 1,
-			backgroundColor: appBackground,
+			backgroundColor: screenBackground,
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
@@ -239,7 +254,7 @@ const getStyles = (appLayout: Object): Object => {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
 			padding,
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...shadow,
 			borderRadius: 2,
 		},
