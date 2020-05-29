@@ -23,7 +23,7 @@
 'use strict';
 
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 const forge = require('node-forge');
@@ -34,6 +34,7 @@ import {
 	Text,
 	TouchableButton,
 	IconTelldus,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	HelpAndSupportBlock,
@@ -176,7 +177,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	});
 
 	return (
-		<ScrollView style={container}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
 			<View
 				level={3}
 				style={body}>
@@ -193,7 +196,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 					style={buttonStyle}
 				/>
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 

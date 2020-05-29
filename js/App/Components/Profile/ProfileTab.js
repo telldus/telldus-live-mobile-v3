@@ -26,7 +26,6 @@ import React, {
 	useCallback,
 } from 'react';
 import {
-	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,6 +34,7 @@ import {
 	View,
 	IconTelldus,
 	Text,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -236,7 +236,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	const hasMultipleAccounts = Object.keys(accounts).length > 1;
 
 	return (
-		<ScrollView style={container}>
+		<ThemedScrollView
+		level={3}
+		style={container}>
 			<View
 				level={3}
 				style={body}>
@@ -320,7 +322,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				<SwitchOrAddAccountButton
 					disabled={isLoggingOut}/>
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 

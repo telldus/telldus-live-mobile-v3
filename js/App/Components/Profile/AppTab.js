@@ -27,7 +27,6 @@ import React, {
 	useState,
 } from 'react';
 import {
-	ScrollView,
 	Platform,
 	LayoutAnimation,
 } from 'react-native';
@@ -45,6 +44,7 @@ import {
 	View,
 	SettingsRow,
 	Text,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
@@ -215,7 +215,8 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	}
 
 	return (
-		<ScrollView
+		<ThemedScrollView
+			level={3}
 			style={container}>
 			<View
 				level={3}
@@ -277,7 +278,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 						intl={intl}/>
 				}
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 
