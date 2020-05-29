@@ -236,7 +236,7 @@ const SettingsRow = (props: Props): Object => {
 										<>
 											{iconValueLeft}
 											<Text
-												level={3}
+												level={4}
 												style={[valueText, valueTextStyle]}>
 												{value} {valuePostfix}
 											</Text>

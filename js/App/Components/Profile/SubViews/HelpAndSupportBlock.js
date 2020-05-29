@@ -123,7 +123,7 @@ const HelpAndSupportBlock = (props: Object): Object => {
 					{formatMessage(i18n.labelHelpAndSupport)}
 				</Text>
 				<Text
-					level={3}
+					level={4}
 					style={bodyStyle}>
 					{formatMessage(i18n.contentHelpAndSupport)}
 				</Text>

@@ -188,7 +188,7 @@ static defaultProps: DefaultProps = {
 				disabled={disabled}>
 				{React.isValidElement(iconLeftPickerBase) && iconLeftPickerBase}
 				<Text style={[pickerBaseTextStyleDef, {
-					color: baseColor || colors.textThree,
+					color: colors.textFour,
 				}, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>

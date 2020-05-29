@@ -107,7 +107,7 @@ const TitledInfoBlock = (props: Props): Object => {
 					justifyContent: 'flex-end',
 				}}>
 					<Text
-						level={3}
+						level={4}
 						style={[ styles.infoValue, valueTextStyle]} numberOfLines={1}>
 						{value}
 					</Text>
