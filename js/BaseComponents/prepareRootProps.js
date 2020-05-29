@@ -127,6 +127,9 @@ const getTextColor = (props: Object): ?string => {
 		case 5: {
 			return colors.textFive;
 		}
+		case 6: {
+			return colors.textSix;
+		}
 		default:
 			return;
 	}
