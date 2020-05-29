@@ -186,7 +186,9 @@ class SchedulerTab extends View<null, Props, State> {
 		});
 
 		return (
-			<View style={swiperContainer}
+			<View
+				level={3}
+				style={swiperContainer}
 				accessible={false}
 				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster

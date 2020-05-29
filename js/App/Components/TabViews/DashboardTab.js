@@ -293,7 +293,7 @@ class DashboardTab extends View {
 					{this.noItemsTitle}
 				</Text>
 				<Text
-					level={4}
+					level={5}
 					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}
@@ -463,10 +463,10 @@ class DashboardTab extends View {
 	renderUnknown(id: number, tileStyle: Object, message: string): Object {
 		return (
 			<View
+				level={2}
 				style={[tileStyle,
 					{
 						...Theme.Core.shadow,
-						backgroundColor: '#fff',
 					},
 				]}>
 				<Text

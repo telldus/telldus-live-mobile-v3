@@ -51,11 +51,16 @@ import {
 	getKnownModes,
 } from '../../../Lib';
 import type { Schedule } from '../../../Reducers/Schedule';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import { methods } from '../../../../Constants';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	active: boolean,
 	method: number,
 	methodValue?: number | number,
@@ -224,7 +229,9 @@ class JobRow extends View<null, Props, null> {
 						isFirst={isFirst}
 						appLayout={appLayout}>
 						{actionIcon}
-						<View style={{ flex: 1 }}>
+						<View
+							level={2}
+							style={{ flex: 1 }}>
 							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
 								<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
 									{deviceName}
@@ -449,10 +456,20 @@ class JobRow extends View<null, Props, null> {
 			borderRadiusRow,
 			inactiveGray,
 		} = Theme.Core;
-		let { active, method, methodValue, expired } = this.props;
+		let {
+			active,
+			method,
+			methodValue,
+			expired,
+			colors,
+		} = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceWidth = isPortrait ? width : height;
+
+		const {
+			textTwo,
+		} = colors;
 
 		const { land } = Theme.Core.headerHeightFactor;
 		let headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * land) + (height * 0.13) : 0;
@@ -510,13 +527,13 @@ class JobRow extends View<null, Props, null> {
 				width: null,
 			},
 			title: {
-				color: !active ? inactiveGray : '#707070',
+				color: !active ? inactiveGray : textTwo,
 				fontSize: deviceWidth * 0.04,
 				fontFamily: fonts.robotoRegular,
 				marginBottom: width * 0.008,
 			},
 			description: {
-				color: !active ? inactiveGray : '#707070',
+				color: !active ? inactiveGray : textTwo,
 				fontSize: deviceWidth * 0.032,
 			},
 			iconOffset: {
@@ -537,7 +554,7 @@ class JobRow extends View<null, Props, null> {
 				width: timeWidth,
 				textAlign: 'center',
 				fontSize: deviceWidth * 0.044,
-				color: !active ? inactiveGray : '#707070',
+				color: !active ? inactiveGray : textTwo,
 			},
 			rowContainer: {
 				width: rowWidth,
@@ -564,4 +581,4 @@ class JobRow extends View<null, Props, null> {
 
 }
 
-export default JobRow;
+export default withTheme(JobRow);

@@ -87,6 +87,7 @@ export default class DeviceHeader extends View<Props, null> {
 
 		return (
 			<View
+				level={2}
 				style={sectionHeader}
 				accessible={accessible}
 				accessibilityLabel={accessibilityLabel}>
@@ -124,7 +125,6 @@ export default class DeviceHeader extends View<Props, null> {
 			sectionHeader: {
 				flexDirection: 'row',
 				height: getSectionHeaderHeight(nameFontSize),
-				backgroundColor: '#ffffff',
 				alignItems: 'center',
 				paddingLeft: 5 + (nameFontSize * 0.2),
 				justifyContent: 'flex-start',
