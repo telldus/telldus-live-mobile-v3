@@ -25,9 +25,7 @@
 import React from 'react';
 import {
 	Image,
-	TouchableOpacity,
 	TouchableWithoutFeedback,
-	ScrollView,
 	BackHandler,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -35,8 +33,15 @@ import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 import {
-	View, Text, TouchableButton, StyleSheet,
-	FormattedNumber, Icon, TitledInfoBlock,
+	View,
+	Text,
+	TouchableButton,
+	StyleSheet,
+	FormattedNumber,
+	Icon,
+	TitledInfoBlock,
+	ThemedScrollView,
+	TouchableOpacity,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
@@ -315,25 +320,28 @@ class Details extends View<Props, State> {
 					paddingTop: 2,
 				}}
 				key={index}>
-					<Text style={{
-						fontSize: 10,
-						color: Theme.Core.eulaContentColor,
-						flexWrap: 'wrap',
-					}}>
+					<Text
+						level={5}
+						style={{
+							fontSize: 10,
+							flexWrap: 'wrap',
+						}}>
 						{`${d}: `}
 					</Text>
-					<Text style={{
-						fontSize: 10,
-						color: Theme.Core.rowTextColor,
-						flexWrap: 'wrap',
-					}}>
+					<Text
+						level={6}
+						style={{
+							fontSize: 10,
+							flexWrap: 'wrap',
+						}}>
 						{text}
 					</Text>
 				</View>
 			);
 		});
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
 				}}
@@ -342,7 +350,7 @@ class Details extends View<Props, State> {
 					paddingVertical: 10,
 				}}>
 				{body}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -574,10 +582,11 @@ class Details extends View<Props, State> {
 		const disableButtonContactSup = !isAcceptableNetType || isContactingSupport || isLoading;
 
 		return (
-			<ScrollView style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<ThemedScrollView
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<View style={container}>
 					<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
@@ -630,19 +639,27 @@ class Details extends View<Props, State> {
 						}}
 						onPress={isLoading ? null : this.onEditTimeZone}
 					/>
-					<TouchableOpacity style={[styles.infoTwoContainerStyle, {
-						padding: fontSize,
-						marginBottom: padding / 2,
-					}]} onPress={isLoading ? null : this.onEditGeoPosition}>
-						<Text style={[styles.textLabel, {fontSize}]}>
+					<TouchableOpacity
+						level={2}
+						style={[styles.infoTwoContainerStyle, {
+							padding: fontSize,
+							marginBottom: padding / 2,
+						}]} onPress={isLoading ? null : this.onEditGeoPosition}>
+						<Text
+							level={3}
+							style={{fontSize}}>
 							{this.labelGeoPosition}
 						</Text>
 						<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
-							<Text style={[styles.textValue, {fontSize}]}>
+							<Text
+								level={4}
+								style={[styles.textValue, {fontSize}]}>
 								{`${this.labelLat}: `}
 								<FormattedNumber value={latitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
-							<Text style={[styles.textValue, {fontSize}]}>
+							<Text
+								level={4}
+								style={[styles.textValue, {fontSize}]}>
 								{` ${this.labelLong}: `}
 								<FormattedNumber value={longitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
@@ -669,7 +686,7 @@ class Details extends View<Props, State> {
 							showThrobber={isLoading}/>
 					</View>
 				</View>
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -683,7 +700,6 @@ class Details extends View<Props, State> {
 			inactiveSwitchBackground,
 			btnPrimaryBg,
 			paddingFactor,
-			appBackground,
 			brandSecondary,
 		} = Theme.Core;
 
@@ -700,7 +716,6 @@ class Details extends View<Props, State> {
 				padding: padding,
 				alignItems: 'stretch',
 				justifyContent: 'center',
-				backgroundColor: appBackground,
 			},
 			infoOneContainerStyle: {
 				flexDirection: 'row',
@@ -749,14 +764,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: '#fff',
 		...Theme.Core.shadow,
 	},
-	textLabel: {
-		color: '#000',
-	},
 	textValue: {
-		color: Theme.Core.rowTextColor,
 		textAlign: 'right',
 	},
 	nextIcon: {

@@ -22,13 +22,14 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
 import {
 	CachedImage,
 } from 'react-native-cached-image';
 
 import IconTelldus from './IconTelldus';
+import TouchableOpacity from './TouchableOpacity';
 import Text from './Text';
 import View from './View';
 import Theme from '../App/Theme';
@@ -147,6 +148,7 @@ class LocationDetails extends Component<Props, State> {
 
 		return (
 			<TouchableOpacity
+				level={2}
 				style={[styles.shadow, container, style]}
 				accessible={accessible}
 				disabled={!onPress}
@@ -211,7 +213,6 @@ class LocationDetails extends Component<Props, State> {
 		return {
 			container: {
 				flexDirection: 'column',
-				backgroundColor: '#fff',
 				padding: textHSHSize,
 				justifyContent: 'center',
 			},

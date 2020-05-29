@@ -29,14 +29,25 @@ import { intlShape } from 'react-intl';
 import MapView from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
-import { View, FloatingButton, IconTelldus, Text } from '../../../../BaseComponents';
+import {
+	View,
+	FloatingButton,
+	IconTelldus,
+	Text,
+} from '../../../../BaseComponents';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
 import Theme from '../../../Theme';
 
 import { googleMapsAPIKey } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	intl: intlShape.isRequired,
 	actions: Object,
 	navigation: Object,
@@ -305,11 +316,7 @@ class GeoPosition extends View {
 					styles= {{
 						textInput: styles.textInput,
 						textInputContainer: styles.textInputContainer,
-						description: {
-							fontWeight: 'bold',
-							color: '#000',
-							fontFamily: 'Roboto-Regular',
-						},
+						description: styles.description,
 						container: styles.searchBoxContainer,
 					}}
 					renderLeftButton={this.renderLeftButton}
@@ -348,7 +355,10 @@ class GeoPosition extends View {
 	}
 
 	getStyle(): Object {
-		const { appLayout } = this.props;
+		const {
+			appLayout,
+			colors,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -366,6 +376,11 @@ class GeoPosition extends View {
 			},
 			body: {
 				flex: 1,
+			},
+			description: {
+				fontWeight: 'bold',
+				color: colors.textFour,
+				fontFamily: 'Roboto-Regular',
 			},
 			mapViewCover: {
 				flex: 1,
@@ -387,7 +402,7 @@ class GeoPosition extends View {
 			},
 			searchBoxContainer: {
 				flex: 0,
-				backgroundColor: '#fff',
+				backgroundColor: colors.card,
 				marginTop: deviceWidth * Theme.Core.paddingFactor,
 				padding: labelBoxPadding,
 				justifyContent: 'center',
@@ -398,7 +413,7 @@ class GeoPosition extends View {
 				width: '100%',
 				borderTopWidth: 0,
 				borderBottomWidth: 0,
-				backgroundColor: 'transparent',
+				backgroundColor: colors.card,
 				marginTop: labelBoxPadding * 0.8,
 			},
 			textInput: {
@@ -407,6 +422,7 @@ class GeoPosition extends View {
 				fontSize,
 
 				// override default styles.
+				backgroundColor: colors.card,
 				height: undefined,
 				borderRadius: 0,
 				paddingTop: 0,
@@ -467,4 +483,4 @@ class GeoPosition extends View {
 	}
 }
 
-export default GeoPosition;
+export default withTheme(GeoPosition);

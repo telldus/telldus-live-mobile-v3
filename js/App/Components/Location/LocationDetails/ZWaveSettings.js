@@ -23,12 +23,13 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, LayoutAnimation } from 'react-native';
+import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
 	View,
 	TouchableButton,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { ExcludeDevice } from '../../Device/Common';
 
@@ -132,7 +133,9 @@ render(): Object {
 	} = this.getStyles(appLayout);
 
 	return (
-		<ScrollView style={container}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
 			{excludeActive && (
 				<ExcludeDevice
 					clientId={id}
@@ -152,7 +155,7 @@ render(): Object {
 					marginTop: padding * 1.5,
 				}}/>
 			)}
-		</ScrollView>
+		</ThemedScrollView>
 	);
 }
 
@@ -160,7 +163,7 @@ getStyles(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, appBackground, brandDanger, btnDisabledBg } = Theme.Core;
+	const { paddingFactor, brandDanger, btnDisabledBg } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -170,7 +173,6 @@ getStyles(appLayout: Object): Object {
 		btnDisabledBg,
 		container: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 	};
 }

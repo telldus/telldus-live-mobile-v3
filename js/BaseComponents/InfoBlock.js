@@ -46,7 +46,9 @@ const InfoBlock = (props: Object): Object => {
 	} = getStyles(appLayout);
 
 	return (
-		<View style={[infoContainerDef, infoContainer]}>
+		<View
+			level={2}
+			style={[infoContainerDef, infoContainer]}>
 			<BlockIcon
 				icon={'info'}
 				style={[infoIconStyleDef, infoIconStyle]}
@@ -56,7 +58,9 @@ const InfoBlock = (props: Object): Object => {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 			}}>
-				<Text style={[textStyleDef, textStyle]}>
+				<Text
+					level={5}
+					style={[textStyleDef, textStyle]}>
 					{text}
 				</Text>
 			</View>
@@ -73,7 +77,6 @@ const getStyles = (appLayout: Object): Object => {
 		shadow,
 		paddingFactor,
 		brandSecondary,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -86,7 +89,6 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			marginBottom: padding / 2,
 			padding: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -102,7 +104,6 @@ const getStyles = (appLayout: Object): Object => {
 		textStyleDef: {
 			flex: 1,
 			fontSize: fontSizeBody,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: padding,
 		},
