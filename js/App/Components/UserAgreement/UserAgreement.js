@@ -47,9 +47,13 @@ import {
 	acceptEULA,
 	toggleVisibilityEula,
 } from '../../Actions';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
 import shouldUpdate from '../../Lib/shouldUpdate';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	showModal: boolean,
 	intl: intlShape,
 	onLayout: (Object) => void,
@@ -227,6 +231,7 @@ class UserAgreement extends View<Props, State> {
 	getStyles(appLayout: Object): Object {
 		const {
 			visibilityEula,
+			colors,
 		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -234,10 +239,6 @@ class UserAgreement extends View<Props, State> {
 		const footerHeight = Math.floor(deviceWidth * 0.13);
 
 		return {
-			modalContainer: {
-				flex: 1,
-				backgroundColor: '#fff',
-			},
 			posterCover: {
 				paddingHorizontal: 20,
 			},
@@ -281,10 +282,10 @@ class UserAgreement extends View<Props, State> {
 			},
 			markupStyle: {
 				heading: {
-					color: Theme.Core.eulaContentColor,
+					color: colors.textFive,
 				},
 				text: {
-					color: Theme.Core.eulaContentColor,
+					color: colors.textFive,
 				},
 				heading1: {
 					fontSize: 28,
@@ -317,4 +318,4 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(UserAgreement));
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(withTheme(UserAgreement)));
