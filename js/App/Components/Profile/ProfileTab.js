@@ -237,8 +237,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 
 	return (
 		<ThemedScrollView
-		level={3}
-		style={container}>
+			level={3}
+			style={container}>
 			<View
 				level={3}
 				style={body}>
