@@ -45,9 +45,6 @@ import {
 import Theme from '../../Theme';
 import LayoutAnimations from '../../Lib/LayoutAnimations';
 import {
-	useAppTheme,
-} from '../../Hooks/Theme';
-import {
 	getSupportTweets,
 } from '../../Actions/App';
 
@@ -79,10 +76,6 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	} = useIntl();
 
 	const {
-		colors,
-	} = useAppTheme();
-
-	const {
 		container,
 		body,
 		buttonStyle,
@@ -92,9 +85,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 		tweetDateStyle,
 		tweetTextStyle,
 		padding,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	const [listInfo, setListInfo] = useState({
 		isLoading: true,
@@ -152,9 +143,11 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 
 		return (
 			<TouchableOpacity onPress={onPressTweet} key={`${i}`}>
-				<View style={[tweetCoverStyle, {
-					marginTop: i === 0 ? padding : padding / 2,
-				}]}>
+				<View
+					level={2}
+					style={[tweetCoverStyle, {
+						marginTop: i === 0 ? padding : padding / 2,
+					}]}>
 					<IconTelldus icon={text.includes('#ok') ? 'checkmark' : 'info'} style={[
 						statusIconStyle, {
 							color: text.includes('#ok') ? Theme.Core.brandSuccess : Theme.Core.brandDanger,
@@ -171,7 +164,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 								{formatTime(created_at)}
 							</Text>
 						</Text>
-						<Text style={tweetTextStyle}>
+						<Text
+							level={3}
+							style={tweetTextStyle}>
 							{text}
 						</Text>
 					</View>
@@ -182,7 +177,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 
 	return (
 		<ScrollView style={container}>
-			<View style={body}>
+			<View
+				level={3}
+				style={body}>
 				{
 					tweets
 				}
@@ -200,9 +197,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -210,17 +205,10 @@ const getStyles = (appLayout: Object, {
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
-	const {
-		screenBackground,
-		textThree,
-		card,
-	} = colors;
-
 	return {
 		padding,
 		container: {
 			flex: 1,
-			backgroundColor: screenBackground,
 		},
 		body: {
 			flex: 1,
@@ -235,7 +223,6 @@ const getStyles = (appLayout: Object, {
 		},
 		tweetCoverStyle: {
 			flexDirection: 'row',
-			backgroundColor: card,
 			...Theme.Core.shadow,
 			padding: padding * 2,
 			justifyContent: 'space-between',
@@ -248,7 +235,6 @@ const getStyles = (appLayout: Object, {
 			marginRight: padding * 2,
 		},
 		tweetTextStyle: {
-			color: textThree,
 			fontSize: fontSize * 0.8,
 		},
 		tweetTextCover: {

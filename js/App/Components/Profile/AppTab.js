@@ -75,9 +75,6 @@ import {
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
-import {
-	useAppTheme,
-} from '../../Hooks/Theme';
 
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
@@ -87,10 +84,6 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	const intl = useIntl();
 	const { formatMessage } = intl;
 	const [ isPushSubmitLoading, setIsPushSubmitLoading ] = useState(false);
-
-	const {
-		colors,
-	} = useAppTheme();
 
 	const { layout, defaultSettings } = useSelector((state: Object): Object => state.app);
 	const {
@@ -111,9 +104,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		titleStyle,
 		contentCoverStyle,
 		bBSortDropDownContainerStyle,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	const {
 		toggleDialogueBoxState,
@@ -224,11 +215,16 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	}
 
 	return (
-		<ScrollView style={container}>
-			<View style={body}>
+		<ScrollView
+			style={container}>
+			<View
+				level={3}
+				style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
 					Theme
 				</Text>
 				<ThemesBlock/>
@@ -238,7 +234,9 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					submitPushToken={submitPushToken}
 				/>
 				<LanguageControlBlock/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
 					{formatMessage(i18n.dashboard)}
 				</Text>
 				<DBSortControlBlock
@@ -256,7 +254,9 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					style={[contentCoverStyle, {
 						marginTop: 0,
 					}]}/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
 					{formatMessage(i18n.crashReports)}
 				</Text>
 				<SettingsRow
@@ -281,17 +281,10 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
-	const {
-		screenBackground,
-		textTwo,
-	} = colors;
 
 	const {
 		paddingFactor,
@@ -304,7 +297,6 @@ const getStyles = (appLayout: Object, {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: screenBackground,
 		},
 		body: {
 			flex: 1,
@@ -327,7 +319,6 @@ const getStyles = (appLayout: Object, {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: textTwo,
 			fontSize,
 		},
 		bBSortDropDownContainerStyle: {

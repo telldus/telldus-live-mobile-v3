@@ -40,9 +40,6 @@ import {
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../../Lib/appUtils';
-import {
-	useAppTheme,
-} from '../../../Hooks/Theme';
 
 import i18n from '../../../Translations/common';
 
@@ -58,10 +55,6 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		navigation,
 		enable,
 	} = props;
-
-	const {
-		colors,
-	} = useAppTheme();
 
 	const intl = useIntl();
 	const {
@@ -84,21 +77,23 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 		valueText,
 		premIconStyle,
 		valueCompCoverStyle,
-	} = getStyle(layout, {
-		colors,
-	});
+	} = getStyle(layout);
 
 	const isBasic = moment().unix() > pro;
 
 	const accStatus = isBasic ? 'Basic' :
 		<View style={valueCompCoverStyle}>
 			<IconTelldus icon={'premium'} style={premIconStyle}/>
-			<Text style={valueText}>{capitalizeFirstLetterOfEachWord('Premium access')}</Text>
+			<Text
+				level={3}
+				style={valueText}>{capitalizeFirstLetterOfEachWord('Premium access')}</Text>
 		</View>;
 
 	return (
 		<View style={coverStyle}>
-			<Text style={labelStyle}> {formatMessage(i18n.subscription)} </Text>
+			<Text
+				level={2}
+				style={labelStyle}> {formatMessage(i18n.subscription)} </Text>
 			<SettingsRow
 				type={'text'}
 				edit={false}
@@ -119,17 +114,10 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	);
 };
 
-const getStyle = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyle = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
-	const {
-		textTwo,
-		textThree,
-	} = colors;
 
 	const {
 		paddingFactor,
@@ -149,12 +137,10 @@ const getStyle = (appLayout: Object, {
 			fontSize: deviceWidth * 0.04,
 		},
 		labelStyle: {
-			color: textTwo,
 			fontSize: Math.floor(deviceWidth * 0.045),
 		},
 		valueText: {
 			fontSize,
-			color: textThree,
 			textAlign: 'right',
 			marginLeft: 5,
 			textAlignVertical: 'center',
