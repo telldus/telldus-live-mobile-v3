@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Dimensions } from 'react-native';
 import Text from './Text';
 import Theme from '../App/Theme';
 
@@ -34,8 +33,6 @@ import {
 	withTheme,
 	PropsThemedComponent,
 } from '../App/Components/HOC/withTheme';
-
-const deviceWidth = Dimensions.get('window').width;
 
 type DefaultProps = {
 	color: string,
@@ -60,8 +57,6 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 	props: PropsThemedIconTelldusComponent;
 
 	static defaultProps: DefaultProps = {
-		color: '#999',
-		size: deviceWidth * 0.04,
 		accessible: true,
 		importantForAccessibility: 'yes',
 	};
@@ -72,11 +67,8 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 			style: incomingStyle = {},
 			size,
 			color,
-			...others } = this.props;
-
-		const defaultProps = {
-			style: this._getDefaultStyle(),
-		};
+			...others
+		} = this.props;
 
 		const {
 			style,
@@ -88,7 +80,7 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 				color,
 				...incomingStyle,
 			},
-		}, defaultProps);
+		}, {});
 
 		return (
 			<Text
@@ -102,16 +94,6 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 			</Text>
 		);
 	}
-
-	_getDefaultStyle = (): Object => {
-		const { size, color } = this.props;
-
-		return {
-			color,
-			fontSize: size,
-		};
-	};
-
 }
 
 export default withTheme(IconTelldus);
