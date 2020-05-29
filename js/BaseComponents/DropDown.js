@@ -163,7 +163,6 @@ static defaultProps: DefaultProps = {
 		const {
 			appLayout,
 			baseLeftIcon,
-			baseColor,
 			pickerBaseCoverStyle,
 			pickerBaseTextStyle,
 			disabled,

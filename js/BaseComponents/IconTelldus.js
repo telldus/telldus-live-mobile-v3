@@ -35,8 +35,6 @@ import {
 } from '../App/Components/HOC/withTheme';
 
 type DefaultProps = {
-	color: string,
-	size: number,
 	accessible: boolean,
 	importantForAccessibility: string,
 };
