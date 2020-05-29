@@ -39,6 +39,9 @@ export default {
 		get textFive() {
 			return Core.eulaContentColor;
 		},
+		get textSix() {
+			return Core.rowTextColor;
+		},
 		get border() {
 			return '#C9C9CE';
 		},
@@ -97,6 +100,9 @@ export default {
 			return '#fff';
 		},
 		get textFive() {
+			return '#fff';
+		},
+		get textSix() {
 			return '#fff';
 		},
 		get border() {
