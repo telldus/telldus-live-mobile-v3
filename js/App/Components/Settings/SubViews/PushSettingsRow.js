@@ -308,7 +308,7 @@ getStyles(appLayout: Object): Object {
 	const closeIconSize = Math.floor(deviceWidth * 0.052);
 	const editIconSize = fontSizeH1 * 0.9;
 
-	const { rowTextColor, brandSecondary } = Theme.Core;
+	const { brandSecondary } = Theme.Core;
 
 	const innerPadding = fontSizeH1 * 0.5;
 

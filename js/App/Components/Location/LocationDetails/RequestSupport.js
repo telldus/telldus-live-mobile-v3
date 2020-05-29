@@ -321,7 +321,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, eulaContentColor } = Theme.Core;
+	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 

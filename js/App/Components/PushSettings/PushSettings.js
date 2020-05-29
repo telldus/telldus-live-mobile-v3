@@ -189,7 +189,6 @@ getStyles(appLayout: Object): Object {
 	const {
 		paddingFactor,
 		brandSecondary,
-		eulaContentColor,
 		subHeader,
 	} = Theme.Core;
 

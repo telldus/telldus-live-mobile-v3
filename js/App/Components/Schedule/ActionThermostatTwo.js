@@ -94,7 +94,6 @@ class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State
 			optionCover,
 			iconStyle,
 			textStyle,
-			eulaContentColor,
 			brandSecondary,
 		} = this._getStyle(appLayout);
 
