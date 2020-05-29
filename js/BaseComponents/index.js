@@ -103,6 +103,7 @@ import TransparentFullPageLoadingIndicator from './TransparentFullPageLoadingInd
 import MainTabBarIOS from './MainTabBarIOS';
 import MainTabNavHeader from './MainTabNavHeader';
 import TouchableOpacity from './TouchableOpacity';
+import ThemedScrollView from './ThemedScrollView';
 
 import {
 	AppState,
@@ -206,4 +207,5 @@ module.exports = {
 	Gravatar,
 	Image,
 	TouchableOpacity,
+	ThemedScrollView,
 };
