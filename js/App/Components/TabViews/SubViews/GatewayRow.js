@@ -35,11 +35,15 @@ import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     location: Object,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
@@ -156,6 +160,7 @@ class GatewayRow extends PureComponent<Props, State> {
 	getStyles(appLayout: Object): Object {
 		const {
 			disabled = false,
+			colors,
 		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -170,7 +175,7 @@ class GatewayRow extends PureComponent<Props, State> {
 		const rowWidth = width - (padding * 2);
 		const rowHeight = deviceWidth * 0.34;
 
-		const colorBackground = disabled ? '#f5f5f5' : '#fff';
+		const colorBackground = disabled ? '#f5f5f5' : colors.card;
 		const colorHeaderOneText = disabled ? '#999999' : brandSecondary;
 
 		return {
@@ -228,4 +233,4 @@ function mapDispatchToProps(dispatch: Object, props: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GatewayRow);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(GatewayRow));

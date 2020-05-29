@@ -216,10 +216,11 @@ class GatewaysScreen extends View {
 		const leftButton = this.getLeftButton(styles);
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<Header
 					leftButton={leftButton}
 					navigation={navigation}
