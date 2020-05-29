@@ -23,10 +23,12 @@
 'use strict';
 
 import React, { PureComponent } from 'react';
-import { Animated } from 'react-native';
 import { intlShape } from 'react-intl';
 
-import { Text } from '../../../../BaseComponents';
+import {
+	Text,
+	View,
+} from '../../../../BaseComponents';
 import WizardIcon from './WizardIcon';
 
 import Theme from '../../../Theme';
@@ -100,24 +102,53 @@ export default class WizardOne extends PureComponent<Props, null> {
 		}
 	}
 
+	getContents = ({
+		iconProps,
+		titleStyle,
+		title,
+		descriptionStyle,
+		description,
+	}: Object): Object => {
+		return (
+			<>
+				<WizardIcon {...iconProps}/>
+				<Text
+					level={5}
+					style={titleStyle}>
+					{title}
+				</Text>
+				<Text
+					level={6}
+					style={descriptionStyle}>
+					{description}
+				</Text>
+			</>
+		);
+	}
+
 	render(): Object {
 		const { currentScreen, animatedX, animatedOpacity, appLayout } = this.props;
 
 		const { container, titleStyle, descriptionStyle, ...otherStyles } = this.getStyles(appLayout);
 		const { title, description, ...iconProps } = this.getScreenData(currentScreen, otherStyles);
 
+		const contents = this.getContents({
+			iconProps,
+			titleStyle,
+			title,
+			descriptionStyle,
+			description,
+		});
+
 		return (
-			<Animated.View style={[container, {opacity: animatedOpacity, transform: [{
-				translateX: animatedX,
-			}]}]}>
-				<WizardIcon {...iconProps}/>
-				<Text style={titleStyle}>
-					{title}
-				</Text>
-				<Text style={descriptionStyle}>
-					{description}
-				</Text>
-			</Animated.View>
+			<View
+				level={2}
+				animated
+				style={[container, {opacity: animatedOpacity, transform: [{
+					translateX: animatedX,
+				}]}]}>
+				{contents}
+			</View>
 		);
 	}
 
@@ -130,7 +161,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 			brandSecondary,
 			shadow,
 			paddingFactor,
-			eulaContentColor,
 		} = Theme.Core;
 		const titleFontSize = Math.floor(deviceWidth * 0.052);
 		const iconSize = Math.floor(deviceWidth * 0.315);
@@ -141,7 +171,6 @@ export default class WizardOne extends PureComponent<Props, null> {
 			iconSize,
 			container: {
 				...shadow,
-				backgroundColor: '#fff',
 				justifyContent: 'center',
 				alignItems: 'center',
 				padding: padding * 2,
@@ -165,13 +194,11 @@ export default class WizardOne extends PureComponent<Props, null> {
 			},
 			titleStyle: {
 				fontSize: titleFontSize,
-				color: eulaContentColor,
 				textAlign: 'center',
 				marginVertical: 10,
 			},
 			descriptionStyle: {
 				fontSize: Math.floor(deviceWidth * 0.042),
-				color: '#00000080',
 				textAlign: 'left',
 				marginBottom: 10,
 			},
