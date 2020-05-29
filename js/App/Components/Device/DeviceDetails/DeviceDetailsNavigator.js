@@ -50,46 +50,40 @@ const ScreenConfigs = [
 	{
 		name: 'Overview',
 		Component: Overview,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color }: Object): Object => (
-					<TabBar
-						icon="home"
-						tintColor={color}
-						label={i18n.overviewHeader}
-						accessibilityLabel={i18n.deviceOverviewTab}/>
-				),
-			};
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="home"
+					tintColor={color}
+					label={i18n.overviewHeader}
+					accessibilityLabel={i18n.deviceOverviewTab}/>
+			),
 		},
 	},
 	{
 		name: 'History',
 		Component: History,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color }: Object): Object => (
-					<TabBar
-						icon="history"
-						tintColor={color}
-						label={i18n.historyHeader}
-						accessibilityLabel={i18n.deviceHistoryTab}/>
-				),
-			};
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="history"
+					tintColor={color}
+					label={i18n.historyHeader}
+					accessibilityLabel={i18n.deviceHistoryTab}/>
+			),
 		},
 	},
 	{
 		name: 'Settings',
 		Component: Settings,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color }: Object): Object => (
-					<TabBar
-						icon="settings"
-						tintColor={color}
-						label={i18n.settingsHeader}
-						accessibilityLabel={i18n.deviceSettingsTab}/>
-				),
-			};
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="settings"
+					tintColor={color}
+					label={i18n.settingsHeader}
+					accessibilityLabel={i18n.deviceSettingsTab}/>
+			),
 		},
 	},
 ];
@@ -134,7 +128,6 @@ const NavigatorConfigs = {
 			backgroundColor: '#fff',
 		},
 		style: {
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			justifyContent: 'center',
 		},
