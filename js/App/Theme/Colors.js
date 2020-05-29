@@ -20,7 +20,7 @@
 import Core from './Core';
 
 export default {
-	Gray: {
+	Default: {
 		get primary() {
 			return Core.brandPrimary;
 		},
@@ -83,7 +83,7 @@ export default {
 		},
 	},
 
-	Blue: {
+	Dark: {
 		get primary() {
 			return Core.brandPrimary;
 		},
@@ -109,13 +109,13 @@ export default {
 			return '#C9C9CE';
 		},
 		get background() {
-			return Core.brandPrimary;
+			return '#000';
 		},
 		get card() {
-			return Core.brandPrimary;
+			return '#000';
 		},
 		get screenBackground() {
-			return '#4972ad';
+			return '#777777';
 		},
 		get activeTintOne() {
 			return Core.brandSecondary;
@@ -136,7 +136,7 @@ export default {
 			return '#fff';
 		},
 		get ShadeOne() {
-			return Core.brandPrimary;
+			return '#000';
 		},
 		get ShadeTwo() {
 			return this.screenBackground;

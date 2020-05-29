@@ -60,8 +60,8 @@ const useAppTheme = (): Object => {
 	]);
 };
 
-const getThemeData = (themeInApp: string | null = 'Gray'): Object => {
-	const colors = Colors[themeInApp] || Colors.Gray;
+const getThemeData = (themeInApp: string | null = 'Default'): Object => {
+	const colors = Colors[themeInApp] || Colors.Default;
 	return {colors};
 };
 
