@@ -2,27 +2,6 @@
 
 exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
 <View
-  colorScheme="light"
-  colors={
-    Object {
-      "ShadeOne": "#eeeeee",
-      "ShadeThree": "#8e8e93",
-      "ShadeTwo": "#b5b5b5",
-      "activeTintOne": "#e26901",
-      "background": "#fff",
-      "border": "#C9C9CE",
-      "card": "#fff",
-      "inActiveTintOne": "#e26901",
-      "primary": "#1b365d",
-      "screenBackground": "#eeeeee",
-      "text": "#A59F9A",
-      "textFive": "#555555",
-      "textFour": "#4C4C4C",
-      "textThree": "#000",
-      "textTwo": "#777777",
-    }
-  }
-  dark={false}
   style={
     Object {
       "alignItems": "center",
@@ -136,27 +115,6 @@ exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
   </View>
   <Text
     allowFontScaling={false}
-    colorScheme="light"
-    colors={
-      Object {
-        "ShadeOne": "#eeeeee",
-        "ShadeThree": "#8e8e93",
-        "ShadeTwo": "#b5b5b5",
-        "activeTintOne": "#e26901",
-        "background": "#fff",
-        "border": "#C9C9CE",
-        "card": "#fff",
-        "inActiveTintOne": "#e26901",
-        "primary": "#1b365d",
-        "screenBackground": "#eeeeee",
-        "text": "#A59F9A",
-        "textFive": "#555555",
-        "textFour": "#4C4C4C",
-        "textThree": "#000",
-        "textTwo": "#777777",
-      }
-    }
-    dark={false}
     style={
       Object {
         "backgroundColor": "transparent",
@@ -172,27 +130,6 @@ exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
 
 exports[`renders VSetting when isOneSelected using Snapshots 1`] = `
 <View
-  colorScheme="light"
-  colors={
-    Object {
-      "ShadeOne": "#eeeeee",
-      "ShadeThree": "#8e8e93",
-      "ShadeTwo": "#b5b5b5",
-      "activeTintOne": "#e26901",
-      "background": "#fff",
-      "border": "#C9C9CE",
-      "card": "#fff",
-      "inActiveTintOne": "#e26901",
-      "primary": "#1b365d",
-      "screenBackground": "#eeeeee",
-      "text": "#A59F9A",
-      "textFive": "#555555",
-      "textFour": "#4C4C4C",
-      "textThree": "#000",
-      "textTwo": "#777777",
-    }
-  }
-  dark={false}
   style={
     Object {
       "alignItems": "center",
@@ -306,27 +243,6 @@ exports[`renders VSetting when isOneSelected using Snapshots 1`] = `
   </View>
   <Text
     allowFontScaling={false}
-    colorScheme="light"
-    colors={
-      Object {
-        "ShadeOne": "#eeeeee",
-        "ShadeThree": "#8e8e93",
-        "ShadeTwo": "#b5b5b5",
-        "activeTintOne": "#e26901",
-        "background": "#fff",
-        "border": "#C9C9CE",
-        "card": "#fff",
-        "inActiveTintOne": "#e26901",
-        "primary": "#1b365d",
-        "screenBackground": "#eeeeee",
-        "text": "#A59F9A",
-        "textFive": "#555555",
-        "textFour": "#4C4C4C",
-        "textThree": "#000",
-        "textTwo": "#777777",
-      }
-    }
-    dark={false}
     style={
       Object {
         "backgroundColor": "transparent",

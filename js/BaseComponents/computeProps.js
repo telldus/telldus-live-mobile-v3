@@ -28,6 +28,11 @@ module.exports = function (incomingProps: Object, defaultProps: Object): Object 
 
 	incomingProps = _.clone(incomingProps);
 	delete incomingProps.children;
+	delete incomingProps.colors;
+	delete incomingProps.dark;
+	delete incomingProps.themeInApp;
+	delete incomingProps.colorScheme;
+	delete incomingProps.level;
 
 	if (incomingProps) {
 		_.merge(computedProps, defaultProps, incomingProps);
