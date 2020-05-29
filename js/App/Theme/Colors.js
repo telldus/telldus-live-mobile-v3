@@ -55,7 +55,19 @@ export default {
 			return Core.brandSecondary;
 		},
 		get inActiveTintOne() {
+			return Core.inactiveTintColor;
+		},
+		get thumbColorActiveSwitch() {
 			return Core.brandSecondary;
+		},
+		get thumbColorInActiveSwitch() {
+			return Core.inactiveSwitch;
+		},
+		get trackColorActiveSwitch() {
+			return '#e2690150';
+		},
+		get trackColorInActiveSwitch() {
+			return Core.inactiveSwitchBackground;
 		},
 		get ShadeOne() {
 			return Core.appBackground;
@@ -103,7 +115,19 @@ export default {
 			return Core.brandSecondary;
 		},
 		get inActiveTintOne() {
+			return Core.inactiveTintColor;
+		},
+		get thumbColorActiveSwitch() {
 			return Core.brandSecondary;
+		},
+		get thumbColorInActiveSwitch() {
+			return Core.inactiveSwitch;
+		},
+		get trackColorActiveSwitch() {
+			return '#e2690150';
+		},
+		get trackColorInActiveSwitch() {
+			return '#fff';
 		},
 		get ShadeOne() {
 			return Core.brandPrimary;
