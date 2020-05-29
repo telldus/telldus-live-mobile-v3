@@ -93,7 +93,6 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
     <Text
       accessible={true}
       allowFontScaling={false}
-      color="#999"
       colorScheme="light"
       colors={
         Object {
@@ -116,7 +115,6 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
       }
       dark={false}
       importantForAccessibility="yes"
-      size={30}
       style={
         Object {
           "backgroundColor": "#1b365d",
@@ -234,7 +232,6 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
     <Text
       accessible={true}
       allowFontScaling={false}
-      color="#999"
       colorScheme="light"
       colors={
         Object {
@@ -257,7 +254,6 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
       }
       dark={false}
       importantForAccessibility="yes"
-      size={30}
       style={
         Object {
           "backgroundColor": "#fff",

@@ -173,7 +173,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
       <Text
         accessible={true}
         allowFontScaling={false}
-        color="#999"
         colorScheme="light"
         colors={
           Object {
@@ -196,7 +195,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
         }
         dark={false}
         importantForAccessibility="yes"
-        size={30}
         style={
           Object {
             "backgroundColor": "transparent",
@@ -391,7 +389,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
       <Text
         accessible={true}
         allowFontScaling={false}
-        color="#999"
         colorScheme="light"
         colors={
           Object {
@@ -414,7 +411,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
         }
         dark={false}
         importantForAccessibility="yes"
-        size={30}
         style={
           Object {
             "backgroundColor": "transparent",

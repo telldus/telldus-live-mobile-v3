@@ -247,7 +247,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           <Text
             accessible={true}
             allowFontScaling={false}
-            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -270,7 +269,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
             dark={false}
             importantForAccessibility="yes"
-            size={30}
             style={
               Object {
                 "backgroundColor": "transparent",
@@ -567,7 +565,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
           <Text
             accessible={true}
             allowFontScaling={false}
-            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -590,7 +587,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, with initializeVa
             }
             dark={false}
             importantForAccessibility="yes"
-            size={30}
             style={
               Object {
                 "backgroundColor": "transparent",
@@ -960,7 +956,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           <Text
             accessible={true}
             allowFontScaling={false}
-            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -983,7 +978,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
             dark={false}
             importantForAccessibility="yes"
-            size={30}
             style={
               Object {
                 "backgroundColor": "transparent",
@@ -1280,7 +1274,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
           <Text
             accessible={true}
             allowFontScaling={false}
-            color="#999"
             colorScheme="light"
             colors={
               Object {
@@ -1303,7 +1296,6 @@ exports[`<DeviceSettings /> - snapshot renders DeviceSettings, without initializ
             }
             dark={false}
             importantForAccessibility="yes"
-            size={30}
             style={
               Object {
                 "backgroundColor": "transparent",

@@ -462,7 +462,6 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
         <Text
           accessible={true}
           allowFontScaling={false}
-          color="#fff"
           colorScheme="light"
           colors={
             Object {
@@ -485,11 +484,9 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           }
           dark={false}
           importantForAccessibility="yes"
-          size={30}
           style={
             Object {
               "0": Object {
-                "backgroundColor": "transparent",
                 "color": "#e26901",
                 "fontSize": 14.000000000000002,
               },
@@ -497,9 +494,9 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
                 "color": "#D32F2E",
               },
               "backgroundColor": "transparent",
-              "color": undefined,
+              "color": "#fff",
               "fontFamily": "telldusicons",
-              "fontSize": 12,
+              "fontSize": 30,
             }
           }
         >
@@ -1434,7 +1431,6 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               <Text
                 accessible={true}
                 allowFontScaling={false}
-                color="#fff"
                 colorScheme="light"
                 colors={
                   Object {
@@ -1457,19 +1453,17 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 }
                 dark={false}
                 importantForAccessibility="yes"
-                size={30}
                 style={
                   Object {
                     "0": Object {
-                      "backgroundColor": "transparent",
                       "color": "#e26901",
                       "fontSize": 14.000000000000002,
                     },
                     "1": undefined,
                     "backgroundColor": "transparent",
-                    "color": undefined,
+                    "color": "#fff",
                     "fontFamily": "telldusicons",
-                    "fontSize": 12,
+                    "fontSize": 30,
                   }
                 }
               >

@@ -264,7 +264,6 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
       <Text
         accessible={true}
         allowFontScaling={false}
-        color="#999"
         colorScheme="light"
         colors={
           Object {
@@ -287,7 +286,6 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
         }
         dark={false}
         importantForAccessibility="yes"
-        size={30}
         style={
           Object {
             "backgroundColor": "transparent",
@@ -573,7 +571,6 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
       <Text
         accessible={true}
         allowFontScaling={false}
-        color="#999"
         colorScheme="light"
         colors={
           Object {
@@ -596,7 +593,6 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
         }
         dark={false}
         importantForAccessibility="yes"
-        size={30}
         style={
           Object {
             "backgroundColor": "transparent",
