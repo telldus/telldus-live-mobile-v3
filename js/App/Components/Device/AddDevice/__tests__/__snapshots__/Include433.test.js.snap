@@ -233,19 +233,17 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           allowFontScaling={false}
           importantForAccessibility="yes"
           style={
-            Object {
-              "0": Object {
+            Array [
+              Object {
+                "backgroundColor": "transparent",
                 "color": "#e26901",
+                "fontFamily": "telldusicons",
                 "fontSize": 14.000000000000002,
               },
-              "1": Object {
+              Object {
                 "color": "#D32F2E",
               },
-              "backgroundColor": "transparent",
-              "color": "#fff",
-              "fontFamily": "telldusicons",
-              "fontSize": 12,
-            }
+            ]
           }
         >
           info
@@ -698,17 +696,15 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 allowFontScaling={false}
                 importantForAccessibility="yes"
                 style={
-                  Object {
-                    "0": Object {
+                  Array [
+                    Object {
+                      "backgroundColor": "transparent",
                       "color": "#e26901",
+                      "fontFamily": "telldusicons",
                       "fontSize": 14.000000000000002,
                     },
-                    "1": undefined,
-                    "backgroundColor": "transparent",
-                    "color": "#fff",
-                    "fontFamily": "telldusicons",
-                    "fontSize": 12,
-                  }
+                    undefined,
+                  ]
                 }
               >
                 info
