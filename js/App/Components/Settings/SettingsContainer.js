@@ -258,7 +258,9 @@ render(): Object {
 	const importantForAccessibility = openModal ? 'no-hide-descendants' : 'yes';
 	return (
 
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={h1} h2={h2}
 				navigation={navigation}
@@ -301,7 +303,6 @@ getStyles(appLayout: Object): Object {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,

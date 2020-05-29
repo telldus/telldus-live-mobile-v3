@@ -235,7 +235,10 @@ render(): Object {
 		<Row
 			style={rowStyle}
 			containerStyle={rowContainerStyle}>
-			<IconTelldus icon={'phone'} style={iconStyle}/>
+			<IconTelldus
+				level={3}
+				icon={'phone'}
+				style={iconStyle}/>
 			<View style={infoContainerStyle}>
 				<View style={{
 					flexDirection: 'row',
@@ -272,7 +275,9 @@ render(): Object {
 								onPress={editNameAcive ? this.onSubmitEditing : this.onPressEditName}/>
 					}
 				</View>
-				<Text style={h2Style}>
+				<Text
+					level={6}
+					style={h2Style}>
 					{model}
 				</Text>
 			</View>
@@ -339,7 +344,6 @@ getStyles(appLayout: Object): Object {
 		},
 		h2Style: {
 			fontSize: fontSizeH2,
-			color: rowTextColor,
 			marginTop: 2,
 		},
 		closeIconStyle: {

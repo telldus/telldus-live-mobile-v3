@@ -140,7 +140,9 @@ render(): Object {
 	const isHuaweiBuild = deployStore === 'huawei';
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			{current && <Text style={labelStyle}>
 				{formatMessage(i18n.labelThisDevice)}
 			</Text>
@@ -149,7 +151,9 @@ render(): Object {
 				current
 				:
 				<View style={pushDisabledContentStyle}>
-					<Text style={pushDisabledTextStyle}>
+					<Text
+						level={5}
+						style={pushDisabledTextStyle}>
 						{isHuaweiBuild ? formatMessage(i18n.labelPushDisabledInfoHuawei) : formatMessage(i18n.labelPushDisabled)}
 					</Text>
 					<TouchableButton
@@ -216,7 +220,6 @@ getStyles(appLayout: Object): Object {
 		},
 		pushDisabledTextStyle: {
 			fontSize: fontSizeLabel * 0.93,
-			color: eulaContentColor,
 			textAlign: 'center',
 		},
 		touchableButtonStyle: {
