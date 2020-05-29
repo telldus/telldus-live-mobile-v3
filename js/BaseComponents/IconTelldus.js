@@ -68,25 +68,38 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 			...others
 		} = this.props;
 
-		const {
-			style,
-			...otherProps
-		} = prepareRootPropsText({
-			...others,
-			style: {
-				fontSize: size,
+		let incomingStyleUpdated = incomingStyle;
+		if (color) {
+			incomingStyleUpdated = {
+				...incomingStyleUpdated,
 				color,
-				...incomingStyle,
-			},
-		}, {});
+			};
+		}
+		if (size) {
+			incomingStyleUpdated = {
+				...incomingStyleUpdated,
+				fontSize: size,
+			};
+		}
+
+		const props = prepareRootPropsText({
+			...others,
+			style: incomingStyleUpdated,
+		}, {
+			style: Array.isArray(incomingStyle) ?
+				[
+					{
+						fontFamily: Theme.Core.fonts.telldusIconFont,
+					},
+				] :
+				{
+					fontFamily: Theme.Core.fonts.telldusIconFont,
+				},
+		});
 
 		return (
 			<Text
-				{...otherProps}
-				style={{
-					...style,
-					fontFamily: Theme.Core.fonts.telldusIconFont,
-				}}
+				{...props}
 				allowFontScaling={false}>
 				{icon}
 			</Text>
