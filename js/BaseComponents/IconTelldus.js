@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Dimensions } from 'react-native';
 import Text from './Text';
 import Theme from '../App/Theme';
@@ -68,7 +67,12 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 	};
 
 	render(): Object {
-		const { icon, ...others } = this.props;
+		const {
+			icon,
+			style: incomingStyle = {},
+			size,
+			color,
+			...others } = this.props;
 
 		const defaultProps = {
 			style: this._getDefaultStyle(),
@@ -77,7 +81,14 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 		const {
 			style,
 			...otherProps
-		} = prepareRootPropsText(others, defaultProps);
+		} = prepareRootPropsText({
+			...others,
+			style: {
+				fontSize: size,
+				color,
+				...incomingStyle,
+			},
+		}, defaultProps);
 
 		return (
 			<Text
