@@ -22,7 +22,7 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'react-native';
+import { View, Animated } from 'react-native';
 import Base from './Base';
 import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
 
@@ -34,7 +34,7 @@ import {
 	PropsThemedComponent,
 } from '../App/Components/HOC/withTheme';
 
-type NewProps = {|padder?: boolean, level?: number, style: Object | Array<any>|};
+type NewProps = {|padder?: boolean, level?: number, animated?: boolean, style: Object | Array<any>|};
 type Props = {|...NewProps, ...ViewProps|};
 
 
@@ -45,8 +45,18 @@ class ViewComponent extends Base {
 	render(): React$Element<any> {
 		const {
 			children,
+			animated,
 			...others
 		} = this.props;
+
+		if (animated) {
+			return (
+				<Animated.View
+					{...prepareRootPropsView(others)}>
+					{children}
+				</Animated.View>
+			);
+		}
 
 		return (
 			<View
