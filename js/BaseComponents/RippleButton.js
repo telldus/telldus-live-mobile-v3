@@ -25,10 +25,31 @@
 import React from 'react';
 import Ripple from 'react-native-material-ripple';
 
+import {
+	prepareRootPropsView,
+} from './prepareRootProps';
+
 import Theme from '../App/Theme';
 
-const RippleButton = (props: Object): Object => {
+import {
+	useAppTheme,
+} from '../App/Hooks/Theme';
+import {
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
+type Props = {
+	children: Object,
+	onPress: Function,
+	level?: number,
+};
+
+type ThemedRippleButton = Props & PropsThemedComponent;
+
+const RippleButton = (props: ThemedRippleButton): Object => {
 	const { children, onPress, ...others } = props;
+
+	const theme = useAppTheme();
 
 	const { rippleColor, rippleOpacity, rippleDuration } = Theme.Core;
 
@@ -39,7 +60,11 @@ const RippleButton = (props: Object): Object => {
 			rippleDuration={rippleDuration}
 			rippleCentered={true}
 			onPress={onPress}
-			{...others}>
+			{
+				...prepareRootPropsView({
+					...others,
+					...theme,
+				})}>
 			<>
 				{children}
 			</>
