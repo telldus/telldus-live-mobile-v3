@@ -28,11 +28,15 @@ import TextRowWrapper from './TextRowWrapper';
 import Title from './Title';
 
 import { getDeviceIcons } from '../../../Lib/DeviceUtils';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	row: Object,
 	onPress?: Function,
 	containerStyle?: Object,
@@ -40,7 +44,7 @@ type Props = {
 	labelPostScript?: string,
 };
 
-export default class DeviceRow extends View<null, Props, null> {
+class DeviceRow extends View<null, Props, null> {
 
 	static propTypes = {
 		row: PropTypes.object.isRequired,
@@ -74,7 +78,10 @@ export default class DeviceRow extends View<null, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { brandSecondary, rowTextColor } = Theme.Core;
+		const {
+			colors,
+		} = this.props;
+		const { brandSecondary } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -111,9 +118,11 @@ export default class DeviceRow extends View<null, Props, null> {
 				paddingRight: 10,
 			},
 			titleStyle: {
-				color: rowTextColor,
+				color: colors.textSix,
 			},
 		};
 	};
 
 }
+
+export default withTheme(DeviceRow);

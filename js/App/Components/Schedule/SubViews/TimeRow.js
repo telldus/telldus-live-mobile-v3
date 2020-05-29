@@ -163,7 +163,10 @@ export default class TimeRow extends View<null, Props, State> {
 					</Description>
 					{!!offset && (
 						<View style={iconRow}>
-							<IconTelldus icon={offsetIcon} style={icon}/>
+							<IconTelldus
+								level={6}
+								icon={offsetIcon}
+								style={icon}/>
 							<Description style={description} appLayout={appLayout}>
 								{labelOffset}
 							</Description>
@@ -171,7 +174,10 @@ export default class TimeRow extends View<null, Props, State> {
 					)}
 					{!!randomInterval && (
 						<View style={iconRow}>
-							<IconTelldus icon={randomIcon} style={icon}/>
+							<IconTelldus
+								level={6}
+								icon={randomIcon}
+								style={icon}/>
 							<Description style={description} appLayout={appLayout}>
 								{labelInterval}
 							</Description>

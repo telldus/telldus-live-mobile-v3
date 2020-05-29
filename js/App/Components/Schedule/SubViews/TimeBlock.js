@@ -28,7 +28,12 @@ import Theme from '../../../Theme';
 import Description from './Description';
 import i18n from '../../../Translations/common';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	type: string,
 	onPress: (number) => void,
 	isSelected: boolean,
@@ -36,7 +41,7 @@ type Props = {
 	intl: Object,
 };
 
-export default class TimeBlock extends View<null, Props, null> {
+class TimeBlock extends View<null, Props, null> {
 
 	static propTypes = {
 		type: PropTypes.string.isRequired,
@@ -95,7 +100,11 @@ export default class TimeBlock extends View<null, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
-		const { isSelected, type } = this.props;
+		const {
+			isSelected,
+			type,
+			colors,
+		} = this.props;
 		const { brandSecondary } = Theme.Core;
 
 		const { height, width } = appLayout;
@@ -104,9 +113,9 @@ export default class TimeBlock extends View<null, Props, null> {
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 		const size = (deviceWidth - (padding * 3)) * 0.3333;
 
-		const backgroundColor = isSelected ? brandSecondary : '#fff';
+		const backgroundColor = isSelected ? brandSecondary : colors.card;
 		const iconColor = isSelected ? '#fff' : Theme.Core[`${type}Color`];
-		const textColor = isSelected ? '#fff' : '#555555';
+		const textColor = isSelected ? '#fff' : colors.textFive;
 
 		return {
 			container: {
@@ -133,3 +142,5 @@ export default class TimeBlock extends View<null, Props, null> {
 		};
 	};
 }
+
+export default withTheme(TimeBlock);

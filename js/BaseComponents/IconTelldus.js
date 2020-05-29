@@ -22,8 +22,13 @@
 'use strict';
 
 import React, { Component } from 'react';
+import {
+	Dimensions,
+} from 'react-native';
 import Text from './Text';
 import Theme from '../App/Theme';
+
+const deviceWidth = Dimensions.get('window').width;
 
 import {
 	prepareRootPropsText,
@@ -90,10 +95,12 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 				[
 					{
 						fontFamily: Theme.Core.fonts.telldusIconFont,
+						size: deviceWidth * 0.04,
 					},
 				] :
 				{
 					fontFamily: Theme.Core.fonts.telldusIconFont,
+					size: deviceWidth * 0.04,
 				},
 		});
 

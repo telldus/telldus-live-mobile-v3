@@ -187,8 +187,12 @@ render(): Object {
 	const hasInitialValue = initialValue !== null && typeof initialValue !== 'undefined' && !isNaN(initialValue);
 
 	return (
-		<View style={cover}>
-			<View style={leftBlock}>
+		<View
+			level={2}
+			style={cover}>
+			<View
+				level={2}
+				style={leftBlock}>
 				<LabelBlock
 					textStyle={[labelStyle, { color: textColor }]}
 					label={label.toUpperCase()}
@@ -268,7 +272,6 @@ getStyles(): Object {
 			flexDirection: 'row',
 			alignItems: 'stretch',
 			justifyContent: 'flex-start',
-			backgroundColor: appBackground,
 			marginTop: padding,
 			marginHorizontal: padding,
 			minHeight: deviceWidth * 0.16,
@@ -280,7 +283,6 @@ getStyles(): Object {
 			alignItems: 'center',
 			justifyContent: 'center',
 			...shadow,
-			backgroundColor: '#fff',
 		},
 		labelStyle: {
 			color: rowTextColor,

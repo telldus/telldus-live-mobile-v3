@@ -140,7 +140,9 @@ render(): Object {
 
 	return (
 		<View style={[modesCover, modesCoverStyle]}>
-			<Text style={modeHeaderStyle}>
+			<Text
+				level={2}
+				style={modeHeaderStyle}>
 				{intl.formatMessage(i18n.labelModes)}
 			</Text>
 			{modesL}
@@ -156,7 +158,6 @@ getStyles(): Object {
 
 	const {
 		paddingFactor,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -168,7 +169,6 @@ getStyles(): Object {
 		modeHeaderStyle: {
 			marginLeft: padding,
 			fontSize: deviceWidth * 0.04,
-			color: rowTextColor,
 		},
 	};
 }
