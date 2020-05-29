@@ -35,9 +35,6 @@ import {
 } from '../../../../BaseComponents';
 
 import { changeSortingDB } from '../../../Actions';
-import {
-	useAppTheme,
-} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 
@@ -50,10 +47,6 @@ const DBSortControlBlock = (props: Object): Object => {
 	const intl = useIntl();
 	const { formatMessage } = intl;
 
-	const {
-		colors,
-	} = useAppTheme();
-
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { sortingDB: sortingDBProp } = defaultSettings;
 
@@ -65,9 +58,7 @@ const DBSortControlBlock = (props: Object): Object => {
 		coverStyle,
 		labelStyle,
 		pickerBaseTextStyle,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	const dispatch = useDispatch();
 	const saveSortingDB = useCallback((value: string, itemIndex: number, data: Array<any>) => {
@@ -85,8 +76,12 @@ const DBSortControlBlock = (props: Object): Object => {
 	const labelSortingDB = formatMessage(i18n.sorting);
 
 	return (
-		<View style={coverStyle}>
-			<Text style={labelStyle} numberOfLine={1}>
+		<View
+			level={2}
+			style={coverStyle}>
+			<Text
+				level={3}
+				style={labelStyle} numberOfLine={1}>
 				{labelSortingDB}
 			</Text>
 			<DropDown
@@ -100,7 +95,6 @@ const DBSortControlBlock = (props: Object): Object => {
 				intl={intl}
 				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
 				dropDownHeaderStyle={dropDownHeaderStyle}
-				baseColor={colors.textThree}
 				fontSize={fontSize}
 				accessibilityLabelPrefix={labelSortingDB}
 				pickerContainerStyle={pickerContainerStyle}
@@ -110,18 +104,11 @@ const DBSortControlBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
-
-	const {
-		card,
-		textThree,
-	} = colors;
 
 	const {
 		paddingFactor,
@@ -160,12 +147,10 @@ const getStyles = (appLayout: Object, {
 			width: width - (padding * 2),
 			justifyContent: 'space-between',
 			...shadow,
-			backgroundColor: card,
 			marginBottom: padding / 2,
 		},
 		labelStyle: {
 			flex: 0,
-			color: textThree,
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: fontSize,

@@ -43,7 +43,6 @@ type Props = {
 	textStyle: Object,
 	boxSize: number,
 	onValueChange: Function,
-	backgroundColor: string,
 };
 
 const ThemesRow = (props: Props): Object => {
@@ -53,7 +52,6 @@ const ThemesRow = (props: Props): Object => {
 		textStyle,
 		boxSize,
 		onValueChange,
-		backgroundColor,
 	} = props;
 
 	const _onValueChange = useCallback(() => {
@@ -62,13 +60,13 @@ const ThemesRow = (props: Props): Object => {
 
 	return (
 		<RippleButton
+			level={2}
 			onPress={_onValueChange}
 			style={[...style, {
 				flexDirection: 'row',
 				justifyContent: 'space-between',
 				alignItems: 'center',
 				width: '100%',
-				backgroundColor,
 			}]}>
 			<Text style={textStyle}>
 				{item.value}

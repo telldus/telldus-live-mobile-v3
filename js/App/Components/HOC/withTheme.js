@@ -36,6 +36,7 @@ export interface PropsThemedComponent {
     themeInApp: string,
 	colorScheme?: string,
 	colors: Object,
+	style?: Object,
 }
 
 const withTheme = (Component: Object, returnClassComponent?: boolean = false): Object => {

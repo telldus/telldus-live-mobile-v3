@@ -238,8 +238,8 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	return (
 		<ScrollView style={container}>
 			<View
-			level={3}
-			style={body}>
+				level={3}
+				style={body}>
 				<UserInfoBlock blockContainerStyle={{
 					marginBottom: 0,
 				}}/>

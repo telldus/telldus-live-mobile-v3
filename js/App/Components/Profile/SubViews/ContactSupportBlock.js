@@ -31,10 +31,6 @@ import {
 	Text,
 } from '../../../../BaseComponents';
 
-import {
-	useAppTheme,
-} from '../../../Hooks/Theme';
-
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -44,17 +40,11 @@ const ContactSupportBlock = (props: Object): Object => {
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
-		colors,
-	} = useAppTheme();
-
-	const {
 		coverOneStyle,
 		titleStyle,
 		bodyStyle,
 		labelStyle,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	const {
 		formatMessage,
@@ -67,7 +57,9 @@ const ContactSupportBlock = (props: Object): Object => {
 				level={2}>
 				{formatMessage(i18n.labelContactSupport)}
 			</Text>
-			<View style={coverOneStyle}>
+			<View
+				level={2}
+				style={coverOneStyle}>
 				<Text
 					style={titleStyle}>
 					{formatMessage(i18n.titleContactSupportBlock)}
@@ -82,17 +74,11 @@ const ContactSupportBlock = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.04);
-
-	const {
-		card,
-	} = colors;
 
 	const {
 		paddingFactor,
@@ -105,7 +91,6 @@ const getStyles = (appLayout: Object, {
 	return {
 		padding,
 		coverOneStyle: {
-			backgroundColor: card,
 			...shadow,
 			justifyContent: 'center',
 			alignItems: 'center',

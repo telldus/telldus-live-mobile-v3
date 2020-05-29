@@ -89,9 +89,6 @@ type PropsDropDownComponent = Props & PropsThemedComponent;
 
 type DefaultProps = {
 	baseLeftIcon: string | Object,
-	baseColor: string,
-	itemColor: string,
-	selectedItemColor: string,
 	dropdownPosition: number,
 	itemCount: number,
 	itemPadding: number,
@@ -107,9 +104,6 @@ state: State = {
 };
 static defaultProps: DefaultProps = {
 	baseLeftIcon: 'down',
-	baseColor: '#000',
-	itemColor: '#000',
-	selectedItemColor: Theme.Core.rowTextColor,
 	dropdownPosition: 0,
 	itemCount: 4,
 	itemPadding: 8,
@@ -174,6 +168,7 @@ static defaultProps: DefaultProps = {
 			pickerBaseTextStyle,
 			disabled,
 			iconLeftPickerBase,
+			colors,
 		} = this.props;
 
 		const {
@@ -192,7 +187,9 @@ static defaultProps: DefaultProps = {
 				accessibilityLabel={accessibilityLabel}
 				disabled={disabled}>
 				{React.isValidElement(iconLeftPickerBase) && iconLeftPickerBase}
-				<Text style={[pickerBaseTextStyleDef, {color: baseColor}, pickerBaseTextStyle]} numberOfLines={1}>
+				<Text style={[pickerBaseTextStyleDef, {
+					color: baseColor || colors.textThree,
+				}, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>
 				{React.isValidElement(baseLeftIcon) ?
@@ -232,6 +229,7 @@ static defaultProps: DefaultProps = {
 			labelExtractor,
 			itemSize,
 			dropDownPosition,
+			colors,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -248,7 +246,9 @@ static defaultProps: DefaultProps = {
 		return (
 			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>
 				{!!label && (
-					<Text style={[dropDownHeaderStyleDef, dropDownHeaderStyle]}>
+					<Text
+						level={2}
+						style={[dropDownHeaderStyleDef, dropDownHeaderStyle]}>
 						{label}
 					</Text>
 				)}
@@ -265,9 +265,9 @@ static defaultProps: DefaultProps = {
 						fontSize={fontSize}
 						itemCount={iCount}
 						itemPadding={itemPadding}
-						baseColor={baseColor}
-						itemColor={itemColor}
-						selectedItemColor={selectedItemColor}
+						baseColor={baseColor || colors.textThree}
+						itemColor={itemColor || colors.textThree}
+						selectedItemColor={selectedItemColor || colors.inActiveTintOne}
 						dropdownPosition={dropdownPosition}
 						dropdownOffset={{
 							top: dropdownTop,
@@ -296,7 +296,7 @@ static defaultProps: DefaultProps = {
 			card,
 		} = colors;
 
-		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
+		const { shadow, paddingFactor, rowTextColor, brandDanger, brandInfo } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
@@ -314,7 +314,6 @@ static defaultProps: DefaultProps = {
 				alignItems: 'flex-start',
 			},
 			dropDownHeaderStyleDef: {
-				color: inactiveTintColor,
 				fontSize: fontSizeText * 1.2,
 				marginBottom: 5,
 			},

@@ -49,9 +49,6 @@ import {
 import {
 	colorShades,
 } from '../../../Lib/appUtils';
-import {
-	useAppTheme,
-} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 
@@ -62,10 +59,6 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 
 	const intl = useIntl();
 	const ddRef = useRef(null);
-
-	const {
-		colors,
-	} = useAppTheme();
 
 	const colorScheme = useColorScheme();
 	const items = colorShades(colorScheme);
@@ -81,9 +74,7 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 		coverStyle,
 		labelStyle,
 		pickerBaseTextStyle,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	const dispatch = useDispatch();
 	const onValueChange = useCallback((item: Object) => {
@@ -113,18 +104,18 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 				style={style}
 				item={item}
 				boxSize={boxSize}
-				textStyle={{
-					...textStyle,
-					color: themeInApp === item.value ? colors.inActiveTintOne : colors.textThree,
-				}}
-				backgroundColor={colors.card}
+				textStyle={textStyle}
 			/>
 		);
-	}, [colors.card, colors.inActiveTintOne, colors.textThree, onValueChange, themeInApp]);
+	}, [onValueChange, themeInApp]);
 
 	return (
-		<View style={coverStyle}>
-			<Text style={labelStyle} numberOfLine={1}>
+		<View
+			level={2}
+			style={coverStyle}>
+			<Text
+				level={3}
+				style={labelStyle} numberOfLine={1}>
 				Select theme
 			</Text>
 			<DropDown
@@ -136,7 +127,6 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 				intl={intl}
 				dropDownContainerStyle={dropDownContainerStyleDef}
 				dropDownHeaderStyle={dropDownHeaderStyle}
-				baseColor={colors.textThree}
 				fontSize={fontSize}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
@@ -145,18 +135,11 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
-
-	const {
-		card,
-		textThree,
-	} = colors;
 
 	const {
 		paddingFactor,
@@ -197,12 +180,10 @@ const getStyles = (appLayout: Object, {
 			width: width - (padding * 2),
 			justifyContent: 'space-between',
 			...shadow,
-			backgroundColor: card,
 			marginBottom: padding / 2,
 		},
 		labelStyle: {
 			flex: 0,
-			color: textThree,
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: fontSize,

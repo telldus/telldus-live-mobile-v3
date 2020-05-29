@@ -44,9 +44,6 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	useAppTheme,
-} from '../../Hooks/Theme';
-import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
 import {
@@ -72,7 +69,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		formatMessage,
 	} = intl;
 
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
 
 	const {
@@ -82,9 +79,8 @@ const MoreOptionsTab = (props: Props): Object => {
 	const { enable: enableGeoFenceFeature } = JSON.parse(geoFenceFeature);
 
 	const {
-		colors,
 		themeInApp,
-	} = useAppTheme();
+	} = defaultSettings;
 
 	const {
 		outerCoverStyle,
@@ -92,9 +88,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		rowCoverStyle,
 		iconStyle,
 		labelStyle,
-	} = getStyles(layout, {
-		colors,
-	});
+	} = getStyles(layout);
 
 	const {
 		navigateToCampaign,
@@ -182,7 +176,9 @@ const MoreOptionsTab = (props: Props): Object => {
 		}: Object, i: number): Object => {
 			if (enable) {
 				components.push(
-					<RippleButton style={rowCoverStyle} onPress={onPress} key={`${i}`}>
+					<RippleButton
+						level={2}
+						style={rowCoverStyle} onPress={onPress} key={`${i}`}>
 						{!!icon && <IconTelldus style={iconStyle} icon={icon}/>}
 						{!!iconComponent && iconComponent}
 						<Text style={labelStyle}>
@@ -218,16 +214,10 @@ const MoreOptionsTab = (props: Props): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {
-	colors,
-}: Object): Object => {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-
-	const {
-		card,
-	} = colors;
 
 	const {
 		paddingFactor,
@@ -254,7 +244,6 @@ const getStyles = (appLayout: Object, {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
 			padding,
-			backgroundColor: card,
 			...shadow,
 			borderRadius: 2,
 		},
