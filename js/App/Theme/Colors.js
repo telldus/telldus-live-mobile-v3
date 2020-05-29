@@ -54,6 +54,9 @@ export default {
 		get screenBackground() {
 			return Core.appBackground;
 		},
+		get backgroundColorOne() {
+			return '#000';
+		},
 		get activeTintOne() {
 			return Core.brandSecondary;
 		},
@@ -115,6 +118,9 @@ export default {
 			return '#000';
 		},
 		get screenBackground() {
+			return '#777777';
+		},
+		get backgroundColorOne() {
 			return '#777777';
 		},
 		get activeTintOne() {
