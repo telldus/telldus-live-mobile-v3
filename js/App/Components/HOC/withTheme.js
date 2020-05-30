@@ -39,6 +39,8 @@ export interface PropsThemedComponent {
 	style?: Object,
 }
 
+// NOTE: Try not to wrap functional components. Especially if they already use forwardRef
+// Instead use 'useAppTheme' in the functional component.
 const withTheme = (Component: Object, returnClassComponent?: boolean = false): Object => {
 	const ThemedComponent = memo<Object>(forwardRef<Object, Object>((props: Object, ref: Object): Object => {
 		return (
