@@ -98,7 +98,13 @@ class FloatingButton extends Component<Props, null> {
 		} = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
-		const { container, innerContainerDef, icon, throbber } = this._getStyle(appLayout);
+		const {
+			container,
+			innerContainerDef,
+			icon,
+			throbber,
+			iconSize,
+		} = this._getStyle(appLayout);
 
 		return (
 			<TouchableOpacity
@@ -117,6 +123,7 @@ class FloatingButton extends Component<Props, null> {
 						(
 							<IconTelldus icon={iconName} style={[{
 								color: '#fff',
+								fontSize: iconSize,
 							}, iconStyle]}/>
 						)
 					}
@@ -191,6 +198,7 @@ class FloatingButton extends Component<Props, null> {
 			throbber: {
 				color: '#ffffff',
 			},
+			iconSize,
 		};
 	};
 
