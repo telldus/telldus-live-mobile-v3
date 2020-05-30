@@ -33,11 +33,17 @@ import {
 	toSliderValue,
 	getKnownModes,
 } from '../../../../Lib';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
+
 import i18n from '../../../../Translations/common';
 
 import Theme from '../../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	item: Object,
 	onOriginPress: Function,
 	isFirst: boolean,
@@ -287,6 +293,8 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			}
 		}
 
+		console.log('TEST bGColor', bGColor);
+
 		let accessibilityLabel = this.accessibilityLabel(deviceState);
 		accessibilityLabel = `${accessibilityLabel}. ${currentModeLabel}, ${originInfo}`;
 		let accessible = !isModalOpen && currentScreen === 'History';
@@ -347,7 +355,9 @@ class HistoryRow extends React.PureComponent<Props, null> {
 						</View>
 					}
 					<View style={locationCover}>
-						<Text style={originTextStyle} numberOfLines={1}>{originText}</Text>
+						<Text
+							level={6}
+							style={originTextStyle} numberOfLines={1}>{originText}</Text>
 					</View>
 				</ListRow>
 			</TouchableOpacity>
@@ -355,10 +365,20 @@ class HistoryRow extends React.PureComponent<Props, null> {
 	}
 
 	getStyle(): Object {
-		const { appLayout, isLast, isFirst, item } = this.props;
+		const {
+			appLayout,
+			isLast,
+			isFirst,
+			item,
+			colors,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			textTwo,
+		} = colors;
 
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
@@ -367,7 +387,6 @@ class HistoryRow extends React.PureComponent<Props, null> {
 				width: width * 0.40,
 				height: isPortrait ? height * 0.07 : width * 0.07,
 				justifyContent: 'center',
-				backgroundColor: '#fff',
 				alignItems: 'flex-start',
 				paddingLeft: 5,
 				borderTopRightRadius: 3,
@@ -402,13 +421,13 @@ class HistoryRow extends React.PureComponent<Props, null> {
 			},
 			timeStyle: {
 				fontSize: deviceWidth * 0.047,
+				color: textTwo,
 			},
 			timeContainerStyle: {
 				width: isPortrait ? width * 0.30 : width * 0.20,
 				zIndex: 1,
 			},
 			originTextStyle: {
-				color: '#A59F9A',
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			roundIconContainerStyle: {
@@ -445,4 +464,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = HistoryRow;
+module.exports = withTheme(HistoryRow);

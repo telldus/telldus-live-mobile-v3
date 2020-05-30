@@ -352,7 +352,9 @@ class DialogueBox extends Component<Props, null> {
 				onModalShow={this.onModalOpened}
 				supportedOrientations={['portrait', 'landscape']}
 				customBackdrop={customBackdrop}>
-				<View style={[styles.container, style]}>
+				<View
+					level={2}
+					style={[styles.container, style]}>
 					{!!showHeader && this.renderHeader(styles)}
 					{this.renderBody(styles)}
 					{this.renderFooter(styles)}
@@ -382,7 +384,6 @@ class DialogueBox extends Component<Props, null> {
 			},
 			container: {
 				flex: 0,
-				backgroundColor: '#fff',
 				alignItems: 'stretch',
 				justifyContent: 'space-between',
 				borderRadius: borderRadi,

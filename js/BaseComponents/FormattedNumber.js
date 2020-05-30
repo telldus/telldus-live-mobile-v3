@@ -26,25 +26,44 @@ import Text from './Text';
 import * as Intl from 'react-intl';
 
 const FormattedNumberComponent = (props: Object): React$Element<any> => {
-	const { style, suffix = null, suffixStyle = {}, formatterFunction } = props;
+	const {
+		style,
+		suffix = null,
+		suffixStyle = {},
+		formatterFunction,
+		localeMatcher,
+		formatStyle,
+		currency,
+		currencyDisplay,
+		useGrouping,
+		minimumIntegerDigits,
+		minimumFractionDigits,
+		maximumFractionDigits,
+		minimumSignificantDigits,
+		maximumSignificantDigits,
+		value,
+		level,
+	} = props;
 
 	const formatOptions = {
-		localeMatcher: props.localeMatcher,
-		style: props.formatStyle,
-		currency: props.currency,
-		currencyDisplay: props.currencyDisplay,
-		useGrouping: props.useGrouping,
-		minimumIntegerDigits: props.minimumIntegerDigits,
-		minimumFractionDigits: props.minimumFractionDigits,
-		maximumFractionDigits: props.maximumFractionDigits,
-		minimumSignificantDigits: props.minimumSignificantDigits,
-		maximumSignificantDigits: props.maximumSignificantDigits,
-		value: props.value,
+		localeMatcher,
+		style: formatStyle,
+		currency,
+		currencyDisplay,
+		useGrouping,
+		minimumIntegerDigits,
+		minimumFractionDigits,
+		maximumFractionDigits,
+		minimumSignificantDigits,
+		maximumSignificantDigits,
+		value,
 	};
 
 	return (
 		<Intl.FormattedNumber {...formatOptions}>
-			{(localized: number): React$Element<any> => <Text style={style}>{props.prefix}{formatterFunction ? formatterFunction(localized) : localized}
+			{(localized: number): React$Element<any> => <Text
+				level={level}
+				style={style}>{props.prefix}{formatterFunction ? formatterFunction(localized) : localized}
 				{!!suffix && (
 					[<Text style={styles.space} key={'1'}>
 						{' '}

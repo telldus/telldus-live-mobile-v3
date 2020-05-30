@@ -76,14 +76,14 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 		let incomingStyleUpdated = incomingStyle;
 		if (color) {
 			incomingStyleUpdated = {
-				...incomingStyleUpdated,
 				color,
+				...incomingStyleUpdated,
 			};
 		}
 		if (size) {
 			incomingStyleUpdated = {
-				...incomingStyleUpdated,
 				fontSize: size,
+				...incomingStyleUpdated,
 			};
 		}
 
