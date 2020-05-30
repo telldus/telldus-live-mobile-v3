@@ -62,10 +62,17 @@ import {
 import {
 	navigate,
 } from '../../Lib/NavigationService';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import i18n from '../../Translations/common';
 
 const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
+
+	const {
+		colors,
+	} = useAppTheme();
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		accounts = {},
@@ -131,6 +138,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	} = getStyles(layout, {
 		showAddNewAccount,
 		isLoggingOut,
+		colors,
 	});
 
 	function closeActionSheet(index?: number, callback?: Function) {
@@ -365,16 +373,25 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object): Object => {
+const getStyles = (appLayout: Object, {
+	showAddNewAccount,
+	isLoggingOut,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
+		card,
+		textThree,
+		textFive,
+		textSix,
+	} = colors;
+
+	const {
 		paddingFactor,
 		brandSecondary,
-		rowTextColor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -405,7 +422,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetTitle: {
 			fontSize: fontSizeActionSheetTitle,
-			color: '#000',
+			color: textThree,
 		},
 		actionSheetMessageBox: {
 			height: undefined,
@@ -415,11 +432,12 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			paddingHorizontal: padding,
 			alignItems: 'stretch',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 		},
 		actionSheetTitleBox: {
 			height: titleBoxHeight,
 			marginBottom: StyleSheet.hairlineWidth,
+			backgroundColor: card,
 		},
 		actionSheetButtonOneCover: {
 			flex: 1,
@@ -436,7 +454,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetButtonOne: {
 			fontSize,
-			color: '#fff',
+			color: textThree,
 			textAlignVertical: 'center',
 			textAlign: 'center',
 		},
@@ -453,7 +471,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetButtonAccText: {
 			fontSize,
-			color: '#000',
+			color: textThree,
 			textAlignVertical: 'center',
 			textAlign: 'left',
 			marginHorizontal: padding,
@@ -462,7 +480,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetButtonAccEmailText: {
 			fontSize: fontSize * 0.9,
-			color: '#000',
+			color: textThree,
 			textAlignVertical: 'center',
 			textAlign: 'left',
 			marginHorizontal: padding,
@@ -477,7 +495,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			height: addIconCoverSize,
 			width: addIconCoverSize,
 			borderWidth: 0.5,
-			borderColor: rowTextColor,
+			borderColor: textSix,
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
@@ -486,12 +504,12 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			height: addIconCoverSize,
 			width: addIconCoverSize,
 			borderWidth: 0.5,
-			borderColor: rowTextColor,
+			borderColor: textSix,
 		},
 		addIconStyle: {
 			height: addIconSize,
 			width: addIconSize,
-			tintColor: eulaContentColor,
+			tintColor: textFive,
 		},
 		throbberContainerStyle: {
 			backgroundColor: 'transparent',
