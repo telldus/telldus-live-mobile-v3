@@ -272,7 +272,6 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
                 "marginLeft": 2.7777,
               },
               Object {
-                "color": "#8e8e93",
                 "fontSize": 3.5000000000000004,
               },
             ]
@@ -733,7 +732,6 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "marginLeft": 2.7777,
                     },
                     Object {
-                      "color": "#8e8e93",
                       "fontSize": 3.5000000000000004,
                     },
                   ]
