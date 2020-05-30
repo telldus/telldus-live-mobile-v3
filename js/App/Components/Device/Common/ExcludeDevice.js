@@ -424,7 +424,9 @@ render(): Object {
 			flex: 1,
 		}}>
 			{status === 'timed out' ?
-				<View style={infoContainer}>
+				<View
+					level={2}
+					style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{formatMessage(i18n.noDeviceFoundMessageExclude)}
@@ -493,7 +495,6 @@ getStyles(): Object {
 			flexDirection: 'row',
 			margin: padding,
 			padding: innerPadding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',

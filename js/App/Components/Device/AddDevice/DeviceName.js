@@ -321,9 +321,13 @@ render(): Object {
 					{firstRow}
 					{rows.length !== 0 && (
 						<View style={rowsContainer}>
-							<View style={infoContainer}>
+							<View
+								level={2}
+								style={infoContainer}>
 								<IconTelldus icon={'info'} style={infoIconStyle}/>
-								<Text style={infoTextStyle}>
+								<Text
+									level={5}
+									style={infoTextStyle}>
 									{intl.formatMessage(i18n.setNameMultichannelInfo)}
 								</Text>
 							</View>
@@ -331,19 +335,27 @@ render(): Object {
 						</View>
 					)}
 					{!!statusMessage && (
-						<View style={infoContainer}>
+						<View
+							level={2}
+							style={infoContainer}>
 							<IconTelldus icon={statusIcon} style={[statusIconStyle, {
 								color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
 							}]}/>
-							<Text style={infoTextStyle}>
+							<Text
+								level={5}
+								style={infoTextStyle}>
 								{statusMessage}
 							</Text>
 						</View>
 					)}
 					{!!hintMessage && (
-						<View style={infoContainer}>
+						<View
+							level={2}
+							style={infoContainer}>
 							<IconTelldus icon={'info'} style={statusIconStyle}/>
-							<Text style={infoTextStyle}>
+							<Text
+								level={5}
+								style={infoTextStyle}>
 								{hintMessage}
 							</Text>
 						</View>
@@ -366,7 +378,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
+	const { paddingFactor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -391,7 +403,6 @@ getStyles(): Object {
 			marginTop: padding / 2,
 			paddingVertical: 3 + (infoTextFontSize * 0.3),
 			paddingRight: editBoxPadding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -413,7 +424,6 @@ getStyles(): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: infoTextFontSize,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 		},
 		iconSize: deviceWidth * 0.050666667,

@@ -281,6 +281,7 @@ render(): Object {
 		infoIconErrorStyle,
 		iconSize,
 		iconStyle,
+		throbber,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -351,18 +352,22 @@ render(): Object {
 							flexDirection: 'row',
 						}}>
 							<Throbber
-								throbberStyle={statusStyle}
+								throbberStyle={throbber}
 								throbberContainerStyle={{
 									position: 'relative',
 								}}/>
-							<Text style={[statusStyle, {
-								marginLeft: 5,
-							}]}>
+							<Text
+								level={6}
+								style={[statusStyle, {
+									marginLeft: 5,
+								}]}>
 								{`${intl.formatMessage(i18n.reconnectingTellstick)}...`}
 							</Text>
 						</View>
 						:
-						<Text style={statusStyle}>
+						<Text
+							level={6}
+							style={statusStyle}>
 							{statusText}
 						</Text>
 					}
@@ -457,7 +462,6 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 		},
 		infoTextStyle: {
-			color: rowTextColor,
 			fontSize: fontSizeText,
 		},
 		iconSize: deviceWidth * 0.050666667,
@@ -473,9 +477,13 @@ getStyles(): Object {
 		infoIconErrorStyle: {
 			color: red,
 		},
-		statusStyle: {
+		throbber: {
 			fontSize: fontSizeStatus,
 			color: rowTextColor,
+			marginBottom: 4,
+		},
+		statusStyle: {
+			fontSize: fontSizeStatus,
 			marginBottom: 4,
 		},
 	};

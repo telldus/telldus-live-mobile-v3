@@ -75,6 +75,24 @@ export default {
 		get trackColorInActiveSwitch() {
 			return Core.inactiveSwitchBackground;
 		},
+		get colorBlockDisabled() {
+			return '#f5f5f5';
+		},
+		get headerOneColorBlockEnabled() {
+			return Core.brandSecondary;
+		},
+		get headerOneColorBlockDisabled() {
+			return '#999999';
+		},
+		get iconOneColorBlockEnabled() {
+			return '#1b365d';
+		},
+		get iconOneColorBlockDisabled() {
+			return '#bdbdbd';
+		},
+		get iconTwoColorBlock() {
+			return '#A59F9A90';
+		},
 		get ShadeOne() {
 			return Core.appBackground;
 		},
@@ -140,6 +158,24 @@ export default {
 		},
 		get trackColorInActiveSwitch() {
 			return '#fff';
+		},
+		get colorBlockDisabled() {
+			return '#f5f5f5';
+		},
+		get headerOneColorBlockEnabled() {
+			return Core.brandSecondary;
+		},
+		get headerOneColorBlockDisabled() {
+			return '#999999';
+		},
+		get iconOneColorBlockEnabled() {
+			return '#1b365d';
+		},
+		get iconOneColorBlockDisabled() {
+			return '#bdbdbd';
+		},
+		get iconTwoColorBlock() {
+			return '#A59F9A90';
 		},
 		get ShadeOne() {
 			return '#000';

@@ -62,7 +62,9 @@ const NumberedBlock = (props: Object): Object => {
 	} = getStyles(layout);
 
 	return (
-		<View style={[blockStyleCoverDef, blockStyleCover]}>
+		<View
+			level={2}
+			style={[blockStyleCoverDef, blockStyleCover]}>
 			<View style={[blockStyleDef, blockStyle]}>
 				<View style={blockLeft}>
 					<View style={markerTextCover}/>
@@ -85,7 +87,9 @@ const NumberedBlock = (props: Object): Object => {
 					}
 				</View>
 				<View style={blockRight}>
-					<Text style={infoText}>
+					<Text
+						level={6}
+						style={infoText}>
 						{text}
 					</Text>
 					{!!rightBlockIItemOne && rightBlockIItemOne}
@@ -118,7 +122,6 @@ const getStyles = (appLayout: Object): Object => {
 		padding,
 		blockStyleCoverDef: {
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			width: width - (2 * padding),
 			borderRadius: 2,
@@ -174,7 +177,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		infoText: {
 			fontSize: fontSizeText,
-			color: rowTextColor,
 			flexWrap: 'wrap',
 		},
 	};

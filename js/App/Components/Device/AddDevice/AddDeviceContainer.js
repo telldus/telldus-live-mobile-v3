@@ -231,9 +231,9 @@ export class AddDeviceContainer extends View<Props, State> {
 
 		return (
 			<View
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}>
 				<NavigationHeaderPoster
 					h1={h1} h2={h2}

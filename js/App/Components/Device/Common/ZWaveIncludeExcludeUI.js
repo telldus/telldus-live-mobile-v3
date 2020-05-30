@@ -160,7 +160,9 @@ render(): Object {
 
 	return (
 		<View style={container}>
-			<View style={progressContainer}>
+			<View
+				level={2}
+				style={progressContainer}>
 				<View style={[blockLeft, {
 					flexDirection: 'column',
 					alignItems: 'flex-start',
@@ -182,11 +184,15 @@ render(): Object {
 						</Text>,
 						<Text key={'1'}/>]
 					)}
-					<Text style={textStyle}>
+					<Text
+						level={6}
+						style={textStyle}>
 						{this.messageOne}
 					</Text>
 					<Text/>
-					<Text style={textStyle}>
+					<Text
+						level={6}
+						style={textStyle}>
 						{this.messageTwo}
 					</Text>
 					<Text/>
@@ -211,7 +217,9 @@ render(): Object {
 								</TouchableOpacity>
 								}
 							</View>
-							<Text style={statusStyle} key={'1'}>
+							<Text
+								level={6}
+								style={statusStyle} key={'1'}>
 								{status}
 							</Text>
 						</>
@@ -225,7 +233,9 @@ render(): Object {
 						unfilledColor={Theme.Core.inactiveSwitchBackground} />
 				</View>
 			</View>
-			{showInfo && (<View style={infoContainer}>
+			{showInfo && (<View
+				level={2}
+				style={infoContainer}>
 				<View style={blockLeft}>
 					<BlockIcon icon={'info'} style={infoIconStyle} containerStyle={blockIcontainerStyle}/>
 				</View>
@@ -234,7 +244,9 @@ render(): Object {
 					flexDirection: 'row',
 					flexWrap: 'wrap',
 				}}>
-					<Text style={textStyle}>
+					<Text
+						level={6}
+						style={textStyle}>
 						{infoText}
 					</Text>
 				</View>
@@ -284,7 +296,6 @@ getStyles(): Object {
 			flex: 1,
 			flexDirection: 'row',
 			marginBottom: padding / 2,
-			backgroundColor: '#fff',
 			borderRadius: 2,
 			padding: contPadding,
 			...shadow,
@@ -293,7 +304,6 @@ getStyles(): Object {
 			flex: 1,
 			flexDirection: 'row',
 			marginBottom: padding / 2,
-			backgroundColor: '#fff',
 			borderRadius: 2,
 			padding: contPadding,
 			...shadow,
@@ -335,7 +345,6 @@ getStyles(): Object {
 		},
 		textStyle: {
 			fontSize: fontSizeText,
-			color: rowTextColor,
 			flexWrap: 'wrap',
 		},
 		infoIconStyle: {
@@ -346,7 +355,7 @@ getStyles(): Object {
 			width: blockIconContainerSize,
 			height: undefined,
 			borderRadius: 0,
-			backgroundColor: '#fff',
+			backgroundColor: 'transparent',
 		},
 		timerStyle: {
 			fontSize: deviceWidth * 0.045,
@@ -361,7 +370,6 @@ getStyles(): Object {
 		},
 		statusStyle: {
 			fontSize: fontSizeStatus,
-			color: rowTextColor,
 			marginBottom: 4,
 		},
 		blockLeft: {
