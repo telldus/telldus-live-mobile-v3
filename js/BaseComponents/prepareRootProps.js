@@ -130,6 +130,12 @@ const getTextColor = (props: Object): ?string => {
 		case 6: {
 			return colors.textSix;
 		}
+		case 7: {
+			return colors.headerOneColorBlockEnabled;
+		}
+		case 8: {
+			return colors.colorTimeExpired;
+		}
 		default:
 			return;
 	}

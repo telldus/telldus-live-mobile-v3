@@ -93,6 +93,15 @@ export default {
 		get iconTwoColorBlock() {
 			return '#A59F9A90';
 		},
+		get infoOneColorBlockEnabled() {
+			return Core.rowTextColor;
+		},
+		get infoOneColorBlockDisabled() {
+			return Core.rowTextColor;
+		},
+		get colorTimeExpired() {
+			return '#990000';
+		},
 		get ShadeOne() {
 			return Core.appBackground;
 		},
@@ -176,6 +185,15 @@ export default {
 		},
 		get iconTwoColorBlock() {
 			return '#A59F9A90';
+		},
+		get infoOneColorBlockEnabled() {
+			return '#fff';
+		},
+		get infoOneColorBlockDisabled() {
+			return Core.rowTextColor;
+		},
+		get colorTimeExpired() {
+			return '#990000';
 		},
 		get ShadeOne() {
 			return '#000';
