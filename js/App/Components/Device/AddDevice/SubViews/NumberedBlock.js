@@ -108,7 +108,6 @@ const getStyles = (appLayout: Object): Object => {
 	const {
 		paddingFactor,
 		shadow,
-		rowTextColor,
 		brandPrimary,
 	} = Theme.Core;
 

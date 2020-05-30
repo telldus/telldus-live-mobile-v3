@@ -265,7 +265,6 @@ getStyles(): Object {
 	const {
 		paddingFactor,
 		shadow,
-		rowTextColor,
 		brandSecondary,
 		brandPrimary,
 		inactiveSwitchBackground,
