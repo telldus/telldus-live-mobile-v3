@@ -98,6 +98,7 @@ render(): Object {
 	} = this.getStyles();
 	return (
 		<RippleButton
+			style={{flex: 0}}
 			onPress={this.onPress}
 			disabled={!enabled}>
 			<View style={container}>
@@ -174,6 +175,8 @@ getStyles(): Object {
 		iconOneColorBlockEnabled,
 		iconOneColorBlockDisabled,
 		iconTwoColorBlock,
+		infoOneColorBlockEnabled,
+		infoOneColorBlockDisabled,
 	} = colors;
 
 	const colorBackground = enabled ? card : colorBlockDisabled;
@@ -224,7 +227,7 @@ getStyles(): Object {
 		},
 		h2Style: {
 			fontSize: h2FontSize,
-			color: rowTextColor,
+			color: enabled ? infoOneColorBlockEnabled : infoOneColorBlockDisabled,
 		},
 		imageType: {
 			fontSize: deviceWidth * 0.18,

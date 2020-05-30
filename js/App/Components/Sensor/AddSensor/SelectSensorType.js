@@ -200,11 +200,17 @@ render(): Object {
 			{typesToRender}
 			{!support433 &&
 			<>
-				<View style={no433Cover}>
-					<Text style={no433Header}>
+				<View
+					level={2}
+					style={no433Cover}>
+					<Text
+						level={7}
+						style={no433Header}>
 						{formatMessage(i18n.gatewayNoSupport433Header)}
 					</Text>
-					<Text style={no433Body}>
+					<Text
+						level={6}
+						style={no433Body}>
 						{enableWebshop ?
 							formatMessage(i18n.gatewayNoSupport433InfoTwo)
 							:
@@ -232,9 +238,7 @@ getStyles(): Object {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		brandSecondary,
 		paddingFactor,
-		rowTextColor,
 		shadow,
 		maxSizeTextButton,
 	} = Theme.Core;
@@ -257,20 +261,17 @@ getStyles(): Object {
 		},
 		no433Cover: {
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
 			padding: padding * 2,
 		},
 		no433Header: {
-			color: brandSecondary,
 			fontSize: h2FontSize * 1.2,
 			marginBottom: padding * 1.6,
 			textAlign: 'center',
 		},
 		no433Body: {
-			color: rowTextColor,
 			fontSize: h2FontSize,
 			textAlign: 'center',
 		},

@@ -168,15 +168,23 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		const {
 			paddingFactor,
-			brandSecondary,
 		} = Theme.Core;
+
+		const {
+			card,
+			colorBlockDisabled,
+			headerOneColorBlockEnabled,
+			headerOneColorBlockDisabled,
+			iconTwoColorBlock,
+			iconOneColorBlockDisabled,
+		} = colors;
 
 		const padding = deviceWidth * paddingFactor;
 		const rowWidth = width - (padding * 2);
 		const rowHeight = deviceWidth * 0.34;
 
-		const colorBackground = disabled ? '#f5f5f5' : colors.card;
-		const colorHeaderOneText = disabled ? '#999999' : brandSecondary;
+		const colorBackground = disabled ? colorBlockDisabled : card;
+		const colorHeaderOneText = disabled ? headerOneColorBlockDisabled : headerOneColorBlockEnabled;
 
 		return {
 			rowItemsCover: {
@@ -197,7 +205,7 @@ class GatewayRow extends PureComponent<Props, State> {
 				top: '40%',
 			},
 			arrow: {
-				tintColor: '#A59F9A90',
+				tintColor: iconTwoColorBlock,
 				height: rowHeight * 0.25,
 				width: rowHeight * 0.2,
 			},
@@ -212,7 +220,7 @@ class GatewayRow extends PureComponent<Props, State> {
 			},
 			notAvailableIcon: {
 				fontSize: rowHeight * 0.25,
-				color: '#bdbdbd',
+				color: iconOneColorBlockDisabled,
 			},
 		};
 	}

@@ -348,18 +348,16 @@ class SensorRow extends View<Props, State> {
 						updateIntervalInSeconds={60}
 						timestamp={lastUpdatedValue}
 						gatewayTimezone={sensor.gatewayTimezone}
+						level={minutesAgo < 1440 ? 6 : 8}
 						textStyle={[
 							textInfoStyle, {
-								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
 								opacity: minutesAgo < 1440 ? 1 : 0.5,
 							},
 						]} />
 					:
-					<Text style={[
-						textInfoStyle, {
-							color: Theme.Core.rowTextColor,
-						},
-					]}>
+					<Text
+						level={5}
+						style={textInfoStyle}>
 						{this.offline}
 					</Text>
 				}
@@ -460,7 +458,6 @@ class SensorRow extends View<Props, State> {
 				marginHorizontal: 5,
 			},
 			time: {
-				color: Theme.Core.rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},
