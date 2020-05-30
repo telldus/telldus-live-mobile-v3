@@ -233,7 +233,9 @@ class SliderDetails extends View {
 
 		return (
 			<View style={[styles.container, style]}>
-				<Text style={[styles.textDimmingLevel, {fontSize}]}>
+				<Text
+					level={2}
+					style={[styles.textDimmingLevel, {fontSize}]}>
 					<FormattedMessage {...i18n.dimmingLevel} style={[styles.textDimmingLevel, {fontSize}]} />: {this.state.dimmerValue}%
 				</Text>
 				{slider}
@@ -258,7 +260,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	textDimmingLevel: {
-		color: '#1a355b',
 		fontSize: 14,
 		marginTop: 12,
 		marginLeft: 8,

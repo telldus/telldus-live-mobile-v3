@@ -22,14 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { utils } from 'live-shared-data';
 
 const { images: {DEVICES} } = utils;
 
-import { View, LocationDetails } from '../../../../BaseComponents';
+import {
+	ThemedScrollView,
+	View,
+	LocationDetails,
+} from '../../../../BaseComponents';
 
 import {
 	getDeviceManufacturerInfo,
@@ -203,10 +206,10 @@ class OverviewTab extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={styles.itemsContainer}>
 				<DeviceActionDetails
@@ -227,7 +230,7 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 

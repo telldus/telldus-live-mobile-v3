@@ -153,25 +153,25 @@ class DeviceHistoryDetails extends View {
 			textState = state === 'Dim' ? `${state} ${this.getPercentage(stateValue)}%` : state;
 			switch (state) {
 				case 'On':
-					textState = <FormattedMessage {...i18n.on} style={detailsText}/>;
+					textState = <FormattedMessage {...i18n.on} level={4} style={detailsText}/>;
 					break;
 				case 'Off':
-					textState = <FormattedMessage {...i18n.off} style={detailsText}/>;
+					textState = <FormattedMessage {...i18n.off} level={4} style={detailsText}/>;
 					break;
 				case 'Dim':
-					textState = <Text style={detailsText}><FormattedMessage {...i18n.dimmingLevel} style={detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
+					textState = <Text level={4} style={detailsText}><FormattedMessage {...i18n.dimmingLevel} style={detailsText}/>: {this.getPercentage(stateValue)}% </Text>;
 					break;
 				case 'Bell':
-					textState = <FormattedMessage {...i18n.bell} style={detailsText}/>;
+					textState = <FormattedMessage level={4} {...i18n.bell} style={detailsText}/>;
 					break;
 				case 'Down':
-					textState = <FormattedMessage {...i18n.down} style={detailsText}/>;
+					textState = <FormattedMessage level={4} {...i18n.down} style={detailsText}/>;
 					break;
 				case 'Up':
-					textState = <FormattedMessage {...i18n.up} style={detailsText}/>;
+					textState = <FormattedMessage level={4} {...i18n.up} style={detailsText}/>;
 					break;
 				case 'Stop':
-					textState = <FormattedMessage {...i18n.stop} style={detailsText}/>;
+					textState = <FormattedMessage level={4} {...i18n.stop} style={detailsText}/>;
 					break;
 				default:
 					textState = state;
@@ -183,7 +183,7 @@ class DeviceHistoryDetails extends View {
 		if (successStatus >= 0) {
 			switch (successStatus) {
 				case 0:
-					textStatus = <FormattedMessage {...i18n.success} style={detailsText}/>;
+					textStatus = <FormattedMessage {...i18n.success} level={4} style={detailsText}/>;
 					break;
 				case '1':
 					textStatus = <FormattedMessage {...i18n.failed} style={detailsTextError}/>;
@@ -259,7 +259,9 @@ class DeviceHistoryDetails extends View {
 				endValue= {0}
 				showModal={this.props.showDetails}>
 				<View style={titleTextCover}>
-					<Text style={titleText}>
+					<Text
+						level={2}
+						style={titleText}>
 						<FormattedMessage {...i18n.details} style={titleText}/>
 					</Text>
 					<TouchableOpacity
@@ -275,25 +277,35 @@ class DeviceHistoryDetails extends View {
 						flex: 1,
 					}}
 					contentContainerStyle={detailsContainer}>
-					<View style={detailsRow}
+					<View
+						level={2}
+						style={detailsRow}
 						accessible={accessible}
 						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={detailsLabel}>
+							<Text
+								level={3}
+								style={detailsLabel}>
 								<FormattedMessage {...i18n.state} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={detailsValueCover}>
-							<Text style={detailsText}>
+							<Text
+								level={4}
+								style={detailsText}>
 								{textState}
 							</Text>
 						</View>
 					</View>
-					<View style={detailsRow}
+					<View
+						level={2}
+						style={detailsRow}
 						accessible={accessible}
 						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={detailsLabel}>
+							<Text
+								level={3}
+								style={detailsLabel}>
 								<FormattedMessage {...i18n.time} style={detailsLabel}/>
 							</Text>
 						</View>
@@ -307,7 +319,8 @@ class DeviceHistoryDetails extends View {
 									weekday="short"
 									day="2-digit"
 									month="short"
-									style={timeText} />
+									style={timeText}
+									level={4}/>
 								<FormattedTime
 									value={textDate}
 									localeMatcher= "best fit"
@@ -315,31 +328,43 @@ class DeviceHistoryDetails extends View {
 									hour="numeric"
 									minute="numeric"
 									second="numeric"
-									style={[timeText, {paddingLeft: 6}]} />
+									style={[timeText, {paddingLeft: 6}]}
+									level={4}/>
 							</View>
 							:
 							null
 						}
 					</View>
-					<View style={detailsRow}
+					<View
+						level={2}
+						style={detailsRow}
 						accessible={accessible}
 						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={detailsLabel}>
+							<Text
+								level={3}
+								style={detailsLabel}>
 								<FormattedMessage {...i18n.origin} style={detailsLabel}/>
 							</Text>
 						</View>
 						<View style={detailsValueCover}>
-							<Text style={detailsText} numberOfLines={1}>
+							<Text
+								level={4}
+								style={detailsText}
+								numberOfLines={1}>
 								{originText}
 							</Text>
 						</View>
 					</View>
-					<View style={detailsRow}
+					<View
+						level={2}
+						style={detailsRow}
 						accessible={accessible}
 						importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
 						<View style={detailsLabelCover}>
-							<Text style={detailsLabel}>
+							<Text
+								level={3}
+								style={detailsLabel}>
 								<FormattedMessage {...i18n.status} style={detailsLabel}/>
 							</Text>
 						</View>
@@ -369,7 +394,6 @@ class DeviceHistoryDetails extends View {
 			brandSecondary,
 			shadow,
 			paddingFactor,
-			appBackground,
 			inactiveTintColor,
 		} = Theme.Core;
 
@@ -395,7 +419,6 @@ class DeviceHistoryDetails extends View {
 			container: {
 				flex: 1,
 				position: 'absolute',
-				backgroundColor: appBackground,
 				top: 0,
 				left: 0,
 				right: 0,
@@ -420,7 +443,7 @@ class DeviceHistoryDetails extends View {
 			closeIconStyle: {
 				fontSize: closeIconSize,
 				color: brandSecondary,
-				backgroundColor: appBackground,
+				backgroundColor: 'transparent',
 			},
 			detailsContainer: {
 				flexGrow: 1,
@@ -428,7 +451,6 @@ class DeviceHistoryDetails extends View {
 			detailsRow: {
 				flexDirection: 'row',
 				padding: itemInnerPadding,
-				backgroundColor: '#fff',
 				alignItems: 'center',
 				justifyContent: 'space-between',
 				marginHorizontal: padding,
@@ -450,16 +472,13 @@ class DeviceHistoryDetails extends View {
 				flexDirection: 'row',
 			},
 			titleText: {
-				color: inactiveTintColor,
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			statusIconSize: Math.floor(deviceWidth * 0.047),
 			detailsLabel: {
 				fontSize: Math.floor(deviceWidth * 0.04),
-				color: '#4C4C4C',
 			},
 			detailsText: {
-				color: inactiveTintColor,
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			detailsTextError: {
@@ -467,7 +486,6 @@ class DeviceHistoryDetails extends View {
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			timeText: {
-				color: inactiveTintColor,
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 		};

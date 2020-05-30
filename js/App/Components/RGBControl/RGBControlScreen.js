@@ -146,7 +146,9 @@ class RGBControlScreen extends View<Props, State> {
 					swatchWheelCover={styles.swatchWheelCover}
 					thumbSize={15}
 					deviceSetStateRGBOverride={onPressOverride ? this._deviceSetStateRGBOverride : undefined}
-					showActionIndicator={true}/>
+					showActionIndicator={true}
+					colorWheelCoverLevel={2}
+					swatchesCoverLevel={2}/>
 			</View>
 		);
 	}
@@ -173,7 +175,9 @@ class RGBControlScreen extends View<Props, State> {
 		} = device;
 
 		return (
-			<View style={styles.sliderCover}>
+			<View
+				level={2}
+				style={styles.sliderCover}>
 				{
 					methodRequested === 'DIM' ?
 						<ButtonLoadingIndicator style={styles.dot} color={Theme.Core.brandSecondary}/>
@@ -237,10 +241,11 @@ class RGBControlScreen extends View<Props, State> {
 		const details = this.renderDetails(locationData, locationDataZWave, styles);
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<NavigationHeaderPoster
 					icon={'device-alt'}
 					h2={deviceName}
@@ -301,7 +306,6 @@ class RGBControlScreen extends View<Props, State> {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 				...Theme.Core.shadow,
-				backgroundColor: '#fff',
 				borderRadius: 2,
 				paddingHorizontal: padding,
 				paddingTop: padding / 2,
@@ -317,7 +321,6 @@ class RGBControlScreen extends View<Props, State> {
 				marginTop: padding,
 			},
 			colorWheelCover: {
-				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				marginVertical: padding,
@@ -326,7 +329,6 @@ class RGBControlScreen extends View<Props, State> {
 				alignItems: 'center',
 			},
 			sliderCover: {
-				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				marginHorizontal: padding,
