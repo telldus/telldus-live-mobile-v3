@@ -22,13 +22,13 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 
 import {
 	View,
 	FullPageActivityIndicator,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	GraphValuesDropDown,
@@ -597,15 +597,17 @@ class HistoryTab extends View {
 
 		if (!keepHistory) {
 			return (
-				<ScrollView style={{
-					backgroundColor: Theme.Core.appBackground,
-				}}>
+				<ThemedScrollView
+					level={3}
+					style={{
+						flex: 1,
+					}}>
 					<View style={containerStyle}>
 						<HistoryNotStored
 							sensorId={sensorId}
 							width={deviceWidth}/>
 					</View>
-				</ScrollView>
+				</ThemedScrollView>
 			);
 		}
 
@@ -632,9 +634,11 @@ class HistoryTab extends View {
 		};
 
 		return (
-			<ScrollView style={{
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<ThemedScrollView
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<View style={containerStyle}>
 					<View style={{
 						flexDirection: 'row',
@@ -691,7 +695,7 @@ class HistoryTab extends View {
 					appLayout={appLayout}
 					intl={intl}
 					gatewayTimezone={gatewayTimezone}/>
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 

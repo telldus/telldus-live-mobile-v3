@@ -23,7 +23,6 @@
 
 import React from 'react';
 import {
-	ScrollView,
 	LayoutAnimation,
 	BackHandler,
 } from 'react-native';
@@ -36,6 +35,7 @@ import {
 	SettingsRow,
 	TouchableButton,
 	EditBox,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	ExcludeDevice,
@@ -673,7 +673,9 @@ class SettingsTab extends View {
 
 		if (editName) {
 			return (
-				<View style={container}>
+				<View
+					level={3}
+					style={container}>
 					<EditBox
 						value={sensorName}
 						icon={'sensor'}
@@ -691,10 +693,10 @@ class SettingsTab extends View {
 		const { isFailed = false } = nodeInfo;
 
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={{flexGrow: 1}}>
 				{excludeActive ?
@@ -815,10 +817,14 @@ class SettingsTab extends View {
 										}]}
 										accessible={true}/>
 								}
-								<Text style={clearCacheHintStyle}>
+								<Text
+									level={5}
+									style={clearCacheHintStyle}>
 									{formatMessage(i18n.hintHistoryCache)}.
 								</Text>
-								<Text style={infoHeaderText}>
+								<Text
+									level={2}
+									style={infoHeaderText}>
 									{formatMessage(i18n.labelTechnicalInfo)}
 								</Text>
 								<SettingsRow
@@ -846,7 +852,7 @@ class SettingsTab extends View {
 						}
 					</View>
 				}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -877,7 +883,6 @@ class SettingsTab extends View {
 			},
 			infoHeaderText: {
 				fontSize,
-				color: inactiveTintColor,
 				marginTop: padding * 2,
 			},
 			editBoxStyle: {
@@ -901,7 +906,6 @@ class SettingsTab extends View {
 			clearCacheHintStyle: {
 				fontSize,
 				textAlign: 'center',
-				color: eulaContentColor,
 				marginTop: padding * 2,
 				marginHorizontal: padding * 2,
 			},

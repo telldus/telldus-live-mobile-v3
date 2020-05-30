@@ -88,13 +88,16 @@ render(): Object {
 	return (
 		<View style={container}>
 			<FormattedMessage
+				level={5}
 				{...i18n.historyNotStoredHeader}
 				style={headerStyle}/>
 			<FormattedMessage
+				level={6}
 				{...i18n.historyNotStoredPOne}
 				style={contentStyle}/>
 			<Text />
 			<FormattedMessage
+				level={6}
 				{...i18n.historyNotStoredPTwo}
 				style={contentStyle}/>
 			<TouchableButton
@@ -107,7 +110,7 @@ render(): Object {
 }
 
 getStyles(width: number): Object {
-	const { eulaContentColor, rowTextColor, fonts } = Theme.Core;
+	const { fonts } = Theme.Core;
 	const fontSizeH = width * 0.07;
 	const fontSizeC = width * 0.045;
 	return {
@@ -118,7 +121,6 @@ getStyles(width: number): Object {
 			alignItems: 'center',
 		},
 		headerStyle: {
-			color: eulaContentColor,
 			fontFamily: fonts.robotoRegular,
 			fontSize: fontSizeH,
 			marginBottom: 10,
@@ -126,7 +128,6 @@ getStyles(width: number): Object {
 			paddingHorizontal: 5,
 		},
 		contentStyle: {
-			color: rowTextColor,
 			fontFamily: fonts.sfnsDisplay,
 			fontSize: fontSizeC,
 			textAlign: 'center',
