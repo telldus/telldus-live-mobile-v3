@@ -394,7 +394,6 @@ class DeviceHistoryDetails extends View {
 			brandSecondary,
 			shadow,
 			paddingFactor,
-			inactiveTintColor,
 		} = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;

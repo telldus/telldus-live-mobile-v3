@@ -862,9 +862,7 @@ class SettingsTab extends View {
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
-			inactiveTintColor,
 			paddingFactor,
-			eulaContentColor,
 			brandDanger,
 			btnDisabledBg,
 		} = Theme.Core;
