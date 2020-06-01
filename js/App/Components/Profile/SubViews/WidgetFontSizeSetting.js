@@ -86,7 +86,7 @@ const WidgetFontSizeSetting = memo<Object>((props: Props): Object => {
 			<Text style={textStyle}>
 				{intl.formatMessage(i18n.widgetTextSize)}
 			</Text>
-			<View style={containerStyle}>
+			<View level={2} style={containerStyle}>
 				<Slider
 					minimumValue= {BASE_FONT_SIZE_FACTOR_MIN}
 					maximumValue={BASE_FONT_SIZE_FACTOR_MAX}
@@ -122,7 +122,6 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			paddingHorizontal: fontSize2,
 			paddingVertical: fontSize2 / 2,
-			backgroundColor: '#fff',
 			...shadow,
 			borderRadius: 2,
 		},
