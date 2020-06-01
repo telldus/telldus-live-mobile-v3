@@ -266,7 +266,9 @@ render(): Object | null {
 	} = this.getContents();
 
 	return (
-		<View style={styles.modalContainer}>
+		<View
+			level={3}
+			style={styles.modalContainer}>
 			<NavigationHeader
 				showLeftIcon={true}
 				topMargin={false}
@@ -286,14 +288,21 @@ render(): Object | null {
 					leftIcon={'close'}
 					scrollableH1={true}
 					navigation={navigation}/>
-				<View style={styles.contentContainerStyle}>
+				<View
+					level={2}
+					style={styles.contentContainerStyle}>
 					<IconTelldus
 						icon={icon}
+						level={9}
 						style={styles.iconStyle}/>
-					<Text style={styles.h1Style}>
+					<Text
+						level={5}
+						style={styles.h1Style}>
 						{h1}
 					</Text>
-					<Text style={styles.bodyStyle}>
+					<Text
+						level={6}
+						style={styles.bodyStyle}>
 						{body}
 					</Text>
 				</View>
@@ -323,10 +332,7 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
-		appBackground,
 		brandSecondary,
-		eulaContentColor,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -334,11 +340,9 @@ getStyles(appLayout: Object): Object {
 	return {
 		modalContainer: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 		scrollView: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 		SVContentContainerStyle: {
 			flexGrow: 1,
@@ -349,25 +353,21 @@ getStyles(appLayout: Object): Object {
 			marginTop: padding,
 			marginHorizontal: padding,
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			borderRadius: 2,
 			padding: padding * 2,
 		},
 		iconStyle: {
 			fontSize: Math.floor(deviceWidth * 0.3),
-			color: brandSecondary,
 		},
 		h1Style: {
 			fontSize: Math.floor(deviceWidth * 0.06),
-			color: eulaContentColor,
 			fontWeight: '500',
 		},
 		bodyStyle: {
 			marginTop: 10,
 			textAlign: 'left',
 			fontSize: Math.floor(deviceWidth * 0.04),
-			color: rowTextColor,
 		},
 		buttonStyle: {
 			marginTop: padding * 2,
