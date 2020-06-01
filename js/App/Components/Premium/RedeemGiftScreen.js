@@ -118,13 +118,17 @@ const RedeemGiftScreen = (props: Object): Object => {
 		return headerArray.map((word: string): Object => {
 			if (word.includes('%')) {
 				return (
-					<Text style={titleStyleTwo}>
+					<Text
+						level={5}
+						style={titleStyleTwo}>
 						{` ${word.replace(/%/g, '').toUpperCase()}`}
 					</Text>
 				);
 			}
 			return (
-				<Text style={titleStyleOne}>
+				<Text
+					level={5}
+					style={titleStyleOne}>
 					{word.toUpperCase()}
 				</Text>
 			);
@@ -136,7 +140,9 @@ const RedeemGiftScreen = (props: Object): Object => {
 	]);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={formatMessage(i18n.redeemCard)} h2={formatMessage(i18n.applyVoucherCode)}
 				align={'right'}
@@ -145,12 +151,16 @@ const RedeemGiftScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<View style={body} >
+				<View
+					level={2}
+					style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
 						{header}
 					</View>
-					<Text style={bodyStyle}>
+					<Text
+						level={5}
+						style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
 					</Text>
 					<MaterialTextInput
@@ -192,13 +202,11 @@ const getStyles = (appLayout: Object): Object => {
 		brandSecondary: Theme.Core.brandSecondary,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
@@ -222,16 +230,13 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			marginTop: 15,
 			textAlign: 'center',
-			color: Theme.Core.eulaContentColor,
 		},
 		titleStyleOne: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			marginLeft: 5,
 		},
 		titleStyleTwo: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 		},
 		iconStyle: {
