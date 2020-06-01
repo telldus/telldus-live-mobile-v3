@@ -272,10 +272,11 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 					styles={styles}
 					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
 					onPress={this._showSwitchAccountActionSheet}/>
-				<View style={{
-					flex: 1,
-					backgroundColor: 'white',
-				}}>
+				<View
+					level={3}
+					style={{
+						flex: 1,
+					}}>
 					<View style={styles.settingsLinkCover}>
 						<DrawerSubHeader
 							textIntl={i18n.settingsHeader}
@@ -470,7 +471,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			},
 			linkLabelStyle: {
 				fontSize: fontSizeAddLocText,
-				color: eulaContentColor,
 			},
 			iapTestCoverStyle: {
 				flexDirection: 'row',

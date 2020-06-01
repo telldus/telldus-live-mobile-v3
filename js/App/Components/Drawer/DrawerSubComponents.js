@@ -96,7 +96,7 @@ const SettingsLink = ({styles, textIntl, text, iconName, iconComponent, onPressL
 	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
 		{!!iconName && <IconTelldus style={styles.linkIconStyle} icon={iconName}/>}
 		{!!iconComponent && iconComponent}
-		<Text style={styles.linkLabelStyle}>
+		<Text level={5} style={styles.linkLabelStyle}>
 			{!!text && text}
 			{!!textIntl && <FormattedMessage {...textIntl} style={styles.linkLabelStyle}/>}
 		</Text>
@@ -107,7 +107,7 @@ const SettingsButton = ({ onPress, styles }: Object): Object => (
 	<RippleButton
 		style={styles.settingsCover}
 		onPress={onPress}>
-		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
+		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} level={9} style={styles.settingsIconStyle}/>
 		<Text style={styles.settingsText}><FormattedMessage {...i18n.settingsHeader} style={styles.settingsText} /></Text>
 	</RippleButton>
 );
