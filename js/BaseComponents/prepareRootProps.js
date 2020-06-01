@@ -159,7 +159,53 @@ const getTextColor = (props: Object): ?string => {
 	}
 };
 
+const prepareRootPropsImageView = (props: Object = {}, defaultPropsOverride?: Object = {}): Object => {
+	const tintColor = getTintColor(props);
+	let defaultProps = {
+		style: {
+			tintColor,
+		},
+	};
+	if (!props.style) {
+		defaultProps = {
+			style: {
+				tintColor,
+			},
+		};
+	} else if (Array.isArray(props.style)) {
+		defaultProps = {
+			style: [{
+				tintColor,
+			}],
+		};
+	}
+
+	defaultProps = computeProps(defaultProps, defaultPropsOverride);
+
+	return computeProps(props, defaultProps);
+
+};
+
+const getTintColor = (props: Object): ?string => {
+	const {
+		level,
+		colors,
+	} = props;
+
+	if (!level) {
+		return;
+	}
+	switch (level) {
+		case 1: {
+			return colors.imageTintOne;
+		}
+		default:
+			return;
+	}
+};
+
 module.exports = {
 	prepareRootPropsView,
 	prepareRootPropsText,
+	prepareRootPropsImageView,
 };

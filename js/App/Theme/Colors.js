@@ -111,6 +111,9 @@ export default {
 		get footerSecondary() {
 			return '#fff';
 		},
+		get imageTintOne() {
+			return Core.rowTextColor;
+		},
 		get ShadeOne() {
 			return Core.appBackground;
 		},
@@ -212,6 +215,9 @@ export default {
 		},
 		get footerSecondary() {
 			return '#000';
+		},
+		get imageTintOne() {
+			return '#fff';
 		},
 		get ShadeOne() {
 			return '#000';
