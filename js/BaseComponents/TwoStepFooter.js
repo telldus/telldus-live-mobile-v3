@@ -32,8 +32,6 @@ import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
 
-import Theme from '../App/Theme';
-
 const TwoStepFooter = (props: Object): Object => {
 	const {
 		f1,
