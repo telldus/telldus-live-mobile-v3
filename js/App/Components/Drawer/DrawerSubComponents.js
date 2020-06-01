@@ -37,7 +37,6 @@ import {
 	RippleButton,
 	EmptyView,
 } from '../../../BaseComponents';
-import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 

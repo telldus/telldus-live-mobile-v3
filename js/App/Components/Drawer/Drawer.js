@@ -346,7 +346,6 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		const {
 			paddingFactor,
 			brandSecondary,
-			eulaContentColor,
 			brandPrimary,
 		} = Theme.Core;
 
