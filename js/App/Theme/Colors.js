@@ -99,6 +99,9 @@ export default {
 		get infoOneColorBlockDisabled() {
 			return Core.rowTextColor;
 		},
+		get headerIconColorBlock() {
+			return Core.brandSecondary;
+		},
 		get colorTimeExpired() {
 			return '#990000';
 		},
@@ -191,6 +194,9 @@ export default {
 		},
 		get infoOneColorBlockDisabled() {
 			return Core.rowTextColor;
+		},
+		get headerIconColorBlock() {
+			return Core.brandSecondary;
 		},
 		get colorTimeExpired() {
 			return '#990000';

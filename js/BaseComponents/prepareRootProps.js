@@ -136,6 +136,9 @@ const getTextColor = (props: Object): ?string => {
 		case 8: {
 			return colors.colorTimeExpired;
 		}
+		case 9: {
+			return colors.headerIconColorBlock;
+		}
 		default:
 			return;
 	}
