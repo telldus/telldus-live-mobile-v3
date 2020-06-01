@@ -33,8 +33,6 @@ import {
 	NavigationHeader,
 } from '../../../BaseComponents';
 
-import Theme from '../../Theme';
-
 import {
 	getUserProfile,
 } from '../../Actions/Login';
@@ -67,7 +65,9 @@ const TransactionWebview = (props: Object): Object => {
 	}, [params]);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeader
 				navigation={navigation}
 				showLeftIcon={true}/>
@@ -84,7 +84,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 	};
 };
