@@ -35,9 +35,10 @@ import Status from '../TabViews/SubViews/Gateway/Status';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
 import {
 	withTheme,
+	PropsThemedComponent,
 } from '../HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	gateway: Object,
 	onPressGateway: (Object) => void,
 	intl: intlShape,
