@@ -30,7 +30,6 @@ import React, {
 import Swiper from 'react-native-swiper';
 import {
 	ScrollView,
-	Image,
 	TouchableOpacity,
 	Linking,
 } from 'react-native';
@@ -42,6 +41,7 @@ import {
 	NavigationHeaderPoster,
 	Text,
 	IconTelldus,
+	ThemedImage,
 } from '../../../BaseComponents';
 import {
 	UpgradePremiumButton,
@@ -223,8 +223,14 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 						removeClippedSubviews={false}
 						buttonWrapperStyle={buttonWrapperStyle}
 						onIndexChanged={onIndexChanged}
-						nextButton={<Image source={{uri: 'right_arrow_key'}} style={buttonStyleN}/>}
-						prevButton={<Image source={{uri: 'left_arrow_key'}} style={buttonStyleP}/>}>
+						nextButton={<ThemedImage
+							level={1}
+							source={{uri: 'right_arrow_key'}}
+							style={buttonStyleN}/>}
+						prevButton={<ThemedImage
+							level={1}
+							source={{uri: 'left_arrow_key'}}
+							style={buttonStyleP}/>}>
 						{screens}
 					</Swiper>
 					<View style={labelsContainer}>
@@ -285,13 +291,11 @@ const getStyles = (appLayout: Object): Object => {
 		buttonStyleP: {
 			height: fontSize * 1.6,
 			width: fontSize * 1.2,
-			tintColor: Theme.Core.rowTextColor,
 			margin: 10,
 		},
 		buttonStyleN: {
 			height: fontSize * 1.6,
 			width: fontSize * 1.2,
-			tintColor: Theme.Core.rowTextColor,
 			margin: 10,
 		},
 		iconStyle: {
