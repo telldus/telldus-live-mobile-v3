@@ -139,6 +139,9 @@ const getTextColor = (props: Object): ?string => {
 		case 9: {
 			return colors.headerIconColorBlock;
 		}
+		case 9: {
+			return colors.activeTintOne;
+		}
 		default:
 			return;
 	}
