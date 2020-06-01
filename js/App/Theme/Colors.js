@@ -105,6 +105,12 @@ export default {
 		get colorTimeExpired() {
 			return '#990000';
 		},
+		get footerPrimary() {
+			return Core.brandSecondary;
+		},
+		get footerSecondary() {
+			return '#fff';
+		},
 		get ShadeOne() {
 			return Core.appBackground;
 		},
@@ -200,6 +206,12 @@ export default {
 		},
 		get colorTimeExpired() {
 			return '#990000';
+		},
+		get footerPrimary() {
+			return Core.brandSecondary;
+		},
+		get footerSecondary() {
+			return '#000';
 		},
 		get ShadeOne() {
 			return '#000';

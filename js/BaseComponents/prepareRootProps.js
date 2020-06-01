@@ -72,6 +72,12 @@ const getBGColor = (props: Object): ?string => {
 		case 3: {
 			return colors.screenBackground;
 		}
+		case 4: {
+			return colors.footerPrimary;
+		}
+		case 5: {
+			return colors.footerSecondary;
+		}
 		default:
 			return 'transparent';
 	}
@@ -141,6 +147,12 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 9: {
 			return colors.activeTintOne;
+		}
+		case 10: {
+			return colors.footerPrimary;
+		}
+		case 11: {
+			return colors.footerSecondary;
 		}
 		default:
 			return;
