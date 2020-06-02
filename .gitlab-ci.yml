@@ -65,7 +65,7 @@ ios:
   stage: build
   tags:
     - macos
-    - xcode-10
+    - xcode-11.2
   cache:
     paths:
       - node_modules
