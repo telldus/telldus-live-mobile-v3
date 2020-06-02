@@ -22,13 +22,13 @@
 'use strict';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import i18n from '../App/Translations/common';
 import Text from './Text';
 import Throbber from './Throbber';
 import View from './View';
+import TouchableOpacity from './TouchableOpacity';
 import Theme from '../App/Theme';
 
 type Props = {
@@ -47,6 +47,9 @@ type Props = {
 	disabled?: boolean,
 	showThrobber?: boolean,
 	textProps?: Object,
+	buttonLevel?: number,
+	textLevel?: number,
+	throbberLevel?: number,
 };
 
 type DefaultProps = {
@@ -103,6 +106,9 @@ class TouchableButton extends Component<Props, void> {
 			disabled,
 			showThrobber,
 			textProps = {},
+			buttonLevel,
+			textLevel,
+			throbberLevel,
 		} = this.props;
 		let label = typeof text === 'string' ? text : intl.formatMessage(text);
 		accessibilityLabel = !accessible ? '' :
@@ -117,18 +123,25 @@ class TouchableButton extends Component<Props, void> {
 			cover,
 		} = this.getStyle();
 
+		const bLevel = buttonLevel || (disabled ? 7 : 6);
+		const tLevel = textLevel || (disabled ? 13 : 12);
+		const thLevel = throbberLevel || 14;
+
 		return (
 			<TouchableOpacity
 				accessible={accessible}
 				importantForAccessibility={importantForAccessibility}
 				accessibilityLabel={accessibilityLabel}
 				style={[buttonContainer, style]}
+				level={bLevel}
 				disabled={disabled}
 				onPress={this.onPress}>
 				<View style={cover}>
 					{(typeof preScript === 'object' ||
 					typeof preScript === 'function') && preScript}
-					<Text style={[buttonLabel, labelStyle]}
+					<Text
+						level={tLevel}
+						style={[buttonLabel, labelStyle]}
 						accessible={accessible}
 						importantForAccessibility={importantForAccessibility}
 						{...textProps}>
@@ -137,6 +150,7 @@ class TouchableButton extends Component<Props, void> {
 					{!!showThrobber &&
 					(
 						<Throbber
+							level={thLevel}
 							throbberContainerStyle={[throbberContainerStyleDef, throbberContainerStyle]}
 							throbberStyle={[throbberStyleDef, throbberStyle]}
 						/>
@@ -150,9 +164,6 @@ class TouchableButton extends Component<Props, void> {
 	getStyle = (): Object => {
 		const {
 			maxSizeTextButton,
-			btnPrimaryBg,
-			btnDisabledBg,
-			textDisabled,
 			shadow,
 		} = Theme.Core;
 		const { appLayout, disabled } = this.props;
@@ -168,7 +179,6 @@ class TouchableButton extends Component<Props, void> {
 
 		return {
 			buttonContainer: {
-				backgroundColor: disabled ? btnDisabledBg : btnPrimaryBg,
 				paddingVertical: borderRadius / 2,
 				paddingHorizontal: borderRadius / 2,
 				maxWidth: width * 0.9,
@@ -188,14 +198,12 @@ class TouchableButton extends Component<Props, void> {
 				flexDirection: 'row',
 			},
 			buttonLabel: {
-				color: disabled ? textDisabled : '#ffffff',
 				fontSize,
 
 				textAlign: 'center',
 				textAlignVertical: 'center',
 			},
 			throbberStyleDef: {
-				color: '#ffffff',
 				fontSize,
 			},
 			throbberContainerStyleDef: {
