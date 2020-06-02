@@ -20,7 +20,7 @@
 
 // @flow
 
-'use strict';
+
 
 import React, { useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
