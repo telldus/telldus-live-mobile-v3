@@ -28,15 +28,18 @@ import {
 	Animated,
 	ScrollView,
 	Easing,
-	TouchableOpacity,
 } from 'react-native';
 
 import View from './View';
 import Text from './Text';
+import TouchableOpacity from './TouchableOpacity';
 
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
-const WARN_COLOR = '#FF3B30';
+import {
+	withTheme,
+} from '../App/Components/HOC/withTheme';
+
 const MAX_HEIGHT = Dimensions.get('window').height * 0.7;
 
 const utils = {
@@ -111,11 +114,12 @@ const ButtonComponent = React.memo<Object>((props: Object): Object => {
 		title,
 		index,
 		hide,
+		colors,
 	} = props;
 
 	const styles = prepareStyles(stypesP);
 
-	const fontColor = destructiveButtonIndex === index ? WARN_COLOR : tintColor;
+	const fontColor = destructiveButtonIndex === index ? colors.danger : (tintColor || colors.textSix);
 	const buttonBoxStyle = cancelButtonIndex === index ? styles.cancelButtonBox : styles.buttonBox;
 
 	function onPress() {
@@ -127,7 +131,8 @@ const ButtonComponent = React.memo<Object>((props: Object): Object => {
 			disabled={disabledButtonIndexes.indexOf(index) !== -1}
 			activeOpacity={1}
 			style={buttonBoxStyle}
-			onPress={onPress}>
+			onPress={onPress}
+			level={2}>
 			{React.isValidElement(title) ? title : (
 				<Text style={[styles.buttonText, {color: fontColor}]}>{title}</Text>
 			)}
@@ -159,7 +164,6 @@ type State = {
 
 class ActionSheet extends React.Component<Props, State> {
 static defaultProps = {
-	tintColor: '#007AFF',
 	onPress: () => {},
 	styles: {},
 	disabledButtonIndexes: [],
@@ -244,9 +248,13 @@ _renderTitle(): Object | null {
 		return null;
 	}
 	return (
-		<View style={styles.titleBox}>
+		<View
+			level={2}
+			style={styles.titleBox}>
 			{React.isValidElement(title) ? title : (
-				<Text style={styles.titleText}>{title}</Text>
+				<Text
+					level={5}
+					style={styles.titleText}>{title}</Text>
 			)}
 		</View>
 	);
@@ -259,9 +267,13 @@ _renderMessage(): Object | null {
 		return null;
 	}
 	return (
-		<View style={styles.messageBox}>
+		<View
+			level={2}
+			style={styles.messageBox}>
 			{React.isValidElement(message) ? message : (
-				<Text style={styles.messageText}>{message}</Text>
+				<Text
+					level={6}
+					style={styles.messageText}>{message}</Text>
 			)}
 		</View>
 	);
@@ -295,6 +307,9 @@ _renderOptions(): Array<Object> {
 }
 
 render(): Object {
+	const {
+		colors,
+	} = this.props;
 	const styles = prepareStyles(this.props.styles);
 	const {
 		visible,
@@ -302,6 +317,10 @@ render(): Object {
 		scrollEnabled,
 		translateY,
 	} = this.state;
+
+	const {
+		modalOverlay,
+	} = colors;
 
 	const options = this._renderOptions();
 
@@ -313,10 +332,14 @@ render(): Object {
 		>
 			<View style={[styles.wrapper]}>
 				<Text
-					style={[styles.overlay]}
+					style={[styles.overlay, {
+						backgroundColor: modalOverlay,
+					}]}
 					onPress={this._cancel}
 				/>
-				<Animated.View
+				<View
+					level={3}
+					animated
 					style={[
 						styles.body,
 						{ height: translateY, transform: [{ translateY: sheetAnim }] },
@@ -326,7 +349,7 @@ render(): Object {
 					{this._renderMessage()}
 					<ScrollView scrollEnabled={scrollEnabled}>{options}</ScrollView>
 					{this._renderCancelButton()}
-				</Animated.View>
+				</View>
 			</View>
 		</Modal>
 	);
@@ -342,7 +365,6 @@ const getStyles = (): Object => {
 			bottom: 0,
 			left: 0,
 			opacity: 0.4,
-			backgroundColor: '#000',
 		},
 		wrapper: {
 			flex: 1,
@@ -351,16 +373,13 @@ const getStyles = (): Object => {
 		body: {
 			flex: 1,
 			alignSelf: 'flex-end',
-			backgroundColor: '#e5e5e5',
 		},
 		titleBox: {
 			height: 40,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 		},
 		titleText: {
-			color: '#757575',
 			fontSize: 14,
 		},
 		messageBox: {
@@ -370,17 +389,14 @@ const getStyles = (): Object => {
 			paddingBottom: 10,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 		},
 		messageText: {
-			color: '#9a9a9a',
 			fontSize: 12,
 		},
 		buttonBox: {
 			height: 50,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 		},
 		buttonText: {
 			fontSize: 18,
@@ -390,10 +406,9 @@ const getStyles = (): Object => {
 			marginTop: 6,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 		},
 	};
 };
 
-export default ActionSheet;
+export default withTheme(ActionSheet);
 
