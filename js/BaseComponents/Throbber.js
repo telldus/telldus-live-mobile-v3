@@ -87,7 +87,7 @@ export default class Throbber extends Component<Props, null> {
 		return (
 			<View style={[styles.throbberContainer, throbberContainerStyle]}>
 				<AnimatedIconTelldus
-					level={level}
+					level={level || 15}
 					icon="loading" style={[styles.throbber, throbberStyle, {
 						transform: [{
 							rotate: interpolatedValue,
