@@ -29,8 +29,7 @@ const isEqual = require('react-fast-compare');
 import {
 	View,
 	TouchableButton,
-	IconTelldus,
-	Text,
+	InfoBlock,
 } from '../../../../BaseComponents';
 import ZWaveIncludeExcludeUI from './ZWaveIncludeExcludeUI';
 import CantEnterInclusionExclusionUI from './CantEnterInclusionExclusionUI';
@@ -424,14 +423,12 @@ render(): Object {
 			flex: 1,
 		}}>
 			{status === 'timed out' ?
-				<View
-					level={2}
-					style={infoContainer}>
-					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
-						{formatMessage(i18n.noDeviceFoundMessageExclude)}
-					</Text>
-				</View>
+				<InfoBlock
+					text={formatMessage(i18n.noDeviceFoundMessageExclude)}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					textStyle={infoTextStyle}
+					infoIconStyle={statusIconStyle}/>
 				:
 				<View style={{
 					flex: 1,
@@ -480,7 +477,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, shadow, brandDanger } = Theme.Core;
+	const { paddingFactor, brandDanger } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
@@ -491,23 +488,15 @@ getStyles(): Object {
 		brandDanger,
 		padding,
 		infoContainer: {
-			flex: 1,
-			flexDirection: 'row',
 			margin: padding,
 			padding: innerPadding,
-			...shadow,
-			alignItems: 'center',
-			justifyContent: 'space-between',
-			borderRadius: 2,
 		},
 		statusIconStyle: {
 			fontSize: deviceWidth * 0.16,
-			color: brandSecondary,
 		},
 		infoTextStyle: {
 			flex: 1,
 			fontSize: infoTextFontSize,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: innerPadding,
 		},
