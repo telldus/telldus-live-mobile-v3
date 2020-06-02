@@ -152,6 +152,7 @@ type Props = {
 	message: any,
 	disabledButtonIndexes?: Array<number>,
 	extraData?: Object,
+	colors: Object,
 };
 
 type State = {
