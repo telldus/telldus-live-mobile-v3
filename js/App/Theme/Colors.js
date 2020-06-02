@@ -19,11 +19,18 @@
 
 import Core from './Core';
 
+const common = {
+	get primary() {
+		return Core.brandPrimary;
+	},
+	get secondary() {
+		return Core.brandSecondary;
+	},
+};
+
 export default {
 	Default: {
-		get primary() {
-			return Core.brandPrimary;
-		},
+		...common,
 		get text() {
 			return '#A59F9A';
 		},
@@ -141,9 +148,7 @@ export default {
 	},
 
 	Dark: {
-		get primary() {
-			return Core.brandPrimary;
-		},
+		...common,
 		get text() {
 			return '#A59F9A';
 		},

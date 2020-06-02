@@ -169,6 +169,9 @@ const getTextColor = (props: Object): ?string => {
 		case 14: {
 			return colors.colorOneThrobberButton;
 		}
+		case 15: {
+			return colors.secondary;
+		}
 		default:
 			return;
 	}
