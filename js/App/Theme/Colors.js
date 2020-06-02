@@ -114,6 +114,21 @@ export default {
 		get imageTintOne() {
 			return Core.rowTextColor;
 		},
+		get backgroundOneButtonEnabled() {
+			return Core.brandSecondary;
+		},
+		get backgroundOneButtonDisabled() {
+			return '#b5b5b5';
+		},
+		get colorOneButtonTextEnabled() {
+			return '#ffffff';
+		},
+		get colorOneButtonTextDisabled() {
+			return '#f5f5f5';
+		},
+		get colorOneThrobberButton() {
+			return '#ffffff';
+		},
 		get ShadeOne() {
 			return Core.appBackground;
 		},
@@ -218,6 +233,21 @@ export default {
 		},
 		get imageTintOne() {
 			return '#fff';
+		},
+		get backgroundOneButtonEnabled() {
+			return Core.brandSecondary;
+		},
+		get backgroundOneButtonDisabled() {
+			return '#b5b5b5';
+		},
+		get colorOneButtonTextEnabled() {
+			return '#ffffff';
+		},
+		get colorOneButtonTextDisabled() {
+			return '#f5f5f5';
+		},
+		get colorOneThrobberButton() {
+			return '#ffffff';
 		},
 		get ShadeOne() {
 			return '#000';

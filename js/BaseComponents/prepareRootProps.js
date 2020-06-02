@@ -78,6 +78,12 @@ const getBGColor = (props: Object): ?string => {
 		case 5: {
 			return colors.footerSecondary;
 		}
+		case 6: {
+			return colors.backgroundOneButtonEnabled;
+		}
+		case 7: {
+			return colors.backgroundOneButtonDisabled;
+		}
 		default:
 			return 'transparent';
 	}
@@ -153,6 +159,15 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 11: {
 			return colors.footerSecondary;
+		}
+		case 12: {
+			return colors.colorOneButtonTextEnabled;
+		}
+		case 13: {
+			return colors.colorOneButtonTextDisabled;
+		}
+		case 14: {
+			return colors.colorOneThrobberButton;
 		}
 		default:
 			return;
