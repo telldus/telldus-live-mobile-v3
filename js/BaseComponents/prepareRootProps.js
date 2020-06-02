@@ -84,6 +84,9 @@ const getBGColor = (props: Object): ?string => {
 		case 7: {
 			return colors.backgroundOneButtonDisabled;
 		}
+		case 8: {
+			return colors.secondary;
+		}
 		default:
 			return 'transparent';
 	}
@@ -216,6 +219,9 @@ const getTintColor = (props: Object): ?string => {
 	switch (level) {
 		case 1: {
 			return colors.imageTintOne;
+		}
+		case 2: {
+			return colors.secondary;
 		}
 		default:
 			return;
