@@ -26,6 +26,12 @@ const common = {
 	get secondary() {
 		return Core.brandSecondary;
 	},
+	get danger() {
+		return Core.brandDanger;
+	},
+	get warning() {
+		return Core.brandWarning;
+	},
 };
 
 export default {
@@ -135,6 +141,9 @@ export default {
 		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
+		},
+		get modalOverlay() {
+			return '#000';
 		},
 		get ShadeOne() {
 			return Core.appBackground;
@@ -253,6 +262,9 @@ export default {
 		},
 		get colorOneThrobberButton() {
 			return '#ffffff';
+		},
+		get modalOverlay() {
+			return '#000';
 		},
 		get ShadeOne() {
 			return '#000';
