@@ -24,7 +24,7 @@
 #import "React/RCTBundleURLProvider.h"
 #import "React/RCTRootView.h"
 #import <RNCPushNotificationIOS.h>
-#import <RNGoogleSignin/RNGoogleSignin.h>
+//#import <RNGoogleSignin/RNGoogleSignin.h>
 
 #import "Orientation.h"
 #import "RNSplashScreen.h"
@@ -89,9 +89,9 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 }
 
 // method to respond to the google auth URL scheme
-- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
-    return [RNGoogleSignin application:application openURL:url options:options];
-}
+//- (BOOL)application:(UIApplication *)application openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options {
+//    return [RNGoogleSignin application:application openURL:url options:options];
+//}
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
