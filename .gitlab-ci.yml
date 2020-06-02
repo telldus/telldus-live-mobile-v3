@@ -78,6 +78,7 @@ ios:
   only:
     - tags
     - master
+    - no-g-signin
     - /^v\d+\.\d+.*$/ # Version branches
   script:
     - $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-*
