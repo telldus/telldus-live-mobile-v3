@@ -514,7 +514,15 @@ public class NewSensorWidget extends AppWidgetProvider {
     }
 
     public static String formatValue(CharSequence sensorValue) {
+        if (sensorValue == null || sensorValue == "") {
+            return "";
+        }
+
         String value = String.valueOf(sensorValue);
+
+        if (value == null || value == "") {
+            return "";
+        }
 
         List<String> list = Arrays.asList(SensorsUtilities.WIND_DIR);
         if (list.contains(value)) { // Check for wind direction values
