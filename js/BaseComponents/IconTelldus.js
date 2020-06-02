@@ -56,6 +56,38 @@ type Props = {
 
 type PropsThemedIconTelldusComponent = Props & PropsThemedComponent;
 
+const prepareIncomingStyle = (incomingStyle: Object | Array<any>, {color, size}: Object): Object | Array<any> => {
+	let incomingStyleUpdated = incomingStyle;
+	if (Array.isArray(incomingStyle)) {
+		if (color) {
+			incomingStyleUpdated = [
+				{color}, // $FlowFixMe
+				...incomingStyleUpdated, // color in 'style' has higher priority
+			];
+		}
+		if (size) {
+			incomingStyleUpdated = [
+				{fontSize: size}, // $FlowFixMe
+				...incomingStyleUpdated, // size in 'style' has higher priority
+			];
+		}
+	} else {
+		if (color) {
+			incomingStyleUpdated = {
+				color, // $FlowFixMe
+				...incomingStyleUpdated, // color in 'style' has higher priority
+			};
+		}
+		if (size) {
+			incomingStyleUpdated = {
+				fontSize: size, // $FlowFixMe
+				...incomingStyleUpdated, // size in 'style' has higher priority
+			};
+		}
+	}
+	return incomingStyleUpdated;
+};
+
 class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 	props: PropsThemedIconTelldusComponent;
 
@@ -73,23 +105,14 @@ class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
 			...others
 		} = this.props;
 
-		let incomingStyleUpdated = incomingStyle;
-		if (color) {
-			incomingStyleUpdated = {
-				color, // $FlowFixMe
-				...incomingStyleUpdated, // color in 'style' has higher priority
-			};
-		}
-		if (size) {
-			incomingStyleUpdated = {
-				fontSize: size, // $FlowFixMe
-				...incomingStyleUpdated, // size in 'style' has higher priority
-			};
-		}
+
 
 		const props = prepareRootPropsText({
 			...others,
-			style: incomingStyleUpdated,
+			style: prepareIncomingStyle(incomingStyle, {
+				size,
+				color,
+			}),
 		}, {
 			style: Array.isArray(incomingStyle) ?
 				[

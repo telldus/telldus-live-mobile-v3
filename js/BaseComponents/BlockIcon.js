@@ -22,7 +22,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import View from './View';
 import IconTelldus from './IconTelldus';
 import Theme from '../App/Theme';
@@ -42,20 +41,12 @@ type Props = {
 	containerStyle?: Array<any> | Object,
 	backgroundMask?: boolean,
 	backgroundMaskStyle?: Array<any> | Object,
+	iconLevel?: number,
+	blockLevel?: number,
 };
 
 export default class BlockIcon extends Component<Props, null> {
 	props: Props;
-
-	static propTypes = {
-		icon: PropTypes.string.isRequired,
-		size: PropTypes.number,
-		color: PropTypes.string,
-		bgColor: PropTypes.string,
-		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		containerStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-		backgroundMaskStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-	};
 
 	static defaultProps: DefaultProps = {
 		color: '#fff',
@@ -64,13 +55,30 @@ export default class BlockIcon extends Component<Props, null> {
 	};
 
 	render(): Object {
-		const { style, containerStyle, icon, size, color, backgroundMask, backgroundMaskStyle } = this.props;
+		const {
+			style,
+			containerStyle,
+			icon,
+			size,
+			color,
+			backgroundMask,
+			backgroundMaskStyle,
+			iconLevel,
+			blockLevel,
+		} = this.props;
 		const defaultStyle = this._getDefaultStyle();
 
 		return (
-			<View style={[defaultStyle, containerStyle]}>
+			<View
+				level={blockLevel || 8}
+				style={[defaultStyle, containerStyle]}>
 				{backgroundMask && (<View style={backgroundMaskStyle}/>)}
-				<IconTelldus icon={icon} size={size} color={color} style={style}/>
+				<IconTelldus
+					level={iconLevel}
+					icon={icon}
+					size={size}
+					color={typeof iconLevel === 'undefined' ? color : undefined}
+					style={style}/>
 			</View>
 		);
 	}
