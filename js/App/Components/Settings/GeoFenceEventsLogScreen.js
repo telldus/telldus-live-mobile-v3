@@ -43,6 +43,9 @@ import {
 	Text,
 	TouchableButton,
 } from '../../../BaseComponents';
+import {
+	GeoFenceEventsLogRow,
+} from './SubViews';
 
 import {
 	useDialogueBox,
@@ -150,15 +153,13 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 		const val = others[key];
 
 		return (
-			<View style={rowCover}>
-				<Text style={rowLabel}>
-					{key} :
-				</Text>
-				{!!val && <Text style={rowValue}>
-					{typeof val === 'string' ? val : JSON.stringify(val)}
-				</Text>
-				}
-			</View>
+			<GeoFenceEventsLogRow
+				key={key}
+				val={val}
+				label={key}
+				rowValue={rowValue}
+				rowLabel={rowLabel}
+				rowCover={rowCover}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [layout]);

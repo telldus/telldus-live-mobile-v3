@@ -15,30 +15,41 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-'use strict';
-import PushSettingsRow from './PushSettingsRow';
-import WhatsNewLink from './WhatsNewLink';
-import AppVersionBlock from './AppVersionBlock';
-import PushInfoBlock from './PushInfoBlock';
-import DBSortControlBlock from './DBSortControlBlock';
-import UserInfoBlock from './UserInfoBlock';
-import LanguageControlBlock from './LanguageControlBlock';
-import LogoutButton from './LogoutButton';
-import LogoutAllAccButton from './LogoutAllAccButton';
-import GeoFenceEventsLogRow from './GeoFenceEventsLogRow';
+// @flow
 
-module.exports = {
-	PushSettingsRow,
-	WhatsNewLink,
-	AppVersionBlock,
-	PushInfoBlock,
-	DBSortControlBlock,
-	UserInfoBlock,
-	LanguageControlBlock,
-	LogoutButton,
-	LogoutAllAccButton,
-	GeoFenceEventsLogRow,
+'use strict';
+
+import React, {
+	memo,
+} from 'react';
+
+import {
+	View,
+	Text,
+} from '../../../../BaseComponents';
+
+const GeoFenceEventsLogRow = (props: Object): Object => {
+	const {
+		rowCover,
+		rowLabel,
+		label,
+		val,
+		rowValue,
+	} = props;
+
+	return (
+		<View style={rowCover}>
+			<Text style={rowLabel}>
+				{label} :
+			</Text>
+			{!!val && <Text style={rowValue}>
+				{typeof val === 'string' ? val : JSON.stringify(val)}
+			</Text>
+			}
+		</View>
+	);
 };
+
+export default memo<Object>(GeoFenceEventsLogRow);
