@@ -295,7 +295,9 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 										paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
 									}}
 									name={'location-on'}/>
-								<Text style={styles.linkLabelStyle}>
+								<Text
+									level={5}
+									style={styles.linkLabelStyle}>
 									{formatMessage(i18n.geoFenceSettings)}
 								</Text>
 							</RippleButton>
