@@ -35,6 +35,7 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+let uuid = require('react-native-uuid');
 
 import {
 	View,
@@ -143,6 +144,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		let newSelected = {...selectedItems};
 		newSelected.selectedDevices[deviceId] = {
 			...args,
+			uuid: uuid.v1(),
 		};
 		setSelectedItems(newSelected);
 		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
@@ -216,6 +218,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			} else {
 				newSelected.selectedDevices[id] = {
 					...data,
+					uuid: uuid.v1(),
 				};
 			}
 		} else if (type === 'schedule') {
@@ -224,6 +227,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			} else {
 				newSelected.selectedSchedules[id] = {
 					...data,
+					uuid: uuid.v1(),
 				};
 			}
 		} else if (type === 'event') {
@@ -232,6 +236,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			} else {
 				newSelected.selectedEvents[id] = {
 					...data,
+					uuid: uuid.v1(),
 				};
 			}
 		}
@@ -241,9 +246,15 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	function toggleActiveState(type: 'schedule' | 'event', id: string, data: Object) {
 		let newSelected = {...selectedItems};
 		if (type === 'schedule') {
-			newSelected.selectedSchedules[id] = data;
+			newSelected.selectedSchedules[id] = {
+				...data,
+				uuid: uuid.v1(),
+			};
 		} else if (type === 'event') {
-			newSelected.selectedEvents[id] = data;
+			newSelected.selectedEvents[id] = {
+				...data,
+				uuid: uuid.v1(),
+			};
 		}
 		setSelectedItems(newSelected);
 	}
