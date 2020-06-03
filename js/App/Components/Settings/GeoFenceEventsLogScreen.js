@@ -72,6 +72,7 @@ function prepareListData(data: Array<Object>, {
 			action,
 			extras = {},
 			identifier,
+			inAppTime,
 		} = event;
 
 		const {
@@ -87,6 +88,13 @@ function prepareListData(data: Array<Object>, {
 			...others,
 		};
 
+		const {
+			arriving,
+			leaving,
+			title,
+			...otherExtras
+		} = extras;
+
 		if (timestamp) {
 			listData.push({
 				header: timestamp,
@@ -99,16 +107,28 @@ function prepareListData(data: Array<Object>, {
 						},
 					},
 					{
+						key: 'in app time',
+						'in app time': `${formatDate(inAppTime)} ${formatTime(inAppTime)}`,
+					},
+					{
 						key: 'action',
 						action,
 					},
 					{
-						key: 'fenceName',
-						fenceName: extras.title,
+						key: 'fence name',
+						'fence name': title,
+					},
+					{
+						key: 'arriving actions',
+						'arriving actions': arriving,
+					},
+					{
+						key: 'leaving actions',
+						'leaving actions': leaving,
 					},
 					{
 						key: 'extras',
-						extras,
+						extras: otherExtras,
 					},
 					{
 						key: 'identifier',
@@ -161,10 +181,7 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 			<GeoFenceEventsLogRow
 				key={key}
 				val={val}
-				label={key}
-				rowValue={rowValue}
-				rowLabel={rowLabel}
-				rowCover={rowCover}/>
+				label={key}/>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [layout]);

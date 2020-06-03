@@ -84,6 +84,7 @@ function setupGeoFence(): ThunkAction {
 			dispatch(debugGFOnGeofence({
 				...geofence,
 				AppState: AppState.currentState,
+				inAppTime: Date.now(),
 			}));
 			// if (AppState.currentState === 'active') {
 			dispatch(handleFence(geofence));
@@ -196,6 +197,7 @@ const GeoFenceHeadlessTask = async (store: Object, event: Object): Promise<any> 
 					delete queue[uuid];
 					store.dispatch(debugGFOnGeofence({
 						...params,
+						inAppTime: Date.now(),
 					}));
 					await store.dispatch(handleFence(params));
 					removeSubscriber();
@@ -209,6 +211,7 @@ const GeoFenceHeadlessTask = async (store: Object, event: Object): Promise<any> 
 				delete queue[uuid];
 				store.dispatch(debugGFOnGeofence({
 					...params,
+					inAppTime: Date.now(),
 				}));
 				await store.dispatch(handleFence(params));
 				Promise.resolve();

@@ -28,8 +28,12 @@ import React, {
 	memo,
 	useState,
 	useCallback,
+	useMemo,
 } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {
+	useSelector,
+} from 'react-redux';
 
 import {
 	View,
@@ -43,14 +47,23 @@ import {
 
 const GeoFenceEventsLogRow = (props: Object): Object => {
 	const {
-		rowCover,
-		rowLabel,
 		label,
 		val,
-		rowValue,
 	} = props;
 
+	const { layout } = useSelector((state: Object): Object => state.app);
+
 	const ignoreExpand = typeof val === 'string';
+	const isActions = label === 'arriving actions' || label === 'leaving actions';
+
+	const {
+		rowCover,
+		rowLabel,
+		rowValue,
+	} = getStyles({
+		layout,
+		isActions,
+	});
 
 	const [ expand, setExpand ] = useState(ignoreExpand);
 
@@ -58,6 +71,63 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		setExpand(!expand);
 	}, [expand]);
+
+	const content = useMemo((): Object => {
+		if (ignoreExpand) {
+			return (
+				<Text
+					level={6}
+					style={rowValue}>
+					{val}
+				</Text>
+			);
+		}
+		if (isActions) {
+			return Object.keys(val).map((items: Object): Object => {
+				const val2 = val[items];
+				return (
+					<View style={{
+						flex: 1,
+					}}>
+						<Text
+							level={3}
+							style={rowValue}>
+							{items}
+						</Text>
+						{
+							Object.keys(val2).map((items2: Object): Object => {
+								const {
+									uuid,
+									...others
+								} = val2[items2];
+								return (
+									<View style={{
+										flex: 1,
+									}}>
+										<Text
+											level={3}
+											style={rowValue}>
+											{uuid}
+										</Text>
+										<Text
+											level={6}
+											style={rowValue}>
+											{JSON.stringify(others)}
+										</Text>
+									</View>
+								);
+							})
+						}
+					</View>
+				);
+			});
+		}
+		return <Text
+			level={6}
+			style={rowValue}>
+			{JSON.stringify(val)}
+		</Text>;
+	}, [ignoreExpand, isActions, rowValue, val]);
 
 	return (
 		<View style={rowCover}>
@@ -78,14 +148,48 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 					color={Theme.Core.brandSecondary}/>
 				}
 			</TouchableOpacity>
-			{(expand && !!val) && <Text
-				level={6}
-				style={rowValue}>
-				{ignoreExpand ? val : JSON.stringify(val)}
-			</Text>
+			{(expand && !!val) &&
+				content
 			}
 		</View>
 	);
 };
 
+const getStyles = ({
+	layout,
+	isActions,
+}: Object): Object => {
+	const { height, width } = layout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	const fontSize = Math.floor(deviceWidth * 0.04);
+
+	return {
+		rowCover: {
+			backgroundColor: '#fff',
+			flexDirection: isActions ? 'column' : 'row',
+			marginHorizontal: padding,
+			padding,
+			marginTop: 1,
+			flexWrap: isActions ? 'nowrap' : 'wrap',
+		},
+		rowLabel: {
+			fontSize,
+			justifyContent: 'center',
+			marginRight: 5,
+		},
+		rowValue: {
+			fontSize,
+			justifyContent: 'center',
+			marginLeft: 5,
+		},
+	};
+};
 export default memo<Object>(GeoFenceEventsLogRow);
