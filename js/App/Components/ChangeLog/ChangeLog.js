@@ -429,7 +429,7 @@ const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		flex: 1,
+		flex: 0,
 	},
 	buttonIconStyle: {
 		transform: [{rotateZ: '180deg'}],
