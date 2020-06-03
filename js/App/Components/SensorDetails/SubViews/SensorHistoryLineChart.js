@@ -461,7 +461,7 @@ class SensorHistoryLineChart extends View<Props, State> {
 				animationType={'none'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
-				supportedOrientations={['portrait', supportedOrientations]}
+				supportedOrientations={[supportedOrientations]}
 				hardwareAccelerated={true}
 				onShow={this.onShow}>
 				<SafeAreaView>
