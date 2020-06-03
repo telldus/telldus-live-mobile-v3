@@ -105,6 +105,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		latitudeDelta,
 		longitudeDelta,
 	});
+	const [ regionToReset, setRegionToReset ] = useState();
 
 	function onPressNext() {
 		dispatch(resetFence());
@@ -128,9 +129,20 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				latitudeDelta,
 				longitudeDelta,
 			});
+			setRegionToReset({
+				latitude,
+				longitude,
+				latitudeDelta,
+				longitudeDelta,
+			});
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [latitude, latitudeDelta, longitude, longitudeDelta]);
+	useEffect(() => {
+		if (regionToReset) {
+			setRegionToReset();
+		}
+	}, [regionToReset]);
 
 	const onRegionChangeComplete = useCallback((reg: Object) => {
 		setRegion(reg);
@@ -171,7 +183,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
 					style={mapStyle}
-					region={new AnimatedRegion(region)}
+					initialRegion={new AnimatedRegion(region)}
+					region={regionToReset ? new AnimatedRegion(regionToReset) : undefined}
 					scrollEnabled={enableGeoFence}
 					loadingEnabled={true}
 					showsTraffic={false}

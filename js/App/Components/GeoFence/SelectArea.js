@@ -98,6 +98,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		longitudeDelta,
 	};
 	const [initialRegion, setInitialRegion] = useState(region);
+	const [ regionToReset, setRegionToReset ] = useState();
 
 	useEffect(() => {
 		onDidMount(`1. ${formatMessage(i18n.area)}`, formatMessage(i18n.selectArea));
@@ -132,9 +133,20 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 				latitudeDelta: location.latitudeDelta || 0.1,
 				longitudeDelta: location.longitudeDelta || 0.1,
 			});
+			setRegionToReset({
+				latitude,
+				longitude,
+				latitudeDelta,
+				longitudeDelta,
+			});
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [location]);
+	useEffect(() => {
+		if (regionToReset) {
+			setRegionToReset();
+		}
+	}, [regionToReset]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -146,7 +158,8 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 					loadingEnabled={true}
 					showsTraffic={false}
 					showsUserLocation={true}
-					region={new MapView.AnimatedRegion(initialRegion)}
+					initialRegion={new MapView.AnimatedRegion(initialRegion)}
+					region={regionToReset ? new MapView.AnimatedRegion(regionToReset) : undefined}
 					onRegionChangeComplete={onRegionChangeComplete}
 					showsMyLocationButton={false}/>
 				<MapOverlay/>
