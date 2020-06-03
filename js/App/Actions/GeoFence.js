@@ -85,18 +85,18 @@ function setupGeoFence(): ThunkAction {
 				...geofence,
 				AppState: AppState.currentState,
 			}));
-			if (AppState.currentState === 'active') {
-				dispatch(handleFence(geofence));
-			} else {
-				BackgroundGeolocation.startBackgroundTask().then((taskId: number) => {
-					dispatch(handleFence(geofence)).then(() => {
-						BackgroundGeolocation.stopBackgroundTask(taskId);
-					});
-				}).catch((error: Object) => {
-					// Be sure to catch errors:  never leave you background-task hanging.
-					BackgroundGeolocation.stopBackgroundTask();
-				});
-			}
+			// if (AppState.currentState === 'active') {
+			dispatch(handleFence(geofence));
+			// } else {
+			// 	BackgroundGeolocation.startBackgroundTask().then((taskId: number) => {
+			// 		dispatch(handleFence(geofence)).then(() => {
+			// 			BackgroundGeolocation.stopBackgroundTask(taskId);
+			// 		});
+			// 	}).catch((error: Object) => {
+			// 		// Be sure to catch errors:  never leave you background-task hanging.
+			// 		BackgroundGeolocation.stopBackgroundTask();
+			// 	});
+			// }
 		});
 
 		return BackgroundGeolocation.ready({
@@ -256,7 +256,7 @@ function handleFence(fence: Object): ThunkAction {
 }
 
 function handleActions(actions: Object, userId: string): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
 		const { devices = {}, schedules = {}, events = {} } = actions;
 
 		if (!userId) {
@@ -270,38 +270,48 @@ function handleActions(actions: Object, userId: string): ThunkAction {
 			return Promise.resolve('done');
 		}
 
+		let promises = [];
+
 		for (let id in devices) {
-			dispatch(handleActionDevice(devices[id], accessToken));
+			promises.push(dispatch(handleActionDevice(devices[id], accessToken)));
 		}
 		for (let id in events) {
-			dispatch(handleActionEvent(events[id], accessToken));
+			promises.push(dispatch(handleActionEvent(events[id], accessToken)));
 		}
 		for (let id in schedules) {
-			dispatch(handleActionSchedule(schedules[id], accessToken));
+			promises.push(dispatch(handleActionSchedule(schedules[id], accessToken)));
 		}
 		// NOTE: Not using Promise.all to resolve as BG task started using BackgroundGeolocation.startBackgroundTask
 		// Will only last for 30secs in Android and 180secs in iOS. If any promise gets stuck we do not want the
 		// preceeding requests/actions to be not fires/ignored.
-		return Promise.resolve('done');
+		return await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+			return promise.then((res: Object): Object => {
+				return res;
+			}).catch((err: Object): Object => {
+				return err;
+			});
+		}));
 	};
 }
 
 function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
 		const { deviceId, method, stateValues = {} } = action;
 		if (!deviceId) {
 			return Promise.resolve('done');
 		}
 
+		let promises = [];
+
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
-			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken));
+			promises.push(dispatch(deviceSetState(deviceId, method, dimValue, accessToken)));
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
-			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken));
+			promises.push(dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)));
 		} else if (method === 2048) {
 			const {
 				changeMode,
@@ -309,9 +319,15 @@ function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
 				mode,
 				temp,
 			} = action;
-			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
+			promises.push(dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)));
 		}
-		return Promise.resolve('done');
+		return await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
+			return promise.then((res: Object): Object => {
+				return res;
+			}).catch((err: Object): Object => {
+				return err;
+			});
+		}));
 	};
 }
 
