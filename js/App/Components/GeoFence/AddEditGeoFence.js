@@ -63,6 +63,7 @@ type Props = {
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
 	enableGeoFence: boolean,
+	route: Object,
 };
 
 const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
@@ -70,12 +71,28 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		enableGeoFence,
+		route,
 	} = props;
+
+	const {
+		params = {},
+	} = route;
 
 	const dispatch = useDispatch();
 
-	let { location, fence } = useSelector((state: Object): Object => state.fences);
-	location = location ? location : {};
+	const fallbackLocation = {
+		latitude: 55.70584,
+		longitude: 13.19321,
+		latitudeDelta: 0.1,
+		longitudeDelta: 0.1,
+	};
+
+	let { location = {}, fence } = useSelector((state: Object): Object => state.fences);
+	location = {
+		...fallbackLocation,
+		...location,
+	};
+	const initialRegion = params.region || location;
 
 	const [ currentAccFences, setCurrentAccFences ] = useState([]);
 
@@ -93,18 +110,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		contentContainerStyle,
 	} = getStyles(appLayout);
 
-	const {
-		latitude = 55.70584,
-		longitude = 13.19321,
-		latitudeDelta = 0.1,
-		longitudeDelta = 0.1,
-	} = location;
-	const [ region, setRegion ] = useState({
-		latitude,
-		longitude,
-		latitudeDelta,
-		longitudeDelta,
-	});
+	const [ region, setRegion ] = useState(initialRegion);
 	const [ regionToReset, setRegionToReset ] = useState();
 
 	function onPressNext() {
@@ -123,28 +129,18 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const onPressFocusMyLocation = useCallback(() => {
 		(async () => {
 			dispatch(getCurrentLocation());
-			setRegion({
-				latitude,
-				longitude,
-				latitudeDelta,
-				longitudeDelta,
-			});
-			setRegionToReset({
-				latitude,
-				longitude,
-				latitudeDelta,
-				longitudeDelta,
-			});
+			setRegion(location);
+			setRegionToReset(location);
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [latitude, latitudeDelta, longitude, longitudeDelta]);
+	}, [location]);
 	useEffect(() => {
 		if (regionToReset) {
 			setRegionToReset();
 		}
 	}, [regionToReset]);
 
-	const onRegionChangeComplete = useCallback((reg: Object) => {
+	const onRegionChange = useCallback((reg: Object) => {
 		setRegion(reg);
 	}, []);
 
@@ -190,7 +186,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					showsTraffic={false}
 					showsUserLocation={true}
 					showsMyLocationButton={false}
-					onRegionChangeComplete={onRegionChangeComplete}>
+					onRegionChange={onRegionChange}>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);

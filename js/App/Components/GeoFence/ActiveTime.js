@@ -28,6 +28,7 @@ import {
 } from 'react-native';
 import {
 	useDispatch,
+	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import { CommonActions } from '@react-navigation/native';
@@ -56,6 +57,8 @@ import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
 
+import GeoFenceUtils from '../../Lib/GeoFenceUtils';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -78,6 +81,8 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 	} = intl;
 
 	const dispatch = useDispatch();
+
+	let { fence } = useSelector((state: Object): Object => state.fences);
 
 	useEffect(() => {
 		onDidMount(`4. ${formatMessage(i18n.activeTime)}`, formatMessage(i18n.selectTimeForFence));
@@ -112,6 +117,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
 		dispatch(addGeofence()).then(() => {
 			setIsLoading(false);
+			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
 			navigation.dispatch(CommonActions.reset({
 				index: 2,
 				routes: [
@@ -124,7 +130,15 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 								},
 							],
 						}},
-					{name: 'GeoFenceNavigator'},
+					{
+						name: 'GeoFenceNavigator',
+						params: { region: {
+							latitude: fence.latitude,
+							longitude: fence.longitude,
+							latitudeDelta: lngDelta / 2,
+							longitudeDelta: lngDelta,
+						} },
+					},
 				],
 			}));
 		}).catch((err: Object = {}) => {
