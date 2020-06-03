@@ -20,15 +20,26 @@
 // @flow
 
 'use strict';
-
+import {
+	TouchableOpacity,
+	LayoutAnimation,
+} from 'react-native';
 import React, {
 	memo,
+	useState,
+	useCallback,
 } from 'react';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
+
+import Theme from '../../../Theme';
+import {
+	LayoutAnimations,
+} from '../../../Lib';
 
 const GeoFenceEventsLogRow = (props: Object): Object => {
 	const {
@@ -39,13 +50,38 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 		rowValue,
 	} = props;
 
+	const ignoreExpand = typeof val === 'string';
+
+	const [ expand, setExpand ] = useState(ignoreExpand);
+
+	const toggle = useCallback(() => {
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+		setExpand(!expand);
+	}, [expand]);
+
 	return (
 		<View style={rowCover}>
-			<Text style={rowLabel}>
-				{label} :
-			</Text>
-			{!!val && <Text style={rowValue}>
-				{typeof val === 'string' ? val : JSON.stringify(val)}
+			<TouchableOpacity
+				onPress={toggle}
+				style={{
+					flexDirection: 'row',
+				}}
+			>
+				<Text
+					level={3}
+					style={rowLabel}>
+					{label} :
+				</Text>
+				{!ignoreExpand && <MaterialIcons
+					name={expand ? 'expand-less' : 'expand-more'}
+					size={22}
+					color={Theme.Core.brandSecondary}/>
+				}
+			</TouchableOpacity>
+			{(expand && !!val) && <Text
+				level={6}
+				style={rowValue}>
+				{ignoreExpand ? val : JSON.stringify(val)}
 			</Text>
 			}
 		</View>

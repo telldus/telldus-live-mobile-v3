@@ -35,6 +35,7 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+import orderBy from 'lodash/orderBy';
 
 import {
 	View,
@@ -60,7 +61,7 @@ type Props = {
 	navigation: Object,
 };
 
-function prepareListData(data: Object, {
+function prepareListData(data: Array<Object>, {
 	formatDate,
 	formatTime,
 }: Object): Array<Object> {
@@ -88,7 +89,7 @@ function prepareListData(data: Object, {
 
 		if (timestamp) {
 			listData.push({
-				header: `${formatDate(timestamp)} ${formatTime(timestamp)}`,
+				header: timestamp,
 				data: [
 					{
 						key: 'location',
@@ -102,6 +103,10 @@ function prepareListData(data: Object, {
 						action,
 					},
 					{
+						key: 'fenceName',
+						fenceName: extras.title,
+					},
+					{
 						key: 'extras',
 						extras,
 					},
@@ -112,7 +117,7 @@ function prepareListData(data: Object, {
 			});
 		}
 	});
-	return listData;
+	return orderBy(listData, 'header', ['desc']);
 }
 
 const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
@@ -167,8 +172,10 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 	const renderSectionHeader = useCallback(({section, index}: Object): Object => {
 		return (
 			<View style={sectionCover}>
-				<Text style={sectionLabel}>
-					{section.header}
+				<Text
+					level={5}
+					style={sectionLabel}>
+					{formatDate(section.header)} {formatTime(section.header)}
 				</Text>
 			</View>
 		);
@@ -294,16 +301,15 @@ const getStyles = (appLayout: Object): Object => {
 			flexWrap: 'wrap',
 		},
 		rowLabel: {
-			color: '#000',
 			fontSize,
 			justifyContent: 'center',
+			marginRight: 5,
 		},
 		sectionCover: {
 			marginLeft: padding,
 			marginBottom: 5,
 		},
 		rowValue: {
-			color: rowTextColor,
 			fontSize,
 			justifyContent: 'center',
 			marginLeft: 5,
@@ -313,6 +319,12 @@ const getStyles = (appLayout: Object): Object => {
 			color: rowTextColor,
 			fontSize,
 			alignSelf: 'center',
+		},
+		sectionLabel: {
+			fontSize,
+			justifyContent: 'center',
+			marginRight: 5,
+			marginTop: 5,
 		},
 	};
 };
