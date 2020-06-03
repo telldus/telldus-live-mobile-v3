@@ -26,7 +26,7 @@ import { Platform, Keyboard, InteractionManager } from 'react-native';
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-// import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import appleAuth, {
 	AppleButton,
 	AppleAuthRequestOperation,
@@ -49,9 +49,9 @@ import {
 import {
 	testUsername,
 	testPassword,
-	// webClientId,
-	// iosClientId,
-	// deployStore,
+	webClientId,
+	iosClientId,
+	deployStore,
 } from '../../../../Config';
 
 import i18n from '../../../Translations/common';
@@ -118,15 +118,15 @@ class LoginForm extends View {
 	}
 
 	componentDidMount() {
-		// this.configureGoogleSignIn();
+		this.configureGoogleSignIn();
 	}
 
 	configureGoogleSignIn() {
-		// GoogleSignin.configure({
-		// 	webClientId: webClientId,
-		// 	offlineAccess: true,
-		// 	iosClientId: Platform.OS === 'ios' ? iosClientId : undefined,
-		// });
+		GoogleSignin.configure({
+			webClientId: webClientId,
+			offlineAccess: true,
+			iosClientId: Platform.OS === 'ios' ? iosClientId : undefined,
+		});
 	}
 
 	onPressSignInApple = async () => {
@@ -294,29 +294,29 @@ class LoginForm extends View {
 					/>
 				)
 				}
-				{/* {deployStore !== 'huawei' && showSocialAuth && (<GoogleSigninButton
+				{deployStore !== 'huawei' && showSocialAuth && (<GoogleSigninButton
 					style={styles.loginButtonStyleG}
 					size={GoogleSigninButton.Size.Wide}
 					color={GoogleSigninButton.Color.Dark}
 					onPress={this.signIn}
 					disabled={disableAllSignin} />
-				)} */}
+				)}
 				<View style={{ height: 10 }}/>
 			</View>
 		);
 	}
 
 	async signOutGoogle(): any {
-		// try {
-		// 	await GoogleSignin.revokeAccess();
-		// 	await GoogleSignin.signOut();
+		try {
+			await GoogleSignin.revokeAccess();
+			await GoogleSignin.signOut();
 
-		// 	this.setState({ userInfo: null, error: null });
-		//   } catch (error) {
-		// 	this.setState({
-		// 	  error,
-		// 	});
-		//   }
+			this.setState({ userInfo: null, error: null });
+		  } catch (error) {
+			this.setState({
+			  error,
+			});
+		  }
 	}
 
 	onSocialLoginFail404 = (authConfig: Object) => {
@@ -336,71 +336,71 @@ class LoginForm extends View {
 	}
 
 	async signIn(): any {
-		// const { openDialogueBox, intl } = this.props;
-		// this.setState({ isSigninInProgress: true });
-		// try {
-		// 	await GoogleSignin.hasPlayServices();
-		// 	const data: Object = await GoogleSignin.signIn();
+		const { openDialogueBox, intl } = this.props;
+		this.setState({ isSigninInProgress: true });
+		try {
+			await GoogleSignin.hasPlayServices();
+			const data: Object = await GoogleSignin.signIn();
 
-		// 	const { idToken } = data;
-		// 	if (idToken) {
-		// 		Keyboard.dismiss();
-		// 		InteractionManager.runAfterInteractions(() => {
-		// 			const credential = {
-		// 				idToken,
-		// 			};
-		// 			const provider = 'google';
-		// 			this.props.loginToTelldus(credential, provider)
-		// 				.catch((err: Object = {}) => {
-		// 					this.setState({
-		// 						isSigninInProgress: false,
-		// 					});
-		// 					if (err.response && err.response.status === 404 && idToken) {
+			const { idToken } = data;
+			if (idToken) {
+				Keyboard.dismiss();
+				InteractionManager.runAfterInteractions(() => {
+					const credential = {
+						idToken,
+					};
+					const provider = 'google';
+					this.props.loginToTelldus(credential, provider)
+						.catch((err: Object = {}) => {
+							this.setState({
+								isSigninInProgress: false,
+							});
+							if (err.response && err.response.status === 404 && idToken) {
 
-		// 						const {
-		// 							user = {},
-		// 						} = data || {};
-		// 						const {
-		// 							email,
-		// 							givenName,
-		// 							familyName,
-		// 							name = '',
-		// 						} = user;
-		// 						const [fn, ln] = name.split(' ');
+								const {
+									user = {},
+								} = data || {};
+								const {
+									email,
+									givenName,
+									familyName,
+									name = '',
+								} = user;
+								const [fn, ln] = name.split(' ');
 
-		// 						const _fullName = {
-		// 							fn: fn || givenName,
-		// 							ln: ln || familyName,
-		// 						};
+								const _fullName = {
+									fn: fn || givenName,
+									ln: ln || familyName,
+								};
 
-		// 						this.onSocialLoginFail404({
-		// 							idToken,
-		// 							provider,
-		// 							email,
-		// 							fullName: _fullName,
-		// 						});
-		// 						return;
-		// 					}
-		// 					this.handleLoginError(err);
-		// 				});
-		// 		});
-		// 	} else {
-		// 		openDialogueBox(this.unknownError);
-		// 	}
-		//   } catch (error) {
-		// 	if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-		// 	  // user cancelled the login flow
-		// 	} else if (error.code === statusCodes.IN_PROGRESS) {
-		// 	  // operation (f.e. sign in) is in progress already
-		// 	} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-		// 	  // play services not available or outdated
-		// 	  openDialogueBox(intl.formatMessage(i18n.emailAddress));
-		// 	} else {
-		// 	  // some other error happened
-		// 	  openDialogueBox(this.unknownError);
-		// 	}
-		// 	this.setState({ isSigninInProgress: false });
-		//   }
+								this.onSocialLoginFail404({
+									idToken,
+									provider,
+									email,
+									fullName: _fullName,
+								});
+								return;
+							}
+							this.handleLoginError(err);
+						});
+				});
+			} else {
+				openDialogueBox(this.unknownError);
+			}
+		  } catch (error) {
+			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+			  // user cancelled the login flow
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+			  // operation (f.e. sign in) is in progress already
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+			  // play services not available or outdated
+			  openDialogueBox(intl.formatMessage(i18n.emailAddress));
+			} else {
+			  // some other error happened
+			  openDialogueBox(this.unknownError);
+			}
+			this.setState({ isSigninInProgress: false });
+		  }
 	}
 
 	onChangeUsername(username: string) {

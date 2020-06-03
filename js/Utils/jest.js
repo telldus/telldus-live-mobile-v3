@@ -37,15 +37,15 @@ jest.mock('react-native-orientation-locker', (): Object => {
 	};
 });
 
-// jest.mock('@react-native-community/google-signin', (): Object => {
-// 	return {
-// 		statusCodes: {
-// 			SIGN_IN_CANCELLED: '',
-// 			IN_PROGRESS: '',
-// 			PLAY_SERVICES_NOT_AVAILABLE: '',
-// 		},
-// 	};
-// });
+jest.mock('@react-native-community/google-signin', (): Object => {
+	return {
+		statusCodes: {
+			SIGN_IN_CANCELLED: '',
+			IN_PROGRESS: '',
+			PLAY_SERVICES_NOT_AVAILABLE: '',
+		},
+	};
+});
 
 jest.mock('react-native-device-info', (): Object => {
 	return {
