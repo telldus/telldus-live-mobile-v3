@@ -38,6 +38,9 @@ import i18n from '../Translations/common';
 import * as Translations from '../Translations';
 
 const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
+	if (!gatewayTimezone || gatewayTimezone.trim().toLowerCase() === 'gmt') {
+		return useIntl();
+	}
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	let { language = {} } = defaultSettings;
 	let locale = language.code;
