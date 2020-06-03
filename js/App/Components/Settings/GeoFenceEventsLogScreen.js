@@ -156,11 +156,8 @@ const GeoFenceEventsLogScreen = memo<Object>((props: Props): Object => {
 	} = intl;
 
 	const {
-		rowCover,
-		rowLabel,
 		sectionCover,
 		sectionLabel,
-		rowValue,
 		contentContainerStyle,
 		emptyTextStyle,
 	} = getStyles(layout);
@@ -309,27 +306,9 @@ const getStyles = (appLayout: Object): Object => {
 		contentCoverStyle: {
 			marginBottom: fontSize / 2,
 		},
-		rowCover: {
-			backgroundColor: '#fff',
-			flexDirection: 'row',
-			marginHorizontal: padding,
-			padding,
-			marginTop: 1,
-			flexWrap: 'wrap',
-		},
-		rowLabel: {
-			fontSize,
-			justifyContent: 'center',
-			marginRight: 5,
-		},
 		sectionCover: {
 			marginLeft: padding,
 			marginBottom: 5,
-		},
-		rowValue: {
-			fontSize,
-			justifyContent: 'center',
-			marginLeft: 5,
 		},
 		emptyTextStyle: {
 			marginTop: 10,
