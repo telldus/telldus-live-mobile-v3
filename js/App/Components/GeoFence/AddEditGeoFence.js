@@ -41,6 +41,7 @@ import MapView, {
 import {
 	FloatingButton,
 	View,
+	FullPageActivityIndicator,
 } from '../../../BaseComponents';
 import {
 	FenceCalloutWithMarker,
@@ -104,11 +105,16 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [fence]);
 
+	const [ mapReady, setMapReady ] = useState(false);
+
 	const {
 		container,
 		mapStyle,
 		contentContainerStyle,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		mapReady,
+	});
 
 	const [ region, setRegion ] = useState(initialRegion);
 	const [ regionToReset, setRegionToReset ] = useState();
@@ -142,6 +148,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const onRegionChange = useCallback((reg: Object) => {
 		setRegion(reg);
+	}, []);
+
+	const onMapReady = useCallback(() => {
+		setMapReady(true);
 	}, []);
 
 	function renderMarker(fenceC: Object, index: number): Object {
@@ -182,17 +192,21 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					initialRegion={new AnimatedRegion(region)}
 					region={regionToReset ? new AnimatedRegion(regionToReset) : undefined}
 					scrollEnabled={enableGeoFence}
-					loadingEnabled={true}
+					loadingEnabled={false}
 					showsTraffic={false}
 					showsUserLocation={true}
 					showsMyLocationButton={false}
-					onRegionChange={onRegionChange}>
+					onRegionChange={onRegionChange}
+					onMapReady={onMapReady}>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
 						})
 					}
 				</MapView.Animated>
+				{!mapReady && <FullPageActivityIndicator
+					overlayLevel={3}
+					color={'#000'}/>}
 			</ScrollView>
 			<MyLocation
 				onPress={onPressFocusMyLocation}/>
@@ -204,7 +218,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	mapReady,
+}: Object): Object => {
 
 	return {
 		container: {
