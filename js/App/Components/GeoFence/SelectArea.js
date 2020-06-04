@@ -82,21 +82,22 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		formatMessage,
 	} = intl;
 
-	const { userId } = useSelector((state: Object): Object => state.user);
-	const { location } = useSelector((state: Object): Object => state.fences);
-
-	const {
-		latitude = 55.70584,
-		longitude = 13.19321,
-		latitudeDelta = 0.1,
-		longitudeDelta = 0.1,
-	} = params.region || location || {};
-	const region = {
-		latitude,
-		longitude,
-		latitudeDelta,
-		longitudeDelta,
+	const fallbackLocation = {
+		latitude: 55.70584,
+		longitude: 13.19321,
+		latitudeDelta: 0.1,
+		longitudeDelta: 0.1,
 	};
+
+	const { userId } = useSelector((state: Object): Object => state.user);
+	let { location } = useSelector((state: Object): Object => state.fences);
+	location = {
+		...fallbackLocation,
+		...location,
+	};
+
+	const region = params.region || location;
+
 	const [initialRegion, setInitialRegion] = useState(region);
 	const [ regionToReset, setRegionToReset ] = useState();
 
@@ -127,21 +128,16 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 	const onPressFocusMyLocation = useCallback(() => {
 		(async () => {
 			dispatch(getCurrentLocation());
-			setInitialRegion({
-				latitude: location.latitude,
-				longitude: location.longitude,
-				latitudeDelta: location.latitudeDelta || 0.1,
-				longitudeDelta: location.longitudeDelta || 0.1,
-			});
-			setRegionToReset({
-				latitude,
-				longitude,
-				latitudeDelta,
-				longitudeDelta,
-			});
+			const loc = {
+				...location,
+				latitudeDelta: initialRegion.latitudeDelta,
+				longitudeDelta: initialRegion.longitudeDelta,
+			};
+			setInitialRegion(loc);
+			setRegionToReset(loc);
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [location]);
+	}, [location, initialRegion]);
 	useEffect(() => {
 		if (regionToReset) {
 			setRegionToReset();

@@ -135,11 +135,16 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const onPressFocusMyLocation = useCallback(() => {
 		(async () => {
 			dispatch(getCurrentLocation());
-			setRegion(location);
-			setRegionToReset(location);
+			const loc = {
+				...location,
+				latitudeDelta: region.latitudeDelta,
+				longitudeDelta: region.longitudeDelta,
+			};
+			setRegion(loc);
+			setRegionToReset(loc);
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [location]);
+	}, [location, region]);
 	useEffect(() => {
 		if (regionToReset) {
 			setRegionToReset();
