@@ -138,13 +138,19 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			deviceId,
 		} = args;
 		const isSelected = !!selectedDevices[deviceId];
+
 		if (!isSelected) {
 			return;
 		}
-		let newSelected = {...selectedItems};
-		newSelected.selectedDevices[deviceId] = {
-			...args,
-			uuid: uuid.v1(),
+		let newSelected = {
+			...selectedItems,
+			selectedDevices: {
+				...selectedItems.selectedDevices,
+				[deviceId]: {
+					...args,
+					uuid: uuid.v1(),
+				},
+			},
 		};
 		setSelectedItems(newSelected);
 		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
@@ -216,44 +222,75 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			if (selectedDevices[id]) {
 				delete newSelected.selectedDevices[id];
 			} else {
-				newSelected.selectedDevices[id] = {
-					...data,
-					uuid: uuid.v1(),
+				newSelected = {
+					...newSelected,
+					selectedDevices: {
+						...newSelected.selectedDevices,
+						[id]: {
+							...data,
+							uuid: uuid.v1(),
+						},
+					},
 				};
 			}
 		} else if (type === 'schedule') {
 			if (selectedSchedules[id]) {
 				delete newSelected.selectedSchedules[id];
 			} else {
-				newSelected.selectedSchedules[id] = {
-					...data,
-					uuid: uuid.v1(),
+				newSelected = {
+					...newSelected,
+					selectedSchedules: {
+						...newSelected.selectedSchedules,
+						[id]: {
+							...data,
+							uuid: uuid.v1(),
+						},
+					},
 				};
 			}
 		} else if (type === 'event') {
 			if (selectedEvents[id]) {
 				delete newSelected.selectedEvents[id];
 			} else {
-				newSelected.selectedEvents[id] = {
-					...data,
-					uuid: uuid.v1(),
+				newSelected = {
+					...newSelected,
+					selectedEvents: {
+						...newSelected.selectedEvents,
+						[id]: {
+							...data,
+							uuid: uuid.v1(),
+						},
+					},
 				};
 			}
 		}
+
 		setSelectedItems(newSelected);
 	}
 
 	function toggleActiveState(type: 'schedule' | 'event', id: string, data: Object) {
 		let newSelected = {...selectedItems};
 		if (type === 'schedule') {
-			newSelected.selectedSchedules[id] = {
-				...data,
-				uuid: uuid.v1(),
+			newSelected = {
+				...newSelected,
+				selectedSchedules: {
+					...newSelected.selectedSchedules,
+					[id]: {
+						...data,
+						uuid: uuid.v1(),
+					},
+				},
 			};
 		} else if (type === 'event') {
-			newSelected.selectedEvents[id] = {
-				...data,
-				uuid: uuid.v1(),
+			newSelected = {
+				...newSelected,
+				selectedEvents: {
+					...newSelected.selectedEvents,
+					[id]: {
+						...data,
+						uuid: uuid.v1(),
+					},
+				},
 			};
 		}
 		setSelectedItems(newSelected);
