@@ -48,6 +48,7 @@ import GeoFenceUtils from '../Lib/GeoFenceUtils';
 
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
+const ERROR_CODE_TIMED_OUT = 'FENCE_TIMED_OUT';
 
 const ERROR_CODE_GF_RC_DISABLED = 'GF_REMOTE_CONFIG_DISABLED';
 
@@ -365,64 +366,92 @@ const hasEntry = (item: Object = {}): boolean => {
 	return Object.keys(item).length > 0;
 };
 
+let addGeofenceTimeout = null;
 function addGeofence(override?: boolean = false): ThunkAction {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
-
-		const {
-			fences:
-			{
-				fence,
-			},
-			user: {
-				userId,
-			},
-		} = getState();
-		const {
-			identifier,
-			radius,
-			latitude,
-			longitude,
-			arriving = {},
-			leaving = {},
-		} = fence;
-
-		const { devices: ad = {}, schedules: as = {}, events: aa = {} } = arriving;
-		const { devices: ld = {}, schedules: ls = {}, events: la = {} } = leaving;
-
-		const notifyOnEntry = hasEntry(ad) || hasEntry(as) || hasEntry(aa);
-		const notifyOnExit = hasEntry(ld) || hasEntry(ls) || hasEntry(la);
-
-		if (!notifyOnEntry && !notifyOnExit) {
-			return Promise.reject({
-				code: ERROR_CODE_FENCE_NO_ACTION,
-				message: 'No actions are selected to execute on Entry/Exit. Please select any action to perform.',
-			});
-		}
-
-		const data: TYPE_ADD_GEO_FENCE_DATA = {
-			identifier,
-			radius: radius * 1000, // In meters
-			latitude,
-			longitude,
-			notifyOnEntry,
-			notifyOnExit,
-			extras: {
-				...fence,
-				radius: radius * 1000,
-				userId,
-			},
-		};
-
-		return BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
-			try {
-				dispatch(startGeofences());
-			} catch (e) {
-				// ignore
-			} finally {
-				return success;
+		return new Promise(async (resolve: Function, reject: Function) => {
+			if (addGeofenceTimeout) {
+				clearTimeout(addGeofenceTimeout);
+				addGeofenceTimeout = null;
 			}
-		}).catch((error: any) => {
-			throw error;
+			addGeofenceTimeout = setTimeout(() => {
+				addGeofenceTimeout = null;
+				reject({
+					code: ERROR_CODE_TIMED_OUT,
+					message: 'timed out',
+				});
+			}, 8000);
+
+			const {
+				fences:
+		{
+			fence,
+		},
+				user: {
+					userId,
+				},
+			} = getState();
+			const {
+				identifier,
+				radius,
+				latitude,
+				longitude,
+				arriving = {},
+				leaving = {},
+			} = fence;
+
+			const { devices: ad = {}, schedules: as = {}, events: aa = {} } = arriving;
+			const { devices: ld = {}, schedules: ls = {}, events: la = {} } = leaving;
+
+			const notifyOnEntry = hasEntry(ad) || hasEntry(as) || hasEntry(aa);
+			const notifyOnExit = hasEntry(ld) || hasEntry(ls) || hasEntry(la);
+
+			if (!notifyOnEntry && !notifyOnExit) {
+				if (addGeofenceTimeout) {
+					clearTimeout(addGeofenceTimeout);
+					addGeofenceTimeout = null;
+				}
+				reject({
+					code: ERROR_CODE_FENCE_NO_ACTION,
+					message: 'No actions are selected to execute on Entry/Exit. Please select any action to perform.',
+				});
+			}
+
+			const data: TYPE_ADD_GEO_FENCE_DATA = {
+				identifier,
+				radius: radius * 1000, // In meters
+				latitude,
+				longitude,
+				notifyOnEntry,
+				notifyOnExit,
+				extras: {
+					...fence,
+					radius: radius * 1000,
+					userId,
+				},
+				notifyOnDwell: true,
+				loiteringDelay: 10000,
+			};
+
+			BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
+				try {
+					dispatch(startGeofences());
+				} catch (e) {
+					// ignore
+				} finally {
+					if (addGeofenceTimeout) {
+						clearTimeout(addGeofenceTimeout);
+						addGeofenceTimeout = null;
+					}
+					resolve(success);
+				}
+			}).catch((error: any) => {
+				if (addGeofenceTimeout) {
+					clearTimeout(addGeofenceTimeout);
+					addGeofenceTimeout = null;
+				}
+				reject(error);
+			});
 		});
 	};
 }
@@ -504,6 +533,7 @@ module.exports = {
 
 	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
+	ERROR_CODE_TIMED_OUT,
 
 	debugGFOnGeofence,
 	clearAllOnGeoFencesLog,
