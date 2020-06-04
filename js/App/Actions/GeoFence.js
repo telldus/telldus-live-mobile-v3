@@ -429,8 +429,6 @@ function addGeofence(override?: boolean = false): ThunkAction {
 					radius: radius * 1000,
 					userId,
 				},
-				notifyOnDwell: true,
-				loiteringDelay: 10000,
 			};
 
 			BackgroundGeolocation.addGeofence(data).then((success: any): Object => {
