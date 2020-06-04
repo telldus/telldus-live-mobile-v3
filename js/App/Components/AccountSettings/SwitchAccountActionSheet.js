@@ -209,6 +209,9 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 								userId,
 							}));
 						}
+						navigate('Tabs', {
+							screen: 'Dashboard',
+						});
 					}).catch((err: Object) => {
 						closeActionSheet();
 						setSwitchingId(null);

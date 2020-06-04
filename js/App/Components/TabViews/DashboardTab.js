@@ -221,7 +221,7 @@ class DashboardTab extends View {
 				this.timeoutSwitchTabAndroid = setTimeout(() => {
 					navigation.navigate('Devices');
 					this.timeoutSwitchTabAndroid = null;
-				}, 800);
+				}, 1000);
 			} else {
 				navigation.navigate('Devices');
 			}

@@ -69,6 +69,7 @@ class WelcomeScreen extends View {
 			registeredCredential,
 			onPressOK,
 			dispatch,
+			navigation,
 		} = this.props;
 
 		onPressOK(registeredCredential);
@@ -76,7 +77,9 @@ class WelcomeScreen extends View {
 		const { source = 'prelogin' } = screenProps;
 		if (source === 'postlogin') {
 			dispatch(clearAppData());
-			this.goBack();
+			navigation.navigate('Tabs', {
+				screen: 'Dashboard',
+			});
 		}
 	}
 

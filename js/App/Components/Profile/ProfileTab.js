@@ -176,6 +176,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 							value: `${res.firstname} ${res.lastname}`,
 						});
 						dispatch(showToast(messageOnSuccesSwitch));
+						navigation.navigate('Tabs', {
+							screen: 'Dashboard',
+						});
 					}).catch((err: Object) => {
 						dispatch(toggleVisibilitySwitchAccountAS({
 							...otherSAConfs,
@@ -190,7 +193,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						});
 					});
 				}
-
 			} else {
 				dispatch(toggleVisibilitySwitchAccountAS({
 					showAS: true,
