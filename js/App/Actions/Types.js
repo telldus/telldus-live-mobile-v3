@@ -183,6 +183,7 @@ export type Action =
 	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
 
 	| { type: 'DEBUG_GF_EVENT_ONGEOFENCE', payload: Object }
+	| { type: 'DEBUG_GF_SET_CHECKPOINT', payload: Object }
 	| { type: 'CLEAR_ON_GEOFENCE_LOG' }
 	| { type: 'UPDATE_GEOFENCE_CONFIG', payload: Object }
 	;

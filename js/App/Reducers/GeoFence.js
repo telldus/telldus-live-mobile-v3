@@ -58,6 +58,45 @@ const geoFence = (state: Object = initialState, action: Object): State => {
 			onGeofence: onGeofence.concat(action.payload),
 		};
 	}
+	if (action.type === 'DEBUG_GF_SET_CHECKPOINT') {
+		const {
+			checkpoint,
+			eventUUID,
+			...others
+		} = action.payload;
+
+		const {
+			onGeofence = [],
+		} = state;
+		let newOnGeofence = [];
+		onGeofence.map((events: Object) => {
+			const {
+				location = {},
+			} = events;
+			const {
+				uuid,
+			} = location;
+			if (eventUUID === uuid) {
+				newOnGeofence.push({
+					...events,
+					checkpoints: {
+						...events.checkpoints,
+						[checkpoint]: {
+							...others,
+							checkpoint,
+						},
+					},
+				});
+			} else {
+				newOnGeofence.push(events);
+			}
+		});
+
+		return {
+			...state,
+			onGeofence: newOnGeofence,
+		};
+	}
 	if (action.type === 'UPDATE_GEOFENCE_CONFIG') {
 		const {
 			config = {},

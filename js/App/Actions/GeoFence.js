@@ -231,7 +231,14 @@ function handleFence(fence: Object): ThunkAction {
 		const {
 			action,
 			extras = {},
+			location = {},
 		} = fence;
+
+		dispatch(debugGFSetCheckpoint({
+			checkpoint: 'handleFence-0',
+			eventUUID: location.uuid,
+		}));
+
 		const {
 			isAlwaysActive,
 			arriving,
@@ -243,6 +250,10 @@ function handleFence(fence: Object): ThunkAction {
 			userId,
 		} = extras;
 		if (isAlwaysActive || GeoFenceUtils.isActive(fromHr, fromMin, toHr, toMin)) {
+			dispatch(debugGFSetCheckpoint({
+				checkpoint: 'handleFence-1',
+				eventUUID: location.uuid,
+			}));
 			let actions = null;
 			if (action === 'ENTER') {
 				actions = arriving;
@@ -251,7 +262,11 @@ function handleFence(fence: Object): ThunkAction {
 			}
 
 			if (actions) {
-				return dispatch(handleActions(actions, userId));
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: 'handleFence-2',
+					eventUUID: location.uuid,
+				}));
+				return dispatch(handleActions(actions, userId, location.uuid));
 			}
 			return Promise.resolve('done');
 		}
@@ -259,17 +274,25 @@ function handleFence(fence: Object): ThunkAction {
 	};
 }
 
-function handleActions(actions: Object, userId: string): ThunkAction {
+function handleActions(actions: Object, userId: string, eventUUID: string): ThunkAction {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
 		const { devices = {}, schedules = {}, events = {} } = actions;
-
+		dispatch(debugGFSetCheckpoint({
+			checkpoint: 'handleActions-0',
+			eventUUID,
+			userId,
+		}));
 		if (!userId) {
 			return Promise.resolve('done');
 		}
 
 		const { user: { accounts = {} } } = getState();
 		const { accessToken } = accounts[userId.trim().toLowerCase()];
-
+		dispatch(debugGFSetCheckpoint({
+			checkpoint: 'handleActions-1',
+			eventUUID,
+			accessToken,
+		}));
 		if (!accessToken) {
 			return Promise.resolve('done');
 		}
@@ -277,13 +300,13 @@ function handleActions(actions: Object, userId: string): ThunkAction {
 		let promises = [];
 
 		for (let id in devices) {
-			promises.push(dispatch(handleActionDevice(devices[id], accessToken)));
+			promises.push(dispatch(handleActionDevice(devices[id], accessToken, eventUUID)));
 		}
 		for (let id in events) {
-			promises.push(dispatch(handleActionEvent(events[id], accessToken)));
+			promises.push(dispatch(handleActionEvent(events[id], accessToken, eventUUID)));
 		}
 		for (let id in schedules) {
-			promises.push(dispatch(handleActionSchedule(schedules[id], accessToken)));
+			promises.push(dispatch(handleActionSchedule(schedules[id], accessToken, eventUUID)));
 		}
 		// NOTE: Not using Promise.all to resolve as BG task started using BackgroundGeolocation.startBackgroundTask
 		// Will only last for 30secs in Android and 180secs in iOS. If any promise gets stuck we do not want the
@@ -298,24 +321,31 @@ function handleActions(actions: Object, userId: string): ThunkAction {
 	};
 }
 
-function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
-	return async (dispatch: Function, getState: Function): Promise<any> => {
-		const { deviceId, method, stateValues = {} } = action;
+function handleActionDevice(action: Object, accessToken: Object, eventUUID: string): ThunkAction {
+	return (dispatch: Function, getState: Function): Promise<any> => {
+		let { deviceId, method, stateValues = {} } = action;
+		dispatch(debugGFSetCheckpoint({
+			checkpoint: `handleActionDevice${action.uuid}`,
+			eventUUID,
+			...action,
+		}));
 		if (!deviceId) {
 			return Promise.resolve('done');
 		}
+		if (typeof method === 'undefined') {
+			return Promise.resolve('done');
+		}
 
-		let promises = [];
-
+		method = parseInt(method, 10);
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
-			promises.push(dispatch(deviceSetState(deviceId, method, dimValue, accessToken)));
+			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken));
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
-			promises.push(dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)));
+			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken));
 		} else if (method === 2048) {
 			const {
 				changeMode,
@@ -323,31 +353,35 @@ function handleActionDevice(action: Object, accessToken: Object): ThunkAction {
 				mode,
 				temp,
 			} = action;
-			promises.push(dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)));
+			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
 		}
-		return await Promise.all(promises.map((promise: Promise<any>): Promise<any> => {
-			return promise.then((res: Object): Object => {
-				return res;
-			}).catch((err: Object): Object => {
-				return err;
-			});
-		}));
+		return Promise.resolve('done');
 	};
 }
 
-function handleActionEvent(action: Object, accessToken: Object): ThunkAction {
+function handleActionEvent(action: Object, accessToken: Object, eventUUID: string): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const {
 			id,
 			...options
 		} = getEventOptions(action);
+		dispatch(debugGFSetCheckpoint({
+			checkpoint: `handleActionEvent${action.uuid}`,
+			eventUUID,
+			id,
+		}));
 		return dispatch(setEvent(id, options, accessToken));
 	};
 }
 
-function handleActionSchedule(action: Object, accessToken: Object): ThunkAction {
+function handleActionSchedule(action: Object, accessToken: Object, eventUUID: string): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const options = getScheduleOptions(action);
+		dispatch(debugGFSetCheckpoint({
+			checkpoint: `handleActionSchedule${action.uuid}`,
+			eventUUID,
+			options,
+		}));
 		return dispatch(saveSchedule(options, accessToken));
 	};
 }
@@ -504,6 +538,13 @@ const debugGFOnGeofence = (payload: Object): Action => {
 	};
 };
 
+const debugGFSetCheckpoint = (payload: Object): Action => {
+	return {
+		type: 'DEBUG_GF_SET_CHECKPOINT',
+		payload,
+	};
+};
+
 const updateGeoFenceConfig = (payload: Object): Action => {
 	return {
 		type: 'UPDATE_GEOFENCE_CONFIG',
@@ -535,4 +576,5 @@ module.exports = {
 
 	debugGFOnGeofence,
 	clearAllOnGeoFencesLog,
+	debugGFSetCheckpoint,
 };
