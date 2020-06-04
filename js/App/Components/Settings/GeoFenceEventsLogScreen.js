@@ -73,6 +73,7 @@ function prepareListData(data: Array<Object>, {
 			extras = {},
 			identifier,
 			inAppTime,
+			checkpoints,
 		} = event;
 
 		const {
@@ -125,6 +126,10 @@ function prepareListData(data: Array<Object>, {
 					{
 						key: 'leaving actions',
 						'leaving actions': leaving,
+					},
+					{
+						key: 'checkpoints',
+						'checkpoints': checkpoints,
 					},
 					{
 						key: 'extras',

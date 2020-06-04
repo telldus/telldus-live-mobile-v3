@@ -55,6 +55,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 
 	const ignoreExpand = typeof val === 'string';
 	const isActions = label === 'arriving actions' || label === 'leaving actions';
+	const isCpoints = label === 'checkpoints';
 
 	const {
 		rowCover,
@@ -62,7 +63,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 		rowValue,
 	} = getStyles({
 		layout,
-		isActions,
+		column: isActions || isCpoints,
 	});
 
 	const [ expand, setExpand ] = useState(ignoreExpand);
@@ -81,8 +82,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 					{val}
 				</Text>
 			);
-		}
-		if (isActions) {
+		} else if (isActions) {
 			return Object.keys(val).map((items: Object): Object => {
 				const val2 = val[items];
 				return (
@@ -121,13 +121,33 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 					</View>
 				);
 			});
+		} else if (isCpoints) {
+			return Object.keys(val).map((items: Object): Object => {
+				const val2 = val[items];
+				return (
+					<View style={{
+						flex: 1,
+					}}>
+						<Text
+							level={3}
+							style={rowValue}>
+							{items}
+						</Text>
+						<Text
+							level={6}
+							style={rowValue}>
+							{JSON.stringify(val2)}
+						</Text>
+					</View>
+				);
+			});
 		}
 		return <Text
 			level={6}
 			style={rowValue}>
 			{JSON.stringify(val)}
 		</Text>;
-	}, [ignoreExpand, isActions, rowValue, val]);
+	}, [ignoreExpand, isActions, rowValue, val, isCpoints]);
 
 	return (
 		<View style={rowCover}>
@@ -157,7 +177,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 
 const getStyles = ({
 	layout,
-	isActions,
+	column,
 }: Object): Object => {
 	const { height, width } = layout;
 	const isPortrait = height > width;
@@ -174,11 +194,11 @@ const getStyles = ({
 	return {
 		rowCover: {
 			backgroundColor: '#fff',
-			flexDirection: isActions ? 'column' : 'row',
+			flexDirection: column ? 'column' : 'row',
 			marginHorizontal: padding,
 			padding,
 			marginTop: 1,
-			flexWrap: isActions ? 'nowrap' : 'wrap',
+			flexWrap: column ? 'nowrap' : 'wrap',
 		},
 		rowLabel: {
 			fontSize,
