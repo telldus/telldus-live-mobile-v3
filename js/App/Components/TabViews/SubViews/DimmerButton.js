@@ -136,7 +136,13 @@ class DimmerButton extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled', 'sensitive']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'device',
+			'showSlider',
+			'screenReaderEnabled',
+			'sensitive',
+			'onPressOverride',
+		]);
 		if (propsChange) {
 			return true;
 		}

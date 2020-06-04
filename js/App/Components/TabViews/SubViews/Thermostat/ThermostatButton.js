@@ -88,7 +88,13 @@ class ThermostatButton extends View<Props, State> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device', 'tileWidth', 'isOpen', 'currentTemp']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'device',
+			'tileWidth',
+			'isOpen',
+			'currentTemp',
+			'onPressOverride',
+		]);
 		if (propsChange) {
 			return true;
 		}

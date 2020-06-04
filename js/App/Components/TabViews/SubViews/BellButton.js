@@ -70,7 +70,9 @@ class BellButton extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'device',
+			'onPressOverride']);
 		if (propsChange) {
 			return true;
 		}

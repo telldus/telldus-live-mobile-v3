@@ -65,7 +65,7 @@ class ToggleButton extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'device']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'device', 'onPressOverride']);
 		if (propsChange) {
 			return true;
 		}

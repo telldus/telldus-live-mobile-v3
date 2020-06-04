@@ -150,6 +150,7 @@ class RGBButton extends View<Props, null> {
 			'iconOnColor',
 			'offColorMultiplier',
 			'onColorMultiplier',
+			'onPressOverride',
 		]);
 		if (propsChange) {
 			return true;
