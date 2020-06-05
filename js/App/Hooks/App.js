@@ -23,6 +23,9 @@ import {
 	useMemo,
 } from 'react';
 import {
+	Platform,
+} from 'react-native';
+import {
 	createIntl,
 	createIntlCache,
 } from 'react-intl';
@@ -46,7 +49,8 @@ const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): O
 
 	return useMemo((): Object => {
 
-		if (!gatewayTimezone || gatewayTimezone.trim().toLowerCase() === 'gmt') {
+		const majorVersionIOS = parseInt(Platform.Version, 10);
+		if (!gatewayTimezone || majorVersionIOS <= 9) {
 			return intl;
 		}
 
