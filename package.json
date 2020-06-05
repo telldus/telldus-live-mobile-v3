@@ -1,6 +1,6 @@
 {
   "name": "TelldusLiveApp",
-  "version": "3.14.4",
+  "version": "3.14.5",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
