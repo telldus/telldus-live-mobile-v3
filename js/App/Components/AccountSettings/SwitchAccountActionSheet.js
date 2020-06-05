@@ -116,8 +116,21 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		}
 	}
 
+	function closeActionSheet(index?: number, callback?: Function) {
+		if (actionSheetRef.current) {
+			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
+			actionSheetRef.current.hide(index, callback);
+		}
+	}
+
 	React.useImperativeHandle(ref, (): Object => ({
 		show: () => {
+			showActionSheet();
+		},
+		close: () => {
 			showActionSheet();
 		},
 	}));
@@ -162,16 +175,6 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		isLoggingOut,
 		colors,
 	});
-
-	function closeActionSheet(index?: number, callback?: Function) {
-		if (actionSheetRef.current) {
-			dispatch(toggleVisibilitySwitchAccountAS({
-				showAS: false,
-				isLoggingOut: false,
-			}));
-			actionSheetRef.current.hide(index, callback);
-		}
-	}
 
 	const onSelectActionSheet = useCallback((index: number) => {
 		if (switchingId) {
