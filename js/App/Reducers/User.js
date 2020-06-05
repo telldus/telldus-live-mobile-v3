@@ -170,7 +170,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 			registeredCredential: false,
 			isTokenValid: true,
 			accounts: newAccounts,
-			userId: userIdN,
+			userId: userId || userIdN,
 		};
 	}
 	if (action.type === 'RECEIVED_ACCESS_TOKEN_OTHER_ACCOUNT') {
