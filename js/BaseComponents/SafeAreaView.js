@@ -35,6 +35,7 @@ type Props = {
 	children: Object | Array<Object>,
 	onLayout: (Object) => void,
 	backgroundColor?: string,
+	safeAreaBackgroundColor?: string,
 };
 
 const SafeAreaViewComponent = (props: Props): Object => {
@@ -47,11 +48,12 @@ const SafeAreaViewComponent = (props: Props): Object => {
 		children,
 		onLayout,
 		backgroundColor = colors.screenBackground,
+		safeAreaBackgroundColor = colors.primary,
 		...otherProperties
 	} = props;
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
+		<SafeAreaView style={{ flex: 1, backgroundColor: safeAreaBackgroundColor }}>
 			<View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
