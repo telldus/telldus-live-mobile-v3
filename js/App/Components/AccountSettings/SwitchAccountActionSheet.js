@@ -24,6 +24,7 @@
 
 import React, {
 	useCallback,
+	useMemo,
 } from 'react';
 import {
 	StyleSheet,
@@ -32,6 +33,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const gravatar = require('gravatar-api');
 import { RadioButtonInput } from 'react-native-simple-radio-button';
 import { useIntl } from 'react-intl';
+import orderBy from 'lodash/orderBy';
 
 import {
 	View,
@@ -75,11 +77,31 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	} = useAppTheme();
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
-		accounts = {},
+		accounts: _accounts = {},
 		userId = '',
 		pushToken,
 		switchAccountConf = {},
 	} = useSelector((state: Object): Object => state.user);
+	const {
+		accounts,
+		actionSheetItems,
+	 } = useMemo((): Object => {
+		const one = orderBy(_accounts, [(item: Object): any => {
+			const {
+				firstname = '',
+				lastname = '',
+				email,
+			} = item;
+			const nameInfo = `${firstname} ${lastname}`;
+			return `${nameInfo} ${email}`;
+		}], ['asc']);
+		const two = one.map((o: Object): string => o.accessToken.userId);
+		return {
+			accounts: one,
+			actionSheetItems: two,
+		};
+	}, [_accounts]);
+
 	const {
 		isLoggingOut = false,
 	} = switchAccountConf;
@@ -167,7 +189,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				navigate('RegisterScreen');
 			}
 		} else {
-			const addNewIndex = Object.keys(accounts).length;
+			const addNewIndex = accounts.length;
 			if (index === addNewIndex) {
 				setShowAddNewAccount(true);
 				if (actionSheetRef.current) {
@@ -180,13 +202,14 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						isLoggingOut: false,
 					}));
 				}
-				let userIdKey = Object.keys(accounts)[index];
-				if (userIdKey) {
-					userIdKey = userIdKey.trim().toLowerCase();
-					setSwitchingId(userIdKey);
+				let account = accounts[index];
+				if (account && account.accessToken) {
 					const {
 						accessToken,
-					} = accounts[userIdKey];
+					} = account;
+					let { userId: _userId } = accessToken;
+					_userId = _userId.trim().toLowerCase();
+					setSwitchingId(_userId);
 
 					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
 						closeActionSheet(undefined, () => {
@@ -200,7 +223,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						});
 						setSwitchingId(null);
 						dispatch(onSwitchAccount({
-							userId: userIdKey,
+							userId: _userId,
 						}));
 
 						if (isLoggingOut) {
@@ -240,7 +263,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 
 	let ACCOUNTS = [];
 	const disabledButtonIndexes = [];
-	Object.keys(accounts).map((un: string, index: number) => {
+	accounts.map((account: Object, index: number) => {
 		if (!showAddNewAccount) {
 			disabledButtonIndexes.push(index);
 		}
@@ -249,7 +272,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			firstname = '',
 			lastname = '',
 			accessToken = {},
-		} = accounts[un];
+		} = account;
 		const nameInfo = `${firstname} ${lastname}`;
 
 		let options = {
@@ -326,7 +349,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			ref={actionSheetRef}
 			extraData={{
 				showAddNewAccount,
-				items: Object.keys(accounts),
+				items: actionSheetItems,
 				isLoggingOut,
 			}}
 			disabledButtonIndexes={disabledButtonIndexes}
