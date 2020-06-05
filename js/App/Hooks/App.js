@@ -190,6 +190,10 @@ const useSwitchOrAddAccountAction = (): Object => {
 
 		if (hasAPremAccount) {
 			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
+			dispatch(toggleVisibilitySwitchAccountAS({
 				showAS: true,
 				isLoggingOut: false,
 			}));
