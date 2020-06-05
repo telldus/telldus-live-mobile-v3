@@ -33,6 +33,7 @@ import {
 import View from './View';
 import Text from './Text';
 import TouchableOpacity from './TouchableOpacity';
+import SafeAreaView from './SafeAreaView';
 
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
@@ -329,29 +330,32 @@ render(): Object {
 		<Modal visible={visible}
 			animationType="none"
 			transparent
-			onRequestClose={this._cancel}
-		>
-			<View style={[styles.wrapper]}>
-				<Text
-					style={[styles.overlay, {
-						backgroundColor: modalOverlay,
-					}]}
-					onPress={this._cancel}
-				/>
-				<View
-					level={3}
-					animated
-					style={[
-						styles.body,
-						{ height: translateY, transform: [{ translateY: sheetAnim }] },
-					]}
-				>
-					{this._renderTitle()}
-					{this._renderMessage()}
-					<ScrollView scrollEnabled={scrollEnabled}>{options}</ScrollView>
-					{this._renderCancelButton()}
+			onRequestClose={this._cancel}>
+			<SafeAreaView
+				backgroundColor={'transparent'}
+				safeAreaBackgroundColor={'transparent'}>
+				<View style={styles.wrapper}>
+					<Text
+						style={[styles.overlay, {
+							backgroundColor: modalOverlay,
+						}]}
+						onPress={this._cancel}
+					/>
+					<View
+						level={3}
+						animated
+						style={[
+							styles.body,
+							{ height: translateY, transform: [{ translateY: sheetAnim }] },
+						]}
+					>
+						{this._renderTitle()}
+						{this._renderMessage()}
+						<ScrollView scrollEnabled={scrollEnabled}>{options}</ScrollView>
+						{this._renderCancelButton()}
+					</View>
 				</View>
-			</View>
+			</SafeAreaView>
 		</Modal>
 	);
 }
