@@ -87,6 +87,9 @@ const getBGColor = (props: Object): ?string => {
 		case 8: {
 			return colors.secondary;
 		}
+		case 9: {
+			return colors.badgeColor;
+		}
 		default:
 			return 'transparent';
 	}
@@ -177,6 +180,9 @@ const getTextColor = (props: Object): ?string => {
 		}
 		case 16: {
 			return colors.textInsideBrandSecondary;
+		}
+		case 17: {
+			return colors.textInsideBrandPrimary;
 		}
 		default:
 			return;

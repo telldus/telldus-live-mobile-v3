@@ -32,6 +32,9 @@ const common = {
 	get warning() {
 		return Core.brandWarning;
 	},
+	get badgeColor() {
+		return '#ED1727';
+	},
 };
 
 export default {
@@ -56,6 +59,9 @@ export default {
 			return Core.rowTextColor;
 		},
 		get textInsideBrandSecondary() {
+			return '#fff';
+		},
+		get textInsideBrandPrimary() {
 			return '#fff';
 		},
 		get border() {
@@ -180,6 +186,9 @@ export default {
 			return '#fff';
 		},
 		get textInsideBrandSecondary() {
+			return '#fff';
+		},
+		get textInsideBrandPrimary() {
 			return '#fff';
 		},
 		get border() {
