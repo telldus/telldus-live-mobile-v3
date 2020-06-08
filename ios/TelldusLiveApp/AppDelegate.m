@@ -75,11 +75,7 @@ static void InitializeFlipper(UIApplication *application) {
 	self.window.rootViewController = rootViewController;
 	[self.window makeKeyAndVisible];
 	[RNSplashScreen show];
-  
-  // TODO: Remove once dark mode is properly supported by react-native-datetimepicker
-	if (@available(iOS 13, *)) {
-		self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
-	}
+ 
   
   // NOTE: Deprecated iOS Background Fetch API for devices running < iOS 13
   // part is not enabled.
