@@ -131,7 +131,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
 		let accessToken = action.accessToken;
-		if (state.accessToken) {
+		if (state.accessToken && !accessToken.refresh_token) {
 			accessToken.refresh_token = state.accessToken.refresh_token;
 		}
 
@@ -154,7 +154,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 		} else if (userIdN) { // Refreshing access token
 			userId = userIdN.trim().toLowerCase();
 			const existAccount = accounts[userId] || {};
-			const uId = existAccount.userId || userIdN;
+			const uId = (existAccount.accessToken && existAccount.accessToken.userId) ? existAccount.accessToken.userId : userIdN;
 			newAccounts[userId] = {
 				...existAccount,
 				accessToken: {
@@ -192,7 +192,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 				return state;
 			}
 
-			const { refresh_token } = existAccount;
+			const refresh_token = accessToken.refresh_token || existAccount.accessToken.refresh_token;
 
 			newAccounts[userId] = {
 				...existAccount,
@@ -203,10 +203,11 @@ export default function reduceUser(state: State = initialState, action: Action):
 			};
 		} else if (userIdN) { // Refreshing access token
 			userId = userIdN.trim().toLowerCase();
-			const existAccount = accounts[userId] || {};
-			const uId = existAccount.userId || userIdN;
+			const existAccount = accounts[userId] || {accessToken: {}};
 
-			const refresh_token = existAccount.refresh_token || state.accessToken.refresh_token;
+			const uId = (existAccount.accessToken && existAccount.accessToken.userId) ? existAccount.accessToken.userId : userIdN;
+
+			const refresh_token = accessToken.refresh_token || existAccount.accessToken.refresh_token;
 
 			newAccounts[userId] = {
 				...existAccount,
@@ -289,7 +290,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 				newAccounts[email] = {
 					accessToken: {
 						...state.accessToken,
-						userId: action.payload.email, // TODO: Should use user id, once it is available.
+						userId: email, // TODO: Should use user id, once it is available.
 					},
 					...action.payload,
 				};
@@ -303,7 +304,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 
 		let userIdN = state.userId;
 		if (action.payload.email) {
-			userIdN = action.payload.email; // TODO: Should use user id, once it is available.
+			userIdN = action.payload.email.trim().toLowerCase(); // TODO: Should use user id, once it is available.
 		}
 
 		return {
