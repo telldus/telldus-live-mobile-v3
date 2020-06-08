@@ -131,23 +131,6 @@ const getSectionHeaderFontSize = (deviceWidth: number): number => {
 
 const getSectionHeaderHeight = (sectionHeaderFontSize: number): number => sectionHeaderFontSize * 1.8;
 
-const colorShades = (): Array<Object> => {
-	const {
-		Colors,
-	} = Theme;
-	const themes = Object.keys(Colors);
-	return themes.map((value: string): Object => {
-		return {
-			value,
-			shades: [
-				Colors[value].ShadeOne,
-				Colors[value].ShadeTwo,
-				Colors[value].ShadeThree,
-			],
-		};
-	});
-};
-
 module.exports = {
 	supportRSA,
 	getLocale,
@@ -159,5 +142,4 @@ module.exports = {
 	getItemLayout,
 	getSectionHeaderFontSize,
 	getSectionHeaderHeight,
-	colorShades,
 };

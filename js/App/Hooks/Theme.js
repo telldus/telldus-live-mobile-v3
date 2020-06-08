@@ -27,11 +27,8 @@ import {
 	useSelector,
 } from 'react-redux';
 
-import Theme from '../Theme';
-
-const {
-	Colors,
-} = Theme;
+import ThemedColors from '../Theme/ThemedColors';
+const DEVICE_THEME_KEY = 'OS';
 
 const useAppTheme = (): Object => {
 	const colorScheme = useColorScheme();
@@ -40,12 +37,12 @@ const useAppTheme = (): Object => {
 		themeInApp,
 	} = defaultSettings;
 	return React.useMemo((): Object => {
-		if (colorScheme === 'dark') {
+		if (themeInApp === DEVICE_THEME_KEY) {
 			return {
 				colorScheme,
-				dark: true,
+				dark: colorScheme === 'dark',
 				themeInApp,
-				...getThemeData(themeInApp),
+				...getThemeData(colorScheme),
 			};
 		}
 		return {
@@ -60,11 +57,43 @@ const useAppTheme = (): Object => {
 	]);
 };
 
-const getThemeData = (themeInApp: string | null = 'Default'): Object => {
-	const colors = Colors[themeInApp] || Colors.Default;
+const getThemeData = (themeInApp: string | null = 'light'): Object => {
+	const colors = ThemedColors[themeInApp] || ThemedColors.light;
 	return {colors};
+};
+
+const useAppThemeOptions = (): Array<Object> => {
+	const colorScheme = useColorScheme();
+	const themes = Object.keys(ThemedColors);
+	let options = themes.map((value: string): Object => {
+		let label = 'Default Theme';// TODO: translate
+		if (value === 'dark') {
+			label = 'Dark Theme';// TODO: translate
+		}
+		return {
+			value,
+			label,
+			shades: [
+				ThemedColors[value].ShadeOne,
+				ThemedColors[value].ShadeTwo,
+				ThemedColors[value].ShadeThree,
+			],
+		};
+	});
+	const value = colorScheme || 'light';
+	options.push({
+		value: DEVICE_THEME_KEY,
+		label: 'Device Theme', // TODO: translate
+		shades: [
+			ThemedColors[value].ShadeOne,
+			ThemedColors[value].ShadeTwo,
+			ThemedColors[value].ShadeThree,
+		],
+	});
+	return options;
 };
 
 module.exports = {
 	useAppTheme,
+	useAppThemeOptions,
 };

@@ -69,7 +69,7 @@ const ThemesRow = (props: Props): Object => {
 				width: '100%',
 			}]}>
 			<Text style={textStyle}>
-				{item.value}
+				{item.label}
 			</Text>
 			<View style={{
 				flex: 1,

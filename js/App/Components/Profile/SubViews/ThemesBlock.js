@@ -47,8 +47,8 @@ import {
 	changThemeInApp,
 } from '../../../Actions';
 import {
-	colorShades,
-} from '../../../Lib/appUtils';
+	useAppThemeOptions,
+} from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
 
@@ -61,7 +61,7 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 	const ddRef = useRef(null);
 
 	const colorScheme = useColorScheme();
-	const items = colorShades(colorScheme);
+	const items = useAppThemeOptions(colorScheme);
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { themeInApp = items[0].value } = defaultSettings;

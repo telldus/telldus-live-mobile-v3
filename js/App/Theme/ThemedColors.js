@@ -38,7 +38,7 @@ const common = {
 };
 
 export default {
-	Default: {
+	light: {
 		...common,
 		get text() {
 			return '#A59F9A';
@@ -165,7 +165,7 @@ export default {
 		},
 	},
 
-	Dark: {
+	dark: {
 		...common,
 		get text() {
 			return '#A59F9A';
