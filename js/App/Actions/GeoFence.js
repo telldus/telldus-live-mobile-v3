@@ -340,12 +340,39 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
-			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken));
+			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken)).then((res: Object = {}): Object => {
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
+					eventUUID,
+					...res,
+				}));
+				return res;
+			}).catch((err: Object = {}) => {
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
+					eventUUID,
+					error: err.message || JSON.stringify(err),
+				}));
+				throw err;
+			});
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
-			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken));
+			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)).then((res: Object = {}): Object => {
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
+					eventUUID,
+					...res,
+				}));
+				return res;
+			}).catch((err: Object = {}) => {
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
+					eventUUID,
+					error: err.message || JSON.stringify(err),
+				}));
+			});
 		} else if (method === 2048) {
 			const {
 				changeMode,
@@ -353,7 +380,21 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				mode,
 				temp,
 			} = action;
-			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken));
+			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)).then((res: Object = {}): Object => {
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
+					eventUUID,
+					...res,
+				}));
+				return res;
+			}).catch((err: Object = {}) => {
+				dispatch(debugGFSetCheckpoint({
+					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
+					eventUUID,
+					error: err.message || JSON.stringify(err),
+				}));
+				throw err;
+			});
 		}
 		return Promise.resolve('done');
 	};
