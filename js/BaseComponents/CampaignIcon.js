@@ -27,8 +27,6 @@ import { useSelector } from 'react-redux';
 import View from './View';
 import IconTelldus from './IconTelldus';
 
-import { Core } from '../App/Theme';
-
 const CampaignIcon = (props: Object): Object => {
 	const {
 		style,
@@ -45,16 +43,17 @@ const CampaignIcon = (props: Object): Object => {
 				icon="campaign"
 				size={size}
 				style={style}
-				color={'#fff'}/>
-			{!hasVisitedCampaign && <View style={{
-				position: 'absolute',
-				backgroundColor: Core.badgeBg,
-				height: badgeSize,
-				width: badgeSize,
-				borderRadius: badgeSize / 2,
-				top: 1,
-				right: 0,
-			}}/>
+				level={17}/>
+			{!hasVisitedCampaign && <View
+				level={9}
+				style={{
+					position: 'absolute',
+					height: badgeSize,
+					width: badgeSize,
+					borderRadius: badgeSize / 2,
+					top: 1,
+					right: 0,
+				}}/>
 			}
 		</View>
 	);
