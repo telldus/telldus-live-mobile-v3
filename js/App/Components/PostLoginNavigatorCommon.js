@@ -154,6 +154,8 @@ refSwitchAccountActionSheet: Object;
 screensAllowsNavigationOrModalOverride: Array<string>;
 clearNetInfoListener: any;
 
+clearListenerSyncLiveApiOnForeground: any;
+
 constructor(props: Props) {
 	super(props);
 
@@ -196,6 +198,7 @@ constructor(props: Props) {
 
 	this.refSwitchAccountActionSheet = {};
 	this.clearNetInfoListener = null;
+	this.clearListenerSyncLiveApiOnForeground = null;
 }
 
 async componentDidMount() {
@@ -320,7 +323,7 @@ actionsToPerformOnStart = async () => {
 			});
 		}
 
-		dispatch(syncLiveApiOnForeground());
+		this.clearListenerSyncLiveApiOnForeground = await dispatch(syncLiveApiOnForeground());
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
@@ -535,6 +538,10 @@ componentWillUnmount() {
 	if (this.onTokenRefreshListener) {
 		this.onTokenRefreshListener();
 		this.onTokenRefreshListener = null;
+	}
+	if (this.clearListenerSyncLiveApiOnForeground) {
+		this.clearListenerSyncLiveApiOnForeground();
+		this.clearListenerSyncLiveApiOnForeground = null;
 	}
 }
 
