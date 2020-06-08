@@ -32,9 +32,6 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
-import {
-	useColorScheme,
-} from 'react-native';
 
 import {
 	DropDown,
@@ -60,8 +57,7 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 	const intl = useIntl();
 	const ddRef = useRef(null);
 
-	const colorScheme = useColorScheme();
-	const items = useAppThemeOptions(colorScheme);
+	const items = useAppThemeOptions();
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { themeInApp = items[0].value } = defaultSettings;
