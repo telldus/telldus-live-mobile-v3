@@ -151,8 +151,8 @@ render(): Object {
 						borderRadius: 4,
 					}}>
 					<Text
+						level={16}
 						style={{
-							color: '#fff',
 							fontSize: 16,
 						}}>
 						{text}
