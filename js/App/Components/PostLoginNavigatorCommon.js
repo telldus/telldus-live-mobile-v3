@@ -155,6 +155,7 @@ screensAllowsNavigationOrModalOverride: Array<string>;
 clearNetInfoListener: any;
 
 clearListenerSyncLiveApiOnForeground: any;
+clearListenerAppState: any;
 
 constructor(props: Props) {
 	super(props);
@@ -199,12 +200,13 @@ constructor(props: Props) {
 	this.refSwitchAccountActionSheet = {};
 	this.clearNetInfoListener = null;
 	this.clearListenerSyncLiveApiOnForeground = null;
+	this.clearListenerAppState = null;
 }
 
 async componentDidMount() {
 	const { dispatch } = this.props;
 	dispatch(appStart());
-	dispatch(appState());
+	this.clearListenerAppState = await dispatch(appState());
 
 	dispatch(updateAllAccountsInfo());
 
@@ -542,6 +544,10 @@ componentWillUnmount() {
 	if (this.clearListenerSyncLiveApiOnForeground) {
 		this.clearListenerSyncLiveApiOnForeground();
 		this.clearListenerSyncLiveApiOnForeground = null;
+	}
+	if (this.clearListenerAppState) {
+		this.clearListenerAppState();
+		this.clearListenerAppState = null;
 	}
 }
 
