@@ -55,6 +55,9 @@ export default {
 		get textSix() {
 			return Core.rowTextColor;
 		},
+		get textInsideBrandSecondary() {
+			return '#fff';
+		},
 		get border() {
 			return '#C9C9CE';
 		},
@@ -174,6 +177,9 @@ export default {
 			return '#fff';
 		},
 		get textSix() {
+			return '#fff';
+		},
+		get textInsideBrandSecondary() {
 			return '#fff';
 		},
 		get border() {

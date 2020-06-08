@@ -175,6 +175,9 @@ const getTextColor = (props: Object): ?string => {
 		case 15: {
 			return colors.secondary;
 		}
+		case 16: {
+			return colors.textInsideBrandSecondary;
+		}
 		default:
 			return;
 	}
