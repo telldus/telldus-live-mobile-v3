@@ -39,7 +39,7 @@ module.exports = {
 	appStart: (): Action => ({
 		type: 'APP_START',
 	}),
-	appState: (): ThunkAction => (): ThunkAction => {
+	appState: (): ThunkAction => {
 		return (dispatch: Function): Function => {
 			const initialAppState = AppState.currentState;
 			if (initialAppState === 'active') {
