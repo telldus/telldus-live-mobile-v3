@@ -154,14 +154,19 @@ class LocationDetails extends Component<Props, State> {
 				disabled={!onPress}
 				onPress={this.onPress}>
 				{!!title && (
-					<Text style={[textLocation, {marginLeft: 10}]}>
+					<Text
+						level={18}
+						style={[textLocation, {marginLeft: 10}]}>
 						{title}
 					</Text>)
 				}
 				<View style={styles.imageHeaderContainer}>
 					<View style={locationImageContainer}>
 						{errorShowImage ?
-							<IconTelldus icon={'zwave'} style={locationIcon}/>
+							<IconTelldus
+								level={20}
+								icon={'zwave'}
+								style={locationIcon}/>
 							:
 							fromJS ?
 								<Image
@@ -179,10 +184,16 @@ class LocationDetails extends Component<Props, State> {
 						}
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
-						<Text numberOfLines={1} style={[textHSH, h1Style]}>
+						<Text
+							level={15}
+							numberOfLines={1}
+							style={[textHSH, h1Style]}>
 							{!!H1 && H1}
 						</Text>
-						<Text numberOfLines={1} style={[textLocation, h2Style]}>
+						<Text
+							level={18}
+							numberOfLines={1}
+							style={[textLocation, h2Style]}>
 							{!!H2 && H2}
 						</Text>
 						{!!info && (
@@ -235,15 +246,12 @@ class LocationDetails extends Component<Props, State> {
 				maxWidth: widthImage,
 			},
 			textLocation: {
-				color: '#A59F9A',
 				fontSize: textLocationSize,
 			},
 			textHSH: {
-				color: Theme.Core.brandSecondary,
 				fontSize: textHSHSize,
 			},
 			locationIcon: {
-				color: Theme.Core.brandPrimary,
 				fontSize: widthImage,
 			},
 		};
