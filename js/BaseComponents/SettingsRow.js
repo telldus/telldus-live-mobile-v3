@@ -25,14 +25,17 @@ import React, {
 	useCallback,
 	memo,
 } from 'react';
-import { Image, Platform, TouchableOpacity, TextInput } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Platform, TouchableOpacity } from 'react-native';
 
 import Text from './Text';
 import View from './View';
 import Switch from './Switch';
 import RippleButton from './RippleButton';
 import IconTelldus from './IconTelldus';
+import ThemedTextInput from './ThemedTextInput';
+import ThemedImage from './ThemedImage';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
+
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
@@ -186,7 +189,10 @@ const SettingsRow = (props: Props): Object => {
 						)}
 						{!!iconLabelRight && (
 							<TouchableOpacity onPress={_onPressIconLabelRight} style={iconLabelRightCover}>
-								<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+								<IconTelldus
+									level={15}
+									icon={iconLabelRight}
+									style={iconLabelRightStyle}/>
 							</TouchableOpacity>
 						)}
 					</View>
@@ -210,7 +216,10 @@ const SettingsRow = (props: Props): Object => {
 						)}
 						{!!iconLabelRight && (
 							<TouchableOpacity onPress={_onPressIconLabelRight} style={iconLabelRightCover}>
-								<IconTelldus icon={iconLabelRight} style={iconLabelRightStyle}/>
+								<IconTelldus
+									level={15}
+									icon={iconLabelRight}
+									style={iconLabelRightStyle}/>
 							</TouchableOpacity>
 						)}
 					</View>
@@ -219,7 +228,8 @@ const SettingsRow = (props: Props): Object => {
 						disabled={!onPressRHS}
 						style={[valueCover, valueCoverStyle]}>
 						{inLineEditActive ?
-							<TextInput
+							<ThemedTextInput
+								level={6}
 								value={value.toString()}
 								style={[textField, textFieldStyle]}
 								onChangeText={_onChangeText}
@@ -254,12 +264,18 @@ const SettingsRow = (props: Props): Object => {
 								onPress={onPressIconValueRight}
 								style={iconValueRightCover}
 								disabled={!onPressIconValueRight}>
-								{typeof iconValueRight === 'string' ? <Icon name={iconValueRight} size={_iconValueRightSize} color={Theme.Core.brandSecondary}/> : iconValueRight}
+								{typeof iconValueRight === 'string' ? <ThemedMaterialIcon
+									name={iconValueRight}
+									size={_iconValueRightSize}
+									level={15}/> : iconValueRight}
 							</TouchableOpacity>
 						)}
 					</TouchableOpacity>
 					{edit && (
-						<Image source={{uri: 'right_arrow_key'}} style={arrowStyle}/>
+						<ThemedImage
+							level={3}
+							source={{uri: 'right_arrow_key'}}
+							style={arrowStyle}/>
 					)}
 				</Parent>
 			}
@@ -276,9 +292,7 @@ const getStyle = ({
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		rowTextColor,
 		paddingFactor,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -326,7 +340,6 @@ const getStyle = ({
 		arrowStyle: {
 			height: fontSize,
 			width: fontSize,
-			tintColor: '#A59F9A90',
 			marginLeft: fontSize,
 		},
 		_iconValueRightSize: iconValueRightSize ? iconValueRightSize : fontSize,
@@ -339,11 +352,9 @@ const getStyle = ({
 		},
 		iconLabelRightStyle: {
 			fontSize,
-			color: brandSecondary,
 		},
 		textField: {
 			flex: 1,
-			color: rowTextColor,
 			paddingBottom: 0,
 			paddingTop: 0,
 			fontSize,
