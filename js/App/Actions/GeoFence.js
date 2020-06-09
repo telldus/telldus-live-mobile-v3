@@ -30,11 +30,15 @@ import {
 import Toast from 'react-native-simple-toast';
 import BackgroundTimer from 'react-native-background-timer';
 
-import {
-	deviceSetState,
-	deviceSetStateThermostat,
-	deviceSetStateRGB,
-} from './Devices';
+// import {
+// 	deviceSetState,
+// 	deviceSetStateThermostat,
+// 	deviceSetStateRGB,
+// } from './Devices';
+import { actions as _actions } from 'live-shared-data';
+const { Devices } = _actions;
+const { deviceSetState, deviceSetStateThermostat, deviceSetStateRGB } = Devices;
+
 import {
 	getScheduleOptions,
 	saveSchedule,
