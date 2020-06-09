@@ -151,6 +151,27 @@ export default {
 		get colorOneThrobberButton() {
 			return '#ffffff';
 		},
+		get checkBoxIconActiveOne() {
+			return Core.brandSecondary;
+		},
+		get checkBoxIconInactiveOne() {
+			return 'transparent';
+		},
+		get checkBoxIconBGActiveOne() {
+			return '#ffffff';
+		},
+		get checkBoxIconBGInactiveOne() {
+			return 'transparent';
+		},
+		get checkBoxIconBorderActiveOne() {
+			return Core.brandSecondary;
+		},
+		get checkBoxIconBorderInactiveOne() {
+			return '#ffffff';
+		},
+		get checkBoxTextActiveOne() {
+			return '#ffffff';
+		},
 		get modalOverlay() {
 			return '#000';
 		},
@@ -276,6 +297,27 @@ export default {
 			return '#f5f5f5';
 		},
 		get colorOneThrobberButton() {
+			return '#ffffff';
+		},
+		get checkBoxIconActiveOne() {
+			return Core.brandSecondary;
+		},
+		get checkBoxIconInactiveOne() {
+			return 'transparent';
+		},
+		get checkBoxIconBGActiveOne() {
+			return '#ffffff';
+		},
+		get checkBoxIconBGInactiveOne() {
+			return 'transparent';
+		},
+		get checkBoxIconBorderActiveOne() {
+			return Core.brandSecondary;
+		},
+		get checkBoxIconBorderInactiveOne() {
+			return '#ffffff';
+		},
+		get checkBoxTextActiveOne() {
 			return '#ffffff';
 		},
 		get modalOverlay() {

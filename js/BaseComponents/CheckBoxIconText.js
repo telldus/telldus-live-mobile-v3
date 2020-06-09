@@ -27,11 +27,15 @@ import { useSelector } from 'react-redux';
 
 import Text from './Text';
 import IconTelldus from './IconTelldus';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     style?: Array<any> | Object,
     iconStyle?: Object,
     textStyle?: Array<any> | Object,
@@ -51,6 +55,7 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 		text,
 		isChecked,
 		intl,
+		colors,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -96,6 +101,16 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			checkBoxIconActiveOne,
+			checkBoxIconInactiveOne,
+			checkBoxIconBGActiveOne,
+			checkBoxIconBGInactiveOne,
+			checkBoxIconBorderActiveOne,
+			checkBoxIconBorderInactiveOne,
+			checkBoxTextActiveOne,
+		} = colors;
+
 		const fontSize = Math.floor(deviceWidth * 0.035);
 		const fontSizeIcon = Math.floor(deviceWidth * 0.038);
 
@@ -111,7 +126,7 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 			textDefaultStyle: {
 				marginLeft: 5 + (fontSize * 0.4),
 				fontSize: fontSize,
-				color: '#fff',
+				color: checkBoxTextActiveOne,
 				fontFamily: Theme.Core.fonts.robotoLight,
 			},
 			checkIconCommon: {
@@ -124,14 +139,14 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 				overflow: 'hidden',
 			},
 			checkIconStyleActive: {
-				color: Theme.Core.brandSecondary,
-				backgroundColor: '#fff',
-				borderColor: Theme.Core.brandSecondary,
+				color: checkBoxIconActiveOne,
+				backgroundColor: checkBoxIconBGActiveOne,
+				borderColor: checkBoxIconBorderActiveOne,
 			},
 			checkIconStyleInactive: {
-				color: 'transparent',
-				backgroundColor: 'transparent',
-				borderColor: '#fff',
+				color: checkBoxIconInactiveOne,
+				backgroundColor: checkBoxIconBGInactiveOne,
+				borderColor: checkBoxIconBorderInactiveOne,
 			},
 		};
 	}
@@ -139,7 +154,6 @@ const CheckBoxIconText: Object = React.memo<Object>((props: Props): Object => {
 
 CheckBoxIconText.defaultProps = {
 	isChecked: false,
-	checkBoxColor: '#fff',
 };
 
-export default CheckBoxIconText;
+export default withTheme(CheckBoxIconText);
