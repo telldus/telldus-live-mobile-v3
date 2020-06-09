@@ -62,7 +62,7 @@ const getThemeData = (themeInApp: string | null = 'light'): Object => {
 	return {colors};
 };
 
-const useAppThemeOptions = (): Array<Object> => {
+const useAppThemeOptions = (): Object => {
 	const colorScheme = useColorScheme();
 	const themes = Object.keys(ThemedColors);
 	let options = themes.map((value: string): Object => {
