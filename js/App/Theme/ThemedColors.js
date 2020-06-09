@@ -112,6 +112,9 @@ export default {
 		get iconOneColorBlockDisabled() {
 			return '#bdbdbd';
 		},
+		get iconOneSubColorBlock() {
+			return Core.brandPrimary;
+		},
 		get iconTwoColorBlock() {
 			return '#A59F9A90';
 		},
@@ -259,6 +262,9 @@ export default {
 		},
 		get iconOneColorBlockDisabled() {
 			return '#bdbdbd';
+		},
+		get iconOneSubColorBlock() {
+			return '#ffffff';
 		},
 		get iconTwoColorBlock() {
 			return '#A59F9A90';

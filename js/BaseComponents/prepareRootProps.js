@@ -184,6 +184,15 @@ const getTextColor = (props: Object): ?string => {
 		case 17: {
 			return colors.textInsideBrandPrimary;
 		}
+		case 18: {
+			return colors.infoOneColorBlockEnabled;
+		}
+		case 19: {
+			return colors.infoOneColorBlockDisabled;
+		}
+		case 20: {
+			return colors.iconOneSubColorBlock;
+		}
 		default:
 			return;
 	}
