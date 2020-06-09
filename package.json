@@ -58,6 +58,7 @@
     "react-native-accessibility": "git+https://github.com/MaxToyberman/react-native-accessibility.git#319008ffbfd9115cf520a718f3dfc88381161313",
     "react-native-background-fetch": "^3.0.4",
     "react-native-background-geolocation": "^3.6.2",
+    "react-native-background-timer": "^2.2.0",
     "react-native-cached-image": "https://github.com/telldus/react-native-cached-image.git",
     "react-native-calendars": "~1.264.0",
     "react-native-circular-slider": "git+https://github.com/telldus/react-native-circular-slider.git",
