@@ -24,9 +24,7 @@
 
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Platform, ScrollView } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import DeviceInfo from 'react-native-device-info';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const isEqual = require('react-fast-compare');
 
 import Text from './Text';
@@ -34,6 +32,8 @@ import View from './View';
 import Poster from './Poster';
 import BlockIcon from './BlockIcon';
 import RoundedInfoButton from './RoundedInfoButton';
+import Icon from './Icon';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
 
 import { shouldUpdate } from '../App/Lib';
 
@@ -212,7 +212,11 @@ render(): Object {
 				<View style={[posterCover, posterCoverStyle]}>
 					<View style={[posterItemsContainerDef, posterItemsContainerStyle]}>
 						{!!icon && (
-							<BlockIcon icon={icon} style={iconStyle} containerStyle={iconBackground}/>
+							<BlockIcon
+								iconLevel={15}
+								icon={icon}
+								style={iconStyle}
+								containerStyle={iconBackground}/>
 						)}
 						{!!h1 && (
 							scrollableH1 ?
@@ -223,17 +227,25 @@ render(): Object {
 									showsHorizontalScrollIndicator={false}
 									style={scolllViewStyle}
 									contentContainerStyle={scolllViewCCStyle}>
-									<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
+									<Text
+										level={16}
+										style={[h1StyleDef, h1Style]}
+										onLayout={this.onLayoutHeaderOne}>
 										{h1}
 									</Text>
 								</ScrollView>
 								:
-								<Text style={[h1StyleDef, h1Style]} onLayout={this.onLayoutHeaderOne}>
+								<Text
+									level={16}
+									style={[h1StyleDef, h1Style]}
+									onLayout={this.onLayoutHeaderOne}>
 									{h1}
 								</Text>
 						)}
 						{!!h2 && (
-							<Text style={h2StyleDef} onLayout={this.onLayoutHeaderTwo}>
+							<Text
+								level={16}
+								style={h2StyleDef} onLayout={this.onLayoutHeaderTwo}>
 								{h2}
 							</Text>
 						)}
@@ -244,9 +256,15 @@ render(): Object {
 							onPress={this.goBack}
 							accessibilityLabel={this.labelLeftIcon}>
 							{Platform.OS === 'ios' && leftIcon !== 'close' ?
-								<FontAwesome name={leftIcon} size={width * 0.047} color="#fff"/>
+								<Icon
+									level={17}
+									name={leftIcon}
+									size={width * 0.047} />
 								:
-								<Icon name={leftIcon} size={width * 0.047} color="#fff"/>
+								<ThemedMaterialIcon
+									level={17}
+									name={leftIcon}
+									size={width * 0.047} />
 							}
 						</TouchableOpacity>
 					)}
@@ -333,17 +351,14 @@ getStyles(appLayout: Object, adjustItems: boolean): Object {
 		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
-			color: '#F06F0C',
 		},
 		h1StyleDef: {
 			flex: 0,
 			fontSize: fontSizeH1,
-			color: '#fff',
 			fontWeight: '500',
 		},
 		h2StyleDef: {
 			fontSize: fontSizeH2,
-			color: '#fff',
 			fontWeight: '400',
 		},
 		posterHeight,
