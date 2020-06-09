@@ -23,8 +23,12 @@
 'use strict';
 const colorsys = require('colorsys');
 import BackgroundGeolocation from 'react-native-background-geolocation';
-import { AppState } from 'react-native';
+import {
+	AppState,
+	Platform,
+} from 'react-native';
 import Toast from 'react-native-simple-toast';
+import BackgroundTimer from 'react-native-background-timer';
 
 import {
 	deviceSetState,
@@ -45,6 +49,9 @@ import {
 	setCurrentLocation,
 } from './Fences';
 import GeoFenceUtils from '../Lib/GeoFenceUtils';
+import {
+	createLocationNotification,
+} from '../Lib/PushNotification';
 
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
@@ -53,6 +60,15 @@ const ERROR_CODE_TIMED_OUT = 'FENCE_TIMED_OUT';
 const ERROR_CODE_GF_RC_DISABLED = 'GF_REMOTE_CONFIG_DISABLED';
 
 import type { Action } from './Types';
+
+let retryQueueSchedule = {};
+let retryQueueEvent = {};
+let retryQueueDeviceAction = {};
+let MAP_QUEUE_TIME = {
+	'1': 10,
+	'2': 30,
+	'3': 60,
+};
 
 function setupGeoFence(): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
@@ -266,7 +282,10 @@ function handleFence(fence: Object): ThunkAction {
 					checkpoint: 'handleFence-2',
 					eventUUID: location.uuid,
 				}));
-				return dispatch(handleActions(actions, userId, location.uuid));
+				return dispatch(handleActions(actions, userId, location.uuid, {
+					...extras,
+					actionEvent: action,
+				}));
 			}
 			return Promise.resolve('done');
 		}
@@ -274,7 +293,7 @@ function handleFence(fence: Object): ThunkAction {
 	};
 }
 
-function handleActions(actions: Object, userId: string, eventUUID: string): ThunkAction {
+function handleActions(actions: Object, userId: string, eventUUID: string, extras: Object): ThunkAction {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
 		const { devices = {}, schedules = {}, events = {} } = actions;
 		dispatch(debugGFSetCheckpoint({
@@ -300,13 +319,13 @@ function handleActions(actions: Object, userId: string, eventUUID: string): Thun
 		let promises = [];
 
 		for (let id in devices) {
-			promises.push(dispatch(handleActionDevice(devices[id], accessToken, eventUUID)));
+			promises.push(dispatch(handleActionDevice(devices[id], accessToken, eventUUID, extras)));
 		}
 		for (let id in events) {
-			promises.push(dispatch(handleActionEvent(events[id], accessToken, eventUUID)));
+			promises.push(dispatch(handleActionEvent(events[id], accessToken, eventUUID, extras)));
 		}
 		for (let id in schedules) {
-			promises.push(dispatch(handleActionSchedule(schedules[id], accessToken, eventUUID)));
+			promises.push(dispatch(handleActionSchedule(schedules[id], accessToken, eventUUID, extras)));
 		}
 		// NOTE: Not using Promise.all to resolve as BG task started using BackgroundGeolocation.startBackgroundTask
 		// Will only last for 30secs in Android and 180secs in iOS. If any promise gets stuck we do not want the
@@ -321,14 +340,20 @@ function handleActions(actions: Object, userId: string, eventUUID: string): Thun
 	};
 }
 
-function handleActionDevice(action: Object, accessToken: Object, eventUUID: string): ThunkAction {
+function handleActionDevice(action: Object, accessToken: Object, eventUUID: string, extras: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			actionEvent,
+			title,
+		} = extras;
+
 		let { deviceId, method, stateValues = {} } = action;
+		let date = new Date();
 		dispatch(debugGFSetCheckpoint({
 			checkpoint: `handleActionDevice${action.uuid}`,
 			eventUUID,
 			...action,
-			time: Date.now(),
+			time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 		}));
 		if (!deviceId) {
 			return Promise.resolve('done');
@@ -342,41 +367,114 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
 			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken)).then((res: Object = {}): Object => {
+				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
+					delete retryQueueDeviceAction[action.uuid];
+					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+				}
+
+				date = new Date();
 				dispatch(debugGFSetCheckpoint({
 					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
 					eventUUID,
 					...res,
-					time: Date.now(),
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 				}));
 				return res;
-			}).catch((err: Object = {}) => {
+			}).catch((err: Object = {}): Object => {
+				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count === 3)) {
+					delete retryQueueDeviceAction[action.uuid];
+					dispatch(showNotificationOnErrorExecutingAction({
+						notificationId: action.uuid,
+						body: `Failed to execute Device action while ${actionString} the fence ${title}.`,
+					}));
+					return;
+				}
+
+				let prevCount = retryQueueDeviceAction[action.uuid] ? retryQueueDeviceAction[action.uuid].count : 0;
+				retryQueueDeviceAction[action.uuid] = {
+					count: prevCount + 1,
+				};
+
+				date = new Date();
 				dispatch(debugGFSetCheckpoint({
 					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
 					eventUUID,
 					error: err.message || JSON.stringify(err),
-					time: Date.now(),
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+					retryCount: retryQueueDeviceAction[action.uuid],
 				}));
-				throw err;
+
+				const timeout = MAP_QUEUE_TIME[retryQueueDeviceAction[action.uuid].count.toString()];
+				const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+				dispatch(showNotificationOnErrorExecutingAction({
+					notificationId: action.uuid,
+					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+				}));
+
+				if (Platform.OS === 'android') {
+					retryQueueDeviceAction[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
+					}, timeout * 1000);
+				}
 			});
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
 			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)).then((res: Object = {}): Object => {
+				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
+					delete retryQueueDeviceAction[action.uuid];
+					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+				}
+
+				date = new Date();
 				dispatch(debugGFSetCheckpoint({
 					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
 					eventUUID,
 					...res,
-					time: Date.now(),
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 				}));
 				return res;
-			}).catch((err: Object = {}) => {
+			}).catch((err: Object = {}): Object => {
+				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count === 3)) {
+					delete retryQueueDeviceAction[action.uuid];
+					dispatch(showNotificationOnErrorExecutingAction({
+						notificationId: action.uuid,
+						body: `Failed to execute Device action while ${actionString} the fence ${title}.`,
+					}));
+					return;
+				}
+				let prevCount = retryQueueDeviceAction[action.uuid] ? retryQueueDeviceAction[action.uuid].count : 0;
+				retryQueueDeviceAction[action.uuid] = {
+					count: prevCount + 1,
+				};
+
+				date = new Date();
 				dispatch(debugGFSetCheckpoint({
 					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
 					eventUUID,
 					error: err.message || JSON.stringify(err),
-					time: Date.now(),
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+					retryCount: retryQueueDeviceAction[action.uuid],
 				}));
+
+				const timeout = MAP_QUEUE_TIME[retryQueueDeviceAction[action.uuid].count.toString()];
+
+				const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+				dispatch(showNotificationOnErrorExecutingAction({
+					notificationId: action.uuid,
+					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+				}));
+
+				if (Platform.OS === 'android') {
+					retryQueueDeviceAction[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
+					}, timeout * 1000);
+				}
 			});
 		} else if (method === 2048) {
 			const {
@@ -386,82 +484,204 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				temp,
 			} = action;
 			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)).then((res: Object = {}): Object => {
+				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
+					delete retryQueueDeviceAction[action.uuid];
+					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+				}
+
+				date = new Date();
 				dispatch(debugGFSetCheckpoint({
 					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
 					eventUUID,
 					...res,
-					time: Date.now(),
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 				}));
 				return res;
-			}).catch((err: Object = {}) => {
+			}).catch((err: Object = {}): Object => {
+				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count === 3)) {
+					delete retryQueueDeviceAction[action.uuid];
+					dispatch(showNotificationOnErrorExecutingAction({
+						notificationId: action.uuid,
+						body: `Failed to execute Device action while ${actionString} the fence ${title}.`,
+					}));
+					return;
+				}
+				let prevCount = retryQueueDeviceAction[action.uuid] ? retryQueueDeviceAction[action.uuid].count : 0;
+				retryQueueDeviceAction[action.uuid] = {
+					count: prevCount + 1,
+				};
+
+				date = new Date();
 				dispatch(debugGFSetCheckpoint({
 					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
 					eventUUID,
 					error: err.message || JSON.stringify(err),
-					time: Date.now(),
+					time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+					retryCount: retryQueueDeviceAction[action.uuid],
 				}));
-				throw err;
+
+				const timeout = MAP_QUEUE_TIME[retryQueueDeviceAction[action.uuid].count.toString()];
+
+				const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+				dispatch(showNotificationOnErrorExecutingAction({
+					notificationId: action.uuid,
+					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+				}));
+
+				if (Platform.OS === 'android') {
+					retryQueueDeviceAction[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
+					}, timeout * 1000);
+				}
 			});
 		}
 		return Promise.resolve('done');
 	};
 }
 
-function handleActionEvent(action: Object, accessToken: Object, eventUUID: string): ThunkAction {
+function handleActionEvent(action: Object, accessToken: Object, eventUUID: string, extras: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			actionEvent,
+			title,
+		} = extras;
+
 		const {
 			id,
 			...options
 		} = getEventOptions(action);
+		let date = new Date();
 		dispatch(debugGFSetCheckpoint({
 			checkpoint: `handleActionEvent${action.uuid}`,
 			eventUUID,
 			id,
-			time: Date.now(),
+			time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 		}));
 		return dispatch(setEvent(id, options, accessToken)).then((res: Object = {}): Object => {
+			if (retryQueueEvent[action.uuid] && retryQueueEvent[action.uuid].timeoutId) {
+				delete retryQueueEvent[action.uuid];
+				BackgroundTimer.clearTimeout(retryQueueEvent[action.uuid].timeoutId);
+			}
+
+			date = new Date();
 			dispatch(debugGFSetCheckpoint({
 				checkpoint: `handleActionEvent-SUCCESS${action.uuid}`,
 				eventUUID,
 				...res,
-				time: Date.now(),
+				time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 			}));
 			return res;
-		}).catch((err: Object = {}) => {
+		}).catch((err: Object = {}): Object => {
+			const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+			if (retryQueueEvent[action.uuid] && (retryQueueEvent[action.uuid].count === 3)) {
+				delete retryQueueEvent[action.uuid];
+				dispatch(showNotificationOnErrorExecutingAction({
+					notificationId: action.uuid,
+					body: `Failed to execute Event action while ${actionString} the fence ${title}.`,
+				}));
+				return;
+			}
+			let prevCount = retryQueueEvent[action.uuid] ? retryQueueEvent[action.uuid].count : 0;
+			retryQueueEvent[action.uuid] = {
+				count: prevCount + 1,
+			};
+
+			date = new Date();
 			dispatch(debugGFSetCheckpoint({
 				checkpoint: `handleActionEvent-ERROR${action.uuid}`,
 				eventUUID,
 				error: err.message || JSON.stringify(err),
-				time: Date.now(),
+				time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+				retryCount: retryQueueEvent[action.uuid],
 			}));
+
+			const timeout = MAP_QUEUE_TIME[retryQueueEvent[action.uuid].count.toString()];
+
+			const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+			dispatch(showNotificationOnErrorExecutingAction({
+				notificationId: action.uuid,
+				body: `Failed to execute Event action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+			}));
+
+			if (Platform.OS === 'android') {
+				retryQueueEvent[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+					dispatch(handleActionEvent(action, accessToken, eventUUID, extras));
+				}, timeout * 1000);
+			}
 		});
 	};
 }
 
-function handleActionSchedule(action: Object, accessToken: Object, eventUUID: string): ThunkAction {
+function handleActionSchedule(action: Object, accessToken: Object, eventUUID: string, extras: Object): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
+		const {
+			actionEvent,
+			title,
+		} = extras;
+
 		const options = getScheduleOptions(action);
+		let date = new Date();
 		dispatch(debugGFSetCheckpoint({
 			checkpoint: `handleActionSchedule${action.uuid}`,
 			eventUUID,
 			options,
-			time: Date.now(),
+			time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 		}));
 		return dispatch(saveSchedule(options, accessToken)).then((res: Object = {}): Object => {
+			if (retryQueueSchedule[action.uuid] && retryQueueSchedule[action.uuid].timeoutId) {
+				delete retryQueueSchedule[action.uuid];
+				BackgroundTimer.clearTimeout(retryQueueSchedule[action.uuid].timeoutId);
+			}
+
+			date = new Date();
 			dispatch(debugGFSetCheckpoint({
 				checkpoint: `handleActionSchedule-SUCCESS${action.uuid}`,
 				eventUUID,
 				...res,
-				time: Date.now(),
+				time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 			}));
 			return res;
-		}).catch((err: Object = {}) => {
+		}).catch((err: Object = {}): Object => {
+			const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+			if (retryQueueSchedule[action.uuid] && (retryQueueSchedule[action.uuid].count === 3)) {
+				delete retryQueueSchedule[action.uuid];
+				dispatch(showNotificationOnErrorExecutingAction({
+					notificationId: action.uuid,
+					body: `Failed to execute Schedule action while ${actionString} the fence ${title}.`,
+				}));
+				return;
+			}
+			let prevCount = retryQueueSchedule[action.uuid] ? retryQueueSchedule[action.uuid].count : 0;
+			retryQueueSchedule[action.uuid] = {
+				count: prevCount + 1,
+			};
+
+			date = new Date();
 			dispatch(debugGFSetCheckpoint({
 				checkpoint: `handleActionSchedule-ERROR${action.uuid}`,
 				eventUUID,
 				error: err.message || JSON.stringify(err),
-				time: Date.now(),
+				time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+				retryCount: retryQueueSchedule[action.uuid],
 			}));
+
+			const timeout = MAP_QUEUE_TIME[retryQueueSchedule[action.uuid].count.toString()];
+
+			const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+			dispatch(showNotificationOnErrorExecutingAction({
+				notificationId: action.uuid,
+				body: `Failed to execute Schedule action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+			}));
+
+			if (Platform.OS === 'android') {
+				retryQueueSchedule[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+					dispatch(handleActionSchedule(action, accessToken, eventUUID, extras));
+				}, timeout * 1000);
+			}
 		});
 	};
 }
@@ -635,6 +855,34 @@ const updateGeoFenceConfig = (payload: Object): Action => {
 const clearAllOnGeoFencesLog = (): Action => {
 	return {
 		type: 'CLEAR_ON_GEOFENCE_LOG',
+	};
+};
+
+const showNotificationOnErrorExecutingAction = ({
+	notificationId,
+	body,
+}: Object): ThunkAction => {
+	return (dispatch: Function, getState: Function): ?Promise<any> => {
+		const {
+			geoFence = {},
+		} = getState();
+
+		const {
+			showNotificationOnActionFail,
+		} = geoFence.config || {};
+
+		if (!showNotificationOnActionFail) {
+			return Promise.resolve('done');
+		}
+
+		createLocationNotification({
+			notificationId,
+			title: 'Telldus Live! Mobile',
+			body,
+			data: {
+				notificationId,
+			},
+		});
 	};
 };
 
