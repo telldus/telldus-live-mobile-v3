@@ -105,6 +105,8 @@ import MainTabNavHeader from './MainTabNavHeader';
 import TouchableOpacity from './TouchableOpacity';
 import ThemedScrollView from './ThemedScrollView';
 import ThemedImage from './ThemedImage';
+import ThemedTextInput from './ThemedTextInput';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
 
 import {
 	AppState,
@@ -211,4 +213,6 @@ module.exports = {
 
 	ThemedScrollView,
 	ThemedImage,
+	ThemedTextInput,
+	ThemedMaterialIcon,
 };

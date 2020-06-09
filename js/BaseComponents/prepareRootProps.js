@@ -232,13 +232,28 @@ const getTintColor = (props: Object): ?string => {
 		case 2: {
 			return colors.secondary;
 		}
+		case 3: {
+			return colors.iconTwoColorBlock;
+		}
 		default:
 			return;
 	}
+};
+
+const prepareRootPropsIcon = (props: Object, defaultPropsOverride?: Object = {}): Object => {
+
+	let defaultProps = {
+		color: getTextColor(props),
+	};
+
+	defaultProps = computeProps(defaultProps, defaultPropsOverride);
+
+	return computeProps(props, defaultProps);
 };
 
 module.exports = {
 	prepareRootPropsView,
 	prepareRootPropsText,
 	prepareRootPropsImageView,
+	prepareRootPropsIcon,
 };
