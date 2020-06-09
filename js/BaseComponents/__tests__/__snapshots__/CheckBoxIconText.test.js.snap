@@ -30,7 +30,7 @@ exports[`renders CheckBoxIconText when checked 1`] = `
     importantForAccessibility="yes"
     style={
       Object {
-        "backgroundColor": "#fff",
+        "backgroundColor": "#ffffff",
         "borderColor": "#e26901",
         "borderRadius": 2,
         "borderWidth": 1,
@@ -52,7 +52,7 @@ exports[`renders CheckBoxIconText when checked 1`] = `
       Array [
         Object {
           "backgroundColor": "transparent",
-          "color": "#fff",
+          "color": "#ffffff",
           "fontFamily": "Roboto-Light",
           "fontSize": 26,
           "marginLeft": 15.4,
@@ -97,7 +97,7 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
     style={
       Object {
         "backgroundColor": "transparent",
-        "borderColor": "#fff",
+        "borderColor": "#ffffff",
         "borderRadius": 2,
         "borderWidth": 1,
         "color": "transparent",
@@ -118,7 +118,7 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
       Array [
         Object {
           "backgroundColor": "transparent",
-          "color": "#fff",
+          "color": "#ffffff",
           "fontFamily": "Roboto-Light",
           "fontSize": 26,
           "marginLeft": 15.4,
