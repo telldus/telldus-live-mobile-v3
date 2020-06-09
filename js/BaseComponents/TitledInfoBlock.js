@@ -113,7 +113,12 @@ const TitledInfoBlock = (props: Props): Object => {
 					</Text>
 				</View>
 				{!!icon && (
-					<Icon name={icon} size={iconSize} color={iconColor} style={[styles.nextIcon, iconStyle]}/>
+					<Icon
+						level={21}
+						name={icon}
+						size={iconSize}
+						color={iconColor}
+						style={[styles.nextIcon, iconStyle]}/>
 				)}
 			</TouchableOpacity>
 		</View>

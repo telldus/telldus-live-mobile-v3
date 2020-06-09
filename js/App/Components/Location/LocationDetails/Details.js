@@ -616,7 +616,6 @@ class Details extends View<Props, State> {
 						label={this.labelName}
 						value={name}
 						icon={'angle-right'}
-						iconColor="#A59F9A90"
 						blockContainerStyle={{
 							marginTop: padding / 2,
 							marginBottom: padding / 2,
@@ -630,7 +629,6 @@ class Details extends View<Props, State> {
 						label={timezoneLabel}
 						value={timezone}
 						icon={'angle-right'}
-						iconColor="#A59F9A90"
 						blockContainerStyle={{
 							marginBottom: padding / 2,
 						}}
@@ -664,7 +662,11 @@ class Details extends View<Props, State> {
 								<FormattedNumber value={longitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
 						</View>
-						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
+						<Icon
+							name="angle-right"
+							size={iconSize}
+							level={21}
+							style={styles.nextIcon}/>
 					</TouchableOpacity>
 					{supportLocalControl && (
 						<TouchableButton

@@ -70,7 +70,6 @@ const RegisterForPushScreen = (props: Object): Object => {
 	const { phonesList = {}, pushToken, deviceName, deviceId } = useSelector((state: Object): Object => state.user);
 	const {
 		container,
-		iconStyle,
 		fontSize,
 		contentCover,
 		contentTextStyle,
@@ -220,7 +219,6 @@ const RegisterForPushScreen = (props: Object): Object => {
 					key={key}
 					label={label}
 					icon={'angle-right'}
-					iconStyle={iconStyle}
 					fontSize={fontSize}
 					valueTextStyle={valueTextStyle}
 					blockContainerStyle={blockContainerStyle}
@@ -360,9 +358,6 @@ const getStyles = (appLayout: Object): Object => {
 			flex: 1,
 		},
 		fontSize,
-		iconStyle: {
-			color: '#8e8e93',
-		},
 		contentCover: {
 			justifyContent: 'center',
 			alignItems: 'center',
