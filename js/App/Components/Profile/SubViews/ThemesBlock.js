@@ -57,10 +57,13 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 	const intl = useIntl();
 	const ddRef = useRef(null);
 
-	const items = useAppThemeOptions();
+	const {
+		colorScheme,
+		options,
+	 } = useAppThemeOptions();
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { themeInApp = items[0].value } = defaultSettings;
+	const { themeInApp = options[0].value } = defaultSettings;
 
 	const {
 		dropDownContainerStyleDef,
@@ -117,7 +120,10 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 			<DropDown
 				ref={ddRef}
 				dropDownPosition={'bottom'}
-				items={items}
+				items={options}
+				extraData={{
+					colorScheme,
+				}}
 				value={themeInApp}
 				appLayout={layout}
 				intl={intl}

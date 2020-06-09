@@ -90,7 +90,10 @@ const useAppThemeOptions = (): Array<Object> => {
 			ThemedColors[value].ShadeThree,
 		],
 	});
-	return options;
+	return {
+		options,
+		colorScheme,
+	};
 };
 
 module.exports = {
