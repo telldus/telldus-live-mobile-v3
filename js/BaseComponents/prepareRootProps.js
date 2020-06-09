@@ -193,6 +193,9 @@ const getTextColor = (props: Object): ?string => {
 		case 20: {
 			return colors.iconOneSubColorBlock;
 		}
+		case 21: {
+			return colors.iconTwoColorBlock;
+		}
 		default:
 			return;
 	}

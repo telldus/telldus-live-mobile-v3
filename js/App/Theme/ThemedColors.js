@@ -267,7 +267,7 @@ export default {
 			return '#ffffff';
 		},
 		get iconTwoColorBlock() {
-			return '#A59F9A90';
+			return '#ffffff';
 		},
 		get infoOneColorBlockEnabled() {
 			return '#fff';
