@@ -194,7 +194,11 @@ static defaultProps: DefaultProps = {
 				{React.isValidElement(baseLeftIcon) ?
 					baseLeftIcon
 					:
-					<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
+					<IconTelldus
+						level={6}
+						icon={baseLeftIcon}
+						accessible={false}
+						style={rightIconStyle}/>
 				}
 			</RippleButton>
 		);
@@ -295,7 +299,7 @@ static defaultProps: DefaultProps = {
 			card,
 		} = colors;
 
-		const { shadow, paddingFactor, rowTextColor, brandDanger, brandInfo } = Theme.Core;
+		const { shadow, paddingFactor } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
@@ -338,17 +342,12 @@ static defaultProps: DefaultProps = {
 			pickerBaseTextStyleDef: {
 				flex: 1,
 				fontSize: fontSizeText,
-				color: rowTextColor,
 				marginRight: fontSizeText,
 				textAlignVertical: 'center',
 			},
 			rightIconStyle: {
 				fontSize: fontSizeRightIcon,
-				color: rowTextColor,
 			},
-			brandInfo,
-			rowTextColor,
-			brandDanger,
 			fontSize: fontSizeText,
 		};
 	}
