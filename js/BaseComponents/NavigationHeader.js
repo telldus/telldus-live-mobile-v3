@@ -27,12 +27,13 @@ import { StyleSheet, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import Header from './Header';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
+import Icon from './Icon';
+
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
@@ -154,12 +155,20 @@ class NavigationHeader extends PureComponent<Props, State> {
 		let size = isPortrait ? width * 0.06 : height * 0.06;
 		if (Platform.OS === 'ios' && leftIcon !== 'close') {
 			return (
-				<FontAwesome name={leftIcon} size={size} color="#fff" style={styles.iconLeft}/>
+				<Icon
+					level={17}
+					name={leftIcon}
+					size={size}
+					style={styles.iconLeft}/>
 			);
 		}
 
 		return (
-			<MaterialIcons name={leftIcon} size={size} color="#fff" style={styles.iconLeft}/>
+			<ThemedMaterialIcon
+				level={17}
+				name={leftIcon}
+				size={size}
+				style={styles.iconLeft}/>
 		);
 	}
 
