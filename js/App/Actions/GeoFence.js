@@ -328,6 +328,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			checkpoint: `handleActionDevice${action.uuid}`,
 			eventUUID,
 			...action,
+			time: Date.now(),
 		}));
 		if (!deviceId) {
 			return Promise.resolve('done');
@@ -345,6 +346,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
 					eventUUID,
 					...res,
+					time: Date.now(),
 				}));
 				return res;
 			}).catch((err: Object = {}) => {
@@ -352,6 +354,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
 					eventUUID,
 					error: err.message || JSON.stringify(err),
+					time: Date.now(),
 				}));
 				throw err;
 			});
@@ -364,6 +367,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
 					eventUUID,
 					...res,
+					time: Date.now(),
 				}));
 				return res;
 			}).catch((err: Object = {}) => {
@@ -371,6 +375,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
 					eventUUID,
 					error: err.message || JSON.stringify(err),
+					time: Date.now(),
 				}));
 			});
 		} else if (method === 2048) {
@@ -385,6 +390,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					checkpoint: `handleActionDevice-SUCCESS${action.uuid}`,
 					eventUUID,
 					...res,
+					time: Date.now(),
 				}));
 				return res;
 			}).catch((err: Object = {}) => {
@@ -392,6 +398,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					checkpoint: `handleActionDevice-ERROR${action.uuid}`,
 					eventUUID,
 					error: err.message || JSON.stringify(err),
+					time: Date.now(),
 				}));
 				throw err;
 			});
@@ -410,8 +417,24 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 			checkpoint: `handleActionEvent${action.uuid}`,
 			eventUUID,
 			id,
+			time: Date.now(),
 		}));
-		return dispatch(setEvent(id, options, accessToken));
+		return dispatch(setEvent(id, options, accessToken)).then((res: Object = {}): Object => {
+			dispatch(debugGFSetCheckpoint({
+				checkpoint: `handleActionEvent-SUCCESS${action.uuid}`,
+				eventUUID,
+				...res,
+				time: Date.now(),
+			}));
+			return res;
+		}).catch((err: Object = {}) => {
+			dispatch(debugGFSetCheckpoint({
+				checkpoint: `handleActionEvent-ERROR${action.uuid}`,
+				eventUUID,
+				error: err.message || JSON.stringify(err),
+				time: Date.now(),
+			}));
+		});
 	};
 }
 
@@ -422,8 +445,24 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 			checkpoint: `handleActionSchedule${action.uuid}`,
 			eventUUID,
 			options,
+			time: Date.now(),
 		}));
-		return dispatch(saveSchedule(options, accessToken));
+		return dispatch(saveSchedule(options, accessToken)).then((res: Object = {}): Object => {
+			dispatch(debugGFSetCheckpoint({
+				checkpoint: `handleActionSchedule-SUCCESS${action.uuid}`,
+				eventUUID,
+				...res,
+				time: Date.now(),
+			}));
+			return res;
+		}).catch((err: Object = {}) => {
+			dispatch(debugGFSetCheckpoint({
+				checkpoint: `handleActionSchedule-ERROR${action.uuid}`,
+				eventUUID,
+				error: err.message || JSON.stringify(err),
+				time: Date.now(),
+			}));
+		});
 	};
 }
 
