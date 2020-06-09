@@ -34,6 +34,7 @@ export const initialState = {
 		enableHeadless: true,
 		geofenceModeHighAccuracy: true,
 		preventSuspend: false,
+		showNotificationOnActionFail: true,
 	},
 };
 

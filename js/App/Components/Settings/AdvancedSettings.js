@@ -77,6 +77,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		enableHeadless = true,
 		geofenceModeHighAccuracy = true,
 		preventSuspend = false,
+		showNotificationOnActionFail = true,
 	} = config;
 
 	const [ inLineEditActiveDF, setInLineEditActiveDF ] = useState();
@@ -182,6 +183,12 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 	const onValueChangePS = useCallback((value: string) => {
 		onUpdateGeoFenceConfig({
 			preventSuspend: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
+	const onValueChangeShowNotif = useCallback((value: boolean) => {
+		onUpdateGeoFenceConfig({
+			showNotificationOnActionFail: value,
 		});
 	}, [onUpdateGeoFenceConfig]);
 
@@ -313,6 +320,18 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							}]}
 							extraData={config}/>
 						}
+						<SettingsRow
+							label={'Show notification when action fail: '}
+							onValueChange={onValueChangeShowNotif}
+							value={showNotificationOnActionFail}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
 						<SettingsRow
 							label={'View Fences Event Log'}
 							onPress={showOnGeoFenceLog}
