@@ -23,13 +23,13 @@
 'use strict';
 
 import React from 'react';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {
 	useSelector,
 } from 'react-redux';
 
 import {
 	FloatingButton,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -52,10 +52,10 @@ const MyLocation = React.memo<Object>((props: Object): Object => {
 		<FloatingButton
 			buttonStyle={buttonStyle}
 			onPress={onPress}
-			customComponent={<MaterialIcons
+			customComponent={<ThemedMaterialIcon
 				name={'my-location'}
 				size={iconSize}
-				color="#000"
+				level={12}
 				style={iconStyle}/>}/>
 	);
 });
@@ -78,7 +78,6 @@ const getStyles = (appLayout: Object): Object => {
 		iconSize: buttonSize,
 		buttonStyle: {
 			bottom: offsetBottom,
-			backgroundColor: '#fff',
 		},
 		iconStyle: {
 
