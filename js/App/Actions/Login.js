@@ -23,27 +23,44 @@
 'use strict';
 
 import axios from 'axios';
-import type { Action, ThunkAction, GrantType } from './Types';
+const gravatar = require('gravatar-api');
+import {
+	ImageCacheManager,
+} from 'react-native-cached-image';
+import max from 'lodash/max';
+import min from 'lodash/min';
+
+import {
+	updateAccessToken,
+} from './Auth';
+import type { ThunkAction, GrantType } from './Types';
 import { publicKey, privateKey, authenticationTimeOut, apiServer } from '../../Config';
 
 import {LiveApi} from '../Lib/LiveApi';
 import { destroyAllConnections } from '../Actions/Websockets';
 import { widgetAndroidDisableAll, widgetiOSRemoveDataFromKeychain } from './Widget';
-import { setBoolean } from '../Lib/Analytics';
+import {
+	setBoolean,
+} from '../Lib/Analytics';
+
+import {
+	getPremiumAccounts,
+	isAutoRenew,
+} from '../Lib/appUtils';
 
 import {
 	setUserIdentifierFirebaseCrashlytics,
 	setUserNameFirebaseCrashlytics,
 } from './Analytics';
 
-type loginCredential = {
+type loginCredential = {|
 	username: string,
 	password: string,
-};
+|};
 
-type loginCredentialSocial = {
+type loginCredentialSocial = {|
 	idToken: string,
-};
+|};
 
 type loginCredentialApple = {|
 	id_token: string,
@@ -69,10 +86,10 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 		.then((response: Object): Object => {
 			if (response.status === 200) {
 				setBoolean('Password', true);
-				dispatch({
-					type: 'RECEIVED_ACCESS_TOKEN',
-					accessToken: response.data,
-				});
+				dispatch(updateAccessToken({
+					...response.data,
+					userId: credential.username || undefined, // TODO: Should use user id, once it is available.
+				})); // https://code.telldus.com/telldus/live-api/issues/143
 				return response;
 			}
 			throw response;
@@ -83,32 +100,62 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 		});
 };
 
-function updateAccessToken(accessToken: Object): Action {
-	return {
-		type: 'RECEIVED_ACCESS_TOKEN',
-		accessToken: accessToken,
-	};
-}
-
-function getUserProfile(): ThunkAction {
+/**
+ *
+ * @param {Object} _accessToken : Should have all attributes received upon login and cached in store.
+ * @param {boolean} cancelAllPending : If true, will cancel all pending API calls if any.
+ * @param {boolean} activeAccount : If true, will update active accounts user profile, else the account that belongs to the received user id
+ */
+function getUserProfile(_accessToken?: Object = undefined, cancelAllPending?: boolean = false, activeAccount?: boolean = true): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
 		const payload = {
 			url: '/user/profile',
 			requestParams: {
 				method: 'GET',
 			},
+			_accessToken,
+			cancelAllPending,
 		};
 		return dispatch(LiveApi(payload)).then((response: Object): Object => {
-			dispatch({
-				type: 'RECEIVED_USER_PROFILE',
-				payload: {
-					...payload,
-					...response,
-				},
-			});
-			dispatch(setUserIdentifierFirebaseCrashlytics());
-			dispatch(setUserNameFirebaseCrashlytics());
-			return response;
+			if (response && response.email) {
+				if (activeAccount) {
+					dispatch({
+						type: 'RECEIVED_USER_PROFILE',
+						payload: {
+							...payload,
+							...response,
+						},
+					});
+				} else {
+					dispatch({
+						type: 'RECEIVED_USER_PROFILE_OTHER',
+						payload: {
+							...payload,
+							...response,
+						},
+					});
+				}
+
+				dispatch(setUserIdentifierFirebaseCrashlytics());
+				dispatch(setUserNameFirebaseCrashlytics());
+
+				try {
+					let options = {
+						email: response.email,
+						parameters: { 'size': '200', 'd': 'mm' },
+						secure: true,
+					};
+					const url = gravatar.imageUrl(options);
+					ImageCacheManager().downloadAndCacheUrl(url, {
+						useQueryParamsInCacheKey: true,
+					});
+				} catch (e) {
+					// Just ignore
+				} finally {
+					return response;
+				}
+			}
+			throw response;
 		}).catch((err: any) => {
 			throw err;
 		});
@@ -127,9 +174,82 @@ function logoutFromTelldus(): ThunkAction {
 	};
 }
 
+function logoutSelectedFromTelldus(data: Object): ThunkAction {
+	return (dispatch: Function, getState: Function): Function => {
+
+		destroyAllConnections();
+		widgetiOSRemoveDataFromKeychain();
+		dispatch(widgetAndroidDisableAll());
+
+		return dispatch({
+			type: 'LOGGED_OUT_SELECTED',
+			payload: {
+				...data,
+			},
+		});
+	};
+}
+function onSwitchAccount(payload: Object): ThunkAction {
+	return (dispatch: Function, getState: Function): Function => {
+
+		destroyAllConnections();
+		widgetiOSRemoveDataFromKeychain();
+		dispatch(widgetAndroidDisableAll());
+
+		return dispatch({
+			type: 'SWITCH_USER_ACCOUNT',
+			payload,
+		});
+	};
+}
+
+function prepareGAPremiumProperties(): ThunkAction {
+	return (dispatch: Function, getState: Function): Object => {
+		const {
+			user: {
+				accounts = {},
+			},
+		} = getState();
+
+		const premAccounts = getPremiumAccounts(accounts);
+		const isPremium = Object.keys(premAccounts).length > 0;
+
+		if (!isPremium) {
+			let dates = [];
+			Object.keys(accounts).forEach((userId: string) => {
+				const { pro = -1 } = accounts[userId];
+				dates.push(pro);
+			});
+
+			let greatestTS = max(dates);
+			greatestTS = greatestTS === -1 ? '' : greatestTS;
+
+			return {
+				isPremium: 'false',
+				premiumDate: greatestTS.toString(),
+			};
+		}
+
+		let dates = [];
+		Object.keys(premAccounts).forEach((userId: string) => {
+			const { pro, subscriptions } = premAccounts[userId];
+			if (!isAutoRenew(subscriptions)) {
+				dates.push(pro);
+			}
+		});
+
+		return {
+			isPremium: 'true',
+			premiumDate: dates.length > 0 ? min(dates).toString() : '',
+		};
+	};
+}
+
 module.exports = {
 	loginToTelldus,
 	logoutFromTelldus,
 	getUserProfile,
-	updateAccessToken,
+	logoutSelectedFromTelldus,
+	onSwitchAccount,
+	prepareGAPremiumProperties,
 };

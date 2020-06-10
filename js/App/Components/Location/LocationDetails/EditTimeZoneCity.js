@@ -41,6 +41,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -88,9 +89,11 @@ class EditTimeZoneCity extends View {
 	}
 
 	onCityChoose(city: string) {
-		const { navigation, actions, toggleDialogueBox } = this.props;
-		const id = navigation.getParam('id', null);
-		const continent = navigation.getParam('continent', null);
+		const { navigation, actions, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+			continent,
+		} = route.params || {};
 		const timezone = `${continent}/${city}`;
 		actions.setTimezone(id, timezone).then(() => {
 			actions.getGateways();

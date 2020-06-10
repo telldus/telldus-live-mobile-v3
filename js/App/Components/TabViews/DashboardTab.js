@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
@@ -56,7 +55,7 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { getTabBarIcon, LayoutAnimations } from '../../Lib';
+import { LayoutAnimations } from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
@@ -65,6 +64,7 @@ type Props = {
 	dbCarousel: boolean,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number) => void,
@@ -104,7 +104,7 @@ class DashboardTab extends View {
 	stopSensorTimer: () => void;
 	changeDisplayType: (number) => void;
 	onRefresh: () => void;
-	_renderRow: (number) => Object;
+	_renderRow: (Object) => Object;
 	onDismissDialogueHide: () => void;
 
 	showDimInfo: (Object) => void;
@@ -112,16 +112,7 @@ class DashboardTab extends View {
 	openRGBControl: (number) => void;
 	openThermostatControl: (number) => void;
 
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Dashboard' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.dashboard),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'dashboard'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.dashboardTab)}, ${postScript}`,
-		};
-	};
+	timeoutSwitchTabAndroid: any;
 
 	constructor(props: Props) {
 		super(props);
@@ -159,6 +150,8 @@ class DashboardTab extends View {
 
 		this.openRGBControl = this.openRGBControl.bind(this);
 		this.openThermostatControl = this.openThermostatControl.bind(this);
+
+		this.timeoutSwitchTabAndroid = null;
 	}
 
 	startSensorTimer() {
@@ -217,22 +210,35 @@ class DashboardTab extends View {
 	}
 
 	componentDidMount() {
-		const { isDBEmpty, navigation, screenProps } = this.props;
-		if (isDBEmpty && (screenProps.currentScreen === 'Dashboard' || screenProps.currentScreen === 'Tabs')) {
-			navigation.navigate({
-				routeName: 'Devices',
-				key: 'Devices',
-			});
+		const { isDBEmpty, navigation, currentScreen } = this.props;
+		const possibleScreen = ['Dashboard', 'Tabs', 'Login'];
+		if (isDBEmpty && possibleScreen.indexOf(currentScreen) !== -1) {
+			// Navigating to other tab inside componentDidMount of one tab has an issue in Android
+			// ISSUE: It successfully navigates to 'Devices' after after a second it navigates
+			// back to Dashboard itself.
+			// No issues in iOS though.
+			if (Platform.OS === 'android') {
+				this.timeoutSwitchTabAndroid = setTimeout(() => {
+					navigation.navigate('Devices');
+					this.timeoutSwitchTabAndroid = null;
+				}, 1000);
+			} else {
+				navigation.navigate('Devices');
+			}
 		}
 		this.startSensorTimer();
 	}
 
 	componentWillUnmount() {
 		this.stopSensorTimer();
+		if (this.timeoutSwitchTabAndroid) {
+			clearTimeout(this.timeoutSwitchTabAndroid);
+			this.timeoutSwitchTabAndroid = null;
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
+		const { currentScreen } = nextProps;
 		if (currentScreen !== 'Dashboard' && this.timer) {
 			this.stopSensorTimer();
 		}
@@ -240,8 +246,8 @@ class DashboardTab extends View {
 	}
 
 	componentDidUpdate(prevProps: Object) {
-		const { currentScreen } = this.props.screenProps;
-		if (currentScreen === 'Dashboard' && prevProps.screenProps.currentScreen !== 'Dashboard' && !this.timer) {
+		const { currentScreen } = this.props;
+		if (currentScreen === 'Dashboard' && prevProps.currentScreen !== 'Dashboard' && !this.timer) {
 			this.startSensorTimer();
 		}
 	}
@@ -275,14 +281,20 @@ class DashboardTab extends View {
 
 	noItemsMessage(style: Object): Object {
 		return (
-			<View style={[style.container, {
-				paddingHorizontal: 20,
-			}]}>
+			<View
+				level={3}
+				style={[style.container, {
+					paddingHorizontal: 20,
+				}]}>
 				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
-				<Text style={style.noItemsTitle}>
+				<Text
+					level={4}
+					style={style.noItemsTitle}>
 					{this.noItemsTitle}
 				</Text>
-				<Text style={style.noItemsContent}>
+				<Text
+					level={5}
+					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}
 				</Text>
@@ -313,13 +325,10 @@ class DashboardTab extends View {
 
 	openRGBControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'RGBControl',
-			key: 'RGBControl',
-			params: {
+		navigation.navigate('RGBControl',
+			{
 				id,
-			},
-		});
+			});
 	}
 
 	openDialogueBox(action: string, device: Object) {
@@ -331,19 +340,18 @@ class DashboardTab extends View {
 
 	openThermostatControl = (id: number) => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'ThermostatControl',
-			key: 'ThermostatControl',
-			params: {
+		navigation.navigate('ThermostatControl',
+			{
 				id,
-			},
-		});
+			});
 	}
 
 	getDialogueBoxData(action: string, device: Object): Object {
 		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		let data = {
 			show: true,
@@ -393,13 +401,21 @@ class DashboardTab extends View {
 			gateways,
 			gatewaysDidFetch,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
+			return <NoGateways
+				disabled={addingNewLocation}
+				onPress={addNewLocation}/>;
 		}
 
 		if (isDBEmpty) {
@@ -412,7 +428,10 @@ class DashboardTab extends View {
 		};
 
 		return (
-			<View onLayout={this._onLayout} style={style.container}>
+			<View
+				level={3}
+				onLayout={this._onLayout}
+				style={style.container}>
 				<FlatList
 					ref="list"
 					data={rows}
@@ -444,10 +463,10 @@ class DashboardTab extends View {
 	renderUnknown(id: number, tileStyle: Object, message: string): Object {
 		return (
 			<View
+				level={2}
 				style={[tileStyle,
 					{
 						...Theme.Core.shadow,
-						backgroundColor: '#fff',
 					},
 				]}>
 				<Text
@@ -529,31 +548,34 @@ class DashboardTab extends View {
 		return deviceWidth * Theme.Core.paddingFactor;
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
 		const padding = this.getPadding();
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		return {
 			container: {
 				flex: 1,
 				alignItems: 'center',
 				justifyContent: 'center',
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
-				backgroundColor: Theme.Core.appBackground,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
 			noItemsTitle: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
@@ -589,10 +611,6 @@ class DashboardTab extends View {
 	}
 }
 
-DashboardTab.propTypes = {
-	rows: PropTypes.array,
-};
-
 const getRows = createSelector(
 	[
 		({ dashboard }: Object): Object => dashboard,
@@ -600,21 +618,32 @@ const getRows = createSelector(
 		({ sensors }: Object): Object => sensors,
 		({ gateways }: Object): Object => gateways,
 		({ app }: Object): Object => app,
+		({ user }: Object): Object => user,
 	],
-	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app)
+	(dashboard: Object, devices: Object, sensors: Object, gateways: Object, app: Object, user: Object): Array<any> => parseDashboardForListView(dashboard, devices, sensors, gateways, app, user)
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
 	const { deviceIds = [], sensorIds = []} = state.dashboard;
 	const { defaultSettings } = state.app;
-	const { dbCarousel = true } = defaultSettings || {};
+	const { dbCarousel = true, activeDashboardId } = defaultSettings || {};
+
+	const { userId } = state.user;
+
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+
+	const { screen: currentScreen } = state.navigation;
 
 	return {
 		rows: getRows(state),
-		isDBEmpty: (deviceIds.length === 0) && (sensorIds.length === 0),
+		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0),
 		dbCarousel,
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
+		currentScreen,
 	};
 }
 
@@ -627,4 +656,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DashboardTab);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardTab);

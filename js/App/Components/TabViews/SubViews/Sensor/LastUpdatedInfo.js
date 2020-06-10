@@ -47,6 +47,7 @@ const LastUpdatedInfo = (props: Object): Object => {
 		numeric,
 		updateIntervalInSeconds,
 		timestamp,
+		level,
 	} = props;
 
 	const {
@@ -69,6 +70,7 @@ const LastUpdatedInfo = (props: Object): Object => {
 		<RawIntlProvider value={intl}>
 			<FormattedRelative
 				value={value}
+				level={level}
 				numeric={numeric}
 				updateIntervalInSeconds={updateIntervalInSeconds}
 				formatterFunction={formatSensorLastUpdateFunc}

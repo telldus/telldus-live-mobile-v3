@@ -1,4 +1,4 @@
-import {updateAccessToken} from '../../Actions/Login.js';
+import {updateAccessToken} from '../../Actions/Auth';
 import { configureStore } from '../../Store/ConfigureStore';
 jest.useFakeTimers();
 import fetchMock from 'fetch-mock';
@@ -8,7 +8,7 @@ describe('Test Login actions', ()=>{
 	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
 
 	beforeEach(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
 			device: [{

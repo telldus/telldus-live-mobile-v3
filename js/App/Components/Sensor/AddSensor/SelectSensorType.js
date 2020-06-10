@@ -51,6 +51,7 @@ type Props = {
 	currentScreen: string,
 	enableWebshop: boolean,
 	locale: string,
+	route: Object,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
@@ -84,8 +85,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 }
 
 onChooseType({module, action, secure}: Object) {
-	const { navigation } = this.props;
-	const gateway = navigation.getParam('gateway', {});
+	const { navigation, route } = this.props;
+	const { gateway = {}, ...others } = route.params || {};
 
 	if (module === 'zwave') {
 		navigation.navigate('IncludeDevice', {
@@ -96,18 +97,17 @@ onChooseType({module, action, secure}: Object) {
 			parent: 'sensors_tab',
 		});
 	} else if (module === 'rf433') {
-		const prevParams = navigation.state.params || {};
 		navigation.navigate('SensorsListAddSensor', {
-			...prevParams,
+			...others,
 			gateway,
 		});
 	}
 }
 
 getDeviceTypes(): Object {
-	const { navigation, intl } = this.props;
+	const { route, intl } = this.props;
 	const { formatMessage, formatNumber } = intl;
-	const gateway = navigation.getParam('gateway', {});
+	const { gateway = {}} = route.params || {};
 	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 
@@ -200,11 +200,17 @@ render(): Object {
 			{typesToRender}
 			{!support433 &&
 			<>
-				<View style={no433Cover}>
-					<Text style={no433Header}>
+				<View
+					level={2}
+					style={no433Cover}>
+					<Text
+						level={7}
+						style={no433Header}>
 						{formatMessage(i18n.gatewayNoSupport433Header)}
 					</Text>
-					<Text style={no433Body}>
+					<Text
+						level={6}
+						style={no433Body}>
 						{enableWebshop ?
 							formatMessage(i18n.gatewayNoSupport433InfoTwo)
 							:
@@ -232,9 +238,7 @@ getStyles(): Object {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		brandSecondary,
 		paddingFactor,
-		rowTextColor,
 		shadow,
 		maxSizeTextButton,
 	} = Theme.Core;
@@ -257,20 +261,17 @@ getStyles(): Object {
 		},
 		no433Cover: {
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
 			padding: padding * 2,
 		},
 		no433Header: {
-			color: brandSecondary,
 			fontSize: h2FontSize * 1.2,
 			marginBottom: padding * 1.6,
 			textAlign: 'center',
 		},
 		no433Body: {
-			color: rowTextColor,
 			fontSize: h2FontSize,
 			textAlign: 'center',
 		},

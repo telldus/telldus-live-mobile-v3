@@ -34,7 +34,6 @@ import Swiper from 'react-native-swiper';
 import {
 	FullPageActivityIndicator,
 	View,
-	StyleSheet,
 	Text,
 	Icon,
 } from '../../../BaseComponents';
@@ -50,7 +49,6 @@ import type { Schedule } from '../../Reducers/Schedule';
 
 import Theme from '../../Theme';
 
-import { getTabBarIcon } from '../../Lib';
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -62,6 +60,7 @@ type Props = {
 	gatewayTimezone: string,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 };
 
 type State = {
@@ -74,17 +73,6 @@ class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
-
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Scheduler' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.scheduler),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'scheduler'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.schedulerTab)}, ${postScript}`,
-		};
-	};
 
 	constructor(props: Props) {
 		super(props);
@@ -104,13 +92,14 @@ class SchedulerTab extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen, screenReaderEnabled } = nextProps.screenProps;
-		const { currentScreen: prevScreen } = this.props.screenProps;
+		const { currentScreen, screenProps } = nextProps;
+		const { screenReaderEnabled } = screenProps;
+		const { currentScreen: prevScreen } = this.props;
 		return (currentScreen === 'Scheduler') || (currentScreen !== 'Scheduler' && prevScreen === 'Scheduler' && screenReaderEnabled);
 	}
 
 	componentDidMount() {
-		const { currentScreen } = this.props.screenProps;
+		const { currentScreen } = this.props;
 		if (currentScreen === 'Scheduler') {
 			this.refreshJobs();
 		}
@@ -141,10 +130,12 @@ class SchedulerTab extends View<null, Props, State> {
 		const { dispatch, navigation } = this.props;
 
 		dispatch(editSchedule(schedule));
-		navigation.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
-			params: { editMode: true },
+		navigation.navigate('Schedule', {
+			editMode: true,
+			screen: 'Edit',
+			params: {
+				editMode: true,
+			},
 		});
 	};
 
@@ -170,8 +161,13 @@ class SchedulerTab extends View<null, Props, State> {
 			showInactive,
 			gatewaysDidFetch,
 			gateways,
+			currentScreen,
 		} = this.props;
-		const { appLayout, currentScreen } = screenProps;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 		const { todayIndex, isLoading } = this.state;
 		const { days, daysToRender } = this._getDaysToRender(rowsAndSections, appLayout);
 
@@ -180,13 +176,19 @@ class SchedulerTab extends View<null, Props, State> {
 		}
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
+			return <NoGateways
+				disabled={addingNewLocation}
+				onPress={addNewLocation}/>;
 		}
 
-		const { swiperContainer } = this.getStyles(appLayout);
+		const { swiperContainer } = this.getStyles({
+			appLayout,
+		});
 
 		return (
-			<View style={swiperContainer}
+			<View
+				level={3}
+				style={swiperContainer}
 				accessible={false}
 				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
@@ -214,18 +216,33 @@ class SchedulerTab extends View<null, Props, State> {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
+
 		const headerHeight = (Platform.OS === 'android' && !isPortrait) ? (width * 0.05) + (height * 0.13) : 0;
-		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * 0.07303) : 0;
+		const marginLeft = (Platform.OS === 'android' && !isPortrait) ? (width * androidLandMarginLeftFactor) : 0;
 
 		const fontSizeNoData = deviceWidth * 0.03;
 		const iconSize = deviceWidth * 0.05;
 
 		return {
+			container: {
+				flex: 1,
+			},
+			containerWhenNoData: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginTop: 20,
+			},
 			line: {
 				backgroundColor: '#929292',
 				height: '100%',
@@ -271,18 +288,31 @@ class SchedulerTab extends View<null, Props, State> {
 
 			let isEmpty = !schedules || schedules.length === 0;
 
-			const { line, textWhenNoData, iconSize } = this.getStyles(appLayout);
+			const {
+				line,
+				textWhenNoData,
+				iconSize,
+				container,
+				containerWhenNoData,
+			} = this.getStyles({
+				appLayout,
+			});
 			daysToRender.push(
-				<View style={styles.container} key={key}>
+				<View
+					level={3}
+					style={container}
+					key={key}>
 					{isEmpty ?
-						<View style={styles.containerWhenNoData}>
+						<View style={containerWhenNoData}>
 							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
 							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
 						</View>
 						:
-						<View style={styles.container}>
+						<View
+							level={3}
+							style={container}>
 							<View style={line}/>
 							<FlatList
 								data={schedules}
@@ -294,6 +324,7 @@ class SchedulerTab extends View<null, Props, State> {
 								// if there is any expired schedule)
 								extraData={{
 									todayIndex,
+									appLayout,
 								}}
 							/>
 						</View>
@@ -319,7 +350,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
-		const { rowsAndSections, screenProps } = this.props;
+		const { rowsAndSections, screenProps, currentScreen } = this.props;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -334,6 +365,7 @@ class SchedulerTab extends View<null, Props, State> {
 				editJob={this.editJob}
 				isFirst={props.index === 0}
 				gatewayTimezone={item.gatewayTimezone}
+				currentScreen={currentScreen}
 				{...screenProps}/>
 		);
 	};
@@ -353,32 +385,22 @@ const getRowsAndSections = createSelector(
 	},
 );
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Theme.Core.appBackground,
-	},
-	containerWhenNoData: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: 20,
-	},
-});
-
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
 };
 
 const mapStateToProps = (store: Object): MapStateToPropsType => {
-	const { jobsList = {} } = store;
+	const { jobsList = {}, navigation } = store;
 	const { userOptions = {} } = jobsList;
 	const { showInactive = true } = userOptions;
+	const { screen: currentScreen } = navigation;
+
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		showInactive,
 		gateways: store.gateways.allIds,
 		gatewaysDidFetch: store.gateways.didFetch,
+		currentScreen,
 	};
 };
 
@@ -388,4 +410,5 @@ const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 	};
 };
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+export default connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+

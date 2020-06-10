@@ -26,9 +26,18 @@ import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 
 import { FormattedMessage, View, Text, TouchableButton, H1 } from '../../../BaseComponents';
+
+import {
+	clearAppData,
+} from '../../Actions/AppData';
+
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
+
+import {
+	updateAccessToken,
+} from '../../Actions/Auth';
 
 type Props = {
 	accessToken: Object,
@@ -37,6 +46,10 @@ type Props = {
 	intl: intlShape.isRequired,
 	appLayout: Object,
 	styles: Object,
+	navigation: Object,
+	screenProps: Object,
+	dispatch: Function,
+	ScreenName: string,
 };
 
 class WelcomeScreen extends View {
@@ -51,7 +64,31 @@ class WelcomeScreen extends View {
 	}
 
 	onPressOK() {
-		this.props.onPressOK(this.props.registeredCredential);
+		const {
+			screenProps,
+			registeredCredential,
+			onPressOK,
+			dispatch,
+			navigation,
+		} = this.props;
+
+		onPressOK(registeredCredential);
+
+		const { source = 'prelogin' } = screenProps;
+		if (source === 'postlogin') {
+			dispatch(clearAppData());
+			navigation.navigate('Tabs', {
+				screen: 'Dashboard',
+			});
+		}
+	}
+
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
+	}
+
+	goBack = () => {
+		this.props.navigation.pop(2);
 	}
 
 	render(): Object {
@@ -111,11 +148,9 @@ function mapStateToProps(store: Object): Object {
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		onPressOK: (accessToken: string) => {
-			dispatch({
-				type: 'RECEIVED_ACCESS_TOKEN',
-				accessToken,
-			});
+			dispatch(updateAccessToken(accessToken));
 		},
+		dispatch,
 	};
 }
 

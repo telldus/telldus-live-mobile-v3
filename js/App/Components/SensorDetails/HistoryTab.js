@@ -22,14 +22,13 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 
 import {
 	View,
-	TabBar,
 	FullPageActivityIndicator,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	GraphValuesDropDown,
@@ -71,6 +70,7 @@ type Props = {
 	smoothing: boolean,
 	graphView: string,
 	gatewayTimezone: string,
+	currentScreen: string,
 
 	sensorId: number,
 	dispatch: Function,
@@ -110,25 +110,9 @@ class HistoryTab extends View {
 
 	refreshHistoryDataAfterLiveUpdate: () => Promise<any>;
 
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="history"
-				tintColor={tintColor}
-				label={i18n.historyHeader}
-				accessibilityLabel={i18n.deviceHistoryTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'SHistory',
-				key: 'SHistory',
-			});
-		},
-	});
-
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { screenProps } = props;
-		if (screenProps.currentScreen !== 'SHistory') {
+		const { currentScreen } = props;
+		if (currentScreen !== 'SHistory') {
 			return {
 				hasRefreshed: false,
 			};
@@ -177,7 +161,7 @@ class HistoryTab extends View {
 		// the conditional check here is to prevent the history related query from happening when being in
 		// overview tab, which can result in delay to open history tab if the query is running in the background.
 		// Data fetch/query is handled at 'didUpdate' method.
-		if (this.props.screenProps.currentScreen === 'SHistory') {
+		if (this.props.currentScreen === 'SHistory') {
 			this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
 		}
 	}
@@ -394,11 +378,11 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps, keepHistory } = nextProps;
-		const { appLayout, currentScreen } = screenProps;
+		const { screenProps, keepHistory, currentScreen } = nextProps;
+		const { appLayout } = screenProps;
 		if (currentScreen === 'SHistory') {
 			const { chartDataOne, chartDataTwo, list, ...others } = this.state;
-			if (this.props.screenProps.currentScreen !== 'SHistory') {
+			if (this.props.currentScreen !== 'SHistory') {
 				return true;
 			}
 
@@ -432,9 +416,9 @@ class HistoryTab extends View {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { screenProps } = this.props;
+		const { currentScreen } = this.props;
 		const { hasRefreshed, hasLoaded } = this.state;
-		if (screenProps.currentScreen === 'SHistory' && !hasRefreshed) {
+		if (currentScreen === 'SHistory' && !hasRefreshed) {
 			// If data fetch did not happen inside 'didMount' do it here
 			if (!hasLoaded) {
 				this.getHistoryDataWithLatestTimestamp();
@@ -613,15 +597,17 @@ class HistoryTab extends View {
 
 		if (!keepHistory) {
 			return (
-				<ScrollView style={{
-					backgroundColor: Theme.Core.appBackground,
-				}}>
+				<ThemedScrollView
+					level={3}
+					style={{
+						flex: 1,
+					}}>
 					<View style={containerStyle}>
 						<HistoryNotStored
 							sensorId={sensorId}
 							width={deviceWidth}/>
 					</View>
-				</ScrollView>
+				</ThemedScrollView>
 			);
 		}
 
@@ -648,9 +634,11 @@ class HistoryTab extends View {
 		};
 
 		return (
-			<ScrollView style={{
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<ThemedScrollView
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<View style={containerStyle}>
 					<View style={{
 						flexDirection: 'row',
@@ -707,7 +695,7 @@ class HistoryTab extends View {
 					appLayout={appLayout}
 					intl={intl}
 					gatewayTimezone={gatewayTimezone}/>
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -756,7 +744,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const { defaultSensorSettings } = state.sensorsList;
 	const defaultSettings = defaultSensorSettings[id];
 	const { keepHistory, clientId } = state.sensors.byId[id] ? state.sensors.byId[id] : {};
@@ -774,6 +763,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		timezone: gatewayTimezone,
 	} = gateway ? gateway : {};
 
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		sensorId: id,
 		keepHistory,
@@ -784,6 +775,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		smoothing,
 		graphView,
 		gatewayTimezone,
+		currentScreen,
 	};
 }
 

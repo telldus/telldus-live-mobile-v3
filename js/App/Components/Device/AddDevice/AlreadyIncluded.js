@@ -23,9 +23,6 @@
 'use strict';
 
 import React from 'react';
-import {
-	ScrollView,
-} from 'react-native';
 
 import {
 	View,
@@ -33,6 +30,7 @@ import {
 	Row,
 	Text,
 	IconTelldus,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { DeviceInfoBlock } from './SubViews';
 
@@ -43,7 +41,8 @@ import { capitalize } from '../../../Lib';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -73,7 +72,7 @@ onPressNext() {
 }
 
 render(): Object {
-	const { intl, navigation, appLayout } = this.props;
+	const { intl, appLayout, route } = this.props;
 	const { formatMessage } = intl;
 
 	const {
@@ -87,20 +86,25 @@ render(): Object {
 	} = this.getStyles();
 
 	const {
+		info = {},
+		gateway = {},
+	} = route.params || {};
+	const {
 		deviceImage,
 		deviceModel,
 		name,
 		imageW,
 		imageH,
-	} = navigation.getParam('info', {});
+	} = info;
 	const {
 		name: gName,
-	} = navigation.getParam('gateway', {});
+	} = gateway;
 
 
 	return (
 		<View style={container}>
-			<ScrollView>
+			<ThemedScrollView
+				level={3}>
 				<Row
 					containerStyle={containerStyle}>
 					<DeviceInfoBlock
@@ -113,13 +117,17 @@ render(): Object {
 						appLayout={appLayout}
 					/>
 				</Row>
-				<View style={infoContainer}>
+				<View
+					level={2}
+					style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
+					<Text
+						level={5}
+						style={infoTextStyle}>
 						{formatMessage(i18n.messageDeviceAlreadyIncluded, {name: `"${name}"`})}
 					</Text>
 				</View>
-			</ScrollView>
+			</ThemedScrollView>
 			<FloatingButton
 				onPress={this.onPressNext}
 				iconName={'checkmark'}
@@ -135,7 +143,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, shadow } = Theme.Core;
+	const { paddingFactor, brandSecondary, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
@@ -164,7 +172,6 @@ getStyles(): Object {
 			marginBottom: padding,
 			marginHorizontal: padding,
 			padding: innerPadding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -177,7 +184,6 @@ getStyles(): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: infoTextFontSize,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: innerPadding,
 		},

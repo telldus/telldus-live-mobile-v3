@@ -60,6 +60,7 @@ type Props = {
 	name?: string,
 	methodRequested: string,
 	local: boolean,
+	disableActionIndicator?: boolean,
 };
 
 type State = {
@@ -116,8 +117,22 @@ class SliderScale extends View {
 
 	render(): Object {
 		const { minimumValue, maximumValue, scaleWidth } = this.state;
-		const { thumbWidth, thumbHeight, isGatewayActive, containerHeight, containerWidth, displayedValue,
-			style, value, importantForAccessibility, name = '', isInState, methodRequested, local } = this.props;
+		const {
+			thumbWidth,
+			thumbHeight,
+			isGatewayActive,
+			containerHeight,
+			containerWidth,
+			displayedValue,
+			style,
+			value,
+			importantForAccessibility,
+			name = '',
+			isInState,
+			methodRequested,
+			local,
+			disableActionIndicator,
+		} = this.props;
 		const thumbLeft = value.interpolate({
 			inputRange: [minimumValue, maximumValue],
 			outputRange: [0, scaleWidth - thumbWidth],
@@ -170,7 +185,7 @@ class SliderScale extends View {
 					{displayedValue}%
 				</Text>
 				{
-					methodRequested === 'DIM' ?
+					!disableActionIndicator && methodRequested === 'DIM' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
@@ -223,6 +238,7 @@ SliderScale.defaultProps = {
 	thumbWidth: 12,
 	fontSize: 10,
 	sensitive: 1,
+	disableActionIndicator: false,
 };
 
 module.exports = injectIntl(SliderScale);

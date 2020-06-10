@@ -226,7 +226,7 @@ const Push = {
 		return false;
 	},
 	navigateToPurchasePremium: () => {
-		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+		navigate('PremiumUpgradeScreen');
 	},
 	checkPlayServices(): Object {
 		const utils = firebase.utils();

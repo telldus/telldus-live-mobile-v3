@@ -25,10 +25,15 @@ import { TouchableOpacity, Modal, ScrollView, Linking } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { intlShape, injectIntl } from 'react-intl';
-import { SafeAreaView } from 'react-navigation'; // Using SafeAreaView from react-navigation, this fix issue https://github.com/facebook/react-native/issues/18177.
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
 
-import { View, Text, StyleSheet, PosterWithText, NavigationHeader } from '../../../BaseComponents';
+import {
+	View,
+	Text,
+	StyleSheet,
+	PosterWithText,
+	NavigationHeader,
+	SafeAreaView,
+} from '../../../BaseComponents';
 import Block from './SubViews/Block';
 
 import Theme from '../../Theme';
@@ -40,8 +45,6 @@ import shouldUpdate from '../../Lib/shouldUpdate';
 import {
 	capitalizeFirstLetterOfEachWord,
 } from '../../Lib/appUtils';
-
-const ViewX = isIphoneX() ? SafeAreaView : View;
 
 type Props = {
 	showModal: boolean,
@@ -149,43 +152,41 @@ render(): Object | null {
 			presentationStyle={'fullScreen'}
 			onRequestClose={this.noOP}
 			supportedOrientations={['portrait', 'landscape']}>
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor: Theme.Core.appBackground }) }}>
-				<View style={styles.modalContainer} onLayout={this.props.onLayout}>
-					<NavigationHeader showLeftIcon={false} topMargin={false} forceHideStatus/>
-					<ScrollView
-						style={styles.scrollView}
-						contentContainerStyle={styles.SVContentContainerStyle}>
-						<PosterWithText
-							appLayout={appLayout}
-							align={'right'}
-							h1={this.h1}
-							h2={this.h2}
-							navigation={navigation}/>
-						{blocks}
-					</ScrollView>
-					<View style={styles.footersCover}>
-						<View style={styles.footerOne}>
-							<TouchableOpacity style={styles.footerItem} onPress={this.navigateToExchange}>
-								<Text style={[styles.footerText, {color: '#fff'}]}>
-									{this.f1}
-								</Text>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.footerTwo}>
-							<TouchableOpacity style={styles.footerItem} onPress={this.hidePerm}>
-								<Text style={styles.footerText}>
-									{this.f3}
-								</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.footerItem} onPress={this.hideTemp}>
-								<Text style={styles.footerText}>
-									{this.f2}
-								</Text>
-							</TouchableOpacity>
-						</View>
+			<SafeAreaView onLayout={this.props.onLayout}>
+				<NavigationHeader showLeftIcon={false} topMargin={false} forceHideStatus/>
+				<ScrollView
+					style={styles.scrollView}
+					contentContainerStyle={styles.SVContentContainerStyle}>
+					<PosterWithText
+						appLayout={appLayout}
+						align={'right'}
+						h1={this.h1}
+						h2={this.h2}
+						navigation={navigation}/>
+					{blocks}
+				</ScrollView>
+				<View style={styles.footersCover}>
+					<View style={styles.footerOne}>
+						<TouchableOpacity style={styles.footerItem} onPress={this.navigateToExchange}>
+							<Text style={[styles.footerText, {color: '#fff'}]}>
+								{this.f1}
+							</Text>
+						</TouchableOpacity>
+					</View>
+					<View style={styles.footerTwo}>
+						<TouchableOpacity style={styles.footerItem} onPress={this.hidePerm}>
+							<Text style={styles.footerText}>
+								{this.f3}
+							</Text>
+						</TouchableOpacity>
+						<TouchableOpacity style={styles.footerItem} onPress={this.hideTemp}>
+							<Text style={styles.footerText}>
+								{this.f2}
+							</Text>
+						</TouchableOpacity>
 					</View>
 				</View>
-			</ViewX>
+			</SafeAreaView>
 		</Modal>
 	);
 }
@@ -203,9 +204,6 @@ getStyles(appLayout: Object): Object {
 
 	return {
 		footerHeight,
-		modalContainer: {
-			flex: 1,
-		},
 		hContainer: {
 			position: 'absolute',
 			right: isPortrait ? width * 0.1 : height * 0.1,

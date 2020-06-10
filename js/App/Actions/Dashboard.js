@@ -32,14 +32,18 @@ function getSupportedDisplayTypes(data: Object = {}): Array<string> {
 }
 
 const changeSensorDisplayTypeDB = (id?: number): ThunkAction => (dispatch: Function, getState: Function) => {
-	const { sensors, dashboard, sensorsList, app: {defaultSettings} } = getState();
-	const { sensorIds } = dashboard;
+	const { sensors, dashboard, sensorsList, app: {defaultSettings}, user: { userId } } = getState();
+
 	const { defaultSensorSettings } = sensorsList;
 
-	const { dbCarousel } = defaultSettings || {};
+	const { dbCarousel, activeDashboardId } = defaultSettings || {};
+
+	const { sensorIds = {} } = dashboard;
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 
 	if (dbCarousel) {
-		sensorIds.forEach((sensorId: number) => {
+		sensorIdsInCurrentDb.forEach((sensorId: number) => {
 			const sensor = sensors.byId[sensorId];
 			dispatch(prepareAndUpdate(sensorId, sensor.data, defaultSensorSettings));
 		});

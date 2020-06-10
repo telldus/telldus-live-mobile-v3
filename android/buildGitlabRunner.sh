@@ -36,10 +36,12 @@ GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
 PUSH_SENDER_ID=${PUSH_SENDER_ID}
 TELLDUS_API_SERVER="${TELLDUS_API_SERVER}"
 DEPLOY_STORE="${DEPLOY_STORE}"
+GEOLOCATION_APPLICATION_KEY=${GEOLOCATION_APPLICATION_KEY}
 
 android.useAndroidX=true
 android.enableJetifier=true
-org.gradle.jvmargs=-Xmx4608M
+org.gradle.jvmargs=-Xms512M
+FLIPPER_VERSION=0.33.1
 EOF
 
 echo "${GOOGLE_SERVICES}" > app/google-services.json

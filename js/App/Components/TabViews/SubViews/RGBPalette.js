@@ -43,11 +43,13 @@ type Props = {
 	offColorMultiplier: number,
 	onColorMultiplier: number,
 	methodRequested: string,
+	disableActionIndicator?: boolean,
 };
 
 type DefaultProps = {
 	fontSize: number,
 	fontSizeIcon: number,
+	disableActionIndicator: boolean,
 };
 
 class RGBPalette extends View<Props, null> {
@@ -56,6 +58,7 @@ class RGBPalette extends View<Props, null> {
 	static defaultProps: DefaultProps = {
 		fontSize: 9,
 		fontSizeIcon: 26,
+		disableActionIndicator: false,
 	}
 
 	constructor(props: Props) {
@@ -72,6 +75,7 @@ class RGBPalette extends View<Props, null> {
 			isGatewayActive,
 			onColorMultiplier,
 			methodRequested,
+			disableActionIndicator,
 		} = this.props;
 
 		let mainColor = isInState === 'DIM' || isInState === 'RGB' && typeof rgb !== 'undefined' ? prepareMainColor(getMainColorRGB(rgb), onColorMultiplier) : '#eeeeee';
@@ -87,7 +91,7 @@ class RGBPalette extends View<Props, null> {
 				backgroundColor: mainColor,
 			}]}>
 				{
-					methodRequested === 'DIM' || methodRequested === 'RGB' ?
+					!disableActionIndicator && (methodRequested === 'DIM' || methodRequested === 'RGB') ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}

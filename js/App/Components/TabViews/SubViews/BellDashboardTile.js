@@ -43,8 +43,8 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	style: Object,
-	containerStyle?: number | Object | Array<any>,
-	bellButtonStyle?: number | Object | Array<any>,
+	containerStyle?: Array<any> | Object,
+	bellButtonStyle?: Array<any> | Object,
 	deviceSetState: (id: number, command: number, value?: number) => void,
 };
 

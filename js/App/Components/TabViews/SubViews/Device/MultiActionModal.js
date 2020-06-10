@@ -175,7 +175,10 @@ render(): Object {
 							}
 							return (
 								<View style={{ marginTop: 10 }}>
-									{React.cloneElement(child, {...newStyle, ...newProps})}
+									{React.cloneElement(child, {
+										...newProps, // $FlowFixMe
+										...newStyle,
+									})}
 								</View>
 							);
 						}

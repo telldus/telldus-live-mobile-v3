@@ -32,6 +32,10 @@ import { methods } from '../../../../Constants';
 import {
 	getKnownModes,
 } from '../../../Lib/thermostatUtils';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
@@ -149,7 +153,7 @@ type DefaultProps = {
 	methodValue: number | string,
 };
 
-type Props = {
+type Props = PropsThemedComponent & {
 	method: number,
 	actionIcons: Object,
 	onPress?: Function,
@@ -159,10 +163,10 @@ type Props = {
 	appLayout: Object,
 	intl: Object,
 	labelPostScript?: string,
-	iconContainerStyle?: Array<any> | Object | number,
+	iconContainerStyle?: Array<any> | Object,
 };
 
-export default class ActionRow extends View<DefaultProps, Props, null> {
+class ActionRow extends View<DefaultProps, Props, null> {
 
 	static defaultProps = {
 		showValue: false,
@@ -339,6 +343,9 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
+		const {
+			colors,
+		} = this.props;
 		const { borderRadiusRow } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -358,7 +365,7 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 				width: iconContainerWidth,
 			},
 			description: {
-				color: '#707070',
+				color: colors.textSix,
 				fontSize: deviceWidth * 0.032,
 				opacity: 1,
 			},
@@ -397,3 +404,5 @@ export default class ActionRow extends View<DefaultProps, Props, null> {
 	};
 
 }
+
+export default withTheme(ActionRow);

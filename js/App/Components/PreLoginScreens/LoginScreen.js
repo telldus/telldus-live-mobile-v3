@@ -30,6 +30,10 @@ import { FormattedMessage, View } from '../../../BaseComponents';
 import { LoginForm, SessionLocked } from './SubViews';
 
 import {
+	clearAppData,
+} from '../../Actions/AppData';
+
+import {
 	setSocialAuthConfig,
 } from './../../Actions/User';
 
@@ -47,6 +51,7 @@ type Props = {
 	accessToken: Object,
 	isTokenValid: boolean,
 	dispatch: Function,
+	ScreenName: string,
 };
 
 type State = {
@@ -117,10 +122,7 @@ class LoginScreen extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
-			return false;
-		}
-		return true;
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
 	}
 
 	getRelativeData(extras?: Object): Object {
@@ -199,6 +201,21 @@ class LoginScreen extends View {
 		});
 	}
 
+	goBack = () => {
+		this.props.navigation.goBack();
+	}
+
+	_onLoginSuccess = () => {
+		const {
+			navigation,
+			dispatch,
+		} = this.props;
+		dispatch(clearAppData());
+		navigation.navigate('Tabs', {
+			screen: 'Dashboard',
+		});
+	}
+
 	loginPostSocialLoginFail = () => {
 		this.setState({
 			showModal: false,
@@ -212,10 +229,7 @@ class LoginScreen extends View {
 			const {
 				navigation,
 			} = this.props;
-			navigation.navigate({ // TODO: update in v3.15
-				routeName: 'Register',
-				key: 'Register',
-			});
+			navigation.navigate('Register');
 		});
 	}
 
@@ -225,8 +239,10 @@ class LoginScreen extends View {
 	}
 
 	render(): Object {
-		let { appLayout, styles: commonStyles } = this.props;
+		let { appLayout, styles: commonStyles, screenProps, intl } = this.props;
 		let styles = this.getStyles(appLayout);
+
+		const { source = 'prelogin' } = screenProps;
 
 		let {
 			headerText,
@@ -250,23 +266,38 @@ class LoginScreen extends View {
 						dialogueOpen={this.state.showModal}
 						headerText={headerText}
 						styles={commonStyles}
-						openDialogueBox={this.openDialogueBox}/>
+						openDialogueBox={this.openDialogueBox}
+						onLoginSuccess={source === 'postlogin' ? this._onLoginSuccess : undefined}/>
 				}
 				{this.props.accessToken && !this.props.isTokenValid ?
 					null
 					:
 					<View style={styles.otherLinks}>
-						<TouchableOpacity
-							onPress={this.onForgotPassword}
-							accessibilityLabel={this.labelForgotPassword}>
-							<FormattedMessage {...i18n.forgotPassword} style={styles.textLink}/>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={this.onNeedAccount}
-							accessibilityLabel={this.labelNeedAccount}>
-							<FormattedMessage {...i18n.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
-						</TouchableOpacity>
-						<View style={{ height: 10 }}/>
+						{source === 'prelogin' && (
+							<>
+								<TouchableOpacity
+									onPress={this.onForgotPassword}
+									accessibilityLabel={this.labelForgotPassword}>
+									<FormattedMessage {...i18n.forgotPassword} style={styles.textLink}/>
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={this.onNeedAccount}
+									accessibilityLabel={this.labelNeedAccount}>
+									<FormattedMessage {...i18n.needAccount} style={[ styles.textLink, { paddingLeft: 5 }]}/>
+								</TouchableOpacity>
+								<View style={{ height: 10 }}/>
+							</>
+						)}
+						{source === 'postlogin' && (
+							<TouchableOpacity
+								onPress={this.goBack}
+								accessibilityLabel={intl.formatMessage(i18n.cancelAndBack)}
+								style={{
+									alignSelf: 'center',
+								}}>
+								<FormattedMessage {...i18n.cancelAndBack} style={styles.textLink} />
+							</TouchableOpacity>
+						)}
 					</View>
 				}
 			</View>
@@ -306,19 +337,11 @@ class LoginScreen extends View {
 	}
 
 	onNeedAccount() {
-		this.closeModal();
-		this.props.navigation.navigate({
-			routeName: 'Register',
-			key: 'Register',
-		});
+		this.props.navigation.navigate('Register');
 	}
 
 	onForgotPassword() {
-		this.closeModal();
-		this.props.navigation.navigate({
-			routeName: 'ForgotPassword',
-			key: 'ForgotPassword',
-		});
+		this.props.navigation.navigate('ForgotPassword');
 	}
 }
 
@@ -329,10 +352,10 @@ function mapStateToProps(store: Object): Object {
 	};
 }
 
-function dispatchToProps(dispatch: Function): Object {
+function mapDispatchToProps(dispatch: Function): Object {
 	return {
 		dispatch,
 	};
 }
 
-module.exports = connect(mapStateToProps, dispatchToProps)(injectIntl(LoginScreen));
+module.exports = connect(mapStateToProps, mapDispatchToProps)(injectIntl(LoginScreen));

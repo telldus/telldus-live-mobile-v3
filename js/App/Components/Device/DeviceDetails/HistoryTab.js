@@ -27,7 +27,7 @@ import { StyleSheet, SectionList, RefreshControl } from 'react-native';
 import reduce from 'lodash/reduce';
 import groupBy from 'lodash/groupBy';
 
-import { FormattedMessage, Text, View, Icon, FormattedDate, TabBar } from '../../../../BaseComponents';
+import { FormattedMessage, Text, View, Icon, FormattedDate } from '../../../../BaseComponents';
 import { DeviceHistoryDetails, HistoryRow } from './SubViews';
 import { getDeviceHistory } from '../../../Actions/Devices';
 import { getHistory, storeHistory, getLatestTimestamp } from '../../../Actions/LocalStorage';
@@ -65,28 +65,9 @@ class HistoryTab extends View {
 	getHistoryDataWithLatestTimestamp: () => void;
 	onOriginPress: () => void;
 
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="history"
-				tintColor={tintColor}
-				label={i18n.historyHeader}
-				accessibilityLabel={i18n.deviceHistoryTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			const noOp = () => {};
-			const onPress = navigation.getParam('actionOnHistoryTabPress', noOp);
-			onPress();
-			navigation.navigate({
-				routeName: 'History',
-				key: 'History',
-			});
-		},
-	});
-
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { screenProps } = props;
-		if (screenProps.currentScreen !== 'History') {
+		const { currentScreen } = props;
+		if (currentScreen !== 'History') {
 			return {
 				hasRefreshed: false,
 			};
@@ -116,10 +97,6 @@ class HistoryTab extends View {
 	}
 
 	componentDidMount() {
-		let {setParams} = this.props.navigation;
-		setParams({
-			actionOnHistoryTabPress: this.closeHistoryDetailsModal,
-		});
 		this.getHistoryData(false, true, this.getHistoryDataWithLatestTimestamp());
 	}
 
@@ -182,9 +159,9 @@ class HistoryTab extends View {
 	}
 
 	componentDidUpdate(prevProps: Object, prevState: Object) {
-		const { screenProps } = this.props;
+		const { currentScreen } = this.props;
 		const { hasRefreshed } = this.state;
-		if (screenProps.currentScreen === 'History' && !hasRefreshed) {
+		if (currentScreen === 'History' && !hasRefreshed) {
 			this.refreshHistoryData();
 			this.setState({
 				hasRefreshed: true,
@@ -240,8 +217,8 @@ class HistoryTab extends View {
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, device, gatewayTimezone } = this.props;
-		const { intl, currentScreen, appLayout } = screenProps;
+		const { screenProps, device, gatewayTimezone, currentScreen } = this.props;
+		const { intl, appLayout } = screenProps;
 		const { deviceType } = device;
 		const { historyDetails } = this.state;
 
@@ -277,7 +254,9 @@ class HistoryTab extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<View style={sectionHeader}>
+			<View
+				level={2}
+				style={sectionHeader}>
 				<FormattedDate
 					value={item.section.key}
 					localeMatcher= "best fit"
@@ -285,7 +264,7 @@ class HistoryTab extends View {
 					weekday="long"
 					day="2-digit"
 					month="long"
-					style={sectionHeaderText} />
+					style={sectionHeaderText}/>
 			</View>
 		);
 	}
@@ -295,7 +274,7 @@ class HistoryTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'History';
+		return nextProps.currentScreen === 'History';
 	}
 
 	_onRefresh() {
@@ -306,9 +285,9 @@ class HistoryTab extends View {
 	}
 
 	render(): Object | null {
-		let { screenProps, device } = this.props;
+		let { screenProps, device, currentScreen } = this.props;
 		let { hasLoaded, refreshing, rowsAndSections, historyDetails } = this.state;
-		let { intl, currentScreen, appLayout } = screenProps;
+		let { intl, appLayout } = screenProps;
 		let { brandPrimary } = Theme.Core;
 
 		if (!device.id) {
@@ -324,7 +303,9 @@ class HistoryTab extends View {
 		// response received but, no history for the requested device, so empty list message.
 		if (!refreshing && hasLoaded && rowsAndSections.length === 0) {
 			return (
-				<View style={styles.containerWhenNoData}>
+				<View
+					level={3}
+					style={styles.containerWhenNoData}>
 					<View style={{
 						flexDirection: 'row',
 						justifyContent: 'center',
@@ -339,7 +320,9 @@ class HistoryTab extends View {
 			);
 		}
 		return (
-			<View style={styles.container}>
+			<View
+				level={3}
+				style={styles.container}>
 				<SectionList
 					style={{flex: 1}}
 					contentContainerStyle={{flexGrow: 1}}
@@ -395,7 +378,6 @@ class HistoryTab extends View {
 			},
 			sectionHeader: {
 				paddingVertical: fontSizeSectionText * 0.5,
-				backgroundColor: '#ffffff',
 				justifyContent: 'center',
 				paddingLeft: 5 + (fontSizeSectionText * 0.2),
 				...Theme.Core.shadow,
@@ -418,7 +400,6 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
-		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
 		flex: 1,
@@ -426,7 +407,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		backgroundColor: Theme.Core.appBackground,
 	},
 });
 
@@ -453,7 +433,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const device = state.devices.byId[id];
 	const { clientId } = device ? device : {};
 
@@ -462,9 +443,14 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		timezone: gatewayTimezone,
 	} = gateway ? gateway : {};
 
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		device: device ? device : {},
 		gatewayTimezone,
+		currentScreen,
 	};
 }
 

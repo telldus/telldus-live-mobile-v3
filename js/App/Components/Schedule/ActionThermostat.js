@@ -74,9 +74,6 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
 		this.h2 = formatMessage(i18n.posterChooseAction);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		this.device = devices.byId[schedule.deviceId]; // We do not want scheduler to update on device prop change
 		const { stateValues = {}, parameter = [] } = this.device || {};
@@ -159,8 +156,8 @@ export default class ActionThermostat extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -171,7 +168,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 	}
 
 	selectAction = () => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 		const { methodValue } = this.state;
 
 		const {
@@ -192,11 +189,11 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		if (isEditMode()) {
 			actions.selectAction(2048, JSON.stringify(data));
-			navigation.goBack(navigation.state.params.actionKey);
+			navigation.navigate(route.params.actionKey);
 		} else {
 			actions.selectAction(2048, JSON.stringify(data));
 			navigation.navigate({
-				routeName: 'Time',
+				name: 'Time',
 				key: 'Time',
 			});
 		}
@@ -284,7 +281,9 @@ export default class ActionThermostat extends View<null, Props, State> {
 							onChange={this.onChange}/>
 					}
 					{!hideTemperatureControl ?
-						<Text style={tempLabelStyle}>
+						<Text
+							level={2}
+							style={tempLabelStyle}>
 							{intl.formatMessage(i18n.labelTemperature)}
 						</Text>
 						:
@@ -330,7 +329,6 @@ export default class ActionThermostat extends View<null, Props, State> {
 				marginTop: outerPadding,
 				marginLeft: outerPadding,
 				fontSize: deviceWidth * 0.04,
-				color: Theme.Core.rowTextColor,
 			},
 		};
 	};

@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>com.transistorsoft.fetch</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -47,8 +51,6 @@
 	<string>3.0.0.1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>firebase_crashlytics_collection_enabled</key>
-	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -64,10 +66,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Used to calculate the sunrise and sunset for schedules and events.</string>
+	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used to calculate the sunrise and sunset for schedules and events.</string>
+	<string>Used to calculate the sunrise and sunset for schedules and events. Also geo fencing.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Used for GeoFencing</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>telldusicons.ttf</string>
@@ -85,10 +91,12 @@
 		<string>Zocial.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
-		
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
+		<string>location</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
@@ -105,6 +113,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>firebase_crashlytics_collection_enabled</key>
 	<false/>
 </dict>
 </plist>

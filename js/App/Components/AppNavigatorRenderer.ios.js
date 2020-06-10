@@ -24,48 +24,33 @@
 import React from 'react';
 import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 import { intlShape } from 'react-intl';
 const isEqual = require('react-fast-compare');
 import appleAuth from '@invertase/react-native-apple-authentication';
 
 import {
 	View,
-	IconTelldus,
-	Throbber,
-	HeaderLeftButtonsMainTab,
-	CampaignIcon,
 } from '../../BaseComponents';
-import Navigator from './AppNavigator';
+import AppNavigator from './AppNavigator';
 
 import {
-	syncWithServer,
-	screenChange,
-	resetSchedule,
 	logoutAfterUnregister,
 } from '../Actions';
 import {
-	setTopLevelNavigator,
-	navigate,
-	getRouteName,
 	LayoutAnimations,
 	shouldUpdate,
 } from '../Lib';
-
-import Theme from '../Theme';
-import i18n from '../Translations/common';
-import { Image } from 'react-native-animatable';
 
 type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	addingNewLocation: boolean,
+	currentScreen: string,
 	hasGateways: boolean,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	addNewLocation: () => Promise<any>,
-	onNavigationStateChange: (string) => void,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
 	navigateToCampaign: () => void,
@@ -73,7 +58,6 @@ type Props = {
 };
 
 type State = {
-	currentScreen: string,
 	showAttentionCaptureAddDevice: boolean,
 	addNewDevicePressed: boolean,
 };
@@ -83,12 +67,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	setNavigatorRef: (any) => void;
-
-	onNavigationStateChange: (Object, Object) => void;
-	onOpenSetting: () => void;
 	onCloseSetting: () => void;
-	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
 	addNewDevice: () => void;
@@ -100,48 +79,9 @@ class AppNavigatorRenderer extends View<Props, State> {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Dashboard',
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
 		};
-
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-
-		this.setNavigatorRef = this.setNavigatorRef.bind(this);
-		this.onOpenSetting = this.onOpenSetting.bind(this);
-
-		this.addNewDevice = this.addNewDevice.bind(this);
-
-		const { appLayout } = this.props;
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-		const size = Math.floor(deviceHeight * 0.03);
-
-		let fontSize = size < 20 ? 20 : size;
-
-		this.AddButton = {
-			component: <Image source={{uri: 'icon_plus'}} style={{
-				height: fontSize * 0.85,
-				width: fontSize * 0.85,
-			}}/>,
-			onPress: () => {},
-		};
-
-		this.throbber = {
-			component: <Throbber
-				throbberStyle={{
-					fontSize,
-					color: '#fff',
-				}}
-				throbberContainerStyle={{
-					position: 'relative',
-				}}/>,
-			onPress: () => {},
-		};
-
-		this.newSchedule = this.newSchedule.bind(this);
-		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
 
 		this.clearAppleCredentialRevokedListener = null;
 	}
@@ -169,31 +109,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 		return shouldUpdate(this.props, nextProps, [
 			'appLayout',
+			'currentScreen',
+			'screenReaderEnabled',
 			'hasGateways',
 			'addingNewLocation',
 		]);
 	}
 
-	onOpenSetting() {
-		navigate('Profile', {}, 'Profile');
-	}
-
-	newSchedule() {
-		this.props.dispatch(resetSchedule());
-		navigate('Schedule', {
-			key: 'Schedule',
-			params: { editMode: false },
-		}, 'Schedule');
-	}
-
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		this.setState({ currentScreen });
-
-		this.props.onNavigationStateChange(currentScreen);
-	}
-
-	addNewDevice() {
+	addNewDevice = () => {
 		this.setState({
 			addNewDevicePressed: true,
 		}, () => {
@@ -209,167 +132,54 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeRightButton(CS: string, styles: Object): Object | null {
-		const { intl, hasGateways } = this.props;
-		const { formatMessage } = intl;
-		switch (CS) {
-			case 'Devices':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewDevice,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Sensors':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewSensor,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Gateways':
-				if (this.props.addingNewLocation) {
-					return {
-						...this.throbber,
-					};
-				}
-				return {
-					...this.AddButton,
-					onPress: this.props.addNewLocation,
-					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Scheduler':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.newSchedule,
-					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			default:
-				return null;
-		}
-	}
-
-	toggleAttentionCapture(value: boolean) {
+	toggleAttentionCapture = (value: boolean) => {
 		if (!this.state.addNewDevicePressed) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearU(500), () => {
-				// This is to prevent same layout animation occuring on navigation(next layout)
-				// Callback only available in iOS
-				LayoutAnimation.configureNext(null);
-			});
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(500));
 		}
 		this.setState({
 			showAttentionCaptureAddDevice: value,
 		});
 	}
 
-	setNavigatorRef(navigatorRef: any) {
-		setTopLevelNavigator(navigatorRef);
-	}
-
 	showAttentionCapture(): boolean {
-		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
-	}
+		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		const { currentScreen, hasGateways } = this.props;
 
-	makeLeftButton(styles: Object): any {
-		const { intl } = this.props;
-
-		const buttons = [
-			{
-				style: styles.settingsButtonStyle,
-				accessibilityLabel: `${intl.formatMessage(i18n.settingsHeader)}, ${intl.formatMessage(i18n.defaultDescriptionButton)}`,
-				onPress: this.onOpenSetting,
-				iconComponent: <IconTelldus icon={'settings'} style={{
-					fontSize: styles.fontSizeIcon,
-					color: '#fff',
-				}}/>,
-			},
-			{
-				style: styles.campaingButtonStyle,
-				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
-				onPress: this.props.navigateToCampaign,
-				iconComponent: <CampaignIcon
-					size={styles.fontSizeIcon}
-				/>,
-			},
-		];
-
-		const customComponent = <HeaderLeftButtonsMainTab buttons={buttons}/>;
-
-		return {
-			customComponent,
-		};
+		return hasGateways && (currentScreen === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	render(): Object {
-		const { currentScreen: CS, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
-
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-
-		const styles = this.getStyles(appLayout);
-
-		const { land } = Theme.Core.headerHeightFactor;
-		const rightButton = this.makeRightButton(CS, styles);
-		const showAttentionCapture = this.showAttentionCapture() && rightButton;
-		let screenProps = {
-			currentScreen: CS,
+		const { showAttentionCaptureAddDevice } = this.state;
+		const {
 			intl,
 			appLayout,
 			screenReaderEnabled,
 			toggleDialogueBox,
-			leftButton: this.makeLeftButton(styles),
-			rightButton,
+			addingNewLocation,
+			addNewLocation,
+		} = this.props;
+
+		const showAttentionCapture = this.showAttentionCapture();
+		let screenProps = {
+			intl,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
 			hideHeader: false,
-			style: {height: (isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land )},
 			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCapture,
 			showAttentionCaptureAddDevice,
+			source: 'postlogin',
+			addingNewLocation,
+			addNewSensor: this.addNewSensor,
+			addNewDevice: this.addNewDevice,
+			addNewLocation,
 		};
 
 		return (
-			<Navigator
-				ref={this.setNavigatorRef}
-				onNavigationStateChange={this.onNavigationStateChange}
-				screenProps={screenProps} />
+			<AppNavigator
+				screenProps={screenProps}/>
 		);
-	}
-
-	getStyles(appLayout: Object): Object {
-		const { height, width } = appLayout;
-		const isPortrait = height > width;
-		const deviceHeight = isPortrait ? height : width;
-
-		const size = Math.floor(deviceHeight * 0.025);
-		const fontSizeIcon = size < 20 ? 20 : size;
-
-		return {
-			addIconStyle: {
-				height: fontSizeIcon,
-				width: fontSizeIcon,
-			},
-			campaingButtonStyle: {
-				marginLeft: 4,
-				paddingRight: 15,
-				paddingLeft: 5,
-				paddingVertical: 4,
-			},
-			settingsButtonStyle: {
-				paddingLeft: 15,
-				paddingRight: 5,
-				paddingVertical: 4,
-			},
-			fontSizeIcon,
-		};
 	}
 }
 
@@ -382,15 +192,12 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
+		currentScreen: state.navigation.screen,
 	};
 }
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		onNavigationStateChange: (screen: string) => {
-			dispatch(syncWithServer(screen));
-			dispatch(screenChange(screen));
-		},
 		dispatch,
 	};
 }

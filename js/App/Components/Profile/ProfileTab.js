@@ -22,29 +22,31 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import {
-	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
 	View,
-	TabBar,
 	IconTelldus,
 	Text,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
 	LogoutButton,
+	LogoutAllAccButton,
 } from '../Settings/SubViews';
 import {
 	EditNameBlock,
 	UpdatePasswordBlock,
 	PrivacyPolicyLink,
 	EulaLink,
+	SwitchOrAddAccountButton,
 } from './SubViews';
 import {
 	ViewPremiumBenefitsButton,
@@ -56,9 +58,23 @@ import {
 } from '../Premium/SubViews';
 import {
 	isAutoRenew,
+	isBasicUser,
+	getPremiumAccounts,
 } from '../../Lib/appUtils';
 import capitalize from '../../Lib/capitalize';
 import Theme from '../../Theme';
+
+import {
+	onSwitchAccount,
+	getUserProfile,
+	unregisterPushToken,
+	logoutSelectedFromTelldus,
+	showToast,
+	toggleVisibilitySwitchAccountAS,
+} from '../../Actions';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import i18n from '../../Translations/common';
 
@@ -67,19 +83,36 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		toggleDialogueBox,
 		intl,
 	}, navigation } = props;
-	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile = {}, subscriptions = {}, firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
-	const { pro } = userProfile;
 
-	const { premiumPurchase = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
+	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		userProfile = {},
+		subscriptions = {},
+		accounts = {},
+		userId = '',
+		firebaseRemoteConfig = {},
+		pushToken,
+		switchAccountConf = {},
+	} = useSelector((state: Object): Object => state.user);
+	const { pro, firstname: fn, lastname: ln } = userProfile;
+	const {
+		isLoggingOut = false,
+		...otherSAConfs
+	} = switchAccountConf;
+
+	const {
+		premiumPurchase = JSON.stringify({enable: false}),
+	} = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
 
 	function onPressRedeemGift() {
-		navigation.navigate({
-			routeName: 'RedeemGiftScreen',
-			key: 'RedeemGiftScreen',
-		});
+		navigation.navigate('RedeemGiftScreen');
 	}
+
+	const dispatch = useDispatch();
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	const {
 		formatMessage,
@@ -97,21 +130,120 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		redeemIconStyle,
 		redeemTextSyle,
 		pHistoryCStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		isLoggingOut,
+	});
 
 	let showAuto = isAutoRenew(subscriptions);
-	const isBasic = moment().unix() > pro;
+	const isBasic = isBasicUser(pro);
+	const premAccounts = getPremiumAccounts(accounts);
+	const hasAPremAccount = Object.keys(premAccounts).length > 0;
 
 	function onPressViewPurchaseHistory() {
-		navigation.navigate({
-			routeName: 'PurchaseHistoryScreen',
-			key: 'PurchaseHistoryScreen',
-		});
+		navigation.navigate('PurchaseHistoryScreen');
 	}
 
+	const onConfirmLogout = useCallback(() => {
+		function proceedWithLogout() {
+			if (Object.keys(accounts).length === 2) {
+				dispatch(toggleVisibilitySwitchAccountAS({
+					...otherSAConfs,
+					isLoggingOut: true,
+				}));
+				let otherUserId;
+				Object.keys(accounts).forEach((uid: string) => {
+					const check1 = uid.trim().toLowerCase();
+					if (check1 !== userId.trim().toLowerCase()) {
+						otherUserId = check1;
+					}
+				});
+				if (otherUserId) {
+					let { accessToken } = accounts[otherUserId];
+					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
+						dispatch(onSwitchAccount({
+							userId: otherUserId,
+						}));
+
+						dispatch(unregisterPushToken(pushToken));
+						dispatch(toggleVisibilitySwitchAccountAS({
+							...otherSAConfs,
+							isLoggingOut: false,
+						}));
+						dispatch(logoutSelectedFromTelldus({
+							userId,
+						}));
+						const messageOnSuccesSwitch = formatMessage(i18n.switchedToAccount, {
+							value: `${res.firstname} ${res.lastname}`,
+						});
+						dispatch(showToast(messageOnSuccesSwitch));
+						navigation.navigate('Tabs', {
+							screen: 'Dashboard',
+						});
+					}).catch((err: Object) => {
+						dispatch(toggleVisibilitySwitchAccountAS({
+							...otherSAConfs,
+							isLoggingOut: false,
+						}));
+						toggleDialogueBoxState({
+							show: true,
+							showHeader: true,
+							imageHeader: true,
+							text: err.message || formatMessage(i18n.unknownError),
+							showPositive: true,
+						});
+					});
+				}
+			} else {
+				dispatch(toggleVisibilitySwitchAccountAS({
+					showAS: true,
+					isLoggingOut: true,
+				}));
+			}
+		}
+
+		(() => {
+			const premAccsCount = Object.keys(premAccounts).length;
+			if (premAccsCount > 1) {
+				proceedWithLogout();
+			} else {
+				const userIdOfOnlyPremAcc = Object.keys(premAccounts)[0];
+				if (userIdOfOnlyPremAcc.trim().toLowerCase() === userId.trim().toLowerCase()) {
+					toggleDialogueBoxState({
+						show: true,
+						showHeader: true,
+						imageHeader: true,
+						header: `${formatMessage(i18n.logout)}?`,
+						text: formatMessage(i18n.infoLogoutOnlyPremAccount),
+						showPositive: true,
+						positiveText: formatMessage(i18n.logout).toUpperCase(),
+						onPressPositive: proceedWithLogout,
+						showNegative: true,
+						closeOnPressNegative: true,
+						closeOnPressPositive: true,
+						timeoutToCallPositive: 400,
+					});
+				} else {
+					proceedWithLogout();
+				}
+			}
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		accounts,
+		premAccounts,
+		pushToken,
+		userId,
+	]);
+
+	const hasMultipleAccounts = Object.keys(accounts).length > 1;
+
 	return (
-		<ScrollView style={container}>
-			<View style={body}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
+			<View
+				level={3}
+				style={body}>
 				<UserInfoBlock blockContainerStyle={{
 					marginBottom: 0,
 				}}/>
@@ -122,7 +254,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					labelTextStyle={labelTextStyleENB}
 					toggleDialogueBox={toggleDialogueBox}
 					style={style}
-				/>
+					userProfile={userProfile}/>
 				<UpdatePasswordBlock
 					navigation={navigation}/>
 				<EulaLink/>
@@ -176,20 +308,38 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 				)}
 				{(isBasic && enable) && <ViewPremiumBenefitsButton
 					navigation={navigation}/>}
-				<LogoutButton
+				{(hasMultipleAccounts && hasAPremAccount) && <LogoutButton
 					buttonAccessibleProp={true}
 					toggleDialogueBox={toggleDialogueBox}
+					onConfirmLogout={onConfirmLogout}
+					label={`${formatMessage(i18n.labelLogOut)} ${fn} ${ln}`}
+					isLoggingOut={isLoggingOut}
+				/>}
+				<LogoutAllAccButton
+					buttonAccessibleProp={true}
+					toggleDialogueBox={toggleDialogueBox}
+					label={hasMultipleAccounts ? formatMessage(i18n.logoutFromAllAccnts) : formatMessage(i18n.labelLogOut)}
+					isLoggingOut={isLoggingOut}
 				/>
+				<SwitchOrAddAccountButton
+					disabled={isLoggingOut}/>
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	isLoggingOut,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const padding = deviceWidth * Theme.Core.paddingFactor;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
 	const paddingEditNameBlock = Math.floor(deviceWidth * 0.045);
 
 	const fontSize = Math.floor(deviceWidth * 0.045);
@@ -212,7 +362,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,
@@ -244,21 +393,5 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-
-ProfileTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="user"
-			tintColor={tintColor}
-			label={i18n.labelProfile}
-			accessibilityLabel={i18n.labelAccessibleProfileTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'ProfileTab',
-			key: 'ProfileTab',
-		});
-	},
-});
 
 export default ProfileTab;

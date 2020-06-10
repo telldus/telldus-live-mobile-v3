@@ -57,9 +57,6 @@ export default class ActionDim extends View<null, Props, State> {
 
 		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
 		this.h2 = formatMessage(i18n.posterChooseAction);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		this.maximumValue = 255;
 		const { methodValue = 0 } = schedule;
@@ -82,8 +79,8 @@ export default class ActionDim extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -91,15 +88,15 @@ export default class ActionDim extends View<null, Props, State> {
 	}
 
 	selectAction = () => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 
 		actions.selectAction(16, Math.round(this.state.methodValue));
 
 		if (isEditMode()) {
-			navigation.goBack(navigation.state.params.actionKey);
+			navigation.navigate(route.params.actionKey);
 		} else {
 			navigation.navigate({
-				routeName: 'Time',
+				name: 'Time',
 				key: 'Time',
 			});
 		}

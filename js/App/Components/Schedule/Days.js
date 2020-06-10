@@ -70,9 +70,6 @@ export default class Days extends View<null, Props, State> {
 		this.labelUncheckAll = formatMessage(i18n.unCheckAll);
 		this.labelWeekDays = `${formatMessage(i18n.weekdays)} (${formatMessage(i18n.weekdaysDescription)})`;
 		this.labelWeekEnds = `${formatMessage(i18n.weekends)} (${formatMessage(i18n.weekendsDescription)})`;
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		this.state = {
 			selectedDays: getSelectedDays(schedule.weekdays, formatDate),
@@ -84,8 +81,8 @@ export default class Days extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -186,7 +183,7 @@ export default class Days extends View<null, Props, State> {
 			navigation.goBack();
 		} else {
 			navigation.navigate({
-				routeName: 'Summary',
+				name: 'Summary',
 				key: 'Summary',
 			});
 		}

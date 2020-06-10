@@ -22,16 +22,16 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, LayoutAnimation, BackHandler } from 'react-native';
+import { LayoutAnimation, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	TabBar,
 	SettingsRow,
 	TouchableButton,
 	EditBox,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 
 import { LearnButton } from '../../TabViews/SubViews';
@@ -85,6 +85,7 @@ type Props = {
 	addDevice433: Object,
 	transports: string,
 	gatewaySupportEditModel: boolean,
+	currentScreen: string,
 
 	dispatch: Function,
 	onAddToDashboard: (id: number) => void,
@@ -128,22 +129,6 @@ class SettingsTab extends View {
 
 	timeoutConfirmDeviceRemove: any;
 	isMount: boolean;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="settings"
-				tintColor={tintColor}
-				label={i18n.settingsHeader}
-				accessibilityLabel={i18n.deviceSettingsTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'Settings',
-				key: 'Settings',
-			});
-		},
-	});
 
 	constructor(props: Props) {
 		super(props);
@@ -192,8 +177,8 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { screenProps: screenPropsN, currentScreen, inDashboard: inDashboardN, ...othersN } = nextProps;
+		const { appLayout } = screenPropsN;
 		if (currentScreen === 'Settings') {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
@@ -500,10 +485,7 @@ class SettingsTab extends View {
 	}
 
 	goBack() {
-		this.props.navigation.navigate({
-			routeName: 'Devices',
-			key: 'Devices',
-		});
+		this.props.navigation.navigate('Devices');
 	}
 
 	onValueChange(value: boolean) {
@@ -859,7 +841,9 @@ class SettingsTab extends View {
 
 		if (editName) {
 			return (
-				<View style={containerWhenEditName}>
+				<View
+					level={3}
+					style={containerWhenEditName}>
 					<EditBox
 						value={deviceName}
 						icon={'sensor'}
@@ -899,9 +883,11 @@ class SettingsTab extends View {
 		const showScan = supportsScan(transportsArray) && scannable;
 
 		return (
-			<ScrollView style={{
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<ThemedScrollView
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				{excludeActive ?
 					<ExcludeDevice
 						clientId={clientId}
@@ -1033,7 +1019,7 @@ class SettingsTab extends View {
 						}
 					</View>
 				}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -1043,7 +1029,6 @@ class SettingsTab extends View {
 		const deviceWidth = isPortrait ? width : height;
 		const {
 			paddingFactor,
-			appBackground,
 			brandDanger,
 			btnDisabledBg,
 			brandSecondary,
@@ -1065,7 +1050,6 @@ class SettingsTab extends View {
 				paddingHorizontal: padding,
 				paddingBottom: padding,
 				paddingTop: padding / 2,
-				backgroundColor: appBackground,
 			},
 			containerWhenEditName: {
 				flex: 1,
@@ -1113,7 +1097,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	let device = state.devices.byId[id];
 	device = device ? device : {};
 
@@ -1123,13 +1108,30 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const gatewaySupportEditModel = doesSupportEditModel(type);
 	const { addDevice433 = {}} = state.addDevice;
 
+	const {
+		dashboard,
+		user: { userId },
+		app: {defaultSettings},
+	} = state;
+
+	const { activeDashboardId } = defaultSettings || {};
+
+	const { devicesById = {} } = dashboard;
+	const userDbsAndDevicesById = devicesById[userId] || {};
+	const devicesByIdInCurrentDb = userDbsAndDevicesById[activeDashboardId] || {};
+
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		device: device ? device : {},
-		inDashboard: !!state.dashboard.devicesById[id],
+		inDashboard: !!devicesByIdInCurrentDb[id],
 		isGatewayReachable: online && websocketOnline,
 		addDevice433,
 		transports,
 		gatewaySupportEditModel,
+		currentScreen,
 	};
 }
 

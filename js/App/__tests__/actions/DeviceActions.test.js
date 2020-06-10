@@ -15,7 +15,7 @@ describe('Test device actions', ()=>{
 	});
 
 	beforeEach(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		store.dispatch({type: 'RECEIVED_GATEWAYS', payload: {
 			client: [{

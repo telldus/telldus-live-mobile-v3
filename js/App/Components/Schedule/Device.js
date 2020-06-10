@@ -100,7 +100,7 @@ export default class Device extends View<void, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.currentScreen === 'InitialScreen';
+		return nextProps.currentScreen === 'Device';
 	}
 
 	onRefresh = () => {
@@ -121,7 +121,7 @@ export default class Device extends View<void, Props, State> {
 	selectDevice = (row: Object) => {
 		const { actions, navigation } = this.props;
 		navigation.navigate({
-			routeName: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
+			name: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
 			key: row.supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
 		});
 		actions.selectDevice(row.id);
@@ -131,7 +131,7 @@ export default class Device extends View<void, Props, State> {
 		return index.toString();
 	}
 
-	render(): React$Element<SectionList> | null {
+	render(): Object | null {
 		const { dataSource, refreshing } = this.state;
 		if (!dataSource || dataSource.length <= 0) {
 			return null;
@@ -198,7 +198,9 @@ export default class Device extends View<void, Props, State> {
 			sectionHeader,
 		} = this.getStyles();
 		return (
-			<View style={sectionHeader}>
+			<View
+				level={2}
+				style={sectionHeader}>
 				<Text style={[Theme.Styles.sectionHeaderText, {fontSize: nameFontSize}]}>
 					{key}
 				</Text>
@@ -229,7 +231,6 @@ export default class Device extends View<void, Props, State> {
 			sectionHeader: {
 				flexDirection: 'row',
 				paddingVertical: 2 + (nameFontSize * 0.2),
-				backgroundColor: '#ffffff',
 				alignItems: 'center',
 				paddingLeft: 5 + (nameFontSize * 0.2),
 				justifyContent: 'flex-start',

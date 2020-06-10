@@ -5,7 +5,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
   focusable={true}
-  isTVSelectable={true}
+  importantForAccessibility="yes"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -41,6 +41,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flex": 1,
         "flexDirection": "row",
         "justifyContent": "center",
@@ -54,6 +55,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled 1
       style={
         Array [
           Object {
+            "backgroundColor": "transparent",
             "color": "#f5f5f5",
             "fontSize": 26,
             "textAlign": "center",
@@ -74,7 +76,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
   focusable={true}
-  isTVSelectable={true}
+  importantForAccessibility="yes"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -110,6 +112,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flex": 1,
         "flexDirection": "row",
         "justifyContent": "center",
@@ -123,6 +126,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
       style={
         Array [
           Object {
+            "backgroundColor": "transparent",
             "color": "#f5f5f5",
             "fontSize": 26,
             "textAlign": "center",
@@ -139,6 +143,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "position": "absolute",
           },
           Array [
@@ -156,24 +161,17 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when disabled a
         allowFontScaling={false}
         importantForAccessibility="yes"
         style={
-          Array [
-            Object {
-              "color": "#999",
-              "fontSize": 30,
-            },
-            Object {
-              "color": "#ffffff",
-              "fontSize": 26,
-              "transform": Array [
-                Object {
-                  "rotate": "0deg",
-                },
-              ],
-            },
-            Object {
-              "fontFamily": "telldusicons",
-            },
-          ]
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#ffffff",
+            "fontFamily": "telldusicons",
+            "fontSize": 26,
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          }
         }
       >
         loading
@@ -188,7 +186,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled 1`
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
   focusable={true}
-  isTVSelectable={true}
+  importantForAccessibility="yes"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -224,6 +222,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled 1`
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flex": 1,
         "flexDirection": "row",
         "justifyContent": "center",
@@ -237,6 +236,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled 1`
       style={
         Array [
           Object {
+            "backgroundColor": "transparent",
             "color": "#ffffff",
             "fontSize": 26,
             "textAlign": "center",
@@ -257,7 +257,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
   accessibilityLabel="TouchableButton button, Double tap to activate"
   accessible={true}
   focusable={true}
-  isTVSelectable={true}
+  importantForAccessibility="yes"
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -293,6 +293,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flex": 1,
         "flexDirection": "row",
         "justifyContent": "center",
@@ -306,6 +307,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
       style={
         Array [
           Object {
+            "backgroundColor": "transparent",
             "color": "#ffffff",
             "fontSize": 26,
             "textAlign": "center",
@@ -322,6 +324,7 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "position": "absolute",
           },
           Array [
@@ -339,24 +342,17 @@ exports[`<NavigationHeader /> - snapshot renders TouchableButton when enabled an
         allowFontScaling={false}
         importantForAccessibility="yes"
         style={
-          Array [
-            Object {
-              "color": "#999",
-              "fontSize": 30,
-            },
-            Object {
-              "color": "#ffffff",
-              "fontSize": 26,
-              "transform": Array [
-                Object {
-                  "rotate": "0deg",
-                },
-              ],
-            },
-            Object {
-              "fontFamily": "telldusicons",
-            },
-          ]
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#ffffff",
+            "fontFamily": "telldusicons",
+            "fontSize": 26,
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          }
         }
       >
         loading

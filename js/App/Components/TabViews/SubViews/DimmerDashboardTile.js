@@ -60,10 +60,10 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	showDimmerStep: (number) => void,
-	containerStyle?: number | Object | Array<any>,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
-	sliderStyle?: number | Object | Array<any>,
+	containerStyle?: Array<any> | Object,
+	offButtonStyle?: Array<any> | Object,
+	onButtonStyle?: Array<any> | Object,
+	sliderStyle?: Array<any> | Object,
 	onDimmerSlide: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
 	showDimmerPopup: (name: string, sliderValue: number) => void,
@@ -209,7 +209,6 @@ class DimmerDashboardTile extends View<Props, void> {
 			screenReaderEnabled,
 		};
 
-		// TODO: refactor writing a higher order component
 		const onButton =
 		<HVSliderContainer
 			{...sliderProps}

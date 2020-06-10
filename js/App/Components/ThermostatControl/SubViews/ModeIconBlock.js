@@ -32,9 +32,10 @@ const ModeIconBlock = (props: Object): Object => {
 		style,
 		children,
 	} = props;
-	function onPress() {
+	const onPress = React.useCallback(() => {
 		onPressRow(1);
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	return (
 		<TouchableOpacity style={style} onPress={onPress}>
 			{children}

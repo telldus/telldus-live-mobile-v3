@@ -21,13 +21,16 @@
 
 'use strict';
 
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
-import { TouchableOpacity } from 'react-native';
+import React, {
+	memo,
+	useCallback,
+} from 'react';
+import { useSelector } from 'react-redux';
 
 import Text from './Text';
 import View from './View';
 import Icon from './Icon';
+import TouchableOpacity from './TouchableOpacity';
 
 import Theme from '../App/Theme';
 
@@ -35,58 +38,65 @@ type Props = {
     title?: string,
     label?: string,
     value?: string | number,
-    blockContainerStyle?: number | Array<any> | Object,
-    titleTextStyle?: number | Array<any> | Object,
-    labelTextStyle?: number | Array<any> | Object,
-    valueTextStyle?: number | Array<any> | Object,
+    blockContainerStyle?: Array<any> | Object,
+    titleTextStyle?: Array<any> | Object,
+    labelTextStyle?: Array<any> | Object,
+    valueTextStyle?: Array<any> | Object,
 	appLayout: Object,
 	icon?: string,
 	iconSize?: number,
 	iconColor?: string,
-	iconStyle?: number | Array<any> | Object,
+	iconStyle?: Array<any> | Object,
 	onPress?: () => void,
 };
 
-class TitledInfoBlock extends PureComponent<Props, null> {
-props: Props;
+const TitledInfoBlock = (props: Props): Object => {
+	let {
+		title,
+		label,
+		value,
+		blockContainerStyle,
+		titleTextStyle,
+		labelTextStyle,
+		valueTextStyle, icon,
+		iconSize,
+		iconColor,
+		iconStyle,
+		onPress,
+	} = props;
 
-onPress: () => void;
+	const { layout } = useSelector((state: Object): Object => state.app);
 
-constructor(props: Props) {
-	super(props);
-
-	this.onPress = this.onPress.bind(this);
-}
-
-onPress() {
-	let { onPress } = this.props;
-	if (onPress) {
-		if (typeof onPress === 'function') {
-			onPress();
-		} else {
-			console.warn('Invalid Prop Passed : onPress expects a Function.');
+	const _onPress = useCallback(() => {
+		if (onPress) {
+			if (typeof onPress === 'function') {
+				onPress();
+			} else {
+				console.warn('Invalid Prop Passed : onPress expects a Function.');
+			}
 		}
-	}
-}
+	}, [onPress]);
 
-render(): Object {
-	let { title, label, value, appLayout,
-		blockContainerStyle, titleTextStyle,
-		labelTextStyle, valueTextStyle, icon,
-		iconSize, iconColor, iconStyle, onPress,
-	} = this.props;
-	let styles = this.getStyles(appLayout);
+	let styles = getStyles(layout);
 	iconSize = iconSize ? iconSize : styles.iconSize;
 
 	return (
 		<View style={[styles.blockContainer, blockContainerStyle]}>
 			{!!title && (
-				<Text style={[styles.titleStyle, titleTextStyle]}>
+				<Text
+					level={2}
+					style={[styles.titleStyle, titleTextStyle]}>
 					{title}
 				</Text>
 			)}
-			<TouchableOpacity style={styles.infoCover} onPress={this.onPress} disabled={!onPress}>
-				<Text style={[styles.infoLabel, labelTextStyle]} numberOfLines={1}>
+			<TouchableOpacity
+				level={2}
+				style={styles.infoCover}
+				onPress={_onPress}
+				disabled={!onPress}>
+				<Text
+					level={3}
+					style={[styles.infoLabel, labelTextStyle]} numberOfLines={1}>
 					{label}
 				</Text>
 				<View style={{
@@ -96,28 +106,33 @@ render(): Object {
 					alignItems: 'center',
 					justifyContent: 'flex-end',
 				}}>
-					<Text style={[ styles.infoValue, valueTextStyle]} numberOfLines={1}>
+					<Text
+						level={4}
+						style={[ styles.infoValue, valueTextStyle]} numberOfLines={1}>
 						{value}
 					</Text>
 				</View>
 				{!!icon && (
-					<Icon name={icon} size={iconSize} color={iconColor} style={[styles.nextIcon, iconStyle]}/>
+					<Icon
+						level={21}
+						name={icon}
+						size={iconSize}
+						color={iconColor}
+						style={[styles.nextIcon, iconStyle]}/>
 				)}
 			</TouchableOpacity>
 		</View>
 	);
-}
+};
 
-getStyles(appLayout: Object): Object {
+const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const fontSize = Math.floor(deviceWidth * 0.045);
 
 	const {
-		subHeader,
 		shadow,
-		rowTextColor,
 	} = Theme.Core;
 
 	return {
@@ -130,24 +145,20 @@ getStyles(appLayout: Object): Object {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: subHeader,
 			fontSize,
 		},
 		infoCover: {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			backgroundColor: '#fff',
 			...shadow,
 			padding: fontSize,
 		},
 		infoLabel: {
-			color: '#000',
 			fontSize,
 		},
 		infoValue: {
 			marginLeft: 8,
-			color: rowTextColor,
 			fontSize,
 			flexWrap: 'wrap',
 		},
@@ -156,13 +167,6 @@ getStyles(appLayout: Object): Object {
 			right: fontSize,
 		},
 	};
-}
-}
+};
 
-function mapStateToProps(store: Object, ownProps: Object): Object {
-	return {
-		appLayout: store.app.layout,
-	};
-}
-
-module.exports = connect(mapStateToProps, null)(TitledInfoBlock);
+export default memo<Object>(TitledInfoBlock);

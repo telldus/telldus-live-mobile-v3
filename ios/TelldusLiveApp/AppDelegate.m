@@ -29,10 +29,37 @@
 #import "Orientation.h"
 #import "RNSplashScreen.h"
 
+// IMPORTANT:  Paste import ABOVE the DEBUG macro
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
+
+#if DEBUG
+#import <FlipperKit/FlipperClient.h>
+#import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
+#import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
+#import <FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h>
+#import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
+#import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
+static void InitializeFlipper(UIApplication *application) {
+  FlipperClient *client = [FlipperClient sharedClient];
+  SKDescriptorMapper *layoutDescriptorMapper = [[SKDescriptorMapper alloc] initWithDefaults];
+  [client addPlugin:[[FlipperKitLayoutPlugin alloc] initWithRootNode:application withDescriptorMapper:layoutDescriptorMapper]];
+  [client addPlugin:[[FKUserDefaultsPlugin alloc] initWithSuiteName:nil]];
+  [client addPlugin:[FlipperKitReactPlugin new]];
+  [client addPlugin:[[FlipperKitNetworkPlugin alloc] initWithNetworkAdapter:[SKIOSNetworkAdapter new]]];
+  [client start];
+}
+#endif
+
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
+	#if DEBUG
+		InitializeFlipper(application);
+	#endif
+
 	[FIRApp configure];
 
 	RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
@@ -48,11 +75,12 @@
 	self.window.rootViewController = rootViewController;
 	[self.window makeKeyAndVisible];
 	[RNSplashScreen show];
+ 
   
-  // TODO: Remove once dark mode is properly supported by react-native-datetimepicker
-	if (@available(iOS 13, *)) {
-		self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
-	}
+  // NOTE: Deprecated iOS Background Fetch API for devices running < iOS 13
+  // part is not enabled.
+  // [REQUIRED] Register BackgroundFetch
+  [[TSBackgroundFetch sharedInstance] didFinishLaunching];
   
 	return YES;
 }

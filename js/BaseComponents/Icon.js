@@ -20,9 +20,21 @@
 // @flow
 
 'use strict';
-
+import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-export default class IconComponent extends Icon {
+import {
+	withTheme,
+} from '../App/Components/HOC/withTheme';
 
-}
+import {
+	prepareRootPropsIcon,
+} from './prepareRootProps';
+
+const IconComponent = (props: Object): Object => {
+	return <Icon
+		{...prepareRootPropsIcon(props)}
+		allowFontScaling={false}/>;
+};
+
+export default withTheme(IconComponent);

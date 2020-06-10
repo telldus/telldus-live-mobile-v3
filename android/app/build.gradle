@@ -29,7 +29,9 @@ def readVersionCode() {
  *   // the name of the generated asset file containing your JS bundle
  *   bundleAssetName: "index.android.bundle",
  *
- *   // the entry file for bundle generation
+ *   // the entry file for bundle generation. If none specified and
+ *   // "index.android.js" exists, it will be used. Otherwise "index.js" is
+ *   // default. Can be overridden with ENTRY_FILE environment variable.
  *   entryFile: "index.android.js",
  *
  *   // https://facebook.github.io/react-native/docs/performance#enable-the-ram-format
@@ -100,6 +102,9 @@ apply from: "../../node_modules/react-native/react.gradle"
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
+Project background_geolocation = project(':react-native-background-geolocation')
+apply from: "${background_geolocation.projectDir}/app.gradle"
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -138,19 +143,6 @@ def jscFlavor = 'org.webkit:android-jsc-intl:+'
 def enableHermes = project.ext.react.get("enableHermes", false);
 
 android {
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -168,7 +160,11 @@ android {
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
-        manifestPlaceholders = [googleMapsAPIKey: GOOGLE_MAPS_API_KEY, pushSenderId: PUSH_SENDER_ID]
+        manifestPlaceholders = [
+            googleMapsAPIKey: GOOGLE_MAPS_API_KEY,
+            pushSenderId: PUSH_SENDER_ID,
+            geolocationApplicationKey: GEOLOCATION_APPLICATION_KEY
+        ]
     }
     signingConfigs {
         debug {
@@ -209,6 +205,12 @@ android {
             buildConfigField "String", "TELLDUS_API_SERVER", TELLDUS_API_SERVER
         }
     }
+    packagingOptions {
+        pickFirst "lib/armeabi-v7a/libc++_shared.so"
+        pickFirst "lib/arm64-v8a/libc++_shared.so"
+        pickFirst "lib/x86/libc++_shared.so"
+        pickFirst "lib/x86_64/libc++_shared.so"
+    }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
@@ -230,7 +232,10 @@ android {
 dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    //noinspection GradleDynamicVersion
     implementation ("com.facebook.react:react-native:+")
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
@@ -242,7 +247,8 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.6') {
         transitive = true;
     }
-    implementation ("com.google.android.gms:play-services-base:16.1.0") {
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation ("com.google.android.gms:play-services-base:17.0.0") {
         force = true;
     }
     implementation ("com.google.android.gms:play-services-maps:16.0.0") {
@@ -271,6 +277,8 @@ dependencies {
     implementation 'com.google.android:flexbox:1.0.0'
     implementation "com.github.skydoves:colorpickerview:2.1.5"
     implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
 
     implementation 'com.huawei.hms:safetydetect:4.0.2.300'
 

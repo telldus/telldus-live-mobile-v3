@@ -28,7 +28,11 @@ import { TouchableOpacity, PixelRatio } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
 
-import { ListItem, Text, View, BlockIcon } from '../../../../BaseComponents';
+import {
+	Text,
+	View,
+	BlockIcon,
+} from '../../../../BaseComponents';
 import ToggleButton from './ToggleButton';
 import RGBButton from './RGBButton';
 import BellButton from './BellButton';
@@ -424,7 +428,8 @@ class DeviceRow extends View<Props, State> {
 					<HiddenRow device={device} intl={intl} style={styles.hiddenRow}
 						onPressSettings={this.onSettingsSelected} onSetIgnoreDevice={this.onSetIgnoreDevice}
 						isOpen={isOpen}/>
-					<ListItem
+					<View
+						level={2}
 						style={styles.row}
 						// Fixes issue controlling device in IOS, in accessibility mode
 						// By passing onPress to visible content of 'SwipeRow', prevents it from
@@ -458,7 +463,7 @@ class DeviceRow extends View<Props, State> {
 								}
 							</View>
 						</View>
-					</ListItem>
+					</View>
 				</SwipeRow>
 				{
 					button.length !== 1 && (
@@ -502,11 +507,15 @@ class DeviceRow extends View<Props, State> {
 
 		return (
 			<View style={coverStyle}>
-				<Text style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
+				<Text
+					level={6}
+					style = {[styles.text, { opacity: device.name ? 1 : 0.5 }]} numberOfLines={1}>
 					{deviceName}
 				</Text>
 				{!!info && (
-					<Text style = {textPowerStyle} numberOfLines={1}>
+					<Text
+						level={6}
+						style = {textPowerStyle} numberOfLines={1}>
 						{info}
 					</Text>
 				)}
@@ -547,7 +556,6 @@ class DeviceRow extends View<Props, State> {
 			shadow,
 			paddingFactor,
 			offlineColor,
-			rowTextColor,
 		} = Theme.Core;
 
 		let nameFontSize = Math.floor(deviceWidth * 0.047);
@@ -572,7 +580,6 @@ class DeviceRow extends View<Props, State> {
 				marginHorizontal: padding,
 				marginTop: padding / 2,
 				marginBottom: isLast ? padding : 0,
-				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
 				...shadow,
@@ -615,7 +622,6 @@ class DeviceRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			text: {
-				color: rowTextColor,
 				fontSize: nameFontSize,
 				textAlignVertical: 'center',
 				textAlign: 'left',
@@ -660,13 +666,11 @@ class DeviceRow extends View<Props, State> {
 				alignItems: 'center',
 			},
 			textPowerConsumed: {
-				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 				marginLeft: 6,
 			},
 			textPowerConsumedTablet: {
-				color: rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 				marginLeft: 6,

@@ -23,15 +23,13 @@
 'use strict';
 
 import React from 'react';
-import {
-	ScrollView,
-} from 'react-native';
 
 import {
 	View,
 	TouchableButton,
 	Text,
 	IconTelldus,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -39,7 +37,8 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -73,23 +72,15 @@ onPressExit() {
 }
 
 onPressExclude() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'ExcludeScreen',
-		key: 'ExcludeScreen',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('ExcludeScreen', {...params});
 }
 
 onPressTryAgain() {
-	const { navigation } = this.props;
-	const { params = {}} = navigation.state;
-	navigation.navigate({
-		routeName: 'IncludeDevice',
-		key: 'IncludeDevice',
-		params,
-	});
+	const { navigation, route } = this.props;
+	const { params = {}} = route;
+	navigation.navigate('IncludeDevice', {...params});
 }
 
 render(): Object {
@@ -107,11 +98,16 @@ render(): Object {
 
 
 	return (
-		<ScrollView>
+		<ThemedScrollView
+			level={3}>
 			<View style={container}>
-				<View style={infoContainer}>
+				<View
+					level={2}
+					style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={infoTextStyle}>
+					<Text
+						level={5}
+						style={infoTextStyle}>
 						{formatMessage(i18n.noDeviceFoundMessageInclude)}
 					</Text>
 				</View>
@@ -130,7 +126,7 @@ render(): Object {
 					onPress={this.onPressExit}
 					style={buttonStyle}/>
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 }
 
@@ -139,7 +135,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, shadow, brandDanger } = Theme.Core;
+	const { paddingFactor, brandSecondary, shadow, brandDanger } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
@@ -157,7 +153,6 @@ getStyles(): Object {
 			flex: 1,
 			flexDirection: 'row',
 			padding: innerPadding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -171,7 +166,6 @@ getStyles(): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: infoTextFontSize,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: innerPadding,
 		},

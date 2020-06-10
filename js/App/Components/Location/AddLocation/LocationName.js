@@ -41,6 +41,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -91,16 +92,12 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
-		const { navigation, intl, toggleDialogueBox } = this.props;
+		const { route, intl, toggleDialogueBox } = this.props;
 		if (locationName !== '') {
 			Keyboard.dismiss();
-			let clientInfo = navigation.getParam('clientInfo', {});
+			let { clientInfo } = route.params || {};
 			clientInfo.name = locationName;
-			this.props.navigation.navigate({
-				routeName: 'TimeZone',
-				key: 'TimeZone',
-				params: {clientInfo},
-			});
+			this.props.navigation.navigate('TimeZone', {clientInfo});
 		} else {
 			let message = intl.formatMessage(i18n.invalidLocationName);
 			const dialogueData = {

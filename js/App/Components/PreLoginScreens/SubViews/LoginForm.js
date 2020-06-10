@@ -67,6 +67,7 @@ type Props = {
 	headerText: string,
 	socialAuthConfig: Object,
 
+	onLoginSuccess?: () => void,
 	openDialogueBox: (string, ?Object) => void,
 };
 
@@ -283,7 +284,7 @@ class LoginForm extends View {
 					accessible={buttonAccessible}
 					disabled={disableAllSignin}
 				/>
-				<View style={{ height: 10 }}/>
+				<View style={{ height: 20 }}/>
 				{(Platform.OS === 'ios' && appleAuth.isSupported && showSocialAuth) &&
 				(
 					<AppleButton
@@ -336,7 +337,7 @@ class LoginForm extends View {
 	}
 
 	async signIn(): any {
-		const { openDialogueBox, intl } = this.props;
+		const { openDialogueBox, intl, onLoginSuccess } = this.props;
 		this.setState({ isSigninInProgress: true });
 		try {
 			await GoogleSignin.hasPlayServices();
@@ -350,39 +351,42 @@ class LoginForm extends View {
 						idToken,
 					};
 					const provider = 'google';
-					this.props.loginToTelldus(credential, provider)
-						.catch((err: Object = {}) => {
-							this.setState({
-								isSigninInProgress: false,
-							});
-							if (err.response && err.response.status === 404 && idToken) {
-
-								const {
-									user = {},
-								} = data || {};
-								const {
-									email,
-									givenName,
-									familyName,
-									name = '',
-								} = user;
-								const [fn, ln] = name.split(' ');
-
-								const _fullName = {
-									fn: fn || givenName,
-									ln: ln || familyName,
-								};
-
-								this.onSocialLoginFail404({
-									idToken,
-									provider,
-									email,
-									fullName: _fullName,
-								});
-								return;
-							}
-							this.handleLoginError(err);
+					this.props.loginToTelldus(credential, provider).then(() => {
+						if (onLoginSuccess) {
+							onLoginSuccess();
+						}
+					}).catch((err: Object = {}) => {
+						this.setState({
+							isSigninInProgress: false,
 						});
+						if (err.response && err.response.status === 404 && idToken) {
+
+							const {
+								user = {},
+							} = data || {};
+							const {
+								email,
+								givenName,
+								familyName,
+								name = '',
+							} = user;
+							const [fn, ln] = name.split(' ');
+
+							const _fullName = {
+								fn: fn || givenName,
+								ln: ln || familyName,
+							};
+
+							this.onSocialLoginFail404({
+								idToken,
+								provider,
+								email,
+								fullName: _fullName,
+							});
+							return;
+						}
+						this.handleLoginError(err);
+					});
 				});
 			} else {
 				openDialogueBox(this.unknownError);
@@ -418,7 +422,7 @@ class LoginForm extends View {
 	}
 
 	onFormSubmit() {
-		const { intl, openDialogueBox } = this.props;
+		const { intl, openDialogueBox, onLoginSuccess } = this.props;
 		const { username, password } = this.state;
 		if (this.state.username !== '' && this.state.password !== '') {
 			this.setState({ isLoading: true });
@@ -429,6 +433,11 @@ class LoginForm extends View {
 					password,
 				};
 				this.props.loginToTelldus(credential, 'password')
+					.then(() => {
+						if (onLoginSuccess) {
+							onLoginSuccess();
+						}
+					})
 					.catch((err: Object) => {
 						this.postSubmit();
 						this.handleLoginError(err);

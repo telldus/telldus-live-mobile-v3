@@ -23,13 +23,13 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { Image, Platform, TouchableOpacity } from 'react-native';
+import { Image, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import IconTelldus from './IconTelldus';
 import Throbber from './Throbber';
+import TouchableOpacity from './TouchableOpacity';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
@@ -41,21 +41,24 @@ type DefaultProps = {
 
 type Props = {
 	onPress?: Function,
-	imageSource?: number | boolean | Object,
+	imageSource?: Object,
 	tabs: boolean,
 	iconSize: number,
 	paddingRight: number,
 	showThrobber: boolean,
-	buttonStyle: number | Array<any> | Object,
+	buttonStyle: Array<any> | Object,
 	appLayout: Object,
 	accessible: boolean,
 	accessibilityLabel?: string,
 	intl: intlShape.isRequired,
-	iconStyle?: Object | number,
+	iconStyle?: Object,
 	iconName?: string,
 	customComponent?: Object,
 	disabled?: boolean,
-	innerContainer?: number | Array<any> | Object,
+	innerContainer?: Array<any> | Object,
+	buttonLevel?: number,
+	iconLevel?: number,
+	throbberLevel?: number,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -63,15 +66,6 @@ class FloatingButton extends Component<Props, null> {
 	labelButton: string;
 	defaultLabel: string;
 	props: Props;
-
-	static propTypes = {
-		imageSource: PropTypes.oneOfType([PropTypes.number, PropTypes.bool, PropTypes.object]),
-		tabs: PropTypes.bool,
-		iconSize: PropTypes.number,
-		paddingRight: PropTypes.number,
-		showThrobber: PropTypes.bool,
-		buttonStyle: PropTypes.oneOfType([PropTypes.number, PropTypes.array, PropTypes.object]),
-	};
 
 	static defaultProps: DefaultProps = {
 		tabs: false,
@@ -105,13 +99,27 @@ class FloatingButton extends Component<Props, null> {
 			customComponent,
 			disabled,
 			innerContainer,
+			buttonLevel,
+			iconLevel,
+			throbberLevel,
 		} = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
-		const { container, innerContainerDef, icon, throbber } = this._getStyle(appLayout);
+		const {
+			container,
+			innerContainerDef,
+			icon,
+			throbber,
+			iconSize,
+		} = this._getStyle(appLayout);
+
+		const bLevel = buttonLevel || (disabled ? 7 : 6);
+		const iLevel = iconLevel || (disabled ? 13 : 12);
+		const thLevel = throbberLevel || 14;
 
 		return (
 			<TouchableOpacity
+				level={bLevel}
 				style={[container, buttonStyle]}
 				onPress={onPress}
 				accessible={accessible}
@@ -125,7 +133,12 @@ class FloatingButton extends Component<Props, null> {
 					}
 					{!!iconName &&
 						(
-							<IconTelldus icon={iconName} style={iconStyle}/>
+							<IconTelldus
+								level={iLevel}
+								icon={iconName}
+								style={[{
+									fontSize: iconSize,
+								}, iconStyle]}/>
 						)
 					}
 					{
@@ -134,6 +147,7 @@ class FloatingButton extends Component<Props, null> {
 					{!!showThrobber &&
 					(
 						<Throbber
+							level={thLevel}
 							throbberStyle={throbber}
 						/>
 					)
@@ -146,9 +160,7 @@ class FloatingButton extends Component<Props, null> {
 	_getStyle = (appLayout: Object): Object => {
 		const {
 			shadow: themeShadow,
-			brandSecondary,
 			maxSizeFloatingButton,
-			btnDisabledBg,
 		} = Theme.Core;
 		const height = appLayout.height;
 		const width = appLayout.width;
@@ -156,7 +168,7 @@ class FloatingButton extends Component<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 		const maxIconSize = 40;
 
-		let { tabs, iconSize, paddingRight, disabled } = this.props;
+		let { tabs, iconSize, paddingRight } = this.props;
 		iconSize = iconSize ? iconSize : isPortrait ? width * 0.056 : height * 0.056;
 		iconSize = iconSize > maxIconSize ? maxIconSize : iconSize;
 
@@ -178,7 +190,6 @@ class FloatingButton extends Component<Props, null> {
 
 		return {
 			container: {
-				backgroundColor: disabled ? btnDisabledBg : brandSecondary,
 				borderRadius: buttonSize / 2,
 				position: 'absolute',
 				height: buttonSize,
@@ -197,8 +208,8 @@ class FloatingButton extends Component<Props, null> {
 				height: iconSize,
 			},
 			throbber: {
-				color: '#ffffff',
 			},
+			iconSize,
 		};
 	};
 

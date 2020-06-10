@@ -39,34 +39,42 @@ module.exports = {
 	appStart: (): Action => ({
 		type: 'APP_START',
 	}),
-	appState: (): ThunkAction => (dispatch: Function) => {
-		const initialAppState = AppState.currentState;
-		if (initialAppState === 'active') {
-			dispatch({
-				type: 'APP_FOREGROUND',
-			});
-		}
-		if (initialAppState === 'background') {
-			dispatch({
-				type: 'APP_BACKGROUND',
-			});
-		}
-		AppState.addEventListener('change', (appState: string) => {
-			if (appState === 'active') {
+	appState: (): ThunkAction => {
+		return (dispatch: Function): Function => {
+			const initialAppState = AppState.currentState;
+			if (initialAppState === 'active') {
 				dispatch({
 					type: 'APP_FOREGROUND',
 				});
-				dispatch(initiateGatewayLocalTest());
-				dispatch(autoDetectLocalTellStick());
 			}
-			if (appState === 'background') {// background state is not persisted by redux-persist. Follow: https://github.com/rt2zz/redux-persist/issues/1097
+			if (initialAppState === 'background') {
 				dispatch({
 					type: 'APP_BACKGROUND',
 				});
-				dispatch(resetLocalControlSupport());
-				closeUDPSocket();
 			}
-		});
+
+			function _handleAppStateChange(appState: string) {
+				if (appState === 'active') {
+					dispatch({
+						type: 'APP_FOREGROUND',
+					});
+					dispatch(initiateGatewayLocalTest());
+					dispatch(autoDetectLocalTellStick());
+				}
+				if (appState === 'background') {// background state is not persisted by redux-persist. Follow: https://github.com/rt2zz/redux-persist/issues/1097
+					dispatch({
+						type: 'APP_BACKGROUND',
+					});
+					dispatch(resetLocalControlSupport());
+					closeUDPSocket();
+				}
+			}
+
+			AppState.addEventListener('change', _handleAppStateChange);
+			return (): Function => {
+				AppState.removeEventListener('change', _handleAppStateChange);
+			};
+		};
 	},
 
 	appOrientation: (initialOrientation: string): ThunkAction => (dispatch: Function): Object => {

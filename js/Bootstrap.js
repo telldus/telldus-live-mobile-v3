@@ -50,9 +50,13 @@ require('@formatjs/intl-relativetimeformat/dist/locale-data/de');
 
 import React from 'react';
 import { Text } from './BaseComponents';
-import { Provider } from 'react-redux';
+import {
+	Provider,
+	useDispatch,
+	useSelector,
+} from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
-import { useDispatch, useSelector } from 'react-redux';
 
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -74,33 +78,26 @@ import {
 	setUserNameFirebaseCrashlytics,
 } from './App/Actions/Analytics';
 
+const {
+	store,
+	persistor,
+} = configureStore();
+
 function Bootstrap(): Object {
 
 	console.disableYellowBox = true;
 
-	type State = {
-		isLoading: boolean,
-		store: Object,
-	};
-
-	class Root extends React.Component<null, State> {
-		state: State;
+	class Root extends React.Component<null, null> {
 
 		constructor() {
 			super();
 
 			enableCrashlyticsCollection();
-
-			this.state = {
-				isLoading: true,
-				store: configureStore(this._configureStoreCompleted.bind(this)),
-			};
 		}
 
-		_configureStoreCompleted() {
-			this.setState({ isLoading: false });
+		onBeforeLift = () => {
 			SplashScreen.hide();
-			const { getState, dispatch } = this.state.store;
+			const { getState, dispatch } = store;
 			let state = getState();
 			if (state.user && state.user.userProfile) {
 				dispatch(setUserIdentifierFirebaseCrashlytics());
@@ -109,12 +106,13 @@ function Bootstrap(): Object {
 		}
 
 		render(): Provider {
-			if (this.state.isLoading) {
-				return null;
-			}
 			return (
-				<Provider store={this.state.store}>
-					<WithIntlProvider/>
+				<Provider store={store}>
+					<PersistGate
+						persistor={persistor}
+						onBeforeLift={this.onBeforeLift}>
+						<WithIntlProvider/>
+					</PersistGate>
 				</Provider>
 			);
 		}
@@ -180,4 +178,7 @@ global.console.warn = (str: string): any => {
 	return global.__old_console_warn.apply(console, [str]);
 };
 
-module.exports = Bootstrap;
+module.exports = {
+	Bootstrap,
+	store,
+};

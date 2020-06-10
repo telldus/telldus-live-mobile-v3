@@ -33,7 +33,8 @@ import { CantEnterInclusionExclusionUI } from '../Common';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,

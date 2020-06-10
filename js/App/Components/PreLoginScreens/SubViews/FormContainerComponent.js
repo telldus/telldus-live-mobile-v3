@@ -35,6 +35,9 @@ type Props = {
 	appLayout: Object,
 	navigation: Object,
 	screenProps: Object,
+	route: Object,
+	screen: string,
+	ScreenName: string,
 };
 
 class FormContainerComponent extends View<Props, null> {
@@ -49,12 +52,18 @@ class FormContainerComponent extends View<Props, null> {
 		this.logo = require('./../img/telldusLogoBlack.png');
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.ScreenName === nextProps.screen;
+	}
+
 	render(): Object {
 		const {
 			navigation,
 			screenProps,
+			route,
 			children,
 			appLayout,
+			screen,
 		} = this.props;
 
 		const styles = this.getStyles(appLayout);
@@ -81,7 +90,11 @@ class FormContainerComponent extends View<Props, null> {
 										isTablet: this.isTablet,
 										appLayout,
 										navigation,
-										screenProps,
+										screenProps: {
+											...screenProps,
+											currentScreen: screen,
+										},
+										route,
 										styles,
 									},
 								)}
@@ -226,6 +239,7 @@ class FormContainerComponent extends View<Props, null> {
 function mapStateToProps(store: Object): Object {
 	return {
 		appLayout: store.app.layout,
+		screen: store.navigation.screen,
 	};
 }
 

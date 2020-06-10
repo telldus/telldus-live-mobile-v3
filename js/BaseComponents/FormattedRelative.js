@@ -28,7 +28,7 @@ const FormattedRelativeComponent = (props: Object): React$Element<any> => {
 	const { textStyle, formatterFunction, ...others } = props;
 	const formatterAvailable = formatterFunction && (typeof formatterFunction === 'function');
 	return (
-		<Text style={textStyle}>
+		<Text level={props.level} style={textStyle}>
 			<FormattedRelativeTime {...others}>{(time: string): string => {
 				return formatterAvailable ? formatterFunction(time) : time;
 			}}

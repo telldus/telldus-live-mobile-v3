@@ -22,11 +22,14 @@
 
 'use strict';
 
-import type { ThunkAction } from './Types';
+import type { ThunkAction, Action } from './Types';
 import { actions } from 'live-shared-data';
 const {DevicesCommon: {getDevices}} = actions;
-const {Sensors: {getSensors}} = actions;
-const {Jobs: {getJobs}} = actions;
+const {
+	Sensors: {getSensors},
+	Jobs: {getJobs},
+	Events: {getEvents},
+} = actions;
 const {Websockets: {authenticateSession, connectToGateways}} = actions;
 
 function getAppData(): ThunkAction {
@@ -34,6 +37,7 @@ function getAppData(): ThunkAction {
 		dispatch(authenticateSession());
 		dispatch(connectToGateways());
 		dispatch(getJobs());
+		dispatch(getEvents());
 		return Promise.all([
 			dispatch(getDevices()),
 			dispatch(getSensors()),
@@ -41,6 +45,13 @@ function getAppData(): ThunkAction {
 	};
 }
 
+const clearAppData = (): Action => {
+	return {
+		type: 'CLEAR_APP_DATA',
+	};
+};
+
 module.exports = {
 	getAppData,
+	clearAppData,
 };

@@ -23,8 +23,10 @@
 
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { NavigationActions, StackActions } from 'react-navigation';
 import { intlShape, injectIntl } from 'react-intl';
+import {
+	CommonActions,
+} from '@react-navigation/native';
 
 import {
 	FloatingButton,
@@ -69,9 +71,6 @@ class Summary extends View<null, Props, State> {
 		this.h1 = formatMessage(i18n.summary);
 		this.h2 = formatMessage(i18n.posterSummary);
 		this.messageOnAdd = formatMessage(i18n.addScheduleSuccess);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 		this.device = this._getDeviceById(schedule.deviceId);
 
 		this.onToggleAdvanced = this.onToggleAdvanced.bind(this);
@@ -82,8 +81,8 @@ class Summary extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -128,28 +127,31 @@ class Summary extends View<null, Props, State> {
 
 	resetNavigation = () => {
 		const { navigation, schedule } = this.props;
-		let navigateAction = NavigationActions.navigate({
-			routeName: 'Tabs',
-			key: 'Tabs',
-			action: NavigationActions.navigate({
-				routeName: 'Scheduler',
-				key: 'Scheduler',
-			}),
-		});
-		let actions = [
-			navigateAction,
-			NavigationActions.navigate({
-				routeName: 'InfoScreen',
-				key: 'InfoScreen',
+
+		let routes = [
+			{
+				name: 'Tabs',
+				state: {
+					index: 3,
+					routes: [
+						{
+							name: 'Scheduler',
+						},
+					],
+				},
+			},
+			{
+				name: 'InfoScreen',
 				params: {
 					info: 'add_schedule_another',
 					deviceId: schedule.deviceId,
 				},
-			}),
+			},
 		];
-		const resetAction = StackActions.reset({
+
+		const resetAction = CommonActions.reset({
 			index: 1,
-			actions,
+			routes,
 		});
 		navigation.dispatch(resetAction);
 	}

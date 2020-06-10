@@ -37,12 +37,13 @@ type Props = {
 	appLayout: Object,
 	onSubmit: (string) => void,
 	navigation: Object,
+	route: Object,
 };
 
 class CitiesList extends View {
 	props: Props;
 
-	renderRow: (string) => void;
+	renderRow: (Object) => Object;
 	onCityChoose: () => void;
 	keyExtractor: (string) => string;
 
@@ -72,8 +73,10 @@ class CitiesList extends View {
 	}
 
 	render(): Object {
-		const { navigation, appLayout } = this.props;
-		const data = navigation.getParam('cities', []);
+		const { route, appLayout } = this.props;
+		const {
+			cities: data = [],
+		} = route.params || {};
 
 		return (
 			<View style={{flex: 1}}>

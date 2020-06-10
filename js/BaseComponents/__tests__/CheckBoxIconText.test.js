@@ -35,7 +35,7 @@ import CheckBoxIconText from '../CheckBoxIconText';
 
 let {height, width} = Dimensions.get('window');
 
-const store = configureStore();
+const store = configureStore().store;
 
 const intl = {
 	formatMessage: () => '',

@@ -36,6 +36,7 @@ type Props = {
 	screenProps: Object,
 	isModalOpen: boolean,
 	navigation: Object,
+	currentScreen: string,
 };
 
 class ProfileHeaderPoster extends View<Props, null> {
@@ -45,9 +46,15 @@ class ProfileHeaderPoster extends View<Props, null> {
 
 	noName: string;
 
+	pointsToHiddenCave: number;
+	openCaveTimeout: any;
+
 	constructor(props: Props) {
 		super(props);
 		this.handleBackPress = this.handleBackPress.bind(this);
+
+		this.pointsToHiddenCave = 0;
+		this.openCaveTimeout = null;
 	}
 
 	goBack() {
@@ -55,8 +62,7 @@ class ProfileHeaderPoster extends View<Props, null> {
 	}
 
 	handleBackPress(): boolean {
-		let { isModalOpen, hideModal: hideModalProp, screenProps } = this.props;
-		let { currentScreen } = screenProps;
+		let { isModalOpen, hideModal: hideModalProp, currentScreen } = this.props;
 		if (isModalOpen) {
 			hideModalProp();
 			return true;
@@ -66,6 +72,32 @@ class ProfileHeaderPoster extends View<Props, null> {
 			return true;
 		}
 		return false;
+	}
+
+	clearOpenCaveTimeout = () => {
+		clearTimeout(this.openCaveTimeout);
+		this.openCaveTimeout = null;
+	}
+
+	componentWillUnmount() {
+		this.clearOpenCaveTimeout();
+	}
+
+	openHiddenCave = () => {
+		this.pointsToHiddenCave++;
+
+		if (this.openCaveTimeout) {
+			this.clearOpenCaveTimeout();
+		}
+
+		this.openCaveTimeout = setTimeout(() => {
+			this.pointsToHiddenCave = 0;
+		}, 500);
+
+		if (this.pointsToHiddenCave >= 5) {
+			this.pointsToHiddenCave = 0;
+			this.props.navigation.navigate('AdvancedSettings');
+		}
 	}
 
 	render(): Object {
@@ -82,14 +114,20 @@ class ProfileHeaderPoster extends View<Props, null> {
 				handleBackPress={this.handleBackPress}
 				leftIcon={'close'}
 				align={'right'}
-			/>
+				onPressPoster={this.openHiddenCave}/>
 		);
 	}
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
+
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		isModalOpen: store.modal.openModal,
+		currentScreen,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {

@@ -59,9 +59,11 @@ type Props = {
 	children: Object,
 	actions?: Object,
 	screenProps: Object,
+	currentScreen: string,
 	ScreenName: string,
 	locale: string,
 	processWebsocketMessage: (string, string, string, Object) => any,
+	route: Object,
 };
 
 type State = {
@@ -107,7 +109,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -140,10 +142,9 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		const { navigation, screenProps } = this.props;
+		const { navigation, currentScreen } = this.props;
 		const { forceLeftIconVisibilty } = this.state;
 
-		const { currentScreen } = screenProps;
 		const onLeftPress = this.getLeftIconPressAction(currentScreen);
 
 		const allowBacknavigation = !this.disAllowBackNavigation() || forceLeftIconVisibilty;
@@ -161,8 +162,7 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	disAllowBackNavigation(): boolean {
-		const {screenProps} = this.props;
-		const { currentScreen } = screenProps;
+		const {currentScreen} = this.props;
 		const screens = ['AlreadyIncluded', 'IncludeFailed', 'DeviceName', 'NoDeviceFound', 'ExcludeScreen', 'CantEnterInclusion', 'Include433'];
 		return screens.indexOf(currentScreen) !== -1;
 	}
@@ -182,7 +182,15 @@ export class AddDeviceContainer extends View<Props, State> {
 	}
 
 	getLeftIcon = (CS: string): ?string => {
-		const SCNS = ['InitialScreen', 'Include433'];
+		if (CS === 'SelectDeviceType') {
+			const {
+				route,
+			} = this.props;
+			if (route.params && route.params.singleGateway) {
+				return 'close';
+			}
+		}
+		const SCNS = ['SelectLocation', 'Include433'];
 		return SCNS.indexOf(CS) === -1 ? undefined : 'close';
 	}
 
@@ -193,10 +201,7 @@ export class AddDeviceContainer extends View<Props, State> {
 
 	closeAdd433MHz = () => {
 		const { navigation } = this.props;
-		navigation.navigate({
-			routeName: 'Devices',
-			key: 'Devices',
-		});
+		navigation.navigate('Devices');
 	}
 
 	render(): Object {
@@ -208,8 +213,10 @@ export class AddDeviceContainer extends View<Props, State> {
 			addDevice,
 			locale,
 			sessionId,
+			route,
+			currentScreen,
 		} = this.props;
-		const { appLayout, currentScreen } = screenProps;
+		const { appLayout } = screenProps;
 		const { h1, h2, infoButton, forceLeftIconVisibilty } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -224,9 +231,9 @@ export class AddDeviceContainer extends View<Props, State> {
 
 		return (
 			<View
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}>
 				<NavigationHeaderPoster
 					h1={h1} h2={h2}
@@ -251,6 +258,7 @@ export class AddDeviceContainer extends View<Props, State> {
 							onDidMount: this.onChildDidMount,
 							actions,
 							...screenProps,
+							currentScreen,
 							navigation,
 							paddingHorizontal: padding,
 							addDevice,
@@ -259,6 +267,7 @@ export class AddDeviceContainer extends View<Props, State> {
 							toggleLeftIconVisibilty: this.toggleLeftIconVisibilty,
 							sessionId,
 							showLeftIcon,
+							route,
 						},
 					)}
 				</KeyboardAvoidingView>
@@ -274,10 +283,15 @@ export const mapStateToProps = (store: Object): Object => {
 
 	const { websockets: { session: { id: sessionId } } } = store;
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		addDevice: store.addDevice,
 		locale,
 		sessionId,
+		currentScreen,
 	};
 };
 

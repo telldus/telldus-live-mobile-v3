@@ -51,6 +51,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+	route: Object,
 };
 
 type State = {
@@ -109,16 +110,16 @@ class TimeZone extends View<void, Props, State> {
 	}
 
 	getTimeZone(): Object {
-		let { navigation } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
+		let { route } = this.props;
+		let { clientInfo } = route.params || {};
 		let timeZone = clientInfo.timezone;
 		let autoDetected = clientInfo.autoDetected;
 		return {timeZone, autoDetected};
 	}
 
 	onTimeZoneSubmit() {
-		let { screenReaderEnabled, actions, navigation } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
+		let { screenReaderEnabled, actions, navigation, route } = this.props;
+		let { clientInfo } = route.params || {};
 		if (screenReaderEnabled) {
 			this.setState({
 				isLoading: true,
@@ -126,11 +127,7 @@ class TimeZone extends View<void, Props, State> {
 			clientInfo.coordinates = {};
 			actions.activateGateway(clientInfo)
 				.then((response: Object) => {
-					navigation.navigate({
-						routeName: 'Success',
-						key: 'Success',
-						params: {clientInfo},
-					});
+					navigation.navigate('Success', {clientInfo});
 					this.setState({
 						isLoading: false,
 					});
@@ -140,22 +137,14 @@ class TimeZone extends View<void, Props, State> {
 					});
 				});
 		} else {
-			navigation.navigate({
-				routeName: 'Position',
-				key: 'Position',
-				params: {clientInfo},
-			});
+			navigation.navigate('Position', {clientInfo});
 		}
 	}
 
 	onEditTimeZone() {
-		let { navigation } = this.props;
-		let clientInfo = navigation.getParam('clientInfo', {});
-		navigation.navigate({
-			routeName: 'TimeZoneContinent',
-			key: 'TimeZoneContinent',
-			params: {clientInfo},
-		});
+		let { navigation, route } = this.props;
+		let { clientInfo } = route.params || {};
+		navigation.navigate('TimeZoneContinent', {clientInfo});
 	}
 
 	render(): Object {

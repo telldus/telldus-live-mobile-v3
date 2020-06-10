@@ -38,6 +38,11 @@ import { LayoutAnimations } from '../../Lib';
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
+
 const TYPES = ['sunrise', 'sunset', 'time'];
 
 interface Props extends ScheduleProps {
@@ -54,7 +59,7 @@ type State = {
 	shouldRenderTimePickerAndroid: boolean,
 };
 
-export default class Time extends View<null, Props, State> {
+class Time extends View<null, Props & PropsThemedComponent, State> {
 
 	selectTimeAndroid: Function;
 	toggleEdit: (string) => void;
@@ -68,7 +73,7 @@ export default class Time extends View<null, Props, State> {
 		isEditMode: PropTypes.func,
 	};
 
-	constructor(props: Props) {
+	constructor(props: Props & PropsThemedComponent) {
 		super(props);
 
 		const { isEditMode, intl, schedule } = this.props;
@@ -81,10 +86,6 @@ export default class Time extends View<null, Props, State> {
 
 		this.labelEditTime = formatMessage(i18n.editTime);
 		this.labelEditTimeAccessible = formatMessage(i18n.editTimeAccessible);
-
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		const { type, offset, randomInterval, hour, minute } = schedule;
 
@@ -103,8 +104,8 @@ export default class Time extends View<null, Props, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -175,7 +176,7 @@ export default class Time extends View<null, Props, State> {
 			navigation.goBack();
 		} else {
 			navigation.navigate({
-				routeName: 'Days',
+				name: 'Days',
 				key: 'Days',
 			});
 		}
@@ -189,7 +190,13 @@ export default class Time extends View<null, Props, State> {
 			shouldRenderTimePickerAndroid,
 			date,
 		} = this.state;
-		const { container, row, marginBottom, type } = this._getStyle(appLayout);
+		const {
+			container,
+			row,
+			marginBottom,
+			type,
+			textColorDateTimePicker,
+		} = this._getStyle(appLayout);
 
 		const shouldRender = !!selectedType;
 
@@ -224,6 +231,7 @@ export default class Time extends View<null, Props, State> {
 					<DateTimePicker
 						mode="time"
 						value={date}
+						textColor={textColorDateTimePicker}
 						onChange={this._onDateChange}/>
 				)}
 				{shouldRender && (
@@ -256,6 +264,7 @@ export default class Time extends View<null, Props, State> {
 			androidTimeValueCenterLine,
 			androidTimeCaption,
 			androidTimeMargin,
+			textColorDateTimePicker,
 		} = this._getStyle(appLayout);
 
 		let timePicker;
@@ -267,6 +276,7 @@ export default class Time extends View<null, Props, State> {
 						value={date}
 						mode="time"
 						style={{ flex: 1 }}
+						textColor={textColorDateTimePicker}
 						onChange={this._onDateChange}
 					/>
 				</View>
@@ -403,6 +413,9 @@ export default class Time extends View<null, Props, State> {
 	};
 
 	_getStyle = (appLayout: Object): Object => {
+		const {
+			colors,
+		} = this.props;
 		const { brandPrimary, borderRadiusRow, maxSizeFloatingButton } = Theme.Core;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -420,6 +433,7 @@ export default class Time extends View<null, Props, State> {
 		let buttonBottom = deviceWidth * 0.066666667;
 
 		return {
+			textColorDateTimePicker: colors.textThree,
 			container: {
 				flex: 1,
 				justifyContent: 'flex-start',
@@ -488,3 +502,5 @@ export default class Time extends View<null, Props, State> {
 	};
 
 }
+
+export default withTheme(Time);

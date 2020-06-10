@@ -23,8 +23,10 @@
 export type Action =
 	  { type: 'LOGGED_IN' }
 	| { type: 'RECEIVED_ACCESS_TOKEN', accessToken: Object }
+	| { type: 'RECEIVED_ACCESS_TOKEN_OTHER_ACCOUNT', accessToken: Object }
 	| { type: 'RECEIVED_PUSH_TOKEN', pushToken: string }
 	| { type: 'RECEIVED_USER_PROFILE', payload: Object }
+	| { type: 'RECEIVED_USER_PROFILE_OTHER', payload: Object }
 	| { type: 'RECEIVED_DEVICES', payload: Object }
 	| { type: 'RECEIVED_GATEWAYS', payload: Object }
 	| { type: 'RECEIVED_SENSORS', payload: Object }
@@ -33,8 +35,11 @@ export type Action =
 	| { type: 'PUSH_TOKEN_UNREGISTERED', token: string, payload: Object }
 	| { type: 'PUSH_TOKEN_DELETED', token: string, payload: Object }
 	| { type: 'LOGGED_OUT' }
+	| { type: 'LOGGED_OUT_SELECTED', payload: Object }
 	| { type: 'LOCK_SESSION' }
 	| { type: 'SET_NETWORK_CONNECTION_INFO', payload: Object }
+	| { type: 'SWITCH_USER_ACCOUNT', payload: Object }
+	| { type: 'TOGGLE_VISIBILITY_SWITCH_ACCOUNT_AS', payload: Object }
 
 	| { type: 'GENERATE_PUSH_TOKEN_ERROR', generatePushError: string }
 	| { type: 'PLAY_SERVICES_INFO', payload: Object }
@@ -42,8 +47,18 @@ export type Action =
 	| { type: 'CHANGE_SCREEN', screen: string }
 	| { type: 'TOGGLE_EDIT_MODE', tab: 'sensorsTab' | 'devicesTab' }
 
-	| { type: 'ADD_TO_DASHBOARD', kind: 'device' | 'sensor', id: number }
-	| { type: 'REMOVE_FROM_DASHBOARD', kind: 'device' | 'sensor', id: number }
+	| { type: 'ADD_TO_DASHBOARD', payload: {
+		kind: 'device' | 'sensor',
+		id: number,
+		userId: string,
+		dashboardId: string,
+	}}
+	| { type: 'REMOVE_FROM_DASHBOARD', payload: {
+		kind: 'device' | 'sensor',
+		id: number,
+		userId: string,
+		dashboardId: string,
+	}}
 
 	| { type: 'CHANGE_SENSOR_DISPLAY_TYPE', id: number, displayType: string }
 	| { type: 'CHANGE_SENSOR_DEFAULT_DISPLAY_TYPE', id: number, displayType: string }
@@ -132,6 +147,7 @@ export type Action =
 	| { type: 'RECEIVED_PHONES_LIST', payload: Array<Object> }
 
 	| { type: 'RECEIVED_USER_SUBSCRIPTIONS', payload: Object }
+	| { type: 'RECEIVED_USER_SUBSCRIPTIONS_OTHER', payload: Object }
 	| { type: 'SET_SOCIAL_AUTH_CONFIG', payload: Object }
 
 	| { type: 'CAMPAIGN_VISITED', payload: boolean }
@@ -139,13 +155,37 @@ export type Action =
 	| { type: 'TOGGLE_DIALOGUE_BOX_STATE', payload: Object }
 	| { type: 'SET_FIREBASE_REMOTE_CONFIG', payload: Object }
 
+	| { type: 'SET_FENCE_AREA', payload: Object }
+	| { type: 'SET_FENCE_ARRIVING_ACTIONS', payload: Object }
+	| { type: 'SET_FENCE_LEAVING_ACTIONS', payload: Object }
+	| { type: 'SET_FENCE_ACTIVE_TIME', payload: Object }
+	| { type: 'SET_FENCE_TITLE', payload: Object }
+	| { type: 'SAVE_FENCE', payload: Object }
+	| { type: 'SET_CURRENT_LOCATION', payload: Object }
+	| { type: 'SET_EDIT_FENCE', payload: Object }
+	| { type: 'DELETE_FENCE', payload: Object }
+	| { type: 'UPDATE_FENCE', payload: Object }
+	| { type: 'SET_FENCE_IDENTIFIER', payload: string }
+	| { type: 'RESET_FENCE', payload: Object }
+	| { type: 'CLEAR_FENCES', payload: Object }
+
+	| { type: 'SET_FIREBASE_REMOTE_CONFIG', payload: Object }
+
 	| { type: 'TOGGLE_VISIBILITY_EXCHANGE_OFFER', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 	| { type: 'TOGGLE_VISIBILITY_PRO_EXPIRE_HEADSUP', payload: 'show' | 'hide_temp' | 'hide_perm' | 'force_show' }
 	| { type: 'TOGGLE_VISIBILITY_EULA', payload: boolean }
 
+	| { type: 'SELECT_DASHBOARD', payload: Object }
+
+	| { type: 'CLEAR_APP_DATA' }
 	| { type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS', payload: Array<Object> }
 	| { type: 'UPDATE_STATUS_IAP_TRANSACTION', payload: Object }
 	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
+
+	| { type: 'DEBUG_GF_EVENT_ONGEOFENCE', payload: Object }
+	| { type: 'DEBUG_GF_SET_CHECKPOINT', payload: Object }
+	| { type: 'CLEAR_ON_GEOFENCE_LOG' }
+	| { type: 'UPDATE_GEOFENCE_CONFIG', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;
@@ -155,7 +195,7 @@ export type PromiseAction = Promise<Action>;
 
 export type GrantType = 'password' | 'google' | 'refresh_token';
 
-export type TicketData = {
+export type TicketData = {|
 	email: string,
 	message: string,
 	failedTests: string,
@@ -163,4 +203,4 @@ export type TicketData = {
 	connectionType: string,
 	connectionEffectiveType: string,
 	testCount: number,
-};
+|};

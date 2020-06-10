@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StyleSheet, Dimensions } from 'react-native';
 import Slider from 'react-native-slider';
+import throttle from 'lodash/throttle';
 
 const deviceHeight = Dimensions.get('window').height;
 
@@ -54,8 +55,9 @@ type Props = {
 	requestDeviceAction: (number) => any,
 	intl: Object,
 	isGatewayActive: boolean,
-	style: Object | number | Array<any>,
+	style: Array<any> | Object,
 	appLayout: Object,
+	onPressOverride?: (Object) => void,
 };
 
 type State = {
@@ -100,6 +102,10 @@ class SliderDetails extends View {
 
 		const dimmerValue: number = prepareDimmerValue(this.props.device);
 
+		this.onValueChangeOverrideThrottled = throttle(this._onValueChangeOverride, 100, {
+			trailing: true,
+		});
+
 		this.state = {
 			dimmerValue,
 		};
@@ -120,22 +126,79 @@ class SliderDetails extends View {
 		rDA(id);
 	}
 
+	_onValueChangeOverride(dimValue: number) {
+		let { commandDIM, onPressOverride } = this.props;
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandDIM,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+		}
+	}
+
 	onValueChange(dimmerValue: number) {
 		this.setState({ dimmerValue });
+		this.onValueChangeOverrideThrottled(dimmerValue);
 	}
 
 	onSlidingComplete(sliderValue: number) {
+		const {
+			device,
+			commandOFF,
+			commandDIM,
+			onPressOverride,
+		} = this.props;
+
 		let dimValue = toDimmerValue(sliderValue);
-		let command = dimValue === 0 ? this.props.commandOFF : this.props.commandDIM;
-		this.props.deviceSetState(this.props.device.id, command, dimValue);
+		let command = dimValue === 0 ? commandOFF : commandDIM;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: command,
+				stateValues: {
+					[commandDIM]: dimValue,
+				},
+			});
+			return;
+		}
+
+		this.props.deviceSetState(device.id, command, dimValue);
 	}
 
 	onTurnOn() {
-		this.props.deviceSetState(this.props.device.id, this.props.commandON);
+		const {
+			device,
+			commandON,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandON,
+			});
+			return;
+		}
+
+		this.props.deviceSetState(device.id, commandON);
 	}
 
 	onTurnOff() {
-		this.props.deviceSetState(this.props.device.id, this.props.commandOFF);
+		const {
+			device,
+			commandOFF,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandOFF,
+			});
+			return;
+		}
+
+		this.props.deviceSetState(device.id, commandOFF);
 	}
 
 	render(): Object {
@@ -170,7 +233,9 @@ class SliderDetails extends View {
 
 		return (
 			<View style={[styles.container, style]}>
-				<Text style={[styles.textDimmingLevel, {fontSize}]}>
+				<Text
+					level={2}
+					style={[styles.textDimmingLevel, {fontSize}]}>
 					<FormattedMessage {...i18n.dimmingLevel} style={[styles.textDimmingLevel, {fontSize}]} />: {this.state.dimmerValue}%
 				</Text>
 				{slider}
@@ -195,7 +260,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	textDimmingLevel: {
-		color: '#1a355b',
 		fontSize: 14,
 		marginTop: 12,
 		marginLeft: 8,

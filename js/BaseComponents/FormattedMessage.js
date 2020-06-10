@@ -30,15 +30,21 @@ type Props = {
 	style: Object,
 	prefix?: string,
 	postfix?: string,
+	level?: number,
 };
 
 class FormattedMessageComponent extends Base {
 	props: Props;
 
 	render(): Object {
+		const {
+			postfix,
+			prefix,
+			...others
+		} = this.props;
 		return (
 			<FormattedMessage {...this.props}>{(msg: string): Object => {
-				return <Text style={this.props.style}>{this.props.prefix}{msg}{this.props.postfix}</Text>;
+				return <Text {...others}>{prefix}{msg}{postfix}</Text>;
 			}}
 			</FormattedMessage>
 		);

@@ -25,9 +25,7 @@
 import React from 'react';
 import {
 	Image,
-	TouchableOpacity,
 	TouchableWithoutFeedback,
-	ScrollView,
 	BackHandler,
 } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
@@ -35,9 +33,15 @@ import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 
 import {
-	View, Text, TouchableButton, StyleSheet,
-	FormattedNumber, Icon, TitledInfoBlock,
-	TabBar,
+	View,
+	Text,
+	TouchableButton,
+	StyleSheet,
+	FormattedNumber,
+	Icon,
+	TitledInfoBlock,
+	ThemedScrollView,
+	TouchableOpacity,
 } from '../../../../BaseComponents';
 import LabelBox from '../Common/LabelBox';
 import Status from '../../TabViews/SubViews/Gateway/Status';
@@ -70,7 +74,9 @@ type Props = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	deviceId: string,
+	route: Object,
 	firebaseRemoteConfig: Object,
+	currentScreen: string,
 };
 
 type State = {
@@ -107,22 +113,6 @@ class Details extends View<Props, State> {
 	onConfirmRemoveLocation: () => void;
 
 	onPressTestLocalControl: () => void;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="home"
-				tintColor={tintColor}
-				label={i18n.overviewHeader}
-				accessibilityLabel={i18n.locationOverviewTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'LOverview',
-				key: 'LOverview',
-			});
-		},
-	});
 
 	handleBackPress: () => boolean;
 
@@ -192,12 +182,12 @@ class Details extends View<Props, State> {
 	}
 
 	componentDidMount() {
-		const { location, navigation, dispatch } = this.props;
+		const { location, navigation, dispatch, route } = this.props;
 		if (location && location.id) {
 			let { id } = location, extras = 'timezoneAutodetect';
 			dispatch(getGatewayInfo({id}, extras)).then((response: Object) => {
 				let { autodetectedTimezone } = response;
-				let { params } = navigation.state;
+				let { params } = route;
 				let newParams = { ...params, autodetectedTimezone };
 				navigation.setParams(newParams);
 			});
@@ -206,7 +196,7 @@ class Details extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.screenProps.currentScreen === 'LOverview';
+		return nextProps.currentScreen === 'LOverview';
 	}
 
 	componentWillUnmount() {
@@ -217,8 +207,8 @@ class Details extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let { navigation, screenProps } = this.props;
-		if (screenProps.currentScreen === 'LOverview') {
+		let { navigation, currentScreen } = this.props;
+		if (currentScreen === 'LOverview') {
 			navigation.pop();
 			return true;
 		}
@@ -227,20 +217,17 @@ class Details extends View<Props, State> {
 
 	onEditName() {
 		const { navigation, location } = this.props;
-		navigation.navigate({
-			routeName: 'EditName',
-			key: 'EditName',
-			params: {
+		navigation.navigate('EditName',
+			{
 				id: location.id,
 				name: location.name,
-			},
-		});
+			});
 		this.infoPressCount = 0;
 	}
 
 	onEditTimeZone() {
-		let { navigation, location = {} } = this.props;
-		let { params } = navigation.state;
+		let { navigation, location = {}, route } = this.props;
+		let { params } = route;
 		let newParams = { ...params, id: location.id, timezone: location.timezone };
 		navigation.navigate('EditTimeZoneContinent', newParams);
 		this.infoPressCount = 0;
@@ -249,13 +236,10 @@ class Details extends View<Props, State> {
 	onEditGeoPosition() {
 		let { navigation, location = {} } = this.props;
 		let { latitude, longitude, id } = location;
-		navigation.navigate({
-			routeName: 'EditGeoPosition',
-			key: 'EditGeoPosition',
-			params: {
+		navigation.navigate('EditGeoPosition',
+			{
 				id, latitude, longitude,
-			},
-		});
+			});
 		this.infoPressCount = 0;
 	}
 
@@ -277,8 +261,10 @@ class Details extends View<Props, State> {
 	}
 
 	onConfirmRemoveLocation() {
-		const { dispatch, navigation, screenProps } = this.props;
-		const location = navigation.getParam('location', {id: null});
+		const { dispatch, navigation, screenProps, route } = this.props;
+		const {
+			location = {id: null},
+		} = route.params || {};
 		this.setState({
 			isLoading: true,
 		});
@@ -334,25 +320,28 @@ class Details extends View<Props, State> {
 					paddingTop: 2,
 				}}
 				key={index}>
-					<Text style={{
-						fontSize: 10,
-						color: Theme.Core.eulaContentColor,
-						flexWrap: 'wrap',
-					}}>
+					<Text
+						level={5}
+						style={{
+							fontSize: 10,
+							flexWrap: 'wrap',
+						}}>
 						{`${d}: `}
 					</Text>
-					<Text style={{
-						fontSize: 10,
-						color: Theme.Core.rowTextColor,
-						flexWrap: 'wrap',
-					}}>
+					<Text
+						level={6}
+						style={{
+							fontSize: 10,
+							flexWrap: 'wrap',
+						}}>
 						{text}
 					</Text>
 				</View>
 			);
 		});
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
 				}}
@@ -361,7 +350,7 @@ class Details extends View<Props, State> {
 					paddingVertical: 10,
 				}}>
 				{body}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -526,13 +515,10 @@ class Details extends View<Props, State> {
 			return;
 		}
 
-		navigation.navigate({
-			routeName: 'TestLocalControl',
-			key: 'TestLocalControl',
-			params: {
+		navigation.navigate('TestLocalControl',
+			{
 				location,
-			},
-		});
+			});
 	}
 
 	getLocationStatus(online: boolean, websocketOnline: boolean, localKey: Object): Object {
@@ -596,14 +582,15 @@ class Details extends View<Props, State> {
 		const disableButtonContactSup = !isAcceptableNetType || isContactingSupport || isLoading;
 
 		return (
-			<ScrollView style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<ThemedScrollView
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<View style={container}>
 					<LabelBox containerStyle={infoOneContainerStyle} appLayout={appLayout}>
 						<Image resizeMode={'contain'} style={locationImage} source={{ uri: image, isStatic: true }} />
-						<TouchableWithoutFeedback style={{flex: 1}} onPress={this.onPressGatewayInfo}>
+						<TouchableWithoutFeedback onPress={this.onPressGatewayInfo}>
 							<View style={boxItemsCover}>
 								<Text style={[textName]}>
 									{type}
@@ -629,7 +616,6 @@ class Details extends View<Props, State> {
 						label={this.labelName}
 						value={name}
 						icon={'angle-right'}
-						iconColor="#A59F9A90"
 						blockContainerStyle={{
 							marginTop: padding / 2,
 							marginBottom: padding / 2,
@@ -643,7 +629,6 @@ class Details extends View<Props, State> {
 						label={timezoneLabel}
 						value={timezone}
 						icon={'angle-right'}
-						iconColor="#A59F9A90"
 						blockContainerStyle={{
 							marginBottom: padding / 2,
 						}}
@@ -652,24 +637,36 @@ class Details extends View<Props, State> {
 						}}
 						onPress={isLoading ? null : this.onEditTimeZone}
 					/>
-					<TouchableOpacity style={[styles.infoTwoContainerStyle, {
-						padding: fontSize,
-						marginBottom: padding / 2,
-					}]} onPress={isLoading ? null : this.onEditGeoPosition}>
-						<Text style={[styles.textLabel, {fontSize}]}>
+					<TouchableOpacity
+						level={2}
+						style={[styles.infoTwoContainerStyle, {
+							padding: fontSize,
+							marginBottom: padding / 2,
+						}]} onPress={isLoading ? null : this.onEditGeoPosition}>
+						<Text
+							level={3}
+							style={{fontSize}}>
 							{this.labelGeoPosition}
 						</Text>
 						<View style={{ flexDirection: 'column', justifyContent: 'center', marginRight: 20 }}>
-							<Text style={[styles.textValue, {fontSize}]}>
+							<Text
+								level={4}
+								style={[styles.textValue, {fontSize}]}>
 								{`${this.labelLat}: `}
 								<FormattedNumber value={latitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
-							<Text style={[styles.textValue, {fontSize}]}>
+							<Text
+								level={4}
+								style={[styles.textValue, {fontSize}]}>
 								{` ${this.labelLong}: `}
 								<FormattedNumber value={longitude} maximumFractionDigits={3} style={[styles.textValue, {fontSize}]}/>
 							</Text>
 						</View>
-						<Icon name="angle-right" size={iconSize} color="#A59F9A90" style={styles.nextIcon}/>
+						<Icon
+							name="angle-right"
+							size={iconSize}
+							level={21}
+							style={styles.nextIcon}/>
 					</TouchableOpacity>
 					{supportLocalControl && (
 						<TouchableButton
@@ -691,7 +688,7 @@ class Details extends View<Props, State> {
 							showThrobber={isLoading}/>
 					</View>
 				</View>
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -705,7 +702,6 @@ class Details extends View<Props, State> {
 			inactiveSwitchBackground,
 			btnPrimaryBg,
 			paddingFactor,
-			appBackground,
 			brandSecondary,
 		} = Theme.Core;
 
@@ -722,7 +718,6 @@ class Details extends View<Props, State> {
 				padding: padding,
 				alignItems: 'stretch',
 				justifyContent: 'center',
-				backgroundColor: appBackground,
 			},
 			infoOneContainerStyle: {
 				flexDirection: 'row',
@@ -771,14 +766,9 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: '#fff',
 		...Theme.Core.shadow,
 	},
-	textLabel: {
-		color: '#000',
-	},
 	textValue: {
-		color: Theme.Core.rowTextColor,
 		textAlign: 'right',
 	},
 	nextIcon: {
@@ -788,7 +778,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let { id } = ownProps.navigation.getParam('location', {id: null});
+	const {
+		location = {id: null},
+	} = ownProps.route.params || {};
+	const { id } = location;
 	const {
 		pushToken,
 		generatePushError,
@@ -798,6 +791,10 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 	} = store.user;
 	const { networkInfo } = store.app;
 
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		location: store.gateways.byId[id],
 		pushToken,
@@ -806,6 +803,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		playServicesInfo,
 		deviceId,
 		firebaseRemoteConfig,
+		currentScreen,
 	};
 }
 

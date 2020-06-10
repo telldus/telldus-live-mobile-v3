@@ -21,7 +21,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
@@ -37,8 +36,8 @@ type Props = {
 	intl: Object,
 	name: string,
 	isGatewayActive: boolean,
-	style: Object | number | Array<any>,
-	iconStyle: Object | number | Array<any>,
+	style: Object | Array<any>,
+	iconStyle: Object | Array<any>,
 	methodRequested: string,
 	isInState: string,
 	enabled: boolean,
@@ -49,6 +48,8 @@ type Props = {
 	closeSwipeRow: () => void,
 	actionIcon?: string,
 	onPressDeviceAction?: () => void,
+	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class OnButton extends View {
@@ -64,7 +65,21 @@ class OnButton extends View {
 	}
 
 	onPress() {
-		const { command, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		const {
+			command,
+			id,
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: command,
+			});
+			return;
+		}
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
@@ -76,7 +91,17 @@ class OnButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle, local, actionIcon } = this.props;
+		let {
+			isInState,
+			enabled,
+			methodRequested,
+			name,
+			isGatewayActive,
+			iconStyle,
+			local,
+			actionIcon,
+			disableActionIndicator,
+		} = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState !== 'TURNOFF' ? styles.offline : styles.disabled) : (isInState !== 'TURNOFF' ? styles.enabled : styles.disabled);
@@ -94,7 +119,7 @@ class OnButton extends View {
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
-					methodRequested === 'TURNON' ?
+					!disableActionIndicator && methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -134,19 +159,10 @@ const styles = StyleSheet.create({
 		left: 3,
 	},
 });
-
-OnButton.propTypes = {
-	id: PropTypes.number,
-	isInState: PropTypes.string,
-	enabled: PropTypes.bool,
-	fontSize: PropTypes.number,
-	methodRequested: PropTypes.string,
-	command: PropTypes.number,
-};
-
 OnButton.defaultProps = {
 	enabled: true,
 	command: 1,
+	disableActionIndicator: false,
 };
 
 function mapDispatchToProps(dispatch: Function): Object {

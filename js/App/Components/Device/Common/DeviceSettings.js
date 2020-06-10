@@ -63,8 +63,8 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	settings: Object,
-	coverStyle?: Array<any> | number | Object,
-	labelStyle?: Array<any> | number | Object,
+	coverStyle?: Array<any> | Object,
+	labelStyle?: Array<any> | Object,
 	widgetId?: string | null,
 	deviceId?: string,
 	initializeValueFromStore?: boolean,
@@ -76,7 +76,7 @@ type Props = {
 	renderExtraSettingsTop?: Function,
 };
 
-const DeviceSettings = (props: Props): Object => {
+const DeviceSettings = React.memo<Object>((props: Props): Object => {
 	const inputRefSystem = useRef(null);
 	const inputRefHouse = useRef(null);
 	const inputRefUnit = useRef(null);
@@ -616,7 +616,7 @@ const DeviceSettings = (props: Props): Object => {
 			}
 		</View>
 	);
-};
+});
 
 const getStyles = (appLayout: Object): Object => {
 	const { height, width } = appLayout;
@@ -697,5 +697,5 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(DeviceSettings);
+export default DeviceSettings;
 

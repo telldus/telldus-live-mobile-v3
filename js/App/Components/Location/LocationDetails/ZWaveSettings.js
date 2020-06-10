@@ -23,13 +23,13 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, LayoutAnimation } from 'react-native';
+import { LayoutAnimation } from 'react-native';
 import { connect } from 'react-redux';
 
 import {
 	View,
-	TabBar,
 	TouchableButton,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { ExcludeDevice } from '../../Device/Common';
 
@@ -47,6 +47,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	screenProps: Object,
 	location: Object,
+	currentScreen: string,
 
 	navigation: Object,
 	showToast: (?string) => void,
@@ -58,22 +59,6 @@ type State = {
 };
 
 class ZWaveSettings extends View<Props, State> {
-
-static navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="settings"
-			tintColor={tintColor}
-			label={'Z-Wave'}
-			accessibilityLabel={i18n.zWaveSettingsTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'ZWaveSettings',
-			key: 'ZWaveSettings',
-		});
-	},
-});
 
 props: Props;
 state: State;
@@ -94,7 +79,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.screenProps.currentScreen === 'ZWaveSettings';
+	return nextProps.currentScreen === 'ZWaveSettings';
 }
 
 onPressExcludeDevice() {
@@ -148,7 +133,9 @@ render(): Object {
 	} = this.getStyles(appLayout);
 
 	return (
-		<ScrollView style={container}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
 			{excludeActive && (
 				<ExcludeDevice
 					clientId={id}
@@ -168,7 +155,7 @@ render(): Object {
 					marginTop: padding * 1.5,
 				}}/>
 			)}
-		</ScrollView>
+		</ThemedScrollView>
 	);
 }
 
@@ -176,7 +163,7 @@ getStyles(appLayout: Object): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, appBackground, brandDanger, btnDisabledBg } = Theme.Core;
+	const { paddingFactor, brandDanger, btnDisabledBg } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -186,7 +173,6 @@ getStyles(appLayout: Object): Object {
 		btnDisabledBg,
 		container: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 	};
 }
@@ -200,9 +186,16 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	let { id } = ownProps.navigation.getParam('location', {id: null});
+	const {
+		location: {id},
+	} = ownProps.route.params || {};
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		location: store.gateways.byId[id],
+		currentScreen,
 	};
 }
 

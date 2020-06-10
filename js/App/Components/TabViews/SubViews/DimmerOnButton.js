@@ -21,7 +21,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
@@ -34,8 +33,8 @@ import Theme from '../../../Theme';
 
 type Props = {
 	isInState: string,
-	style: Object | number | Array<any>,
-	iconStyle: Object | number | Array<any>,
+	style: Array<any> | Object,
+	iconStyle: Object | Array<any>,
 	methodRequested: string,
 	name: string,
 	isGatewayActive: boolean,
@@ -45,6 +44,7 @@ type Props = {
 	local: boolean,
 	onButtonColor?: string,
 	iconOnColor?: string,
+	disableActionIndicator?: boolean,
 };
 
 type State = {
@@ -105,6 +105,7 @@ class DimmerOnButton extends View {
 			local,
 			onButtonColor,
 			iconOnColor,
+			disableActionIndicator,
 		} = this.props;
 		let accessibilityLabel = `${this.labelOnButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
@@ -123,7 +124,7 @@ class DimmerOnButton extends View {
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="on" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
-					methodRequested === 'TURNON' ?
+					!disableActionIndicator && methodRequested === 'TURNON' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
@@ -132,11 +133,11 @@ class DimmerOnButton extends View {
 	}
 
 	fadeIn() {
-		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100, useNativeDriver: true }).start();
 	}
 
 	fadeOut() {
-		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100, useNativeDriver: true }).start();
 	}
 }
 
@@ -172,15 +173,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-DimmerOnButton.propTypes = {
-	isInState: PropTypes.string,
-	enabled: PropTypes.bool,
-	fontSize: PropTypes.number,
-	methodRequested: PropTypes.string,
-};
-
 DimmerOnButton.defaultProps = {
 	enabled: true,
+	disableActionIndicator: false,
 };
 
 module.exports = DimmerOnButton;

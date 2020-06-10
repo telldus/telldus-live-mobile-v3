@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 
 import { View } from '../../../../BaseComponents';
@@ -41,12 +40,14 @@ type Props = {
 
 	intl: Object,
 	style?: Object | number,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
+	offButtonStyle?: Array<any> | Object,
+	onButtonStyle?: Array<any> | Object,
 	closeSwipeRow: () => void,
 	onTurnOff: number => void,
 	onTurnOn: number => void,
 	onPressDeviceAction?: () => void,
+	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class ToggleButton extends View {
@@ -64,7 +65,7 @@ class ToggleButton extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'device']);
+		const propsChange = shouldUpdate(others, othersN, ['actionIcons', 'device', 'onPressOverride']);
 		if (propsChange) {
 			return true;
 		}
@@ -84,6 +85,8 @@ class ToggleButton extends View {
 			closeSwipeRow,
 			actionIcons = {},
 			onPressDeviceAction,
+			onPressOverride,
+			disableActionIndicator,
 		} = this.props;
 		const { id, isInState, methodRequested, name, local, supportedMethods = {} } = device;
 		const { TURNON, TURNOFF } = supportedMethods;
@@ -100,6 +103,8 @@ class ToggleButton extends View {
 			closeSwipeRow,
 			intl,
 			onPressDeviceAction,
+			onPressOverride,
+			disableActionIndicator,
 		};
 
 		const onButton = <OnButton
@@ -142,13 +147,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-ToggleButton.propTypes = {
-	device: PropTypes.object,
-	enabled: PropTypes.bool,
-};
-
 ToggleButton.defaultProps = {
 	enabled: true,
+	disableActionIndicator: false,
 };
 
 module.exports = ToggleButton;

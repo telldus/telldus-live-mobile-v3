@@ -24,13 +24,17 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 import { intlShape } from 'react-intl';
 import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import timeZone from '../../../Lib/TimeZone';
-import { View, Text } from '../../../../BaseComponents';
+import {
+	View,
+	Text,
+	TouchableOpacity,
+} from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
@@ -43,6 +47,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	actions: Object,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -99,8 +104,10 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onContinentChoose(continent: string) {
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+		} = route.params || {};
 		if (continent === 'UTC') {
 			actions.setTimezone(id, continent).then(() => {
 				actions.getGateways();
@@ -121,19 +128,18 @@ class EditTimeZoneContinent extends View {
 				let items = v1.split('/');
 				return !(items[0] === v2);
 			});
-			navigation.navigate({
-				routeName: 'EditTimeZoneCity',
-				key: 'EditTimeZoneCity',
-				params: {
+			navigation.navigate('EditTimeZoneCity',
+				{
 					cities: data, continent, id,
-				},
-			});
+				});
 		}
 	}
 
 	onPressAutodetect() {
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+		} = route.params || {};
 		actions.setTimezone(id, '').then(() => {
 			actions.getGateways();
 			navigation.goBack();
@@ -151,9 +157,11 @@ class EditTimeZoneContinent extends View {
 	}
 
 	onPressAutodetected() {
-		const { actions, navigation, toggleDialogueBox } = this.props;
-		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
-		const id = navigation.getParam('id', null);
+		const { actions, navigation, toggleDialogueBox, route } = this.props;
+		const {
+			id,
+			autodetectedTimezone,
+		} = route.params || {};
 		actions.setTimezone(id, autodetectedTimezone).then(() => {
 			actions.getGateways();
 			navigation.goBack();
@@ -171,20 +179,32 @@ class EditTimeZoneContinent extends View {
 	}
 
 	render(): Object {
-		const { appLayout, navigation } = this.props;
-		const autodetectedTimezone = navigation.getParam('autodetectedTimezone', null);
+		const { appLayout, route } = this.props;
+		const {
+			autodetectedTimezone,
+		} = route.params || {};
 		const styles = this.getStyle(appLayout);
 
 		return (
 			<ScrollView style={{paddingTop: 20}}>
-				<TouchableOpacity onPress={this.onPressAutodetect} style={styles.rowItems}>
-					<Text style={styles.text}>
+				<TouchableOpacity
+					level={2}
+					onPress={this.onPressAutodetect}
+					style={styles.rowItems}>
+					<Text
+						level={6}
+						style={styles.text}>
 						{this.labelAutodetect}
 					</Text>
 				</TouchableOpacity>
 				{!!autodetectedTimezone && (
-					<TouchableOpacity onPress={this.onPressAutodetected} style={styles.rowItems}>
-						<Text style={styles.text}>
+					<TouchableOpacity
+						level={2}
+						onPress={this.onPressAutodetected}
+						style={styles.rowItems}>
+						<Text
+							level={6}
+							style={styles.text}>
 							{autodetectedTimezone}
 						</Text>
 					</TouchableOpacity>
@@ -206,7 +226,6 @@ class EditTimeZoneContinent extends View {
 		return {
 			rowItems: {
 				width: width,
-				backgroundColor: '#ffffff',
 				marginTop: 2,
 				justifyContent: 'center',
 			},
@@ -214,7 +233,6 @@ class EditTimeZoneContinent extends View {
 				fontSize,
 				marginLeft: 10 + (fontSize * 0.2),
 				paddingVertical: 10 + (fontSize * 0.2),
-				color: '#A59F9A',
 			},
 		};
 	}

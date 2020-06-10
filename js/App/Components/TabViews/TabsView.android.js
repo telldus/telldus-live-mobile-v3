@@ -22,54 +22,58 @@
 
 'use strict';
 
-
+import React from 'react';
 
 import { MainTabBarAndroid } from '../../../BaseComponents';
 import TabViews from './index';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
-import ViewPagerAdapter from 'react-native-tab-view-viewpager-adapter';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-const RouteConfigs = {
-	Dashboard: {
-		screen: TabViews.Dashboard,
-	},
-	Devices: {
-		screen: TabViews.Devices,
-	},
-	Sensors: {
-		screen: TabViews.Sensors,
-	},
-	Scheduler: {
-		screen: TabViews.Scheduler,
-	},
-};
+import {
+	prepareNavigator,
+	shouldNavigatorUpdate,
+} from '../../Lib/NavigationService';
 
-const TabNavigatorConfig = {
+const ScreenConfigs = [
+	{
+		name: 'Dashboard',
+		Component: TabViews.Dashboard,
+	},
+	{
+		name: 'Devices',
+		Component: TabViews.Devices,
+	},
+	{
+		name: 'Sensors',
+		Component: TabViews.Sensors,
+	},
+	{
+		name: 'Scheduler',
+		Component: TabViews.Scheduler,
+	},
+];
+
+const NavigatorConfigs = {
 	initialRouteName: 'Dashboard',
-	initialRouteKey: 'Dashboard',
 	swipeEnabled: false,
 	lazy: true,
 	animationEnabled: true,
-	tabBarComponent: MainTabBarAndroid,
+	tabBar: (props: Object): Object => <MainTabBarAndroid {...props}/>,
 	tabBarPosition: 'top',
 	tabBarOptions: {
-		activeTintColor: '#fff',
-		indicatorStyle: {
-			backgroundColor: '#fff',
-		},
 		scrollEnabled: true,
 		allowFontScaling: false,
 	},
-	// NOTE: The default one has an issue:
-	// From dahsboard did mount, when db is empty we
-	// do navigate to devices tab, with the default pager
-	// component, after navigation device tab contents
-	// are rendered once, but after a flash it gets overridden
-	// by the empty db message, which must be some bug
-	// in the default pager component used by react-navigation-tabs.
-	pagerComponent: ViewPagerAdapter,
 };
 
-const TabsView = createMaterialTopTabNavigator(RouteConfigs, TabNavigatorConfig);
+const Tab = createMaterialTopTabNavigator();
+
+const TabsView = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+}, (prevProps: Object, nextProps: Object): boolean => shouldNavigatorUpdate(prevProps, nextProps, [
+	'hideHeader',
+	'showAttentionCapture',
+	'showAttentionCaptureAddDevice',
+	'addingNewLocation',
+]));
 
 module.exports = TabsView;

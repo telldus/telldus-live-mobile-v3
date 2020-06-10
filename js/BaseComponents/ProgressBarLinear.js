@@ -29,7 +29,7 @@ import Theme from '../App/Theme';
 const INDETERMINATE_WIDTH_FACTOR = 0.3;
 const BAR_WIDTH_ZERO_POSITION = INDETERMINATE_WIDTH_FACTOR / (1 + INDETERMINATE_WIDTH_FACTOR);
 
-type Props = {
+type Props = {|
 	progress: number,
 	indeterminate: boolean,
 	animated: boolean,
@@ -41,7 +41,7 @@ type Props = {
 	style: Object,
 	unfilledColor?: string,
 	width: number,
-};
+|};
 
 type DefaultProps = {
 	animated: boolean,
@@ -66,6 +66,7 @@ const animate = (animationValue: any) => {
 		duration: 1000,
 		easing: Easing.linear,
 		isInteraction: false,
+		useNativeDriver: true,
 	}).start((endState: Object) => {
 		if (endState.finished) {
 			animate(animationValue);
@@ -85,6 +86,7 @@ class ProgressBarLinear extends Component<Props, State> {
 			} else {
 				Animated.spring(state.animationValue, {
 					toValue: BAR_WIDTH_ZERO_POSITION,
+					useNativeDriver: true,
 				}).start();
 			}
 		}
@@ -98,6 +100,7 @@ class ProgressBarLinear extends Component<Props, State> {
 				Animated.spring(state.progress, {
 					toValue: progress,
 					bounciness: 0,
+					useNativeDriver: true,
 				}).start();
 			} else {
 				state.progress.setValue(progress);
@@ -131,7 +134,19 @@ class ProgressBarLinear extends Component<Props, State> {
 		this.state.progress._value = Math.max(0.0001, this.state.progress._value); // fix a bug in android :
 	                                                                               // https://github.com/facebook/react-native/issues/6278
 
-		const { borderColor, borderRadius, borderWidth, color, height, style, unfilledColor, width, ...restProps } = this.props;
+		const {
+			borderColor,
+			borderRadius,
+			borderWidth,
+			color,
+			height,
+			style,
+			unfilledColor,
+			width,
+			// eslint-disable-next-line no-unused-vars
+			animated, indeterminate, progress,
+			...restProps
+		} = this.props;
 
 		const innerWidth = width - (borderWidth * 2);
 		const containerStyle = {
@@ -168,8 +183,8 @@ class ProgressBarLinear extends Component<Props, State> {
 
 		return (
 			<View
-				style={[containerStyle, style]}
-				{...restProps}>
+				{...restProps}
+				style={[containerStyle, style]}>
 				<Animated.View style={progressStyle}/>
 			</View>
 		);

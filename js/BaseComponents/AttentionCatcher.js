@@ -22,12 +22,11 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, Image } from 'react-native';
+import { Animated } from 'react-native';
 
 import View from './View';
 import Text from './Text';
-
-import Theme from '../App/Theme';
+import ThemedImage from './ThemedImage';
 
 type Props = {
     containerTop?: number,
@@ -80,6 +79,7 @@ bounceToDest() {
 		{
 			toValue: toVal,
 			duration: 800,
+			useNativeDriver: false,
 		}).start((event: Object) => {
 		if (event.finished) {
 			this.bounceFromDest();
@@ -95,6 +95,7 @@ bounceFromDest() {
 		{
 			toValue: toVal + distance,
 			duration: 800,
+			useNativeDriver: false,
 		}).start((event: Object) => {
 		if (event.finished) {
 			this.bounceToDest();
@@ -135,35 +136,36 @@ render(): Object {
 				alignItems: 'center',
 			}} pointerEvents={'none'}>
 				{arrowPos === 'left' && (
-					<Image
+					<ThemedImage
+						level={2}
 						source={{uri: 'triangle'}}
-						style={[triangleCommon]}
-						tintColor={Theme.Core.brandSecondary}
+						style={triangleCommon}
 						resizeMode={'stretch'}
 					/>
 				)}
-				<View style={{
-					backgroundColor: Theme.Core.brandSecondary,
-					justifyContent: 'center',
-					padding: 7,
-					borderRadius: 4,
-				}}>
-					<Text style={{
-						color: '#fff',
-						fontSize: 16,
+				<View
+					level={8}
+					style={{
+						justifyContent: 'center',
+						padding: 7,
+						borderRadius: 4,
 					}}>
+					<Text
+						level={16}
+						style={{
+							fontSize: 16,
+						}}>
 						{text}
 					</Text>
 				</View>
 				{arrowPos === 'right' && (
-					<Image
+					<ThemedImage
 						source={{uri: 'triangle'}}
 						style={[triangleCommon, {
 							transform: [
 								{rotate: '180deg'},
 							],
 						}]}
-						tintColor={Theme.Core.brandSecondary}
 						resizeMode={'stretch'}
 					/>
 				)}

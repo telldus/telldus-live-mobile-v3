@@ -113,7 +113,7 @@ const Push = {
 		return false;
 	},
 	navigateToPurchasePremium: () => {
-		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+		navigate('PremiumUpgradeScreen');
 	},
 };
 

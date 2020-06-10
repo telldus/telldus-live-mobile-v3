@@ -33,8 +33,12 @@ import {
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	gateway: Object,
 	onPressGateway: (Object) => void,
 	intl: intlShape,
@@ -101,14 +105,25 @@ class Gateway extends PureComponent<Props, null> {
 					imageStyle={image}
 					descriptionContainerStyle={descriptionContainer}
 					h1Style={h1Style}
-					h2Style={h2Style}/>
-				<View style={iconSettingsContainer} pointerEvents={'box-none'}>
-					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
+					h2Style={h2Style}
+					onPress={this.onPress}
+					resizeMode={'stretch'}/>
+				<View style={iconSettingsContainer} pointerEvents="none">
+					<IconTelldus icon={'settings'} size={iconSize} level={6}/>
 				</View>
 			</RippleButton>
 		);
 	}
 	getStyles(drawerWidth: number): Object {
+
+		const {
+			colors,
+		} = this.props;
+
+		const {
+			headerOneColorBlockEnabled,
+			textSix,
+		} = colors;
 
 		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
 		const fontSizeH2 = Math.floor(drawerWidth * 0.042);
@@ -136,6 +151,7 @@ class Gateway extends PureComponent<Props, null> {
 				shadowColor: '#000',
 				shadowRadius: 0,
 				shadowOpacity: 0,
+				backgroundColor: undefined,
 				shadowOffset: {
 					width: 0,
 					height: 0,
@@ -159,23 +175,29 @@ class Gateway extends PureComponent<Props, null> {
 				marginRight: iconContainerWidth * 2,
 				width: drawerWidth - (iconContainerWidth + (drawerWidth * 0.22)),
 				flexWrap: 'wrap',
+				color: headerOneColorBlockEnabled,
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
+				color: textSix,
 			},
 			statusStyle: {
 				fontSize: fontSizeH3,
+				color: textSix,
 			},
 			statusInfoStyle: {
 				fontSize: fontSizeH3 * 2,
 			},
 			iconSettingsContainer: {
-				width: iconContainerWidth,
+				flex: 1,
 				alignItems: 'flex-end',
 				justifyContent: 'center',
 				position: 'absolute',
-				right: 5,
-				top: drawerWidth * 0.016,
+				right: 0,
+				left: 0,
+				top: 0,
+				bottom: 0,
+				paddingRight: 10,
 			},
 			coverStyle: {
 				paddingVertical: 5,
@@ -190,4 +212,4 @@ class Gateway extends PureComponent<Props, null> {
 	}
 }
 
-export default injectIntl(Gateway);
+export default injectIntl(withTheme(Gateway));

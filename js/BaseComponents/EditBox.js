@@ -40,10 +40,10 @@ type Props = {
 	placeholder?: string,
 	placeholderTextColor?: string,
     onChangeText: (string) => void,
-	containerStyle: number | Object | Array<any>,
-	textStyle: number | Object | Array<any>,
-	iconStyle: number | Object | Array<any>,
-	labelStyle: number | Object | Array<any>,
+	containerStyle: Array<any> | Object,
+	textStyle: Array<any> | Object,
+	iconStyle: Array<any> | Object,
+	labelStyle: Array<any> | Object,
     label?: string,
 	icon?: string,
 	header?: Object,
@@ -129,7 +129,9 @@ render(): Object {
 	const styles = this.getStyle(appLayout);
 
 	return (
-		<View style={[styles.container, containerStyle]}>
+		<View
+			level={2}
+			style={[styles.container, containerStyle]}>
 			{!!header && header}
 			<View style={styles.inputCover}>
 				<MaterialTextInput
@@ -183,7 +185,6 @@ getStyle(appLayout: Object): Object {
 			flexDirection: 'column',
 			alignItems: 'flex-start',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			padding,
 			...shadow,
 			borderRadius: 2,

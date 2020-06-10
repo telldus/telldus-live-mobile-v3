@@ -23,84 +23,134 @@
 'use strict';
 
 import React from 'react';
-import { createMaterialTopTabNavigator, MaterialTopTabBar } from 'react-navigation-tabs';
+import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigation/material-top-tabs';
 
-import { View } from '../../../BaseComponents';
+import {
+	View,
+	TabBar,
+} from '../../../BaseComponents';
 import AppTab from './AppTab';
 import ProfileTab from './ProfileTab';
 import SupportTab from './SupportTab';
 import ProfileHeaderPoster from './SubViews/ProfileHeaderPoster';
+
 import Theme from '../../Theme';
 
-const ProfileNavigator = createMaterialTopTabNavigator(
+import {
+	prepareNavigator,
+	shouldNavigatorUpdate,
+} from '../../Lib/NavigationService';
+
+import i18n from '../../Translations/common';
+
+const ScreenConfigs = [
 	{
-		AppTab: {
-			screen: AppTab,
-		},
-		ProfileTab: {
-			screen: ProfileTab,
-		},
-		SupportTab: {
-			screen: SupportTab,
+		name: 'AppTab',
+		Component: AppTab,
+		options: {
+			tabBarLabel: ({color}: Object): Object => {
+				return (
+					<TabBar
+						icon="phone"
+						tintColor={color}
+						label={i18n.labelApp}
+						accessibilityLabel={i18n.labelAccessibleAppTab}/>
+				);
+			},
 		},
 	},
 	{
-		initialRouteName: 'AppTab',
-		initialRouteKey: 'AppTab',
-		tabBarPosition: 'top',
-		swipeEnabled: false,
-		lazy: true,
-		animationEnabled: true,
-		tabBarComponent: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
-			let { screenProps } = rest,
-				tabWidth = 0, fontSize = 0, paddingVertical = 0;
-			if (screenProps && screenProps.appLayout) {
-				const { width, height } = screenProps.appLayout;
-				const isPortrait = height > width;
-				const deviceWidth = isPortrait ? width : height;
+		name: 'ProfileTab',
+		Component: ProfileTab,
+		options: {
+			tabBarLabel: ({color}: Object): Object => {
+				return (
+					<TabBar
+						icon="user"
+						tintColor={color}
+						label={i18n.labelProfile}
+						accessibilityLabel={i18n.labelAccessibleProfileTab}/>
+				);
+			},
+		},
+	},
+	{
+		name: 'SupportTab',
+		Component: SupportTab,
+		options: {
+			tabBarLabel: ({color}: Object): Object => {
+				return (
+					<TabBar
+						icon="faq"
+						tintColor={color}
+						label={i18n.userHelp}
+						accessibilityLabel={i18n.labelAccessibleSupportTab}/>
+				);
+			},
+		},
+	},
+];
 
-				tabWidth = width / 3;
-				fontSize = deviceWidth * 0.03;
-				paddingVertical = 10 + (fontSize * 0.5);
-			}
-			return (
-				<View style={{flex: 0}}>
-					<ProfileHeaderPoster {...rest}/>
-					<MaterialTopTabBar {...rest}
-						tabStyle={{
-							...tabStyle,
-							width: tabWidth,
-							paddingVertical,
-						}}
-						labelStyle={{
-							...labelStyle,
-							fontSize,
-						}}
-					/>
-				</View>
-			);
+const NavigatorConfigs = {
+	initialRouteName: 'AppTab',
+	initialRouteKey: 'AppTab',
+	tabBarPosition: 'top',
+	swipeEnabled: false,
+	lazy: true,
+	animationEnabled: true,
+	tabBar: ({ tabStyle, labelStyle, ...rest }: Object): Object => {
+		let { screenProps } = rest,
+			tabWidth = 0, fontSize = 0, paddingVertical = 0;
+		if (screenProps && screenProps.appLayout) {
+			const { width, height } = screenProps.appLayout;
+			const isPortrait = height > width;
+			const deviceWidth = isPortrait ? width : height;
+
+			tabWidth = width / 3;
+			fontSize = deviceWidth * 0.03;
+			paddingVertical = 10 + (fontSize * 0.5);
+		}
+		return (
+			<View style={{flex: 0}}>
+				<ProfileHeaderPoster {...rest}/>
+				<MaterialTopTabBar {...rest}
+					tabStyle={{
+						...tabStyle,
+						width: tabWidth,
+						paddingVertical,
+					}}
+					labelStyle={{
+						...labelStyle,
+						fontSize,
+					}}
+				/>
+			</View>
+		);
+	},
+	tabBarOptions: {
+		indicatorStyle: {
+			backgroundColor: '#fff',
 		},
-		tabBarOptions: {
-			indicatorStyle: {
-				backgroundColor: '#fff',
-			},
-			style: {
-				backgroundColor: '#fff',
-				...Theme.Core.shadow,
-				justifyContent: 'center',
-			},
-			tabStyle: {
-				alignItems: 'center',
-				justifyContent: 'center',
-			},
-			upperCaseLabel: false,
-			scrollEnabled: true,
-			activeTintColor: Theme.Core.brandSecondary,
-			inactiveTintColor: Theme.Core.inactiveTintColor,
-			showIcon: false,
-			allowFontScaling: false,
+		style: {
+			justifyContent: 'center',
 		},
-	}
-);
+		tabStyle: {
+			alignItems: 'center',
+			justifyContent: 'center',
+		},
+		upperCaseLabel: false,
+		scrollEnabled: true,
+		activeTintColor: Theme.Core.brandSecondary,
+		inactiveTintColor: Theme.Core.inactiveTintColor,
+		showIcon: false,
+		allowFontScaling: false,
+	},
+};
+
+const Tab = createMaterialTopTabNavigator();
+
+const ProfileNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Tab, {ScreenConfigs, NavigatorConfigs}, props);
+}, shouldNavigatorUpdate);
 
 export default ProfileNavigator;

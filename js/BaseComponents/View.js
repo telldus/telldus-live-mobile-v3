@@ -22,22 +22,49 @@
 'use strict';
 
 import React from 'react';
-import { View } from 'react-native';
+import { View, Animated } from 'react-native';
 import Base from './Base';
+import type { ViewProps } from 'react-native/Libraries/Components/View/ViewPropTypes';
 
-type Props = {
-	padder: boolean,
-};
+import {
+	prepareRootPropsView,
+} from './prepareRootProps';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
-export default class ViewComponent extends Base {
-	props: Props;
+type NewProps = {|padder?: boolean, level?: number, animated?: boolean, style: Object | Array<any>|};
+type Props = {|...NewProps, ...ViewProps|};
+
+
+type PropsThemedViewComponent = Props & PropsThemedComponent;
+class ViewComponent extends Base {
+	props: PropsThemedViewComponent;
 
 	render(): React$Element<any> {
+		const {
+			children,
+			animated,
+			...others
+		} = this.props;
+
+		if (animated) {
+			return (
+				<Animated.View
+					{...prepareRootPropsView(others)}>
+					{children}
+				</Animated.View>
+			);
+		}
+
 		return (
-			<View style={{
-				padding: (this.props.padder) ? this.getTheme().contentPadding : 0,
-				flex: 1,
-			}} {...this.props} />
+			<View
+				{...prepareRootPropsView(others)}>
+				{children}
+			</View>
 		);
 	}
 }
+
+export default withTheme(ViewComponent, true);

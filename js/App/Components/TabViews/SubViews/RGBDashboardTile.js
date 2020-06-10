@@ -64,10 +64,10 @@ type Props = {
 	intl: Object,
 	isGatewayActive: boolean,
 	showDimmerStep: (number) => void,
-	containerStyle?: number | Object | Array<any>,
-	offButtonStyle?: number | Object | Array<any>,
-	onButtonStyle?: number | Object | Array<any>,
-	sliderStyle?: number | Object | Array<any>,
+	containerStyle?: Array<any> | Object,
+	offButtonStyle?: Array<any> | Object,
+	onButtonStyle?: Array<any> | Object,
+	sliderStyle?: Array<any> | Object,
 	closeSwipeRow: () => void,
 	onDimmerSlide: number => void,
 	saveDimmerInitialState: (deviceId: number, initalValue: number, initialState: string) => void,
@@ -273,7 +273,7 @@ class RGBDashboardTile extends View<Props, null> {
 			name: deviceName,
 			enabled: false,
 		};
-		// TODO: refactor writing a higher order component
+
 		const onButton = (
 			<HVSliderContainer
 				{...sliderProps}

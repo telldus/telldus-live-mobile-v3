@@ -30,7 +30,7 @@ import i18n from '../../../../Translations/common';
 type Props = {
     onPressDim: (number) => void,
 	value: number,
-	importantForAccessibility?: string,
+	importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants',
 	intl: Object,
 };
 

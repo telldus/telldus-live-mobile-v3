@@ -28,7 +28,7 @@ type State = {
 };
 
 const initialState: State = {
-	screen: 'Dashboard',
+	screen: 'Login',
 };
 
 function navigation(state: State = initialState, action: Action): State {
@@ -38,9 +38,19 @@ function navigation(state: State = initialState, action: Action): State {
 			screen: action.screen,
 		};
 	}
+	// From react navigation v5 onwards when navigator is rendered the first time
+	// state change is not called we might not save the correct screen.
+	// This is a work around to prevent it.
+	if (action.type === 'APP_START') {
+		return {
+			...state,
+			screen: 'Dashboard',
+		};
+	}
 	if (action.type === 'LOGGED_OUT') {
 		return {
-			...initialState,
+			...state,
+			screen: 'Login',
 		};
 	}
 	return state;

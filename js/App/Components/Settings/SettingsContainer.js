@@ -56,6 +56,7 @@ type Props = {
 	deviceName: string,
 	deviceId: string,
 	openModal: boolean,
+	currentScreen: string,
 
 	actions?: Object,
 	navigation: Object,
@@ -108,7 +109,7 @@ handleBackPress(): boolean {
 }
 
 shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-	if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+	if (nextProps.ScreenName === nextProps.currentScreen) {
 		const isStateEqual = isEqual(this.state, nextState);
 		if (!isStateEqual) {
 			return true;
@@ -116,13 +117,13 @@ shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
 
 		const { screenProps, ...others } = this.props;
 		const { screenProps: screenPropsN, ...otherN } = nextProps;
-		const { currentScreen, appLayout } = screenProps;
-		const { currentScreen: currentScreenN, appLayout: appLayoutN } = screenPropsN;
-		if ((currentScreen !== currentScreenN) || (appLayout.width !== appLayoutN.width)) {
+		const { appLayout } = screenProps;
+		const { appLayout: appLayoutN } = screenPropsN;
+		if (appLayout.width !== appLayoutN.width) {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, otherN, ['pushToken', 'phonesList', 'deviceName', 'deviceId', 'openModal']);
+		const propsChange = shouldUpdate(others, otherN, ['currentScreen', 'pushToken', 'phonesList', 'deviceName', 'deviceId', 'openModal']);
 		if (propsChange) {
 			return true;
 		}
@@ -242,10 +243,10 @@ render(): Object {
 		phonesList,
 		pushToken,
 		openModal,
+		currentScreen,
 	} = this.props;
 	const {
 		appLayout,
-		currentScreen,
 	} = screenProps;
 
 	const {
@@ -257,7 +258,9 @@ render(): Object {
 	const importantForAccessibility = openModal ? 'no-hide-descendants' : 'yes';
 	return (
 
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={h1} h2={h2}
 				navigation={navigation}
@@ -281,6 +284,7 @@ render(): Object {
 								pushToken,
 								isPushSubmitLoading,
 								...screenProps,
+								currentScreen,
 							},
 						)}
 					</View>
@@ -299,7 +303,6 @@ getStyles(appLayout: Object): Object {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,
@@ -311,15 +314,17 @@ getStyles(appLayout: Object): Object {
 
 }
 
-const mapStateToProps = ({user, modal}: Object): Object => {
+const mapStateToProps = ({user, modal, navigation}: Object): Object => {
 	const { phonesList = {}, pushToken, deviceName, deviceId } = user;
 	const { openModal } = modal;
+	const { screen: currentScreen } = navigation;
 	return {
 		phonesList,
 		pushToken,
 		deviceName,
 		deviceId,
 		openModal,
+		currentScreen,
 	};
 };
 

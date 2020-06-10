@@ -43,11 +43,13 @@ type Props = {
 	supportedMethod: string,
 	id: number,
 	iconSize: number,
-	style: Object | Array<any> | number,
+	style: Object | Array<any>,
 	local: boolean,
 	isOpen: boolean,
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
+	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class UpButton extends View {
@@ -64,7 +66,21 @@ class UpButton extends View {
 	}
 
 	onUp() {
-		const { commandUp, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		const {
+			commandUp,
+			id,
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: commandUp,
+			});
+			return;
+		}
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
@@ -80,7 +96,7 @@ class UpButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local } = this.props;
+			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
 
 		let upButtonStyle = !isGatewayActive ?
 			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
@@ -99,7 +115,7 @@ class UpButton extends View {
 		      }}
 				/>
 				{
-					methodRequested === 'UP' ?
+					!disableActionIndicator && methodRequested === 'UP' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -111,6 +127,7 @@ class UpButton extends View {
 
 UpButton.defaultProps = {
 	commandUp: 128,
+	disableActionIndicator: false,
 };
 
 const styles = StyleSheet.create({

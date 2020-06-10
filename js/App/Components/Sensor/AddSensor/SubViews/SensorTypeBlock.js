@@ -33,10 +33,14 @@ import {
 	IconTelldus,
 	RippleButton,
 } from '../../../../../BaseComponents';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../../HOC/withTheme';
 
 import Theme from '../../../../Theme';
 
-type Props = {
+type Props = PropsThemedComponent & {
     module: string,
     action: string,
     h1: string,
@@ -90,22 +94,26 @@ render(): Object {
 		imageComponentStyle,
 		imageComponentHeight,
 		imageComponentWidth,
+		boxOneStyle,
 	} = this.getStyles();
 	return (
 		<RippleButton
+			style={{flex: 0}}
 			onPress={this.onPress}
 			disabled={!enabled}>
 			<View style={container}>
 				<View style={itemsCover}>
-					{!!icon && <IconTelldus icon={icon} style={imageType}/>}
-					{!!ImageSVG && <ImageSVG
-						height={imageComponentHeight}
-						width={imageComponentWidth}
-						style={imageComponentStyle}/>}
+					<View style={boxOneStyle}>
+						{!!icon && <IconTelldus icon={icon} style={imageType}/>}
+						{!!ImageSVG && <ImageSVG
+							height={imageComponentHeight}
+							width={imageComponentWidth}
+							style={imageComponentStyle}/>}
+					</View>
 					<View style={{
 						flex: 1,
 						flexDirection: 'column',
-						flexWrap: 'wrap',
+						justifyContent: 'center',
 					}}>
 						<Text>
 							{!!secure && (
@@ -121,7 +129,6 @@ render(): Object {
 							</Text>
 						</Text>
 						<View style={{
-							flex: 1,
 							flexDirection: 'row',
 							flexWrap: 'wrap',
 						}}>
@@ -143,12 +150,16 @@ render(): Object {
 	);
 }
 getStyles(): Object {
-	const { appLayout, enabled } = this.props;
+	const {
+		appLayout,
+		enabled,
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor } = Theme.Core;
+	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const rowHeight = deviceWidth * 0.27;
@@ -156,12 +167,26 @@ getStyles(): Object {
 	const h1FontSize = deviceWidth * 0.065;
 	const h2FontSize = deviceWidth * 0.033;
 
-	const colorBackground = enabled ? '#fff' : '#f5f5f5';
-	const colorHeaderOneText = enabled ? brandSecondary : '#999999';
-	const colorIcon = enabled ? '#1b365d' : '#bdbdbd';
+	const {
+		card,
+		colorBlockDisabled,
+		headerOneColorBlockEnabled,
+		headerOneColorBlockDisabled,
+		iconOneColorBlockEnabled,
+		iconOneColorBlockDisabled,
+		iconTwoColorBlock,
+		infoOneColorBlockEnabled,
+		infoOneColorBlockDisabled,
+	} = colors;
+
+	const colorBackground = enabled ? card : colorBlockDisabled;
+	const colorHeaderOneText = enabled ? headerOneColorBlockEnabled : headerOneColorBlockDisabled;
+	const colorIcon = enabled ? iconOneColorBlockEnabled : iconOneColorBlockDisabled;
 
 	const imageComponentWidth = deviceWidth * 0.16;
 	const imageComponentHeight = deviceWidth * 0.22;
+
+	const boxOneWidth = deviceWidth * 0.26;
 
 	return {
 		container: {
@@ -173,6 +198,11 @@ getStyles(): Object {
 			marginHorizontal: padding,
 			height: imageComponentHeight + (padding * 3),
 		},
+		boxOneStyle: {
+			width: boxOneWidth,
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 		arrowCover: {
 			flex: 0,
 			position: 'absolute',
@@ -181,7 +211,7 @@ getStyles(): Object {
 			top: '40%',
 		},
 		arrow: {
-			tintColor: '#A59F9A90',
+			tintColor: iconTwoColorBlock,
 			height: rowHeight * 0.25,
 			width: rowHeight * 0.2,
 		},
@@ -197,12 +227,11 @@ getStyles(): Object {
 		},
 		h2Style: {
 			fontSize: h2FontSize,
-			color: rowTextColor,
+			color: enabled ? infoOneColorBlockEnabled : infoOneColorBlockDisabled,
 		},
 		imageType: {
 			fontSize: deviceWidth * 0.18,
 			color: colorIcon,
-			marginHorizontal: padding * 2,
 		},
 		iconSecurity: {
 			fontSize: h1FontSize,
@@ -210,10 +239,9 @@ getStyles(): Object {
 		},
 		notAvailableIcon: {
 			fontSize: rowHeight * 0.25,
-			color: '#bdbdbd',
+			color: iconOneColorBlockDisabled,
 		},
 		imageComponentStyle: {
-			marginHorizontal: padding,
 			color: colorIcon,
 		},
 		imageComponentHeight,
@@ -222,4 +250,4 @@ getStyles(): Object {
 }
 }
 
-export default SensorTypeBlock;
+export default withTheme(SensorTypeBlock);

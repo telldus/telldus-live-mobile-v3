@@ -43,7 +43,8 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 type Props = {
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
 
     intl: Object,
 	onDidMount: (string, string, ?Object) => void,
@@ -69,8 +70,10 @@ inputRefs: Object;
 constructor(props: Props) {
 	super(props);
 
-	const devices = props.navigation.getParam('devices', []);
-	const mainNodeDeviceId = props.navigation.getParam('mainNodeDeviceId', null);
+	const {
+		devices = [],
+		mainNodeDeviceId = null,
+	} = props.route.params || {};
 	let rowData = {};
 	devices.map(({id, clientDeviceId}: Object, index: number) => {
 		rowData[id] = {
@@ -145,7 +148,7 @@ submitName() {
 }
 
 postSubmitName = async () => {
-	const { navigation, actions } = this.props;
+	const { navigation, actions, route } = this.props;
 	const { rowData } = this.state;
 
 	try {
@@ -159,11 +162,13 @@ postSubmitName = async () => {
 		}, () => {
 			InteractionManager.runAfterInteractions(() => {
 
-				const gateway = navigation.getParam('gateway', {});
-				const parentScreen = navigation.getParam('parent', '');
+				const {
+					gateway = {},
+					parent: parentScreen = '',
+					sensors = [],
+				} = route.params || {};
 
 				if (parentScreen === 'sensors_tab') {
-					const sensors = navigation.getParam('sensors', []);
 					if (sensors.length > 0) {
 
 						let newSensors = {};
@@ -177,26 +182,18 @@ postSubmitName = async () => {
 							};
 						});
 
-						navigation.navigate({
-							routeName: 'Sensors',
-							key: 'Sensors',
-							params: {
-								gateway,
-								newSensors,
-							},
+						navigation.navigate('Sensors', {
+							gateway,
+							newSensors,
 						});
 
 						return;
 					}
 				}
 
-				navigation.navigate({
-					routeName: 'Devices',
-					key: 'Devices',
-					params: {
-						gateway,
-						newDevices: rowData,
-					},
+				navigation.navigate('Devices', {
+					gateway,
+					newDevices: rowData,
 				});
 			});
 		});
@@ -219,15 +216,18 @@ onChangeName(name: string, id: number) {
 }
 
 getDeviceInfo(styles: Object): Object {
-	const { navigation, intl, appLayout } = this.props;
+	const { intl, appLayout, route } = this.props;
 	const { formatMessage } = intl;
+	const {
+		info = {},
+	} = route.params || {};
 	const {
 		deviceImage,
 		deviceModel,
 		deviceBrand,
 		imageW,
 		imageH,
-	} = navigation.getParam('info', {});
+	} = info;
 
 	return (
 		<DeviceInfoBlock
@@ -264,7 +264,7 @@ getNameRow({key, deviceName, id, label, header, placeholder, containerStyle, aut
 
 render(): Object {
 	const { rowData, isLoading } = this.state;
-	const { intl, navigation } = this.props;
+	const { intl, route } = this.props;
 
 	const {
 		container,
@@ -307,9 +307,11 @@ render(): Object {
 		}
 	}
 
-	const statusMessage = navigation.getParam('statusMessage', null);
-	const statusIcon = navigation.getParam('statusIcon', null);
-	const hintMessage = navigation.getParam('interviewPartialStatusMessage', null);
+	const {
+		statusMessage = null,
+		statusIcon = null,
+		interviewPartialStatusMessage: hintMessage = null,
+	} = route.params || {};
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -319,9 +321,13 @@ render(): Object {
 					{firstRow}
 					{rows.length !== 0 && (
 						<View style={rowsContainer}>
-							<View style={infoContainer}>
+							<View
+								level={2}
+								style={infoContainer}>
 								<IconTelldus icon={'info'} style={infoIconStyle}/>
-								<Text style={infoTextStyle}>
+								<Text
+									level={5}
+									style={infoTextStyle}>
 									{intl.formatMessage(i18n.setNameMultichannelInfo)}
 								</Text>
 							</View>
@@ -329,19 +335,27 @@ render(): Object {
 						</View>
 					)}
 					{!!statusMessage && (
-						<View style={infoContainer}>
+						<View
+							level={2}
+							style={infoContainer}>
 							<IconTelldus icon={statusIcon} style={[statusIconStyle, {
 								color: statusIcon === 'security' ? '#9CCC65' : '#F44336',
 							}]}/>
-							<Text style={infoTextStyle}>
+							<Text
+								level={5}
+								style={infoTextStyle}>
 								{statusMessage}
 							</Text>
 						</View>
 					)}
 					{!!hintMessage && (
-						<View style={infoContainer}>
+						<View
+							level={2}
+							style={infoContainer}>
 							<IconTelldus icon={'info'} style={statusIconStyle}/>
-							<Text style={infoTextStyle}>
+							<Text
+								level={5}
+								style={infoTextStyle}>
 								{hintMessage}
 							</Text>
 						</View>
@@ -364,7 +378,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
+	const { paddingFactor, brandSecondary, editBoxPaddingFactor, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -389,7 +403,6 @@ getStyles(): Object {
 			marginTop: padding / 2,
 			paddingVertical: 3 + (infoTextFontSize * 0.3),
 			paddingRight: editBoxPadding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -411,7 +424,6 @@ getStyles(): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: infoTextFontSize,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 		},
 		iconSize: deviceWidth * 0.050666667,

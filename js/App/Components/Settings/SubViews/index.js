@@ -27,6 +27,8 @@ import DBSortControlBlock from './DBSortControlBlock';
 import UserInfoBlock from './UserInfoBlock';
 import LanguageControlBlock from './LanguageControlBlock';
 import LogoutButton from './LogoutButton';
+import LogoutAllAccButton from './LogoutAllAccButton';
+import GeoFenceEventsLogRow from './GeoFenceEventsLogRow';
 
 module.exports = {
 	PushSettingsRow,
@@ -37,4 +39,6 @@ module.exports = {
 	UserInfoBlock,
 	LanguageControlBlock,
 	LogoutButton,
+	LogoutAllAccButton,
+	GeoFenceEventsLogRow,
 };

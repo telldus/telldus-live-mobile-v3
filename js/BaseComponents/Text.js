@@ -24,38 +24,39 @@
 import React from 'react';
 import { Text } from 'react-native';
 import Base from './Base';
-import computeProps from './computeProps';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
+import {
+	prepareRootPropsText,
+} from './prepareRootProps';
 
 type Props = {
 	children: Object,
+	level?: number,
+	style?: Object | Array<Object>,
 };
 
-export default class TextComponent extends Base {
-	props: Props;
+type PropsThemedTextComponent = Props & PropsThemedComponent;
 
-	prepareRootProps(): Object {
-
-		let type = {
-			color: this.getContextForegroundColor(),
-			backgroundColor: 'transparent',
-			fontSize: this.getTheme().fontSizeBase,
-		};
-
-		let defaultProps = {
-			style: type,
-		};
-
-		return computeProps(this.props, defaultProps);
-
-	}
-
+class TextComponent extends Base {
+	props: PropsThemedTextComponent;
 	render(): React$Element<any> {
+		const {
+			children,
+			...others
+		} = this.props;
 		return (
 			<Text
-				{...this.prepareRootProps()}
+				{...prepareRootPropsText(others)}
 				allowFontScaling={false}
-			>{this.props.children}</Text>
+			>{children}</Text>
 		);
 	}
 
 }
+
+export default withTheme(TextComponent);

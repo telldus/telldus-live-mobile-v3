@@ -23,7 +23,6 @@
 import React from 'react';
 import { TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 
 import {
 	View,
@@ -46,6 +45,8 @@ type Props = {
 	screenProps: Object,
 	gateways: Object,
 	devices: Object,
+	route: Object,
+	currentScreen: string,
 
     navigation: Object,
     dispatch: Function,
@@ -72,7 +73,7 @@ constructor(props: Props) {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const { currentScreen } = nextProps.screenProps;
+	const { currentScreen } = nextProps;
 	return currentScreen === 'InfoScreen';
 }
 
@@ -94,16 +95,9 @@ addNewLocation = () => {
 				isLoading: false,
 			});
 			if (response.client) {
-				// TODO: refactor in app v3.15(RNavigation v5)
-				navigation.navigate(
-					{
-						routeName: 'AddLocation',
-						key: 'AddLocation',
-						params: {
-							clients: response.client,
-						},
-					}
-				);
+				navigation.navigate('AddLocation', {
+					clients: response.client,
+				});
 			}
 		}).catch((error: Object) => {
 			this.setState({
@@ -115,10 +109,10 @@ addNewLocation = () => {
 }
 
 addNewDevice = () => {
-	const { gateways, navigation } = this.props;
+	const { gateways, navigation, route } = this.props;
 	const gatewaysLen = Object.keys(gateways).length;
 
-	const clientId = navigation.getParam('clientId', '');
+	const { clientId = ''} = route.params || {};
 	const client = gateways[clientId];
 
 	if (gatewaysLen > 0) {
@@ -128,65 +122,62 @@ addNewDevice = () => {
 		} : client ? {
 			...client,
 		} : null;
-		// TODO: refactor in app v3.15(RNavigation v5)
-		navigation.navigate(
-			{
-				routeName: 'AddDevice',
-				key: 'AddDevice',
+
+		if (singleGateway) {
+			navigation.navigate('AddDevice', {
+				gateway,
+				screen: 'SelectDeviceType',
 				params: {
-					selectLocation: !singleGateway,
 					gateway,
+					singleGateway,
 				},
 			});
+		} else {
+			navigation.navigate('AddDevice', {
+				screen: 'SelectLocation',
+				params: {
+					singleGateway,
+				},
+			});
+		}
 	}
 }
 
 addNewSchedule = () => {
-	const { navigation, dispatch, devices } = this.props;
+	const { navigation, dispatch, devices, route } = this.props;
 
-	const deviceId = navigation.getParam('deviceId', '');
+	const { deviceId = ''} = route.params || {};
+
 	const {
 		supportedMethods = {},
 		id,
 	} = devices[deviceId] || {};
 
-	// TODO: refactor in app v3.15(RNavigation v5)
 	if (id) {
 		dispatch(selectDevice(id));
 
-		const routeName = supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action';
-		const key = supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action';
+		const screen = supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action';
 
-		let navigateAction = NavigationActions.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
+		navigation.navigate('Schedule', {
+			editMode: false,
+			screen,
 			params: { editMode: false },
-			action: NavigationActions.navigate({
-				routeName,
-				key,
-				params: { editMode: false },
-			}),
 		});
-		navigation.dispatch(navigateAction);
 	} else {
-		navigation.navigate({
-			routeName: 'Schedule',
-			key: 'Schedule',
-			params: { editMode: false },
-		});
+		navigation.navigate('Schedule', { editMode: false });
 	}
 }
 
 getContents = (): Object => {
 	const {
-		navigation,
+		route,
 		screenProps,
 	} = this.props;
 	const {
 		formatMessage,
 	} = screenProps.intl;
 
-	const info = navigation.getParam('info', '');
+	const { info = ''} = route.params || {};
 
 	const posterH1 = formatMessage(i18n.getStarted),
 		cancelLabel = formatMessage(i18n.labelNotNow).toUpperCase(),
@@ -275,7 +266,9 @@ render(): Object | null {
 	} = this.getContents();
 
 	return (
-		<View style={styles.modalContainer}>
+		<View
+			level={3}
+			style={styles.modalContainer}>
 			<NavigationHeader
 				showLeftIcon={true}
 				topMargin={false}
@@ -295,14 +288,21 @@ render(): Object | null {
 					leftIcon={'close'}
 					scrollableH1={true}
 					navigation={navigation}/>
-				<View style={styles.contentContainerStyle}>
+				<View
+					level={2}
+					style={styles.contentContainerStyle}>
 					<IconTelldus
 						icon={icon}
+						level={9}
 						style={styles.iconStyle}/>
-					<Text style={styles.h1Style}>
+					<Text
+						level={5}
+						style={styles.h1Style}>
 						{h1}
 					</Text>
-					<Text style={styles.bodyStyle}>
+					<Text
+						level={6}
+						style={styles.bodyStyle}>
 						{body}
 					</Text>
 				</View>
@@ -332,10 +332,7 @@ getStyles(appLayout: Object): Object {
 	const {
 		shadow,
 		paddingFactor,
-		appBackground,
 		brandSecondary,
-		eulaContentColor,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -343,11 +340,9 @@ getStyles(appLayout: Object): Object {
 	return {
 		modalContainer: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 		scrollView: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 		SVContentContainerStyle: {
 			flexGrow: 1,
@@ -358,25 +353,21 @@ getStyles(appLayout: Object): Object {
 			marginTop: padding,
 			marginHorizontal: padding,
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			borderRadius: 2,
 			padding: padding * 2,
 		},
 		iconStyle: {
 			fontSize: Math.floor(deviceWidth * 0.3),
-			color: brandSecondary,
 		},
 		h1Style: {
 			fontSize: Math.floor(deviceWidth * 0.06),
-			color: eulaContentColor,
 			fontWeight: '500',
 		},
 		bodyStyle: {
 			marginTop: 10,
 			textAlign: 'left',
 			fontSize: Math.floor(deviceWidth * 0.04),
-			color: rowTextColor,
 		},
 		buttonStyle: {
 			marginTop: padding * 2,
@@ -398,9 +389,15 @@ noOP() {
 function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { byId: gateways = {} } = state.gateways;
 	const { byId: devices = {} } = state.devices;
+
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		gateways,
 		devices,
+		currentScreen,
 	};
 }
 

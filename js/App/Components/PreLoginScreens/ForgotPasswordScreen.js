@@ -43,6 +43,7 @@ type Props = {
 	validationMessage?: string,
 	validationMessageHeader?: string,
 	showModal: boolean,
+	ScreenName: string,
 };
 
 class ForgotPasswordScreen extends View<Props, null> {
@@ -66,11 +67,12 @@ class ForgotPasswordScreen extends View<Props, null> {
 		this.labelBackToLogin = `${this.labelLink} ${this.backToLogin} ${this.labelButtondefaultDescription}`;
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
+	}
+
 	goBackToLogin() {
-		this.props.navigation.navigate({
-			routeName: 'Login',
-			key: 'Login',
-		});
+		this.props.navigation.navigate('Login');
 	}
 
 	openDialogueBox = (body: string, header?: Object) => {

@@ -47,6 +47,7 @@ type Props = {
 	lastUpdated: number,
 	currentTemp: string,
 	gatewayTimezone: string,
+	route: Object,
 
 	navigation: Object,
 	intl: Object,
@@ -71,6 +72,35 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return false;
 }
 
+_deviceSetStateThermostat = (deviceId: number, mode: string, temp: number, scale: 0 | 1 = 0, changeMode: 1 | 0, requestedState: number) => {
+	const {
+		deviceSetStateThermostat: dSetState,
+		route,
+	} = this.props;
+
+	const { onPressOverride } = route.params || {};
+	if (onPressOverride) {
+		onPressOverride({
+			deviceId,
+			method: 2048,
+			changeMode,
+			scale,
+			mode,
+			temp,
+			stateValues: {
+				[2048]: {
+					mode,
+					setpoint: {
+						[mode]: typeof temp === 'number' ? temp.toString() : temp,
+					},
+				},
+			},
+		});
+		return;
+	}
+	dSetState(deviceId, mode, temp, scale, changeMode, requestedState);
+}
+
 render(): Object | null {
 	const {
 		navigation,
@@ -80,6 +110,7 @@ render(): Object | null {
 		intl,
 		currentTemp,
 		gatewayTimezone,
+		route,
 	} = this.props;
 
 	if (!device || !device.id) {
@@ -107,6 +138,8 @@ render(): Object | null {
 	const { THERMOSTAT: { setpoint = {}, mode } } = stateValues;
 
 	const supportedModes = getSupportedModes(parameter, setpoint, intl);
+
+	const { timeoutPlusMinus } = route.params || {};
 
 	return (
 		<View style={{
@@ -143,11 +176,12 @@ render(): Object | null {
 						activeMode={mode}
 						lastUpdated={lastUpdated}
 						currentTemp={currentTemp}
-						deviceSetStateThermostat={this.props.deviceSetStateThermostat}
+						deviceSetStateThermostat={this._deviceSetStateThermostat}
 						supportResume={supportResume}
 						gatewayTimezone={gatewayTimezone}
 						intl={intl}
-						source="ThermostatFullControl"/>
+						source="ThermostatFullControl"
+						timeoutPlusMinus={timeoutPlusMinus}/>
 				</ScrollView>
 			</KeyboardAvoidingView>
 		</View>
@@ -165,8 +199,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { screenProps, navigation } = ownProps;
-	const id = navigation.getParam('id', null);
+	const { screenProps, route } = ownProps;
+	const { id = null } = route.params || {};
 
 	const device = store.devices.byId[id];
 	const { clientDeviceId, clientId } = device ? device : {};

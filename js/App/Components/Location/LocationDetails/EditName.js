@@ -41,6 +41,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 };
@@ -98,12 +99,14 @@ class LocationName extends View {
 	}
 
 	onNameSubmit(locationName: string) {
-		let { navigation, actions, intl, toggleDialogueBox } = this.props;
+		let { navigation, actions, intl, toggleDialogueBox, route } = this.props;
 		if (locationName !== '') {
 			this.setState({
 				isLoading: true,
 			});
-			const id = navigation.getParam('id', null);
+			const {
+				id,
+			} = route.params || {};
 			actions.setName(id, locationName).then(() => {
 				Keyboard.dismiss();
 				this.setState({

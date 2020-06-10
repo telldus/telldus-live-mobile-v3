@@ -48,7 +48,6 @@ const PushInfoBlock = (props: Object): Object => {
 
 	const {
 		fontSize,
-		iconStyle,
 		buttonResubmit,
 	} = getStyles(layout);
 
@@ -57,10 +56,7 @@ const PushInfoBlock = (props: Object): Object => {
 
 	const onPressPushSettings = useCallback(() => {
 		(() => {
-			navigation.navigate({
-				routeName: 'PushSettings',
-				key: 'PushSettings',
-			});
+			navigation.navigate('PushSettings');
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -75,7 +71,6 @@ const PushInfoBlock = (props: Object): Object => {
 				title={formatMessage(i18n.titlePush)}
 				label={labelPush}
 				icon={'angle-right'}
-				iconStyle={iconStyle}
 				fontSize={fontSize}
 				onPress={onPressPushSettings}
 			/>
@@ -96,9 +91,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		fontSize,
-		iconStyle: {
-			color: '#8e8e93',
-		},
 		buttonResubmit: {
 			fontSize: Math.floor(deviceWidth * 0.045),
 			color: Theme.Core.brandSecondary,

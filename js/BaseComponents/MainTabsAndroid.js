@@ -27,9 +27,12 @@ import React, { Component } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
+const isEqual = require('react-fast-compare');
+import { connect } from 'react-redux';
 
 import View from './View';
 import Text from './Text';
+import shouldUpdate from '../App/Lib/shouldUpdate';
 
 type Props = {
 	tab: Object,
@@ -46,7 +49,7 @@ type State = {
 	heightLand: any,
 };
 
-export default class MainTabsAndroid extends Component<Props, State> {
+class MainTabsAndroid extends Component<Props, State> {
 	props: Props;
 	state: State;
 
@@ -93,10 +96,7 @@ export default class MainTabsAndroid extends Component<Props, State> {
 
 	onTabPress() {
 		let { navigation, tab } = this.props;
-		navigation.navigate({
-			routeName: tab.routeName,
-			key: tab.routeName,
-		});
+		navigation.navigate(tab.name);
 	}
 
 	onLayout(ev: Object) {
@@ -105,9 +105,17 @@ export default class MainTabsAndroid extends Component<Props, State> {
 		});
 	}
 
+	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+		return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
+			'tab',
+			'appLayout',
+			'currentScreen',
+		]);
+	}
+
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		let { adjustScroll, currentScreen, tab } = prevProps;
-		if (currentScreen === tab.routeName) {
+		if (currentScreen === tab.name) {
 			adjustScroll(this.state.layout);
 		}
 	}
@@ -124,17 +132,17 @@ export default class MainTabsAndroid extends Component<Props, State> {
 		}
 	}
 
-	getLabel(routeName: string): Object {
-		if (routeName === 'Dashboard') {
+	getLabel(name: string): Object {
+		if (name === 'Dashboard') {
 			return this.dashboard;
 		}
-		if (routeName === 'Devices') {
+		if (name === 'Devices') {
 			return this.devices;
 		}
-		if (routeName === 'Sensors') {
+		if (name === 'Sensors') {
 			return this.sensors;
 		}
-		if (routeName === 'Scheduler') {
+		if (name === 'Scheduler') {
 			return this.scheduler;
 		}
 		return {};
@@ -143,7 +151,7 @@ export default class MainTabsAndroid extends Component<Props, State> {
 	render(): Object {
 		const { tab, currentScreen, appLayout, intl } = this.props;
 		const { formatMessage } = intl;
-		let {label, accessibilityLabel} = this.getLabel(tab.routeName);
+		let {label, accessibilityLabel} = this.getLabel(tab.name);
 
 		const {
 			tabBarStyle,
@@ -152,7 +160,7 @@ export default class MainTabsAndroid extends Component<Props, State> {
 			indicatorPassiveStyle,
 		} = this.getStyles(appLayout);
 
-		const postScript = currentScreen === tab.routeName ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
+		const postScript = currentScreen === tab.name ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
 		accessibilityLabel = `${accessibilityLabel}, ${postScript}`;
 
 		return (
@@ -164,7 +172,7 @@ export default class MainTabsAndroid extends Component<Props, State> {
 					<Text style={labelStyle} onLayout={this.onLabelLayout}>
 						{label}
 					</Text>
-					{(currentScreen === tab.routeName) ?
+					{(currentScreen === tab.name) ?
 						<View style={indicatorActiveStyle}/>
 						:
 						<View style={indicatorPassiveStyle}/>
@@ -217,6 +225,17 @@ export default class MainTabsAndroid extends Component<Props, State> {
 		};
 	}
 }
+
+function mapStateToProps(state: Object, ownprops: Object): Object {
+
+	const { screen: currentScreen } = state.navigation;
+
+	return {
+		currentScreen,
+	};
+}
+
+export default connect(mapStateToProps, null)(MainTabsAndroid);
 
 const styles = StyleSheet.create({
 	tabBar: {

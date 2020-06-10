@@ -33,12 +33,14 @@ import LiveApi from './LiveApi';
 import Modal from './Modal';
 import sensorsList from './SensorsList';
 import jobsList from './Jobs';
+import fences from './Fences';
+import geoFence from './GeoFence';
 import { reducers } from 'live-shared-data';
 
 const config = {
 	key: localStorageKey,
 	storage: AsyncStorage,
-	blacklist: ['dimmer', 'schedule', 'liveApi', 'navigation', 'modal', 'addDevice'],
+	blacklist: ['dimmer', 'schedule', 'liveApi', 'modal', 'addDevice', 'navigation'],
 	migrate: migrations,
 };
 
@@ -50,4 +52,6 @@ module.exports = persistCombineReducers(config, {
 	sensorsList,
 	...reducers,
 	jobsList,
+	fences,
+	geoFence,
 });

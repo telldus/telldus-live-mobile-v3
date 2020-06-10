@@ -46,13 +46,16 @@ type Props = {
 	device: Object,
 	deviceName: string,
 	isGatewayActive: boolean,
-    appLayout: Object,
+	appLayout: Object,
+	route: Object,
+	currentScreen: string,
 
 	openModal: () => void,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
 	intl: Object,
 	dispatch: Function,
-    navigation: Object,
+	navigation: Object,
+	onPressOverride?: (Object) => void,
 };
 
 type State = {
@@ -109,8 +112,26 @@ class RGBControlScreen extends View<Props, State> {
 		});
 	}
 
+	_deviceSetStateRGBOverride = (id: number, valueHex: string) => {
+		const { route } = this.props;
+		const {
+			onPressOverride,
+		} = route.params || {};
+
+		onPressOverride({
+			deviceId: id,
+			method: 1024,
+			stateValues: {
+				'1024': valueHex,
+			},
+		});
+	}
+
 	renderColorPicker(styles: Object): Object {
-		const { device, appLayout } = this.props;
+		const { device, appLayout, route } = this.props;
+		const {
+			onPressOverride,
+		} = route.params || {};
 
 		return (
 			<View style={styles.wheelCover}>
@@ -124,19 +145,39 @@ class RGBControlScreen extends View<Props, State> {
 					colorWheelCover={styles.colorWheelCover}
 					swatchWheelCover={styles.swatchWheelCover}
 					thumbSize={15}
-					showActionIndicator={true}/>
+					deviceSetStateRGBOverride={onPressOverride ? this._deviceSetStateRGBOverride : undefined}
+					showActionIndicator={true}
+					colorWheelCoverLevel={2}
+					swatchesCoverLevel={2}/>
 			</View>
 		);
 	}
 
+	_onPressOverride = (params: Object) => {
+		const { route } = this.props;
+		const {
+			onPressOverride,
+			id = null,
+		} = route.params || {};
+		onPressOverride({
+			deviceId: id,
+			...params,
+		});
+	}
+
 	renderSlider(styles: Object): Object {
-		const { device, intl, isGatewayActive, appLayout } = this.props;
+		const { device, intl, isGatewayActive, appLayout, route } = this.props;
+		const {
+			onPressOverride,
+		} = route.params || {};
 		const {
 			methodRequested,
 		} = device;
 
 		return (
-			<View style={styles.sliderCover}>
+			<View
+				level={2}
+				style={styles.sliderCover}>
 				{
 					methodRequested === 'DIM' ?
 						<ButtonLoadingIndicator style={styles.dot} color={Theme.Core.brandSecondary}/>
@@ -146,7 +187,8 @@ class RGBControlScreen extends View<Props, State> {
 					device={device}
 					intl={intl}
 					isGatewayActive={isGatewayActive}
-					appLayout={appLayout}/>
+					appLayout={appLayout}
+					onPressOverride={onPressOverride ? this._onPressOverride : undefined}/>
 			</View>
 		);
 	}
@@ -199,10 +241,11 @@ class RGBControlScreen extends View<Props, State> {
 		const details = this.renderDetails(locationData, locationDataZWave, styles);
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<NavigationHeaderPoster
 					icon={'device-alt'}
 					h2={deviceName}
@@ -263,7 +306,6 @@ class RGBControlScreen extends View<Props, State> {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 				...Theme.Core.shadow,
-				backgroundColor: '#fff',
 				borderRadius: 2,
 				paddingHorizontal: padding,
 				paddingTop: padding / 2,
@@ -279,7 +321,6 @@ class RGBControlScreen extends View<Props, State> {
 				marginTop: padding,
 			},
 			colorWheelCover: {
-				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				marginVertical: padding,
@@ -288,7 +329,6 @@ class RGBControlScreen extends View<Props, State> {
 				alignItems: 'center',
 			},
 			sliderCover: {
-				backgroundColor: '#fff',
 				...Theme.Core.shadow,
 				borderRadius: 2,
 				marginHorizontal: padding,
@@ -332,13 +372,19 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const { screenProps, navigation } = ownProps;
-	const id = navigation.getParam('id', null);
+	const { screenProps, route } = ownProps;
+	const {
+		id = null,
+	} = route.params || {};
 	const device = store.devices.byId[id];
 
 	const { clientId } = device ? device : {};
 	const gateway = store.gateways.byId[clientId];
 	const { online: isGatewayActive, name: gatewayName, type: gatewayType } = gateway ? gateway : {};
+
+	const {
+		screen: currentScreen,
+	} = store.navigation;
 
 	return {
 		...screenProps,
@@ -346,6 +392,7 @@ function mapStateToProps(store: Object, ownProps: Object): Object {
 		isGatewayActive,
 		gatewayName,
 		gatewayType,
+		currentScreen,
 	};
 }
 

@@ -20,6 +20,9 @@
 // @flow
 'use strict';
 
+import {
+	useCallback,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import {
 	toggleDialogueBoxState,
@@ -44,7 +47,7 @@ type DialogueData = {
 	onPressPositive?: () => void,
 	onPressNegative?: () => void,
 	accessibilityLabel?: string,
-	style?: number | Object | Array<any>,
+	style?: Array<any> | Object,
 	backdropColor?: string,
 	capitalizeHeader?: boolean,
 	negTextColor?: string,
@@ -60,7 +63,7 @@ type DialogueData = {
 const useDialogueBox = (): Object => {
 	const dispatch = useDispatch();
 	return {
-		toggleDialogueBoxState: (dialogueData: DialogueData) => {
+		toggleDialogueBoxState: useCallback((dialogueData: DialogueData) => {
 			const {
 				show,
 				...others
@@ -76,7 +79,8 @@ const useDialogueBox = (): Object => {
 					openModal: false,
 				}));
 			}
-		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, []),
 	};
 };
 

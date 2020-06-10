@@ -32,9 +32,9 @@ type Props = {
     online: boolean,
     websocketOnline: boolean,
 	intl: Object,
-	textStyle?: number | Object | Array<any>,
+	textStyle?: Array<any> | Object,
 	appLayout: Object,
-	statusInfoStyle?: number | Object | Array<any>,
+	statusInfoStyle?: Object,
 	localKey: Object,
 };
 

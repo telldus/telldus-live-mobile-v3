@@ -27,7 +27,6 @@ import React, {
 	useState,
 } from 'react';
 import {
-	ScrollView,
 	Platform,
 	LayoutAnimation,
 } from 'react-native';
@@ -38,13 +37,14 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
+
 import { pushServiceId } from '../../../Config';
 
 import {
 	View,
-	TabBar,
 	SettingsRow,
 	Text,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
@@ -55,6 +55,7 @@ import {
 } from '../Settings/SubViews';
 import {
 	WidgetFontSizeSetting,
+	ThemesBlock,
 } from './SubViews';
 
 import { LayoutAnimations } from '../../Lib';
@@ -214,17 +215,29 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 	}
 
 	return (
-		<ScrollView style={container}>
-			<View style={body}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
+			<View
+				level={3}
+				style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
+				<Text
+					level={2}
+					style={titleStyle}>
+					Theme
+				</Text>
+				<ThemesBlock/>
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}
 					submitPushToken={submitPushToken}
 				/>
 				<LanguageControlBlock/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
 					{formatMessage(i18n.dashboard)}
 				</Text>
 				<DBSortControlBlock
@@ -242,7 +255,9 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					style={[contentCoverStyle, {
 						marginTop: 0,
 					}]}/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
 					{formatMessage(i18n.crashReports)}
 				</Text>
 				<SettingsRow
@@ -263,7 +278,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 						intl={intl}/>
 				}
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 
@@ -273,7 +288,6 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
 		paddingFactor,
 	} = Theme.Core;
 
@@ -284,7 +298,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,
@@ -294,7 +307,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelTextStyle: {
 			fontSize,
-			color: '#000',
 			justifyContent: 'center',
 		},
 		touchableStyle: {
@@ -308,7 +320,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: subHeader,
 			fontSize,
 		},
 		bBSortDropDownContainerStyle: {
@@ -317,21 +328,5 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-
-AppTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="phone"
-			tintColor={tintColor}
-			label={i18n.labelApp}
-			accessibilityLabel={i18n.labelAccessibleAppTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'AppTab',
-			key: 'AppTab',
-		});
-	},
-});
 
 export default AppTab;

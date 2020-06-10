@@ -5,6 +5,7 @@ exports[`renders USetting when checked using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -14,7 +15,6 @@ exports[`renders USetting when checked using Snapshots 1`] = `
     accessibilityLabel=" , , "
     accessible={true}
     focusable={true}
-    isTVSelectable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
     onResponderMove={[Function]}
@@ -39,30 +39,22 @@ exports[`renders USetting when checked using Snapshots 1`] = `
       allowFontScaling={false}
       importantForAccessibility="yes"
       style={
-        Array [
-          Object {
-            "color": "#999",
-            "fontSize": 30,
-          },
-          Object {
-            "backgroundColor": "#1b365d",
-            "borderColor": "#1b365d",
-            "borderRadius": 2,
-            "borderWidth": 1,
-            "color": "#fff",
-            "fontSize": 37.6,
-            "height": 47,
-            "marginTop": 20.83275,
-            "overflow": "hidden",
-            "padding": 1.4000000000000001,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-            "width": 47,
-          },
-          Object {
-            "fontFamily": "telldusicons",
-          },
-        ]
+        Object {
+          "backgroundColor": "#1b365d",
+          "borderColor": "#1b365d",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "#fff",
+          "fontFamily": "telldusicons",
+          "fontSize": 37.6,
+          "height": 47,
+          "marginTop": 20.83275,
+          "overflow": "hidden",
+          "padding": 1.4000000000000001,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+          "width": 47,
+        }
       }
     >
       checkmark
@@ -87,6 +79,7 @@ exports[`renders USetting when unchecked using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -96,7 +89,6 @@ exports[`renders USetting when unchecked using Snapshots 1`] = `
     accessibilityLabel=" , , "
     accessible={true}
     focusable={true}
-    isTVSelectable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
     onResponderMove={[Function]}
@@ -121,30 +113,22 @@ exports[`renders USetting when unchecked using Snapshots 1`] = `
       allowFontScaling={false}
       importantForAccessibility="yes"
       style={
-        Array [
-          Object {
-            "color": "#999",
-            "fontSize": 30,
-          },
-          Object {
-            "backgroundColor": "#fff",
-            "borderColor": "#1b365d",
-            "borderRadius": 2,
-            "borderWidth": 1,
-            "color": "transparent",
-            "fontSize": 37.6,
-            "height": 47,
-            "marginTop": 20.83275,
-            "overflow": "hidden",
-            "padding": 1.4000000000000001,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-            "width": 47,
-          },
-          Object {
-            "fontFamily": "telldusicons",
-          },
-        ]
+        Object {
+          "backgroundColor": "#fff",
+          "borderColor": "#1b365d",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "transparent",
+          "fontFamily": "telldusicons",
+          "fontSize": 37.6,
+          "height": 47,
+          "marginTop": 20.83275,
+          "overflow": "hidden",
+          "padding": 1.4000000000000001,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+          "width": 47,
+        }
       }
     >
       checkmark

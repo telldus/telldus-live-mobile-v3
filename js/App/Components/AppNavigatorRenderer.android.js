@@ -27,54 +27,45 @@ import { connect } from 'react-redux';
 import { announceForAccessibility } from 'react-native-accessibility';
 const isEqual = require('react-fast-compare');
 import { intlShape } from 'react-intl';
-import { NavigationActions } from 'react-navigation';
-
 import {
 	View,
-	Header,
-	Image,
-	HeaderLeftButtonsMainTab,
-	Icon,
-	CampaignIcon,
+	MainTabNavHeader,
 } from '../../BaseComponents';
-import Navigator from './AppNavigator';
+import AppNavigator from './AppNavigator';
 import Drawer from './Drawer/Drawer';
 
 import {
 	syncWithServer,
-	screenChange,
-	resetSchedule,
 } from '../Actions';
 import {
-	setTopLevelNavigator,
 	navigate,
 	getDrawerWidth,
-	getRouteName,
 	LayoutAnimations,
 	shouldUpdate,
 } from '../Lib';
-import Theme from '../Theme';
 import i18n from '../Translations/common';
+import Theme from '../Theme';
 
 type Props = {
 	screenReaderEnabled: boolean,
 	appLayout: Object,
+	currentScreen: string,
 	hasGateways: boolean,
 
 	intl: intlShape.isRequired,
 	dispatch: Function,
 	syncGateways: () => void,
 	onTabSelect: (string) => void,
-	onNavigationStateChange: (string) => void,
 	addNewLocation: () => any,
 	addNewDevice: () => void,
 	toggleDialogueBox: (Object) => void,
 	navigateToCampaign: () => void,
 	addNewSensor: () => void,
+	showSwitchAccountActionSheet: () => void,
+	toggleDrawerState: (boolean) => void,
 };
 
 type State = {
-	currentScreen: string,
 	drawer: boolean,
 	showAttentionCaptureAddDevice: boolean,
 	addNewDevicePressed: boolean,
@@ -85,26 +76,24 @@ class AppNavigatorRenderer extends View<Props, State> {
 	props: Props;
 	state: State;
 
-	onNavigationStateChange: (Object, Object) => void;
 	autoDetectLocalTellStick: () => void;
-	setNavigatorRef: (any) => void;
 
 	renderNavigationView: () => Object;
 	onOpenSetting: () => void;
 	openDrawer: () => void;
 	addNewLocation: () => void;
 	onPressGateway: (Object) => void;
-	newSchedule: () => void;
 	toggleAttentionCapture: (boolean) => void;
 
 	addNewDevice: () => void;
 	addNewSensor: () => void;
 
+	timeoutCloseDrawer: any;
+
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
-			currentScreen: 'Dashboard',
 			drawer: false,
 			showAttentionCaptureAddDevice: false,
 			addNewDevicePressed: false,
@@ -115,32 +104,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 		this.labelButton = formatMessage(i18n.button);
 		this.labelButtondefaultDescription = formatMessage(i18n.defaultDescriptionButton);
 
-		this.menuIcon = `${formatMessage(i18n.menuIcon)} ${this.labelButton}. ${this.labelButtondefaultDescription}`;
-		this.starIconShowDevices = `${formatMessage(i18n.starIconShowDevices)}. ${this.labelButtondefaultDescription}`;
-		this.starIconHideDevices = `${formatMessage(i18n.starIconHideDevices)}. ${this.labelButtondefaultDescription}`;
-		this.starIconShowSensors = `${formatMessage(i18n.starIconShowSensors)}. ${this.labelButtondefaultDescription}`;
-		this.starIconHideSensors = `${formatMessage(i18n.starIconHideSensors)}. ${this.labelButtondefaultDescription}`;
 		this.messageCloseMenu = `${formatMessage(i18n.messageCloseMenu)}`;
 
 		this.networkFailed = `${formatMessage(i18n.networkFailed)}.`;
 		this.addNewLocationFailed = `${formatMessage(i18n.addNewLocationFailed)}`;
 
-		this.onNavigationStateChange = this.onNavigationStateChange.bind(this);
-
-		this.setNavigatorRef = this.setNavigatorRef.bind(this);
-
-		this.renderNavigationView = this.renderNavigationView.bind(this);
-		this.onOpenSetting = this.onOpenSetting.bind(this);
-		this.onCloseDrawer = this.onCloseDrawer.bind(this);
-		this.onOpenDrawer = this.onOpenDrawer.bind(this);
-		this.openDrawer = this.openDrawer.bind(this);
-		this.addNewLocation = this.addNewLocation.bind(this);
-		this.onPressGateway = this.onPressGateway.bind(this);
-
-		this.addNewDevice = this.addNewDevice.bind(this);
-
-		this.newSchedule = this.newSchedule.bind(this);
-		this.toggleAttentionCapture = this.toggleAttentionCapture.bind(this);
+		this.timeoutCloseDrawer = null;
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -148,65 +117,76 @@ class AppNavigatorRenderer extends View<Props, State> {
 		if (!isStateEqual) {
 			return true;
 		}
+
 		return shouldUpdate(this.props, nextProps, [
 			'appLayout',
+			'currentScreen',
+			'screenReaderEnabled',
 			'hasGateways',
 		]);
 	}
 
-	addNewLocation() {
+	componentWillUnmount() {
+		if (this.timeoutCloseDrawer) {
+			clearTimeout(this.timeoutCloseDrawer);
+		}
+	}
+
+	addNewLocation = () => {
 		if (this.state.drawer) {
 			this.closeDrawer();
 		}
 		this.props.addNewLocation();
 	}
 
-	newSchedule() {
-		this.props.dispatch(resetSchedule());
-		navigate('Schedule', {
-			key: 'Schedule',
-			params: { editMode: false },
-		}, 'Schedule');
-	}
-
-	onOpenDrawer() {
+	onOpenDrawer = () => {
+		this.props.toggleDrawerState(true);
 		this.setState({ drawer: true });
 		if (this.props.screenReaderEnabled) {
 			announceForAccessibility(this.messageCloseMenu);
 		}
 	}
 
-	closeDrawer() {
+	showSwitchAccountActionSheet = () => {
+		this.closeDrawer();
+		this.timeoutCloseDrawer = setTimeout(() => {
+			this.props.showSwitchAccountActionSheet();
+			this.timeoutCloseDrawer = null;
+		}, 300);
+	}
+
+	closeDrawer = () => {
 		this.refs.drawer.closeDrawer();
 	}
 
-	onCloseDrawer() {
+	onCloseDrawer = () => {
+		this.props.toggleDrawerState(false);
 		this.setState({ drawer: false });
 	}
 
-	onPressGateway(location: Object) {
+	onPressGateway = (location: Object) => {
 		this.closeDrawer();
-		const navigateAction = NavigationActions.navigate({
-			routeName: 'Details',
-			key: 'Details',
-			params: { location },
+		navigate('LocationDetails', {
+			screen: 'Details',
+			params: {
+				location,
+			},
+			location,
 		});
-		navigate('LocationDetails', location, 'LocationDetails', navigateAction);
 	}
 
-	onOpenSetting() {
+	onOpenSetting = (tabName?: string) => {
 		this.closeDrawer();
-		navigate('Profile', {}, 'Profile');
+		if (tabName) {
+			navigate('Profile', {
+				screen: tabName,
+			});
+		} else {
+			navigate('Profile');
+		}
 	}
 
-	onNavigationStateChange(prevState: Object, currentState: Object) {
-		const currentScreen = getRouteName(currentState);
-		this.setState({ currentScreen });
-
-		this.props.onNavigationStateChange(currentScreen);
-	}
-
-	addNewDevice() {
+	addNewDevice = () => {
 		this.setState({
 			addNewDevicePressed: true,
 		}, () => {
@@ -222,64 +202,13 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeRightButton(CS: string, styles: Object): Object | null {
-		this.AddButton = {
-			component: <Image source={{uri: 'icon_plus'}} style={styles.addIconStyle}/>,
-			style: styles.rightButtonStyle,
-			onPress: () => {},
-		};
-		const { intl, hasGateways } = this.props;
-		const { formatMessage } = intl;
-		switch (CS) {
-			case 'Devices':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewDevice,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewDevice)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Sensors':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.addNewSensor,
-					accessibilityLabel: `${formatMessage(i18n.labelAddNewSensor)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Gateways':
-				return {
-					...this.AddButton,
-					onPress: this.addNewLocation,
-					accessibilityLabel: `${formatMessage(i18n.addNewLocation)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			case 'Scheduler':
-				if (!hasGateways) {
-					return null;
-				}
-				return {
-					...this.AddButton,
-					onPress: this.newSchedule,
-					accessibilityLabel: `${formatMessage(i18n.labelAddEditSchedule)}, ${formatMessage(i18n.defaultDescriptionButton)}`,
-				};
-			default:
-				return null;
-		}
-	}
-
-	setNavigatorRef(navigatorRef: any) {
-		setTopLevelNavigator(navigatorRef);
-	}
-
-	openDrawer() {
+	openDrawer = () => {
 		this.refs.drawer.openDrawer();
 		this.props.syncGateways();
 	}
 
-	renderNavigationView(): Object {
-		const { appLayout} = this.props;
+	renderNavigationView = (): Object => {
+		const { appLayout, toggleDialogueBox, intl } = this.props;
 
 		return <Drawer
 			addNewLocation={this.addNewLocation}
@@ -287,10 +216,14 @@ class AppNavigatorRenderer extends View<Props, State> {
 			appLayout={appLayout}
 			isOpen={this.state.drawer}
 			onPressGateway={this.onPressGateway}
+			closeDrawer={this.closeDrawer}
+			showSwitchAccountActionSheet={this.showSwitchAccountActionSheet}
+			toggleDialogueBox={toggleDialogueBox}
+			intl={intl}
 		/>;
 	}
 
-	toggleAttentionCapture(value: boolean) {
+	toggleAttentionCapture = (value: boolean) => {
 		if (!this.state.addNewDevicePressed) {
 			LayoutAnimation.configureNext(LayoutAnimations.linearU(500));
 		}
@@ -303,72 +236,51 @@ class AppNavigatorRenderer extends View<Props, State> {
 		});
 	}
 
-	makeLeftButton(styles: Object): any {
-		const { drawer } = this.state;
-		const { screenReaderEnabled, intl } = this.props;
-
-		const buttons = [
-			{
-				style: styles.settingsButtonStyle,
-				accessibilityLabel: this.menuIcon,
-				onPress: this.openDrawer,
-				iconComponent: <Icon
-					name="bars"
-					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
-					style={styles.menuIconStyle}
-					color={'#fff'}/>,
-			},
-			{
-				style: styles.campaingButtonStyle,
-				accessibilityLabel: intl.formatMessage(i18n.linkToCampaigns),
-				onPress: this.props.navigateToCampaign,
-				iconComponent: <CampaignIcon
-					size={styles.buttonSize > 22 ? styles.buttonSize : 22}
-					style={styles.campaingIconStyle}/>,
-			},
-		];
-
-		const customComponent = <HeaderLeftButtonsMainTab style={styles.menuButtonStyle} buttons={buttons}/>;
-
-		return (drawer && screenReaderEnabled) ? null : {
-			customComponent,
-		};
-	}
-
 	showAttentionCapture(): boolean {
-		const { currentScreen: CS, showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
-		return (CS === 'Devices') && showAttentionCaptureAddDevice && !addNewDevicePressed;
+		const { showAttentionCaptureAddDevice, addNewDevicePressed } = this.state;
+		const { currentScreen, hasGateways } = this.props;
+
+		return (currentScreen === 'Devices') && hasGateways && showAttentionCaptureAddDevice && !addNewDevicePressed;
 	}
 
 	render(): Object {
-		const { currentScreen: CS, drawer, showAttentionCaptureAddDevice } = this.state;
-		const { intl, appLayout, screenReaderEnabled, toggleDialogueBox } = this.props;
+		const { drawer, showAttentionCaptureAddDevice } = this.state;
+		const {
+			intl,
+			appLayout,
+			screenReaderEnabled,
+			toggleDialogueBox,
+			currentScreen: CS,
+		} = this.props;
 
 		const styles = this.getStyles(appLayout);
 
-		const leftButton = this.makeLeftButton(styles);
-		const rightButton = this.makeRightButton(CS, styles);
 		const drawerWidth = getDrawerWidth(styles.deviceWidth);
 
 		const showHeader = CS === 'Tabs' || CS === 'Devices' || CS === 'Sensors' ||
 			CS === 'Dashboard' || CS === 'Scheduler' || CS === 'Gateways';
 
 		const showAttentionCapture = this.showAttentionCapture();
-		let screenProps = {
-			currentScreen: CS,
-			intl,
-			drawer,
-			appLayout,
-			screenReaderEnabled,
-			toggleDialogueBox,
-			leftButton,
-			rightButton,
-			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
-			style: styles.header,
-			logoStyle: styles.logoStyle,
-			toggleAttentionCapture: this.toggleAttentionCapture,
+
+		const MainNavHeaderProps = {
+			addNewSensor: this.addNewSensor,
+			addNewDevice: this.addNewDevice,
+			addNewLocation: this.addNewLocation,
 			showAttentionCapture,
+			openDrawer: this.openDrawer,
+			drawer,
+			screenReaderEnabled,
+		};
+
+		let screenProps = {
+			intl,
+			appLayout,
+			toggleDialogueBox,
+			hideHeader: !styles.isPortrait, // Hide Stack Nav Header, show custom Header
+			toggleAttentionCapture: this.toggleAttentionCapture,
 			showAttentionCaptureAddDevice,
+			source: 'postlogin',
+			...MainNavHeaderProps,
 		};
 
 		return (
@@ -382,20 +294,12 @@ class AppNavigatorRenderer extends View<Props, State> {
 				onDrawerClose={this.onCloseDrawer}
 			>
 				{showHeader && !styles.isPortrait && (
-					<Header
-						style={styles.header}
-						logoStyle={styles.logoStyle}
-						leftButton={leftButton}
-						rightButton={rightButton}
-						appLayout={appLayout}
-						intl={intl}
-						showAttentionCapture={showAttentionCapture}/>
+					<MainTabNavHeader
+						{...MainNavHeaderProps}/>
 				)}
 				<View style={showHeader ? styles.container : {flex: 1}}>
-					<Navigator
-						ref={this.setNavigatorRef}
-						onNavigationStateChange={this.onNavigationStateChange}
-						screenProps={screenProps} />
+					<AppNavigator
+						screenProps={screenProps}/>
 				</View>
 			</DrawerLayoutAndroid>
 		);
@@ -407,79 +311,19 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const size = Math.floor(deviceHeight * 0.025);
-		const fontSizeIcon = size < 20 ? 20 : size;
+		const {
+			headerHeightFactor,
+		} = Theme.Core;
 
-		const { port, land } = Theme.Core.headerHeightFactor;
-
-		const buttonSize = isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04);
+		const { land } = headerHeightFactor;
 
 		return {
 			deviceWidth,
-			header: isPortrait ? {
-				height: deviceHeight * port,
-				alignItems: 'center',
-			} : {
-				transform: [{rotateZ: '-90deg'}],
-				position: 'absolute',
-				left: -deviceHeight * 0.4444,
-				top: deviceHeight * 0.4444,
-				width: deviceHeight,
-				height: deviceHeight * land,
-			},
 			container: {
 				flex: 1,
-				marginLeft: isPortrait ? 0 : deviceHeight * 0.11,
-			},
-			buttonSize,
-			menuButtonStyle: isPortrait ? null : {
-				position: 'absolute',
-				left: undefined,
-				right: 50,
-				top: deviceHeight * 0.03666,
-				paddingTop: 0,
-				paddingHorizontal: 0,
-			},
-			starButtonStyle: isPortrait ? null : {
-				position: 'absolute',
-				right: height - 50,
-				top: deviceHeight * 0.03666,
-				paddingTop: 0,
-				paddingHorizontal: 0,
-			},
-			menuIconStyle: isPortrait ? null : {
-				transform: [{rotateZ: '90deg'}],
-			},
-			campaingButtonStyle: {
-				marginLeft: 4,
-				paddingRight: 15,
-				paddingLeft: 8,
-				paddingVertical: 4,
-			},
-			settingsButtonStyle: {
-				paddingLeft: 15,
-				paddingRight: 8,
-				paddingVertical: 4,
-			},
-			rightButtonStyle: isPortrait ? null : {
-				top: deviceHeight * 0.03666,
-				right: height - 50,
-				paddingTop: 0,
-				paddingHorizontal: 0,
-			},
-			addIconStyle: {
-				height: fontSizeIcon,
-				width: fontSizeIcon,
-			},
-			logoStyle: isPortrait ? null : {
-				position: 'absolute',
-				left: deviceHeight * 0.6255,
-				top: deviceHeight * 0.0400,
+				marginLeft: isPortrait ? 0 : Math.floor(deviceHeight * land),
 			},
 			isPortrait,
-			campaingIconStyle: isPortrait ? null : {
-				transform: [{rotateZ: '90deg'}],
-			},
 		};
 	}
 }
@@ -493,6 +337,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
 		screenReaderEnabled,
 		appLayout: layout,
+		currentScreen: state.navigation.screen,
 	};
 }
 
@@ -501,10 +346,6 @@ function mapDispatchToProps(dispatch: Function): Object {
 		dispatch,
 		syncGateways: () => {
 			dispatch(syncWithServer('gatewaysTab'));
-		},
-		onNavigationStateChange: (screen: string) => {
-			dispatch(syncWithServer(screen));
-			dispatch(screenChange(screen));
 		},
 	};
 }

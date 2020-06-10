@@ -28,7 +28,7 @@ import {
 } from 'react-native';
 
 import { configureStore } from '../App/Store/ConfigureStore';
-const store = configureStore();
+const store = configureStore().store;
 import {
 	setAppLayout,
 	deviceInfoSuccess,
@@ -132,13 +132,6 @@ const setAppLayoutInStore = () => {
 };
 
 const NAVIGATION_PROP = {
-	getParam: (paramName, defaultValue) => {
-		return NAVIGATION_PROP.state.params[paramName] || defaultValue;
-	},
-	state: {
-		params: {
-		},
-	},
 };
 
 const setDeviceListInStore = () => {

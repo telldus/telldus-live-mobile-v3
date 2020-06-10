@@ -5,6 +5,7 @@ exports[`<Include433 /> Should initiateAdd433MHz and show activity indicator 1`]
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flex": 1,
       "justifyContent": "center",
     }
@@ -31,6 +32,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
   <View
     style={
       Object {
+        "backgroundColor": "transparent",
         "flex": 0,
       }
     }
@@ -38,22 +40,28 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
     <View
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 0,
         }
       }
     >
       <View
         style={
-          Object {
-            "alignItems": "center",
-            "backgroundColor": "#1b365d",
-            "flexDirection": "row",
-            "height": 148.2074,
-            "justifyContent": "center",
-            "paddingHorizontal": 15,
-            "paddingTop": 15,
-            "position": "relative",
-          }
+          Array [
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#1b365d",
+              "flexDirection": "row",
+              "height": 64,
+              "justifyContent": "center",
+              "paddingHorizontal": 15,
+              "paddingTop": 0,
+              "position": "relative",
+            },
+            Object {
+              "height": 106.72,
+            },
+          ]
         }
       >
         <Image
@@ -76,64 +84,85 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       </View>
     </View>
     <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "flex": 0,
+          "opacity": 1,
         }
       }
     >
       <View
         style={
           Object {
-            "borderWidth": 0,
-            "height": 15.5,
-            "overflow": "hidden",
-            "width": 750,
+            "backgroundColor": "transparent",
+            "flex": 0,
           }
         }
       >
         <View
-          height={313}
           style={
             Object {
-              "marginTop": -2,
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+              "height": 15.5,
+              "overflow": "hidden",
+              "width": "100%",
             }
           }
-          width={750}
-        />
-        <View
-          style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "bottom": 0,
-                "flex": 1,
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              undefined,
-            ]
-          }
         >
+          <View
+            height={313}
+            style={
+              Object {
+                "marginTop": -2,
+              }
+            }
+            width={750}
+          />
           <View
             style={
               Array [
                 Object {
-                  "alignItems": "flex-end",
-                  "flex": 0,
-                  "flexDirection": "column",
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "bottom": 0,
+                  "flex": 1,
+                  "flexDirection": "row",
                   "justifyContent": "center",
-                  "marginRight": 12.4,
-                  "width": 80,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
                 },
                 undefined,
               ]
             }
-          />
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "alignItems": "flex-end",
+                    "backgroundColor": "transparent",
+                    "flex": 0,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "marginRight": 12.4,
+                    "width": 80,
+                  },
+                  undefined,
+                ]
+              }
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -206,20 +235,13 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           style={
             Array [
               Object {
-                "color": "#fff",
-                "fontSize": 30,
-              },
-              Array [
-                Object {
-                  "color": "#e26901",
-                  "fontSize": 14.000000000000002,
-                },
-                Object {
-                  "color": "#D32F2E",
-                },
-              ],
-              Object {
+                "backgroundColor": "transparent",
+                "color": "#e26901",
                 "fontFamily": "telldusicons",
+                "fontSize": 14.000000000000002,
+              },
+              Object {
+                "color": "#D32F2E",
               },
             ]
           }
@@ -230,6 +252,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
       <View
         style={
           Object {
+            "backgroundColor": "transparent",
             "flex": 1,
             "flexDirection": "row",
             "flexWrap": "wrap",
@@ -241,6 +264,7 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           style={
             Array [
               Object {
+                "backgroundColor": "transparent",
                 "color": "#555555",
                 "flex": 1,
                 "flexWrap": "wrap",
@@ -248,7 +272,6 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
                 "marginLeft": 2.7777,
               },
               Object {
-                "color": "#8e8e93",
                 "fontSize": 3.5000000000000004,
               },
             ]
@@ -274,6 +297,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
   <View
     style={
       Object {
+        "backgroundColor": "transparent",
         "flex": 0,
       }
     }
@@ -281,22 +305,28 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
     <View
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 0,
         }
       }
     >
       <View
         style={
-          Object {
-            "alignItems": "center",
-            "backgroundColor": "#1b365d",
-            "flexDirection": "row",
-            "height": 148.2074,
-            "justifyContent": "center",
-            "paddingHorizontal": 15,
-            "paddingTop": 15,
-            "position": "relative",
-          }
+          Array [
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#1b365d",
+              "flexDirection": "row",
+              "height": 64,
+              "justifyContent": "center",
+              "paddingHorizontal": 15,
+              "paddingTop": 0,
+              "position": "relative",
+            },
+            Object {
+              "height": 106.72,
+            },
+          ]
         }
       >
         <Image
@@ -319,64 +349,85 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
       </View>
     </View>
     <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "flex": 0,
+          "opacity": 1,
         }
       }
     >
       <View
         style={
           Object {
-            "borderWidth": 0,
-            "height": 15.5,
-            "overflow": "hidden",
-            "width": 750,
+            "backgroundColor": "transparent",
+            "flex": 0,
           }
         }
       >
         <View
-          height={313}
           style={
             Object {
-              "marginTop": -2,
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+              "height": 15.5,
+              "overflow": "hidden",
+              "width": "100%",
             }
           }
-          width={750}
-        />
-        <View
-          style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "bottom": 0,
-                "flex": 1,
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              undefined,
-            ]
-          }
         >
+          <View
+            height={313}
+            style={
+              Object {
+                "marginTop": -2,
+              }
+            }
+            width={750}
+          />
           <View
             style={
               Array [
                 Object {
-                  "alignItems": "flex-end",
-                  "flex": 0,
-                  "flexDirection": "column",
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "bottom": 0,
+                  "flex": 1,
+                  "flexDirection": "row",
                   "justifyContent": "center",
-                  "marginRight": 12.4,
-                  "width": 80,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
                 },
                 undefined,
               ]
             }
-          />
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "alignItems": "flex-end",
+                    "backgroundColor": "transparent",
+                    "flex": 0,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "marginRight": 12.4,
+                    "width": 80,
+                  },
+                  undefined,
+                ]
+              }
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -397,6 +448,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
     <View
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 1,
         }
       }
@@ -443,6 +495,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 Array [
                   Object {
                     "alignItems": "stretch",
+                    "backgroundColor": "transparent",
                     "flexDirection": "row",
                     "justifyContent": "space-between",
                   },
@@ -454,6 +507,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 style={
                   Object {
                     "alignItems": "flex-start",
+                    "backgroundColor": "transparent",
                     "flex": 1,
                     "flexDirection": "column",
                     "justifyContent": "center",
@@ -497,6 +551,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 <View
                   style={
                     Object {
+                      "backgroundColor": "transparent",
                       "height": 0,
                       "width": 0,
                     }
@@ -507,6 +562,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 style={
                   Object {
                     "alignItems": "flex-start",
+                    "backgroundColor": "transparent",
                     "justifyContent": "center",
                     "paddingHorizontal": 20.83275,
                     "paddingVertical": 41.6655,
@@ -530,7 +586,11 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
               </View>
             </View>
             <View
-              style={Object {}}
+              style={
+                Object {
+                  "backgroundColor": "transparent",
+                }
+              }
             >
               <Text
                 allowFontScaling={false}
@@ -546,9 +606,6 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 (0% )
               </Text>
               <View
-                animated={true}
-                indeterminate={false}
-                progress={0}
                 style={
                   Array [
                     Object {
@@ -640,19 +697,12 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 style={
                   Array [
                     Object {
-                      "color": "#fff",
-                      "fontSize": 30,
-                    },
-                    Array [
-                      Object {
-                        "color": "#e26901",
-                        "fontSize": 14.000000000000002,
-                      },
-                      undefined,
-                    ],
-                    Object {
+                      "backgroundColor": "transparent",
+                      "color": "#e26901",
                       "fontFamily": "telldusicons",
+                      "fontSize": 14.000000000000002,
                     },
+                    undefined,
                   ]
                 }
               >
@@ -662,6 +712,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
             <View
               style={
                 Object {
+                  "backgroundColor": "transparent",
                   "flex": 1,
                   "flexDirection": "row",
                   "flexWrap": "wrap",
@@ -673,6 +724,7 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                 style={
                   Array [
                     Object {
+                      "backgroundColor": "transparent",
                       "color": "#555555",
                       "flex": 1,
                       "flexWrap": "wrap",
@@ -680,7 +732,6 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
                       "marginLeft": 2.7777,
                     },
                     Object {
-                      "color": "#8e8e93",
                       "fontSize": 3.5000000000000004,
                     },
                   ]
@@ -709,6 +760,7 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
   <View
     style={
       Object {
+        "backgroundColor": "transparent",
         "flex": 0,
       }
     }
@@ -716,22 +768,28 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
     <View
       style={
         Object {
+          "backgroundColor": "transparent",
           "flex": 0,
         }
       }
     >
       <View
         style={
-          Object {
-            "alignItems": "center",
-            "backgroundColor": "#1b365d",
-            "flexDirection": "row",
-            "height": 148.2074,
-            "justifyContent": "center",
-            "paddingHorizontal": 15,
-            "paddingTop": 15,
-            "position": "relative",
-          }
+          Array [
+            Object {
+              "alignItems": "center",
+              "backgroundColor": "#1b365d",
+              "flexDirection": "row",
+              "height": 64,
+              "justifyContent": "center",
+              "paddingHorizontal": 15,
+              "paddingTop": 0,
+              "position": "relative",
+            },
+            Object {
+              "height": 106.72,
+            },
+          ]
         }
       >
         <Image
@@ -754,64 +812,85 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
       </View>
     </View>
     <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
       style={
         Object {
-          "flex": 0,
+          "opacity": 1,
         }
       }
     >
       <View
         style={
           Object {
-            "borderWidth": 0,
-            "height": 15.5,
-            "overflow": "hidden",
-            "width": 750,
+            "backgroundColor": "transparent",
+            "flex": 0,
           }
         }
       >
         <View
-          height={313}
           style={
             Object {
-              "marginTop": -2,
+              "backgroundColor": "transparent",
+              "borderWidth": 0,
+              "height": 15.5,
+              "overflow": "hidden",
+              "width": "100%",
             }
           }
-          width={750}
-        />
-        <View
-          style={
-            Array [
-              Object {
-                "alignItems": "center",
-                "bottom": 0,
-                "flex": 1,
-                "flexDirection": "row",
-                "justifyContent": "center",
-                "left": 0,
-                "position": "absolute",
-                "right": 0,
-                "top": 0,
-              },
-              undefined,
-            ]
-          }
         >
+          <View
+            height={313}
+            style={
+              Object {
+                "marginTop": -2,
+              }
+            }
+            width={750}
+          />
           <View
             style={
               Array [
                 Object {
-                  "alignItems": "flex-end",
-                  "flex": 0,
-                  "flexDirection": "column",
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "bottom": 0,
+                  "flex": 1,
+                  "flexDirection": "row",
                   "justifyContent": "center",
-                  "marginRight": 12.4,
-                  "width": 80,
+                  "left": 0,
+                  "position": "absolute",
+                  "right": 0,
+                  "top": 0,
                 },
                 undefined,
               ]
             }
-          />
+          >
+            <View
+              style={
+                Array [
+                  Object {
+                    "alignItems": "flex-end",
+                    "backgroundColor": "transparent",
+                    "flex": 0,
+                    "flexDirection": "column",
+                    "justifyContent": "center",
+                    "marginRight": 12.4,
+                    "width": 80,
+                  },
+                  undefined,
+                ]
+              }
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -833,6 +912,7 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
       style={
         Object {
           "alignItems": "center",
+          "backgroundColor": "transparent",
           "flex": 1,
           "justifyContent": "center",
         }

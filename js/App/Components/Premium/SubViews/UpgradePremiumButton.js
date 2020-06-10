@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -47,12 +49,11 @@ const UpgradePremiumButton = (props: Object): Object => {
 	const {
 		buttonStyle,
 	} = getStyles(layout);
-	function onPress() {
-		navigation.navigate({
-			routeName: 'PremiumUpgradeScreen',
-			key: 'PremiumUpgradeScreen',
-		});
-	}
+
+	const onPress = useCallback(() => {
+		navigation.navigate('PremiumUpgradeScreen');
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<TouchableButton

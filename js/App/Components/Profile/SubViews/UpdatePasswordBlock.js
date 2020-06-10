@@ -43,15 +43,11 @@ const UpdatePasswordBlock = (props: Object): Object => {
 
 	const {
 		fontSize,
-		iconStyle,
 	} = getStyles(layout);
 
 	const onPress = useCallback(() => {
 		(() => {
-			navigation.navigate({
-				routeName: 'UpdatePasswordScreen',
-				key: 'UpdatePasswordScreen',
-			});
+			navigation.navigate('UpdatePasswordScreen');
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -62,7 +58,6 @@ const UpdatePasswordBlock = (props: Object): Object => {
 			fontSize={fontSize}
 			icon={'angle-right'}
 			onPress={onPress}
-			iconStyle={iconStyle}
 		/>
 	);
 };
@@ -75,9 +70,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		fontSize,
-		iconStyle: {
-			color: '#8e8e93',
-		},
 	};
 };
 

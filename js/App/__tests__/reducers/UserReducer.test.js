@@ -17,10 +17,30 @@ describe('Test User reducers', ()=>{
 	});
 
 	it('check User reducers after received access token', () => {
-		const State = { accessToken: {access_token: 'tell', refresh_token: 'tell'}, registeredCredential: false, isTokenValid: true };
+		const State = {
+			accessToken:
+			{
+				access_token: 'tell',
+				refresh_token: 'tell',
+				userId: 'rz',
+			},
+			registeredCredential: false,
+			isTokenValid: true,
+			accounts: {
+				rz: {
+					accessToken:
+					{
+						access_token: 'tell',
+						refresh_token: 'tell',
+						userId: 'rz',
+					},
+				},
+			},
+			userId: 'rz',
+		};
 		const action = {
 			type: 'RECEIVED_ACCESS_TOKEN',
-			accessToken: {access_token: 'tell', refresh_token: 'tell'},
+			accessToken: {access_token: 'tell', refresh_token: 'tell', userId: 'rz'},
 		};
 		expect(reducer( {}, action )).toEqual(State);
 	});

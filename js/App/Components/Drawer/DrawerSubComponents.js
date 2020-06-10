@@ -22,69 +22,92 @@
 
 'use strict';
 import React from 'react';
+const gravatar = require('gravatar-api');
 import {
 	Linking,
+	Image,
 } from 'react-native';
 
 import {
 	FormattedMessage,
 	Text,
 	View,
-	Icon,
-	Image,
+	CachedImage,
 	IconTelldus,
 	RippleButton,
 	EmptyView,
 } from '../../../BaseComponents';
-import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
-const AddLocation = ({onPress, styles}: Object): Object => {
+const NavigationHeader = ({ firstName, lastName, email, styles, onPress, textSwitchAccount }: Object): Object => {
+
+	let options = {
+		email,
+		parameters: { 'size': '200', 'd': 'mm' },
+		secure: true,
+	};
+	let avatar = gravatar.imageUrl(options);
+
 	return (
 		<RippleButton
-			style={styles.addNewLocationContainer}
+			style={styles.navigationHeader}
 			onPress={onPress}>
-			<Icon name="plus-circle" size={styles.iconAddLocSize} color="#e26901"/>
-			<FormattedMessage {...i18n.addNewLocation} style={styles.addNewLocationText}/>
+			<View style={{
+				flex: 1,
+				flexDirection: 'row',
+				alignItems: 'center',
+			}}>
+				<CachedImage
+					resizeMode={'cover'}
+					useQueryParamsInCacheKey={true}
+					sourceImg={avatar}
+					style={styles.navigationHeaderImage}/>
+				<View>
+					<View style={styles.navigationHeaderTextCover}>
+						<Text numberOfLines={1} style={styles.navigationHeaderText}>
+							{firstName}
+						</Text>
+						{lastName ?
+							<Text numberOfLines={1} style={styles.navigationHeaderText}>
+								{` ${lastName}`}
+							</Text>
+							:
+							null
+						}
+					</View>
+					<Text style={styles.switchOrAdd}>
+						{textSwitchAccount}
+					</Text>
+				</View>
+			</View>
 		</RippleButton>
 	);
 };
 
-const NavigationHeader = ({ firstName, lastName, styles }: Object): Object => {
-	return (
-		<View style={styles.navigationHeader}>
-			<Image style={styles.navigationHeaderImage}
-		       source={{uri: 'telldus'}}
-		       resizeMode={'contain'}/>
-			<View style={styles.navigationHeaderTextCover}>
-				<Text numberOfLines={1} style={styles.navigationHeaderText}>
-					{firstName}
-				</Text>
-				{lastName ?
-					<Text numberOfLines={1} style={styles.navigationHeaderText}>
-						{` ${lastName}`}
-					</Text>
-					:
-					null
-				}
-			</View>
-		</View>
-	);
-};
-
-const ConnectedLocations = ({styles}: Object): Object => (
+const DrawerSubHeader = ({styles, textIntl}: Object): Object => (
 	<View style={styles.navigationTitle}>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.connectedLocations} style={styles.navigationTextTitle}/></Text>
+		<Text style={styles.navigationTextTitle}><FormattedMessage {...textIntl} style={styles.navigationTextTitle}/></Text>
 	</View>
+);
+
+const SettingsLink = ({styles, textIntl, text, iconName, iconComponent, onPressLink}: Object): Object => (
+	<RippleButton style={styles.linkCoverStyle} onPress={onPressLink}>
+		{!!iconName && <IconTelldus style={styles.linkIconStyle} icon={iconName}/>}
+		{!!iconComponent && iconComponent}
+		<Text level={5} style={styles.linkLabelStyle}>
+			{!!text && text}
+			{!!textIntl && <FormattedMessage {...textIntl} style={styles.linkLabelStyle}/>}
+		</Text>
+	</RippleButton>
 );
 
 const SettingsButton = ({ onPress, styles }: Object): Object => (
 	<RippleButton
 		style={styles.settingsCover}
 		onPress={onPress}>
-		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} color={Theme.Core.brandPrimary} style={styles.settingsIconStyle}/>
-		<Text style={styles.navigationTextTitle}><FormattedMessage {...i18n.settingsHeader} style={styles.navigationTextTitle} /></Text>
+		<IconTelldus icon={'settings'} size={styles.settingsIconSize} accessible={false} importantForAccessibility={'no'} level={9} style={styles.settingsIconStyle}/>
+		<Text style={styles.settingsText}><FormattedMessage {...i18n.settingsHeader} style={styles.settingsText} /></Text>
 	</RippleButton>
 );
 
@@ -126,8 +149,8 @@ const TestIapLink = ({styles, appDrawerBanner}: Object): Object => {
 
 module.exports = {
 	SettingsButton,
-	ConnectedLocations,
+	DrawerSubHeader,
 	NavigationHeader,
-	AddLocation,
+	SettingsLink,
 	TestIapLink,
 };

@@ -168,7 +168,7 @@ class VerticalSlider extends View {
 		}
 	};
 
-	handlePanResponderEnd = (e: Object, gestureState: Object) => {
+	handlePanResponderEnd = (e: Object, gestureState: Object): boolean => {
 		if (this.activeSlider) {
 			// re-enable scrolling on listView parent
 			if (!this.parentScrollEnabled) {
@@ -194,6 +194,7 @@ class VerticalSlider extends View {
 		this.props.onRightEnd();
 		this.activeSlider = false;
 		clearTimeout(this.longPressTimeout);
+		return true;
 	};
 
 	handlePanResponderTerminate = (e: Object, gestureState: Object) => {

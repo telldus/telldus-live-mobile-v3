@@ -38,11 +38,14 @@ function reduceRefetchLiveApi(state: Object = initialState, action: Action): Obj
 	}
 	if (action.type === 'LIVEAPI_REFETCH') {
 		return {
-			...state,
+			...state, // $FlowFixMe
 			[action.endpoint]: true,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {
+		return {};
+	}
+	if (action.type === 'SWITCH_USER_ACCOUNT') {
 		return {};
 	}
 	return state;

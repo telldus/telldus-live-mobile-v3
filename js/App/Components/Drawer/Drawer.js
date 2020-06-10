@@ -25,39 +25,58 @@
 import React from 'react';
 import { ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
 const isEqual = require('react-fast-compare');
 
-import { View } from '../../../BaseComponents';
+import {
+	View,
+	RippleButton,
+	Text,
+	Icon,
+} from '../../../BaseComponents';
 import Gateway from './Gateway';
 import {
-	SettingsButton,
-	ConnectedLocations,
+	DrawerSubHeader,
 	NavigationHeader,
-	AddLocation,
+	SettingsLink,
 	TestIapLink,
 } from './DrawerSubComponents';
 
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
-import { hasStatusBar, getDrawerWidth, shouldUpdate } from '../../Lib';
+import {
+	getDrawerWidth,
+	shouldUpdate,
+	navigate,
+	getPremiumAccounts,
+	capitalize,
+} from '../../Lib';
+
+import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 type Props = {
-gateways: Array<Object>,
-appLayout: Object,
-isOpen: boolean,
-appDrawerBanner?: Object,
+	gateways: Array<Object>,
+	appLayout: Object,
+	isOpen: boolean,
+	hasAPremAccount: boolean,
+	enableGeoFenceFeature: boolean,
 
-userProfile: Function,
-onOpenSetting: Function,
-addNewLocation: Function,
-onPressGateway: () => void,
-dispatch: Function,
+	userProfile: Function,
+	onOpenSetting: Function,
+	addNewLocation: Function,
+	onPressGateway: () => void,
+	dispatch: Function,
+	closeDrawer: Function,
+	showSwitchAccountActionSheet: () => void,
+	intl: Object,
+	toggleDialogueBox: (Object) => void,
+	appDrawerBanner?: Object,
 };
 
 type State = {
-	hasStatusBar: boolean,
 	iapTestImageWidth: number,
 	iapTestImageheight: number,
 };
@@ -66,60 +85,42 @@ class Drawer extends View<Props, State> {
 props: Props;
 state: State;
 
-_hasStatusBar: () => void;
-
 constructor(props: Props) {
 	super(props);
+
 	this.state = {
-		hasStatusBar: false,
 		iapTestImageWidth: 0,
 		iapTestImageheight: 0,
 	};
 
-	this._hasStatusBar();
-}
-
-_hasStatusBar = async () => {
-	const _hasStatusBar = await hasStatusBar();
-	this.setState({
-		hasStatusBar: _hasStatusBar,
-	});
-}
-
-setBannerImageDimensions = () => {
 	const {
-		appLayout,
-	} = this.props;
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-	const drawerWidth = getDrawerWidth(deviceWidth);
+		onOpenSetting,
+	} = props;
 
-	let iapTestImageWidth = drawerWidth - 25;
-	let iapTestImageheight = iapTestImageWidth * 0.3;
-	const {
-		appDrawerBanner,
-	} = this.props;
-	const {
-		image,
-	} = appDrawerBanner ? appDrawerBanner : {};
-	if (image) {
-		Image.getSize(image, (w: number, h: number) => {
-			if (w && h) {
-				const ratio = w / h;
-				iapTestImageheight = iapTestImageWidth / ratio;
-			}
-			this.setState({
-				iapTestImageWidth,
-				iapTestImageheight,
-			});
-		}, () => {
-			this.setState({
-				iapTestImageWidth,
-				iapTestImageheight,
-			});
-		});
-	}
+	this.SETTINGS = [
+		{
+			icon: 'phone',
+			text: i18n.appSettigs,
+			onPressLink: () => {
+				onOpenSetting('AppTab');
+			},
+		},
+		{
+			icon: 'user',
+			text: i18n.userProfile,
+			onPressLink: () => {
+				onOpenSetting('ProfileTab');
+			},
+		},
+		{
+			icon: 'faq',
+			text: i18n.labelHelpAndSupport,
+			onPressLink: () => {
+				onOpenSetting('SupportTab');
+			},
+		},
+	];
+
 }
 
 componentDidMount() {
@@ -130,8 +131,12 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 	return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
 		'gateways',
 		'userProfile',
+		'isOpen',
+		'appLayout',
+		'hasAPremAccount',
+		'enableGeoFenceFeature',
 		'appDrawerBanner',
-		'appLayout']);
+	]);
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -140,146 +145,346 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 	}
 }
 
-render(): Object {
-	const {
-		gateways,
-		userProfile,
-		onOpenSetting,
-		addNewLocation,
-		appLayout,
-		onPressGateway,
-		dispatch,
-		appDrawerBanner,
-	} = this.props;
-	const styles = this.getStyles(appLayout);
+	onPressGeoFence = () => {
+		const {
+			closeDrawer,
+		} = this.props;
 
-	return (
-		<ScrollView
-			style={{ flex: 1 }}
-			contentContainerStyle={{flexGrow: 1}}>
-			<NavigationHeader firstName={userProfile.firstname} appLayout={appLayout} lastName={userProfile.lastname} styles={styles}/>
-			<View style={{
-				flex: 1,
-				backgroundColor: 'white',
-			}}>
-				<ConnectedLocations styles={styles}/>
-				{gateways.map((gateway: number, index: number): Object => {
-					return (<Gateway
-						gateway={gateway}
-						key={index}
-						appLayout={appLayout}
-						onPressGateway={onPressGateway}
-						dispatch={dispatch}/>);
-				})}
-				<AddLocation onPress={addNewLocation} styles={styles}/>
-				<SettingsButton onPress={onOpenSetting} styles={styles}/>
-				<TestIapLink
-					appDrawerBanner={appDrawerBanner}
-					styles={styles}/>
-			</View>
-		</ScrollView>
-	);
-}
+		closeDrawer();
+		navigate('GeoFenceNavigator');
+	}
 
-getStyles(appLayout: Object): Object {
-	const { height, width } = appLayout;
-	const isPortrait = height > width;
-	const deviceHeight = isPortrait ? height : width;
-	const deviceWidth = isPortrait ? width : height;
-	const drawerWidth = getDrawerWidth(deviceWidth);
+	showPurchacePremiumDialogue = () => {
+		const {
+			toggleDialogueBox,
+			intl,
+		} = this.props;
 
-	const fontSizeHeader = Math.floor(drawerWidth * 0.072);
-	const fontSizeRow = Math.floor(drawerWidth * 0.062);
-	const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
+		const {
+			formatMessage,
+		} = intl;
 
-	const ImageWidth = Math.floor(drawerWidth * 0.18);
-	const ImageHeight = Math.floor(drawerWidth * 0.186);
+		toggleDialogueBox({
+			show: true,
+			showHeader: true,
+			imageHeader: true,
+			header: formatMessage(i18n.upgradeToPremium),
+			text: formatMessage(i18n.switchAccountBasicInfo),
+			showPositive: true,
+			showNegative: true,
+			positiveText: formatMessage(i18n.upgrade).toUpperCase(),
+			onPressPositive: () => {
+				navigate('PremiumUpgradeScreen');
+			},
+			closeOnPressPositive: true,
+			timeoutToCallPositive: 200,
+		});
+	}
 
-	return {
-		navigationHeader: {
-			height: deviceHeight * 0.197,
-			width: drawerWidth,
-			minWidth: 250,
-			backgroundColor: 'rgba(26,53,92,255)',
-			marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
-			paddingBottom: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-			flexDirection: 'row',
-			justifyContent: 'center',
-			alignItems: 'flex-end',
-			paddingLeft: 10,
-		},
-		navigationHeaderImage: {
-			width: ImageWidth,
-			height: ImageHeight,
-			padding: 5,
-		},
-		navigationHeaderText: {
-			color: '#e26901',
-			fontSize: fontSizeHeader,
-			zIndex: 3,
-			textAlignVertical: 'bottom',
-		},
-		navigationHeaderTextCover: {
-			flex: 1,
-			flexDirection: 'row',
-			flexWrap: 'wrap',
-			justifyContent: 'flex-start',
-			alignItems: 'flex-end',
-			paddingLeft: 10,
-		},
-		navigationTitle: {
-			flexDirection: 'row',
-			marginVertical: 5 + (fontSizeRow * 0.5),
-			marginLeft: 10,
-			alignItems: 'center',
-		},
-		settingsCover: {
-			flexDirection: 'row',
-			paddingVertical: 5 + (fontSizeRow * 0.5),
-			marginLeft: 15,
-			alignItems: 'center',
-		},
-		iconAddLocSize: fontSizeAddLocText * 1.2,
-		settingsIconSize: fontSizeRow * 1.6,
-		navigationTextTitle: {
-			color: 'rgba(26,53,92,255)',
-			fontSize: fontSizeRow,
-			marginLeft: 10,
-		},
-		settingsButton: {
-			padding: 6,
-			minWidth: 100,
-		},
-		settingsText: {
-			color: 'white',
-			fontSize: fontSizeRow,
-		},
-		addNewLocationContainer: {
-			flexDirection: 'row',
-			borderBottomWidth: 1,
-			borderBottomColor: '#eeeeef',
-			marginLeft: 16,
-			marginRight: 10,
-			marginVertical: 5 + (fontSizeAddLocText * 0.5),
-			justifyContent: 'flex-start',
-		},
-		addNewLocationText: {
-			fontSize: fontSizeAddLocText,
-			color: '#e26901',
-			marginLeft: 10,
-		},
-		iapTestCoverStyle: {
-			flexDirection: 'row',
-			marginBottom: 5 + (fontSizeRow * 0.5),
-			marginLeft: 15,
-			alignItems: 'center',
-		},
-		iapTestImageStyle: {
-			width: this.state.iapTestImageWidth,
-			height: this.state.iapTestImageheight,
-		},
-	};
-}
+	_showSwitchAccountActionSheet = () => {
+		const {
+			showSwitchAccountActionSheet,
+			hasAPremAccount,
+		} = this.props;
+
+		if (hasAPremAccount) {
+			showSwitchAccountActionSheet();
+		} else {
+			this.showPurchacePremiumDialogue();
+		}
+	}
+
+	setBannerImageDimensions = () => {
+		const {
+			appLayout,
+		} = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+		const drawerWidth = getDrawerWidth(deviceWidth);
+
+		let iapTestImageWidth = drawerWidth - 25;
+		let iapTestImageheight = iapTestImageWidth * 0.3;
+		const {
+			appDrawerBanner,
+		} = this.props;
+		const {
+			image,
+		} = appDrawerBanner ? appDrawerBanner : {};
+		if (image) {
+			Image.getSize(image, (w: number, h: number) => {
+				if (w && h) {
+					const ratio = w / h;
+					iapTestImageheight = iapTestImageWidth / ratio;
+				}
+				this.setState({
+					iapTestImageWidth,
+					iapTestImageheight,
+				});
+			}, () => {
+				this.setState({
+					iapTestImageWidth,
+					iapTestImageheight,
+				});
+			});
+		}
+	}
+
+	render(): Object {
+		const {
+			gateways,
+			userProfile,
+			addNewLocation,
+			appLayout,
+			onPressGateway,
+			dispatch,
+			enableGeoFenceFeature,
+			appDrawerBanner,
+			intl,
+		} = this.props;
+		const {
+			drawerSubHeader,
+			...styles
+		} = this.getStyles(appLayout);
+
+		const {
+			formatMessage,
+		} = intl;
+
+		const settingLinks = this.SETTINGS.map((s: Object, index: number): Object => {
+			return <SettingsLink
+				key={index}
+				styles={styles}
+				textIntl={s.text}
+				iconName={s.icon}
+				onPressLink={s.onPressLink}/>;
+		});
+
+		return (
+			<ScrollView
+				style={{ flex: 1 }}
+				contentContainerStyle={{flexGrow: 1}}>
+				<NavigationHeader
+					firstName={userProfile.firstname}
+					email={userProfile.email}
+					appLayout={appLayout}
+					lastName={userProfile.lastname}
+					styles={styles}
+					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
+					onPress={this._showSwitchAccountActionSheet}/>
+				<View
+					level={3}
+					style={{
+						flex: 1,
+					}}>
+					<View style={styles.settingsLinkCover}>
+						<DrawerSubHeader
+							textIntl={i18n.settingsHeader}
+							styles={drawerSubHeader}/>
+						{settingLinks}
+					</View>
+					{enableGeoFenceFeature && (
+						<View style={styles.settingsLinkCover}>
+							<DrawerSubHeader
+								textIntl={i18n.geoFence}
+								styles={drawerSubHeader}/>
+							<RippleButton style={styles.linkCoverStyle} onPress={this.onPressGeoFence}>
+								<MaterialIcons
+									style={{
+										...styles.linkIconStyle,
+										paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
+									}}
+									name={'location-on'}/>
+								<Text
+									level={5}
+									style={styles.linkLabelStyle}>
+									{formatMessage(i18n.geoFenceSettings)}
+								</Text>
+							</RippleButton>
+						</View>
+					)}
+					<DrawerSubHeader
+						textIntl={i18n.locationsLayoutTitle}
+						styles={{
+							...drawerSubHeader,
+							navigationTitle: {
+								...drawerSubHeader.navigationTitle,
+								marginBottom: 0,
+							},
+						}}/>
+					{gateways.map((gateway: number, index: number): Object => {
+						return <Gateway
+							gateway={gateway}
+							key={index}
+							appLayout={appLayout}
+							onPressGateway={onPressGateway}
+							dispatch={dispatch}/>;
+					})}
+					<SettingsLink
+						styles={{
+							...styles,
+							linkCoverStyle: styles.linkCoverStyleAddNewGateway,
+						}}
+						text={capitalize(formatMessage(i18n.addNewGatway))}
+						iconComponent={<Icon
+							style={{
+								...styles.linkIconStyle,
+								paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
+							}}
+							name={'plus-circle'}/>}
+						onPressLink={addNewLocation}/>
+					<TestIapLink
+						appDrawerBanner={appDrawerBanner}
+						styles={styles}/>
+				</View>
+			</ScrollView>
+		);
+	}
+
+	getStyles(appLayout: Object): Object {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+
+		const {
+			paddingFactor,
+			brandSecondary,
+			brandPrimary,
+		} = Theme.Core;
+
+		const deviceWidth = isPortrait ? width : height;
+
+		const padding = deviceWidth * paddingFactor;
+
+		const drawerWidth = getDrawerWidth(deviceWidth);
+
+		const fontSizeHeader = Math.floor(drawerWidth * 0.072);
+		const fontSizeHeaderTwo = Math.floor(drawerWidth * 0.045);
+		const fontSizeRow = Math.floor(drawerWidth * 0.062);
+		const fontSizeAddLocText = Math.floor(drawerWidth * 0.049);
+
+		const fontSizeSettingsIcon = Math.floor(drawerWidth * 0.07);
+
+		const ImageSize = Math.floor(drawerWidth * 0.18);
+
+		return {
+			navigationHeader: {
+				paddingVertical: padding * 2,
+				width: drawerWidth,
+				minWidth: 250,
+				backgroundColor: brandPrimary,
+				marginTop: 0,
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				paddingHorizontal: 15,
+			},
+			navigationHeaderImage: {
+				width: ImageSize,
+				height: ImageSize,
+				borderRadius: ImageSize / 2,
+			},
+			navigationHeaderText: {
+				color: brandSecondary,
+				fontSize: fontSizeHeader,
+				zIndex: 3,
+				textAlignVertical: 'center',
+			},
+			navigationHeaderTextCover: {
+				flexDirection: 'row',
+				flexWrap: 'wrap',
+				justifyContent: 'flex-start',
+				alignItems: 'flex-end',
+				paddingLeft: 10,
+			},
+			drawerSubHeader: {
+				navigationTitle: {
+					flexDirection: 'row',
+					marginBottom: padding,
+					paddingVertical: padding / 2,
+					paddingLeft: 10,
+					alignItems: 'center',
+					backgroundColor: brandSecondary,
+				},
+				navigationTextTitle: {
+					color: '#fff',
+					fontSize: fontSizeRow,
+					marginLeft: 10,
+				},
+			},
+			switchOrAdd: {
+				color: '#fff',
+				fontSize: fontSizeHeaderTwo,
+				zIndex: 3,
+				textAlignVertical: 'center',
+				marginLeft: 10,
+			},
+			settingsCover: {
+				flexDirection: 'row',
+				paddingVertical: 5 + (fontSizeRow * 0.5),
+				marginLeft: 12,
+				alignItems: 'center',
+			},
+			iconAddLocSize: fontSizeAddLocText * 1.2,
+			settingsIconSize: fontSizeRow * 1.6,
+			settingsButton: {
+				padding: 6,
+				minWidth: 100,
+			},
+			settingsText: {
+				color: brandPrimary,
+				fontSize: fontSizeRow,
+				marginLeft: 10,
+			},
+			addNewLocationContainer: {
+				flexDirection: 'row',
+				marginLeft: 16,
+				marginRight: 10,
+				marginVertical: 5 + (fontSizeAddLocText * 0.5),
+				justifyContent: 'flex-start',
+				marginBottom: 5,
+			},
+			addNewLocationText: {
+				fontSize: fontSizeAddLocText,
+				color: brandSecondary,
+				marginLeft: 10,
+			},
+			settingsLinkCover: {
+				marginBottom: padding * 0.9,
+			},
+			linkCoverStyle: {
+				flexDirection: 'row',
+				paddingHorizontal: 10,
+				alignItems: 'center',
+				paddingVertical: padding * 0.9,
+			},
+			linkCoverStyleAddNewGateway: {
+				flexDirection: 'row',
+				paddingHorizontal: 10,
+				alignItems: 'center',
+				paddingVertical: padding * 1.5,
+			},
+			linkIconStyle: {
+				fontSize: fontSizeSettingsIcon,
+				color: brandSecondary,
+				marginRight: 8,
+				marginLeft: 10,
+				textAlign: 'left',
+			},
+			linkLabelStyle: {
+				fontSize: fontSizeAddLocText,
+			},
+			iapTestCoverStyle: {
+				flexDirection: 'row',
+				marginBottom: 5 + (fontSizeRow * 0.5),
+				marginLeft: 15,
+				alignItems: 'center',
+			},
+			iapTestImageStyle: {
+				width: this.state.iapTestImageWidth,
+				height: this.state.iapTestImageheight,
+			},
+		};
+	}
 }
 
 const getRows = createSelector(
@@ -290,15 +495,24 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
-	const {
-		firebaseRemoteConfig = {},
-	} = store.user;
 
-	const { appDrawerBanner = JSON.stringify({}) } = firebaseRemoteConfig;
+	const { accounts = {}, firebaseRemoteConfig = {} } = store.user;
+
+	const premAccounts = getPremiumAccounts(accounts);
+	const hasAPremAccount = Object.keys(premAccounts).length > 0;
+
+	const {
+		geoFenceFeature = JSON.stringify({enable: false}),
+		appDrawerBanner = JSON.stringify({}),
+	} = firebaseRemoteConfig;
+
+	const { enable } = JSON.parse(geoFenceFeature);
 
 	return {
 		gateways: getRows(store),
 		userProfile: getUserProfileSelector(store),
+		hasAPremAccount,
+		enableGeoFenceFeature: enable,
 		appDrawerBanner: appDrawerBanner === '' ? {} : JSON.parse(appDrawerBanner),
 	};
 }

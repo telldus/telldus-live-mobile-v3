@@ -44,7 +44,7 @@ import { getSensors, setIgnoreSensor, showToast, getGateways } from '../../Actio
 
 import i18n from '../../Translations/common';
 import { parseSensorsForListView } from '../../Reducers/Sensors';
-import { getTabBarIcon, LayoutAnimations, getItemLayout } from '../../Lib';
+import { LayoutAnimations, getItemLayout } from '../../Lib';
 import Theme from '../../Theme';
 
 type Props = {
@@ -56,8 +56,10 @@ type Props = {
 	sensors: Array<any>,
 	sensorsDidFetch: boolean,
 	gatewaysById: Object,
+	route: Object,
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
+	currentScreen: string,
 };
 
 type State = {
@@ -89,17 +91,6 @@ class SensorsTab extends View {
 
 	noSensorsTitle: string;
 	noSensorsContent: string;
-
-	static navigationOptions = ({navigation, screenProps}: Object): Object => {
-		const { intl, currentScreen } = screenProps;
-		const { formatMessage } = intl;
-		const postScript = currentScreen === 'Sensors' ? formatMessage(i18n.labelActive) : formatMessage(i18n.defaultDescriptionButton);
-		return {
-			title: formatMessage(i18n.sensors),
-			tabBarIcon: ({ focused, tintColor }: Object): Object => getTabBarIcon(focused, tintColor, 'sensors'),
-			tabBarAccessibilityLabel: `${formatMessage(i18n.sensorsTab)}, ${postScript}`,
-		};
-	};
 
 	constructor(props: Props) {
 		super(props);
@@ -162,9 +153,11 @@ class SensorsTab extends View {
 	componentDidUpdate() {
 		this.normalizeNewlyAddedUITimeout();
 
-		const { navigation } = this.props;
-		const newSensors = navigation.getParam('newSensors', {});
-		const gateway = navigation.getParam('gateway', {});
+		const { route } = this.props;
+		const {
+			newSensors = {},
+			gateway = {},
+		} = route.params || {};
 		if (gateway && newSensors && !isEmpty(newSensors) && !this.calledOnNewlyAddedDidMount) {
 			Object.keys(newSensors).map((id: string) => {
 				let gId = gateway.id.toString();
@@ -174,8 +167,8 @@ class SensorsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { currentScreen } = nextProps.screenProps;
-		const { currentScreen: prevScreen } = this.props.screenProps;
+		const { currentScreen } = nextProps;
+		const { currentScreen: prevScreen } = this.props;
 		return (currentScreen === 'Sensors') || (currentScreen !== 'Sensors' && prevScreen === 'Sensors');
 	}
 
@@ -225,9 +218,9 @@ class SensorsTab extends View {
 					if (this.listView) {
 						this.listView.scrollToLocation({
 							animated: true,
-							sectionIndex: visibleList.length - 1,
+							sectionIndex: visibleList.length,
 							itemIndex: 0,
-							viewPosition: 0.7,
+							viewPosition: 0.8,
 						});
 					}
 				}, 500);
@@ -281,10 +274,8 @@ class SensorsTab extends View {
 	}
 
 	openSensorDetail(sensor: Object) {
-		this.props.navigation.navigate({
-			routeName: 'SensorDetails',
-			key: 'SensorDetails',
-			params: { id: sensor.id },
+		this.props.navigation.navigate('SensorDetails', {
+			id: sensor.id,
 		});
 	}
 
@@ -299,9 +290,11 @@ class SensorsTab extends View {
 	}
 
 	toggleHiddenListButton(): Object {
-		const { screenProps } = this.props;
-		const accessible = screenProps.currentScreen === 'Sensors';
-		const style = this.getStyles(screenProps.appLayout);
+		const { screenProps, currentScreen } = this.props;
+		const accessible = currentScreen === 'Sensors';
+		const style = this.getStyles({
+			appLayout: screenProps.appLayout,
+		});
 
 		const { showHiddenList } = this.state;
 		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
@@ -314,9 +307,15 @@ class SensorsTab extends View {
 				accessible={accessible}
 				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
+				<IconTelldus
+					level={2}
+					icon="hidden"
+					style={style.toggleHiddenListIcon}
 					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={false}>
+				<Text
+					level={2}
+					style={style.toggleHiddenListText}
+					accessible={false}>
 					{showHiddenList ?
 						this.hideHidden
 						:
@@ -329,12 +328,18 @@ class SensorsTab extends View {
 
 	noSensorsMessage(style: Object): Object {
 		return (
-			<View style={style.noItemsContainer}>
+			<View
+				level={3}
+				style={style.noItemsContainer}>
 				<IconTelldus icon={'sensor'} style={style.sensorIconStyle}/>
-				<Text style={style.noItemsTitle}>
+				<Text
+					level={4}
+					style={style.noItemsTitle}>
 					{this.noSensorsTitle}
 				</Text>
-				<Text style={style.noItemsContent}>
+				<Text
+					level={4}
+					style={style.noItemsContent}>
 					{'\n'}
 					{this.noSensorsContent}
 				</Text>
@@ -361,17 +366,26 @@ class SensorsTab extends View {
 			sensors,
 			gateways,
 			gatewaysDidFetch,
+			currentScreen,
 		} = this.props;
-		const { appLayout } = screenProps;
+		const {
+			appLayout,
+			addingNewLocation,
+			addNewLocation,
+		} = screenProps;
 		const {
 			isRefreshing,
 			propsSwipeRow,
 		} = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
-			return <NoGateways/>;
+			return <NoGateways
+				disabled={addingNewLocation}
+				onPress={addNewLocation}/>;
 		}
 
 		const hasGateways = gateways.length > 0 && gatewaysDidFetch;
@@ -380,7 +394,7 @@ class SensorsTab extends View {
 		}
 
 		let makeRowAccessible = 0;
-		if (screenReaderEnabled && screenProps.currentScreen === 'Sensors') {
+		if (screenReaderEnabled && currentScreen === 'Sensors') {
 			makeRowAccessible = 1;
 		}
 
@@ -392,7 +406,9 @@ class SensorsTab extends View {
 		};
 
 		return (
-			<View style={style.container}>
+			<View
+				level={3}
+				style={style.container}>
 				<SectionList
 					sections={listData}
 					renderItem={this.renderRow}
@@ -420,7 +436,7 @@ class SensorsTab extends View {
 			return null;
 		}
 
-		const { screenProps, gatewaysById } = this.props;
+		const { screenProps, gatewaysById, currentScreen } = this.props;
 
 		const { name } = gatewaysById[sectionData.section.header] || {};
 
@@ -432,21 +448,21 @@ class SensorsTab extends View {
 				supportLocalControl={supportLocalControl}
 				isOnline={isOnline}
 				websocketOnline={websocketOnline}
-				accessible={screenProps.currentScreen === 'Sensors'}
+				accessible={currentScreen === 'Sensors'}
 			/>
 		);
 	}
 
 	renderRow(row: Object): Object {
-		const { screenProps, navigation } = this.props;
+		const { screenProps, route, currentScreen } = this.props;
 		const { propsSwipeRow } = this.state;
-		const { intl, currentScreen, appLayout, screenReaderEnabled } = screenProps;
+		const { intl, appLayout, screenReaderEnabled } = screenProps;
 		const { item, section, index } = row;
 		const { isOnline, buttonRow, id } = item;
 
 		if (buttonRow) {
 			return (
-				<View importantForAccessibility={screenProps.currentScreen === 'Sensors' ? 'no' : 'no-hide-descendants'}>
+				<View importantForAccessibility={currentScreen === 'Sensors' ? 'no' : 'no-hide-descendants'}>
 					{this.toggleHiddenListButton()}
 				</View>
 			);
@@ -455,7 +471,9 @@ class SensorsTab extends View {
 		const sectionLength = section.data.length;
 		const isLast = index === sectionLength - 1;
 
-		const newSensors = navigation.getParam('newSensors', {}) || {};
+		const {
+			newSensors = {},
+		} = route.params || {};
 
 		return (
 			<SensorRow
@@ -476,9 +494,11 @@ class SensorsTab extends View {
 	}
 
 	onNewlyAddedDidMount = (id: number, clientId: string) => {
-		const { rowsAndSections, navigation } = this.props;
+		const { rowsAndSections, route } = this.props;
 		const { visibleList } = rowsAndSections;
-		const newSensors = navigation.getParam('newSensors', {});
+		const {
+			newSensors = {},
+		} = route.params || {};
 		let section = 0, row = 0;
 		let item = newSensors[id];
 		if (item && item.mainNode) {
@@ -510,8 +530,10 @@ class SensorsTab extends View {
 	}
 
 	normalizeNewlyAddedUITimeout = () => {
-		const { navigation } = this.props;
-		const newSensors = navigation.getParam('newSensors', null);
+		const { route } = this.props;
+		const {
+			newSensors,
+		} = route.params || {};
 		if (newSensors && !this.timeoutNormalizeNewlyAdded ) {
 			this.timeoutNormalizeNewlyAdded = setTimeout(() => {
 				this.normalizeNewlyAddedUI();
@@ -523,13 +545,12 @@ class SensorsTab extends View {
 	}
 
 	normalizeNewlyAddedUI = () => {
-		const { navigation } = this.props;
-		const newSensors = navigation.getParam('newSensors', null);
+		const { navigation, route } = this.props;
+		const {
+			newSensors,
+		} = route.params || {};
 		if (newSensors) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearU(300), () => {
-				// Callback only available in iOS
-				LayoutAnimation.configureNext(null);
-			});
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			navigation.setParams({
 				newSensors: undefined,
 			});
@@ -545,10 +566,16 @@ class SensorsTab extends View {
 		});
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
+
+		const {
+			androidLandMarginLeftFactor,
+		} = Theme.Core;
 
 		let hiddenListTextFontSize = Math.floor(deviceWidth * 0.049);
 		hiddenListTextFontSize = hiddenListTextFontSize > 25 ? 25 : hiddenListTextFontSize;
@@ -559,8 +586,7 @@ class SensorsTab extends View {
 		return {
 			container: {
 				flex: 1,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * 0.07303),
-				backgroundColor: Theme.Core.appBackground,
+				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -572,13 +598,11 @@ class SensorsTab extends View {
 			toggleHiddenListIcon: {
 				marginTop: 4,
 				fontSize: hiddenListIconFontSize,
-				color: Theme.Core.rowTextColor,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
 				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
-				color: Theme.Core.rowTextColor,
 			},
 			dialogueHeaderStyle: {
 				paddingVertical: 10,
@@ -604,17 +628,14 @@ class SensorsTab extends View {
 				paddingHorizontal: 30,
 				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-				backgroundColor: Theme.Core.appBackground,
 			},
 			noItemsTitle: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: Math.floor(deviceWidth * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			sensorIconStyle: {
@@ -636,7 +657,10 @@ const getRowsAndSections = createSelector(
 );
 
 function mapStateToProps(store: Object): Object {
+
 	const { screenReaderEnabled } = store.app;
+	const { screen: currentScreen } = store.navigation;
+
 	return {
 		rowsAndSections: getRowsAndSections(store),
 		screenReaderEnabled,
@@ -645,6 +669,7 @@ function mapStateToProps(store: Object): Object {
 		gatewaysById: store.gateways.byId,
 		gateways: store.gateways.allIds,
 		gatewaysDidFetch: store.gateways.didFetch,
+		currentScreen,
 	};
 }
 
@@ -654,4 +679,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
+export default connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
+

@@ -30,16 +30,19 @@ import Toast from 'react-native-simple-toast';
 import NetInfo from '@react-native-community/netinfo';
 import RNIap from 'react-native-iap';
 
-import { View } from '../../BaseComponents';
+import {
+	View,
+	TransparentFullPageLoadingIndicator,
+} from '../../BaseComponents';
 import AppNavigatorRenderer from './AppNavigatorRenderer';
 import UserAgreement from './UserAgreement/UserAgreement';
 import DimmerStep from './TabViews/SubViews/Device/DimmerStep';
 import { DimmerPopup } from './TabViews/SubViews';
+import SwitchAccountActionSheet from './AccountSettings/SwitchAccountActionSheet';
 
 const { AndroidWidget } = NativeModules;
 
 import {
-	setAppLayout,
 	getUserProfile,
 	appStart,
 	appState,
@@ -57,7 +60,10 @@ import {
 	getUserSubscriptions,
 	campaignVisited,
 	toggleVisibilityProExpireHeadsup,
+	setupGeoFence,
 	fetchRemoteConfig,
+	prepareGAPremiumProperties,
+	updateAllAccountsInfo,
 	setGatewayRelatedGAProperties,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
@@ -65,7 +71,11 @@ import {
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
-import { widgetAndroidConfigure, widgetAndroidRefresh, widgetiOSConfigure } from '../Actions/Widget';
+import {
+	widgetAndroidConfigure,
+	widgetAndroidRefresh,
+	widgetiOSConfigure,
+} from '../Actions/Widget';
 import Push from './Push';
 import {
 	deployStore,
@@ -76,6 +86,7 @@ import {
 	shouldUpdate,
 	navigate,
 	premiumAboutToExpire,
+	setGAUserProperties,
 	getSubscriptionPlans,
 } from '../Lib';
 
@@ -89,6 +100,7 @@ type Props = {
 	pushTokenRegistered: boolean,
 	deviceId: string,
 	pushToken: string,
+	visibilityEula: boolean,
 
     showToast: boolean,
 	messageToast: string,
@@ -102,20 +114,29 @@ type Props = {
 
 	screen: string,
 
+	showSwitchAccountAS: boolean,
+
 	subscriptions: Object,
 	pro: number,
 	visibilityProExpireHeadsup: 'show' | 'hide_temp' | 'hide_perm' | 'force_show',
+	userId: string,
+
+	showLoadingIndicator: boolean,
+
+	enableGeoFence: boolean,
 
     intl: intlShape.isRequired,
     dispatch: Function,
 	addNewLocation: () => any,
 	locale: string,
 	toggleDialogueBox: (Object) => null,
+	onLayout: Function,
 };
 
 type State = {
     addingNewLocation: boolean,
 	hasTriedAddLocation: boolean,
+	isDrawerOpen: boolean,
 };
 
 class PostLoginNavigatorCommon extends View<Props, State> {
@@ -123,25 +144,30 @@ class PostLoginNavigatorCommon extends View<Props, State> {
 props: Props;
 state: State;
 
-onLayout: (Object) => void;
 onDoneDimming: (Object) => void;
 autoDetectLocalTellStick: () => void;
 handleConnectivityChange: () => void;
 addNewLocation: () => void;
 addNewDevice: () => void;
 
+refSwitchAccountActionSheet: Object;
+screensAllowsNavigationOrModalOverride: Array<string>;
 clearNetInfoListener: any;
+
+clearListenerSyncLiveApiOnForeground: any;
+clearListenerAppState: any;
+
 constructor(props: Props) {
 	super(props);
 
 	this.state = {
 		addingNewLocation: false,
 		hasTriedAddLocation: false,
+		isDrawerOpen: false,
 	};
 
 	this.timeOutConfigureLocalControl = null;
 
-	this.onLayout = this.onLayout.bind(this);
 	this.onDoneDimming = this.onDoneDimming.bind(this);
 	this.autoDetectLocalTellStick = this.autoDetectLocalTellStick.bind(this);
 
@@ -162,27 +188,56 @@ constructor(props: Props) {
 	this.onNotification = Push.onNotification();
 	this.onNotificationOpened = Push.onNotificationOpened();
 
-	this.clearNetInfoListener = null;
-
 	this.screensAllowsNavigationOrModalOverride = [
 		'Tabs',
 		'Dashboard',
 		'Devices',
 		'Sensors',
 		'Scheduler',
-		'Gateways',
+		'MoreOptionsTab',
 	];
-}
 
-doesAllowsToOverrideScreen = (): boolean => {
-	const { screen } = this.props;
-	return this.screensAllowsNavigationOrModalOverride.indexOf(screen) !== -1;
+	this.refSwitchAccountActionSheet = {};
+	this.clearNetInfoListener = null;
+	this.clearListenerSyncLiveApiOnForeground = null;
+	this.clearListenerAppState = null;
 }
 
 async componentDidMount() {
-	const { dispatch, pushTokenRegistered, subscriptions, pro, visibilityProExpireHeadsup } = this.props;
+	const { dispatch } = this.props;
 	dispatch(appStart());
-	dispatch(appState());
+	this.clearListenerAppState = await dispatch(appState());
+
+	dispatch(updateAllAccountsInfo());
+
+	this.actionsToPerformOnStart();
+
+	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
+
+	this._askIfAddNewLocation();
+}
+
+actionsToPerformOnStart = async () => {
+	const {
+		dispatch,
+		subscriptions,
+		pro,
+		visibilityProExpireHeadsup,
+		showLoadingIndicator,
+		enableGeoFence,
+	} = this.props;
+
+	try {
+		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
+		await dispatch(fetchRemoteConfig());
+
+		if (enableGeoFence) {
+			await dispatch(setupGeoFence());
+		}
+	} catch (e) {
+		// Ignore
+	}
+
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 	// and results in generating multiple tokens.
@@ -256,23 +311,34 @@ async componentDidMount() {
 				const register = (!phonesList.phone) || (phonesList.phone.length === 0);
 				this.pushConf(register);
 				if (
-					!pushTokenRegistered &&
-				phonesList.phone &&
-				phonesList.phone.length > 0 &&
-				this.doesAllowsToOverrideScreen()) {
-					navigate('RegisterForPushScreen', {}, 'RegisterForPushScreen');
+					!this.state.isDrawerOpen &&
+					!this.props.pushTokenRegistered &&
+					!this.props.showLoadingIndicator &&
+					phonesList.phone &&
+					phonesList.phone.length > 0 &&
+					this.doesAllowsToOverrideScreen()
+				) {
+					navigate('RegisterForPushScreen');
 				}
 			}).catch(() => {
 				this.pushConf(false);
 			});
 		}
 
-		dispatch(syncLiveApiOnForeground());
+		this.clearListenerSyncLiveApiOnForeground = await dispatch(syncLiveApiOnForeground());
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
+
+		try {
+			await dispatch(getUserSubscriptions());
+		} catch (userSubsErr) {
+			// Ignore
+		} finally {
+			const gAPremProps = dispatch(prepareGAPremiumProperties());
+			setGAUserProperties(gAPremProps);
+		}
 		dispatch(setGatewayRelatedGAProperties());// NOTE: Make sure is called resolving getGateways
-		dispatch(getUserSubscriptions());
 
 		// test gateway local control end-point on app restart.
 		dispatch(initiateGatewayLocalTest());
@@ -284,16 +350,24 @@ async componentDidMount() {
 	this.checkIfOpenPurchase();
 	this.checkIfOpenThermostatControl();
 
-	this.clearNetInfoListener = NetInfo.addEventListener(this.handleConnectivityChange);
-
-	this._askIfAddNewLocation();
-
 	dispatch(checkAndLinkAccountIfRequired());
 
-	if (Platform.OS !== 'ios' && premiumAboutToExpire(subscriptions, pro) && visibilityProExpireHeadsup !== 'hide_perm') {
+	const {
+		isDrawerOpen,
+	} = this.state;
+
+	if (
+		Platform.OS !== 'ios' &&
+		!isDrawerOpen &&
+		!showLoadingIndicator &&
+		premiumAboutToExpire(subscriptions, pro) &&
+		visibilityProExpireHeadsup !== 'hide_perm' &&
+		this.doesAllowsToOverrideScreen()
+	) {
 		dispatch(toggleVisibilityProExpireHeadsup('show'));
-		navigate('PremiumUpgradeScreen', {}, 'PremiumUpgradeScreen');
+		navigate('PremiumUpgradeScreen');
 	}
+
 }
 
 /*
@@ -327,7 +401,7 @@ checkIfOpenPurchase = async () => {
 		const openPurchase = await AndroidWidget.checkIfOpenPurchase();
 		if (openPurchase) {
 			AndroidWidget.setOpenPurchase(false);
-			navigate('AdditionalPlansPaymentsScreen', {}, 'AdditionalPlansPaymentsScreen');
+			navigate('AdditionalPlansPaymentsScreen');
 		}
 	}
 }
@@ -340,7 +414,7 @@ checkIfOpenThermostatControl = async () => {
 			AndroidWidget.setOpenThermostatControl(-1);
 			navigate('ThermostatControl', {
 				id,
-			}, 'ThermostatControl');
+			});
 		}
 	}
 }
@@ -371,7 +445,13 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showEULA',
 		'addNewGatewayBool',
 		'showChangeLog',
+		'userId',
 		'screen',
+		'showLoadingIndicator',
+		'screen',
+		'showSwitchAccountAS',
+		'enableGeoFence',
+		'visibilityEula',
 	]);
 	if (propsChange) {
 		return true;
@@ -395,6 +475,8 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		durationToast,
 		positionToast,
 		intl,
+		userId,
+		showSwitchAccountAS,
 	} = this.props;
 	if (showToastBool && !prevProps.showToast) {
 		const { formatMessage } = intl;
@@ -402,15 +484,29 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		this._showToast(message, durationToast, positionToast);
 	}
 
+	// Account switched
+	if (userId && prevProps.userId && (userId.trim().toLowerCase() !== prevProps.userId.trim().toLowerCase())) {
+		this.actionsToPerformOnStart();
+	}
 	this._askIfAddNewLocation();
+
+	if (showSwitchAccountAS && !prevProps.showSwitchAccountAS) {
+		this.showSwitchAccountActionSheet();
+	}
 }
 
 _askIfAddNewLocation = () => {
 	const {
 		addNewGatewayBool,
+		showLoadingIndicator,
 	} = this.props;
 	const { hasTriedAddLocation } = this.state;
-	if (addNewGatewayBool && this.doesAllowsToOverrideScreen() && !hasTriedAddLocation) {
+	if (
+		addNewGatewayBool &&
+		this.doesAllowsToOverrideScreen() &&
+		!hasTriedAddLocation &&
+		!showLoadingIndicator
+	) {
 		this.setState({
 			hasTriedAddLocation: true,
 		}, () => {
@@ -445,6 +541,19 @@ componentWillUnmount() {
 		this.onTokenRefreshListener();
 		this.onTokenRefreshListener = null;
 	}
+	if (this.clearListenerSyncLiveApiOnForeground) {
+		this.clearListenerSyncLiveApiOnForeground();
+		this.clearListenerSyncLiveApiOnForeground = null;
+	}
+	if (this.clearListenerAppState) {
+		this.clearListenerAppState();
+		this.clearListenerAppState = null;
+	}
+}
+
+doesAllowsToOverrideScreen = (extraScreens?: Object = []): boolean => {
+	const { screen } = this.props;
+	return this.screensAllowsNavigationOrModalOverride.concat(extraScreens).indexOf(screen) !== -1;
 }
 
 addNewLocation = () => {
@@ -458,7 +567,7 @@ addNewLocation = () => {
 				addingNewLocation: false,
 			});
 			if (response.client) {
-				navigate('AddLocation', {clients: response.client}, 'AddLocation');
+				navigate('AddLocation', {clients: response.client});
 			}
 		}).catch((error: Object) => {
 			this.setState({
@@ -476,12 +585,21 @@ addNewDevice() {
 
 	if (gatewaysLen > 0) {
 		const singleGateway = gatewaysLen === 1;
-		navigate('AddDevice', {
-			selectLocation: !singleGateway,
-			gateway: singleGateway ? {
-				...byId[Object.keys(byId)[0]],
-			} : null,
-		}, 'AddDevice');
+		if (singleGateway) {
+			navigate('AddDevice', {
+				gateway: byId[Object.keys(byId)[0]],
+				singleGateway,
+				screen: 'SelectDeviceType',
+				params: {
+					gateway: byId[Object.keys(byId)[0]],
+					singleGateway,
+				},
+			});
+		} else {
+			navigate('AddDevice', {
+				screen: 'SelectLocation',
+			});
+		}
 	}
 }
 
@@ -494,10 +612,21 @@ addNewSensor = () => {
 
 		if (gatewaysLen > 0) {
 			const singleGateway = gatewaysLen === 1;
-			navigate('AddSensor', {
-				selectLocation: !singleGateway,
-				gateway: singleGateway ? {...filteredGateways[filteredAllIds[0]]} : null,
-			}, 'AddSensor');
+			if (singleGateway) {
+				navigate('AddSensor', {
+					gateway: filteredGateways[filteredAllIds[0]],
+					singleGateway,
+					screen: 'SelectSensorType',
+					params: {
+						gateway: filteredGateways[filteredAllIds[0]],
+						singleGateway,
+					},
+				});
+			} else {
+				navigate('AddSensor', {
+					screen: 'SelectLocationAddSensor',
+				});
+			}
 		}
 	}
 }
@@ -557,39 +686,63 @@ showDialogue(message: string) {
 	});
 }
 
-onLayout(ev: Object) {
-	this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
-}
-
 onDoneDimming() {
 	this.props.dispatch(hideDimmerStep());
 }
 
+showSwitchAccountActionSheet = () => {
+	if (this.refSwitchAccountActionSheet && this.refSwitchAccountActionSheet.show) {
+		this.refSwitchAccountActionSheet.show();
+	}
+}
+
+setRefSwitchAccountActionSheet = (ref: any) => {
+	this.refSwitchAccountActionSheet = ref;
+}
+
+toggleDrawerState = (isDrawerOpen: boolean) => {
+	this.setState({
+		isDrawerOpen,
+	});
+}
+
 render(): Object {
+	const {
+		isDrawerOpen,
+	} = this.state;
+
 	const {
 		showEULA,
 		dimmer,
 		intl,
 		screenReaderEnabled,
 		showChangeLog,
+		showLoadingIndicator,
+		onLayout,
 		gateways,
+		visibilityEula,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showUA = showEULA && !showChangeLog;
+	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
+	const showUA = showEulaModal && !showChangeLog;
+
+	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA;
 
 	return (
 		<View style={{flex: 1}}>
 			<View style={{flex: 1}} importantForAccessibility={importantForAccessibility}>
 				<AppNavigatorRenderer
 					{...this.props}
+					showSwitchAccountActionSheet={this.showSwitchAccountActionSheet}
 					addNewLocation={this.addNewLocation}
 					addingNewLocation={this.state.addingNewLocation}
 					addNewDevice={this.addNewDevice}
 					addNewSensor={this.addNewSensor}
 					navigateToCampaign={this.navigateToCampaign}
+					toggleDrawerState={this.toggleDrawerState}
 					hasGateways={gateways.didFetch && gateways.allIds.length > 0}/>
 			</View>
 
@@ -606,7 +759,11 @@ render(): Object {
 					intl={intl}
 				/>
 			)}
-			<UserAgreement showModal={showUA} onLayout={this.onLayout}/>
+			<SwitchAccountActionSheet
+				ref={this.setRefSwitchAccountActionSheet}/>
+			<TransparentFullPageLoadingIndicator
+				isVisible={showLoadingIndicatorFinal}/>
+			<UserAgreement showModal={showUA} onLayout={onLayout}/>
 		</View>
 	);
 }
@@ -622,24 +779,29 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		defaultSettings,
 	} = state.app;
 
-	let { language = {} } = defaultSettings || {};
+	let { language = {}, enableGeoFence } = defaultSettings || {};
 	let locale = language.code;
 
-	const {
+	let {
 		subscriptions,
 		userProfile,
 		visibilityProExpireHeadsup,
 		visibilityEula,
-	} = state.user;
-
-	const { allIds = [], toActivate } = state.gateways;
-	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
-
-	let {
 		pushToken,
 		pushTokenRegistered,
 		deviceId = null,
+		userId,
+		switchAccountConf = {},
 	} = state.user;
+
+	const { allIds = [], toActivate, didFetch: gDidFetch } = state.gateways;
+	const addNewGatewayBool = allIds.length === 0 && toActivate.checkIfGatewaysEmpty;
+
+	const { didFetch: dDidFetch, allIds: allDs = [] } = state.devices;
+	const { didFetch: sDidFetch, allIds: allSs = [] } = state.sensors;
+	const showLoadingIndicator = (!gDidFetch && allIds.length === 0) ||
+	(!dDidFetch && allDs.length === 0) ||
+	(!sDidFetch && allSs.length === 0);
 
 	return {
 		messageToast,
@@ -652,6 +814,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gateways: state.gateways,
 
 		showEULA: !getUserProfileSelector(state).eula || visibilityEula,
+		visibilityEula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
 
@@ -661,7 +824,13 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		subscriptions,
 		pro: userProfile.pro,
 		visibilityProExpireHeadsup,
+		userId,
 		screen: state.navigation.screen,
+		showSwitchAccountAS: switchAccountConf.showAS,
+
+		showLoadingIndicator,
+
+		enableGeoFence: typeof enableGeoFence === 'undefined' ? true : enableGeoFence,
 	};
 }
 

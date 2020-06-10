@@ -21,7 +21,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { StyleSheet, Animated } from 'react-native';
 import ButtonLoadingIndicator from './ButtonLoadingIndicator';
@@ -42,10 +41,11 @@ type Props = {
 	offButtonColor?: string,
 	iconOffColor?: string,
 
-	style: Object | number | Array<any>,
+	style: Array<any> | Object,
 	onPress: () => void,
 	intl: Object,
-	iconStyle: Object | number | Array<any>,
+	iconStyle: Object | Array<any>,
+	disableActionIndicator?: boolean,
 };
 
 type State = {
@@ -106,6 +106,7 @@ class DimmerOffButton extends View {
 			local,
 			offButtonColor,
 			iconOffColor,
+			disableActionIndicator,
 		} = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
@@ -124,7 +125,7 @@ class DimmerOffButton extends View {
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon="off" style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
-					methodRequested === 'TURNOFF' ?
+					!disableActionIndicator && methodRequested === 'TURNOFF' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						: null
 				}
@@ -133,11 +134,11 @@ class DimmerOffButton extends View {
 	}
 
 	fadeIn() {
-		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 1, duration: 100, useNativeDriver: true }).start();
 	}
 
 	fadeOut() {
-		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100 }).start();
+		Animated.timing(this.state.fadeAnim, { toValue: 0.5, duration: 100, useNativeDriver: true }).start();
 	}
 }
 
@@ -173,15 +174,9 @@ const styles = StyleSheet.create({
 	},
 });
 
-DimmerOffButton.propTypes = {
-	isInState: PropTypes.string,
-	enabled: PropTypes.bool,
-	fontSize: PropTypes.number,
-	methodRequested: PropTypes.string,
-};
-
 DimmerOffButton.defaultProps = {
 	enabled: true,
+	disableActionIndicator: false,
 };
 
 module.exports = DimmerOffButton;

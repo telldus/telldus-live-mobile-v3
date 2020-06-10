@@ -2,15 +2,17 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "28.0.3"
+        buildToolsVersion = "29.0.3"
         minSdkVersion = 21
-        compileSdkVersion = 28
-        targetSdkVersion = 28
-        supportLibVersion = "28.0.0"
-        googlePlayServicesVersion = "16.1.0"
+        compileSdkVersion = 29
+        targetSdkVersion = 29
+        supportLibVersion = "29.0.0"
+        googlePlayServicesVersion = "17.0.0" // NOTE: Used by react-native-geolocation-service to set version of com.google.android.gms:play-services-location. Check before updating, else will cause build error.
         androidMapsUtilsVersion = "0.5+"
         googlePlayServicesAuthVersion = "17.0.0"
         googlePlayServicesIidVersion = "16.0.1"
+        googlePlayServicesLocationVersion = "17.0.0"
+        appCompatVersion = "1.0.2" // IMPORTANT:  For new AndroidX compatibility.
     }
     repositories {
         google()
@@ -23,7 +25,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.4.2")
+        classpath("com.android.tools.build:gradle:3.5.2")
         classpath 'com.google.gms:google-services:4.2.0'
         classpath 'io.fabric.tools:gradle:1.26.1'
         classpath 'com.huawei.agconnect:agcp:1.2.1.301'
@@ -45,7 +47,7 @@ allprojects {
         }
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }
+        maven { url 'https://www.jitpack.io' }
         maven {
             url ("http://developer.huawei.com/repo/")
         }

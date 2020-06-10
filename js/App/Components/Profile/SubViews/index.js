@@ -29,6 +29,8 @@ import ContactSupportBlock from './ContactSupportBlock';
 import PrivacyPolicyLink from './PrivacyPolicyLink';
 import EulaLink from './EulaLink';
 import WidgetFontSizeSetting from './WidgetFontSizeSetting';
+import SwitchOrAddAccountButton from './SwitchOrAddAccountButton';
+import ThemesBlock from './ThemesBlock';
 
 module.exports = {
 	EditNameBlock,
@@ -38,4 +40,6 @@ module.exports = {
 	PrivacyPolicyLink,
 	EulaLink,
 	WidgetFontSizeSetting,
+	SwitchOrAddAccountButton,
+	ThemesBlock,
 };

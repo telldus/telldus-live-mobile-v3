@@ -60,7 +60,7 @@ type Props = {
 	gradientColorToOverride?: string,
 
 	intl: Object,
-	modesCoverStyle: number | Array<any> | Object,
+	modesCoverStyle: Array<any> | Object,
 	deviceSetStateThermostat: (deviceId: number, mode: string, temperature?: number, scale?: 0 | 1, changeMode?: 0 | 1, requestedState: number) => Promise<any>,
 };
 
@@ -544,7 +544,9 @@ render(): Object | null {
 				<EmptyView/>
 			}
 			{!hideTemperatureControl ?
-				<View style={cover}>
+				<View
+					level={2}
+					style={cover}>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
 							<MaterialIcons
@@ -693,7 +695,6 @@ getStyles(): Object {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			marginTop: padding,
 			marginHorizontal: padding,
 			paddingHorizontal: padding * 2,

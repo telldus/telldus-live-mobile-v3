@@ -46,6 +46,7 @@ type Props = {
 	appLayout: Object,
 	location: Object,
 	email: string,
+	route: Object,
 
 	toggleDialogueBox: (Object) => void,
 	onDidMount: Function,
@@ -128,7 +129,7 @@ onChangeTextEmail(emailValue: string) {
 }
 
 contactSupport() {
-	const { actions, location, navigation, intl } = this.props;
+	const { actions, location, intl, route } = this.props;
 	const { formatMessage } = intl;
 	const { id } = location;
 	const { value, isLoading, routerValue, emailValue } = this.state;
@@ -144,8 +145,10 @@ contactSupport() {
 		NetInfo.fetch().then((connectionInfo: Object) => {
 			const { type, effectiveType } = connectionInfo;
 
-			const failedTests = navigation.getParam('failedTests', 'null');
-			const testCount = navigation.getParam('testCount', 1);
+			const {
+				failedTests = null,
+				testCount = 1,
+			} = route.params || {};
 			const ticketData = {
 				message: value,
 				failedTests,
@@ -236,11 +239,15 @@ render(testData: Object): Object {
 
 	return (
 		<>
-			<View style={container}>
+			<View
+				level={2}
+				style={container}>
 				<Text style={title}>
 					{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
 				</Text>
-				<Text style={body}>
+				<Text
+					level={6}
+					style={body}>
 					{formatMessage(i18n.messageCreateSupportTicket)}
 				</Text>
 				<Text style={label}>
@@ -288,9 +295,13 @@ render(testData: Object): Object {
 					returnKeyType={'done'}
 				/>
 			</View>
-			{descLen < 50 && <View style={infoContainer}>
+			{descLen < 50 && <View
+				level={2}
+				style={infoContainer}>
 				<IconTelldus icon={'info'} style={statusIconStyle}/>
-				<Text style={infoTextStyle}>
+				<Text
+					level={5}
+					style={infoTextStyle}>
 					{formatMessage(i18n.supportTicketDescriptionInfo)}
 				</Text>
 			</View>
@@ -310,7 +321,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor, eulaContentColor } = Theme.Core;
+	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -322,7 +333,6 @@ getStyles(appLayout: Object): Object {
 	return {
 		brandSecondary,
 		container: {
-			backgroundColor: '#fff',
 			...shadow,
 			marginVertical: padding,
 			padding: padding * 2,
@@ -332,7 +342,6 @@ getStyles(appLayout: Object): Object {
 			fontSize: fontSizeTitle,
 		},
 		body: {
-			color: rowTextColor,
 			fontSize: fontSizeBody,
 			marginTop: 10,
 		},
@@ -355,7 +364,6 @@ getStyles(appLayout: Object): Object {
 			flexDirection: 'row',
 			marginBottom: padding,
 			padding: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -368,7 +376,6 @@ getStyles(appLayout: Object): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: fontSizeBody,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: padding,
 		},

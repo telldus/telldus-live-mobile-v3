@@ -30,9 +30,9 @@ import i18n from '../../../Translations/common';
 type Props = {
 	id: string,
 	command: number,
-	style?: Object | number | Array<any>,
+	style?: Array<any> | Object,
 	onLearn: (string, number) => void,
-	labelStyle?: Object | number | Array<any>,
+	labelStyle?: Array<any> | Object,
 	disabled?: boolean,
 };
 

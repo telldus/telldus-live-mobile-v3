@@ -30,7 +30,7 @@ import Theme from '../../../Theme';
 
 type Props = {
 	color?: string,
-	style?: Object | number | Array<any>,
+	style?: Array<any> | Object,
 };
 
 type DefaultProps = {
@@ -80,10 +80,12 @@ class ButtonLoadingIndicator extends View {
 			Animated.timing(this.state.fadeAnim, {
 				toValue: 1,
 				duration: 500,
+				useNativeDriver: true,
 			}),
 			Animated.timing(this.state.fadeAnim, {
 				toValue: 0,
 				duration: 500,
+				useNativeDriver: true,
 			}),
 		]).start((event: Object) => {
 			if (event.finished && this.blinking) {

@@ -5,6 +5,7 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "row",
       "justifyContent": "center",
     }
@@ -15,6 +16,7 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
     style={
       Array [
         Object {
+          "backgroundColor": "transparent",
           "color": "#8e8e93",
           "fontSize": 26.250000000000004,
           "marginTop": 20.83275,
@@ -27,7 +29,6 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
     accessibilityLabel=" , , "
     accessible={true}
     focusable={true}
-    isTVSelectable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
     onResponderMove={[Function]}
@@ -52,29 +53,21 @@ exports[`renders FadeSetting when checked using Snapshots 1`] = `
       allowFontScaling={false}
       importantForAccessibility="yes"
       style={
-        Array [
-          Object {
-            "color": "#999",
-            "fontSize": 30,
-          },
-          Object {
-            "backgroundColor": "#1b365d",
-            "borderColor": "#1b365d",
-            "borderRadius": 2,
-            "borderWidth": 1,
-            "color": "#fff",
-            "fontSize": 41,
-            "marginLeft": 20.83275,
-            "marginTop": 20.83275,
-            "overflow": "hidden",
-            "padding": 2,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-          },
-          Object {
-            "fontFamily": "telldusicons",
-          },
-        ]
+        Object {
+          "backgroundColor": "#1b365d",
+          "borderColor": "#1b365d",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "#fff",
+          "fontFamily": "telldusicons",
+          "fontSize": 41,
+          "marginLeft": 20.83275,
+          "marginTop": 20.83275,
+          "overflow": "hidden",
+          "padding": 2,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        }
       }
     >
       checkmark
@@ -88,6 +81,7 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "row",
       "justifyContent": "center",
     }
@@ -98,6 +92,7 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
     style={
       Array [
         Object {
+          "backgroundColor": "transparent",
           "color": "#8e8e93",
           "fontSize": 26.250000000000004,
           "marginTop": 20.83275,
@@ -110,7 +105,6 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
     accessibilityLabel=" , , "
     accessible={true}
     focusable={true}
-    isTVSelectable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
     onResponderMove={[Function]}
@@ -135,29 +129,21 @@ exports[`renders FadeSetting when unchecked using Snapshots 1`] = `
       allowFontScaling={false}
       importantForAccessibility="yes"
       style={
-        Array [
-          Object {
-            "color": "#999",
-            "fontSize": 30,
-          },
-          Object {
-            "backgroundColor": "#fff",
-            "borderColor": "#1b365d",
-            "borderRadius": 2,
-            "borderWidth": 1,
-            "color": "transparent",
-            "fontSize": 41,
-            "marginLeft": 20.83275,
-            "marginTop": 20.83275,
-            "overflow": "hidden",
-            "padding": 2,
-            "textAlign": "center",
-            "textAlignVertical": "center",
-          },
-          Object {
-            "fontFamily": "telldusicons",
-          },
-        ]
+        Object {
+          "backgroundColor": "#fff",
+          "borderColor": "#1b365d",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "color": "transparent",
+          "fontFamily": "telldusicons",
+          "fontSize": 41,
+          "marginLeft": 20.83275,
+          "marginTop": 20.83275,
+          "overflow": "hidden",
+          "padding": 2,
+          "textAlign": "center",
+          "textAlignVertical": "center",
+        }
       }
     >
       checkmark

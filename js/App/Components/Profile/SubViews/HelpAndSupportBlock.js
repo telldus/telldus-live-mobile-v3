@@ -37,6 +37,7 @@ import {
 	Text,
 	IconTelldus,
 } from '../../../../BaseComponents';
+
 import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
@@ -97,9 +98,11 @@ const HelpAndSupportBlock = (props: Object): Object => {
 
 			return (
 				<TouchableOpacity onPress={onPress} key={`${i}`}>
-					<View style={[coverTwoStyle, {
-						marginLeft: i === 0 ? 0 : padding / 2,
-					}]}>
+					<View
+						level={2}
+						style={[coverTwoStyle, {
+							marginLeft: i === 0 ? 0 : padding / 2,
+						}]}>
 						<IconTelldus icon={icon} style={iconStyle}/>
 						<Text style={textStyle}>
 							{text}
@@ -113,11 +116,15 @@ const HelpAndSupportBlock = (props: Object): Object => {
 
 	return (
 		<View>
-			<View style={coverOneStyle}>
+			<View
+				level={2}
+				style={coverOneStyle}>
 				<Text style={titleStyle}>
 					{formatMessage(i18n.labelHelpAndSupport)}
 				</Text>
-				<Text style={bodyStyle}>
+				<Text
+					level={4}
+					style={bodyStyle}>
 					{formatMessage(i18n.contentHelpAndSupport)}
 				</Text>
 			</View>
@@ -141,7 +148,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		padding,
 		coverOneStyle: {
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -157,7 +163,6 @@ const getStyles = (appLayout: Object): Object => {
 		bodyStyle: {
 			fontSize,
 			textAlign: 'center',
-			color: Theme.Core.rowTextColor,
 			marginTop: 10,
 		},
 		blocksCoverStyle: {
@@ -165,7 +170,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		coverTwoStyle: {
 			width: blockWidth,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			justifyContent: 'center',
 			alignItems: 'center',

@@ -33,7 +33,6 @@ import {
 import { connect } from 'react-redux';
 import { intlShape, injectIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
-import { ifIphoneX } from 'react-native-iphone-x-helper';
 
 
 import { View, FloatingButton, Text, StyleSheet, SafeAreaView, NavigationHeader } from '../../../BaseComponents';
@@ -79,9 +78,9 @@ class ChangeLogNavigator extends View {
 	animatedX: Object;
 	animatedOpacity: Object;
 
-	startAnimationX: (number) => void;
+	startAnimationX: (number) => Object;
 	startAnimationParallel: (number) => void;
-	startAnimationOpacity: () => void;
+	startAnimationOpacity: () => Object;
 
 	onRequestClose: () => void;
 
@@ -182,17 +181,19 @@ class ChangeLogNavigator extends View {
 		]).start();
 	}
 
-	startAnimationX(value: number) {
-		Animated.timing(this.animatedX, {
+	startAnimationX(value: number): Object {
+		return Animated.timing(this.animatedX, {
 			toValue: value,
 			duration: 300,
+			useNativeDriver: true,
 		}).start();
 	}
 
-	startAnimationOpacity() {
-		Animated.timing(this.animatedOpacity, {
+	startAnimationOpacity(): Object {
+		return Animated.timing(this.animatedOpacity, {
 			toValue: 1,
 			duration: 300,
+			useNativeDriver: true,
 		}).start();
 	}
 
@@ -277,7 +278,7 @@ class ChangeLogNavigator extends View {
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.isIos ? this.noOP : this.onRequestClose}
 				supportedOrientations={['portrait', 'landscape']}>
-				<SafeAreaView backgroundColor={Theme.Core.appBackground} onLayout={onLayout}>
+				<SafeAreaView onLayout={onLayout}>
 					<NavigationHeader showLeftIcon={false} topMargin={this.isIos} forceHideStatus={!this.isIos}/>
 					<ChangeLogPoster h1={h1} h2={h2} appLayout={appLayout}/>
 					<ScrollView>
@@ -335,7 +336,6 @@ class ChangeLogNavigator extends View {
 		const {
 			brandSecondary,
 			maxSizeFloatingButton,
-			iPhoneXbg,
 			shadow: themeShadow,
 			paddingFactor,
 		} = Theme.Core;
@@ -369,7 +369,7 @@ class ChangeLogNavigator extends View {
 				justifyContent: 'center',
 				marginBottom: 10,
 				height: buttonSize,
-				...ifIphoneX({ flex: 1, backgroundColor: iPhoneXbg }, { flex: 1 }),
+				flex: 1,
 			},
 			stepIndicator: {
 				height: stepIndicatorSize,
@@ -429,7 +429,7 @@ const styles = StyleSheet.create({
 	buttonCover: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1 }),
+		flex: 0,
 	},
 	buttonIconStyle: {
 		transform: [{rotateZ: '180deg'}],

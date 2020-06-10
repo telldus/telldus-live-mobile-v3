@@ -29,14 +29,17 @@ import { getJobs } from './Jobs';
 import { getDevices } from './Devices';
 import { getSensors } from './Sensors';
 import { getUserProfile } from './Login';
+import {
+	updateAllAccountsInfo,
+} from './User';
 
 import { AppState } from 'react-native';
 
 type Tab = 'Sensors' | 'Scheduler' | 'Gateways';
 
 function syncLiveApiOnForeground(): ThunkAction {
-	return (dispatch: Function) => {
-		AppState.addEventListener('change', (appState: string) => {
+	return (dispatch: Function): Function => {
+		function _handleAppStateChange(appState: string) {
 			if (appState === 'active') {
 				console.log('app active, fetching devices');
 				dispatch(getUserProfile());
@@ -44,8 +47,14 @@ function syncLiveApiOnForeground(): ThunkAction {
 				dispatch(getDevices());
 				dispatch(getSensors());
 				dispatch(getJobs());
+				dispatch(updateAllAccountsInfo());
 			}
-		});
+		}
+
+		AppState.addEventListener('change', _handleAppStateChange);
+		return (): Function => {
+			AppState.removeEventListener('change', _handleAppStateChange);
+		};
 	};
 }
 

@@ -38,6 +38,7 @@ import i18n from '../../../Translations/common';
 
 type Props = {
 	currentScreen: string,
+	route: Object,
 
     navigation: Object,
     appLayout: Object,
@@ -89,9 +90,9 @@ getPadding(): number {
 }
 
 onChooseBrand = ({deviceBrand}: Object) => {
-	const { navigation } = this.props;
+	const { navigation, route } = this.props;
 
-	const prevParams = navigation.state.params || {};
+	const prevParams = route.params || {};
 	navigation.push('SelectModel433', {
 		...prevParams,
 		deviceBrand,

@@ -178,7 +178,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 	if (BELL) {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline : styles.itemIconContainerOn;
 
-		buttons.unshift(<BellDashboardTile key={4} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
+		buttons.unshift(<BellDashboardTile {...this.props} key={4} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -191,7 +191,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'STOP' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<NavigationalDashboardTile key={1} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
+		buttons.unshift(<NavigationalDashboardTile {...this.props} key={1} containerStyle={[styles.buttonsContainerStyle, {width}]}
 			showStopButton={showStopButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
@@ -205,7 +205,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<DimmerDashboardTile key={2} {...this.props} containerStyle={[styles.buttonsContainerStyle, {width}]}
+		buttons.unshift(<DimmerDashboardTile {...this.props} key={2} containerStyle={[styles.buttonsContainerStyle, {width}]}
 			showSlider={showSlider} setScrollEnabled={setScrollEnabled} onPressDimButton={onPressDimButton}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
@@ -219,7 +219,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={3} {...this.props} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
+		buttons.unshift(<ToggleDashboardTile {...this.props} key={3} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -262,7 +262,8 @@ getButtonsInfo(item: Object, styles: Object): Object {
 			mode === 'off' ? styles.itemIconContainerOff : styles.itemIconContainerOn;
 
 		buttons.unshift(<ThermostatButtonDB
-			key={8} {...this.props}
+			{...this.props}
+			key={8}
 			containerStyle={[
 				styles.buttonsContainerStyle,
 				{
@@ -279,7 +280,7 @@ getButtonsInfo(item: Object, styles: Object): Object {
 		const iconContainerStyle = !isOnline ? styles.itemIconContainerOffline :
 			(isInState === 'TURNOFF' ? styles.itemIconContainerOff : styles.itemIconContainerOn);
 
-		buttons.unshift(<ToggleDashboardTile key={5} {...this.props} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
+		buttons.unshift(<ToggleDashboardTile {...this.props} key={5} actionIcons={actionIcons} containerStyle={[styles.buttonsContainerStyle, {width: tileWidth}]}/>);
 		buttonsInfo.unshift({
 			iconContainerStyle: iconContainerStyle,
 			iconsName,
@@ -355,7 +356,7 @@ getInfo(): null | string {
 
 	const {
 		THERMOSTAT,
-	} = item.supportedMethods;
+	} = item.supportedMethods || {};
 
 	let info = typeof powerConsumed === 'number' || typeof powerConsumed === 'string' ? `${intl.formatNumber(powerConsumed, {maximumFractionDigits: 1})}W` : null;
 	if (THERMOSTAT && (typeof currentTemp === 'number' || typeof currentTemp === 'string')) {

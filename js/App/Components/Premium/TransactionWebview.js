@@ -22,7 +22,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	useCallback,
+} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { WebView } from 'react-native-webview';
 
@@ -31,42 +33,41 @@ import {
 	NavigationHeader,
 } from '../../../BaseComponents';
 
-import Theme from '../../Theme';
-
 import {
 	getUserProfile,
 } from '../../Actions/Login';
 
 const TransactionWebview = (props: Object): Object => {
-	const { navigation } = props;
+	const { navigation, route } = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		container,
 	} = getStyles(layout);
 
-	const uri = navigation.getParam('uri', '');
+	const { params = {} } = route;
+	const {
+		uri = '',
+	} = params;
 
 	const dispatch = useDispatch();
-	function onShouldStartLoadWithRequest(request: Object): boolean {
+	const onShouldStartLoadWithRequest = useCallback((request: Object): boolean => {
 		if (request.url.includes('telldus-live-mobile-common')) {
-			const { params } = navigation.state;
-			navigation.navigate({
-				routeName: 'PostPurchaseScreen',
-				key: 'PostPurchaseScreen',
-				params: {
-					...params,
-					success: request.url.includes('status=success'),
-				},
+			navigation.navigate('PostPurchaseScreen', {
+				...params,
+				success: request.url.includes('status=success'),
 			});
 			dispatch(getUserProfile());
 			return false;
 		}
 		return true;
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [params]);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeader
 				navigation={navigation}
 				showLeftIcon={true}/>
@@ -83,7 +84,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 	};
 };

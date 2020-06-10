@@ -23,7 +23,12 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, BackHandler, Platform } from 'react-native';
+import {
+	StyleSheet,
+	BackHandler,
+	Platform,
+	TouchableOpacity,
+} from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import View from './View';
@@ -34,8 +39,8 @@ import { shouldUpdate } from '../App/Lib';
 
 type InfoButton = {
 	onPress?: Function,
-	infoButtonContainerStyle?: Array<any> | Object | number,
-	infoButtonStyle?: Array<any> | Object | number,
+	infoButtonContainerStyle?: Array<any> | Object,
+	infoButtonStyle?: Array<any> | Object,
 };
 
 type Props = {
@@ -48,12 +53,17 @@ type Props = {
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
+	onPressPoster?: Function,
 
 	navigation: Object,
     handleBackPress: () => boolean,
     intl: Object,
-	posterCoverStyle?: Array<any> | Object | number,
+	posterCoverStyle?: Array<any> | Object,
 	goBack: () => void,
+	showPoster?: boolean,
+	rightButton?: Object,
+	extraData?: Object,
+	onPressLogo?: Function,
 };
 
 type DefaultProps = {
@@ -61,6 +71,7 @@ type DefaultProps = {
 	align: 'right' | 'center',
 	showLeftIcon: boolean,
 	leftIcon: string,
+	showPoster: boolean,
 };
 
 class NavigationHeaderPoster extends React.Component<Props, null> {
@@ -71,6 +82,7 @@ static defaultProps: DefaultProps = {
 	align: 'center',
 	showLeftIcon: true,
 	leftIcon: Platform.OS === 'ios' ? 'angle-left' : 'arrow-back',
+	showPoster: true,
 };
 
 goBack: () => void;
@@ -104,6 +116,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'h2',
 		'h1',
 		'appLayout',
+		'showPoster',
+		'extraData',
 	]);
 }
 
@@ -132,7 +146,11 @@ render(): Object {
 		showLeftIcon,
 		leftIcon,
 		goBack,
+		showPoster,
 		align,
+		onPressPoster,
+		rightButton,
+		onPressLogo,
 	} = this.props;
 
 	return (
@@ -141,19 +159,28 @@ render(): Object {
 				navigation={navigation}
 				showLeftIcon={showLeftIcon}
 				leftIcon={leftIcon}
-				goBack={goBack}/>
-			<PosterWithText
-				appLayout={appLayout}
-				align={align}
-				icon={icon}
-				h1={h1}
-				h2={h2}
-				showBackButton={showBackButton}
-				showLeftIcon={showLeftIcon}
-				navigation={navigation}
-				infoButton={infoButton}
-				leftIcon={leftIcon}
-				posterCoverStyle={posterCoverStyle}/>
+				goBack={goBack}
+				rightButton={rightButton}
+				onPressLogo={onPressLogo}/>
+			{showPoster && (
+				<TouchableOpacity
+					onPress={onPressPoster}
+					disabled={!onPressPoster}
+					activeOpacity={1}>
+					<PosterWithText
+						appLayout={appLayout}
+						align={align}
+						icon={icon}
+						h1={h1}
+						h2={h2}
+						showBackButton={showBackButton}
+						showLeftIcon={showLeftIcon}
+						navigation={navigation}
+						infoButton={infoButton}
+						leftIcon={leftIcon}
+						posterCoverStyle={posterCoverStyle}/>
+				</TouchableOpacity>
+			)}
 		</View>
 	);
 }

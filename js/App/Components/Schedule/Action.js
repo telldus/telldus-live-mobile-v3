@@ -54,9 +54,6 @@ export default class Action extends View<null, ScheduleProps, State> {
 		const { formatMessage } = intl;
 		this.h1 = isEditMode() ? formatMessage(i18n.labelAction) : formatMessage(i18n.labelAction);
 		this.h2 = formatMessage(i18n.posterChooseAction);
-		this.infoButton = {
-			tmp: true, // TODO: fill with real fields
-		};
 
 		let { type } = this.getDeviceInfo(schedule.deviceId), methods = [];
 
@@ -95,8 +92,8 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	componentDidMount() {
-		const { h1, h2, infoButton } = this;
-		this.props.onDidMount(h1, h2, infoButton);
+		const { h1, h2 } = this;
+		this.props.onDidMount(h1, h2);
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -112,7 +109,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 			navigation.goBack();
 		} else {
 			navigation.navigate({
-				routeName: 'Time',
+				name: 'Time',
 				key: 'Time',
 			});
 		}
@@ -123,16 +120,16 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (isEditMode()) {
 			navigation.navigate({
-				routeName: 'ActionDim',
+				name: 'ActionDim',
 				key: 'ActionDim',
 				params: {
-					actionKey: navigation.state.key,
+					actionKey: 'Action',
 					editMode: true,
 				},
 			});
 		} else {
 			navigation.navigate({
-				routeName: 'ActionDim',
+				name: 'ActionDim',
 				key: 'ActionDim',
 			});
 		}
@@ -142,16 +139,16 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (isEditMode()) {
 			navigation.navigate({
-				routeName: 'ActionRGB',
+				name: 'ActionRGB',
 				key: 'ActionRGB',
 				params: {
-					actionKey: navigation.state.key,
+					actionKey: 'Action',
 					editMode: true,
 				},
 			});
 		} else {
 			navigation.navigate({
-				routeName: 'ActionRGB',
+				name: 'ActionRGB',
 				key: 'ActionRGB',
 			});
 		}
@@ -162,16 +159,16 @@ export default class Action extends View<null, ScheduleProps, State> {
 
 		if (isEditMode()) {
 			navigation.navigate({
-				routeName: 'ActionThermostat',
+				name: 'ActionThermostat',
 				key: 'ActionThermostat',
 				params: {
-					actionKey: navigation.state.key,
+					actionKey: 'Action',
 					editMode: true,
 				},
 			});
 		} else {
 			navigation.navigate({
-				routeName: 'ActionThermostat',
+				name: 'ActionThermostat',
 				key: 'ActionThermostat',
 			});
 		}
@@ -189,7 +186,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 		return index.toString();
 	}
 
-	render(): React$Element<FlatList> {
+	render(): Object {
 		const padding = this.getPadding();
 		return (
 			<FlatList

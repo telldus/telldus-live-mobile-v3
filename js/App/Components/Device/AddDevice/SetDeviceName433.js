@@ -37,6 +37,9 @@ import {
 import {
 	DeviceSettings,
 } from '../Common';
+import {
+	withTheme,
+} from '../../HOC/withTheme';
 
 import {
 	setWidgetParamsValue,
@@ -61,6 +64,8 @@ const SetDeviceName433 = (props: Object): Object => {
 		intl,
 		appLayout,
 		navigation,
+		route,
+		colors,
 	} = props;
 	const { formatMessage } = intl;
 
@@ -74,7 +79,9 @@ const SetDeviceName433 = (props: Object): Object => {
 	const { addDevice433 = {} } = useSelector((state: Object): Object => state.addDevice);
 	const { widgetParams433Device = {} } = addDevice433;
 
-	const deviceInfo = navigation.getParam('deviceInfo', {});
+	const {
+		deviceInfo = {},
+	} = route.params || {};
 	const { widget, configuration, devicetype } = deviceInfo;
 
 	const dispatch = useDispatch();
@@ -116,15 +123,11 @@ const SetDeviceName433 = (props: Object): Object => {
 				});
 				return;
 			}
-			const prevParams = navigation.state.params || {};
-			navigation.navigate({
-				routeName: 'Include433',
-				key: 'Include433',
-				params: {
-					...prevParams,
-					deviceName: name,
-					widgetParams433Device,
-				},
+			const prevParams = route.params || {};
+			navigation.navigate('Include433', {
+				...prevParams,
+				deviceName: name,
+				widgetParams433Device,
 			});
 		})();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,7 +140,10 @@ const SetDeviceName433 = (props: Object): Object => {
 		textFieldCoverStyle,
 		labelStyle,
 		accessoryiconStyle,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
 	const renderLeftAccessory = useCallback((): Function => {
 		return ((): Object => {
@@ -184,10 +190,17 @@ const SetDeviceName433 = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		card,
+	} = colors;
 
 	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
 
@@ -205,7 +218,7 @@ const getStyles = (appLayout: Object): Object => {
 		textFieldCoverStyle: {
 			width: blockWidth,
 			marginTop: padding,
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...shadow,
 			marginHorizontal: padding,
 			padding,
@@ -230,4 +243,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(SetDeviceName433);
+export default React.memo<Object>(withTheme(SetDeviceName433));

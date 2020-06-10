@@ -49,6 +49,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	rows: Array<Object>,
 	currentScreen: string,
+	route: Object,
 
     navigation: Object,
     appLayout: Object,
@@ -84,7 +85,7 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'InitialScreenAddSensor';
+	return nextProps.currentScreen === 'SensorsListAddSensor';
 }
 
 keyExtractor(item: Object): string {
@@ -116,8 +117,8 @@ getPadding(): number {
 }
 
 onSelectSensor = (sensor: Object) => {
-	const { navigation } = this.props;
-	const prevParams = navigation.state.params || {};
+	const { navigation, route } = this.props;
+	const prevParams = route.params || {};
 	navigation.navigate('SetSensorName', {
 		sensor,
 		...prevParams,
@@ -206,7 +207,7 @@ const getRows433Sensors = createSelector(
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
 
-	const gateway = ownProps.navigation.getParam('gateway', {});
+	const { gateway = {}} = ownProps.route.params || {};
 
 	return {
 		rows: getRows433Sensors({...state, gateway}),

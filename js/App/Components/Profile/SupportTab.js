@@ -23,7 +23,7 @@
 'use strict';
 
 import React, { useEffect, useState } from 'react';
-import { ScrollView, Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { Linking, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
 const forge = require('node-forge');
@@ -33,8 +33,8 @@ import {
 	View,
 	Text,
 	TouchableButton,
-	TabBar,
 	IconTelldus,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	HelpAndSupportBlock,
@@ -45,7 +45,6 @@ import {
 } from '../../../Config';
 import Theme from '../../Theme';
 import LayoutAnimations from '../../Lib/LayoutAnimations';
-
 import {
 	getSupportTweets,
 } from '../../Actions/App';
@@ -121,10 +120,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	}, []);
 
 	function onPress() {
-		navigation.navigate({
-			routeName: 'RequestSupportScreen',
-			key: 'RequestSupportScreen',
-		});
+		navigation.navigate('RequestSupportScreen');
 	}
 
 	function openLink(url: string) {
@@ -148,9 +144,11 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 
 		return (
 			<TouchableOpacity onPress={onPressTweet} key={`${i}`}>
-				<View style={[tweetCoverStyle, {
-					marginTop: i === 0 ? padding : padding / 2,
-				}]}>
+				<View
+					level={2}
+					style={[tweetCoverStyle, {
+						marginTop: i === 0 ? padding : padding / 2,
+					}]}>
 					<IconTelldus icon={text.includes('#ok') ? 'checkmark' : 'info'} style={[
 						statusIconStyle, {
 							color: text.includes('#ok') ? Theme.Core.brandSuccess : Theme.Core.brandDanger,
@@ -167,7 +165,9 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 								{formatTime(created_at)}
 							</Text>
 						</Text>
-						<Text style={tweetTextStyle}>
+						<Text
+							level={3}
+							style={tweetTextStyle}>
 							{text}
 						</Text>
 					</View>
@@ -177,8 +177,12 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 	});
 
 	return (
-		<ScrollView style={container}>
-			<View style={body}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
+			<View
+				level={3}
+				style={body}>
 				{
 					tweets
 				}
@@ -192,7 +196,7 @@ const SupportTab: Object = React.memo<Object>((props: Object): Object => {
 					style={buttonStyle}
 				/>
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 
@@ -208,7 +212,6 @@ const getStyles = (appLayout: Object): Object => {
 		padding,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,
@@ -223,7 +226,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		tweetCoverStyle: {
 			flexDirection: 'row',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: padding * 2,
 			justifyContent: 'space-between',
@@ -236,7 +238,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginRight: padding * 2,
 		},
 		tweetTextStyle: {
-			color: Theme.Core.rowTextColor,
 			fontSize: fontSize * 0.8,
 		},
 		tweetTextCover: {
@@ -248,21 +249,5 @@ const getStyles = (appLayout: Object): Object => {
 		},
 	};
 };
-
-SupportTab.navigationOptions = ({ navigation }: Object): Object => ({
-	tabBarLabel: ({ tintColor }: Object): Object => (
-		<TabBar
-			icon="faq"
-			tintColor={tintColor}
-			label={i18n.labelSupport}
-			accessibilityLabel={i18n.labelAccessibleSupportTab}/>
-	),
-	tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-		navigation.navigate({
-			routeName: 'SupportTab',
-			key: 'SupportTab',
-		});
-	},
-});
 
 export default SupportTab;

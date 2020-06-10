@@ -24,7 +24,6 @@ import React from 'react';
 import {
 	AccessibilityInfo,
 	UIManager,
-	Keyboard,
 	Platform,
 	StatusBar,
 } from 'react-native';
@@ -67,15 +66,11 @@ type Props = {
 	locale: string,
 	deviceId?: string,
 	dialogueData: Object,
+	cachedLayout: Object,
 };
 
-type State = {
-	keyboard: boolean,
-};
-
-class App extends React.Component<Props, State> {
+class App extends React.Component<Props> {
 	props: Props;
-	state: State;
 
 	onLayout: (Object) => void;
 	onNotification: Function | null;
@@ -87,11 +82,6 @@ class App extends React.Component<Props, State> {
 	onPressDialogueNegative: () => void;
 	onPressHeader: () => void;
 
-	_keyboardDidShow: () => void;
-	_keyboardDidHide: () => void;
-	keyboardDidShowListener: Object;
-	keyboardDidHideListener: Object;
-
 	onTokenRefreshListener: null | Function;
 
 	timeoutToCallCallback: any;
@@ -99,29 +89,17 @@ class App extends React.Component<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.onLayout = this.onLayout.bind(this);
 		this.setCalendarLocale = this.setCalendarLocale.bind(this);
-
-		this.state = {
-			keyboard: false,
-		};
 
 		this.setCalendarLocale();
 		if (Platform.OS === 'android') {
 			UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 		}
 
-		this.toggleDialogueBox = this.toggleDialogueBox.bind(this);
 		this.closeDialogue = this.closeDialogue.bind(this);
 		this.onPressDialoguePositive = this.onPressDialoguePositive.bind(this);
 		this.onPressDialogueNegative = this.onPressDialogueNegative.bind(this);
 		this.onPressHeader = this.onPressHeader.bind(this);
-
-		this._keyboardDidShow = this._keyboardDidShow.bind(this);
-		this._keyboardDidHide = this._keyboardDidHide.bind(this);
-
-		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 
 		this.timeoutToCallCallback = null;
 
@@ -130,7 +108,7 @@ class App extends React.Component<Props, State> {
 
 	componentDidMount() {
 		let { dispatch, deviceId } = this.props;
-		AccessibilityInfo.fetch().done((isEnabled: boolean) => {
+		AccessibilityInfo.isScreenReaderEnabled().then((isEnabled: boolean) => {
 			dispatch(setAccessibilityInfo(isEnabled));
 			dispatch(setAccessibilityListener(setAccessibilityInfo));
 		});
@@ -174,33 +152,32 @@ class App extends React.Component<Props, State> {
 		  'change',
 		  setAccessibilityInfo
 		);
-		this.keyboardDidShowListener.remove();
-		this.keyboardDidHideListener.remove();
 		clearTimeout(this.timeoutToCallCallback);
 		if (this.clearListenerNetWorkInfo) {
 			this.clearListenerNetWorkInfo();
 		}
 	}
 
-	_keyboardDidShow() {
-		this.setState({
-			keyboard: true,
-		});
-	  }
+	onLayout = (ev: Object) => {
+		const { cachedLayout, dispatch } = this.props;
+		const { width } = cachedLayout;
 
-	_keyboardDidHide() {
-		this.setState({
-			keyboard: false,
-		});
-	}
+		const { layout } = ev.nativeEvent;
 
-	onLayout(ev: Object) {
-		if (!this.state.keyboard) {
-			this.props.dispatch(setAppLayout(ev.nativeEvent.layout));
+		if (!layout || !layout.height) {
+			return;
+		}
+
+		// We use app layout basically for styling, and we need to update
+		// Only when orientation changes.
+		// This conditional check will prevent layout update when keyboard
+		// is shown or any other event.
+		if (layout.width !== width) {
+			dispatch(setAppLayout(ev.nativeEvent.layout));
 		}
 	}
 
-	toggleDialogueBox(dialogueData: Object) {
+	toggleDialogueBox = (dialogueData: Object) => {
 		const {
 			show,
 			...others
@@ -282,12 +259,17 @@ class App extends React.Component<Props, State> {
 		return (
 			<SafeAreaView onLayout={this.onLayout} backgroundColor={Theme.Core.appBackground}>
 				{hasNotLoggedIn ?
-					<PreLoginNavigator toggleDialogueBox={this.toggleDialogueBox}/>
+					<PreLoginNavigator
+						screenProps={{
+							source: 'prelogin',
+							toggleDialogueBox: this.toggleDialogueBox,
+						}}/>
 					:
 					<PostLoginNavigatorCommon
 						{...this.props}
 						toggleDialogueBox={this.toggleDialogueBox}
-						showChangeLog={showChangeLog}/>
+						showChangeLog={showChangeLog}
+						onLayout={this.onLayout}/>
 				}
 				<ChangeLogNavigator
 					changeLogVersion={changeLogVersion}
@@ -319,6 +301,7 @@ function mapStateToProps(store: Object): Object {
 	} = store.user;
 	let {
 		changeLogVersion: prevChangeLogVersion,
+		layout = {},
 	} = store.app;
 
 	return {
@@ -330,6 +313,7 @@ function mapStateToProps(store: Object): Object {
 		forceShowChangeLog,
 		deviceId,
 		dialogueData: store.modal,
+		cachedLayout: layout,
 	};
 }
 

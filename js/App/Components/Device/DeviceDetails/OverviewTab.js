@@ -22,14 +22,17 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
 import { utils } from 'live-shared-data';
 
 const { images: {DEVICES} } = utils;
 
-import { View, TabBar, LocationDetails } from '../../../../BaseComponents';
+import {
+	ThemedScrollView,
+	View,
+	LocationDetails,
+} from '../../../../BaseComponents';
 
 import {
 	getDeviceManufacturerInfo,
@@ -66,6 +69,7 @@ type Props = {
 	currentTemp?: string,
 	gatewayTimezone: string,
 	locale: string,
+	currentScreen: string,
 
 	screenProps: Object,
 	dispatch: Function,
@@ -74,22 +78,6 @@ type Props = {
 
 class OverviewTab extends View<Props, null> {
 	props: Props;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="home"
-				tintColor={tintColor}
-				label={i18n.overviewHeader}
-				accessibilityLabel={i18n.deviceOverviewTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'Overview',
-				key: 'Overview',
-			});
-		},
-	});
 
 	constructor(props: Props) {
 		super(props);
@@ -126,9 +114,8 @@ class OverviewTab extends View<Props, null> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const {
-			screenProps,
+			currentScreen,
 		} = nextProps;
-		const { currentScreen } = screenProps;
 		if (currentScreen === 'Overview') {
 			return shouldUpdate(this.props, nextProps, [
 				'screenProps',
@@ -219,10 +206,10 @@ class OverviewTab extends View<Props, null> {
 		const styles = this.getStyles(appLayout);
 
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={styles.itemsContainer}>
 				<DeviceActionDetails
@@ -243,7 +230,7 @@ class OverviewTab extends View<Props, null> {
 					style={[styles.LocationDetail, {
 						marginBottom: styles.padding * 2,
 					}]}/>
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -285,7 +272,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const device = state.devices.byId[id];
 	const { clientId, clientDeviceId } = device ? device : {};
 
@@ -301,6 +289,10 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 	const { language = {} } = defaultSettings || {};
 	const locale = language.code;
 
+	const {
+		screen: currentScreen,
+	} = state.navigation;
+
 	return {
 		device,
 		gatewayType,
@@ -310,6 +302,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		currentTemp: getThermostatValue(state.sensors.byId, clientDeviceId, clientId),
 		gatewayTimezone,
 		locale,
+		currentScreen,
 	};
 }
 

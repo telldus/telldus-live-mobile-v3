@@ -22,16 +22,24 @@
 'use strict';
 
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Dimensions } from 'react-native';
+import {
+	Dimensions,
+} from 'react-native';
 import Text from './Text';
 import Theme from '../App/Theme';
 
 const deviceWidth = Dimensions.get('window').width;
 
+import {
+	prepareRootPropsText,
+} from './prepareRootProps';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
+
 type DefaultProps = {
-	color: string,
-	size: number,
 	accessible: boolean,
 	importantForAccessibility: string,
 };
@@ -40,49 +48,93 @@ type Props = {
 	icon?: string,
 	size?: number,
 	color?: string,
-	style?: Object | number | Array<any>,
+	style?: Array<any> | Object,
 	accessible?: boolean,
 	importantForAccessibility: string,
+	level?: number,
 };
 
-export default class IconTelldus extends Component<Props, null> {
-	props: Props;
+type PropsThemedIconTelldusComponent = Props & PropsThemedComponent;
 
-	static propTypes = {
-		icon: PropTypes.string.isRequired,
-		size: PropTypes.number,
-		color: PropTypes.string,
-		style: PropTypes.oneOfType([PropTypes.number, PropTypes.object, PropTypes.array]),
-	};
+const prepareIncomingStyle = (incomingStyle: Object | Array<any>, {color, size}: Object): Object | Array<any> => {
+	let incomingStyleUpdated = incomingStyle;
+	if (Array.isArray(incomingStyle)) {
+		if (color) {
+			incomingStyleUpdated = [
+				{color}, // $FlowFixMe
+				...incomingStyleUpdated, // color in 'style' has higher priority
+			];
+		}
+		if (size) {
+			incomingStyleUpdated = [
+				{fontSize: size}, // $FlowFixMe
+				...incomingStyleUpdated, // size in 'style' has higher priority
+			];
+		}
+	} else {
+		if (color) {
+			incomingStyleUpdated = {
+				color, // $FlowFixMe
+				...incomingStyleUpdated, // color in 'style' has higher priority
+			};
+		}
+		if (size) {
+			incomingStyleUpdated = {
+				fontSize: size, // $FlowFixMe
+				...incomingStyleUpdated, // size in 'style' has higher priority
+			};
+		}
+	}
+	return incomingStyleUpdated;
+};
+
+class IconTelldus extends Component<PropsThemedIconTelldusComponent, null> {
+	props: PropsThemedIconTelldusComponent;
 
 	static defaultProps: DefaultProps = {
-		color: '#999',
-		size: deviceWidth * 0.04,
 		accessible: true,
 		importantForAccessibility: 'yes',
 	};
 
 	render(): Object {
-		const { icon, style, accessible, importantForAccessibility } = this.props;
-		const defaultStyle = this._getDefaultStyle();
+		const {
+			icon,
+			style: incomingStyle = {},
+			size,
+			color,
+			...others
+		} = this.props;
+
+
+
+		const props = prepareRootPropsText({
+			...others,
+			style: prepareIncomingStyle(incomingStyle, {
+				size,
+				color,
+			}),
+		}, {
+			style: Array.isArray(incomingStyle) ?
+				[
+					{
+						fontFamily: Theme.Core.fonts.telldusIconFont,
+						fontSize: deviceWidth * 0.04,
+					},
+				] :
+				{
+					fontFamily: Theme.Core.fonts.telldusIconFont,
+					fontSize: deviceWidth * 0.04,
+				},
+		});
 
 		return (
-			<Text style={[defaultStyle, style, { fontFamily: Theme.Core.fonts.telldusIconFont }]}
-				allowFontScaling={false}
-				importantForAccessibility={importantForAccessibility}
-				accessible={accessible}>
+			<Text
+				{...props}
+				allowFontScaling={false}>
 				{icon}
 			</Text>
 		);
 	}
-
-	_getDefaultStyle = (): Object => {
-		const { size, color } = this.props;
-
-		return {
-			color,
-			fontSize: size,
-		};
-	};
-
 }
+
+export default withTheme(IconTelldus);

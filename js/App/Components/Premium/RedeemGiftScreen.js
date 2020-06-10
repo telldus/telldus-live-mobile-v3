@@ -22,7 +22,7 @@
 
 'use strict';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { ScrollView } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useIntl } from 'react-intl';
@@ -69,18 +69,22 @@ const RedeemGiftScreen = (props: Object): Object => {
 	} = getStyles(layout);
 
 	const {
+		toggleDialogueBox,
+	} = screenProps;
+
+	const {
 		formatMessage,
 	} = useIntl();
 
 	const [ code, setCode ] = useState('');
-	function onChangeText(text: string) {
+	const onChangeText = useCallback((text: string) => {
 		setCode(text);
-	}
+	}, []);
 
 	const dispatch = useDispatch();
-	function onPress() {
+	const onPress = useCallback(() => {
 		if (!code || code.trim() === '') {
-			screenProps.toggleDialogueBox({
+			toggleDialogueBox({
 				show: true,
 				showHeader: true,
 				text: formatMessage(i18n.errorInvalidCode),
@@ -92,15 +96,11 @@ const RedeemGiftScreen = (props: Object): Object => {
 		dispatch(activateCoupon(code)).then((response: Object) => {
 			if (response && response.status === 'success') {
 				dispatch(getUserProfile());
-				navigation.navigate({
-					routeName: 'PostPurchaseScreen',
-					key: 'PostPurchaseScreen',
-					params: {
-						...response,
-						voucher: true,
-						success: true,
-						screensToPop: 2,
-					},
+				navigation.navigate('PostPurchaseScreen', {
+					...response,
+					voucher: true,
+					success: true,
+					screensToPop: 2,
 				});
 			} else {
 				dispatch(showToast(formatMessage(i18n.errorRedeemFailed)));
@@ -110,20 +110,25 @@ const RedeemGiftScreen = (props: Object): Object => {
 			dispatch(showToast(err.message || formatMessage(i18n.errorRedeemFailed)));
 			dispatch(getUserProfile());
 		});
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [code]);
 
 	const headerArray = formatMessage(i18n.enterRedeemCode).split(' ');
 	const header = useMemo((): Array<Object> => {
 		return headerArray.map((word: string): Object => {
 			if (word.includes('%')) {
 				return (
-					<Text style={titleStyleTwo}>
+					<Text
+						level={5}
+						style={titleStyleTwo}>
 						{` ${word.replace(/%/g, '').toUpperCase()}`}
 					</Text>
 				);
 			}
 			return (
-				<Text style={titleStyleOne}>
+				<Text
+					level={5}
+					style={titleStyleOne}>
 					{word.toUpperCase()}
 				</Text>
 			);
@@ -135,7 +140,9 @@ const RedeemGiftScreen = (props: Object): Object => {
 	]);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={formatMessage(i18n.redeemCard)} h2={formatMessage(i18n.applyVoucherCode)}
 				align={'right'}
@@ -144,12 +151,16 @@ const RedeemGiftScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<View style={body} >
+				<View
+					level={2}
+					style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
 						{header}
 					</View>
-					<Text style={bodyStyle}>
+					<Text
+						level={5}
+						style={bodyStyle}>
 						{formatMessage(i18n.infoVoucherCode)}
 					</Text>
 					<MaterialTextInput
@@ -191,13 +202,11 @@ const getStyles = (appLayout: Object): Object => {
 		brandSecondary: Theme.Core.brandSecondary,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
@@ -221,16 +230,13 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			marginTop: 15,
 			textAlign: 'center',
-			color: Theme.Core.eulaContentColor,
 		},
 		titleStyleOne: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			marginLeft: 5,
 		},
 		titleStyleTwo: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 		},
 		iconStyle: {

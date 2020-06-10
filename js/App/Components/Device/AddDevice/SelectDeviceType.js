@@ -40,6 +40,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	appLayout: Object,
 	currentScreen: string,
+	route: Object,
 
 	onDidMount: (string, string, ?Object) => void,
 	actions: Object,
@@ -68,21 +69,14 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	const { navigation, currentScreen, appLayout } = nextProps;
-	const { width } = this.props.appLayout;
-	const selectLocation = navigation.getParam('selectLocation', true);
-	if (!selectLocation && currentScreen === 'InitialScreen' && appLayout.width !== width) {
-		return true;
-	}
-	if (currentScreen === 'SelectDeviceType' && appLayout.width !== width) {
-		return true;
-	}
-	return false;
+	return nextProps.currentScreen === 'SelectDeviceType';
 }
 
 onChooseType({module, action, secure}: Object) {
-	const { navigation } = this.props;
-	const gateway = navigation.getParam('gateway', {});
+	const { navigation, route } = this.props;
+	const {
+		gateway = {},
+	} = route.params || {};
 
 	if (module === 'zwave') {
 		navigation.navigate('IncludeDevice', {
@@ -104,9 +98,11 @@ onChooseType({module, action, secure}: Object) {
 }
 
 getDeviceTypes(): Array<any> {
-	const { navigation, intl } = this.props;
+	const { route, intl } = this.props;
 	const { formatMessage, formatNumber } = intl;
-	const gateway = navigation.getParam('gateway', {});
+	const {
+		gateway = {},
+	} = route.params || {};
 	const { transports = '' } = gateway;
 	const transportsAsArray = transports.split(',');
 

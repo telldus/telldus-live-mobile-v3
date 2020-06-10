@@ -37,7 +37,7 @@ import { useIntl } from 'react-intl';
 import RNIap, {
 	IAPErrorCode,
 } from 'react-native-iap';
-import { StackActions } from 'react-navigation';// TODO: Update import in 3.15
+import { StackActions } from '@react-navigation/native';
 
 import {
 	View,
@@ -150,26 +150,34 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		}
 		return (
 			<TouchableOpacity onPress={onSelectPlan} key={`${index}`}>
-				<View style={[contentCover,
-					selectedIndex === index ? {
-						borderWidth: 3,
-						borderColor: Theme.Core.brandSecondary,
-					} : undefined,
-				]}>
+				<View
+					level={2}
+					style={[contentCover,
+						selectedIndex === index ? {
+							borderWidth: 3,
+							borderColor: Theme.Core.brandSecondary,
+						} : undefined,
+					]}>
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={premiumIconStyle}/>
-						<Text style={validityTextStyle}>
+						<Text
+							level={5}
+							style={validityTextStyle}>
 							{validity === 1 ? `${validity} ${formatMessage(i18n.month)}` : `${formatMessage(i18n.months, {value: validity})}`}
 						</Text>
 					</View>
-					<Text style={pMonthTextStyle}>
+					<Text
+						level={9}
+						style={pMonthTextStyle}>
 						{`€${formatNumber(cPerMonth, {
 							minimumFractionDigits: cPerMonth === 3 ? 0 : 2,
 						})}/${formatMessage(i18n.month)}`}
 					</Text>
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
-						<Text style={smsCreditTextStyle}>
+						<Text
+							level={5}
+							style={smsCreditTextStyle}>
 							{formatMessage(i18n.includingSMS, {
 								value: smsCredit,
 							})}
@@ -182,7 +190,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
 							{`€${formatNumber(prevTotal)}`}
 						</Text>}
-						<Text style={newChargeTextStyle}>
+						<Text
+							level={5}
+							style={newChargeTextStyle}>
 							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
 					</View>
@@ -258,17 +268,13 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 		} else {
 			dispatch(createTransaction(options, true)).then((response: Object) => {
 				if (response && response.id && response.url) {
-					navigation.navigate({
-						routeName: 'TransactionWebview',
-						key: 'TransactionWebview',
-						params: {
-							uri: response.url,
-							product,
-							credits,
-							quantity,
-							voucher: false,
-							screensToPop: 4,
-						},
+					navigation.navigate('TransactionWebview', {
+						uri: response.url,
+						product,
+						credits,
+						quantity,
+						voucher: false,
+						screensToPop: 4,
 					});
 				} else {
 					dispatch(showToast(formatMessage(i18n.unknownError)));
@@ -288,7 +294,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 	const showInfo = !recurring || !supportAutoRenew;
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
@@ -304,7 +312,9 @@ const AdditionalPlansPaymentsScreen = (props: Object): Object => {
 				flexGrow: 1,
 				paddingBottom: 20,
 			}}>
-				<Text style={labelStyle}>{formatMessage(i18n.selectSubscriptionPlan)}</Text>
+				<Text
+					level={6}
+					style={labelStyle}>{formatMessage(i18n.selectSubscriptionPlan)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
 				{supportAutoRenew && <CheckBoxIconText
@@ -373,13 +383,11 @@ const getStyles = (appLayout: Object): Object => {
 		footerHeight,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		contentCover: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding / 2,
@@ -388,7 +396,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.rowTextColor,
 			marginLeft: padding,
 			marginTop: padding * 2,
 			padding: 3,
@@ -404,7 +411,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		validityTextStyle: {
 			fontSize: fontSize * 1.7,
-			color: Theme.Core.eulaContentColor,
 			marginLeft: 5,
 		},
 		premiumIconStyle: {
@@ -413,14 +419,12 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		pMonthTextStyle: {
 			fontSize: fontSize * 2,
-			color: Theme.Core.brandSecondary,
 			marginTop: 8,
 			fontWeight: 'bold',
 			textAlign: 'center',
 		},
 		smsCreditTextStyle: {
 			fontSize: fontSize * 0.9,
-			color: Theme.Core.eulaContentColor,
 			textAlign: 'center',
 		},
 		prevChargeTextStyle: {
@@ -434,7 +438,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		newChargeTextStyle: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			textAlign: 'center',
 			marginLeft: 5,
 		},

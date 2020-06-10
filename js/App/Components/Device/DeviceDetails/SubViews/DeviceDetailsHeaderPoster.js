@@ -38,6 +38,7 @@ type Props = {
 	screenProps: Object,
 	isModalOpen: boolean,
 	navigation: Object,
+	currentScreen: string,
 };
 
 class DeviceDetailsHeaderPoster extends View<Props, null> {
@@ -61,8 +62,7 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 	}
 
 	handleBackPress(): boolean {
-		let { isModalOpen, hideModal: hideModalProp, screenProps } = this.props;
-		let { currentScreen } = screenProps;
+		let { isModalOpen, hideModal: hideModalProp, currentScreen } = this.props;
 		if (isModalOpen) {
 			hideModalProp();
 			return true;
@@ -101,13 +101,20 @@ class DeviceDetailsHeaderPoster extends View<Props, null> {
 }
 
 function mapStateToProps(store: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const device = store.devices.byId[id] ? store.devices.byId[id] : {};
 	const { name: deviceName, deviceType } = device;
+
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
 	return {
 		deviceName,
 		deviceType,
 		isModalOpen: store.modal.openModal,
+		currentScreen,
 	};
 }
 function mapDispatchToProps(dispatch: Function): Object {

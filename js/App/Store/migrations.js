@@ -22,10 +22,12 @@
 
 'use strict';
 
+const defaultDashboardId = 'defaultDashboardId';
+
 export default function migrations(state: Object = {}): Promise<any> {
 	const { tabs, ...withOutTabs } = state;
 
-	let newState = state;
+	let newState = {...state};
 	// Remove redux store object 'tabs' if present.
 	if (tabs) {
 		newState = withOutTabs;
@@ -40,7 +42,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
-	const { app } = newState;
+	const { app, dashboard, user } = newState;
 	if (app && !app.defaultSettings) {
 		newState = {
 			...newState,
@@ -49,7 +51,94 @@ export default function migrations(state: Object = {}): Promise<any> {
 				defaultSettings: {
 					dimmerSensitivity: 5,
 					sortingDB: 'Chronological',
+					activeDashboardId: defaultDashboardId,
 				},
+			},
+		};
+	}
+
+	if (app && app.defaultSettings && !app.defaultSettings.activeDashboardId) {
+		newState = {
+			...newState,
+			app: {
+				...app,
+				defaultSettings: {
+					...app.defaultSettings,
+					activeDashboardId: defaultDashboardId,
+				},
+			},
+		};
+	}
+
+	if (user && !user.activeDashboardId) {
+		newState = {
+			...newState,
+			user: {
+				...user,
+				activeDashboardId: defaultDashboardId,
+			},
+		};
+	}
+
+	const { userId } = user || {};
+	if (dashboard && userId) {
+		const {
+			devicesById = {},
+			deviceIds,
+			sensorsById = {},
+			sensorIds,
+		} = dashboard;
+
+		const prevDataType = [true, false];
+
+		let newDashboard = {...dashboard};
+
+		const devicesByIdC = Object.keys(devicesById);
+		if (devicesByIdC.length > 0 && prevDataType.indexOf(devicesById[devicesByIdC[0]] !== -1)) {
+			newDashboard = {
+				...newDashboard,
+				devicesById: {
+					[userId]: {
+						[defaultDashboardId]: devicesById,
+					},
+				},
+			};
+		}
+		if (deviceIds && typeof deviceIds.length !== 'undefined') {
+			newDashboard = {
+				...newDashboard,
+				deviceIds: {
+					[userId]: {
+						[defaultDashboardId]: deviceIds,
+					},
+				},
+			};
+		}
+		const sensorsByIdC = Object.keys(sensorsById);
+		if (sensorsByIdC.length > 0 && prevDataType.indexOf(sensorsById[sensorsByIdC[0]] !== -1)) {
+			newDashboard = {
+				...newDashboard,
+				sensorsById: {
+					[userId]: {
+						[defaultDashboardId]: sensorsById,
+					},
+				},
+			};
+		}
+		if (sensorIds && typeof sensorIds.length !== 'undefined') {
+			newDashboard = {
+				...newDashboard,
+				sensorIds: {
+					[userId]: {
+						[defaultDashboardId]: sensorIds,
+					},
+				},
+			};
+		}
+		newState = {
+			...newState,
+			dashboard: {
+				...newDashboard,
 			},
 		};
 	}

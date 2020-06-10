@@ -20,21 +20,43 @@
 // @flow
 'use strict';
 import {
+	useCallback,
+} from 'react';
+import {
+	Linking,
+} from 'react-native';
+import {
 	useMemo,
 } from 'react';
 import {
 	createIntl,
 	createIntlCache,
 } from 'react-intl';
-import { useSelector } from 'react-redux';
+import {
+	useSelector,
+	useDispatch,
+} from 'react-redux';
 import * as RNLocalize from 'react-native-localize';
 import { useIntl } from 'react-intl';
+import { useNavigation } from '@react-navigation/native';
 
 import {
 	useDialogueBox,
 } from './Dialoguebox';
+import {
+	campaignVisited,
+	toggleVisibilitySwitchAccountAS,
+} from '../Actions';
+import {
+	getPremiumAccounts,
+} from '../Lib/appUtils';
+
+import {
+	CAMPAIGNS_URL,
+} from '../../Constants';
 
 import i18n from '../Translations/common';
+
 import * as Translations from '../Translations';
 
 const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
@@ -80,7 +102,115 @@ const useNoInternetDialogue = (): Object => {
 	};
 };
 
+const useCampaignAction = (): Object => {
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const dispatch = useDispatch();
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
+	const navigateToCampaign = useCallback(() => {
+
+		const showDialogue = (text: string) => {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				text,
+				showPositive: true,
+			});
+		};
+
+		(() => {
+			let url = CAMPAIGNS_URL;
+			const defaultMessage = formatMessage(i18n.errorMessageOpenCampaign);
+			Linking.canOpenURL(url)
+				.then((supported: boolean): any => {
+					if (!supported) {
+						showDialogue(defaultMessage);
+					} else {
+						dispatch(campaignVisited(true));
+						return Linking.openURL(url);
+					}
+				})
+				.catch((err: any) => {
+					const message = err.message || defaultMessage;
+					showDialogue(message);
+				});
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	return {
+		navigateToCampaign,
+	};
+};
+
+const useSwitchOrAddAccountAction = (): Object => {
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const dispatch = useDispatch();
+
+	const { accounts = {} } = useSelector((state: Object): Object => state.user);
+	const premAccounts = getPremiumAccounts(accounts);
+	const hasAPremAccount = Object.keys(premAccounts).length > 0;
+
+	const navigation = useNavigation();
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
+	const performAddOrSwitch = useCallback(() => {
+		const showPurchacePremiumDialogue = () => {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: formatMessage(i18n.upgradeToPremium),
+				text: formatMessage(i18n.switchAccountBasicInfo),
+				showPositive: true,
+				showNegative: true,
+				positiveText: formatMessage(i18n.upgrade).toUpperCase(),
+				onPressPositive: () => {
+					navigation.navigate('PremiumUpgradeScreen');
+				},
+				closeOnPressPositive: true,
+				timeoutToCallPositive: 200,
+			});
+		};
+
+		if (hasAPremAccount) {
+			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
+			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: true,
+				isLoggingOut: false,
+			}));
+		} else {
+			showPurchacePremiumDialogue();
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [hasAPremAccount]);
+
+	return {
+		performAddOrSwitch,
+	};
+};
+
 module.exports = {
 	useRelativeIntl,
 	useNoInternetDialogue,
+	useCampaignAction,
+	useSwitchOrAddAccountAction,
 };

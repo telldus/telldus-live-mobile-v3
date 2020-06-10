@@ -5,6 +5,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -14,6 +15,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -30,7 +32,6 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -81,6 +82,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -97,7 +99,6 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -138,6 +139,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -154,7 +156,6 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -199,6 +200,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -208,6 +210,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -224,7 +227,6 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -265,6 +267,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -281,7 +284,6 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -322,6 +324,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -338,7 +341,6 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -393,6 +395,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -402,6 +405,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -418,7 +422,6 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -459,6 +462,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -475,7 +479,6 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}
@@ -526,6 +529,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -542,7 +546,6 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
       <View
         accessible={true}
         focusable={true}
-        isTVSelectable={true}
         onClick={[Function]}
         onResponderGrant={[Function]}
         onResponderMove={[Function]}

@@ -42,6 +42,7 @@ type Props = {
 	appLayout: Object,
 	styles: Object,
 	screenProps: Object,
+	ScreenName: string,
 };
 
 type State = {
@@ -78,10 +79,7 @@ class RegisterScreen extends View<Props, State> {
 	componentDidUpdate(prevProps: Object, prevState: Object) {
 		const { screenProps, registeredCredential, navigation } = this.props;
 		if (registeredCredential && screenProps.currentScreen !== 'Welcome') {
-			navigation.navigate({
-				routeName: 'Welcome',
-				key: 'Welcome',
-			});
+			navigation.navigate('Welcome');
 		}
 	}
 
@@ -99,11 +97,7 @@ class RegisterScreen extends View<Props, State> {
 	}
 
 	goBackToLogin() {
-		this.closeModal();
-		this.props.navigation.navigate({
-			routeName: 'Login',
-			key: 'Login',
-		});
+		this.props.navigation.navigate('Login');
 	}
 
 	openDialogueBox = (body: string, header?: Object) => {
@@ -127,15 +121,18 @@ class RegisterScreen extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		if (nextProps.navigation.state.routeName !== nextProps.screenProps.currentScreen) {
-			return false;
-		}
-		return true;
+		return nextProps.ScreenName === nextProps.screenProps.currentScreen;
+	}
+
+	goBack = () => {
+		this.props.navigation.goBack();
 	}
 
 	render(): Object {
-		let { appLayout, intl, styles: commonStyles } = this.props;
+		let { appLayout, intl, styles: commonStyles, screenProps } = this.props;
 		let styles = this.getStyles(appLayout);
+
+		const { source = 'prelogin' } = screenProps;
 
 		return (
 			<View style={{
@@ -148,14 +145,26 @@ class RegisterScreen extends View<Props, State> {
 					headerText={intl.formatMessage(i18n.createAccount)}
 					styles={commonStyles}
 					openDialogueBox={this.openDialogueBox}/>
-				<TouchableOpacity
-					onPress={this.goBackToLogin}
-					accessibilityLabel={this.labelAlreadyHaveAccount}
-					style={{
-						alignSelf: 'center',
-					}}>
-					<FormattedMessage {...i18n.alreadyHaveAccount} style={styles.accountExist}/>
-				</TouchableOpacity>
+				{source === 'prelogin' && (
+					<TouchableOpacity
+						onPress={this.goBackToLogin}
+						accessibilityLabel={this.labelAlreadyHaveAccount}
+						style={{
+							alignSelf: 'center',
+						}}>
+						<FormattedMessage {...i18n.alreadyHaveAccount} style={styles.accountExist}/>
+					</TouchableOpacity>
+				)}
+				{source === 'postlogin' && (
+					<TouchableOpacity
+						onPress={this.goBack}
+						accessibilityLabel={intl.formatMessage(i18n.cancelAndBack)}
+						style={{
+							alignSelf: 'center',
+						}}>
+						<FormattedMessage {...i18n.cancelAndBack} style={styles.accountExist} />
+					</TouchableOpacity>
+				)}
 			</View>
 		);
 	}

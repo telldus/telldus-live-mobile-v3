@@ -55,7 +55,7 @@ type Props = {
 	gatewayTimezoneOffset: number,
 };
 
-const SensorBlock = (props: Props): Object => {
+const SensorBlock = React.memo<Object>((props: Props): Object => {
 
 	const {
 		name,
@@ -91,7 +91,11 @@ const SensorBlock = (props: Props): Object => {
 	} = getStyles();
 
 	return (
-		<View style={containerStyle} accessible={true} importantForAccessibility={'yes'}>
+		<View
+			level={2}
+			style={containerStyle}
+			accessible={true}
+			importantForAccessibility={'yes'}>
 			<IconTelldus icon={icon} style={iconStyle}/>
 			<View style={textContainer}>
 				<Text style={labelStyle}>
@@ -109,7 +113,9 @@ const SensorBlock = (props: Props): Object => {
 						suffix={unit}
 						suffixStyle={valueStyle}/>
 				}
-				<Text style={updatedInfoStyle}>
+				<Text
+					level={3}
+					style={updatedInfoStyle}>
 					<Text style={updatedInfoStyle}>
 						{formatDate(lastUpdated)}
 					</Text>
@@ -121,7 +127,9 @@ const SensorBlock = (props: Props): Object => {
 					</Text>
 				</Text>
 				{!!max && (
-					<Text style={updatedInfoStyle}>
+					<Text
+						level={3}
+						style={updatedInfoStyle}>
 						<Icon name={'angle-up'} color={brandSecondary} size={icSize}/>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
@@ -140,7 +148,9 @@ const SensorBlock = (props: Props): Object => {
 					</Text>
 				)}
 				{!!min && (
-					<Text style={updatedInfoStyle}>
+					<Text
+						level={3}
+						style={updatedInfoStyle}>
 						<Icon name={'angle-down'} color={brandSecondary} size={icSize}/>
 						<Text style={Theme.Styles.hiddenText}>
 							{' '}
@@ -182,7 +192,6 @@ const SensorBlock = (props: Props): Object => {
 			containerStyle: {
 				flexDirection: 'row',
 				width: blockFullWidth,
-				backgroundColor: '#fff',
 				...shadow,
 				marginBottom: padding / 2,
 				marginHorizontal: padding / 4,
@@ -211,13 +220,12 @@ const SensorBlock = (props: Props): Object => {
 			},
 			updatedInfoStyle: {
 				fontSize: updateInfoFontSize,
-				color: '#000',
 				backgroundColor: 'rgba(0,0,0,0)',
 				textShadowColor: 'rgba(0,0,0,0)',
 			},
 			iconSize: updateInfoFontSize * 1.5,
 		};
 	}
-};
+});
 
-export default React.memo<Object>(SensorBlock);
+export default SensorBlock;

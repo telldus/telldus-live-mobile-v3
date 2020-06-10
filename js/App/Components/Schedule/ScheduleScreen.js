@@ -46,6 +46,8 @@ type Props = {
 	devices: Object,
 	screenProps: Object,
 	ScreenName: string,
+	route: Object,
+	currentScreen: string,
 
 	navigation: Object,
 	children: Object,
@@ -66,6 +68,7 @@ export interface ScheduleProps {
 	loading: (loading: boolean) => void,
 	isEditMode: () => boolean,
 	devices: Object,
+	route: Object,
 }
 
 class ScheduleScreen extends View<null, Props, State> {
@@ -107,17 +110,17 @@ class ScheduleScreen extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
 			}
-			const { gateways, devices, screenProps, ...otherProps } = this.props;
-			const { gateways: gatewaysN, devices: devicesN, screenProps: screenPropsN, ...otherPropsN } = nextProps;
+			const { gateways, devices, currentScreen, ...otherProps } = this.props;
+			const { gateways: gatewaysN, devices: devicesN, ...otherPropsN } = nextProps;
 			if ((Object.keys(gateways.byId).length !== Object.keys(gatewaysN.byId).length) || (Object.keys(devices.byId).length !== Object.keys(devicesN.byId).length)) {
 				return true;
 			}
-			if (screenProps.currentScreen !== screenPropsN.currentScreen) {
+			if (currentScreen !== nextProps.currentScreen) {
 				return true;
 			}
 			const propsChange = shouldUpdate(otherProps, otherPropsN, ['schedule']);
@@ -162,7 +165,9 @@ class ScheduleScreen extends View<null, Props, State> {
 			devices,
 			schedule,
 			screenProps,
+			currentScreen,
 			gateways,
+			route,
 		} = this.props;
 		const {
 			appLayout,
@@ -171,10 +176,11 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { style } = this._getStyle(appLayout);
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				{loading && (
 					<FullPageActivityIndicator/>
 				)}
@@ -188,7 +194,9 @@ class ScheduleScreen extends View<null, Props, State> {
 						align={'right'}
 						navigation={navigation}
 						{...screenProps}
-						leftIcon={screenProps.currentScreen === 'InitialScreen' ? 'close' : undefined}/>
+						currentScreen={currentScreen}
+						leftIcon={(currentScreen === 'Device' || currentScreen === 'Edit')
+							? 'close' : undefined}/>
 					<KeyboardAvoidingView
 						behavior="padding"
 						style={{flex: 1}}
@@ -207,7 +215,9 @@ class ScheduleScreen extends View<null, Props, State> {
 									loading: this.loading,
 									isEditMode: this._isEditMode,
 									...screenProps,
+									currentScreen,
 									gateways,
+									route,
 								},
 							)}
 						</View>
@@ -218,8 +228,8 @@ class ScheduleScreen extends View<null, Props, State> {
 	}
 
 	_isEditMode = (): boolean => {
-		const { navigation } = this.props;
-		const editMode = navigation.getParam('editMode', false);
+		const { route } = this.props;
+		const { editMode = false } = route.params || {};
 		return editMode;
 	};
 
@@ -229,10 +239,9 @@ class ScheduleScreen extends View<null, Props, State> {
 		const deviceWidth = isPortrait ? width : height;
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
-		const { screenProps } = this.props;
-		const { currentScreen } = screenProps;
+		const { currentScreen } = this.props;
 
-		const screenDontPad = ['InitialScreen', 'ActionThermostat', 'ActionThermostatTwo'];
+		const screenDontPad = ['Device', 'Edit', 'ActionThermostat', 'ActionThermostatTwo'];
 		const doPad = screenDontPad.indexOf(currentScreen) === -1;
 		return {
 			style: {
@@ -250,20 +259,27 @@ type mapStateToPropsType = {
 	modal: Object,
 	app: Object,
 	gateways: Object,
+	navigation: Object,
 };
 
-const mapStateToProps = ({ schedule, devices, modal, app, gateways }: mapStateToPropsType): Object => (
-	{
+const mapStateToProps = ({ schedule, devices, modal, app, gateways, navigation }: mapStateToPropsType): Object => {
+
+	const {
+		screen: currentScreen,
+	} = navigation;
+
+	return {
 		schedule,
 		devices,
 		gateways,
-	}
-);
+		currentScreen,
+	};
+};
 
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({getJobs, showToast, ...scheduleActions, ...modalActions}, dispatch),
+			...bindActionCreators({...scheduleActions, ...modalActions, getJobs, showToast}, dispatch),
 			getDevices: (): Object => dispatch(getDevices()),
 		},
 	}

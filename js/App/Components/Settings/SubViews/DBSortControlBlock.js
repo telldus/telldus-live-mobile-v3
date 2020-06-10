@@ -76,8 +76,12 @@ const DBSortControlBlock = (props: Object): Object => {
 	const labelSortingDB = formatMessage(i18n.sorting);
 
 	return (
-		<View style={coverStyle}>
-			<Text style={labelStyle} numberOfLine={1}>
+		<View
+			level={2}
+			style={coverStyle}>
+			<Text
+				level={3}
+				style={labelStyle} numberOfLine={1}>
 				{labelSortingDB}
 			</Text>
 			<DropDown
@@ -91,7 +95,6 @@ const DBSortControlBlock = (props: Object): Object => {
 				intl={intl}
 				dropDownContainerStyle={[dropDownContainerStyleDef, dropDownContainerStyle]}
 				dropDownHeaderStyle={dropDownHeaderStyle}
-				baseColor={'#000'}
 				fontSize={fontSize}
 				accessibilityLabelPrefix={labelSortingDB}
 				pickerContainerStyle={pickerContainerStyle}
@@ -144,12 +147,10 @@ const getStyles = (appLayout: Object): Object => {
 			width: width - (padding * 2),
 			justifyContent: 'space-between',
 			...shadow,
-			backgroundColor: '#fff',
 			marginBottom: padding / 2,
 		},
 		labelStyle: {
 			flex: 0,
-			color: '#000',
 			fontSize,
 			flexWrap: 'wrap',
 			marginLeft: fontSize,

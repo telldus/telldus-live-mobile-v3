@@ -20,7 +20,6 @@
 import Color from 'color';
 
 import { Platform } from 'react-native';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 export default {
 	brandPrimary: '#1b365d',
@@ -61,7 +60,7 @@ export default {
 	},
 
 	get navBarTopPadding() {
-		return (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 10;
+		return (Platform.OS === 'ios') ? 0 : 10;
 	},
 
 	appBackground: '#eeeeee',
@@ -70,6 +69,8 @@ export default {
 	eulaContentColor: '#555555',
 	inactiveTintColor: '#A59F9A',
 	gatewayInactive: '#a2a2a2',
+	angleTintColor: '#A59F9A90',
+	angledRowBorderColor: '#BBB',
 
 	baseColorPreloginScreen: '#ffffff',
 
@@ -86,6 +87,9 @@ export default {
 	rowHeight: 60,
 
 	buttonRowKey: '  **buttonRow**  ',
+	GeoFenceDevicesHeaderKey: '  **devicesHeader**  ',
+	GeoFenceJobsHeaderKey: '  **jobsHeader**  ',
+	GeoFenceEventsHeaderKey: '  **eventsHeader**  ',
 
 	maxSizeRowTextOne: 24,
 	maxSizeRowTextTwo: 18,
@@ -146,8 +150,15 @@ export default {
 	get headerHeightFactor() {
 		return {
 			port: 0.05,
-			land: 0.1111,
+			land: 0.08,
 		};
+	},
+
+	get androidLandMarginLeftFactor() {
+		return 0.0635;
+	},
+	get androidLandTabbarHeightFactor() {
+		return 0.13;
 	},
 
 	get editBoxPaddingFactor() {
@@ -258,7 +269,9 @@ export default {
 	listNoteColor: '#808080',
 	listNoteSize: 13,
 
-	iconFontSize: this.fontSizeBase,
+	get iconFontSize() {
+		return this.fontSizeBase;
+	},
 
 	badgeColor: '#fff',
 	badgeBg: '#ED1727',

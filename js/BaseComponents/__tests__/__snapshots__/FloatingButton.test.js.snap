@@ -5,7 +5,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled 1`] 
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
   focusable={false}
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -39,6 +38,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled 1`] 
       Array [
         Object {
           "alignItems": "center",
+          "backgroundColor": "transparent",
           "flex": 1,
           "justifyContent": "center",
         },
@@ -54,7 +54,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
   focusable={false}
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -88,6 +87,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
       Array [
         Object {
           "alignItems": "center",
+          "backgroundColor": "transparent",
           "flex": 1,
           "justifyContent": "center",
         },
@@ -100,6 +100,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "position": "absolute",
           },
           undefined,
@@ -111,24 +112,17 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when disabled and 
         allowFontScaling={false}
         importantForAccessibility="yes"
         style={
-          Array [
-            Object {
-              "color": "#999",
-              "fontSize": 30,
-            },
-            Object {
-              "color": "#ffffff",
-              "fontSize": 25,
-              "transform": Array [
-                Object {
-                  "rotate": "0deg",
-                },
-              ],
-            },
-            Object {
-              "fontFamily": "telldusicons",
-            },
-          ]
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#ffffff",
+            "fontFamily": "telldusicons",
+            "fontSize": 25,
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          }
         }
       >
         loading
@@ -143,7 +137,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled 1`] =
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
   focusable={false}
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -177,6 +170,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled 1`] =
       Array [
         Object {
           "alignItems": "center",
+          "backgroundColor": "transparent",
           "flex": 1,
           "justifyContent": "center",
         },
@@ -192,7 +186,6 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
   accessibilityLabel="next button. Double tap to activate"
   accessible={true}
   focusable={false}
-  isTVSelectable={true}
   onClick={[Function]}
   onResponderGrant={[Function]}
   onResponderMove={[Function]}
@@ -226,6 +219,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
       Array [
         Object {
           "alignItems": "center",
+          "backgroundColor": "transparent",
           "flex": 1,
           "justifyContent": "center",
         },
@@ -238,6 +232,7 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
         Array [
           Object {
             "alignItems": "center",
+            "backgroundColor": "transparent",
             "position": "absolute",
           },
           undefined,
@@ -249,24 +244,17 @@ exports[`<FloatingButton /> - snapshot renders FloatingButton when enabled and l
         allowFontScaling={false}
         importantForAccessibility="yes"
         style={
-          Array [
-            Object {
-              "color": "#999",
-              "fontSize": 30,
-            },
-            Object {
-              "color": "#ffffff",
-              "fontSize": 25,
-              "transform": Array [
-                Object {
-                  "rotate": "0deg",
-                },
-              ],
-            },
-            Object {
-              "fontFamily": "telldusicons",
-            },
-          ]
+          Object {
+            "backgroundColor": "transparent",
+            "color": "#ffffff",
+            "fontFamily": "telldusicons",
+            "fontSize": 25,
+            "transform": Array [
+              Object {
+                "rotate": "0deg",
+              },
+            ],
+          }
         }
       >
         loading

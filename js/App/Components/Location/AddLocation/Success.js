@@ -27,7 +27,10 @@ import React from 'react';
 import { Linking, Platform } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
-import { NavigationActions, StackActions } from 'react-navigation';
+
+import {
+	CommonActions,
+} from '@react-navigation/native';
 
 import Theme from '../../../Theme';
 import {
@@ -49,6 +52,7 @@ type Props = {
 	appLayout: Object,
 	screenReaderEnabled: boolean,
 	currentScreen: string,
+	route: Object,
 };
 
 type State = {
@@ -99,41 +103,43 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		const { navigation } = this.props;
-		const clientInfo = navigation.getParam('clientInfo', {});
+		const { navigation, route } = this.props;
+		const { clientInfo } = route.params || {};
 
-		// TODO: refactor in app v3.15(RNavigation v5)
-		let navigateAction = NavigationActions.navigate({
-			routeName: 'Tabs',
-			key: 'Tabs',
-		});
+		let routes = [{ name: 'Tabs' }];
 		if (Platform.OS === 'ios') {
-			navigateAction = NavigationActions.navigate({
-				routeName: 'Tabs',
-				key: 'Tabs',
-				action: NavigationActions.navigate({
-					routeName: 'Gateways',
-					key: 'Gateways',
-				}),
-			});
-		}
-		let actions = [
-				navigateAction,
-				NavigationActions.navigate({
-					routeName: 'InfoScreen',
-					key: 'InfoScreen',
-					params: {
-						info: 'add_device',
-						clientId: clientInfo.clientId,
+			routes = [
+				{
+					name: 'Tabs',
+					state: {
+						index: 4,
+						routes: [
+							{
+								name: 'MoreOptionsTab',
+							},
+						],
 					},
-				}),
-			],
-			index = 1;
-		const resetAction = StackActions.reset({
-			index,
-			actions,
+				},
+				{
+					name: 'Gateways',
+				},
+			];
+		}
+		routes = [
+			...routes,
+			{
+				name: 'InfoScreen',
+				params: {
+					info: 'add_device',
+					clientId: clientInfo.clientId,
+				},
+			},
+		];
+		const resetAction = CommonActions.reset({
+			index: 1,
+			routes,
 		});
-		this.props.navigation.dispatch(resetAction);
+		navigation.dispatch(resetAction);
 	}
 
 	onPressHelp() {
@@ -150,10 +156,10 @@ class Success extends View<void, Props, State> {
 	}
 
 	render(): Object {
-		const { appLayout, navigation } = this.props;
+		const { appLayout, route } = this.props;
 		const styles = this.getStyle(appLayout);
 
-		const clientInfo = navigation.getParam('clientInfo', {});
+		const { clientInfo } = route.params || {};
 		const locationImageUrl = getLocationImageUrl(clientInfo.type);
 
 		return (

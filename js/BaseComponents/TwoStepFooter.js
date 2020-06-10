@@ -32,8 +32,6 @@ import View from './View';
 import Text from './Text';
 import IconTelldus from './IconTelldus';
 
-import Theme from '../App/Theme';
-
 const TwoStepFooter = (props: Object): Object => {
 	const {
 		f1,
@@ -58,22 +56,35 @@ const TwoStepFooter = (props: Object): Object => {
 
 	return (
 		<View style={footersCover}>
-			<View style={footerOne}>
+			<View
+				level={4}
+				style={footerOne}>
 				<TouchableOpacity style={footerItem} onPress={onPressF1}>
-					{f1Icon && <IconTelldus icon={f1Icon} style={f1IconStyle}/>}
-					<Text style={[footerText, {color: '#fff'}]}>
+					{f1Icon && <IconTelldus
+						level={11}
+						icon={f1Icon}
+						style={f1IconStyle}/>}
+					<Text
+						level={11}
+						style={footerText}>
 						{f1}
 					</Text>
 				</TouchableOpacity>
 			</View>
-			<View style={footerTwo}>
+			<View
+				level={5}
+				style={footerTwo}>
 				<TouchableOpacity style={footerItem} onPress={onPressF2}>
-					<Text style={footerText}>
+					<Text
+						level={10}
+						style={footerText}>
 						{f2}
 					</Text>
 				</TouchableOpacity>
 				<TouchableOpacity style={footerItem} onPress={onPressF3}>
-					<Text style={footerText}>
+					<Text
+						level={10}
+						style={footerText}>
 						{f3}
 					</Text>
 				</TouchableOpacity>
@@ -87,10 +98,6 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const footerHeight = Math.floor(deviceWidth * 0.26);
-
-	const {
-		brandSecondary,
-	} = Theme.Core;
 
 	return {
 		footerHeight,
@@ -109,7 +116,6 @@ const getStyles = (appLayout: Object): Object => {
 			width: '100%',
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: brandSecondary,
 			height: footerHeight / 2,
 			maxHeight: 100,
 		},
@@ -118,7 +124,6 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'space-between',
-			backgroundColor: '#FAFAFA',
 			height: footerHeight / 2,
 			maxHeight: 100,
 		},
@@ -130,13 +135,11 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		footerText: {
 			fontSize: Math.floor(deviceWidth * 0.04),
-			color: brandSecondary,
 			fontWeight: 'bold',
 			fontFamily: 'Roboto-Regular',
 		},
 		f1IconStyle: {
 			fontSize: Math.floor(deviceWidth * 0.04),
-			color: brandSecondary,
 		},
 	};
 };

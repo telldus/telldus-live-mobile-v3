@@ -39,10 +39,10 @@ type Props = {
 	style: Object,
 	intl: Object,
 	isGatewayActive: boolean,
-	containerStyle?: number | Object | Array<any>,
-	upButtonStyle?: number | Object | Array<any>,
-	downButtonStyle?: number | Object | Array<any>,
-	stopButtonStyle?: number | Object | Array<any>,
+	containerStyle?: Array<any> | Object,
+	upButtonStyle?: Array<any> | Object,
+	downButtonStyle?: Array<any> | Object,
+	stopButtonStyle?: Array<any> | Object,
 };
 
 type DefaultProps = {

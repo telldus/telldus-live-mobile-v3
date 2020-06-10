@@ -107,7 +107,7 @@ class Edit extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.currentScreen === 'InitialScreen';
+		return nextProps.currentScreen === 'Edit';
 	}
 
 	editAction = () => {
@@ -344,13 +344,13 @@ class Edit extends View<null, Props, State> {
 		);
 	}
 
-	_navigate = (routeName: string) => {
+	_navigate = (name: string) => {
 		this.props.navigation.navigate({
-			routeName,
-			key: routeName,
+			name,
+			key: name,
 			params: {
 				editMode: true,
-				actionKey: routeName,
+				actionKey: 'Edit',
 			},
 		});
 	};

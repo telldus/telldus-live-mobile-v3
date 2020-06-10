@@ -39,7 +39,9 @@ class LabelBox extends View {
 		const styles = this.getStyle(appLayout);
 
 		return (
-			<View style={[styles.container, containerStyle]}>
+			<View
+				level={2}
+				style={[styles.container, containerStyle]}>
 				{!!label &&
 					<Text style={styles.label}>
 						{label}
@@ -64,7 +66,6 @@ class LabelBox extends View {
 		return {
 			container: {
 				flexDirection: 'column',
-				backgroundColor: '#fff',
 				marginTop: deviceWidth * Theme.Core.paddingFactor,
 				padding: deviceWidth * 0.05,
 				alignItems: 'flex-start',

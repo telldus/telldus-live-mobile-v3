@@ -48,6 +48,7 @@ import i18n from '../../../Translations/common';
 type Props = {
 	currentScreen: string,
 	locale: string,
+	route: Object,
 
     navigation: Object,
     appLayout: Object,
@@ -69,9 +70,13 @@ onChooseLocation: (Object) => void;
 constructor(props: Props) {
 	super(props);
 
-	const shortcutToTelldus = props.navigation.getParam('shortcutToTelldus', false);
-	this.deviceBrand = shortcutToTelldus ? 'Telldus' : props.navigation.getParam('deviceBrand', '');
-	const gateway = props.navigation.getParam('gateway', {});
+	const {
+		shortcutToTelldus = false,
+		deviceBrand = '',
+		gateway = {},
+	} = props.route.params || {};
+
+	this.deviceBrand = shortcutToTelldus ? 'Telldus' : deviceBrand;
 	const { transports = '' } = gateway;
 	const transportsArr = transports.split(',');
 
@@ -95,11 +100,11 @@ prepareName = (lang: Array<Object> = [], modelNameDef: string): string => {
 }
 
 onPressShortcutRow = (deviceInfo: Object) => {
-	const { navigation, actions } = this.props;
+	const { navigation, actions, route } = this.props;
 
 	actions.setWidgetParamId(deviceInfo.widget);
 
-	const prevParams = navigation.state.params || {};
+	const prevParams = route.params || {};
 	navigation.navigate('SetDeviceName433', {
 		...prevParams,
 		shortcutToTelldus: false,
@@ -109,8 +114,8 @@ onPressShortcutRow = (deviceInfo: Object) => {
 }
 
 onPressOtherBrand = () => {
-	const { navigation } = this.props;
-	const prevParams = navigation.state.params || {};
+	const { navigation, route } = this.props;
+	const prevParams = route.params || {};
 	navigation.navigate('SelectBrand433', {
 		...prevParams,
 	});
@@ -147,9 +152,11 @@ render(): Object {
 	} = this.getStyles();
 	const { rows } = this.state;
 
-	const { navigation, intl } = this.props;
+	const { intl, route } = this.props;
 	const { formatMessage } = intl;
-	const shortcutToTelldus = navigation.getParam('shortcutToTelldus', false);
+	const {
+		shortcutToTelldus = false,
+	} = route.params || {};
 
 	const telldusDevices = rows.map((data: Object, i: number): Object => {
 		return this.renderRowShortcut(data, i);
@@ -166,7 +173,9 @@ render(): Object {
 			}}>
 			<View style={shortCutItemsCover}>
 				{shortcutToTelldus && <TouchableOpacity onPress={this.onPressOtherBrand}>
-					<View style={shortCutInfoCover}>
+					<View
+						level={2}
+						style={shortCutInfoCover}>
 						<Text style={clickTextStyle}>
 							{formatMessage(i18n.addDeviceAnotherBrand)}
 						</Text>
@@ -236,7 +245,6 @@ getStyles(): Object {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			paddingVertical: padding,
 			borderRadius: 2,

@@ -41,6 +41,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	paddingHorizontal: number,
+	route: Object,
 };
 
 class LocationDetected extends View {
@@ -94,18 +95,11 @@ class LocationDetected extends View {
 			timezone: client.timezone,
 			autoDetected: client.timezoneAutodetected,
 		};
-		this.props.navigation.navigate({
-			routeName: 'LocationName',
-			key: 'LocationName',
-			params: {clientInfo},
-		});
+		this.props.navigation.navigate('LocationName', {clientInfo});
 	}
 
 	onActivateManual() {
-		this.props.navigation.navigate({
-			routeName: 'LocationActivationManual',
-			key: 'LocationActivationManual',
-		});
+		this.props.navigation.navigate('LocationActivationManual');
 	}
 
 	renderClient(client: Object, i: number, appLayout: Object): Object {
@@ -116,11 +110,11 @@ class LocationDetected extends View {
 
 	render(): Object {
 		let items = [];
-		const { navigation, appLayout, paddingHorizontal } = this.props;
+		const { appLayout, paddingHorizontal, route } = this.props;
 
 		const styles = this.getStyle(appLayout, paddingHorizontal);
 
-		const clients = navigation.getParam('clients', null);
+		const { clients } = route.params || {};
 		if (clients) {
 			items = clients.map((client: Object, i: number): Object => {
 				return this.renderClient(client, i, appLayout);

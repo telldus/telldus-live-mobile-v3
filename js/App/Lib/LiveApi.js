@@ -28,6 +28,11 @@ import { parse } from 'url';
 const CancelToken = axios.CancelToken;
 let axiosSources = {};
 
+import {
+	updateAccessTokenOtherAccount,
+	updateAccessToken,
+} from '../Actions/Auth';
+
 import type { ThunkAction } from '../Actions/Types';
 import { apiServer, publicKey, privateKey } from '../../Config';
 
@@ -44,7 +49,15 @@ import { apiServer, publicKey, privateKey } from '../../Config';
 
 export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = false }: {url: string, requestParams: Object, _accessToken?: Object, cancelAllPending?: boolean }): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
-		const { user: { accessToken, userId = '' } } = getState();
+		let { user: { accessToken, userId = '' } } = getState();
+
+		// NOTE: userId is not yet(v3.14) available while logging in.
+		// So user's who upgrade from old app version will not have
+		// 'userId' inside accessToken Object. Inject it here if required.
+		accessToken = {
+			...accessToken,
+			userId: accessToken.userId || userId,
+		};
 
 		const { path } = parse(url);
 		let source = {};
@@ -76,7 +89,9 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			...requestParams,
 		};
 
-		return doApiCall(url, requestParams, _accessToken || accessToken, dispatch).then((response: Object): any => {
+		const accessTokenFinal = _accessToken || accessToken;
+
+		return doApiCall(url, requestParams, accessTokenFinal, dispatch).then((response: Object): any => {
 			const currUserSources = axiosSources[userId] || {};
 			delete currUserSources[path];
 
@@ -93,9 +108,14 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			if (axios.isCancel(error)) {// DO not throw axios cancel
 				return error;
 			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
-				return dispatch({
-					type: 'LOCK_SESSION',
-				});
+				const { userId: userIdRequest = '' } = accessTokenFinal;
+				const isRequestMadeByTheActiveAccount = userIdRequest.trim().toLowerCase() === userId.trim().toLowerCase();
+				if (isRequestMadeByTheActiveAccount) {
+					return dispatch({
+						type: 'LOCK_SESSION',
+					});
+				}
+				return error;
 			}
 
 			throw error;
@@ -174,22 +194,31 @@ export function refreshAccessToken(url?: string = '', requestParams?: Object = {
 		})
 			.then((response: Object): any => response.json())
 			.then((response: Object): any => {
+				const { userId = '' } = accessToken;
+				const { user: { userId: userIdActive = '' } } = getState();
+				const isRequestMadeByTheActiveAccount = userIdActive.trim().toLowerCase() === userId.trim().toLowerCase();
 				if (response.error) {
+					if (isRequestMadeByTheActiveAccount) {
 					// We couldn't get a new access token with the refresh_token, so we lock the session.
-					dispatch({
-						type: 'LOCK_SESSION',
-					});
+						dispatch({
+							type: 'LOCK_SESSION',
+						});
+					}
 					throw response;
 				}
 
-				// import 'updateAccessToken' fails on doing module.exports from Actions/Login'
-				// works on exporting 'updateAccessToken' directly(cant be do as there are multiple exports already). need to investigate.
-				dispatch({
-					type: 'RECEIVED_ACCESS_TOKEN',
-					accessToken: {
+				if (isRequestMadeByTheActiveAccount) {
+					dispatch(updateAccessToken({
 						...response,
-					},
-				});
+						userId, // TODO: No need to override once userId is available via API response
+					}));
+				} else {
+					dispatch(updateAccessTokenOtherAccount({
+						...response,
+						userId, // TODO: No need to override once userId is available via API response
+					}));
+				}
+
 				return response;
 			}).catch((err: any) => {
 				throw err;

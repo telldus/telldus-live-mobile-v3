@@ -5,6 +5,7 @@ exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -21,7 +22,6 @@ exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
     <View
       accessible={true}
       focusable={true}
-      isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -68,7 +68,6 @@ exports[`renders VSetting when isOneSelected is false using Snapshots 1`] = `
     <View
       accessible={true}
       focusable={true}
-      isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -134,6 +133,7 @@ exports[`renders VSetting when isOneSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -150,7 +150,6 @@ exports[`renders VSetting when isOneSelected using Snapshots 1`] = `
     <View
       accessible={true}
       focusable={true}
-      isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -207,7 +206,6 @@ exports[`renders VSetting when isOneSelected using Snapshots 1`] = `
     <View
       accessible={true}
       focusable={true}
-      isTVSelectable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}

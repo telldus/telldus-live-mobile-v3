@@ -23,7 +23,6 @@
 
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 
 import {
 	View,
@@ -36,11 +35,15 @@ import { hasTokenExpired } from '../../../Lib/LocalControl';
 import getLocationImageUrl from '../../../Lib/getLocationImageUrl';
 import Status from './Gateway/Status';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
     location: Object,
 	appLayout: Object,
 	screenReaderEnabled: boolean,
@@ -74,17 +77,10 @@ class GatewayRow extends PureComponent<Props, State> {
 		if (onPress) {
 			onPress(location);
 		} else {
-			const navigateAction = NavigationActions.navigate({
-				routeName: 'LocationDetails',
-				key: 'LocationDetails',
+			this.props.navigation.navigate('LocationDetails', {
+				screen: 'Details',
 				params: { location },
-				action: NavigationActions.navigate({
-					routeName: 'Details',
-					key: 'Details',
-					params: { location },
-				}),
-			  });
-			this.props.navigation.dispatch(navigateAction);
+			});
 		}
 	}
 
@@ -164,6 +160,7 @@ class GatewayRow extends PureComponent<Props, State> {
 	getStyles(appLayout: Object): Object {
 		const {
 			disabled = false,
+			colors,
 		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -171,15 +168,23 @@ class GatewayRow extends PureComponent<Props, State> {
 
 		const {
 			paddingFactor,
-			brandSecondary,
 		} = Theme.Core;
+
+		const {
+			card,
+			colorBlockDisabled,
+			headerOneColorBlockEnabled,
+			headerOneColorBlockDisabled,
+			iconTwoColorBlock,
+			iconOneColorBlockDisabled,
+		} = colors;
 
 		const padding = deviceWidth * paddingFactor;
 		const rowWidth = width - (padding * 2);
 		const rowHeight = deviceWidth * 0.34;
 
-		const colorBackground = disabled ? '#f5f5f5' : '#fff';
-		const colorHeaderOneText = disabled ? '#999999' : brandSecondary;
+		const colorBackground = disabled ? colorBlockDisabled : card;
+		const colorHeaderOneText = disabled ? headerOneColorBlockDisabled : headerOneColorBlockEnabled;
 
 		return {
 			rowItemsCover: {
@@ -200,7 +205,7 @@ class GatewayRow extends PureComponent<Props, State> {
 				top: '40%',
 			},
 			arrow: {
-				tintColor: '#A59F9A90',
+				tintColor: iconTwoColorBlock,
 				height: rowHeight * 0.25,
 				width: rowHeight * 0.2,
 			},
@@ -215,7 +220,7 @@ class GatewayRow extends PureComponent<Props, State> {
 			},
 			notAvailableIcon: {
 				fontSize: rowHeight * 0.25,
-				color: '#bdbdbd',
+				color: iconOneColorBlockDisabled,
 			},
 		};
 	}
@@ -236,4 +241,4 @@ function mapDispatchToProps(dispatch: Object, props: Object): Object {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GatewayRow);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(GatewayRow));

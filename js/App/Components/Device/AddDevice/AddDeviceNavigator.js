@@ -23,7 +23,7 @@
 'use strict';
 
 import React from 'react';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import AddDeviceContainer from './AddDeviceContainer';
 
@@ -34,44 +34,65 @@ import SelectModel433 from './SelectModel433';
 import Include433 from './Include433';
 import SetDeviceName433 from './SetDeviceName433';
 
-const initialRouteName = 'InitialScreen';
+import {
+	prepareNavigator,
+	shouldNavigatorUpdate,
+} from '../../../Lib/NavigationService';
 
-type renderContainer = (Object, string) => Object;
+const initialRouteName = 'SelectLocation';
 
-const renderAddDeviceContainer = (navigation: Object, screenProps: Object): renderContainer => (Component: Object, ScreenName: string): Object => (
-	<AddDeviceContainer navigation={navigation} screenProps={screenProps} ScreenName={ScreenName}>
-		<Component/>
-	</AddDeviceContainer>
-);
+const ScreenConfigs = [
+	{
+		name: 'SelectLocation',
+		Component: SelectLocation,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectDeviceType',
+		Component: SelectDeviceType,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectBrand433',
+		Component: SelectBrand433,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectModel433',
+		Component: SelectModel433,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'Include433',
+		Component: Include433,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SetDeviceName433',
+		Component: SetDeviceName433,
+		ContainerComponent: AddDeviceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+];
 
-
-const RouteConfigs = {
-	InitialScreen: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(
-			navigation.getParam('selectLocation', false) ?
-				SelectLocation
-				:
-				SelectDeviceType
-			, 'InitialScreen'),
-	},
-	SelectDeviceType: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SelectDeviceType, 'SelectDeviceType'),
-	},
-	SelectBrand433: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SelectBrand433, 'SelectBrand433'),
-	},
-	SelectModel433: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SelectModel433, 'SelectModel433'),
-	},
-	Include433: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(Include433, 'Include433'),
-	},
-	SetDeviceName433: {
-		screen: ({ navigation, screenProps }: Object): Object => renderAddDeviceContainer(navigation, screenProps)(SetDeviceName433, 'SetDeviceName433'),
-	},
-};
-
-const StackNavigatorConfig = {
+const NavigatorConfigs = {
 	initialRouteName,
 	initialRouteKey: initialRouteName,
 	headerMode: 'none',
@@ -82,6 +103,9 @@ const StackNavigatorConfig = {
 	},
 };
 
-const AddDeviceNavigator = createStackNavigator(RouteConfigs, StackNavigatorConfig);
+const Stack = createStackNavigator();
 
+const AddDeviceNavigator = React.memo<Object>((props: Object): Object => {
+	return prepareNavigator(Stack, {ScreenConfigs, NavigatorConfigs}, props);
+}, shouldNavigatorUpdate);
 export default AddDeviceNavigator;

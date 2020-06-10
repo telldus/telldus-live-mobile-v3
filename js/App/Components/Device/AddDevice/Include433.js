@@ -56,6 +56,9 @@ type Props = {
 	appLayout: Object,
 	addDevice: Object,
 	showLeftIcon: boolean,
+	route: Object,
+	currentScreen: string,
+	ScreenName: string,
 
 	onDidMount: (string, string, ?Object) => void,
 	navigation: Object,
@@ -82,18 +85,21 @@ constructor(props: Props) {
 		isLoading: false,
 	};
 
-	const { navigation, intl, actions } = props;
-	const gateway = navigation.getParam('gateway', {});
+	const { intl, actions, route } = props;
+	const {
+		gateway = {},
+		deviceInfo = {},
+		deviceName = '',
+	} = route.params || {};
+
 	const { id } = gateway;
 	this.gatewayId = id.toString();
 
-	const deviceInfo = navigation.getParam('deviceInfo', '');
 	const {
 		postConfig,
 	} = deviceInfo;
 	this.PostConfigScreenOptions = get433DevicePostConfigScreenOptions(postConfig, intl.formatMessage);
 
-	let deviceName = navigation.getParam('deviceName', '');
 	this.deleteSocketAndTimer = actions.initiateAdd433MHz(id.toString(), {
 		...deviceInfo,
 		deviceName,
@@ -130,7 +136,7 @@ componentDidMount() {
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-	return nextProps.currentScreen === 'Include433';
+	return nextProps.currentScreen === nextProps.ScreenName;
 }
 
 componentDidUpdate(prevProps: Object, prevState: Object) {
@@ -138,7 +144,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		toggleLeftIconVisibilty,
 		addDevice,
 		showLeftIcon,
-		navigation,
+		route,
 	} = this.props;
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -152,7 +158,9 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 		toggleLeftIconVisibilty(true);
 	}
 
-	const deviceInfo = navigation.getParam('deviceInfo', '');
+	const {
+		deviceInfo = {},
+	} = route.params || {};
 	const {
 		postConfig,
 	} = deviceInfo;
@@ -211,7 +219,7 @@ onNext = async (handleLoading?: boolean = true) => {
 		});
 	}
 
-	const { navigation, addDevice, actions } = this.props;
+	const { navigation, addDevice, actions, route } = this.props;
 
 	try {
 		await actions.getDevices();
@@ -222,7 +230,11 @@ onNext = async (handleLoading?: boolean = true) => {
 		const {
 			deviceId,
 		} = addDevice433;
-		const deviceName = navigation.getParam('deviceName', '');
+		const {
+			deviceName = '',
+			gateway = {},
+		} = route.params || {};
+
 		// $FlowFixMe
 		let rowData = {[deviceId]: {
 			id: deviceId,
@@ -236,20 +248,16 @@ onNext = async (handleLoading?: boolean = true) => {
 				isLoading: false,
 			});
 		}
-		const gateway = navigation.getParam('gateway', {});
-		navigation.navigate({
-			routeName: 'Devices',
-			key: 'Devices',
-			params: {
-				gateway,
-				newDevices: rowData,
-			},
+
+		navigation.navigate('Devices', {
+			gateway,
+			newDevices: rowData,
 		});
 	}
 }
 
 render(): Object {
-	const { intl, appLayout, navigation, addDevice = {} } = this.props;
+	const { intl, appLayout, route, addDevice = {} } = this.props;
 
 	const { addDevice433 = {}} = addDevice;
 	const {
@@ -273,6 +281,7 @@ render(): Object {
 		infoIconErrorStyle,
 		iconSize,
 		iconStyle,
+		throbber,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -291,8 +300,11 @@ render(): Object {
 
 	const errorInfo = message && (status === 'socket-failed' || status === 'socket-retry' || status === 'idle');
 
-	const deviceInfo = navigation.getParam('deviceInfo', '');
-	const deviceBrand = navigation.getParam('deviceBrand', '');
+	const {
+		deviceInfo = {},
+		deviceBrand = '',
+	} = route.params || {};
+
 	const {
 		model,
 	} = deviceInfo;
@@ -340,18 +352,22 @@ render(): Object {
 							flexDirection: 'row',
 						}}>
 							<Throbber
-								throbberStyle={statusStyle}
+								throbberStyle={throbber}
 								throbberContainerStyle={{
 									position: 'relative',
 								}}/>
-							<Text style={[statusStyle, {
-								marginLeft: 5,
-							}]}>
+							<Text
+								level={6}
+								style={[statusStyle, {
+									marginLeft: 5,
+								}]}>
 								{`${intl.formatMessage(i18n.reconnectingTellstick)}...`}
 							</Text>
 						</View>
 						:
-						<Text style={statusStyle}>
+						<Text
+							level={6}
+							style={statusStyle}>
 							{statusText}
 						</Text>
 					}
@@ -446,7 +462,6 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 		},
 		infoTextStyle: {
-			color: rowTextColor,
 			fontSize: fontSizeText,
 		},
 		iconSize: deviceWidth * 0.050666667,
@@ -462,9 +477,13 @@ getStyles(): Object {
 		infoIconErrorStyle: {
 			color: red,
 		},
-		statusStyle: {
+		throbber: {
 			fontSize: fontSizeStatus,
 			color: rowTextColor,
+			marginBottom: 4,
+		},
+		statusStyle: {
+			fontSize: fontSizeStatus,
 			marginBottom: 4,
 		},
 	};

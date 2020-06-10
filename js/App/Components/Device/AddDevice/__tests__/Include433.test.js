@@ -58,27 +58,32 @@ const onDidMount = jest.fn();
 const deviceName = 'Device name';
 const navigation = {
 	...NAVIGATION_PROP,
-	getParam: (paramName, defaultValue) => {
-		return navigation.state.params[paramName] || defaultValue;
-	},
-	state: {
-		params: {
-			gateway: {
-				id: DUMMY_DEVICE_433.client,
-			},
-			deviceInfo: {
-				...DEVICE_MANU_INFO_433,
-			},
-			deviceName,
+};
+const route = {
+	params: {
+		gateway: {
+			id: DUMMY_DEVICE_433.client,
 		},
+		deviceInfo: {
+			...DEVICE_MANU_INFO_433,
+		},
+		deviceName,
 	},
 };
 const currentScreen = 'Include433';
+const ScreenName = currentScreen;
 
 let actions = {
 	initiateAdd433MHz: jest.fn((id, deviceInfo, formatMessage) => {
 		return Promise.resolve(() => {});
 	}),
+};
+
+const customMapStateToProps = (_store, _ownProps) => {
+	return {
+		...mapStateToProps(_store, _ownProps),
+		currentScreen,
+	};
 };
 
 describe('<Include433 />', () => {
@@ -114,6 +119,7 @@ describe('<Include433 />', () => {
 			component = rendererWithIntlAndRedux(
 				<Include433
 					navigation={navigation}
+					route={route}
 					intl={intl}
 					appLayout={appLayout}
 					onDidMount={onDidMount}
@@ -165,7 +171,7 @@ describe('<Include433 /> with container component', () => {
 		};
 	};
 
-	const ConnectedAddDeviceContainer = connect(mapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
+	const ConnectedAddDeviceContainer = connect(customMapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
 
 	beforeAll(() => {
 		setAppLayoutInStore();
@@ -197,13 +203,15 @@ describe('<Include433 /> with container component', () => {
 
 			const screenProps = {
 				appLayout,
-				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
 					navigation={navigation}
+					currentScreen={currentScreen}
+					ScreenName={ScreenName}
+					route={route}
 					children={
 						<Include433/>
 					}
@@ -245,7 +253,7 @@ describe('<Include433 /> on success with container component', () => {
 		};
 	};
 
-	const ConnectedAddDeviceContainer = connect(mapStateToProps, customMapDispatchToProps2)(UnConnectedAddDeviceContainer);
+	const ConnectedAddDeviceContainer = connect(customMapStateToProps, customMapDispatchToProps2)(UnConnectedAddDeviceContainer);
 
 	beforeAll(() => {
 		setAppLayoutInStore();
@@ -278,13 +286,15 @@ describe('<Include433 /> on success with container component', () => {
 
 			const screenProps = {
 				appLayout,
-				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
+					currentScreen={currentScreen}
+					ScreenName={ScreenName}
 					navigation={navigation}
+					route={route}
 					children={
 						<Include433/>
 					}
@@ -329,7 +339,7 @@ describe('<Include433 /> on error with container component', () => {
 		};
 	};
 
-	const ConnectedAddDeviceContainer = connect(mapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
+	const ConnectedAddDeviceContainer = connect(customMapStateToProps, customMapDispatchToProps)(UnConnectedAddDeviceContainer);
 
 	beforeAll(() => {
 		setAppLayoutInStore();
@@ -363,13 +373,15 @@ describe('<Include433 /> on error with container component', () => {
 
 			const screenProps = {
 				appLayout,
-				currentScreen,
 				intl,
 			};
 			component = rendererWithIntlAndRedux(
 				<ConnectedAddDeviceContainer
 					screenProps={screenProps}
+					currentScreen={currentScreen}
+					ScreenName={ScreenName}
 					navigation={navigation}
+					route={route}
 					children={
 						<Include433/>
 					}

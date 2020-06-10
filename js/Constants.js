@@ -78,4 +78,5 @@ module.exports = {
 		'e433': '433',
 		'433': '433',
 	},
+	CAMPAIGNS_URL: 'https://live.telldus.com/profile/campaigns',
 };

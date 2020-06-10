@@ -22,11 +22,15 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
-import { View, TabBar, LocationDetails } from '../../../BaseComponents';
+import {
+	View,
+	LocationDetails,
+	ThemedScrollView,
+} from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
 import { getSensorInfo } from '../../Actions';
@@ -45,6 +49,7 @@ type Props = {
 	gatewayName: string,
 	gatewayTimezone: string,
 	gatewayTimezoneOffset: number,
+	currentScreen: string,
 
 	screenProps: Object,
 	getSensorInfo: (id: number, includeUnit: 1 | 0) => Promise<any>,
@@ -60,22 +65,6 @@ class OverviewTab extends View<Props, State> {
 	state: State;
 
 	onRefresh: () => void;
-
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="home"
-				tintColor={tintColor}
-				label={i18n.overviewHeader}
-				accessibilityLabel={i18n.deviceOverviewTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'SOverview',
-				key: 'SOverview',
-			});
-		},
-	});
 
 	constructor(props: Props) {
 		super(props);
@@ -111,10 +100,10 @@ class OverviewTab extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN, ...othersN } = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { currentScreen, screenProps: screenPropsN, gatewayName: gatewayNameN, sensor: sensorN, ...othersN } = nextProps;
+		const { appLayout } = screenPropsN;
 		if (currentScreen === 'SOverview') {
-			if (this.props.screenProps.currentScreen !== 'SOverview') {
+			if (this.props.currentScreen !== 'SOverview') {
 				return true;
 			}
 
@@ -176,10 +165,10 @@ class OverviewTab extends View<Props, State> {
 		} = this.getStyles(appLayout);
 
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={contentContainerStyle}
 				refreshControl={
@@ -201,7 +190,7 @@ class OverviewTab extends View<Props, State> {
 				{(!!battery && battery !== 254) && (
 					<BatteryInfo battery={battery} appLayout={appLayout} style={batterInfoStyle}/>
 				)}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -246,7 +235,8 @@ function mapDispatchToProps(dispatch: Function): Object {
 }
 
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
+	const { route } = ownProps;
+	const { id } = route.params || {};
 	const sensor = state.sensors.byId[id];
 	const { clientId } = sensor ? sensor : {};
 
@@ -258,12 +248,15 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		tzoffset: gatewayTimezoneOffset,
 	} = gateway ? gateway : {};
 
+	const { screen: currentScreen } = state.navigation;
+
 	return {
 		sensor,
 		gatewayType,
 		gatewayName,
 		gatewayTimezone,
 		gatewayTimezoneOffset,
+		currentScreen,
 	};
 }
 

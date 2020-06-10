@@ -6,7 +6,7 @@ import { configureStore } from '../../Store/ConfigureStore';
 jest.useFakeTimers();
 
 describe('Test websocket actions', ()=>{
-	let store = configureStore();
+	let store = configureStore().store;
 
 	it('check websocket action authenticateSession', () => {
 		const session = { sessionId: 333, ttl: 'ksr' };

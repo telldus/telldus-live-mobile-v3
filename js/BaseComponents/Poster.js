@@ -27,8 +27,6 @@ import PropTypes from 'prop-types';
 import View from './View';
 import GeometricHeader from './GeometricHeader';
 
-import { ifIphoneX } from 'react-native-iphone-x-helper';
-
 type Props = {
 	children?: any,
 	appLayout: Object,
@@ -53,7 +51,7 @@ class Poster extends Component<Props, null> {
 		const { mask, headerHeight, headerWidth } = this._getStyle(appLayout);
 		return (
 			<View style={mask}>
-				<GeometricHeader headerHeight={headerHeight} headerWidth={headerWidth} style={{
+				<GeometricHeader headerHeight={Math.ceil(headerHeight)} headerWidth={Math.ceil(headerWidth)} style={{
 					marginTop: -2, // TODO: this is a work around for a very narrow line shown on top
 					// of the image. Investigate and give a proper fix.
 				}}/>
@@ -76,11 +74,11 @@ class Poster extends Component<Props, null> {
 				resizeMode: 'cover',
 			},
 			headerHeight: posterHeight,
-			headerWidth: ifIphoneX(width, posterWidth),
+			headerWidth: posterWidth,
 			mask: {
 				borderWidth: 0,
 				height: posterHeight,
-				...ifIphoneX({width: '100%'}, {width: posterWidth}),
+				width: '100%',
 				overflow: 'hidden',
 			},
 		};

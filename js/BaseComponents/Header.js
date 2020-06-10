@@ -21,17 +21,26 @@
 
 'use strict';
 
-import React from 'react';
-import { Platform, Image, Text, TouchableOpacity } from 'react-native';
+import React, {
+	useCallback,
+} from 'react';
+import {
+	Platform,
+	Image,
+	Text,
+	TouchableOpacity,
+} from 'react-native';
+import {
+	useSelector,
+} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import { hasStatusBar } from '../App/Lib';
+import { useIntl } from 'react-intl';
+
 import Theme from '../App/Theme';
 
-import computeProps from './computeProps';
 import Button from './Button';
 import View from './View';
-import Base from './Base';
 import Title from './Title';
 import InputGroup from './InputGroup';
 import Subtitle from './Subtitle';
@@ -41,140 +50,72 @@ import i18n from '../App/Translations/common';
 
 type Props = {
 	children?: Object,
-	logoStyle?: Object | number,
+	logoStyle?: Object,
 	rounded?: number,
 	searchBar?: ?Object,
 	rightButton?: Object,
 	leftButton: Object,
-	appLayout: Object,
-	showAttentionCapture: boolean,
-	intl: Object,
-	forceHideStatus?: boolean,
-};
-
-type DefaultProps = {
 	showAttentionCapture: boolean,
 	forceHideStatus?: boolean,
+	style: Object | Array<any>,
+	onPressLogo?: Function,
 };
 
-export default class HeaderComponent extends Base {
+const HeaderComponent = (props: Props): Object => {
 
-	deviceWidth: number;
-	paddingHorizontal: number;
-	paddingTop: number;
-	props: Props;
-	state: Object;
+	const {
+		children,
+		rounded,
+		logoStyle,
+		searchBar,
+		leftButton,
+		rightButton,
+		showAttentionCapture,
+		style,
+		onPressLogo,
+	} = props;
 
-	getTheme: () => Object;
+	const {
+		iosToolbarBtnColor,
+		toolbarTextColor,
+	 } = Theme.Core;
 
-	static defaultProps: DefaultProps = {
-		showAttentionCapture: false,
-		forceHideStatus: false,
-	};
+	 const intl = useIntl();
 
-	getInitialStyle: () => Object;
-	prepareRootProps: () => Object;
-	renderChildren: () => Object;
-	renderRightButton: (Object) => Object;
-	renderLeftButton: (Object) => Object;
-	renderButtonContent: (Object) => Object;
+	const { layout: appLayout } = useSelector((state: Object): Object => state.app);
+	const {
+		height,
+		width,
+	} = appLayout;
+	const {
+		navbar,
+		logoImage,
+		iosToolbarSearch,
+		toolbarButton,
+		androidToolbarSearch,
+		headerButton,
+	} = getStyles(appLayout, {
+		rounded,
+		children,
+	});
 
-	_hasStatusBar: () => void;
-
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			hasStatusBar: false,
-		};
-
-		this._hasStatusBar();
-	}
-
-	_hasStatusBar = async () => {
-		const _hasStatusBar = await hasStatusBar();
-		this.setState({
-			hasStatusBar: _hasStatusBar,
-		});
-	}
-
-	getInitialStyle(): Object {
-		let { appLayout } = this.props;
-		let { height, width } = appLayout;
-		this.deviceWidth = height > width ? width : height;
-
-		this.paddingHorizontal = 15;
-		this.paddingTop = Theme.Core.navBarTopPadding;
-
-		return {
-			navbar: {
-				backgroundColor: this.getTheme().toolbarDefaultBg,
-				justifyContent: (!Array.isArray(this.props.children)) ? 'center' : 'space-between',
-				flexDirection: 'row',
-				alignItems: 'center',
-				paddingHorizontal: this.paddingHorizontal,
-				paddingTop: this.paddingTop,
-				height: this.getTheme().toolbarHeight,
-				position: 'relative',
-			},
-			statusBar: {
-				height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
-				backgroundColor: this.getTheme().toolbarDefaultBg,
-			},
-			logoImage: {
-				width: this.deviceWidth * 0.307333333,
-				height: this.deviceWidth * 0.046666667,
-				resizeMode: 'contain',
-			},
-			iosToolbarSearch: {
-				backgroundColor: this.getTheme().toolbarInputColor,
-				borderRadius: this.props.rounded ? 25 : 2,
-				height: 30,
-				borderColor: 'transparent',
-				flex: 1,
-			},
-			androidToolbarSearch: {
-				backgroundColor: '#fff',
-				borderRadius: 2,
-				borderColor: 'transparent',
-				elevation: 2,
-				flex: 1,
-			},
-			toolbarButton: {
-				paddingHorizontal: this.paddingHorizontal,
-			},
-			headerButton: {
-				position: 'absolute',
-				flex: 1,
-				justifyContent: 'center',
-				paddingTop: this.paddingTop,
-				paddingHorizontal: this.paddingHorizontal,
-			},
-		};
-	}
-
-	prepareRootProps(): Object {
-
-		let defaultProps = {
-			style: this.getInitialStyle().navbar,
-		};
-
-		return computeProps(this.props, defaultProps);
-
-	}
-
-	renderChildren(): ?Object | ?Array<any> {
-		if (!this.props.children) {
+	const renderChildren = useCallback((): ?Object | ?Array<any> => {
+		if (!children) {
 			return (
-				<Image
-					source={{uri: 'telldus_logo'}}
-					style={[this.getInitialStyle().logoImage, this.props.logoStyle]}
-				/>
+				<TouchableOpacity
+					disabled={!onPressLogo}
+					onPress={onPressLogo}>
+					<Image
+						source={{uri: 'telldus_logo'}}
+						style={[logoImage, logoStyle]}
+					/>
+				</TouchableOpacity>
 			);
-		} else if (!Array.isArray(this.props.children)) {
-			return this.props.children;
-		} else if (Array.isArray(this.props.children)) {
+		} else if (!Array.isArray(children)) {
+			return children;
+		} else if (Array.isArray(children)) {
 			let newChildren = [];
-			let childrenArray = React.Children.toArray(this.props.children);
+			let childrenArray = React.Children.toArray(children);
 
 			let buttons = [];
 			buttons = _.remove(childrenArray, (item: Object): ?boolean => {
@@ -204,7 +145,7 @@ export default class HeaderComponent extends Base {
 				}
 			});
 
-			if (this.props.searchBar) {
+			if (searchBar) {
 				if (Platform.OS === 'ios') {
 					newChildren.push(<View key="search" style={{
 						flex: 1,
@@ -216,7 +157,7 @@ export default class HeaderComponent extends Base {
 						{React.cloneElement(
 							input[0],
 							{
-								style: this.getInitialStyle().iosToolbarSearch,
+								style: iosToolbarSearch,
 								toolbar: true,
 								key: 'inp',
 							}
@@ -231,8 +172,8 @@ export default class HeaderComponent extends Base {
 						{React.cloneElement(
 							buttons[0],
 							{
-								color: this.getTheme().iosToolbarBtnColor,
-								style: this.getInitialStyle().toolbarButton,
+								color: iosToolbarBtnColor,
+								style: toolbarButton,
 							}
 						)}
 					</View>);
@@ -248,7 +189,7 @@ export default class HeaderComponent extends Base {
 						{React.cloneElement(
 							input[0],
 							{
-								style: this.getInitialStyle().androidToolbarSearch,
+								style: androidToolbarSearch,
 								atoolbar: true,
 							}
 						)}
@@ -264,8 +205,8 @@ export default class HeaderComponent extends Base {
 					{React.cloneElement(
 						buttons[0],
 						{
-							color: this.getTheme().iosToolbarBtnColor,
-							style: this.getInitialStyle().toolbarButton,
+							color: iosToolbarBtnColor,
+							style: toolbarButton,
 						}
 					)}
 				</View>);
@@ -286,8 +227,8 @@ export default class HeaderComponent extends Base {
 						{React.cloneElement(
 							buttons[i],
 							{
-								color: this.getTheme().iosToolbarBtnColor,
-								style: this.getInitialStyle().toolbarButton,
+								color: iosToolbarBtnColor,
+								style: toolbarButton,
 							}
 						)}
 					</View>);
@@ -303,9 +244,9 @@ export default class HeaderComponent extends Base {
 					{React.cloneElement(
 						buttons[0],
 						{
-							style: this.getInitialStyle().toolbarButton,
+							style: toolbarButton,
 							header: true,
-							textStyle: { color: this.getTheme().toolbarTextColor },
+							textStyle: { color: toolbarTextColor },
 						}
 					)}
 				</View>);
@@ -326,9 +267,9 @@ export default class HeaderComponent extends Base {
 						{React.cloneElement(
 							buttons[i],
 							{
-								style: this.getInitialStyle().toolbarButton,
+								style: toolbarButton,
 								header: true,
-								textStyle: { color: this.getTheme().toolbarTextColor },
+								textStyle: { color: toolbarTextColor },
 							}
 						)}
 					</View>);
@@ -337,9 +278,14 @@ export default class HeaderComponent extends Base {
 			}
 			return newChildren;
 		}
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		children,
+		searchBar,
+		appLayout,
+	]);
 
-	renderButtonContent = (button: Object): ?Object => {
+	const renderButtonContent = useCallback((button: Object): ?Object => {
 		if (button.image) {
 			return <Image source={button.image}/>;
 		}
@@ -353,28 +299,27 @@ export default class HeaderComponent extends Base {
 		if (button.component) {
 			return button.component;
 		}
-	};
+	}, []);
 
-	getPropsAttentionCatcher(): Object {
-		const { appLayout, intl } = this.props;
-		let top = Theme.Core.navBarTopPadding, pos = 'right', right = 35, left;
 
-		if (Platform.OS === 'android') {
-			const { height, width } = appLayout;
-			const isPortrait = height > width;
 
-			top = isPortrait ? Theme.Core.navBarTopPadding : 0;
-			if (!isPortrait) {
-				pos = 'left';
-				right = undefined;
-				left = height - 35;
+	const renderRightButtonAttentionCapture = useCallback((): Object => {
+		const getPropsAttentionCatcher = (): Object => {
+			let top = Theme.Core.navBarTopPadding, pos = 'right', right = 35, left;
+
+			if (Platform.OS === 'android') {
+				const isPortrait = height > width;
+
+				top = isPortrait ? Theme.Core.navBarTopPadding : 0;
+				if (!isPortrait) {
+					pos = 'left';
+					right = undefined;
+					left = height - 35;
+				}
 			}
-		}
-		return {top, right, left, pos, text: intl.formatMessage(i18n.labelAddNewDevice).toUpperCase()};
-	}
-
-	renderRightButtonAttentionCapture = (): Object => {
-		const { top, right, left, pos, text } = this.getPropsAttentionCatcher();
+			return {top, right, left, pos, text: intl.formatMessage(i18n.labelAddNewDevice).toUpperCase()};
+		};
+		const { top, right, left, pos, text } = getPropsAttentionCatcher();
 		return (
 			<AttentionCatcher
 				containerTop={top}
@@ -383,73 +328,139 @@ export default class HeaderComponent extends Base {
 				left={left}
 				text={text}/>
 		);
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [appLayout]);
 
-	renderRightButton = (rightButton: Object): Object => {
-		let { accessibilityLabel, icon, style } = rightButton;
-		style = icon ? icon.style : style;
+	const renderRightButton = useCallback((button: Object): Object => {
+
+		let { accessibilityLabel, icon } = button;
+		let coverStyle = icon ? icon.style : button.style;
 		return (
 			<TouchableOpacity
-				onPress={rightButton.onPress}
+				onPress={button.onPress}
 				accessibilityLabel={accessibilityLabel}
 				style={[
-					this.getInitialStyle().headerButton,
+					headerButton,
 					{
 						alignItems: 'flex-end',
 						backgroundColor: 'transparent',
 						right: 0,
 					},
-					style,
+					coverStyle,
 				]}
 			>
-				{this.renderButtonContent(rightButton)}
+				{renderButtonContent(button)}
 			</TouchableOpacity>
 		);
-	};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [appLayout]);
 
-	renderLeftButton = (leftButton: Object): Object => {
-		let { accessibilityLabel, icon, customComponent } = leftButton;
-		let style = icon ? icon.style : null;
+	const renderLeftButton = useCallback((button: Object): Object => {
+		let { accessibilityLabel, icon, customComponent } = button;
+		let coverStyle = icon ? icon.style : null;
 		if (customComponent) {
 			return customComponent;
 		}
 		return (
 			<TouchableOpacity
-				onPress={leftButton.onPress}
+				onPress={button.onPress}
 				accessibilityLabel={accessibilityLabel}
 				style={[
-					this.getInitialStyle().headerButton,
+					headerButton,
 					{
 						alignItems: 'flex-start',
 						backgroundColor: 'transparent',
 						left: 0,
 					},
-					style,
+					coverStyle,
 				]}
 			>
-				{this.renderButtonContent(leftButton)}
+				{renderButtonContent(button)}
 			</TouchableOpacity>
 		);
-	};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [appLayout]);
 
-	render(): Object {
-		const { leftButton, rightButton, showAttentionCapture, forceHideStatus } = this.props;
-		const { style } = this.prepareRootProps();
-		return (
-			<View style={{ flex: 0 }}>
-				{
-					(!forceHideStatus && Platform.OS === 'android' && this.state.hasStatusBar) ? (
-						<View style={this.getInitialStyle().statusBar}/>
-					) : null
-				}
-				<View style={style}>
-					{!!leftButton && this.renderLeftButton(leftButton)}
-					{this.renderChildren()}
-					{showAttentionCapture && this.renderRightButtonAttentionCapture()}
-					{!!rightButton && this.renderRightButton(rightButton)}
-				</View>
+	return (
+		<View style={{ flex: 0 }}>
+			<View style={[navbar, style]}>
+				{!!leftButton && renderLeftButton(leftButton)}
+				{renderChildren()}
+				{showAttentionCapture && renderRightButtonAttentionCapture()}
+				{!!rightButton && renderRightButton(rightButton)}
 			</View>
-		);
-	}
-}
+		</View>
+	);
+};
 
+const getStyles = (appLayout: Object, {
+	children,
+	rounded,
+}: Object): Object => {
+
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const paddingHorizontal = 15;
+
+	const {
+		navBarTopPadding: paddingTop,
+		toolbarDefaultBg,
+		toolbarHeight,
+		toolbarInputColor,
+	 } = Theme.Core;
+
+	return {
+		navbar: {
+			backgroundColor: toolbarDefaultBg,
+			justifyContent: (!Array.isArray(children)) ? 'center' : 'space-between',
+			flexDirection: 'row',
+			alignItems: 'center',
+			paddingHorizontal: paddingHorizontal,
+			paddingTop: paddingTop,
+			height: toolbarHeight,
+			position: 'relative',
+		},
+		statusBar: {
+			height: ExtraDimensions.get('STATUS_BAR_HEIGHT'),
+			backgroundColor: toolbarDefaultBg,
+		},
+		logoImage: {
+			width: deviceWidth * 0.307333333,
+			height: deviceWidth * 0.046666667,
+			resizeMode: 'contain',
+		},
+		iosToolbarSearch: {
+			backgroundColor: toolbarInputColor,
+			borderRadius: rounded ? 25 : 2,
+			height: 30,
+			borderColor: 'transparent',
+			flex: 1,
+		},
+		androidToolbarSearch: {
+			backgroundColor: '#fff',
+			borderRadius: 2,
+			borderColor: 'transparent',
+			elevation: 2,
+			flex: 1,
+		},
+		toolbarButton: {
+			paddingHorizontal: paddingHorizontal,
+		},
+		headerButton: {
+			position: 'absolute',
+			flex: 1,
+			justifyContent: 'center',
+			paddingTop: paddingTop,
+			paddingHorizontal: paddingHorizontal,
+		},
+	};
+};
+
+HeaderComponent.defaultProps = {
+	showAttentionCapture: false,
+	forceHideStatus: false,
+};
+
+export default React.memo<Object>(HeaderComponent);

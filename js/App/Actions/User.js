@@ -32,6 +32,7 @@ const { User } = actions;
 
 const {
 	linkedAccountAdd,
+	getUserSubscriptions,
 } = User;
 
 import type { ThunkAction, Action } from './Types';
@@ -168,7 +169,11 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			setBoolean('Email', true);
 			dispatch({
 				type: 'USER_REGISTER',
-				accessToken: responseData,
+				accessToken: {
+					...responseData,
+					userId: email || undefined, // TODO: Should use user id, once it is available.
+					// https://code.telldus.com/telldus/live-api/issues/143
+				},
 			});
 			return responseData;
 		}).catch((e: Object): any => {
@@ -329,6 +334,26 @@ function toggleVisibilityProExpireHeadsup(value: 'show' | 'hide_temp' | 'hide_pe
 	};
 }
 
+function updateAllAccountsInfo(): ThunkAction {
+	return (dispatch: Function, getState: Function) => {
+
+		const {
+			user: {
+				accounts = {},
+				userId: activeUserId = '',
+			},
+		} = getState();
+
+		Object.keys(accounts).forEach((userId: string) => {
+			const { accessToken } = accounts[userId];
+			if (accessToken && (activeUserId.trim().toLowerCase() !== userId.trim().toLowerCase())) {
+				dispatch(getUserProfile(accessToken, false, false));
+				dispatch(getUserSubscriptions(accessToken));
+			}
+		});
+	};
+}
+
 function updateStatusIAPTransaction(payload: Object): Action {
 	return {
 		type: 'UPDATE_STATUS_IAP_TRANSACTION',
@@ -405,6 +430,13 @@ const logoutAfterUnregister = (): ThunkAction => {
 	};
 };
 
+function toggleVisibilitySwitchAccountAS(payload: Object): Action {
+	return {
+		type: 'TOGGLE_VISIBILITY_SWITCH_ACCOUNT_AS',
+		payload,
+	};
+}
+
 const setSocialAuthConfig = (payload: Object): Action => {
 	return {
 		type: 'SET_SOCIAL_AUTH_CONFIG',
@@ -461,11 +493,13 @@ module.exports = {
 	campaignVisited,
 	toggleVisibilityExchangeOffer,
 	toggleVisibilityProExpireHeadsup,
+	updateAllAccountsInfo,
 	updateStatusIAPTransaction,
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
 	reportIapAtServer,
 	logoutAfterUnregister,
+	toggleVisibilitySwitchAccountAS,
 	setSocialAuthConfig,
 	checkAndLinkAccountIfRequired,
 	toggleVisibilityEula,

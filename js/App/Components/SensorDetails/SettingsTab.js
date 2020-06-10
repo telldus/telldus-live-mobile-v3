@@ -23,7 +23,6 @@
 
 import React from 'react';
 import {
-	ScrollView,
 	LayoutAnimation,
 	BackHandler,
 } from 'react-native';
@@ -32,11 +31,11 @@ const isEqual = require('react-fast-compare');
 
 import {
 	View,
-	TabBar,
 	Text,
 	SettingsRow,
 	TouchableButton,
 	EditBox,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	ExcludeDevice,
@@ -74,6 +73,7 @@ type Props = {
 	inDashboard: boolean,
 	navigation: Object,
 	isGatewayReachable: boolean,
+	currentScreen: string,
 
 	screenProps: Object,
 	onAddToDashboard: (id: number) => void,
@@ -117,30 +117,14 @@ class SettingsTab extends View {
 
 	handleBackPress: () => boolean;
 
-	static navigationOptions = ({ navigation }: Object): Object => ({
-		tabBarLabel: ({ tintColor }: Object): Object => (
-			<TabBar
-				icon="settings"
-				tintColor={tintColor}
-				label={i18n.settingsHeader}
-				accessibilityLabel={i18n.deviceSettingsTab}/>
-		),
-		tabBarOnPress: ({scene, jumpToIndex}: Object) => {
-			navigation.navigate({
-				routeName: 'SSettings',
-				key: 'SSettings',
-			});
-		},
-	});
-
 	static getDerivedStateFromProps(props: Object, state: Object): null | Object {
-		const { screenProps, sensor } = props;
+		const { currentScreen, sensor } = props;
 		const { switchConf } = state;
 		const { transition, source } = switchConf;
 
 		// This is required to make the 'keepHistory' prop update when changed from history tab
 		// also while toggling switch prevent update in between API response.
-		if (screenProps.currentScreen === 'SSettings' &&
+		if (currentScreen === 'SSettings' &&
 			state.keepHistory !== sensor.keepHistory &&
 			source !== 'keepHistory' && !transition
 		) {
@@ -207,10 +191,10 @@ class SettingsTab extends View {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
-		const { currentScreen, appLayout } = screenPropsN;
+		const { currentScreen, screenProps: screenPropsN, inDashboard: inDashboardN, ...othersN } = nextProps;
+		const { appLayout } = screenPropsN;
 		if (currentScreen === 'SSettings') {
-			if (this.props.screenProps.currentScreen !== 'SSettings') {
+			if (this.props.currentScreen !== 'SSettings') {
 				return true;
 			}
 
@@ -460,10 +444,7 @@ class SettingsTab extends View {
 			clearHistory('sensor', sensor.id);
 			dispatch(removeSensorHistory(sensor.id));
 
-			navigation.navigate({
-				routeName: 'Sensors',
-				key: 'Sensors',
-			});
+			navigation.navigate('Sensors');
 		}).catch((err: Object) => {
 			const	message = err.message ? err.message : null;
 			dispatch(showToast(message));
@@ -543,10 +524,7 @@ class SettingsTab extends View {
 	}
 
 	goBack = () => {
-		this.props.navigation.navigate({
-			routeName: 'Sensors',
-			key: 'Sensors',
-		});
+		this.props.navigation.navigate('Sensors');
 	}
 
 	registerForWebSocketEvents = (callbacks: Object): () => Object => {
@@ -695,7 +673,9 @@ class SettingsTab extends View {
 
 		if (editName) {
 			return (
-				<View style={container}>
+				<View
+					level={3}
+					style={container}>
 					<EditBox
 						value={sensorName}
 						icon={'sensor'}
@@ -713,10 +693,10 @@ class SettingsTab extends View {
 		const { isFailed = false } = nodeInfo;
 
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={{flexGrow: 1}}>
 				{excludeActive ?
@@ -837,10 +817,14 @@ class SettingsTab extends View {
 										}]}
 										accessible={true}/>
 								}
-								<Text style={clearCacheHintStyle}>
+								<Text
+									level={5}
+									style={clearCacheHintStyle}>
 									{formatMessage(i18n.hintHistoryCache)}.
 								</Text>
-								<Text style={infoHeaderText}>
+								<Text
+									level={2}
+									style={infoHeaderText}>
 									{formatMessage(i18n.labelTechnicalInfo)}
 								</Text>
 								<SettingsRow
@@ -868,7 +852,7 @@ class SettingsTab extends View {
 						}
 					</View>
 				}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 
@@ -878,9 +862,7 @@ class SettingsTab extends View {
 		const deviceWidth = isPortrait ? width : height;
 
 		const {
-			inactiveTintColor,
 			paddingFactor,
-			eulaContentColor,
 			brandDanger,
 			btnDisabledBg,
 		} = Theme.Core;
@@ -899,7 +881,6 @@ class SettingsTab extends View {
 			},
 			infoHeaderText: {
 				fontSize,
-				color: inactiveTintColor,
 				marginTop: padding * 2,
 			},
 			editBoxStyle: {
@@ -923,7 +904,6 @@ class SettingsTab extends View {
 			clearCacheHintStyle: {
 				fontSize,
 				textAlign: 'center',
-				color: eulaContentColor,
 				marginTop: padding * 2,
 				marginHorizontal: padding * 2,
 			},
@@ -940,16 +920,32 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 function mapStateToProps(state: Object, ownProps: Object): Object {
-	const id = ownProps.navigation.getParam('id', null);
-	const sensor = state.sensors.byId[id] || {};
+	const { route } = ownProps;
+	const { id } = route.params || {};
+	const sensor = state.sensors.byId[id];
+
+	const {
+		dashboard,
+		user: { userId },
+		app: {defaultSettings},
+	} = state;
+
+	const { activeDashboardId } = defaultSettings || {};
+
+	const { sensorsById = {} } = dashboard;
+	const userDbsAndSensorsById = sensorsById[userId] || {};
+	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
 
 	const { clientId } = sensor;
 	const { online = false, websocketOnline = false } = state.gateways.byId[clientId] || {};
 
+	const { screen: currentScreen } = state.navigation;
+
 	return {
-		sensor,
-		inDashboard: !!state.dashboard.sensorsById[id],
+		sensor: sensor ? sensor : {},
+		inDashboard: !!sensorsByIdInCurrentDb[id],
 		isGatewayReachable: online && websocketOnline,
+		currentScreen,
 	};
 }
 

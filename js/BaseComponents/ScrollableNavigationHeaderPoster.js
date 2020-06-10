@@ -23,16 +23,17 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, BackHandler, Platform, ScrollView } from 'react-native';
+import { StyleSheet, BackHandler, Platform } from 'react-native';
 
 import View from './View';
+import ThemedScrollView from './ThemedScrollView';
 import NavigationHeader from './NavigationHeader';
 import PosterWithText from './PosterWithText';
 
 type InfoButton = {
 	onPress?: Function,
-	infoButtonContainerStyle?: Array<any> | Object | number,
-	infoButtonStyle?: Array<any> | Object | number,
+	infoButtonContainerStyle?: Array<any> | Object,
+	infoButtonStyle?: Array<any> | Object,
 };
 
 type Props = {
@@ -49,7 +50,7 @@ type Props = {
 	navigation: Object,
     handleBackPress: () => boolean,
     intl: Object,
-	posterCoverStyle?: Array<any> | Object | number,
+	posterCoverStyle?: Array<any> | Object,
 	goBack: () => void,
 	children: Object | Array<Object>,
 };
@@ -121,7 +122,8 @@ render(): Object {
 				showLeftIcon={showLeftIcon}
 				leftIcon={leftIcon}
 				goBack={goBack}/>
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{flex: 1}}
 				contentContainerStyle={{flexGrow: 1}}>
 				<PosterWithText
@@ -144,7 +146,7 @@ render(): Object {
 						return null;
 					})
 				}
-			</ScrollView>
+			</ThemedScrollView>
 		</View>
 	);
 }

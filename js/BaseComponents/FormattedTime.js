@@ -28,7 +28,9 @@ import * as RNLocalize from 'react-native-localize';
 
 const FormattedTimeComponent = (props: Object): React$Element<any> => (
 	<FormattedTime {...props} hour12={!RNLocalize.uses24HourClock()}>{(formattedTime: string): React$Element<any> => {
-		return <Text style={props.style}>{formattedTime}</Text>;
+		return <Text
+			level={props.level}
+			style={props.style}>{formattedTime}</Text>;
 	}}
 	</FormattedTime>
 );

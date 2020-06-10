@@ -32,8 +32,8 @@ type Props = {
 	onPress: () => void,
 	intl: Object,
 	name: string,
-	style: Object | number | Array<any>,
-	dotStyle: Object | number | Array<any>,
+	style: Object | Array<any>,
+	dotStyle: Array<any> | Object,
 };
 
 export default class ShowMoreButton extends View<Props, null> {

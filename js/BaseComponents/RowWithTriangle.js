@@ -35,9 +35,9 @@ type Props = {
 	style: any,
 	triangleColor: string,
 	appLayout: Object,
-	rowWithTriangleContainerStyle?: number | Object | Array<any>,
-	triangleContainerStyle?: number | Object | Array<any>,
-	triangleStyle?: number | Object | Array<any>,
+	rowWithTriangleContainerStyle?: Array<any> | Object,
+	triangleContainerStyle?: Array<any> | Object,
+	triangleStyle?: Array<any> | Object,
 };
 
 type DefaultProps = {

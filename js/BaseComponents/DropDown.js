@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React, { Component } from 'react';
+import React, {
+	Component,
+} from 'react';
 import { Dropdown } from 'react-native-material-dropdown';
 import { intlShape } from 'react-intl';
 
@@ -33,6 +35,10 @@ import RippleButton from './RippleButton';
 import shouldUpdate from '../App/Lib/shouldUpdate';
 
 import Theme from '../App/Theme';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
 import i18n from '../App/Translations/common';
 
@@ -48,6 +54,7 @@ type Props = {
 	label: string,
 	extraData?: Object,
 	disabled?: boolean,
+	dropDownPosition: 'top' | 'bottom',
 
 	fontSize?: number,
 	baseColor?: string,
@@ -58,19 +65,19 @@ type Props = {
 	itemPadding?: number,
     baseLeftIcon?: string | Object,
 	onValueChange: (string, number, Array<any>) => void,
-    pickerContainerStyle: Array<any> | number | Object,
-    dropDownHeaderStyle: Array<any> | number | Object,
-    dropDownContainerStyle: Array<any> | number | Object,
-	dropDownListsContainerStyle: Array<any> | number | Object,
+    pickerContainerStyle: Array<any> | Object,
+    dropDownHeaderStyle: Array<any> | Object,
+    dropDownContainerStyle: Array<any> | Object,
+	dropDownListsContainerStyle: Array<any> | Object,
 	accessibilityLabelPrefix?: string,
 	intl: intlShape.isRequired,
-	pickerStyle?: Array<any> | number | Object,
-	overlayStyle?: Array<any> | number | Object,
+	pickerStyle?: Array<any> | Object,
+	overlayStyle?: Array<any> | Object,
 	dropdownMargins?: DDMargin,
-	pickerBaseCoverStyle?: Array<any> | number | Object,
+	pickerBaseCoverStyle?: Array<any> | Object,
 	textColor?: string,
 	animationDuration?: number,
-	pickerBaseTextStyle?: Array<any> | number | Object,
+	pickerBaseTextStyle?: Array<any> | Object,
 	iconLeftPickerBase?: Object,
 	renderItem?: Function,
 	valueExtractor?: Function,
@@ -78,33 +85,30 @@ type Props = {
 	itemSize?: number,
 };
 
+type PropsDropDownComponent = Props & PropsThemedComponent;
+
 type DefaultProps = {
 	baseLeftIcon: string | Object,
-	baseColor: string,
-	itemColor: string,
-	selectedItemColor: string,
 	dropdownPosition: number,
 	itemCount: number,
 	itemPadding: number,
 	disabled: boolean,
+	dropDownPosition: 'top' | 'bottom',
 };
 
 type State = {
 };
-
-class DropDown extends Component<Props, State> {
-props: Props;
+class DropDown extends Component<PropsDropDownComponent, State> {
+props: PropsDropDownComponent;
 state: State = {
 };
 static defaultProps: DefaultProps = {
 	baseLeftIcon: 'down',
-	baseColor: '#000',
-	itemColor: '#000',
-	selectedItemColor: Theme.Core.rowTextColor,
 	dropdownPosition: 0,
 	itemCount: 4,
 	itemPadding: 8,
 	disabled: false,
+	dropDownPosition: 'top',
 };
 	renderBase: () => Object;
 	onPressPicker: () => void;
@@ -114,7 +118,7 @@ static defaultProps: DefaultProps = {
 
 	blur: Function;
 
-	constructor(props: Props) {
+	constructor(props: PropsDropDownComponent) {
 		super(props);
 
 		this.renderBase = this.renderBase.bind(this);
@@ -128,7 +132,15 @@ static defaultProps: DefaultProps = {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const propsChange = shouldUpdate(this.props, nextProps, [
-			'value', 'appLayout', 'label', 'extraData', 'disabled', 'itemSize']);
+			'value',
+			'appLayout',
+			'label',
+			'extraData',
+			'disabled',
+			'itemSize',
+			'colorScheme',
+			'themeInApp',
+		]);
 		if (propsChange) {
 			return true;
 		}
@@ -151,11 +163,11 @@ static defaultProps: DefaultProps = {
 		const {
 			appLayout,
 			baseLeftIcon,
-			baseColor,
 			pickerBaseCoverStyle,
 			pickerBaseTextStyle,
 			disabled,
 			iconLeftPickerBase,
+			colors,
 		} = this.props;
 
 		const {
@@ -174,13 +186,19 @@ static defaultProps: DefaultProps = {
 				accessibilityLabel={accessibilityLabel}
 				disabled={disabled}>
 				{React.isValidElement(iconLeftPickerBase) && iconLeftPickerBase}
-				<Text style={[pickerBaseTextStyleDef, {color: baseColor}, pickerBaseTextStyle]} numberOfLines={1}>
+				<Text style={[pickerBaseTextStyleDef, {
+					color: colors.textFour,
+				}, pickerBaseTextStyle]} numberOfLines={1}>
 					{title}
 				</Text>
 				{React.isValidElement(baseLeftIcon) ?
 					baseLeftIcon
 					:
-					<IconTelldus icon={baseLeftIcon} accessible={false} style={rightIconStyle}/>
+					<IconTelldus
+						level={6}
+						icon={baseLeftIcon}
+						accessible={false}
+						style={rightIconStyle}/>
 				}
 			</RippleButton>
 		);
@@ -213,6 +231,8 @@ static defaultProps: DefaultProps = {
 			valueExtractor,
 			labelExtractor,
 			itemSize,
+			dropDownPosition,
+			colors,
 		} = this.props;
 		const {
 			pickerContainerStyleDef,
@@ -224,12 +244,14 @@ static defaultProps: DefaultProps = {
 		} = this.getStyle(appLayout);
 		const _itemSize = itemSize || Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = items.length < itemCount ? items.length : itemCount;
-		const dropdownTop = -(iCount * _itemSize);
+		let dropdownTop = dropDownPosition === 'bottom' ? ((iCount * _itemSize) - itemPadding) : -(iCount * _itemSize);
 
 		return (
 			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>
 				{!!label && (
-					<Text style={[dropDownHeaderStyleDef, dropDownHeaderStyle]}>
+					<Text
+						level={2}
+						style={[dropDownHeaderStyleDef, dropDownHeaderStyle]}>
 						{label}
 					</Text>
 				)}
@@ -246,9 +268,9 @@ static defaultProps: DefaultProps = {
 						fontSize={fontSize}
 						itemCount={iCount}
 						itemPadding={itemPadding}
-						baseColor={baseColor}
-						itemColor={itemColor}
-						selectedItemColor={selectedItemColor}
+						baseColor={baseColor || colors.textThree}
+						itemColor={itemColor || colors.textThree}
+						selectedItemColor={selectedItemColor || colors.inActiveTintOne}
 						dropdownPosition={dropdownPosition}
 						dropdownOffset={{
 							top: dropdownTop,
@@ -268,12 +290,16 @@ static defaultProps: DefaultProps = {
 		);
 	}
 	getStyle(appLayout: Object): Object {
-		const { fontSize } = this.props;
+		const { fontSize, colors } = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const { shadow, paddingFactor, rowTextColor, inactiveTintColor, brandDanger, brandInfo } = Theme.Core;
+		const {
+			card,
+		} = colors;
+
+		const { shadow, paddingFactor } = Theme.Core;
 
 		const padding = deviceWidth * paddingFactor;
 
@@ -284,13 +310,13 @@ static defaultProps: DefaultProps = {
 			pickerStyleDef: {
 				width: width - (2 * padding),
 				left: padding,
+				backgroundColor: card,
 			},
 			dropDownContainerStyleDef: {
 				flex: 0,
 				alignItems: 'flex-start',
 			},
 			dropDownHeaderStyleDef: {
-				color: inactiveTintColor,
 				fontSize: fontSizeText * 1.2,
 				marginBottom: 5,
 			},
@@ -304,7 +330,7 @@ static defaultProps: DefaultProps = {
 				flex: 1,
 				...shadow,
 				marginBottom: padding / 2,
-				backgroundColor: '#fff',
+				backgroundColor: card,
 			},
 			pickerBaseCoverStyleDef: {
 				flex: 1,
@@ -316,20 +342,15 @@ static defaultProps: DefaultProps = {
 			pickerBaseTextStyleDef: {
 				flex: 1,
 				fontSize: fontSizeText,
-				color: rowTextColor,
 				marginRight: fontSizeText,
 				textAlignVertical: 'center',
 			},
 			rightIconStyle: {
 				fontSize: fontSizeRightIcon,
-				color: rowTextColor,
 			},
-			brandInfo,
-			rowTextColor,
-			brandDanger,
 			fontSize: fontSizeText,
 		};
 	}
 }
 
-export default DropDown;
+export default withTheme(DropDown);

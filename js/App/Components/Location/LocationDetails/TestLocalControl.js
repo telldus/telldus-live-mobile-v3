@@ -413,15 +413,12 @@ onPressRequestSupport() {
 			failedTests = failedTests ? `${failedTests}, ${test.name}` : test.name;
 		}
 	});
-	navigation.navigate({
-		routeName: 'RequestSupport',
-		key: 'RequestSupport',
-		params: {
+	navigation.navigate('RequestSupport',
+		{
 			location,
 			failedTests: failedTests ? `${failedTests}` : 'null',
 			testCount,
-		},
-	});
+		});
 }
 
 renderTestRow(testData: Object, index: number): Object {
@@ -560,7 +557,9 @@ render(): Object | null {
 	return (
 		<>
 			<LocationDetails {...locationData} isStatic={true} style={LocationDetail}/>
-			<View style={testsCover}>
+			<View
+				level={2}
+				style={testsCover}>
 				{tests}
 			</View>
 			{!!troubleShootHints && (troubleShootHints.length > 0) &&
@@ -612,7 +611,6 @@ getStyles(appLayout: Object): Object {
 			marginTop: padding / 2,
 			marginBottom: padding / 2,
 			padding: 10,
-			backgroundColor: '#fff',
 			...shadow,
 
 		},

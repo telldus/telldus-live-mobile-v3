@@ -20,7 +20,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, IconTelldus } from '../../../../BaseComponents';
 import { TouchableOpacity, StyleSheet } from 'react-native';
@@ -35,8 +34,8 @@ type Props = {
 	intl: Object,
 	name: string,
 	isGatewayActive: boolean,
-	style: Object | number | Array<any>,
-	iconStyle: Object | number | Array<any>,
+	style: Object | Array<any>,
+	iconStyle: Object | Array<any>,
 	methodRequested: string,
 	isInState: string,
 	enabled: boolean,
@@ -47,6 +46,8 @@ type Props = {
 	closeSwipeRow: () => void,
 	actionIcon?: string,
 	onPressDeviceAction?: () => void,
+	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class OffButton extends View {
@@ -63,7 +64,21 @@ class OffButton extends View {
 	}
 
 	onPress() {
-		const { command, id, isOpen, closeSwipeRow, onPressDeviceAction } = this.props;
+		const {
+			command,
+			id,
+			isOpen,
+			closeSwipeRow,
+			onPressDeviceAction,
+			onPressOverride,
+		} = this.props;
+
+		if (onPressOverride) {
+			onPressOverride({
+				method: command,
+			});
+			return;
+		}
 		if (isOpen && closeSwipeRow) {
 			closeSwipeRow();
 			return;
@@ -75,7 +90,17 @@ class OffButton extends View {
 	}
 
 	render(): Object {
-		let { isInState, enabled, methodRequested, name, isGatewayActive, iconStyle, local, actionIcon } = this.props;
+		let {
+			isInState,
+			enabled,
+			methodRequested,
+			name,
+			isGatewayActive,
+			iconStyle,
+			local,
+			actionIcon,
+			disableActionIndicator,
+		} = this.props;
 		let accessibilityLabel = `${this.labelOffButton}, ${name}`;
 		let buttonStyle = !isGatewayActive ?
 			(isInState === 'TURNOFF' ? styles.offline : styles.disabled) : (isInState === 'TURNOFF' ? styles.enabled : styles.disabled);
@@ -93,7 +118,7 @@ class OffButton extends View {
 				accessibilityLabel={accessibilityLabel}>
 				<IconTelldus icon={iconName} style={StyleSheet.flatten([Theme.Styles.deviceActionIcon, iconStyle])} color={iconColor}/>
 				{
-					methodRequested === 'TURNOFF' ?
+					!disableActionIndicator && methodRequested === 'TURNOFF' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -135,18 +160,10 @@ const styles = StyleSheet.create({
 	},
 });
 
-OffButton.propTypes = {
-	id: PropTypes.number,
-	isInState: PropTypes.string,
-	enabled: PropTypes.bool,
-	fontSize: PropTypes.number,
-	methodRequested: PropTypes.string,
-	command: PropTypes.number,
-};
-
 OffButton.defaultProps = {
 	enabled: true,
 	command: 2,
+	disableActionIndicator: false,
 };
 
 function mapDispatchToProps(dispatch: Function): Object {

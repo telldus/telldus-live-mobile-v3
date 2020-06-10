@@ -32,10 +32,10 @@ const AnimatedTouchable = Animated.createAnimatedComponent(Ripple);
 import Theme from '../../../../Theme';
 
 type Props = {
-    style: Array<any> | number | Object,
-	valueCoverStyle: Array<any> | number | Object,
+    style: Array<any> | Object,
+	valueCoverStyle: Array<any> | Object,
 	dotStyle: Object,
-	dotCoverStyle: Array<any> | number | Object,
+	dotCoverStyle: Array<any> | Object,
     sensors?: Object,
     defaultType?: string | null,
     onLayout?: Function,

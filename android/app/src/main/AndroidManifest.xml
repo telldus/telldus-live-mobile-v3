@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission tools:node="remove" android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -29,7 +31,7 @@
           android:label="@string/app_name"
       		android:launchMode="singleInstance"
           android:theme="@style/SplashTheme"
-      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|layoutDirection|locale">
+      		android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation|layoutDirection|locale|uiMode">
           <intent-filter>
               <action android:name="android.intent.action.MAIN" />
               <category android:name="android.intent.category.LAUNCHER" />
@@ -64,7 +66,6 @@
         <meta-data
           android:name="com.google.firebase.messaging.default_notification_channel_id"
           android:value="${pushSenderId}"/>
-        <receiver android:name=".DeviceWidget"/>
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver" android:enabled="true">
             <intent-filter>
@@ -197,7 +198,16 @@
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
         <uses-library
           android:name="org.apache.http.legacy"
-          android:required="false" />
+          android:required="false"/>
+
+        <service
+          android:name="com.agontuk.RNFusedLocation.RNFusedBackgroundLocationService"
+          android:exported="false"
+          android:foregroundServiceType="location"/>
+
+        <meta-data
+          android:name="com.transistorsoft.locationmanager.license"
+          android:value="${geolocationApplicationKey}"/>
     </application>
 
 </manifest>

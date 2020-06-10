@@ -392,7 +392,9 @@ class SensorHistoryLineChart extends View<Props, State> {
 		};
 
 		return (
-			<View style={containerStyle}>
+			<View
+				level={2}
+				style={containerStyle}>
 				<ChartLegend
 					legendData={legendData}
 					appLayout={appLayout}
@@ -454,16 +456,15 @@ class SensorHistoryLineChart extends View<Props, State> {
 
 		return (
 			<Modal
-				isVisible={show}
+				visible={show}
 				transparent={false}
-				backdropColor={'#fff'}
 				animationType={'none'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
 				supportedOrientations={[supportedOrientations]}
 				hardwareAccelerated={true}
 				onShow={this.onShow}>
-				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
+				<SafeAreaView>
 					<View style={{
 						flex: 1,
 						alignItems: 'center',
@@ -500,7 +501,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 		return {
 			containerStyle: show ?
 				{
-					backgroundColor: '#fff',
 					width: chartWidth,
 					...shadow,
 					alignItems: 'center',
@@ -508,7 +508,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 				}
 				:
 				{
-					backgroundColor: '#fff',
 					marginLeft: padding / 2,
 					width: chartWidth,
 					...shadow,

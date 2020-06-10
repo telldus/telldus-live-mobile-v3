@@ -25,13 +25,13 @@ import {Animated, StyleSheet} from 'react-native';
 
 import View from './View';
 import IconTelldus from './IconTelldus';
-import Theme from '../App/Theme';
 const AnimatedIconTelldus = Animated.createAnimatedComponent(IconTelldus);
 
 type Props = {
-	throbberContainerStyle?: number | Object | Array<any>,
-	throbberStyle?: number | Object | Array<any>,
+	throbberContainerStyle?: Array<any> | Object,
+	throbberStyle?: Array<any> | Object,
 	throbSpeed?: number,
+	level?: number,
 };
 
 export default class Throbber extends Component<Props, null> {
@@ -62,6 +62,7 @@ export default class Throbber extends Component<Props, null> {
 			toValue: this.nextValue,
 			duration: this.props.throbSpeed,
 			delay: 10,
+			useNativeDriver: true,
 		}).start((event: Object) => {
 			if (event.finished) {
 				this.currentValue = this.nextValue;
@@ -75,6 +76,7 @@ export default class Throbber extends Component<Props, null> {
 		let {
 			throbberContainerStyle,
 			throbberStyle,
+			level,
 		} = this.props;
 
 		let interpolatedValue = this.animatedValue.interpolate({
@@ -84,12 +86,14 @@ export default class Throbber extends Component<Props, null> {
 
 		return (
 			<View style={[styles.throbberContainer, throbberContainerStyle]}>
-				<AnimatedIconTelldus icon="loading" style={[styles.throbber, throbberStyle, {
-					transform: [{
-						rotate: interpolatedValue,
-					}],
-				},
-				]}/>
+				<AnimatedIconTelldus
+					level={level || 15}
+					icon="loading" style={[styles.throbber, throbberStyle, {
+						transform: [{
+							rotate: interpolatedValue,
+						}],
+					},
+					]}/>
 			</View>
 		);
 	}
@@ -102,6 +106,5 @@ const styles = StyleSheet.create({
 	},
 	throbber: {
 		fontSize: 25,
-		color: Theme.Core.brandSecondary,
 	},
 });

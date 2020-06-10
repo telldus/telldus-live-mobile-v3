@@ -23,7 +23,7 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -43,6 +43,14 @@ import {
 
 import i18n from '../../../Translations/common';
 
+function usePrevious(value: string): ?string {
+	const ref = useRef();
+	useEffect(() => {
+	  ref.current = value;
+	});
+	return ref.current;
+}
+
 const EditNameBlock = (props: Object): Object => {
 	const {
 		style,
@@ -51,6 +59,7 @@ const EditNameBlock = (props: Object): Object => {
 		textFieldStyle,
 		labelTextStyle,
 		toggleDialogueBox,
+		userProfile,
 	} = props;
 	const [ inLineEditActive, setInLineEditActive ] = useState(false);
 
@@ -58,25 +67,20 @@ const EditNameBlock = (props: Object): Object => {
 	const { formatMessage } = intl;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { userProfile } = useSelector((state: Object): Object => state.user);
 	const { firstname = '', lastname = '' } = userProfile || {};
 	const FN = `${firstname} ${lastname}`;
 
 	const [ nameEditValue, setNameEditValue ] = useState(FN);
-
-	function toggleEdit() {
-		if (inLineEditActive) {
-			setUserNameConfirm();
+	const prevNameEditValue = usePrevious(FN);
+	useEffect(() => {
+		if (prevNameEditValue !== FN) {
+			setNameEditValue(FN);
 		}
-		setInLineEditActive(!inLineEditActive);
-	}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [FN]);
 
-	function onDoneEdit() {
-		setInLineEditActive(false);
-		setUserNameConfirm();
-	}
 	const dispatch = useDispatch();
-	function setUserNameConfirm() {
+	const setUserNameConfirm = useCallback(() => {
 		if (!nameEditValue || nameEditValue.trim() === '') {
 			toggleDialogueBox({
 				show: true,
@@ -95,12 +99,24 @@ const EditNameBlock = (props: Object): Object => {
 			dispatch(showToast(error.message || formatMessage(i18n.updateFailed)));
 			dispatch(getUserProfile());
 		});
-	}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [nameEditValue]);
 
-	function onChangeText(text: string) {
+	const toggleEdit = useCallback(() => {
+		if (inLineEditActive) {
+			setUserNameConfirm();
+		}
+		setInLineEditActive(!inLineEditActive);
+	}, [inLineEditActive, setUserNameConfirm]);
+
+	const onDoneEdit = useCallback(() => {
+		setInLineEditActive(false);
+		setUserNameConfirm();
+	}, [setUserNameConfirm]);
+
+	const onChangeText = useCallback((text: string) => {
 		setNameEditValue(text);
-	}
-
+	}, []);
 
 	const {
 		iconValueRightSize,

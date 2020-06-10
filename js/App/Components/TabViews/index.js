@@ -22,14 +22,16 @@
 
 import DashboardTab from './DashboardTab';
 import DevicesTab from './DevicesTab';
-import GatewaysTab from './GatewaysTab';
+import GatewaysScreen from './GatewaysScreen';
 import SchedulerTab from './SchedulerTab';
 import SensorsTab from './SensorsTab';
+import MoreOptionsTab from './MoreOptionsTab';
 
 module.exports = {
 	Dashboard: DashboardTab,
 	Devices: DevicesTab,
-	Gateways: GatewaysTab,
+	Gateways: GatewaysScreen,
 	Scheduler: SchedulerTab,
 	Sensors: SensorsTab,
+	MoreOptionsTab,
 };

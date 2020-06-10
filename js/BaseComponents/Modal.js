@@ -24,8 +24,9 @@
 import React, {Component} from 'react';
 import { Animated, Easing } from 'react-native';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
-
 import { connect } from 'react-redux';
+
+import View from './View';
 
 import Theme from '../App/Theme';
 
@@ -33,15 +34,15 @@ type Props = {
 	dispatch: Function,
 	showModal: any,
 	showOverlay?: boolean,
-	modalStyle?: Array<any> | number | Object,
-	modalContainerStyle?: Array<any> | number | Object,
+	modalStyle?: Array<any> | Object,
+	modalContainerStyle?: Array<any> | Object,
 	children: any,
 	entry?: string,
 	exit?: string,
 	entryDuration?: number,
 	exitDuration?: number,
-	startValue?: number,
-	endValue?: number,
+	startValue: number,
+	endValue: number,
 	onOpen?: () => void,
 	onClose?: () => void,
 	onOpened?: () => void,
@@ -154,8 +155,8 @@ class Modal extends Component<Props, State> {
 		]).start();
 	}
 
-	startSlideInY(duration?: number) {
-		Animated.timing(this.animatedYValue,
+	startSlideInY(duration?: number): Object {
+		return Animated.timing(this.animatedYValue,
 			{
 				toValue: this.props.endValue,
 				duration,
@@ -163,8 +164,8 @@ class Modal extends Component<Props, State> {
 			}).start();
 	}
 
-	startSlideOutY(duration?: number) {
-		Animated.timing(this.animatedYValue,
+	startSlideOutY(duration?: number): Object {
+		return Animated.timing(this.animatedYValue,
 			{
 				toValue: this.props.startValue,
 				duration,
@@ -176,8 +177,8 @@ class Modal extends Component<Props, State> {
 		});
 	}
 
-	_startScale(duration?: number) {
-		Animated.timing(this.animatedScale,
+	_startScale(duration?: number): Object {
+		return Animated.timing(this.animatedScale,
 			{
 				toValue: 1,
 				duration: duration,
@@ -186,8 +187,8 @@ class Modal extends Component<Props, State> {
 			}).start();
 	}
 
-	_stopScale(duration?: number) {
-		Animated.timing(this.animatedScale,
+	_stopScale(duration?: number): Object {
+		return Animated.timing(this.animatedScale,
 			{
 				toValue: 0.01,
 				duration: duration,
@@ -196,8 +197,8 @@ class Modal extends Component<Props, State> {
 			}).start();
 	}
 
-	_startOpacity(duration?: number) {
-		Animated.timing(this.animatedOpacity,
+	_startOpacity(duration?: number): Object {
+		return Animated.timing(this.animatedOpacity,
 			{
 				toValue: 1,
 				duration: duration,
@@ -206,8 +207,8 @@ class Modal extends Component<Props, State> {
 			}).start();
 	}
 
-	_stopOpacity(duration?: number) {
-		Animated.timing(this.animatedOpacity,
+	_stopOpacity(duration?: number): Object {
+		return Animated.timing(this.animatedOpacity,
 			{
 				toValue: 0,
 				duration: duration,
@@ -324,24 +325,32 @@ class Modal extends Component<Props, State> {
 
 		if (!showOverlay) {
 			return (
-				<Animated.View style={[ styles.modal, modalStyle, {transform: animatedProps,
-					opacity: opacityAnim,
-				}]}>
+				<View
+					animated
+					level={3}
+					style={[ styles.modal, modalStyle, {transform: animatedProps,
+						opacity: opacityAnim,
+					}]}>
 					{children}
-				</Animated.View>
+				</View>
 			);
 		}
 
 		return (
-			<Animated.View style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: animatedProps,
-				opacity: opacityAnim,
-			}]}>
-				<Animated.View style={[ styles.modal, modalStyle, {transform: animatedProps,
+			<View
+				animated
+				style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: animatedProps,
 					opacity: opacityAnim,
 				}]}>
+				<View
+					animated
+					level={3}
+					style={[ styles.modal, modalStyle, {transform: animatedProps,
+						opacity: opacityAnim,
+					}]}>
 					{children}
-				</Animated.View>
-			</Animated.View>
+				</View>
+			</View>
 		);
 	}
 

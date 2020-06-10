@@ -35,7 +35,7 @@ export default class Title extends Base {
 
 	render(): React$Element<any> {
 		return (
-			<View id="titleView"><Text style={{
+			<View><Text style={{
 				color: this.getTheme().toolbarTextColor,
 				fontSize: this.getTheme().titleFontSize,
 				fontFamily: this.getTheme().btnFontFamily,

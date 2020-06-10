@@ -42,6 +42,8 @@ type Props = {
 	actions?: Object,
 	screenProps: Object,
 	ScreenName: string,
+	route: Object,
+	currentScreen: string,
 };
 
 type State = {
@@ -81,8 +83,8 @@ class AddLocationContainer extends View<null, Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let {navigation, screenProps} = this.props;
-		if (screenProps.currentScreen === 'Success') {
+		let {navigation, currentScreen} = this.props;
+		if (currentScreen === 'Success') {
 			return true;
 		}
 		navigation.pop();
@@ -91,7 +93,7 @@ class AddLocationContainer extends View<null, Props, State> {
 
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.ScreenName === nextProps.screenProps.currentScreen) {
+		if (nextProps.ScreenName === nextProps.currentScreen) {
 			const isStateEqual = isEqual(this.state, nextState);
 			if (!isStateEqual) {
 				return true;
@@ -119,8 +121,10 @@ class AddLocationContainer extends View<null, Props, State> {
 			actions,
 			screenProps,
 			navigation,
+			route,
+			currentScreen,
 		} = this.props;
-		const { currentScreen, appLayout } = screenProps;
+		const { appLayout } = screenProps;
 		const { h1, h2, infoButton } = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
@@ -133,9 +137,11 @@ class AddLocationContainer extends View<null, Props, State> {
 			|| currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * Theme.Core.paddingFactor);
 
 		return (
-			<View style={{
-				flex: 1,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={{flex: 1}}
@@ -151,7 +157,6 @@ class AddLocationContainer extends View<null, Props, State> {
 						leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>
 					<ScrollView style={{
 						flex: 1,
-						backgroundColor: Theme.Core.appBackground,
 					}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(
@@ -160,8 +165,10 @@ class AddLocationContainer extends View<null, Props, State> {
 									onDidMount: this.onChildDidMount,
 									actions,
 									...screenProps,
+									currentScreen,
 									navigation,
 									paddingHorizontal: padding,
+									route,
 								},
 							)}
 						</View>
@@ -184,9 +191,20 @@ class AddLocationContainer extends View<null, Props, State> {
 const mapDispatchToProps = (dispatch: Function): Object => (
 	{
 		actions: {
-			...bindActionCreators({...modalActions, ...gatewayActions}, dispatch),
+			...bindActionCreators({...gatewayActions, ...modalActions}, dispatch),
 		},
 	}
 );
 
-export default connect(null, mapDispatchToProps)(AddLocationContainer);
+const mapStateToProps = (store: Object): Object => {
+
+	const {
+		screen: currentScreen,
+	} = store.navigation;
+
+	return {
+		currentScreen,
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddLocationContainer);

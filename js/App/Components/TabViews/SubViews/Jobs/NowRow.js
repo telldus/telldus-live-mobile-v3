@@ -28,10 +28,10 @@ import Theme from '../../../../Theme';
 
 type Props = {
 	text: string,
-    roundIconContainerStyle?: number | Object | Array<any>,
-    rowWithTriangleContainerStyle?: number | Object | Array<any>,
-    textStyle?: number | Object | Array<any>,
-	lineStyle?: number | Object | Array<any>,
+    roundIconContainerStyle?: Array<any> | Object,
+    rowWithTriangleContainerStyle?: Array<any> | Object,
+    textStyle?: Array<any> | Object,
+	lineStyle?: Array<any> | Object,
 	appLayout: Object,
 };
 

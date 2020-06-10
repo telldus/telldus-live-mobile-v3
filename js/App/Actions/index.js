@@ -42,7 +42,11 @@ import LocalTest from './LocalTest';
 import LocalControl from './LocalControl';
 import Widget from './Widget';
 import AddDevice from './AddDevice';
-import Firebase from './Firebase';
+import * as Fences from './Fences';
+import * as Events from './Events';
+import * as GeoFence from './GeoFence';
+import * as Firebase from './Firebase';
+import * as Auth from './Auth';
 
 module.exports = {
 	...GatewayActions,
@@ -65,5 +69,9 @@ module.exports = {
 	...LocalControl,
 	...Widget,
 	...AddDevice,
+	...Fences,
+	...Events,
+	...GeoFence,
 	...Firebase,
+	...Auth,
 };

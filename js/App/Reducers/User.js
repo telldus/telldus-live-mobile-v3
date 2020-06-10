@@ -23,6 +23,10 @@
 
 import type { Action } from '../Actions/Types';
 import { createSelector } from 'reselect';
+import isEmpty from 'lodash/isEmpty';
+import omit from 'lodash/omit';
+
+const defaultDashboardId = 'defaultDashboardId';
 
 export type State = {
 	accessToken: any,
@@ -44,9 +48,16 @@ export type State = {
 	generatePushError: string,
 	playServicesInfo: Object,
 	firebaseRemoteConfig: Object,
+	accounts: Object,
+	userId: string,
+	activeDashboardId: string,
 	iapTransactionConfig: Object,
 	iapProducts: Array<Object>,
 	iapAvailablePurchases: Array<Object>,
+	switchAccountConf: {
+		showAS: boolean,
+		isLoggingOut: boolean,
+	},
 	socialAuthConfig: Object,
 	visibilityEula: boolean,
 };
@@ -71,9 +82,16 @@ export const initialState = {
 	generatePushError: '',
 	playServicesInfo: {},
 	firebaseRemoteConfig: {},
+	accounts: {},
+	userId: '',
+	activeDashboardId: defaultDashboardId,
 	iapTransactionConfig: {},
 	iapProducts: [],
 	iapAvailablePurchases: [],
+	switchAccountConf: {
+		showAS: false,
+		isLoggingOut: false,
+	},
 	socialAuthConfig: {},
 	visibilityEula: false,
 };
@@ -97,6 +115,10 @@ export default function reduceUser(state: State = initialState, action: Action):
 			showChangeLog: false,
 			visibilityProExpireHeadsup: nextVPEValue,
 			iapTransactionConfig: {},
+			switchAccountConf: {
+				showAS: false,
+				isLoggingOut: false,
+			},
 			socialAuthConfig: {},
 			visibilityEula: false,
 		};
@@ -109,14 +131,97 @@ export default function reduceUser(state: State = initialState, action: Action):
 	}
 	if (action.type === 'RECEIVED_ACCESS_TOKEN') {
 		let accessToken = action.accessToken;
-		if (state.accessToken) {
+		if (state.accessToken && !accessToken.refresh_token) {
 			accessToken.refresh_token = state.accessToken.refresh_token;
 		}
+
+		const { accounts = {}} = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		let userIdN = state.userId;
+		let { userId } = accessToken;
+		if (userId) {
+			userIdN = userId;
+			userId = userId.trim().toLowerCase();
+
+			const existAccount = accounts[userId] || {};
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken,
+			};
+		} else if (userIdN) { // Refreshing access token
+			userId = userIdN.trim().toLowerCase();
+			const existAccount = accounts[userId] || {};
+			const uId = (existAccount.accessToken && existAccount.accessToken.userId) ? existAccount.accessToken.userId : userIdN;
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken: {
+					...accessToken,
+					userId: uId,
+				},
+			};
+		}
+
 		return {
 			...state,
-			accessToken: accessToken,
+			accessToken,
 			registeredCredential: false,
 			isTokenValid: true,
+			accounts: newAccounts,
+			userId: userId || userIdN,
+		};
+	}
+	if (action.type === 'RECEIVED_ACCESS_TOKEN_OTHER_ACCOUNT') {
+		let accessToken = action.accessToken;
+
+		const { accounts = {}} = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		let userIdN = state.userId;
+		let { userId } = accessToken || {};
+		if (userId) {
+			userId = userId.trim().toLowerCase();
+
+			const existAccount = accounts[userId] || {};
+
+			if (!existAccount) {
+				return state;
+			}
+
+			const refresh_token = accessToken.refresh_token || existAccount.accessToken.refresh_token;
+
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken: {
+					...accessToken,
+					refresh_token,
+				},
+			};
+		} else if (userIdN) { // Refreshing access token
+			userId = userIdN.trim().toLowerCase();
+			const existAccount = accounts[userId] || {accessToken: {}};
+
+			const uId = (existAccount.accessToken && existAccount.accessToken.userId) ? existAccount.accessToken.userId : userIdN;
+
+			const refresh_token = accessToken.refresh_token || existAccount.accessToken.refresh_token;
+
+			newAccounts[userId] = {
+				...existAccount,
+				accessToken: {
+					...accessToken,
+					userId: uId,
+					refresh_token,
+				},
+			};
+		}
+
+		return {
+			...state,
+			accounts: newAccounts,
 		};
 	}
 	if (action.type === 'RECEIVED_PUSH_TOKEN') {
@@ -170,9 +275,78 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'RECEIVED_USER_PROFILE') {
+
+		const { accounts = {} } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		if (action.payload.email) { // TODO: Should use user id, once it is available.
+			const email = action.payload.email.trim().toLowerCase();
+			const existAccount = accounts[email] || {};
+
+			// Required while upgrading from older version, and already logged in
+			if (isEmpty(accounts)) {
+				newAccounts[email] = {
+					accessToken: {
+						...state.accessToken,
+						userId: email, // TODO: Should use user id, once it is available.
+					},
+					...action.payload,
+				};
+			} else {
+				newAccounts[email] = {
+					...existAccount,
+					...action.payload,
+				};
+			}
+		}
+
+		let userIdN = state.userId;
+		if (action.payload.email) {
+			userIdN = action.payload.email.trim().toLowerCase(); // TODO: Should use user id, once it is available.
+		}
+
 		return {
 			...state,
 			userProfile: action.payload,
+			accounts: newAccounts,
+			userId: userIdN,
+		};
+	}
+	if (action.type === 'RECEIVED_USER_PROFILE_OTHER') {
+
+		const { accounts = {} } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const {
+			email, // TODO: Should use user id, once it is available.
+		} = action.payload;
+		if (!email) {
+			return state;
+		}
+
+		const userId = email.trim().toLowerCase();
+		const account = accounts[userId];
+		if (!account) {
+			return state;
+		}
+
+		const updatedAccount = {
+			...account,
+			...action.payload,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
+		return {
+			...state,
+			accounts: newAccounts,
 		};
 	}
 	if (action.type === 'LOGGED_OUT') {
@@ -236,11 +410,74 @@ export default function reduceUser(state: State = initialState, action: Action):
 		};
 	}
 	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS') {
+
+		let { accounts = {}, userId = '' } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const subscriptions = action.payload;
+
+		userId = userId.trim().toLowerCase();
+		const account = accounts[userId] || {};
+
+		const updatedAccount = {
+			...account,
+			subscriptions,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
 		return {
 			...state,
-			subscriptions: {
-				...action.payload,
-			},
+			subscriptions,
+			accounts: newAccounts,
+		};
+	}
+	if (action.type === 'RECEIVED_USER_SUBSCRIPTIONS_OTHER') {
+
+		const { accounts = {}, userId: activeAccUserId = '' } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		let {
+			userId,
+			subscriptions,
+		} = action.payload;
+		if (!userId) {
+			return state;
+		}
+
+		userId = userId.trim().toLowerCase();
+		const account = accounts[userId];
+		if (!account) {
+			return state;
+		}
+
+		const updatedAccount = {
+			...account,
+			subscriptions,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
+		// Update if the other account is the active one
+		let activeAccountSubscriptions = state.subscriptions;
+		if (userId === activeAccUserId.trim().toLowerCase()) {
+			activeAccountSubscriptions = subscriptions;
+		}
+
+		return {
+			...state,
+			accounts: newAccounts,
+			subscriptions: activeAccountSubscriptions,
 		};
 	}
 	if (action.type === 'CAMPAIGN_VISITED') {
@@ -261,6 +498,65 @@ export default function reduceUser(state: State = initialState, action: Action):
 			firebaseRemoteConfig: action.payload,
 		};
 	}
+	if (action.type === 'SWITCH_USER_ACCOUNT') {
+		let { userId } = action.payload;
+		const { accounts = {} } = state;
+
+		const existAccount = accounts[userId] || {};
+		const {
+			accessToken,
+			activeDashboardId = defaultDashboardId,
+		} = existAccount;
+
+		if (!accessToken) {
+			return state;
+		}
+
+		return {
+			...state,
+			accessToken,
+			userId: accessToken.userId,
+			activeDashboardId,
+		};
+	}
+	if (action.type === 'LOGGED_OUT_SELECTED') {
+		let { userId } = action.payload;
+		const { accounts = {} } = state;
+
+		return {
+			...state,
+			accounts: omit(accounts, userId),
+		};
+	}
+	if (action.type === 'SELECT_DASHBOARD') {
+		const { payload: { dashboardId } } = action;
+
+		let { accounts = {}, userId = '' } = state;
+		let newAccounts = {
+			...accounts,
+		};
+
+		const subscriptions = action.payload;
+
+		userId = userId.trim().toLowerCase();
+		const account = accounts[userId] || {};
+
+		const updatedAccount = {
+			...account,
+			subscriptions,
+		};
+
+		newAccounts = {
+			...newAccounts,
+			[userId]: updatedAccount,
+		};
+
+		return {
+			...state,
+			activeDashboardId: dashboardId,
+			accounts: newAccounts,
+		};
+	}
 	if (action.type === 'UPDATE_STATUS_IAP_TRANSACTION') {
 		return {
 			...state,
@@ -277,6 +573,12 @@ export default function reduceUser(state: State = initialState, action: Action):
 		return {
 			...state,
 			iapAvailablePurchases: action.payload,
+		};
+	}
+	if (action.type === 'TOGGLE_VISIBILITY_SWITCH_ACCOUNT_AS') {
+		return {
+			...state,
+			switchAccountConf: action.payload,
 		};
 	}
 	if (action.type === 'SET_SOCIAL_AUTH_CONFIG') {

@@ -64,10 +64,15 @@ const ShortcutRow = (props: Object): Object => {
 
 	return (
 		<TouchableOpacity onPress={onPressRow}>
-			<View style={coverStyle}>
+			<View
+				level={2}
+				style={coverStyle}>
 				<Image source={img} style={imgStyle} resizeMode={'contain'}/>
 				<View style={textCoverStyle}>
-					<Text style={textStyle} numberOfLines={2}>
+					<Text
+						level={5}
+						style={textStyle}
+						numberOfLines={2}>
 						{name}
 					</Text>
 				</View>
@@ -83,7 +88,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		eulaContentColor,
 		shadow,
 	} = Theme.Core;
 
@@ -98,7 +102,6 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'space-between',
 			marginLeft: padding / 2,
 			marginTop: padding / 2,
-			backgroundColor: '#fff',
 			width: blockSize,
 			height: blockSize,
 			borderRadius: 2,
@@ -114,7 +117,6 @@ const getStyles = (appLayout: Object): Object => {
 			justifyContent: 'center',
 		},
 		textStyle: {
-			color: eulaContentColor,
 			fontSize,
 			textAlign: 'center',
 		},
