@@ -38,7 +38,7 @@
     "global": "~4.4.0",
     "intl": "~1.2.5",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#a09b28e681d4115b0491fa0d3e6aa5adc869d69e",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#live-app-3.14",
     "lodash": "~4.17.11",
     "moment": "~2.25.1",
     "moment-timezone": "~0.5.23",
