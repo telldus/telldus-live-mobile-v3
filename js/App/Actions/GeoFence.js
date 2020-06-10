@@ -363,7 +363,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 		if (methodsSharedSetState.indexOf(method) !== -1) {
 			const dimValue = stateValues[16];
 			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken)).then((res: Object = {}): Object => {
-				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
+				if (retryQueueDeviceAction[action.uuid] && typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
 					platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
 					delete retryQueueDeviceAction[action.uuid];
 				}
@@ -379,7 +379,10 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			}).catch((err: Object = {}): Object => {
 				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
 
-				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count === 3)) {
+				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count >= 3)) {
+					if (typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
+						platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					}
 					delete retryQueueDeviceAction[action.uuid];
 					dispatch(showNotificationOnErrorExecutingAction({
 						notificationId: action.uuid,
@@ -388,7 +391,13 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					return;
 				}
 
-				let prevCount = retryQueueDeviceAction[action.uuid] ? retryQueueDeviceAction[action.uuid].count : 0;
+				if (!retryQueueDeviceAction[action.uuid]) {
+					retryQueueDeviceAction[action.uuid] = {
+						count: 0,
+					};
+				}
+
+				let prevCount = retryQueueDeviceAction[action.uuid].count;
 				retryQueueDeviceAction[action.uuid] = {
 					count: prevCount + 1,
 				};
@@ -409,18 +418,16 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
 				}));
 
-				if (Platform.OS === 'android') {
-					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
-					}, timeout * 1000);
-				}
+				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
+					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
+				}, timeout * 1000);
 			});
 		} else if (method === 1024) {
 			const rgbValue = stateValues[1024];
 			const rgb = colorsys.hexToRgb(rgbValue);
 			const { r, g, b } = rgb;
 			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)).then((res: Object = {}): Object => {
-				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
+				if (retryQueueDeviceAction[action.uuid] && typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
 					platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
 					delete retryQueueDeviceAction[action.uuid];
 				}
@@ -436,7 +443,10 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			}).catch((err: Object = {}): Object => {
 				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
 
-				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count === 3)) {
+				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count >= 3)) {
+					if (typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
+						platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					}
 					delete retryQueueDeviceAction[action.uuid];
 					dispatch(showNotificationOnErrorExecutingAction({
 						notificationId: action.uuid,
@@ -444,7 +454,14 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					}));
 					return;
 				}
-				let prevCount = retryQueueDeviceAction[action.uuid] ? retryQueueDeviceAction[action.uuid].count : 0;
+
+				if (!retryQueueDeviceAction[action.uuid]) {
+					retryQueueDeviceAction[action.uuid] = {
+						count: 0,
+					};
+				}
+
+				let prevCount = retryQueueDeviceAction[action.uuid].count;
 				retryQueueDeviceAction[action.uuid] = {
 					count: prevCount + 1,
 				};
@@ -466,11 +483,9 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
 				}));
 
-				if (Platform.OS === 'android') {
-					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
-					}, timeout * 1000);
-				}
+				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
+					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
+				}, timeout * 1000);
 			});
 		} else if (method === 2048) {
 			const {
@@ -480,7 +495,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				temp,
 			} = action;
 			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)).then((res: Object = {}): Object => {
-				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
+				if (retryQueueDeviceAction[action.uuid] && typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
 					platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
 					delete retryQueueDeviceAction[action.uuid];
 				}
@@ -496,7 +511,10 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			}).catch((err: Object = {}): Object => {
 				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
 
-				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count === 3)) {
+				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count >= 3)) {
+					if (typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
+						platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					}
 					delete retryQueueDeviceAction[action.uuid];
 					dispatch(showNotificationOnErrorExecutingAction({
 						notificationId: action.uuid,
@@ -504,7 +522,14 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					}));
 					return;
 				}
-				let prevCount = retryQueueDeviceAction[action.uuid] ? retryQueueDeviceAction[action.uuid].count : 0;
+
+				if (!retryQueueDeviceAction[action.uuid]) {
+					retryQueueDeviceAction[action.uuid] = {
+						count: 0,
+					};
+				}
+
+				let prevCount = retryQueueDeviceAction[action.uuid].count;
 				retryQueueDeviceAction[action.uuid] = {
 					count: prevCount + 1,
 				};
@@ -526,11 +551,9 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
 				}));
 
-				if (Platform.OS === 'android') {
-					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
-					}, timeout * 1000);
-				}
+				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
+					dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
+				}, timeout * 1000);
 			});
 		}
 		return Promise.resolve('done');
@@ -556,7 +579,7 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 			time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 		}));
 		return dispatch(setEvent(id, options, accessToken)).then((res: Object = {}): Object => {
-			if (retryQueueEvent[action.uuid] && retryQueueEvent[action.uuid].timeoutId) {
+			if (retryQueueEvent[action.uuid] && typeof retryQueueEvent[action.uuid].timeoutId !== 'undefined') {
 				platformAppStateIndependentClearTimeout(retryQueueEvent[action.uuid].timeoutId);
 				delete retryQueueEvent[action.uuid];
 			}
@@ -572,7 +595,10 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 		}).catch((err: Object = {}): Object => {
 			const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
 
-			if (retryQueueEvent[action.uuid] && (retryQueueEvent[action.uuid].count === 3)) {
+			if (retryQueueEvent[action.uuid] && (retryQueueEvent[action.uuid].count >= 3)) {
+				if (typeof retryQueueEvent[action.uuid].timeoutId !== 'undefined') {
+					platformAppStateIndependentClearTimeout(retryQueueEvent[action.uuid].timeoutId);
+				}
 				delete retryQueueEvent[action.uuid];
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
@@ -580,7 +606,14 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 				}));
 				return;
 			}
-			let prevCount = retryQueueEvent[action.uuid] ? retryQueueEvent[action.uuid].count : 0;
+
+			if (!retryQueueEvent[action.uuid]) {
+				retryQueueEvent[action.uuid] = {
+					count: 0,
+				};
+			}
+
+			let prevCount = retryQueueEvent[action.uuid].count;
 			retryQueueEvent[action.uuid] = {
 				count: prevCount + 1,
 			};
@@ -602,11 +635,9 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 				body: `Failed to execute Event action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
 			}));
 
-			if (Platform.OS === 'android') {
-				retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-					dispatch(handleActionEvent(action, accessToken, eventUUID, extras));
-				}, timeout * 1000);
-			}
+			retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
+				dispatch(handleActionEvent(action, accessToken, eventUUID, extras));
+			}, timeout * 1000);
 		});
 	};
 }
@@ -627,7 +658,7 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 			time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
 		}));
 		return dispatch(saveSchedule(options, accessToken)).then((res: Object = {}): Object => {
-			if (retryQueueSchedule[action.uuid] && retryQueueSchedule[action.uuid].timeoutId) {
+			if (retryQueueSchedule[action.uuid] && typeof retryQueueSchedule[action.uuid].timeoutId !== 'undefined') {
 				platformAppStateIndependentClearTimeout(retryQueueSchedule[action.uuid].timeoutId);
 				delete retryQueueSchedule[action.uuid];
 			}
@@ -643,7 +674,10 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 		}).catch((err: Object = {}): Object => {
 			const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
 
-			if (retryQueueSchedule[action.uuid] && (retryQueueSchedule[action.uuid].count === 3)) {
+			if (retryQueueSchedule[action.uuid] && (retryQueueSchedule[action.uuid].count >= 3)) {
+				if (typeof retryQueueSchedule[action.uuid].timeoutId !== 'undefined') {
+					platformAppStateIndependentClearTimeout(retryQueueSchedule[action.uuid].timeoutId);
+				}
 				delete retryQueueSchedule[action.uuid];
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
@@ -651,7 +685,14 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 				}));
 				return;
 			}
-			let prevCount = retryQueueSchedule[action.uuid] ? retryQueueSchedule[action.uuid].count : 0;
+
+			if (!retryQueueSchedule[action.uuid]) {
+				retryQueueSchedule[action.uuid] = {
+					count: 0,
+				};
+			}
+
+			let prevCount = retryQueueSchedule[action.uuid].count;
 			retryQueueSchedule[action.uuid] = {
 				count: prevCount + 1,
 			};
@@ -673,11 +714,9 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 				body: `Failed to execute Schedule action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
 			}));
 
-			if (Platform.OS === 'android') {
-				retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
-					dispatch(handleActionSchedule(action, accessToken, eventUUID, extras));
-				}, timeout * 1000);
-			}
+			retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
+				dispatch(handleActionSchedule(action, accessToken, eventUUID, extras));
+			}, timeout * 1000);
 		});
 	};
 }
