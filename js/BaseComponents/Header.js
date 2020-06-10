@@ -58,6 +58,7 @@ type Props = {
 	showAttentionCapture: boolean,
 	forceHideStatus?: boolean,
 	style: Object | Array<any>,
+	onPressLogo?: Function,
 };
 
 const HeaderComponent = (props: Props): Object => {
@@ -71,6 +72,7 @@ const HeaderComponent = (props: Props): Object => {
 		rightButton,
 		showAttentionCapture,
 		style,
+		onPressLogo,
 	} = props;
 
 	const {
@@ -100,10 +102,14 @@ const HeaderComponent = (props: Props): Object => {
 	const renderChildren = useCallback((): ?Object | ?Array<any> => {
 		if (!children) {
 			return (
-				<Image
-					source={{uri: 'telldus_logo'}}
-					style={[logoImage, logoStyle]}
-				/>
+				<TouchableOpacity
+					disabled={!onPressLogo}
+					onPress={onPressLogo}>
+					<Image
+						source={{uri: 'telldus_logo'}}
+						style={[logoImage, logoStyle]}
+					/>
+				</TouchableOpacity>
 			);
 		} else if (!Array.isArray(children)) {
 			return children;

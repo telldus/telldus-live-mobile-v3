@@ -49,6 +49,7 @@ type Props = {
 	goBack: () => void,
 	forceHideStatus?: boolean,
 	rightButton?: Object,
+	onPressLogo?: Function,
 };
 
 type DefaultProps = {
@@ -173,7 +174,14 @@ class NavigationHeader extends PureComponent<Props, State> {
 	}
 
 	render(): Object {
-		let { appLayout, showLeftIcon, topMargin, forceHideStatus, rightButton } = this.props;
+		let {
+			appLayout,
+			showLeftIcon,
+			topMargin,
+			forceHideStatus,
+			rightButton,
+			onPressLogo,
+		} = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
@@ -205,7 +213,8 @@ class NavigationHeader extends PureComponent<Props, State> {
 						deviceHeight * 0.08
 						:
 						deviceHeight * land,
-				}}/>
+				}}
+				onPressLogo={onPressLogo}/>
 		);
 	}
 }

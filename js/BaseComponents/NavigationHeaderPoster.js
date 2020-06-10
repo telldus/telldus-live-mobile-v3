@@ -63,6 +63,7 @@ type Props = {
 	showPoster?: boolean,
 	rightButton?: Object,
 	extraData?: Object,
+	onPressLogo?: Function,
 };
 
 type DefaultProps = {
@@ -149,6 +150,7 @@ render(): Object {
 		align,
 		onPressPoster,
 		rightButton,
+		onPressLogo,
 	} = this.props;
 
 	return (
@@ -158,7 +160,8 @@ render(): Object {
 				showLeftIcon={showLeftIcon}
 				leftIcon={leftIcon}
 				goBack={goBack}
-				rightButton={rightButton}/>
+				rightButton={rightButton}
+				onPressLogo={onPressLogo}/>
 			{showPoster && (
 				<TouchableOpacity
 					onPress={onPressPoster}
