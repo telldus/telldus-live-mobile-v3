@@ -24,10 +24,8 @@
 const colorsys = require('colorsys');
 import BackgroundGeolocation from 'react-native-background-geolocation';
 import {
-	AppState,
 	Platform,
 } from 'react-native';
-import Toast from 'react-native-simple-toast';
 import BackgroundTimer from 'react-native-background-timer';
 
 // import {
@@ -56,6 +54,10 @@ import GeoFenceUtils from '../Lib/GeoFenceUtils';
 import {
 	createLocationNotification,
 } from '../Lib/PushNotification';
+import {
+	platformAppStateIndependentSetTimeout,
+	platformAppStateIndependentClearTimeout,
+} from '../Lib/Timer';
 
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
@@ -73,6 +75,7 @@ let MAP_QUEUE_TIME = {
 	'2': 30,
 	'3': 60,
 };
+let backgroundTimerStartedIniOS = false;
 
 function setupGeoFence(): ThunkAction {
 	return (dispatch: Function, getState: Function): Promise<any> => {
@@ -101,24 +104,15 @@ function setupGeoFence(): ThunkAction {
 		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
-			Toast.showWithGravity(`onGeofence ${AppState.currentState || ''} ${geofence.action}`, Toast.LONG, Toast.TOP);
 			dispatch(debugGFOnGeofence({
 				...geofence,
-				AppState: AppState.currentState,
 				inAppTime: Date.now(),
 			}));
-			// if (AppState.currentState === 'active') {
+			if (Platform.OS === 'ios' && !backgroundTimerStartedIniOS) {
+				BackgroundTimer.start();
+				backgroundTimerStartedIniOS = true;
+			}
 			dispatch(handleFence(geofence));
-			// } else {
-			// 	BackgroundGeolocation.startBackgroundTask().then((taskId: number) => {
-			// 		dispatch(handleFence(geofence)).then(() => {
-			// 			BackgroundGeolocation.stopBackgroundTask(taskId);
-			// 		});
-			// 	}).catch((error: Object) => {
-			// 		// Be sure to catch errors:  never leave you background-task hanging.
-			// 		BackgroundGeolocation.stopBackgroundTask();
-			// 	});
-			// }
 		});
 
 		return BackgroundGeolocation.ready({
@@ -199,8 +193,6 @@ const GeoFenceHeadlessTask = async (store: Object, event: Object): Promise<any> 
 		name,
 	} = event;
 
-	const paramss = JSON.stringify(params);
-	Toast.showWithGravity(`GeoFenceHeadlessTask ${name} ${paramss}`, Toast.LONG, Toast.TOP);
 	if (name === 'geofence') {
 		const {
 			location = {},
@@ -372,7 +364,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			const dimValue = stateValues[16];
 			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken)).then((res: Object = {}): Object => {
 				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
-					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
 					delete retryQueueDeviceAction[action.uuid];
 				}
 
@@ -418,7 +410,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				if (Platform.OS === 'android') {
-					retryQueueDeviceAction[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
 						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
 					}, timeout * 1000);
 				}
@@ -429,7 +421,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			const { r, g, b } = rgb;
 			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)).then((res: Object = {}): Object => {
 				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
-					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
 					delete retryQueueDeviceAction[action.uuid];
 				}
 
@@ -475,7 +467,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				if (Platform.OS === 'android') {
-					retryQueueDeviceAction[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
 						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
 					}, timeout * 1000);
 				}
@@ -489,7 +481,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			} = action;
 			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)).then((res: Object = {}): Object => {
 				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
-					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					platformAppStateIndependentClearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
 					delete retryQueueDeviceAction[action.uuid];
 				}
 
@@ -535,7 +527,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				if (Platform.OS === 'android') {
-					retryQueueDeviceAction[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+					retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
 						dispatch(handleActionDevice(action, accessToken, eventUUID, extras));
 					}, timeout * 1000);
 				}
@@ -565,7 +557,7 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 		}));
 		return dispatch(setEvent(id, options, accessToken)).then((res: Object = {}): Object => {
 			if (retryQueueEvent[action.uuid] && retryQueueEvent[action.uuid].timeoutId) {
-				BackgroundTimer.clearTimeout(retryQueueEvent[action.uuid].timeoutId);
+				platformAppStateIndependentClearTimeout(retryQueueEvent[action.uuid].timeoutId);
 				delete retryQueueEvent[action.uuid];
 			}
 
@@ -611,7 +603,7 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 			}));
 
 			if (Platform.OS === 'android') {
-				retryQueueEvent[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+				retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
 					dispatch(handleActionEvent(action, accessToken, eventUUID, extras));
 				}, timeout * 1000);
 			}
@@ -636,7 +628,7 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 		}));
 		return dispatch(saveSchedule(options, accessToken)).then((res: Object = {}): Object => {
 			if (retryQueueSchedule[action.uuid] && retryQueueSchedule[action.uuid].timeoutId) {
-				BackgroundTimer.clearTimeout(retryQueueSchedule[action.uuid].timeoutId);
+				platformAppStateIndependentClearTimeout(retryQueueSchedule[action.uuid].timeoutId);
 				delete retryQueueSchedule[action.uuid];
 			}
 
@@ -682,7 +674,7 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 			}));
 
 			if (Platform.OS === 'android') {
-				retryQueueSchedule[action.uuid].timeoutId = BackgroundTimer.setTimeout(() => {
+				retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
 					dispatch(handleActionSchedule(action, accessToken, eventUUID, extras));
 				}, timeout * 1000);
 			}
