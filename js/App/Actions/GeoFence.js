@@ -372,8 +372,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			const dimValue = stateValues[16];
 			return dispatch(deviceSetState(deviceId, method, dimValue, accessToken)).then((res: Object = {}): Object => {
 				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
-					delete retryQueueDeviceAction[action.uuid];
 					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					delete retryQueueDeviceAction[action.uuid];
 				}
 
 				date = new Date();
@@ -429,8 +429,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			const { r, g, b } = rgb;
 			return dispatch(deviceSetStateRGB(deviceId, r, g, b, accessToken)).then((res: Object = {}): Object => {
 				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
-					delete retryQueueDeviceAction[action.uuid];
 					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					delete retryQueueDeviceAction[action.uuid];
 				}
 
 				date = new Date();
@@ -489,8 +489,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			} = action;
 			return dispatch(deviceSetStateThermostat(deviceId, mode, temp, scale, changeMode, mode === 'off' ? 2 : 1, accessToken)).then((res: Object = {}): Object => {
 				if (retryQueueDeviceAction[action.uuid] && retryQueueDeviceAction[action.uuid].timeoutId) {
-					delete retryQueueDeviceAction[action.uuid];
 					BackgroundTimer.clearTimeout(retryQueueDeviceAction[action.uuid].timeoutId);
+					delete retryQueueDeviceAction[action.uuid];
 				}
 
 				date = new Date();
@@ -565,8 +565,8 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 		}));
 		return dispatch(setEvent(id, options, accessToken)).then((res: Object = {}): Object => {
 			if (retryQueueEvent[action.uuid] && retryQueueEvent[action.uuid].timeoutId) {
-				delete retryQueueEvent[action.uuid];
 				BackgroundTimer.clearTimeout(retryQueueEvent[action.uuid].timeoutId);
+				delete retryQueueEvent[action.uuid];
 			}
 
 			date = new Date();
@@ -636,8 +636,8 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 		}));
 		return dispatch(saveSchedule(options, accessToken)).then((res: Object = {}): Object => {
 			if (retryQueueSchedule[action.uuid] && retryQueueSchedule[action.uuid].timeoutId) {
-				delete retryQueueSchedule[action.uuid];
 				BackgroundTimer.clearTimeout(retryQueueSchedule[action.uuid].timeoutId);
+				delete retryQueueSchedule[action.uuid];
 			}
 
 			date = new Date();
