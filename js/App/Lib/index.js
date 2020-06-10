@@ -52,6 +52,8 @@ import * as rgbUtils from './rgbUtils';
 import * as thermostatUtils from './thermostatUtils';
 import GeoFenceUtils from './GeoFenceUtils';
 import * as dashboardUtils from './dashboardUtils';
+import * as PushNotification from './PushNotification';
+import * as Timer from './Timer';
 
 module.exports = {
 	getRouteName,
@@ -86,4 +88,6 @@ module.exports = {
 	...thermostatUtils,
 	GeoFenceUtils,
 	...dashboardUtils,
+	...PushNotification,
+	...Timer,
 };
