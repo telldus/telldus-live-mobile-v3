@@ -76,23 +76,40 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
         
       </Text>
     </View>
-    <Image
-      source={
+    <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
         Object {
-          "uri": "telldus_logo",
+          "opacity": 1,
         }
       }
-      style={
-        Array [
+    >
+      <Image
+        source={
           Object {
-            "height": 35.00000025,
-            "resizeMode": "contain",
-            "width": 230.49999975,
-          },
-          undefined,
-        ]
-      }
-    />
+            "uri": "telldus_logo",
+          }
+        }
+        style={
+          Array [
+            Object {
+              "height": 35.00000025,
+              "resizeMode": "contain",
+              "width": 230.49999975,
+            },
+            undefined,
+          ]
+        }
+      />
+    </View>
   </View>
 </View>
 `;
@@ -173,23 +190,40 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
         
       </Text>
     </View>
-    <Image
-      source={
+    <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
         Object {
-          "uri": "telldus_logo",
+          "opacity": 1,
         }
       }
-      style={
-        Array [
+    >
+      <Image
+        source={
           Object {
-            "height": 35.00000025,
-            "resizeMode": "contain",
-            "width": 230.49999975,
-          },
-          undefined,
-        ]
-      }
-    />
+            "uri": "telldus_logo",
+          }
+        }
+        style={
+          Array [
+            Object {
+              "height": 35.00000025,
+              "resizeMode": "contain",
+              "width": 230.49999975,
+            },
+            undefined,
+          ]
+        }
+      />
+    </View>
   </View>
 </View>
 `;

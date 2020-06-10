@@ -64,23 +64,40 @@ exports[`<Include433 /> on error with container component Should initiateAdd433M
           ]
         }
       >
-        <Image
-          source={
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
             Object {
-              "uri": "telldus_logo",
+              "opacity": 1,
             }
           }
-          style={
-            Array [
+        >
+          <Image
+            source={
               Object {
-                "height": 35.00000025,
-                "resizeMode": "contain",
-                "width": 230.49999975,
-              },
-              undefined,
-            ]
-          }
-        />
+                "uri": "telldus_logo",
+              }
+            }
+            style={
+              Array [
+                Object {
+                  "height": 35.00000025,
+                  "resizeMode": "contain",
+                  "width": 230.49999975,
+                },
+                undefined,
+              ]
+            }
+          />
+        </View>
       </View>
     </View>
     <View
@@ -329,23 +346,40 @@ exports[`<Include433 /> on success with container component Should initiateAdd43
           ]
         }
       >
-        <Image
-          source={
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
             Object {
-              "uri": "telldus_logo",
+              "opacity": 1,
             }
           }
-          style={
-            Array [
+        >
+          <Image
+            source={
               Object {
-                "height": 35.00000025,
-                "resizeMode": "contain",
-                "width": 230.49999975,
-              },
-              undefined,
-            ]
-          }
-        />
+                "uri": "telldus_logo",
+              }
+            }
+            style={
+              Array [
+                Object {
+                  "height": 35.00000025,
+                  "resizeMode": "contain",
+                  "width": 230.49999975,
+                },
+                undefined,
+              ]
+            }
+          />
+        </View>
       </View>
     </View>
     <View
@@ -792,23 +826,40 @@ exports[`<Include433 /> with container component Should initiateAdd433MHz and sh
           ]
         }
       >
-        <Image
-          source={
+        <View
+          accessible={true}
+          focusable={false}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
             Object {
-              "uri": "telldus_logo",
+              "opacity": 1,
             }
           }
-          style={
-            Array [
+        >
+          <Image
+            source={
               Object {
-                "height": 35.00000025,
-                "resizeMode": "contain",
-                "width": 230.49999975,
-              },
-              undefined,
-            ]
-          }
-        />
+                "uri": "telldus_logo",
+              }
+            }
+            style={
+              Array [
+                Object {
+                  "height": 35.00000025,
+                  "resizeMode": "contain",
+                  "width": 230.49999975,
+                },
+                undefined,
+              ]
+            }
+          />
+        </View>
       </View>
     </View>
     <View
