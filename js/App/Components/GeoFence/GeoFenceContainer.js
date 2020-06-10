@@ -72,6 +72,9 @@ export class GeoFenceContainer extends View<Props, State> {
 	_keyboardDidShow: () => void;
 	_keyboardDidHide: () => void;
 
+	pointsToHiddenCave: number;
+	openCaveTimeout: any;
+
 	state = {
 		h1: '',
 		h2: '',
@@ -87,6 +90,9 @@ export class GeoFenceContainer extends View<Props, State> {
 		this.handleBackPress = this.handleBackPress.bind(this);
 		this._keyboardDidShow = this._keyboardDidShow.bind(this);
 		this._keyboardDidHide = this._keyboardDidHide.bind(this);
+
+		this.pointsToHiddenCave = 0;
+		this.openCaveTimeout = null;
 	}
 
 	componentDidMount() {
@@ -126,6 +132,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
 		this.keyboardDidShowListener.remove();
 		this.keyboardDidHideListener.remove();
+		this.clearOpenCaveTimeout();
 	}
 
 	handleBackPress(): boolean {
@@ -240,6 +247,28 @@ export class GeoFenceContainer extends View<Props, State> {
 		}
 	}
 
+	clearOpenCaveTimeout = () => {
+		clearTimeout(this.openCaveTimeout);
+		this.openCaveTimeout = null;
+	}
+
+	onPressLogo = () => {
+		this.pointsToHiddenCave++;
+
+		if (this.openCaveTimeout) {
+			this.clearOpenCaveTimeout();
+		}
+
+		this.openCaveTimeout = setTimeout(() => {
+			this.pointsToHiddenCave = 0;
+		}, 500);
+
+		if (this.pointsToHiddenCave >= 5) {
+			this.pointsToHiddenCave = 0;
+			this.props.navigation.navigate('AdvancedSettings');
+		}
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -302,6 +331,7 @@ export class GeoFenceContainer extends View<Props, State> {
 						isGeoFenceLoadingStatus,
 					}}
 					{...screenProps}
+					onPressLogo={this.onPressLogo}
 					rightButton={currentScreen === 'AddEditGeoFence' ? rightButton : undefined}/>
 				<KeyboardAvoidingView
 					behavior="padding"
