@@ -26,7 +26,7 @@ import {
 	Platform,
 } from 'react-native';
 
-const platformAppStateIndependentSetTimeout = (callback: Function, timeout: number): number => {
+const platformAppStateIndependentSetTimeout = (callback: Function, timeout: number): any => {
 	if (Platform.OS === 'android') {
 		return BackgroundTimer.setTimeout(callback, timeout);
 	}
@@ -35,7 +35,7 @@ const platformAppStateIndependentSetTimeout = (callback: Function, timeout: numb
 	return setTimeout(callback, timeout);
 };
 
-const platformAppStateIndependentClearTimeout = (timeoutId: number): string => {
+const platformAppStateIndependentClearTimeout = (timeoutId: any) => {
 	if (Platform.OS === 'android') {
 		BackgroundTimer.clearTimeout(timeoutId);
 	}
