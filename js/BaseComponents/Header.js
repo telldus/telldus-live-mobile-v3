@@ -338,6 +338,7 @@ const HeaderComponent = (props: Props): Object => {
 		return (
 			<TouchableOpacity
 				onPress={button.onPress}
+				disabled={!button.onPress}
 				accessibilityLabel={accessibilityLabel}
 				style={[
 					headerButton,
@@ -364,6 +365,7 @@ const HeaderComponent = (props: Props): Object => {
 		return (
 			<TouchableOpacity
 				onPress={button.onPress}
+				disabled={!button.onPress}
 				accessibilityLabel={accessibilityLabel}
 				style={[
 					headerButton,
