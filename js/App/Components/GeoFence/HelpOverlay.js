@@ -23,13 +23,19 @@
 import React, {
 	useCallback,
 } from 'react';
+import {
+	Platform,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { SvgXml } from 'react-native-svg';
 
 import {
 	View,
 	Text,
+	SafeAreaView,
 } from '../../../BaseComponents';
+
+import Theme from '../../Theme';
 
 const HelpOverlay = (props: Object): Object => {
 
@@ -40,8 +46,13 @@ const HelpOverlay = (props: Object): Object => {
 	} = props;
 
 	const {
-		boxHeight,
-		boxWidth,
+		infoTextStyle,
+		closeIconBoxStyle,
+		closePathD,
+		closeBoxHeight,
+		closeBoxWidth,
+		closeModalTextStyle,
+		strokeWidth,
 	} = getStyles({
 		appLayout,
 	});
@@ -59,78 +70,119 @@ const HelpOverlay = (props: Object): Object => {
 
 	const closeArrow = `
     <svg xmlns="http://www.w3.org/2000/svg"
-    width="${boxWidth}" height="${boxHeight}" viewBox="${boxWidth / 2} 0 ${boxWidth} ${boxHeight}">
+    width="${closeBoxWidth}" height="${closeBoxHeight}" viewBox="0 0 ${closeBoxWidth} ${closeBoxHeight}">
     <defs>
         ${Triangle}
     </defs>
 
-        <g fill="none" stroke-width="10" marker-end="url(#Triangle)">
-        <path stroke="#fff" d="M 175,125 C 150,150 125,150 100,125" marker-end="url(#Triangle)"/>   
+        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
+		<path stroke="#fff" d="${closePathD}" marker-end="url(#Triangle)"/>   
      
-        </g>
-    </svg>`;
-
-	const controlGF = `
-    <svg xmlns="http://www.w3.org/2000/svg"
-    width="${boxWidth}" height="${boxHeight}" viewBox="${boxWidth / 2} 0 ${boxWidth} ${boxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
-
-        <g fill="none" stroke-width="10" marker-end="url(#Triangle)">
-        <path stroke="#fff" d="M 100,75 C 125,50 150,50 175,20" marker-end="url(#Triangle)"/>
         </g>
     </svg>`;
 
 	return (
 		<Modal
+			coverScreen
+			style={{
+				margin: 0,
+			}}
 			isVisible={isVisible}>
-			<View style={{
-				flex: 1,
-			}}>
-				<Text
-					onPress={closeModal}
-					style={{
-						position: 'absolute',
-						bottom: 20,
-						fontSize: 40,
-						color: '#fff',
-					}}>
+			<SafeAreaView
+				backgroundColor={'transparent'}
+				safeAreaBackgroundColor={'transparent'}>
+				<View style={{
+					flex: 1,
+					borderWidth: 1,
+					borderColor: 'red',
+				}}>
+					<View style={closeIconBoxStyle}>
+						<SvgXml xml={closeArrow} />
+						<Text
+							onPress={closeModal}
+							style={infoTextStyle}>
                     Close
-				</Text>
-				<View style={{
-					flex: 0,
-					position: 'absolute',
-					top: 40,
-					backgroundColor: '#00000080',
-				}}>
-					<SvgXml xml={closeArrow} />
+						</Text>
+					</View>
+					<Text
+						onPress={closeModal}
+						style={closeModalTextStyle}>
+                    Close Modal
+					</Text>
 				</View>
-				<View style={{
-					flex: 0,
-					position: 'absolute',
-					top: 40,
-					right: 10,
-					backgroundColor: '#00000080',
-				}}>
-					<SvgXml xml={controlGF} />
-				</View>
-			</View>
+			</SafeAreaView>
 		</Modal>
 	);
 };
 
 const getStyles = ({appLayout}: Object): Object => {
 	const { height, width } = appLayout;
-	// const isPortrait = height > width;
-	// const deviceWidth = isPortrait ? width : height;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+	const deviceHeight = isPortrait ? height : width;
+
+	const {
+		headerButtonHorizontalPadding,
+		headerHeightFactor,
+		headerButtonIconSizeFactor,
+	} = Theme.Core;
+
+	const { land } = headerHeightFactor;
 
 	const boxHeight = height * 0.2;
 	const boxWidth = width * 0.4;
+	const navHeaderHeight = Platform.OS === 'android' ?
+		deviceHeight * 0.08
+		:
+		deviceHeight * land;
+
+	const fontSize = deviceWidth * 0.055;
+	const iconSize = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
+
+	const left = (iconSize / 2) + headerButtonHorizontalPadding;
+
+	const closeBoxHeight = 100 + (deviceWidth * 0.1);
+	const closeBoxWidth = 50 + (fontSize * 5);
+
+	let strokeWidth = deviceWidth * 0.015;
+	const strokeWidthMax = 10;
+	strokeWidth = strokeWidth > strokeWidthMax ? strokeWidthMax : strokeWidth;
+
+	const pathDTop = strokeWidth * 3;
+	const closePathD = `M ${left + 42},${pathDTop + 90} C ${left + 40},${pathDTop + 10} ${left},${pathDTop + 30} ${left},${pathDTop}`;
 
 	return {
+		closePathD,
+		closeBoxHeight,
+		closeBoxWidth,
 		boxHeight,
 		boxWidth,
+		strokeWidth,
+		closeIconBoxStyle: {
+			flex: 0,
+			position: 'absolute',
+			top: navHeaderHeight - (navHeaderHeight * 0.3),
+			borderWidth: 1,
+			borderColor: 'red',
+		},
+		infoTextStyle: {
+			position: 'absolute',
+			borderWidth: 1,
+			borderColor: 'red',
+			left: left / (fontSize * 0.03),
+			bottom: 0,
+			fontSize,
+			color: '#fff',
+			fontFamily: 'SFNS Display',
+		},
+		closeModalTextStyle: {
+			alignSelf: 'center',
+			position: 'absolute',
+			bottom: 20,
+			fontSize: 40,
+			color: '#fff',
+			fontFamily: 'SFNS Display',
+		},
 	};
 };
 
