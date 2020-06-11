@@ -570,7 +570,7 @@ public class DevicesGroupDialogueActivity extends Activity {
             dim_slider_cover.setLayoutParams(params);
 
             TextView dim_value = (TextView) findViewById(R.id.dim_value);
-            deviceStateValue = (deviceStateValue == null || deviceStateValue == "") ? "0" : deviceStateValue;
+            deviceStateValue = (deviceStateValue == null || deviceStateValue.trim().isEmpty()) ? "0" : deviceStateValue;
             int slidervalue = deviceUtils.toSliderValue(Integer.parseInt(deviceStateValue));
             dim_value.setText(String.valueOf(slidervalue)+"%");
 
