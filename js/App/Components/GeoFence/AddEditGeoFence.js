@@ -47,6 +47,7 @@ import {
 	FenceCalloutWithMarker,
 	MyLocation,
 } from './SubViews';
+import HelpOverlay from './HelpOverlay';
 
 import {
 	setEditFence,
@@ -65,6 +66,8 @@ type Props = {
 	onDidMount: (string, string, ?string) => void,
 	enableGeoFence: boolean,
 	route: Object,
+	isHelpVisible: boolean,
+	setIsHelpVisible: Function,
 };
 
 const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
@@ -73,6 +76,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		appLayout,
 		enableGeoFence,
 		route,
+		isHelpVisible,
+		setIsHelpVisible,
 	} = props;
 
 	const {
@@ -187,6 +192,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		);
 	}
 
+	const closeHelp = useCallback(() => {
+		setIsHelpVisible(false);
+	}, [setIsHelpVisible]);
+
 	return (
 		<View style={{flex: 1}}>
 			<ScrollView
@@ -219,6 +228,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				onPress={onPressNext}
 				imageSource={{uri: 'icon_plus'}}
 				disabled={!enableGeoFence}/>
+			<HelpOverlay
+				closeHelp={closeHelp}
+				isVisible={isHelpVisible}
+				appLayout={appLayout}/>
 		</View>
 	);
 });

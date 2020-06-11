@@ -32,6 +32,8 @@ import {
 	NavigationHeaderPoster,
 	Switch,
 	Throbber,
+	TouchableOpacity,
+	BlockIcon,
 } from '../../../BaseComponents';
 
 import {
@@ -64,6 +66,7 @@ type State = {
 	keyboardShown: boolean,
 	forceLeftIconVisibilty: boolean,
 	isGeoFenceLoadingStatus: boolean,
+	isHelpVisible: boolean,
 };
 
 export class GeoFenceContainer extends View<Props, State> {
@@ -82,6 +85,7 @@ export class GeoFenceContainer extends View<Props, State> {
 		keyboardShown: false,
 		forceLeftIconVisibilty: false,
 		isGeoFenceLoadingStatus: false,
+		isHelpVisible: false,
 	};
 
 	constructor(props: Props) {
@@ -269,6 +273,16 @@ export class GeoFenceContainer extends View<Props, State> {
 		}
 	}
 
+	setIsHelpVisible = (isHelpVisible: boolean) => {
+		this.setState({
+			isHelpVisible,
+		});
+	}
+
+	showHelp = () => {
+		this.setIsHelpVisible(true);
+	}
+
 	render(): Object {
 		const {
 			children,
@@ -280,7 +294,14 @@ export class GeoFenceContainer extends View<Props, State> {
 			enableGeoFence,
 		} = this.props;
 		const { appLayout } = screenProps;
-		const { h1, h2, infoButton, forceLeftIconVisibilty, isGeoFenceLoadingStatus } = this.state;
+		const {
+			h1,
+			h2,
+			infoButton,
+			forceLeftIconVisibilty,
+			isGeoFenceLoadingStatus,
+			isHelpVisible,
+		} = this.state;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 
@@ -293,21 +314,55 @@ export class GeoFenceContainer extends View<Props, State> {
 		const goBack = this.getLeftIconPressAction(currentScreen);
 		const showPoster = this.shouldShowPoster(currentScreen);
 
+		const {
+			rightIconsCoverStyle,
+			helpIconCoverStyle,
+			helpIconStyle,
+			backgroundMaskStyle,
+		} = this.getStyles(appLayout);
+
+		const throbber = <Throbber
+			throbberContainerStyle={{
+				position: 'relative',
+			}}
+			throbberStyle={{
+				color: '#fff',
+			}}/>;
+
+		const help = (
+			<TouchableOpacity
+				onPress={this.showHelp}
+				style={helpIconCoverStyle}>
+				<BlockIcon
+					backgroundMaskStyle={backgroundMaskStyle}
+					iconLevel={15}
+					backgroundMask
+					icon={'help'}
+					style={helpIconStyle}/>
+			</TouchableOpacity>
+		);
+
 		const rightButton = {
-			component: isGeoFenceLoadingStatus ? <Throbber
-				throbberContainerStyle={{
-					position: 'relative',
-				}}
-				throbberStyle={{
-					color: '#fff',
-				}}/> :
-				<Switch
-					onValueChange={this.onValueChange}
-					thumbColor={enableGeoFence ? Theme.Core.brandSecondary : Theme.Core.btnDisabledBg}
-					tintColor={'#fff'}
-					onTintColor={'#fff'}
-					value={enableGeoFence}
-				/>,
+			component:
+			<View style={rightIconsCoverStyle}>
+				{
+					isGeoFenceLoadingStatus ?
+						<>
+							{help}
+							{throbber}
+						</>
+						:
+						<>
+							{help}
+							<Switch
+								onValueChange={this.onValueChange}
+								thumbColor={enableGeoFence ? Theme.Core.brandSecondary : Theme.Core.btnDisabledBg}
+								tintColor={'#fff'}
+								onTintColor={'#fff'}
+								value={enableGeoFence}/>
+						</>
+				}
+			</View>,
 			onPress: () => {},
 		};
 
@@ -354,11 +409,42 @@ export class GeoFenceContainer extends View<Props, State> {
 							isEditMode: this.isEditMode,
 							route,
 							enableGeoFence,
+							setIsHelpVisible: this.setIsHelpVisible,
+							isHelpVisible,
 						}
 					)}
 				</KeyboardAvoidingView>
 			</View>
 		);
+	}
+
+	getStyles = (appLayout: Object): Object => {
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+		const deviceWidth = isPortrait ? width : height;
+
+		const fontSize = deviceWidth * 0.08;
+		const maskSize = fontSize * 0.7;
+
+		return {
+			rightIconsCoverStyle: {
+				flexDirection: 'row',
+				alignItems: 'center',
+			},
+			helpIconCoverStyle: {
+				marginRight: 10,
+			},
+			helpIconStyle: {
+				fontSize,
+			},
+			backgroundMaskStyle: {
+				position: 'absolute',
+				backgroundColor: '#fff',
+				height: maskSize,
+				width: maskSize,
+				borderRadius: maskSize / 2,
+			},
+		};
 	}
 }
 
