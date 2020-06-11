@@ -520,7 +520,7 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         String value = String.valueOf(sensorValue);
 
-        if (value == null || value == "") {
+        if (value == null || value.trim().isEmpty()) {
             return "";
         }
 
