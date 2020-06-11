@@ -404,14 +404,15 @@ const getStyles = (appLayout: Object, {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const paddingHorizontal = 15;
-
 	const {
 		navBarTopPadding: paddingTop,
 		toolbarDefaultBg,
 		toolbarHeight,
 		toolbarInputColor,
+		headerButtonHorizontalPadding,
 	 } = Theme.Core;
+
+	const paddingHorizontal = headerButtonHorizontalPadding;
 
 	return {
 		navbar: {

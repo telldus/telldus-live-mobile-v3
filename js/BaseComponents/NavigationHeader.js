@@ -150,10 +150,15 @@ class NavigationHeader extends PureComponent<Props, State> {
 	}
 
 	getLeftIcon(): Object {
-		let { appLayout, leftIcon } = this.props;
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let size = isPortrait ? width * 0.06 : height * 0.06;
+		const { appLayout, leftIcon } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+
+		const {
+			headerButtonIconSizeFactor,
+		} = Theme.Core;
+
+		let size = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
 		if (Platform.OS === 'ios' && leftIcon !== 'close') {
 			return (
 				<Icon

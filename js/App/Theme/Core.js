@@ -298,4 +298,11 @@ export default {
 			},
 		};
 	},
+
+	get headerButtonHorizontalPadding() {
+		return 15;
+	},
+	get headerButtonIconSizeFactor() {
+		return 0.06;
+	},
 };
