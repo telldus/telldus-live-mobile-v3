@@ -161,6 +161,8 @@ class FloatingButton extends Component<Props, null> {
 		const {
 			shadow: themeShadow,
 			maxSizeFloatingButton,
+			floatingButtonSizefactor,
+			floatingButtonOffsetfactor,
 		} = Theme.Core;
 		const height = appLayout.height;
 		const width = appLayout.width;
@@ -174,10 +176,15 @@ class FloatingButton extends Component<Props, null> {
 
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
-		let buttonSize = deviceWidth * 0.134666667;
+		const {
+			right,
+			bottom,
+		} = floatingButtonOffsetfactor;
+
+		let buttonSize = deviceWidth * floatingButtonSizefactor;
 		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
-		const offsetBottom = deviceWidth * 0.046666667 + (isIOSTabs ? 50 : 0);
-		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
+		const offsetBottom = deviceWidth * bottom + (isIOSTabs ? 50 : 0);
+		const offsetRight = deviceWidth * right - paddingRight;
 
 		const shadow = Object.assign({}, themeShadow, {
 			shadowOpacity: 0.35,
