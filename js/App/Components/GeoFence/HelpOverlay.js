@@ -178,7 +178,7 @@ const getStyles = ({appLayout}: Object): Object => {
      
         </g>
 	</svg>`;
-	
+
 	return {
 		closeArrow,
 		controlGFArrow,
@@ -220,7 +220,7 @@ const getStyles = ({appLayout}: Object): Object => {
 			borderColor: 'red',
 		},
 		controlGFTextStyle: {
-			top: pathDTop + 115,
+			top: pathDTop + sizeFactorTop + 115,
 		},
 	};
 };
