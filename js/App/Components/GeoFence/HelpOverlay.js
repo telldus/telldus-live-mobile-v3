@@ -48,11 +48,12 @@ const HelpOverlay = (props: Object): Object => {
 	const {
 		infoTextStyle,
 		closeIconBoxStyle,
-		closePathD,
-		closeBoxHeight,
-		closeBoxWidth,
 		closeModalTextStyle,
-		strokeWidth,
+		controlGFIconBoxStyle,
+		closeTextStyle,
+		controlGFTextStyle,
+		closeArrow,
+		controlGFArrow,
 	} = getStyles({
 		appLayout,
 	});
@@ -60,26 +61,6 @@ const HelpOverlay = (props: Object): Object => {
 	const closeModal = useCallback(() => {
 		closeHelp();
 	}, [closeHelp]);
-
-	const Triangle = `
-    <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
-            markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
-            orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
-    </marker>`;
-
-	const closeArrow = `
-    <svg xmlns="http://www.w3.org/2000/svg"
-    width="${closeBoxWidth}" height="${closeBoxHeight}" viewBox="0 0 ${closeBoxWidth} ${closeBoxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
-
-        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
-		<path stroke="#fff" d="${closePathD}" marker-end="url(#Triangle)"/>   
-     
-        </g>
-    </svg>`;
 
 	return (
 		<Modal
@@ -100,8 +81,16 @@ const HelpOverlay = (props: Object): Object => {
 						<SvgXml xml={closeArrow} />
 						<Text
 							onPress={closeModal}
-							style={infoTextStyle}>
-                    Close
+							style={[infoTextStyle, closeTextStyle]}>
+                    CLOSE
+						</Text>
+					</View>
+					<View style={controlGFIconBoxStyle}>
+						<SvgXml xml={controlGFArrow} />
+						<Text
+							onPress={closeModal}
+							style={[infoTextStyle, controlGFTextStyle]}>
+                    TAP TO TURN ON/OFF GEOFENCE
 						</Text>
 					</View>
 					<Text
@@ -129,8 +118,6 @@ const getStyles = ({appLayout}: Object): Object => {
 
 	const { land } = headerHeightFactor;
 
-	const boxHeight = height * 0.2;
-	const boxWidth = width * 0.4;
 	const navHeaderHeight = Platform.OS === 'android' ?
 		deviceHeight * 0.08
 		:
@@ -140,9 +127,13 @@ const getStyles = ({appLayout}: Object): Object => {
 	const iconSize = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
 
 	const left = (iconSize / 2) + headerButtonHorizontalPadding;
+	const right = (deviceWidth * 0.055) + headerButtonHorizontalPadding;
 
 	const closeBoxHeight = 100 + (deviceWidth * 0.1);
 	const closeBoxWidth = 50 + (fontSize * 5);
+
+	const controlGFBoxHeight = 100 + (deviceWidth * 0.3);
+	const controlGFBoxWidth = 50 + (fontSize * 6);
 
 	let strokeWidth = deviceWidth * 0.015;
 	const strokeWidthMax = 10;
@@ -151,13 +142,46 @@ const getStyles = ({appLayout}: Object): Object => {
 	const pathDTop = strokeWidth * 3;
 	const closePathD = `M ${left + 42},${pathDTop + 90} C ${left + 40},${pathDTop + 10} ${left},${pathDTop + 30} ${left},${pathDTop}`;
 
+	const controlGFRight = controlGFBoxWidth - right;
+	const sizeFactorTop = deviceWidth * 0.02;
+	const controlGFPathD = `M ${controlGFRight - 42},${pathDTop + sizeFactorTop + 110} C ${controlGFRight - 40},${pathDTop + sizeFactorTop + 10} ${controlGFRight},${pathDTop + sizeFactorTop + 25} ${controlGFRight},${pathDTop + sizeFactorTop}`;
+
+	const Triangle = `
+    <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
+            markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
+            orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
+    </marker>`;
+
+	const closeArrow = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+    width="${closeBoxWidth}" height="${closeBoxHeight}" viewBox="0 0 ${closeBoxWidth} ${closeBoxHeight}">
+    <defs>
+        ${Triangle}
+    </defs>
+
+        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
+		<path stroke="#fff" d="${closePathD}" marker-end="url(#Triangle)"/>   
+     
+        </g>
+	</svg>`;
+
+	const controlGFArrow = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+    width="${controlGFBoxWidth}" height="${controlGFBoxHeight}" viewBox="0 0 ${controlGFBoxWidth} ${controlGFBoxHeight}">
+    <defs>
+        ${Triangle}
+    </defs>
+
+        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
+		<path stroke="#fff" d="${controlGFPathD}" marker-end="url(#Triangle)"/>   
+     
+        </g>
+	</svg>`;
+	
 	return {
-		closePathD,
-		closeBoxHeight,
-		closeBoxWidth,
-		boxHeight,
-		boxWidth,
-		strokeWidth,
+		closeArrow,
+		controlGFArrow,
 		closeIconBoxStyle: {
 			flex: 0,
 			position: 'absolute',
@@ -166,14 +190,17 @@ const getStyles = ({appLayout}: Object): Object => {
 			borderColor: 'red',
 		},
 		infoTextStyle: {
+			width: '100%',
 			position: 'absolute',
 			borderWidth: 1,
 			borderColor: 'red',
-			left: left / (fontSize * 0.03),
-			bottom: 0,
+			textAlign: 'center',
 			fontSize,
 			color: '#fff',
 			fontFamily: 'SFNS Display',
+		},
+		closeTextStyle: {
+			top: pathDTop + 90,
 		},
 		closeModalTextStyle: {
 			alignSelf: 'center',
@@ -182,6 +209,18 @@ const getStyles = ({appLayout}: Object): Object => {
 			fontSize: 40,
 			color: '#fff',
 			fontFamily: 'SFNS Display',
+		},
+		controlGFIconBoxStyle: {
+			alignItems: 'stretch',
+			flex: 0,
+			position: 'absolute',
+			top: navHeaderHeight - (navHeaderHeight * 0.3),
+			right: 0,
+			borderWidth: 1,
+			borderColor: 'red',
+		},
+		controlGFTextStyle: {
+			top: pathDTop + 115,
 		},
 	};
 };
