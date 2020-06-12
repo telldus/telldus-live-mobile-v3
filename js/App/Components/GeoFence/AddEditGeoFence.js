@@ -25,6 +25,7 @@ import React, {
 	useState,
 	useEffect,
 	useCallback,
+	useRef,
 } from 'react';
 import {
 	StyleSheet,
@@ -84,6 +85,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		params = {},
 	} = route;
 
+	const mapRef: Object = useRef({});
+
 	const dispatch = useDispatch();
 
 	const fallbackLocation = {
@@ -92,6 +95,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		latitudeDelta: 0.1,
 		longitudeDelta: 0.1,
 	};
+
+	const [ pointCurrentLocation, setPointCurrentLocation ] = useState({});
 
 	let { location = {}, fence } = useSelector((state: Object): Object => state.fences);
 	location = {
@@ -196,12 +201,22 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		setIsHelpVisible(false);
 	}, [setIsHelpVisible]);
 
+	const onUserLocationChange = useCallback((data: Object) => {
+		(async () => {
+			if (mapRef && mapRef.current) {
+				const point = await mapRef.current.pointForCoordinate(data.nativeEvent.coordinate);
+				setPointCurrentLocation(point);
+			}
+		})();
+	}, [mapRef]);
+
 	return (
 		<View style={{flex: 1}}>
 			<ScrollView
 				style={container}
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
+					ref={mapRef}
 					style={mapStyle}
 					initialRegion={new AnimatedRegion(region)}
 					region={regionToReset ? new AnimatedRegion(regionToReset) : undefined}
@@ -211,6 +226,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					showsUserLocation={true}
 					showsMyLocationButton={false}
 					onRegionChange={onRegionChange}
+					onUserLocationChange={onUserLocationChange}
 					onMapReady={onMapReady}>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
@@ -231,7 +247,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 			<HelpOverlay
 				closeHelp={closeHelp}
 				isVisible={isHelpVisible}
-				appLayout={appLayout}/>
+				appLayout={appLayout}
+				pointCurrentLocation={pointCurrentLocation}/>
 		</View>
 	);
 });
