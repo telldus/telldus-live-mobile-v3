@@ -30,7 +30,7 @@ const isEqual = require('react-fast-compare');
 import {
 	View,
 	NavigationHeaderPoster,
-	Switch,
+	ThemedSwitch,
 	Throbber,
 	TouchableOpacity,
 	BlockIcon,
@@ -354,11 +354,10 @@ export class GeoFenceContainer extends View<Props, State> {
 						:
 						<>
 							{help}
-							<Switch
+							<ThemedSwitch
 								onValueChange={this.onValueChange}
-								thumbColor={enableGeoFence ? Theme.Core.brandSecondary : Theme.Core.btnDisabledBg}
-								tintColor={'#fff'}
-								onTintColor={'#fff'}
+								backgroundActive={'#fff'}
+								backgroundInactive={'#fff'}
 								value={enableGeoFence}/>
 						</>
 				}
