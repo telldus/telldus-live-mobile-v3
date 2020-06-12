@@ -25,6 +25,7 @@ import React, {
 } from 'react';
 import {
 	Platform,
+	SafeAreaView,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { SvgXml } from 'react-native-svg';
@@ -32,7 +33,6 @@ import { SvgXml } from 'react-native-svg';
 import {
 	View,
 	Text,
-	SafeAreaView,
 } from '../../../BaseComponents';
 
 import Theme from '../../Theme';
@@ -43,6 +43,7 @@ const HelpOverlay = (props: Object): Object => {
 		closeHelp,
 		isVisible,
 		appLayout,
+		pointCurrentLocation,
 	} = props;
 
 	const {
@@ -60,9 +61,18 @@ const HelpOverlay = (props: Object): Object => {
 		currentPosTextStyle,
 		addNewIconBoxStyle,
 		addNewTextStyle,
+		currentLocationBoxStyle,
+		currentLocationArrow,
+		currentLocationTextStyle,
 	} = getStyles({
 		appLayout,
+		pointCurrentLocation,
 	});
+
+	const {
+		x,
+		y,
+	} = pointCurrentLocation;
 
 	const closeModal = useCallback(() => {
 		closeHelp();
@@ -76,8 +86,9 @@ const HelpOverlay = (props: Object): Object => {
 			}}
 			isVisible={isVisible}>
 			<SafeAreaView
-				backgroundColor={'transparent'}
-				safeAreaBackgroundColor={'transparent'}>
+				style={{
+					flex: 1,
+				}}>
 				<View style={{
 					flex: 1,
 				}}>
@@ -91,16 +102,22 @@ const HelpOverlay = (props: Object): Object => {
 					</View>
 					<View style={controlGFIconBoxStyle}>
 						<Text
-							onPress={closeModal}
 							style={[infoTextStyle, controlGFTextStyle]}>
                     TAP TO TURN ON/OFF GEOFENCE
 						</Text>
 						<SvgXml xml={controlGFArrow} />
 					</View>
+					{(x || y) && (<View style={currentLocationBoxStyle}>
+						<SvgXml xml={currentLocationArrow} />
+						<Text
+							style={[infoTextStyle, currentLocationTextStyle]}>
+                    CURRENT POSITION
+						</Text>
+					</View>
+					)}
 					<View style={currentPosIconBoxStyle}>
 						<SvgXml xml={currentPosArrow} />
 						<Text
-							onPress={closeModal}
 							style={[infoTextStyle, currentPosTextStyle]}>
                     CENTER TO CURRENT POSITION
 						</Text>
@@ -108,7 +125,6 @@ const HelpOverlay = (props: Object): Object => {
 					<View style={addNewIconBoxStyle}>
 						<SvgXml xml={AddNewArrow} />
 						<Text
-							onPress={closeModal}
 							style={[infoTextStyle, addNewTextStyle]}>
                     ADD NEW GEOFENCE
 						</Text>
@@ -124,11 +140,19 @@ const HelpOverlay = (props: Object): Object => {
 	);
 };
 
-const getStyles = ({appLayout}: Object): Object => {
+const getStyles = ({
+	appLayout,
+	pointCurrentLocation,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 	const deviceHeight = isPortrait ? height : width;
+
+	const {
+		x,
+		y,
+	} = pointCurrentLocation;
 
 	const {
 		headerButtonHorizontalPadding,
@@ -249,11 +273,29 @@ const getStyles = ({appLayout}: Object): Object => {
         </g>
 	</svg>`;
 
+	const currentLocationBoxHeight = 30 + offsetBottom + (buttonSize / 2) + (fontSize * 1.2);
+	const currentLocationBoxWidth = width / 2;
+	const currentLocationX = currentLocationBoxWidth - (strokeWidth * 3);
+	const currentLocationY = (currentLocationBoxHeight * 0.5);
+	const currentLocationPathD = `M ${currentLocationX - 95},${currentLocationY - 30} C ${currentLocationX - 40},${currentLocationY - 5} ${currentLocationX - 20},${currentLocationY} ${currentLocationX},${currentLocationY}`;
+
+	const currentLocationArrow = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+    width="${currentLocationBoxWidth}" height="${currentLocationBoxHeight}" viewBox="0 0 ${currentLocationBoxWidth} ${currentLocationBoxHeight}">
+    <defs>
+        ${Triangle}
+    </defs>
+        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
+			<path stroke="#fff" d="${currentLocationPathD}" marker-end="url(#Triangle)"/>
+        </g>
+	</svg>`;
+
 	return {
 		closeArrow,
 		controlGFArrow,
 		currentPosArrow,
 		AddNewArrow,
+		currentLocationArrow,
 		closeIconBoxStyle: {
 			flex: 0,
 			position: 'absolute',
@@ -304,6 +346,16 @@ const getStyles = ({appLayout}: Object): Object => {
 		},
 		addNewTextStyle: {
 			bottom: addNewBoxHeight - fontSize,
+		},
+		currentLocationBoxStyle: {
+			alignItems: 'stretch',
+			flex: 0,
+			position: 'absolute',
+			top: (y + navHeaderHeight) - (currentLocationBoxHeight / 2),
+			right: x,
+		},
+		currentLocationTextStyle: {
+			bottom: currentLocationBoxHeight - fontSize,
 		},
 	};
 };
