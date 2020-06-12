@@ -54,6 +54,12 @@ const HelpOverlay = (props: Object): Object => {
 		controlGFTextStyle,
 		closeArrow,
 		controlGFArrow,
+		AddNewArrow,
+		currentPosArrow,
+		currentPosIconBoxStyle,
+		currentPosTextStyle,
+		addNewIconBoxStyle,
+		addNewTextStyle,
 	} = getStyles({
 		appLayout,
 	});
@@ -74,8 +80,6 @@ const HelpOverlay = (props: Object): Object => {
 				safeAreaBackgroundColor={'transparent'}>
 				<View style={{
 					flex: 1,
-					borderWidth: 1,
-					borderColor: 'red',
 				}}>
 					<View style={closeIconBoxStyle}>
 						<SvgXml xml={closeArrow} />
@@ -86,11 +90,27 @@ const HelpOverlay = (props: Object): Object => {
 						</Text>
 					</View>
 					<View style={controlGFIconBoxStyle}>
-						<SvgXml xml={controlGFArrow} />
 						<Text
 							onPress={closeModal}
 							style={[infoTextStyle, controlGFTextStyle]}>
                     TAP TO TURN ON/OFF GEOFENCE
+						</Text>
+						<SvgXml xml={controlGFArrow} />
+					</View>
+					<View style={currentPosIconBoxStyle}>
+						<SvgXml xml={currentPosArrow} />
+						<Text
+							onPress={closeModal}
+							style={[infoTextStyle, currentPosTextStyle]}>
+                    CENTER TO CURRENT POSITION
+						</Text>
+					</View>
+					<View style={addNewIconBoxStyle}>
+						<SvgXml xml={AddNewArrow} />
+						<Text
+							onPress={closeModal}
+							style={[infoTextStyle, addNewTextStyle]}>
+                    ADD NEW GEOFENCE
 						</Text>
 					</View>
 					<Text
@@ -114,6 +134,9 @@ const getStyles = ({appLayout}: Object): Object => {
 		headerButtonHorizontalPadding,
 		headerHeightFactor,
 		headerButtonIconSizeFactor,
+		maxSizeFloatingButton,
+		floatingButtonSizefactor,
+		floatingButtonOffsetfactor,
 	} = Theme.Core;
 
 	const { land } = headerHeightFactor;
@@ -123,11 +146,11 @@ const getStyles = ({appLayout}: Object): Object => {
 		:
 		deviceHeight * land;
 
-	const fontSize = deviceWidth * 0.055;
+	const fontSize = deviceWidth * 0.045;
 	const iconSize = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
 
 	const left = (iconSize / 2) + headerButtonHorizontalPadding;
-	const right = (deviceWidth * 0.055) + headerButtonHorizontalPadding;
+	const rightGF = (deviceWidth * 0.055) + headerButtonHorizontalPadding;
 
 	const closeBoxHeight = 100 + (deviceWidth * 0.1);
 	const closeBoxWidth = 50 + (fontSize * 5);
@@ -142,7 +165,7 @@ const getStyles = ({appLayout}: Object): Object => {
 	const pathDTop = strokeWidth * 3;
 	const closePathD = `M ${left + 42},${pathDTop + 90} C ${left + 40},${pathDTop + 10} ${left},${pathDTop + 30} ${left},${pathDTop}`;
 
-	const controlGFRight = controlGFBoxWidth - right;
+	const controlGFRight = controlGFBoxWidth - rightGF;
 	const sizeFactorTop = deviceWidth * 0.02;
 	const controlGFPathD = `M ${controlGFRight - 42},${pathDTop + sizeFactorTop + 110} C ${controlGFRight - 40},${pathDTop + sizeFactorTop + 10} ${controlGFRight},${pathDTop + sizeFactorTop + 25} ${controlGFRight},${pathDTop + sizeFactorTop}`;
 
@@ -179,21 +202,66 @@ const getStyles = ({appLayout}: Object): Object => {
         </g>
 	</svg>`;
 
+	const {
+		right,
+		bottom,
+	} = floatingButtonOffsetfactor;
+	const offsetBottom = deviceWidth * bottom;
+	const offsetRight = deviceWidth * right;
+	let buttonSize = deviceWidth * floatingButtonSizefactor;
+	buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+
+	const bottomBoxCurrPos = offsetBottom + (buttonSize * 1.2) + 10;
+
+	const currentPosBoxHeight = 30 + (buttonSize / 2) + (fontSize * 1.2);
+	const currentPosBoxWidth = width;
+
+	const currentPosX = currentPosBoxWidth - (offsetRight + (strokeWidth * 3) + buttonSize);
+	const currentPosY = currentPosBoxHeight - (buttonSize / 2);
+	const currentPosPathD = `M ${currentPosX - 95},${currentPosY - 30} C ${currentPosX - 40},${currentPosY - 5} ${currentPosX - 20},${currentPosY} ${currentPosX},${currentPosY}`;
+
+	const currentPosArrow = `
+	<svg xmlns="http://www.w3.org/2000/svg"
+    width="${currentPosBoxWidth}" height="${currentPosBoxHeight}" viewBox="0 0 ${currentPosBoxWidth} ${currentPosBoxHeight}">
+    <defs>
+        ${Triangle}
+    </defs>
+        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
+			<path stroke="#fff" d="${currentPosPathD}" marker-end="url(#Triangle)"/>
+        </g>
+	</svg>`;
+
+	const addNewBoxHeight = 30 + offsetBottom + (buttonSize / 2) + (fontSize * 1.2);
+	const addNewBoxWidth = width;
+
+	const addNewX = addNewBoxWidth - (offsetRight + (strokeWidth * 3) + buttonSize);
+	const addNewY = addNewBoxHeight - (offsetBottom + (buttonSize / 2));
+	const addNewPathD = `M ${addNewX - 95},${addNewY - 30} C ${addNewX - 40},${addNewY - 5} ${addNewX - 20},${addNewY} ${addNewX},${addNewY}`;
+
+	const AddNewArrow = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+    width="${addNewBoxWidth}" height="${addNewBoxHeight}" viewBox="0 0 ${addNewBoxWidth} ${addNewBoxHeight}">
+    <defs>
+        ${Triangle}
+    </defs>
+        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
+			<path stroke="#fff" d="${addNewPathD}" marker-end="url(#Triangle)"/>
+        </g>
+	</svg>`;
+
 	return {
 		closeArrow,
 		controlGFArrow,
+		currentPosArrow,
+		AddNewArrow,
 		closeIconBoxStyle: {
 			flex: 0,
 			position: 'absolute',
 			top: navHeaderHeight - (navHeaderHeight * 0.3),
-			borderWidth: 1,
-			borderColor: 'red',
 		},
 		infoTextStyle: {
 			width: '100%',
 			position: 'absolute',
-			borderWidth: 1,
-			borderColor: 'red',
 			textAlign: 'center',
 			fontSize,
 			color: '#fff',
@@ -205,7 +273,6 @@ const getStyles = ({appLayout}: Object): Object => {
 		closeModalTextStyle: {
 			alignSelf: 'center',
 			position: 'absolute',
-			bottom: 20,
 			fontSize: 40,
 			color: '#fff',
 			fontFamily: 'SFNS Display',
@@ -216,11 +283,27 @@ const getStyles = ({appLayout}: Object): Object => {
 			position: 'absolute',
 			top: navHeaderHeight - (navHeaderHeight * 0.3),
 			right: 0,
-			borderWidth: 1,
-			borderColor: 'red',
 		},
 		controlGFTextStyle: {
 			top: pathDTop + sizeFactorTop + 115,
+		},
+		currentPosIconBoxStyle: {
+			width: '100%',
+			position: 'absolute',
+			right: 0,
+			bottom: bottomBoxCurrPos,
+		},
+		currentPosTextStyle: {
+			bottom: currentPosBoxHeight - fontSize,
+		},
+		addNewIconBoxStyle: {
+			width: '100%',
+			position: 'absolute',
+			right: 0,
+			bottom: 0,
+		},
+		addNewTextStyle: {
+			bottom: addNewBoxHeight - fontSize,
 		},
 	};
 };
