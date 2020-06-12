@@ -107,6 +107,7 @@ import ThemedScrollView from './ThemedScrollView';
 import ThemedImage from './ThemedImage';
 import ThemedTextInput from './ThemedTextInput';
 import ThemedMaterialIcon from './ThemedMaterialIcon';
+import ThemedSwitch from './ThemedSwitch';
 
 import {
 	AppState,
@@ -215,4 +216,5 @@ module.exports = {
 	ThemedImage,
 	ThemedTextInput,
 	ThemedMaterialIcon,
+	ThemedSwitch,
 };
