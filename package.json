@@ -93,6 +93,7 @@
     "react-native-svg": "^12.0.0",
     "react-native-swipe-list-view": "^2.3.0",
     "react-native-swiper": "https://github.com/telldus/react-native-swiper.git",
+    "react-native-switch": "^1.5.0",
     "react-native-tab-view": "^2.13.0",
     "react-native-udp": "git+https://github.com/tradle/react-native-udp.git#aac2bfa30591864b18fe8e4190f141f97798e058",
     "react-native-uuid": "~1.4.9",
