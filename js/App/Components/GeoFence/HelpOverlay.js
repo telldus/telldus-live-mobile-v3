@@ -84,7 +84,9 @@ const HelpOverlay = (props: Object): Object => {
 			style={{
 				margin: 0,
 			}}
-			isVisible={isVisible}>
+			isVisible={isVisible}
+			swipeDirection={['left', 'right']}
+			onSwipeComplete={closeModal}>
 			<SafeAreaView
 				style={{
 					flex: 1,
@@ -95,7 +97,6 @@ const HelpOverlay = (props: Object): Object => {
 					<View style={closeIconBoxStyle}>
 						<SvgXml xml={closeArrow} />
 						<Text
-							onPress={closeModal}
 							style={[infoTextStyle, closeTextStyle]}>
                     CLOSE
 						</Text>
@@ -130,9 +131,8 @@ const HelpOverlay = (props: Object): Object => {
 						</Text>
 					</View>
 					<Text
-						onPress={closeModal}
 						style={closeModalTextStyle}>
-                    Close Modal
+                    Swipe to close
 					</Text>
 				</View>
 			</SafeAreaView>
