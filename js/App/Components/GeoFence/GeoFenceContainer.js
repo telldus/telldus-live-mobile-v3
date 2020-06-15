@@ -26,6 +26,7 @@ import { BackHandler, Keyboard, KeyboardAvoidingView, Platform } from 'react-nat
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
+import Orientation from 'react-native-orientation-locker';
 
 import {
 	View,
@@ -274,6 +275,11 @@ export class GeoFenceContainer extends View<Props, State> {
 	}
 
 	setIsHelpVisible = (isHelpVisible: boolean) => {
+		if (isHelpVisible) {
+			Orientation.lockToPortrait();
+		} else {
+			Orientation.unlockAllOrientations();
+		}
 		this.setState({
 			isHelpVisible,
 		});
