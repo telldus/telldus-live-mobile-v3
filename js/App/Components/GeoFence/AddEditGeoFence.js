@@ -71,6 +71,8 @@ type Props = {
 	setIsHelpVisible: Function,
 };
 
+const overlayFenceRadius = 1000;
+
 const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
@@ -107,13 +109,31 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const [ currentAccFences, setCurrentAccFences ] = useState([]);
 
+	const [ region, setRegion ] = useState(initialRegion);
+	const [ regionToReset, setRegionToReset ] = useState();
+	const [ regionToResume, setRegionToResume ] = useState();
+	const [ currenLocationInApp, setCurrenLocationInApp ] = useState();
+
 	useEffect(() => {
-		(async () => {
-			const geofences = await dispatch(getCurrentAccountsFences());
-			setCurrentAccFences(geofences);
-		})();
+		if (isHelpVisible) {
+			const data = currenLocationInApp || location;
+			setCurrentAccFences([{
+				extras: {
+					...data,
+					radius: overlayFenceRadius,
+				},
+			}]);
+		} else {
+			(async () => {
+				const geofences = await dispatch(getCurrentAccountsFences());
+				setCurrentAccFences(geofences);
+			})();
+		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [fence]);
+	}, [
+		fence,
+		isHelpVisible,
+	]);
 
 	const [ mapReady, setMapReady ] = useState(false);
 
@@ -125,11 +145,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		appLayout,
 		mapReady,
 	});
-
-	const [ region, setRegion ] = useState(initialRegion);
-	const [ regionToReset, setRegionToReset ] = useState();
-	const [ regionToResume, setRegionToResume ] = useState();
-	const [ currenLocationInApp, setCurrenLocationInApp ] = useState();
 
 	function onPressNext() {
 		dispatch(resetFence());
@@ -224,12 +239,15 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				setRegionToReset(regionToResume);
 				setRegionToResume();
 			}
+			if (!isHelpVisible && pointCurrentLocation.x) {
+				setPointCurrentLocation({});
+			}
 			if (isHelpVisible) {
 				if (!regionToResume) {
 					onPressFocusMyLocation();
 					setRegionToResume(region);
 				}
-				if (mapRef && mapRef.current) {
+				if (mapRef && mapRef.current && typeof pointCurrentLocation.x === 'undefined') {
 					const data = currenLocationInApp || location;
 					const point = await mapRef.current.pointForCoordinate(data);
 					if (point.x > 0 && point.y > 0) {
@@ -291,7 +309,8 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				closeHelp={closeHelp}
 				isVisible={isHelpVisible}
 				appLayout={appLayout}
-				pointCurrentLocation={pointCurrentLocation}/>
+				pointCurrentLocation={pointCurrentLocation}
+				fenceRadius={overlayFenceRadius}/>
 		</View>
 	);
 });

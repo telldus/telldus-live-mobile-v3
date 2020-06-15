@@ -45,6 +45,7 @@ const HelpOverlay = (props: Object): Object => {
 		isVisible,
 		appLayout,
 		pointCurrentLocation,
+		fenceRadius,
 	} = props;
 
 	const {
@@ -64,9 +65,13 @@ const HelpOverlay = (props: Object): Object => {
 		currentLocationBoxStyle,
 		currentLocationArrow,
 		currentLocationTextStyle,
+		geofenceArrow,
+		geofenceBoxStyle,
+		geofenceTextStyle,
 	} = getStyles({
 		appLayout,
 		pointCurrentLocation,
+		fenceRadius,
 	});
 
 	const {
@@ -120,6 +125,14 @@ const HelpOverlay = (props: Object): Object => {
 							</Text>
 						</View>
 						)}
+						{((x || y) && fenceRadius) && (<View style={geofenceBoxStyle}>
+							<SvgXml xml={geofenceArrow} />
+							<Text
+								style={[infoTextStyle, geofenceTextStyle]}>
+                    A GEOFENCE
+							</Text>
+						</View>
+						)}
 						<View style={currentPosIconBoxStyle}>
 							<SvgXml xml={currentPosArrow} />
 							<Text
@@ -144,6 +157,7 @@ const HelpOverlay = (props: Object): Object => {
 const getStyles = ({
 	appLayout,
 	pointCurrentLocation,
+	fenceRadius,
 }: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
@@ -291,11 +305,11 @@ const getStyles = ({
 			</g>
 		</svg>`;
 
-	const currentLocationBoxHeight = 30 + offsetBottom + (buttonSize / 2) + (fontSize * 1.2);
+	const currentLocationBoxHeight = (height * 0.25);
 	const currentLocationBoxWidth = width / 2;
 	const currentLocationX = currentLocationBoxWidth - (strokeWidth * 3);
 	const currentLocationY = (currentLocationBoxHeight * 0.5);
-	const currentLocationPathD = `M ${currentLocationX - 95},${currentLocationY - 30} C ${currentLocationX - 40},${currentLocationY - 5} ${currentLocationX - 20},${currentLocationY} ${currentLocationX},${currentLocationY}`;
+	const currentLocationPathD = `M ${currentLocationBoxWidth * 0.5},${fontSize * 1.2} C ${currentLocationBoxWidth * 0.6},${currentLocationY - 5} ${currentLocationBoxWidth * 0.7},${currentLocationY} ${currentLocationX},${currentLocationY}`;
 
 	const currentLocationArrow = `
     <svg xmlns="http://www.w3.org/2000/svg"
@@ -310,12 +324,32 @@ const getStyles = ({
         </g>
 	</svg>`;
 
+	const geofenceBoxHeight = (height * 0.25);
+	const geofenceBoxWidth = width / 2;
+	const geofenceX = width * 0.129;
+	const geofenceY = (geofenceBoxHeight * 0.5);
+	const geofencePathD = `M ${geofenceBoxWidth * 0.5},${geofenceBoxHeight - (fontSize * 1.4)} C ${geofenceBoxWidth * 0.6},${geofenceY + 5} ${geofenceX + 35},${geofenceY} ${geofenceX},${geofenceY}`;
+
+	const geofenceArrow = `
+    <svg xmlns="http://www.w3.org/2000/svg"
+		width="${geofenceBoxWidth}" height="${geofenceBoxHeight}" viewBox="0 0 ${geofenceBoxWidth} ${geofenceBoxHeight}">
+		
+		${Triangle}
+
+        <g ${sharedGAttributes}>
+			<path
+				${sharedPathAttributes}
+				d="${geofencePathD}"/>
+        </g>
+	</svg>`;
+
 	return {
 		closeArrow,
 		controlGFArrow,
 		currentPosArrow,
 		AddNewArrow,
 		currentLocationArrow,
+		geofenceArrow,
 		closeIconBoxStyle: {
 			flex: 0,
 			position: 'absolute',
@@ -369,6 +403,16 @@ const getStyles = ({
 		},
 		currentLocationTextStyle: {
 			bottom: currentLocationBoxHeight - fontSize,
+		},
+		geofenceBoxStyle: {
+			alignItems: 'stretch',
+			flex: 0,
+			position: 'absolute',
+			top: (y + navHeaderHeight) - (currentLocationBoxHeight / 2),
+			left: x,
+		},
+		geofenceTextStyle: {
+			bottom: 0,
 		},
 	};
 };
