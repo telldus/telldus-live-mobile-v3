@@ -156,37 +156,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		})();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [location, region]);
-	useEffect(() => {
-		if (regionToReset) {
-			setRegionToReset();
-		}
-		if (!isHelpVisible && regionToResume) {
-			setRegion(regionToResume);
-			setRegionToReset(regionToResume);
-			setRegionToResume();
-		}
-		if (isHelpVisible && !regionToResume) {
-			onPressFocusMyLocation();
-			setRegionToResume(region);
-		}
-		if (mapReady && (!pointCurrentLocation || typeof pointCurrentLocation.x === 'undefined') && location) {
-			onUserLocationChange({
-				nativeEvent: {
-					coordinate: location,
-				},
-			});
-		}
-	}, [
-		regionToReset,
-		regionToResume,
-		isHelpVisible,
-		region,
-		onPressFocusMyLocation,
-		location,
-		pointCurrentLocation,
-		onUserLocationChange,
-		mapReady,
-	]);
 
 	const onRegionChange = useCallback((reg: Object) => {
 		setRegion(reg);
@@ -232,10 +201,44 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		(async () => {
 			if (mapRef && mapRef.current) {
 				const point = await mapRef.current.pointForCoordinate(data.nativeEvent.coordinate);
-				setPointCurrentLocation(point);
+				if (point.x > 0 && point.y > 0) {
+					setPointCurrentLocation(point);
+				}
 			}
 		})();
 	}, [mapRef]);
+
+	useEffect(() => {
+		if (regionToReset) {
+			setRegionToReset();
+		}
+		if (!isHelpVisible && regionToResume) {
+			setRegion(regionToResume);
+			setRegionToReset(regionToResume);
+			setRegionToResume();
+		}
+		if (isHelpVisible && !regionToResume) {
+			onPressFocusMyLocation();
+			setRegionToResume(region);
+		}
+		if (mapReady && (!pointCurrentLocation || typeof pointCurrentLocation.x === 'undefined') && location) {
+			onUserLocationChange({
+				nativeEvent: {
+					coordinate: location,
+				},
+			});
+		}
+	}, [
+		regionToReset,
+		regionToResume,
+		isHelpVisible,
+		region,
+		onPressFocusMyLocation,
+		location,
+		pointCurrentLocation,
+		onUserLocationChange,
+		mapReady,
+	]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -254,7 +257,9 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 					showsMyLocationButton={false}
 					onRegionChange={onRegionChange}
 					onUserLocationChange={onUserLocationChange}
-					onMapReady={onMapReady}>
+					onMapReady={onMapReady}
+					userLocationUpdateInterval={15000}
+					userLocationFastestInterval={15000}>
 					{
 						currentAccFences.map((fenceC: Object, index: number): () => Object => {
 							return renderMarker(fenceC, index);
