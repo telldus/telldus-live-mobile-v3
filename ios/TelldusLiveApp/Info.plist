@@ -91,6 +91,8 @@
 		<string>Zocial.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
+		<string>Caveat-Regular.ttf</string>
+		<string>Caveat-Bold.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

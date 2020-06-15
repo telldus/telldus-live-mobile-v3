@@ -16,6 +16,8 @@
 		269003392269BCBA00699DE0 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		26AE96182226874F00AC557A /* DisplayMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96162226874E00AC557A /* DisplayMode.m */; };
 		26AE96192226874F00AC557A /* Linking.m in Sources */ = {isa = PBXBuildFile; fileRef = 26AE96172226874E00AC557A /* Linking.m */; };
+		26C7BEBA24977AEA007EC056 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */; };
+		26C7BEBB24977AEA007EC056 /* Caveat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */; };
 		26D4DC5821424D8A0060DC8E /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC2221424D8A0060DC8E /* AddressBook.framework */; };
 		26D4DC5B21424DAC0060DC8E /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5A21424DAC0060DC8E /* SafariServices.framework */; };
 		26D4DC5D21424DBE0060DC8E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */; };
@@ -68,15 +70,13 @@
 		26AE96172226874E00AC557A /* Linking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Linking.m; sourceTree = "<group>"; };
 		26BB28AF21622F8F0027C32A /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		26BB28B1216230CA0027C32A /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Caveat-Regular.ttf"; path = "../assets/fonts/Caveat-Regular.ttf"; sourceTree = "<group>"; };
+		26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Caveat-Bold.ttf"; path = "../assets/fonts/Caveat-Bold.ttf"; sourceTree = "<group>"; };
 		26D4DC2221424D8A0060DC8E /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		26D4DC5A21424DAC0060DC8E /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		26D4DC5C21424DBE0060DC8E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		26D4DC5E21424DCB0060DC8E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		26D4DD1E214261290060DC8E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "TelldusLiveApp/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		26DA5FD22045A28C003FCA91 /* SFNS Display.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFNS Display.ttf"; path = "../android/app/src/main/assets/fonts/SFNS Display.ttf"; sourceTree = "<group>"; };
-		26DA5FD32045A28C003FCA91 /* Roboto-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Light.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Light.ttf"; sourceTree = "<group>"; };
-		26DA5FD42045A28D003FCA91 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Medium.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		26DA5FD52045A28D003FCA91 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Roboto-Regular.ttf"; path = "../android/app/src/main/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		26DD7C6324167ABE00052599 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		26EDB68022266ACF003EF9E3 /* Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Widget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		26EDB68122266ACF003EF9E3 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
@@ -230,10 +230,8 @@
 		978DD6CDC2824ACE99408D92 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				26DA5FD32045A28C003FCA91 /* Roboto-Light.ttf */,
-				26DA5FD42045A28D003FCA91 /* Roboto-Medium.ttf */,
-				26DA5FD52045A28D003FCA91 /* Roboto-Regular.ttf */,
-				26DA5FD22045A28C003FCA91 /* SFNS Display.ttf */,
+				26C7BEB924977AEA007EC056 /* Caveat-Bold.ttf */,
+				26C7BEB824977AEA007EC056 /* Caveat-Regular.ttf */,
 				AA4E203FFC8849A6989EDD54 /* telldusicons.ttf */,
 				DB8C12D469844F34ABBA0A64 /* telldusicons.svg */,
 				DFFF079D6FE74233BAB019F1 /* Roboto-Light.ttf */,
@@ -351,6 +349,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26C7BEBA24977AEA007EC056 /* Caveat-Regular.ttf in Resources */,
+				26C7BEBB24977AEA007EC056 /* Caveat-Bold.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				40D7C76A1F73AB9C0078E086 /* LaunchScreen.storyboard in Resources */,
 				E01A717BB6604D8D8C4C0CA0 /* telldusicons.ttf in Resources */,
