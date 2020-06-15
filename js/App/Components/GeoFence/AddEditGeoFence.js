@@ -128,6 +128,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const [ region, setRegion ] = useState(initialRegion);
 	const [ regionToReset, setRegionToReset ] = useState();
+	const [ regionToResume, setRegionToResume ] = useState();
 
 	function onPressNext() {
 		dispatch(resetFence());
@@ -159,7 +160,33 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		if (regionToReset) {
 			setRegionToReset();
 		}
-	}, [regionToReset]);
+		if (!isHelpVisible && regionToResume) {
+			setRegion(regionToResume);
+			setRegionToReset(regionToResume);
+			setRegionToResume();
+		}
+		if (isHelpVisible && !regionToResume) {
+			onPressFocusMyLocation();
+			setRegionToResume(region);
+		}
+		if (mapReady && (!pointCurrentLocation || typeof pointCurrentLocation.x === 'undefined') && location) {
+			onUserLocationChange({
+				nativeEvent: {
+					coordinate: location,
+				},
+			});
+		}
+	}, [
+		regionToReset,
+		regionToResume,
+		isHelpVisible,
+		region,
+		onPressFocusMyLocation,
+		location,
+		pointCurrentLocation,
+		onUserLocationChange,
+		mapReady,
+	]);
 
 	const onRegionChange = useCallback((reg: Object) => {
 		setRegion(reg);
