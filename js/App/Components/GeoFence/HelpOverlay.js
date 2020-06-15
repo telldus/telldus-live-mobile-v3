@@ -93,10 +93,7 @@ const HelpOverlay = (props: Object): Object => {
 					flex: 1,
 				}}>
 				<TouchableWithoutFeedback
-					onPress={closeModal}
-					style={{
-						flex: 1,
-					}}>
+					onPress={closeModal}>
 					<View
 						style={{
 							flex: 1,
