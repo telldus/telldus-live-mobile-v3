@@ -86,7 +86,8 @@ const HelpOverlay = (props: Object): Object => {
 			}}
 			isVisible={isVisible}
 			hideModalContentWhileAnimating={true}
-			supportedOrientations={['portrait']}>
+			supportedOrientations={['portrait']}
+			backdropOpacity={0.50}>
 			<SafeAreaView
 				style={{
 					flex: 1,
@@ -197,37 +198,50 @@ const getStyles = ({
 	const controlGFPathD = `M ${controlGFRight - 42},${pathDTop + sizeFactorTop + 110} C ${controlGFRight - 40},${pathDTop + sizeFactorTop + 10} ${controlGFRight},${pathDTop + sizeFactorTop + 25} ${controlGFRight},${pathDTop + sizeFactorTop}`;
 
 	const Triangle = `
-    <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
-            markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
-            orient="auto">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
-    </marker>`;
+		<defs>
+			<marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
+				markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
+				orient="auto">
+				<path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke" />
+			</marker>
+		</defs>`;
+
+	const sharedPathAttributes = `
+		stroke="#fff" 
+		marker-end = 'url(#Triangle)' 
+		stroke-linecap = "round"
+	`;
+	const sharedGAttributes = `
+		fill="none"
+		stroke-width=${strokeWidth}
+		marker-end="url(#Triangle)"
+	`;
 
 	const closeArrow = `
-    <svg xmlns="http://www.w3.org/2000/svg"
-    width="${closeBoxWidth}" height="${closeBoxHeight}" viewBox="0 0 ${closeBoxWidth} ${closeBoxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
-
-        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
-		<path stroke="#fff" d="${closePathD}" marker-end="url(#Triangle)"/>   
-     
-        </g>
-	</svg>`;
+		<svg xmlns="http://www.w3.org/2000/svg"
+			width="${closeBoxWidth}" height="${closeBoxHeight}" viewBox="0 0 ${closeBoxWidth} ${closeBoxHeight}">
+			
+			${Triangle}
+			
+			<g ${sharedGAttributes}>
+				<path
+					${sharedPathAttributes}
+					d="${closePathD}"/>
+			</g>
+		</svg>`;
 
 	const controlGFArrow = `
-    <svg xmlns="http://www.w3.org/2000/svg"
-    width="${controlGFBoxWidth}" height="${controlGFBoxHeight}" viewBox="0 0 ${controlGFBoxWidth} ${controlGFBoxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
+		<svg xmlns="http://www.w3.org/2000/svg"
+			width="${controlGFBoxWidth}" height="${controlGFBoxHeight}" viewBox="0 0 ${controlGFBoxWidth} ${controlGFBoxHeight}">
+			
+			${Triangle}
 
-        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
-		<path stroke="#fff" d="${controlGFPathD}" marker-end="url(#Triangle)"/>   
-     
-        </g>
-	</svg>`;
+			<g ${sharedGAttributes}>
+				<path
+					${sharedPathAttributes}
+					d="${controlGFPathD}"/>
+			</g>
+		</svg>`;
 
 	const {
 		right,
@@ -248,15 +262,17 @@ const getStyles = ({
 	const currentPosPathD = `M ${currentPosX - 95},${currentPosY - 30} C ${currentPosX - 40},${currentPosY - 5} ${currentPosX - 20},${currentPosY} ${currentPosX},${currentPosY}`;
 
 	const currentPosArrow = `
-	<svg xmlns="http://www.w3.org/2000/svg"
-    width="${currentPosBoxWidth}" height="${currentPosBoxHeight}" viewBox="0 0 ${currentPosBoxWidth} ${currentPosBoxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
-        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
-			<path stroke="#fff" d="${currentPosPathD}" marker-end="url(#Triangle)"/>
-        </g>
-	</svg>`;
+		<svg xmlns="http://www.w3.org/2000/svg"
+			width="${currentPosBoxWidth}" height="${currentPosBoxHeight}" viewBox="0 0 ${currentPosBoxWidth} ${currentPosBoxHeight}">
+			
+			${Triangle}
+
+			<g ${sharedGAttributes}>
+				<path
+					${sharedPathAttributes}
+					d="${currentPosPathD}"/>
+			</g>
+		</svg>`;
 
 	const addNewBoxHeight = 30 + offsetBottom + (buttonSize / 2) + (fontSize * 1.2);
 	const addNewBoxWidth = width;
@@ -266,15 +282,17 @@ const getStyles = ({
 	const addNewPathD = `M ${addNewX - 95},${addNewY - 30} C ${addNewX - 40},${addNewY - 5} ${addNewX - 20},${addNewY} ${addNewX},${addNewY}`;
 
 	const AddNewArrow = `
-    <svg xmlns="http://www.w3.org/2000/svg"
-    width="${addNewBoxWidth}" height="${addNewBoxHeight}" viewBox="0 0 ${addNewBoxWidth} ${addNewBoxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
-        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
-			<path stroke="#fff" d="${addNewPathD}" marker-end="url(#Triangle)"/>
-        </g>
-	</svg>`;
+		<svg xmlns="http://www.w3.org/2000/svg"
+			width="${addNewBoxWidth}" height="${addNewBoxHeight}" viewBox="0 0 ${addNewBoxWidth} ${addNewBoxHeight}">
+			
+			${Triangle}
+
+			<g ${sharedGAttributes}>
+				<path
+					${sharedPathAttributes}
+					d="${addNewPathD}"/>
+			</g>
+		</svg>`;
 
 	const currentLocationBoxHeight = 30 + offsetBottom + (buttonSize / 2) + (fontSize * 1.2);
 	const currentLocationBoxWidth = width / 2;
@@ -284,12 +302,14 @@ const getStyles = ({
 
 	const currentLocationArrow = `
     <svg xmlns="http://www.w3.org/2000/svg"
-    width="${currentLocationBoxWidth}" height="${currentLocationBoxHeight}" viewBox="0 0 ${currentLocationBoxWidth} ${currentLocationBoxHeight}">
-    <defs>
-        ${Triangle}
-    </defs>
-        <g fill="none" stroke-width=${strokeWidth} marker-end="url(#Triangle)">
-			<path stroke="#fff" d="${currentLocationPathD}" marker-end="url(#Triangle)"/>
+		width="${currentLocationBoxWidth}" height="${currentLocationBoxHeight}" viewBox="0 0 ${currentLocationBoxWidth} ${currentLocationBoxHeight}">
+		
+		${Triangle}
+
+        <g ${sharedGAttributes}>
+			<path
+				${sharedPathAttributes}
+				d="${currentLocationPathD}"/>
         </g>
 	</svg>`;
 
