@@ -26,6 +26,7 @@ import React, {
 import {
 	Platform,
 	SafeAreaView,
+	TouchableWithoutFeedback,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { SvgXml } from 'react-native-svg';
@@ -49,7 +50,6 @@ const HelpOverlay = (props: Object): Object => {
 	const {
 		infoTextStyle,
 		closeIconBoxStyle,
-		closeModalTextStyle,
 		controlGFIconBoxStyle,
 		closeTextStyle,
 		controlGFTextStyle,
@@ -85,58 +85,59 @@ const HelpOverlay = (props: Object): Object => {
 				margin: 0,
 			}}
 			isVisible={isVisible}
-			swipeDirection={['left', 'right']}
-			onSwipeComplete={closeModal}
 			hideModalContentWhileAnimating={true}
 			supportedOrientations={['portrait']}>
 			<SafeAreaView
 				style={{
 					flex: 1,
 				}}>
-				<View style={{
-					flex: 1,
-				}}>
-					<View style={closeIconBoxStyle}>
-						<SvgXml xml={closeArrow} />
-						<Text
-							style={[infoTextStyle, closeTextStyle]}>
+				<TouchableWithoutFeedback
+					onPress={closeModal}
+					style={{
+						flex: 1,
+					}}>
+					<View
+						style={{
+							flex: 1,
+						}}>
+						<View style={closeIconBoxStyle}>
+							<SvgXml xml={closeArrow} />
+							<Text
+								style={[infoTextStyle, closeTextStyle]}>
                     CLOSE
-						</Text>
-					</View>
-					<View style={controlGFIconBoxStyle}>
-						<Text
-							style={[infoTextStyle, controlGFTextStyle]}>
+							</Text>
+						</View>
+						<View style={controlGFIconBoxStyle}>
+							<Text
+								style={[infoTextStyle, controlGFTextStyle]}>
                     TAP TO TURN ON/OFF GEOFENCE
-						</Text>
-						<SvgXml xml={controlGFArrow} />
-					</View>
-					{(x || y) && (<View style={currentLocationBoxStyle}>
-						<SvgXml xml={currentLocationArrow} />
-						<Text
-							style={[infoTextStyle, currentLocationTextStyle]}>
+							</Text>
+							<SvgXml xml={controlGFArrow} />
+						</View>
+						{(x || y) && (<View style={currentLocationBoxStyle}>
+							<SvgXml xml={currentLocationArrow} />
+							<Text
+								style={[infoTextStyle, currentLocationTextStyle]}>
                     CURRENT POSITION
-						</Text>
-					</View>
-					)}
-					<View style={currentPosIconBoxStyle}>
-						<SvgXml xml={currentPosArrow} />
-						<Text
-							style={[infoTextStyle, currentPosTextStyle]}>
+							</Text>
+						</View>
+						)}
+						<View style={currentPosIconBoxStyle}>
+							<SvgXml xml={currentPosArrow} />
+							<Text
+								style={[infoTextStyle, currentPosTextStyle]}>
                     CENTER TO CURRENT POSITION
-						</Text>
-					</View>
-					<View style={addNewIconBoxStyle}>
-						<SvgXml xml={AddNewArrow} />
-						<Text
-							style={[infoTextStyle, addNewTextStyle]}>
+							</Text>
+						</View>
+						<View style={addNewIconBoxStyle}>
+							<SvgXml xml={AddNewArrow} />
+							<Text
+								style={[infoTextStyle, addNewTextStyle]}>
                     ADD NEW GEOFENCE
-						</Text>
+							</Text>
+						</View>
 					</View>
-					<Text
-						style={closeModalTextStyle}>
-                    Swipe to close
-					</Text>
-				</View>
+				</TouchableWithoutFeedback>
 			</SafeAreaView>
 		</Modal>
 	);
@@ -309,17 +310,10 @@ const getStyles = ({
 			textAlign: 'center',
 			fontSize,
 			color: '#fff',
-			fontFamily: 'SFNS Display',
+			fontFamily: 'Caveat-Bold',
 		},
 		closeTextStyle: {
 			top: pathDTop + 90,
-		},
-		closeModalTextStyle: {
-			alignSelf: 'center',
-			position: 'absolute',
-			fontSize: 40,
-			color: '#fff',
-			fontFamily: 'SFNS Display',
 		},
 		controlGFIconBoxStyle: {
 			alignItems: 'stretch',
