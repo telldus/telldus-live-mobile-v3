@@ -224,9 +224,6 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				setRegionToReset(regionToResume);
 				setRegionToResume();
 			}
-			// if (!isHelpVisible && pointCurrentLocation.x) {
-			// 	setPointCurrentLocation({});
-			// }
 			if (isHelpVisible) {
 				if (!regionToResume) {
 					onPressFocusMyLocation();
