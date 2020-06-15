@@ -118,6 +118,7 @@ function setupGeoFence(): ThunkAction {
 		return BackgroundGeolocation.ready({
 			// Geolocation Config
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
+			geofenceInitialTriggerEntry: false,
 			distanceFilter,
 			// Activity Recognition
 			stopTimeout,
