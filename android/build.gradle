@@ -51,6 +51,10 @@ allprojects {
         maven {
             url ("http://developer.huawei.com/repo/")
         }
+        maven {
+            // react-native-background-fetch
+            url("${project(':react-native-background-fetch').projectDir}/libs")
+        }
     }
 }
 
