@@ -129,6 +129,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const [ region, setRegion ] = useState(initialRegion);
 	const [ regionToReset, setRegionToReset ] = useState();
 	const [ regionToResume, setRegionToResume ] = useState();
+	const [ currenLocationInApp, setCurrenLocationInApp ] = useState();
 
 	function onPressNext() {
 		dispatch(resetFence());
@@ -199,35 +200,47 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const onUserLocationChange = useCallback((data: Object) => {
 		(async () => {
-			if (mapRef && mapRef.current) {
-				const point = await mapRef.current.pointForCoordinate(data.nativeEvent.coordinate);
-				if (point.x > 0 && point.y > 0) {
-					setPointCurrentLocation(point);
+			const {
+				latitude: lat1,
+				longitude: long1,
+			} = currenLocationInApp || {};
+			const {
+				latitude: lat2,
+				longitude: long2,
+			} = data.nativeEvent.coordinate;
+			if (lat1 !== lat2 || long1 !== long2) {
+				setCurrenLocationInApp(data.nativeEvent.coordinate);
+			}
+		})();
+	}, [currenLocationInApp]);
+
+	useEffect(() => {
+		(async () => {
+			if (regionToReset) {
+				setRegionToReset();
+			}
+			if (!isHelpVisible && regionToResume) {
+				setRegion(regionToResume);
+				setRegionToReset(regionToResume);
+				setRegionToResume();
+			}
+			// if (!isHelpVisible && pointCurrentLocation.x) {
+			// 	setPointCurrentLocation({});
+			// }
+			if (isHelpVisible) {
+				if (!regionToResume) {
+					onPressFocusMyLocation();
+					setRegionToResume(region);
+				}
+				if (mapRef && mapRef.current) {
+					const data = currenLocationInApp || location;
+					const point = await mapRef.current.pointForCoordinate(data);
+					if (point.x > 0 && point.y > 0) {
+						setPointCurrentLocation(point);
+					}
 				}
 			}
 		})();
-	}, [mapRef]);
-
-	useEffect(() => {
-		if (regionToReset) {
-			setRegionToReset();
-		}
-		if (!isHelpVisible && regionToResume) {
-			setRegion(regionToResume);
-			setRegionToReset(regionToResume);
-			setRegionToResume();
-		}
-		if (isHelpVisible && !regionToResume) {
-			onPressFocusMyLocation();
-			setRegionToResume(region);
-		}
-		if (mapReady && (!pointCurrentLocation || typeof pointCurrentLocation.x === 'undefined') && location) {
-			onUserLocationChange({
-				nativeEvent: {
-					coordinate: location,
-				},
-			});
-		}
 	}, [
 		regionToReset,
 		regionToResume,
@@ -238,6 +251,7 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 		pointCurrentLocation,
 		onUserLocationChange,
 		mapReady,
+		currenLocationInApp,
 	]);
 
 	return (

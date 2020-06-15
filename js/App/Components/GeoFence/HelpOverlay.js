@@ -86,7 +86,8 @@ const HelpOverlay = (props: Object): Object => {
 			}}
 			isVisible={isVisible}
 			swipeDirection={['left', 'right']}
-			onSwipeComplete={closeModal}>
+			onSwipeComplete={closeModal}
+			hideModalContentWhileAnimating={true}>
 			<SafeAreaView
 				style={{
 					flex: 1,
