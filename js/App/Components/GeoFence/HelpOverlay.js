@@ -208,12 +208,12 @@ const getStyles = ({
 
 	const sharedPathAttributes = `
 		stroke="#fff" 
-		marker-end = 'url(#Triangle)' 
+		marker-end = "url(#Triangle)"
 		stroke-linecap = "round"
 	`;
 	const sharedGAttributes = `
 		fill="none"
-		stroke-width=${strokeWidth}
+		stroke-width="${strokeWidth}"
 		marker-end="url(#Triangle)"
 	`;
 
