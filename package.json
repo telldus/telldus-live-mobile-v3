@@ -31,6 +31,11 @@
     "@react-native-community/netinfo": "~5.5.1",
     "@react-native-community/push-notification-ios": "~1.0.7",
     "@react-native-community/viewpager": "^3.3.0",
+    "@react-native-firebase/analytics": "^7.1.4",
+    "@react-native-firebase/app": "^7.2.1",
+    "@react-native-firebase/crashlytics": "^7.1.5",
+    "@react-native-firebase/messaging": "^7.1.5",
+    "@react-native-firebase/remote-config": "^7.1.4",
     "@react-navigation/bottom-tabs": "^5.1.1",
     "@react-navigation/compat": "^5.1.1",
     "@react-navigation/material-top-tabs": "^5.1.1",
@@ -65,7 +70,6 @@
     "react-native-color-wheel": "https://github.com/telldus/react-native-color-wheel.git",
     "react-native-device-info": "~5.5.3",
     "react-native-extra-dimensions-android": "~1.2.5",
-    "react-native-firebase": "^5.6.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "~1.4.1",
     "react-native-i18n": "~2.0.15",
@@ -174,7 +178,7 @@
       "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|react-navigation|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
+      "node_modules/(?!((jest-)?react-native|react-navigation|@react-native-firebase/|@react-native-community/push-notification-ios|@invertase/react-native-apple-authentication|@react-navigation/.*|@react-native-community/async-storage/(?!(lib))))"
     ]
   },
   "@comment": {

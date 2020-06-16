@@ -23,9 +23,9 @@
 
 import { Platform } from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import firebase from 'react-native-firebase';
+// import firebase from 'react-native-firebase';
 
-const PUSH_CHANNEL_ID = '1010101';
+// const PUSH_CHANNEL_ID = '1010101';
 
 export interface LocalNotificationData {
     notificationId: string,
@@ -36,15 +36,15 @@ export interface LocalNotificationData {
 
 
 const setChannel = () => {
-	const channel = new firebase.notifications.Android.Channel(
-		PUSH_CHANNEL_ID,
-		'Tellus Local Notification',
-		firebase.notifications.Android.Importance.Max)
-		.setDescription('Telldus local notification when actions fail to execute on fence event.')
-		.enableVibration(true)
-		.setVibrationPattern([0.0, 1000.0, 500.0]);
+	// const channel = new firebase.notifications.Android.Channel(
+	// 	PUSH_CHANNEL_ID,
+	// 	'Tellus Local Notification',
+	// 	firebase.notifications.Android.Importance.Max)
+	// 	.setDescription('Telldus local notification when actions fail to execute on fence event.')
+	// 	.enableVibration(true)
+	// 	.setVibrationPattern([0.0, 1000.0, 500.0]);
 
-	firebase.notifications().android.createChannel(channel);
+	// firebase.notifications().android.createChannel(channel);
 };
 
 const createLocationNotification = ({
@@ -57,22 +57,22 @@ const createLocationNotification = ({
 	if (Platform.OS === 'android') {
 		setChannel();
 
-		const localNotification = new firebase.notifications.Notification({
-			sound: 'default',
-			show_in_foreground: true,
-		})
-			.setNotificationId(notificationId)
-			.setData(data)
-			.android.setBigText(body, title, body)
-			.android.setAutoCancel(true)
-			.android.setCategory(firebase.notifications.Android.Category.Error)
-			.android.setChannelId(PUSH_CHANNEL_ID)
-			.android.setSmallIcon('icon_notif')
-			.android.setColor('#e26901')
-			.android.setDefaults(firebase.notifications.Android.Defaults.All)
-			.android.setVibrate([0.0, 1000.0, 500.0])
-			.android.setPriority(firebase.notifications.Android.Priority.High);
-		firebase.notifications().displayNotification(localNotification);
+		// const localNotification = new firebase.notifications.Notification({
+		// 	sound: 'default',
+		// 	show_in_foreground: true,
+		// })
+		// 	.setNotificationId(notificationId)
+		// 	.setData(data)
+		// 	.android.setBigText(body, title, body)
+		// 	.android.setAutoCancel(true)
+		// 	.android.setCategory(firebase.notifications.Android.Category.Error)
+		// 	.android.setChannelId(PUSH_CHANNEL_ID)
+		// 	.android.setSmallIcon('icon_notif')
+		// 	.android.setColor('#e26901')
+		// 	.android.setDefaults(firebase.notifications.Android.Defaults.All)
+		// 	.android.setVibrate([0.0, 1000.0, 500.0])
+		// 	.android.setPriority(firebase.notifications.Android.Priority.High);
+		// firebase.notifications().displayNotification(localNotification);
 	} else {
 		PushNotificationIOS.presentLocalNotification({
 			alertBody: body,

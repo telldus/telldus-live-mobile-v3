@@ -22,18 +22,20 @@
 
 'use strict';
 
-import firebase from 'react-native-firebase';
-import type { Notification, NotificationOpen } from 'react-native-firebase';
+import messaging, {
+	AuthorizationStatus,
+} from '@react-native-firebase/messaging';
 import DeviceInfo from 'react-native-device-info';
+import { utils } from '@react-native-firebase/app';
 
 import type { ThunkAction } from '../Actions/Types';
 import {
-	pushSenderId,
+	// pushSenderId,
 	pushServiceId,
 	deployStore,
 } from '../../Config';
 import { registerPushToken } from '../Actions/User';
-import { reportException } from '../Lib/Analytics';
+// import { reportException } from '../Lib/Analytics';
 
 import {
 	navigate,
@@ -71,15 +73,16 @@ const Push = {
 				// TODO: Check the behaviour in lower android versions.
 				Push.setChannel();
 
-				return firebase.messaging().hasPermission()
-					.then((enabled: boolean): any => {
+				return messaging().hasPermission()
+					.then((authStatus: Object): any => {
+						const enabled = authStatus === AuthorizationStatus.AUTHORIZED || authStatus === AuthorizationStatus.PROVISIONAL;
 						if (enabled) {
 							// user has permissions
 							if (!pushToken || !pushTokenRegistered) {
 								return dispatch(Push.getToken(params));
 							}
 						} else {
-							return firebase.messaging().requestPermission()
+							return messaging().requestPermission()
 								.then((): any => {
 									// User has authorised
 									if (!pushToken || !pushTokenRegistered) {
@@ -107,15 +110,15 @@ const Push = {
 		};
 	},
 	setChannel: () => {
-		const channel = new firebase.notifications.Android.Channel(
-			pushSenderId,
-			'Tellus Alert',
-			firebase.notifications.Android.Importance.Max)
-			.setDescription('Telldus Live alerts on user subscribed events')
-			.enableVibration(true)
-			.setVibrationPattern([0.0, 1000.0, 500.0]);
+		// const channel = new firebase.notifications.Android.Channel(
+		// 	pushSenderId,
+		// 	'Tellus Alert',
+		// 	firebase.notifications.Android.Importance.Max)
+		// 	.setDescription('Telldus Live alerts on user subscribed events')
+		// 	.enableVibration(true)
+		// 	.setVibrationPattern([0.0, 1000.0, 500.0]);
 
-		firebase.notifications().android.createChannel(channel);
+		// firebase.notifications().android.createChannel(channel);
 	},
 	getToken: ({
 		pushToken,
@@ -125,7 +128,7 @@ const Push = {
 		toggleDialogueBox,
 	}: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Promise<any> => {
-			return firebase.messaging().getToken()
+			return messaging().getToken()
 				.then(async (token: string): string => {
 					if (token && (!pushToken || pushToken !== token || !pushTokenRegistered)) {
 						if (register) {
@@ -163,7 +166,7 @@ const Push = {
 		if (deployStore === 'huawei') {
 			return;
 		}
-		return firebase.notifications().onNotification((notification: Notification): any => {
+		return messaging().onMessage((notification: Object): any => {
 			// Remote Notification received when app is in foreground is handled here.
 			Push.createLocalNotification(notification);
 		});
@@ -171,31 +174,31 @@ const Push = {
 	// Displays notification in the notification tray.
 	createLocalNotification: (notification: Object) => {
 		// $FlowFixMe
-		const localNotification = new firebase.notifications.Notification({
-			sound: 'default',
-			show_in_foreground: true,
-			  })
-			  .setNotificationId(notification.notificationId)
-			  .setTitle(notification.title)
-			  .setBody(notification.body)
-			  .setData(notification.data)
-			  .android.setChannelId(pushSenderId)
-			  .android.setSmallIcon('icon_notif')
-			  .android.setColor('#e26901')
-			  .android.setDefaults(firebase.notifications.Android.Defaults.All)
-			  .android.setVibrate([0.0, 1000.0, 500.0])
-			  .android.setPriority(firebase.notifications.Android.Priority.High);
-		firebase.notifications().displayNotification(localNotification)
-			.catch((err: any) => {
-				reportException(err);
-			});
+		// const localNotification = new firebase.notifications.Notification({
+		// 	sound: 'default',
+		// 	show_in_foreground: true,
+		// 	  })
+		// 	  .setNotificationId(notification.notificationId)
+		// 	  .setTitle(notification.title)
+		// 	  .setBody(notification.body)
+		// 	  .setData(notification.data)
+		// 	  .android.setChannelId(pushSenderId)
+		// 	  .android.setSmallIcon('icon_notif')
+		// 	  .android.setColor('#e26901')
+		// 	  .android.setDefaults(firebase.notifications.Android.Defaults.All)
+		// 	  .android.setVibrate([0.0, 1000.0, 500.0])
+		// 	  .android.setPriority(firebase.notifications.Android.Priority.High);
+		// firebase.notifications().displayNotification(localNotification)
+		// 	.catch((err: any) => {
+		// 		reportException(err);
+		// 	});
 	},
 	refreshTokenListener: ({ deviceId, register }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Function => {
 			if (deployStore === 'huawei') {
 				return;
 			}
-			return firebase.messaging().onTokenRefresh(async (token: string) => {
+			return messaging().onTokenRefresh(async (token: string) => {
 				if (token) {
 					if (register) {
 						const deviceUniqueId = deviceId ? deviceId : DeviceInfo.getUniqueId();
@@ -212,16 +215,16 @@ const Push = {
 		if (deployStore === 'huawei') {
 			return;
 		}
-		return firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
+		return messaging().onNotificationOpenedApp((notificationOpen: Object) => {
 			if (Push.isPremiumExpireHeadsup(notificationOpen)) {
 				Push.navigateToPurchasePremium();
 			}
 		});
 	},
-	isPremiumExpireHeadsup: (notification: Object): boolean => {
-		if (notification && notification.action) {
-			const action = notification.action;
-			return action === 'SHOW_PREMIUM_PURCHASE_SCREEN';
+	isPremiumExpireHeadsup: ({notification}: Object): boolean => {
+		// TODO: Check and verify the notification data!
+		if (notification.android && notification.android.clickAction) {
+			return notification.android.clickAction === 'SHOW_PREMIUM_PURCHASE_SCREEN';
 		}
 		return false;
 	},
@@ -229,13 +232,12 @@ const Push = {
 		navigate('PremiumUpgradeScreen');
 	},
 	checkPlayServices(): Object {
-		const utils = firebase.utils();
 
 		const {
-		  status,
-		  isAvailable,
-		  hasResolution,
-		  isUserResolvableError,
+			status,
+			isAvailable,
+			hasResolution,
+			isUserResolvableError,
 		} = utils.playServicesAvailability;
 
 		// all good and valid \o/
