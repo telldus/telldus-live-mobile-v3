@@ -186,7 +186,8 @@ function toByteArray(obj: string): any {
 
 function randomPort(): number {
 	// eslint-disable-next-line
-	return Math.random() * 60536 | 0 + 5000; // 60536-65536
+	const port =  Math.random() * 60536 | 0 + 5000; // 60536-65536
+	return typeof port === 'number' ? port : randomPort();
 }
 
 const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Object): Action => {

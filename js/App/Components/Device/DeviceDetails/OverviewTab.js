@@ -87,6 +87,9 @@ class OverviewTab extends View<Props, null> {
 
 	componentDidMount() {
 		const { dispatch, device } = this.props;
+		if (!device) {
+			return;
+		}
 		const { nodeInfo, id, clientId, clientDeviceId } = device;
 		dispatch(getDeviceInfoCommon(id));
 		if (nodeInfo) {
