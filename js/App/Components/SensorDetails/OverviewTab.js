@@ -106,6 +106,9 @@ class OverviewTab extends View<Props, State> {
 
 	componentDidMount() {
 		const { dispatch, sensor } = this.props;
+		if (!sensor) {
+			return;
+		}
 		const { clientId, sensorId } = sensor;
 		dispatch(requestNodeInfo(clientId, sensorId));
 	}
