@@ -91,9 +91,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 	if (dashboard && userId) {
 		const {
 			devicesById = {},
-			deviceIds,
 			sensorsById = {},
-			sensorIds,
 		} = dashboard;
 
 		const prevDataType = [true, false];
@@ -109,14 +107,9 @@ export default function migrations(state: Object = {}): Promise<any> {
 						[defaultDashboardId]: devicesById,
 					},
 				},
-			};
-		}
-		if (deviceIds && typeof deviceIds.length !== 'undefined') {
-			newDashboard = {
-				...newDashboard,
 				deviceIds: {
 					[userId]: {
-						[defaultDashboardId]: deviceIds,
+						[defaultDashboardId]: devicesByIdC,
 					},
 				},
 			};
@@ -130,14 +123,9 @@ export default function migrations(state: Object = {}): Promise<any> {
 						[defaultDashboardId]: sensorsById,
 					},
 				},
-			};
-		}
-		if (sensorIds && typeof sensorIds.length !== 'undefined') {
-			newDashboard = {
-				...newDashboard,
 				sensorIds: {
 					[userId]: {
-						[defaultDashboardId]: sensorIds,
+						[defaultDashboardId]: sensorsByIdC,
 					},
 				},
 			};
