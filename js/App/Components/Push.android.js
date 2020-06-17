@@ -22,6 +22,11 @@
 
 'use strict';
 
+import { NativeModules } from 'react-native';
+const {
+	NativeUtilitiesModule,
+} = NativeModules;
+
 import messaging from '@react-native-firebase/messaging';
 const {
 	AuthorizationStatus,
@@ -31,12 +36,12 @@ import { utils } from '@react-native-firebase/app';
 
 import type { ThunkAction } from '../Actions/Types';
 import {
-	// pushSenderId,
+	pushSenderId,
 	pushServiceId,
 	deployStore,
 } from '../../Config';
 import { registerPushToken } from '../Actions/User';
-// import { reportException } from '../Lib/Analytics';
+import { reportException } from '../Lib/Analytics';
 
 import {
 	navigate,
@@ -69,10 +74,6 @@ const Push = {
 				}
 
 				const { pushToken, pushTokenRegistered } = params;
-
-				// It is mandatory to create channel. https://rnfirebase.io/docs/v4.2.x/notifications/android-channels
-				// TODO: Check the behaviour in lower android versions.
-				Push.setChannel();
 
 				return messaging().hasPermission()
 					.then((authStatus: Object): any => {
@@ -111,15 +112,11 @@ const Push = {
 		};
 	},
 	setChannel: () => {
-		// const channel = new firebase.notifications.Android.Channel(
-		// 	pushSenderId,
-		// 	'Tellus Alert',
-		// 	firebase.notifications.Android.Importance.Max)
-		// 	.setDescription('Telldus Live alerts on user subscribed events')
-		// 	.enableVibration(true)
-		// 	.setVibrationPattern([0.0, 1000.0, 500.0]);
-
-		// firebase.notifications().android.createChannel(channel);
+		NativeUtilitiesModule.createNotificationChannel({
+			channelId: pushSenderId,
+			channelName: 'Tellus Alert',
+			channelDescription: 'Telldus Live alerts on user subscribed events',
+		});
 	},
 	getToken: ({
 		pushToken,
@@ -173,26 +170,24 @@ const Push = {
 		});
 	},
 	// Displays notification in the notification tray.
-	createLocalNotification: (notification: Object) => {
-		// $FlowFixMe
-		// const localNotification = new firebase.notifications.Notification({
-		// 	sound: 'default',
-		// 	show_in_foreground: true,
-		// 	  })
-		// 	  .setNotificationId(notification.notificationId)
-		// 	  .setTitle(notification.title)
-		// 	  .setBody(notification.body)
-		// 	  .setData(notification.data)
-		// 	  .android.setChannelId(pushSenderId)
-		// 	  .android.setSmallIcon('icon_notif')
-		// 	  .android.setColor('#e26901')
-		// 	  .android.setDefaults(firebase.notifications.Android.Defaults.All)
-		// 	  .android.setVibrate([0.0, 1000.0, 500.0])
-		// 	  .android.setPriority(firebase.notifications.Android.Priority.High);
-		// firebase.notifications().displayNotification(localNotification)
-		// 	.catch((err: any) => {
-		// 		reportException(err);
-		// 	});
+	createLocalNotification: ({notification}: Object) => {
+		Push.setChannel();
+		NativeUtilitiesModule.showLocalNotification({
+			channelId: pushSenderId,
+			smallIcon: 'icon_notif',
+			title: notification.title,
+			text: notification.body,
+			notificationId: notification.notificationId,
+			color: '#e26901',
+			userInfo: notification.data,
+			bigText: {
+				text: notification.body,
+				contentTitle: notification.title,
+				summaryText: notification.body,
+			},
+		}).catch((err: any) => {
+			reportException(err);
+		});
 	},
 	refreshTokenListener: ({ deviceId, register }: Object): ThunkAction => {
 		return (dispatch: Function, getState: Object): Function => {
