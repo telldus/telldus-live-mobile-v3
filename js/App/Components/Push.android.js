@@ -22,9 +22,10 @@
 
 'use strict';
 
-import messaging, {
+import messaging from '@react-native-firebase/messaging';
+const {
 	AuthorizationStatus,
-} from '@react-native-firebase/messaging';
+} = messaging;
 import DeviceInfo from 'react-native-device-info';
 import { utils } from '@react-native-firebase/app';
 
@@ -238,11 +239,11 @@ const Push = {
 			isAvailable,
 			hasResolution,
 			isUserResolvableError,
-		} = utils.playServicesAvailability;
+		} = utils().playServicesAvailability;
 
 		// all good and valid \o/
 		if (isAvailable) {
-			return utils.playServicesAvailability;
+			return utils().playServicesAvailability;
 		}
 
 		// if the user can resolve the issue i.e by updating play services
@@ -253,32 +254,32 @@ const Push = {
 			  // SERVICE_MISSING - Google Play services is missing on this device.
 			  // show something to user
 			  // and then attempt to install if necessary
-					utils.makePlayServicesAvailable();
-					return utils.playServicesAvailability;
+					utils().makePlayServicesAvailable();
+					return utils().playServicesAvailability;
 				case 2:
 			  // SERVICE_VERSION_UPDATE_REQUIRED - The installed version of Google Play services is out of date.
 			  // show something to user
 			  // and then attempt to update if necessary
-			   utils.resolutionForPlayServices();
-			   return utils.playServicesAvailability;
+			   utils().resolutionForPlayServices();
+			   return utils().playServicesAvailability;
 					// TODO handle other cases as necessary, see link below for all codes and descriptions
 					// TODO e.g. https://developers.google.com/android/reference/com/google/android/gms/common/ConnectionResult#SERVICE_VERSION_UPDATE_REQUIRED
 				default:
 			  // some default dialog / component?
 			  if (isUserResolvableError) {
-				   utils.promptForPlayServices();
-				  return utils.playServicesAvailability;
+				   utils().promptForPlayServices();
+				  return utils().playServicesAvailability;
 			  }
 			  if (hasResolution) {
-						utils.resolutionForPlayServices();
-				  return utils.playServicesAvailability;
+						utils().resolutionForPlayServices();
+				  return utils().playServicesAvailability;
 			  }
 		  }
 		}
 
 		// There's no way to resolve play services on this device
 		// probably best to show a dialog / force crash the app
-		return utils.playServicesAvailability;
+		return utils().playServicesAvailability;
 	  },
 };
 
