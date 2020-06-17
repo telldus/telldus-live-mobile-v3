@@ -126,7 +126,7 @@ huawei_app_gallery:
     - bundle install
     - bundle exec fastlane android huawei --verbose
 
-testflight:
+testflight: &testflight
   stage: release
   tags:
     - macos
@@ -139,6 +139,12 @@ testflight:
     - tags
   script:
     - fastlane ios beta --verbose
+
+testflight (master):
+  <<: *testflight
+  when: manual
+  only:
+    - master
 
 s3:
   image: cgswong/aws:latest
