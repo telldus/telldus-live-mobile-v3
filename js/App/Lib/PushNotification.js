@@ -23,7 +23,10 @@
 
 import { Platform } from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import firebase from 'react-native-firebase';
+import { NativeModules } from 'react-native';
+const {
+	NativeUtilitiesModule = {},
+} = NativeModules;
 
 const PUSH_CHANNEL_ID = '1010101';
 
@@ -36,15 +39,14 @@ export interface LocalNotificationData {
 
 
 const setChannel = () => {
-	const channel = new firebase.notifications.Android.Channel(
-		PUSH_CHANNEL_ID,
-		'Tellus Local Notification',
-		firebase.notifications.Android.Importance.Max)
-		.setDescription('Telldus local notification when actions fail to execute on fence event.')
-		.enableVibration(true)
-		.setVibrationPattern([0.0, 1000.0, 500.0]);
-
-	firebase.notifications().android.createChannel(channel);
+	if (Platform.OS !== 'android') {
+		return;
+	}
+	NativeUtilitiesModule.createNotificationChannel({
+		channelId: PUSH_CHANNEL_ID,
+		channelName: 'Tellus Local Notification',
+		channelDescription: 'Telldus local notification when actions fail to execute on fence event.',
+	});
 };
 
 const createLocationNotification = ({
@@ -56,23 +58,20 @@ const createLocationNotification = ({
 
 	if (Platform.OS === 'android') {
 		setChannel();
-
-		const localNotification = new firebase.notifications.Notification({
-			sound: 'default',
-			show_in_foreground: true,
-		})
-			.setNotificationId(notificationId)
-			.setData(data)
-			.android.setBigText(body, title, body)
-			.android.setAutoCancel(true)
-			.android.setCategory(firebase.notifications.Android.Category.Error)
-			.android.setChannelId(PUSH_CHANNEL_ID)
-			.android.setSmallIcon('icon_notif')
-			.android.setColor('#e26901')
-			.android.setDefaults(firebase.notifications.Android.Defaults.All)
-			.android.setVibrate([0.0, 1000.0, 500.0])
-			.android.setPriority(firebase.notifications.Android.Priority.High);
-		firebase.notifications().displayNotification(localNotification);
+		NativeUtilitiesModule.showLocalNotification({
+			channelId: PUSH_CHANNEL_ID,
+			smallIcon: 'icon_notif',
+			title: title,
+			text: body,
+			notificationId: notificationId,
+			color: '#e26901',
+			userInfo: data,
+			bigText: {
+				text: body,
+				contentTitle: title,
+				summaryText: body,
+			},
+		});
 	} else {
 		PushNotificationIOS.presentLocalNotification({
 			alertBody: body,

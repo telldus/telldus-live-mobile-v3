@@ -166,7 +166,7 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			if (responseData.error) {
 				throw responseData;
 			}
-			setBoolean('Email', true);
+			setBoolean('Email', 'true');
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: {
@@ -177,7 +177,7 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			});
 			return responseData;
 		}).catch((e: Object): any => {
-			setBoolean('Email', false);
+			setBoolean('Email', 'false');
 			throw e;
 		});
 };

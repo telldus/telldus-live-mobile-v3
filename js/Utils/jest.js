@@ -55,10 +55,28 @@ jest.mock('react-native-device-info', (): Object => {
 	};
 });
 
-jest.mock('react-native-firebase', (): Object => {
+jest.mock('@react-native-firebase/app', (): Object => {
 	return {
-		crashlytics: jest.fn(),
-		notifications: jest.fn(),
+	};
+});
+
+jest.mock('@react-native-firebase/analytics', (): Object => {
+	return {
+	};
+});
+
+jest.mock('@react-native-firebase/crashlytics', (): Object => {
+	return {
+	};
+});
+
+jest.mock('@react-native-firebase/messaging', (): Object => {
+	return {
+	};
+});
+
+jest.mock('@react-native-firebase/remote-config', (): Object => {
+	return {
 	};
 });
 

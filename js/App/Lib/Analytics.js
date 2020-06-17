@@ -22,16 +22,17 @@
 
 'use strict';
 
-import firebase from 'react-native-firebase';
+import analytics from '@react-native-firebase/analytics';
+import crashlytics from '@react-native-firebase/crashlytics';
 import {
 	deployStore,
 } from '../../Config';
 
 const enableAnalytics = deployStore !== 'huawei' && !__DEV__;
 
-export function reportError(msg: string) {
+export function reportError(error: Error) {
 	if (enableAnalytics) {
-		firebase.crashlytics().recordError(101, msg);
+		crashlytics().recordError(error);
 	}
 }
 
@@ -39,49 +40,49 @@ export function reportException(e: Error | string) {
 	if (enableAnalytics) {
 		if (e instanceof Error) {
 			// Log the stack trace
-			firebase.crashlytics().log(e.stack);
-			reportError(e.message);
+			crashlytics().log(e.stack);
+			reportError(e);
 		} else {
-			reportError(JSON.stringify(e));
+			crashlytics().log(JSON.stringify(e));
+			reportError(new Error(JSON.stringify(e)));
 		}
 	}
 }
 
-export function setBoolean(key: string, value: boolean) {
+export function setBoolean(key: string, value: string) {
 	if (enableAnalytics) {
-		firebase.crashlytics().setBoolValue(key, value);
+		crashlytics().setAttribute(key, value);
 	}
 }
 
 export function setUserIdentifier(userId: string = '') {
 	if (enableAnalytics) {
 		const uid = typeof userId !== 'string' ? '' : userId;
-		firebase.crashlytics().setUserIdentifier(uid);
+		crashlytics().setUserId(uid);
 	}
 }
 
 export function enableCrashlyticsCollection() {
 	if (enableAnalytics) {
-		firebase.crashlytics().enableCrashlyticsCollection();
+		crashlytics().setCrashlyticsCollectionEnabled(true);
 	}
 }
 
 export function setUserName(uname?: string | null) {
-	// TODO: Enable once the method is supported. rn-firebase v6
-	// if (enableAnalytics) {
-	//  const uName = typeof uname !== 'string' ? 'anonymous' : uname;
-	// 	firebase.crashlytics().setUserName(uName);
-	// }
+	if (enableAnalytics) {
+		const uName = typeof uname !== 'string' ? 'anonymous' : uname;
+		crashlytics().setUserName(uName);
+	}
 }
 
 export const setGAUserProperty = (key: Object, value: string) => {
 	if (deployStore !== 'huawei') {
-		firebase.analytics().setUserProperty(key, value);
+		analytics().setUserProperty(key, value);
 	}
 };
 
 export const setGAUserProperties = (properties: Object) => {
 	if (deployStore !== 'huawei') {
-		firebase.analytics().setUserProperties(properties);
+		analytics().setUserProperties(properties);
 	}
 };
