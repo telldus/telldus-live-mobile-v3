@@ -53,6 +53,10 @@
         <meta-data
           android:name="com.google.firebase.messaging.default_notification_icon"
           android:resource="@drawable/icon_notif" />
+        <meta-data
+          tools:replace="android:resource"
+          android:name="com.google.firebase.messaging.default_notification_color"
+          android:resource="@color/brandSecondary" />
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver" android:enabled="true">
             <intent-filter>
