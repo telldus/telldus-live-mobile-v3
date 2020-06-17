@@ -87,7 +87,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 		} = userProfile;
 		userId = email;
 	}
-	userId = userId.trim().toLowerCase();
+
 	if (dashboard && userId) {
 		const {
 			devicesById = {},
