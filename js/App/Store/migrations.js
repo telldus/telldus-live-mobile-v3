@@ -80,7 +80,14 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
-	const { userId } = user || {};
+	let { userId, userProfile = {} } = user || {};
+	if (!userId) {
+		const {
+			email = '', // TODO: Replace with real userId once available from the API.
+		} = userProfile;
+		userId = email;
+	}
+	userId = userId.trim().toLowerCase();
 	if (dashboard && userId) {
 		const {
 			devicesById = {},
@@ -94,7 +101,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 		let newDashboard = {...dashboard};
 
 		const devicesByIdC = Object.keys(devicesById);
-		if (devicesByIdC.length > 0 && prevDataType.indexOf(devicesById[devicesByIdC[0]] !== -1)) {
+		if (devicesByIdC.length > 0 && prevDataType.indexOf(devicesById[devicesByIdC[0]]) !== -1) {
 			newDashboard = {
 				...newDashboard,
 				devicesById: {
@@ -115,7 +122,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 			};
 		}
 		const sensorsByIdC = Object.keys(sensorsById);
-		if (sensorsByIdC.length > 0 && prevDataType.indexOf(sensorsById[sensorsByIdC[0]] !== -1)) {
+		if (sensorsByIdC.length > 0 && prevDataType.indexOf(sensorsById[sensorsByIdC[0]]) !== -1) {
 			newDashboard = {
 				...newDashboard,
 				sensorsById: {
