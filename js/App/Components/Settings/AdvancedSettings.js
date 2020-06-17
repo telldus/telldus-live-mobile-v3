@@ -78,6 +78,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		geofenceModeHighAccuracy = true,
 		preventSuspend = false,
 		showNotificationOnActionFail = true,
+		geofenceInitialTriggerEntry = false,
 	} = config;
 
 	const [ inLineEditActiveDF, setInLineEditActiveDF ] = useState();
@@ -180,6 +181,12 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 		});
 	}, [onUpdateGeoFenceConfig]);
 
+	const onValueChangeGITE = useCallback((value: string) => {
+		onUpdateGeoFenceConfig({
+			geofenceInitialTriggerEntry: value,
+		});
+	}, [onUpdateGeoFenceConfig]);
+
 	const onValueChangePS = useCallback((value: string) => {
 		onUpdateGeoFenceConfig({
 			preventSuspend: value,
@@ -273,6 +280,18 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 							label={'Start on boot: '}
 							onValueChange={onValueChangeSOB}
 							value={startOnBoot}
+							appLayout={layout}
+							intl={intl}
+							labelTextStyle={labelTextStyle}
+							touchableStyle={touchableStyle}
+							style={[contentCoverStyle, {
+								marginTop: 0,
+							}]}
+							extraData={config}/>
+						<SettingsRow
+							label={'Intial trigger ENTRY: '}
+							onValueChange={onValueChangeGITE}
+							value={geofenceInitialTriggerEntry}
 							appLayout={layout}
 							intl={intl}
 							labelTextStyle={labelTextStyle}

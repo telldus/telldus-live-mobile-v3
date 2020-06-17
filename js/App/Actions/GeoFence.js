@@ -101,6 +101,7 @@ function setupGeoFence(): ThunkAction {
 			enableHeadless = true,
 			geofenceModeHighAccuracy = true,
 			preventSuspend = false,
+			geofenceInitialTriggerEntry = false,
 		} = geoFence.config || {};
 
 		BackgroundGeolocation.onGeofence((geofence: Object) => {
@@ -118,7 +119,7 @@ function setupGeoFence(): ThunkAction {
 		return BackgroundGeolocation.ready({
 			// Geolocation Config
 			desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH,
-			geofenceInitialTriggerEntry: false,
+			geofenceInitialTriggerEntry,
 			distanceFilter,
 			// Activity Recognition
 			stopTimeout,
