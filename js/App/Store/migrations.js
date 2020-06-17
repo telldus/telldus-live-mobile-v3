@@ -92,6 +92,8 @@ export default function migrations(state: Object = {}): Promise<any> {
 		const {
 			devicesById = {},
 			sensorsById = {},
+			sensorIds,
+			deviceIds,
 		} = dashboard;
 
 		const prevDataType = [true, false];
@@ -109,7 +111,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 				},
 				deviceIds: {
 					[userId]: {
-						[defaultDashboardId]: devicesByIdC,
+						[defaultDashboardId]: deviceIds,
 					},
 				},
 			};
@@ -125,7 +127,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 				},
 				sensorIds: {
 					[userId]: {
-						[defaultDashboardId]: sensorsByIdC,
+						[defaultDashboardId]: sensorIds,
 					},
 				},
 			};
