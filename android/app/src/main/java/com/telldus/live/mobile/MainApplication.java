@@ -54,6 +54,7 @@ public class MainApplication extends Application implements ReactApplication {
 			// packages.add(new MyReactNativePackage());
 
 			packages.add(new WidgetPackage());
+			packages.add(new NativeUtilitiesPackage());
 			return packages;
 		}
 
