@@ -75,8 +75,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onConfigure (SQLiteDatabase db) {
         db.enableWriteAheadLogging();
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_DEVICE + "("+ WIDGET_ID_DEVICE + " INTEGER," + DEVICE_ID
                 + " INTEGER," + DEVICE_NAME + " TEXT," + DEVICE_STATE + " TEXT," + DEVICE_METHODS
@@ -98,7 +102,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.enableWriteAheadLogging();
         if (oldVersion == 1 && newVersion == 2) {
             // A new column introduced into the table "TABLE_WIDGET_INFO_SENSOR"
             addColumnIsUpdatingToSensorsTable(db);
@@ -182,7 +185,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void addWidgetDevice(DeviceInfo mDeviceInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
 
         ContentValues values = new ContentValues();
         values.put(WIDGET_ID_DEVICE, mDeviceInfo.getWidgetId());
@@ -210,7 +212,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public void addWidgetSensor(SensorInfo mSensorInfo) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
 
         ContentValues values = new ContentValues();
         values.put(WIDGET_ID_SENSOR, mSensorInfo.getWidgetId());
@@ -234,7 +235,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public DeviceInfo findWidgetInfoDevice(int id) {
         String query = "Select * FROM " + TABLE_WIDGET_INFO_DEVICE + " WHERE " + WIDGET_ID_DEVICE + " =  \"" + id + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         Cursor cursor = db.rawQuery(query, null);
         DeviceInfo r = new DeviceInfo();
 
@@ -270,7 +270,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public SensorInfo findWidgetInfoSensor(int id) {
         String query = "Select * FROM " + TABLE_WIDGET_INFO_SENSOR + " WHERE " + WIDGET_ID_SENSOR + " =  \"" + id + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         Cursor cursor = db.rawQuery(query, null);
         SensorInfo r = new SensorInfo();
 
@@ -300,7 +299,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public ArrayList<SensorInfo> findWidgetInfoSensorWithSensorId(int id) {
         String selectQuery = "Select * FROM " + TABLE_WIDGET_INFO_SENSOR + " WHERE " + SENSOR_ID + " =  \"" + id + "\"";
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         Cursor cursor = db.rawQuery(selectQuery, null);
         ArrayList<SensorInfo> mSensorInfo = new ArrayList<SensorInfo>();
 
@@ -324,7 +322,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateDeviceState(String action, int widgetId, String value, String secStateValue) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_STATE, action);
         contentValues.put(DEVICE_STATE_VALUE, value);
@@ -339,7 +336,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateDeviceMethodRequested(String methodRequested, int widgetId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_METHOD_REQUESTED, methodRequested);
 
@@ -352,7 +348,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateIsShowingStatus(Integer isShowingStatus, int widgetId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_IS_SHOWING_STATUS, isShowingStatus);
 
@@ -367,7 +362,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
                                     String secStateValue, int widgetId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_STATE, deviceState);
         contentValues.put(DEVICE_STATE_VALUE, stateValue);
@@ -384,7 +378,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateDeviceName(String deviceName, int deviceId) {
         String val = String.valueOf(deviceId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_NAME, deviceName);
 
@@ -397,7 +390,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public int updateSensorInfo(String name, String value, long time, int Wid) {
         String time1 = String.valueOf(time);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         String id = String.valueOf(Wid);
 
@@ -413,7 +405,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateSensorName(String sensorName, int sensorId) {
         String val = String.valueOf(sensorId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SENSOR_NAME, sensorName);
 
@@ -426,7 +417,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean deleteWidgetInfoDevice(int id) {
         String widget = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         String[] whereArgs = {widget};
 
         int flag = db.delete(TABLE_WIDGET_INFO_DEVICE, WIDGET_ID_DEVICE+" = ?", whereArgs);
@@ -437,7 +427,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean deleteWidgetInfoSensor(int id) {
         String widget = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         String[] whereArgs = {widget};
 
         int flag = db.delete(TABLE_WIDGET_INFO_SENSOR, WIDGET_ID_SENSOR+" = ?", whereArgs);
@@ -447,7 +436,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public int countWidgetSensorTableValues() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         String count = "SELECT count(*) FROM " + TABLE_WIDGET_INFO_SENSOR;
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
@@ -459,7 +447,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
 
     public int countWidgetDeviceTableValues() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         String count = "SELECT count(*) FROM " + TABLE_WIDGET_INFO_DEVICE;
         Cursor mcursor = db.rawQuery(count, null);
         mcursor.moveToFirst();
@@ -555,7 +542,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateDeviceIdDeviceWidget(Integer deviceId, int id) {
         String val = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_ID, deviceId);
 
@@ -568,7 +554,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateSensorIdSensorWidget(Integer sensorId, int id) {
         String val = String.valueOf(id);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SENSOR_ID, sensorId);
 
@@ -627,7 +612,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean setDeviceIdDeviceWidget(Integer widgetId, Integer deviceId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DEVICE_ID, deviceId);
 
@@ -640,7 +624,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean setSensorIdSensorWidget(Integer widgetId, Integer sensorId) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SENSOR_ID, sensorId);
 
@@ -653,7 +636,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
     public boolean updateSensorIsUpdating(Integer widgetId, String isUpdating) {
         String val = String.valueOf(widgetId);
         SQLiteDatabase db = this.getWritableDatabase();
-        db.enableWriteAheadLogging();
         ContentValues contentValues = new ContentValues();
         contentValues.put(SENSOR_IS_UPDATING, isUpdating);
 
