@@ -53,17 +53,18 @@ const LastUpdatedInfo = (props: Object): Object => {
 	const {
 		defaultSettings = {},
 	} = useSelector((state: Object): Object => state.app);
-	const { language = {} } = defaultSettings || {};
+	const { language = {}, sensorLastUpdatedMode = '0' } = defaultSettings || {};
 	const locale = language.code;
 
 	const intl = useRelativeIntl(gatewayTimezone);
 	const formatSensorLastUpdateFunc = useCallback((time: string): string => {
-		return formatSensorLastUpdate(time, intl, timestamp, gatewayTimezone);
+		return formatSensorLastUpdate(time, intl, timestamp, gatewayTimezone, sensorLastUpdatedMode);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		gatewayTimezone,
 		timestamp,
 		locale,
+		sensorLastUpdatedMode,
 	]);
 
 	return (
