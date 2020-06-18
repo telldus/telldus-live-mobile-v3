@@ -29,6 +29,7 @@ import LanguageControlBlock from './LanguageControlBlock';
 import LogoutButton from './LogoutButton';
 import LogoutAllAccButton from './LogoutAllAccButton';
 import GeoFenceEventsLogRow from './GeoFenceEventsLogRow';
+import SensorLastUpdateModeControlBlock from './SensorLastUpdateModeControlBlock';
 
 module.exports = {
 	PushSettingsRow,
@@ -41,4 +42,5 @@ module.exports = {
 	LogoutButton,
 	LogoutAllAccButton,
 	GeoFenceEventsLogRow,
+	SensorLastUpdateModeControlBlock,
 };
