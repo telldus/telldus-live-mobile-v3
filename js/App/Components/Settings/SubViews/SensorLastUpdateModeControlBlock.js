@@ -70,10 +70,10 @@ const SensorLastUpdateModeControlBlock = (props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const zero = 'Time ago';
-	const one = 'Actual time';
+	const zero = 'Time ago';// TODO: translate
+	const one = 'Actual time';// TODO: translate
 
-	const labelSortingDB = 'Last updated info';
+	const labelSortingDB = 'Last updated info';// TODO: translate
 
 	return (
 		<View
