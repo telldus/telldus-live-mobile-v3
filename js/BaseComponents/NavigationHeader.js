@@ -27,14 +27,13 @@ import { StyleSheet, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { intlShape, injectIntl } from 'react-intl';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 import View from './View';
 import Header from './Header';
-import { hasStatusBar } from '../App/Lib';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
+import Icon from './Icon';
+
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
@@ -49,6 +48,8 @@ type Props = {
 	onClose: () => void,
 	goBack: () => void,
 	forceHideStatus?: boolean,
+	rightButton?: Object,
+	onPressLogo?: Function,
 };
 
 type DefaultProps = {
@@ -87,8 +88,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 		forceHideStatus: false,
 	}
 
-	_hasStatusBar: () => void;
-
 	constructor(props: Props) {
 		super(props);
 		this.isTablet = DeviceInfo.isTablet();
@@ -100,8 +99,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 			keyboard: false,
 			hasStatusBar: false,
 		};
-
-		this._hasStatusBar();
 
 		this.defaultDescription = `${formatMessage(i18n.defaultDescriptionButton)}`;
 		this.labelLeftIcon = `${formatMessage(i18n.navigationBackButton)} .${this.defaultDescription}`;
@@ -116,13 +113,6 @@ class NavigationHeader extends PureComponent<Props, State> {
 		  'keyboardDidHide',
 		  this._keyboardDidHide,
 		);
-	}
-
-	_hasStatusBar = async () => {
-		const _hasStatusBar = await hasStatusBar();
-		this.setState({
-			hasStatusBar: _hasStatusBar,
-		});
 	}
 
 	componentWillUnmount() {
@@ -160,23 +150,43 @@ class NavigationHeader extends PureComponent<Props, State> {
 	}
 
 	getLeftIcon(): Object {
-		let { appLayout, leftIcon } = this.props;
-		let { height, width } = appLayout;
-		let isPortrait = height > width;
-		let size = isPortrait ? width * 0.06 : height * 0.06;
+		const { appLayout, leftIcon } = this.props;
+		const { height, width } = appLayout;
+		const isPortrait = height > width;
+
+		const {
+			headerButtonIconSizeFactor,
+		} = Theme.Core;
+
+		let size = isPortrait ? width * headerButtonIconSizeFactor : height * headerButtonIconSizeFactor;
 		if (Platform.OS === 'ios' && leftIcon !== 'close') {
 			return (
-				<FontAwesome name={leftIcon} size={size} color="#fff" style={styles.iconLeft}/>
+				<Icon
+					level={17}
+					name={leftIcon}
+					size={size}
+					style={styles.iconLeft}/>
 			);
 		}
 
 		return (
-			<MaterialIcons name={leftIcon} size={size} color="#fff" style={styles.iconLeft}/>
+			<ThemedMaterialIcon
+				level={17}
+				name={leftIcon}
+				size={size}
+				style={styles.iconLeft}/>
 		);
 	}
 
 	render(): Object {
-		let { appLayout, showLeftIcon, topMargin, forceHideStatus } = this.props;
+		let {
+			appLayout,
+			showLeftIcon,
+			topMargin,
+			forceHideStatus,
+			rightButton,
+			onPressLogo,
+		} = this.props;
 		let { height, width } = appLayout;
 		let isPortrait = height > width;
 		let deviceHeight = isPortrait ? height : width;
@@ -202,12 +212,14 @@ class NavigationHeader extends PureComponent<Props, State> {
 			<Header
 				forceHideStatus={forceHideStatus}
 				leftButton={leftIcon}
+				rightButton={rightButton}
 				style={{
 					height: Platform.OS === 'android' ?
 						deviceHeight * 0.08
 						:
-						(isIphoneX() ? deviceHeight * 0.08 : deviceHeight * land ),
-				}}/>
+						deviceHeight * land,
+				}}
+				onPressLogo={onPressLogo}/>
 		);
 	}
 }

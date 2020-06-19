@@ -25,7 +25,6 @@ import React, { useEffect, useState } from 'react';
 import {
 	useDispatch,
 } from 'react-redux';
-import { CommonActions } from '@react-navigation/native';
 import { useIntl } from 'react-intl';
 
 import {
@@ -35,9 +34,11 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	saveFence,
 	setFenceTitle,
 } from '../../Actions/Fences';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import Theme from '../../Theme';
 
@@ -61,6 +62,10 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		formatMessage,
 	} = intl;
 
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	useEffect(() => {
 		onDidMount(`5. ${formatMessage(i18n.name)}`, formatMessage(i18n.selectNameForArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,16 +75,19 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 	const [ name, setName ] = useState('');
 
 	function onPressNext() {
+		if (!name || name.trim() === '') {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: 'Please enter a unique name for the fence.',
+				showPositive: true,
+			});
+			return;
+		}
+
 		dispatch(setFenceTitle(name));
-		dispatch(saveFence());
-		navigation.dispatch(CommonActions.reset({
-			index: 2,
-			routes: [
-				{name: 'Tabs'},
-				{name: 'Profile'},
-				{name: 'GeoFenceNavigator'},
-			],
-		}));
+		navigation.navigate('ArrivingActions');
 	}
 
 	const {
@@ -87,7 +95,6 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 		textField,
 		containerStyleTF,
 		brandSecondary,
-		iconStyle,
 	} = getStyles(appLayout);
 
 	function onChangeText(value: string) {
@@ -109,8 +116,7 @@ const SetAreaName = React.memo<Object>((props: Props): Object => {
 				value={name}/>
 			<FloatingButton
 				onPress={onPressNext}
-				iconName={'checkmark'}
-				iconStyle={iconStyle}/>
+				imageSource={{uri: 'right_arrow_key'}}/>
 		</View>
 	);
 });
@@ -148,9 +154,6 @@ const getStyles = (appLayout: Object): Object => {
 		textField: {
 			fontSize: fontSize * 1.3,
 			color: rowTextColor,
-		},
-		iconStyle: {
-			color: '#fff',
 		},
 	};
 };

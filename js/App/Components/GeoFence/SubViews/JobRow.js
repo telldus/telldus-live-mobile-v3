@@ -27,15 +27,13 @@ import {
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 import DeviceInfo from 'react-native-device-info';
-import {
-	Switch,
-} from 'react-native';
 
 import {
 	Text,
 	View,
 	ListItem,
 	CheckBoxIconText,
+	Switch,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -53,6 +51,7 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 		device = {},
 		checkBoxId,
 		toggleActiveState,
+		isLast,
 	} = props;
 	const {
 		name,
@@ -75,7 +74,9 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 		textTwoStyle,
 		switchStyle,
 		switchTextStyle,
-	} = getStyles(layout);
+	} = getStyles(layout, {
+		isLast,
+	});
 
 	function noOp() {}
 
@@ -162,7 +163,9 @@ const JobRow = React.memo<Object>((props: Object): Object => {
 
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = (appLayout: Object, {
+	isLast,
+}: Object): Object => {
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
 	let deviceWidth = isPortrait ? width : height;
@@ -191,7 +194,7 @@ const getStyles = (appLayout: Object): Object => {
 		row: {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
-			marginBottom: padding,
+			marginBottom: isLast ? padding : 0,
 			backgroundColor: '#FFFFFF',
 			height: rowHeight,
 			borderRadius: 2,

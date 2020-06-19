@@ -104,8 +104,8 @@ public class NewRGBWidget extends AppWidgetProvider {
             return;
         }
 
-        int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
-        int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
+        int iconWidth = (int) (CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId)* 2);
+        int fontSize = (int) (CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId) * 2.3);
         int fontSizeFour = (int) (fontSize * 0.9);
         int fontSizeFive = (int) (fontSize * 0.6);
         int fontSizeSix = (int) (fontSize * 0.45);
@@ -331,7 +331,7 @@ public class NewRGBWidget extends AppWidgetProvider {
         }
 
         views.setTextViewText(R.id.txtWidgetTitle, widgetText);
-        views.setTextViewTextSize(R.id.txtWidgetTitle, COMPLEX_UNIT_SP, fontSizeFour);
+        views.setTextViewTextSize(R.id.txtWidgetTitle, COMPLEX_UNIT_SP, 14);
         if (transparent.equals("dark")) {
             views.setTextColor(R.id.txtWidgetTitle, ContextCompat.getColor(context, R.color.themeDark));
         } else if (transparent.equals("light") || transparent.equals("true")) {

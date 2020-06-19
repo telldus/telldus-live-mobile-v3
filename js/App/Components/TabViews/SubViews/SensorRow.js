@@ -28,7 +28,6 @@ import DeviceInfo from 'react-native-device-info';
 const isEqual = require('react-fast-compare');
 
 import {
-	ListItem,
 	Text,
 	View,
 	BlockIcon,
@@ -288,7 +287,8 @@ class SensorRow extends View<Props, State> {
 				<HiddenRow sensor={sensor} intl={intl} style={styles.hiddenRow}
 					onSetIgnoreSensor={this.onSetIgnoreSensor} isOpen={isOpen}
 					onPressSettings={this.onSettingsSelected} />
-				<ListItem
+				<View
+					level={2}
 					style={styles.row}
 					accessible={false}
 					importantForAccessibility={accessible ? 'no' : 'no-hide-descendants'}
@@ -316,7 +316,7 @@ class SensorRow extends View<Props, State> {
 							dotCoverStyle={styles.dotCoverStyle}
 							dotStyle={styles.dotStyle} />
 					</View>
-				</ListItem>
+				</View>
 			</SwipeRow>
 		);
 	}
@@ -334,7 +334,9 @@ class SensorRow extends View<Props, State> {
 
 		return (
 			<View style={coverStyle}>
-				<Text style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
+				<Text
+					level={6}
+					style={[styles.nameText, { opacity: sensor.name ? 1 : 0.5 }]}
 					ellipsizeMode="middle"
 					numberOfLines={1}>
 					{sensorName}
@@ -346,18 +348,16 @@ class SensorRow extends View<Props, State> {
 						updateIntervalInSeconds={60}
 						timestamp={lastUpdatedValue}
 						gatewayTimezone={sensor.gatewayTimezone}
+						level={minutesAgo < 1440 ? 6 : 8}
 						textStyle={[
 							textInfoStyle, {
-								color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
 								opacity: minutesAgo < 1440 ? 1 : 0.5,
 							},
 						]} />
 					:
-					<Text style={[
-						textInfoStyle, {
-							color: Theme.Core.rowTextColor,
-						},
-					]}>
+					<Text
+						level={5}
+						style={textInfoStyle}>
 						{this.offline}
 					</Text>
 				}
@@ -412,7 +412,6 @@ class SensorRow extends View<Props, State> {
 				flexDirection: 'row',
 			},
 			nameText: {
-				color: Theme.Core.rowTextColor,
 				fontSize: nameFontSize,
 				marginBottom: 2,
 				marginRight: 4,
@@ -421,7 +420,6 @@ class SensorRow extends View<Props, State> {
 				marginHorizontal: padding,
 				marginTop: padding / 2,
 				marginBottom: isLast ? padding : 0,
-				backgroundColor: '#FFFFFF',
 				height: rowHeight,
 				borderRadius: 2,
 				...Theme.Core.shadow,
@@ -460,7 +458,6 @@ class SensorRow extends View<Props, State> {
 				marginHorizontal: 5,
 			},
 			time: {
-				color: Theme.Core.rowTextColor,
 				fontSize: infoFontSize,
 				textAlignVertical: 'center',
 			},

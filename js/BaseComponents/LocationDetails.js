@@ -22,13 +22,14 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
 import {
 	CachedImage,
 } from 'react-native-cached-image';
 
 import IconTelldus from './IconTelldus';
+import TouchableOpacity from './TouchableOpacity';
 import Text from './Text';
 import View from './View';
 import Theme from '../App/Theme';
@@ -47,6 +48,8 @@ type Props = {
 	fromJS?: boolean,
 	info2?: Object,
 	resizeMode?: 'cover' | 'contain' | 'stretch' | 'repeat' | 'center',
+	h1Style: Object,
+	h2Style: Object,
 };
 
 type DefaultProps = {
@@ -129,6 +132,8 @@ class LocationDetails extends Component<Props, State> {
 			info2,
 			fromJS,
 			resizeMode,
+			h1Style,
+			h2Style,
 		} = this.props;
 
 		const {
@@ -143,19 +148,25 @@ class LocationDetails extends Component<Props, State> {
 
 		return (
 			<TouchableOpacity
+				level={2}
 				style={[styles.shadow, container, style]}
 				accessible={accessible}
 				disabled={!onPress}
 				onPress={this.onPress}>
 				{!!title && (
-					<Text style={[textLocation, {marginLeft: 10}]}>
+					<Text
+						level={18}
+						style={[textLocation, {marginLeft: 10}]}>
 						{title}
 					</Text>)
 				}
 				<View style={styles.imageHeaderContainer}>
 					<View style={locationImageContainer}>
 						{errorShowImage ?
-							<IconTelldus icon={'zwave'} style={locationIcon}/>
+							<IconTelldus
+								level={20}
+								icon={'zwave'}
+								style={locationIcon}/>
 							:
 							fromJS ?
 								<Image
@@ -173,10 +184,16 @@ class LocationDetails extends Component<Props, State> {
 						}
 					</View>
 					<View style={[locationTextContainer, infoContainerStyle]}>
-						<Text numberOfLines={1} style={textHSH}>
+						<Text
+							level={15}
+							numberOfLines={1}
+							style={[textHSH, h1Style]}>
 							{!!H1 && H1}
 						</Text>
-						<Text numberOfLines={1} style={textLocation}>
+						<Text
+							level={18}
+							numberOfLines={1}
+							style={[textLocation, h2Style]}>
 							{!!H2 && H2}
 						</Text>
 						{!!info && (
@@ -207,7 +224,6 @@ class LocationDetails extends Component<Props, State> {
 		return {
 			container: {
 				flexDirection: 'column',
-				backgroundColor: '#fff',
 				padding: textHSHSize,
 				justifyContent: 'center',
 			},
@@ -230,15 +246,12 @@ class LocationDetails extends Component<Props, State> {
 				maxWidth: widthImage,
 			},
 			textLocation: {
-				color: '#A59F9A',
 				fontSize: textLocationSize,
 			},
 			textHSH: {
-				color: '#F06F0C',
 				fontSize: textHSHSize,
 			},
 			locationIcon: {
-				color: Theme.Core.brandPrimary,
 				fontSize: widthImage,
 			},
 		};

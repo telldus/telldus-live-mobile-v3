@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 def add_flipper_pods!(versions = {})
@@ -73,14 +73,8 @@ target 'TelldusLiveApp' do
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
-
-  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
-
-  pod 'Firebase/Core', '~> 6.13.0'
-  pod 'Firebase/RemoteConfig', '~> 6.13.0'
+  
   pod 'GoogleIDFASupport', '~> 3.14.0'
-  pod 'Fabric', '~> 1.10.2'
-  pod 'Crashlytics', '~> 3.14.0'
   pod 'GoogleSignIn', '~> 5.0.0'
 
   use_native_modules!

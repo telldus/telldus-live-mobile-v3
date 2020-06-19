@@ -36,7 +36,9 @@ import Theme from '../../Theme';
 type Props = {
 	device: Object,
 	deviceSetStateRGB: (id: number, r: number, g: number, b: number) => void,
-    appLayout: Object,
+	appLayout: Object,
+	colorWheelCoverLevel: number,
+	swatchesCoverLevel: number,
 
     style?: Array<any> | Object,
 	thumStyle?: Array<any> | Object,
@@ -230,6 +232,8 @@ render(): Object {
 		swatchWheelCover,
 		device,
 		showActionIndicator,
+		colorWheelCoverLevel,
+		swatchesCoverLevel,
 	} = this.props;
 
 	const colorSwatches = this.COLOR_SWATCHES.map((color: string, i: number): any => {
@@ -246,7 +250,9 @@ render(): Object {
 
 	return (
 		<View style={swatchWheelCover}>
-			<View style={colorWheelCover}>
+			<View
+				level={colorWheelCoverLevel}
+				style={colorWheelCover}>
 				{(showActionIndicator && controlSource === 'wheel' && methodRequested === 'RGB') ?
 					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
 					: null
@@ -261,7 +267,9 @@ render(): Object {
 					toggleMeToforceUpdateInitialColor={toggleMeToforceUpdateInitialColor}
 				/>
 			</View>
-			<View style={swatchesCover}>
+			<View
+				level={swatchesCoverLevel}
+				style={swatchesCover}>
 				{(showActionIndicator && controlSource === 'swatch' && methodRequested === 'RGB') ?
 					<ButtonLoadingIndicator style={dot} color={Theme.Core.brandSecondary}/>
 					: null

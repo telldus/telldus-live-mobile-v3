@@ -129,7 +129,9 @@ render(): Object {
 	const styles = this.getStyle(appLayout);
 
 	return (
-		<View style={[styles.container, containerStyle]}>
+		<View
+			level={2}
+			style={[styles.container, containerStyle]}>
 			{!!header && header}
 			<View style={styles.inputCover}>
 				<MaterialTextInput
@@ -183,7 +185,6 @@ getStyle(appLayout: Object): Object {
 			flexDirection: 'column',
 			alignItems: 'flex-start',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			padding,
 			...shadow,
 			borderRadius: 2,

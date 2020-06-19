@@ -21,39 +21,51 @@
 
 'use strict';
 
-import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper';
-import Theme from '../App/Theme';
+import React, {
+	memo,
+} from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import View from './View';
 
-const ViewX = isIphoneX() ? SafeAreaView : View;
+import {
+	useAppTheme,
+} from '../App/Hooks/Theme';
 
 type Props = {
 	children: Object | Array<Object>,
 	onLayout: (Object) => void,
 	backgroundColor?: string,
+	safeAreaBackgroundColor?: string,
 };
 
-export default class SafeAreaViewComponent extends React.Component<Props, null> {
-	props: Props;
+const SafeAreaViewComponent = (props: Props): Object => {
 
-	render(): Object {
-		let { children, onLayout, backgroundColor, ...otherProperties } = this.props;
+	const {
+		colors,
+	} = useAppTheme();
 
-		return (
-			<ViewX style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.brandPrimary }, { flex: 1, backgroundColor }) }}>
-				<View style={{ ...ifIphoneX({ flex: 1, backgroundColor: Theme.Core.iPhoneXbg }, { flex: 1, backgroundColor }) }} onLayout={onLayout}>
-					{
-						React.Children.map(children, (child: Object): Object | null => {
-							if (React.isValidElement(child)) {
-								return React.cloneElement(child, {...otherProperties});
-							}
-							return null;
-						})
-					}
-				</View>
-			</ViewX>
-		);
-	}
-}
+	let {
+		children,
+		onLayout,
+		backgroundColor = colors.screenBackground,
+		safeAreaBackgroundColor = colors.primary,
+		...otherProperties
+	} = props;
+
+	return (
+		<SafeAreaView style={{ flex: 1, backgroundColor: safeAreaBackgroundColor }}>
+			<View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
+				{
+					React.Children.map(children, (child: Object): Object | null => {
+						if (React.isValidElement(child)) {
+							return React.cloneElement(child, {...otherProperties});
+						}
+						return null;
+					})
+				}
+			</View>
+		</SafeAreaView>
+	);
+};
+
+export default memo<Object>(SafeAreaViewComponent);

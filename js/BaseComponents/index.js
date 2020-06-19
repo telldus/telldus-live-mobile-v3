@@ -102,6 +102,12 @@ import CachedImage from './CachedImage';
 import TransparentFullPageLoadingIndicator from './TransparentFullPageLoadingIndicator';
 import MainTabBarIOS from './MainTabBarIOS';
 import MainTabNavHeader from './MainTabNavHeader';
+import TouchableOpacity from './TouchableOpacity';
+import ThemedScrollView from './ThemedScrollView';
+import ThemedImage from './ThemedImage';
+import ThemedTextInput from './ThemedTextInput';
+import ThemedMaterialIcon from './ThemedMaterialIcon';
+import ThemedSwitch from './ThemedSwitch';
 
 import {
 	AppState,
@@ -196,12 +202,19 @@ module.exports = {
 	MainTabBarIOS,
 	MainTabNavHeader,
 
-	AppState: AppState,
-	Dimensions: Dimensions,
-	PixelRatio: PixelRatio,
-	StatusBar: StatusBar,
-	StyleSheet: StyleSheet,
-	TabBarIOS: TabBarIOS,
-	Gravatar: Gravatar,
-	Image: Image,
+	AppState,
+	Dimensions,
+	PixelRatio,
+	StatusBar,
+	StyleSheet,
+	TabBarIOS,
+	Gravatar,
+	Image,
+	TouchableOpacity,
+
+	ThemedScrollView,
+	ThemedImage,
+	ThemedTextInput,
+	ThemedMaterialIcon,
+	ThemedSwitch,
 };

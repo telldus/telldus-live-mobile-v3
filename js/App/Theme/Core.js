@@ -20,7 +20,6 @@
 import Color from 'color';
 
 import { Platform } from 'react-native';
-import { isIphoneX } from 'react-native-iphone-x-helper';
 
 export default {
 	brandPrimary: '#1b365d',
@@ -61,7 +60,7 @@ export default {
 	},
 
 	get navBarTopPadding() {
-		return (Platform.OS === 'ios') ? (isIphoneX() ? 0 : 15) : 10;
+		return (Platform.OS === 'ios') ? 0 : 10;
 	},
 
 	appBackground: '#eeeeee',
@@ -151,12 +150,15 @@ export default {
 	get headerHeightFactor() {
 		return {
 			port: 0.05,
-			land: 0.1111,
+			land: 0.08,
 		};
 	},
 
 	get androidLandMarginLeftFactor() {
-		return 0.068;
+		return 0.0635;
+	},
+	get androidLandTabbarHeightFactor() {
+		return 0.13;
 	},
 
 	get editBoxPaddingFactor() {
@@ -297,14 +299,19 @@ export default {
 		};
 	},
 
-	textColorOneLT: '#A59F9A',
-	borderColorOneLT: '#C9C9CE',
-	backgroundColorOneLT: '#fff',
-	get backgroundColorTwoLT() {
-		return this.brandPrimary;
+	get headerButtonHorizontalPadding() {
+		return 15;
 	},
-	get activeTintOneLT() {
-		return this.brandSecondary;
+	get headerButtonIconSizeFactor() {
+		return 0.06;
 	},
-	inActiveTintOneLT: '#C9C9CE',
+	get floatingButtonSizefactor() {
+		return 0.134666667;
+	},
+	get floatingButtonOffsetfactor() {
+		return {
+			right: 0.034666667,
+			bottom: 0.046666667,
+		};
+	},
 };

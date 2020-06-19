@@ -22,7 +22,7 @@
 
 'use strict';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { reportException } from './Analytics';
 import * as RNLocalize from 'react-native-localize';
 
@@ -307,11 +307,12 @@ function getSensorInfo(name: string, scale: string, value: number = 0, isLarge: 
 	};
 }
 
-const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, gatewayTimezone?: string = RNLocalize.getTimeZone()): string => {
+const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, gatewayTimezone?: string = RNLocalize.getTimeZone(), sensorLastUpdatedMode?: string = '0'): string => {
+	const { formatRelativeTime, formatTime, formatMessage, formatDate } = intl;
+
 	const timeAgo = time.replace(/[0-9]/g, '').trim();
 	moment.tz.setDefault(gatewayTimezone);
 
-	const { formatRelativeTime, formatMessage, formatDate } = intl;
 	const now = moment().unix();
 
 	const m = moment.unix(timestamp);
@@ -319,6 +320,10 @@ const formatSensorLastUpdate = (time: string, intl: Object, timestamp: number, g
 	if (diff > 7) {
 		moment.tz.setDefault();
 		return formatDate(m);
+	}
+
+	if (sensorLastUpdatedMode === '1') {
+		return `${formatDate(m)} ${formatTime(m)}`;
 	}
 
 	// 'now' from 'FormattedRelative' matches only when 1 sec is added to moment.unix()

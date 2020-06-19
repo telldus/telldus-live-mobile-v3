@@ -54,10 +54,14 @@ const PremiumInfoContent = (props: Object): Object => {
 	return (
 		<View style={coverStyle}>
 			<IconTelldus icon={'premium'} style={iconStyle}/>
-			<Text style={titleSyle}>
+			<Text
+				level={5}
+				style={titleSyle}>
 				{formatMessage(i18n.premiumInfoTitle)}
 			</Text>
-			<Text style={contentStyle}>
+			<Text
+				level={6}
+				style={contentStyle}>
 				{formatMessage(i18n.premiumInfoDescription)}
 			</Text>
 		</View>
@@ -79,13 +83,11 @@ const getStyle = (appLayout: Object): Object => {
 			marginBottom: padding,
 		},
 		titleSyle: {
-			color: Theme.Core.eulaContentColor,
 			fontSize: deviceWidth * 0.06,
 			fontWeight: 'bold',
 		},
 		contentStyle: {
 			textAlign: 'center',
-			color: Theme.Core.rowTextColor,
 			fontSize: Math.floor(deviceWidth * 0.04),
 			marginTop: 10,
 		},

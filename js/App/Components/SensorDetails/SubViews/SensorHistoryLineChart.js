@@ -24,7 +24,7 @@ import React from 'react';
 import { Modal, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import Orientation from 'react-native-orientation-locker';
 const isEqual = require('react-fast-compare');
 import maxBy from 'lodash/maxBy';
@@ -392,7 +392,9 @@ class SensorHistoryLineChart extends View<Props, State> {
 		};
 
 		return (
-			<View style={containerStyle}>
+			<View
+				level={2}
+				style={containerStyle}>
 				<ChartLegend
 					legendData={legendData}
 					appLayout={appLayout}
@@ -459,10 +461,10 @@ class SensorHistoryLineChart extends View<Props, State> {
 				animationType={'none'}
 				presentationStyle={'fullScreen'}
 				onRequestClose={this.onRequestClose}
-				supportedOrientations={['portrait', supportedOrientations]}
+				supportedOrientations={[supportedOrientations]}
 				hardwareAccelerated={true}
 				onShow={this.onShow}>
-				<SafeAreaView backgroundColor={Theme.Core.appBackground}>
+				<SafeAreaView>
 					<View style={{
 						flex: 1,
 						alignItems: 'center',
@@ -499,7 +501,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 		return {
 			containerStyle: show ?
 				{
-					backgroundColor: '#fff',
 					width: chartWidth,
 					...shadow,
 					alignItems: 'center',
@@ -507,7 +508,6 @@ class SensorHistoryLineChart extends View<Props, State> {
 				}
 				:
 				{
-					backgroundColor: '#fff',
 					marginLeft: padding / 2,
 					width: chartWidth,
 					...shadow,

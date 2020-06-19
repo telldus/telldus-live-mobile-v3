@@ -99,15 +99,19 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 		}
 		return (
 			<TouchableOpacity onPress={onSelectPlan} key={`${index}`}>
-				<View style={[contentCover,
-					selectedIndex === index ? {
-						borderWidth: 3,
-						borderColor: Theme.Core.brandSecondary,
-					} : undefined,
-				]}>
+				<View
+					level={2}
+					style={[contentCover,
+						selectedIndex === index ? {
+							borderWidth: 3,
+							borderColor: Theme.Core.brandSecondary,
+						} : undefined,
+					]}>
 					<View style={headerCover}>
 						<IconTelldus icon={'sms'} style={premiumIconStyle}/>
-						<Text style={validityTextStyle}>
+						<Text
+							level={5}
+							style={validityTextStyle}>
 							{`${count} ${formatMessage(i18n.smsCredits).toUpperCase()}`}
 						</Text>
 					</View>
@@ -168,7 +172,9 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 	}
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.purchaseSMSCredits)}
@@ -178,7 +184,9 @@ const BuySMSCreditsScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<Text style={labelStyle}>{formatMessage(i18n.selectAmountOfCredits)}</Text>
+				<Text
+					level={6}
+					style={labelStyle}>{formatMessage(i18n.selectAmountOfCredits)}</Text>
 				{plans}
 				<PaymentProvidersBlock onSelect={onSelect}/>
 				<TouchableButton
@@ -205,13 +213,11 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		contentCover: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding / 2,
@@ -220,7 +226,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.rowTextColor,
 			marginLeft: padding,
 			marginTop: padding * 2,
 			padding: 3,
@@ -236,7 +241,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		validityTextStyle: {
 			fontSize: fontSize * 1.7,
-			color: Theme.Core.eulaContentColor,
 			marginLeft: 5,
 		},
 		premiumIconStyle: {

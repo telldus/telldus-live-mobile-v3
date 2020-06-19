@@ -44,6 +44,7 @@ import {
 	shouldUpdate,
 } from '../Lib';
 import i18n from '../Translations/common';
+import Theme from '../Theme';
 
 type Props = {
 	screenReaderEnabled: boolean,
@@ -224,7 +225,7 @@ class AppNavigatorRenderer extends View<Props, State> {
 
 	toggleAttentionCapture = (value: boolean) => {
 		if (!this.state.addNewDevicePressed) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(500));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(500));
 		}
 		this.setState({
 			showAttentionCaptureAddDevice: value,
@@ -310,11 +311,17 @@ class AppNavigatorRenderer extends View<Props, State> {
 		const deviceHeight = isPortrait ? height : width;
 		const deviceWidth = isPortrait ? width : height;
 
+		const {
+			headerHeightFactor,
+		} = Theme.Core;
+
+		const { land } = headerHeightFactor;
+
 		return {
 			deviceWidth,
 			container: {
 				flex: 1,
-				marginLeft: isPortrait ? 0 : Math.ceil(deviceHeight * 0.11),
+				marginLeft: isPortrait ? 0 : Math.floor(deviceHeight * land),
 			},
 			isPortrait,
 		};

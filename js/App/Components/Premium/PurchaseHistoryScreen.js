@@ -127,7 +127,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
 						return {
 							typeInfo: preS + postS,
-							color: Theme.Core.eulaContentColor,
+							level: 5,
 						};
 					}
 					case 'promonth': {
@@ -135,7 +135,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
 						return {
 							typeInfo: preS + postS,
-							color: Theme.Core.eulaContentColor,
+							level: 5,
 						};
 					}
 					case 'prohalfyear': {
@@ -143,7 +143,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
 						return {
 							typeInfo: preS + postS,
-							color: Theme.Core.eulaContentColor,
+							level: 5,
 						};
 					}
 					case 'proyear': {
@@ -151,7 +151,7 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
 						return {
 							typeInfo: preS + postS,
-							color: Theme.Core.eulaContentColor,
+							level: 5,
 						};
 					}
 					default: {
@@ -159,21 +159,30 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 						const postS = months === 1 ? `1 ${formatMessage(i18n.month)}` : formatMessage(i18n.months, {value: months});
 						return {
 							typeInfo: preS + postS,
-							color: Theme.Core.eulaContentColor,
+							level: 5,
 						};
 					}
 				}
 			}
 
-			const { typeInfo, color } = getTypeAndMonth(item);
+			const { typeInfo, level } = getTypeAndMonth(item);
 
 			return (
-				<View style={rowStyle} key={index}>
-					<Text style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
+				<View
+					level={2}
+					style={rowStyle}
+					key={index}>
+					<Text
+						level={3}
+						style={rowTextStyle1}>{formatTime(moment.unix(item.date))}</Text>
 					<View style={toBlock}>
-						<Text style={rowTextStyle2}>{typeInfo}</Text>
+						<Text
+							level={3}
+							style={rowTextStyle2}>{typeInfo}</Text>
 					</View>
-					<Text style={[rowTextStyle3, {color}]}>€{formatNumber(item.price)}</Text>
+					<Text
+						level={level}
+						style={rowTextStyle3}>€{formatNumber(item.price)}</Text>
 				</View>);
 		}
 		)();
@@ -182,8 +191,13 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 
 	const renderSectionHeader = useCallback(({section: {key}}: Object): Object => {
 		return ((): Object => (
-			<View style={sectionStyle} key={key}>
-				<Text style={sectionTextStyle}>{key}</Text>
+			<View
+				level={2}
+				style={sectionStyle}
+				key={key}>
+				<Text
+					level={6}
+					style={sectionTextStyle}>{key}</Text>
 			</View>
 		))();
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -194,7 +208,9 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 	}, []);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalizeFirstLetterOfEachWord(formatMessage(i18n.purchaseHistory))} h2={formatMessage(i18n.yourTransactions)}
 				align={'right'}
@@ -203,9 +219,12 @@ const PurchaseHistoryScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			{(!isLoading && listData.length === 0 ) ?
-				<View style={emptyCover}>
+				<View
+					level={2}
+					style={emptyCover}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
-					<Text style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
+					<Text
+						style={emptyInfo}>{formatMessage(i18n.noPurchaseHistory)}</Text>
 				</View>
 				:
 				<SectionList
@@ -235,14 +254,12 @@ const getStyles = (appLayout: Object): Object => {
 		toIconSize: fontSizeRow * 1.2,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		rowStyle: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: 10,
 			marginBottom: padding / 2,
@@ -251,7 +268,6 @@ const getStyles = (appLayout: Object): Object => {
 			flexDirection: 'row',
 			marginTop: padding,
 			marginHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: padding * 2,
 			justifyContent: 'center',
@@ -270,7 +286,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		sectionStyle: {
 			paddingHorizontal: padding,
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			paddingVertical: 5,
 			marginTop: padding / 2,
@@ -278,7 +293,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowTextStyle1: {
 			fontSize: fontSizeRow,
-			color: '#000',
 			width: '25%',
 			textAlign: 'left',
 		},
@@ -289,19 +303,16 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		rowTextStyle2: {
 			fontSize: fontSizeRow,
-			color: '#000',
 			marginLeft: 3,
 			textAlign: 'left',
 		},
 		rowTextStyle3: {
 			fontSize: fontSizeRow,
-			color: '#000',
 			textAlign: 'right',
 			width: '10%',
 		},
 		sectionTextStyle: {
 			fontSize: fontSizeSection,
-			color: Theme.Core.rowTextColor,
 		},
 		contentContainerStyle: {
 			marginTop: padding,

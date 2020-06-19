@@ -47,6 +47,7 @@ type Props = {
 	deviceSetState: (id: number, command: number, value?: number) => void,
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class BellButton extends View {
@@ -69,7 +70,9 @@ class BellButton extends View {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'device',
+			'onPressOverride']);
 		if (propsChange) {
 			return true;
 		}
@@ -104,7 +107,7 @@ class BellButton extends View {
 	}
 
 	render(): Object {
-		let { device, isGatewayActive, bellButtonStyle } = this.props;
+		let { device, isGatewayActive, bellButtonStyle, disableActionIndicator = false } = this.props;
 		let { methodRequested, name, local } = device;
 		let accessibilityLabel = `${this.labelBellButton}, ${name}`;
 		let iconColor = !isGatewayActive ? '#a2a2a2' : Theme.Core.brandSecondary;
@@ -115,7 +118,7 @@ class BellButton extends View {
 				<IconTelldus icon="bell" size={22} color={iconColor} />
 
 				{
-					methodRequested === 'BELL' ?
+					!disableActionIndicator && methodRequested === 'BELL' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -127,6 +130,7 @@ class BellButton extends View {
 
 BellButton.defaultProps = {
 	command: 4,
+	disableActionIndicator: false,
 };
 
 const styles = StyleSheet.create({

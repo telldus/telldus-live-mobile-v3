@@ -176,10 +176,11 @@ class ScheduleScreen extends View<null, Props, State> {
 		const { style } = this._getStyle(appLayout);
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				{loading && (
 					<FullPageActivityIndicator/>
 				)}

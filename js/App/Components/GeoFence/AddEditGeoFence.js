@@ -23,6 +23,9 @@
 
 import React, {
 	useState,
+	useEffect,
+	useCallback,
+	useRef,
 } from 'react';
 import {
 	StyleSheet,
@@ -39,15 +42,22 @@ import MapView, {
 import {
 	FloatingButton,
 	View,
+	FullPageActivityIndicator,
 } from '../../../BaseComponents';
 import {
-	FenceCallout,
+	FenceCalloutWithMarker,
+	MyLocation,
 } from './SubViews';
+import HelpOverlay from './HelpOverlay';
 
 import {
 	setEditFence,
 	resetFence,
 } from '../../Actions/Fences';
+import {
+	getCurrentAccountsFences,
+	getCurrentLocation,
+} from '../../Actions/GeoFence';
 
 import Theme from '../../Theme';
 
@@ -55,74 +65,209 @@ type Props = {
     navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	enableGeoFence: boolean,
+	route: Object,
+	isHelpVisible: boolean,
+	setIsHelpVisible: Function,
 };
+
+const overlayFenceRadius = 1000;
 
 const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const {
 		navigation,
 		appLayout,
+		enableGeoFence,
+		route,
+		isHelpVisible,
+		setIsHelpVisible,
 	} = props;
+
+	const {
+		params = {},
+	} = route;
+
+	const mapRef: Object = useRef({});
 
 	const dispatch = useDispatch();
 
-	const { userId } = useSelector((state: Object): Object => state.user);
-	let { fences = {}, location } = useSelector((state: Object): Object => state.fences);
-	const currentAccFences = fences[userId] || [];
-	location = location ? location : {};
+	const fallbackLocation = {
+		latitude: 55.70584,
+		longitude: 13.19321,
+		latitudeDelta: 0.1,
+		longitudeDelta: 0.1,
+	};
 
-	function onPressNext() {
-		dispatch(resetFence());
-		navigation.navigate('SelectArea');
-	}
+	const [ pointCurrentLocation, setPointCurrentLocation ] = useState({});
 
-	const [ activeFenceIndex, setActiveFenceIndex ] = useState(0);
+	let { location = {}, fence } = useSelector((state: Object): Object => state.fences);
+	location = {
+		...fallbackLocation,
+		...location,
+	};
+	const initialRegion = params.region || location;
+
+	const [ currentAccFences, setCurrentAccFences ] = useState([]);
+
+	const [ region, setRegion ] = useState(initialRegion);
+	const [ regionToReset, setRegionToReset ] = useState();
+	const [ regionToResume, setRegionToResume ] = useState();
+	const [ currenLocationInApp, setCurrenLocationInApp ] = useState();
+
+	useEffect(() => {
+		if (isHelpVisible) {
+			const data = currenLocationInApp || location;
+			setCurrentAccFences([{
+				extras: {
+					...data,
+					radius: overlayFenceRadius,
+				},
+			}]);
+		} else {
+			(async () => {
+				const geofences = await dispatch(getCurrentAccountsFences());
+				setCurrentAccFences(geofences);
+			})();
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		fence,
+		isHelpVisible,
+	]);
+
+	const [ mapReady, setMapReady ] = useState(false);
 
 	const {
 		container,
 		mapStyle,
 		contentContainerStyle,
-	} = getStyles(appLayout);
-
-	const {
-		latitude = 55.70584,
-		longitude = 13.19321,
-		latitudeDelta = 0.1,
-		longitudeDelta = 0.1,
-	} = location;
-	const region = new AnimatedRegion({
-		latitude,
-		longitude,
-		latitudeDelta,
-		longitudeDelta,
+	} = getStyles({
+		appLayout,
+		mapReady,
 	});
 
-	function onEditFence(index: number) {
-		dispatch(setEditFence(index, userId));
-		setActiveFenceIndex(0);
-		navigation.navigate('EditGeoFence');
+	function onPressNext() {
+		dispatch(resetFence());
+		navigation.navigate('SelectArea', {
+			region,
+		});
 	}
 
-	function renderMarker(fence: Object, index: number): Object {
-		if (!fence) {
+	const onEditFence = useCallback((fenceToEdit: Object) => {
+		dispatch(setEditFence(fenceToEdit));
+		navigation.navigate('EditGeoFence');
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const onPressFocusMyLocation = useCallback(() => {
+		(async () => {
+			dispatch(getCurrentLocation());
+			const loc = {
+				...location,
+				latitudeDelta: region.latitudeDelta,
+				longitudeDelta: region.longitudeDelta,
+			};
+			setRegion(loc);
+			setRegionToReset(loc);
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [location, region]);
+
+	const onRegionChange = useCallback((reg: Object) => {
+		setRegion(reg);
+	}, []);
+
+	const onMapReady = useCallback(() => {
+		setMapReady(true);
+	}, []);
+
+	function renderMarker(fenceC: Object, index: number): Object {
+		if (!fenceC) {
 			return;
 		}
 
-		function onEditFenceInner() {
-			onEditFence(index);
-		}
+		const {
+			extras = {},
+		} = fenceC;
 
 		return (
-			<MapView.Marker
-				key={`${index}`}
-				image={{uri: 'marker'}}
-				coordinate={{ latitude: fence.latitude, longitude: fence.longitude }}>
-				<MapView.Callout onPress={onEditFenceInner}>
-					<FenceCallout
-						title={fence.title}/>
-				</MapView.Callout>
-			</MapView.Marker>
+			<React.Fragment
+				key={`${index}`}>
+				<FenceCalloutWithMarker
+					fence={fenceC}
+					enableGeoFence={enableGeoFence}
+					onPress={onEditFence}/>
+				<MapView.Circle
+					center={{
+						latitude: extras.latitude,
+						longitude: extras.longitude,
+					}}
+					radius={extras.radius}
+					fillColor="rgba(226, 105, 1, 0.3)"
+					strokeColor={Theme.Core.brandSecondary}/>
+			</React.Fragment>
 		);
 	}
+
+	const closeHelp = useCallback(() => {
+		setIsHelpVisible(false);
+	}, [setIsHelpVisible]);
+
+	const onUserLocationChange = useCallback((data: Object) => {
+		(async () => {
+			const {
+				latitude: lat1,
+				longitude: long1,
+			} = currenLocationInApp || {};
+			const {
+				latitude: lat2,
+				longitude: long2,
+			} = data.nativeEvent.coordinate;
+			if (lat1 !== lat2 || long1 !== long2) {
+				setCurrenLocationInApp(data.nativeEvent.coordinate);
+			}
+		})();
+	}, [currenLocationInApp]);
+
+	useEffect(() => {
+		(async () => {
+			if (regionToReset) {
+				setRegionToReset();
+			}
+			if (!isHelpVisible && regionToResume) {
+				setRegion(regionToResume);
+				setRegionToReset(regionToResume);
+				setRegionToResume();
+			}
+			if (!isHelpVisible && pointCurrentLocation.x) {
+				setPointCurrentLocation({});
+			}
+			if (isHelpVisible) {
+				if (!regionToResume) {
+					onPressFocusMyLocation();
+					setRegionToResume(region);
+				}
+				if (mapRef && mapRef.current && typeof pointCurrentLocation.x === 'undefined') {
+					const data = currenLocationInApp || location;
+					const point = await mapRef.current.pointForCoordinate(data);
+					if (point.x > 0 && point.y > 0) {
+						setPointCurrentLocation(point);
+					}
+				}
+			}
+		})();
+	}, [
+		regionToReset,
+		regionToResume,
+		isHelpVisible,
+		region,
+		onPressFocusMyLocation,
+		location,
+		pointCurrentLocation,
+		onUserLocationChange,
+		mapReady,
+		currenLocationInApp,
+	]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -130,33 +275,50 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 				style={container}
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
+					ref={mapRef}
 					style={mapStyle}
-					initialRegion={region}>
+					initialRegion={new AnimatedRegion(region)}
+					region={regionToReset ? new AnimatedRegion(regionToReset) : undefined}
+					scrollEnabled={enableGeoFence}
+					loadingEnabled={false}
+					showsTraffic={false}
+					showsUserLocation={true}
+					showsMyLocationButton={false}
+					onRegionChange={onRegionChange}
+					onUserLocationChange={onUserLocationChange}
+					onMapReady={onMapReady}
+					userLocationUpdateInterval={15000}
+					userLocationFastestInterval={15000}>
 					{
-						currentAccFences.map((fence: Object, index: number): () => Object => {
-							return renderMarker(fence, index);
+						currentAccFences.map((fenceC: Object, index: number): () => Object => {
+							return renderMarker(fenceC, index);
 						})
 					}
-					{currentAccFences.length > 0 && <MapView.Circle
-						key={`fence-${activeFenceIndex}`}
-						center={{
-							latitude: currentAccFences[activeFenceIndex].latitude,
-							longitude: currentAccFences[activeFenceIndex].longitude,
-						}}
-						radius={currentAccFences[activeFenceIndex].radius}
-						fillColor="rgba(226, 105, 1, 0.3)"
-						strokeColor={Theme.Core.brandSecondary}/>
-					}
 				</MapView.Animated>
+				{!mapReady && <FullPageActivityIndicator
+					overlayLevel={3}
+					color={'#000'}/>}
 			</ScrollView>
+			<MyLocation
+				onPress={onPressFocusMyLocation}/>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'icon_plus'}}/>
+				imageSource={{uri: 'icon_plus'}}
+				disabled={!enableGeoFence}/>
+			<HelpOverlay
+				closeHelp={closeHelp}
+				isVisible={isHelpVisible}
+				appLayout={appLayout}
+				pointCurrentLocation={pointCurrentLocation}
+				fenceRadius={overlayFenceRadius}/>
 		</View>
 	);
 });
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	mapReady,
+}: Object): Object => {
 
 	return {
 		container: {

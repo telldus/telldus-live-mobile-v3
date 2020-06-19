@@ -50,6 +50,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class StopButton extends View {
@@ -96,7 +97,7 @@ class StopButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local } = this.props;
+			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
 
 		let stopButtonStyle = !isGatewayActive ?
 			(isInState === 'STOP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'STOP' ? styles.enabledBackgroundStop : styles.disabledBackground);
@@ -115,7 +116,7 @@ class StopButton extends View {
 					}}
 				/>
 				{
-					methodRequested === 'STOP' ?
+					!disableActionIndicator && methodRequested === 'STOP' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -129,6 +130,7 @@ StopButton.defaultProps = {
 	commandUp: 128,
 	commandDown: 256,
 	commandStop: 512,
+	disableActionIndicator: false,
 };
 
 const styles = StyleSheet.create({

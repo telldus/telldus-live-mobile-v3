@@ -26,7 +26,6 @@ import React, {
 	useCallback,
 } from 'react';
 import {
-	ScrollView,
 	TouchableOpacity,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,6 +34,7 @@ import {
 	View,
 	IconTelldus,
 	Text,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	UserInfoBlock,
@@ -46,6 +46,7 @@ import {
 	UpdatePasswordBlock,
 	PrivacyPolicyLink,
 	EulaLink,
+	SwitchOrAddAccountButton,
 } from './SubViews';
 import {
 	ViewPremiumBenefitsButton,
@@ -82,6 +83,7 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		toggleDialogueBox,
 		intl,
 	}, navigation } = props;
+
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
 		userProfile = {},
@@ -98,7 +100,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 		...otherSAConfs
 	} = switchAccountConf;
 
-	const { premiumPurchase = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
+	const {
+		premiumPurchase = JSON.stringify({enable: false}),
+	} = firebaseRemoteConfig;
 	const { enable } = JSON.parse(premiumPurchase);
 
 	function onPressRedeemGift() {
@@ -172,6 +176,9 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 							value: `${res.firstname} ${res.lastname}`,
 						});
 						dispatch(showToast(messageOnSuccesSwitch));
+						navigation.navigate('Tabs', {
+							screen: 'Dashboard',
+						});
 					}).catch((err: Object) => {
 						dispatch(toggleVisibilitySwitchAccountAS({
 							...otherSAConfs,
@@ -186,7 +193,6 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 						});
 					});
 				}
-
 			} else {
 				dispatch(toggleVisibilitySwitchAccountAS({
 					showAS: true,
@@ -232,8 +238,12 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 	const hasMultipleAccounts = Object.keys(accounts).length > 1;
 
 	return (
-		<ScrollView style={container}>
-			<View style={body}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
+			<View
+				level={3}
+				style={body}>
 				<UserInfoBlock blockContainerStyle={{
 					marginBottom: 0,
 				}}/>
@@ -311,12 +321,16 @@ const ProfileTab: Object = React.memo<Object>((props: Object): Object => {
 					label={hasMultipleAccounts ? formatMessage(i18n.logoutFromAllAccnts) : formatMessage(i18n.labelLogOut)}
 					isLoggingOut={isLoggingOut}
 				/>
+				<SwitchOrAddAccountButton
+					disabled={isLoggingOut}/>
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 
-const getStyles = (appLayout: Object, {isLoggingOut}: Object): Object => {
+const getStyles = (appLayout: Object, {
+	isLoggingOut,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -348,7 +362,6 @@ const getStyles = (appLayout: Object, {isLoggingOut}: Object): Object => {
 		},
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,

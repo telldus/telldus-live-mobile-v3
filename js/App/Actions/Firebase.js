@@ -22,7 +22,7 @@
 
 'use strict';
 
-import firebase from 'react-native-firebase';
+import remoteConfig from '@react-native-firebase/remote-config';
 
 import type { ThunkAction, Action } from './Types';
 
@@ -30,13 +30,13 @@ import {
 	deployStore,
 } from '../../Config';
 
-const remoteConfigs = [
-	'geoFenceFeature',
-	'premiumPurchase',
-	'rgb',
-	'appDrawerBanner',
-	'webshop',
-];
+// const remoteConfigs = [
+// 	'geoFenceFeature',
+// 	'premiumPurchase',
+// 	'rgb',
+// 	'appDrawerBanner',
+// 	'webshop',
+// ];
 
 const fetchRemoteConfig = (): ThunkAction => {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
@@ -45,11 +45,13 @@ const fetchRemoteConfig = (): ThunkAction => {
 		}
 
 		if (__DEV__) {
-			firebase.config().enableDeveloperMode();
+			await remoteConfig().setConfigSettings({
+				isDeveloperModeEnabled: true,
+			});
 		}
 
 		// Set default values
-		firebase.config().setDefaults({
+		return remoteConfig().setDefaults({
 			geoFenceFeature: {
 				enable: false,
 			},
@@ -65,29 +67,27 @@ const fetchRemoteConfig = (): ThunkAction => {
 			webshop: {
 				enable: false,
 			},
+		}).then((): Promise<any> => {
+			return remoteConfig().fetch(0)
+				.then((): any => {
+					return remoteConfig().activate();
+				})
+				.then((activated: boolean): any => {
+					if (!activated) {
+					// Fetched data not activated
+					}
+					const parameters = remoteConfig().getAll();
+					let data = {};
+					Object.entries(parameters).forEach(([key, parameter]: [string, any]) => {
+						data[key] = parameter.value;
+					});
+					dispatch(setRemoteConfigs(data));
+				})
+				.catch((): any => {
+					return;
+				});
 		});
 
-		return firebase.config().fetch(0)
-			.then((): any => {
-				return firebase.config().activateFetched();
-			})
-			.then((activated: boolean): any => {
-				if (!activated) {
-					// Fetched data not activated
-				}
-				return firebase.config().getValues(remoteConfigs);
-			})
-			.then((objects: Object) => {
-				let data = {};
-				Object.keys(objects).forEach((key: string) => {
-					data[key] = objects[key].val();
-				});
-				dispatch(setRemoteConfigs(data));
-				return;
-			})
-			.catch((): any => {
-				return;
-			});
 	};
 };
 

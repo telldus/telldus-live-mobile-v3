@@ -7,7 +7,7 @@ describe('(Dashboard) removeFromDashboard ', () => {
 	const userId = '1';
 
 	beforeAll(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'SELECT_DASHBOARD', payload: {
 			dashboardId,
 		}});
@@ -35,7 +35,7 @@ describe('(Dashboard) addToDashboard ', () => {
 	const userId = '1';
 
 	beforeAll(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'SELECT_DASHBOARD', payload: {
 			dashboardId,
 		}});

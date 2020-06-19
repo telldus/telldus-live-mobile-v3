@@ -378,7 +378,7 @@ onPressRow = (controlType: string, changeMode: 0 | 1, callback: Function) => {
 			callback();
 		}
 	});
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 }
 
 onEndSlide = () => {
@@ -544,7 +544,9 @@ render(): Object | null {
 				<EmptyView/>
 			}
 			{!hideTemperatureControl ?
-				<View style={cover}>
+				<View
+					level={2}
+					style={cover}>
 					{showControlIcons ?
 						<TouchableOpacity style={[iconCommon, removeStyle]} onPress={this.onMinus}>
 							<MaterialIcons
@@ -693,7 +695,6 @@ getStyles(): Object {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			marginTop: padding,
 			marginHorizontal: padding,
 			paddingHorizontal: padding * 2,

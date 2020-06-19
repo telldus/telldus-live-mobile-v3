@@ -12,7 +12,7 @@ describe('<SchedulerTab />', () => {
 	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
 
 	beforeEach(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
 			device: [{
@@ -35,7 +35,7 @@ describe('<SchedulerTab />', () => {
 		expect(wrapper).toBeTruthy();
 	});
 
-	it(' render the connected(SchedulerTab) component', () => {
+	it(' render the Connected SchedulerTab component', () => {
 		const Tab = wrapper.props().children.props.children.type.displayName;
 		expect(Tab).toEqual('Connect(SchedulerTab)');
 	});

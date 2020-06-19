@@ -48,6 +48,10 @@ import {
 } from '../../TabViews/SubViews';
 import ShowMoreButton from '../../TabViews/SubViews/Device/ShowMoreButton';
 
+import {
+	GeoFenceUtils,
+} from '../../../Lib';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -72,6 +76,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		onChangeSelection,
 		isChecked,
 		checkBoxId,
+		isLast,
 	} = props;
 	const {
 		supportedMethods = {},
@@ -114,7 +119,10 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		checkButtonStyle,
 		checkIconActiveStyle,
 		checkIconInActiveStyle,
-	} = getStyles(layout, isInState);
+	} = getStyles(layout, {
+		isInState,
+		isLast,
+	});
 
 	function setScrollEnabled() {}
 	function onSlideActive() {}
@@ -156,6 +164,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		appLayout: layout,
 		actionIcons,
 		onPressOverride,
+		disableActionIndicator: true,
 	};
 
 	if (BELL) {
@@ -268,7 +277,11 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 	}
 
 	function _onChangeSelection() {
-		const data = {}; // For a device need to choose some action. So now pass empty.
+		const data = {
+			checkBoxId,
+			deviceId: id,
+			...GeoFenceUtils.prepareInitialActionFromDeviceState(device),
+		};
 		onChangeSelection('device', checkBoxId, data);
 	}
 
@@ -320,7 +333,10 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 
 });
 
-const getStyles = (appLayout: Object, deviceState: string): Object => {
+const getStyles = (appLayout: Object, {
+	isInState,
+	isLast,
+}: Object): Object => {
 	let { height, width } = appLayout;
 	let isPortrait = height > width;
 	let deviceWidth = isPortrait ? width : height;
@@ -339,7 +355,7 @@ const getStyles = (appLayout: Object, deviceState: string): Object => {
 	let nameFontSize = Math.floor(deviceWidth * 0.047);
 	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
 
-	let color = (deviceState === 'TURNOFF' || deviceState === 'STOP') ? brandPrimary : brandSecondary;
+	let color = (isInState === 'TURNOFF' || isInState === 'STOP') ? brandPrimary : brandSecondary;
 	let backgroundColor = color;
 
 	const padding = deviceWidth * paddingFactor;
@@ -354,7 +370,7 @@ const getStyles = (appLayout: Object, deviceState: string): Object => {
 		row: {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
-			marginBottom: padding,
+			marginBottom: isLast ? padding : 0,
 			backgroundColor: '#FFFFFF',
 			height: rowHeight,
 			borderRadius: 2,

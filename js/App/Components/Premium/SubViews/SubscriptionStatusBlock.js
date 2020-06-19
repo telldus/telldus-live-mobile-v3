@@ -84,12 +84,16 @@ const SubscriptionStatusBlock = (props: Object): Object => {
 	const accStatus = isBasic ? 'Basic' :
 		<View style={valueCompCoverStyle}>
 			<IconTelldus icon={'premium'} style={premIconStyle}/>
-			<Text style={valueText}>{capitalizeFirstLetterOfEachWord('Premium access')}</Text>
+			<Text
+				level={4}
+				style={valueText}>{capitalizeFirstLetterOfEachWord('Premium access')}</Text>
 		</View>;
 
 	return (
 		<View style={coverStyle}>
-			<Text style={labelStyle}> {formatMessage(i18n.subscription)} </Text>
+			<Text
+				level={2}
+				style={labelStyle}> {formatMessage(i18n.subscription)} </Text>
 			<SettingsRow
 				type={'text'}
 				edit={false}
@@ -116,10 +120,8 @@ const getStyle = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
 		paddingFactor,
 		brandSecondary,
-		rowTextColor,
 		twine,
 	} = Theme.Core;
 
@@ -135,12 +137,10 @@ const getStyle = (appLayout: Object): Object => {
 			fontSize: deviceWidth * 0.04,
 		},
 		labelStyle: {
-			color: subHeader,
 			fontSize: Math.floor(deviceWidth * 0.045),
 		},
 		valueText: {
 			fontSize,
-			color: rowTextColor,
 			textAlign: 'right',
 			marginLeft: 5,
 			textAlignVertical: 'center',

@@ -49,12 +49,16 @@ import {
 import {
 	createSupportTicketGeneral,
 } from '../../Actions/App';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
 
 import Theme from '../../Theme';
 
 import i18n from '../../Translations/common';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	byId: Object,
 	email: string,
 	screenProps: Object,
@@ -253,6 +257,7 @@ render(testData: Object): Object {
 		infoTextStyle,
 		textFieldMessage,
 		textFieldContainerStyle,
+		pickerStyle,
 	} = this.getStyles(appLayout);
 	const { formatMessage } = intl;
 
@@ -287,11 +292,15 @@ render(testData: Object): Object {
 				leftIcon={'close'}
 				navigation={navigation}
 				{...screenProps}>
-				<View style={container}>
+				<View
+					level={2}
+					style={container}>
 					<Text style={title}>
 						{capitalizeFirstLetterOfEachWord(formatMessage(i18n.labelCreateSupportTicket))}
 					</Text>
-					<Text style={body}>
+					<Text
+						level={6}
+						style={body}>
 						{formatMessage(i18n.contactSupportDescription)}
 					</Text>
 					<Text style={label}>
@@ -318,6 +327,7 @@ render(testData: Object): Object {
 						appLayout={appLayout}
 						intl={intl}
 						dropDownContainerStyle={dropDownContainerStyle}
+						pickerStyle={pickerStyle}
 						pickerContainerStyle={pickerContainerStyle}
 						baseColor={rowTextColor}
 						fontSize={fontSizeText}
@@ -345,7 +355,9 @@ render(testData: Object): Object {
 						/>
 					</View>
 				</View>
-				{descLen < 50 && <View style={infoContainer}>
+				{descLen < 50 && <View
+					level={2}
+					style={infoContainer}>
 					<IconTelldus icon={'info'} style={statusIconStyle}/>
 					<Text style={infoTextStyle}>
 						{formatMessage(i18n.supportTicketDescriptionInfo)}
@@ -364,6 +376,9 @@ render(testData: Object): Object {
 }
 
 getStyles(appLayout: Object): Object {
+	const {
+		colors,
+	} = this.props;
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
@@ -385,7 +400,6 @@ getStyles(appLayout: Object): Object {
 			backgroundColor: Theme.Core.appBackground,
 		},
 		container: {
-			backgroundColor: '#fff',
 			...shadow,
 			marginVertical: padding,
 			padding: padding * 2,
@@ -399,7 +413,6 @@ getStyles(appLayout: Object): Object {
 			alignSelf: 'center',
 		},
 		body: {
-			color: rowTextColor,
 			fontSize: fontSizeBody,
 			marginTop: 10,
 		},
@@ -430,6 +443,9 @@ getStyles(appLayout: Object): Object {
 			marginTop: 8,
 			marginBottom: fontSizeText / 2,
 		},
+		pickerStyle: {
+			backgroundColor: colors.backgroundColorOne,
+		},
 		pickerBaseCoverStyle: {
 			padding: 0,
 		},
@@ -443,7 +459,7 @@ getStyles(appLayout: Object): Object {
 				height: 0,
 			},
 			marginBottom: 0,
-			backgroundColor: '#fff',
+			backgroundColor: 'transparent',
 		},
 		fontSizeText,
 		infoContainer: {
@@ -452,7 +468,6 @@ getStyles(appLayout: Object): Object {
 			marginBottom: padding,
 			marginHorizontal: padding,
 			padding: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -499,4 +514,4 @@ const mapDispatchToProps = (dispatch: Function): Object => (
 	}
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequestSupportScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(RequestSupportScreen));

@@ -27,7 +27,7 @@ import Text from './Text';
 
 const FormattedDateComponent = (props: Object): React$Element<any> => (
 	<FormattedDate {...props}>{(formattedDate: string): React$Element<any> => {
-		return <Text style={props.style}>{formattedDate}</Text>;
+		return <Text level={props.level} style={props.style}>{formattedDate}</Text>;
 	}}
 	</FormattedDate>
 );

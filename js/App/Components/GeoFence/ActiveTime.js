@@ -24,11 +24,15 @@
 import React, { useEffect, useState } from 'react';
 import {
 	ScrollView,
+	Platform,
 } from 'react-native';
 import {
 	useDispatch,
+	useSelector,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+import { CommonActions } from '@react-navigation/native';
+let uuid = require('react-native-uuid');
 
 import {
 	FloatingButton,
@@ -39,12 +43,24 @@ import {
 	TimePicker,
 } from './SubViews';
 
-import Theme from '../../Theme';
-
 import {
 	setFenceActiveTime,
+	setFenceIdentifier,
 } from '../../Actions/Fences';
 
+import {
+	addGeofence,
+	ERROR_CODE_FENCE_ID_EXIST,
+	ERROR_CODE_FENCE_NO_ACTION,
+	ERROR_CODE_TIMED_OUT,
+} from '../../Actions/GeoFence';
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
+import GeoFenceUtils from '../../Lib/GeoFenceUtils';
+
+import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
 type Props = {
@@ -67,10 +83,14 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
+	let { fence } = useSelector((state: Object): Object => state.fences);
+
 	useEffect(() => {
 		onDidMount(`4. ${formatMessage(i18n.activeTime)}`, formatMessage(i18n.selectTimeForFence));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const [ isLoading, setIsLoading ] = useState(false);
 
 	const [ timeInfo, setTimeInfo ] = useState({
 		alwaysActive: true,
@@ -87,9 +107,59 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		toMin: tM,
 	} = timeInfo;
 
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
+
 	function onPressNext() {
+		setIsLoading(true);
+		dispatch(setFenceIdentifier(uuid.v1()));
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
-		navigation.navigate('SetAreaName');
+		dispatch(addGeofence()).then(() => {
+			setIsLoading(false);
+			const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(fence.latitude, fence.longitude, fence.radius);
+			navigation.dispatch(CommonActions.reset({
+				index: 2,
+				routes: [
+					{name: 'Tabs',
+						state: {
+							index: Platform.OS === 'android' ? 1 : 4,
+							routes: [
+								{
+									name: Platform.OS === 'android' ? 'Devices' : 'MoreOptionsTab',
+								},
+							],
+						}},
+					{
+						name: 'GeoFenceNavigator',
+						params: { region: {
+							latitude: fence.latitude,
+							longitude: fence.longitude,
+							latitudeDelta: lngDelta / 2,
+							longitudeDelta: lngDelta,
+						} },
+					},
+				],
+			}));
+		}).catch((err: Object = {}) => {
+			setIsLoading(false);
+			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
+			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
+				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
+			} else if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
+				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
+			} else if (err.code && err.code === ERROR_CODE_TIMED_OUT) {
+				message = 'Could not add fence. Please try again.'; // TODO: Translate
+			}
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: message,
+				showPositive: true,
+			});
+		});
 	}
 
 	const {
@@ -97,6 +167,7 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 		contentContainerStyle,
 		rowStyle,
 		leftItemStyle,
+		iconStyle,
 	} = getStyles(appLayout);
 
 	function onChangeTime(
@@ -129,7 +200,10 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 			</ScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
+				iconName={isLoading ? undefined : 'checkmark'}
+				iconStyle={iconStyle}
+				disabled={isLoading}
+				showThrobber={isLoading}/>
 		</View>
 
 	);
@@ -167,6 +241,9 @@ const getStyles = (appLayout: Object): Object => {
 		leftItemStyle: {
 			color: eulaContentColor,
 			fontSize,
+		},
+		iconStyle: {
+			color: '#fff',
 		},
 	};
 };

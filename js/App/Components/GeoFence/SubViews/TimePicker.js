@@ -26,14 +26,17 @@
 import React from 'react';
 import {
 	StyleSheet,
-	Switch,
-	Picker,
 	LayoutAnimation,
+	Platform,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import {
 	View,
 	Text,
 	EmptyView,
+	Switch,
+	SettingsRow,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
@@ -47,11 +50,8 @@ import i18n from '../../../Translations/common';
 type Props = {
 	value: Object,
 	appLayout: Object,
-	onSwitch: (boolean, number, number, number, number) => void,
-	onChangeFromHr: (boolean, number, number, number, number) => void,
-	onChangeFromMin: (boolean, number, number, number, number) => void,
-	onChangeToHr: (boolean, number, number, number, number) => void,
-	onChangeToMin: (boolean, number, number, number, number) => void,
+
+	onChange: (boolean, ?number, ?number, ?number, ?number) => void,
 
 	labelStyle?: Array<any> | Object,
 	rowStyle?: Array<any> | Object,
@@ -60,30 +60,48 @@ type Props = {
 
 type State = {
 	alwaysActive: boolean,
-	fromHr: number,
-	fromMin: number,
-	toHr: number,
-	toMin: number,
+	showTimePicker: boolean,
+	editingValue: 'from' | 'to',
+	timeFrom: Date,
+	timeTo: Date,
 };
 
 class TimePicker extends View<Props, State> {
 	state: State;
 
 	onSwitch: (boolean) => void;
-	onChangeFromHr: (string | number) => void;
-	onChangeFromMin: (string | number) => void;
-	onChangeToHr: (string | number) => void;
-	onChangeToMin: (string | number) => void;
 
 	constructor(props: Props) {
 		super(props);
+		const {
+			fromHr,
+			fromMin,
+			toHr,
+			toMin,
+			alwaysActive,
+		} = this.props.value || {};
+
+		const timeFrom = new Date();
+		if (typeof fromHr !== 'undefined') {
+			timeFrom.setHours(fromHr);
+		}
+		if (typeof fromMin !== 'undefined') {
+			timeFrom.setMinutes(fromMin);
+		}
+		const timeTo = new Date();
+		if (typeof toHr !== 'undefined') {
+			timeTo.setHours(toHr);
+		}
+		if (typeof toMin !== 'undefined') {
+			timeTo.setMinutes(toMin);
+		}
 
 		this.state = {
-			alwaysActive: this.props.value ? this.props.value.alwaysActive : true,
-			fromHr: this.props.value ? this.props.value.fromHr : 0,
-			fromMin: this.props.value ? this.props.value.fromMin : 0,
-			toHr: this.props.value ? this.props.value.toHr : 0,
-			toMin: this.props.value ? this.props.value.toMin : 0,
+			alwaysActive: typeof alwaysActive !== 'undefined' ? alwaysActive : true,
+			showTimePicker: false,
+			editingValue: 'from',
+			timeFrom,
+			timeTo,
 		};
 
 		this.hrs = [];
@@ -94,47 +112,67 @@ class TimePicker extends View<Props, State> {
 		for (let i = 0; i < 60; i++) {
 			this.mins.push(i);
 		}
-
-		this.onSwitch = this.onSwitch.bind(this);
-		this.onChangeFromHr = this.onChangeFromHr.bind(this);
-		this.onChangeFromMin = this.onChangeFromMin.bind(this);
-		this.onChangeToHr = this.onChangeToHr.bind(this);
-		this.onChangeToMin = this.onChangeToMin.bind(this);
 	}
 
-	onSwitch(value: boolean) {
+	onSwitch = (value: boolean) => {
 		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
 		if (value) {
-			this.setState({ alwaysActive: value, fromHr: 0, fromMin: 0, toHr: 0, toMin: 0 });
-			this.props.onChange(true, 0, 0, 0, 0);
+			this.setState({ alwaysActive: value});
+			this.props.onChange(true);
 		} else {
-			this.setState({ alwaysActive: false, fromHr: 0, fromMin: 0, toHr: 0, toMin: 0 });
-			this.props.onChange(false, 0, 0, 0, 0);
+			this.setState({ alwaysActive: false});
+			this.props.onChange(false);
 		}
 	}
 
-	onChangeFromHr(value: string | number) {
-		const { fromMin, toHr, toMin} = this.state;
-		this.setState({fromHr: value});
-		this.props.onChange(false, value, fromMin, toHr, toMin);
+	_onDateChange = (event: Object, time: Object) => {
+		if (Platform.OS === 'ios') {
+			if (time === undefined) {
+				// dismissedAction
+				this.setState({
+					showTimePicker: false,
+				});
+			}
+		} else {
+			this.setState({
+				showTimePicker: false,
+			});
+		}
+
+		if (!time) {
+			return;
+		}
+
+		const { editingValue } = this.state;
+		const key = editingValue === 'from' ? 'timeFrom' : 'timeTo';
+		this.setState({// $FlowFixMe
+			[key]: time,
+		}, () => {
+			const {
+				timeFrom,
+				timeTo,
+			} = this.state;
+			this.props.onChange(
+				false,
+				timeFrom.getHours(),
+				timeFrom.getMinutes(),
+				timeTo.getHours(),
+				timeTo.getMinutes());
+		});
+	};
+
+	editTo = () => {
+		this.setState({
+			showTimePicker: true,
+			editingValue: 'to',
+		});
 	}
 
-	onChangeFromMin(value: string | number) {
-		const {fromHr, toHr, toMin} = this.state;
-		this.setState({fromMin: value});
-		this.props.onChange(false, fromHr, value, toHr, toMin);
-	}
-
-	onChangeToHr(value: string | number) {
-		const {fromHr, fromMin, toMin} = this.state;
-		this.setState({toHr: value});
-		this.props.onChange(false, fromHr, fromMin, value, toMin);
-	}
-
-	onChangeToMin(value: string | number) {
-		const {fromHr, fromMin, toHr} = this.state;
-		this.setState({toMin: value});
-		this.props.onChange(false, fromHr, fromMin, toHr, value);
+	editFrom = () => {
+		this.setState({
+			showTimePicker: true,
+			editingValue: 'from',
+		});
 	}
 
 	render(): Object {
@@ -146,7 +184,15 @@ class TimePicker extends View<Props, State> {
 		} = this.props;
 
 		const {
+			showTimePicker,
+			timeFrom,
+			timeTo,
+			editingValue,
+		} = this.state;
+
+		const {
 			formatMessage,
+			formatTime,
 		} = intl;
 
 		const styles = getStyles(appLayout);
@@ -166,66 +212,38 @@ class TimePicker extends View<Props, State> {
 						(
 
 							<View style={styles.body}>
-								<Text style={styles.sectionLabel}>
-									{`${formatMessage(i18n.activeFrom)}:`}
-								</Text>
-								<View
-									style={styles.pickers}
-								>
-									<Picker
-										selectedValue={this.state.fromHr}
-										onValueChange={this.onChangeFromHr}
-										style={styles.picker}
-									>
-										{
-											this.hrs.map((hr: number, index: number): Object => (
-												<Picker.Item label={`${hr}`} value={hr} key={`fromHr-${hr}`} />
-											))
-										}
-									</Picker>
-									<Picker
-										selectedValue={this.state.fromMin}
-										onValueChange={this.onChangeFromMin}
-										style={styles.picker}
-									>
-										{
-											this.mins.map((min: number, index: number): Object => (
-												<Picker.Item label={`${min}`} value={min} key={`fromMin-${min}`} />
-											))
-										}
-									</Picker>
-								</View>
-								<Text style={styles.sectionLabel}>
-									{`${formatMessage(i18n.activeTo)}:`}
-								</Text>
-								<View
-									style={styles.pickers}
-								>
-									<Picker
-										selectedValue={this.state.toHr}
-										onValueChange={this.onChangeToHr}
-										style={styles.picker}
-									>
-										{
-											this.hrs.map((hr: number, index: number): Object => (
-												<Picker.Item label={`${hr}`} value={hr} key={`toHr-${hr}`} />
-											))
-										}
-									</Picker>
-									<Picker
-										selectedValue={this.state.toMin}
-										onValueChange={this.onChangeToMin}
-										style={styles.picker}
-									>
-										{
-											this.mins.map((min: number, index: number): Object => (
-												<Picker.Item label={`${min}`} value={min} key={`toMin-${min}`} />
-											))
-										}
-									</Picker>
-								</View>
+								<SettingsRow
+									label={`${formatMessage(i18n.activeFrom)}:`}
+									value={formatTime(timeFrom)}
+									iconValueRight={'edit'}
+									onPress={this.editFrom}
+									appLayout={appLayout}
+									intl={intl}
+									type={'text'}
+									labelTextStyle={styles.labelTextStyle}
+									touchableStyle={styles.touchableStyle}
+									style={styles.contentCoverStyle}/>
+								<SettingsRow
+									label={`${formatMessage(i18n.activeTo)}:`}
+									value={formatTime(timeTo)}
+									iconValueRight={'edit'}
+									onPress={this.editTo}
+									appLayout={appLayout}
+									intl={intl}
+									type={'text'}
+									labelTextStyle={styles.labelTextStyle}
+									touchableStyle={styles.touchableStyle}
+									style={styles.contentCoverStyle}/>
 							</View>
 						)
+				}
+				{
+					showTimePicker && (
+						<DateTimePicker
+							mode="time"
+							value={editingValue === 'from' ? timeTo : timeFrom}
+							onChange={this._onDateChange}/>
+					)
 				}
 			</View>
 		);
@@ -266,19 +284,17 @@ const getStyles = (appLayout: Object): Object => {
 		body: {
 			padding: padding * 1.5,
 		},
-		sectionLabel: {
-			marginTop: padding,
+		labelTextStyle: {
 			fontSize,
-			color: '#999',
-		},
-		pickers: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			marginTop: padding,
-		},
-		picker: {
-			flex: 1,
 			color: '#000',
+			justifyContent: 'center',
+		},
+		touchableStyle: {
+			height: fontSize * 3.1,
+		},
+		contentCoverStyle: {
+			marginBottom: padding / 2,
+			marginTop: 0,
 		},
 	};
 };

@@ -24,6 +24,7 @@
 import React, {
 	useEffect,
 	useState,
+	useCallback,
 } from 'react';
 import {
 	StyleSheet,
@@ -42,11 +43,15 @@ import {
 } from '../../../BaseComponents';
 import {
 	MapOverlay,
+	MyLocation,
 } from './SubViews';
 
 import {
 	setFenceArea,
 } from '../../Actions/Fences';
+import {
+	getCurrentLocation,
+} from '../../Actions/GeoFence';
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
 import i18n from '../../Translations/common';
@@ -55,6 +60,7 @@ type Props = {
 	navigation: Object,
 	appLayout: Object,
 	onDidMount: (string, string, ?string) => void,
+	route: Object,
 };
 
 const SelectArea = React.memo<Object>((props: Props): Object => {
@@ -62,7 +68,12 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		navigation,
 		appLayout,
 		onDidMount,
+		route,
 	} = props;
+
+	const {
+		params = {},
+	} = route;
 
 	const dispatch = useDispatch();
 
@@ -71,23 +82,24 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		formatMessage,
 	} = intl;
 
+	const fallbackLocation = {
+		latitude: 55.70584,
+		longitude: 13.19321,
+		latitudeDelta: 0.1,
+		longitudeDelta: 0.1,
+	};
+
 	const { userId } = useSelector((state: Object): Object => state.user);
 	let { location } = useSelector((state: Object): Object => state.fences);
-	location = location ? location : {};
-
-	const {
-		latitude = 55.70584,
-		longitude = 13.19321,
-		latitudeDelta = 0.1,
-		longitudeDelta = 0.1,
-	} = location;
-	const region = {
-		latitude,
-		longitude,
-		latitudeDelta,
-		longitudeDelta,
+	location = {
+		...fallbackLocation,
+		...location,
 	};
+
+	const region = params.region || location;
+
 	const [initialRegion, setInitialRegion] = useState(region);
+	const [ regionToReset, setRegionToReset ] = useState();
 
 	useEffect(() => {
 		onDidMount(`1. ${formatMessage(i18n.area)}`, formatMessage(i18n.selectArea));
@@ -100,8 +112,7 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 			longitude: long,
 		} = initialRegion;
 		dispatch(setFenceArea(lat, long, GeoFenceUtils.getRadiusFromRegion(initialRegion), userId));
-
-		navigation.navigate('ArrivingActions');
+		navigation.navigate('SetAreaName');
 	}
 
 	const {
@@ -110,9 +121,28 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 		contentContainerStyle,
 	} = getStyles(appLayout);
 
-	function onRegionChangeComplete(reg: Object) {
+	const onRegionChangeComplete = useCallback((reg: Object) => {
 		setInitialRegion(reg);
-	}
+	}, []);
+
+	const onPressFocusMyLocation = useCallback(() => {
+		(async () => {
+			dispatch(getCurrentLocation());
+			const loc = {
+				...location,
+				latitudeDelta: initialRegion.latitudeDelta,
+				longitudeDelta: initialRegion.longitudeDelta,
+			};
+			setInitialRegion(loc);
+			setRegionToReset(loc);
+		})();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [location, initialRegion]);
+	useEffect(() => {
+		if (regionToReset) {
+			setRegionToReset();
+		}
+	}, [regionToReset]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -121,10 +151,17 @@ const SelectArea = React.memo<Object>((props: Props): Object => {
 				contentContainerStyle={contentContainerStyle}>
 				<MapView.Animated
 					style={mapStyle}
+					loadingEnabled={true}
+					showsTraffic={false}
+					showsUserLocation={true}
 					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}/>
+					region={regionToReset ? new MapView.AnimatedRegion(regionToReset) : undefined}
+					onRegionChangeComplete={onRegionChangeComplete}
+					showsMyLocationButton={false}/>
 				<MapOverlay/>
 			</ScrollView>
+			<MyLocation
+				onPress={onPressFocusMyLocation}/>
 			<FloatingButton
 				onPress={onPressNext}
 				imageSource={{uri: 'right_arrow_key'}}/>

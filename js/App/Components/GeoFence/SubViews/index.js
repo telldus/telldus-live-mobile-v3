@@ -21,7 +21,7 @@
 
 'use strict';
 
-import FenceCallout from './FenceCallout';
+import FenceCalloutWithMarker from './FenceCalloutWithMarker';
 import MapOverlay from './MapOverlay';
 import ActionSectionHeader from './ActionSectionHeader';
 import DeviceRow from './DeviceRow';
@@ -29,9 +29,11 @@ import JobRow from './JobRow';
 import EventRow from './EventRow';
 import TimePicker from './TimePicker';
 import RowWithAngle from './RowWithAngle';
+import CurrentPositionMarker from './CurrentPositionMarker';
+import MyLocation from './MyLocation';
 
 module.exports = {
-	FenceCallout,
+	FenceCalloutWithMarker,
 	MapOverlay,
 	ActionSectionHeader,
 	DeviceRow,
@@ -39,4 +41,6 @@ module.exports = {
 	EventRow,
 	TimePicker,
 	RowWithAngle,
+	CurrentPositionMarker,
+	MyLocation,
 };

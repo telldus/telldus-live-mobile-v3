@@ -106,8 +106,11 @@ public class NewSensorWidget extends AppWidgetProvider {
             return;
         }
 
+        Boolean isNearly1By1 = CommonUtilities.isNearly1By1(context, appWidgetManager, appWidgetId);
+
         int iconWidth = CommonUtilities.getBaseIconWidth(context, appWidgetManager, appWidgetId);
         int fontSize = CommonUtilities.getBaseFontSize(context, appWidgetManager, appWidgetId);
+        fontSize = isNearly1By1 ? (int) (fontSize * 1.8) : fontSize;
         int fontSizeOne = (int) (fontSize * 1.2);
         int fontSizeTwo = (int) (fontSize * 0.88);
         int fontSizeFour = (int) (fontSize * 0.9);
@@ -189,7 +192,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         String formattedDate = dMWY.format(date);
         String formattedTime = DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
 
-        String formattedDT = formattedDate + " " + formattedTime;
+        String formattedDT = isNearly1By1 ? formattedTime : formattedDate + " " + formattedTime;
 
         transparent = transparent == null ? "" : transparent;
         int color = ContextCompat.getColor(context, R.color.white);
@@ -251,13 +254,19 @@ public class NewSensorWidget extends AppWidgetProvider {
 
         view.setOnClickPendingIntent(R.id.linear_background, getPendingSelf(context, ACTION_SENSOR_UPDATE, appWidgetId));
 
-        view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
-                sensorIcon,
-                color,
-                (int) (iconWidth * 0.8),
-                (int) (iconWidth * 0.8),
-                (int) (iconWidth * 0.8),
-                context));
+        if (isNearly1By1) {
+            view.setViewVisibility(R.id.iconSensor, View.GONE);
+        } else {
+            view.setViewVisibility(R.id.iconSensor, View.VISIBLE);
+            view.setImageViewBitmap(R.id.iconSensor, CommonUtilities.buildTelldusIcon(
+                    sensorIcon,
+                    color,
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
+                    (int) (iconWidth * 0.8),
+                    context));
+        }
+
         view.setTextColor(R.id.txtSensorType, colorTitle);
         view.setTextColor(R.id.txtHistoryInfo, color);
         view.setTextColor(R.id.txtSensorValue, color);
@@ -271,7 +280,7 @@ public class NewSensorWidget extends AppWidgetProvider {
         view.setTextViewTextSize(R.id.txtSensorValue, COMPLEX_UNIT_SP, fontSizeOne);
         view.setTextViewTextSize(R.id.txtSensorUnit, COMPLEX_UNIT_SP, fontSizeTwo);
         view.setTextViewTextSize(R.id.txtHistoryInfo, COMPLEX_UNIT_SP, fontSizeFive);
-        view.setTextViewTextSize(R.id.txtSensorType, COMPLEX_UNIT_SP, fontSizeFour);
+        view.setTextViewTextSize(R.id.txtSensorType, COMPLEX_UNIT_SP, 14);
 
         long currentTime = new Date().getTime();
         long timeAgo = currentTime - time;
@@ -505,7 +514,15 @@ public class NewSensorWidget extends AppWidgetProvider {
     }
 
     public static String formatValue(CharSequence sensorValue) {
+        if (sensorValue == null || sensorValue == "") {
+            return "";
+        }
+
         String value = String.valueOf(sensorValue);
+
+        if (value == null || value.trim().isEmpty()) {
+            return "";
+        }
 
         List<String> list = Arrays.asList(SensorsUtilities.WIND_DIR);
         if (list.contains(value)) { // Check for wind direction values

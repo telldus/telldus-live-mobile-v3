@@ -30,6 +30,7 @@ import {
 	View,
 	Text,
 } from '../../../../BaseComponents';
+
 import Theme from '../../../Theme';
 
 import i18n from '../../../Translations/common';
@@ -51,14 +52,21 @@ const ContactSupportBlock = (props: Object): Object => {
 
 	return (
 		<View>
-			<Text style={labelStyle}>
+			<Text
+				style={labelStyle}
+				level={2}>
 				{formatMessage(i18n.labelContactSupport)}
 			</Text>
-			<View style={coverOneStyle}>
-				<Text style={titleStyle}>
+			<View
+				level={2}
+				style={coverOneStyle}>
+				<Text
+					style={titleStyle}>
 					{formatMessage(i18n.titleContactSupportBlock)}
 				</Text>
-				<Text style={bodyStyle}>
+				<Text
+					style={bodyStyle}
+					level={4}>
 					{formatMessage(i18n.contentContactSupportBlock)}
 				</Text>
 			</View>
@@ -73,11 +81,9 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	const {
-		subHeader,
 		paddingFactor,
 		shadow,
 		brandSecondary,
-		rowTextColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -85,7 +91,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		padding,
 		coverOneStyle: {
-			backgroundColor: '#fff',
 			...shadow,
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -94,7 +99,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginTop: padding / 2,
 		},
 		labelStyle: {
-			color: subHeader,
 			fontSize: Math.floor(deviceWidth * 0.045),
 			marginTop: padding * 1.5,
 		},
@@ -106,7 +110,6 @@ const getStyles = (appLayout: Object): Object => {
 		bodyStyle: {
 			fontSize,
 			textAlign: 'center',
-			color: rowTextColor,
 			marginTop: 10,
 		},
 	};

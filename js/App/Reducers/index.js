@@ -34,6 +34,7 @@ import Modal from './Modal';
 import sensorsList from './SensorsList';
 import jobsList from './Jobs';
 import fences from './Fences';
+import geoFence from './GeoFence';
 import { reducers } from 'live-shared-data';
 
 const config = {
@@ -52,4 +53,5 @@ module.exports = persistCombineReducers(config, {
 	...reducers,
 	jobsList,
 	fences,
+	geoFence,
 });

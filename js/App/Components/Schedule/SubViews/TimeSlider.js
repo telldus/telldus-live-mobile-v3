@@ -31,7 +31,12 @@ import Description from './Description';
 import TimeField from './TimeField';
 import { TouchableOpacity } from 'react-native';
 
-type Props = {
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../../HOC/withTheme';
+
+type Props = PropsThemedComponent & {
 	description: string,
 	icon: string,
 	minimumValue: number,
@@ -50,7 +55,7 @@ type State = {
 	isEditing: boolean,
 };
 
-export default class TimeSlider extends View<null, Props, State> {
+class TimeSlider extends View<null, Props, State> {
 
 	static propTypes = {
 		description: PropTypes.string.isRequired,
@@ -202,6 +207,9 @@ export default class TimeSlider extends View<null, Props, State> {
 	}
 
 	_getStyle = (appLayout: Object): Object => {
+		const {
+			colors,
+		} = this.props;
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -228,6 +236,7 @@ export default class TimeSlider extends View<null, Props, State> {
 			},
 			description: {
 				fontSize: deviceWidth * 0.032,
+				color: colors.textFive,
 			},
 			slider: {
 				track: {
@@ -255,3 +264,5 @@ export default class TimeSlider extends View<null, Props, State> {
 	};
 
 }
+
+export default withTheme(TimeSlider);

@@ -39,6 +39,7 @@ import {
 	View,
 	Text,
 	TouchableButton,
+	EmptyView,
 } from '../../../BaseComponents';
 
 import {
@@ -49,11 +50,18 @@ import {
 
 import {
 	setFenceActiveTime,
-	deleteFence,
-	updateFence,
-	setFenceArea,
 	setFenceTitle,
+	setEditFence,
 } from '../../Actions/Fences';
+import {
+	removeGeofence,
+	addGeofence,
+	ERROR_CODE_FENCE_NO_ACTION,
+} from '../../Actions/GeoFence';
+
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
 
 import GeoFenceUtils from '../../Lib/GeoFenceUtils';
 
@@ -73,13 +81,14 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		onDidMount,
 	} = props;
 
-	let { fence } = useSelector((state: Object): Object => state.fences);
+	let { fence = {} } = useSelector((state: Object): Object => state.fences);
 
 	const {
 		latitude,
 		longitude,
 		radius,
 		title,
+		identifier,
 	} = fence;
 
 	const intl = useIntl();
@@ -106,7 +115,7 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		buttonStyle,
 		labelStyle,
 		textFieldStyle,
-		rightItemStyle,
+		overlayWidth,
 	} = getStyles(appLayout);
 
 	const lngDelta = GeoFenceUtils.getLngDeltaFromRadius(latitude, longitude, radius);
@@ -116,10 +125,9 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		latitudeDelta: lngDelta / 2,
 		longitudeDelta: lngDelta,
 	};
-	const [initialRegion, setInitialRegion] = useState(region);
 
-	function onRegionChangeComplete(reg: Object) {
-		setInitialRegion(reg);
+	function onPress(reg: Object) {
+		navigation.navigate('EditGeoFenceAreaFull');
 	}
 
 	const [ timeInfo, setTimeInfo ] = useState({
@@ -141,27 +149,33 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 	const [ areaName, setAreaName ] = useState(fence.title);
 	const [ editName, setEditName ] = useState(false);
 
-	const { userId } = useSelector((state: Object): Object => state.user);
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	function onSave() {
 		dispatch(setFenceActiveTime(aA, fH, fM, tH, tM));
-		const {
-			latitude: lat,
-			longitude: long,
-		} = initialRegion;
-		dispatch(setFenceArea(
-			lat,
-			long,
-			GeoFenceUtils.getRadiusFromRegion(initialRegion),
-			userId,
-		));
 		dispatch(setFenceTitle(areaName));
-		dispatch(updateFence());
-		navigation.goBack();
+		dispatch(addGeofence(true)).then(() => {
+			navigation.goBack();
+		}).catch((err: Object = {}) => {
+			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
+			if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
+				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
+			}
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: message,
+				showPositive: true,
+			});
+		});
 	}
 
 	function onDelete() {
-		dispatch(deleteFence());
+		dispatch(removeGeofence(identifier));
+		dispatch(setEditFence({}));
 		navigation.goBack();
 	}
 
@@ -205,13 +219,20 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		setAreaName(value);
 	}
 
+	if (typeof fence.latitude === 'undefined') {
+		return <EmptyView/>;
+	}
+
 	return (
 		<ScrollView
 			style={container}
 			contentContainerStyle={contentContainerStyle}>
 			<View style={rowContainer}>
 
-				<View style={rowStyle}>
+				<TouchableOpacity
+					onPress={onEditName}
+					disabled={editName}
+					style={rowStyle}>
 					<Text style={leftItemStyle}>
 						{formatMessage(i18n.name)}
 					</Text>
@@ -226,13 +247,11 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 							returnKeyType={'done'}
 						/>
 						:
-						<TouchableOpacity onPress={onEditName} style={rightItemStyle}>
-							<Text style={rightTextItemStyle}>
-								{areaName}
-							</Text>
-						</TouchableOpacity>
+						<Text style={rightTextItemStyle}>
+							{areaName}
+						</Text>
 					}
-				</View>
+				</TouchableOpacity>
 				<RowWithAngle
 					labelText={formatMessage(i18n.arrivingActions)}
 					onPress={onEditArriving}/>
@@ -256,17 +275,22 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 			<View style={mapCover}>
 				<MapView.Animated
 					style={mapStyle}
-					initialRegion={new MapView.AnimatedRegion(initialRegion)}
-					onRegionChangeComplete={onRegionChangeComplete}/>
-				<MapOverlay/>
+					scrollEnabled={false}
+					initialRegion={new MapView.AnimatedRegion(region)}
+					region={new MapView.AnimatedRegion(region)}
+					onPress={onPress}
+					loadingEnabled={true}
+					showsTraffic={false}
+					showsUserLocation={true}/>
+				<MapOverlay
+					overlayWidth={overlayWidth}/>
 			</View>
 			<TouchableButton
 				text={i18n.confirmAndSave}
 				style={buttonStyle}
 				labelStyle={labelStyle}
 				onPress={onSave}
-				accessible={true}
-			/>
+				accessible={true}/>
 			<TouchableButton
 				text={i18n.delete}
 				style={[buttonStyle, {
@@ -299,6 +323,7 @@ const getStyles = (appLayout: Object): Object => {
 	const fontSizeButtonLabel = deviceWidth * 0.033;
 
 	return {
+		overlayWidth: deviceWidth - (2 * padding),
 		container: {
 			flex: 1,
 		},
@@ -312,6 +337,9 @@ const getStyles = (appLayout: Object): Object => {
 			marginBottom: padding,
 			height: deviceWidth * 1.2,
 			width: deviceWidth - (2 * padding),
+			overflow: 'hidden',
+			alignItems: 'center',
+			justifyContent: 'center',
 		},
 		mapStyle: {
 			borderRadius: 5,
@@ -346,13 +374,10 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize: fontSizeButtonLabel,
 		},
 		textFieldStyle: {
+			flex: 1,
 			color: eulaContentColor,
 			fontSize,
 			textAlign: 'right',
-		},
-		rightItemStyle: {
-			alignItems: 'flex-end',
-			justifyContent: 'center',
 		},
 	};
 };

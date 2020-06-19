@@ -209,7 +209,6 @@ class SensorsTab extends View {
 		const { hiddenList, visibleList } = rowsAndSections;
 
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
-
 		this.setState({
 			showHiddenList: !this.state.showHiddenList,
 		}, () => {
@@ -293,7 +292,9 @@ class SensorsTab extends View {
 	toggleHiddenListButton(): Object {
 		const { screenProps, currentScreen } = this.props;
 		const accessible = currentScreen === 'Sensors';
-		const style = this.getStyles(screenProps.appLayout);
+		const style = this.getStyles({
+			appLayout: screenProps.appLayout,
+		});
 
 		const { showHiddenList } = this.state;
 		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
@@ -306,9 +307,15 @@ class SensorsTab extends View {
 				accessible={accessible}
 				accessibilityLabel={accessibilityLabel}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
+				<IconTelldus
+					level={2}
+					icon="hidden"
+					style={style.toggleHiddenListIcon}
 					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={false}>
+				<Text
+					level={2}
+					style={style.toggleHiddenListText}
+					accessible={false}>
 					{showHiddenList ?
 						this.hideHidden
 						:
@@ -321,12 +328,18 @@ class SensorsTab extends View {
 
 	noSensorsMessage(style: Object): Object {
 		return (
-			<View style={style.noItemsContainer}>
+			<View
+				level={3}
+				style={style.noItemsContainer}>
 				<IconTelldus icon={'sensor'} style={style.sensorIconStyle}/>
-				<Text style={style.noItemsTitle}>
+				<Text
+					level={4}
+					style={style.noItemsTitle}>
 					{this.noSensorsTitle}
 				</Text>
-				<Text style={style.noItemsContent}>
+				<Text
+					level={4}
+					style={style.noItemsContent}>
 					{'\n'}
 					{this.noSensorsContent}
 				</Text>
@@ -365,7 +378,9 @@ class SensorsTab extends View {
 			propsSwipeRow,
 		} = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
 			return <NoGateways
@@ -391,7 +406,9 @@ class SensorsTab extends View {
 		};
 
 		return (
-			<View style={style.container}>
+			<View
+				level={3}
+				style={style.container}>
 				<SectionList
 					sections={listData}
 					renderItem={this.renderRow}
@@ -533,7 +550,7 @@ class SensorsTab extends View {
 			newSensors,
 		} = route.params || {};
 		if (newSensors) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			navigation.setParams({
 				newSensors: undefined,
 			});
@@ -549,7 +566,9 @@ class SensorsTab extends View {
 		});
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -568,7 +587,6 @@ class SensorsTab extends View {
 			container: {
 				flex: 1,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: Theme.Core.appBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -580,13 +598,11 @@ class SensorsTab extends View {
 			toggleHiddenListIcon: {
 				marginTop: 4,
 				fontSize: hiddenListIconFontSize,
-				color: Theme.Core.rowTextColor,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
 				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
-				color: Theme.Core.rowTextColor,
 			},
 			dialogueHeaderStyle: {
 				paddingVertical: 10,
@@ -612,17 +628,14 @@ class SensorsTab extends View {
 				paddingHorizontal: 30,
 				paddingTop: 10,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-				backgroundColor: Theme.Core.appBackground,
 			},
 			noItemsTitle: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: Math.floor(deviceWidth * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: Math.floor(deviceWidth * 0.04),
 			},
 			sensorIconStyle: {
@@ -666,4 +679,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
+export default connect(mapStateToProps, mapDispatchToProps)(SensorsTab);
+

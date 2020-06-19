@@ -1,0 +1,2 @@
+- Add possibility to change Widget text size
+

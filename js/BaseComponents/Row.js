@@ -24,10 +24,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-	TouchableOpacity,
 	Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
+
+import TouchableOpacity from './TouchableOpacity';
 import View from './View';
 import Theme from '../App/Theme';
 
@@ -83,6 +84,7 @@ class Row extends Component<Props, null> {
 
 		return (
 			<TouchableOpacity
+				level={2}
 				accessible={accessible}
 				onPress={this.onPress}
 				style={[defaultStyle.container, containerStyle]}
@@ -104,12 +106,10 @@ class Row extends Component<Props, null> {
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
 
-		const backgroundColor = '#fff';
 		const padding = deviceWidth * Theme.Core.paddingFactor;
 
 		return {
 			container: {
-				backgroundColor,
 				flexDirection: 'row',
 				marginVertical: padding / 4,
 				height: deviceWidth * 0.209333333,
@@ -117,7 +117,6 @@ class Row extends Component<Props, null> {
 				borderRadius: borderRadiusRow,
 			},
 			wrapper: {
-				backgroundColor,
 				flex: 1,
 				flexDirection: layout,
 				alignItems: layout === 'row' ? 'center' : 'flex-start',

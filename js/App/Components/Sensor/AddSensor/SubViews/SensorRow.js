@@ -137,13 +137,20 @@ const SensorRow = (props: Object): Object => {
 
 	return (
 		<TouchableOpacity onPress={onPress}>
-			<View style={cover}>
+			<View
+				level={2}
+				style={cover}>
 				<View style={iconAndBlockStyle}>
-					<IconTelldus icon={'sensor'} style={iconStyle}/>
+					<IconTelldus
+						level={5}
+						icon={'sensor'}
+						style={iconStyle}/>
 					<View style={[blockOneStyle, {
 						alignItems: 'flex-start',
 					}]}>
-						<Text style={textOneStyle}>
+						<Text
+							level={6}
+							style={textOneStyle}>
 							{textOne.toUpperCase()}
 						</Text>
 						<LastUpdatedInfo
@@ -151,9 +158,9 @@ const SensorRow = (props: Object): Object => {
 							numeric="auto"
 							updateIntervalInSeconds={60}
 							timestamp={lastUpdated}
+							level={minutesAgo < 1440 ? 6 : 8}
 							textStyle={[
 								textTwoStyle, {
-									color: minutesAgo < 1440 ? Theme.Core.rowTextColor : '#990000',
 									opacity: minutesAgo < 1440 ? 1 : 0.5,
 								},
 							]} />
@@ -180,11 +187,9 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 	const {
 		shadow,
 		paddingFactor,
-		rowTextColor,
 		brandPrimary,
 		buttonWidth,
 		rowHeight,
-		eulaContentColor,
 		maxSizeRowTextOne,
 	} = Theme.Core;
 
@@ -200,7 +205,6 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 	return {
 		cover: {
 			flexDirection: 'row',
-			backgroundColor: '#fff',
 			...shadow,
 			marginHorizontal: padding,
 			marginBottom: padding / 2,
@@ -215,7 +219,6 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 			padding,
 		},
 		iconStyle: {
-			color: eulaContentColor,
 			fontSize: nameFontSize * 1.8,
 		},
 		blockOneStyle: {
@@ -225,11 +228,9 @@ const getStyles = (appLayout: Object, data: Object = {}): Object => {
 			marginLeft: padding,
 		},
 		textOneStyle: {
-			color: rowTextColor,
 			fontSize: nameFontSize,
 		},
 		textTwoStyle: {
-			color: rowTextColor,
 			fontSize: nameFontSize * 0.9,
 			marginTop: 4,
 		},

@@ -34,7 +34,6 @@ import Swiper from 'react-native-swiper';
 import {
 	FullPageActivityIndicator,
 	View,
-	StyleSheet,
 	Text,
 	Icon,
 } from '../../../BaseComponents';
@@ -182,10 +181,14 @@ class SchedulerTab extends View<null, Props, State> {
 				onPress={addNewLocation}/>;
 		}
 
-		const { swiperContainer } = this.getStyles(appLayout);
+		const { swiperContainer } = this.getStyles({
+			appLayout,
+		});
 
 		return (
-			<View style={swiperContainer}
+			<View
+				level={3}
+				style={swiperContainer}
 				accessible={false}
 				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
@@ -213,7 +216,9 @@ class SchedulerTab extends View<null, Props, State> {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -229,6 +234,15 @@ class SchedulerTab extends View<null, Props, State> {
 		const iconSize = deviceWidth * 0.05;
 
 		return {
+			container: {
+				flex: 1,
+			},
+			containerWhenNoData: {
+				flexDirection: 'row',
+				justifyContent: 'center',
+				alignItems: 'center',
+				marginTop: 20,
+			},
 			line: {
 				backgroundColor: '#929292',
 				height: '100%',
@@ -274,18 +288,31 @@ class SchedulerTab extends View<null, Props, State> {
 
 			let isEmpty = !schedules || schedules.length === 0;
 
-			const { line, textWhenNoData, iconSize } = this.getStyles(appLayout);
+			const {
+				line,
+				textWhenNoData,
+				iconSize,
+				container,
+				containerWhenNoData,
+			} = this.getStyles({
+				appLayout,
+			});
 			daysToRender.push(
-				<View style={styles.container} key={key}>
+				<View
+					level={3}
+					style={container}
+					key={key}>
 					{isEmpty ?
-						<View style={styles.containerWhenNoData}>
+						<View style={containerWhenNoData}>
 							<Icon name="exclamation-circle" size={iconSize} color="#F06F0C" />
 							<Text style={textWhenNoData}>
 								{this.noScheduleMessage}
 							</Text>
 						</View>
 						:
-						<View style={styles.container}>
+						<View
+							level={3}
+							style={container}>
 							<View style={line}/>
 							<FlatList
 								data={schedules}
@@ -297,6 +324,7 @@ class SchedulerTab extends View<null, Props, State> {
 								// if there is any expired schedule)
 								extraData={{
 									todayIndex,
+									appLayout,
 								}}
 							/>
 						</View>
@@ -322,7 +350,7 @@ class SchedulerTab extends View<null, Props, State> {
 
 	_renderRow = (props: Object): React$Element<JobRow> => {
 		// Trying to identify if&where the 'Now' row has to be inserted.
-		const { rowsAndSections, screenProps } = this.props;
+		const { rowsAndSections, screenProps, currentScreen } = this.props;
 		const { todayIndex } = this.state;
 		const { item } = props;
 		const expiredJobs = rowsAndSections[7] ? rowsAndSections[7] : [];
@@ -337,6 +365,7 @@ class SchedulerTab extends View<null, Props, State> {
 				editJob={this.editJob}
 				isFirst={props.index === 0}
 				gatewayTimezone={item.gatewayTimezone}
+				currentScreen={currentScreen}
 				{...screenProps}/>
 		);
 	};
@@ -355,19 +384,6 @@ const getRowsAndSections = createSelector(
 		return sections;
 	},
 );
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: Theme.Core.appBackground,
-	},
-	containerWhenNoData: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginTop: 20,
-	},
-});
 
 type MapStateToPropsType = {
 	rowsAndSections: Object[],
@@ -394,4 +410,5 @@ const mapDispatchToProps = (dispatch: Function): { dispatch: Function } => {
 	};
 };
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+export default connect(mapStateToProps, mapDispatchToProps)(SchedulerTab);
+

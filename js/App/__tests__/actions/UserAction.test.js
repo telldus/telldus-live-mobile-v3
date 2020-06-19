@@ -12,7 +12,7 @@ describe('Test User actions', ()=>{
 	let token = 'token';
 
 	beforeEach(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		axios.mockReset();
 		const data = {
@@ -28,7 +28,7 @@ describe('Test User actions', ()=>{
 	});
 
 	it('check user unregisterPushToken', () => {
-		store = configureStore();
+		store = configureStore().store;
 		const url = format({ pathname: '/user/unregisterPushToken',	query: { token }});
 		const payload = { url, requestParams: {	method: 'GET'}};
 		return store.dispatch(unregisterPushToken(token))

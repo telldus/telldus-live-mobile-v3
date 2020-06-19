@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ActivityIndicator } from 'react-native';
 
 import View from './View';
@@ -31,6 +30,7 @@ type Props = {
 	animating?: boolean,
 	color?: string,
 	size?: 'small' | 'large' | number,
+	overlayLevel?: number,
 };
 
 type DefaultProps = {
@@ -39,27 +39,21 @@ type DefaultProps = {
 
 export default class FullPageActivityIndicator extends React.Component<Props, null> {
 
-	static propTypes = {
-		animating: PropTypes.bool,
-		color: PropTypes.string,
-		size: PropTypes.oneOf(['small', 'large', PropTypes.number]),
-	};
-
 	static defaultProps: DefaultProps = {
 		size: 'large',
 	};
 
 	render(): React$Element<any> {
-		const { animating, color, size } = this.props;
+		const { animating, color, size, overlayLevel } = this.props;
 
 		return (
 			<View
+				level={overlayLevel}
 				style={{
 					flex: 1,
 					alignItems: 'center',
 					justifyContent: 'center',
-				}}
-			>
+				}}>
 				<ActivityIndicator animating={animating} color={color} size={size}/>
 			</View>
 		);

@@ -4,6 +4,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
 <View
   style={
     Object {
+      "backgroundColor": "transparent",
       "flex": 0,
     }
   }
@@ -18,11 +19,11 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "height": 64,
           "justifyContent": "center",
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "relative",
         },
         Object {
-          "height": 148.2074,
+          "height": 106.72,
         },
       ]
     }
@@ -47,7 +48,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "left": 0,
           "opacity": 1,
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "absolute",
         }
       }
@@ -75,23 +76,40 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
         
       </Text>
     </View>
-    <Image
-      source={
+    <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
         Object {
-          "uri": "telldus_logo",
+          "opacity": 1,
         }
       }
-      style={
-        Array [
+    >
+      <Image
+        source={
           Object {
-            "height": 35.00000025,
-            "resizeMode": "contain",
-            "width": 230.49999975,
-          },
-          undefined,
-        ]
-      }
-    />
+            "uri": "telldus_logo",
+          }
+        }
+        style={
+          Array [
+            Object {
+              "height": 35.00000025,
+              "resizeMode": "contain",
+              "width": 230.49999975,
+            },
+            undefined,
+          ]
+        }
+      />
+    </View>
   </View>
 </View>
 `;
@@ -100,6 +118,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
 <View
   style={
     Object {
+      "backgroundColor": "transparent",
       "flex": 0,
     }
   }
@@ -114,11 +133,11 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "height": 64,
           "justifyContent": "center",
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "relative",
         },
         Object {
-          "height": 148.2074,
+          "height": 106.72,
         },
       ]
     }
@@ -143,7 +162,7 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
           "left": 0,
           "opacity": 1,
           "paddingHorizontal": 15,
-          "paddingTop": 15,
+          "paddingTop": 0,
           "position": "absolute",
         }
       }
@@ -171,23 +190,40 @@ exports[`<NavigationHeader /> - snapshot renders NavigationHeader when showLeftI
         
       </Text>
     </View>
-    <Image
-      source={
+    <View
+      accessible={true}
+      focusable={false}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
         Object {
-          "uri": "telldus_logo",
+          "opacity": 1,
         }
       }
-      style={
-        Array [
+    >
+      <Image
+        source={
           Object {
-            "height": 35.00000025,
-            "resizeMode": "contain",
-            "width": 230.49999975,
-          },
-          undefined,
-        ]
-      }
-    />
+            "uri": "telldus_logo",
+          }
+        }
+        style={
+          Array [
+            Object {
+              "height": 35.00000025,
+              "resizeMode": "contain",
+              "width": 230.49999975,
+            },
+            undefined,
+          ]
+        }
+      />
+    </View>
   </View>
 </View>
 `;

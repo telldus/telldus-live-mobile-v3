@@ -25,7 +25,6 @@
 import React from 'react';
 import { ScrollView, Image } from 'react-native';
 import { connect } from 'react-redux';
-import ExtraDimensions from 'react-native-extra-dimensions-android';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createSelector } from 'reselect';
 const isEqual = require('react-fast-compare');
@@ -47,7 +46,6 @@ import {
 import { parseGatewaysForListView } from '../../Reducers/Gateways';
 import { getUserProfile as getUserProfileSelector } from '../../Reducers/User';
 import {
-	hasStatusBar,
 	getDrawerWidth,
 	shouldUpdate,
 	navigate,
@@ -79,7 +77,6 @@ type Props = {
 };
 
 type State = {
-	hasStatusBar: boolean,
 	iapTestImageWidth: number,
 	iapTestImageheight: number,
 };
@@ -88,13 +85,10 @@ class Drawer extends View<Props, State> {
 props: Props;
 state: State;
 
-_hasStatusBar: () => void;
-
 constructor(props: Props) {
 	super(props);
 
 	this.state = {
-		hasStatusBar: false,
 		iapTestImageWidth: 0,
 		iapTestImageheight: 0,
 	};
@@ -127,37 +121,29 @@ constructor(props: Props) {
 		},
 	];
 
-	this._hasStatusBar();
 }
 
-	_hasStatusBar = async () => {
-		const _hasStatusBar = await hasStatusBar();
-		this.setState({
-			hasStatusBar: _hasStatusBar,
-		});
-	}
+componentDidMount() {
+	this.setBannerImageDimensions();
+}
 
-	componentDidMount() {
+shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
+	return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
+		'gateways',
+		'userProfile',
+		'isOpen',
+		'appLayout',
+		'hasAPremAccount',
+		'enableGeoFenceFeature',
+		'appDrawerBanner',
+	]);
+}
+
+componentDidUpdate(prevProps: Object, prevState: Object) {
+	if (!isEqual(this.props.appDrawerBanner, prevProps.appDrawerBanner)) {
 		this.setBannerImageDimensions();
 	}
-
-	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return !isEqual(this.state, nextState) || shouldUpdate(this.props, nextProps, [
-			'gateways',
-			'userProfile',
-			'isOpen',
-			'appLayout',
-			'hasAPremAccount',
-			'enableGeoFenceFeature',
-			'appDrawerBanner',
-		]);
-	}
-
-	componentDidUpdate(prevProps: Object, prevState: Object) {
-		if (!isEqual(this.props.appDrawerBanner, prevProps.appDrawerBanner)) {
-			this.setBannerImageDimensions();
-		}
-	}
+}
 
 	onPressGeoFence = () => {
 		const {
@@ -286,10 +272,11 @@ constructor(props: Props) {
 					styles={styles}
 					textSwitchAccount={formatMessage(i18n.switchOrAddAccount)}
 					onPress={this._showSwitchAccountActionSheet}/>
-				<View style={{
-					flex: 1,
-					backgroundColor: 'white',
-				}}>
+				<View
+					level={3}
+					style={{
+						flex: 1,
+					}}>
 					<View style={styles.settingsLinkCover}>
 						<DrawerSubHeader
 							textIntl={i18n.settingsHeader}
@@ -308,7 +295,9 @@ constructor(props: Props) {
 										paddingRight: 3, // NOTE: Need extra padding to match with Telldus Icons
 									}}
 									name={'location-on'}/>
-								<Text style={styles.linkLabelStyle}>
+								<Text
+									level={5}
+									style={styles.linkLabelStyle}>
 									{formatMessage(i18n.geoFenceSettings)}
 								</Text>
 							</RippleButton>
@@ -359,7 +348,6 @@ constructor(props: Props) {
 		const {
 			paddingFactor,
 			brandSecondary,
-			eulaContentColor,
 			brandPrimary,
 		} = Theme.Core;
 
@@ -384,7 +372,7 @@ constructor(props: Props) {
 				width: drawerWidth,
 				minWidth: 250,
 				backgroundColor: brandPrimary,
-				marginTop: this.state.hasStatusBar ? ExtraDimensions.get('STATUS_BAR_HEIGHT') : 0,
+				marginTop: 0,
 				flexDirection: 'row',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -484,7 +472,6 @@ constructor(props: Props) {
 			},
 			linkLabelStyle: {
 				fontSize: fontSizeAddLocText,
-				color: eulaContentColor,
 			},
 			iapTestCoverStyle: {
 				flexDirection: 'row',

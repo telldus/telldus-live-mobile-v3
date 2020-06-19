@@ -246,13 +246,17 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 		return headerArray.map((word: string, i: number): Object => {
 			if (word.includes('%')) {
 				return (
-					<Text style={titleStyleTwo} key={`${i}`}>
+					<Text
+						level={5}
+						style={titleStyleTwo} key={`${i}`}>
 						{` ${word.replace(/%/g, '').toUpperCase()}`}
 					</Text>
 				);
 			}
 			return (
-				<Text style={titleStyleOne} key={`${i}`}>
+				<Text
+					level={5}
+					style={titleStyleOne} key={`${i}`}>
 					{word.toUpperCase()}
 				</Text>
 			);
@@ -304,7 +308,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 	})}`;
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
@@ -322,18 +328,24 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 				flexGrow: 1,
 				paddingBottom: 20,
 			}}>
-				{premAboutExpire && <View style={expireNotifCover}>
+				{premAboutExpire && <View
+					level={2}
+					style={expireNotifCover}>
 					<Text style={expireNotifHeader}>
 						{formatMessage(i18n.premExpireNofifHeader)}!
 					</Text>
-					<Text style={expireNotifContent}>
+					<Text
+						level={5}
+						style={expireNotifContent}>
 						{formatMessage(i18n.premExpireNofifContent, {
 							expDate: formatDate(moment.unix(pro)),
 						})}
 					</Text>
 				</View>
 				}
-				<View style={body} >
+				<View
+					level={2}
+					style={body} >
 					<View style={headerCover}>
 						<IconTelldus icon={'premium'} style={iconStyle}/>
 						{header}
@@ -341,7 +353,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					<Text style={pMonthTextStyle}>
 						{`${pricePerMon}/${formatMessage(i18n.month)}`}
 					</Text>
-					{cPerMonth !== newTotal && <Text style={annualChargeTextStyle}>
+					{cPerMonth !== newTotal && <Text
+						level={5}
+						style={annualChargeTextStyle}>
 						{formatMessage(i18n.billedAnnually, {
 							value: `€${formatNumber(newTotal)}`,
 						})}
@@ -349,7 +363,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					}
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 10}}>
 						<IconTelldus icon={'sms'} style={smsIconStyle}/>
-						<Text style={smsCreditTextStyle}>
+						<Text
+							level={5}
+							style={smsCreditTextStyle}>
 							{smsCreditText}
 						</Text>
 					</View>
@@ -357,7 +373,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 						{!!prevTotal && <Text style={prevChargeTextStyle}>
 							{`€${formatNumber(prevTotal)}`}
 						</Text>}
-						{cPerMonth !== newTotal && <Text style={newChargeTextStyle}>
+						{cPerMonth !== newTotal && <Text
+							level={5}
+							style={newChargeTextStyle}>
 							{`€${formatNumber(newTotal)} ${formatMessage(i18n.total)}`}
 						</Text>
 						}
@@ -365,7 +383,9 @@ const PremiumUpgradeScreen = (props: Object): Object => {
 					{!!save && <Text style={saveTextStyle}>
 						{`${formatMessage(i18n.saveLabel).toUpperCase()} ${save}%`}
 					</Text>}
-					<Text style={autoRenewInfoStyle}>
+					<Text
+						level={5}
+						style={autoRenewInfoStyle}>
 						{renewalText}
 					</Text>
 				</View>
@@ -406,7 +426,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		shadow,
 		paddingFactor,
 		brandSecondary,
-		eulaContentColor,
 	} = Theme.Core;
 	const padding = deviceWidth * paddingFactor;
 
@@ -419,13 +438,11 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		footerHeight,
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			marginHorizontal: padding,
 			marginTop: premAboutExpire ? padding / 2 : padding * 2,
@@ -440,12 +457,10 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		titleStyleOne: {
 			fontSize: fontSize * 1.2,
-			color: eulaContentColor,
 			marginLeft: 5,
 		},
 		titleStyleTwo: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			fontWeight: 'bold',
 		},
 		iconStyle: {
@@ -461,12 +476,10 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		annualChargeTextStyle: {
 			fontSize: fontSize * 1.3,
-			color: eulaContentColor,
 			textAlign: 'center',
 		},
 		smsCreditTextStyle: {
 			fontSize: fontSize * 0.9,
-			color: eulaContentColor,
 			textAlign: 'center',
 		},
 		prevChargeTextStyle: {
@@ -479,7 +492,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		newChargeTextStyle: {
 			fontSize: fontSize * 1.2,
-			color: eulaContentColor,
 			textAlign: 'center',
 			marginLeft: 5,
 		},
@@ -495,7 +507,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		autoRenewInfoStyle: {
 			fontSize: fontSize * 0.8,
-			color: eulaContentColor,
 			marginTop: 10,
 			textAlign: 'center',
 		},
@@ -518,7 +529,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 			marginTop: padding,
 		},
 		expireNotifCover: {
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'center',
@@ -534,7 +544,6 @@ const getStyles = (appLayout: Object, premAboutExpire: boolean): Object => {
 		},
 		expireNotifContent: {
 			fontSize: fontSize * 1.1,
-			color: eulaContentColor,
 			marginTop: 5,
 			textAlign: 'center',
 		},

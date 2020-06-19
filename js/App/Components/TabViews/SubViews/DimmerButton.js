@@ -73,6 +73,7 @@ type Props = {
 	onPressDimButton: (device: Object) => void,
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 type DefaultProps = {
@@ -80,6 +81,7 @@ type DefaultProps = {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
+	disableActionIndicator: boolean,
 };
 
 class DimmerButton extends View<Props, null> {
@@ -100,6 +102,7 @@ class DimmerButton extends View<Props, null> {
 		commandON: 1,
 		commandOFF: 2,
 		commandDIM: 16,
+		disableActionIndicator: false,
 	};
 
 	constructor(props: Props) {
@@ -133,7 +136,13 @@ class DimmerButton extends View<Props, null> {
 			return true;
 		}
 
-		const propsChange = shouldUpdate(others, othersN, ['device', 'showSlider', 'screenReaderEnabled', 'sensitive']);
+		const propsChange = shouldUpdate(others, othersN, [
+			'device',
+			'showSlider',
+			'screenReaderEnabled',
+			'sensitive',
+			'onPressOverride',
+		]);
 		if (propsChange) {
 			return true;
 		}
@@ -276,6 +285,7 @@ class DimmerButton extends View<Props, null> {
 			isOpen,
 			closeSwipeRow,
 			sensitive,
+			disableActionIndicator,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -309,6 +319,7 @@ class DimmerButton extends View<Props, null> {
 			local,
 			name: deviceName,
 			enabled: false,
+			disableActionIndicator,
 		};
 
 		const onButton = (

@@ -25,9 +25,6 @@ import React, {
 	memo,
 } from 'react';
 import {
-	ScrollView,
-} from 'react-native';
-import {
 	useSelector,
 } from 'react-redux';
 
@@ -35,6 +32,7 @@ import {
 	Text,
 	TouchableButton,
 	IconTelldus,
+	ThemedScrollView,
 } from '../../../../../BaseComponents';
 
 import Theme from '../../../../Theme';
@@ -70,18 +68,22 @@ const EmptyTabTemplate = (props: Props): Object => {
 	} = getStyles(layout);
 
 	return (
-		<ScrollView
+		<ThemedScrollView
+			level={3}
 			contentContainerStyle={containerStyle}
 			style={{
 				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
 			}}>
 			{!!icon && <IconTelldus icon={icon} style={iconStyle}/>}
-			{!!headerText && <Text style={headerStyle}>
+			{!!headerText && <Text
+				level={4}
+				style={headerStyle}>
 				{headerText}
 			</Text>
 			}
-			{!!bodyText && <Text style={bodyStyle}>
+			{!!bodyText && <Text
+				level={5}
+				style={bodyStyle}>
 				{bodyText}
 			</Text>
 			}
@@ -93,7 +95,7 @@ const EmptyTabTemplate = (props: Props): Object => {
 				disabled={!onPress}
 				showThrobber={isLoading}/>
 			}
-		</ScrollView>
+		</ThemedScrollView>
 	);
 };
 
@@ -105,8 +107,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	const {
 		paddingFactor,
-		eulaContentColor,
-		textDark,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -120,17 +120,14 @@ const getStyles = (appLayout: Object): Object => {
 			alignItems: 'center',
 			justifyContent: 'center',
 			padding: padding * 2,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		headerStyle: {
 			fontSize: fontSizeH,
-			color: textDark,
 			textAlign: 'center',
 			fontWeight: '500',
 		},
 		bodyStyle: {
 			fontSize: fontSizeB,
-			color: eulaContentColor,
 			marginVertical: 15,
 			textAlign: 'center',
 		},

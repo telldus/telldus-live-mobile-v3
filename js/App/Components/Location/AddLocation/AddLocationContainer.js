@@ -137,9 +137,11 @@ class AddLocationContainer extends View<null, Props, State> {
 			|| currentScreen === 'TimeZoneContinent' ? 0 : (deviceWidth * Theme.Core.paddingFactor);
 
 		return (
-			<View style={{
-				flex: 1,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={{flex: 1}}
@@ -155,7 +157,6 @@ class AddLocationContainer extends View<null, Props, State> {
 						leftIcon={currentScreen === 'LocationDetected' ? 'close' : undefined}/>
 					<ScrollView style={{
 						flex: 1,
-						backgroundColor: Theme.Core.appBackground,
 					}} keyboardShouldPersistTaps={'always'} contentContainerStyle={{flexGrow: 1}}>
 						<View style={[styles.style, {paddingHorizontal: padding}]}>
 							{React.cloneElement(

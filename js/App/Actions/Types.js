@@ -165,6 +165,7 @@ export type Action =
 	| { type: 'SET_EDIT_FENCE', payload: Object }
 	| { type: 'DELETE_FENCE', payload: Object }
 	| { type: 'UPDATE_FENCE', payload: Object }
+	| { type: 'SET_FENCE_IDENTIFIER', payload: string }
 	| { type: 'RESET_FENCE', payload: Object }
 	| { type: 'CLEAR_FENCES', payload: Object }
 
@@ -180,6 +181,11 @@ export type Action =
 	| { type: 'RECEIVED_IN_APP_PURCHASE_PRODUCTS', payload: Array<Object> }
 	| { type: 'UPDATE_STATUS_IAP_TRANSACTION', payload: Object }
 	| { type: 'RECEIVED_IN_APP_AVAILABLE_PURCHASES', payload: Array<Object> }
+
+	| { type: 'DEBUG_GF_EVENT_ONGEOFENCE', payload: Object }
+	| { type: 'DEBUG_GF_SET_CHECKPOINT', payload: Object }
+	| { type: 'CLEAR_ON_GEOFENCE_LOG' }
+	| { type: 'UPDATE_GEOFENCE_CONFIG', payload: Object }
 	;
 
 export type Dispatch = (action: Action | ThunkAction | PromiseAction | Array<Action>) => any;

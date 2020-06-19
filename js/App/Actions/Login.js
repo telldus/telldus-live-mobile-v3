@@ -85,7 +85,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 	  })
 		.then((response: Object): Object => {
 			if (response.status === 200) {
-				setBoolean('Password', true);
+				setBoolean('Password', 'true');
 				dispatch(updateAccessToken({
 					...response.data,
 					userId: credential.username || undefined, // TODO: Should use user id, once it is available.
@@ -95,7 +95,7 @@ const loginToTelldus = (credential: loginCredential | loginCredentialSocial | lo
 			throw response;
 		})
 		.catch((error: Object): Object => {
-			setBoolean('Password', true);
+			setBoolean('Password', 'true');
 			throw error;
 		});
 };

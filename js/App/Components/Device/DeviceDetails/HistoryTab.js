@@ -254,7 +254,9 @@ class HistoryTab extends View {
 		} = this.getStyle(appLayout);
 
 		return (
-			<View style={sectionHeader}>
+			<View
+				level={2}
+				style={sectionHeader}>
 				<FormattedDate
 					value={item.section.key}
 					localeMatcher= "best fit"
@@ -262,7 +264,7 @@ class HistoryTab extends View {
 					weekday="long"
 					day="2-digit"
 					month="long"
-					style={sectionHeaderText} />
+					style={sectionHeaderText}/>
 			</View>
 		);
 	}
@@ -301,7 +303,9 @@ class HistoryTab extends View {
 		// response received but, no history for the requested device, so empty list message.
 		if (!refreshing && hasLoaded && rowsAndSections.length === 0) {
 			return (
-				<View style={styles.containerWhenNoData}>
+				<View
+					level={3}
+					style={styles.containerWhenNoData}>
 					<View style={{
 						flexDirection: 'row',
 						justifyContent: 'center',
@@ -316,7 +320,9 @@ class HistoryTab extends View {
 			);
 		}
 		return (
-			<View style={styles.container}>
+			<View
+				level={3}
+				style={styles.container}>
 				<SectionList
 					style={{flex: 1}}
 					contentContainerStyle={{flexGrow: 1}}
@@ -372,7 +378,6 @@ class HistoryTab extends View {
 			},
 			sectionHeader: {
 				paddingVertical: fontSizeSectionText * 0.5,
-				backgroundColor: '#ffffff',
 				justifyContent: 'center',
 				paddingLeft: 5 + (fontSizeSectionText * 0.2),
 				...Theme.Core.shadow,
@@ -395,7 +400,6 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'flex-start',
 		alignItems: 'flex-start',
-		backgroundColor: Theme.Core.appBackground,
 	},
 	containerWhenNoData: {
 		flex: 1,
@@ -403,7 +407,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'flex-start',
-		backgroundColor: Theme.Core.appBackground,
 	},
 });
 

@@ -24,8 +24,9 @@
 import React, {Component} from 'react';
 import { Animated, Easing } from 'react-native';
 import { ifIphoneX } from 'react-native-iphone-x-helper';
-
 import { connect } from 'react-redux';
+
+import View from './View';
 
 import Theme from '../App/Theme';
 
@@ -324,24 +325,32 @@ class Modal extends Component<Props, State> {
 
 		if (!showOverlay) {
 			return (
-				<Animated.View style={[ styles.modal, modalStyle, {transform: animatedProps,
-					opacity: opacityAnim,
-				}]}>
+				<View
+					animated
+					level={3}
+					style={[ styles.modal, modalStyle, {transform: animatedProps,
+						opacity: opacityAnim,
+					}]}>
 					{children}
-				</Animated.View>
+				</View>
 			);
 		}
 
 		return (
-			<Animated.View style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: animatedProps,
-				opacity: opacityAnim,
-			}]}>
-				<Animated.View style={[ styles.modal, modalStyle, {transform: animatedProps,
+			<View
+				animated
+				style={[ styles.modalContainer, modalContainerStyle, overlayProps, {transform: animatedProps,
 					opacity: opacityAnim,
 				}]}>
+				<View
+					animated
+					level={3}
+					style={[ styles.modal, modalStyle, {transform: animatedProps,
+						opacity: opacityAnim,
+					}]}>
 					{children}
-				</Animated.View>
-			</Animated.View>
+				</View>
+			</View>
 		);
 	}
 

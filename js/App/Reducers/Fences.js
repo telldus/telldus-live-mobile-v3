@@ -24,7 +24,6 @@ import {createReducer} from 'reduxsauce';
 
 
 export const initialState = Immutable({
-	fences: {},
 	fence: {},
 	editIndex: -1,
 	location: null,
@@ -77,19 +76,6 @@ const setTitle = (state: Object, action: Object): Object => ({
 	},
 });
 
-const saveFence = (state: Object, action: Object): Object => {
-	let userFences = state.fences[state.userId] || [];
-	userFences = userFences.concat(state.fence);
-	return {
-		...state,
-		fences: {
-			...state.fences,
-			[state.userId]: userFences,
-		},
-		fence: {},
-	};
-};
-
 const setCurrentLocation = (state: Object, action: Object): Object => ({
 	...state,
 	location: action.payload,
@@ -97,61 +83,30 @@ const setCurrentLocation = (state: Object, action: Object): Object => ({
 
 const setEditFence = (state: Object, action: Object): Object => {
 	const {
-		index: editIndex,
 		userId,
 	} = action.payload;
 
-	const userFences = state.fences[userId] || {};
-	const fence = userFences[editIndex];
-
 	return {
 		...state,
-		editIndex,
+		fence: action.payload,
 		userId,
-		fence,
 	};
 };
-
-const deleteFence = (state: Object, action: Object): Object => {
-	let userFences = state.fences[state.userId] || [];
-	userFences = userFences.slice();
-	userFences.splice(state.editIndex, 1);
-	return {
-		...state,
-		fences: {
-			...state.fences,
-			[state.userId]: userFences,
-		},
-	};
-};
-
-const updateFence = (state: Object, action: Object): Object => {
-	let userFences = state.fences[state.userId] || [];
-	userFences = userFences.slice();
-	userFences.splice(state.editIndex, 1, state.fence);
-
-	return {
-		...state,
-		fences: {
-			...state.fences,
-			[state.userId]: userFences,
-		},
-		fence: {},
-		editIndex: -1,
-	};
-};
-
-const clearFences = (state: Object, action: Object): Object => ({
-	...state,
-	fences: {},
-	fence: {},
-	editIndex: -1,
-});
 
 const resetFence = (state: Object, action: Object): Object => ({
 	...state,
 	fence: {},
 });
+
+const setFenceIdentifier = (state: Object, action: Object): Object => {
+	return {
+		...state,
+		fence: {
+			...state.fence,
+			identifier: action.payload,
+		},
+	};
+};
 
 const rehydrateFence = (state: Object, action: Object): Object => {
 	if (action.payload && action.payload.fences) {
@@ -171,15 +126,11 @@ const actionHandlers = {
 	['SET_FENCE_LEAVING_ACTIONS']: setLeavingActions,
 	['SET_FENCE_ACTIVE_TIME']: setActiveTime,
 	['SET_FENCE_TITLE']: setTitle,
-	['SAVE_FENCE']: saveFence,
 	['SET_CURRENT_LOCATION']: setCurrentLocation,
 	['SET_EDIT_FENCE']: setEditFence,
-	['DELETE_FENCE']: deleteFence,
-	['UPDATE_FENCE']: updateFence,
-	['CLEAR_FENCES']: clearFences,
+	['SET_FENCE_IDENTIFIER']: setFenceIdentifier,
 	['RESET_FENCE']: resetFence,
 	['persist/REHYDRATE']: rehydrateFence,
-
 };
 
 export default createReducer(initialState, actionHandlers);

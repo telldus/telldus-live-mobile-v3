@@ -21,9 +21,11 @@
 
 'use strict';
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import React from 'react';
+import {
+	useIntl,
+} from 'react-intl';
+import { useSelector } from 'react-redux';
 
 import View from './View';
 import Text from './Text';
@@ -33,66 +35,60 @@ type Props = {
 	icon: string,
 	tintColor: string,
 	label: any,
-	appLayout: Object,
-	intl: intlShape.isRequired,
 	accessibilityLabel?: Object,
 };
 
-class TabBar extends Component<Props, null> {
-	props: Props;
+const TabBar = (props: Props): Object => {
 
-	constructor(props: Props) {
-		super(props);
-	}
+	let {
+		icon,
+		tintColor,
+		label = '',
+		accessibilityLabel,
+	} = props;
 
-	render(): Object {
-		let { icon, tintColor, label = '', intl, accessibilityLabel, appLayout } = this.props;
-		accessibilityLabel = typeof accessibilityLabel === 'string' ? accessibilityLabel : intl.formatMessage(accessibilityLabel);
+	const intl = useIntl();
+	accessibilityLabel = typeof accessibilityLabel === 'string' ? accessibilityLabel : intl.formatMessage(accessibilityLabel);
 
-		const {
-			iconSize,
-			container,
-			labelStyle,
-		} = this.getStyles(appLayout);
+	const { layout } = useSelector((state: Object): Object => state.app);
 
-		label = typeof label === 'string' ? label : intl.formatMessage(label);
+	const {
+		iconSize,
+		container,
+		labelStyle,
+	} = getStyles(layout);
 
-		return (
-			<View style={container} accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
-				<Text style={[labelStyle, {color: tintColor}]}>
-					{label}
-				</Text>
-			</View>
-		);
-	}
+	label = typeof label === 'string' ? label : intl.formatMessage(label);
 
-	getStyles(appLayout: Object): Object {
-		const { width, height } = appLayout;
-		const isPortrait = height > width;
-		const deviceWidth = isPortrait ? width : height;
+	return (
+		<View style={container} accessibilityLabel={accessibilityLabel}>
+			<IconTelldus icon={icon} size={iconSize} color={tintColor}/>
+			<Text style={[labelStyle, {color: tintColor}]}>
+				{label}
+			</Text>
+		</View>
+	);
+};
 
-		const iconSize = deviceWidth * 0.05;
-		const fontSize = deviceWidth * 0.03;
+const getStyles = (appLayout: Object): Object => {
+	const { width, height } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
 
-		return {
-			container: {
-				flexDirection: 'row',
-				alignItems: 'center',
-			},
-			iconSize,
-			labelStyle: {
-				fontSize,
-				paddingLeft: 5 + (fontSize * 0.2),
-			},
-		};
-	}
-}
+	const iconSize = deviceWidth * 0.05;
+	const fontSize = deviceWidth * 0.03;
 
-function mapStateToProps(state: Object, ownProps: Object): Object {
 	return {
-		appLayout: state.app.layout,
+		container: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+		iconSize,
+		labelStyle: {
+			fontSize,
+			paddingLeft: 5 + (fontSize * 0.2),
+		},
 	};
-}
+};
 
-module.exports = connect(mapStateToProps, null)(injectIntl(TabBar));
+export default TabBar;

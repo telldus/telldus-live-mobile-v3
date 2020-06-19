@@ -206,8 +206,14 @@ class LoginScreen extends View {
 	}
 
 	_onLoginSuccess = () => {
-		this.props.dispatch(clearAppData());
-		this.goBack();
+		const {
+			navigation,
+			dispatch,
+		} = this.props;
+		dispatch(clearAppData());
+		navigation.navigate('Tabs', {
+			screen: 'Dashboard',
+		});
 	}
 
 	loginPostSocialLoginFail = () => {

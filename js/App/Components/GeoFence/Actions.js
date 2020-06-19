@@ -21,7 +21,10 @@
 
 'use strict';
 
-import React, { useState } from 'react';
+import React, {
+	useState,
+	useEffect,
+} from 'react';
 import {
 	SectionList,
 	RefreshControl,
@@ -32,6 +35,7 @@ import {
 	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
+let uuid = require('react-native-uuid');
 
 import {
 	View,
@@ -48,6 +52,10 @@ import {
 } from '../TabViews/SubViews';
 
 import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
+import {
 	LayoutAnimations,
 	GeoFenceUtils,
 } from '../../Lib';
@@ -58,9 +66,11 @@ import {
 	getJobs,
 	setFenceArrivingActions,
 	setFenceLeavingActions,
+	getGateways,
 } from '../../Actions';
 
 import Theme from '../../Theme';
+import isEmpty from 'lodash/isEmpty';
 
 type Props = {
 	navigation: Object,
@@ -82,6 +92,10 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	const intl = useIntl();
 
 	const dispatch = useDispatch();
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	let { fence = {}} = useSelector((state: Object): Object => state.fences);
 	const {
@@ -113,17 +127,30 @@ const Actions = React.memo<Object>((props: Props): Object => {
 
 	const [ devices, setDevices ] = useState(GeoFenceUtils.prepareDevicesWithNewStateValues(byId, selectedDevices));
 
+	const devicesListLength = Object.keys(byId).length;
+	useEffect(() => {
+		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(byId, selectedDevices));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [devicesListLength]);
+
 	function onDeviceValueChange(args: Object) {
 		const {
 			deviceId,
 		} = args;
 		const isSelected = !!selectedDevices[deviceId];
+
 		if (!isSelected) {
 			return;
 		}
-		let newSelected = {...selectedItems};
-		newSelected.selectedDevices[deviceId] = {
-			...args,
+		let newSelected = {
+			...selectedItems,
+			selectedDevices: {
+				...selectedItems.selectedDevices,
+				[deviceId]: {
+					...args,
+					uuid: uuid.v1(),
+				},
+			},
 		};
 		setSelectedItems(newSelected);
 		setDevices(GeoFenceUtils.prepareDevicesWithNewStateValues(devices, newSelected.selectedDevices));
@@ -175,17 +202,17 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	}
 
 	function toggleShowDevices(collapsed: boolean) {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowDevices(collapsed);
 	}
 
 	function toggleShowEvents(collapsed: boolean) {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowEvents(collapsed);
 	}
 
 	function toggleShowJobs(collapsed: boolean) {
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(200));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(200));
 		setShowJobs(collapsed);
 	}
 
@@ -195,40 +222,91 @@ const Actions = React.memo<Object>((props: Props): Object => {
 			if (selectedDevices[id]) {
 				delete newSelected.selectedDevices[id];
 			} else {
-				newSelected.selectedDevices[id] = data;
+				newSelected = {
+					...newSelected,
+					selectedDevices: {
+						...newSelected.selectedDevices,
+						[id]: {
+							...data,
+							uuid: uuid.v1(),
+						},
+					},
+				};
 			}
 		} else if (type === 'schedule') {
 			if (selectedSchedules[id]) {
 				delete newSelected.selectedSchedules[id];
 			} else {
-				newSelected.selectedSchedules[id] = data;
+				newSelected = {
+					...newSelected,
+					selectedSchedules: {
+						...newSelected.selectedSchedules,
+						[id]: {
+							...data,
+							uuid: uuid.v1(),
+						},
+					},
+				};
 			}
 		} else if (type === 'event') {
 			if (selectedEvents[id]) {
 				delete newSelected.selectedEvents[id];
 			} else {
-				newSelected.selectedEvents[id] = data;
+				newSelected = {
+					...newSelected,
+					selectedEvents: {
+						...newSelected.selectedEvents,
+						[id]: {
+							...data,
+							uuid: uuid.v1(),
+						},
+					},
+				};
 			}
 		}
+
 		setSelectedItems(newSelected);
 	}
 
 	function toggleActiveState(type: 'schedule' | 'event', id: string, data: Object) {
 		let newSelected = {...selectedItems};
 		if (type === 'schedule') {
-			newSelected.selectedSchedules[id] = data;
+			newSelected = {
+				...newSelected,
+				selectedSchedules: {
+					...newSelected.selectedSchedules,
+					[id]: {
+						...data,
+						uuid: uuid.v1(),
+					},
+				},
+			};
 		} else if (type === 'event') {
-			newSelected.selectedEvents[id] = data;
+			newSelected = {
+				...newSelected,
+				selectedEvents: {
+					...newSelected.selectedEvents,
+					[id]: {
+						...data,
+						uuid: uuid.v1(),
+					},
+				},
+			};
 		}
 		setSelectedItems(newSelected);
 	}
 
-	function renderDevice({item, index}: Object): Object {
+	function renderDevice({item, index, section}: Object): Object {
 		const checkBoxId = item.id;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
+
 		return (
 			<DeviceRow
 				key={`${item.id}${index}`}
 				device={item}
+				isLast={isLast}
 				onDeviceValueChange={onDeviceValueChange}
 				openRGBControl={openRGBControl}
 				openThermostatControl={openThermostatControl}
@@ -239,11 +317,16 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		);
 	}
 
-	function renderEvent({item}: Object): Object {
+	function renderEvent({item, index, section}: Object): Object {
 		const { id } = item;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<EventRow
+				key={`${item.id}${index}`}
+				isLast={isLast}
 				event={selectedEvents[id] || item}
 				onChangeSelection={onChangeSelection}
 				checkBoxId={id}
@@ -252,11 +335,16 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		);
 	}
 
-	function renderJob({item}: Object): Object {
+	function renderJob({item, index, section}: Object): Object {
 		const { id } = item;
+
+		const sectionLength = section.data.length;
+		const isLast = index === sectionLength - 1;
 
 		return (
 			<JobRow
+				key={`${item.id}${index}`}
+				isLast={isLast}
 				job={selectedSchedules[id] || item}
 				device={devices[item.deviceId]}
 				onChangeSelection={onChangeSelection}
@@ -272,6 +360,7 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		async function _onRefresh() {
 			setIsRefreshing(true);
 			try {
+				await dispatch(getGateways());
 				await dispatch(getDevices());
 				await dispatch(getEvents());
 				await dispatch(getJobs());
@@ -328,6 +417,28 @@ const Actions = React.memo<Object>((props: Props): Object => {
 	}
 
 	function _onPressNext() {
+		let deviceInvalidAction = null;
+		for (let i = 0; i < Object.keys(selectedDevices).length; i++) {
+			const key = Object.keys(selectedDevices)[i];
+			const dAction = selectedDevices[key];
+			if (!dAction || isEmpty(dAction) || !dAction.method) {
+				deviceInvalidAction = key;
+			}
+		}
+		if (deviceInvalidAction) {
+			const {
+				name,
+			} = byId[deviceInvalidAction];
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				header: 'No action selected', // TODO: Translate
+				text: `Please select any action to perform on the device ${name}.`,
+				showPositive: true,
+			});
+			return;
+		}
 		if (currentScreen === 'ArrivingActions') {
 			dispatch(setFenceArrivingActions({
 				devices: selectedDevices,
@@ -357,9 +468,16 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		appLayout,
 	};
 
+	const {
+		style,
+		contentContainerStyle,
+	} = getStyles(appLayout);
+
 	return (
 		<View style={{flex: 1}}>
 			<SectionList
+				style={style}
+				contentContainerStyle={contentContainerStyle}
 				sections={listData}
 				renderItem={renderRow}
 				renderSectionHeader={renderSectionHeader}
@@ -383,5 +501,28 @@ const Actions = React.memo<Object>((props: Props): Object => {
 		</View>
 	);
 });
+
+const getStyles = (appLayout: Object): Object => {
+	const { height, width } = appLayout;
+	const isPortrait = height > width;
+	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		paddingFactor,
+	} = Theme.Core;
+
+	const padding = deviceWidth * paddingFactor;
+
+	return {
+		style: {
+			flex: 1,
+		},
+		contentContainerStyle: {
+			flexGrow: 1,
+			paddingBottom: padding * 6,
+		},
+	};
+};
+
 
 export default Actions;

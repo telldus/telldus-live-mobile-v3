@@ -34,6 +34,7 @@ import appleAuth, {
 	AppleAuthCredentialState,
 	AppleAuthError,
 } from '@invertase/react-native-apple-authentication';
+const jwtDecode = require('jwt-decode');
 
 import {
 	TouchableButton,
@@ -166,11 +167,13 @@ class LoginForm extends View {
 									fn: fullName.givenName,
 									ln: fullName.familyName || fullName.middleName,
 								};
+								const tokenJSON = jwtDecode(identityToken) || {};
+								const isPvtEmail = Boolean(tokenJSON.is_private_email);
 								this.onSocialLoginFail404({
 									idToken: identityToken,
 									provider,
 									fullName: _fullName,
-									email,
+									email: isPvtEmail ? '' : email,
 								});
 								return;
 							}
@@ -281,7 +284,7 @@ class LoginForm extends View {
 					accessible={buttonAccessible}
 					disabled={disableAllSignin}
 				/>
-				<View style={{ height: 10 }}/>
+				<View style={{ height: 20 }}/>
 				{(Platform.OS === 'ios' && appleAuth.isSupported && showSocialAuth) &&
 				(
 					<AppleButton

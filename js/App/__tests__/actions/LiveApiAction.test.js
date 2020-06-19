@@ -10,7 +10,7 @@ describe('(LiveApi) syncWithServer', () => {
 	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
 
 	beforeEach(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
 			device: [{
@@ -34,14 +34,14 @@ describe('(LiveApi) syncWithServer', () => {
 
 
 	it('check syncWithServer', () => {
-		store = configureStore();
+		store = configureStore().store;
 		// Send new status through websocket connection
 		store.dispatch(syncWithServer('Sensors'));
 		expect(store.getState().liveApi.sensors).toBe(true);
 	});
 
 	it('check syncLiveApiOnForeground', () => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch(syncLiveApiOnForeground());
 		expect(store.getState().devices.byId['1'].isInState).toBe('TURNOFF');
 		expect(store.getState().liveApi.sensors).toBe(true);

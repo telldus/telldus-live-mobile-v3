@@ -5,6 +5,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -14,6 +15,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -80,6 +82,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -136,6 +139,7 @@ exports[`renders SSetting when isOneSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -196,6 +200,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -205,6 +210,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -261,6 +267,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -317,6 +324,7 @@ exports[`renders SSetting when isThreeSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -387,6 +395,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
   style={
     Object {
       "alignItems": "center",
+      "backgroundColor": "transparent",
       "flexDirection": "column",
       "justifyContent": "center",
     }
@@ -396,6 +405,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -452,6 +462,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }
@@ -518,6 +529,7 @@ exports[`renders SSetting when isTwoSelected using Snapshots 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "transparent",
         "flexDirection": "row",
         "justifyContent": "center",
       }

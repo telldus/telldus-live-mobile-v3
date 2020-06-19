@@ -65,9 +65,13 @@ const Row = (props: Object): Object => {
 
 	return (
 		<TouchableOpacity onPress={onPressRow}>
-			<View style={coverStyle}>
+			<View
+				level={2}
+				style={coverStyle}>
 				<Image source={img} style={imgStyle} resizeMode={'contain'}/>
-				<Text style={textStyle}>
+				<Text
+					level={5}
+					style={textStyle}>
 					{name}
 				</Text>
 			</View>
@@ -103,7 +107,6 @@ const getStyles = (appLayout: Object, isLast: boolean): Object => {
 			borderTopColor: eulaContentColor,
 			paddingVertical,
 			paddingHorizontal: padding * 2,
-			backgroundColor: '#fff',
 			...sdw,
 			marginBottom: isLast ? padding : 0,
 		},
@@ -112,7 +115,6 @@ const getStyles = (appLayout: Object, isLast: boolean): Object => {
 			width: imageW,
 		},
 		textStyle: {
-			color: eulaContentColor,
 			marginLeft: padding * 2,
 			fontSize,
 		},

@@ -22,7 +22,6 @@
 'use strict';
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
@@ -37,6 +36,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 	Text,
 	View,
+	EmptyView,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -221,7 +221,7 @@ class DashboardTab extends View {
 				this.timeoutSwitchTabAndroid = setTimeout(() => {
 					navigation.navigate('Devices');
 					this.timeoutSwitchTabAndroid = null;
-				}, 800);
+				}, 1000);
 			} else {
 				navigation.navigate('Devices');
 			}
@@ -281,14 +281,20 @@ class DashboardTab extends View {
 
 	noItemsMessage(style: Object): Object {
 		return (
-			<View style={[style.container, {
-				paddingHorizontal: 20,
-			}]}>
+			<View
+				level={3}
+				style={[style.container, {
+					paddingHorizontal: 20,
+				}]}>
 				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
-				<Text style={style.noItemsTitle}>
+				<Text
+					level={4}
+					style={style.noItemsTitle}>
 					{this.noItemsTitle}
 				</Text>
-				<Text style={style.noItemsContent}>
+				<Text
+					level={5}
+					style={style.noItemsContent}>
 					{'\n'}
 					{this.noItemsContent}
 				</Text>
@@ -343,7 +349,9 @@ class DashboardTab extends View {
 	getDialogueBoxData(action: string, device: Object): Object {
 		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		let data = {
 			show: true,
@@ -400,7 +408,9 @@ class DashboardTab extends View {
 		} = screenProps;
 		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
 			return <NoGateways
@@ -418,7 +428,10 @@ class DashboardTab extends View {
 		};
 
 		return (
-			<View onLayout={this._onLayout} style={style.container}>
+			<View
+				level={3}
+				onLayout={this._onLayout}
+				style={style.container}>
 				<FlatList
 					ref="list"
 					data={rows}
@@ -450,10 +463,10 @@ class DashboardTab extends View {
 	renderUnknown(id: number, tileStyle: Object, message: string): Object {
 		return (
 			<View
+				level={2}
 				style={[tileStyle,
 					{
 						...Theme.Core.shadow,
-						backgroundColor: '#fff',
 					},
 				]}>
 				<Text
@@ -468,6 +481,9 @@ class DashboardTab extends View {
 	}
 
 	_renderRow(row: Object): Object {
+		if (!row || !row.item) {
+			return <EmptyView/>;
+		}
 		const { screenProps } = this.props;
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;
@@ -532,7 +548,9 @@ class DashboardTab extends View {
 		return deviceWidth * Theme.Core.paddingFactor;
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -549,18 +567,15 @@ class DashboardTab extends View {
 				alignItems: 'center',
 				justifyContent: 'center',
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: Theme.Core.appBackground,
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
 			noItemsTitle: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: isPortrait ? Math.floor(width * 0.068) : Math.floor(height * 0.068),
 				paddingTop: 15,
 			},
 			noItemsContent: {
 				textAlign: 'center',
-				color: '#4C4C4C',
 				fontSize: isPortrait ? Math.floor(width * 0.04) : Math.floor(height * 0.04),
 			},
 			padding,
@@ -595,10 +610,6 @@ class DashboardTab extends View {
 		};
 	}
 }
-
-DashboardTab.propTypes = {
-	rows: PropTypes.array,
-};
 
 const getRows = createSelector(
 	[
@@ -645,4 +656,4 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DashboardTab);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardTab);

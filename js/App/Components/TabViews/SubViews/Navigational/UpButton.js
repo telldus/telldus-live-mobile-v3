@@ -49,6 +49,7 @@ type Props = {
 	closeSwipeRow: () => void,
 	onPressDeviceAction?: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 class UpButton extends View {
@@ -95,7 +96,7 @@ class UpButton extends View {
 		};
 
 		let { isGatewayActive, supportedMethod, isInState,
-			name, methodRequested, iconSize, style, local } = this.props;
+			name, methodRequested, iconSize, style, local, disableActionIndicator } = this.props;
 
 		let upButtonStyle = !isGatewayActive ?
 			(isInState === 'UP' ? styles.offlineBackground : styles.disabledBackground) : (isInState === 'UP' ? styles.enabledBackground : styles.disabledBackground);
@@ -114,7 +115,7 @@ class UpButton extends View {
 		      }}
 				/>
 				{
-					methodRequested === 'UP' ?
+					!disableActionIndicator && methodRequested === 'UP' ?
 						<ButtonLoadingIndicator style={styles.dot} color={dotColor}/>
 						:
 						null
@@ -126,6 +127,7 @@ class UpButton extends View {
 
 UpButton.defaultProps = {
 	commandUp: 128,
+	disableActionIndicator: false,
 };
 
 const styles = StyleSheet.create({

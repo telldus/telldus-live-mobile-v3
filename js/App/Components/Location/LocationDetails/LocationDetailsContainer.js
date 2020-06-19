@@ -157,10 +157,11 @@ class LocationDetailsContainer extends View<null, Props, State> {
 			};
 
 		return (
-			<View style={{
-				flex: 1,
-				backgroundColor: Theme.Core.appBackground,
-			}}>
+			<View
+				level={3}
+				style={{
+					flex: 1,
+				}}>
 				<KeyboardAvoidingView
 					behavior="padding"
 					style={{flex: 1}}

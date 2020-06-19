@@ -23,12 +23,13 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Image, Platform, TouchableOpacity } from 'react-native';
+import { Image, Platform } from 'react-native';
 import { intlShape, injectIntl } from 'react-intl';
 
 import View from './View';
 import IconTelldus from './IconTelldus';
 import Throbber from './Throbber';
+import TouchableOpacity from './TouchableOpacity';
 import Theme from '../App/Theme';
 import i18n from '../App/Translations/common';
 
@@ -55,6 +56,9 @@ type Props = {
 	customComponent?: Object,
 	disabled?: boolean,
 	innerContainer?: Array<any> | Object,
+	buttonLevel?: number,
+	iconLevel?: number,
+	throbberLevel?: number,
 };
 
 class FloatingButton extends Component<Props, null> {
@@ -95,13 +99,27 @@ class FloatingButton extends Component<Props, null> {
 			customComponent,
 			disabled,
 			innerContainer,
+			buttonLevel,
+			iconLevel,
+			throbberLevel,
 		} = this.props;
 		accessibilityLabel = accessible ? (accessibilityLabel ? accessibilityLabel : this.defaultLabel) : '';
 
-		const { container, innerContainerDef, icon, throbber } = this._getStyle(appLayout);
+		const {
+			container,
+			innerContainerDef,
+			icon,
+			throbber,
+			iconSize,
+		} = this._getStyle(appLayout);
+
+		const bLevel = buttonLevel || (disabled ? 7 : 6);
+		const iLevel = iconLevel || (disabled ? 13 : 12);
+		const thLevel = throbberLevel || 14;
 
 		return (
 			<TouchableOpacity
+				level={bLevel}
 				style={[container, buttonStyle]}
 				onPress={onPress}
 				accessible={accessible}
@@ -115,9 +133,12 @@ class FloatingButton extends Component<Props, null> {
 					}
 					{!!iconName &&
 						(
-							<IconTelldus icon={iconName} style={[{
-								color: '#fff',
-							}, iconStyle]}/>
+							<IconTelldus
+								level={iLevel}
+								icon={iconName}
+								style={[{
+									fontSize: iconSize,
+								}, iconStyle]}/>
 						)
 					}
 					{
@@ -126,6 +147,7 @@ class FloatingButton extends Component<Props, null> {
 					{!!showThrobber &&
 					(
 						<Throbber
+							level={thLevel}
 							throbberStyle={throbber}
 						/>
 					)
@@ -138,9 +160,9 @@ class FloatingButton extends Component<Props, null> {
 	_getStyle = (appLayout: Object): Object => {
 		const {
 			shadow: themeShadow,
-			brandSecondary,
 			maxSizeFloatingButton,
-			btnDisabledBg,
+			floatingButtonSizefactor,
+			floatingButtonOffsetfactor,
 		} = Theme.Core;
 		const height = appLayout.height;
 		const width = appLayout.width;
@@ -148,16 +170,21 @@ class FloatingButton extends Component<Props, null> {
 		const deviceWidth = isPortrait ? width : height;
 		const maxIconSize = 40;
 
-		let { tabs, iconSize, paddingRight, disabled } = this.props;
+		let { tabs, iconSize, paddingRight } = this.props;
 		iconSize = iconSize ? iconSize : isPortrait ? width * 0.056 : height * 0.056;
 		iconSize = iconSize > maxIconSize ? maxIconSize : iconSize;
 
 		const isIOSTabs = Platform.OS === 'ios' && tabs;
 
-		let buttonSize = deviceWidth * 0.134666667;
+		const {
+			right,
+			bottom,
+		} = floatingButtonOffsetfactor;
+
+		let buttonSize = deviceWidth * floatingButtonSizefactor;
 		buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
-		const offsetBottom = deviceWidth * 0.046666667 + (isIOSTabs ? 50 : 0);
-		const offsetRight = deviceWidth * 0.034666667 - paddingRight;
+		const offsetBottom = deviceWidth * bottom + (isIOSTabs ? 50 : 0);
+		const offsetRight = deviceWidth * right - paddingRight;
 
 		const shadow = Object.assign({}, themeShadow, {
 			shadowOpacity: 0.35,
@@ -170,7 +197,6 @@ class FloatingButton extends Component<Props, null> {
 
 		return {
 			container: {
-				backgroundColor: disabled ? btnDisabledBg : brandSecondary,
 				borderRadius: buttonSize / 2,
 				position: 'absolute',
 				height: buttonSize,
@@ -189,8 +215,8 @@ class FloatingButton extends Component<Props, null> {
 				height: iconSize,
 			},
 			throbber: {
-				color: '#ffffff',
 			},
+			iconSize,
 		};
 	};
 

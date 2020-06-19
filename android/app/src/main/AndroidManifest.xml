@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission tools:node="remove" android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -37,11 +38,6 @@
           </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-        <service android:name="io.invertase.firebase.messaging.RNFirebaseMessagingService">
-          <intent-filter>
-            <action android:name="com.google.firebase.MESSAGING_EVENT" />
-          </intent-filter>
-        </service>
         <receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
         <receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
           <intent-filter>
@@ -57,15 +53,10 @@
         <meta-data
           android:name="com.google.firebase.messaging.default_notification_icon"
           android:resource="@drawable/icon_notif" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-            notification message. See README(https://goo.gl/6BKBk7) for more. -->
         <meta-data
+          tools:replace="android:resource"
           android:name="com.google.firebase.messaging.default_notification_color"
           android:resource="@color/brandSecondary" />
-        <meta-data
-          android:name="com.google.firebase.messaging.default_notification_channel_id"
-          android:value="${pushSenderId}"/>
-        <receiver android:name=".DeviceWidget"/>
 
         <receiver android:name=".BroadcastReceiver.BootCompleteReceiver" android:enabled="true">
             <intent-filter>
@@ -198,7 +189,16 @@
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
         <uses-library
           android:name="org.apache.http.legacy"
-          android:required="false" />
+          android:required="false"/>
+
+        <service
+          android:name="com.agontuk.RNFusedLocation.RNFusedBackgroundLocationService"
+          android:exported="false"
+          android:foregroundServiceType="location"/>
+
+        <meta-data
+          android:name="com.transistorsoft.locationmanager.license"
+          android:value="${geolocationApplicationKey}"/>
     </application>
 
 </manifest>

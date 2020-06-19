@@ -10,7 +10,7 @@ describe('(Jobs) getJobs', () => {
 	let accessToken = {access_token: 'bajs', refresh_token: 'bajs'};
 
 	beforeEach(() => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch({type: 'RECEIVED_ACCESS_TOKEN', accessToken});
 		store.dispatch({type: 'RECEIVED_DEVICES', payload: {
 			device: [{
@@ -32,7 +32,7 @@ describe('(Jobs) getJobs', () => {
 
 
 	it('should return job details', () => {
-		store = configureStore();
+		store = configureStore().store;
 		store.dispatch(getJobs());
 		expect(store.getState().jobs).toEqual([]);
 	});

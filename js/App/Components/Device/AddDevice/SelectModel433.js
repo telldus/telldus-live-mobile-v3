@@ -173,7 +173,9 @@ render(): Object {
 			}}>
 			<View style={shortCutItemsCover}>
 				{shortcutToTelldus && <TouchableOpacity onPress={this.onPressOtherBrand}>
-					<View style={shortCutInfoCover}>
+					<View
+						level={2}
+						style={shortCutInfoCover}>
 						<Text style={clickTextStyle}>
 							{formatMessage(i18n.addDeviceAnotherBrand)}
 						</Text>
@@ -243,7 +245,6 @@ getStyles(): Object {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...shadow,
 			paddingVertical: padding,
 			borderRadius: 2,

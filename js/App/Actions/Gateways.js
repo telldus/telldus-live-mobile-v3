@@ -60,6 +60,8 @@ function autoDetectLocalTellStick(): ThunkAction {
 		// No need to do local discovery if the platform is iOS 9 or less, as it does not support RSAAlgorithm
 		if (supportRSA()) {
 
+			// TODO: Better handle : Do not use any attributes of socket, that starts with '_'.
+
 			// Establish new UDP socket only after closing the existing socket completely.
 			closeUDPSocket(() => {
 			// $FlowFixMe
@@ -75,6 +77,14 @@ function autoDetectLocalTellStick(): ThunkAction {
 				socket.on('error', (error: any) => {
 					reportException(error);
 				});
+
+				if (// $FlowFixMe
+					closingSocketID === socket._id ||// $FlowFixMe
+					socket._destroying ||// $FlowFixMe
+					socket._destroyed ||
+					openSocketID === null) {
+					return;
+				}
 
 				// $FlowFixMe
 				try {
@@ -176,7 +186,8 @@ function toByteArray(obj: string): any {
 
 function randomPort(): number {
 	// eslint-disable-next-line
-	return Math.random() * 60536 | 0 + 5000; // 60536-65536
+	const port =  Math.random() * 60536 | 0 + 5000; // 60536-65536
+	return typeof port === 'number' ? port : randomPort();
 }
 
 const autoDetectLocalTellStickSuccess = (tellStickInfo: Object, routeInfo: Object): Action => {

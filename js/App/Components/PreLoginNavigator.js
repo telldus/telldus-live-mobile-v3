@@ -45,7 +45,7 @@ import {
 
 import {
 	useAppTheme,
-} from '../Hooks/App';
+} from '../Hooks/Theme';
 
 const ScreenConfigs = [
 	{

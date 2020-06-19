@@ -43,7 +43,6 @@ const UpdatePasswordBlock = (props: Object): Object => {
 
 	const {
 		fontSize,
-		iconStyle,
 	} = getStyles(layout);
 
 	const onPress = useCallback(() => {
@@ -59,7 +58,6 @@ const UpdatePasswordBlock = (props: Object): Object => {
 			fontSize={fontSize}
 			icon={'angle-right'}
 			onPress={onPress}
-			iconStyle={iconStyle}
 		/>
 	);
 };
@@ -72,9 +70,6 @@ const getStyles = (appLayout: Object): Object => {
 
 	return {
 		fontSize,
-		iconStyle: {
-			color: '#8e8e93',
-		},
 	};
 };
 

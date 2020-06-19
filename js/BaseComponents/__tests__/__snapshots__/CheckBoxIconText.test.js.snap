@@ -29,27 +29,19 @@ exports[`renders CheckBoxIconText when checked 1`] = `
     allowFontScaling={false}
     importantForAccessibility="yes"
     style={
-      Array [
-        Object {
-          "color": "#999",
-          "fontSize": 30,
-        },
-        Object {
-          "backgroundColor": "#fff",
-          "borderColor": "#e26901",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "#e26901",
-          "fontSize": 28,
-          "overflow": "hidden",
-          "padding": 1.4000000000000001,
-          "textAlign": "center",
-          "textAlignVertical": "center",
-        },
-        Object {
-          "fontFamily": "telldusicons",
-        },
-      ]
+      Object {
+        "backgroundColor": "#ffffff",
+        "borderColor": "#e26901",
+        "borderRadius": 2,
+        "borderWidth": 1,
+        "color": "#e26901",
+        "fontFamily": "telldusicons",
+        "fontSize": 28,
+        "overflow": "hidden",
+        "padding": 1.4000000000000001,
+        "textAlign": "center",
+        "textAlignVertical": "center",
+      }
     }
   >
     checkmark
@@ -59,7 +51,8 @@ exports[`renders CheckBoxIconText when checked 1`] = `
     style={
       Array [
         Object {
-          "color": "#fff",
+          "backgroundColor": "transparent",
+          "color": "#ffffff",
           "fontFamily": "Roboto-Light",
           "fontSize": 26,
           "marginLeft": 15.4,
@@ -102,27 +95,19 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
     allowFontScaling={false}
     importantForAccessibility="yes"
     style={
-      Array [
-        Object {
-          "color": "#999",
-          "fontSize": 30,
-        },
-        Object {
-          "backgroundColor": "transparent",
-          "borderColor": "#fff",
-          "borderRadius": 2,
-          "borderWidth": 1,
-          "color": "transparent",
-          "fontSize": 28,
-          "overflow": "hidden",
-          "padding": 1.4000000000000001,
-          "textAlign": "center",
-          "textAlignVertical": "center",
-        },
-        Object {
-          "fontFamily": "telldusicons",
-        },
-      ]
+      Object {
+        "backgroundColor": "transparent",
+        "borderColor": "#ffffff",
+        "borderRadius": 2,
+        "borderWidth": 1,
+        "color": "transparent",
+        "fontFamily": "telldusicons",
+        "fontSize": 28,
+        "overflow": "hidden",
+        "padding": 1.4000000000000001,
+        "textAlign": "center",
+        "textAlignVertical": "center",
+      }
     }
   >
     checkmark
@@ -132,7 +117,8 @@ exports[`renders CheckBoxIconText when unchecked 1`] = `
     style={
       Array [
         Object {
-          "color": "#fff",
+          "backgroundColor": "transparent",
+          "color": "#ffffff",
           "fontFamily": "Roboto-Light",
           "fontSize": 26,
           "marginLeft": 15.4,

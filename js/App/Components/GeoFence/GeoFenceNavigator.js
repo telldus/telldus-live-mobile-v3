@@ -34,6 +34,7 @@ import LeavingActions from './LeavingActions';
 import ActiveTime from './ActiveTime';
 import SetAreaName from './SetAreaName';
 import EditGeoFence from './EditGeoFence';
+import EditGeoFenceAreaFull from './EditGeoFenceAreaFull';
 
 const initialRouteName = 'AddEditGeoFence';
 
@@ -54,6 +55,14 @@ const ScreenConfigs = [
 	{
 		name: 'SelectArea',
 		Component: SelectArea,
+		ContainerComponent: GeoFenceContainer,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'SetAreaName',
+		Component: SetAreaName,
 		ContainerComponent: GeoFenceContainer,
 		options: {
 			headerShown: false,
@@ -84,16 +93,16 @@ const ScreenConfigs = [
 		},
 	},
 	{
-		name: 'SetAreaName',
-		Component: SetAreaName,
+		name: 'EditGeoFence',
+		Component: EditGeoFence,
 		ContainerComponent: GeoFenceContainer,
 		options: {
 			headerShown: false,
 		},
 	},
 	{
-		name: 'EditGeoFence',
-		Component: EditGeoFence,
+		name: 'EditGeoFenceAreaFull',
+		Component: EditGeoFenceAreaFull,
 		ContainerComponent: GeoFenceContainer,
 		options: {
 			headerShown: false,

@@ -24,13 +24,17 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native';
 import { intlShape } from 'react-intl';
 import differenceWith from 'lodash/differenceWith';
 import { announceForAccessibility } from 'react-native-accessibility';
 
 import timeZone from '../../../Lib/TimeZone';
-import { View, Text } from '../../../../BaseComponents';
+import {
+	View,
+	Text,
+	TouchableOpacity,
+} from '../../../../BaseComponents';
 import ContinentsList from '../Common/ContinentsList';
 
 import i18n from '../../../Translations/common';
@@ -183,14 +187,24 @@ class EditTimeZoneContinent extends View {
 
 		return (
 			<ScrollView style={{paddingTop: 20}}>
-				<TouchableOpacity onPress={this.onPressAutodetect} style={styles.rowItems}>
-					<Text style={styles.text}>
+				<TouchableOpacity
+					level={2}
+					onPress={this.onPressAutodetect}
+					style={styles.rowItems}>
+					<Text
+						level={6}
+						style={styles.text}>
 						{this.labelAutodetect}
 					</Text>
 				</TouchableOpacity>
 				{!!autodetectedTimezone && (
-					<TouchableOpacity onPress={this.onPressAutodetected} style={styles.rowItems}>
-						<Text style={styles.text}>
+					<TouchableOpacity
+						level={2}
+						onPress={this.onPressAutodetected}
+						style={styles.rowItems}>
+						<Text
+							level={6}
+							style={styles.text}>
 							{autodetectedTimezone}
 						</Text>
 					</TouchableOpacity>
@@ -212,7 +226,6 @@ class EditTimeZoneContinent extends View {
 		return {
 			rowItems: {
 				width: width,
-				backgroundColor: '#ffffff',
 				marginTop: 2,
 				justifyContent: 'center',
 			},
@@ -220,7 +233,6 @@ class EditTimeZoneContinent extends View {
 				fontSize,
 				marginLeft: 10 + (fontSize * 0.2),
 				paddingVertical: 10 + (fontSize * 0.2),
-				color: '#A59F9A',
 			},
 		};
 	}

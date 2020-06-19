@@ -9,7 +9,7 @@ describe('<TouchableButton />', () => {
 
 	let wrapper, store;
 	beforeEach(()=>{
-		store = configureStore();
+		store = configureStore().store;
 		wrapper = shallow(
 			<Provider store={store}>
 				<IntlProvider>

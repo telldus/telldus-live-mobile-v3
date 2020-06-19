@@ -56,7 +56,7 @@ import {
 } from '../../Actions/App';
 
 import {
-	linearCUD,
+	linearU,
 } from '../../Lib/LayoutAnimations';
 
 import { pushServiceId } from '../../../Config';
@@ -70,7 +70,6 @@ const RegisterForPushScreen = (props: Object): Object => {
 	const { phonesList = {}, pushToken, deviceName, deviceId } = useSelector((state: Object): Object => state.user);
 	const {
 		container,
-		iconStyle,
 		fontSize,
 		contentCover,
 		contentTextStyle,
@@ -83,7 +82,6 @@ const RegisterForPushScreen = (props: Object): Object => {
 		throbberContainerStyle,
 		loadingInfoCover,
 		loadingTextStyle,
-		labelTextStyle,
 	} = getStyles(layout);
 
 	const { formatMessage } = useIntl();
@@ -183,14 +181,14 @@ const RegisterForPushScreen = (props: Object): Object => {
 			isDeleteTokenLoading: true,
 			deletingToken: token,
 		});
-		LayoutAnimation.configureNext(linearCUD(300));
+		LayoutAnimation.configureNext(linearU(300));
 		dispatch(deletePushToken(token)).then(() => {
 			setIsDeleteTokenLoading({
 				isDeleteTokenLoading: false,
 				deletingToken: null,
 			});
 			dispatch(getPhonesList()).then(() => {
-				LayoutAnimation.configureNext(linearCUD(300));
+				LayoutAnimation.configureNext(linearU(300));
 			});
 			submitPushToken();
 		}).catch(() => {
@@ -199,7 +197,7 @@ const RegisterForPushScreen = (props: Object): Object => {
 					isDeleteTokenLoading: false,
 					deletingToken: null,
 				});
-				LayoutAnimation.configureNext(linearCUD(300));
+				LayoutAnimation.configureNext(linearU(300));
 				dispatch(showToast());
 			}, 5000);
 		});
@@ -221,10 +219,8 @@ const RegisterForPushScreen = (props: Object): Object => {
 					key={key}
 					label={label}
 					icon={'angle-right'}
-					iconStyle={iconStyle}
 					fontSize={fontSize}
 					valueTextStyle={valueTextStyle}
-					labelTextStyle={labelTextStyle}
 					blockContainerStyle={blockContainerStyle}
 					value={name}
 					onPress={isLoading ? null : onPressPushSettings}
@@ -302,7 +298,9 @@ const RegisterForPushScreen = (props: Object): Object => {
 	]);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={formatMessage(i18n.registerForPush)} h2={formatMessage(i18n.receiveNotifications)}
 				align={'right'}
@@ -313,12 +311,18 @@ const RegisterForPushScreen = (props: Object): Object => {
 			<ScrollView style={{
 				flex: 1,
 			}}>
-				<View style={contentCover}>
+				<View
+					level={2}
+					style={contentCover}>
 					<IconTelldus icon={'phone'} style={phoneIconStyle}/>
-					<Text style={contentTitleStyle}>
+					<Text
+						level={5}
+						style={contentTitleStyle}>
 						{formatMessage(i18n.replaceAnOldPhone)}
 					</Text>
-					<Text style={contentTextStyle}>
+					<Text
+						level={6}
+						style={contentTextStyle}>
 						{formatMessage(i18n.replaceOldDeviceAndRegisterPush)}
 					</Text>
 				</View>
@@ -352,16 +356,11 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		fontSize,
-		iconStyle: {
-			color: '#8e8e93',
-		},
 		contentCover: {
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding: padding * 1.5,
 			marginTop: padding * 1.5,
@@ -371,20 +370,15 @@ const getStyles = (appLayout: Object): Object => {
 		contentTextStyle: {
 			fontSize: fontSize * 0.9,
 			textAlign: 'center',
-			color: Theme.Core.rowTextColor,
 		},
 		contentTitleStyle: {
 			fontSize: fontSize * 1.2,
 			textAlign: 'center',
-			color: Theme.Core.eulaContentColor,
 			marginVertical: 10,
 		},
 		phoneIconStyle: {
 			fontSize: fontSize * 4,
 			color: Theme.Core.brandSecondary,
-		},
-		labelTextStyle: {
-			color: Theme.Core.eulaContentColor,
 		},
 		valueTextStyle: {
 			marginRight: 15,

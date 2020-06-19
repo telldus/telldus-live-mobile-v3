@@ -15,6 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Telldus Live! app.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 // @flow
@@ -23,48 +24,39 @@
 
 import React from 'react';
 import {
-	TouchableOpacity,
-} from 'react-native';
-import {
 	useSelector,
 } from 'react-redux';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
-	View,
-	Text,
+	FloatingButton,
+	ThemedMaterialIcon,
 } from '../../../../BaseComponents';
 
 import Theme from '../../../Theme';
 
+const MyLocation = React.memo<Object>((props: Object): Object => {
 
-const FenceCallout = React.memo<Object>((props: Object): Object => {
 	const {
-		title,
+		onPress,
 	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
-		container,
-		titleStyle,
-		editBtn,
-		editIcon,
+		iconSize,
+		iconStyle,
+		buttonStyle,
 	} = getStyles(layout);
 
 	return (
-		<View style={container}>
-			<Text
-				style={titleStyle}>
-				{title}
-			</Text>
-			<TouchableOpacity
-				style={editBtn}>
-				<Icon
-					style={editIcon}
-					name="mode-edit"/>
-			</TouchableOpacity>
-		</View>
+		<FloatingButton
+			buttonStyle={buttonStyle}
+			onPress={onPress}
+			customComponent={<ThemedMaterialIcon
+				name={'my-location'}
+				size={iconSize}
+				level={12}
+				style={iconStyle}/>}/>
 	);
 });
 
@@ -74,29 +66,32 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		brandSecondary,
-		eulaContentColor,
+		maxSizeFloatingButton,
+		floatingButtonSizefactor,
+		floatingButtonOffsetfactor,
 	} = Theme.Core;
 
-	const fontSize = deviceWidth * 0.03;
+	const {
+		bottom,
+	} = floatingButtonOffsetfactor;
+
+	let iconSize = deviceWidth * 0.08;
+	iconSize = iconSize > (maxSizeFloatingButton - 3) ? (maxSizeFloatingButton - 3) : iconSize;
+
+	let buttonSize = deviceWidth * floatingButtonSizefactor;
+	buttonSize = buttonSize > maxSizeFloatingButton ? maxSizeFloatingButton : buttonSize;
+
+	const offsetBottom = (deviceWidth * bottom) + (buttonSize * 1.2) + 10;
 
 	return {
-		container: {
-			flexDirection: 'row',
-			alignItems: 'center',
+		iconSize,
+		buttonStyle: {
+			bottom: offsetBottom,
 		},
-		titleStyle: {
-			fontSize,
-			color: brandSecondary,
-		},
-		editBtn: {
-			marginLeft: 8,
-		},
-		editIcon: {
-			color: eulaContentColor,
-			fontSize,
+		iconStyle: {
+
 		},
 	};
 };
 
-export default FenceCallout;
+export default MyLocation;

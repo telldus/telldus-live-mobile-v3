@@ -210,7 +210,9 @@ class DeviceActionDetails extends View {
 						intl={intl}/>
 				}
 				{buttons.length > 0 &&
-				<View style={[container, containerStyle]}>
+				<View
+					level={2}
+					style={[container, containerStyle]}>
 					{!!RGB &&
 					<>
 						{
@@ -278,7 +280,6 @@ class DeviceActionDetails extends View {
 				flex: 1,
 				alignItems: 'stretch',
 				justifyContent: 'center',
-				backgroundColor: '#fff',
 				paddingTop: bodyPadding - 10,
 				paddingBottom: bodyPadding,
 				paddingLeft: bodyPadding - buttonPadding,

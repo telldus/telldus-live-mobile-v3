@@ -23,7 +23,12 @@
 'use strict';
 
 import React from 'react';
-import { StyleSheet, BackHandler, Platform } from 'react-native';
+import {
+	StyleSheet,
+	BackHandler,
+	Platform,
+	TouchableOpacity,
+} from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import View from './View';
@@ -48,6 +53,7 @@ type Props = {
 	infoButton?: InfoButton,
 	showLeftIcon?: boolean,
 	leftIcon: string,
+	onPressPoster?: Function,
 
 	navigation: Object,
     handleBackPress: () => boolean,
@@ -55,6 +61,9 @@ type Props = {
 	posterCoverStyle?: Array<any> | Object,
 	goBack: () => void,
 	showPoster?: boolean,
+	rightButton?: Object,
+	extraData?: Object,
+	onPressLogo?: Function,
 };
 
 type DefaultProps = {
@@ -108,6 +117,7 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'h1',
 		'appLayout',
 		'showPoster',
+		'extraData',
 	]);
 }
 
@@ -138,6 +148,9 @@ render(): Object {
 		goBack,
 		showPoster,
 		align,
+		onPressPoster,
+		rightButton,
+		onPressLogo,
 	} = this.props;
 
 	return (
@@ -146,20 +159,27 @@ render(): Object {
 				navigation={navigation}
 				showLeftIcon={showLeftIcon}
 				leftIcon={leftIcon}
-				goBack={goBack}/>
+				goBack={goBack}
+				rightButton={rightButton}
+				onPressLogo={onPressLogo}/>
 			{showPoster && (
-				<PosterWithText
-					appLayout={appLayout}
-					align={align}
-					icon={icon}
-					h1={h1}
-					h2={h2}
-					showBackButton={showBackButton}
-					showLeftIcon={showLeftIcon}
-					navigation={navigation}
-					infoButton={infoButton}
-					leftIcon={leftIcon}
-					posterCoverStyle={posterCoverStyle}/>
+				<TouchableOpacity
+					onPress={onPressPoster}
+					disabled={!onPressPoster}
+					activeOpacity={1}>
+					<PosterWithText
+						appLayout={appLayout}
+						align={align}
+						icon={icon}
+						h1={h1}
+						h2={h2}
+						showBackButton={showBackButton}
+						showLeftIcon={showLeftIcon}
+						navigation={navigation}
+						infoButton={infoButton}
+						leftIcon={leftIcon}
+						posterCoverStyle={posterCoverStyle}/>
+				</TouchableOpacity>
 			)}
 		</View>
 	);

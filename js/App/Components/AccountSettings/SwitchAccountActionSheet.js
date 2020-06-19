@@ -24,6 +24,7 @@
 
 import React, {
 	useCallback,
+	useMemo,
 } from 'react';
 import {
 	StyleSheet,
@@ -32,6 +33,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const gravatar = require('gravatar-api');
 import { RadioButtonInput } from 'react-native-simple-radio-button';
 import { useIntl } from 'react-intl';
+import orderBy from 'lodash/orderBy';
 
 import {
 	View,
@@ -62,17 +64,44 @@ import {
 import {
 	navigate,
 } from '../../Lib/NavigationService';
+import {
+	useAppTheme,
+} from '../../Hooks/Theme';
 
 import i18n from '../../Translations/common';
 
 const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
+
+	const {
+		colors,
+	} = useAppTheme();
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
-		accounts = {},
+		accounts: _accounts = {},
 		userId = '',
 		pushToken,
 		switchAccountConf = {},
 	} = useSelector((state: Object): Object => state.user);
+	const {
+		accounts,
+		actionSheetItems,
+	 } = useMemo((): Object => {
+		const one = orderBy(_accounts, [(item: Object): any => {
+			const {
+				firstname = '',
+				lastname = '',
+				email,
+			} = item;
+			const nameInfo = `${firstname} ${lastname}`;
+			return `${nameInfo} ${email}`;
+		}], ['asc']);
+		const two = one.map((o: Object): string => o.accessToken.userId);
+		return {
+			accounts: one,
+			actionSheetItems: two,
+		};
+	}, [_accounts]);
+
 	const {
 		isLoggingOut = false,
 	} = switchAccountConf;
@@ -87,8 +116,21 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 		}
 	}
 
+	function closeActionSheet(index?: number, callback?: Function) {
+		if (actionSheetRef.current) {
+			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
+			actionSheetRef.current.hide(index, callback);
+		}
+	}
+
 	React.useImperativeHandle(ref, (): Object => ({
 		show: () => {
+			showActionSheet();
+		},
+		close: () => {
 			showActionSheet();
 		},
 	}));
@@ -131,17 +173,8 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	} = getStyles(layout, {
 		showAddNewAccount,
 		isLoggingOut,
+		colors,
 	});
-
-	function closeActionSheet(index?: number, callback?: Function) {
-		if (actionSheetRef.current) {
-			dispatch(toggleVisibilitySwitchAccountAS({
-				showAS: false,
-				isLoggingOut: false,
-			}));
-			actionSheetRef.current.hide(index, callback);
-		}
-	}
 
 	const onSelectActionSheet = useCallback((index: number) => {
 		if (switchingId) {
@@ -159,7 +192,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 				navigate('RegisterScreen');
 			}
 		} else {
-			const addNewIndex = Object.keys(accounts).length;
+			const addNewIndex = accounts.length;
 			if (index === addNewIndex) {
 				setShowAddNewAccount(true);
 				if (actionSheetRef.current) {
@@ -172,13 +205,14 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						isLoggingOut: false,
 					}));
 				}
-				let userIdKey = Object.keys(accounts)[index];
-				if (userIdKey) {
-					userIdKey = userIdKey.trim().toLowerCase();
-					setSwitchingId(userIdKey);
+				let account = accounts[index];
+				if (account && account.accessToken) {
 					const {
 						accessToken,
-					} = accounts[userIdKey];
+					} = account;
+					let { userId: _userId } = accessToken;
+					_userId = _userId.trim().toLowerCase();
+					setSwitchingId(_userId);
 
 					dispatch(getUserProfile(accessToken, true, false)).then((res: Object = {}) => {
 						closeActionSheet(undefined, () => {
@@ -192,7 +226,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 						});
 						setSwitchingId(null);
 						dispatch(onSwitchAccount({
-							userId: userIdKey,
+							userId: _userId,
 						}));
 
 						if (isLoggingOut) {
@@ -201,6 +235,9 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 								userId,
 							}));
 						}
+						navigate('Tabs', {
+							screen: 'Dashboard',
+						});
 					}).catch((err: Object) => {
 						closeActionSheet();
 						setSwitchingId(null);
@@ -229,7 +266,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 
 	let ACCOUNTS = [];
 	const disabledButtonIndexes = [];
-	Object.keys(accounts).map((un: string, index: number) => {
+	accounts.map((account: Object, index: number) => {
 		if (!showAddNewAccount) {
 			disabledButtonIndexes.push(index);
 		}
@@ -238,7 +275,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			firstname = '',
 			lastname = '',
 			accessToken = {},
-		} = accounts[un];
+		} = account;
 		const nameInfo = `${firstname} ${lastname}`;
 
 		let options = {
@@ -315,7 +352,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			ref={actionSheetRef}
 			extraData={{
 				showAddNewAccount,
-				items: Object.keys(accounts),
+				items: actionSheetItems,
 				isLoggingOut,
 			}}
 			disabledButtonIndexes={disabledButtonIndexes}
@@ -365,16 +402,25 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object): Object => {
+const getStyles = (appLayout: Object, {
+	showAddNewAccount,
+	isLoggingOut,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
+		card,
+		textThree,
+		textFive,
+		textSix,
+	} = colors;
+
+	const {
 		paddingFactor,
 		brandSecondary,
-		rowTextColor,
-		eulaContentColor,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
@@ -405,7 +451,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetTitle: {
 			fontSize: fontSizeActionSheetTitle,
-			color: '#000',
+			color: textThree,
 		},
 		actionSheetMessageBox: {
 			height: undefined,
@@ -415,11 +461,12 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			paddingHorizontal: padding,
 			alignItems: 'stretch',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
+			backgroundColor: card,
 		},
 		actionSheetTitleBox: {
 			height: titleBoxHeight,
 			marginBottom: StyleSheet.hairlineWidth,
+			backgroundColor: card,
 		},
 		actionSheetButtonOneCover: {
 			flex: 1,
@@ -436,7 +483,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetButtonOne: {
 			fontSize,
-			color: '#fff',
+			color: textThree,
 			textAlignVertical: 'center',
 			textAlign: 'center',
 		},
@@ -453,7 +500,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetButtonAccText: {
 			fontSize,
-			color: '#000',
+			color: textThree,
 			textAlignVertical: 'center',
 			textAlign: 'left',
 			marginHorizontal: padding,
@@ -462,7 +509,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 		},
 		actionSheetButtonAccEmailText: {
 			fontSize: fontSize * 0.9,
-			color: '#000',
+			color: textThree,
 			textAlignVertical: 'center',
 			textAlign: 'left',
 			marginHorizontal: padding,
@@ -477,7 +524,7 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			height: addIconCoverSize,
 			width: addIconCoverSize,
 			borderWidth: 0.5,
-			borderColor: rowTextColor,
+			borderColor: textSix,
 			alignItems: 'center',
 			justifyContent: 'center',
 		},
@@ -486,12 +533,12 @@ const getStyles = (appLayout: Object, {showAddNewAccount, isLoggingOut}: Object)
 			height: addIconCoverSize,
 			width: addIconCoverSize,
 			borderWidth: 0.5,
-			borderColor: rowTextColor,
+			borderColor: textSix,
 		},
 		addIconStyle: {
 			height: addIconSize,
 			width: addIconSize,
-			tintColor: eulaContentColor,
+			tintColor: textFive,
 		},
 		throbberContainerStyle: {
 			backgroundColor: 'transparent',

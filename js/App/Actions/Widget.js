@@ -117,6 +117,39 @@ const widgetiOSRemoveDataFromKeychain = () => {
 	}
 };
 
+const getWidgetConstants = (): Object => {
+	// NOTE: Calling synchronous native methods not supported while debugging in chrome
+	if (typeof atob !== 'undefined') {
+		return {};
+	}
+
+	if (Platform.OS === 'android') {
+		const { AndroidWidget } = NativeModules;
+		return AndroidWidget.getAllConstants();
+	}
+	return {};
+};
+
+const getWidgetTextFontSizeFactor = (): number => {
+	// NOTE: Calling synchronous native methods not supported while debugging in chrome
+	if (typeof atob !== 'undefined') {
+		return 0;
+	}
+	if (Platform.OS === 'android') {
+		const { AndroidWidget } = NativeModules;
+		return AndroidWidget.getTextFontSizeFactor();
+	}
+	return 0;
+};
+
+const setWidgetTextFontSizeFactor = (factor: number): Promise<number> => {
+	if (Platform.OS === 'android') {
+		const { AndroidWidget } = NativeModules;
+		return AndroidWidget.setTextFontSizeFactor(factor);
+	}
+	return Promise.resolve(1);
+};
+
 module.exports = {
 	widgetAndroidConfigure,
 	widgetAndroidDisableWidget,
@@ -126,4 +159,7 @@ module.exports = {
 	widgetAndroidRefresh,
 	widgetiOSConfigure,
 	widgetiOSRemoveDataFromKeychain,
+	getWidgetConstants,
+	getWidgetTextFontSizeFactor,
+	setWidgetTextFontSizeFactor,
 };

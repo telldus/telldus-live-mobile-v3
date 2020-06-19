@@ -5,6 +5,7 @@
     android:initialLayout="@layout/configurable_sensor_widget"
     android:minHeight="50dp"
     android:minWidth="120dp"
+    android:minResizeWidth="50dp"
     android:previewImage="@drawable/widget_sensor_default_theme"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"></appwidget-provider>

@@ -102,6 +102,9 @@ apply from: "../../node_modules/react-native/react.gradle"
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
+Project background_geolocation = project(':react-native-background-geolocation')
+apply from: "${background_geolocation.projectDir}/app.gradle"
+
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -157,7 +160,11 @@ android {
         versionCode readVersionCode()
         versionName readVersion()
         multiDexEnabled true
-        manifestPlaceholders = [googleMapsAPIKey: GOOGLE_MAPS_API_KEY, pushSenderId: PUSH_SENDER_ID]
+        manifestPlaceholders = [
+            googleMapsAPIKey: GOOGLE_MAPS_API_KEY,
+            pushSenderId: PUSH_SENDER_ID,
+            geolocationApplicationKey: GEOLOCATION_APPLICATION_KEY
+        ]
     }
     signingConfigs {
         debug {
@@ -222,6 +229,10 @@ android {
     }
 }
 
+crashlytics {
+  enableNdk true
+}
+
 dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -237,9 +248,6 @@ dependencies {
         implementation jscFlavor
     }
 
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.6') {
-        transitive = true;
-    }
     implementation 'com.android.support:multidex:1.0.2'
     implementation ("com.google.android.gms:play-services-base:17.0.0") {
         force = true;
@@ -250,16 +258,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-gcm:16.0.0") {
         force = true;
     }
-    implementation ('com.google.firebase:firebase-core:16.0.9') {
-        force = true;
-    }
-    implementation ('com.google.firebase:firebase-messaging:18.0.0') {
-        force = true;
-    }
     implementation ('com.google.android.gms:play-services-auth:16.0.0') {
-        force = true;
-    }
-    implementation ('com.google.firebase:firebase-config:17.0.0') {
         force = true;
     }
 

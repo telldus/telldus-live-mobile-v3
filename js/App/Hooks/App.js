@@ -19,13 +19,15 @@
  */
 // @flow
 'use strict';
-import React, {
+import {
 	useCallback,
 } from 'react';
 import {
-	useColorScheme,
 	Linking,
 } from 'react-native';
+import {
+	useMemo,
+} from 'react';
 import {
 	createIntl,
 	createIntlCache,
@@ -55,77 +57,24 @@ import {
 
 import i18n from '../Translations/common';
 
-import Theme from '../Theme';
-
-let relativeIntls = {};
+import * as Translations from '../Translations';
 
 const useRelativeIntl = (gatewayTimezone?: string = RNLocalize.getTimeZone()): Object => {
 	const { defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-
-	if (relativeIntls[gatewayTimezone]) {
-		return relativeIntls[gatewayTimezone];
-	}
-
 	let { language = {} } = defaultSettings;
 	let locale = language.code;
 
-	gatewayTimezone = gatewayTimezone;
-
-	const cache = createIntlCache();
-	relativeIntls[gatewayTimezone] = createIntl({
-		locale,
-		timeZone: gatewayTimezone,
-	}, cache);
-
-	return relativeIntls[gatewayTimezone];
-};
-
-const useAppTheme = (): Object => {
-	const colorScheme = useColorScheme();
-	const { themeInApp } = useSelector((state: Object): Object => state.app);
-	return React.useMemo((): Object => {
-		if (colorScheme === 'dark') {
-			return {
-				colorScheme,
-				dark: true,
-				...getThemeData(themeInApp),
-			};
-		}
-		return {
-			colorScheme,
-			dark: false,
-			...getThemeData(themeInApp),
-		};
+	return useMemo((): Object => {
+		const cache = createIntlCache();
+		return createIntl({
+			locale,
+			timeZone: gatewayTimezone,
+			messages: Translations[locale] || Translations.en,
+		}, cache);
 	}, [
-		colorScheme,
-		themeInApp,
+		locale,
+		gatewayTimezone,
 	]);
-};
-
-const getThemeData = (themeInApp: string | null): Object => {
-	const {
-		brandPrimary,
-		textColorOneLT,
-		borderColorOneLT,
-		backgroundColorOneLT,
-		activeTintOneLT,
-		inActiveTintOneLT,
-	} = Theme.Core;
-	switch (themeInApp) {
-		default: {
-			return {
-				colors: {
-					primary: brandPrimary,
-					text: textColorOneLT,
-					border: borderColorOneLT,
-					background: backgroundColorOneLT,
-					card: backgroundColorOneLT,
-					activeTintOne: activeTintOneLT,
-					inActiveTintOne: inActiveTintOneLT,
-				},
-			};
-		}
-	}
 };
 
 const useNoInternetDialogue = (): Object => {
@@ -241,6 +190,10 @@ const useSwitchOrAddAccountAction = (): Object => {
 
 		if (hasAPremAccount) {
 			dispatch(toggleVisibilitySwitchAccountAS({
+				showAS: false,
+				isLoggingOut: false,
+			}));
+			dispatch(toggleVisibilitySwitchAccountAS({
 				showAS: true,
 				isLoggingOut: false,
 			}));
@@ -257,7 +210,6 @@ const useSwitchOrAddAccountAction = (): Object => {
 
 module.exports = {
 	useRelativeIntl,
-	useAppTheme,
 	useNoInternetDialogue,
 	useCampaignAction,
 	useSwitchOrAddAccountAction,

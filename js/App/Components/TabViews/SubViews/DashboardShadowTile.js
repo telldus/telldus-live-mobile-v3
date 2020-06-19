@@ -29,12 +29,14 @@ import Theme from '../../../Theme';
 import i18n from '../../../Translations/common';
 
 const Title = ({ name, tileWidth, icon, iconContainerStyle, iconStyle, info, formatMessage }: Object): Object => (
-	<View style={[styles.title, {
-		width: tileWidth,
-		height: Math.ceil(tileWidth * 0.6),
-		paddingHorizontal: tileWidth * 0.06,
-		paddingVertical: tileWidth * 0.06,
-	}]}>
+	<View
+		level={2}
+		style={[styles.title, {
+			width: tileWidth,
+			height: Math.ceil(tileWidth * 0.6),
+			paddingHorizontal: tileWidth * 0.06,
+			paddingVertical: tileWidth * 0.06,
+		}]}>
 		{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 		<View style={styles.textCover}>
 			<Text
@@ -87,9 +89,10 @@ class DashboardShadowTile extends View<Props, null> {
 			// Because of the limitation of react-native so we need 2 nested views to create an rounded corner view
 			// with shadow
 			<View
+				level={2}
 				accessible={true}
 				accessibilityLabel={accessibilityLabel}
-				style={[this.props.style, Theme.Core.shadow, {elevation: 3, backgroundColor: '#fff'}]}>
+				style={[this.props.style, Theme.Core.shadow, {elevation: 3}]}>
 				<View style={{
 					flexDirection: 'column',
 					borderRadius: 2,
@@ -116,7 +119,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderTopLeftRadius: 2,
 		borderTopRightRadius: 2,
-		backgroundColor: '#ffffff',
 	},
 	noShadow: {
 		borderRadius: 2,

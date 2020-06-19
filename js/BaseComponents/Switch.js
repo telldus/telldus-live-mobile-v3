@@ -24,7 +24,11 @@
 import React from 'react';
 import { Switch } from 'react-native';
 import Base from './Base';
-import Theme from '../App/Theme';
+
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../App/Components/HOC/withTheme';
 
 type Props = {
 	value: boolean,
@@ -33,25 +37,16 @@ type Props = {
 	onTintColor?: any,
 	tintColor?: any,
 	style?: Array<any> | Object,
+	thumbColor: string,
 };
 
-type DefaultProps = {
-	thumbTintColor: any,
-	onTintColor: any,
-	tintColor: any,
-};
+type PropsThemedSwitch = Props & PropsThemedComponent;
 
-export default class SwitchComponent extends Base {
-	props: Props;
+class SwitchComponent extends Base {
+	props: PropsThemedSwitch;
 	onValueChange: (boolean) => void;
 
-	static defaultProps: DefaultProps = {
-		thumbTintColor: Theme.Core.brandSecondary,
-		onTintColor: '#e2690150',
-		tintColor: Theme.Core.inactiveSwitchBackground,
-	}
-
-	constructor(props: Props) {
+	constructor(props: PropsThemedSwitch) {
 		super();
 		this.onValueChange = this.onValueChange.bind(this);
 	}
@@ -64,19 +59,29 @@ export default class SwitchComponent extends Base {
 	}
 
 	render(): React$Element<any> {
-		const { onTintColor, tintColor, value, style } = this.props;
-		const thumbColor = value ? Theme.Core.brandSecondary : Theme.Core.inactiveSwitch;
+		const {
+			onTintColor,
+			tintColor,
+			value,
+			style,
+			thumbColor,
+			colors,
+		} = this.props;
+		const _thumbColor = thumbColor || (value ? colors.thumbColorActiveSwitch : colors.thumbColorInActiveSwitch);
 
 		return (
 			<Switch
 				value={value}
 				onValueChange={this.onValueChange}
 				style={style}
-				thumbColor={thumbColor}
+				thumbColor={_thumbColor}
 				trackColor={{
-					false: tintColor,
-					true: onTintColor,
-				}}/>
+					false: tintColor || colors.trackColorInActiveSwitch,
+					true: onTintColor || colors.trackColorActiveSwitch,
+				}}
+				ios_backgroundColor={value ? undefined : tintColor || colors.trackColorInActiveSwitch}/>
 		);
 	}
 }
+
+export default withTheme(SwitchComponent);

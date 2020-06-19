@@ -198,7 +198,9 @@ export default class Device extends View<void, Props, State> {
 			sectionHeader,
 		} = this.getStyles();
 		return (
-			<View style={sectionHeader}>
+			<View
+				level={2}
+				style={sectionHeader}>
 				<Text style={[Theme.Styles.sectionHeaderText, {fontSize: nameFontSize}]}>
 					{key}
 				</Text>
@@ -229,7 +231,6 @@ export default class Device extends View<void, Props, State> {
 			sectionHeader: {
 				flexDirection: 'row',
 				paddingVertical: 2 + (nameFontSize * 0.2),
-				backgroundColor: '#ffffff',
 				alignItems: 'center',
 				paddingLeft: 5 + (nameFontSize * 0.2),
 				justifyContent: 'flex-start',

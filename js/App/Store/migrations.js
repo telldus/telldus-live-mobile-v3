@@ -80,13 +80,20 @@ export default function migrations(state: Object = {}): Promise<any> {
 		};
 	}
 
-	const { userId } = user || {};
+	let { userId, userProfile = {} } = user || {};
+	if (!userId) {
+		const {
+			email = '', // TODO: Replace with real userId once available from the API.
+		} = userProfile;
+		userId = email;
+	}
+
 	if (dashboard && userId) {
 		const {
 			devicesById = {},
-			deviceIds,
 			sensorsById = {},
 			sensorIds,
+			deviceIds,
 		} = dashboard;
 
 		const prevDataType = [true, false];
@@ -94,7 +101,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 		let newDashboard = {...dashboard};
 
 		const devicesByIdC = Object.keys(devicesById);
-		if (devicesByIdC.length > 0 && prevDataType.indexOf(devicesById[devicesByIdC[0]] !== -1)) {
+		if (devicesByIdC.length > 0 && prevDataType.indexOf(devicesById[devicesByIdC[0]]) !== -1) {
 			newDashboard = {
 				...newDashboard,
 				devicesById: {
@@ -102,11 +109,6 @@ export default function migrations(state: Object = {}): Promise<any> {
 						[defaultDashboardId]: devicesById,
 					},
 				},
-			};
-		}
-		if (deviceIds && typeof deviceIds.length !== 'undefined') {
-			newDashboard = {
-				...newDashboard,
 				deviceIds: {
 					[userId]: {
 						[defaultDashboardId]: deviceIds,
@@ -115,7 +117,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 			};
 		}
 		const sensorsByIdC = Object.keys(sensorsById);
-		if (sensorsByIdC.length > 0 && prevDataType.indexOf(sensorsById[sensorsByIdC[0]] !== -1)) {
+		if (sensorsByIdC.length > 0 && prevDataType.indexOf(sensorsById[sensorsByIdC[0]]) !== -1) {
 			newDashboard = {
 				...newDashboard,
 				sensorsById: {
@@ -123,11 +125,6 @@ export default function migrations(state: Object = {}): Promise<any> {
 						[defaultDashboardId]: sensorsById,
 					},
 				},
-			};
-		}
-		if (sensorIds && typeof sensorIds.length !== 'undefined') {
-			newDashboard = {
-				...newDashboard,
 				sensorIds: {
 					[userId]: {
 						[defaultDashboardId]: sensorIds,

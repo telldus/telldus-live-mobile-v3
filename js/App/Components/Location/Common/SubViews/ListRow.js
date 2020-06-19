@@ -24,9 +24,12 @@
 'use strict';
 
 import React from 'react';
-import {TouchableOpacity, Text} from 'react-native';
 
-import { View } from '../../../../../BaseComponents';
+import {
+	View,
+	TouchableOpacity,
+	Text,
+} from '../../../../../BaseComponents';
 
 type Props = {
 	item: string,
@@ -55,9 +58,14 @@ export default class ListRow extends View {
 		const styles = this.getStyle(appLayout);
 
 		return (
-			<TouchableOpacity onPress={this.onPress}>
-				<View style={styles.rowItems}>
+			<TouchableOpacity
+				level={2}
+				onPress={this.onPress}>
+				<View
+					level={2}
+					style={styles.rowItems}>
 					<Text
+						level={6}
 						style={styles.text}
 						allowFontScaling={false}>{this.props.item}</Text>
 				</View>
@@ -75,7 +83,6 @@ export default class ListRow extends View {
 		return {
 			rowItems: {
 				width: width,
-				backgroundColor: '#ffffff',
 				marginTop: 2,
 				justifyContent: 'center',
 			},
@@ -83,7 +90,6 @@ export default class ListRow extends View {
 				fontSize,
 				marginLeft: 10 + (fontSize * 0.2),
 				paddingVertical: 10 + (fontSize * 0.2),
-				color: '#A59F9A',
 			},
 		};
 	}

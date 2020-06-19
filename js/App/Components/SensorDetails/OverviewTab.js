@@ -22,11 +22,15 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView, RefreshControl } from 'react-native';
+import { RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 const isEqual = require('react-fast-compare');
 
-import { View, LocationDetails } from '../../../BaseComponents';
+import {
+	View,
+	LocationDetails,
+	ThemedScrollView,
+} from '../../../BaseComponents';
 import { SensorTypes, BatteryInfo } from './SubViews';
 
 import { getSensorInfo } from '../../Actions';
@@ -91,6 +95,9 @@ class OverviewTab extends View<Props, State> {
 
 	componentDidMount() {
 		const { dispatch, sensor } = this.props;
+		if (!sensor) {
+			return;
+		}
 		const { clientId, sensorId } = sensor;
 		dispatch(requestNodeInfo(clientId, sensorId));
 	}
@@ -161,10 +168,10 @@ class OverviewTab extends View<Props, State> {
 		} = this.getStyles(appLayout);
 
 		return (
-			<ScrollView
+			<ThemedScrollView
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}
 				contentContainerStyle={contentContainerStyle}
 				refreshControl={
@@ -186,7 +193,7 @@ class OverviewTab extends View<Props, State> {
 				{(!!battery && battery !== 254) && (
 					<BatteryInfo battery={battery} appLayout={appLayout} style={batterInfoStyle}/>
 				)}
-			</ScrollView>
+			</ThemedScrollView>
 		);
 	}
 

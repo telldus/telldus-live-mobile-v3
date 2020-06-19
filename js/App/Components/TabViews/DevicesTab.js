@@ -46,7 +46,6 @@ import {
 } from './SubViews/EmptyInfo';
 
 import { getDevices, setIgnoreDevice } from '../../Actions/Devices';
-
 import {
 	LayoutAnimations,
 	getItemLayout,
@@ -420,7 +419,9 @@ class DevicesTab extends View {
 	getDialogueBoxData(action: string, device: Object): Object {
 		const { screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		let data = {
 			show: true,
@@ -473,7 +474,9 @@ class DevicesTab extends View {
 	toggleHiddenListButton(): Object {
 		const { screenProps, currentScreen } = this.props;
 		const accessible = currentScreen === 'Devices';
-		const style = this.getStyles(screenProps.appLayout);
+		const style = this.getStyles({
+			appLayout: screenProps.appLayout,
+		});
 
 		const { showHiddenList } = this.state;
 		const accessibilityLabelOne = showHiddenList ? this.hideHidden : this.showHidden;
@@ -486,9 +489,16 @@ class DevicesTab extends View {
 				accessible={accessible}
 				importantForAccessibility={accessible ? 'yes' : 'no-hide-descendants'}
 				accessibilityLabel={accessibilityLabel}>
-				<IconTelldus icon="hidden" style={style.toggleHiddenListIcon}
-					importantForAccessibility="no" accessible={false}/>
-				<Text style={style.toggleHiddenListText} accessible={false}>
+				<IconTelldus
+					level={2}
+					icon="hidden"
+					style={style.toggleHiddenListIcon}
+					importantForAccessibility="no"
+					accessible={false}/>
+				<Text
+					level={2}
+					style={style.toggleHiddenListText}
+					accessible={false}>
 					{showHiddenList ?
 						this.hideHidden
 						:
@@ -600,7 +610,7 @@ class DevicesTab extends View {
 		} = route.params || {};
 
 		if (newDevices) {
-			LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+			LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 			navigation.setParams({
 				newDevices: undefined,
 			});
@@ -710,7 +720,9 @@ class DevicesTab extends View {
 			showRefresh,
 		} = this.state;
 
-		const style = this.getStyles(appLayout);
+		const style = this.getStyles({
+			appLayout,
+		});
 
 		if (gateways.length === 0 && gatewaysDidFetch) {
 			return <NoGateways
@@ -734,7 +746,9 @@ class DevicesTab extends View {
 		};
 		const listData = this.prepareFinalListData(rowsAndSections);
 		return (
-			<View style={style.container}>
+			<View
+				level={3}
+				style={style.container}>
 				<SectionList
 					sections={listData}
 					renderItem={this.renderRow}
@@ -758,7 +772,9 @@ class DevicesTab extends View {
 		);
 	}
 
-	getStyles(appLayout: Object): Object {
+	getStyles({
+		appLayout,
+	}: Object): Object {
 		const { height, width } = appLayout;
 		const isPortrait = height > width;
 		const deviceWidth = isPortrait ? width : height;
@@ -774,20 +790,10 @@ class DevicesTab extends View {
 		hiddenListIconFontSize = hiddenListIconFontSize > 50 ? 50 : hiddenListIconFontSize;
 
 		return {
-			noItemsContainer: {
-				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
-				paddingHorizontal: 30,
-				paddingTop: 10,
-				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : width * 0.08,
-				backgroundColor: Theme.Core.appBackground,
-			},
 			container: {
 				flex: 1,
 				paddingHorizontal: this.props.devices.length === 0 ? 30 : 0,
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
-				backgroundColor: Theme.Core.appBackground,
 			},
 			toggleHiddenListButton: {
 				flexDirection: 'row',
@@ -799,13 +805,11 @@ class DevicesTab extends View {
 			toggleHiddenListIcon: {
 				marginTop: 4,
 				fontSize: hiddenListIconFontSize,
-				color: Theme.Core.rowTextColor,
 			},
 			toggleHiddenListText: {
 				marginLeft: 6,
 				fontSize: hiddenListTextFontSize,
 				textAlign: 'center',
-				color: Theme.Core.rowTextColor,
 			},
 			headerWidth: deviceWidth * 0.75,
 			headerHeight: deviceWidth * 0.1,
@@ -875,4 +879,5 @@ function mapDispatchToProps(dispatch: Function): Object {
 	};
 }
 
-module.exports = connect(mapStateToProps, mapDispatchToProps)(DevicesTab);
+export default connect(mapStateToProps, mapDispatchToProps)(DevicesTab);
+

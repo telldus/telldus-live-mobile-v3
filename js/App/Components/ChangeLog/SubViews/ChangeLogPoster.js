@@ -52,7 +52,8 @@ class ChangeLogPoster extends View {
 				appLayout={appLayout}
 				align={'right'}
 				h1={h1}
-				h2={h2}/>
+				h2={h2}
+				showLeftIcon={false}/>
 		);
 	}
 }

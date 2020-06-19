@@ -89,7 +89,9 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			...requestParams,
 		};
 
-		return doApiCall(url, requestParams, _accessToken || accessToken, dispatch).then((response: Object): any => {
+		const accessTokenFinal = _accessToken || accessToken;
+
+		return doApiCall(url, requestParams, accessTokenFinal, dispatch).then((response: Object): any => {
 			const currUserSources = axiosSources[userId] || {};
 			delete currUserSources[path];
 
@@ -106,7 +108,7 @@ export function LiveApi({ url, requestParams, _accessToken, cancelAllPending = f
 			if (axios.isCancel(error)) {// DO not throw axios cancel
 				return error;
 			} else if (data && (data.error === 'invalid_token' || data.error === 'expired_token')) {
-				const { userId: userIdRequest = '' } = accessToken;
+				const { userId: userIdRequest = '' } = accessTokenFinal;
 				const isRequestMadeByTheActiveAccount = userIdRequest.trim().toLowerCase() === userId.trim().toLowerCase();
 				if (isRequestMadeByTheActiveAccount) {
 					return dispatch({

@@ -22,8 +22,6 @@
 'use strict';
 
 import React, {
-	useEffect,
-	useState,
 	useCallback,
 } from 'react';
 import {
@@ -39,7 +37,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ExtraDimensions from 'react-native-extra-dimensions-android';
 import { useIntl } from 'react-intl';
 
-import { hasStatusBar as hasStatusBarMeth } from '../App/Lib';
 import Theme from '../App/Theme';
 
 import Button from './Button';
@@ -61,6 +58,7 @@ type Props = {
 	showAttentionCapture: boolean,
 	forceHideStatus?: boolean,
 	style: Object | Array<any>,
+	onPressLogo?: Function,
 };
 
 const HeaderComponent = (props: Props): Object => {
@@ -73,8 +71,8 @@ const HeaderComponent = (props: Props): Object => {
 		leftButton,
 		rightButton,
 		showAttentionCapture,
-		forceHideStatus,
 		style,
+		onPressLogo,
 	} = props;
 
 	const {
@@ -96,27 +94,22 @@ const HeaderComponent = (props: Props): Object => {
 		toolbarButton,
 		androidToolbarSearch,
 		headerButton,
-		statusBar,
 	} = getStyles(appLayout, {
 		rounded,
 		children,
 	});
 
-	const [ hasStatusBar, setHasStatusBar ] = useState(false);
-	useEffect(() => {
-		(async () => {
-			const _hasStatusBar = await hasStatusBarMeth();
-			setHasStatusBar(_hasStatusBar);
-		})();
-	}, []);
-
 	const renderChildren = useCallback((): ?Object | ?Array<any> => {
 		if (!children) {
 			return (
-				<Image
-					source={{uri: 'telldus_logo'}}
-					style={[logoImage, logoStyle]}
-				/>
+				<TouchableOpacity
+					disabled={!onPressLogo}
+					onPress={onPressLogo}>
+					<Image
+						source={{uri: 'telldus_logo'}}
+						style={[logoImage, logoStyle]}
+					/>
+				</TouchableOpacity>
 			);
 		} else if (!Array.isArray(children)) {
 			return children;
@@ -345,6 +338,7 @@ const HeaderComponent = (props: Props): Object => {
 		return (
 			<TouchableOpacity
 				onPress={button.onPress}
+				disabled={!button.onPress}
 				accessibilityLabel={accessibilityLabel}
 				style={[
 					headerButton,
@@ -371,6 +365,7 @@ const HeaderComponent = (props: Props): Object => {
 		return (
 			<TouchableOpacity
 				onPress={button.onPress}
+				disabled={!button.onPress}
 				accessibilityLabel={accessibilityLabel}
 				style={[
 					headerButton,
@@ -390,11 +385,6 @@ const HeaderComponent = (props: Props): Object => {
 
 	return (
 		<View style={{ flex: 0 }}>
-			{
-				(!forceHideStatus && Platform.OS === 'android' && hasStatusBar) ? (
-					<View style={statusBar}/>
-				) : null
-			}
 			<View style={[navbar, style]}>
 				{!!leftButton && renderLeftButton(leftButton)}
 				{renderChildren()}
@@ -414,14 +404,15 @@ const getStyles = (appLayout: Object, {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const paddingHorizontal = 15;
-
 	const {
 		navBarTopPadding: paddingTop,
 		toolbarDefaultBg,
 		toolbarHeight,
 		toolbarInputColor,
+		headerButtonHorizontalPadding,
 	 } = Theme.Core;
+
+	const paddingHorizontal = headerButtonHorizontalPadding;
 
 	return {
 		navbar: {

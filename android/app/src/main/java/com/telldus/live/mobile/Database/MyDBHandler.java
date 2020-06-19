@@ -75,6 +75,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
     @Override
+    public void onConfigure (SQLiteDatabase db) {
+        db.enableWriteAheadLogging();
+    }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_USER_TABLE = "CREATE TABLE " +
                 TABLE_WIDGET_INFO_DEVICE + "("+ WIDGET_ID_DEVICE + " INTEGER," + DEVICE_ID
@@ -447,6 +452,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         mcursor.moveToFirst();
         int icount = mcursor.getInt(0);
 
+        db.close();
         return icount;
     }
 

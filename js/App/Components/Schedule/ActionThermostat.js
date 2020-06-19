@@ -222,7 +222,7 @@ export default class ActionThermostat extends View<null, Props, State> {
 			...methodValue,
 			...newMethodValue,
 		};
-		LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 		this.setState({
 			methodValue: methodValueN,
 		});
@@ -281,7 +281,9 @@ export default class ActionThermostat extends View<null, Props, State> {
 							onChange={this.onChange}/>
 					}
 					{!hideTemperatureControl ?
-						<Text style={tempLabelStyle}>
+						<Text
+							level={2}
+							style={tempLabelStyle}>
 							{intl.formatMessage(i18n.labelTemperature)}
 						</Text>
 						:
@@ -327,7 +329,6 @@ export default class ActionThermostat extends View<null, Props, State> {
 				marginTop: outerPadding,
 				marginLeft: outerPadding,
 				fontSize: deviceWidth * 0.04,
-				color: Theme.Core.rowTextColor,
 			},
 		};
 	};

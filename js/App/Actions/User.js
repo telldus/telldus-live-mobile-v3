@@ -46,9 +46,8 @@ import {
 
 const prepareDeviceId = (deviceId: string = ''): string => {
 	deviceId = deviceId.trim();
-	return (!deviceId || deviceId.length === 0) ? DeviceInfo.getUniqueId() : deviceId;
+	return (!deviceId || deviceId === '' || deviceId.length === 0) ? DeviceInfo.getUniqueId() : deviceId;
 };
-
 
 /*
  * registers the app at the telldus server for receiving push notification, with push token and other device information.
@@ -167,7 +166,7 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			if (responseData.error) {
 				throw responseData;
 			}
-			setBoolean('Email', true);
+			setBoolean('Email', 'true');
 			dispatch({
 				type: 'USER_REGISTER',
 				accessToken: {
@@ -178,7 +177,7 @@ const registerUser = (email: string, firstName: string, lastName: string): Thunk
 			});
 			return responseData;
 		}).catch((e: Object): any => {
-			setBoolean('Email', false);
+			setBoolean('Email', 'false');
 			throw e;
 		});
 };
@@ -504,4 +503,5 @@ module.exports = {
 	setSocialAuthConfig,
 	checkAndLinkAccountIfRequired,
 	toggleVisibilityEula,
+	prepareDeviceId,
 };

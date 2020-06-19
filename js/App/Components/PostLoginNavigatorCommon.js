@@ -60,7 +60,7 @@ import {
 	getUserSubscriptions,
 	campaignVisited,
 	toggleVisibilityProExpireHeadsup,
-	checkPermissionAndInitializeWatcher,
+	setupGeoFence,
 	fetchRemoteConfig,
 	prepareGAPremiumProperties,
 	updateAllAccountsInfo,
@@ -100,6 +100,7 @@ type Props = {
 	pushTokenRegistered: boolean,
 	deviceId: string,
 	pushToken: string,
+	visibilityEula: boolean,
 
     showToast: boolean,
 	messageToast: string,
@@ -121,6 +122,8 @@ type Props = {
 	userId: string,
 
 	showLoadingIndicator: boolean,
+
+	enableGeoFence: boolean,
 
     intl: intlShape.isRequired,
     dispatch: Function,
@@ -150,6 +153,9 @@ addNewDevice: () => void;
 refSwitchAccountActionSheet: Object;
 screensAllowsNavigationOrModalOverride: Array<string>;
 clearNetInfoListener: any;
+
+clearListenerSyncLiveApiOnForeground: any;
+clearListenerAppState: any;
 
 constructor(props: Props) {
 	super(props);
@@ -193,12 +199,14 @@ constructor(props: Props) {
 
 	this.refSwitchAccountActionSheet = {};
 	this.clearNetInfoListener = null;
+	this.clearListenerSyncLiveApiOnForeground = null;
+	this.clearListenerAppState = null;
 }
 
 async componentDidMount() {
 	const { dispatch } = this.props;
 	dispatch(appStart());
-	dispatch(appState());
+	this.clearListenerAppState = await dispatch(appState());
 
 	dispatch(updateAllAccountsInfo());
 
@@ -216,11 +224,19 @@ actionsToPerformOnStart = async () => {
 		pro,
 		visibilityProExpireHeadsup,
 		showLoadingIndicator,
+		enableGeoFence,
 	} = this.props;
 
-	// NOTE : Make sure "fetchRemoteConfig" is called before 'checkPermissionAndInitializeWatcher'.
-	await dispatch(fetchRemoteConfig());
-	dispatch(checkPermissionAndInitializeWatcher());
+	try {
+		// NOTE : Make sure "fetchRemoteConfig" is called before 'setupGeoFence'.
+		await dispatch(fetchRemoteConfig());
+
+		if (enableGeoFence) {
+			await dispatch(setupGeoFence());
+		}
+	} catch (e) {
+		// Ignore
+	}
 
 	// Calling other API requests after resolving the very first one, in order to avoid the situation, where
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
@@ -309,7 +325,7 @@ actionsToPerformOnStart = async () => {
 			});
 		}
 
-		dispatch(syncLiveApiOnForeground());
+		this.clearListenerSyncLiveApiOnForeground = await dispatch(syncLiveApiOnForeground());
 		dispatch(getAppData()).then(() => {
 			dispatch(widgetAndroidRefresh());
 		});
@@ -434,6 +450,8 @@ shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		'showLoadingIndicator',
 		'screen',
 		'showSwitchAccountAS',
+		'enableGeoFence',
+		'visibilityEula',
 	]);
 	if (propsChange) {
 		return true;
@@ -523,11 +541,19 @@ componentWillUnmount() {
 		this.onTokenRefreshListener();
 		this.onTokenRefreshListener = null;
 	}
+	if (this.clearListenerSyncLiveApiOnForeground) {
+		this.clearListenerSyncLiveApiOnForeground();
+		this.clearListenerSyncLiveApiOnForeground = null;
+	}
+	if (this.clearListenerAppState) {
+		this.clearListenerAppState();
+		this.clearListenerAppState = null;
+	}
 }
 
-doesAllowsToOverrideScreen = (): boolean => {
+doesAllowsToOverrideScreen = (extraScreens?: Object = []): boolean => {
 	const { screen } = this.props;
-	return this.screensAllowsNavigationOrModalOverride.indexOf(screen) !== -1;
+	return this.screensAllowsNavigationOrModalOverride.concat(extraScreens).indexOf(screen) !== -1;
 }
 
 addNewLocation = () => {
@@ -694,12 +720,13 @@ render(): Object {
 		showLoadingIndicator,
 		onLayout,
 		gateways,
+		visibilityEula,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
 	const importantForAccessibility = showStep ? 'no-hide-descendants' : 'no';
 
-	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen();
+	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
 	const showUA = showEulaModal && !showChangeLog;
 
 	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA;
@@ -752,7 +779,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		defaultSettings,
 	} = state.app;
 
-	let { language = {} } = defaultSettings || {};
+	let { language = {}, enableGeoFence } = defaultSettings || {};
 	let locale = language.code;
 
 	let {
@@ -787,6 +814,7 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		gateways: state.gateways,
 
 		showEULA: !getUserProfileSelector(state).eula || visibilityEula,
+		visibilityEula,
 		dimmer: state.dimmer,
 		screenReaderEnabled,
 
@@ -801,6 +829,8 @@ function mapStateToProps(state: Object, ownProps: Object): Object {
 		showSwitchAccountAS: switchAccountConf.showAS,
 
 		showLoadingIndicator,
+
+		enableGeoFence: typeof enableGeoFence === 'undefined' ? true : enableGeoFence,
 	};
 }
 

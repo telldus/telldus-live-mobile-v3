@@ -28,7 +28,6 @@ import React, {
 } from 'react';
 import { useSelector } from 'react-redux';
 import {
-	TouchableOpacity,
 	StyleSheet,
 } from 'react-native';
 import { useIntl } from 'react-intl';
@@ -36,6 +35,7 @@ import { useIntl } from 'react-intl';
 import {
 	Text,
 	View,
+	TouchableOpacity,
 } from '../../../../BaseComponents';
 import CARD from '../../TabViews/img/payment/payment-provider-card.svg';
 import PAYPAL from '../../TabViews/img/payment/payment-provider-paypal.svg';
@@ -90,16 +90,22 @@ const PaymentProvidersBlock = (props: Object): Object => {
 			const IMAGE = PAYMENT_IMAGES[image];
 
 			return (
-				<TouchableOpacity key={`${key}`} style={[contentCoverStyle, {
-					marginLeft: (key % 2 === 0) ? 0 : padding / 2,
-				}, selectedIndex === key ? {
-					borderWidth: 3,
-					borderColor: Theme.Core.brandSecondary,
-				} : undefined]}
-				onPress={onSelectOption}>
+				<TouchableOpacity
+					level={2}
+					key={`${key}`}
+					style={[contentCoverStyle, {
+						marginLeft: (key % 2 === 0) ? 0 : padding / 2,
+					}, selectedIndex === key ? {
+						borderWidth: 3,
+						borderColor: Theme.Core.brandSecondary,
+					} : undefined]}
+					onPress={onSelectOption}>
 					<View style={innerCoverStyle}>
 						<View style={nameCoverStyle}>
-							<Text style={nameStyle} numberOfLines={1}>
+							<Text
+								level={5}
+								style={nameStyle}
+								numberOfLines={1}>
 								{name.toUpperCase()}
 							</Text>
 						</View>
@@ -116,7 +122,9 @@ const PaymentProvidersBlock = (props: Object): Object => {
 
 	return (
 		<View style={[coverStyle, style]}>
-			<Text style={labelStyle}>
+			<Text
+				level={6}
+				style={labelStyle}>
 				{formatMessage(i18n.selectPaymentProvider)}
 			</Text>
 			<View style={optionsCoverStyle}>
@@ -153,7 +161,6 @@ const getStyle = (appLayout: Object): Object => {
 		},
 		labelStyle: {
 			fontSize: Math.floor(deviceWidth * 0.036) * 1.2,
-			color: Theme.Core.rowTextColor,
 			marginLeft: padding,
 			marginTop: padding * 2,
 			padding: 3,
@@ -171,7 +178,6 @@ const getStyle = (appLayout: Object): Object => {
 			width: coverWidth,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			padding,
 			borderRadius: 2,
@@ -203,7 +209,6 @@ const getStyle = (appLayout: Object): Object => {
 		},
 		nameStyle: {
 			fontSize: fontSize * 1.2,
-			color: Theme.Core.eulaContentColor,
 			textAlign: 'center',
 			fontWeight: 'bold',
 		},

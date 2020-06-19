@@ -24,7 +24,6 @@
 
 import React from 'react';
 import {
-	ScrollView,
 	LayoutAnimation,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -34,6 +33,7 @@ import {
 	TouchableButton,
 	IconTelldus,
 	Text,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { ExcludeDevice } from '../Common';
 
@@ -100,7 +100,7 @@ onPressExit() {
 }
 
 onExcludeSuccessImmediate() {
-	LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+	LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	this.setState({
 		excludeSuccess: true,
 	});
@@ -150,7 +150,6 @@ render(): Object {
 	const { excludeSuccess } = this.state;
 
 	const {
-		container,
 		buttonStyle,
 		infoContainer,
 		statusIconStyle,
@@ -162,41 +161,44 @@ render(): Object {
 	} = route.params || {};
 
 	return (
-		<View style={container}>
-			<ScrollView>
-				{excludeSuccess ?
-					<View style={{
-						flex: 1,
-					}}>
-						<View style={infoContainer}>
-							<IconTelldus icon={'info'} style={statusIconStyle}/>
-							<Text style={infoTextStyle}>
-								{intl.formatMessage(i18n.excludedSuccessfullyMessage)}
-							</Text>
-						</View>
-						<TouchableButton
-							text={i18n.includeDevice}
-							onPress={this.onPressInclude}
-							style={buttonStyle}/>
-						<TouchableButton
-							text={i18n.exit}
-							onPress={this.onPressExit}
-							style={buttonStyle}/>
+		<ThemedScrollView
+			level={3}>
+			{excludeSuccess ?
+				<View style={{
+					flex: 1,
+				}}>
+					<View
+						level={2}
+						style={infoContainer}>
+						<IconTelldus icon={'info'} style={statusIconStyle}/>
+						<Text
+							level={5}
+							style={infoTextStyle}>
+							{intl.formatMessage(i18n.excludedSuccessfullyMessage)}
+						</Text>
 					</View>
-					:
-					<ExcludeDevice
-						clientId={gateway.id}
-						appLayout={appLayout}
-						intl={intl}
-						registerForWebSocketEvents={this.registerForWebSocketEvents}
-						showToast={this.props.showToast}
-						onExcludeSuccessImmediate={this.onExcludeSuccessImmediate}
-						onExcludeTimedoutImmediate={this.onExcludeTimedoutImmediate}
-						onPressCancelExclude={this.onPressCancelExclude}
-						onCantEnterExclusionTimeout={this.onCantEnterExclusionTimeout}/>
-				}
-			</ScrollView>
-		</View>
+					<TouchableButton
+						text={i18n.includeDevice}
+						onPress={this.onPressInclude}
+						style={buttonStyle}/>
+					<TouchableButton
+						text={i18n.exit}
+						onPress={this.onPressExit}
+						style={buttonStyle}/>
+				</View>
+				:
+				<ExcludeDevice
+					clientId={gateway.id}
+					appLayout={appLayout}
+					intl={intl}
+					registerForWebSocketEvents={this.registerForWebSocketEvents}
+					showToast={this.props.showToast}
+					onExcludeSuccessImmediate={this.onExcludeSuccessImmediate}
+					onExcludeTimedoutImmediate={this.onExcludeTimedoutImmediate}
+					onPressCancelExclude={this.onPressCancelExclude}
+					onCantEnterExclusionTimeout={this.onCantEnterExclusionTimeout}/>
+			}
+		</ThemedScrollView>
 	);
 }
 
@@ -205,7 +207,7 @@ getStyles(): Object {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
-	const { paddingFactor, eulaContentColor, brandSecondary, shadow } = Theme.Core;
+	const { paddingFactor, brandSecondary, shadow } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 	const innerPadding = 5 + padding;
@@ -213,9 +215,6 @@ getStyles(): Object {
 	const infoTextFontSize = deviceWidth * 0.04;
 
 	return {
-		container: {
-			flex: 1,
-		},
 		buttonStyle: {
 			marginTop: padding,
 		},
@@ -224,7 +223,6 @@ getStyles(): Object {
 			flexDirection: 'row',
 			margin: padding,
 			padding: innerPadding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -237,7 +235,6 @@ getStyles(): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: infoTextFontSize,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: innerPadding,
 		},

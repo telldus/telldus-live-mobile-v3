@@ -121,11 +121,15 @@ onChooseLocation(gateway: Object) {
 
 renderRow(item: Object): Object {
 	const { navigation, intl } = this.props;
+	const {
+		online,
+	} = item.item;
 	return (
 		<GatewayRow
 			location={item.item}
 			navigation={navigation}
 			intl={intl}
+			disabled={!online}
 			onPress={this.onChooseLocation}/>
 	);
 }

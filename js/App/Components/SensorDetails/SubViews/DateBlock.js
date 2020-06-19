@@ -94,10 +94,15 @@ render(): Object {
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>
 			</View>)}
 			<View style={dateContainerStyle}>
-				<Text style={labelStyle}>
+				<Text
+					level={3}
+					style={labelStyle}>
 					{label}
 				</Text>
-				<FormattedDate value={moment.unix(date)} style={dateStyle}/>
+				<FormattedDate
+					level={3}
+					value={moment.unix(date)}
+					style={dateStyle}/>
 			</View>
 			{align === 'right' && (<View style={iconContainerStyle}>
 				<Icon name={'calendar'} size={iconSize} color={'#fff'}/>

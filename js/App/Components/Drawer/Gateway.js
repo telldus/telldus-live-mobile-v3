@@ -33,8 +33,12 @@ import {
 import LocationDetails from '../TabViews/SubViews/Gateway/LocationDetails';
 import Status from '../TabViews/SubViews/Gateway/Status';
 import { getLocationImageUrl, getDrawerWidth } from '../../Lib';
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
 
-type Props = {
+type Props = PropsThemedComponent & {
 	gateway: Object,
 	onPressGateway: (Object) => void,
 	intl: intlShape,
@@ -105,12 +109,21 @@ class Gateway extends PureComponent<Props, null> {
 					onPress={this.onPress}
 					resizeMode={'stretch'}/>
 				<View style={iconSettingsContainer} pointerEvents="none">
-					<IconTelldus icon={'settings'} size={iconSize} color={'#bdbdbd'}/>
+					<IconTelldus icon={'settings'} size={iconSize} level={6}/>
 				</View>
 			</RippleButton>
 		);
 	}
 	getStyles(drawerWidth: number): Object {
+
+		const {
+			colors,
+		} = this.props;
+
+		const {
+			headerOneColorBlockEnabled,
+			textSix,
+		} = colors;
 
 		const fontSizeH1 = Math.floor(drawerWidth * 0.048);
 		const fontSizeH2 = Math.floor(drawerWidth * 0.042);
@@ -138,6 +151,7 @@ class Gateway extends PureComponent<Props, null> {
 				shadowColor: '#000',
 				shadowRadius: 0,
 				shadowOpacity: 0,
+				backgroundColor: undefined,
 				shadowOffset: {
 					width: 0,
 					height: 0,
@@ -161,12 +175,15 @@ class Gateway extends PureComponent<Props, null> {
 				marginRight: iconContainerWidth * 2,
 				width: drawerWidth - (iconContainerWidth + (drawerWidth * 0.22)),
 				flexWrap: 'wrap',
+				color: headerOneColorBlockEnabled,
 			},
 			h2Style: {
 				fontSize: fontSizeH2,
+				color: textSix,
 			},
 			statusStyle: {
 				fontSize: fontSizeH3,
+				color: textSix,
 			},
 			statusInfoStyle: {
 				fontSize: fontSizeH3 * 2,
@@ -195,4 +212,4 @@ class Gateway extends PureComponent<Props, null> {
 	}
 }
 
-export default injectIntl(Gateway);
+export default injectIntl(withTheme(Gateway));

@@ -23,12 +23,12 @@
 'use strict';
 
 import React from 'react';
-import { ScrollView } from 'react-native';
 const isEqual = require('react-fast-compare');
 
 import {
 	View,
 	Image,
+	ThemedScrollView,
 } from '../../../../BaseComponents';
 import { ZWaveIncludeExcludeUI } from '../Common';
 
@@ -841,10 +841,12 @@ render(): Object {
 	const timerText = (timer !== null && showTimer) ? `${timer} ${formatMessage(i18n.labelSeconds).toLowerCase()}` : ' ';
 
 	return (
-		<ScrollView style={{
-			flex: 1,
-		}}
-		contentContainerStyle={{flexGrow: 1}}>
+		<ThemedScrollView
+			level={3}
+			style={{
+				flex: 1,
+			}}
+			contentContainerStyle={{flexGrow: 1}}>
 			<ZWaveIncludeExcludeUI
 				progress={progress}
 				percent={percent}
@@ -856,7 +858,7 @@ render(): Object {
 				infoText={hintMessage}
 				deviceImage={deviceImage}
 				onPressCancel={timerText === ' ' ? undefined : this.onPressCancel}/>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 }
 }

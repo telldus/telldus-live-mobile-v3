@@ -69,7 +69,7 @@ const MoreOptionsTab = (props: Props): Object => {
 		formatMessage,
 	} = intl;
 
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { firebaseRemoteConfig = {} } = useSelector((state: Object): Object => state.user);
 
 	const {
@@ -77,6 +77,10 @@ const MoreOptionsTab = (props: Props): Object => {
 	} = firebaseRemoteConfig;
 
 	const { enable: enableGeoFenceFeature } = JSON.parse(geoFenceFeature);
+
+	const {
+		themeInApp,
+	} = defaultSettings;
 
 	const {
 		outerCoverStyle,
@@ -172,7 +176,9 @@ const MoreOptionsTab = (props: Props): Object => {
 		}: Object, i: number): Object => {
 			if (enable) {
 				components.push(
-					<RippleButton style={rowCoverStyle} onPress={onPress} key={`${i}`}>
+					<RippleButton
+						level={2}
+						style={rowCoverStyle} onPress={onPress} key={`${i}`}>
 						{!!icon && <IconTelldus style={iconStyle} icon={icon}/>}
 						{!!iconComponent && iconComponent}
 						<Text style={labelStyle}>
@@ -188,13 +194,15 @@ const MoreOptionsTab = (props: Props): Object => {
 	}, [
 		layout,
 		enableGeoFenceFeature,
+		themeInApp,
 	]);
 
 	return (
-		<View style={outerCoverStyle}>
+		<View style={outerCoverStyle} level={3}>
 			<PosterWithText
 				appLayout={layout}
 				align={'right'}
+				showBackButton={false}
 				h1={formatMessage(i18n.more)}
 				h2={formatMessage(i18n.featuresAndSettings)}/>
 			<ScrollView
@@ -212,7 +220,6 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		appBackground,
 		paddingFactor,
 		brandSecondary,
 		shadow,
@@ -225,7 +232,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		outerCoverStyle: {
 			flex: 1,
-			backgroundColor: appBackground,
 		},
 		contentContainerStyle: {
 			flexGrow: 1,
@@ -238,7 +244,6 @@ const getStyles = (appLayout: Object): Object => {
 			marginHorizontal: padding,
 			marginTop: padding / 2,
 			padding,
-			backgroundColor: '#fff',
 			...shadow,
 			borderRadius: 2,
 		},

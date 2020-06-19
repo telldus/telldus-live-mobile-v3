@@ -35,7 +35,7 @@ import { configureStore } from '../../App/Store/ConfigureStore';
 
 let {height, width} = Dimensions.get('window');
 
-const store = configureStore();
+const store = configureStore().store;
 
 describe('<NavigationHeader /> - snapshot', () => {
 

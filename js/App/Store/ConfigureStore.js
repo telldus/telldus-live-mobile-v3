@@ -44,12 +44,16 @@ const store = createStore(
 	applyMiddleware(thunk.withExtraArgument({LiveApi, TelldusWebsocket}), promise, array, logger),
 );
 
-export function configureStore(onComplete: () => void): Object {
+export function configureStore(onComplete?: () => void): Object {
 
-	persistStore(store, null, onComplete);
+	const persistor = persistStore(store, null, onComplete);
 
 	if (isDebuggingInChrome) {
 		window.store = store;
 	}
-	return store;
+
+	return {
+		store,
+		persistor,
+	};
 }

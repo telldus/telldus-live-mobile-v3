@@ -76,6 +76,8 @@ class Include433 extends View<Props, State> {
 props: Props;
 state: State;
 
+timeoutAddDeviceFailed: any;
+
 constructor(props: Props) {
 	super(props);
 
@@ -102,15 +104,35 @@ constructor(props: Props) {
 		...deviceInfo,
 		deviceName,
 	}, intl.formatMessage);
+
+	this.timeoutAddDeviceFailed = null;
 }
 
 componentDidMount() {
 	const {
 		onDidMount,
 		intl,
+		actions,
 	} = this.props;
 	const { formatMessage } = intl;
 	onDidMount(formatMessage(i18n.connect), formatMessage(i18n.connectYourDevice));
+
+	this.timeoutAddDeviceFailed = setTimeout(() => {
+		const {
+			addDevice,
+		} = this.props;
+		const { addDevice433 = {}} = addDevice;
+		const {
+			deviceId,
+			isLoading,
+		} = addDevice433;
+		if (isLoading && !deviceId) {
+			actions.addDevice433Failed(formatMessage(i18n.messageAdd433Failed));
+			if (this.deleteSocketAndTimer) {
+				this.deleteSocketAndTimer();
+			}
+		}
+	}, 15000);
 }
 
 shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
@@ -161,11 +183,32 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 			this.onNext(false);
 		}
 	}
+
+	if (deviceId) {
+		this.clearTimeoutAddDeviceFailed();
+	}
+	const {
+		addDevice: { addDevice433: prevAddDevice433 = {}},
+	} = prevProps;
+	const {
+		isLoading: prevIsLoading,
+	} = prevAddDevice433;
+	if (prevIsLoading && !isLoading) {
+		this.clearTimeoutAddDeviceFailed();
+	}
 }
 
 componentWillUnmount() {
 	if (this.deleteSocketAndTimer) {
 		this.deleteSocketAndTimer();
+	}
+	this.clearTimeoutAddDeviceFailed();
+}
+
+clearTimeoutAddDeviceFailed = () => {
+	if (this.timeoutAddDeviceFailed) {
+		clearTimeout(this.timeoutAddDeviceFailed);
+		this.timeoutAddDeviceFailed = null;
 	}
 }
 
@@ -238,6 +281,7 @@ render(): Object {
 		infoIconErrorStyle,
 		iconSize,
 		iconStyle,
+		throbber,
 	} = this.getStyles();
 
 	if (isLoading) {
@@ -308,18 +352,22 @@ render(): Object {
 							flexDirection: 'row',
 						}}>
 							<Throbber
-								throbberStyle={statusStyle}
+								throbberStyle={throbber}
 								throbberContainerStyle={{
 									position: 'relative',
 								}}/>
-							<Text style={[statusStyle, {
-								marginLeft: 5,
-							}]}>
+							<Text
+								level={6}
+								style={[statusStyle, {
+									marginLeft: 5,
+								}]}>
 								{`${intl.formatMessage(i18n.reconnectingTellstick)}...`}
 							</Text>
 						</View>
 						:
-						<Text style={statusStyle}>
+						<Text
+							level={6}
+							style={statusStyle}>
 							{statusText}
 						</Text>
 					}
@@ -414,7 +462,6 @@ getStyles(): Object {
 			marginBottom: padding / 2,
 		},
 		infoTextStyle: {
-			color: rowTextColor,
 			fontSize: fontSizeText,
 		},
 		iconSize: deviceWidth * 0.050666667,
@@ -430,9 +477,13 @@ getStyles(): Object {
 		infoIconErrorStyle: {
 			color: red,
 		},
-		statusStyle: {
+		throbber: {
 			fontSize: fontSizeStatus,
 			color: rowTextColor,
+			marginBottom: 4,
+		},
+		statusStyle: {
+			fontSize: fontSizeStatus,
 			marginBottom: 4,
 		},
 	};

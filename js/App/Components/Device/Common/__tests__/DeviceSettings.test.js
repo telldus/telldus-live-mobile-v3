@@ -45,7 +45,7 @@ import {
 
 let {height, width} = Dimensions.get('window');
 
-const store = configureStore();
+const store = configureStore().store;
 
 const {
 	id,

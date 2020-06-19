@@ -3,7 +3,7 @@ import { shallow } from '../../../Utils/TelldusTestSuite';
 import { Provider } from 'react-redux';
 import { configureStore } from '../../Store/ConfigureStore';
 import { IntlProvider } from 'react-intl';
-const store = configureStore();
+const store = configureStore().store;
 import ForgotPasswordScreen from '../../Components/PreLoginScreens/ForgotPasswordScreen.js';
 
 describe('<ForgotPasswordScreen />', () => {

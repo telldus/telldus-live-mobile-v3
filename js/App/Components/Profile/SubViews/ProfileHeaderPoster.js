@@ -46,9 +46,15 @@ class ProfileHeaderPoster extends View<Props, null> {
 
 	noName: string;
 
+	pointsToHiddenCave: number;
+	openCaveTimeout: any;
+
 	constructor(props: Props) {
 		super(props);
 		this.handleBackPress = this.handleBackPress.bind(this);
+
+		this.pointsToHiddenCave = 0;
+		this.openCaveTimeout = null;
 	}
 
 	goBack() {
@@ -68,6 +74,32 @@ class ProfileHeaderPoster extends View<Props, null> {
 		return false;
 	}
 
+	clearOpenCaveTimeout = () => {
+		clearTimeout(this.openCaveTimeout);
+		this.openCaveTimeout = null;
+	}
+
+	componentWillUnmount() {
+		this.clearOpenCaveTimeout();
+	}
+
+	openHiddenCave = () => {
+		this.pointsToHiddenCave++;
+
+		if (this.openCaveTimeout) {
+			this.clearOpenCaveTimeout();
+		}
+
+		this.openCaveTimeout = setTimeout(() => {
+			this.pointsToHiddenCave = 0;
+		}, 500);
+
+		if (this.pointsToHiddenCave >= 5) {
+			this.pointsToHiddenCave = 0;
+			this.props.navigation.navigate('AdvancedSettings');
+		}
+	}
+
 	render(): Object {
 		const { navigation, screenProps } = this.props;
 		const { appLayout, intl } = screenProps;
@@ -82,7 +114,7 @@ class ProfileHeaderPoster extends View<Props, null> {
 				handleBackPress={this.handleBackPress}
 				leftIcon={'close'}
 				align={'right'}
-			/>
+				onPressPoster={this.openHiddenCave}/>
 		);
 	}
 }

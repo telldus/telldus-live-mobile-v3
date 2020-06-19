@@ -31,6 +31,11 @@ import {
 } from '../../../BaseComponents';
 import { ScheduleProps } from './ScheduleScreen';
 
+import {
+	withTheme,
+	PropsThemedComponent,
+} from '../HOC/withTheme';
+
 import Theme from '../../Theme';
 import i18n from '../../Translations/common';
 
@@ -41,9 +46,9 @@ type State = {
 	onChange: (Object) => void,
 };
 
-export default class ActionThermostatTwo extends View<null, Props, State> {
+class ActionThermostatTwo extends View<null, Props & PropsThemedComponent, State> {
 
-	constructor(props: Props) {
+	constructor(props: Props & PropsThemedComponent) {
 		super(props);
 	}
 
@@ -82,13 +87,13 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 			appLayout,
 			intl,
 			methodValue,
+			colors,
 		} = this.props;
 		const {
 			optionsCover,
 			optionCover,
 			iconStyle,
 			textStyle,
-			eulaContentColor,
 			brandSecondary,
 		} = this._getStyle(appLayout);
 
@@ -98,15 +103,20 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 		const changeTempAlone = changeTemp && !changeMode;
 		const changeModeAlone = (!changeTemp && changeMode);
 
-		const oneItemsColor = (changeBoth) ? '#fff' : eulaContentColor;
-		const twoItemsColor = changeModeAlone ? '#fff' : eulaContentColor;
-		const threeItemsColor = (changeTempAlone) ? '#fff' : eulaContentColor;
+		const {
+			card,
+			textFive,
+		} = colors;
+
+		const oneItemsColor = changeBoth ? card : textFive;
+		const twoItemsColor = changeModeAlone ? card : textFive;
+		const threeItemsColor = changeTempAlone ? card : textFive;
 
 		return (
 			<View style={optionsCover}>
 				<TouchableOpacity onPress={this.onPressOne}>
 					<View style={[optionCover, {
-						backgroundColor: changeBoth ? brandSecondary : '#fff',
+						backgroundColor: changeBoth ? brandSecondary : card,
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
 							color: oneItemsColor,
@@ -123,7 +133,7 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 				</TouchableOpacity>
 				<TouchableOpacity onPress={this.onPressTwo}>
 					<View style={[optionCover, {
-						backgroundColor: changeModeAlone ? brandSecondary : '#fff',
+						backgroundColor: changeModeAlone ? brandSecondary : card,
 					}]}>
 						<IconTelldus icon={'thermostatheatcool'} style={[iconStyle, {
 							color: twoItemsColor,
@@ -137,7 +147,7 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 				</TouchableOpacity>
 				<TouchableOpacity onPress={this.onPressThree}>
 					<View style={[optionCover, {
-						backgroundColor: changeTempAlone ? brandSecondary : '#fff',
+						backgroundColor: changeTempAlone ? brandSecondary : card,
 					}]}>
 						<IconTelldus icon={'temperature'} style={[iconStyle, {
 							color: threeItemsColor,
@@ -205,3 +215,5 @@ export default class ActionThermostatTwo extends View<null, Props, State> {
 	};
 
 }
+
+export default withTheme(ActionThermostatTwo);

@@ -22,9 +22,11 @@
 
 'use strict';
 
-import React, { useEffect, useState } from 'react';
+import React, {
+	useEffect,
+	useState,
+} from 'react';
 import {
-	ScrollView,
 	Platform,
 	LayoutAnimation,
 } from 'react-native';
@@ -42,6 +44,7 @@ import {
 	View,
 	SettingsRow,
 	Text,
+	ThemedScrollView,
 } from '../../../BaseComponents';
 import {
 	AppVersionBlock,
@@ -49,7 +52,13 @@ import {
 	PushInfoBlock,
 	DBSortControlBlock,
 	LanguageControlBlock,
+	SensorLastUpdateModeControlBlock,
 } from '../Settings/SubViews';
+import {
+	WidgetFontSizeSetting,
+	ThemesBlock,
+} from './SubViews';
+
 import { LayoutAnimations } from '../../Lib';
 import {
 	getPhonesList,
@@ -64,9 +73,6 @@ import {
 	setUserIdentifierFirebaseCrashlytics,
 	setUserNameFirebaseCrashlytics,
 } from '../../Actions/Analytics';
-import {
-	resetFence,
-} from '../../Actions/Fences';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
@@ -86,12 +92,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		pushToken,
 		deviceName,
 		deviceId,
-		firebaseRemoteConfig = {},
-		userId,
 	} = useSelector((state: Object): Object => state.user);
-
-	const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
-	const { enable } = JSON.parse(geoFenceFeature);
 
 	const { dbCarousel = true, reportCrash = true } = defaultSettings;
 
@@ -168,10 +169,10 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				dispatch(showToast(message));
 				dispatch(getPhonesList()).then(() => {
 					setIsPushSubmitLoading(false);
-					LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+					LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 				}).catch(() => {
 					setIsPushSubmitLoading(false);
-					LayoutAnimation.configureNext(LayoutAnimations.linearCUD(300));
+					LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 				});
 			}).catch((error: Object) => {
 				let errorCode = !error.error_description && error.message === 'Network request failed' ?
@@ -214,40 +215,30 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 		});
 	}
 
-	const { fences } = useSelector((state: Object): Object => state.fences);
-	const currentAccFences = fences[userId] || [];
-	function onPressGeoFence() {
-		if (!currentAccFences || currentAccFences.length === 0) {
-			dispatch(resetFence());
-			navigation.navigate('GeoFenceNavigator', {
-				screen: 'SelectArea',
-			});
-		} else {
-			navigation.navigate('GeoFenceNavigator');
-		}
-	}
-
 	return (
-		<ScrollView style={container}>
-			<View style={body}>
+		<ThemedScrollView
+			level={3}
+			style={container}>
+			<View
+				level={3}
+				style={body}>
 				<AppVersionBlock/>
 				<WhatsNewLink/>
-				{enable && <Text style={{
-					padding: 10,
-					color: 'red',
-					alignSelf: 'center',
-					margin: 10,
-				}} onPress={onPressGeoFence}>
-				Add or Edit Geo Fence
+				<Text
+					level={2}
+					style={titleStyle}>
+					Theme
 				</Text>
-				}
+				<ThemesBlock/>
 				<PushInfoBlock
 					navigation={navigation}
 					isPushSubmitLoading={isPushSubmitLoading}
 					submitPushToken={submitPushToken}
 				/>
 				<LanguageControlBlock/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
 					{formatMessage(i18n.dashboard)}
 				</Text>
 				<DBSortControlBlock
@@ -265,7 +256,17 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					style={[contentCoverStyle, {
 						marginTop: 0,
 					}]}/>
-				<Text style={titleStyle}>
+				<Text
+					level={2}
+					style={titleStyle}>
+					Sensor
+				</Text>
+				<SensorLastUpdateModeControlBlock
+					showLabel={true}
+					dropDownContainerStyle={bBSortDropDownContainerStyle}/>
+				<Text
+					level={2}
+					style={titleStyle}>
 					{formatMessage(i18n.crashReports)}
 				</Text>
 				<SettingsRow
@@ -280,8 +281,13 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 					touchableStyle={touchableStyle}
 					switchStyle={switchStyle}
 					style={contentCoverStyle}/>
+				{Platform.OS === 'android' &&
+					<WidgetFontSizeSetting
+						appLayout={layout}
+						intl={intl}/>
+				}
 			</View>
-		</ScrollView>
+		</ThemedScrollView>
 	);
 });
 
@@ -291,7 +297,6 @@ const getStyles = (appLayout: Object): Object => {
 	const deviceWidth = isPortrait ? width : height;
 
 	const {
-		subHeader,
 		paddingFactor,
 	} = Theme.Core;
 
@@ -302,7 +307,6 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 1,
@@ -312,7 +316,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		labelTextStyle: {
 			fontSize,
-			color: '#000',
 			justifyContent: 'center',
 		},
 		touchableStyle: {
@@ -326,7 +329,6 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		titleStyle: {
 			marginBottom: 5,
-			color: subHeader,
 			fontSize,
 		},
 		bBSortDropDownContainerStyle: {

@@ -80,6 +80,7 @@ type Props = {
 	onPressDeviceAction?: () => void,
 	openRGBControl: () => void,
 	onPressOverride?: (Object) => void,
+	disableActionIndicator?: boolean,
 };
 
 type DefaultProps = {
@@ -87,6 +88,7 @@ type DefaultProps = {
 	commandON: number,
 	commandOFF: number,
 	commandDIM: number,
+	disableActionIndicator: boolean,
 };
 
 class RGBButton extends View<Props, null> {
@@ -107,6 +109,7 @@ class RGBButton extends View<Props, null> {
 		commandON: 1,
 		commandOFF: 2,
 		commandDIM: 16,
+		disableActionIndicator: false,
 	};
 
 	constructor(props: Props) {
@@ -147,6 +150,7 @@ class RGBButton extends View<Props, null> {
 			'iconOnColor',
 			'offColorMultiplier',
 			'onColorMultiplier',
+			'onPressOverride',
 		]);
 		if (propsChange) {
 			return true;
@@ -280,6 +284,7 @@ class RGBButton extends View<Props, null> {
 			iconOffColor,
 			offColorMultiplier,
 			onColorMultiplier,
+			disableActionIndicator,
 		} = this.props;
 		const { isInState, name, supportedMethods = {}, methodRequested, local, stateValues, value: val } = item;
 		const { DIM } = supportedMethods;
@@ -313,6 +318,7 @@ class RGBButton extends View<Props, null> {
 			local,
 			name: deviceName,
 			enabled: false,
+			disableActionIndicator,
 		};
 
 		const onButton = (

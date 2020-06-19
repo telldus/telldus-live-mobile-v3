@@ -22,12 +22,11 @@
 'use strict';
 
 import React, { Component } from 'react';
-import { Animated, Image } from 'react-native';
+import { Animated } from 'react-native';
 
 import View from './View';
 import Text from './Text';
-
-import Theme from '../App/Theme';
+import ThemedImage from './ThemedImage';
 
 type Props = {
     containerTop?: number,
@@ -137,27 +136,30 @@ render(): Object {
 				alignItems: 'center',
 			}} pointerEvents={'none'}>
 				{arrowPos === 'left' && (
-					<Image
+					<ThemedImage
+						level={2}
 						source={{uri: 'triangle'}}
 						style={triangleCommon}
 						resizeMode={'stretch'}
 					/>
 				)}
-				<View style={{
-					backgroundColor: Theme.Core.brandSecondary,
-					justifyContent: 'center',
-					padding: 7,
-					borderRadius: 4,
-				}}>
-					<Text style={{
-						color: '#fff',
-						fontSize: 16,
+				<View
+					level={8}
+					style={{
+						justifyContent: 'center',
+						padding: 7,
+						borderRadius: 4,
 					}}>
+					<Text
+						level={16}
+						style={{
+							fontSize: 16,
+						}}>
 						{text}
 					</Text>
 				</View>
 				{arrowPos === 'right' && (
-					<Image
+					<ThemedImage
 						source={{uri: 'triangle'}}
 						style={[triangleCommon, {
 							transform: [
@@ -187,7 +189,6 @@ getStyles(): Object {
 		triangleCommon: {
 			height: 15,
 			width: 10,
-			tintColor: Theme.Core.brandSecondary,
 		},
 	};
 }

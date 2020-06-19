@@ -51,8 +51,12 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 		const { container, description } = this._getStyle(appLayout);
 
 		return (
-			<View style={[container, containerStyle]}>
-				<Text style={description}>
+			<View
+				level={2}
+				style={[container, containerStyle]}>
+				<Text
+					level={3}
+					style={description}>
 					{label}
 				</Text>
 				<Switch value={value} onValueChange={onValueChange}/>
@@ -75,7 +79,6 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 				flexDirection: 'row',
 				alignItems: 'center',
 				justifyContent: 'space-between',
-				backgroundColor: '#fff',
 				paddingHorizontal: offsetMiddle,
 				paddingVertical: deviceWidth * 0.02,
 				marginVertical: padding / 4,
@@ -84,7 +87,6 @@ export default class ScheduleSwitch extends View<null, Props, null> {
 				...Theme.Core.shadow,
 			},
 			description: {
-				color: '#5c5c5c',
 				fontSize: deviceWidth * 0.037333333,
 				fontFamily: Theme.Core.fonts.robotoRegular,
 			},

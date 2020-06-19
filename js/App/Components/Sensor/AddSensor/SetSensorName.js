@@ -44,6 +44,9 @@ import {
 import {
 	showToast,
 } from '../../../Actions/App';
+import {
+	withTheme,
+} from '../../HOC/withTheme';
 
 import Theme from '../../../Theme';
 
@@ -58,6 +61,7 @@ const SetSensorName = (props: Object): Object => {
 		navigation,
 		toggleDialogueBox,
 		route,
+		colors,
 	} = props;
 	const { formatMessage } = intl;
 
@@ -147,7 +151,10 @@ const SetSensorName = (props: Object): Object => {
 		labelStyle,
 		iconStyle,
 		accessoryiconStyle,
-	} = getStyles(appLayout);
+	} = getStyles({
+		appLayout,
+		colors,
+	});
 
 	const renderLeftAccessory = useCallback((): Object => {
 		return <IconTelldus icon={'sensor'} style={accessoryiconStyle}/>;
@@ -177,8 +184,7 @@ const SetSensorName = (props: Object): Object => {
 					returnKeyType={'done'}
 					autoCapitalize={'sentences'}
 					renderLeftAccessory={renderLeftAccessory}
-					onSubmitEditing={submitName}
-				/>
+					onSubmitEditing={submitName}/>
 			</View>
 			<FloatingButton
 				onPress={submitName}
@@ -190,10 +196,17 @@ const SetSensorName = (props: Object): Object => {
 	);
 };
 
-const getStyles = (appLayout: Object): Object => {
+const getStyles = ({
+	appLayout,
+	colors,
+}: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
+
+	const {
+		card,
+	} = colors;
 
 	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
 
@@ -211,7 +224,7 @@ const getStyles = (appLayout: Object): Object => {
 		textFieldCoverStyle: {
 			width: blockWidth,
 			marginTop: padding,
-			backgroundColor: '#fff',
+			backgroundColor: card,
 			...shadow,
 			marginHorizontal: padding,
 			padding,
@@ -236,4 +249,4 @@ const getStyles = (appLayout: Object): Object => {
 	};
 };
 
-export default React.memo<Object>(SetSensorName);
+export default React.memo<Object>(withTheme(SetSensorName));

@@ -153,7 +153,9 @@ const PostPurchaseScreen = (props: Object): Object => {
 			formatMessage(i18n.purchaseThanks);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={voucher ? capitalizeFirstLetterOfEachWord(formatMessage(i18n.redeemCard)) : capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={voucher ? formatMessage(i18n.codeAccepted) : formatMessage(i18n.getMoreFeaturesAndBenefits)}
@@ -165,28 +167,38 @@ const PostPurchaseScreen = (props: Object): Object => {
 				handleBackPress={goBack}
 				goBack={goBack}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<View style={body}>
+				<View
+					level={2}
+					style={body}>
 					<IconTelldus icon={success ? 'premium' : 'info'} style={[iconStyle,
 						 success ? { color: Theme.Core.twine } : { color: Theme.Core.brandDanger },
 					]}/>
-					<Text style={titleStyleOne}>
+					<Text
+						level={5}
+						style={titleStyleOne}>
 						{title}
 					</Text>
-					<Text style={bodyStyle}>
+					<Text
+						level={5}
+						style={bodyStyle}>
 						{bodyText}
 					</Text>
 					{success &&
 					<>
 						{product !== 'credits' && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'premium'} style={purchaseInfoIcon}/>
-							<Text style={purchaseInfoText}>
+							<Text
+								level={5}
+								style={purchaseInfoText}>
 								{getInfo().toUpperCase()}
 							</Text>
 						</View>
 						}
 						{!!credits && <View style={purchaseInfoCover}>
 							<IconTelldus icon={'sms'} style={purchaseInfoIcon}/>
-							<Text style={purchaseInfoText}>
+							<Text
+								level={5}
+								style={purchaseInfoText}>
 								{`${credits} `}{formatMessage(i18n.smsCredits).toUpperCase()}
 							</Text>
 						</View>
@@ -235,13 +247,11 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
@@ -251,11 +261,9 @@ const getStyles = (appLayout: Object): Object => {
 			fontSize,
 			marginTop: 15,
 			textAlign: 'center',
-			color: Theme.Core.eulaContentColor,
 		},
 		titleStyleOne: {
 			fontSize: fontSize * 1.3,
-			color: Theme.Core.eulaContentColor,
 			marginTop: 10,
 		},
 		iconStyle: {
@@ -279,7 +287,6 @@ const getStyles = (appLayout: Object): Object => {
 		purchaseInfoText: {
 			fontSize,
 			fontWeight: 'bold',
-			color: Theme.Core.eulaContentColor,
 		},
 	};
 };

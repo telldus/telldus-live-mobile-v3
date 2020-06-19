@@ -239,11 +239,15 @@ render(testData: Object): Object {
 
 	return (
 		<>
-			<View style={container}>
+			<View
+				level={2}
+				style={container}>
 				<Text style={title}>
 					{capitalise(formatMessage(i18n.labelCreateSupportTicket))}
 				</Text>
-				<Text style={body}>
+				<Text
+					level={6}
+					style={body}>
 					{formatMessage(i18n.messageCreateSupportTicket)}
 				</Text>
 				<Text style={label}>
@@ -291,9 +295,13 @@ render(testData: Object): Object {
 					returnKeyType={'done'}
 				/>
 			</View>
-			{descLen < 50 && <View style={infoContainer}>
+			{descLen < 50 && <View
+				level={2}
+				style={infoContainer}>
 				<IconTelldus icon={'info'} style={statusIconStyle}/>
-				<Text style={infoTextStyle}>
+				<Text
+					level={5}
+					style={infoTextStyle}>
 					{formatMessage(i18n.supportTicketDescriptionInfo)}
 				</Text>
 			</View>
@@ -313,7 +321,7 @@ getStyles(appLayout: Object): Object {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor, eulaContentColor } = Theme.Core;
+	const { shadow, paddingFactor, brandSecondary } = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -325,7 +333,6 @@ getStyles(appLayout: Object): Object {
 	return {
 		brandSecondary,
 		container: {
-			backgroundColor: '#fff',
 			...shadow,
 			marginVertical: padding,
 			padding: padding * 2,
@@ -335,7 +342,6 @@ getStyles(appLayout: Object): Object {
 			fontSize: fontSizeTitle,
 		},
 		body: {
-			color: rowTextColor,
 			fontSize: fontSizeBody,
 			marginTop: 10,
 		},
@@ -358,7 +364,6 @@ getStyles(appLayout: Object): Object {
 			flexDirection: 'row',
 			marginBottom: padding,
 			padding: padding,
-			backgroundColor: '#fff',
 			...shadow,
 			alignItems: 'center',
 			justifyContent: 'space-between',
@@ -371,7 +376,6 @@ getStyles(appLayout: Object): Object {
 		infoTextStyle: {
 			flex: 1,
 			fontSize: fontSizeBody,
-			color: eulaContentColor,
 			flexWrap: 'wrap',
 			marginLeft: padding,
 		},

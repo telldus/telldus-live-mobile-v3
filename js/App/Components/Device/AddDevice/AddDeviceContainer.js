@@ -50,6 +50,7 @@ import {
 	getDeviceInfoCommon,
 	sensorAdded,
 	getSensors,
+	addDevice433Failed,
 } from '../../../Actions';
 
 type Props = {
@@ -230,9 +231,9 @@ export class AddDeviceContainer extends View<Props, State> {
 
 		return (
 			<View
+				level={3}
 				style={{
 					flex: 1,
-					backgroundColor: Theme.Core.appBackground,
 				}}>
 				<NavigationHeaderPoster
 					h1={h1} h2={h2}
@@ -313,6 +314,7 @@ export const mapDispatchToProps = (dispatch: Function): Object => (
 				getDeviceInfoCommon,
 				sensorAdded,
 				getSensors,
+				addDevice433Failed,
 			}, dispatch),
 		},
 		processWebsocketMessage: (gatewayId: string, message: string, title: string, websocket: Object): any => processWebsocketMessage(gatewayId, message, title, dispatch, websocket),

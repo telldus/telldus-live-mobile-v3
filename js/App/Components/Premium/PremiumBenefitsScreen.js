@@ -30,7 +30,6 @@ import React, {
 import Swiper from 'react-native-swiper';
 import {
 	ScrollView,
-	Image,
 	TouchableOpacity,
 	Linking,
 } from 'react-native';
@@ -42,6 +41,7 @@ import {
 	NavigationHeaderPoster,
 	Text,
 	IconTelldus,
+	ThemedImage,
 } from '../../../BaseComponents';
 import {
 	UpgradePremiumButton,
@@ -127,9 +127,16 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 		benefits.map((screen: Object, i: number): Object => {
 			_screens.push(
 				<View style={cover} pointerEvents="box-none" key={`${i}`}>
-					<IconTelldus icon={screen.icon} style={iconStyle}/>
-					<Text style={title}>{screen.title}</Text>
-					<Text style={bodyText}>{screen.body}</Text>
+					<IconTelldus
+						level={9}
+						icon={screen.icon}
+						style={iconStyle}/>
+					<Text
+						level={5}
+						style={title}>{screen.title}</Text>
+					<Text
+						level={5}
+						style={bodyText}>{screen.body}</Text>
 				</View>
 			);
 
@@ -139,13 +146,17 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 				}
 			}
 
-			const color = selectedIndex === i ? Theme.Core.brandSecondary : Theme.Core.rowTextColor;
+			const level = selectedIndex === i ? 9 : 6;
 
 			_screenLabels.push(
 				<TouchableOpacity onPress={onChangeSelection} key={`${i}`}>
 					<View style={labelCover}>
-						<IconTelldus icon={screen.icon} style={[labelIcon, {color}]}/>
-						<Text style={[labelText, {color}]}>{screen.title}</Text>
+						<IconTelldus
+							level={level}
+							icon={screen.icon} style={labelIcon}/>
+						<Text
+							level={level}
+							style={labelText}>{screen.title}</Text>
 					</View>
 				</TouchableOpacity>
 			);
@@ -185,7 +196,9 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 	}, []);
 
 	return (
-		<View style={container}>
+		<View
+			level={3}
+			style={container}>
 			<NavigationHeaderPoster
 				h1={capitalizeFirstLetterOfEachWord('Premium access')}
 				h2={formatMessage(i18n.getMoreFeaturesAndBenefits)}
@@ -195,7 +208,9 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 				navigation={navigation}
 				{...screenProps}/>
 			<ScrollView style={{flex: 1}} contentContainerStyle={{ flexGrow: 1 }}>
-				<View style={body}>
+				<View
+					level={2}
+					style={body}>
 					<Swiper
 						ref={swiperRef}
 						containerStyle={containerStyle}
@@ -208,14 +223,22 @@ const PremiumBenefitsScreen = (props: Object): Object => {
 						removeClippedSubviews={false}
 						buttonWrapperStyle={buttonWrapperStyle}
 						onIndexChanged={onIndexChanged}
-						nextButton={<Image source={{uri: 'right_arrow_key'}} style={buttonStyleN}/>}
-						prevButton={<Image source={{uri: 'left_arrow_key'}} style={buttonStyleP}/>}>
+						nextButton={<ThemedImage
+							level={1}
+							source={{uri: 'right_arrow_key'}}
+							style={buttonStyleN}/>}
+						prevButton={<ThemedImage
+							level={1}
+							source={{uri: 'left_arrow_key'}}
+							style={buttonStyleP}/>}>
 						{screens}
 					</Swiper>
 					<View style={labelsContainer}>
 						{screenLabels}
 					</View>
-					<Text style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
+					<Text
+						level={9}
+						style={moreText} onPress={onPressMore}>...{formatMessage(i18n.labelMuchMore)}</Text>
 				</View>
 				<UpgradePremiumButton
 					navigation={navigation}/>
@@ -236,13 +259,11 @@ const getStyles = (appLayout: Object): Object => {
 	return {
 		container: {
 			flex: 1,
-			backgroundColor: Theme.Core.appBackground,
 		},
 		body: {
 			flex: 0,
 			alignItems: 'center',
 			justifyContent: 'center',
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			marginHorizontal: padding,
 			marginVertical: padding * 2,
@@ -270,26 +291,21 @@ const getStyles = (appLayout: Object): Object => {
 		buttonStyleP: {
 			height: fontSize * 1.6,
 			width: fontSize * 1.2,
-			tintColor: Theme.Core.rowTextColor,
 			margin: 10,
 		},
 		buttonStyleN: {
 			height: fontSize * 1.6,
 			width: fontSize * 1.2,
-			tintColor: Theme.Core.rowTextColor,
 			margin: 10,
 		},
 		iconStyle: {
 			fontSize: fontSizeIcon,
-			color: Theme.Core.brandSecondary,
 		},
 		title: {
 			fontSize: fontSize * 1.6,
-			color: Theme.Core.eulaContentColor,
 		},
 		bodyText: {
 			fontSize,
-			color: Theme.Core.eulaContentColor,
 			marginTop: 10,
 			textAlign: 'center',
 		},
@@ -321,7 +337,6 @@ const getStyles = (appLayout: Object): Object => {
 			alignSelf: 'center',
 			textAlign: 'center',
 			fontSize: fontSize * 1.4,
-			color: Theme.Core.brandSecondary,
 			marginTop: padding * 2,
 		},
 	};

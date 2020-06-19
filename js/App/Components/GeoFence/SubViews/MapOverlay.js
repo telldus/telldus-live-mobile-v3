@@ -34,18 +34,21 @@ import {
 } from '../../../../BaseComponents';
 
 const MapOverlay = React.memo<Object>((props: Object): Object => {
+	const {
+		overlayWidth,
+	} = props;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
 	const {
-		overlayWidth,
+		overlayWidth: _overlayWidth,
 		mapOverlay,
 		mapSpacer,
 		markerOverlay,
 		marker,
 	} = getStyles(layout);
 
-	let overlaySize = overlayWidth;
+	let overlaySize = overlayWidth || _overlayWidth;
 
 	return (
 		<View
@@ -73,8 +76,6 @@ const getStyles = (appLayout: Object): Object => {
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const fontSize = deviceWidth * 0.04;
-
 	return {
 		overlayWidth: deviceWidth,
 		mapOverlay: {
@@ -95,7 +96,7 @@ const getStyles = (appLayout: Object): Object => {
 		},
 		marker: {
 			color: '#1B365D',
-			fontSize: fontSize,
+			fontSize: 28,
 			backgroundColor: 'rgba(0,0,0,0)',
 		},
 		mapCircle: {

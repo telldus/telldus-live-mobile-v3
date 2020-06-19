@@ -45,31 +45,27 @@ const ScreenConfigs = [
 	{
 		name: 'Overview',
 		Component: Details,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color }: Object): Object => (
-					<TabBar
-						icon="home"
-						tintColor={color}
-						label={i18n.overviewHeader}
-						accessibilityLabel={i18n.locationOverviewTab}/>
-				),
-			};
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="home"
+					tintColor={color}
+					label={i18n.overviewHeader}
+					accessibilityLabel={i18n.locationOverviewTab}/>
+			),
 		},
 	},
 	{
 		name: 'ZWaveSettings',
 		Component: ZWaveSettings,
-		options: (): Object => {
-			return {
-				tabBarLabel: ({ color }: Object): Object => (
-					<TabBar
-						icon="settings"
-						tintColor={color}
-						label={'Z-Wave'}
-						accessibilityLabel={i18n.zWaveSettingsTab}/>
-				),
-			};
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="settings"
+					tintColor={color}
+					label={'Z-Wave'}
+					accessibilityLabel={i18n.zWaveSettingsTab}/>
+			),
 		},
 	},
 ];
@@ -135,7 +131,6 @@ const NavigatorConfigs = {
 			backgroundColor: '#fff',
 		},
 		style: {
-			backgroundColor: '#fff',
 			...Theme.Core.shadow,
 			justifyContent: 'center',
 		},
