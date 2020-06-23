@@ -73,7 +73,10 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 		setExpand(!expand);
 	}, [expand]);
 
-	const content = useMemo((): Object => {
+	const content = useMemo((): Object | null => {
+		if (!val) {
+			return null;
+		}
 		if (ignoreExpand) {
 			return (
 				<Text
@@ -168,7 +171,7 @@ const GeoFenceEventsLogRow = (props: Object): Object => {
 					color={Theme.Core.brandSecondary}/>
 				}
 			</TouchableOpacity>
-			{(expand && !!val) &&
+			{(expand && !!val && !!content) &&
 				content
 			}
 		</View>
