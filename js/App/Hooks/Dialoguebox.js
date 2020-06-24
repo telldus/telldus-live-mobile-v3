@@ -24,9 +24,13 @@ import {
 	useCallback,
 } from 'react';
 import { useDispatch } from 'react-redux';
+import { useIntl } from 'react-intl';
+
 import {
 	toggleDialogueBoxState,
 } from '../Actions/Modal';
+
+import i18n from '../Translations/common';
 
 type DialogueData = {
     show: boolean,
@@ -84,6 +88,32 @@ const useDialogueBox = (): Object => {
 	};
 };
 
+const useNoPremiumDialogue = (): Object => {
+
+	const {
+		toggleDialogueBoxState: _toggleDialogueBoxState,
+	} = useDialogueBox();
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
+	return {
+		showDialogue: (dialogueHeaderIntl: string) => {
+			_toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: formatMessage(i18n.infoWhenAccessPremFromBasic),
+				header: formatMessage(dialogueHeaderIntl),
+				showPositive: true,
+			});
+		},
+	};
+};
+
 module.exports = {
 	useDialogueBox,
+	useNoPremiumDialogue,
 };
