@@ -51,6 +51,9 @@ import {
 import HelpOverlay from './HelpOverlay';
 
 import {
+	hasAPremiumAccount,
+} from '../../Lib/appUtils';
+import {
 	setEditFence,
 	resetFence,
 } from '../../Actions/Fences';
@@ -58,8 +61,13 @@ import {
 	getCurrentAccountsFences,
 	getCurrentLocation,
 } from '../../Actions/GeoFence';
+import {
+	useNoPremiumDialogue,
+} from '../../Hooks/Dialoguebox';
 
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 type Props = {
     navigation: Object,
@@ -91,6 +99,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 
 	const dispatch = useDispatch();
 
+	const {
+		showDialogue,
+	} = useNoPremiumDialogue();
+
 	const fallbackLocation = {
 		latitude: 55.70584,
 		longitude: 13.19321,
@@ -113,6 +125,9 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	const [ regionToReset, setRegionToReset ] = useState();
 	const [ regionToResume, setRegionToResume ] = useState();
 	const [ currenLocationInApp, setCurrenLocationInApp ] = useState();
+
+	const { accounts = {} } = useSelector((state: Object): Object => state.user);
+	const hasAPremAccount = hasAPremiumAccount(accounts);
 
 	useEffect(() => {
 		if (isHelpVisible) {
@@ -147,6 +162,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	});
 
 	function onPressNext() {
+		if (!hasAPremAccount) {
+			showDialogue(i18n.upgradeToPremium);
+			return;
+		}
 		dispatch(resetFence());
 		navigation.navigate('SelectArea', {
 			region,
@@ -154,6 +173,10 @@ const AddEditGeoFence = React.memo<Object>((props: Props): Object => {
 	}
 
 	const onEditFence = useCallback((fenceToEdit: Object) => {
+		if (!hasAPremAccount) {
+			showDialogue(i18n.upgradeToPremium);
+			return;
+		}
 		dispatch(setEditFence(fenceToEdit));
 		navigation.navigate('EditGeoFence');
 	// eslint-disable-next-line react-hooks/exhaustive-deps

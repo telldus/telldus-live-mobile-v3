@@ -67,6 +67,10 @@ const ERROR_CODE_GF_RC_DISABLED = 'GF_REMOTE_CONFIG_DISABLED';
 
 import type { Action } from './Types';
 
+import {
+	hasAPremiumAccount,
+} from '../Lib/appUtils';
+
 let retryQueueSchedule = {};
 let retryQueueEvent = {};
 let retryQueueDeviceAction = {};
@@ -78,16 +82,25 @@ let MAP_QUEUE_TIME = {
 let backgroundTimerStartedIniOS = false;
 
 function setupGeoFence(): ThunkAction {
-	return (dispatch: Function, getState: Function): Promise<any> => {
+	return async (dispatch: Function, getState: Function): Promise<any> => {
 
 		const {
-			user: { firebaseRemoteConfig = {} },
+			user: {
+				firebaseRemoteConfig = {},
+				accounts = {},
+			},
 			geoFence = {},
 		} = getState();
 		const { geoFenceFeature = JSON.stringify({enable: false}) } = firebaseRemoteConfig;
 		const { enable } = JSON.parse(geoFenceFeature);
 
-		if (!enable) {
+		const hasAPremAccount = hasAPremiumAccount(accounts);
+
+		if (!enable || !hasAPremAccount) {
+			const state = await BackgroundGeolocation.getState();
+			if (state.enabled) {
+				BackgroundGeolocation.stop();
+			}
 			return Promise.reject({
 				code: ERROR_CODE_GF_RC_DISABLED,
 			});
