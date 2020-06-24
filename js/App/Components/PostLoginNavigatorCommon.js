@@ -242,8 +242,6 @@ actionsToPerformOnStart = async () => {
 	// access_token has expired and the API requests, all together goes for fetching new token with refresh_token,
 	// and results in generating multiple tokens.
 
-	await dispatch(fetchRemoteConfig());
-
 	if (Platform.OS === 'ios') {
 		try {
 			await RNIap.initConnection();
