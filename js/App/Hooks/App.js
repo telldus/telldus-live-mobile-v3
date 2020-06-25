@@ -176,7 +176,7 @@ const useSwitchOrAddAccountAction = (): Object => {
 				showHeader: true,
 				imageHeader: true,
 				header: formatMessage(i18n.upgradeToPremium),
-				text: formatMessage(i18n.switchAccountBasicInfo),
+				text: formatMessage(i18n.infoWhenAccessPremFromBasic),
 				showPositive: true,
 				showNegative: true,
 				positiveText: formatMessage(i18n.upgrade).toUpperCase(),

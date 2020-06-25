@@ -81,7 +81,7 @@ const EditGeoFenceAreaFull = React.memo<Object>((props: Props): Object => {
 	useEffect(() => {
 		onDidMount(formatMessage(i18n.editValue, {
 			value: title,
-		}), 'Edit area'); // TODO: Translate
+		}), formatMessage(i18n.editArea));
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [title]);
 
