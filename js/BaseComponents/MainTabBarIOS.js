@@ -77,7 +77,9 @@ const MainTabBarIOS = React.memo<Object>((props: Object): Object => {
 	return (
 		<View style={containerStyle} accessibilityLabel={accessibilityLabel}>
 			{!!icon && icon}
-			<Text style={[labelStyle, {color: tintColor}]}>
+			<Text
+				numberOfLines={1}
+				style={[labelStyle, {color: tintColor}]}>
 				{formatMessage(labelIntl)}
 			</Text>
 		</View>
