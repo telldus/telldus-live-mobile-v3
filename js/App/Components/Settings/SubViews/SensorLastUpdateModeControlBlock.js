@@ -38,14 +38,14 @@ import { changSensorLastUpdatedMode } from '../../../Actions';
 
 import Theme from '../../../Theme';
 
-// import i18n from '../../../Translations/common';
+import i18n from '../../../Translations/common';
 
 const SensorLastUpdateModeControlBlock = (props: Object): Object => {
 	const {
 		dropDownContainerStyle,
 	} = props;
 	const intl = useIntl();
-	// const { formatMessage } = intl;
+	const { formatMessage } = intl;
 
 	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
 	const { sensorLastUpdatedMode: sensorLastUpdatedModeProp = '0' } = defaultSettings;
@@ -70,10 +70,10 @@ const SensorLastUpdateModeControlBlock = (props: Object): Object => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const zero = 'Time ago';// TODO: translate
-	const one = 'Actual time';// TODO: translate
+	const zero = formatMessage(i18n.lastUpdateOption1);
+	const one = formatMessage(i18n.lastUpdateOption2);
 
-	const labelSortingDB = 'Last updated info';// TODO: translate
+	const labelSortingDB = formatMessage(i18n.lastUpdateLabel);
 
 	return (
 		<View
