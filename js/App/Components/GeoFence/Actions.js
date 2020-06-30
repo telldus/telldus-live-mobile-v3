@@ -71,6 +71,7 @@ import {
 
 import Theme from '../../Theme';
 import isEmpty from 'lodash/isEmpty';
+import { i18n } from 'live-shared-data';
 
 type Props = {
 	navigation: Object,
@@ -433,8 +434,9 @@ const Actions = React.memo<Object>((props: Props): Object => {
 				show: true,
 				showHeader: true,
 				imageHeader: true,
-				header: 'No action selected', // TODO: Translate
-				text: `Please select any action to perform on the device ${name}.`,
+				text: intl.formatMessage(i18n.noDeviceActionSelected, {
+					deviceName: name,
+				}),
 				showPositive: true,
 			});
 			return;

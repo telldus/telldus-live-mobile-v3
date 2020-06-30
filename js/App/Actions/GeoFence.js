@@ -64,7 +64,6 @@ import {
 
 import i18n from '../Translations/common';
 
-const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
 const ERROR_CODE_TIMED_OUT = 'FENCE_TIMED_OUT';
 
@@ -1029,7 +1028,6 @@ module.exports = {
 	updateGeoFenceConfig,
 	getCurrentLocation,
 
-	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
 	ERROR_CODE_TIMED_OUT,
 
