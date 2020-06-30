@@ -231,7 +231,7 @@ export class GeoFenceContainer extends View<Props, State> {
 			this.setState({
 				isGeoFenceLoadingStatus: true,
 			});
-			actions.setupGeoFence().then((res: Object) => {
+			actions.setupGeoFence(screenProps.intl).then((res: Object) => {
 				if (res.enabled) {
 					actions.toggleFeatureGeoFence({
 						enableGeoFence,

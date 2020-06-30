@@ -100,7 +100,7 @@ const AdvancedSettings = memo<Object>((props: Props): Object => {
 			...config,
 			...conf,
 		}));
-		dispatch(setupGeoFence());
+		dispatch(setupGeoFence(intl));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [config]);
 

@@ -59,6 +59,8 @@ import {
 	platformAppStateIndependentClearTimeout,
 } from '../Lib/Timer';
 
+import i18n from '../Translations/common';
+
 const ERROR_CODE_FENCE_ID_EXIST = 'FENCE_ID_EXISTS';
 const ERROR_CODE_FENCE_NO_ACTION = 'FENCE_NO_ACTION';
 const ERROR_CODE_TIMED_OUT = 'FENCE_TIMED_OUT';
@@ -81,7 +83,7 @@ let MAP_QUEUE_TIME = {
 };
 let backgroundTimerStartedIniOS = false;
 
-function setupGeoFence(): ThunkAction {
+function setupGeoFence(intl: Object): ThunkAction {
 	return async (dispatch: Function, getState: Function): Promise<any> => {
 
 		const {
@@ -105,6 +107,10 @@ function setupGeoFence(): ThunkAction {
 				code: ERROR_CODE_GF_RC_DISABLED,
 			});
 		}
+
+		const {
+			formatMessage,
+		} = intl;
 
 		const {
 			distanceFilter = 5,
@@ -150,6 +156,8 @@ function setupGeoFence(): ThunkAction {
 			notification: {
 				smallIcon: 'drawable/icon_notif', // <-- defaults to app icon
 				largeIcon: 'drawable/icon_notif',
+				title: 'Telldus Live! Mobile',
+				text: formatMessage(i18n.geoFenceTrackingActive),
 			},
 			// iOS
 			preventSuspend,
