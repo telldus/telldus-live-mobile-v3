@@ -58,6 +58,9 @@ import {
 	platformAppStateIndependentSetTimeout,
 	platformAppStateIndependentClearTimeout,
 } from '../Lib/Timer';
+import {
+	getRawIntl,
+} from '../Lib/intlUtils';
 
 import i18n from '../Translations/common';
 
@@ -381,6 +384,15 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 			return Promise.resolve('done');
 		}
 
+		const { app: {
+			defaultSettings = {},
+		}} = getState();
+		let { language = {} } = defaultSettings;
+		let locale = language.code;
+		const {
+			formatMessage,
+		} = getRawIntl(locale);
+
 		method = parseInt(method, 10);
 		const methodsSharedSetState = [1, 2, 4, 16, 128, 256, 512];
 		if (methodsSharedSetState.indexOf(method) !== -1) {
@@ -400,7 +412,8 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 				return res;
 			}).catch((err: Object = {}): Object => {
-				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+				const actionString = actionEvent === 'EXIT' ? formatMessage(i18n.exiting) : formatMessage(i18n.entering);
 
 				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count >= 3)) {
 					if (typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
@@ -409,7 +422,10 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					delete retryQueueDeviceAction[action.uuid];
 					dispatch(showNotificationOnErrorExecutingAction({
 						notificationId: action.uuid,
-						body: `Failed to execute Device action while ${actionString} the fence ${title}.`,
+						body: formatMessage(i18n.deviceActionFailedOnGF, {
+							actionString,
+							fenceName: title,
+						}),
 					}));
 					return;
 				}
@@ -435,10 +451,15 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 
 				const timeout = MAP_QUEUE_TIME[retryQueueDeviceAction[action.uuid].count.toString()];
-				const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+				const timeString = timeout === 60 ? formatMessage(i18n.oneMinute) : formatMessage(i18n.inSomeSeconds, { value: timeout });
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
-					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+					body: `${formatMessage(i18n.deviceActionFailedOnGF, {
+						actionString,
+						fenceName: title,
+					})} ${formatMessage(i18n.actionFailedOnGFRetry, {
+						timeString,
+					})}`,
 				}));
 
 				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
@@ -464,7 +485,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 				return res;
 			}).catch((err: Object = {}): Object => {
-				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+				const actionString = actionEvent === 'EXIT' ? formatMessage(i18n.exiting) : formatMessage(i18n.entering);
 
 				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count >= 3)) {
 					if (typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
@@ -473,7 +494,10 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					delete retryQueueDeviceAction[action.uuid];
 					dispatch(showNotificationOnErrorExecutingAction({
 						notificationId: action.uuid,
-						body: `Failed to execute Device action while ${actionString} the fence ${title}.`,
+						body: formatMessage(i18n.deviceActionFailedOnGF, {
+							actionString,
+							fenceName: title,
+						}),
 					}));
 					return;
 				}
@@ -500,10 +524,15 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 
 				const timeout = MAP_QUEUE_TIME[retryQueueDeviceAction[action.uuid].count.toString()];
 
-				const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+				const timeString = timeout === 60 ? formatMessage(i18n.oneMinute) : formatMessage(i18n.inSomeSeconds, { value: timeout });
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
-					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+					body: `${formatMessage(i18n.deviceActionFailedOnGF, {
+						actionString,
+						fenceName: title,
+					})} ${formatMessage(i18n.actionFailedOnGFRetry, {
+						timeString,
+					})}`,
 				}));
 
 				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
@@ -532,7 +561,7 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 				}));
 				return res;
 			}).catch((err: Object = {}): Object => {
-				const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+				const actionString = actionEvent === 'EXIT' ? formatMessage(i18n.exiting) : formatMessage(i18n.entering);
 
 				if (retryQueueDeviceAction[action.uuid] && (retryQueueDeviceAction[action.uuid].count >= 3)) {
 					if (typeof retryQueueDeviceAction[action.uuid].timeoutId !== 'undefined') {
@@ -541,7 +570,10 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 					delete retryQueueDeviceAction[action.uuid];
 					dispatch(showNotificationOnErrorExecutingAction({
 						notificationId: action.uuid,
-						body: `Failed to execute Device action while ${actionString} the fence ${title}.`,
+						body: formatMessage(i18n.deviceActionFailedOnGF, {
+							actionString,
+							fenceName: title,
+						}),
 					}));
 					return;
 				}
@@ -568,10 +600,15 @@ function handleActionDevice(action: Object, accessToken: Object, eventUUID: stri
 
 				const timeout = MAP_QUEUE_TIME[retryQueueDeviceAction[action.uuid].count.toString()];
 
-				const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+				const timeString = timeout === 60 ? formatMessage(i18n.oneMinute) : formatMessage(i18n.inSomeSeconds, { value: timeout });
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
-					body: `Failed to execute Device action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+					body: `${formatMessage(i18n.deviceActionFailedOnGF, {
+						actionString,
+						fenceName: title,
+					})} ${formatMessage(i18n.actionFailedOnGFRetry, {
+						timeString,
+					})}`,
 				}));
 
 				retryQueueDeviceAction[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
@@ -616,7 +653,17 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 			}));
 			return res;
 		}).catch((err: Object = {}): Object => {
-			const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+			const { app: {
+				defaultSettings = {},
+			}} = getState();
+			let { language = {} } = defaultSettings;
+			let locale = language.code;
+			const {
+				formatMessage,
+			} = getRawIntl(locale);
+
+			const actionString = actionEvent === 'EXIT' ? formatMessage(i18n.exiting) : formatMessage(i18n.entering);
 
 			if (retryQueueEvent[action.uuid] && (retryQueueEvent[action.uuid].count >= 3)) {
 				if (typeof retryQueueEvent[action.uuid].timeoutId !== 'undefined') {
@@ -625,7 +672,10 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 				delete retryQueueEvent[action.uuid];
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
-					body: `Failed to execute Event action while ${actionString} the fence ${title}.`,
+					body: formatMessage(i18n.eventActionFailedOnGF, {
+						actionString,
+						fenceName: title,
+					}),
 				}));
 				return;
 			}
@@ -652,10 +702,15 @@ function handleActionEvent(action: Object, accessToken: Object, eventUUID: strin
 
 			const timeout = MAP_QUEUE_TIME[retryQueueEvent[action.uuid].count.toString()];
 
-			const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+			const timeString = timeout === 60 ? formatMessage(i18n.oneMinute) : formatMessage(i18n.inSomeSeconds, { value: timeout });
 			dispatch(showNotificationOnErrorExecutingAction({
 				notificationId: action.uuid,
-				body: `Failed to execute Event action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+				body: `${formatMessage(i18n.eventActionFailedOnGF, {
+					actionString,
+					fenceName: title,
+				})} ${formatMessage(i18n.actionFailedOnGFRetry, {
+					timeString,
+				})}`,
 			}));
 
 			retryQueueEvent[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
@@ -695,7 +750,17 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 			}));
 			return res;
 		}).catch((err: Object = {}): Object => {
-			const actionString = actionEvent === 'EXIT' ? 'exiting' : 'entering';
+
+			const { app: {
+				defaultSettings = {},
+			}} = getState();
+			let { language = {} } = defaultSettings;
+			let locale = language.code;
+			const {
+				formatMessage,
+			} = getRawIntl(locale);
+
+			const actionString = actionEvent === 'EXIT' ? formatMessage(i18n.exiting) : formatMessage(i18n.entering);
 
 			if (retryQueueSchedule[action.uuid] && (retryQueueSchedule[action.uuid].count >= 3)) {
 				if (typeof retryQueueSchedule[action.uuid].timeoutId !== 'undefined') {
@@ -704,7 +769,10 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 				delete retryQueueSchedule[action.uuid];
 				dispatch(showNotificationOnErrorExecutingAction({
 					notificationId: action.uuid,
-					body: `Failed to execute Schedule action while ${actionString} the fence ${title}.`,
+					body: formatMessage(i18n.scheduleActionFailedOnGF, {
+						actionString,
+						fenceName: title,
+					}),
 				}));
 				return;
 			}
@@ -731,10 +799,15 @@ function handleActionSchedule(action: Object, accessToken: Object, eventUUID: st
 
 			const timeout = MAP_QUEUE_TIME[retryQueueSchedule[action.uuid].count.toString()];
 
-			const timeString = timeout === 60 ? '1 minute' : `${timeout} seconds`;
+			const timeString = timeout === 60 ? formatMessage(i18n.oneMinute) : formatMessage(i18n.inSomeSeconds, { value: timeout });
 			dispatch(showNotificationOnErrorExecutingAction({
 				notificationId: action.uuid,
-				body: `Failed to execute Schedule action while ${actionString} the fence ${title}. Will retry in ${timeString}.`,
+				body: `${formatMessage(i18n.scheduleActionFailedOnGF, {
+					actionString,
+					fenceName: title,
+				})} ${formatMessage(i18n.actionFailedOnGFRetry, {
+					timeString,
+				})}`,
 			}));
 
 			retryQueueSchedule[action.uuid].timeoutId = platformAppStateIndependentSetTimeout(() => {
