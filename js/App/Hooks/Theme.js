@@ -26,9 +26,11 @@ import {
 import {
 	useSelector,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import ThemedColors from '../Theme/ThemedColors';
 const DEVICE_THEME_KEY = 'OS';
+import i18n from '../Translations/common';
 
 const useAppTheme = (): Object => {
 	const colorScheme = useColorScheme();
@@ -65,10 +67,16 @@ const getThemeData = (themeInApp: string | null = 'light'): Object => {
 const useAppThemeOptions = (): Object => {
 	const colorScheme = useColorScheme();
 	const themes = Object.keys(ThemedColors);
+
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	let options = themes.map((value: string): Object => {
-		let label = 'Default Theme';// TODO: translate
+		let label = formatMessage(i18n.themeOption1);
 		if (value === 'dark') {
-			label = 'Dark Theme';// TODO: translate
+			label = formatMessage(i18n.themeOption2);
 		}
 		return {
 			value,
@@ -83,7 +91,7 @@ const useAppThemeOptions = (): Object => {
 	const value = colorScheme || 'light';
 	options.push({
 		value: DEVICE_THEME_KEY,
-		label: 'Device Theme', // TODO: translate
+		label: formatMessage(i18n.themeOption3),
 		shades: [
 			ThemedColors[value].ShadeOne,
 			ThemedColors[value].ShadeTwo,
