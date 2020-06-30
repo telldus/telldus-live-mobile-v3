@@ -119,6 +119,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		checkButtonStyle,
 		checkIconActiveStyle,
 		checkIconInActiveStyle,
+		brandSecondary,
 	} = getStyles(layout, {
 		isInState,
 		isLast,
@@ -171,6 +172,7 @@ const DeviceRow = React.memo<Object>((props: Object): Object => {
 		button.unshift(
 			<BellButton
 				{...sharedProps}
+				iconColor={isInState === 'BELL' ? '#fff' : brandSecondary}
 				style={bellStyle}
 				key={4}
 			/>
@@ -361,6 +363,7 @@ const getStyles = (appLayout: Object, {
 	const padding = deviceWidth * paddingFactor;
 
 	return {
+		brandSecondary,
 		touchableContainer: {
 			flex: 1,
 			flexDirection: 'row',
@@ -430,7 +433,7 @@ const getStyles = (appLayout: Object, {
 		bellStyle: {
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: '#eeeeee',
+			backgroundColor: isInState === 'BELL' ? brandSecondary : '#eeeeee',
 			width: buttonWidth * 2,
 			borderLeftWidth: 1,
 			borderLeftColor: '#ddd',
