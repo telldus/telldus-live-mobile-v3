@@ -97,12 +97,17 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		renderItem,
 	} = props;
 
+	const [ dataInState, setDataInState ] = useState(data);
+
 	const _rowInfo = useRef({});
 	const _rowRefs = useRef({});
 	const _refSelected = useRef({});
+	const _dropIndexesQueue = useRef({});
+	const _gridIndexToDrop = useRef(-1);
 	const _currentGest = useRef({});
 	const _containerLayoutInfo = useRef({});
 	const _hasMoved = useRef(false);
+
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -118,9 +123,67 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const headerHeight = Platform.OS === 'android' ? (isPortrait ? deviceHeight * port : deviceHeight * land) : deviceHeight * land;
 	const totalTop = statusBarHeight + headerHeight;
 
+	const normalizeGrid = useCallback((key: number) => {
+		_rowRefs.current[key].setNativeProps({
+			style: {
+				transform: [{
+					scaleX: 1,
+				}, {
+					scaleY: 1,
+				}],
+			},
+		});
+		delete _dropIndexesQueue.current[key];
+	}, []);
+
+	const commonActionsOnRelease = useCallback(() => {
+		Object.keys(_dropIndexesQueue.current).forEach((key: string) => {
+			normalizeGrid(parseInt(key, 10));
+		});
+	}, [normalizeGrid]);
+
+	const arrageGrids = useCallback(() => {
+		if (_gridIndexToDrop.current === -1) {
+			return;
+		}
+		if (selectedIndex === -1) {
+			return;
+		}
+		if (parseInt(selectedIndex, 10) === parseInt(_gridIndexToDrop.current, 10)) {
+			return;
+		}
+		if (_dropIndexesQueue.current[_gridIndexToDrop.current]) {
+			const dropIndex = _gridIndexToDrop.current;
+			let newData = [], droppedIndex;
+			dataInState.map((dis: Object, i: number): Object => {
+				if (parseInt(selectedIndex, 10) !== parseInt(i, 10)) {
+					if (parseInt(dropIndex, 10) === parseInt(i, 10)) {
+						newData.push(dataInState[selectedIndex]);
+						droppedIndex = newData.length - 1;
+					} else {
+						newData.push(dis);
+					}
+				}
+			});
+			let newDataL2 = [];
+			if (parseInt(dropIndex, 10) > parseInt(selectedIndex, 10)) {
+				let newDataL1 = newData.slice(0, droppedIndex);
+				newDataL1.push(dataInState[parseInt(dropIndex, 10)]);
+				newDataL2 = newDataL1.concat(newData.slice(droppedIndex));
+			} else {
+				let newDataL1 = newData.slice(0, droppedIndex + 1);
+				newDataL1.push(dataInState[parseInt(dropIndex, 10)]);
+				newDataL2 = newDataL1.concat(newData.slice(droppedIndex + 1));
+			}
+			setDataInState(newDataL2);
+		}
+	}, [dataInState, selectedIndex]);
+
 	const onRelease = (evt: Object, gestureState: Object) => {
+		arrageGrids();
 		setSelectedIndex(-1);
 		_hasMoved.current = false;
+		commonActionsOnRelease();
 	};
 
 	const _setRowRefs = useCallback((ref: any, index: number) => {
@@ -167,11 +230,42 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			} = gestureState;
 
 			const selectedItemInfo = _rowInfo.current[selectedIndex];
+			const left = moveX - (selectedItemInfo.width / 2);
+			const top = moveY - totalTop;
 			_refSelected.current.setNativeProps({
 				style: {
-					left: moveX - (selectedItemInfo.width / 2),
-					top: (moveY - totalTop),
+					left,
+					top,
 				},
+			});
+
+
+			Object.keys(_rowInfo.current).forEach((key: string) => {
+				const {
+					x,
+					y,
+					width: _width,
+					height: _height,
+				} = _rowInfo.current[key];
+
+				if (moveX > x && top > y && moveX < (x + _width) && top < (y + _height)) {
+					_dropIndexesQueue.current = {
+						..._dropIndexesQueue.current,
+						[key]: true,
+					};
+					_gridIndexToDrop.current = key;
+					_rowRefs.current[key].setNativeProps({
+						style: {
+							transform: [{
+								scaleX: 0.8,
+							}, {
+								scaleY: 0.8,
+							}],
+						},
+					});
+				} else if (_dropIndexesQueue.current[key]) {
+					normalizeGrid(parseInt(key, 10));
+				}
 			});
 		},
 		onPanResponderTerminationRequest: ({ nativeEvent }: Object, gestureState: Object): boolean => {
@@ -205,7 +299,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			setSelectedIndex(-1);
 			_hasMoved.current = false;
 		}
-	}, []);
+		commonActionsOnRelease();
+	}, [commonActionsOnRelease]);
 
 	const _onLayoutRow = useCallback((event: Object, index: number) => {
 		const _rowInfoNext = {
@@ -220,7 +315,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	}, []);
 
 	const rows = useMemo((): Array<Object> => {
-		return data.map((item: Object, index: number): Object => {
+		return dataInState.map((item: Object, index: number): Object => {
 			return (
 				<RowItem
 					key={`${index}`}
@@ -233,7 +328,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					moveEnd={_moveEnd}/>
 			);
 		});
-	}, [data, _setRowRefs, _onLayoutRow, renderItem, _move, _moveEnd]);
+	}, [dataInState, _setRowRefs, _onLayoutRow, renderItem, _move, _moveEnd]);
 
 	const selectedItem = useMemo((): null | Object => {
 		if (selectedIndex === -1) {
@@ -243,7 +338,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			<RowItem
 				key={`${selectedIndex}-selected`}
 				renderItem={renderItem}
-				item={data[selectedIndex]}
+				item={dataInState[selectedIndex]}
 				index={`${selectedIndex}-selected`}
 				moveEnd={_moveEnd}
 				setRowRefs={_setRowRefSelected}
@@ -251,7 +346,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					position: 'absolute',
 				}}/>
 		);
-	}, [selectedIndex, renderItem, data, _moveEnd, _setRowRefSelected]);
+	}, [selectedIndex, renderItem, dataInState, _moveEnd, _setRowRefSelected]);
 
 	return (
 		<View
