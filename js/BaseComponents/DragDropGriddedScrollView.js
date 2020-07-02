@@ -96,9 +96,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _rowInfo = useRef({});
 	const _rowRefs = useRef({});
 	const _refSelected = useRef({});
-	const _selectedAnimatedX = useRef(new Animated.Value(0));
-	const _selectedAnimatedY = useRef(new Animated.Value(0));
-	console.log('TEST _selectedAnimatedX', _selectedAnimatedX);
+	const _currentGest = useRef({});
+	const _containerLayoutInfo = useRef({});
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
 	const onRelease = (evt: Object, gestureState: Object) => {
@@ -119,7 +118,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	}, []);
 
 	const _panResponder = PanResponder.create({
-		onStartShouldSetPanResponderCapture: (evt: Object, {numberActiveTouches}: Object): boolean => {
+		onStartShouldSetPanResponderCapture: (evt: Object, gestureState: Object): boolean => {
+			_currentGest.current = gestureState;
 			return false;
 		},
 		onMoveShouldSetPanResponder: (evt: Object, gestureState: Object): boolean => {
@@ -132,8 +132,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			return shouldSet;
 		},
 		onPanResponderMove: (evt: Object, gestureState: Object) => {
-			console.log('TEST onPanResponderMove', gestureState);
-			console.log('TEST onPanResponderMove selectedIndex', selectedIndex);
+			console.log('TEST onPanResponderMove', {...gestureState});
+			console.log('TEST evt.nativeEvent', {...evt.nativeEvent});
 			if (gestureState.numberActiveTouches > 1) {
 				onRelease();
 				return;
@@ -141,42 +141,18 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			if (selectedIndex === -1) {
 				return;
 			}
-			Animated.event([null, { ['moveX']: _selectedAnimatedX.current }], {
-				listener: (event: Object, gState: Object) => {
-					console.log('TEST event _rowRefs', _rowRefs);
-					console.log('TEST event _refSelected', _refSelected);
-					if (!_refSelected.current) {
-						return;
-					}
-					if (selectedIndex === -1) {
-						return;
-					}
-					const { moveX } = gState;
-					_refSelected.current.setNativeProps({
-						style: {
-							left: moveX,
-						},
-					});
+
+			const {
+				moveX,
+				moveY,
+			} = gestureState;
+			console.log('TEST _containerLayoutInfo.current', {..._containerLayoutInfo.current});
+			_refSelected.current.setNativeProps({
+				style: {
+					left: moveX,
+					top: (moveY - _containerLayoutInfo.current.x),
 				},
-				useNativeDriver: false,
-			})(evt, gestureState);
-			Animated.event([null, { ['moveY']: _selectedAnimatedY.current }], {
-				listener: (event: Object, gState: Object) => {
-					if (!_refSelected.current) {
-						return;
-					}
-					if (selectedIndex === -1) {
-						return;
-					}
-					const { moveY } = gState;
-					_refSelected.current.setNativeProps({
-						style: {
-							top: moveY,
-						},
-					});
-				},
-				useNativeDriver: false,
-			})(evt, gestureState);
+			});
 		},
 		onPanResponderTerminationRequest: ({ nativeEvent }: Object, gestureState: Object): boolean => {
 			return false;
@@ -190,10 +166,16 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		if (!_refSelected.current) {
 			return;
 		}
+		console.log('TEST selectedItemInfo', selectedItemInfo);
+		console.log('TEST _currentGest.current', {..._currentGest.current});
+		const {
+			moveX,
+			moveY,
+		} = _currentGest.current;
 		_refSelected.current.setNativeProps({
 			style: {
-				left: selectedItemInfo.x,
-				top: selectedItemInfo.y,
+				left: moveX || selectedItemInfo.x,
+				top: moveY || selectedItemInfo.y,
 				transform: [{
 					scaleX: 1.2,
 				}, {
@@ -214,6 +196,10 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		};
 		_rowInfo.current = _rowInfoNext;
 	}, [_rowInfo]);
+
+	const onLayoutContainer = useCallback((event: Object) => {
+		_containerLayoutInfo.current = event.nativeEvent.layout;
+	}, []);
 
 	const rows = useMemo((): Array<Object> => {
 		return data.map((item: Object, index: number): Object => {
@@ -250,7 +236,11 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 	return (
 		<View
-			{..._panResponder.panHandlers}>
+			style={{
+				flex: 1,
+			}}
+			{..._panResponder.panHandlers}
+			onLayout={onLayoutContainer}>
 			<ScrollView
 				{...props}>
 				{rows}

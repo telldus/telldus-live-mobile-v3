@@ -459,7 +459,6 @@ class DashboardTab extends View {
 						paddingHorizontal: isDBEmpty ? 30 : style.padding,
 					}}
 					scrollEnabled={scrollEnabled}
-					onStartShouldSetResponder={this.handleOnStartShouldSetResponder}
 					keyExtractor={this._keyExtractor}
 				/>
 			</View>
