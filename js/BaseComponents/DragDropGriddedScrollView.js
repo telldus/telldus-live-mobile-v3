@@ -114,7 +114,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const isPortrait = height > width;
 	const deviceHeight = isPortrait ? height : width;
 	const statusBarHeight = getStatusBarHeight();
-	const headerHeight = Platform.OS === 'android' ? (isPortrait ? deviceHeight * port :  deviceHeight * land) : deviceHeight * land;
+	const headerHeight = Platform.OS === 'android' ? (isPortrait ? deviceHeight * port : deviceHeight * land) : deviceHeight * land;
 	const totalTop = statusBarHeight + headerHeight;
 
 	const onRelease = (evt: Object, gestureState: Object) => {
