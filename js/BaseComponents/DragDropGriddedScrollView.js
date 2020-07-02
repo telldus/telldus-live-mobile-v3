@@ -33,8 +33,12 @@ import {
 	View,
 	PanResponder,
 	Animated,
+	Platform,
 } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { useSelector } from 'react-redux';
 
+import Theme from '../App/Theme';
 
 const RowItem = memo<Object>((props: Object): Object => {
 	const {
@@ -100,8 +104,20 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _containerLayoutInfo = useRef({});
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
+	const { layout } = useSelector((state: Object): Object => state.app);
+
+	const {
+		headerHeightFactor,
+	} = Theme.Core;
+	const { land, port } = headerHeightFactor;
+	const { height, width } = layout;
+	const isPortrait = height > width;
+	const deviceHeight = isPortrait ? height : width;
+	const statusBarHeight = getStatusBarHeight();
+	const headerHeight = Platform.OS === 'android' ? (isPortrait ? deviceHeight * port :  deviceHeight * land) : deviceHeight * land;
+	const totalTop = statusBarHeight + headerHeight;
+
 	const onRelease = (evt: Object, gestureState: Object) => {
-		console.log('TEST onRelease');
 		setSelectedIndex(-1);
 	};
 
@@ -132,8 +148,6 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			return shouldSet;
 		},
 		onPanResponderMove: (evt: Object, gestureState: Object) => {
-			console.log('TEST onPanResponderMove', {...gestureState});
-			console.log('TEST evt.nativeEvent', {...evt.nativeEvent});
 			if (gestureState.numberActiveTouches > 1) {
 				onRelease();
 				return;
@@ -146,11 +160,12 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 				moveX,
 				moveY,
 			} = gestureState;
-			console.log('TEST _containerLayoutInfo.current', {..._containerLayoutInfo.current});
+
+			const selectedItemInfo = _rowInfo.current[selectedIndex];
 			_refSelected.current.setNativeProps({
 				style: {
-					left: moveX,
-					top: (moveY - _containerLayoutInfo.current.x),
+					left: moveX - (selectedItemInfo.width / 2),
+					top: (moveY - totalTop),
 				},
 			});
 		},
@@ -166,16 +181,11 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		if (!_refSelected.current) {
 			return;
 		}
-		console.log('TEST selectedItemInfo', selectedItemInfo);
-		console.log('TEST _currentGest.current', {..._currentGest.current});
-		const {
-			moveX,
-			moveY,
-		} = _currentGest.current;
+
 		_refSelected.current.setNativeProps({
 			style: {
-				left: moveX || selectedItemInfo.x,
-				top: moveY || selectedItemInfo.y,
+				left: selectedItemInfo.x,
+				top: selectedItemInfo.y,
 				transform: [{
 					scaleX: 1.2,
 				}, {
