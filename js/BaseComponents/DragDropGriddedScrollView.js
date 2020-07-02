@@ -102,6 +102,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _refSelected = useRef({});
 	const _currentGest = useRef({});
 	const _containerLayoutInfo = useRef({});
+	const _hasMoved = useRef(false);
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -119,6 +120,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 	const onRelease = (evt: Object, gestureState: Object) => {
 		setSelectedIndex(-1);
+		_hasMoved.current = false;
 	};
 
 	const _setRowRefs = useCallback((ref: any, index: number) => {
@@ -145,6 +147,9 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 				return false;
 			}
 			const shouldSet = selectedIndex !== -1;
+			if (shouldSet) {
+				_hasMoved.current = true;
+			}
 			return shouldSet;
 		},
 		onPanResponderMove: (evt: Object, gestureState: Object) => {
@@ -196,7 +201,10 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	}, []);
 
 	const _moveEnd = useCallback(() => {
-		setSelectedIndex(-1);
+		if (!_hasMoved.current) {
+			setSelectedIndex(-1);
+			_hasMoved.current = false;
+		}
 	}, []);
 
 	const _onLayoutRow = useCallback((event: Object, index: number) => {
@@ -221,10 +229,11 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					renderItem={renderItem}
 					item={item}
 					index={index}
-					move={_move}/>
+					move={_move}
+					moveEnd={_moveEnd}/>
 			);
 		});
-	}, [data, _setRowRefs, _onLayoutRow, renderItem, _move]);
+	}, [data, _setRowRefs, _onLayoutRow, renderItem, _move, _moveEnd]);
 
 	const selectedItem = useMemo((): null | Object => {
 		if (selectedIndex === -1) {
