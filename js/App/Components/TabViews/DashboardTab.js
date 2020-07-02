@@ -285,6 +285,8 @@ class DashboardTab extends View {
 				level={3}
 				style={[style.container, {
 					paddingHorizontal: 20,
+					alignItems: 'center',
+					justifyContent: 'center',
 				}]}>
 				<Icon name={'star'} size={style.starIconSize} color={Theme.Core.brandSecondary}/>
 				<Text
@@ -564,8 +566,6 @@ class DashboardTab extends View {
 		return {
 			container: {
 				flex: 1,
-				alignItems: 'center',
-				justifyContent: 'center',
 				marginLeft: Platform.OS !== 'android' || isPortrait ? 0 : (width * androidLandMarginLeftFactor),
 			},
 			starIconSize: isPortrait ? Math.floor(width * 0.12) : Math.floor(height * 0.12),
