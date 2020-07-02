@@ -25,7 +25,6 @@ import React from 'react';
 import { createSelector } from 'reselect';
 import {
 	Dimensions,
-	FlatList,
 	RefreshControl,
 	LayoutAnimation,
 	Platform,
@@ -37,6 +36,8 @@ import {
 	Text,
 	View,
 	EmptyView,
+	TouchableOpacity,
+	DragDropGriddedScrollView,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -434,8 +435,7 @@ class DashboardTab extends View {
 				level={3}
 				onLayout={this._onLayout}
 				style={style.container}>
-				<FlatList
-					ref="list"
+				<DragDropGriddedScrollView
 					data={rows}
 					renderItem={this._renderRow}
 					refreshControl={
@@ -448,8 +448,12 @@ class DashboardTab extends View {
 					key={numColumns}
 					numColumns={numColumns}
 					extraData={extraData}
-					style={{width: '100%'}}
+					style={{
+						width: '100%',
+					}}
 					contentContainerStyle={{
+						flexDirection: 'row',
+						flexWrap: 'wrap',
 						flexGrow: 1,
 						paddingVertical: style.padding,
 						paddingHorizontal: isDBEmpty ? 30 : style.padding,
@@ -486,6 +490,12 @@ class DashboardTab extends View {
 		if (!row || !row.item) {
 			return <EmptyView/>;
 		}
+
+		const {
+			move,
+			moveEnd,
+		} = row;
+
 		const { screenProps } = this.props;
 		const { intl } = screenProps;
 		let { tileWidth } = this.state;
@@ -509,15 +519,16 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
+		let rowItem;
 		if (objectType !== 'sensor' && objectType !== 'device') {
-			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 		if (!data) {
-			return this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 
 		if (objectType === 'sensor') {
-			return <SensorDashboardTile
+			rowItem = <SensorDashboardTile
 				key={id}
 				item={data}
 				isGatewayActive={isOnline || supportLocalControl}
@@ -526,20 +537,28 @@ class DashboardTab extends View {
 				intl={screenProps.intl}
 				onPress={this.changeDisplayType}
 			/>;
+		} else {
+			rowItem = <DashboardRow
+				key={id}
+				item={data}
+				isGatewayActive={isOnline || supportLocalControl}
+				style={tileStyle}
+				tileWidth={tileWidth}
+				intl={screenProps.intl}
+				setScrollEnabled={this.setScrollEnabled}
+				onPressDimButton={this.showDimInfo}
+				openRGBControl={this.openRGBControl}
+				openThermostatControl={this.openThermostatControl}
+			/>;
 		}
 
-		return <DashboardRow
-			key={id}
-			item={data}
-			isGatewayActive={isOnline || supportLocalControl}
-			style={tileStyle}
-			tileWidth={tileWidth}
-			intl={screenProps.intl}
-			setScrollEnabled={this.setScrollEnabled}
-			onPressDimButton={this.showDimInfo}
-			openRGBControl={this.openRGBControl}
-			openThermostatControl={this.openThermostatControl}
-		/>;
+		return (
+			<TouchableOpacity
+				onLongPress={move}
+				onPressOut={moveEnd}>
+				{rowItem}
+			</TouchableOpacity>
+		);
 	}
 
 	getPadding(): number {
