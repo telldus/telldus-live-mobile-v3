@@ -27,18 +27,14 @@ import React, {
 	useCallback,
 	useRef,
 	useState,
+	useEffect,
 } from 'react';
 import {
 	ScrollView,
 	View,
 	PanResponder,
 	Animated,
-	Platform,
 } from 'react-native';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
-import { useSelector } from 'react-redux';
-
-import Theme from '../App/Theme';
 
 const RowItem = memo<Object>((props: Object): Object => {
 	const {
@@ -95,12 +91,17 @@ const RowItem = memo<Object>((props: Object): Object => {
 const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 	const {
-		data,
+		data = [],
 		renderItem,
 		extraData,
 	} = props;
 
 	const [ dataInState, setDataInState ] = useState(data);
+
+	useEffect(() => {
+		setDataInState(data);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [data.length]);
 
 	const _rowInfo = useRef({});
 	const _rowRefs = useRef({});
@@ -112,21 +113,9 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _hasMoved = useRef(false);
 	const _scrollViewRef = useRef({});
 	const _scrollOffset = useRef({});
+	const _containerRef = useRef({});
 
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
-
-	const { layout } = useSelector((state: Object): Object => state.app);
-
-	const {
-		headerHeightFactor,
-	} = Theme.Core;
-	const { land, port } = headerHeightFactor;
-	const { height, width } = layout;
-	const isPortrait = height > width;
-	const deviceHeight = isPortrait ? height : width;
-	const statusBarHeight = getStatusBarHeight();
-	const headerHeight = Platform.OS === 'android' ? (isPortrait ? deviceHeight * port : deviceHeight * land) : deviceHeight * land;
-	const totalTop = statusBarHeight + headerHeight;
 
 	const normalizeGrid = useCallback((key: number) => {
 		_rowRefs.current[key].setNativeProps({
@@ -245,8 +234,14 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					width: widthSelected,
 					height: heightSelected,
 				} = selectedItemInfo;
-				const left = moveX - (widthSelected / 2);
-				const top = moveY - totalTop;
+				const {
+					height: containerH,
+					y: containerY = 0,
+					x: containerX = 0,
+				} = _containerLayoutInfo.current;
+
+				const left = moveX - (widthSelected / 2) - containerX;
+				const top = moveY - (heightSelected / 2) - containerY;
 				_refSelected.current.setNativeProps({
 					style: {
 						left,
@@ -283,24 +278,20 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 						normalizeGrid(parseInt(key, 10));
 					}
 
-					const {
-						height: containerH,
-						y: containerY,
-					} = _containerLayoutInfo.current;
 					const shouldMoveDown = top > (containerH - heightSelected);
 					const shouldMoveUp = top < (containerY + heightSelected);
 					if (shouldMoveDown) {
 						_scrollViewRef.current.scrollTo({
 							x: nextX || 0,
 							y: (nextY + heightSelected) || (containerY + containerH + heightSelected),
-							animated: true,
+							animated: false,
 						});
 					}
 					if (shouldMoveUp) {
 						_scrollViewRef.current.scrollTo({
 							x: nextX || 0,
 							y: (nextY - heightSelected) || (containerY + containerH - heightSelected),
-							animated: true,
+							animated: false,
 						});
 					}
 				});
@@ -310,7 +301,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			},
 			onPanResponderRelease: onRelease,
 		});
-	}, [normalizeGrid, onRelease, selectedIndex, totalTop]);
+	}, [normalizeGrid, onRelease, selectedIndex]);
 
 	const _move = useCallback((index: number) => {
 		const selectedItemInfo = _rowInfo.current[index];
@@ -353,7 +344,14 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	}, [_rowInfo]);
 
 	const onLayoutContainer = useCallback((event: Object) => {
-		_containerLayoutInfo.current = event.nativeEvent.layout;
+		_containerRef.current.measureInWindow((x: number, y: number, _width: number, _height: number) => {
+			_containerLayoutInfo.current = {
+				x,
+				y,
+				width: _width,
+				height: _height,
+			};
+		});
 	}, []);
 
 	const _onScroll = useCallback(({nativeEvent}: Object) => {
@@ -402,7 +400,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 				flex: 1,
 			}}
 			{..._panResponder.panHandlers}
-			onLayout={onLayoutContainer}>
+			onLayout={onLayoutContainer}
+			ref={_containerRef}>
 			<ScrollView
 				{...props}
 				ref={_scrollViewRef}
