@@ -116,15 +116,16 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _scrollOffset = useRef({});
 	const _containerRef = useRef({});
 
+	const _animatedTop = useRef(new Animated.Value(0));
+	const _animatedLeft = useRef(new Animated.Value(0));
+
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
 	const normalizeGrid = useCallback((key: number) => {
 		_rowRefs.current[key].setNativeProps({
 			style: {
 				transform: [{
-					scaleX: 1,
-				}, {
-					scaleY: 1,
+					scale: 1,
 				}],
 			},
 		});
@@ -246,12 +247,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 				const left = moveX - (widthSelected / 2) - containerX;
 				const top = moveY - (heightSelected / 2) - containerY;
-				_refSelected.current.setNativeProps({
-					style: {
-						left,
-						top,
-					},
-				});
+				_animatedTop.current.setValue(top);
+				_animatedLeft.current.setValue(left);
 
 				Object.keys(_rowInfo.current).forEach((key: string) => {
 					const {
@@ -271,9 +268,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 						_rowRefs.current[key].setNativeProps({
 							style: {
 								transform: [{
-									scaleX: 0.8,
-								}, {
-									scaleY: 0.8,
+									scale: 0.8,
 								}],
 							},
 						});
@@ -317,14 +312,14 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			x: nextX = 0,
 			y: nextY = 0,
 		} = (_scrollOffset && _scrollOffset.current) ? _scrollOffset.current : {};
+
+		_animatedTop.current.setValue(selectedItemInfo.y - nextY);
+		_animatedLeft.current.setValue(selectedItemInfo.x - nextX);
+
 		_refSelected.current.setNativeProps({
 			style: {
-				left: selectedItemInfo.x - nextX,
-				top: selectedItemInfo.y - nextY,
 				transform: [{
-					scaleX: 1.2,
-				}, {
-					scaleY: 1.2,
+					scale: 1.2,
 				}],
 			},
 		});
@@ -392,6 +387,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 				setRowRefs={_setRowRefSelected}
 				style={{
 					position: 'absolute',
+					top: _animatedTop.current,
+					left: _animatedLeft.current,
 				}}
 				extraData={extraData}/>
 		);
