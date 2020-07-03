@@ -116,22 +116,27 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _scrollOffset = useRef({});
 	const _containerRef = useRef({});
 
+	const _animatedScaleGrids = useRef({});
+	const _animatedScaleSelected = useRef(new Animated.Value(1));
+
 	const _animatedTop = useRef(new Animated.Value(0));
 	const _animatedLeft = useRef(new Animated.Value(0));
 
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
 	const normalizeGrid = useCallback((key: number) => {
-		if (!_rowRefs.current[key]) {
+		const animatedScaleDropGrid = _animatedScaleGrids.current[key];
+		if (!animatedScaleDropGrid) {
 			return;
 		}
-		_rowRefs.current[key].setNativeProps({
-			style: {
-				transform: [{
-					scale: 1,
-				}],
-			},
-		});
+
+		Animated.spring(animatedScaleDropGrid, {
+			toValue: 1,
+			stiffness: 5000,
+			damping: 500,
+			mass: 3,
+			useNativeDriver: false,
+		}).start();
 		delete _dropIndexesQueue.current[key];
 	}, []);
 
@@ -167,6 +172,13 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			}),
 			Animated.spring(_animatedLeft.current, {
 				toValue: x - nextX,
+				stiffness: 5000,
+				damping: 500,
+				mass: 3,
+				useNativeDriver: false,
+			}),
+			Animated.spring(_animatedScaleSelected.current, {
+				toValue: 1,
 				stiffness: 5000,
 				damping: 500,
 				mass: 3,
@@ -309,21 +321,24 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 					const isDroppable = moveX > x && (top + nextY) > y && moveX < (x + _width) && (top + nextY) < (y + _height);
 					if (isDroppable) {
-						if (!_rowRefs.current[key]) {
-							return;
-						}
 						_dropIndexesQueue.current = {
 							..._dropIndexesQueue.current,
 							[key]: true,
 						};
 						_gridIndexToDrop.current = key;
-						_rowRefs.current[key].setNativeProps({
-							style: {
-								transform: [{
-									scale: 0.8,
-								}],
-							},
-						});
+
+						const animatedScaleDropGrid = _animatedScaleGrids.current[key];
+						if (!animatedScaleDropGrid) {
+							return;
+						}
+
+						Animated.spring(animatedScaleDropGrid, {
+							toValue: 0.8,
+							stiffness: 5000,
+							damping: 500,
+							mass: 3,
+							useNativeDriver: false,
+						}).start();
 					} else if (_dropIndexesQueue.current[key]) {
 						normalizeGrid(parseInt(key, 10));
 					}
@@ -369,13 +384,13 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		_animatedTop.current.setValue(selectedItemInfo.y - nextY);
 		_animatedLeft.current.setValue(selectedItemInfo.x - nextX);
 
-		_refSelected.current.setNativeProps({
-			style: {
-				transform: [{
-					scale: 1.2,
-				}],
-			},
-		});
+		Animated.spring(_animatedScaleSelected.current, {
+			toValue: 1.2,
+			stiffness: 5000,
+			damping: 500,
+			mass: 3,
+			useNativeDriver: false,
+		}).start();
 	}, []);
 
 	const _moveEnd = useCallback(() => {
@@ -411,6 +426,12 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 	const rows = useMemo((): Array<Object> => {
 		return dataInState.map((item: Object, index: number): Object => {
+
+			_animatedScaleGrids.current = {
+				[index]: _animatedScaleGrids.current[index] || new Animated.Value(1),
+				..._animatedScaleGrids.current,
+			};
+
 			return (
 				<RowItem
 					key={`${index}`}
@@ -421,7 +442,12 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					index={index}
 					move={_move}
 					moveEnd={_moveEnd}
-					extraData={extraData}/>
+					extraData={extraData}
+					style={{
+						transform: [{
+							scale: _animatedScaleGrids.current[index],
+						}],
+					}}/>
 			);
 		});
 	}, [dataInState, _setRowRefs, _onLayoutRow, renderItem, _move, _moveEnd, extraData]);
@@ -430,6 +456,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		if (selectedIndex === -1) {
 			return null;
 		}
+
 		return (
 			<RowItem
 				key={`${selectedIndex}-selected`}
@@ -442,6 +469,9 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					position: 'absolute',
 					top: _animatedTop.current,
 					left: _animatedLeft.current,
+					transform: [{
+						scale: _animatedScaleSelected.current,
+					}],
 				}}
 				extraData={extraData}/>
 		);
