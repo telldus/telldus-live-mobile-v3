@@ -153,16 +153,20 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			x,
 			y,
 		} = dropGrid;
+		const {
+			x: nextX = 0,
+			y: nextY = 0,
+		} = (_scrollOffset && _scrollOffset.current) ? _scrollOffset.current : {};
 		Animated.parallel([
 			Animated.spring(_animatedTop.current, {
-				toValue: y,
+				toValue: y - nextY,
 				stiffness: 5000,
 				damping: 500,
 				mass: 3,
 				useNativeDriver: false,
 			}),
 			Animated.spring(_animatedLeft.current, {
-				toValue: x,
+				toValue: x - nextX,
 				stiffness: 5000,
 				damping: 500,
 				mass: 3,
@@ -330,14 +334,14 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 						_scrollViewRef.current.scrollTo({
 							x: nextX || 0,
 							y: (nextY + heightSelected) || (containerY + containerH + heightSelected),
-							animated: false,
+							animated: true,
 						});
 					}
 					if (shouldMoveUp) {
 						_scrollViewRef.current.scrollTo({
 							x: nextX || 0,
 							y: (nextY - heightSelected) || (containerY + containerH - heightSelected),
-							animated: false,
+							animated: true,
 						});
 					}
 				});
