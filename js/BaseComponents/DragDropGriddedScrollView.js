@@ -135,6 +135,46 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		delete _dropIndexesQueue.current[key];
 	}, []);
 
+	const animateDropped = useCallback((callback?: Function) => {
+		let _index = _gridIndexToDrop.current;
+		if (_gridIndexToDrop.current === -1 || !_dropIndexesQueue.current[_gridIndexToDrop.current]) {
+			_index = selectedIndex;
+		}
+
+		const dropGrid = _rowInfo.current[_index];
+		if (!dropGrid) {
+			if (callback) {
+				callback();
+			}
+			return;
+		}
+
+		const {
+			x,
+			y,
+		} = dropGrid;
+		Animated.parallel([
+			Animated.spring(_animatedTop.current, {
+				toValue: y,
+				stiffness: 5000,
+				damping: 500,
+				mass: 3,
+				useNativeDriver: false,
+			}),
+			Animated.spring(_animatedLeft.current, {
+				toValue: x,
+				stiffness: 5000,
+				damping: 500,
+				mass: 3,
+				useNativeDriver: false,
+			}),
+		]).start((event: Object) => {
+			if (event.finished && callback) {
+				callback();
+			}
+		});
+	}, [selectedIndex]);
+
 	const commonActionsOnRelease = useCallback(() => {
 		Object.keys(_dropIndexesQueue.current).forEach((key: string) => {
 			normalizeGrid(parseInt(key, 10));
@@ -182,11 +222,13 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	}, [dataInState, onSortOrderUpdate, selectedIndex]);
 
 	const onRelease = useCallback((evt: Object, gestureState: Object) => {
-		arrageGrids();
-		setSelectedIndex(-1);
-		_hasMoved.current = false;
-		commonActionsOnRelease();
-	}, [arrageGrids, commonActionsOnRelease]);
+		animateDropped(() => {
+			arrageGrids();
+			setSelectedIndex(-1);
+			_hasMoved.current = false;
+			commonActionsOnRelease();
+		});
+	}, [animateDropped, arrageGrids, commonActionsOnRelease]);
 
 	const _setRowRefs = useCallback((ref: any, index: number) => {
 		const _rowRefsNew = {
