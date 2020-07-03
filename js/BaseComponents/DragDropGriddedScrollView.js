@@ -30,7 +30,7 @@ import React, {
 	useEffect,
 } from 'react';
 import {
-	ScrollView,
+	Platform,
 	View,
 	PanResponder,
 	Animated,
@@ -330,17 +330,18 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 					const shouldMoveDown = top > (containerH - heightSelected);
 					const shouldMoveUp = top < (containerY + heightSelected);
+					const scrollDistance = Platform.OS === 'ios' ? heightSelected : heightSelected * 0.2;
 					if (shouldMoveDown) {
 						_scrollViewRef.current.scrollTo({
 							x: nextX || 0,
-							y: (nextY + heightSelected) || (containerY + containerH + heightSelected),
+							y: (nextY + scrollDistance) || (containerY + containerH + scrollDistance),
 							animated: true,
 						});
 					}
 					if (shouldMoveUp) {
 						_scrollViewRef.current.scrollTo({
 							x: nextX || 0,
-							y: (nextY - heightSelected) || (containerY + containerH - heightSelected),
+							y: (nextY - scrollDistance) || (containerY + containerH - scrollDistance),
 							animated: true,
 						});
 					}
@@ -454,13 +455,13 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			{..._panResponder.panHandlers}
 			onLayout={onLayoutContainer}
 			ref={_containerRef}>
-			<ScrollView
+			<Animated.ScrollView
 				{...props}
 				ref={_scrollViewRef}
 				onScroll={_onScroll}
 				scrollEventThrottle={12}>
 				{rows}
-			</ScrollView>
+			</Animated.ScrollView>
 			{!!selectedItem && selectedItem}
 		</View>
 	);
