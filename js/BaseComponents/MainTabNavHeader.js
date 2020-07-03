@@ -262,13 +262,14 @@ const getStyles = (appLayout: Object): Object => {
 		logoStyle: {
 			...Platform.select({
 				android:
-					(!isPortrait) ? {
-						position: 'absolute',
-						left: deviceHeight * 0.6255,
-						top: deviceHeight * 0.0400,
+					isPortrait ? {
 					}
 						:
-						{},
+						{
+							position: 'absolute',
+							left: deviceHeight * 0.16,
+							top: 0,
+						},
 			}),
 		},
 		settingsButtonStyle: {
