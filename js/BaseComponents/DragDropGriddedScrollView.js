@@ -50,6 +50,7 @@ const RowItem = memo<Object>((props: Object): Object => {
 		onLayout,
 		style,
 		setRowRefs,
+		extraData,
 	} = props;
 
 	const _move = useCallback(() => {
@@ -71,8 +72,9 @@ const RowItem = memo<Object>((props: Object): Object => {
 			index,
 			move: _move,
 			moveEnd,
+			extraData,
 		});
-	}, [_move, index, item, moveEnd, renderItem]);
+	}, [_move, index, item, moveEnd, renderItem, extraData]);
 
 	const _setRowRefs = useCallback((ref: any) => {
 		if (setRowRefs) {
@@ -95,6 +97,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const {
 		data,
 		renderItem,
+		extraData,
 	} = props;
 
 	const [ dataInState, setDataInState ] = useState(data);
@@ -107,6 +110,8 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const _currentGest = useRef({});
 	const _containerLayoutInfo = useRef({});
 	const _hasMoved = useRef(false);
+	const _scrollViewRef = useRef({});
+	const _scrollOffset = useRef({});
 
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
@@ -179,12 +184,12 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		}
 	}, [dataInState, selectedIndex]);
 
-	const onRelease = (evt: Object, gestureState: Object) => {
+	const onRelease = useCallback((evt: Object, gestureState: Object) => {
 		arrageGrids();
 		setSelectedIndex(-1);
 		_hasMoved.current = false;
 		commonActionsOnRelease();
-	};
+	}, [arrageGrids, commonActionsOnRelease]);
 
 	const _setRowRefs = useCallback((ref: any, index: number) => {
 		const _rowRefsNew = {
@@ -198,81 +203,114 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		_refSelected.current = ref;
 	}, []);
 
-	const _panResponder = PanResponder.create({
-		onStartShouldSetPanResponderCapture: (evt: Object, gestureState: Object): boolean => {
-			_currentGest.current = gestureState;
-			return false;
-		},
-		onMoveShouldSetPanResponder: (evt: Object, gestureState: Object): boolean => {
-			const { numberActiveTouches } = gestureState;
-			if (numberActiveTouches > 1) {
-				onRelease();
+	const _panResponder = useMemo((): Object => {
+		return PanResponder.create({
+			onStartShouldSetPanResponderCapture: (evt: Object, gestureState: Object): boolean => {
+				_currentGest.current = gestureState;
 				return false;
-			}
-			const shouldSet = selectedIndex !== -1;
-			if (shouldSet) {
-				_hasMoved.current = true;
-			}
-			return shouldSet;
-		},
-		onPanResponderMove: (evt: Object, gestureState: Object) => {
-			if (gestureState.numberActiveTouches > 1) {
-				onRelease();
-				return;
-			}
-			if (selectedIndex === -1) {
-				return;
-			}
-
-			const {
-				moveX,
-				moveY,
-			} = gestureState;
-
-			const selectedItemInfo = _rowInfo.current[selectedIndex];
-			const left = moveX - (selectedItemInfo.width / 2);
-			const top = moveY - totalTop;
-			_refSelected.current.setNativeProps({
-				style: {
-					left,
-					top,
-				},
-			});
-
-
-			Object.keys(_rowInfo.current).forEach((key: string) => {
-				const {
-					x,
-					y,
-					width: _width,
-					height: _height,
-				} = _rowInfo.current[key];
-
-				if (moveX > x && top > y && moveX < (x + _width) && top < (y + _height)) {
-					_dropIndexesQueue.current = {
-						..._dropIndexesQueue.current,
-						[key]: true,
-					};
-					_gridIndexToDrop.current = key;
-					_rowRefs.current[key].setNativeProps({
-						style: {
-							transform: [{
-								scaleX: 0.8,
-							}, {
-								scaleY: 0.8,
-							}],
-						},
-					});
-				} else if (_dropIndexesQueue.current[key]) {
-					normalizeGrid(parseInt(key, 10));
+			},
+			onMoveShouldSetPanResponder: (evt: Object, gestureState: Object): boolean => {
+				const { numberActiveTouches } = gestureState;
+				if (numberActiveTouches > 1) {
+					onRelease();
+					return false;
 				}
-			});
-		},
-		onPanResponderTerminationRequest: ({ nativeEvent }: Object, gestureState: Object): boolean => {
-			return false;
-		},
-		onPanResponderRelease: onRelease,
-	});
+				const shouldSet = selectedIndex !== -1;
+				if (shouldSet) {
+					_hasMoved.current = true;
+				}
+				return shouldSet;
+			},
+			onPanResponderMove: (evt: Object, gestureState: Object) => {
+				if (gestureState.numberActiveTouches > 1) {
+					onRelease();
+					return;
+				}
+				if (selectedIndex === -1) {
+					return;
+				}
+
+				const {
+					moveX,
+					moveY,
+				} = gestureState;
+
+				const {
+					x: nextX = 0,
+					y: nextY = 0,
+				} = (_scrollOffset && _scrollOffset.current) ? _scrollOffset.current : {};
+
+				const selectedItemInfo = _rowInfo.current[selectedIndex];
+				const {
+					width: widthSelected,
+					height: heightSelected,
+				} = selectedItemInfo;
+				const left = moveX - (widthSelected / 2);
+				const top = moveY - totalTop;
+				_refSelected.current.setNativeProps({
+					style: {
+						left,
+						top,
+					},
+				});
+
+
+				Object.keys(_rowInfo.current).forEach((key: string) => {
+					const {
+						x,
+						y,
+						width: _width,
+						height: _height,
+					} = _rowInfo.current[key];
+
+					const isDroppable = moveX > x && (top + nextY) > y && moveX < (x + _width) && (top + nextY) < (y + _height);
+					if (isDroppable) {
+						_dropIndexesQueue.current = {
+							..._dropIndexesQueue.current,
+							[key]: true,
+						};
+						_gridIndexToDrop.current = key;
+						_rowRefs.current[key].setNativeProps({
+							style: {
+								transform: [{
+									scaleX: 0.8,
+								}, {
+									scaleY: 0.8,
+								}],
+							},
+						});
+					} else if (_dropIndexesQueue.current[key]) {
+						normalizeGrid(parseInt(key, 10));
+					}
+
+					const {
+						height: containerH,
+						y: containerY,
+					} = _containerLayoutInfo.current;
+					const shouldMoveDown = top > (containerH - heightSelected);
+					const shouldMoveUp = top < (containerY + heightSelected);
+					if (shouldMoveDown) {
+						_scrollViewRef.current.scrollTo({
+							x: nextX || 0,
+							y: (nextY + heightSelected) || (containerY + containerH + heightSelected),
+							animated: true,
+						});
+					}
+					if (shouldMoveUp) {
+						_scrollViewRef.current.scrollTo({
+							x: nextX || 0,
+							y: (nextY - heightSelected) || (containerY + containerH - heightSelected),
+							animated: true,
+						});
+					}
+				});
+			},
+			onPanResponderTerminationRequest: ({ nativeEvent }: Object, gestureState: Object): boolean => {
+				return false;
+			},
+			onPanResponderRelease: onRelease,
+		});
+	}, [normalizeGrid, onRelease, selectedIndex, totalTop]);
 
 	const _move = useCallback((index: number) => {
 		const selectedItemInfo = _rowInfo.current[index];
@@ -281,10 +319,14 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			return;
 		}
 
+		const {
+			x: nextX = 0,
+			y: nextY = 0,
+		} = (_scrollOffset && _scrollOffset.current) ? _scrollOffset.current : {};
 		_refSelected.current.setNativeProps({
 			style: {
-				left: selectedItemInfo.x,
-				top: selectedItemInfo.y,
+				left: selectedItemInfo.x - nextX,
+				top: selectedItemInfo.y - nextY,
 				transform: [{
 					scaleX: 1.2,
 				}, {
@@ -314,6 +356,10 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		_containerLayoutInfo.current = event.nativeEvent.layout;
 	}, []);
 
+	const _onScroll = useCallback(({nativeEvent}: Object) => {
+		_scrollOffset.current = nativeEvent.contentOffset;
+	}, []);
+
 	const rows = useMemo((): Array<Object> => {
 		return dataInState.map((item: Object, index: number): Object => {
 			return (
@@ -325,10 +371,11 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 					item={item}
 					index={index}
 					move={_move}
-					moveEnd={_moveEnd}/>
+					moveEnd={_moveEnd}
+					extraData={extraData}/>
 			);
 		});
-	}, [dataInState, _setRowRefs, _onLayoutRow, renderItem, _move, _moveEnd]);
+	}, [dataInState, _setRowRefs, _onLayoutRow, renderItem, _move, _moveEnd, extraData]);
 
 	const selectedItem = useMemo((): null | Object => {
 		if (selectedIndex === -1) {
@@ -344,9 +391,10 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 				setRowRefs={_setRowRefSelected}
 				style={{
 					position: 'absolute',
-				}}/>
+				}}
+				extraData={extraData}/>
 		);
-	}, [selectedIndex, renderItem, dataInState, _moveEnd, _setRowRefSelected]);
+	}, [selectedIndex, renderItem, dataInState, _moveEnd, _setRowRefSelected, extraData]);
 
 	return (
 		<View
@@ -356,7 +404,10 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 			{..._panResponder.panHandlers}
 			onLayout={onLayoutContainer}>
 			<ScrollView
-				{...props}>
+				{...props}
+				ref={_scrollViewRef}
+				onScroll={_onScroll}
+				scrollEventThrottle={12}>
 				{rows}
 			</ScrollView>
 			{!!selectedItem && selectedItem}
