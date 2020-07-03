@@ -94,6 +94,7 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 		data = [],
 		renderItem,
 		extraData,
+		onSortOrderUpdate,
 	} = props;
 
 	const [ dataInState, setDataInState ] = useState(data);
@@ -170,8 +171,11 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 				newDataL2 = newDataL1.concat(newData.slice(droppedIndex + 1));
 			}
 			setDataInState(newDataL2);
+			if (onSortOrderUpdate) {
+				onSortOrderUpdate(newDataL2);
+			}
 		}
-	}, [dataInState, selectedIndex]);
+	}, [dataInState, onSortOrderUpdate, selectedIndex]);
 
 	const onRelease = useCallback((evt: Object, gestureState: Object) => {
 		arrageGrids();
@@ -248,7 +252,6 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 						top,
 					},
 				});
-
 
 				Object.keys(_rowInfo.current).forEach((key: string) => {
 					const {

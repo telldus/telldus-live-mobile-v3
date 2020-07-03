@@ -389,11 +389,7 @@ class DashboardTab extends View {
 		return data;
 	}
 
-	_keyExtractor = (item: Object, index: number): string => {
-		const {
-			data = {},
-		} = item || {};
-		return `${data.id}-${index}`;
+	_onSortOrderUpdate = (data: Array<Object>) => {
 	}
 
 	render(): Object {
@@ -459,8 +455,7 @@ class DashboardTab extends View {
 						paddingHorizontal: isDBEmpty ? 30 : style.padding,
 					}}
 					scrollEnabled={scrollEnabled}
-					keyExtractor={this._keyExtractor}
-				/>
+					onSortOrderUpdate={this._onSortOrderUpdate}/>
 			</View>
 		);
 	}
