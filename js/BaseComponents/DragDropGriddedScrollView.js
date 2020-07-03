@@ -122,6 +122,9 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 	const [ selectedIndex, setSelectedIndex ] = useState(-1);
 
 	const normalizeGrid = useCallback((key: number) => {
+		if (!_rowRefs.current[key]) {
+			return;
+		}
 		_rowRefs.current[key].setNativeProps({
 			style: {
 				transform: [{
@@ -260,6 +263,9 @@ const DragDropGriddedScrollView = memo<Object>((props: Object): Object => {
 
 					const isDroppable = moveX > x && (top + nextY) > y && moveX < (x + _width) && (top + nextY) < (y + _height);
 					if (isDroppable) {
+						if (!_rowRefs.current[key]) {
+							return;
+						}
 						_dropIndexesQueue.current = {
 							..._dropIndexesQueue.current,
 							[key]: true,
