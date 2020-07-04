@@ -69,6 +69,7 @@
     "react-native-circular-slider": "git+https://github.com/telldus/react-native-circular-slider.git",
     "react-native-color-wheel": "https://github.com/telldus/react-native-color-wheel.git",
     "react-native-device-info": "~5.5.3",
+    "react-native-drag-and-drop-scroll-view": "git+https://github.com/telldus/react-native-drag-and-drop-scroll-view.git",
     "react-native-extra-dimensions-android": "~1.2.5",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-google-places-autocomplete": "~1.4.1",
