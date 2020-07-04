@@ -31,13 +31,13 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import DragAndDropScrollView from 'react-native-drag-and-drop-scroll-view';
 
 import {
 	Text,
 	View,
 	EmptyView,
 	TouchableOpacity,
-	DragDropGriddedScrollView,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -431,7 +431,7 @@ class DashboardTab extends View {
 				level={3}
 				onLayout={this._onLayout}
 				style={style.container}>
-				<DragDropGriddedScrollView
+				<DragAndDropScrollView
 					data={rows}
 					renderItem={this._renderRow}
 					refreshControl={
