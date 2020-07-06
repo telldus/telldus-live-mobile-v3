@@ -70,8 +70,8 @@ export function enableCrashlyticsCollection() {
 
 export function setUserName(uname?: string | null) {
 	if (enableAnalytics) {
-		const uName = typeof uname !== 'string' ? 'anonymous' : uname;
-		crashlytics().setUserName(uName);
+		// const uName = typeof uname !== 'string' ? 'anonymous' : uname;
+		// crashlytics().setUserName(uName);
 	}
 }
 
