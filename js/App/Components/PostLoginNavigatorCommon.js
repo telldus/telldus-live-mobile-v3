@@ -225,6 +225,7 @@ actionsToPerformOnStart = async () => {
 		visibilityProExpireHeadsup,
 		showLoadingIndicator,
 		enableGeoFence,
+		intl,
 	} = this.props;
 
 	try {
@@ -232,7 +233,7 @@ actionsToPerformOnStart = async () => {
 		await dispatch(fetchRemoteConfig());
 
 		if (enableGeoFence) {
-			await dispatch(setupGeoFence());
+			await dispatch(setupGeoFence(intl));
 		}
 	} catch (e) {
 		// Ignore

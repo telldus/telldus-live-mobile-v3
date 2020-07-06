@@ -162,6 +162,16 @@ class TimePicker extends View<Props, State> {
 	};
 
 	editTo = () => {
+		const {
+			showTimePicker,
+			editingValue,
+		} = this.state;
+		if (showTimePicker && editingValue === 'to') {
+			this.setState({
+				showTimePicker: false,
+			});
+			return;
+		}
 		this.setState({
 			showTimePicker: true,
 			editingValue: 'to',
@@ -169,6 +179,16 @@ class TimePicker extends View<Props, State> {
 	}
 
 	editFrom = () => {
+		const {
+			showTimePicker,
+			editingValue,
+		} = this.state;
+		if (showTimePicker && editingValue === 'from') {
+			this.setState({
+				showTimePicker: false,
+			});
+			return;
+		}
 		this.setState({
 			showTimePicker: true,
 			editingValue: 'from',
@@ -215,7 +235,7 @@ class TimePicker extends View<Props, State> {
 								<SettingsRow
 									label={`${formatMessage(i18n.activeFrom)}:`}
 									value={formatTime(timeFrom)}
-									iconValueRight={'edit'}
+									iconValueRight={(showTimePicker && editingValue === 'from') ? 'done' : 'edit'}
 									onPress={this.editFrom}
 									appLayout={appLayout}
 									intl={intl}
@@ -223,10 +243,18 @@ class TimePicker extends View<Props, State> {
 									labelTextStyle={styles.labelTextStyle}
 									touchableStyle={styles.touchableStyle}
 									style={styles.contentCoverStyle}/>
+								{
+									(showTimePicker && Platform.OS === 'ios' && editingValue === 'from') && (
+										<DateTimePicker
+											mode="time"
+											value={editingValue === 'from' ? timeFrom : timeTo}
+											onChange={this._onDateChange}/>
+									)
+								}
 								<SettingsRow
 									label={`${formatMessage(i18n.activeTo)}:`}
 									value={formatTime(timeTo)}
-									iconValueRight={'edit'}
+									iconValueRight={(showTimePicker && editingValue === 'to') ? 'done' : 'edit'}
 									onPress={this.editTo}
 									appLayout={appLayout}
 									intl={intl}
@@ -238,10 +266,10 @@ class TimePicker extends View<Props, State> {
 						)
 				}
 				{
-					showTimePicker && (
+					(showTimePicker && (Platform.OS === 'android' || editingValue === 'to')) && (
 						<DateTimePicker
 							mode="time"
-							value={editingValue === 'from' ? timeTo : timeFrom}
+							value={editingValue === 'from' ? timeFrom : timeTo}
 							onChange={this._onDateChange}/>
 					)
 				}

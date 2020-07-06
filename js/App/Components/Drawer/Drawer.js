@@ -298,7 +298,7 @@ componentDidUpdate(prevProps: Object, prevState: Object) {
 								<Text
 									level={5}
 									style={styles.linkLabelStyle}>
-									{formatMessage(i18n.geoFenceSettings)}
+									{formatMessage(i18n.Geofencing)}
 								</Text>
 							</RippleButton>
 						</View>

@@ -149,7 +149,7 @@ const MoreOptionsTab = (props: Props): Object => {
 				iconComponent: <MaterialIcons
 					style={iconStyle}
 					name={'location-on'}/>,
-				textIntl: i18n.geoFenceSettings,
+				textIntl: i18n.Geofencing,
 				onPress: () => {
 					navigation.navigate('GeoFenceNavigator');
 				},

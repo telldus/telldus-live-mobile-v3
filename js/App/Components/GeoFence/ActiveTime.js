@@ -50,9 +50,7 @@ import {
 
 import {
 	addGeofence,
-	ERROR_CODE_FENCE_ID_EXIST,
 	ERROR_CODE_FENCE_NO_ACTION,
-	ERROR_CODE_TIMED_OUT,
 } from '../../Actions/GeoFence';
 import {
 	useDialogueBox,
@@ -144,13 +142,9 @@ const ActiveTime = React.memo<Object>((props: Props): Object => {
 			}));
 		}).catch((err: Object = {}) => {
 			setIsLoading(false);
-			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
-			if (err.code && err.code === ERROR_CODE_FENCE_ID_EXIST) {
-				message = 'Fence by the same name already exist. Please choose a different name.'; // TODO: Translate
-			} else if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
-				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
-			} else if (err.code && err.code === ERROR_CODE_TIMED_OUT) {
-				message = 'Could not add fence. Please try again.'; // TODO: Translate
+			let message = formatMessage(i18n.cantSaveGF);
+			if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
+				message = formatMessage(i18n.noActionSelected);
 			}
 			toggleDialogueBoxState({
 				show: true,

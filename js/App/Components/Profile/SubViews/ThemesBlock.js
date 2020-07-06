@@ -48,6 +48,7 @@ import {
 } from '../../../Hooks/Theme';
 
 import Theme from '../../../Theme';
+import i18n from '../../../Translations/common';
 
 type Props = {
 };
@@ -55,6 +56,9 @@ type Props = {
 const ThemesBlock = (props: Props, ref: Object): Object => {
 
 	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
 	const ddRef = useRef(null);
 
 	const {
@@ -115,7 +119,7 @@ const ThemesBlock = (props: Props, ref: Object): Object => {
 			<Text
 				level={3}
 				style={labelStyle} numberOfLine={1}>
-				Select theme
+				{formatMessage(i18n.themeLabel)}
 			</Text>
 			<DropDown
 				ref={ddRef}

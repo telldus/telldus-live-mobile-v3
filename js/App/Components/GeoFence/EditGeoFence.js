@@ -159,9 +159,9 @@ const EditGeoFence = React.memo<Object>((props: Props): Object => {
 		dispatch(addGeofence(true)).then(() => {
 			navigation.goBack();
 		}).catch((err: Object = {}) => {
-			let message = 'Could not save fence. Please try again later.'; // TODO: Translate
+			let message = formatMessage(i18n.cantSaveGF);
 			if (err.code && err.code === ERROR_CODE_FENCE_NO_ACTION) {
-				message = 'No actions are selected to execute on Entry/Exit. Please select any action to perform.'; // TODO: Translate
+				message = formatMessage(i18n.noActionSelected);
 			}
 			toggleDialogueBoxState({
 				show: true,

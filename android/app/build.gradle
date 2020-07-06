@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
-apply plugin: "io.fabric"
 apply plugin: 'com.huawei.agconnect'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 import com.android.build.OutputFile
 
@@ -196,6 +197,9 @@ android {
             signingConfig signingConfigs.debug
         }
         release {
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+            }
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
             applicationIdSuffix ""
@@ -227,10 +231,6 @@ android {
     lintOptions{
         disable 'MissingTranslation'
     }
-}
-
-crashlytics {
-  enableNdk true
 }
 
 dependencies {
@@ -288,4 +288,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
-apply plugin: 'com.google.gms.google-services'
