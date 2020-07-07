@@ -549,7 +549,8 @@ class DashboardTab extends View {
 		return (
 			<TouchableOpacity
 				onLongPress={move}
-				onPressOut={moveEnd}>
+				onPressOut={moveEnd}
+				style={{flex: 0}}>
 				{rowItem}
 			</TouchableOpacity>
 		);
