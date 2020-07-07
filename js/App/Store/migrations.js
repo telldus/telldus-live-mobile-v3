@@ -22,7 +22,9 @@
 
 'use strict';
 
-const defaultDashboardId = 'defaultDashboardId';
+import {
+	DEFAULT_DASHBOARD_ID,
+} from '../Lib/dashboardUtils';
 
 export default function migrations(state: Object = {}): Promise<any> {
 	const { tabs, ...withOutTabs } = state;
@@ -51,7 +53,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 				defaultSettings: {
 					dimmerSensitivity: 5,
 					sortingDB: 'Chronological',
-					activeDashboardId: defaultDashboardId,
+					activeDashboardId: DEFAULT_DASHBOARD_ID,
 				},
 			},
 		};
@@ -64,7 +66,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 				...app,
 				defaultSettings: {
 					...app.defaultSettings,
-					activeDashboardId: defaultDashboardId,
+					activeDashboardId: DEFAULT_DASHBOARD_ID,
 				},
 			},
 		};
@@ -75,7 +77,7 @@ export default function migrations(state: Object = {}): Promise<any> {
 			...newState,
 			user: {
 				...user,
-				activeDashboardId: defaultDashboardId,
+				activeDashboardId: DEFAULT_DASHBOARD_ID,
 			},
 		};
 	}
@@ -106,12 +108,12 @@ export default function migrations(state: Object = {}): Promise<any> {
 				...newDashboard,
 				devicesById: {
 					[userId]: {
-						[defaultDashboardId]: devicesById,
+						[DEFAULT_DASHBOARD_ID]: devicesById,
 					},
 				},
 				deviceIds: {
 					[userId]: {
-						[defaultDashboardId]: deviceIds,
+						[DEFAULT_DASHBOARD_ID]: deviceIds,
 					},
 				},
 			};
@@ -122,12 +124,12 @@ export default function migrations(state: Object = {}): Promise<any> {
 				...newDashboard,
 				sensorsById: {
 					[userId]: {
-						[defaultDashboardId]: sensorsById,
+						[DEFAULT_DASHBOARD_ID]: sensorsById,
 					},
 				},
 				sensorIds: {
 					[userId]: {
-						[defaultDashboardId]: sensorIds,
+						[DEFAULT_DASHBOARD_ID]: sensorIds,
 					},
 				},
 			};
