@@ -720,6 +720,7 @@ render(): Object {
 		onLayout,
 		gateways,
 		visibilityEula,
+		showSwitchAccountAS,
 	} = this.props;
 	const { show, name, value, showStep, deviceStep } = dimmer;
 
@@ -728,7 +729,7 @@ render(): Object {
 	const showEulaModal = showEULA && !showChangeLog && !isDrawerOpen && this.doesAllowsToOverrideScreen(visibilityEula ? ['ProfileTab'] : []);
 	const showUA = showEulaModal && !showChangeLog;
 
-	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA;
+	const showLoadingIndicatorFinal = showLoadingIndicator && !showUA && !showSwitchAccountAS;
 
 	return (
 		<View style={{flex: 1}}>

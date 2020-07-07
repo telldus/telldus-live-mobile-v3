@@ -118,11 +118,15 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 
 	function closeActionSheet(index?: number, callback?: Function) {
 		if (actionSheetRef.current) {
-			dispatch(toggleVisibilitySwitchAccountAS({
-				showAS: false,
-				isLoggingOut: false,
-			}));
-			actionSheetRef.current.hide(index, callback);
+			actionSheetRef.current.hide(index, () => {
+				if (callback) {
+					callback();
+					dispatch(toggleVisibilitySwitchAccountAS({
+						showAS: false,
+						isLoggingOut: false,
+					}));
+				}
+			});
 		}
 	}
 
