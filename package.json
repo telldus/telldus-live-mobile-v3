@@ -50,7 +50,7 @@
     "gravatar-api": "^1.5.0",
     "intl": "~1.2.5",
     "jwt-decode": "^2.2.0",
-    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#aa8dc8e5ea24249968202d6325c6670d8bd7f74c",
+    "live-shared-data": "git+https://code.telldus.com/telldus/live-shared-data.git#43ec77cf7f3695affb8c4d2976d7e4a9d38b6518",
     "lodash": "~4.17.11",
     "moment": "~2.25.1",
     "moment-timezone": "~0.5.23",
