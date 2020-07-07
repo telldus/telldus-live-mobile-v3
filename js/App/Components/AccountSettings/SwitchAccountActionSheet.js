@@ -95,7 +95,7 @@ const SwitchAccountActionSheet = (props: Object, ref: Object): Object => {
 			const nameInfo = `${firstname} ${lastname}`;
 			return `${nameInfo} ${email}`;
 		}], ['asc']);
-		const two = one.map((o: Object): string => o.accessToken.userId);
+		const two = one.map((o: Object): string => (o && o.accessToken) ? o.accessToken.userId : '');
 		return {
 			accounts: one,
 			actionSheetItems: two,
