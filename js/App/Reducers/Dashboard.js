@@ -21,8 +21,9 @@
 
 'use strict';
 import orderBy from 'lodash/orderBy';
-import { hasTokenExpired } from '../Lib/LocalControl';
 import isEmpty from 'lodash/isEmpty';
+
+import { hasTokenExpired } from '../Lib/LocalControl';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
 
@@ -31,7 +32,11 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 	const { userId } = user;
 
-	const { sensorIds = {}, deviceIds = {} } = dashboard;
+	const {
+		sensorIds = {},
+		deviceIds = {},
+		dbExtras = {},
+	} = dashboard;
 
 	const userDbsAndSensorIds = sensorIds[userId] || {};
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
@@ -44,7 +49,7 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		return [];
 	}
 
-	let deviceItems = [];
+	let deviceItems = [], _deviceItems = {};
 	if (devices && !isEmpty(devices.byId)) {
 		deviceIdsInCurrentDb.map((deviceId: number) => {
 			let device = devices.byId[deviceId];
@@ -73,11 +78,17 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 					key: deviceId,
 					data,
 				});
+				_deviceItems[deviceId] = {
+					..._deviceItems,
+					objectType: 'device',
+					key: deviceId,
+					data,
+				};
 			}
 		});
 	}
 
-	let sensorItems = [];
+	let sensorItems = [], _sensorItems = {};
 	if (sensors && !isEmpty(sensors.byId)) {
 		sensorIdsInCurrentDb.map((sensorId: number) => {
 			let sensor = sensors.byId[sensorId] || {};
@@ -118,16 +129,40 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 					key: sensorId,
 					data,
 				});
+				_sensorItems[sensorId] = {
+					..._sensorItems,
+					objectType: 'sensor',
+					key: sensorId,
+					data,
+				};
 			}
 		});
 	}
 	const { sortingDB } = defaultSettings;
 	let orderedList = [...deviceItems, ...sensorItems];
 	if (sortingDB === 'Alphabetical') {
-		orderedList = orderBy(orderedList, [(item: Object): any => {
+		return orderBy(orderedList, [(item: Object): any => {
 			let { name } = item.data;
 			return name ? name.toLowerCase() : null;
 		}], ['asc']);
 	}
-	return orderedList;
+
+	const userDbExtras = dbExtras[userId] || {};
+	const { customOrder } = userDbExtras[activeDashboardId] || {};
+
+	if (!customOrder) {
+		return orderedList;
+	}
+
+	let _orderedList = [];
+	customOrder.forEach(({id}: Object, index: number) => {
+		const sItem = _sensorItems[id];
+		const dItem = _deviceItems[id];
+		if (sItem) {
+			_orderedList.push(sItem);
+		} else if (dItem) {
+			_orderedList.push(dItem);
+		}
+	});
+	return _orderedList;
 }

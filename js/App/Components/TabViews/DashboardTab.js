@@ -45,7 +45,10 @@ import {
 } from './SubViews/EmptyInfo';
 
 import { getDevices, getSensors, getGateways } from '../../Actions';
-import { changeSensorDisplayTypeDB } from '../../Actions/Dashboard';
+import {
+	changeSensorDisplayTypeDB,
+	updateDashboardOrder,
+} from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
 import { parseDashboardForListView } from '../../Reducers/Dashboard';
@@ -390,6 +393,7 @@ class DashboardTab extends View {
 	}
 
 	_onSortOrderUpdate = (data: Array<Object>) => {
+		this.props.dispatch(updateDashboardOrder(data));
 	}
 
 	render(): Object {
