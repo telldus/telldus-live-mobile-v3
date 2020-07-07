@@ -72,7 +72,7 @@ const DBSortControlBlock = (props: Object): Object => {
 
 	const alpha = formatMessage(i18n.labelAlphabetical);
 	const manual = formatMessage(i18n.labelManual);
-	
+
 	const labelSortingDB = formatMessage(i18n.sorting);
 
 	return (
