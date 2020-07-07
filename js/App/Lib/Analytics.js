@@ -69,6 +69,8 @@ export function enableCrashlyticsCollection() {
 }
 
 export function setUserName(uname?: string | null) {
+	// TODO: rn-firebase analytics(v7) seem to have removed setUserName
+	// Enable this back if it gets added again in any upcoming version
 	if (enableAnalytics) {
 		// const uName = typeof uname !== 'string' ? 'anonymous' : uname;
 		// crashlytics().setUserName(uName);

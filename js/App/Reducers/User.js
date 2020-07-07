@@ -26,7 +26,9 @@ import { createSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 import omit from 'lodash/omit';
 
-const defaultDashboardId = 'defaultDashboardId';
+import {
+	DEFAULT_DASHBOARD_ID,
+} from '../Lib/dashboardUtils';
 
 export type State = {
 	accessToken: any,
@@ -84,7 +86,7 @@ export const initialState = {
 	firebaseRemoteConfig: {},
 	accounts: {},
 	userId: '',
-	activeDashboardId: defaultDashboardId,
+	activeDashboardId: DEFAULT_DASHBOARD_ID,
 	iapTransactionConfig: {},
 	iapProducts: [],
 	iapAvailablePurchases: [],
@@ -505,7 +507,7 @@ export default function reduceUser(state: State = initialState, action: Action):
 		const existAccount = accounts[userId] || {};
 		const {
 			accessToken,
-			activeDashboardId = defaultDashboardId,
+			activeDashboardId = DEFAULT_DASHBOARD_ID,
 		} = existAccount;
 
 		if (!accessToken) {
