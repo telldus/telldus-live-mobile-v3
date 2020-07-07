@@ -71,8 +71,8 @@ const DBSortControlBlock = (props: Object): Object => {
 	}, []);
 
 	const alpha = formatMessage(i18n.labelAlphabetical);
-	const chrono = formatMessage(i18n.labelChronological);
-
+	const manual = formatMessage(i18n.labelManual);
+	
 	const labelSortingDB = formatMessage(i18n.sorting);
 
 	return (
@@ -87,9 +87,9 @@ const DBSortControlBlock = (props: Object): Object => {
 			<DropDown
 				items={[
 					{key: 'Alphabetical', value: alpha},
-					{key: 'Chronological', value: chrono},
+					{key: 'Manual', value: manual},
 				]}
-				value={sortingDBProp === 'Alphabetical' ? alpha : chrono}
+				value={sortingDBProp === 'Alphabetical' ? alpha : manual}
 				onValueChange={saveSortingDB}
 				appLayout={layout}
 				intl={intl}
