@@ -454,6 +454,7 @@ class DashboardTab extends View {
 				<DragAndDropScrollView
 					data={rows}
 					enableDragDrop
+					showBin
 					renderItem={this._renderRow}
 					refreshControl={
 						<RefreshControl
