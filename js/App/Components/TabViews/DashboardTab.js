@@ -44,7 +44,12 @@ import {
 	NoGateways,
 } from './SubViews/EmptyInfo';
 
-import { getDevices, getSensors, getGateways } from '../../Actions';
+import {
+	getDevices,
+	getSensors,
+	getGateways,
+	showToast,
+} from '../../Actions';
 import {
 	changeSensorDisplayTypeDB,
 	updateDashboardOrder,
@@ -69,6 +74,7 @@ type Props = {
 	gatewaysDidFetch: boolean,
 	gateways: Array<any>,
 	currentScreen: string,
+	sortingDB: 'Manual' | 'Alphabetical',
 
 	navigation: Object,
 	changeSensorDisplayTypeDB: (id?: number) => void,
@@ -393,7 +399,17 @@ class DashboardTab extends View {
 	}
 
 	_onSortOrderUpdate = (data: Array<Object>) => {
-		this.props.dispatch(updateDashboardOrder(data));
+		const {
+			sortingDB,
+			dispatch,
+		} = this.props;
+
+		if (sortingDB === 'Alphabetical') {
+			dispatch(showToast('Items can be rearranged only in manual mode. Please change the sorting mode to "Manual" in the app settings.')); // TODO: Translate
+			return;
+		}
+
+		dispatch(updateDashboardOrder(data));
 	}
 
 	render(): Object {
@@ -409,7 +425,7 @@ class DashboardTab extends View {
 			addingNewLocation,
 			addNewLocation,
 		} = screenProps;
-		const { isRefreshing, numColumns, tileWidth, scrollEnabled, showRefresh } = this.state;
+		const { isRefreshing, tileWidth, scrollEnabled, showRefresh } = this.state;
 
 		const style = this.getStyles({
 			appLayout,
@@ -437,6 +453,7 @@ class DashboardTab extends View {
 				style={style.container}>
 				<DragAndDropScrollView
 					data={rows}
+					enableDragDrop
 					renderItem={this._renderRow}
 					refreshControl={
 						<RefreshControl
@@ -445,8 +462,6 @@ class DashboardTab extends View {
 							onRefresh={this.onRefresh}
 						/>
 					}
-					key={numColumns}
-					numColumns={numColumns}
 					extraData={extraData}
 					style={{
 						width: '100%',
@@ -644,7 +659,7 @@ const getRows = createSelector(
 function mapStateToProps(state: Object, props: Object): Object {
 	const { deviceIds = [], sensorIds = []} = state.dashboard;
 	const { defaultSettings } = state.app;
-	const { dbCarousel = true, activeDashboardId } = defaultSettings || {};
+	const { dbCarousel = true, activeDashboardId, sortingDB } = defaultSettings || {};
 
 	const { userId } = state.user;
 
@@ -662,6 +677,7 @@ function mapStateToProps(state: Object, props: Object): Object {
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
 		currentScreen,
+		sortingDB,
 	};
 }
 
