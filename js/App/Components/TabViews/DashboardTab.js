@@ -49,6 +49,7 @@ import {
 	getSensors,
 	getGateways,
 	showToast,
+	changeSortingDB,
 } from '../../Actions';
 import {
 	changeSensorDisplayTypeDB,
@@ -406,8 +407,9 @@ class DashboardTab extends View {
 		} = this.props;
 
 		if (sortingDB === 'Alphabetical') {
-			dispatch(showToast('Items can be rearranged only in manual mode. Please change the sorting mode to "Manual" in the app settings.')); // TODO: Translate
-			return;
+			const settings = { sortingDB: 'Manual' };
+			dispatch(changeSortingDB(settings));
+			dispatch(showToast('Dashboard sorting has been changed to "Manual" mode.')); // TODO: Translate
 		}
 
 		dispatch(updateDashboardOrder(data));
