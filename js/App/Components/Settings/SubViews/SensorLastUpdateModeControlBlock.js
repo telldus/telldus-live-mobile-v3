@@ -99,6 +99,7 @@ const SensorLastUpdateModeControlBlock = (props: Object): Object => {
 				accessibilityLabelPrefix={labelSortingDB}
 				pickerContainerStyle={pickerContainerStyle}
 				pickerBaseTextStyle={pickerBaseTextStyle}
+				dropDownPosition={'bottom'}
 			/>
 		</View>
 	);
