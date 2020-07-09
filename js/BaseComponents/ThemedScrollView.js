@@ -21,7 +21,9 @@
 
 'use strict';
 
-import React from 'react';
+import React, {
+	forwardRef,
+} from 'react';
 import { ScrollView } from 'react-native';
 import {
 	prepareRootPropsView,
@@ -31,7 +33,7 @@ import {
 	withTheme,
 } from '../App/Components/HOC/withTheme';
 
-const ThemedScrollView = (props: Object): Object => {
+const ThemedScrollView = forwardRef((props: Object, ref: any): Object => {
 	const {
 		children,
 		...others
@@ -39,10 +41,11 @@ const ThemedScrollView = (props: Object): Object => {
 
 	return (
 		<ScrollView
+			ref={ref}
 			{...prepareRootPropsView(others)}>
 			{children}
 		</ScrollView>
 	);
-};
+});
 
 export default withTheme(ThemedScrollView);
