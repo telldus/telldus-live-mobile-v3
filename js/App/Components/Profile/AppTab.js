@@ -227,7 +227,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					Theme
+					{formatMessage(i18n.theme)}
 				</Text>
 				<ThemesBlock/>
 				<PushInfoBlock
@@ -259,7 +259,7 @@ const AppTab: Object = React.memo<Object>((props: Object): Object => {
 				<Text
 					level={2}
 					style={titleStyle}>
-					Sensor
+					{formatMessage(i18n.labelSensor)}
 				</Text>
 				<SensorLastUpdateModeControlBlock
 					showLabel={true}
