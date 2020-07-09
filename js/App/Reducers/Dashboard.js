@@ -25,6 +25,9 @@ import isEmpty from 'lodash/isEmpty';
 
 import { hasTokenExpired } from '../Lib/LocalControl';
 
+const keyDevice = 'device';
+const keySensor = 'sensor';
+
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
 
 	const { defaultSettings } = app;
@@ -74,15 +77,17 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				}
 
 				deviceItems.push({
-					objectType: 'device',
+					objectType: keyDevice,
 					key: deviceId,
 					data,
 				});
-				_deviceItems[deviceId] = {
+				_deviceItems = {
 					..._deviceItems,
-					objectType: 'device',
-					key: deviceId,
-					data,
+					[`${deviceId}${keyDevice}`]: {
+						objectType: keyDevice,
+						key: deviceId,
+						data,
+					},
 				};
 			}
 		});
@@ -125,15 +130,17 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				}
 
 				sensorItems.push({
-					objectType: 'sensor',
+					objectType: keySensor,
 					key: sensorId,
 					data,
 				});
-				_sensorItems[sensorId] = {
+				_sensorItems = {
 					..._sensorItems,
-					objectType: 'sensor',
-					key: sensorId,
-					data,
+					[`${sensorId}${keySensor}`]: {
+						objectType: keySensor,
+						key: sensorId,
+						data,
+					},
 				};
 			}
 		});
@@ -156,8 +163,8 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 	let _orderedList = [];
 	customOrder.forEach(({id}: Object, index: number) => {
-		const sItem = _sensorItems[id];
-		const dItem = _deviceItems[id];
+		const sItem = _sensorItems[`${id}${keySensor}`];
+		const dItem = _deviceItems[`${id}${keyDevice}`];
 		if (sItem) {
 			_orderedList.push(sItem);
 		} else if (dItem) {

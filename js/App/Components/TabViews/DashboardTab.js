@@ -53,6 +53,7 @@ import {
 import {
 	changeSensorDisplayTypeDB,
 	updateDashboardOrder,
+	removeFromDashboard,
 } from '../../Actions/Dashboard';
 
 import i18n from '../../Translations/common';
@@ -412,6 +413,19 @@ class DashboardTab extends View {
 		dispatch(updateDashboardOrder(data));
 	}
 
+	_onDelete = (index: number, item: Object, fullData: Array<Object>, {animateDeleted}: Object) => {
+		if (item) {
+			const {
+				objectType,
+				data,
+			} = item;
+
+			animateDeleted(() => {
+				this.props.dispatch(removeFromDashboard(objectType, data.id));
+			});
+		}
+	}
+
 	render(): Object {
 		const {
 			screenProps,
@@ -475,7 +489,8 @@ class DashboardTab extends View {
 						paddingHorizontal: isDBEmpty ? 30 : style.padding,
 					}}
 					scrollEnabled={scrollEnabled}
-					onSortOrderUpdate={this._onSortOrderUpdate}/>
+					onSortOrderUpdate={this._onSortOrderUpdate}
+					onDelete={this._onDelete}/>
 			</View>
 		);
 	}
