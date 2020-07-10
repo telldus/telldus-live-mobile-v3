@@ -80,6 +80,8 @@ import GatewaysScreen from './TabViews/GatewaysScreen';
 import AdvancedSettings from './Settings/AdvancedSettings';
 import GeoFenceEventsLogScreen from './Settings/GeoFenceEventsLogScreen';
 
+import EditDbList from './Dashboard/EditDbList';
+
 import {
 	RegisterScreen,
 	LoginScreen,
@@ -410,6 +412,13 @@ const ScreenConfigs = [
 	{
 		name: 'GeoFenceEventsLogScreen',
 		Component: GeoFenceEventsLogScreen,
+		options: {
+			headerShown: false,
+		},
+	},
+	{
+		name: 'EditDbList',
+		Component: EditDbList,
 		options: {
 			headerShown: false,
 		},
