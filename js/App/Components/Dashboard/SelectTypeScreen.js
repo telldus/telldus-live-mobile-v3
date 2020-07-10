@@ -46,7 +46,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
-	useEffect(() => {
+	useEffect(() => {// TODO: translate
 		onDidMount('Select Type', 'Select either device or sensor');
 	}, [onDidMount]);
 
@@ -69,8 +69,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		navigate({selectedType: 'sensor'});
 	}, [navigate]);
 
-
-
+	// TODO: translate
 	return (
 		<ThemedScrollView
 			level={3}>

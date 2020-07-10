@@ -56,7 +56,7 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 
 	useEffect(() => {
 		const type = selectedType === 'device' ? 'Device' : 'Sensor';
-		onDidMount(`Select ${type}`);
+		onDidMount(`Select ${type}`);// TODO: translate
 	}, [onDidMount, selectedType]);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
