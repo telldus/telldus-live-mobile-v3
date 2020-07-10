@@ -63,13 +63,16 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
 	const { byId: dById } = useSelector((state: Object): Object => state.devices);
 	const { byId: sById } = useSelector((state: Object): Object => state.sensors);
+	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
 	const [ refreshing, setRefreshing ] = useState(false);
 
 	const byId = selectedType === 'device' ? dById : sById;
 	const dataSource = useMemo((): Array<Object> => {
-		return prepareSensorsDevicesForAddToDbList(gById, byId);
-	}, [gById, byId]);
+		return prepareSensorsDevicesForAddToDbList(gById, byId, selectedType, {
+			weather,
+		});
+	}, [gById, byId, weather, selectedType]);
 
 	const _renderRow = useCallback(({item}: Object): Object => {
 		return (
