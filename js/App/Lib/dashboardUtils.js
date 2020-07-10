@@ -21,9 +21,63 @@
 
 'use strict';
 
+import groupBy from 'lodash/groupBy';
+import orderBy from 'lodash/orderBy';
+import reduce from 'lodash/reduce';
+import isEmpty from 'lodash/isEmpty';
+
 import { utils } from 'live-shared-data';
 const { dashboardUtils } = utils;
 
+const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, devices: Object = {}, sensors: Object = {}): Array<Object> => {
+	let isGatwaysEmpty = isEmpty(gateways);
+	if (isGatwaysEmpty) {
+		return [];
+	}
+	let listCombined = {};
+	Object.keys(devices).forEach((id: string) => {
+		listCombined = {
+			...listCombined,
+			[`d-${id}`]: devices[id],
+		};
+	});
+	Object.keys(sensors).forEach((id: string) => {
+		if (sensors[id] && sensors[id].name) {
+			listCombined = {
+				...listCombined,
+				[`s-${id}`]: {
+					...sensors[id],
+					deviceType: 'sensor',
+				},
+			};
+		}
+	});
+	let orderedList = orderBy(listCombined, [(item: Object): any => {
+		let { name = '' } = item;
+		name = typeof name !== 'string' ? '' : name;
+		return name.toLowerCase();
+	}], ['asc']);
+
+	let result = groupBy(orderedList, (items: Object): Array<any> => {
+		let gateway = gateways[items.clientId];
+		return gateway && gateway.id;
+	});
+
+	result = reduce(result, (acc: Array<any>, next: Object, index: number): Array<any> => {
+		acc.push({
+			data: next,
+			header: index,
+		});
+		return acc;
+	}, []);
+
+	return orderBy(result, [(item: Object): any => {
+		const { name = '' } = gateways[item.header] || {};
+		return name.toLowerCase();
+	}], ['asc']);
+};
+
 module.exports = {
 	...dashboardUtils,
+	prepareSensorsDevicesForAddToDbList,
 };
