@@ -55,6 +55,7 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 	const {
 		layout,
 		item,
+		selectedType,
 	} = props;
 
 	const {
@@ -80,7 +81,7 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 		id,
 	} = item;
 
-	const icon = deviceType === 'sensor' ? 'sensor' : getDeviceIcons(deviceType);
+	const icon = selectedType === 'sensor' ? 'sensor' : getDeviceIcons(deviceType);
 
 	const { deviceIds = {}, sensorIds } = useSelector((state: Object): Object => state.dashboard);
 	const { userId } = useSelector((state: Object): Object => state.user);
@@ -91,18 +92,18 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 	const userDbsAndSensorIds = sensorIds[userId] || {};
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
-	const isOnDB = deviceType === 'sensor' ? sensorIdsInCurrentDb.indexOf(id) !== -1 : deviceIdsInCurrentDb.indexOf(id) !== -1;
+	const isOnDB = selectedType === 'sensor' ? sensorIdsInCurrentDb.indexOf(id) !== -1 : deviceIdsInCurrentDb.indexOf(id) !== -1;
 
 	let iconFav = isOnDB ? 'favorite' : 'favorite-outline';
 
 	const _onStarSelected = useCallback(() => {
-		const kind = deviceType === 'sensor' ? 'sensor' : 'device';
+		const kind = selectedType === 'sensor' ? 'sensor' : 'device';
 		if (isOnDB) {
 			dispatch(removeFromDashboard(kind, id));
 		} else {
 			dispatch(addToDashboard(kind, id));
 		}
-	}, [isOnDB, dispatch, deviceType, id]);
+	}, [isOnDB, dispatch, selectedType, id]);
 
 	return (
 		<View style={coverStyle}>
@@ -110,7 +111,7 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 				icon={icon}
 				style={iconStyle}
 				containerStyle={[iconContainerStyle, {
-					backgroundColor: deviceType === 'sensor' ? brandPrimary : brandSecondary,
+					backgroundColor: selectedType === 'sensor' ? brandPrimary : brandSecondary,
 				}]}/>
 			<Text
 				level={6}

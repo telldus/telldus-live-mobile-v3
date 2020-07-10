@@ -25,6 +25,7 @@ import React, {
 	useMemo,
 	useCallback,
 	useState,
+	useEffect,
 } from 'react';
 import {
 	useSelector,
@@ -33,10 +34,6 @@ import {
 	SectionList,
 } from 'react-native';
 
-import {
-	View,
-	NavigationHeaderPoster,
-} from '../../../BaseComponents';
 import {
 	EditDbListRow,
 	EditDbListSection,
@@ -48,12 +45,19 @@ import {
 
 import Theme from '../../Theme';
 
-const EditDbList = memo<Object>((props: Object): Object => {
+const SelectItemsScreen = memo<Object>((props: Object): Object => {
 
 	const {
-		navigation,
-		screenProps,
+		onDidMount,
+		route,
 	} = props;
+
+	const { selectedType } = route.params || {};
+
+	useEffect(() => {
+		const type = selectedType === 'device' ? 'Device' : 'Sensor';
+		onDidMount(`Select ${type}`);
+	}, [onDidMount, selectedType]);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
@@ -62,17 +66,19 @@ const EditDbList = memo<Object>((props: Object): Object => {
 
 	const [ refreshing, setRefreshing ] = useState(false);
 
+	const byId = selectedType === 'device' ? dById : sById;
 	const dataSource = useMemo((): Array<Object> => {
-		return prepareSensorsDevicesForAddToDbList(gById, dById, sById);
-	}, [gById, dById, sById]);
+		return prepareSensorsDevicesForAddToDbList(gById, byId);
+	}, [gById, byId]);
 
 	const _renderRow = useCallback(({item}: Object): Object => {
 		return (
 			<EditDbListRow
 				layout={layout}
-				item={item}/>
+				item={item}
+				selectedType={selectedType}/>
 		);
-	}, [layout]);
+	}, [layout, selectedType]);
 
 	const _renderSectionHeader = useCallback(({section}: Object): Object => {
 		const { name = '' } = gById[section.header] || {};
@@ -92,35 +98,21 @@ const EditDbList = memo<Object>((props: Object): Object => {
 	}, []);
 
 	const {
-		container,
 		contentContainerStyle,
 	} = getStyles({
 		layout,
 	});
 
 	return (
-		<View
-			level={3}
-			style={container}>
-			<NavigationHeaderPoster
-				h1={'Edit Dashboard'}
-				h2={'Add or Remove dashboard items'}
-				align={'right'}
-				showLeftIcon={true}
-				leftIcon={'close'}
-				navigation={navigation}
-				{...screenProps}/>
-			<SectionList
-				sections={dataSource}
-				renderItem={_renderRow}
-				renderSectionHeader={_renderSectionHeader}
-				keyExtractor={_keyExtractor}
-				onRefresh={_onRefresh}
-				refreshing={refreshing}
-				contentContainerStyle={contentContainerStyle}
-				stickySectionHeadersEnabled={true}/>
-		</View>
-
+		<SectionList
+			sections={dataSource}
+			renderItem={_renderRow}
+			renderSectionHeader={_renderSectionHeader}
+			keyExtractor={_keyExtractor}
+			onRefresh={_onRefresh}
+			refreshing={refreshing}
+			contentContainerStyle={contentContainerStyle}
+			stickySectionHeadersEnabled={true}/>
 	);
 });
 
@@ -137,9 +129,6 @@ const getStyles = ({layout}: Object): Object => {
 	const padding = deviceWidth * paddingFactor;
 
 	return {
-		container: {
-			flex: 1,
-		},
 		contentContainerStyle: {
 			flexGrow: 1,
 			paddingTop: padding / 2,
@@ -148,4 +137,4 @@ const getStyles = ({layout}: Object): Object => {
 	};
 };
 
-export default EditDbList;
+export default SelectItemsScreen;

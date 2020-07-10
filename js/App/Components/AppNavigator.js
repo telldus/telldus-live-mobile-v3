@@ -80,7 +80,9 @@ import GatewaysScreen from './TabViews/GatewaysScreen';
 import AdvancedSettings from './Settings/AdvancedSettings';
 import GeoFenceEventsLogScreen from './Settings/GeoFenceEventsLogScreen';
 
-import EditDbList from './Dashboard/EditDbList';
+import DashboardActionsContainer from './Dashboard/DashboardActionsContainer';
+import SelectItemsScreen from './Dashboard/SelectItemsScreen';
+import SelectTypeScreen from './Dashboard/SelectTypeScreen';
 
 import {
 	RegisterScreen,
@@ -417,8 +419,18 @@ const ScreenConfigs = [
 		},
 	},
 	{
-		name: 'EditDbList',
-		Component: EditDbList,
+		name: 'SelectItemsScreen',
+		Component: SelectItemsScreen,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SelectTypeScreen',
+		Component: SelectTypeScreen,
+		ContainerComponent: DashboardActionsContainer,
 		options: {
 			headerShown: false,
 		},

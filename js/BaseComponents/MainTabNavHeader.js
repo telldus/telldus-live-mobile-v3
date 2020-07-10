@@ -172,7 +172,7 @@ const MainTabNavHeader = memo<Object>((props: Props): Object => {
 		};
 
 		const editDb = () => {
-			navigate('EditDbList');
+			navigate('SelectTypeScreen');
 		};
 
 		const AddButton = {

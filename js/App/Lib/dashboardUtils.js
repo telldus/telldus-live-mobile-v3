@@ -29,37 +29,19 @@ import isEmpty from 'lodash/isEmpty';
 import { utils } from 'live-shared-data';
 const { dashboardUtils } = utils;
 
-const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, devices: Object = {}, sensors: Object = {}): Array<Object> => {
+const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Object = {}): Array<Object> => {
 	let isGatwaysEmpty = isEmpty(gateways);
 	if (isGatwaysEmpty) {
 		return [];
 	}
-	let listCombined = {};
-	Object.keys(devices).forEach((id: string) => {
-		listCombined = {
-			...listCombined,
-			[`d-${id}`]: devices[id],
-		};
-	});
-	Object.keys(sensors).forEach((id: string) => {
-		if (sensors[id] && sensors[id].name) {
-			listCombined = {
-				...listCombined,
-				[`s-${id}`]: {
-					...sensors[id],
-					deviceType: 'sensor',
-				},
-			};
-		}
-	});
-	let orderedList = orderBy(listCombined, [(item: Object): any => {
+	let orderedList = orderBy(items, [(item: Object): any => {
 		let { name = '' } = item;
 		name = typeof name !== 'string' ? '' : name;
 		return name.toLowerCase();
 	}], ['asc']);
 
-	let result = groupBy(orderedList, (items: Object): Array<any> => {
-		let gateway = gateways[items.clientId];
+	let result = groupBy(orderedList, (item: Object): Array<any> => {
+		let gateway = gateways[item.clientId];
 		return gateway && gateway.id;
 	});
 
