@@ -22,8 +22,10 @@
 'use strict';
 import EditDbListRow from './EditDbListRow';
 import EditDbListSection from './EditDbListSection';
+import TypeBlock from './TypeBlock';
 
 module.exports = {
 	EditDbListRow,
 	EditDbListSection,
+	TypeBlock,
 };
