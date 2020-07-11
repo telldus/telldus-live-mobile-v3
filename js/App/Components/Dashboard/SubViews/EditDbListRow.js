@@ -69,7 +69,6 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 		textStyle,
 		brandPrimary,
 		brandSecondary,
-		favoriteIconCover,
 		favoriteIcon,
 	} = getStyles({layout});
 
@@ -106,7 +105,9 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 	}, [isOnDB, dispatch, selectedType, id]);
 
 	return (
-		<View style={coverStyle}>
+		<TouchableOpacity
+			onPress={_onStarSelected}
+			style={coverStyle}>
 			<BlockIcon
 				icon={icon}
 				style={iconStyle}
@@ -118,12 +119,8 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 				style={textStyle}>
 				{name || formatMessage(i18n.noName)}
 			</Text>
-			<TouchableOpacity
-				style={favoriteIconCover}
-				onPress={_onStarSelected}>
-				<IconTelldus icon={iconFav} style={favoriteIcon}/>
-			</TouchableOpacity>
-		</View>
+			<IconTelldus icon={iconFav} style={favoriteIcon}/>
+		</TouchableOpacity>
 	);
 });
 
@@ -178,12 +175,10 @@ const getStyles = ({layout}: Object): Object => {
 			justifyContent: 'center',
 			marginHorizontal: 5,
 		},
-		favoriteIconCover: {
-			alignSelf: 'flex-end',
-		},
 		favoriteIcon: {
 			fontSize: 25,
 			color: brandSecondary,
+			alignSelf: 'flex-end',
 		},
 	};
 };

@@ -24,25 +24,39 @@ import React, {
 	memo,
 	useCallback,
 	useEffect,
+	useMemo,
+	useState,
 } from 'react';
 import {
 	useSelector,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
-	Text,
 	ThemedScrollView,
-	TouchableOpacity,
+	FloatingButton,
 } from '../../../BaseComponents';
 
+import {
+	TypeBlock,
+} from './SubViews';
+
 import Theme from '../../Theme';
+
+import i18n from '../../Translations/common';
 
 const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	const {
 		onDidMount,
 		navigation,
 	} = props;
+
+	const [ selectedType, setSelectedType ] = useState('device');
+
+	const {
+		formatMessage,
+	} = useIntl();
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -52,49 +66,60 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 
 	const {
 		containerStyle,
-		boxStyle,
-		textStyle,
 	} = getStyles({layout});
 
-	const navigate = useCallback((params: Object) => {
-		navigation.navigate('SelectItemsScreen', params);
+	const onPressNext = useCallback((params: Object) => {
+		navigation.navigate('SelectItemsScreen', {selectedType});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedType]);
+
+	const onPress = useCallback((typeSelected: string) => {
+		setSelectedType(typeSelected);
 	}, []);
 
-	const onPressD = useCallback(() => {
-		navigate({selectedType: 'device'});
-	}, [navigate]);
+	const blocks = useMemo((): Array<Object> => {
+		const items = [{
+			label: formatMessage(i18n.labelDevice),
+			typeId: 'device',
+			onPress,
+		},
+		{
+			label: formatMessage(i18n.labelSensor),
+			onPress,
+			typeId: 'sensor',
+		},
+		{
+			label: 'MET Weather', // TODO: translate
+			onPress,
+			typeId: 'weather1',
+		},
+		];
+		return items.map((item: Object, index: number): Object => {
+			return (
+				<TypeBlock
+					key={`${index}`}
+					layout={layout}
+					onPress={item.onPress}
+					label={item.label}
+					typeId={item.typeId}
+					selected={selectedType === item.typeId}/>
+			);
+		});
+	}, [formatMessage, layout, onPress, selectedType]);
 
-	const onPressS = useCallback(() => {
-		navigate({selectedType: 'sensor'});
-	}, [navigate]);
-
-	// TODO: translate
 	return (
-		<ThemedScrollView
-			level={3}>
-			<View
-				style={containerStyle}>
-				<TouchableOpacity
-					level={3}
-					style={boxStyle}
-					onPress={onPressD}>
-					<Text
-						style={textStyle}>
-                        DEVICE
-					</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					level={3}
-					style={boxStyle}
-					onPress={onPressS}>
-					<Text
-						style={textStyle}>
-                        SENSOR
-					</Text>
-				</TouchableOpacity>
-			</View>
-		</ThemedScrollView>
+		<View style={{flex: 1}}>
+			<ThemedScrollView
+				level={3}>
+				<View
+					style={containerStyle}>
+					{blocks}
+				</View>
+			</ThemedScrollView>
+			<FloatingButton
+				onPress={onPressNext}
+				imageSource={{uri: 'right_arrow_key'}}/>
+		</View>
 	);
 });
 
@@ -106,35 +131,17 @@ const getStyles = ({layout}: Object): Object => {
 
 	const {
 		paddingFactor,
-		shadow,
-		brandSecondary,
 	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
-
-	const fontSize = Math.floor(deviceWidth * 0.04);
 
 	return {
 		containerStyle: {
 			flex: 1,
 			flexDirection: 'row',
-			paddingTop: padding,
-		},
-		boxStyle: {
-			marginLeft: padding,
-			width: (width - (padding * 3)) / 2,
-			...shadow,
-			backgroundColor: '#fff',
-			padding: padding * 3,
-			alignItems: 'center',
-			justifyContent: 'center',
-			borderRadius: 2,
-		},
-		textStyle: {
-			fontSize: fontSize * 1.2,
-			color: brandSecondary,
-			textAlign: 'center',
-			fontWeight: '500',
+			paddingTop: padding / 2,
+			flexWrap: 'wrap',
+			marginLeft: padding / 2,
 		},
 	};
 };

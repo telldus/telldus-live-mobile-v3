@@ -54,20 +54,42 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 
 	const { selectedType } = route.params || {};
 
-	useEffect(() => {
-		const type = selectedType === 'device' ? 'Device' : 'Sensor';
-		onDidMount(`Select ${type}`);// TODO: translate
-	}, [onDidMount, selectedType]);
-
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
 	const { byId: dById } = useSelector((state: Object): Object => state.devices);
 	const { byId: sById } = useSelector((state: Object): Object => state.sensors);
 	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
+	const {
+		type,
+		byId,
+	} = useMemo((): Object => {
+		switch (selectedType) {
+			case 'device':
+				return {
+					type: 'device',
+					byId: dById,
+				};
+			case 'weather1':
+				return {
+					type: 'weather',
+					byId: [],
+				};
+			case 'sensor':
+			default:
+				return {
+					type: 'sensor',
+					byId: sById,
+				};
+		}
+	}, [selectedType, dById, sById]);
+
+	useEffect(() => {
+		onDidMount(`Select ${type}`);// TODO: translate
+	}, [onDidMount, type]);
+
 	const [ refreshing, setRefreshing ] = useState(false);
 
-	const byId = selectedType === 'device' ? dById : sById;
 	const dataSource = useMemo((): Array<Object> => {
 		return prepareSensorsDevicesForAddToDbList(gById, byId, selectedType, {
 			weather,

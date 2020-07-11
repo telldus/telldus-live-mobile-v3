@@ -26,16 +26,10 @@ import orderBy from 'lodash/orderBy';
 import reduce from 'lodash/reduce';
 import isEmpty from 'lodash/isEmpty';
 
-import {
-	getSupportedWeatherProviders,
-} from './appUtils';
-
 import { utils } from 'live-shared-data';
 const { dashboardUtils } = utils;
 
-const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Object = {}, type: 'device' | 'sensor', {
-	weather,
-}: Object = {}): Array<Object> => {
+const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Object = {}, type: 'device' | 'sensor'): Array<Object> => {
 	let isGatwaysEmpty = isEmpty(gateways);
 	if (isGatwaysEmpty) {
 		return [];
@@ -54,18 +48,6 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 		return gateway && gateway.id;
 	});
 	result = reduce(result, (acc: Array<any>, next: Array<Object>, index: number): Array<any> => {
-		if (type === 'sensor') {
-			if (weather && weather[index]) {
-				const weatherProviders = weather[index] || {};
-				let _weatherProviders = Object.keys(weatherProviders).map((weatherProviderId: Object): Object => {
-					const {id} = weatherProviders[weatherProviderId];
-					const { provider: name = '' } = getSupportedWeatherProviders()[id] || {};
-					return {id, name};
-				});
-				next.push(..._weatherProviders);
-			}
-		}
-
 		acc.push({
 			data: next,
 			header: index,
