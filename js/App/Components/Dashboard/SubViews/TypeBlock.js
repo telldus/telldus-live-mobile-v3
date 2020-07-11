@@ -37,7 +37,8 @@ type Props = {
     layout: Object,
     onPress: (string) => void,
     label: string,
-    typeId: string,
+	typeId: string,
+	selected: boolean,
 };
 
 const TypeBlock = memo<Object>((props: Props): Object => {

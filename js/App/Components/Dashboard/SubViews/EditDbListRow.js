@@ -31,7 +31,6 @@ import {
 } from 'react-redux';
 
 import {
-	View,
 	Text,
 	BlockIcon,
 	TouchableOpacity,
