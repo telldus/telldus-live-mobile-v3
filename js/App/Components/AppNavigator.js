@@ -83,6 +83,7 @@ import GeoFenceEventsLogScreen from './Settings/GeoFenceEventsLogScreen';
 import DashboardActionsContainer from './Dashboard/DashboardActionsContainer';
 import SelectItemsScreen from './Dashboard/SelectItemsScreen';
 import SelectTypeScreen from './Dashboard/SelectTypeScreen';
+import SelectScaleScreen from './Dashboard/SelectScaleScreen';
 
 import {
 	RegisterScreen,
@@ -433,6 +434,15 @@ const ScreenConfigs = [
 		ContainerComponent: DashboardActionsContainer,
 		options: {
 			headerShown: false,
+		},
+	},
+	{
+		name: 'SelectScaleScreen',
+		Component: SelectScaleScreen,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		},
 	},
 ];
