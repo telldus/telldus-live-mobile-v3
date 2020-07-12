@@ -29,6 +29,7 @@ import React, {
 } from 'react';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -41,6 +42,9 @@ import {
 	ListRow,
 } from './SubViews';
 
+import {
+	preAddDb,
+} from '../../Actions/Dashboard';
 import {
 	getSensorInfo,
 } from '../../Lib';
@@ -55,7 +59,7 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	} = props;
 
 	const { item } = route.params || {};
-	const { data } = item;
+	const { data, id } = item;
 
 	const {
 		formatMessage,
@@ -76,6 +80,11 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 	const [ selectedScales, setSelectedScales ] = useState({});
 
 	const { layout } = useSelector((state: Object): Object => state.app);
+	const {
+		dbExtras = {},
+	} = useSelector((state: Object): Object => state.dashboard);
+	const { preAddToDb = {} } = dbExtras;
+	const currentItemInPreDb = preAddToDb[id] || {};
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Select Scale', 'Select one or more scale');
@@ -85,10 +94,19 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 		contentContainerStyle,
 	} = getStyles({layout});
 
+	const dispatch = useDispatch();
+
 	const onPressNext = useCallback((params: Object) => {
+		dispatch(preAddDb({
+			...preAddToDb,
+			[id]: {
+				...currentItemInPreDb,
+				selectedScales,
+			},
+		}));
 		navigation.goBack();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedScales]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentItemInPreDb, id, preAddToDb, selectedScales]);
 
 	const onPress = useCallback((typeSelected: string) => {
 		setSelectedScales({

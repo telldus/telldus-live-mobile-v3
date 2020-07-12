@@ -29,6 +29,7 @@ import React, {
 } from 'react';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -37,10 +38,13 @@ import {
 	ThemedScrollView,
 	FloatingButton,
 } from '../../../BaseComponents';
-
 import {
 	TypeBlock,
 } from './SubViews';
+
+import {
+	preAddDb,
+} from '../../Actions/Dashboard';
 
 import Theme from '../../Theme';
 
@@ -68,7 +72,10 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		containerStyle,
 	} = getStyles({layout});
 
+	const dispatch = useDispatch();
+
 	const onPressNext = useCallback((params: Object) => {
+		dispatch(preAddDb({}));
 		navigation.navigate('SelectItemsScreen', {selectedType});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedType]);

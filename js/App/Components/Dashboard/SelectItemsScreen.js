@@ -46,6 +46,7 @@ import {
 
 import {
 	addToDashboardBatch,
+	preAddDb,
 } from '../../Actions/Dashboard';
 import {
 	prepareSensorsDevicesForAddToDbList,
@@ -65,8 +66,6 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 
 	const { selectedType } = route.params || {};
 
-	const [ selectedItems, setSelectedItems ] = useState({});
-
 	const {
 		layout,
 		defaultSettings,
@@ -80,9 +79,11 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const {
 		sensorIds = {},
 		deviceIds = {},
+		dbExtras = {},
 	} = useSelector((state: Object): Object => state.dashboard);
 	// const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
+	const { preAddToDb = {} } = dbExtras;
 	const { activeDashboardId } = defaultSettings;
 
 	const {
@@ -136,12 +137,12 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const _onPress = useCallback((item: Object) => {
 		const { id, data = {} } = item;
 
-		const alreadyAdded = selectedItems[id];
+		const alreadyAdded = preAddToDb[id];
 
-		setSelectedItems({
-			...selectedItems,
-			[id]: alreadyAdded ? false : true,
-		});
+		dispatch(preAddDb({
+			...preAddToDb,
+			[id]: alreadyAdded ? false : {},
+		}));
 
 		if (selectedType === 'sensor' && !alreadyAdded) {
 			const hasMultipleScales = Object.keys(data).length > 1;
@@ -151,23 +152,24 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 				});
 			}
 		}
-	}, [navigate, selectedItems, selectedType]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [navigate, preAddToDb, selectedType]);
 
 	const onPressNext = useCallback((params: Object) => {
 		let _selectedItems = {};
-		Object.keys(selectedItems).map((item: string) => {
-			if (selectedItems[item]) {
-				_selectedItems[item] = {};
+		Object.keys(preAddToDb).map((item: string) => {
+			if (preAddToDb[item]) {
+				_selectedItems[item] = preAddToDb[item];
 			}
 		});
 		dispatch(addToDashboardBatch(selectedType, _selectedItems));
 		navigation.popToTop();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedItems, selectedType]);
+	}, [preAddToDb, selectedType]);
 
 	const _renderRow = useCallback(({item}: Object): Object => {
 
-		const selected = selectedItems[item.id];
+		const selected = preAddToDb[item.id];
 
 		return (
 			<EditDbListRow
@@ -178,7 +180,7 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 				onPress={_onPress}
 				selected={selected}/>
 		);
-	}, [selectedItems, layout, selectedType, navigate, _onPress]);
+	}, [preAddToDb, layout, selectedType, navigate, _onPress]);
 
 	const _renderSectionHeader = useCallback(({section}: Object): Object => {
 		const { name = '' } = gById[section.header] || {};
@@ -204,18 +206,18 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	});
 
 	const hasSelected = useMemo((): boolean => {
-		const _keys = Object.keys(selectedItems);
+		const _keys = Object.keys(preAddToDb);
 		const _len = _keys.length;
 		let _hasSelected = false;
 		for (let i = 0; i < _len; i++) {
-			const _item = selectedItems[_keys[i]];
+			const _item = preAddToDb[_keys[i]];
 			if (_item) {
 				_hasSelected = true;
 				break;
 			}
 		}
 		return _hasSelected;
-	}, [selectedItems]);
+	}, [preAddToDb]);
 
 	return (
 		<View style={{flex: 1}}>
