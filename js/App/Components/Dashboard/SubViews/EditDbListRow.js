@@ -25,26 +25,12 @@ import React, {
 	useCallback,
 } from 'react';
 import { useIntl } from 'react-intl';
-import {
-	useSelector,
-	useDispatch,
-} from 'react-redux';
 
-import {
-	Text,
-	BlockIcon,
-	TouchableOpacity,
-	IconTelldus,
-} from '../../../../BaseComponents';
+import ListRow from './ListRow';
 
 import {
 	getDeviceIcons,
 } from '../../../Lib';
-
-import {
-	removeFromDashboard,
-	addToDashboard,
-} from '../../../Actions/Dashboard';
 
 import Theme from '../../../Theme';
 
@@ -55,6 +41,8 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 		layout,
 		item,
 		selectedType,
+		onPress,
+		selected,
 	} = props;
 
 	const {
@@ -62,16 +50,9 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 	} = useIntl();
 
 	const {
-		coverStyle,
-		iconStyle,
-		iconContainerStyle,
-		textStyle,
 		brandPrimary,
 		brandSecondary,
-		favoriteIcon,
 	} = getStyles({layout});
-
-	const dispatch = useDispatch();
 
 	const {
 		name,
@@ -81,104 +62,37 @@ const EditDbListRow = memo<Object>((props: Object): Object => {
 
 	const icon = selectedType === 'sensor' ? 'sensor' : getDeviceIcons(deviceType);
 
-	const { deviceIds = {}, sensorIds } = useSelector((state: Object): Object => state.dashboard);
-	const { userId } = useSelector((state: Object): Object => state.user);
-	const { defaultSettings } = useSelector((state: Object): Object => state.app);
+	let iconFav = selected ? 'favorite' : 'favorite-outline';
 
-	const { activeDashboardId } = defaultSettings || {};
-	const userDbsAndDeviceIds = deviceIds[userId] || {};
-	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
-	const userDbsAndSensorIds = sensorIds[userId] || {};
-	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
-	const isOnDB = selectedType === 'sensor' ? sensorIdsInCurrentDb.indexOf(id) !== -1 : deviceIdsInCurrentDb.indexOf(id) !== -1;
-
-	let iconFav = isOnDB ? 'favorite' : 'favorite-outline';
-
-	const _onStarSelected = useCallback(() => {
-		const kind = selectedType === 'sensor' ? 'sensor' : 'device';
-		if (isOnDB) {
-			dispatch(removeFromDashboard(kind, id));
-		} else {
-			dispatch(addToDashboard(kind, id));
+	const _onPress = useCallback((rowData: any) => {
+		if (onPress) {
+			onPress(rowData);
 		}
-	}, [isOnDB, dispatch, selectedType, id]);
+	}, [onPress]);
 
 	return (
-		<TouchableOpacity
-			onPress={_onStarSelected}
-			style={coverStyle}>
-			<BlockIcon
-				icon={icon}
-				style={iconStyle}
-				containerStyle={[iconContainerStyle, {
-					backgroundColor: selectedType === 'sensor' ? brandPrimary : brandSecondary,
-				}]}/>
-			<Text
-				level={6}
-				style={textStyle}>
-				{name || formatMessage(i18n.noName)}
-			</Text>
-			<IconTelldus icon={iconFav} style={favoriteIcon}/>
-		</TouchableOpacity>
+		<ListRow
+			key={`${id}`}
+			layout={layout}
+			onPress={_onPress}
+			label={name || formatMessage(i18n.noName)}
+			iconContainerStyle={{
+				backgroundColor: selectedType === 'sensor' ? brandPrimary : brandSecondary,
+			}}
+			rowData={item}
+			leftIcon={icon}
+			rightIcon={iconFav}/>
 	);
 });
 
 const getStyles = ({layout}: Object): Object => {
-
-	const { height, width } = layout;
-	const isPortrait = height > width;
-	const deviceWidth = isPortrait ? width : height;
-
 	const {
-		paddingFactor,
-		shadow,
 		brandSecondary,
-		maxSizeRowTextOne,
 		brandPrimary,
 	} = Theme.Core;
-
-	const padding = deviceWidth * paddingFactor;
-
-	let nameFontSize = Math.floor(deviceWidth * 0.047);
-	nameFontSize = nameFontSize > maxSizeRowTextOne ? maxSizeRowTextOne : nameFontSize;
-
 	return {
 		brandSecondary,
 		brandPrimary,
-		coverStyle: {
-			flex: 1,
-			flexDirection: 'row',
-			justifyContent: 'space-between',
-			alignItems: 'center',
-			marginHorizontal: padding,
-			backgroundColor: '#fff',
-			marginBottom: padding / 2,
-			padding,
-			...shadow,
-			borderRadius: 2,
-		},
-		iconStyle: {
-			fontSize: 18,
-			color: '#fff',
-		},
-		textStyle: {
-			flex: 1,
-			marginLeft: 5,
-			fontSize: nameFontSize,
-		},
-		iconContainerStyle: {
-			borderRadius: 25,
-			width: 25,
-			height: 25,
-			alignItems: 'center',
-			justifyContent: 'center',
-			marginHorizontal: 5,
-		},
-		favoriteIcon: {
-			fontSize: 25,
-			color: brandSecondary,
-			alignSelf: 'flex-end',
-		},
 	};
 };
 

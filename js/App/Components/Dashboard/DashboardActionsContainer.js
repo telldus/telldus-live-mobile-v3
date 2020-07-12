@@ -62,7 +62,8 @@ const DashboardActionsContainer = memo<Object>((props: Props): Object => {
 		});
 	}, []);
 
-	const leftIcon = currentScreen === 'SelectItemsScreen' ? undefined : 'close';
+	const backIconScreens = ['SelectItemsScreen', 'SelectScaleScreen'];
+	const leftIcon = backIconScreens.indexOf(currentScreen) !== -1 ? undefined : 'close';
 
 	return (
 		<View

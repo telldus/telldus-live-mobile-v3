@@ -29,10 +29,16 @@ import React, {
 } from 'react';
 import {
 	useSelector,
+	// useDispatch,
 } from 'react-redux';
 import {
 	SectionList,
 } from 'react-native';
+
+import {
+	View,
+	FloatingButton,
+} from '../../../BaseComponents';
 
 import {
 	EditDbListRow,
@@ -50,15 +56,32 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const {
 		onDidMount,
 		route,
+		navigation,
 	} = props;
+
+	// const dispatch = useDispatch();
 
 	const { selectedType } = route.params || {};
 
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const [ selectedItems, setSelectedItems ] = useState({});
+
+	const {
+		layout,
+		defaultSettings,
+	} = useSelector((state: Object): Object => state.app);
+	const {
+		userId,
+	} = useSelector((state: Object): Object => state.user);
 	const { byId: gById } = useSelector((state: Object): Object => state.gateways);
 	const { byId: dById } = useSelector((state: Object): Object => state.devices);
 	const { byId: sById } = useSelector((state: Object): Object => state.sensors);
-	const { weather } = useSelector((state: Object): Object => state.thirdParties);
+	const {
+		sensorIds = {},
+		deviceIds = {},
+	} = useSelector((state: Object): Object => state.dashboard);
+	// const { weather } = useSelector((state: Object): Object => state.thirdParties);
+
+	const { activeDashboardId } = defaultSettings;
 
 	const {
 		type,
@@ -88,22 +111,65 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 		onDidMount(`Select ${type}`);// TODO: translate
 	}, [onDidMount, type]);
 
+	const navigate = useCallback((screen: string, params: Object) => {
+		navigation.navigate(screen, params);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	const [ refreshing, setRefreshing ] = useState(false);
 
 	const dataSource = useMemo((): Array<Object> => {
+		const userDbsAndSensorIds = sensorIds[userId] || {};
+		const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+
+		const userDbsAndDeviceIds = deviceIds[userId] || {};
+		const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+
 		return prepareSensorsDevicesForAddToDbList(gById, byId, selectedType, {
-			weather,
+			sensorIdsInCurrentDb,
+			deviceIdsInCurrentDb,
 		});
-	}, [gById, byId, weather, selectedType]);
+	}, [sensorIds, userId, activeDashboardId, deviceIds, gById, byId, selectedType]);
+
+	const _onPress = useCallback((item: Object) => {
+		const { id, data = {} } = item;
+
+		const alreadyAdded = selectedItems[id];
+
+		setSelectedItems({
+			...selectedItems,
+			[id]: alreadyAdded ? false : true,
+		});
+
+		if (selectedType === 'sensor' && !alreadyAdded) {
+			const hasMultipleScales = Object.keys(data).length > 1;
+			if (hasMultipleScales) {
+				navigate('SelectScaleScreen', {
+					item,
+				});
+			}
+		}
+	}, [navigate, selectedItems, selectedType]);
+
+	const onPressNext = useCallback((params: Object) => {
+		navigation.popToTop();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedItems]);
 
 	const _renderRow = useCallback(({item}: Object): Object => {
+
+		const selected = selectedItems[item.id];
+
 		return (
 			<EditDbListRow
 				layout={layout}
 				item={item}
-				selectedType={selectedType}/>
+				selectedType={selectedType}
+				navigate={navigate}
+				onPress={_onPress}
+				selected={selected}/>
 		);
-	}, [layout, selectedType]);
+	}, [selectedItems, layout, selectedType, navigate, _onPress]);
 
 	const _renderSectionHeader = useCallback(({section}: Object): Object => {
 		const { name = '' } = gById[section.header] || {};
@@ -128,16 +194,36 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 		layout,
 	});
 
+	const hasSelected = useMemo((): boolean => {
+		const _keys = Object.keys(selectedItems);
+		const _len = _keys.length;
+		let _hasSelected = false;
+		for (let i = 0; i < _len; i++) {
+			const _item = selectedItems[_keys[i]];
+			if (_item) {
+				_hasSelected = true;
+				break;
+			}
+		}
+		return _hasSelected;
+	}, [selectedItems]);
+
 	return (
-		<SectionList
-			sections={dataSource}
-			renderItem={_renderRow}
-			renderSectionHeader={_renderSectionHeader}
-			keyExtractor={_keyExtractor}
-			onRefresh={_onRefresh}
-			refreshing={refreshing}
-			contentContainerStyle={contentContainerStyle}
-			stickySectionHeadersEnabled={true}/>
+		<View style={{flex: 1}}>
+			<SectionList
+				sections={dataSource}
+				renderItem={_renderRow}
+				renderSectionHeader={_renderSectionHeader}
+				keyExtractor={_keyExtractor}
+				onRefresh={_onRefresh}
+				refreshing={refreshing}
+				contentContainerStyle={contentContainerStyle}
+				stickySectionHeadersEnabled={true}/>
+			{hasSelected && <FloatingButton
+				onPress={onPressNext}
+				iconName={'checkmark'}/>
+			}
+		</View>
 	);
 });
 

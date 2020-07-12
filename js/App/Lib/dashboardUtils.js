@@ -29,7 +29,10 @@ import isEmpty from 'lodash/isEmpty';
 import { utils } from 'live-shared-data';
 const { dashboardUtils } = utils;
 
-const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Object = {}, type: 'device' | 'sensor'): Array<Object> => {
+const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Object = {}, type: 'device' | 'sensor', {
+	sensorIdsInCurrentDb,
+	deviceIdsInCurrentDb,
+}: Object): Array<Object> => {
 	let isGatwaysEmpty = isEmpty(gateways);
 	if (isGatwaysEmpty) {
 		return [];
@@ -40,7 +43,13 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 		return name.toLowerCase();
 	}], ['asc']);
 	if (type === 'sensor') {
-		orderedList = orderedList.filter(({name}: Object): boolean => typeof name === 'string');
+		orderedList = orderedList.filter(({name, id}: Object): boolean => {
+			return (typeof name === 'string') && sensorIdsInCurrentDb.indexOf(id) === -1;
+		});
+	} else if (type === 'device') {
+		orderedList = orderedList.filter(({name, id}: Object): boolean => {
+			return deviceIdsInCurrentDb.indexOf(id) === -1;
+		});
 	}
 
 	let result = groupBy(orderedList, (item: Object): Array<any> => {
