@@ -29,7 +29,7 @@ import React, {
 } from 'react';
 import {
 	useSelector,
-	// useDispatch,
+	useDispatch,
 } from 'react-redux';
 import {
 	SectionList,
@@ -39,12 +39,14 @@ import {
 	View,
 	FloatingButton,
 } from '../../../BaseComponents';
-
 import {
 	EditDbListRow,
 	EditDbListSection,
 } from './SubViews';
 
+import {
+	addToDashboardBatch,
+} from '../../Actions/Dashboard';
 import {
 	prepareSensorsDevicesForAddToDbList,
 } from '../../Lib/dashboardUtils';
@@ -59,7 +61,7 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 		navigation,
 	} = props;
 
-	// const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
 	const { selectedType } = route.params || {};
 
@@ -152,9 +154,16 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	}, [navigate, selectedItems, selectedType]);
 
 	const onPressNext = useCallback((params: Object) => {
+		let _selectedItems = {};
+		Object.keys(selectedItems).map((item: string) => {
+			if (selectedItems[item]) {
+				_selectedItems[item] = {};
+			}
+		});
+		dispatch(addToDashboardBatch(selectedType, _selectedItems));
 		navigation.popToTop();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedItems]);
+	}, [selectedItems, selectedType]);
 
 	const _renderRow = useCallback(({item}: Object): Object => {
 
