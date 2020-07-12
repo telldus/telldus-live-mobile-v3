@@ -23,9 +23,11 @@
 import EditDbListRow from './EditDbListRow';
 import EditDbListSection from './EditDbListSection';
 import TypeBlock from './TypeBlock';
+import ListRow from './ListRow';
 
 module.exports = {
 	EditDbListRow,
 	EditDbListSection,
 	TypeBlock,
+	ListRow,
 };
