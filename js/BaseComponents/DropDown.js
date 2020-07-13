@@ -244,7 +244,7 @@ static defaultProps: DefaultProps = {
 		} = this.getStyle(appLayout);
 		const _itemSize = itemSize || Math.ceil(fontSize * 1.5 + itemPadding * 2);
 		const iCount = items.length < itemCount ? items.length : itemCount;
-		let dropdownTop = dropDownPosition === 'bottom' ? ((iCount * _itemSize) - itemPadding) : -(iCount * _itemSize);
+		let dropdownTop = dropDownPosition === 'bottom' ? ((2 * _itemSize) - itemPadding) : -(iCount * _itemSize);
 
 		return (
 			<View style={[dropDownContainerStyleDef, dropDownContainerStyle]}>
