@@ -114,7 +114,7 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 			});
 		}
 	
-		let result = groupBy(orderedList, (item: Object): Array<any> => {
+		result = groupBy(orderedList, (item: Object): Array<any> => {
 			let gateway = gateways[item.clientId];
 			return gateway && gateway.id;
 		});
