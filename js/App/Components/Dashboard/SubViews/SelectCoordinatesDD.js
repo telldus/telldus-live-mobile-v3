@@ -57,7 +57,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
 	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
-	let {items, value} = useMemo((): Array<Object> => {
+	let {items, value} = useMemo((): Object => {
 		let _value = selected === MANUAL_ID ? MANUAL_VALUE : '';
 		let _items = [];
 		Object.keys(weather).forEach((id: string): Object => {
