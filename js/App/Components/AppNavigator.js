@@ -84,6 +84,7 @@ import DashboardActionsContainer from './Dashboard/DashboardActionsContainer';
 import SelectItemsScreen from './Dashboard/SelectItemsScreen';
 import SelectTypeScreen from './Dashboard/SelectTypeScreen';
 import SelectScaleScreen from './Dashboard/SelectScaleScreen';
+import SetCoordinates from './Dashboard/SetCoordinates';
 
 import {
 	RegisterScreen,
@@ -439,6 +440,15 @@ const ScreenConfigs = [
 	{
 		name: 'SelectScaleScreen',
 		Component: SelectScaleScreen,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SetCoordinates',
+		Component: SetCoordinates,
 		ContainerComponent: DashboardActionsContainer,
 		options: {
 			headerShown: false,
