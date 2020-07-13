@@ -99,7 +99,7 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 	if (type === MET_ID) {
 		result = prepareWeather(items, gateways);
 	} else {
-		orderedList = orderBy(items, [(item: Object): any => {
+		let orderedList = orderBy(items, [(item: Object): any => {
 			let { name = '' } = item;
 			name = typeof name !== 'string' ? '' : name;
 			return name.toLowerCase();
