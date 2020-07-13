@@ -90,7 +90,6 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const { activeDashboardId } = defaultSettings;
 
 	const {
-		type,
 		byId,
 		typeLabel,
 	} = useMemo((): Object => {

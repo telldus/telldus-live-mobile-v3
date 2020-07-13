@@ -113,7 +113,7 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 				return deviceIdsInCurrentDb.indexOf(id) === -1;
 			});
 		}
-	
+
 		result = groupBy(orderedList, (item: Object): Array<any> => {
 			let gateway = gateways[item.clientId];
 			return gateway && gateway.id;
