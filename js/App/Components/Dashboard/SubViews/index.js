@@ -24,10 +24,12 @@ import EditDbListRow from './EditDbListRow';
 import EditDbListSection from './EditDbListSection';
 import TypeBlock from './TypeBlock';
 import ListRow from './ListRow';
+import SelectCoordinatesDD from './SelectCoordinatesDD';
 
 module.exports = {
 	EditDbListRow,
 	EditDbListSection,
 	TypeBlock,
 	ListRow,
+	SelectCoordinatesDD,
 };
