@@ -45,6 +45,9 @@ import {
 import {
 	preAddDb,
 } from '../../Actions/Dashboard';
+import {
+	MET_ID,
+} from '../../Lib/thirdPartyUtils';
 
 import Theme from '../../Theme';
 
@@ -98,7 +101,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		{
 			label: 'MET Weather', // TODO: translate
 			onPress,
-			typeId: 'weather1',
+			typeId: MET_ID,
 		},
 		];
 		return items.map((item: Object, index: number): Object => {

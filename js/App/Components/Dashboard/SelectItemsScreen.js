@@ -51,6 +51,9 @@ import {
 import {
 	prepareSensorsDevicesForAddToDbList,
 } from '../../Lib/dashboardUtils';
+import {
+	MET_ID,
+} from '../../Lib/thirdPartyUtils';
 
 import Theme from '../../Theme';
 
@@ -81,7 +84,7 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 		deviceIds = {},
 		dbExtras = {},
 	} = useSelector((state: Object): Object => state.dashboard);
-	// const { weather } = useSelector((state: Object): Object => state.thirdParties);
+	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
 	const { preAddToDb = {} } = dbExtras;
 	const { activeDashboardId } = defaultSettings;
@@ -89,30 +92,34 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 	const {
 		type,
 		byId,
+		typeLabel,
 	} = useMemo((): Object => {
 		switch (selectedType) {
 			case 'device':
 				return {
 					type: 'device',
 					byId: dById,
+					typeLabel: 'device',
 				};
-			case 'weather1':
+			case MET_ID:
 				return {
-					type: 'weather',
-					byId: [],
+					type: MET_ID,
+					byId: weather,
+					typeLabel: 'weather',
 				};
 			case 'sensor':
 			default:
 				return {
 					type: 'sensor',
 					byId: sById,
+					typeLabel: 'sensor',
 				};
 		}
-	}, [selectedType, dById, sById]);
+	}, [selectedType, dById, sById, weather]);
 
 	useEffect(() => {
-		onDidMount(`Select ${type}`);// TODO: translate
-	}, [onDidMount, type]);
+		onDidMount(`Select ${typeLabel}`);// TODO: translate
+	}, [onDidMount, typeLabel]);
 
 	const navigate = useCallback((screen: string, params: Object) => {
 		navigation.navigate(screen, params);
