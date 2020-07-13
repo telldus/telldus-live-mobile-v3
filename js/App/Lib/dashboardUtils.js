@@ -95,37 +95,33 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 	if (isGatwaysEmpty) {
 		return [];
 	}
-	let result = [];
-	if (type === MET_ID) {
-		result = prepareWeather(items, gateways);
-	} else {
-		let orderedList = orderBy(items, [(item: Object): any => {
-			let { name = '' } = item;
-			name = typeof name !== 'string' ? '' : name;
-			return name.toLowerCase();
-		}], ['asc']);
-		if (type === 'sensor') {
-			orderedList = orderedList.filter(({name, id}: Object): boolean => {
-				return (typeof name === 'string') && sensorIdsInCurrentDb.indexOf(id) === -1;
-			});
-		} else if (type === 'device') {
-			orderedList = orderedList.filter(({name, id}: Object): boolean => {
-				return deviceIdsInCurrentDb.indexOf(id) === -1;
-			});
-		}
 
-		result = groupBy(orderedList, (item: Object): Array<any> => {
-			let gateway = gateways[item.clientId];
-			return gateway && gateway.id;
+	let orderedList = orderBy(items, [(item: Object): any => {
+		let { name = '' } = item;
+		name = typeof name !== 'string' ? '' : name;
+		return name.toLowerCase();
+	}], ['asc']);
+	if (type === 'sensor') {
+		orderedList = orderedList.filter(({name, id}: Object): boolean => {
+			return (typeof name === 'string') && sensorIdsInCurrentDb.indexOf(id) === -1;
 		});
-		result = reduce(result, (acc: Array<any>, next: Array<Object>, index: number): Array<any> => {
-			acc.push({
-				data: next,
-				header: index,
-			});
-			return acc;
-		}, []);
+	} else if (type === 'device') {
+		orderedList = orderedList.filter(({name, id}: Object): boolean => {
+			return deviceIdsInCurrentDb.indexOf(id) === -1;
+		});
 	}
+
+	let result = groupBy(orderedList, (item: Object): Array<any> => {
+		let gateway = gateways[item.clientId];
+		return gateway && gateway.id;
+	});
+	result = reduce(result, (acc: Array<any>, next: Array<Object>, index: number): Array<any> => {
+		acc.push({
+			data: next,
+			header: index,
+		});
+		return acc;
+	}, []);
 
 	return orderBy(result, [(item: Object): any => {
 		const { name = '' } = gateways[item.header] || {};
@@ -136,4 +132,5 @@ const prepareSensorsDevicesForAddToDbList = (gateways: Object = {}, items: Objec
 module.exports = {
 	...dashboardUtils,
 	prepareSensorsDevicesForAddToDbList,
+	prepareWeather,
 };

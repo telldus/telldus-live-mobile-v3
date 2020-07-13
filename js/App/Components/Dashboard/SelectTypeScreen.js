@@ -79,7 +79,11 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 
 	const onPressNext = useCallback((params: Object) => {
 		dispatch(preAddDb({}));
-		navigation.navigate('SelectItemsScreen', {selectedType});
+		if (selectedType === MET_ID) {
+			navigation.navigate('SetCoordinates', {selectedType});
+		} else {
+			navigation.navigate('SelectItemsScreen', {selectedType});
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedType]);
 
