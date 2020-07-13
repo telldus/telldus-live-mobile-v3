@@ -23,6 +23,7 @@
 
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import {
 	View,
@@ -39,6 +40,7 @@ import {
 	shouldUpdate,
 	getSensorInfo,
 	getWindDirection,
+	getSensorScalesOnDb,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -47,6 +49,7 @@ type Props = {
 	item: Object,
 	tileWidth: number,
 	displayType: string,
+	sensorTypesInCurrentDb: Object | null,
 
 	style: Object,
 	onPress: (number) => void,
@@ -104,12 +107,12 @@ class SensorDashboardTile extends View<Props, null> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item']);
+		return shouldUpdate(this.props, nextProps, ['displayType', 'tileWidth', 'item', 'sensorTypesInCurrentDb']);
 	}
 
 	getSlideList(item: Object): Object {
 		let slideList = {}, sensorAccessibilityInfo = '';
-		const { intl } = this.props;
+		const { intl, sensorTypesInCurrentDb } = this.props;
 		const { formatMessage } = intl;
 
 		const {
@@ -121,7 +124,8 @@ class SensorDashboardTile extends View<Props, null> {
 			sensorValueCoverStyle,
 		} = this.getStyles();
 
-		for (let key in item.data) {
+		const _data = sensorTypesInCurrentDb || item.data;
+		for (let key in _data) {
 			const { value, scale, name } = item.data[key];
 			const isLarge = checkIfLarge(value.toString());
 
@@ -337,4 +341,23 @@ const styles = StyleSheet.create({
 	},
 });
 
-module.exports = SensorDashboardTile;
+function mapStateToProps(state: Object, props: Object): Object {
+	const { defaultSettings } = state.app;
+	const { sensorsById = {} } = state.dashboard;
+
+	const { activeDashboardId } = defaultSettings;
+	const { userId } = state.user;
+	const { id } = props.item || {};
+
+	const userDbsAndSensorsById = sensorsById[userId] || {};
+	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
+
+	const sensorInCurrentDb = sensorsByIdInCurrentDb[id];
+	let _selectedScales = getSensorScalesOnDb(sensorInCurrentDb);
+
+	return {
+		sensorTypesInCurrentDb: _selectedScales,
+	};
+}
+
+module.exports = connect(mapStateToProps, null)(SensorDashboardTile);

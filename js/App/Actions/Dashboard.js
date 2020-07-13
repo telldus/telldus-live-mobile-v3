@@ -22,6 +22,9 @@
 
 'use strict';
 import type { ThunkAction } from './Types';
+import {
+	getSensorScalesOnDb,
+} from '../Lib/dashboardUtils';
 
 // Dashboard actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -38,18 +41,25 @@ const changeSensorDisplayTypeDB = (id?: number): ThunkAction => (dispatch: Funct
 
 	const { dbCarousel, activeDashboardId } = defaultSettings || {};
 
-	const { sensorIds = {} } = dashboard;
+	const { sensorIds = {}, sensorsById = {} } = dashboard;
 	const userDbsAndSensorIds = sensorIds[userId] || {};
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
+
+	const userDbsAndSensorsById = sensorsById[userId] || {};
+	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
 
 	if (dbCarousel) {
 		sensorIdsInCurrentDb.forEach((sensorId: number) => {
 			const sensor = sensors.byId[sensorId];
-			dispatch(prepareAndUpdate(sensorId, sensor.data, defaultSensorSettings));
+			const sensorInCurrentDb = sensorsByIdInCurrentDb[sensorId];
+			const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
+			dispatch(prepareAndUpdate(sensorId, data, defaultSensorSettings));
 		});
 	} else if (id) {
 		const sensor = sensors.byId[id];
-		dispatch(prepareAndUpdate(id, sensor.data, defaultSensorSettings));
+		const sensorInCurrentDb = sensorsByIdInCurrentDb[id];
+		const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
+		dispatch(prepareAndUpdate(id, data, defaultSensorSettings));
 	}
 };
 
