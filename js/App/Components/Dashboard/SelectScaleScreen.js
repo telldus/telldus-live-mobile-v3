@@ -65,19 +65,23 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 		formatMessage,
 	} = useIntl();
 
-	const scalesInfoList = useMemo((): Object => {
-		let _scalesInfoList = {};
+	const {scalesInfoList, initialSelectedScales} = useMemo((): Object => {
+		let _scalesInfoList = {}, _initialSelectedScales = {};
 		for (let key in data) {
+			_initialSelectedScales[key] = true;
 			const values = data[key];
 			const { value, scale, name } = values;
 
 			const info = getSensorInfo(name, scale, value, true, formatMessage);
 			_scalesInfoList[key] = info;
 		}
-		return _scalesInfoList;
+		return {
+			scalesInfoList: _scalesInfoList,
+			initialSelectedScales: _initialSelectedScales,
+		};
 	}, [data, formatMessage]);
 
-	const [ selectedScales, setSelectedScales ] = useState({});
+	const [ selectedScales, setSelectedScales ] = useState(initialSelectedScales);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const {
