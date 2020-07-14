@@ -66,6 +66,7 @@ const DashboardActionsContainer = memo<Object>((props: Props): Object => {
 		'SelectItemsScreen',
 		'SelectScaleScreen',
 		'SetCoordinates',
+		'SelectWeatherAttributes',
 	];
 	const leftIcon = backIconScreens.indexOf(currentScreen) !== -1 ? undefined : 'close';
 
