@@ -60,13 +60,16 @@ const SelectCoordinatesDD = (props: Object): Object => {
 		let _value = selected === MANUAL_ID ? MANUAL_VALUE : '';
 		let _items = [];
 		Object.keys(weather).forEach((id: string): Object => {
-			if (id === selected) {
-				_value = byId[id].name;
+			const _item = byId[id];
+			if (_item) {
+				if (id === selected) {
+					_value = _item.name;
+				}
+				_items.push({
+					key: id,
+					value: _item.name,
+				});
 			}
-			_items.push({
-				key: id,
-				value: byId[id].name,
-			});
 		});
 		_items.unshift({
 			key: MANUAL_ID,

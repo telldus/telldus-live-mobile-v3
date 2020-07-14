@@ -42,10 +42,11 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	preAddDb,
-} from '../../Actions/Dashboard';
+	getWeatherInfo,
+} from '../../Actions/ThirdParties';
 import {
 	LayoutAnimations,
+	getSupportedWeatherProviders,
 } from '../../Lib';
 
 import {
@@ -74,6 +75,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 
 	const { selectedType } = route.params || {};
 
+	const [ isLoading, setIsLoading ] = useState(false);
 	const [ config, setConfig ] = useState({
 		manual: true,
 		latitude: '',
@@ -101,24 +103,54 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 
 	const dispatch = useDispatch();
 
+	const showDialogue = useCallback((message: string) => {
+		toggleDialogueBoxState({
+			show: true,
+			showHeader: true,
+			imageHeader: true,
+			text: message,
+			showPositive: true,
+		});
+	}, [toggleDialogueBoxState]);
+
 	const onPressNext = useCallback((params: Object) => {
-		if (!latitude || !longitude) {
-			toggleDialogueBoxState({
-				show: true,
-				showHeader: true,
-				imageHeader: true,
-				text: 'Latitude and Longitude cannot be empty. Please enter valid latitude and longitude.', // TODO: translate
-				showPositive: true,
-			});
+		if (!latitude || !longitude) { // TODO: translate
+			showDialogue('Latitude and Longitude cannot be empty. Please enter valid latitude and longitude.');
 			return;
 		}
-		dispatch(preAddDb({}));
-		navigation.navigate('SelectWeatherForecastDay', {
-			selectedType,
-			id,
+		const {
+			id: pId,
+			url,
+		} = getSupportedWeatherProviders()[selectedType];
+		if (!url || !pId) { // TODO: translate
+			showDialogue('Data provider URL not found. Please try again later.');
+			return;
+		}
+		setIsLoading(true);
+		dispatch(getWeatherInfo(url, {
+			lon: longitude,
+			lat: latitude,
+		}, {
+			id: selectedType,
+			clientId: id, // TODO: Handle manual id
+		})).then((res: Object) => {
+			setIsLoading(false);
+			if (res && res.data) {
+				navigation.navigate('SelectWeatherForecastDay', {
+					selectedType,
+					id,
+					latitude,
+					longitude,
+				});
+			} else { // TODO: translate
+				showDialogue('Could not fetch weather data at the moment. Please try again later.');
+			}
+		}).catch(() => {
+			setIsLoading(false); // TODO: translate
+			showDialogue('Could not fetch weather data at the moment. Please try again later.');
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, selectedType, latitude, longitude]);
+	}, [latitude, longitude, selectedType, id, showDialogue]);
 
 	const onChangeLatitude = useCallback((value: string) => {
 		setConfig({
@@ -177,7 +209,8 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
+				imageSource={isLoading ? undefined : {uri: 'right_arrow_key'}}
+				showThrobber={isLoading}/>
 		</View>
 	);
 });
