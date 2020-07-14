@@ -24,6 +24,42 @@
 import { utils } from 'live-shared-data';
 const { thirdPartyUtils } = utils;
 
+import moment from 'moment';
+
+const getMetWeatherDataAttributes = (weatherData: Object, gatewayId: string, providerId: string): Array<Object> => {
+	const weatherCurrentClient = weatherData[gatewayId];
+	const weatherCurrentClientProvider = weatherCurrentClient[providerId];
+
+	let listData = [];
+
+	const { data = {} } = weatherCurrentClientProvider;
+	const { properties = {} } = data;
+	const { meta, timeseries } = properties;
+	if (meta && timeseries) {
+		for (let i = 0; i < timeseries.length; i++) {
+			const { time, data: __data } = timeseries[i];
+			const _moment = moment(time);
+			const dayOfYear1 = _moment.dayOfYear();
+			const hour1 = _moment.hour();
+			const momentNow = moment();
+			const dayOfYearNow = momentNow.dayOfYear();
+			const hourNow = momentNow.hour();
+			if (dayOfYear1 === dayOfYearNow && hour1 === hourNow) {
+				if (__data.instant.details) {
+					Object.keys(__data.instant.details).forEach((key: string, index: number) => {
+						listData.push({
+							property: key,
+						});
+					});
+				}
+				break;
+			}
+		}
+	}
+	return listData;
+};
+
 module.exports = {
 	...thirdPartyUtils,
+	getMetWeatherDataAttributes,
 };
