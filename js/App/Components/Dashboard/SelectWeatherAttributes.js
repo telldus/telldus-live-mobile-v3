@@ -90,7 +90,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const onPress = useCallback((value: string) => {
+	const onPress = useCallback((value: number) => {
 		let _selectedIndexes = [];
 		const itemIndex = selectedIndexes.indexOf(value);
 		if (itemIndex !== -1) {
