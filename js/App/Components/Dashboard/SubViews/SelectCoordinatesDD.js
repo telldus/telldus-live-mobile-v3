@@ -43,14 +43,13 @@ import Theme from '../../../Theme';
 
 const SelectCoordinatesDD = (props: Object): Object => {
 	const {
-		toggleManualVisibility,
-		setLatLong,
+		setConfig,
+		MANUAL_ID,
+		MANUAL_VALUE,
 	} = props;
 
 	const intl = useIntl();
 
-	const MANUAL_ID = 'manual';
-	const MANUAL_VALUE = 'Manual';
 	const [ selected, setSelected ] = useState(MANUAL_ID);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
@@ -77,7 +76,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 			items: _items,
 			value: _value,
 		};
-	}, [byId, selected, weather]);
+	}, [MANUAL_ID, MANUAL_VALUE, byId, selected, weather]);
 
 	const {
 		dropDownContainerStyleDef,
@@ -91,15 +90,22 @@ const SelectCoordinatesDD = (props: Object): Object => {
 
 	const saveSortingDB = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
 		setSelected(data[itemIndex].key);
-		toggleManualVisibility(data[itemIndex].key === MANUAL_ID);
+		let _latitude = '', _longitude = '';
 		if (byId[data[itemIndex].key]) {
 			const {
 				latitude,
 				longitude,
 			} = byId[data[itemIndex].key];
-			setLatLong(latitude, longitude);
+			_latitude = latitude;
+			_longitude = longitude;
 		}
-	}, [byId, setLatLong, toggleManualVisibility]);
+		setConfig({
+			manual: data[itemIndex].key === MANUAL_ID,
+			latitude: _latitude,
+			longitude: _longitude,
+			id: data[itemIndex].key,
+		});
+	}, [MANUAL_ID, byId, setConfig]);
 
 	const labelSortingDB = 'Select coordinates';
 

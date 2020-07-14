@@ -58,12 +58,26 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	const {
 		onDidMount,
 		navigation,
+		route,
 	} = props;
 
-	const [ manual, setManual ] = useState(true);
+	const MANUAL_ID = 'manual';
+	const MANUAL_VALUE = 'Manual';
 
-	const [ latitude, setLatitude ] = useState('');
-	const [ longitude, setLongitude ] = useState('');
+	const { selectedType } = route.params || {};
+
+	const [ config, setConfig ] = useState({
+		manual: true,
+		latitude: '',
+		longitude: '',
+		id: MANUAL_ID,
+	});
+	const {
+		manual,
+		latitude,
+		longitude,
+		id,
+	} = config;
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -81,30 +95,34 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 
 	const onPressNext = useCallback((params: Object) => {
 		dispatch(preAddDb({}));
-		navigation.goBack();
+		navigation.navigate('SelectWeatherAttributes', {
+			selectedType,
+			id,
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const setLatLong = useCallback((lat: string, long: string) => {
-		setLatitude(lat);
-		setLongitude(long);
-	}, []);
+	}, [id, selectedType]);
 
 	const onChangeLatitude = useCallback((value: string) => {
-		setLatitude(value);
-	}, []);
+		setConfig({
+			...config,
+			latitude: value,
+		});
+	}, [config]);
 
 	const onChangeLongitude = useCallback((value: string) => {
-		setLongitude(value);
-	}, []);
+		setConfig({
+			...config,
+			longitude: value,
+		});
+	}, [config]);
 
-	const _toggleManualVisibility = useCallback((visibility: boolean) => {
-		if (visibility) {
-			setLatLong('', '');
-		}
-		setManual(visibility);
+	const _setConfig = useCallback((_config: Object) => {
+		setConfig({
+			...config,
+			..._config,
+		});
 		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
-	}, [setLatLong]);
+	}, [config]);
 
 	return (
 		<View style={{flex: 1}}>
@@ -115,8 +133,9 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 					level={3}
 					style={body}>
 					<SelectCoordinatesDD
-						toggleManualVisibility={_toggleManualVisibility}
-						setLatLong={setLatLong}/>
+						setConfig={_setConfig}
+						MANUAL_ID={MANUAL_ID}
+						MANUAL_VALUE={MANUAL_VALUE}/>
 					{manual &&
 						<>
 							<EditBox
