@@ -73,7 +73,8 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	}, [onDidMount]);
 
 	const listData = useMemo((): Array<Object> => {
-		return getMetWeatherDataAttributes(weather, id, selectedType);
+		const { attributesListData } = getMetWeatherDataAttributes(weather, id, selectedType, true);
+		return attributesListData;
 	}, [id, selectedType, weather]);
 
 	const {
