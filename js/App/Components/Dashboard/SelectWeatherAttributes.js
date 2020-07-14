@@ -91,10 +91,17 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	}, []);
 
 	const onPress = useCallback((value: string) => {
-		setSelectedIndexes([
-			...selectedIndexes,
-			value,
-		]);
+		let _selectedIndexes = [];
+		const itemIndex = selectedIndexes.indexOf(value);
+		if (itemIndex !== -1) {
+			_selectedIndexes = selectedIndexes.filter((el: number, index: number): boolean => index !== itemIndex);
+		} else {
+			_selectedIndexes = [
+				...selectedIndexes,
+				value,
+			];
+		}
+		setSelectedIndexes(_selectedIndexes);
 	}, [selectedIndexes]);
 
 	const properties = useMemo((): Array<Object> => {
