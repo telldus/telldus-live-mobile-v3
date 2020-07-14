@@ -25,6 +25,7 @@ import EditDbListSection from './EditDbListSection';
 import TypeBlock from './TypeBlock';
 import ListRow from './ListRow';
 import SelectCoordinatesDD from './SelectCoordinatesDD';
+import SelectForecastTimeDD from './SelectForecastTimeDD';
 
 module.exports = {
 	EditDbListRow,
@@ -32,4 +33,5 @@ module.exports = {
 	TypeBlock,
 	ListRow,
 	SelectCoordinatesDD,
+	SelectForecastTimeDD,
 };
