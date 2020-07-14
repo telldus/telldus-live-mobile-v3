@@ -52,6 +52,10 @@ import {
 	SelectCoordinatesDD,
 } from './SubViews';
 
+import {
+	useDialogueBox,
+} from '../../Hooks/Dialoguebox';
+
 import Theme from '../../Theme';
 
 const SetCoordinates = memo<Object>((props: Object): Object => {
@@ -60,6 +64,10 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		navigation,
 		route,
 	} = props;
+
+	const {
+		toggleDialogueBoxState,
+	} = useDialogueBox();
 
 	const MANUAL_ID = 'manual';
 	const MANUAL_VALUE = 'Manual';
@@ -94,25 +102,35 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 
 	const onPressNext = useCallback((params: Object) => {
+		if (!latitude || !longitude) {
+			toggleDialogueBoxState({
+				show: true,
+				showHeader: true,
+				imageHeader: true,
+				text: 'Latitude and Longitude cannot be empty. Please enter valid latitude and longitude.', // TODO: translate
+				showPositive: true,
+			});
+			return;
+		}
 		dispatch(preAddDb({}));
 		navigation.navigate('SelectWeatherAttributes', {
 			selectedType,
 			id,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, selectedType]);
+	}, [id, selectedType, latitude, longitude]);
 
 	const onChangeLatitude = useCallback((value: string) => {
 		setConfig({
 			...config,
-			latitude: value,
+			latitude: value.trim(),
 		});
 	}, [config]);
 
 	const onChangeLongitude = useCallback((value: string) => {
 		setConfig({
 			...config,
-			longitude: value,
+			longitude: value.trim(),
 		});
 	}, [config]);
 
