@@ -126,6 +126,8 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		});
 	}, [layout, listData, onPress, selectedIndexes]);
 
+	const sLength = selectedIndexes.length;
+
 	return (
 		<View style={{flex: 1}}>
 			<ThemedScrollView
@@ -137,9 +139,11 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 					{properties}
 				</View>
 			</ThemedScrollView>
-			<FloatingButton
-				onPress={onPressNext}
-				imageSource={{uri: 'right_arrow_key'}}/>
+			{sLength > 0 && (
+				<FloatingButton
+					onPress={onPressNext}
+					imageSource={{uri: 'right_arrow_key'}}/>
+			)}
 		</View>
 	);
 });
