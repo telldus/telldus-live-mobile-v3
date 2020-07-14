@@ -61,6 +61,9 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	const {
 		selectedType,
 		id,
+		latitude,
+		longitude,
+		time,
 	} = route.params || {};
 
 	const [ selectedIndexes, setSelectedIndexes ] = useState([0]);
@@ -85,10 +88,25 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 
 	const onPressNext = useCallback((params: Object) => {
-		dispatch(preAddDb({}));
+		const selectedAttributes = [];
+		listData.forEach((ld: Object, index: number) => {
+			if (selectedIndexes.indexOf(index) !== -1) {
+				selectedAttributes.push(ld);
+			}
+		});
+		dispatch(preAddDb({
+			[id]: {
+				id,
+				latitude,
+				longitude,
+				selectedType,
+				time,
+				selectedAttributes,
+			},
+		}));
 		navigation.popToTop();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [id, latitude, listData, longitude, selectedIndexes, selectedType, time]);
 
 	const onPress = useCallback((value: number) => {
 		let _selectedIndexes = [];

@@ -29,7 +29,6 @@ import React, {
 } from 'react';
 import {
 	useSelector,
-	useDispatch,
 } from 'react-redux';
 import { useIntl } from 'react-intl';
 
@@ -39,9 +38,6 @@ import {
 	FloatingButton,
 } from '../../../BaseComponents';
 
-import {
-	preAddDb,
-} from '../../Actions/Dashboard';
 import {
 	getMetWeatherDataAttributes,
 } from '../../Lib';
@@ -67,6 +63,8 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	const {
 		selectedType,
 		id,
+		latitude,
+		longitude,
 	} = route.params || {};
 
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
@@ -103,16 +101,16 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 		body,
 	} = getStyles({layout});
 
-	const dispatch = useDispatch();
-
 	const onPressNext = useCallback((params: Object) => {
-		dispatch(preAddDb({}));
 		navigation.navigate('SelectWeatherAttributes', {
 			selectedType,
 			id,
+			time: value,
+			latitude,
+			longitude,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [id, latitude, longitude, selectedType, value]);
 
 	const saveSortingDB = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
 		setSelectedIndex(itemIndex);
