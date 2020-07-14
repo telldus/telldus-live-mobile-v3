@@ -113,7 +113,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			return;
 		}
 		dispatch(preAddDb({}));
-		navigation.navigate('SelectWeatherAttributes', {
+		navigation.navigate('SelectWeatherForecastDay', {
 			selectedType,
 			id,
 		});
