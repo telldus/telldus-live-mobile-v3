@@ -50,6 +50,8 @@ import {
 } from '../../Actions/Dashboard';
 import {
 	prepareSensorsDevicesForAddToDbList,
+	DEVICE_KEY,
+	SENSOR_KEY,
 } from '../../Lib/dashboardUtils';
 import {
 	MET_ID,
@@ -94,9 +96,9 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 		typeLabel,
 	} = useMemo((): Object => {
 		switch (selectedType) {
-			case 'device':
+			case DEVICE_KEY:
 				return {
-					type: 'device',
+					type: DEVICE_KEY,
 					byId: dById,
 					typeLabel: 'device',
 				};
@@ -106,10 +108,10 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 					byId: weather,
 					typeLabel: 'weather',
 				};
-			case 'sensor':
+			case SENSOR_KEY:
 			default:
 				return {
-					type: 'sensor',
+					type: SENSOR_KEY,
 					byId: sById,
 					typeLabel: 'sensor',
 				};
@@ -150,7 +152,7 @@ const SelectItemsScreen = memo<Object>((props: Object): Object => {
 			[id]: alreadyAdded ? false : {},
 		}));
 
-		if (selectedType === 'sensor' && !alreadyAdded) {
+		if (selectedType === SENSOR_KEY && !alreadyAdded) {
 			const hasMultipleScales = Object.keys(data).length > 1;
 			if (hasMultipleScales) {
 				navigate('SelectScaleScreen', {

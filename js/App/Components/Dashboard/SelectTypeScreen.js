@@ -47,7 +47,9 @@ import {
 } from '../../Actions/Dashboard';
 import {
 	MET_ID,
-} from '../../Lib/thirdPartyUtils';
+	DEVICE_KEY,
+	SENSOR_KEY,
+} from '../../Lib';
 
 import Theme from '../../Theme';
 
@@ -59,7 +61,7 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		navigation,
 	} = props;
 
-	const [ selectedType, setSelectedType ] = useState('device');
+	const [ selectedType, setSelectedType ] = useState(DEVICE_KEY);
 
 	const {
 		formatMessage,
@@ -94,13 +96,13 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 	const blocks = useMemo((): Array<Object> => {
 		const items = [{
 			label: formatMessage(i18n.labelDevice),
-			typeId: 'device',
+			typeId: DEVICE_KEY,
 			onPress,
 		},
 		{
 			label: formatMessage(i18n.labelSensor),
 			onPress,
-			typeId: 'sensor',
+			typeId: SENSOR_KEY,
 		},
 		{
 			label: 'MET Weather', // TODO: translate
