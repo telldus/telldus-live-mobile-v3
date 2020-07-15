@@ -40,9 +40,11 @@ import {
 
 import {
 	preAddDb,
+	addToDashboardBatch,
 } from '../../Actions/Dashboard';
 import {
 	getMetWeatherDataAttributes,
+	getRandomNumberNotinArray,
 } from '../../Lib';
 
 import {
@@ -70,8 +72,15 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 
 	const [ selectedIndexes, setSelectedIndexes ] = useState([0]);
 
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const { userId } = useSelector((state: Object): Object => state.user);
 	const { weather } = useSelector((state: Object): Object => state.thirdParties);
+	const { metWeatherIds = {} } = useSelector((state: Object): Object => state.dashboard);
+
+	const { activeDashboardId } = defaultSettings;
+
+	const userDbsAndMetWeatherIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeatherIds[activeDashboardId] || [];
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Select Properties', 'Select one or more weather attributes');
@@ -96,9 +105,10 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 				selectedAttributes.push(ld);
 			}
 		});
-		dispatch(preAddDb({
-			[id]: {
-				id,
+		const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);
+		dispatch(addToDashboardBatch(selectedType, {
+			[uniqueId]: {
+				uniqueId,
 				latitude,
 				longitude,
 				selectedType,
@@ -110,7 +120,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		}));
 		navigation.popToTop();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, latitude, listData, longitude, selectedIndexes, selectedType, time]);
+	}, [data, latitude, listData, longitude, metWeatherIdsInCurrentDb, meta, selectedIndexes, selectedType, time]);
 
 	const onPress = useCallback((value: number) => {
 		let _selectedIndexes = [];
@@ -164,7 +174,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 			{sLength > 0 && (
 				<FloatingButton
 					onPress={onPressNext}
-					imageSource={{uri: 'right_arrow_key'}}/>
+					iconName={'checkmark'}/>
 			)}
 		</View>
 	);

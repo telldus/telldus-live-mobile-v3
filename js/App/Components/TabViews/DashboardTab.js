@@ -66,7 +66,12 @@ import {
 	DashboardRow,
 } from './SubViews';
 
-import { LayoutAnimations } from '../../Lib';
+import {
+	LayoutAnimations,
+	DEVICE_KEY,
+	SENSOR_KEY,
+	MET_ID,
+} from '../../Lib';
 
 type Props = {
 	rows: Array<Object>,
@@ -509,6 +514,7 @@ class DashboardTab extends View {
 				<Text
 					style={{
 						color: Theme.Core.eulaContentColor,
+						textAlign: 'center',
 					}}
 					key={id}>
 					{message}
@@ -550,15 +556,12 @@ class DashboardTab extends View {
 			borderRadius: 2,
 		};
 
-		let rowItem;
-		if (objectType !== 'sensor' && objectType !== 'device') {
+		let rowItem = <EmptyView/>;
+		if (objectType !== SENSOR_KEY && objectType !== DEVICE_KEY && objectType !== MET_ID) {
 			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
-		}
-		if (!data) {
+		} else if (!data) {
 			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
-		}
-
-		if (objectType === 'sensor') {
+		} else if (objectType === SENSOR_KEY) {
 			rowItem = <SensorDashboardTile
 				key={id}
 				item={data}
@@ -568,7 +571,7 @@ class DashboardTab extends View {
 				intl={screenProps.intl}
 				onPress={this.changeDisplayType}
 			/>;
-		} else {
+		} else if (objectType === DEVICE_KEY) {
 			rowItem = <DashboardRow
 				key={id}
 				item={data}
@@ -581,6 +584,8 @@ class DashboardTab extends View {
 				openRGBControl={this.openRGBControl}
 				openThermostatControl={this.openThermostatControl}
 			/>;
+		} else if (objectType === MET_ID) {
+			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
 		}
 
 		return (

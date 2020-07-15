@@ -25,8 +25,13 @@ import isEmpty from 'lodash/isEmpty';
 
 import { hasTokenExpired } from '../Lib/LocalControl';
 
-const keyDevice = 'device';
-const keySensor = 'sensor';
+import {
+	DEVICE_KEY,
+	SENSOR_KEY,
+} from '../Lib/dashboardUtils';
+import {
+	MET_ID,
+} from '../Lib/thirdPartyUtils';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
 
@@ -39,18 +44,16 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		sensorIds = {},
 		deviceIds = {},
 		dbExtras = {},
+		metWeatherById = {},
 	} = dashboard;
-
-	const userDbsAndSensorIds = sensorIds[userId] || {};
-	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
-
-	const userDbsAndDeviceIds = deviceIds[userId] || {};
-	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
 	const { byId = {} } = gateways;
 	if (isEmpty(byId)) {
 		return [];
 	}
+
+	const userDbsAndDeviceIds = deviceIds[userId] || {};
+	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
 
 	let deviceItems = [], _deviceItems = {};
 	if (devices && !isEmpty(devices.byId)) {
@@ -77,14 +80,14 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				}
 
 				deviceItems.push({
-					objectType: keyDevice,
+					objectType: DEVICE_KEY,
 					key: deviceId,
 					data,
 				});
 				_deviceItems = {
 					..._deviceItems,
-					[`${deviceId}${keyDevice}`]: {
-						objectType: keyDevice,
+					[`${deviceId}${DEVICE_KEY}`]: {
+						objectType: DEVICE_KEY,
 						key: deviceId,
 						data,
 					},
@@ -92,6 +95,9 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			}
 		});
 	}
+
+	const userDbsAndSensorIds = sensorIds[userId] || {};
+	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 
 	let sensorItems = [], _sensorItems = {};
 	if (sensors && !isEmpty(sensors.byId)) {
@@ -130,14 +136,14 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				}
 
 				sensorItems.push({
-					objectType: keySensor,
+					objectType: SENSOR_KEY,
 					key: sensorId,
 					data,
 				});
 				_sensorItems = {
 					..._sensorItems,
-					[`${sensorId}${keySensor}`]: {
-						objectType: keySensor,
+					[`${sensorId}${SENSOR_KEY}`]: {
+						objectType: SENSOR_KEY,
 						key: sensorId,
 						data,
 					},
@@ -145,8 +151,32 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			}
 		});
 	}
+
+	const userDbsAndMetWeatherById = metWeatherById[userId] || {};
+	const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
+
+	let metItems = [], _metItems = {};
+	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
+		const data = metWeatherByIdInCurrentDb[key] || {};
+		const { uniqueId } = data;
+		metItems.push({
+			objectType: MET_ID,
+			key: uniqueId,
+			data,
+		});
+		_metItems = {
+			..._metItems,
+			[`${uniqueId}${MET_ID}`]: {
+				objectType: MET_ID,
+				key: uniqueId,
+				data,
+			},
+		};
+	});
+
+
 	const { sortingDB } = defaultSettings;
-	let orderedList = [...deviceItems, ...sensorItems];
+	let orderedList = [...deviceItems, ...sensorItems, ...metItems];
 	if (sortingDB === 'Alphabetical') {
 		return orderBy(orderedList, [(item: Object): any => {
 			let { name } = item.data;
@@ -163,12 +193,15 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 
 	let _orderedList = [];
 	customOrder.forEach(({id}: Object, index: number) => {
-		const sItem = _sensorItems[`${id}${keySensor}`];
-		const dItem = _deviceItems[`${id}${keyDevice}`];
+		const sItem = _sensorItems[`${id}${SENSOR_KEY}`];
+		const dItem = _deviceItems[`${id}${DEVICE_KEY}`];
+		const metItem = _metItems[`${id}${MET_ID}`];
 		if (sItem) {
 			_orderedList.push(sItem);
 		} else if (dItem) {
 			_orderedList.push(dItem);
+		} else if (metItem) {
+			_orderedList.push(metItem);
 		}
 	});
 	return _orderedList;
