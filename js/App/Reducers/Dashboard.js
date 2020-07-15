@@ -31,6 +31,7 @@ import {
 } from '../Lib/dashboardUtils';
 import {
 	MET_ID,
+	getSupportedWeatherProviders,
 } from '../Lib/thirdPartyUtils';
 
 export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
@@ -156,20 +157,29 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
 
 	let metItems = [], _metItems = {};
+	const PROVIDERS = getSupportedWeatherProviders();
 	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
+		// TODO: get data from 'thirdParties' reducer so that will get
+		// latest updated information.
 		const data = metWeatherByIdInCurrentDb[key] || {};
-		const { uniqueId } = data;
+		const { id } = data;
 		metItems.push({
 			objectType: MET_ID,
-			key: uniqueId,
-			data,
+			key: id,
+			data: {
+				...data,
+				name: PROVIDERS[MET_ID].provider,
+			},
 		});
 		_metItems = {
 			..._metItems,
-			[`${uniqueId}${MET_ID}`]: {
+			[`${id}${MET_ID}`]: {
 				objectType: MET_ID,
-				key: uniqueId,
-				data,
+				key: id,
+				data: {
+					...data,
+					name: PROVIDERS[MET_ID].provider,
+				},
 			},
 		};
 	});

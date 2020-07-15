@@ -107,7 +107,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);
 		dispatch(addToDashboardBatch(selectedType, {
 			[uniqueId]: {
-				uniqueId,
+				id: uniqueId,
 				latitude,
 				longitude,
 				selectedType,

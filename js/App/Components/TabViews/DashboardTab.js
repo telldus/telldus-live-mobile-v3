@@ -65,6 +65,9 @@ import {
 	SensorDashboardTile,
 	DashboardRow,
 } from './SubViews';
+import {
+	MetWeatherDbTile,
+} from './SubViews/MET';
 
 import {
 	LayoutAnimations,
@@ -585,7 +588,12 @@ class DashboardTab extends View {
 				openThermostatControl={this.openThermostatControl}
 			/>;
 		} else if (objectType === MET_ID) {
-			rowItem = this.renderUnknown(id, tileStyle, intl.formatMessage(i18n.unknownItem));
+			rowItem = <MetWeatherDbTile
+				key={id}
+				item={data}
+				style={tileStyle}
+				tileWidth={tileWidth}
+				intl={screenProps.intl}/>;
 		}
 
 		return (
