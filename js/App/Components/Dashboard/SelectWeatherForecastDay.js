@@ -76,11 +76,11 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 		onDidMount('Select Day', 'Select any day');
 	}, [onDidMount]);
 
-	let {items, value} = useMemo((): Object => {
-		const { timeAndInfo: {listData} } = getMetWeatherDataAttributes(weather, id, selectedType, false);
+	let {items, value, meta} = useMemo((): Object => {
+		const { timeAndInfo: {listData, meta: _meta} } = getMetWeatherDataAttributes(weather, id, selectedType, false);
 		let _items = [], _value = listData[0].time;
 		listData.forEach((ti: Object, index: number) => {
-			const { time } = ti;
+			const { time, data } = ti;
 			const _time = `${formatDate(time)} ${formatTime(time)}`;
 			if (index === selectedIndex) {
 				_value = _time;
@@ -88,11 +88,13 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 			_items.push({
 				key: time,
 				value: _time,
+				data,
 			});
 		});
 		return {
 			items: _items,
 			value: _value,
+			meta: _meta,
 		};
 	}, [formatDate, formatTime, id, selectedIndex, selectedType, weather]);
 
@@ -102,15 +104,21 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	} = getStyles({layout});
 
 	const onPressNext = useCallback((params: Object) => {
+		const {
+			value: _value,
+			data,
+		} = items[selectedIndex];
 		navigation.navigate('SelectWeatherAttributes', {
 			selectedType,
 			id,
-			time: value,
+			time: _value,
 			latitude,
 			longitude,
+			meta,
+			data,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, latitude, longitude, selectedType, value]);
+	}, [items, selectedIndex, selectedType, id, latitude, longitude, meta]);
 
 	const saveSortingDB = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
 		setSelectedIndex(itemIndex);

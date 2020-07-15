@@ -64,6 +64,8 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		latitude,
 		longitude,
 		time,
+		meta,
+		data,
 	} = route.params || {};
 
 	const [ selectedIndexes, setSelectedIndexes ] = useState([0]);
@@ -102,6 +104,8 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 				selectedType,
 				time,
 				selectedAttributes,
+				meta,
+				data,
 			},
 		}));
 		navigation.popToTop();
