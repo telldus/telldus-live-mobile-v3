@@ -30,6 +30,7 @@ import React, {
 import {
 	useSelector,
 } from 'react-redux';
+import { useIntl } from 'react-intl';
 
 import {
 	View,
@@ -54,6 +55,11 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		route,
 	} = props;
 
+	const intl = useIntl();
+	const {
+		formatMessage,
+	} = intl;
+
 	const {
 		selectedType,
 		id,
@@ -74,9 +80,9 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	}, [onDidMount]);
 
 	const listData = useMemo((): Array<Object> => {
-		const { attributesListData } = getMetWeatherDataAttributes(weather, id, selectedType, true);
+		const { attributesListData } = getMetWeatherDataAttributes(weather, id, selectedType, true, {formatMessage});
 		return attributesListData;
-	}, [id, selectedType, weather]);
+	}, [formatMessage, id, selectedType, weather]);
 
 	const {
 		container,

@@ -21,10 +21,17 @@
 
 'use strict';
 
+import moment from 'moment';
+
 import { utils } from 'live-shared-data';
 const { thirdPartyUtils } = utils;
 
-const getMetWeatherDataAttributes = (weatherData: Object, gatewayId: string, providerId: string, onlyAttributes?: boolean = true): Object => {
+
+const NOW_KEY = '0';
+const TOMORROW_KEY = '1';
+const DAY_AFTER_TOMORROW_KEY = '2';
+
+const getMetWeatherDataAttributes = (weatherData: Object, gatewayId: string, providerId: string, onlyAttributes?: boolean = true, {formatMessage}: Object): Object => {
 	const weatherCurrentClient = weatherData[gatewayId];
 	const weatherCurrentClientProvider = weatherCurrentClient[providerId];
 
@@ -42,10 +49,49 @@ const getMetWeatherDataAttributes = (weatherData: Object, gatewayId: string, pro
 		if (!onlyAttributes) {
 			for (let i = 0; i < timeseries.length; i++) {
 				const { time, data: __data } = timeseries[i];
-				timeAndInfoListData.push({
-					time,
-					data: __data,
-				});
+
+				const _moment = moment(time);
+				const _hour = _moment.hour();
+				const _dayOfYear = _moment.dayOfYear();
+
+				const now = moment();
+				const hour = now.hour();
+				const dayOfYear = now.dayOfYear();
+
+				const tom = now.add('1', 'd');
+				const hourTom = tom.hour();
+				const dayOfYearTom = tom.dayOfYear();
+
+				const dFTom = tom.add('1', 'd');
+				const hourDFTom = dFTom.hour();
+				const dayOfYearDFTom = dFTom.dayOfYear();
+
+				const isNow = dayOfYear === _dayOfYear && hour === _hour;
+				const isTomorrow = dayOfYearTom === _dayOfYear && hourTom === _hour;
+				const isDFTomorrow = dayOfYearDFTom === _dayOfYear && hourDFTom === _hour;
+
+				if (isNow) {
+					timeAndInfoListData.push({
+						time,
+						timeLabel: 'Now', // TODO: Translate
+						key: NOW_KEY,
+						data: __data,
+					});
+				} else if (isTomorrow) {
+					timeAndInfoListData.push({
+						time,
+						timeLabel: 'Tomorrow', // TODO: Translate
+						key: TOMORROW_KEY,
+						data: __data,
+					});
+				} else if (isDFTomorrow) {
+					timeAndInfoListData.push({
+						time,
+						timeLabel: 'Day after tomorrow', // TODO: Translate
+						key: DAY_AFTER_TOMORROW_KEY,
+						data: __data,
+					});
+				}
 			}
 		}
 	}
@@ -61,4 +107,7 @@ const getMetWeatherDataAttributes = (weatherData: Object, gatewayId: string, pro
 module.exports = {
 	...thirdPartyUtils,
 	getMetWeatherDataAttributes,
+	NOW_KEY,
+	TOMORROW_KEY,
+	DAY_AFTER_TOMORROW_KEY,
 };

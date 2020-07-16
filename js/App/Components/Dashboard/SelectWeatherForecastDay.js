@@ -56,8 +56,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	} = props;
 
 	const {
-		formatDate,
-		formatTime,
+		formatMessage,
 	} = useIntl();
 
 	const {
@@ -77,17 +76,18 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	}, [onDidMount]);
 
 	let {items, value, meta} = useMemo((): Object => {
-		const { timeAndInfo: {listData, meta: _meta} } = getMetWeatherDataAttributes(weather, id, selectedType, false);
+		const { timeAndInfo: {listData, meta: _meta} } = getMetWeatherDataAttributes(weather, id, selectedType, false, {formatMessage});
 		let _items = [], _value = listData[0].time;
 		listData.forEach((ti: Object, index: number) => {
-			const { time, data } = ti;
-			const _time = `${formatDate(time)} ${formatTime(time)}`;
+			const { time, data, timeLabel } = ti;
+			const _time = timeLabel;
 			if (index === selectedIndex) {
 				_value = _time;
 			}
 			_items.push({
 				key: time,
 				value: _time,
+				time,
 				data,
 			});
 		});
@@ -96,7 +96,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 			value: _value,
 			meta: _meta,
 		};
-	}, [formatDate, formatTime, id, selectedIndex, selectedType, weather]);
+	}, [formatMessage, id, selectedIndex, selectedType, weather]);
 
 	const {
 		container,
@@ -107,11 +107,13 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 		const {
 			value: _value,
 			data,
+			key: timeKey,
 		} = items[selectedIndex];
 		navigation.navigate('SelectWeatherAttributes', {
 			selectedType,
 			id,
 			time: _value,
+			timeKey,
 			latitude,
 			longitude,
 			meta,
