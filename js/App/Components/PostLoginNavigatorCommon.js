@@ -68,6 +68,7 @@ import {
 	onReceivedInAppPurchaseProducts,
 	onReceivedInAppAvailablePurchases,
 	checkAndLinkAccountIfRequired,
+	updateAllMetWeatherDbTiles,
 } from '../Actions';
 import { getUserProfile as getUserProfileSelector } from '../Reducers/User';
 import { hideDimmerStep } from '../Actions/Dimmer';
@@ -350,6 +351,8 @@ actionsToPerformOnStart = async () => {
 	this.checkIfOpenThermostatControl();
 
 	dispatch(checkAndLinkAccountIfRequired());
+
+	dispatch(updateAllMetWeatherDbTiles());
 
 	const {
 		isDrawerOpen,
