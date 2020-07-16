@@ -31,9 +31,10 @@ import {
 } from '../Lib/dashboardUtils';
 import {
 	MET_ID,
+	getMetWeatherDataAttributes,
 } from '../Lib/thirdPartyUtils';
 
-export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}): Array<Object> {
+export function parseDashboardForListView(dashboard: Object = {}, devices: Object = {}, sensors: Object = {}, gateways: Object = {}, app: Object = {}, user: Object = {}, thirdParties: Object = {}): Array<Object> {
 
 	const { defaultSettings } = app;
 	const { activeDashboardId } = defaultSettings;
@@ -152,33 +153,47 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		});
 	}
 
+	const {
+		weather = {},
+	} = thirdParties;
+
 	const userDbsAndMetWeatherById = metWeatherById[userId] || {};
 	const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
 
 	let metItems = [], _metItems = {};
 	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
-		// TODO: get data from 'thirdParties' reducer so that will get
-		// latest updated information.
-		const _data = metWeatherByIdInCurrentDb[key] || {};
 		const {
 			id,
 			selectedAttributes = {},
 			meta = {},
-			data = {},
 			name,
-		} = _data;
-		if (data.instant && data.instant.details) {
+			timeKey,
+			selectedType,
+		} = metWeatherByIdInCurrentDb[key] || {};
+		const {
+			timeAndInfo: {
+				listData,
+			},
+		} = getMetWeatherDataAttributes(weather, id, selectedType, false, {formatMessage: () => {}});
+		let _data = {};
+		for (let i = 0; i < listData.length; i++) {
+			if (timeKey === listData[i].key) {
+				_data = listData[i].data;
+				break;
+			}
+		}
+		if (_data.instant && _data.instant.details) {
 			const attributes = Object.keys(selectedAttributes).map((selectedAttribute: Object): Object => {
 				const {
 					property,
 				} = selectedAttributes[selectedAttribute];
 				return {
 					property,
-					value: data.instant.details[property],
+					value: _data.instant.details[property],
 					unit: meta.units[property],
 				};
 			});
-			const __data = {
+			const data = {
 				id,
 				name,
 				data: attributes,
@@ -187,19 +202,18 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			metItems.push({
 				objectType: MET_ID,
 				key: id,
-				data: __data,
+				data,
 			});
 			_metItems = {
 				..._metItems,
 				[`${id}${MET_ID}`]: {
 					objectType: MET_ID,
 					key: id,
-					data: __data,
+					data,
 				},
 			};
 		}
 	});
-
 
 	const { sortingDB } = defaultSettings;
 	let orderedList = [...deviceItems, ...sensorItems, ...metItems];
