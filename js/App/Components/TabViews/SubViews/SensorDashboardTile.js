@@ -41,6 +41,7 @@ import {
 	getSensorInfo,
 	getWindDirection,
 	getSensorScalesOnDb,
+	SENSOR_KEY,
 } from '../../../Lib';
 import i18n from '../../../Translations/common';
 import Theme from '../../../Theme';
@@ -52,7 +53,7 @@ type Props = {
 	sensorTypesInCurrentDb: Object | null,
 
 	style: Object,
-	onPress: (number) => void,
+	onPress: (number, string) => void,
 	intl: Object,
 	isGatewayActive: boolean,
 };
@@ -194,7 +195,7 @@ class SensorDashboardTile extends View<Props, null> {
 
 	onPressTile = () => {
 		const { onPress, item } = this.props;
-		onPress(item.id);
+		onPress(item.id, SENSOR_KEY);
 	}
 
 	render(): Object {

@@ -24,7 +24,11 @@
 import type { ThunkAction } from './Types';
 import {
 	getSensorScalesOnDb,
+	SENSOR_KEY,
 } from '../Lib/dashboardUtils';
+import {
+	MET_ID,
+} from '../Lib/thirdPartyUtils';
 
 // Dashboard actions that are shared by both Web and Mobile.
 import { actions } from 'live-shared-data';
@@ -34,19 +38,26 @@ function getSupportedDisplayTypes(data: Object = {}): Array<string> {
 	return Object.keys(data);
 }
 
-const changeSensorDisplayTypeDB = (id?: number): ThunkAction => (dispatch: Function, getState: Function) => {
+const changeSensorDisplayTypeDB = (id?: number, kind?: string = SENSOR_KEY): ThunkAction => (dispatch: Function, getState: Function) => {
 	const { sensors, dashboard, sensorsList, app: {defaultSettings}, user: { userId } } = getState();
 
 	const { defaultSensorSettings } = sensorsList;
 
 	const { dbCarousel, activeDashboardId } = defaultSettings || {};
 
-	const { sensorIds = {}, sensorsById = {} } = dashboard;
+	const {
+		sensorIds = {},
+		sensorsById = {},
+		metWeatherById = {},
+	} = dashboard;
 	const userDbsAndSensorIds = sensorIds[userId] || {};
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 
 	const userDbsAndSensorsById = sensorsById[userId] || {};
 	const sensorsByIdInCurrentDb = userDbsAndSensorsById[activeDashboardId] || {};
+
+	const userDbsAndMetWeatherById = metWeatherById[userId] || {};
+	const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
 
 	if (dbCarousel) {
 		sensorIdsInCurrentDb.forEach((sensorId: number) => {
@@ -55,11 +66,22 @@ const changeSensorDisplayTypeDB = (id?: number): ThunkAction => (dispatch: Funct
 			const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
 			dispatch(prepareAndUpdate(sensorId, data, defaultSensorSettings));
 		});
+		Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
+			const metWeather = metWeatherByIdInCurrentDb[key];
+			const data = metWeather.selectedAttributes;
+			dispatch(prepareAndUpdate(parseInt(key, 10), data, defaultSensorSettings));
+		});
 	} else if (id) {
-		const sensor = sensors.byId[id];
-		const sensorInCurrentDb = sensorsByIdInCurrentDb[id];
-		const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
-		dispatch(prepareAndUpdate(id, data, defaultSensorSettings));
+		if (kind === MET_ID) {
+			const metWeather = metWeatherByIdInCurrentDb[id];
+			const data = metWeather.selectedAttributes;
+			dispatch(prepareAndUpdate(id, data, defaultSensorSettings));
+		} else {
+			const sensor = sensors.byId[id];
+			const sensorInCurrentDb = sensorsByIdInCurrentDb[id];
+			const data = getSensorScalesOnDb(sensorInCurrentDb) || sensor.data;
+			dispatch(prepareAndUpdate(id, data, defaultSensorSettings));
+		}
 	}
 };
 

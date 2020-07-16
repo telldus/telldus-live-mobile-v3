@@ -87,7 +87,7 @@ type Props = {
 	sortingDB: 'Manual' | 'Alphabetical',
 
 	navigation: Object,
-	changeSensorDisplayTypeDB: (id?: number) => void,
+	changeSensorDisplayTypeDB: (id?: number, kind?: string) => void,
 	dispatch: Function,
 	onTurnOn: (number) => void,
 	onTurnOff: (number) => void,
@@ -189,10 +189,10 @@ class DashboardTab extends View {
 		this.timer = null;
 	}
 
-	changeDisplayType(id: number) {
+	changeDisplayType(id: number, kind: string) {
 		this.stopSensorTimer();
 		LayoutAnimation.configureNext(LayoutAnimations.SensorChangeDisplay);
-		this.props.changeSensorDisplayTypeDB(id);
+		this.props.changeSensorDisplayTypeDB(id, kind);
 		this.startSensorTimer();
 	}
 
@@ -593,7 +593,8 @@ class DashboardTab extends View {
 				item={data}
 				style={tileStyle}
 				tileWidth={tileWidth}
-				intl={screenProps.intl}/>;
+				intl={screenProps.intl}
+				onPress={this.changeDisplayType}/>;
 		}
 
 		return (
@@ -714,8 +715,8 @@ function mapStateToProps(state: Object, props: Object): Object {
 
 function mapDispatchToProps(dispatch: Function): Object {
 	return {
-		changeSensorDisplayTypeDB: (id?: number) => {
-			dispatch(changeSensorDisplayTypeDB(id));
+		changeSensorDisplayTypeDB: (id?: number, kind?: string) => {
+			dispatch(changeSensorDisplayTypeDB(id, kind));
 		},
 		dispatch,
 	};
