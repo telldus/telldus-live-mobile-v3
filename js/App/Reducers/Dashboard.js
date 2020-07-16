@@ -161,27 +161,44 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 	Object.keys(metWeatherByIdInCurrentDb).forEach((key: string) => {
 		// TODO: get data from 'thirdParties' reducer so that will get
 		// latest updated information.
-		const data = metWeatherByIdInCurrentDb[key] || {};
-		const { id } = data;
-		metItems.push({
-			objectType: MET_ID,
-			key: id,
-			data: {
-				...data,
+		const _data = metWeatherByIdInCurrentDb[key] || {};
+		const {
+			id,
+			selectedAttributes = {},
+			meta = {},
+			data = {},
+		} = _data;
+		if (data.instant && data.instant.details) {
+			const attributes = Object.keys(selectedAttributes).map((selectedAttribute: Object): Object => {
+				const {
+					property,
+				} = selectedAttributes[selectedAttribute];
+				return {
+					property,
+					value: data.instant.details[property],
+					unit: meta.units[property],
+				};
+			});
+			const __data = {
+				id,
 				name: PROVIDERS[MET_ID].provider,
-			},
-		});
-		_metItems = {
-			..._metItems,
-			[`${id}${MET_ID}`]: {
+				data: attributes,
+				meta,
+			};
+			metItems.push({
 				objectType: MET_ID,
 				key: id,
-				data: {
-					...data,
-					name: PROVIDERS[MET_ID].provider,
+				data: __data,
+			});
+			_metItems = {
+				..._metItems,
+				[`${id}${MET_ID}`]: {
+					objectType: MET_ID,
+					key: id,
+					data: __data,
 				},
-			},
-		};
+			};
+		}
 	});
 
 

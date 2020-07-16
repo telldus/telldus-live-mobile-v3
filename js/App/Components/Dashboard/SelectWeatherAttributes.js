@@ -98,10 +98,10 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 
 	const onPressNext = useCallback((params: Object) => {
-		const selectedAttributes = [];
+		const selectedAttributes = {};
 		listData.forEach((ld: Object, index: number) => {
 			if (selectedIndexes.indexOf(index) !== -1) {
-				selectedAttributes.push(ld);
+				selectedAttributes[ld.property] = ld;
 			}
 		});
 		const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);

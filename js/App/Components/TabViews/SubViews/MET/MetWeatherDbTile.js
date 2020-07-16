@@ -23,14 +23,19 @@
 
 import React, {
 	useMemo,
+	useCallback,
 } from 'react';
 import moment from 'moment';
 
-import {
-	View,
-} from '../../../../../BaseComponents';
 import DashboardShadowTile from '../DashboardShadowTile';
 import LastUpdatedInfo from '../Sensor/LastUpdatedInfo';
+import TypeBlockDB from '../Sensor/TypeBlockDB';
+import GenericSensor from '../Sensor/GenericSensor';
+
+import {
+	checkIfLarge,
+	MET_ID,
+} from '../../../../Lib';
 
 import Theme from '../../../../Theme';
 
@@ -38,7 +43,8 @@ type Props = {
     item: Object,
     tileWidth: number,
     intl: Object,
-    style?: Object,
+	style?: Object,
+	onPress: Function,
 };
 
 const MetWeatherDbTile = (props: Props): Object => {
@@ -47,11 +53,29 @@ const MetWeatherDbTile = (props: Props): Object => {
 		tileWidth,
 		intl,
 		style,
+		onPress,
 	} = props;
-
 	const {
 		meta,
+		data,
+		name,
+		id,
 	} = item;
+
+	const {
+		iconStyle,
+		valueUnitCoverStyle,
+		valueStyle,
+		unitStyle,
+		labelStyle,
+		sensorValueCoverStyle,
+		sensorValueCover,
+		dotCoverStyle,
+		dotStyle,
+	} = getStyles({
+		item,
+		tileWidth,
+	});
 
 	const lastUpdated = moment(meta.updated_at).unix();
 	const minutesAgo = Math.round(((Date.now() / 1000) - lastUpdated) / 60);
@@ -75,11 +99,51 @@ const MetWeatherDbTile = (props: Props): Object => {
 		);
 	}, [lastUpdated, minutesAgo, tileWidth]);
 
+	const {slideList} = useMemo((): Object => {
+		let _slideList = {};
+
+		data.forEach((d: Object) => {
+			const {
+				property,
+				value,
+				unit,
+			} = d;
+
+			const isLarge = checkIfLarge(value.toString());
+
+			let sharedProps = {
+				key: property,
+				unit,
+				label: property,
+				icon: 'sensor',
+				isLarge,
+				name: property,
+				value,
+				iconStyle,
+				valueUnitCoverStyle,
+				valueStyle,
+				unitStyle,
+				labelStyle,
+				sensorValueCoverStyle,
+				formatOptions: {},
+			};
+			_slideList[property] = <GenericSensor {...sharedProps}/>;
+		});
+
+		return {slideList: _slideList};
+	}, [data, iconStyle, labelStyle, sensorValueCoverStyle, unitStyle, valueStyle, valueUnitCoverStyle]);
+
+	const onPressTile = useCallback(() => {
+		onPress(id, MET_ID);
+	}, [id, onPress]);
+
+	let background = Object.keys(slideList).length === 0 ? Theme.Core.brandPrimary : 'transparent';
+
 	return (
 		<DashboardShadowTile
 			item={item}
 			isEnabled={true}
-			name={item.name}
+			name={name}
 			info={info}
 			icon={'sensor'}
 			iconStyle={{
@@ -107,9 +171,83 @@ const MetWeatherDbTile = (props: Props): Object => {
 					height: tileWidth,
 				},
 			]}>
-			<View/>
+			<TypeBlockDB
+				sensors={slideList}
+				onPress={onPressTile}
+				id={item.id}
+				lastUpdated={lastUpdated}
+				tileWidth={tileWidth}
+				style={{
+					flexDirection: 'row',
+					borderBottomLeftRadius: 2,
+					borderBottomRightRadius: 2,
+					justifyContent: 'flex-start',
+					alignItems: 'center',
+					width: tileWidth,
+					height: tileWidth * 0.4,
+					backgroundColor: background,
+				}}
+				valueCoverStyle={sensorValueCover}
+				dotCoverStyle={dotCoverStyle}
+				dotStyle={dotStyle}/>
 		</DashboardShadowTile>
 	);
+};
+
+const getStyles = ({
+	tileWidth,
+	item,
+}: Object): Object => {
+	const { data = []} = item;
+
+	const backgroundColor = Theme.Core.brandPrimary;
+
+	const dotSize = tileWidth * 0.045;
+
+	return {
+		iconStyle: {
+			fontSize: tileWidth * 0.28,
+		},
+		valueUnitCoverStyle: {
+			height: tileWidth * 0.16,
+		},
+		valueStyle: {
+			fontSize: tileWidth * 0.14,
+			height: tileWidth * 0.175,
+		},
+		unitStyle: {
+			fontSize: tileWidth * 0.09,
+		},
+		labelStyle: {
+			fontSize: tileWidth * 0.09,
+			height: tileWidth * 0.12,
+			textAlignVertical: 'center',
+		},
+		sensorValueCoverStyle: {
+			marginBottom: data.length <= 1 ? 0 : tileWidth * 0.1,
+		},
+		sensorValueCover: {
+			height: '100%',
+			width: tileWidth,
+			backgroundColor: backgroundColor,
+			alignItems: 'flex-start',
+			justifyContent: 'center',
+		},
+		dotCoverStyle: {
+			position: 'absolute',
+			width: '100%',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			bottom: 3,
+		},
+		dotStyle: {
+			width: dotSize,
+			height: dotSize,
+			borderRadius: dotSize / 2,
+			marginLeft: 2 + (dotSize * 0.2),
+		},
+	};
 };
 
 export default MetWeatherDbTile;
