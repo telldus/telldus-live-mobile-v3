@@ -105,7 +105,7 @@ const MetWeatherDbTile = (props: Props): Object => {
 		data.forEach((d: Object) => {
 			const {
 				property,
-				value,
+				value = '',
 				unit,
 			} = d;
 
