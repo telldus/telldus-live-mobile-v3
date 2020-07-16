@@ -25,6 +25,51 @@
 import { actions } from 'live-shared-data';
 const { ThirdParties } = actions;
 
+const {
+	getWeatherInfo,
+} = ThirdParties;
+
+import type { ThunkAction } from './Types';
+
+import {
+	getSupportedWeatherProviders,
+	MET_ID,
+} from '../Lib/thirdPartyUtils';
+
+const updateAllMetWeatherDbTiles = (): ThunkAction => {
+	return (dispatch: Function, getState: Function): any => {
+		const {
+			app,
+			user,
+			dashboard,
+		} = getState();
+		const { defaultSettings = {} } = app;
+		const { userId } = user;
+		const { metWeatherById } = dashboard;
+
+		const { activeDashboardId } = defaultSettings;
+
+		const userDbsAndMetWeatherById = metWeatherById[userId] || {};
+		const metWeatherByIdInCurrentDb = userDbsAndMetWeatherById[activeDashboardId] || {};
+
+		const { url } = getSupportedWeatherProviders()[MET_ID];
+		Object.keys(metWeatherByIdInCurrentDb).map((metDbId: string) => {
+			const {
+				latitude,
+				longitude,
+			} = metWeatherByIdInCurrentDb[metDbId];
+			dispatch(getWeatherInfo(url, {
+				lon: latitude,
+				lat: longitude,
+			}, {
+				id: metDbId,
+				providerId: MET_ID,
+			}));
+		});
+	};
+};
+
 module.exports = {
 	...ThirdParties,
+	updateAllMetWeatherDbTiles,
 };
