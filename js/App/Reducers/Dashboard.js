@@ -165,14 +165,16 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 		const {
 			id,
 			selectedAttributes = {},
-			meta = {},
 			name,
 			timeKey,
 			selectedType,
+			latitude,
+			longitude,
 		} = metWeatherByIdInCurrentDb[key] || {};
 		const {
 			timeAndInfo: {
 				listData,
+				meta: _meta,
 			},
 		} = getMetWeatherDataAttributes(weather, id, selectedType, false, {formatMessage: () => {}});
 		let _data = {};
@@ -190,14 +192,16 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 				return {
 					property,
 					value: _data.instant.details[property],
-					unit: meta.units[property],
+					unit: _meta.units[property],
 				};
 			});
 			const data = {
 				id,
 				name,
 				data: attributes,
-				meta,
+				meta: _meta,
+				latitude,
+				longitude,
 			};
 			metItems.push({
 				objectType: MET_ID,
