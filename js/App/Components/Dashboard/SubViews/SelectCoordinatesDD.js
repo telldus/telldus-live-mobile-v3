@@ -54,22 +54,19 @@ const SelectCoordinatesDD = (props: Object): Object => {
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 	const { byId = {} } = useSelector((state: Object): Object => state.gateways);
-	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
 	let {items, value} = useMemo((): Object => {
 		let _value = selected === MANUAL_ID ? MANUAL_VALUE : '';
 		let _items = [];
-		Object.keys(weather).forEach((id: string): Object => {
+		Object.keys(byId).forEach((id: string): Object => {
 			const _item = byId[id];
-			if (_item) {
-				if (id === selected) {
-					_value = _item.name;
-				}
-				_items.push({
-					key: id,
-					value: _item.name,
-				});
+			if (id === selected) {
+				_value = _item.name;
 			}
+			_items.push({
+				key: id,
+				value: _item.name,
+			});
 		});
 		_items.unshift({
 			key: MANUAL_ID,
@@ -79,7 +76,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 			items: _items,
 			value: _value,
 		};
-	}, [MANUAL_ID, MANUAL_VALUE, byId, selected, weather]);
+	}, [MANUAL_ID, MANUAL_VALUE, byId, selected]);
 
 	const {
 		dropDownContainerStyleDef,

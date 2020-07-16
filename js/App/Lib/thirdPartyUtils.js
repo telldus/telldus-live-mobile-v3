@@ -31,8 +31,8 @@ const NOW_KEY = '0';
 const TOMORROW_KEY = '1';
 const DAY_AFTER_TOMORROW_KEY = '2';
 
-const getMetWeatherDataAttributes = (weatherData: Object, gatewayId: string, providerId: string, onlyAttributes?: boolean = true, {formatMessage}: Object): Object => {
-	const weatherCurrentClient = weatherData[gatewayId];
+const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId: string, onlyAttributes?: boolean = true, {formatMessage}: Object): Object => {
+	const weatherCurrentClient = weatherData[id];
 	const weatherCurrentClientProvider = weatherCurrentClient[providerId];
 
 	let attributesListData = [], timeAndInfoListData = [];

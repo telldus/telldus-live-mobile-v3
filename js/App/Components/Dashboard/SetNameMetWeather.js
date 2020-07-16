@@ -41,9 +41,6 @@ import {
 import {
 	addToDashboardBatch,
 } from '../../Actions/Dashboard';
-import {
-	getRandomNumberNotinArray,
-} from '../../Lib';
 
 import {
 	useDialogueBox,
@@ -63,18 +60,17 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 	} = useDialogueBox();
 
 	const {
+		uniqueId,
 		selectedType,
 		latitude,
 		longitude,
 		time,
+		timeKey,
 		meta,
-		data,
 		selectedAttributes,
 	} = route.params || {};
 
-	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { userId } = useSelector((state: Object): Object => state.user);
-	const { metWeatherIds = {} } = useSelector((state: Object): Object => state.dashboard);
+	const { layout } = useSelector((state: Object): Object => state.app);
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Set Name', 'Select a name for the dashboard tile');
@@ -87,11 +83,6 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 
 
 	const [ name, setName ] = useState('');
-
-	const { activeDashboardId } = defaultSettings;
-
-	const userDbsAndMetWeatherIds = metWeatherIds[userId] || {};
-	const metWeatherIdsInCurrentDb = userDbsAndMetWeatherIds[activeDashboardId] || [];
 
 	const dispatch = useDispatch();
 
@@ -110,7 +101,6 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 			showDialogue('Tile name cannot be empty. Please enter valid name for the dashboard tile.');
 			return;
 		}
-		const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);
 		dispatch(addToDashboardBatch(selectedType, {
 			[uniqueId]: {
 				id: uniqueId,
@@ -118,15 +108,15 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 				longitude,
 				selectedType,
 				time,
+				timeKey,
 				selectedAttributes,
 				meta,
-				data,
 				name,
 			},
 		}));
 		navigation.popToTop();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, metWeatherIdsInCurrentDb, selectedType, latitude, longitude, time, selectedAttributes, meta, data, showDialogue]);
+	}, [name, selectedType, uniqueId, latitude, longitude, time, timeKey, selectedAttributes, meta, showDialogue]);
 
 	const _onChangeText = useCallback((value: string) => {
 		setName(value);

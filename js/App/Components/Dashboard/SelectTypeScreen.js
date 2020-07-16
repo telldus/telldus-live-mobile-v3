@@ -49,6 +49,7 @@ import {
 	MET_ID,
 	DEVICE_KEY,
 	SENSOR_KEY,
+	getRandomNumberNotinArray,
 } from '../../Lib';
 
 import Theme from '../../Theme';
@@ -67,7 +68,9 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 		formatMessage,
 	} = useIntl();
 
-	const { layout } = useSelector((state: Object): Object => state.app);
+	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
+	const { userId } = useSelector((state: Object): Object => state.user);
+	const { metWeatherIds = {} } = useSelector((state: Object): Object => state.dashboard);
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Select Type', 'Select either device or sensor');
@@ -79,10 +82,20 @@ const SelectTypeScreen = memo<Object>((props: Object): Object => {
 
 	const dispatch = useDispatch();
 
+	const { activeDashboardId } = defaultSettings;
+
+	const userDbsAndMetWeatherIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeatherIds[activeDashboardId] || [];
+
+
 	const onPressNext = useCallback((params: Object) => {
 		dispatch(preAddDb({}));
 		if (selectedType === MET_ID) {
-			navigation.navigate('SetCoordinates', {selectedType});
+			const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);
+			navigation.navigate('SetCoordinates', {
+				selectedType,
+				uniqueId,
+			});
 		} else {
 			navigation.navigate('SelectItemsScreen', {selectedType});
 		}

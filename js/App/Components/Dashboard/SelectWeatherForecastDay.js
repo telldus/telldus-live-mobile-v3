@@ -64,6 +64,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 		id,
 		latitude,
 		longitude,
+		uniqueId,
 	} = route.params || {};
 
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
@@ -76,10 +77,10 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	}, [onDidMount]);
 
 	let {items, value, meta} = useMemo((): Object => {
-		const { timeAndInfo: {listData, meta: _meta} } = getMetWeatherDataAttributes(weather, id, selectedType, false, {formatMessage});
+		const { timeAndInfo: {listData, meta: _meta} } = getMetWeatherDataAttributes(weather, uniqueId, selectedType, false, {formatMessage});
 		let _items = [], _value = listData[0].time;
 		listData.forEach((ti: Object, index: number) => {
-			const { time, data, timeLabel } = ti;
+			const { time, timeLabel, key } = ti;
 			const _time = timeLabel;
 			if (index === selectedIndex) {
 				_value = _time;
@@ -88,7 +89,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 				key: time,
 				value: _time,
 				time,
-				data,
+				timeKey: key,
 			});
 		});
 		return {
@@ -96,7 +97,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 			value: _value,
 			meta: _meta,
 		};
-	}, [formatMessage, id, selectedIndex, selectedType, weather]);
+	}, [formatMessage, selectedIndex, selectedType, uniqueId, weather]);
 
 	const {
 		container,
@@ -106,18 +107,17 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	const onPressNext = useCallback((params: Object) => {
 		const {
 			value: _value,
-			data,
-			key: timeKey,
+			timeKey,
 		} = items[selectedIndex];
 		navigation.navigate('SelectWeatherAttributes', {
 			selectedType,
+			uniqueId,
 			id,
 			time: _value,
 			timeKey,
 			latitude,
 			longitude,
 			meta,
-			data,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [items, selectedIndex, selectedType, id, latitude, longitude, meta]);

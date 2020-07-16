@@ -62,12 +62,12 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 
 	const {
 		selectedType,
-		id,
 		latitude,
 		longitude,
 		time,
 		meta,
-		data,
+		timeKey,
+		uniqueId,
 	} = route.params || {};
 
 	const [ selectedIndexes, setSelectedIndexes ] = useState([0]);
@@ -80,9 +80,9 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	}, [onDidMount]);
 
 	const listData = useMemo((): Array<Object> => {
-		const { attributesListData } = getMetWeatherDataAttributes(weather, id, selectedType, true, {formatMessage});
+		const { attributesListData } = getMetWeatherDataAttributes(weather, uniqueId, selectedType, true, {formatMessage});
 		return attributesListData;
-	}, [formatMessage, id, selectedType, weather]);
+	}, [formatMessage, selectedType, uniqueId, weather]);
 
 	const {
 		container,
@@ -97,16 +97,17 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 			}
 		});
 		navigation.navigate('SetNameMetWeather', {
+			uniqueId,
 			latitude,
 			longitude,
 			selectedType,
 			time,
 			selectedAttributes,
 			meta,
-			data,
+			timeKey,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, latitude, listData, longitude, meta, selectedIndexes, selectedType, time]);
+	}, [latitude, listData, longitude, meta, selectedIndexes, selectedType, time]);
 
 	const onPress = useCallback((value: number) => {
 		let _selectedIndexes = [];

@@ -73,7 +73,10 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	const MANUAL_ID = 'manual';
 	const MANUAL_VALUE = 'Manual';
 
-	const { selectedType } = route.params || {};
+	const {
+		selectedType,
+		uniqueId,
+	} = route.params || {};
 
 	const [ isLoading, setIsLoading ] = useState(false);
 	const [ config, setConfig ] = useState({
@@ -131,13 +134,14 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			lon: longitude,
 			lat: latitude,
 		}, {
-			id: selectedType,
-			clientId: id, // TODO: Handle manual id
+			providerId: selectedType,
+			id: uniqueId,
 		})).then((res: Object) => {
 			setIsLoading(false);
 			if (res && res.data) {
 				navigation.navigate('SelectWeatherForecastDay', {
 					selectedType,
+					uniqueId,
 					id,
 					latitude,
 					longitude,
