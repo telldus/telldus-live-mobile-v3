@@ -87,6 +87,7 @@ import SelectScaleScreen from './Dashboard/SelectScaleScreen';
 import SetCoordinates from './Dashboard/SetCoordinates';
 import SelectWeatherAttributes from './Dashboard/SelectWeatherAttributes';
 import SelectWeatherForecastDay from './Dashboard/SelectWeatherForecastDay';
+import SetNameMetWeather from './Dashboard/SetNameMetWeather';
 
 import {
 	RegisterScreen,
@@ -469,6 +470,15 @@ const ScreenConfigs = [
 	{
 		name: 'SelectWeatherForecastDay',
 		Component: SelectWeatherForecastDay,
+		ContainerComponent: DashboardActionsContainer,
+		options: {
+			headerShown: false,
+			cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+		},
+	},
+	{
+		name: 'SetNameMetWeather',
+		Component: SetNameMetWeather,
 		ContainerComponent: DashboardActionsContainer,
 		options: {
 			headerShown: false,
