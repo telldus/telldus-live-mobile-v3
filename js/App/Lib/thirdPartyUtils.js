@@ -33,11 +33,10 @@ const DAY_AFTER_TOMORROW_KEY = '2';
 
 const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId: string, onlyAttributes?: boolean = true, {formatMessage}: Object): Object => {
 	const weatherCurrentClient = weatherData[id];
-	const weatherCurrentClientProvider = weatherCurrentClient[providerId];
 
 	let attributesListData = [], timeAndInfoListData = [];
 
-	const { data = {} } = weatherCurrentClientProvider;
+	const { data = {} } = weatherCurrentClient;
 	const { properties = {} } = data;
 	const { meta, timeseries } = properties;
 	if (meta && timeseries) {
