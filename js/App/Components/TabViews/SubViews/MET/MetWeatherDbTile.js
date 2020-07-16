@@ -26,6 +26,9 @@ import React, {
 	useCallback,
 } from 'react';
 import moment from 'moment';
+import {
+	useDispatch,
+} from 'react-redux';
 
 import DashboardShadowTile from '../DashboardShadowTile';
 import LastUpdatedInfo from '../Sensor/LastUpdatedInfo';
@@ -36,6 +39,9 @@ import {
 	checkIfLarge,
 	MET_ID,
 } from '../../../../Lib';
+import {
+	updateAllMetWeatherDbTiles,
+} from '../../../../Actions/ThirdParties';
 
 import Theme from '../../../../Theme';
 
@@ -61,6 +67,8 @@ const MetWeatherDbTile = (props: Props): Object => {
 		name,
 		id,
 	} = item;
+
+	const dispatch = useDispatch();
 
 	const {
 		iconStyle,
@@ -134,7 +142,9 @@ const MetWeatherDbTile = (props: Props): Object => {
 	}, [data, iconStyle, labelStyle, sensorValueCoverStyle, unitStyle, valueStyle, valueUnitCoverStyle]);
 
 	const onPressTile = useCallback(() => {
+		dispatch(updateAllMetWeatherDbTiles());
 		onPress(id, MET_ID);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, onPress]);
 
 	let background = Object.keys(slideList).length === 0 ? Theme.Core.brandPrimary : 'transparent';
