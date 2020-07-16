@@ -689,7 +689,7 @@ const getRows = createSelector(
 );
 
 function mapStateToProps(state: Object, props: Object): Object {
-	const { deviceIds = [], sensorIds = []} = state.dashboard;
+	const { deviceIds = {}, sensorIds = {}, metWeatherIds = {}} = state.dashboard;
 	const { defaultSettings } = state.app;
 	const { dbCarousel = true, activeDashboardId, sortingDB } = defaultSettings || {};
 
@@ -699,12 +699,14 @@ function mapStateToProps(state: Object, props: Object): Object {
 	const sensorIdsInCurrentDb = userDbsAndSensorIds[activeDashboardId] || [];
 	const userDbsAndDeviceIds = deviceIds[userId] || {};
 	const deviceIdsInCurrentDb = userDbsAndDeviceIds[activeDashboardId] || [];
+	const userDbsAndMetWeathersIds = metWeatherIds[userId] || {};
+	const metWeatherIdsInCurrentDb = userDbsAndMetWeathersIds[activeDashboardId] || [];
 
 	const { screen: currentScreen } = state.navigation;
 
 	return {
 		rows: getRows(state),
-		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0),
+		isDBEmpty: (deviceIdsInCurrentDb.length === 0) && (sensorIdsInCurrentDb.length === 0) && (metWeatherIdsInCurrentDb.length === 0),
 		dbCarousel,
 		gateways: state.gateways.allIds,
 		gatewaysDidFetch: state.gateways.didFetch,
