@@ -29,7 +29,6 @@ import React, {
 } from 'react';
 import {
 	useSelector,
-	useDispatch,
 } from 'react-redux';
 
 import {
@@ -39,11 +38,7 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	addToDashboardBatch,
-} from '../../Actions/Dashboard';
-import {
 	getMetWeatherDataAttributes,
-	getRandomNumberNotinArray,
 } from '../../Lib';
 
 import {
@@ -71,15 +66,8 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 
 	const [ selectedIndexes, setSelectedIndexes ] = useState([0]);
 
-	const { layout, defaultSettings = {} } = useSelector((state: Object): Object => state.app);
-	const { userId } = useSelector((state: Object): Object => state.user);
+	const { layout } = useSelector((state: Object): Object => state.app);
 	const { weather } = useSelector((state: Object): Object => state.thirdParties);
-	const { metWeatherIds = {} } = useSelector((state: Object): Object => state.dashboard);
-
-	const { activeDashboardId } = defaultSettings;
-
-	const userDbsAndMetWeatherIds = metWeatherIds[userId] || {};
-	const metWeatherIdsInCurrentDb = userDbsAndMetWeatherIds[activeDashboardId] || [];
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Select Properties', 'Select one or more weather attributes');
@@ -95,8 +83,6 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		body,
 	} = getStyles({layout});
 
-	const dispatch = useDispatch();
-
 	const onPressNext = useCallback((params: Object) => {
 		const selectedAttributes = {};
 		listData.forEach((ld: Object, index: number) => {
@@ -104,22 +90,17 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 				selectedAttributes[ld.property] = ld;
 			}
 		});
-		const uniqueId = getRandomNumberNotinArray(metWeatherIdsInCurrentDb);
-		dispatch(addToDashboardBatch(selectedType, {
-			[uniqueId]: {
-				id: uniqueId,
-				latitude,
-				longitude,
-				selectedType,
-				time,
-				selectedAttributes,
-				meta,
-				data,
-			},
-		}));
-		navigation.popToTop();
+		navigation.navigate('SetNameMetWeather', {
+			latitude,
+			longitude,
+			selectedType,
+			time,
+			selectedAttributes,
+			meta,
+			data,
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data, latitude, listData, longitude, metWeatherIdsInCurrentDb, meta, selectedIndexes, selectedType, time]);
+	}, [data, latitude, listData, longitude, meta, selectedIndexes, selectedType, time]);
 
 	const onPress = useCallback((value: number) => {
 		let _selectedIndexes = [];
@@ -173,7 +154,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 			{sLength > 0 && (
 				<FloatingButton
 					onPress={onPressNext}
-					iconName={'checkmark'}/>
+					imageSource={{uri: 'right_arrow_key'}}/>
 			)}
 		</View>
 	);
