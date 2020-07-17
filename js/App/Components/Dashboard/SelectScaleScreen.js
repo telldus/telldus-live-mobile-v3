@@ -151,11 +151,27 @@ const SelectScaleScreen = memo<Object>((props: Object): Object => {
 		});
 	}, [layout, onPress, scalesInfoList, selectedScales]);
 
+	const onPressToggleAll = useCallback(() => {
+		if (hasSelected) {
+			setSelectedScales({});
+		} else {
+			setSelectedScales(initialSelectedScales);
+		}
+	}, [initialSelectedScales, hasSelected]);
+
 	return (
 		<View style={{flex: 1}}>
 			<ThemedScrollView
 				contentContainerStyle={contentContainerStyle}
 				level={3}>
+				<ListRow
+					key={'-1'}
+					layout={layout}
+					onPress={onPressToggleAll}
+					label={hasSelected ? 'Deselect all' : 'Select all'}
+					rowData={-1}
+					rightIcon={hasSelected ? 'favorite-outline' : 'favorite'}
+				/>
 				{blocks}
 			</ThemedScrollView>
 			{hasSelected && <FloatingButton

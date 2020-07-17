@@ -152,6 +152,15 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 
 	const sLength = selectedIndexes.length;
 
+	const onPressToggleAll = useCallback(() => {
+		if (sLength === 0) {
+			const indexes = listData.map((j: Object, i: number): number => i);
+			setSelectedIndexes(indexes);
+		} else {
+			setSelectedIndexes([]);
+		}
+	}, [listData, sLength]);
+
 	return (
 		<View style={{flex: 1}}>
 			<ThemedScrollView
@@ -160,6 +169,14 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 				<View
 					level={3}
 					style={body}>
+					<ListRow
+						key={'-1'}
+						layout={layout}
+						onPress={onPressToggleAll}
+						label={sLength === 0 ? 'Select all' : 'Deselect all'}
+						rowData={-1}
+						rightIcon={sLength === 0 ? 'favorite' : 'favorite-outline'}
+					/>
 					{properties}
 				</View>
 			</ThemedScrollView>
