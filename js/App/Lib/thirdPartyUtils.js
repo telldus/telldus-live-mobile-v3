@@ -26,10 +26,11 @@ import moment from 'moment';
 import { utils } from 'live-shared-data';
 const { thirdPartyUtils } = utils;
 
-
-const NOW_KEY = '0';
-const TOMORROW_KEY = '1';
-const DAY_AFTER_TOMORROW_KEY = '2';
+const {
+	NOW_KEY,
+	TOMORROW_KEY,
+	DAY_AFTER_TOMORROW_KEY,
+} = thirdPartyUtils;
 
 const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId: string, onlyAttributes?: boolean = true, {formatMessage}: Object): Object => {
 	const weatherCurrentClient = weatherData[id];
@@ -106,7 +107,4 @@ const getMetWeatherDataAttributes = (weatherData: Object, id: string, providerId
 module.exports = {
 	...thirdPartyUtils,
 	getMetWeatherDataAttributes,
-	NOW_KEY,
-	TOMORROW_KEY,
-	DAY_AFTER_TOMORROW_KEY,
 };
