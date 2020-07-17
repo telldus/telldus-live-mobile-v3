@@ -39,7 +39,7 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	getMetWeatherDataAttributes,
+	getSupportedWeatherProviders,
 } from '../../Lib';
 
 import {
@@ -65,7 +65,6 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 		latitude,
 		longitude,
 		time,
-		meta,
 		timeKey,
 		uniqueId,
 	} = route.params || {};
@@ -73,16 +72,22 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	const [ selectedIndexes, setSelectedIndexes ] = useState([0]);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Select Properties', 'Select one or more weather attributes');
 	}, [onDidMount]);
 
 	const listData = useMemo((): Array<Object> => {
-		const { attributesListData } = getMetWeatherDataAttributes(weather, uniqueId, selectedType, true, {formatMessage});
-		return attributesListData;
-	}, [formatMessage, selectedType, uniqueId, weather]);
+		const {
+			supportedScales,
+		} = getSupportedWeatherProviders(formatMessage)[selectedType];
+		return Object.keys(supportedScales).map((key: string): Object => {
+			return {
+				property: key,
+				label: supportedScales[key].label,
+			};
+		});
+	}, [formatMessage, selectedType]);
 
 	const {
 		container,
@@ -103,11 +108,11 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 			selectedType,
 			time,
 			selectedAttributes,
-			meta,
 			timeKey,
 		});
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [latitude, listData, longitude, meta, selectedIndexes, selectedType, time]);
+	}, [latitude, listData, longitude, selectedIndexes, selectedType, time, timeKey, uniqueId]);
 
 	const onPress = useCallback((value: number) => {
 		let _selectedIndexes = [];
@@ -126,7 +131,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 	const properties = useMemo((): Array<Object> => {
 		return listData.map((item: Object, index: number): Object => {
 			const {
-				property,
+				label,
 			} = item;
 
 			const selected = selectedIndexes.indexOf(index) !== -1;
@@ -136,7 +141,7 @@ const SelectWeatherAttributes = memo<Object>((props: Object): Object => {
 					key={`${index}`}
 					layout={layout}
 					onPress={onPress}
-					label={property}
+					label={label}
 					rowData={index}
 					leftIcon={'sensor'}
 					rightIcon={selected ? 'favorite' : 'favorite-outline'}

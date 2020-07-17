@@ -41,7 +41,12 @@ import {
 import {
 	addToDashboardBatch,
 } from '../../Actions/Dashboard';
-
+import {
+	getWeatherInfo,
+} from '../../Actions/ThirdParties';
+import {
+	getSupportedWeatherProviders,
+} from '../../Lib/thirdPartyUtils';
 import {
 	useDialogueBox,
 } from '../../Hooks/Dialoguebox';
@@ -66,7 +71,6 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 		longitude,
 		time,
 		timeKey,
-		meta,
 		selectedAttributes,
 	} = route.params || {};
 
@@ -81,7 +85,7 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 		body,
 	} = getStyles({layout});
 
-
+	const [ isLoading, setIsLoading ] = useState(false);
 	const [ name, setName ] = useState('');
 
 	const dispatch = useDispatch();
@@ -101,22 +105,46 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 			showDialogue('Tile name cannot be empty. Please enter valid name for the dashboard tile.');
 			return;
 		}
-		dispatch(addToDashboardBatch(selectedType, {
-			[uniqueId]: {
-				id: uniqueId,
-				latitude,
-				longitude,
-				selectedType,
-				time,
-				timeKey,
-				selectedAttributes,
-				meta,
-				name,
-			},
-		}));
-		navigation.popToTop();
+		const {
+			id: pId,
+			url,
+		} = getSupportedWeatherProviders()[selectedType];
+		if (!url || !pId) { // TODO: translate
+			showDialogue('Data provider URL not found. Please try again later.');
+			return;
+		}
+		setIsLoading(true);
+		dispatch(getWeatherInfo(url, {
+			lon: longitude,
+			lat: latitude,
+		}, {
+			providerId: selectedType,
+			id: uniqueId,
+		})).then((res: Object) => {
+			setIsLoading(false);
+			if (res && res.data) {
+				dispatch(addToDashboardBatch(selectedType, {
+					[uniqueId]: {
+						id: uniqueId,
+						latitude,
+						longitude,
+						selectedType,
+						time,
+						timeKey,
+						selectedAttributes,
+						name,
+					},
+				}));
+				navigation.popToTop();
+			} else { // TODO: translate
+				showDialogue('Could not fetch weather data at the moment. Please try again later.');
+			}
+		}).catch(() => {
+			setIsLoading(false); // TODO: translate
+			showDialogue('Could not fetch weather data at the moment. Please try again later.');
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [name, selectedType, uniqueId, latitude, longitude, time, timeKey, selectedAttributes, meta, showDialogue]);
+	}, [name, selectedType, longitude, latitude, uniqueId, showDialogue, time, timeKey, selectedAttributes]);
 
 	const _onChangeText = useCallback((value: string) => {
 		setName(value);
@@ -141,7 +169,8 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				iconName={'checkmark'}/>
+				showThrobber={isLoading}
+				iconName={isLoading ? undefined : 'checkmark'}/>
 		</View>
 	);
 });

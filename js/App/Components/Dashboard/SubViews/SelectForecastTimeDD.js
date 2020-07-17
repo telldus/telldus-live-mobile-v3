@@ -41,7 +41,7 @@ const SelectForecastTimeDD = (props: Object): Object => {
 	const {
 		items,
 		value,
-		saveSortingDB,
+		onValueChange,
 	} = props;
 
 	const intl = useIntl();
@@ -74,7 +74,7 @@ const SelectForecastTimeDD = (props: Object): Object => {
 				value={value}
 				itemCount={6}
 				dropDownPosition={'bottom'}
-				onValueChange={saveSortingDB}
+				onValueChange={onValueChange}
 				appLayout={layout}
 				intl={intl}
 				dropDownContainerStyle={dropDownContainerStyleDef}

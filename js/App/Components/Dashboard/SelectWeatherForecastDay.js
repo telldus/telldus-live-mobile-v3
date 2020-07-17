@@ -39,8 +39,8 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	getMetWeatherDataAttributes,
-} from '../../Lib';
+	getSupportedWeatherProviders,
+} from '../../Lib/thirdPartyUtils';
 
 import {
 	SelectForecastTimeDD,
@@ -70,34 +70,22 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	const [ selectedIndex, setSelectedIndex ] = useState(0);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
-	const { weather } = useSelector((state: Object): Object => state.thirdParties);
 
 	useEffect(() => {// TODO: translate
 		onDidMount('Select Day', 'Select any day');
 	}, [onDidMount]);
 
-	let {items, value, meta} = useMemo((): Object => {
-		const { timeAndInfo: {listData, meta: _meta} } = getMetWeatherDataAttributes(weather, uniqueId, selectedType, false, {formatMessage});
-		let _items = [], _value = listData[0].time;
-		listData.forEach((ti: Object, index: number) => {
-			const { time, timeLabel, key } = ti;
-			const _time = timeLabel;
-			if (index === selectedIndex) {
-				_value = _time;
-			}
-			_items.push({
-				key: time,
-				value: _time,
-				time,
-				timeKey: key,
-			});
+	let items = useMemo((): Object => {
+		const {
+			supportedDays,
+		} = getSupportedWeatherProviders(formatMessage)[selectedType];
+		return Object.keys(supportedDays).map((key: string): Object => {
+			return {
+				key,
+				value: supportedDays[key].label,
+			};
 		});
-		return {
-			items: _items,
-			value: _value,
-			meta: _meta,
-		};
-	}, [formatMessage, selectedIndex, selectedType, uniqueId, weather]);
+	}, [formatMessage, selectedType]);
 
 	const {
 		container,
@@ -107,7 +95,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 	const onPressNext = useCallback((params: Object) => {
 		const {
 			value: _value,
-			timeKey,
+			key: timeKey,
 		} = items[selectedIndex];
 		navigation.navigate('SelectWeatherAttributes', {
 			selectedType,
@@ -117,14 +105,15 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 			timeKey,
 			latitude,
 			longitude,
-			meta,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [items, selectedIndex, selectedType, id, latitude, longitude, meta]);
+	}, [items, selectedIndex, selectedType, uniqueId, id, latitude, longitude]);
 
-	const saveSortingDB = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
+	const _onValueChange = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
 		setSelectedIndex(itemIndex);
 	}, []);
+
+	const value = items[selectedIndex].value;
 
 	return (
 		<View style={{flex: 1}}>
@@ -137,7 +126,7 @@ const SelectWeatherForecastDay = memo<Object>((props: Object): Object => {
 					<SelectForecastTimeDD
 						items={items}
 						value={value}
-						saveSortingDB={saveSortingDB}/>
+						onValueChange={_onValueChange}/>
 				</View>
 			</ThemedScrollView>
 			<FloatingButton

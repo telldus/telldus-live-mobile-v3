@@ -28,7 +28,6 @@ import React, {
 } from 'react';
 import {
 	useSelector,
-	useDispatch,
 } from 'react-redux';
 import {
 	LayoutAnimation,
@@ -42,11 +41,7 @@ import {
 } from '../../../BaseComponents';
 
 import {
-	getWeatherInfo,
-} from '../../Actions/ThirdParties';
-import {
 	LayoutAnimations,
-	getSupportedWeatherProviders,
 } from '../../Lib';
 
 import {
@@ -78,7 +73,6 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		uniqueId,
 	} = route.params || {};
 
-	const [ isLoading, setIsLoading ] = useState(false);
 	const [ config, setConfig ] = useState({
 		manual: true,
 		latitude: '',
@@ -104,8 +98,6 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		longitudeEditContainerStyle,
 	} = getStyles({layout});
 
-	const dispatch = useDispatch();
-
 	const showDialogue = useCallback((message: string) => {
 		toggleDialogueBoxState({
 			show: true,
@@ -117,44 +109,30 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	}, [toggleDialogueBoxState]);
 
 	const onPressNext = useCallback((params: Object) => {
-		if (!latitude || !longitude) { // TODO: translate
-			showDialogue('Latitude and Longitude cannot be empty. Please enter valid latitude and longitude.');
+		const invalidMessage = 'Invalid Latitude and Longitud. Please enter valid latitude and longitude.'; // TODO: translate
+		if (!latitude || !longitude) {
+			showDialogue(invalidMessage);
 			return;
 		}
-		const {
-			id: pId,
-			url,
-		} = getSupportedWeatherProviders()[selectedType];
-		if (!url || !pId) { // TODO: translate
-			showDialogue('Data provider URL not found. Please try again later.');
+
+		const _latitude = parseInt(latitude, 10);
+		const _longitude = parseInt(longitude, 10);
+		const check1 = _latitude < -90 || _latitude > 90;
+		const check2 = _longitude < -180 || _longitude > 180;
+		if (check1 || check2) {
+			showDialogue(invalidMessage);
 			return;
 		}
-		setIsLoading(true);
-		dispatch(getWeatherInfo(url, {
-			lon: longitude,
-			lat: latitude,
-		}, {
-			providerId: selectedType,
-			id: uniqueId,
-		})).then((res: Object) => {
-			setIsLoading(false);
-			if (res && res.data) {
-				navigation.navigate('SelectWeatherForecastDay', {
-					selectedType,
-					uniqueId,
-					id,
-					latitude,
-					longitude,
-				});
-			} else { // TODO: translate
-				showDialogue('Could not fetch weather data at the moment. Please try again later.');
-			}
-		}).catch(() => {
-			setIsLoading(false); // TODO: translate
-			showDialogue('Could not fetch weather data at the moment. Please try again later.');
+
+		navigation.navigate('SelectWeatherForecastDay', {
+			selectedType,
+			uniqueId,
+			id,
+			latitude,
+			longitude,
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [latitude, longitude, selectedType, id, showDialogue]);
+	}, [latitude, longitude, selectedType, uniqueId, id, showDialogue]);
 
 	const onChangeLatitude = useCallback((value: string) => {
 		setConfig({
@@ -213,8 +191,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={onPressNext}
-				imageSource={isLoading ? undefined : {uri: 'right_arrow_key'}}
-				showThrobber={isLoading}/>
+				imageSource={{uri: 'right_arrow_key'}}/>
 		</View>
 	);
 });
