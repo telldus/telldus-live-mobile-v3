@@ -23,6 +23,7 @@
 
 import React, {
 	useMemo,
+	memo,
 	useCallback,
 } from 'react';
 import moment from 'moment';
@@ -53,7 +54,7 @@ type Props = {
 	onPress: Function,
 };
 
-const MetWeatherDbTile = (props: Props): Object => {
+const MetWeatherDbTile = memo<Object>((props: Props): Object => {
 	const {
 		item,
 		tileWidth,
@@ -113,19 +114,20 @@ const MetWeatherDbTile = (props: Props): Object => {
 		data.forEach((d: Object) => {
 			const {
 				property,
-				value = '',
+				value,
 				unit,
+				label,
 			} = d;
 
-			const isLarge = checkIfLarge(value.toString());
+			const isLarge = (value !== null && typeof value !== 'undefined') ? checkIfLarge(value.toString()) : true;
 
 			let sharedProps = {
 				key: property,
 				unit,
-				label: property,
+				label,
 				icon: 'sensor',
 				isLarge,
-				name: property,
+				name: label,
 				value,
 				iconStyle,
 				valueUnitCoverStyle,
@@ -202,7 +204,7 @@ const MetWeatherDbTile = (props: Props): Object => {
 				dotStyle={dotStyle}/>
 		</DashboardShadowTile>
 	);
-};
+});
 
 const getStyles = ({
 	tileWidth,

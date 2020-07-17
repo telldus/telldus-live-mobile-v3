@@ -188,9 +188,11 @@ export function parseDashboardForListView(dashboard: Object = {}, devices: Objec
 			const attributes = Object.keys(selectedAttributes).map((selectedAttribute: Object): Object => {
 				const {
 					property,
+					label,
 				} = selectedAttributes[selectedAttribute];
 				return {
 					property,
+					label,
 					value: _data.instant.details[property],
 					unit: _meta.units[property],
 				};
