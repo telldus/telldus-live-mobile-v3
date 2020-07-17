@@ -69,12 +69,15 @@ const GenericSensor = ({
 						</Text>
 						:
 						<View style={{flex: 0, flexDirection: 'row', alignItems: 'center'}}>
-							<FormattedNumber
+							{typeof value !== 'undefined' ? <FormattedNumber
 								value={value}
 								{...formatOptions}
 								suffix={unit}
 								style={[sensorValueText, valueStyle]}
 								suffixStyle={[sensorValueLabelText, unitStyle]}/>
+								:
+								<Text style={[sensorValueText, valueStyle]}/>
+							}
 						</View>
 				}
 				<Text style={[{color: '#ffffff'}, labelStyle]}>
