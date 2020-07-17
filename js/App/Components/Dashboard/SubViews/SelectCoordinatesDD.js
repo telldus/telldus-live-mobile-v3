@@ -88,7 +88,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 		pickerBaseTextStyle,
 	} = getStyles(layout);
 
-	const saveSortingDB = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
+	const _onValueChange = useCallback((_value: string, itemIndex: number, data: Array<any>) => {
 		setSelected(data[itemIndex].key);
 		let _latitude = '', _longitude = '';
 		if (byId[data[itemIndex].key]) {
@@ -122,7 +122,7 @@ const SelectCoordinatesDD = (props: Object): Object => {
 				items={items}
 				value={value}
 				dropDownPosition={'bottom'}
-				onValueChange={saveSortingDB}
+				onValueChange={_onValueChange}
 				appLayout={layout}
 				intl={intl}
 				dropDownContainerStyle={dropDownContainerStyleDef}
