@@ -28,21 +28,27 @@ import React, {
 } from 'react';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import {
 	LayoutAnimation,
+	StyleSheet,
+	RefreshControl,
 } from 'react-native';
+import MapView from 'react-native-maps';
 
 import {
 	View,
 	ThemedScrollView,
 	FloatingButton,
-	EditBox,
 } from '../../../BaseComponents';
 
 import {
 	LayoutAnimations,
 } from '../../Lib';
+import {
+	getCurrentLocation,
+} from '../../Actions/GeoFence';
 
 import {
 	SelectCoordinatesDD,
@@ -65,6 +71,8 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		toggleDialogueBoxState,
 	} = useDialogueBox();
 
+	const { location: _location = {} } = useSelector((state: Object): Object => state.fences);
+	let location: {longitude: number, latitude: number} = _location || {};
 	const MANUAL_ID = 'manual';
 	const MANUAL_VALUE = 'Manual';
 
@@ -74,17 +82,45 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	} = route.params || {};
 
 	const [ config, setConfig ] = useState({
+		...location,
+		isRefreshing: !location || (!location.longitude && !location.latitude),
 		manual: true,
-		latitude: '',
-		longitude: '',
 		id: MANUAL_ID,
 	});
 	const {
+		isRefreshing,
 		manual,
 		latitude,
 		longitude,
 		id,
 	} = config;
+
+	const deltaDef = 0.05;
+
+	const dispatch = useDispatch();
+	useEffect(() => {
+		dispatch(getCurrentLocation()).then((res: Object) => {
+			const {
+				coords = {},
+			} = res;
+			const {
+				latitude: lat,
+				longitude: lon,
+			} = coords;
+			setConfig({
+				...config,
+				longitude: lon,
+				latitude: lat,
+				isRefreshing: false,
+			});
+		}).catch(() => {
+			setConfig({
+				...config,
+				isRefreshing: false,
+			});
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const { layout } = useSelector((state: Object): Object => state.app);
 
@@ -95,7 +131,7 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 	const {
 		container,
 		body,
-		longitudeEditContainerStyle,
+		mapStyle,
 	} = getStyles({layout});
 
 	const showDialogue = useCallback((message: string) => {
@@ -134,59 +170,75 @@ const SetCoordinates = memo<Object>((props: Object): Object => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [latitude, longitude, selectedType, uniqueId, id, showDialogue]);
 
-	const onChangeLatitude = useCallback((value: string) => {
-		setConfig({
-			...config,
-			latitude: value.trim(),
-		});
-	}, [config]);
-
-	const onChangeLongitude = useCallback((value: string) => {
-		setConfig({
-			...config,
-			longitude: value.trim(),
-		});
-	}, [config]);
-
 	const _setConfig = useCallback((_config: Object) => {
+		if (_config.latitude && _config.longitude) {
+			setConfig({
+				...config,
+				..._config,
+				isRefreshing: false,
+			});
+		} else {
+			setConfig({
+				...config,
+				..._config,
+				...location,
+				isRefreshing: false,
+			});
+		}
+		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
+	}, [config, location]);
+
+	const onRegionChangeComplete = useCallback((reg: Object) => {
 		setConfig({
 			...config,
-			..._config,
+			...reg,
 		});
-		LayoutAnimation.configureNext(LayoutAnimations.linearU(300));
 	}, [config]);
+
+	const hasCoords = !!longitude && !!latitude;
+	const region = hasCoords ? new MapView.AnimatedRegion({
+		longitude,
+		latitude,
+		longitudeDelta: deltaDef,
+		latitudeDelta: deltaDef,
+	}) : {};
 
 	return (
 		<View style={{flex: 1}}>
 			<ThemedScrollView
 				level={3}
-				style={container}>
-				<View
-					level={3}
-					style={body}>
+				style={container}
+				contentContainerStyle={{flexGrow: 1}}
+				refreshControl={
+					<RefreshControl
+						enabled={false}
+						refreshing={isRefreshing}
+					/>
+				}>
+				<View style={body}>
 					<SelectCoordinatesDD
 						setConfig={_setConfig}
 						MANUAL_ID={MANUAL_ID}
 						MANUAL_VALUE={MANUAL_VALUE}/>
-					{manual &&
-						<>
-							<EditBox
-								value={latitude}
-								autoFocus={false}
-								icon={'sensor'}
-								label={'Latitude'}
-								onChangeText={onChangeLatitude}
-								appLayout={layout}/>
-							<EditBox
-								value={longitude}
-								autoFocus={false}
-								icon={'sensor'}
-								label={'Longitude'}
-								onChangeText={onChangeLongitude}
-								appLayout={layout}
-								containerStyle={longitudeEditContainerStyle}/>
-						</>
-					}
+					<View style={{
+						flex: 1,
+					}}>
+						{hasCoords && <MapView.Animated
+							style={mapStyle}
+							loadingEnabled={true}
+							showsTraffic={false}
+							showsUserLocation={true}
+							region={region}
+							onRegionChangeComplete={onRegionChangeComplete}
+							showsMyLocationButton={false}
+							followsUserLocation={false}
+							scrollEnabled={manual && !isRefreshing}>
+							<MapView.Marker.Animated
+								image={{uri: 'marker'}}
+								coordinate={region}/>
+						</MapView.Animated>
+						}
+					</View>
 				</View>
 			</ThemedScrollView>
 			<FloatingButton
@@ -218,8 +270,8 @@ const getStyles = ({layout}: Object): Object => {
 			paddingBottom: padding,
 			paddingTop: padding * 1.5,
 		},
-		longitudeEditContainerStyle: {
-			marginTop: padding * 0.5,
+		mapStyle: {
+			...StyleSheet.absoluteFillObject,
 		},
 	};
 };
