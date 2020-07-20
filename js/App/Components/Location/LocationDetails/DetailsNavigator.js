@@ -27,6 +27,7 @@ import { createMaterialTopTabNavigator, MaterialTopTabBar } from '@react-navigat
 
 import ZWaveSettings from './ZWaveSettings';
 import Details from './Details';
+import AdministrationTab from './AdministrationTab';
 import Theme from '../../../Theme';
 import {
 	View,
@@ -52,6 +53,19 @@ const ScreenConfigs = [
 					tintColor={color}
 					label={i18n.overviewHeader}
 					accessibilityLabel={i18n.locationOverviewTab}/>
+			),
+		},
+	},
+	{
+		name: 'AdministrationTab',
+		Component: AdministrationTab,
+		options: {
+			tabBarLabel: ({ color }: Object): Object => (
+				<TabBar
+					icon="home"
+					tintColor={color}
+					label={'Administration'} // TODO: Translate
+					accessibilityLabel={'AdministrationTab'}/>
 			),
 		},
 	},
@@ -94,11 +108,10 @@ const NavigatorConfigs = {
 			const isPortrait = height > width;
 			const deviceWidth = isPortrait ? width : height;
 
-			tabWidth = supportZWave ? width / 2 : width;
+			tabWidth = supportZWave ? width / 3 : width / 2;
 			fontSize = deviceWidth * 0.03;
 			paddingVertical = 10 + (fontSize * 0.5);
 		}
-		tabHeight = supportZWave ? undefined : 0;
 		return (
 			<View style={{flex: 0}}>
 				<LocationDetailsHeaderPoster {...rest}/>
