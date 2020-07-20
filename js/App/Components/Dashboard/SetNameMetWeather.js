@@ -36,6 +36,7 @@ import {
 	ThemedScrollView,
 	FloatingButton,
 	EditBox,
+	TouchableButton,
 } from '../../../BaseComponents';
 
 import {
@@ -150,6 +151,11 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 		setName(value);
 	}, []);
 
+	const goBack = useCallback(() => {
+		navigation.popToTop();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<View style={{flex: 1}}>
 			<ThemedScrollView
@@ -166,6 +172,10 @@ const SetNameMetWeather = memo<Object>((props: Object): Object => {
 						onChangeText={_onChangeText}
 						appLayout={layout}/>
 				</View>
+				<TouchableButton
+					text={'EXIT'}
+					buttonLevel={isLoading ? 7 : 10}
+					onPress={goBack}/>
 			</ThemedScrollView>
 			<FloatingButton
 				onPress={onPressNext}
