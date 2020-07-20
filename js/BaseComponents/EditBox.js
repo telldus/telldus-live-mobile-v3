@@ -52,6 +52,7 @@ type Props = {
 	autoFocus?: boolean,
 	setRef: (any) => void,
 	keyboardType?: string,
+	autoCapitalize?: string,
 };
 
 type DefaultProps = {
@@ -125,6 +126,7 @@ render(): Object {
 		iconStyle,
 		labelStyle,
 		keyboardType,
+		autoCapitalize = 'sentences',
 	} = this.props;
 	const styles = this.getStyle(appLayout);
 
@@ -142,7 +144,7 @@ render(): Object {
 					style={[styles.textField, textStyle]}
 					onChangeText={this.onChangeText}
 					onSubmitEditing={this.onSubmitEditing}
-					autoCapitalize="sentences"
+					autoCapitalize={autoCapitalize}
 					autoCorrect={false}
 					autoFocus={autoFocus}
 					baseColor={Theme.Core.brandSecondary}
