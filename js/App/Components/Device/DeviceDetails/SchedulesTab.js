@@ -65,6 +65,7 @@ import Theme from '../../../Theme';
 type Props = {
 	ScreenName: string,
 	route: Object,
+	navigation: Object,
 };
 
 const SchedulesTab = memo<Object>((props: Props): Object => {
