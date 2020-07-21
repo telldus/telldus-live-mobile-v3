@@ -33,6 +33,7 @@ import {
 } from 'react-native';
 import {
 	useSelector,
+	useDispatch,
 } from 'react-redux';
 import {
 	useIntl,
@@ -43,6 +44,7 @@ import {
 	View,
 	Text,
 	Icon,
+	FloatingButton,
 } from '../../../../BaseComponents';
 import {
 	JobRow,
@@ -52,6 +54,12 @@ import { parseJobsForListView } from '../../../Reducers/Jobs';
 import {
 	getSectionHeaderFontSize,
 } from '../../../Lib';
+import {
+	getJobs,
+} from '../../../Actions/Jobs';
+import {
+	selectDevice,
+} from '../../../Actions/Schedule';
 import Theme from '../../../Theme';
 
 type Props = {
@@ -64,8 +72,11 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 	const {
 		route,
 		ScreenName,
+		navigation,
 	} = props;
 	const { id } = route.params || {};
+
+	const dispatch = useDispatch();
 
 	const intl = useIntl();
 	const {
@@ -108,6 +119,11 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 		};
 	}, [_jobs, devices, gateways, userOptions]);
 
+	const device = devices.byId[id] || {};
+	const {
+		supportedMethods = {},
+	} = device;
+
 	const [
 		isRefreshing,
 		setIsRefreshing,
@@ -121,6 +137,7 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 		textWhenNoData,
 		sectionCoverStyle,
 		sectionTextStyle,
+		padding,
 	} = getStyles({layout});
 
 
@@ -138,7 +155,8 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 				currentScreen={screen}
 				ScreenName={ScreenName}
 				appLayout={layout}
-				intl={intl}/>
+				intl={intl}
+				showName={false}/>
 		);
 	}, [ScreenName, _editJob, intl, layout, screen]);
 
@@ -169,6 +187,12 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 
 	const _onRefresh = useCallback(() => {
 		setIsRefreshing(true);
+		dispatch(getJobs()).then(() => {
+			setIsRefreshing(false);
+		}).catch(() => {
+			setIsRefreshing(false);
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const _keyExtractor = useCallback((data: Object = {}, index: number): string => {
@@ -176,6 +200,20 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 	}, []);
 
 	const isEmpty = sectionIds.length === 0;
+
+	const _onPress = useCallback(() => {
+		dispatch(selectDevice(id));
+		navigation.navigate('Schedule', {
+			editMode: false,
+			origin: 'DeviceDetails_SchedulesTab',
+			screen: supportedMethods.THERMOSTAT ? 'ActionThermostat' : 'Action',
+			params: {
+				editMode: false,
+				origin: 'DeviceDetails_SchedulesTab',
+			},
+		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [supportedMethods, id]);
 
 	// TODO: Translate
 	return (
@@ -201,6 +239,9 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 						onRefresh={_onRefresh}
 						keyExtractor={_keyExtractor}
 						refreshing={isRefreshing}
+						contentContainerStyle={{
+							paddingBottom: padding * 6,
+						}}
 						// To re-render the list to update row style on different weekdays(today screen will have different row design
 						// if there is any expired schedule)
 						extraData={{
@@ -209,6 +250,9 @@ const SchedulesTab = memo<Object>((props: Props): Object => {
 					/>
 				</View>
 			}
+			<FloatingButton
+				onPress={_onPress}
+				imageSource={{uri: 'icon_plus'}}/>
 		</View>
 	);
 });
@@ -236,6 +280,7 @@ const getStyles = ({
 	let nameFontSize = getSectionHeaderFontSize(deviceWidth);
 
 	return {
+		padding,
 		container: {
 			flex: 1,
 		},
