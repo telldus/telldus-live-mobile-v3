@@ -78,12 +78,17 @@ type Props = PropsThemedComponent & {
 	deviceSupportedMethods: Object,
 	gatewayTimezone: string,
 	ScreenName: string,
+	showName?: boolean,
 
 	intl: intlShape,
 	editJob: (schedule: Schedule) => void,
 };
 
 class JobRow extends View<null, Props, null> {
+
+	static defaultProps = {
+		showName: true,
+	};
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
 		const { appLayout, intl, editJob, weekdays, currentScreen, ScreenName, ...others } = this.props;// eslint-disable-line
@@ -171,6 +176,7 @@ class JobRow extends View<null, Props, null> {
 			expired,
 			currentScreen,
 			ScreenName,
+			showName,
 		} = this.props;
 
 		const {
@@ -235,9 +241,10 @@ class JobRow extends View<null, Props, null> {
 							level={2}
 							style={{ flex: 1 }}>
 							<TextRowWrapper style={textWrapper} appLayout={appLayout}>
-								<Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
+								{showName && <Title numberOfLines={1} ellipsizeMode="tail" style={title} appLayout={appLayout}>
 									{deviceName}
 								</Title>
+								}
 								<Description numberOfLines={1} ellipsizeMode="tail" style={description} appLayout={appLayout}>
 									{repeat}{' '}
 									{type === 'time' && (
@@ -562,6 +569,7 @@ class JobRow extends View<null, Props, null> {
 			},
 			rowContainer: {
 				width: rowWidth,
+				minHeight: deviceWidth * 0.1,
 			},
 			roundIconContainer: {
 				marginLeft: isPortrait ? 0 : width * 0.01788,
