@@ -192,7 +192,7 @@ class SchedulerTab extends View<null, Props, State> {
 				level={3}
 				style={swiperContainer}
 				accessible={false}
-				importantForAccessibility={currentScreen === 'Scheduler' ? 'no' : 'no-hide-descendants'}>
+				importantForAccessibility={currentScreen === ScreenName ? 'no' : 'no-hide-descendants'}>
 				<JobsPoster
 					days={days}
 					todayIndex={todayIndex}
