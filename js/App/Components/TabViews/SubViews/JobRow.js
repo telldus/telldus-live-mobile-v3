@@ -77,6 +77,7 @@ type Props = PropsThemedComponent & {
 	deviceType: string,
 	deviceSupportedMethods: Object,
 	gatewayTimezone: string,
+	ScreenName: string,
 
 	intl: intlShape,
 	editJob: (schedule: Schedule) => void,
@@ -85,11 +86,11 @@ type Props = PropsThemedComponent & {
 class JobRow extends View<null, Props, null> {
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		const { appLayout, intl, editJob, weekdays, currentScreen, ...others } = this.props;// eslint-disable-line
-		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, currentScreen: currentScreenN, ...othersN } = nextProps;// eslint-disable-line
-		if (currentScreenN === 'Scheduler') {
+		const { appLayout, intl, editJob, weekdays, currentScreen, ScreenName, ...others } = this.props;// eslint-disable-line
+		const { appLayout: appLayoutN, intl: intlN, editJob: editJobN, weekdays: weekdaysN, currentScreen: currentScreenN, ScreenName: ScreenNameN, ...othersN } = nextProps;// eslint-disable-line
+		if (currentScreenN === ScreenNameN) {
 			// Force re-render once to gain/loose accessibility
-			if (currentScreen !== 'Scheduler' && nextProps.screenReaderEnabled) {
+			if (currentScreen !== ScreenName && nextProps.screenReaderEnabled) {
 				return true;
 			}
 			const newLayout = nextProps.appLayout.width !== appLayout.width;
@@ -107,7 +108,7 @@ class JobRow extends View<null, Props, null> {
 			}
 		}
 		// Force re-render once to gain/loose accessibility
-		if (currentScreenN !== 'Scheduler' && currentScreen === 'Scheduler' && nextProps.screenReaderEnabled) {
+		if (currentScreenN !== ScreenNameN && currentScreen === ScreenName && nextProps.screenReaderEnabled) {
 			return true;
 		}
 		return false;
@@ -169,6 +170,7 @@ class JobRow extends View<null, Props, null> {
 			showNow,
 			expired,
 			currentScreen,
+			ScreenName,
 		} = this.props;
 
 		const {
@@ -199,7 +201,7 @@ class JobRow extends View<null, Props, null> {
 		const labelDevice = `${formatMessage(i18n.labelDevice)} ${deviceName}`;
 		const labelAction = `${formatMessage(i18n.labelAction)} ${actionLabel}`;
 
-		const accessible = currentScreen === 'Scheduler';
+		const accessible = currentScreen === ScreenName;
 		const accessibilityLabel = `${formatMessage(i18n.phraseOneSheduler)} ${effectiveHour}:${effectiveMinute}, ${labelDevice}, ${labelAction}, ${formatMessage(i18n.activateEdit)}`;
 
 		return (

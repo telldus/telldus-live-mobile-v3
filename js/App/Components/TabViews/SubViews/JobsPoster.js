@@ -49,6 +49,7 @@ type Props = {
 	intl: Object,
 	currentScreen: string,
 	showInactive: boolean,
+	ScreenName: string,
 };
 
 type State = {
@@ -284,7 +285,7 @@ export default class JobsPoster extends View<null, Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Props, nextState: State): boolean {
-		if (nextProps.currentScreen === 'Scheduler') {
+		if (nextProps.currentScreen === nextProps.ScreenName) {
 			const { daysLayout } = this.state;
 			if (Object.keys(daysLayout).length !== Object.keys(nextState.daysLayout).length) {
 				return true;
