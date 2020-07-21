@@ -62,6 +62,7 @@ type Props = {
 	gateways: Array<any>,
 	currentScreen: string,
 	ScreenName: string,
+	removeClippedSubviews?: boolean,
 };
 
 type State = {
@@ -74,6 +75,10 @@ class SchedulerTab extends View<null, Props, State> {
 
 	keyExtractor: (Object) => string;
 	onToggleVisibility: (boolean) => void;
+
+	static defaultProps = {
+		removeClippedSubviews: true,
+	};
 
 	constructor(props: Props) {
 		super(props);
@@ -164,6 +169,7 @@ class SchedulerTab extends View<null, Props, State> {
 			gateways,
 			currentScreen,
 			ScreenName,
+			removeClippedSubviews,
 		} = this.props;
 		const {
 			appLayout,
@@ -212,7 +218,8 @@ class SchedulerTab extends View<null, Props, State> {
 					loop={false}
 					index={todayIndex}
 					showsPagination={false}
-					onIndexChanged={this.onIndexChanged}>
+					onIndexChanged={this.onIndexChanged}
+					removeClippedSubviews={removeClippedSubviews}>
 					{daysToRender}
 				</Swiper>
 			</View>
