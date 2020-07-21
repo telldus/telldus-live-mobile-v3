@@ -93,11 +93,14 @@ export default class ActionDim extends View<null, Props, State> {
 		actions.selectAction(16, Math.round(this.state.methodValue));
 
 		if (isEditMode()) {
-			navigation.navigate(route.params.actionKey);
+			navigation.navigate(route.params.actionKey, {
+				...route.params,
+			});
 		} else {
 			navigation.navigate({
 				name: 'Time',
 				key: 'Time',
+				params: route.params,
 			});
 		}
 	};

@@ -164,7 +164,7 @@ export default class Days extends View<null, Props, State> {
 	};
 
 	selectDays = () => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 
 		let selectedDaysIndexes: number[] = [];
 		const { selectedDays } = this.state;
@@ -185,6 +185,7 @@ export default class Days extends View<null, Props, State> {
 			navigation.navigate({
 				name: 'Summary',
 				key: 'Summary',
+				params: route.params,
 			});
 		}
 	};

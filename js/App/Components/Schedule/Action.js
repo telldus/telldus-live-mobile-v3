@@ -101,7 +101,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 	}
 
 	selectAction = (action: number) => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 
 		actions.selectAction(action);
 
@@ -111,18 +111,20 @@ export default class Action extends View<null, ScheduleProps, State> {
 			navigation.navigate({
 				name: 'Time',
 				key: 'Time',
+				params: route.params,
 			});
 		}
 	};
 
 	navigateToDim = () => {
-		const { navigation, isEditMode } = this.props;
+		const { navigation, isEditMode, route } = this.props;
 
 		if (isEditMode()) {
 			navigation.navigate({
 				name: 'ActionDim',
 				key: 'ActionDim',
 				params: {
+					...route.params,
 					actionKey: 'Action',
 					editMode: true,
 				},
@@ -131,17 +133,19 @@ export default class Action extends View<null, ScheduleProps, State> {
 			navigation.navigate({
 				name: 'ActionDim',
 				key: 'ActionDim',
+				params: route.params,
 			});
 		}
 	};
 	navigateToRgb = () => {
-		const { navigation, isEditMode } = this.props;
+		const { navigation, isEditMode, route } = this.props;
 
 		if (isEditMode()) {
 			navigation.navigate({
 				name: 'ActionRGB',
 				key: 'ActionRGB',
 				params: {
+					...route.params,
 					actionKey: 'Action',
 					editMode: true,
 				},
@@ -150,18 +154,20 @@ export default class Action extends View<null, ScheduleProps, State> {
 			navigation.navigate({
 				name: 'ActionRGB',
 				key: 'ActionRGB',
+				params: route.params,
 			});
 		}
 	};
 
 	navigateToThermostat = () => {
-		const { navigation, isEditMode } = this.props;
+		const { navigation, isEditMode, route } = this.props;
 
 		if (isEditMode()) {
 			navigation.navigate({
 				name: 'ActionThermostat',
 				key: 'ActionThermostat',
 				params: {
+					...route.params,
 					actionKey: 'Action',
 					editMode: true,
 				},
@@ -170,6 +176,7 @@ export default class Action extends View<null, ScheduleProps, State> {
 			navigation.navigate({
 				name: 'ActionThermostat',
 				key: 'ActionThermostat',
+				params: route.params,
 			});
 		}
 	};

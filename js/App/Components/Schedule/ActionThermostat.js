@@ -189,12 +189,15 @@ export default class ActionThermostat extends View<null, Props, State> {
 
 		if (isEditMode()) {
 			actions.selectAction(2048, JSON.stringify(data));
-			navigation.navigate(route.params.actionKey);
+			navigation.navigate(route.params.actionKey, {
+				...route.params,
+			});
 		} else {
 			actions.selectAction(2048, JSON.stringify(data));
 			navigation.navigate({
 				name: 'Time',
 				key: 'Time',
+				params: route.params,
 			});
 		}
 	};

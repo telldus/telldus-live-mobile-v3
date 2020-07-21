@@ -146,7 +146,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 	};
 
 	selectTime = () => {
-		const { actions, navigation, isEditMode } = this.props;
+		const { actions, navigation, isEditMode, route } = this.props;
 		const { selectedType, randomInterval, offset, date } = this.state;
 
 		if (!selectedType) {
@@ -178,6 +178,7 @@ class Time extends View<null, Props & PropsThemedComponent, State> {
 			navigation.navigate({
 				name: 'Days',
 				key: 'Days',
+				params: route.params,
 			});
 		}
 	};
