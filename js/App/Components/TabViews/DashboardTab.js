@@ -600,8 +600,7 @@ class DashboardTab extends View {
 		return (
 			<TouchableWithoutFeedback
 				onLongPress={move}
-				onPressOut={moveEnd}
-				style={{flex: 0}}>
+				onPressOut={moveEnd}>
 				<View>
 					{rowItem}
 				</View>
