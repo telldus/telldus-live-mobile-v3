@@ -84,7 +84,7 @@ class AddLocationContainer extends View<null, Props, State> {
 
 	handleBackPress(): boolean {
 		let {navigation, currentScreen} = this.props;
-		if (currentScreen === 'Success') {
+		if (currentScreen === 'Success' || currentScreen === 'CopyDevicesAndSchedules') {
 			return true;
 		}
 		navigation.pop();
@@ -150,7 +150,7 @@ class AddLocationContainer extends View<null, Props, State> {
 					<NavigationHeaderPoster
 						h1={h1} h2={h2}
 						infoButton={infoButton}
-						showLeftIcon={currentScreen !== 'Success'}
+						showLeftIcon={currentScreen !== 'Success' && currentScreen !== 'CopyDevicesAndSchedules'}
 						align={'right'}
 						navigation={navigation}
 						{...screenProps}
