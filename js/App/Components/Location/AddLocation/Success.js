@@ -27,6 +27,7 @@ import React from 'react';
 import { Linking, Platform } from 'react-native';
 import { intlShape } from 'react-intl';
 import { announceForAccessibility } from 'react-native-accessibility';
+import { connect } from 'react-redux';
 
 import {
 	CommonActions,
@@ -53,6 +54,7 @@ type Props = {
 	screenReaderEnabled: boolean,
 	currentScreen: string,
 	route: Object,
+	allIds: Array<string>,
 };
 
 type State = {
@@ -103,8 +105,15 @@ class Success extends View<void, Props, State> {
 	}
 
 	onPressContinue() {
-		const { navigation, route } = this.props;
+		const { navigation, route, allIds } = this.props;
 		const { clientInfo } = route.params || {};
+
+		if (allIds.length > 1) {
+			navigation.navigate('CopyDevicesAndSchedules', {
+				...route.params,
+			});
+			return;
+		}
 
 		let routes = [{ name: 'Tabs' }];
 		if (Platform.OS === 'ios') {
@@ -278,4 +287,15 @@ class Success extends View<void, Props, State> {
 	}
 }
 
-export default Success;
+const mapStateToProps = (store: Object): Object => {
+
+	const {
+		allIds,
+	} = store.gateways;
+
+	return {
+		allIds,
+	};
+};
+
+export default connect(mapStateToProps, null)(Success);
