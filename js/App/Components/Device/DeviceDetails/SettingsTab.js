@@ -876,7 +876,7 @@ class SettingsTab extends View {
 		}
 
 		const isZWave = transport === 'zwave';
-		const is433MHz = is433MHzTransport(transport);
+		const is433MHz = is433MHzTransport(transport) || transport === 'egroup';
 		const { isFailed = false } = nodeInfo;
 
 		const transportsArray = transports.split(',');
