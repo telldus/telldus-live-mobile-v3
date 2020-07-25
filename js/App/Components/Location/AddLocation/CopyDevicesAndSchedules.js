@@ -46,6 +46,7 @@ import {
 	DropDown,
 	TouchableButton,
 	ProgressBarLinear,
+	InfoBlock,
 } from '../../../../BaseComponents';
 
 import {
@@ -53,7 +54,17 @@ import {
 } from '../../../Lib';
 import {
 	copyDevicesAndSchedules,
+	getGateways,
 } from '../../../Actions/Gateways';
+import {
+	getDevices,
+} from '../../../Actions/Devices';
+import {
+	getSensors,
+} from '../../../Actions/Sensors';
+import {
+	getJobs,
+} from '../../../Actions/Jobs';
 
 import Theme from '../../../Theme';
 
@@ -91,10 +102,14 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 	const [ copyConfig, setCopyConfig ] = useState({
 		isCopying: false,
 		progress: 0,
+		failedCopying: false,
+		errorMessage: '',
 	});
 	const {
 		isCopying,
 		progress,
+		failedCopying,
+		errorMessage,
 	} = copyConfig;
 
 	const { clientInfo } = route.params || {};
@@ -116,14 +131,20 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 	const dispatch = useDispatch();
 
 	const LIST = useMemo((): Array<Object> => {
-		return Object.keys(byId).map((gId: string): Object => {
+		let _LIST = [];
+		Object.keys(byId).forEach((gId: string): Object => {
 			const { id, name } = byId[gId];
-			return {
-				key: id,
-				value: name,
-			};
+			if (clientInfo.clientId !== id) {
+				_LIST.push(
+					{
+						key: id,
+						value: name,
+					}
+				);
+			}
 		});
-	}, [byId]);
+		return _LIST;
+	}, [byId, clientInfo.clientId]);
 
 	const onChoosegateway = useCallback((val: string, itemIndex: number, data: Array<any>) => {
 		const {
@@ -172,14 +193,23 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 			routes,
 		});
 		navigation.dispatch(resetAction);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [route.params]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [clearAll, clientInfo.clientId]);
 
 	const onPressCancel = useCallback(() => {
 		navigateCommon();
 	}, [navigateCommon]);
 
-	const callback = useCallback((stage: string, data: Object) => {
+	const callback = useCallback(async (stage: string, data: Object) => {
+		if (stage === 'socket-not-connected') {
+			setCopyConfig({
+				...copyConfig,
+				isCopying: false,
+				failedCopying: true,
+				errorMessage: 'Something went wrong while copying devices and schedules',
+			});
+		}
+
 		const {
 			devicesToCopy,
 			groupsToCopy,
@@ -191,19 +221,33 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 		const total = devicesToCopy.length + groupsToCopy.length + schedulesToCopy.length;
 		const totalCopied = devicesCopiedCount + groupsCopiedCount + schedulesCopiedCount;
 
-		const _progress = (totalCopied / total) * 100;
-		const _isCopying = totalCopied === total ? false : true;
+		const isDone = totalCopied === total;
+		const _progress = Math.round((totalCopied / total) * 100);
 
 		setCopyConfig({
 			...copyConfig,
 			progress: _progress,
-			isCopying: _isCopying,
+			isCopying: true,
 		});
 
-		if (totalCopied === total) {
-			navigateCommon();
+		if (isDone) {
+			try {
+				await dispatch(getGateways());
+				await dispatch(getDevices());
+				await dispatch(getSensors());
+				await dispatch(getJobs());
+			} catch (e) {
+				// Ignore
+			} finally {
+				setCopyConfig({
+					...copyConfig,
+					progress: _progress,
+					isCopying: false,
+				});
+				navigateCommon();
+			}
 		}
-
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [copyConfig, navigateCommon]);
 
 	const onPressCopy = useCallback(() => {
@@ -229,8 +273,12 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 		progressWidth,
 		progressBarStyle,
 		progressText,
+		infoContainer,
+		infoTextStyle,
+		infoIconErrorStyle,
 	} = getStyles({
 		appLayout,
+		failedCopying,
 	});
 
 	return (
@@ -261,7 +309,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 						pickerBaseCoverStyle={pickerBaseCoverStyle}
 						disabled={isCopying}/>
 				</View>
-				{isCopying && (
+				{isCopying && !failedCopying && (
 					<>
 						<Text
 							level={15}
@@ -280,6 +328,15 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 				)
 				}
 			</View>
+			{failedCopying && (
+				<InfoBlock
+					text={errorMessage}
+					appLayout={appLayout}
+					infoContainer={infoContainer}
+					infoIconStyle={infoIconErrorStyle}
+					textStyle={infoTextStyle}/>
+			)
+			}
 			<TouchableButton
 				text={isCopying ? 'COPYING...' : 'COPY'}
 				onPress={onPressCopy}
@@ -298,12 +355,19 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 
 const getStyles = ({
 	appLayout,
+	failedCopying,
 }: Object): Object => {
 	const { height, width } = appLayout;
 	const isPortrait = height > width;
 	const deviceWidth = isPortrait ? width : height;
 
-	const { shadow, paddingFactor, brandSecondary, rowTextColor } = Theme.Core;
+	const {
+		shadow,
+		paddingFactor,
+		brandSecondary,
+		rowTextColor,
+		red,
+	} = Theme.Core;
 
 	const padding = deviceWidth * paddingFactor;
 
@@ -317,7 +381,7 @@ const getStyles = ({
 		blockCover: {
 			...shadow,
 			marginTop: padding,
-			marginBottom: padding * 2,
+			marginBottom: failedCopying ? padding / 2 : padding * 2,
 			flex: 0,
 			justifyContent: 'center',
 			padding,
@@ -326,6 +390,16 @@ const getStyles = ({
 			flex: 0,
 			flexDirection: 'row',
 			alignItems: 'center',
+		},
+		infoContainer: {
+			flex: 0,
+			marginBottom: padding * 2,
+		},
+		infoTextStyle: {
+			fontSize: fontSizeText,
+		},
+		infoIconErrorStyle: {
+			color: red,
 		},
 		progressBarStyle: {
 			marginBottom: padding,
