@@ -90,6 +90,9 @@ const getBGColor = (props: Object): ?string => {
 		case 9: {
 			return colors.badgeColor;
 		}
+		case 10: {
+			return colors.danger;
+		}
 		default:
 			return 'transparent';
 	}
