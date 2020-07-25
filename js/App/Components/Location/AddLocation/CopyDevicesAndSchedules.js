@@ -209,6 +209,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 				failedCopying: true,
 				errorMessage: 'Something went wrong while copying devices and schedules',
 			});
+			return;
 		}
 
 		const {
