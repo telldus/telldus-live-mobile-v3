@@ -84,6 +84,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 	} = intl;
 
 	const clearTimersRef = useRef({});
+	const copyingComplete = useRef(false);
 
 	const clearAll = useCallback(() => {
 		if (typeof clearTimersRef.current === 'function') {
@@ -134,7 +135,7 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 		let _LIST = [];
 		Object.keys(byId).forEach((gId: string): Object => {
 			const { id, name } = byId[gId];
-			if (clientInfo.clientId !== id) {
+			if (parseInt(clientInfo.clientId, 10) !== parseInt(id, 10)) {
 				_LIST.push(
 					{
 						key: id,
@@ -230,7 +231,8 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 			isCopying: true,
 		});
 
-		if (isDone) {
+		if (isDone && !copyingComplete.current) {
+			copyingComplete.current = true;
 			try {
 				await dispatch(getGateways());
 				await dispatch(getDevices());
