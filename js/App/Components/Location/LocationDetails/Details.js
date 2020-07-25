@@ -77,6 +77,7 @@ type Props = {
 	route: Object,
 	firebaseRemoteConfig: Object,
 	currentScreen: string,
+	ScreenName: string,
 };
 
 type State = {
@@ -196,7 +197,7 @@ class Details extends View<Props, State> {
 	}
 
 	shouldComponentUpdate(nextProps: Object, nextState: Object): boolean {
-		return nextProps.currentScreen === 'LOverview';
+		return nextProps.currentScreen === nextProps.ScreenName;
 	}
 
 	componentWillUnmount() {
@@ -207,8 +208,8 @@ class Details extends View<Props, State> {
 	}
 
 	handleBackPress(): boolean {
-		let { navigation, currentScreen } = this.props;
-		if (currentScreen === 'LOverview') {
+		let { navigation, currentScreen, ScreenName } = this.props;
+		if (currentScreen === ScreenName) {
 			navigation.pop();
 			return true;
 		}
@@ -680,10 +681,11 @@ class Details extends View<Props, State> {
 					)}
 					<View style={styles.buttonCover}>
 						<TouchableButton
+							buttonLevel={isContactingSupport || isLoading ? 7 : 10}
 							disabled={isContactingSupport || isLoading}
-							text={this.labelDelete} style={[styles.button, {
+							text={this.labelDelete} style={{
 								minWidth: minWidthButton,
-							}]}
+							}}
 							onPress={isLoading ? null : this.onPressRemoveLocation}
 							showThrobber={isLoading}/>
 					</View>
