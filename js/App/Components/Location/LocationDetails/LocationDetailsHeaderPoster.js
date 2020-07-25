@@ -58,7 +58,7 @@ class LocationDetailsHeaderPoster extends View<Props, null> {
 
 	handleBackPress(): boolean {
 		let { currentScreen } = this.props;
-		if (currentScreen === 'LOverview') {
+		if (currentScreen === 'Overview') {
 			this.goBack();
 			return true;
 		}
