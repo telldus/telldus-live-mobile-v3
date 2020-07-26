@@ -317,7 +317,11 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 						<Text
 							level={15}
 							style={progressText}>
-							{`Copying... (${progress}% ${formatMessage(i18n.done).toLowerCase()})`}
+							{progress === 100 ?
+								'Completed copying devices and schedules'
+								:
+								`Copying... (${progress}% ${formatMessage(i18n.done).toLowerCase()})`
+							}
 						</Text>
 						<ProgressBarLinear
 							progress={Math.max(progress / 100, 0)}
