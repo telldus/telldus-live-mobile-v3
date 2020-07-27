@@ -257,6 +257,8 @@ const CopyDevicesAndSchedules = memo<Object>((props: Object): Object => {
 		setCopyConfig({
 			...copyConfig,
 			isCopying: true,
+			failedCopying: false,
+			errorMessage: '',
 		});
 		clearTimersRef.current = dispatch(copyDevicesAndSchedules(keyDD, clientInfo.clientId, callback));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
