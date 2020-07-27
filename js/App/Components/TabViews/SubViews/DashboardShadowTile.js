@@ -29,8 +29,8 @@ import {
 	useSelector,
 } from 'react-redux';
 import {
-	ScrollView,
 } from 'react-native';
+import TextTicker from 'react-native-text-ticker';
 
 import { View, Text, BlockIcon, StyleSheet } from '../../../../BaseComponents';
 
@@ -44,17 +44,22 @@ const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconSty
 
 	const NameInfo = useMemo((): Object => {
 		return (
-			<Text
+			<TextTicker
+				disabled={tileNameDisplayMode === 'Truncate'}
 				ellipsizeMode={tileNameDisplayMode === 'Truncate' ? 'middle' : undefined}
 				numberOfLines={1}
+				duration={5000}
+				repeatSpacer={50}
+				marqueeDelay={1000}
 				style={[
 					styles.name, {
 						fontSize: Math.floor(tileWidth / 10),
 						opacity: name ? 1 : 0.7,
 					},
-				]}>
+				]}
+				bounce={false}>
 				{name ? name : formatMessage(i18n.noName)}
-			</Text>
+			</TextTicker>
 		);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name, tileWidth, tileNameDisplayMode]);
@@ -70,20 +75,7 @@ const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconSty
 			}]}>
 			{!!icon && (<BlockIcon icon={icon} containerStyle={iconContainerStyle} style={iconStyle}/>)}
 			<View style={styles.textCover}>
-				{tileNameDisplayMode === 'Truncate' ?
-					NameInfo
-					:
-					<ScrollView
-						horizontal
-						style={{flex: 1}}
-						contentContainerStyle={{
-							flexGrow: 1,
-							alignItems: 'center',
-							justifyContent: 'center',
-						}}>
-						{NameInfo}
-					</ScrollView>
-				}
+				{NameInfo}
 				{!!info &&
 			typeof info === 'string' ?
 					<Text
