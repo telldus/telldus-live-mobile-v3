@@ -24,7 +24,6 @@
 import React, {
 	memo,
 	useMemo,
-	useCallback,
 } from 'react';
 import {
 	useSelector,
@@ -60,8 +59,6 @@ const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconSty
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [name, tileWidth, tileNameDisplayMode]);
 
-	const _onStartShouldSetResponder = useCallback((): boolean => true, []);
-
 	return (
 		<View
 			level={2}
@@ -84,9 +81,7 @@ const Title = memo<Object>(({ name, tileWidth, icon, iconContainerStyle, iconSty
 							alignItems: 'center',
 							justifyContent: 'center',
 						}}>
-						<View onStartShouldSetResponder={_onStartShouldSetResponder}>
-							{NameInfo}
-						</View>
+						{NameInfo}
 					</ScrollView>
 				}
 				{!!info &&

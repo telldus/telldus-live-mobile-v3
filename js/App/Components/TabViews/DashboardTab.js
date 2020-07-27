@@ -28,7 +28,6 @@ import {
 	RefreshControl,
 	LayoutAnimation,
 	Platform,
-	TouchableWithoutFeedback,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -38,6 +37,7 @@ import {
 	Text,
 	View,
 	EmptyView,
+	TouchableOpacity,
 } from '../../../BaseComponents';
 import { DimmerControlInfo } from './SubViews/Device';
 import {
@@ -598,13 +598,12 @@ class DashboardTab extends View {
 		}
 
 		return (
-			<TouchableWithoutFeedback
+			<TouchableOpacity
 				onLongPress={move}
-				onPressOut={moveEnd}>
-				<View>
-					{rowItem}
-				</View>
-			</TouchableWithoutFeedback>
+				onPressOut={moveEnd}
+				style={{flex: 0}}>
+				{rowItem}
+			</TouchableOpacity>
 		);
 	}
 
