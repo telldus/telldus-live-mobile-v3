@@ -221,12 +221,12 @@ class Success extends View<void, Props, State> {
 						</TouchableOpacity> */}
 				</View>
 				{hasOtherGateways && <TouchableButton
-					text={'IMPORT DEVICES FROM OTHER GATEWAY'}
+					text={'COPY DEVICES FROM OTHER GATEWAY'}
 					onPress={this.navigateToCopy}
 					style={styles.button}
 				/>}
 				<TouchableButton
-					text={hasOtherGateways ? 'CONTINUE WITHOUT IMPORTING' : intl.formatMessage(i18n.continue)}
+					text={hasOtherGateways ? 'CONTINUE WITHOUT COPYING' : intl.formatMessage(i18n.continue)}
 					onPress={this.onPressContinue}
 					style={styles.button}
 				/>
