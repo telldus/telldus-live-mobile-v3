@@ -67,6 +67,7 @@ type Props = {
 	deviceId?: string,
 	dialogueData: Object,
 	cachedLayout: Object,
+	preventLayoutUpdate: boolean,
 };
 
 class App extends React.Component<Props> {
@@ -159,7 +160,12 @@ class App extends React.Component<Props> {
 	}
 
 	onLayout = (ev: Object) => {
-		const { cachedLayout, dispatch } = this.props;
+		const { cachedLayout, dispatch, preventLayoutUpdate } = this.props;
+
+		if (preventLayoutUpdate) {
+			return;
+		}
+
 		const { width } = cachedLayout;
 
 		const { layout } = ev.nativeEvent;
@@ -302,6 +308,7 @@ function mapStateToProps(store: Object): Object {
 	let {
 		changeLogVersion: prevChangeLogVersion,
 		layout = {},
+		preventLayoutUpdate = false,
 	} = store.app;
 
 	return {
@@ -314,6 +321,7 @@ function mapStateToProps(store: Object): Object {
 		deviceId,
 		dialogueData: store.modal,
 		cachedLayout: layout,
+		preventLayoutUpdate,
 	};
 }
 
