@@ -85,7 +85,7 @@
     "react-native-orientation-locker": "^1.1.6",
     "react-native-reanimated": "~1.7.0",
     "react-native-rsa-native": "https://github.com/rimzici/react-native-rsa-native.git",
-    "react-native-safe-area-context": "^2.0.0",
+    "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "~2.2.0",
     "react-native-section-list-get-item-layout": "~2.2.3",
     "react-native-sensitive-info": "https://github.com/telldus/react-native-sensitive-info.git",

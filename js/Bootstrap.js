@@ -57,6 +57,10 @@ import {
 } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
+import {
+	SafeAreaProvider,
+	initialWindowMetrics,
+} from 'react-native-safe-area-context';
 
 import App from './App';
 import { configureStore } from './App/Store/ConfigureStore';
@@ -107,13 +111,16 @@ function Bootstrap(): Object {
 
 		render(): Provider {
 			return (
-				<Provider store={store}>
-					<PersistGate
-						persistor={persistor}
-						onBeforeLift={this.onBeforeLift}>
-						<WithIntlProvider/>
-					</PersistGate>
-				</Provider>
+				<SafeAreaProvider
+					initialMetrics={initialWindowMetrics}>
+					<Provider store={store}>
+						<PersistGate
+							persistor={persistor}
+							onBeforeLift={this.onBeforeLift}>
+							<WithIntlProvider/>
+						</PersistGate>
+					</Provider>
+				</SafeAreaProvider>
 			);
 		}
 	}
