@@ -26,7 +26,7 @@ import React, {
 } from 'react';
 import {
 	SafeAreaView,
-} from 'react-native-safe-area-context';
+} from 'react-native';
 import View from './View';
 
 import {
