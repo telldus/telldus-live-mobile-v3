@@ -166,7 +166,7 @@ class App extends React.Component<Props> {
 			return;
 		}
 
-		const { width } = cachedLayout;
+		const { width, x, y } = cachedLayout;
 
 		const { layout } = ev.nativeEvent;
 
@@ -178,7 +178,7 @@ class App extends React.Component<Props> {
 		// Only when orientation changes.
 		// This conditional check will prevent layout update when keyboard
 		// is shown or any other event.
-		if (layout.width !== width) {
+		if (layout.width !== width || layout.x !== x || layout.y !== y) {
 			dispatch(setAppLayout(ev.nativeEvent.layout));
 		}
 	}
