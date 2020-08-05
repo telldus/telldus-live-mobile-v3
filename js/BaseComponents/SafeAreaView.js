@@ -24,7 +24,9 @@
 import React, {
 	memo,
 } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+	SafeAreaView,
+} from 'react-native';
 import View from './View';
 
 import {
@@ -53,7 +55,8 @@ const SafeAreaViewComponent = (props: Props): Object => {
 	} = props;
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: safeAreaBackgroundColor }}>
+		<SafeAreaView
+			style={{ flex: 1, backgroundColor: safeAreaBackgroundColor }}>
 			<View style={{ flex: 1, backgroundColor }} onLayout={onLayout}>
 				{
 					React.Children.map(children, (child: Object): Object | null => {
