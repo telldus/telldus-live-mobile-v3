@@ -150,7 +150,6 @@
     "redux-mock-store": "^1.5.3"
   },
   "resolutions": {
-    "stacktrace-parser": "0.1.4",
     "react-native-svg": "^12.1.0"
   },
   "engines": {
