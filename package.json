@@ -21,8 +21,8 @@
     "dgram": "react-native-udp"
   },
   "dependencies": {
-    "@formatjs/intl-pluralrules": "^1.5.2",
-    "@formatjs/intl-relativetimeformat": "^4.5.9",
+    "@formatjs/intl-pluralrules": "^3.2.5",
+    "@formatjs/intl-relativetimeformat": "^7.0.0",
     "@invertase/react-native-apple-authentication": "^0.2.0",
     "@react-native-community/async-storage": "^1.8.1",
     "@react-native-community/datetimepicker": "^2.4.0",
