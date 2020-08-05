@@ -182,7 +182,7 @@
   },
   "@comment": {
     "dependencies": {
-      "react-native-material-dropdown": "Update dep link if react-native-material-textfield",
+      "react-native-material-dropdown": "Update dep link of react-native-material-textfield",
       "react-native-material-textfield": "Check if main repo has merged the pull request from the fork"
     }
   }
