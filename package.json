@@ -116,7 +116,7 @@
     "seamless-immutable": "^7.1.4",
     "svgs": "~4.1.0",
     "url": "~0.11.0",
-    "victory-native": "^34.1.0"
+    "victory-native": "^35.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
