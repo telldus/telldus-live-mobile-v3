@@ -36,6 +36,7 @@ import com.telldus.live.mobile.API.OnAPITaskComplete;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Model.DeviceInfo;
 import com.telldus.live.mobile.NewOnOffWidget;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.Utility.HandlerRunnablePair;
 import com.telldus.live.mobile.R;
@@ -48,7 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class DevicesAPI {
-    private static Integer supportedMethodsAggreg = 4023;
+    private static Integer supportedMethodsAggreg = Constants.supportedMethods;
 
     private static Map<String, Map> deviceInfoPendingCheckList = new HashMap<String, Map>();
     Runnable runnableDeviceInfoCheck;

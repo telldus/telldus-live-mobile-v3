@@ -55,6 +55,7 @@ import java.util.Map;
 import com.telldus.live.mobile.Database.MyDBHandler;
 import com.telldus.live.mobile.Database.PrefManager;
 import com.telldus.live.mobile.Model.DeviceInfo;
+import com.telldus.live.mobile.Utility.Constants;
 import com.telldus.live.mobile.Utility.DevicesUtilities;
 import com.telldus.live.mobile.API.API;
 import com.telldus.live.mobile.API.OnAPITaskComplete;
@@ -399,7 +400,7 @@ public class NewAppWidgetConfigureActivity extends Activity {
     }
 
     void createDeviceApi() {
-        String params = "/devices/list?supportedMethods=4023&includeIgnored=1&extras=devicetype,transport,room";
+        String params = "/devices/list?supportedMethods="+Constants.supportedMethods+"&includeIgnored=1&extras=devicetype,transport,room";
         API endPoints = new API();
         endPoints.callEndPoint(getApplicationContext(), params, "DeviceApi1", new OnAPITaskComplete() {
             @Override
