@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.telldus.live.mobile.NewDimmerOneConfigureActivity"
+    android:initialKeyguardLayout="@layout/new_dimmer_one_widget"
+    android:initialLayout="@layout/new_dimmer_one_widget"
+    android:minHeight="50dp"
+    android:minWidth="50dp"
+    android:previewImage="@drawable/widget_rgb_preview"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"></appwidget-provider>

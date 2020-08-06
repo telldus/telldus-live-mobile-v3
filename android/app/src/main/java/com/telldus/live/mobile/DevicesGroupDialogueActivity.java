@@ -103,6 +103,9 @@ public class DevicesGroupDialogueActivity extends Activity {
 
     int currentColorControlled;
 
+    String[] methodsToShow = null;
+    String widgetKey = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +122,9 @@ public class DevicesGroupDialogueActivity extends Activity {
         if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             return;
         }
+
+        methodsToShow = extras.getStringArray("methodsToShow");
+        widgetKey = extras.getString("widgetKey");
 
         updateUI(widgetId);
     }
@@ -176,6 +182,19 @@ public class DevicesGroupDialogueActivity extends Activity {
         Boolean hasDim = ((supportedMethods.get("DIM") != null) && supportedMethods.get("DIM"));
         Boolean hasOn = ((supportedMethods.get("TURNON") != null) && supportedMethods.get("TURNON"));
         Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
+
+        if (methodsToShow != null) {
+            List<String> methodsToShowList = Arrays.asList(methodsToShow);
+            hasBell = methodsToShowList.contains("BELL") && hasBell;
+            hasUp = methodsToShowList.contains("UP") && hasUp;
+            hasDown = methodsToShowList.contains("DOWN") && hasDown;
+            hasStop = methodsToShowList.contains("STOP") && hasStop;
+            hasOff = methodsToShowList.contains("TURNOFF") && hasOff;
+            hasDim = methodsToShowList.contains("DIM") && hasDim;
+            hasOn = methodsToShowList.contains("TURNON") && hasOn;
+            hasRGB = methodsToShowList.contains("RGB") && hasRGB;
+        }
+        final Boolean _hasRGB = hasRGB;
 
         Boolean hasLearn = ((supportedMethods.get("LEARN") != null) && supportedMethods.get("LEARN"));
         if (hasLearn) {
@@ -617,7 +636,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                                 removeHandlerResetDeviceStateToNull();
                                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                                 updateUI(widgetId);
-                                if (!hasRGB) {
+                                if (widgetKey.equals("NewDimmerSingle")) {
+                                    NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                                } else if (!_hasRGB) {
                                     NewAppWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
                                 } else {
                                     if (primarySetting.equalsIgnoreCase("full")) {
@@ -958,7 +979,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
 
-                if (hasRGB) {
+                if (widgetKey.equals("NewDimmerSingle")) {
+                    NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                } else if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
                     if (primarySetting.equalsIgnoreCase("full")) {
                         NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
@@ -976,7 +999,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                 AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
                 updateUI(widgetId);
 
-                if (hasRGB) {
+                if (widgetKey.equals("NewDimmerSingle")) {
+                    NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                } else if (hasRGB) {
                     String primarySetting = widgetInfo.getPrimarySetting();
                     if (primarySetting.equalsIgnoreCase("full")) {
                         NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
@@ -1053,7 +1078,9 @@ public class DevicesGroupDialogueActivity extends Activity {
                     Integer methods = widgetInfo.getDeviceMethods();
                     Map<String, Boolean> supportedMethods = deviceUtils.getSupportedMethods(methods);
                     Boolean hasRGB = ((supportedMethods.get("RGB") != null) && supportedMethods.get("RGB"));
-                    if (hasRGB) {
+                    if (widgetKey.equals("NewDimmerSingle")) {
+                        NewDimmerSingle.updateAppWidget(context, widgetManager, widgetId, new HashMap());
+                    } else if (hasRGB) {
                         String primarySetting = widgetInfo.getPrimarySetting();
                         if (primarySetting.equalsIgnoreCase("full")) {
                             NewOnOffWidget.updateAppWidget(context, widgetManager, widgetId, new HashMap());
